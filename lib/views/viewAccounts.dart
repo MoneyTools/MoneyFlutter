@@ -44,6 +44,10 @@ class _ViewAccountsState extends State<ViewAccounts> {
                 Expanded(child: Container(color: Theme
                     .of(context)
                     .colorScheme
+                    .secondaryContainer, child: Text("Type", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: Theme
+                    .of(context)
+                    .colorScheme
                     .secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
               ]),
               Expanded(
@@ -56,6 +60,9 @@ class _ViewAccountsState extends State<ViewAccounts> {
                           children: <Widget>[
                             Expanded(
                               child: Text(accountsOpened[index].name, textAlign: TextAlign.left),
+                            ),
+                            Expanded(
+                              child: Text(accountsOpened[index].typeAsText(), textAlign: TextAlign.left),
                             ),
                             Expanded(
                               child: Text(formatCurrency.format(accountsOpened[index].balance), textAlign: TextAlign.right),
