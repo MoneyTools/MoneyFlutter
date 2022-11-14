@@ -14,7 +14,7 @@ class Transaction {
 class Transactions {
   num runningBalance = 0;
 
-  List<Transaction> list = [];
+  static List<Transaction> list = [];
 
   load(rows) async {
     runningBalance = 0;

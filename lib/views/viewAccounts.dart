@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../models/accounts.dart';
 import '../models/data.dart';
 
 class ViewAccounts extends StatefulWidget {
@@ -15,6 +16,7 @@ class ViewAccounts extends StatefulWidget {
 class _ViewAccountsState extends State<ViewAccounts> {
   final Data data;
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
+  var accountsOpened = Accounts.getOpenAccounts();
 
   _ViewAccountsState(this.data);
 
@@ -30,6 +32,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
         .apply(displayColor: Theme.of(context).colorScheme.onSurface);
 
     return Expanded(
+
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
@@ -45,17 +48,17 @@ class _ViewAccountsState extends State<ViewAccounts> {
               ]),
               Expanded(
                   child: ListView.builder(
-                      itemCount: data.accounts.list.length,
+                      itemCount: accountsOpened.length,
                       itemExtent: 30,
                       // cacheExtent: 30*10000,
                       itemBuilder: (context, index) {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(data.accounts.list[index].name, textAlign: TextAlign.left),
+                              child: Text(accountsOpened[index].name, textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(0.00), textAlign: TextAlign.right),
+                              child: Text(formatCurrency.format(accountsOpened[index].balance), textAlign: TextAlign.right),
                             ),
                           ],
                         );

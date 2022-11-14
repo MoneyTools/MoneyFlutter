@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/models/data.dart';
+import 'package:money/models/transactions.dart';
 
 class ViewTransactions extends StatefulWidget {
   final Data data;
@@ -58,29 +59,29 @@ class _ViewTransactionsState extends State<ViewTransactions> {
               ]),
               Expanded(
                   child: ListView.builder(
-                      itemCount: data.transactions.list.length,
+                      itemCount: Transactions.list.length,
                       itemExtent: 30,
                       // cacheExtent: 30*10000,
                       itemBuilder: (context, index) {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(data.accounts.getNameFromId(data.transactions.list[index].accountId), textAlign: TextAlign.left),
+                              child: Text(data.accounts.getNameFromId(Transactions.list[index].accountId), textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(data.transactions.list[index].dateTime
+                              child: Text(Transactions.list[index].dateTime
                                   .toIso8601String()
                                   .split('T')
                                   .first, textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(data.payees.getNameFromId(data.transactions.list[index].payeeId), textAlign: TextAlign.left),
+                              child: Text(data.payees.getNameFromId(Transactions.list[index].payeeId), textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(data.transactions.list[index].amount), textAlign: TextAlign.right),
+                              child: Text(formatCurrency.format(Transactions.list[index].amount), textAlign: TextAlign.right),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(data.transactions.list[index].balance), textAlign: TextAlign.right),
+                              child: Text(formatCurrency.format(Transactions.list[index].balance), textAlign: TextAlign.right),
                             ),
                           ],
                         );

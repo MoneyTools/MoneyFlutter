@@ -58,8 +58,10 @@ class Data {
           var result = await db.query('Transactions');
           await transactions.load(result);
         }
-
         await db.close();
+
+
+        Accounts.onAllDataLoaded();
 
         callbackWhenLoaded(true);
       }
