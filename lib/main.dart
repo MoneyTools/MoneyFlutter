@@ -26,32 +26,6 @@ class MyMoney extends StatefulWidget {
   State<MyMoney> createState() => _MyMoneyState();
 }
 
-// NavigationRail shows if the screen width is greater or equal to
-// screenWidthThreshold; otherwise, NavigationBar is used for navigation.
-const double narrowScreenWidthThreshold = 450;
-
-const Color m3BaseColor = Color(0xff6750a4);
-
-const List<Color> colorOptions = [
-  m3BaseColor,
-  Colors.blue,
-  Colors.teal,
-  Colors.green,
-  Colors.yellow,
-  Colors.orange,
-  Colors.pink
-];
-
-const List<String> colorText = <String>[
-  "Default palette",
-  "Blue",
-  "Teal",
-  "Green",
-  "Yellow",
-  "Orange",
-  "Pink",
-];
-
 class _MyMoneyState extends State<MyMoney> {
   bool _isLoading = true;
   bool useMaterial3 = true;
@@ -133,7 +107,8 @@ class _MyMoneyState extends State<MyMoney> {
     if (fileSelected != null) {
       pathToDatabase = fileSelected.paths[0];
       if (pathToDatabase != null) {
-        prefs?.setString(prefLastLoadedPathToDatabase, pathToDatabase.toString());
+        prefs?.setString(
+            prefLastLoadedPathToDatabase, pathToDatabase.toString());
         loadData();
       }
     }
@@ -173,22 +148,28 @@ class _MyMoneyState extends State<MyMoney> {
     return const Expanded(child: Center(child: CircularProgressIndicator()));
   }
 
-  Widget createScreenFor(BuildContext context, int screenIndex, bool showNavBarExample) {
+  Widget getWidgetForMainContent(
+      BuildContext context, int screenIndex, bool showNavBarExample) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
 
     if (shouldShowOpenInstructions()) {
       return Expanded(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text("Welcome to MyMoney", textAlign: TextAlign.left, style: textTheme.headline5),
+        Text("Welcome to MyMoney",
+            textAlign: TextAlign.left, style: textTheme.headline5),
         const SizedBox(height: 40),
-        Text("No data loaded", textAlign: TextAlign.left, style: textTheme.caption),
+        Text("No data loaded",
+            textAlign: TextAlign.left, style: textTheme.caption),
         const SizedBox(height: 40),
         Wrap(
           spacing: 10,
           children: [
-            OutlinedButton(onPressed: handleFileOpen, child: const Text("Open File ...")),
-            OutlinedButton(onPressed: handleUseDemoData, child: const Text("Use Demo Data"))
+            OutlinedButton(
+                onPressed: handleFileOpen, child: const Text("Open File ...")),
+            OutlinedButton(
+                onPressed: handleUseDemoData,
+                child: const Text("Use Demo Data"))
           ],
         ),
       ]));
@@ -224,13 +205,16 @@ class _MyMoneyState extends State<MyMoney> {
           tooltip: "Open mmdb file",
         ),
         IconButton(
-          icon: useLightMode ? const Icon(Icons.wb_sunny_outlined) : const Icon(Icons.wb_sunny),
+          icon: useLightMode
+              ? const Icon(Icons.wb_sunny_outlined)
+              : const Icon(Icons.wb_sunny),
           onPressed: handleBrightnessChange,
           tooltip: "Toggle brightness",
         ),
         PopupMenuButton(
           icon: const Icon(Icons.more_vert),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           itemBuilder: (context) {
             var l = List.generate(colorOptions.length, (index) {
               return PopupMenuItem(
@@ -240,16 +224,27 @@ class _MyMoneyState extends State<MyMoney> {
                       Padding(
                         padding: const EdgeInsets.only(left: 10),
                         child: Icon(
-                          index == colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
+                          index == colorSelected
+                              ? Icons.color_lens
+                              : Icons.color_lens_outlined,
                           color: colorOptions[index],
                         ),
                       ),
-                      Padding(padding: const EdgeInsets.only(left: 20), child: Text(colorText[index]))
+                      Padding(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: Text(colorText[index]))
                     ],
                   ));
             });
-            l.add(PopupMenuItem(value: 1002, child: Text(!useMaterial3 ? "Using Material2" : "Switch to Material2")));
-            l.add(PopupMenuItem(value: 1003, child: Text(useMaterial3 ? "Using Material3" : "Switch to Material3")));
+            l.add(PopupMenuItem(
+                value: 1002,
+                child: Text(!useMaterial3
+                    ? "Using Material2"
+                    : "Switch to Material2")));
+            l.add(PopupMenuItem(
+                value: 1003,
+                child: Text(
+                    useMaterial3 ? "Using Material3" : "Switch to Material3")));
             return l;
           },
           onSelected: handleColorSelect,
@@ -269,7 +264,10 @@ class _MyMoneyState extends State<MyMoney> {
   widgetMainTitle() {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Text("MyMoney", textAlign: TextAlign.left),
-      Text(getTitle(), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10))
+      Text(getTitle(),
+          textAlign: TextAlign.left,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontSize: 10))
     ]);
   }
 
@@ -281,26 +279,27 @@ class _MyMoneyState extends State<MyMoney> {
       themeMode: useLightMode ? ThemeMode.light : ThemeMode.dark,
       theme: themeData,
       home: LayoutBuilder(builder: (context, constraints) {
-        if (constraints.maxWidth < narrowScreenWidthThreshold) {
-          return navBarHorizontal(context);
+        if (isSmallWidth(constraints)) {
+          return getScaffoldingForSmallSurface(context);
         } else {
-          return navBarVertical(context);
+          return getScaffoldingForLargeSurface(context);
         }
       }),
     );
   }
 
-  navBarHorizontal(context) {
+  getScaffoldingForSmallSurface(context) {
     return Scaffold(
       appBar: createAppBar(),
       body: Row(children: <Widget>[
-        createScreenFor(context, screenIndex, false),
+        getWidgetForMainContent(context, screenIndex, false),
       ]),
-      bottomNavigationBar: NavigationBars(onSelectItem: handleScreenChanged, selectedIndex: screenIndex),
+      bottomNavigationBar: NavigationBars(
+          onSelectItem: handleScreenChanged, selectedIndex: screenIndex),
     );
   }
 
-  navBarVertical(context) {
+  getScaffoldingForLargeSurface(context) {
     return Scaffold(
       appBar: createAppBar(),
       body: SafeArea(
@@ -310,9 +309,11 @@ class _MyMoneyState extends State<MyMoney> {
           children: <Widget>[
             Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 5),
-                child: NavigationRailSection(onSelectItem: handleScreenChanged, selectedIndex: screenIndex)),
+                child: NavigationRailSection(
+                    onSelectItem: handleScreenChanged,
+                    selectedIndex: screenIndex)),
             const VerticalDivider(thickness: 1, width: 1),
-            createScreenFor(context, screenIndex, true),
+            getWidgetForMainContent(context, screenIndex, true),
           ],
         ),
       ),

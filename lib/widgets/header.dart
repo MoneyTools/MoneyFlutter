@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers.dart';
 
 class Header extends StatefulWidget {
   final String title;
@@ -8,18 +9,18 @@ class Header extends StatefulWidget {
   const Header(this.title, this.count, this.description, {super.key});
 
   @override
-  _HeaderState createState() => _HeaderState();
+  HeaderState createState() => HeaderState();
 }
 
-class _HeaderState extends State<Header> {
+class HeaderState extends State<Header> {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        if (constraints.maxWidth > 600) {
-          return _buildWide();
-        } else {
+        if (isSmallWidth(constraints)) {
           return _buildNarrow();
+        } else {
+          return _buildWide();
         }
       },
     );
