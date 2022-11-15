@@ -2,5 +2,7 @@
     "cmake.configureOnOpen": false,
     "cSpell.words": [
         "LTRB"
-    ]
+    ],
+    "editor.wordWrap": "off",
+    "editor.wordWrapColumn": 999
 }

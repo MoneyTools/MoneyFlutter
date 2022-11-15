@@ -2,27 +2,32 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "MoneyFlutter",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "MoneyFlutter (debug)",
+            "name": "Mac (debug)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug"
         },
         {
-            "name": "MoneyFlutter (profile mode)",
+            "name": "Mac (profile)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "MoneyFlutter (release mode)",
+            "name": "Mac (release)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
+        },
+        {
+            "name": "Web (debug)",
+            "type": "dart",
+            "request": "launch",
+            "program": "lib/main.dart",
+            "args": [
+                "-d",
+                "chrome"
+            ]
         }
     ]
 }
