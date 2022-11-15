@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:money/models/data.dart';
+import '../helpers.dart';
+import '../models/data.dart';
+import '../widgets/header.dart';
 
-import 'package:money/helpers.dart';
-import 'package:money/widgets/header.dart';
-
-class ViewPayees extends StatefulWidget {
+class ViewCategories extends StatefulWidget {
   final Data data;
 
-  const ViewPayees({super.key, required this.data});
+  const ViewCategories({super.key, required this.data});
 
   @override
-  State<ViewPayees> createState() => _ViewPayeesState(data);
+  State<ViewCategories> createState() => ViewCategoriesState();
 }
 
-class _ViewPayeesState extends State<ViewPayees> {
-  final Data data;
+class ViewCategoriesState extends State<ViewCategories> {
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
-  _ViewPayeesState(this.data);
+
+  ViewCategoriesState();
 
   @override
   void initState() {
@@ -34,8 +33,10 @@ class _ViewPayeesState extends State<ViewPayees> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Payees", numValueOrDefault(data.payees.list.length),
-                  "Who is getting your money."),
+              Header(
+                  "Categories",
+                  numValueOrDefault(widget.data.categories.list.length),
+                  "Classification of your money transactions."),
               Row(children: <Widget>[
                 Expanded(
                     child: Container(
@@ -52,14 +53,14 @@ class _ViewPayeesState extends State<ViewPayees> {
               ]),
               Expanded(
                   child: ListView.builder(
-                      itemCount: data.payees.list.length,
+                      itemCount: widget.data.categories.list.length,
                       itemExtent: 30,
                       // cacheExtent: 30*10000,
                       itemBuilder: (context, index) {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(data.payees.list[index].name,
+                              child: Text(widget.data.categories.list[index].name,
                                   textAlign: TextAlign.left),
                             ),
                             Expanded(

@@ -1,7 +1,9 @@
 {
     "cmake.configureOnOpen": false,
     "cSpell.words": [
-        "LTRB"
+        "BECU",
+        "LTRB",
+        "mmdb"
     ],
     "editor.wordWrap": "off",
     "editor.wordWrapColumn": 999

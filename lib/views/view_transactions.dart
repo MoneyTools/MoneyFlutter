@@ -12,16 +12,14 @@ class ViewTransactions extends StatefulWidget {
   const ViewTransactions({super.key, required this.data});
 
   @override
-  State<ViewTransactions> createState() => _ViewTransactionsState(data);
+  State<ViewTransactions> createState() => ViewTransactionsState();
 }
 
-class _ViewTransactionsState extends State<ViewTransactions> {
-  final Data data;
-
+class ViewTransactionsState extends State<ViewTransactions> {
   final styleHeader =
       const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
-  _ViewTransactionsState(this.data);
+  ViewTransactionsState();
 
   @override
   void initState() {
@@ -84,7 +82,7 @@ class _ViewTransactionsState extends State<ViewTransactions> {
                           children: <Widget>[
                             Expanded(
                               child: Text(
-                                  data.accounts.getNameFromId(
+                                  widget.data.accounts.getNameFromId(
                                       Transactions.list[index].accountId),
                                   textAlign: TextAlign.left),
                             ),
@@ -98,7 +96,7 @@ class _ViewTransactionsState extends State<ViewTransactions> {
                             ),
                             Expanded(
                               child: Text(
-                                  data.payees.getNameFromId(
+                                  widget.data.payees.getNameFromId(
                                       Transactions.list[index].payeeId),
                                   textAlign: TextAlign.left),
                             ),

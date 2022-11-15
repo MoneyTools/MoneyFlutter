@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../helpers.dart';
@@ -12,15 +11,14 @@ class ViewAccounts extends StatefulWidget {
   const ViewAccounts({super.key, required this.data});
 
   @override
-  State<ViewAccounts> createState() => _ViewAccountsState(data);
+  State<ViewAccounts> createState() => ViewAccountsState();
 }
 
-class _ViewAccountsState extends State<ViewAccounts> {
-  final Data data;
+class ViewAccountsState extends State<ViewAccounts> {  
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   var accountsOpened = Accounts.getOpenAccounts();
 
-  _ViewAccountsState(this.data);
+  ViewAccountsState();
 
   @override
   void initState() {

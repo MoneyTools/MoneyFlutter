@@ -6,10 +6,10 @@ import 'constants.dart';
 import 'helpers.dart';
 import 'menu.dart';
 import 'models/data.dart';
-import 'views//viewPayees.dart';
-import 'views//viewTransactions.dart';
-import 'views/viewAccounts.dart';
-import 'views/viewCategories.dart';
+import 'views/view_payees.dart';
+import 'views/view_transactions.dart';
+import 'views/view_accounts.dart';
+import 'views/view_categories.dart';
 
 const prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
 const prefColor = 'color';
@@ -34,7 +34,7 @@ class _MyMoneyState extends State<MyMoney> {
   int screenIndex = 0;
   final Data data = Data();
   String? pathToDatabase;
-  SharedPreferences? prefs;
+  SharedPreferences? preferences;
 
   late ThemeData themeData;
 
@@ -47,13 +47,13 @@ class _MyMoneyState extends State<MyMoney> {
 
   loadLastPreference() async {
     // Obtain shared preferences.
-    prefs = await SharedPreferences.getInstance();
-    if (prefs != null) {
-      colorSelected = intValueOrDefault(prefs?.getInt(prefColor));
-      useLightMode = intValueOrDefault(prefs?.getInt(prefDarkMode)) == 1;
+    preferences = await SharedPreferences.getInstance();
+    if (preferences != null) {
+      colorSelected = intValueOrDefault(preferences?.getInt(prefColor));
+      useLightMode = intValueOrDefault(preferences?.getInt(prefDarkMode)) == 1;
 
       themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
-      pathToDatabase = prefs?.getString(prefLastLoadedPathToDatabase);
+      pathToDatabase = preferences?.getString(prefLastLoadedPathToDatabase);
       await Future.delayed(const Duration(seconds: 1), loadData());
 
       setState(() {
@@ -94,7 +94,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void handleBrightnessChange() {
-    prefs?.setInt(prefDarkMode, useLightMode ? 0 : 1);
+    preferences?.setInt(prefDarkMode, useLightMode ? 0 : 1);
 
     setState(() {
       useLightMode = !useLightMode;
@@ -107,7 +107,7 @@ class _MyMoneyState extends State<MyMoney> {
     if (fileSelected != null) {
       pathToDatabase = fileSelected.paths[0];
       if (pathToDatabase != null) {
-        prefs?.setString(
+        preferences?.setString(
             prefLastLoadedPathToDatabase, pathToDatabase.toString());
         loadData();
       }
@@ -136,7 +136,7 @@ class _MyMoneyState extends State<MyMoney> {
       return;
     }
 
-    prefs?.setInt(prefColor, value);
+    preferences?.setInt(prefColor, value);
 
     setState(() {
       colorSelected = value;
