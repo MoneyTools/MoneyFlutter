@@ -3,6 +3,9 @@ import 'package:intl/intl.dart';
 import 'package:money/models/data.dart';
 import 'package:money/models/transactions.dart';
 
+import 'package:money/helpers.dart';
+import 'package:money/widgets/header.dart';
+
 class ViewTransactions extends StatefulWidget {
   final Data data;
 
@@ -35,6 +38,7 @@ class _ViewTransactionsState extends State<ViewTransactions> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
+              Header("Transactions", intValueOrDefault(Transactions.list.length), "Details actions of your accounts."),
               Row(children: <Widget>[
                 Expanded(child: Container(color: Theme
                     .of(context)

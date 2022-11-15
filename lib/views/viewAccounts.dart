@@ -1,8 +1,10 @@
 // ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../helpers.dart';
 import '../models/accounts.dart';
 import '../models/data.dart';
+import '../widgets/header.dart';
 
 class ViewAccounts extends StatefulWidget {
   final Data data;
@@ -35,6 +37,7 @@ class _ViewAccountsState extends State<ViewAccounts> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
+              Header("Accounts", numValueOrDefault(accountsOpened.length), "Your main assets."),
               Row(children: <Widget>[
                 Expanded(
                     child: Container(

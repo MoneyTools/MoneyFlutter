@@ -66,8 +66,8 @@ class _MyMoneyState extends State<MyMoney> {
     // Obtain shared preferences.
     prefs = await SharedPreferences.getInstance();
     if (prefs != null) {
-      colorSelected = intValueOrDefault(prefs?.getInt(prefColor), 0);
-      useLightMode = intValueOrDefault(prefs?.getInt(prefDarkMode), 0) == 1;
+      colorSelected = intValueOrDefault(prefs?.getInt(prefColor));
+      useLightMode = intValueOrDefault(prefs?.getInt(prefDarkMode)) == 1;
 
       themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
       pathToDatabase = prefs?.getString(prefLastLoadedPathToDatabase);

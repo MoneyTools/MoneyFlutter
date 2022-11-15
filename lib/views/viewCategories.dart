@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import '../helpers.dart';
 import '../models/data.dart';
+import '../widgets/header.dart';
 
 class ViewCategories extends StatefulWidget {
 
@@ -33,6 +35,7 @@ class _ViewCategoriesState extends State<ViewCategories> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
+              Header("Categories", numValueOrDefault(data.categories.list.length), "Classification of your money transactions."),
               Row(children: <Widget>[
                 Expanded(child: Container(color: Theme
                     .of(context)
