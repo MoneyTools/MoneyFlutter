@@ -1,10 +1,10 @@
+// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/accounts.dart';
 import '../models/data.dart';
 
 class ViewAccounts extends StatefulWidget {
-
   final Data data;
 
   const ViewAccounts({super.key, required this.data});
@@ -32,23 +32,28 @@ class _ViewAccountsState extends State<ViewAccounts> {
         .apply(displayColor: Theme.of(context).colorScheme.onSurface);
 
     return Expanded(
-
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
               Row(children: <Widget>[
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Type", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Name",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Type",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Balance",
+                            textAlign: TextAlign.right,
+                            style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -59,13 +64,18 @@ class _ViewAccountsState extends State<ViewAccounts> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(accountsOpened[index].name, textAlign: TextAlign.left),
+                              child: Text(accountsOpened[index].name,
+                                  textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(accountsOpened[index].typeAsText(), textAlign: TextAlign.left),
+                              child: Text(accountsOpened[index].typeAsText(),
+                                  textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(accountsOpened[index].balance), textAlign: TextAlign.right),
+                              child: Text(
+                                  formatCurrency
+                                      .format(accountsOpened[index].balance),
+                                  textAlign: TextAlign.right),
                             ),
                           ],
                         );
