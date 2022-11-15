@@ -62,6 +62,8 @@ class Data {
         await db.close();
 
         Accounts.onAllDataLoaded();
+        Categories.onAllDataLoaded();
+        Payees.onAllDataLoaded();
 
         callbackWhenLoaded(true);
       }

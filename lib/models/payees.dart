@@ -1,9 +1,11 @@
 import 'package:collection/collection.dart';
+import 'package:money/models/transactions.dart';
 
 class Payee {
   num id = -1;
   String accountId = "";
   String name = "";
+  num count = 0;
   double amount = 0.00;
   double balance = 0.00;
 
@@ -13,9 +15,9 @@ class Payee {
 class Payees {
   num runningBalance = 0;
 
-  List<Payee> list = [];
+  static List<Payee> list = [];
 
-  Payee? get(id) {
+  static Payee? get(id) {
     return list.firstWhereOrNull((item) => item.id == id);
   }
 
@@ -55,5 +57,20 @@ class Payees {
       'Barbara'
     ];
     list = List<Payee>.generate(10, (i) => Payee(i, names[i]));
+  }
+
+  static onAllDataLoaded() {
+    for (var item in list) {
+      item.count = 0;
+      item.balance = 0;
+    }
+
+    for (var t in Transactions.list) {
+      var item = get(t.payeeId);
+      if (item != null) {
+        item.count++;
+        item.balance += t.amount;
+      }
+    }
   }
 }

@@ -5,6 +5,8 @@ import 'package:money/models/data.dart';
 import 'package:money/helpers.dart';
 import 'package:money/widgets/header.dart';
 
+import '../models/payees.dart';
+
 class ViewPayees extends StatefulWidget {
   final Data data;
 
@@ -33,7 +35,7 @@ class ViewPayeesState extends State<ViewPayees> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Payees", numValueOrDefault(widget.data.payees.list.length),
+              Header("Payees", numValueOrDefault(Payees.list.length),
                   "Who is getting your money."),
               Row(children: <Widget>[
                 Expanded(
@@ -51,18 +53,20 @@ class ViewPayeesState extends State<ViewPayees> {
               ]),
               Expanded(
                   child: ListView.builder(
-                      itemCount: widget.data.payees.list.length,
+                      itemCount: Payees.list.length,
                       itemExtent: 30,
                       // cacheExtent: 30*10000,
                       itemBuilder: (context, index) {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(widget.data.payees.list[index].name,
+                              child: Text(Payees.list[index].name,
                                   textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(0.00),
+                              child: Text(
+                                  formatCurrency
+                                      .format(Payees.list[index].balance),
                                   textAlign: TextAlign.right),
                             ),
                           ],

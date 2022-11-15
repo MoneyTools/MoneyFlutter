@@ -1,8 +1,10 @@
 import 'package:collection/collection.dart';
+import 'package:money/models/transactions.dart';
 
 class Category {
   num id = -1;
   String name = "";
+  num count = 0;
   double balance = 0.00;
 
   Category(this.id, this.name);
@@ -11,9 +13,9 @@ class Category {
 class Categories {
   num runningBalance = 0;
 
-  List<Category> list = [];
+  static List<Category> list = [];
 
-  Category? get(accountId) {
+  static Category? get(accountId) {
     return list.firstWhereOrNull((item) => item.id == accountId);
   }
 
@@ -62,5 +64,20 @@ class Categories {
       'God-Inc'
     ];
     list = List<Category>.generate(10, (i) => Category(i, names[i]));
+  }
+
+  static onAllDataLoaded() {
+    for (var item in list) {
+      item.count = 0;
+      item.balance = 0;
+    }
+
+    for (var t in Transactions.list) {
+      var item = get(t.categoryId);
+      if (item != null) {
+        item.count++;
+        item.balance += t.amount;
+      }
+    }
   }
 }

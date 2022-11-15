@@ -3,7 +3,8 @@
     "cSpell.words": [
         "BECU",
         "LTRB",
-        "mmdb"
+        "mmdb",
+        "sqflite"
     ],
     "editor.wordWrap": "off",
     "editor.wordWrapColumn": 999

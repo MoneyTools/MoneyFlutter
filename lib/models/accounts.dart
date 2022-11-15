@@ -146,10 +146,10 @@ class Accounts {
     }
 
     for (var t in Transactions.list) {
-      var account = get(t.accountId);
-      if (account != null) {
-        account.count++;
-        account.balance += t.amount;
+      var item = get(t.accountId);
+      if (item != null) {
+        item.count++;
+        item.balance += t.amount;
       }
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../helpers.dart';
+import '../models/categories.dart';
 import '../models/data.dart';
 import '../widgets/header.dart';
 
@@ -33,9 +34,7 @@ class ViewCategoriesState extends State<ViewCategories> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header(
-                  "Categories",
-                  numValueOrDefault(widget.data.categories.list.length),
+              Header("Categories", numValueOrDefault(Categories.list.length),
                   "Classification of your money transactions."),
               Row(children: <Widget>[
                 Expanded(
@@ -53,18 +52,20 @@ class ViewCategoriesState extends State<ViewCategories> {
               ]),
               Expanded(
                   child: ListView.builder(
-                      itemCount: widget.data.categories.list.length,
+                      itemCount: Categories.list.length,
                       itemExtent: 30,
                       // cacheExtent: 30*10000,
                       itemBuilder: (context, index) {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(widget.data.categories.list[index].name,
+                              child: Text(Categories.list[index].name,
                                   textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(0.00),
+                              child: Text(
+                                  formatCurrency
+                                      .format(Categories.list[index].balance),
                                   textAlign: TextAlign.right),
                             ),
                           ],
