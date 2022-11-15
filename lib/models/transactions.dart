@@ -8,7 +8,8 @@ class Transaction {
   double amount = 0.00;
   double balance = 0.00;
 
-  Transaction(this.accountId, this.dateTime, this.payeeId, this.amount, this.balance);
+  Transaction(
+      this.accountId, this.dateTime, this.payeeId, this.amount, this.balance);
 }
 
 class Transactions {
@@ -25,18 +26,17 @@ class Transactions {
       var payee = num.parse(row["Payee"].toString());
       var amount = double.parse(row["Amount"].toString());
 
-      list.add(Transaction(accountId, DateTime.parse(date), payee, amount, runningBalance += amount));
+      list.add(Transaction(accountId, DateTime.parse(date), payee, amount,
+          runningBalance += amount));
     }
     return list;
   }
 
   loadScale() {
     runningBalance = 0;
-    list = List<Transaction>.generate(10000, (i) => Transaction(
-        Random().nextInt(10),
-        DateTime(2020, 02, i + 1),
-        Random().nextInt(10), i * 1.0,
-        (runningBalance += i).toDouble())
-    );
+    list = List<Transaction>.generate(
+        10000,
+        (i) => Transaction(Random().nextInt(10), DateTime(2020, 02, i + 1),
+            Random().nextInt(10), i * 1.0, (runningBalance += i).toDouble()));
   }
 }

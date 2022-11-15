@@ -16,10 +16,10 @@ class ViewTransactions extends StatefulWidget {
 }
 
 class _ViewTransactionsState extends State<ViewTransactions> {
-
   final Data data;
 
-  final styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+  final styleHeader =
+      const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   _ViewTransactionsState(this.data);
 
@@ -38,28 +38,41 @@ class _ViewTransactionsState extends State<ViewTransactions> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Transactions", intValueOrDefault(Transactions.list.length), "Details actions of your accounts."),
+              Header(
+                  "Transactions",
+                  intValueOrDefault(Transactions.list.length),
+                  "Details actions of your accounts."),
               Row(children: <Widget>[
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Account", textAlign: TextAlign.left, style:textTheme.titleMedium))),
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Date", textAlign: TextAlign.left, style:textTheme.titleMedium))),
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Payee", textAlign: TextAlign.left, style:textTheme.titleMedium))),
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Amount", textAlign: TextAlign.right, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Account",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Date",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Payee",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Amount",
+                            textAlign: TextAlign.right,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Balance",
+                            textAlign: TextAlign.right,
+                            style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -70,22 +83,36 @@ class _ViewTransactionsState extends State<ViewTransactions> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(data.accounts.getNameFromId(Transactions.list[index].accountId), textAlign: TextAlign.left),
+                              child: Text(
+                                  data.accounts.getNameFromId(
+                                      Transactions.list[index].accountId),
+                                  textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(Transactions.list[index].dateTime
-                                  .toIso8601String()
-                                  .split('T')
-                                  .first, textAlign: TextAlign.left),
+                              child: Text(
+                                  Transactions.list[index].dateTime
+                                      .toIso8601String()
+                                      .split('T')
+                                      .first,
+                                  textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(data.payees.getNameFromId(Transactions.list[index].payeeId), textAlign: TextAlign.left),
+                              child: Text(
+                                  data.payees.getNameFromId(
+                                      Transactions.list[index].payeeId),
+                                  textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(Transactions.list[index].amount), textAlign: TextAlign.right),
+                              child: Text(
+                                  formatCurrency
+                                      .format(Transactions.list[index].amount),
+                                  textAlign: TextAlign.right),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(Transactions.list[index].balance), textAlign: TextAlign.right),
+                              child: Text(
+                                  formatCurrency
+                                      .format(Transactions.list[index].balance),
+                                  textAlign: TextAlign.right),
                             ),
                           ],
                         );

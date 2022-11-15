@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './accounts.dart';
+import './categories.dart';
 import './payees.dart';
 import './transactions.dart';
-import './categories.dart';
+import '../constants.dart';
 
 class Data {
   Accounts accounts = Accounts();
@@ -15,7 +15,7 @@ class Data {
   Transactions transactions = Transactions();
 
   init(filePathToLoad, callbackWhenLoaded) async {
-    if (kIsWeb) {
+    if (filePathToLoad == Constants.demoData) {
       // Not supported on Web so generate some random data to see in the views
       accounts.loadScale();
       categories.loadScale();
@@ -31,7 +31,8 @@ class Data {
       }
 
       var databaseFactory = databaseFactoryFfi;
-      String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
+      String? pathToDatabaseFile =
+          await validateDataBasePathIsValidAndExist(filePathToLoad);
       if (pathToDatabaseFile != null) {
         var db = await databaseFactory.openDatabase(pathToDatabaseFile);
 
@@ -59,7 +60,6 @@ class Data {
           await transactions.load(result);
         }
         await db.close();
-
 
         Accounts.onAllDataLoaded();
 

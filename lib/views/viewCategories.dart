@@ -5,7 +5,6 @@ import '../models/data.dart';
 import '../widgets/header.dart';
 
 class ViewCategories extends StatefulWidget {
-
   final Data data;
 
   const ViewCategories({super.key, required this.data});
@@ -35,16 +34,23 @@ class _ViewCategoriesState extends State<ViewCategories> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Categories", numValueOrDefault(data.categories.list.length), "Classification of your money transactions."),
+              Header(
+                  "Categories",
+                  numValueOrDefault(data.categories.list.length),
+                  "Classification of your money transactions."),
               Row(children: <Widget>[
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: Theme
-                    .of(context)
-                    .colorScheme
-                    .secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Name",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        child: Text("Balance",
+                            textAlign: TextAlign.right,
+                            style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -55,10 +61,12 @@ class _ViewCategoriesState extends State<ViewCategories> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(data.categories.list[index].name, textAlign: TextAlign.left),
+                              child: Text(data.categories.list[index].name,
+                                  textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(0.00), textAlign: TextAlign.right),
+                              child: Text(formatCurrency.format(0.00),
+                                  textAlign: TextAlign.right),
                             ),
                           ],
                         );

@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'constants.dart';
 import 'helpers.dart';
 import 'menu.dart';
 import 'models/data.dart';
@@ -31,7 +32,15 @@ const double narrowScreenWidthThreshold = 450;
 
 const Color m3BaseColor = Color(0xff6750a4);
 
-const List<Color> colorOptions = [m3BaseColor, Colors.blue, Colors.teal, Colors.green, Colors.yellow, Colors.orange, Colors.pink];
+const List<Color> colorOptions = [
+  m3BaseColor,
+  Colors.blue,
+  Colors.teal,
+  Colors.green,
+  Colors.yellow,
+  Colors.orange,
+  Colors.pink
+];
 
 const List<String> colorText = <String>[
   "Default palette",
@@ -98,7 +107,10 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   ThemeData updateThemes(int colorIndex, bool useMaterial3, bool useLightMode) {
-    return ThemeData(colorSchemeSeed: colorOptions[colorSelected], useMaterial3: useMaterial3, brightness: useLightMode ? Brightness.light : Brightness.dark);
+    return ThemeData(
+        colorSchemeSeed: colorOptions[colorSelected],
+        useMaterial3: useMaterial3,
+        brightness: useLightMode ? Brightness.light : Brightness.dark);
   }
 
   void handleScreenChanged(int selectedScreen) {
@@ -125,6 +137,11 @@ class _MyMoneyState extends State<MyMoney> {
         loadData();
       }
     }
+  }
+
+  void handleUseDemoData() async {
+    pathToDatabase = Constants.demoData;
+    loadData();
   }
 
   void handleMaterialVersionChange(useVersion3) {
@@ -162,17 +179,19 @@ class _MyMoneyState extends State<MyMoney> {
 
     if (shouldShowOpenInstructions()) {
       return Expanded(
-          child: Center(
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                      Text("Select a Money file to load", textAlign: TextAlign.left, style: textTheme.headline6),
-                      const SizedBox(height: 80),
-                      OutlinedButton(
-                        onPressed: handleFileOpen,
-                        child: const Text("Open")
-                      )
-                    ])));
+          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        Text("Welcome to MyMoney", textAlign: TextAlign.left, style: textTheme.headline5),
+        const SizedBox(height: 40),
+        Text("No data loaded", textAlign: TextAlign.left, style: textTheme.caption),
+        const SizedBox(height: 40),
+        Wrap(
+          spacing: 10,
+          children: [
+            OutlinedButton(onPressed: handleFileOpen, child: const Text("Open File ...")),
+            OutlinedButton(onPressed: handleUseDemoData, child: const Text("Use Demo Data"))
+          ],
+        ),
+      ]));
     }
 
     if (_isLoading) {
@@ -248,7 +267,10 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   widgetMainTitle() {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const Text("MyMoney", textAlign: TextAlign.left), Text(getTitle(), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10))]);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Text("MyMoney", textAlign: TextAlign.left),
+      Text(getTitle(), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10))
+    ]);
   }
 
   @override
@@ -286,7 +308,9 @@ class _MyMoneyState extends State<MyMoney> {
         top: false,
         child: Row(
           children: <Widget>[
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 5), child: NavigationRailSection(onSelectItem: handleScreenChanged, selectedIndex: screenIndex)),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5),
+                child: NavigationRailSection(onSelectItem: handleScreenChanged, selectedIndex: screenIndex)),
             const VerticalDivider(thickness: 1, width: 1),
             createScreenFor(context, screenIndex, true),
           ],
