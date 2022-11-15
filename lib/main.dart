@@ -80,8 +80,14 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
-  loadData() {
+  shouldShowOpenInstructions() {
+    if (pathToDatabase == null) {
+      return true;
+    }
+    return false;
+  }
 
+  loadData() {
     data.init(pathToDatabase, (success) {
       _isLoading = success ? false : true;
       setState(() {
@@ -150,31 +156,41 @@ class _MyMoneyState extends State<MyMoney> {
     return const Expanded(child: Center(child: CircularProgressIndicator()));
   }
 
-  Widget createScreenFor(int screenIndex, bool showNavBarExample) {
+  Widget createScreenFor(BuildContext context, int screenIndex, bool showNavBarExample) {
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    if (shouldShowOpenInstructions()) {
+      return Expanded(
+          child: Center(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                      Text("Select a Money file to load", textAlign: TextAlign.left, style: textTheme.headline6),
+                      const SizedBox(height: 80),
+                      OutlinedButton(
+                        onPressed: handleFileOpen,
+                        child: const Text("Open")
+                      )
+                    ])));
+    }
+
+    if (_isLoading) {
+      return showLoading();
+    }
+
     switch (screenIndex) {
       // Accounts
       case 0:
-        if (_isLoading) {
-          return showLoading();
-        }
         return ViewAccounts(data: data);
       // Categories
       case 1:
-        if (_isLoading) {
-          return showLoading();
-        }
         return ViewCategories(data: data);
       // Payees
       case 2:
-        if (_isLoading) {
-          return showLoading();
-        }
         return ViewPayees(data: data);
       case 3:
       default:
-        if (_isLoading) {
-          return showLoading();
-        }
         return ViewTransactions(data: data);
     }
   }
@@ -244,25 +260,25 @@ class _MyMoneyState extends State<MyMoney> {
       theme: themeData,
       home: LayoutBuilder(builder: (context, constraints) {
         if (constraints.maxWidth < narrowScreenWidthThreshold) {
-          return navBarHorizontal();
+          return navBarHorizontal(context);
         } else {
-          return navBarVertical();
+          return navBarVertical(context);
         }
       }),
     );
   }
 
-  navBarHorizontal() {
+  navBarHorizontal(context) {
     return Scaffold(
       appBar: createAppBar(),
       body: Row(children: <Widget>[
-        createScreenFor(screenIndex, false),
+        createScreenFor(context, screenIndex, false),
       ]),
       bottomNavigationBar: NavigationBars(onSelectItem: handleScreenChanged, selectedIndex: screenIndex),
     );
   }
 
-  navBarVertical() {
+  navBarVertical(context) {
     return Scaffold(
       appBar: createAppBar(),
       body: SafeArea(
@@ -272,7 +288,7 @@ class _MyMoneyState extends State<MyMoney> {
           children: <Widget>[
             Padding(padding: const EdgeInsets.symmetric(horizontal: 5), child: NavigationRailSection(onSelectItem: handleScreenChanged, selectedIndex: screenIndex)),
             const VerticalDivider(thickness: 1, width: 1),
-            createScreenFor(screenIndex, true),
+            createScreenFor(context, screenIndex, true),
           ],
         ),
       ),
