@@ -27,29 +27,22 @@ class ViewPayeesState extends State<ViewPayees> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context)
-        .textTheme
-        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
+    final textTheme = Theme.of(context).textTheme.apply(displayColor: Theme.of(context).colorScheme.onSurface);
 
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Payees", numValueOrDefault(Payees.list.length),
-                  "Who is getting your money."),
+              Header("Payees", numValueOrDefault(Payees.list.length), "Who is getting your money."),
               Row(children: <Widget>[
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Name",
-                            textAlign: TextAlign.left,
-                            style: textTheme.titleMedium))),
+                        child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Balance",
-                            textAlign: TextAlign.right,
-                            style: textTheme.titleMedium))),
+                        child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -60,14 +53,11 @@ class ViewPayeesState extends State<ViewPayees> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(Payees.list[index].name,
-                                  textAlign: TextAlign.left),
+                              child: Text(Payees.list[index].name, textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(
-                                  formatCurrency
-                                      .format(Payees.list[index].balance),
-                                  textAlign: TextAlign.right),
+                              child:
+                                  Text(formatCurrency.format(Payees.list[index].balance), textAlign: TextAlign.right),
                             ),
                           ],
                         );

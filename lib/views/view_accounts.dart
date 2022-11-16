@@ -14,7 +14,7 @@ class ViewAccounts extends StatefulWidget {
   State<ViewAccounts> createState() => ViewAccountsState();
 }
 
-class ViewAccountsState extends State<ViewAccounts> {  
+class ViewAccountsState extends State<ViewAccounts> {
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   var accountsOpened = Accounts.getOpenAccounts();
 

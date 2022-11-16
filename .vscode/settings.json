@@ -7,5 +7,16 @@
         "sqflite"
     ],
     "editor.wordWrap": "off",
-    "editor.wordWrapColumn": 999
+    "editor.wordWrapColumn": 120,
+    "editor.overviewRulerBorder": false,
+    "editor.rulers": [
+        120
+    ],
+    "yaml.format.printWidth": 120,
+    "dart.lineLength": 120,
+    "dart.renameFilesWithClasses": "always",
+    "[dart]": {
+        "editor.defaultFormatter": "Dart-Code.dart-code"
+    },
+    "editor.formatOnType": true
 }
