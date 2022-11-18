@@ -26,7 +26,9 @@ class ViewCategoriesState extends State<ViewCategories> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.apply(displayColor: Theme.of(context).colorScheme.onSurface);
+    final textTheme = Theme.of(context)
+        .textTheme
+        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
 
     return Expanded(
         child: Padding(
@@ -38,11 +40,15 @@ class ViewCategoriesState extends State<ViewCategories> {
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                        child: Text("Name",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
+                        child: Text("Balance",
+                            textAlign: TextAlign.right,
+                            style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -53,10 +59,13 @@ class ViewCategoriesState extends State<ViewCategories> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(Categories.list[index].name, textAlign: TextAlign.left),
+                              child: Text(Categories.list[index].name,
+                                  textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(Categories.list[index].balance),
+                              child: Text(
+                                  formatCurrency
+                                      .format(Categories.list[index].balance),
                                   textAlign: TextAlign.right),
                             ),
                           ],

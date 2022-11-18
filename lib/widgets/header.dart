@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
 
-class Header extends StatefulWidget {
+class Header extends StatelessWidget {
   final String title;
   final num count;
   final String description;
@@ -9,48 +9,41 @@ class Header extends StatefulWidget {
   const Header(this.title, this.count, this.description, {super.key});
 
   @override
-  HeaderState createState() => HeaderState();
-}
-
-class HeaderState extends State<Header> {
-  @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         if (isSmallWidth(constraints)) {
-          return _buildNarrow();
+          return _buildNarrow(context);
         } else {
-          return _buildWide();
+          return _buildWide(context);
         }
       },
     );
   }
 
-  _buildWide() {
+  _buildWide(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-        child: Expanded(
-            child: Row(children: [
-          renderCaptionAndCount(widget.title, widget.count),
+        child: Row(children: [
+          renderCaptionAndCount(context, title, count),
           const Spacer(),
-          Text(widget.description, style: Theme.of(context).textTheme.caption)
-        ])));
+          Text(description, style: Theme.of(context).textTheme.caption)
+        ]));
   }
 
-  _buildNarrow() {
+  _buildNarrow(BuildContext context) {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-        child: Expanded(
-            child: Column(
-          children: [renderCaptionAndCount(widget.title, widget.count)],
-        )));
+        child: Column(
+          children: [renderCaptionAndCount(context, title, count)],
+        ));
   }
 
-  renderCaptionAndCount(caption, count) {
+  renderCaptionAndCount(BuildContext context, String caption, num count) {
     return Row(children: [
-      Text(widget.title, style: Theme.of(context).textTheme.headline6),
+      Text(caption, style: Theme.of(context).textTheme.headline6),
       const SizedBox(width: 10),
-      Text('(${widget.count})', style: Theme.of(context).textTheme.caption)
+      Text('(${count.toString()})', style: Theme.of(context).textTheme.caption)
     ]);
   }
 }

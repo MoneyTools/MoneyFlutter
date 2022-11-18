@@ -16,7 +16,8 @@ class ViewTransactions extends StatefulWidget {
 }
 
 class ViewTransactionsState extends State<ViewTransactions> {
-  final styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+  final styleHeader =
+      const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   ViewTransactionsState();
 
@@ -27,34 +28,49 @@ class ViewTransactionsState extends State<ViewTransactions> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme.apply(displayColor: Theme.of(context).colorScheme.onSurface);
+    final textTheme = Theme.of(context)
+        .textTheme
+        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
 
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Transactions", intValueOrDefault(Transactions.list.length), "Details actions of your accounts."),
+              Header(
+                  "Transactions",
+                  intValueOrDefault(Transactions.list.length),
+                  "Details actions of your accounts."),
               Row(children: <Widget>[
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Account", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                        child: Text("Account",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Date", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                        child: Text("Date",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Payee", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                        child: Text("Payee",
+                            textAlign: TextAlign.left,
+                            style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Amount", textAlign: TextAlign.right, style: textTheme.titleMedium))),
+                        child: Text("Amount",
+                            textAlign: TextAlign.right,
+                            style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
                         color: Theme.of(context).colorScheme.secondaryContainer,
-                        child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
+                        child: Text("Balance",
+                            textAlign: TextAlign.right,
+                            style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -65,23 +81,35 @@ class ViewTransactionsState extends State<ViewTransactions> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(widget.data.accounts.getNameFromId(Transactions.list[index].accountId),
+                              child: Text(
+                                  widget.data.accounts.getNameFromId(
+                                      Transactions.list[index].accountId),
                                   textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(Transactions.list[index].dateTime.toIso8601String().split('T').first,
+                              child: Text(
+                                  Transactions.list[index].dateTime
+                                      .toIso8601String()
+                                      .split('T')
+                                      .first,
                                   textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(widget.data.payees.getNameFromId(Transactions.list[index].payeeId),
+                              child: Text(
+                                  widget.data.payees.getNameFromId(
+                                      Transactions.list[index].payeeId),
                                   textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(Transactions.list[index].amount),
+                              child: Text(
+                                  formatCurrency
+                                      .format(Transactions.list[index].amount),
                                   textAlign: TextAlign.right),
                             ),
                             Expanded(
-                              child: Text(formatCurrency.format(Transactions.list[index].balance),
+                              child: Text(
+                                  formatCurrency
+                                      .format(Transactions.list[index].balance),
                                   textAlign: TextAlign.right),
                             ),
                           ],
