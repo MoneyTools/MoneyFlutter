@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import '../helpers.dart';
 import '../models/accounts.dart';
 import '../models/data.dart';
@@ -27,9 +28,8 @@ class ViewAccountsState extends State<ViewAccounts> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context)
-        .textTheme
-        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
+    final textTheme = getTextTheme(context)
+        .apply(displayColor: getColorTheme(context).onSurface);
 
     return Expanded(
         child: Padding(
@@ -40,19 +40,19 @@ class ViewAccountsState extends State<ViewAccounts> {
               Row(children: <Widget>[
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Name",
                             textAlign: TextAlign.left,
                             style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Type",
                             textAlign: TextAlign.left,
                             style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Balance",
                             textAlign: TextAlign.right,
                             style: textTheme.titleMedium))),

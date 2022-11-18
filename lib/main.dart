@@ -6,10 +6,10 @@ import 'constants.dart';
 import 'helpers.dart';
 import 'menu.dart';
 import 'models/data.dart';
-import 'views/view_payees.dart';
-import 'views/view_transactions.dart';
 import 'views/view_accounts.dart';
 import 'views/view_categories.dart';
+import 'views/view_payees.dart';
+import 'views/view_transactions.dart';
 
 const prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
 const prefColor = 'color';
@@ -150,31 +150,6 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget getWidgetForMainContent(
       BuildContext context, int screenIndex, bool showNavBarExample) {
-    final theme = Theme.of(context);
-    final textTheme = theme.textTheme;
-
-    if (shouldShowOpenInstructions()) {
-      return Expanded(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-        Text("Welcome to MyMoney",
-            textAlign: TextAlign.left, style: textTheme.headline5),
-        const SizedBox(height: 40),
-        Text("No data loaded",
-            textAlign: TextAlign.left, style: textTheme.caption),
-        const SizedBox(height: 40),
-        Wrap(
-          spacing: 10,
-          children: [
-            OutlinedButton(
-                onPressed: handleFileOpen, child: const Text("Open File ...")),
-            OutlinedButton(
-                onPressed: handleUseDemoData,
-                child: const Text("Use Demo Data"))
-          ],
-        ),
-      ]));
-    }
-
     if (_isLoading) {
       return showLoading();
     }
@@ -193,6 +168,37 @@ class _MyMoneyState extends State<MyMoney> {
       default:
         return ViewTransactions(data: data);
     }
+  }
+
+  welcomePanel(BuildContext context) {
+    return Scaffold(
+      appBar: createAppBar(),
+      body: Row(children: <Widget>[
+        renderWelcomeAndOpen(context),
+      ]),
+    );
+  }
+
+  renderWelcomeAndOpen(BuildContext context) {
+    var textTheme = getTextTheme(context);
+    return Expanded(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      Text("Welcome to MyMoney",
+          textAlign: TextAlign.left, style: textTheme.headline5),
+      const SizedBox(height: 40),
+      Text("No data loaded",
+          textAlign: TextAlign.left, style: textTheme.caption),
+      const SizedBox(height: 40),
+      Wrap(
+        spacing: 10,
+        children: [
+          OutlinedButton(
+              onPressed: handleFileOpen, child: const Text("Open File ...")),
+          OutlinedButton(
+              onPressed: handleUseDemoData, child: const Text("Use Demo Data"))
+        ],
+      ),
+    ]));
   }
 
   PreferredSizeWidget createAppBar() {
@@ -279,6 +285,10 @@ class _MyMoneyState extends State<MyMoney> {
       themeMode: useLightMode ? ThemeMode.light : ThemeMode.dark,
       theme: themeData,
       home: LayoutBuilder(builder: (context, constraints) {
+        if (shouldShowOpenInstructions()) {
+          return welcomePanel(context);
+        }
+
         if (isSmallWidth(constraints)) {
           return getScaffoldingForSmallSurface(context);
         } else {

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 import 'constants.dart';
 
@@ -22,4 +23,14 @@ isSmallWidth(BoxConstraints constraints,
     return true;
   }
   return false;
+}
+
+getTextTheme(BuildContext context) {
+  var theme = Theme.of(context);
+  return theme.textTheme;
+}
+
+getColorTheme(BuildContext context) {
+  var theme = Theme.of(context);
+  return theme.colorScheme;
 }

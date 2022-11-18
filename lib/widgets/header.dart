@@ -27,7 +27,7 @@ class Header extends StatelessWidget {
         child: Row(children: [
           renderCaptionAndCount(context, title, count),
           const Spacer(),
-          Text(description, style: Theme.of(context).textTheme.caption)
+          Text(description, style: getTextTheme(context).caption)
         ]));
   }
 
@@ -41,9 +41,9 @@ class Header extends StatelessWidget {
 
   renderCaptionAndCount(BuildContext context, String caption, num count) {
     return Row(children: [
-      Text(caption, style: Theme.of(context).textTheme.headline6),
+      Text(caption, style: getTextTheme(context).headline6),
       const SizedBox(width: 10),
-      Text('(${count.toString()})', style: Theme.of(context).textTheme.caption)
+      Text('(${count.toString()})', style: getTextTheme(context).caption)
     ]);
   }
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money/helpers.dart';
 import 'package:money/models/data.dart';
 import 'package:money/models/transactions.dart';
-
-import 'package:money/helpers.dart';
 import 'package:money/widgets/header.dart';
 
 class ViewTransactions extends StatefulWidget {
@@ -28,9 +27,8 @@ class ViewTransactionsState extends State<ViewTransactions> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context)
-        .textTheme
-        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
+    final textTheme = getTextTheme(context)
+        .apply(displayColor: getColorTheme(context).onSurface);
 
     return Expanded(
         child: Padding(
@@ -43,31 +41,31 @@ class ViewTransactionsState extends State<ViewTransactions> {
               Row(children: <Widget>[
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Account",
                             textAlign: TextAlign.left,
                             style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Date",
                             textAlign: TextAlign.left,
                             style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Payee",
                             textAlign: TextAlign.left,
                             style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Amount",
                             textAlign: TextAlign.right,
                             style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Balance",
                             textAlign: TextAlign.right,
                             style: textTheme.titleMedium))),

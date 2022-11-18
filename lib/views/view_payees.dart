@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:money/models/data.dart';
-
 import 'package:money/helpers.dart';
+import 'package:money/models/data.dart';
 import 'package:money/widgets/header.dart';
 
 import '../models/payees.dart';
@@ -27,9 +26,8 @@ class ViewPayeesState extends State<ViewPayees> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context)
-        .textTheme
-        .apply(displayColor: Theme.of(context).colorScheme.onSurface);
+    final textTheme = getTextTheme(context)
+        .apply(displayColor: getColorTheme(context).onSurface);
 
     return Expanded(
         child: Padding(
@@ -40,13 +38,13 @@ class ViewPayeesState extends State<ViewPayees> {
               Row(children: <Widget>[
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Name",
                             textAlign: TextAlign.left,
                             style: textTheme.titleMedium))),
                 Expanded(
                     child: Container(
-                        color: Theme.of(context).colorScheme.secondaryContainer,
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Balance",
                             textAlign: TextAlign.right,
                             style: textTheme.titleMedium))),
