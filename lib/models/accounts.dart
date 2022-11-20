@@ -123,7 +123,7 @@ class Accounts {
     return list;
   }
 
-  loadScale() {
+  loadDemoData() {
     List<String> names = [
       'BankOfAmerica',
       'BECU',

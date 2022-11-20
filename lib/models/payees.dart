@@ -43,7 +43,7 @@ class Payees {
     return list;
   }
 
-  loadScale() {
+  loadDemoData() {
     List<String> names = [
       'John',
       'Paul',

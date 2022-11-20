@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../helpers.dart';
+
 class Transaction {
   num id = -1;
   num accountId = -1;
@@ -14,12 +16,12 @@ class Transaction {
 }
 
 class Transactions {
-  num runningBalance = 0;
+  double runningBalance = 0.00;
 
   static List<Transaction> list = [];
 
   load(rows) async {
-    runningBalance = 0;
+    runningBalance = 0.00;
 
     for (var row in rows) {
       var accountId = num.parse(row["Account"].toString());
@@ -35,22 +37,30 @@ class Transactions {
           category, // Category Id
           amount, // Amount
           runningBalance += amount // Balance
-          ));
+      ));
     }
     return list;
   }
 
-  loadScale() {
+  loadDemoData() {
     runningBalance = 0;
-    list = List<Transaction>.generate(
-        10000,
-        (i) => Transaction(
-            Random().nextInt(10), // Account Id
-            DateTime(2020, 02, i + 1), // Date
-            Random().nextInt(10), // Payee Id
-            Random().nextInt(10), // Category Id
-            i * 1.0, // Amount
-            (runningBalance += i).toDouble() // Balance
-            ));
+    for(int i=0; i<=9999;i++){
+      double amount = getRandomAmount(i);
+      runningBalance += amount;
+      list.add(Transaction(
+          Random().nextInt(10), // Account Id
+          DateTime(2020, 02, i + 1), // Date
+          Random().nextInt(10), // Payee Id
+          Random().nextInt(10), // Category Id
+          amount, // Amount
+          runningBalance // Balance
+      ));
+    }
+  }
+
+  getRandomAmount(index) {
+    var isExpense = (Random().nextInt(5) < 4); // Generate more expense transaction than income once
+    var amount = Random().nextDouble() * (isExpense ? -500 : 2500);
+    return roundDouble(amount,2);
   }
 }

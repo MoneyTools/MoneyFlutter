@@ -50,7 +50,7 @@ class Categories {
     return list;
   }
 
-  loadScale() {
+  loadDemoData() {
     List<String> names = [
       'BankOfAmerica',
       'BECU',

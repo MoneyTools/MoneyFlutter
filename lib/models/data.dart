@@ -17,10 +17,10 @@ class Data {
   init(filePathToLoad, callbackWhenLoaded) async {
     if (filePathToLoad == Constants.demoData) {
       // Not supported on Web so generate some random data to see in the views
-      accounts.loadScale();
-      categories.loadScale();
-      payees.loadScale();
-      transactions.loadScale();
+      accounts.loadDemoData();
+      categories.loadDemoData();
+      payees.loadDemoData();
+      transactions.loadDemoData();
       callbackWhenLoaded(true);
       return;
     }

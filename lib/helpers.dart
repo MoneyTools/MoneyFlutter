@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -32,4 +34,10 @@ TextTheme getTextTheme(BuildContext context) {
 getColorTheme(BuildContext context) {
   var theme = Theme.of(context);
   return theme.colorScheme;
+}
+
+
+double roundDouble(double value, int places){
+  num mod = pow(10.0, places);
+  return ((value * mod).round().toDouble() / mod);
 }
