@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'constants.dart';
@@ -17,7 +16,7 @@ intValueOrDefault(int? value, {int defaultValueIfNull = 0}) {
   return value;
 }
 
-isSmallWidth(BoxConstraints constraints,
+bool isSmallWidth(BoxConstraints constraints,
     {num minWidth = Constants.narrowScreenWidthThreshold}) {
   if (constraints.maxWidth < minWidth) {
     return true;
@@ -25,7 +24,7 @@ isSmallWidth(BoxConstraints constraints,
   return false;
 }
 
-getTextTheme(BuildContext context) {
+TextTheme getTextTheme(BuildContext context) {
   var theme = Theme.of(context);
   return theme.textTheme;
 }

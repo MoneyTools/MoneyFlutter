@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers.dart';
+import '../helpers.dart';
+import 'caption_and_counter.dart';
 
 class Header extends StatelessWidget {
   final String title;
@@ -25,7 +26,7 @@ class Header extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Row(children: [
-          renderCaptionAndCount(context, title, count),
+          CaptionAndCounter(caption: title, count: count),
           const Spacer(),
           Text(description, style: getTextTheme(context).caption)
         ]));
@@ -35,15 +36,7 @@ class Header extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Column(
-          children: [renderCaptionAndCount(context, title, count)],
+          children: [CaptionAndCounter(caption: title, count: count)],
         ));
-  }
-
-  renderCaptionAndCount(BuildContext context, String caption, num count) {
-    return Row(children: [
-      Text(caption, style: getTextTheme(context).headline6),
-      const SizedBox(width: 10),
-      Text('(${count.toString()})', style: getTextTheme(context).caption)
-    ]);
   }
 }
