@@ -37,14 +37,14 @@ class Transactions {
           category, // Category Id
           amount, // Amount
           runningBalance += amount // Balance
-      ));
+          ));
     }
     return list;
   }
 
   loadDemoData() {
     runningBalance = 0;
-    for(int i=0; i<=9999;i++){
+    for (int i = 0; i <= 9999; i++) {
       double amount = getRandomAmount(i);
       runningBalance += amount;
       list.add(Transaction(
@@ -54,13 +54,14 @@ class Transactions {
           Random().nextInt(10), // Category Id
           amount, // Amount
           runningBalance // Balance
-      ));
+          ));
     }
   }
 
   getRandomAmount(index) {
-    var isExpense = (Random().nextInt(5) < 4); // Generate more expense transaction than income once
+    var isExpense = (Random().nextInt(5) <
+        4); // Generate more expense transaction than income once
     var amount = Random().nextDouble() * (isExpense ? -500 : 2500);
-    return roundDouble(amount,2);
+    return roundDouble(amount, 2);
   }
 }

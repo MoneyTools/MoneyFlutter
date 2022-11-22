@@ -36,8 +36,7 @@ getColorTheme(BuildContext context) {
   return theme.colorScheme;
 }
 
-
-double roundDouble(double value, int places){
+double roundDouble(double value, int places) {
   num mod = pow(10.0, places);
   return ((value * mod).round().toDouble() / mod);
 }

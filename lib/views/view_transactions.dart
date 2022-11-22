@@ -117,41 +117,42 @@ class ViewTransactionsState extends State<ViewTransactions> {
                       itemBuilder: (context, index) {
                         return Row(
                           children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                  widget.data.accounts
-                                      .getNameFromId(list[index].accountId),
-                                  textAlign: TextAlign.left),
-                            ),
-                            Expanded(
-                              child: Text(
-                                  list[index]
-                                      .dateTime
-                                      .toIso8601String()
-                                      .split('T')
-                                      .first,
-                                  textAlign: TextAlign.left),
-                            ),
-                            Expanded(
-                              child: Text(
-                                  widget.data.payees
-                                      .getNameFromId(list[index].payeeId),
-                                  textAlign: TextAlign.left),
-                            ),
-                            Expanded(
-                              child: Text(
-                                  formatCurrency.format(list[index].amount),
-                                  textAlign: TextAlign.right),
-                            ),
-                            Expanded(
-                              child: Text(
-                                  formatCurrency.format(list[index].balance),
-                                  textAlign: TextAlign.right),
-                            ),
+                            renderColumValueEntryText(widget.data.accounts
+                                .getNameFromId(list[index].accountId)),
+                            renderColumValueEntryText(list[index]
+                                .dateTime
+                                .toIso8601String()
+                                .split('T')
+                                .first),
+                            renderColumValueEntryText(widget.data.payees
+                                .getNameFromId(list[index].payeeId)),
+                            renderColumValueEntryCurrency(list[index].amount),
+                            renderColumValueEntryCurrency(list[index].balance),
                           ],
                         );
                       })),
             ])));
+  }
+
+  Widget renderColumValueEntryText(text) {
+    return Expanded(
+        child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                child: Text(text, textAlign: TextAlign.left))));
+  }
+
+  Widget renderColumValueEntryCurrency(value) {
+    return Expanded(
+        child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerRight,
+            child: Padding(
+                padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
+                child: Text(formatCurrency.format(value),
+                    textAlign: TextAlign.right))));
   }
 
   renderToggles() {
