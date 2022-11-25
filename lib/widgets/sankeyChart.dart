@@ -13,6 +13,7 @@ class FunnelTarget {
   Rect rect;
   Color color;
   bool useAsIncome = true;
+
   FunnelTarget(this.name, this.rect, this.color, this.useAsIncome) {
     //
   }
@@ -34,50 +35,33 @@ class SankyPaint extends CustomPainter {
     var targetHeight = 200.0;
     var quarterHeight = size.height / 4;
 
-    FunnelTarget targetIncome = FunnelTarget(
-        "Incomes",
-        ui.Rect.fromLTWH(targetLeft, (quarterHeight * 1) - (targetWidth / 2),
-            targetWidth, targetHeight),
-        const Color(0xff254406),
-        true);
-    FunnelTarget targetExpense = FunnelTarget(
-        "Expenses",
-        ui.Rect.fromLTWH(targetLeft, (quarterHeight * 3) - (targetWidth / 2),
-            targetWidth, targetHeight),
-        const Color(0xFF4D0C05),
-        false);
+    FunnelTarget targetIncome = FunnelTarget("Incomes", ui.Rect.fromLTWH(targetLeft, (quarterHeight * 1) - (targetWidth / 2), targetWidth, targetHeight), const Color(0xff254406), true);
+    FunnelTarget targetExpense = FunnelTarget("Expenses", ui.Rect.fromLTWH(targetLeft, (quarterHeight * 3) - (targetWidth / 2), targetWidth, targetHeight), const Color(0xFF4D0C05), false);
 
     var stackVerticalPosition = 0.0;
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true,
-        padding, stackVerticalPosition, targetIncome);
+    stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome);
     stackVerticalPosition += padding;
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses,
-        false, padding, stackVerticalPosition, targetExpense);
+    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense);
   }
 
-  double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left,
-      double top, FunnelTarget target) {
+  double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, FunnelTarget target) {
     double ratioPriceToHeight = getRatioFromMaxValue(list, useAsIncome);
 
     var verticalPosition = 0.0;
     var sourceWidth = 200.0;
 
     var destinationRightLeft = ui.Offset(target.rect.left, target.rect.top);
-    var destinationRightBottom =
-        ui.Offset(target.rect.left, target.rect.bottom);
+    var destinationRightBottom = ui.Offset(target.rect.left, target.rect.bottom);
 
-    drawBoxAndText(canvas, destinationRightLeft.dx, destinationRightLeft.dy,
-        target.rect.width, target.rect.height, target.name, target.color);
+    drawBoxAndText(canvas, destinationRightLeft.dx, destinationRightLeft.dy, target.rect.width, target.rect.height, target.name, target.color);
 
     for (var element in list) {
       double height = element.value.abs() * ratioPriceToHeight;
       double boxTop = top + verticalPosition;
-      drawBoxAndText(canvas, left, boxTop, sourceWidth, height, element.name,
-          target.color);
+      drawBoxAndText(canvas, left, boxTop, sourceWidth, height, element.name, target.color);
       var offsetLeftTop = ui.Offset(left + sourceWidth, boxTop);
       var offsetLeftBottom = ui.Offset(left + sourceWidth, boxTop + height);
-      drawPath(canvas, offsetLeftTop, offsetLeftBottom, destinationRightLeft,
-          destinationRightBottom, Colors.grey);
+      drawPath(canvas, offsetLeftTop, offsetLeftBottom, destinationRightLeft, destinationRightBottom, Colors.grey);
       verticalPosition += height + padding;
     }
 
@@ -85,8 +69,7 @@ class SankyPaint extends CustomPainter {
     return verticalPosition;
   }
 
-  ui.Path drawPath(ui.Canvas canvas, ui.Offset topLeft, ui.Offset topRight,
-      ui.Offset bottomLeft, ui.Offset bottomRight, color) {
+  ui.Path drawPath(ui.Canvas canvas, ui.Offset topLeft, ui.Offset topRight, ui.Offset bottomLeft, ui.Offset bottomRight, color) {
     Path downwardPath = Path();
     downwardPath.moveTo(topLeft.dx, topLeft.dy);
 
@@ -105,33 +88,16 @@ class SankyPaint extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 
   void drawBoxAndText(canvas, x, y, w, h, text, Color color) {
-    canvas.drawRect(
-      Rect.fromLTWH(
-        x,
-        y,
-        w,
-        h,
-      ),
-      Paint()..color = color,
-    );
+    canvas.drawRect(Rect.fromLTWH(x, y, w, h), Paint()..color = color);
     drawText(canvas, text, x, y, color: Colors.white);
   }
 
-  void drawText(Canvas context, String name, double x, double y,
-      {Color color = Colors.black,
-      double fontSize = 10.0,
-      double angleRotationInRadians = 0.0}) {
+  void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 10.0, double angleRotationInRadians = 0.0}) {
     context.save();
     context.translate(x, y);
     context.rotate(angleRotationInRadians);
-    TextSpan span = TextSpan(
-        style:
-            TextStyle(color: color, fontSize: fontSize, fontFamily: 'Roboto'),
-        text: name);
-    TextPainter tp = TextPainter(
-        text: span,
-        textAlign: TextAlign.left,
-        textDirection: ui.TextDirection.ltr);
+    TextSpan span = TextSpan(style: TextStyle(color: color, fontSize: fontSize, fontFamily: 'Roboto'), text: name);
+    TextPainter tp = TextPainter(text: span, textAlign: TextAlign.left, textDirection: ui.TextDirection.ltr);
     tp.layout();
     tp.paint(context, const Offset(0.0, 0.0));
     context.restore();
@@ -139,8 +105,7 @@ class SankyPaint extends CustomPainter {
 }
 
 double getHeightNeededToRender(list, useAsIncome) {
-  var ratioPriceToHeight =
-      useAsIncome ? getHeightRationIncome(list) : getHeightRatioExpense(list);
+  var ratioPriceToHeight = useAsIncome ? getHeightRationIncome(list) : getHeightRatioExpense(list);
 
   var verticalPosition = 0.0;
   var gap = 10.0;

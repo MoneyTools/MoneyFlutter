@@ -19,8 +19,7 @@ intValueOrDefault(int? value, {int defaultValueIfNull = 0}) {
   return value;
 }
 
-bool isSmallWidth(BoxConstraints constraints,
-    {num minWidth = Constants.narrowScreenWidthThreshold}) {
+bool isSmallWidth(BoxConstraints constraints, {num minWidth = Constants.narrowScreenWidthThreshold}) {
   if (constraints.maxWidth < minWidth) {
     return true;
   }

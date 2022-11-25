@@ -28,34 +28,17 @@ class ViewAccountsState extends State<ViewAccounts> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = getTextTheme(context)
-        .apply(displayColor: getColorTheme(context).onSurface);
+    final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
 
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Accounts", numValueOrDefault(accountsOpened.length),
-                  "Your main assets."),
+              Header("Accounts", numValueOrDefault(accountsOpened.length), "Your main assets."),
               Row(children: <Widget>[
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Name",
-                            textAlign: TextAlign.left,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Type",
-                            textAlign: TextAlign.left,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Balance",
-                            textAlign: TextAlign.right,
-                            style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Type", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -66,18 +49,13 @@ class ViewAccountsState extends State<ViewAccounts> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(accountsOpened[index].name,
-                                  textAlign: TextAlign.left),
+                              child: Text(accountsOpened[index].name, textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(accountsOpened[index].typeAsText(),
-                                  textAlign: TextAlign.left),
+                              child: Text(accountsOpened[index].typeAsText(), textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(
-                                  formatCurrency
-                                      .format(accountsOpened[index].balance),
-                                  textAlign: TextAlign.right),
+                              child: Text(formatCurrency.format(accountsOpened[index].balance), textAlign: TextAlign.right),
                             ),
                           ],
                         );

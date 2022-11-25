@@ -16,8 +16,7 @@ class ViewTransactions extends StatefulWidget {
 }
 
 class ViewTransactionsState extends State<ViewTransactions> {
-  final styleHeader =
-      const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+  final styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   final List<Widget> options = [];
   final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
@@ -28,23 +27,9 @@ class ViewTransactionsState extends State<ViewTransactions> {
   void initState() {
     super.initState();
 
-    options.add(CaptionAndCounter(
-        caption: "Incomes",
-        small: true,
-        vertical: true,
-        count:
-            Transactions.list.where((element) => element.amount > 0).length));
-    options.add(CaptionAndCounter(
-        caption: "Expenses",
-        small: true,
-        vertical: true,
-        count:
-            Transactions.list.where((element) => element.amount < 0).length));
-    options.add(CaptionAndCounter(
-        caption: "All",
-        small: true,
-        vertical: true,
-        count: Transactions.list.length));
+    options.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, count: Transactions.list.where((element) => element.amount > 0).length));
+    options.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, count: Transactions.list.where((element) => element.amount < 0).length));
+    options.add(CaptionAndCounter(caption: "All", small: true, vertical: true, count: Transactions.list.length));
   }
 
   getFilteredList() {
@@ -65,8 +50,7 @@ class ViewTransactionsState extends State<ViewTransactions> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = getTextTheme(context)
-        .apply(displayColor: getColorTheme(context).onSurface);
+    final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
 
     var list = getFilteredList();
 
@@ -74,40 +58,14 @@ class ViewTransactionsState extends State<ViewTransactions> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Transactions", intValueOrDefault(list.length),
-                  "Details actions of your accounts."),
+              Header("Transactions", intValueOrDefault(list.length), "Details actions of your accounts."),
               renderToggles(),
               Row(children: <Widget>[
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Account",
-                            textAlign: TextAlign.left,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Date",
-                            textAlign: TextAlign.left,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Payee",
-                            textAlign: TextAlign.left,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Amount",
-                            textAlign: TextAlign.right,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Balance",
-                            textAlign: TextAlign.right,
-                            style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Account", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Date", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Payee", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Amount", textAlign: TextAlign.right, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -117,15 +75,9 @@ class ViewTransactionsState extends State<ViewTransactions> {
                       itemBuilder: (context, index) {
                         return Row(
                           children: <Widget>[
-                            renderColumValueEntryText(widget.data.accounts
-                                .getNameFromId(list[index].accountId)),
-                            renderColumValueEntryText(list[index]
-                                .dateTime
-                                .toIso8601String()
-                                .split('T')
-                                .first),
-                            renderColumValueEntryText(widget.data.payees
-                                .getNameFromId(list[index].payeeId)),
+                            renderColumValueEntryText(widget.data.accounts.getNameFromId(list[index].accountId)),
+                            renderColumValueEntryText(list[index].dateTime.toIso8601String().split('T').first),
+                            renderColumValueEntryText(widget.data.payees.getNameFromId(list[index].payeeId)),
                             renderColumValueEntryCurrency(list[index].amount),
                             renderColumValueEntryCurrency(list[index].balance),
                           ],
@@ -135,24 +87,12 @@ class ViewTransactionsState extends State<ViewTransactions> {
   }
 
   Widget renderColumValueEntryText(text) {
-    return Expanded(
-        child: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerLeft,
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
-                child: Text(text, textAlign: TextAlign.left))));
+    return Expanded(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: Padding(padding: const EdgeInsets.fromLTRB(0, 0, 8, 0), child: Text(text, textAlign: TextAlign.left))));
   }
 
   Widget renderColumValueEntryCurrency(value) {
     return Expanded(
-        child: FittedBox(
-            fit: BoxFit.scaleDown,
-            alignment: Alignment.centerRight,
-            child: Padding(
-                padding: const EdgeInsets.fromLTRB(1, 0, 1, 0),
-                child: Text(formatCurrency.format(value),
-                    textAlign: TextAlign.right))));
+        child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: Padding(padding: const EdgeInsets.fromLTRB(1, 0, 1, 0), child: Text(formatCurrency.format(value), textAlign: TextAlign.right))));
   }
 
   renderToggles() {

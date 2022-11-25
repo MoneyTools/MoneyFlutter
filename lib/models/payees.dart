@@ -44,18 +44,7 @@ class Payees {
   }
 
   loadDemoData() {
-    List<String> names = [
-      'John',
-      'Paul',
-      'George',
-      'Ringo',
-      'Jean-Pierre',
-      'Chris',
-      'Bill',
-      'Steve',
-      'Sue',
-      'Barbara'
-    ];
+    List<String> names = ['John', 'Paul', 'George', 'Ringo', 'Jean-Pierre', 'Chris', 'Bill', 'Steve', 'Sue', 'Barbara'];
     list = List<Payee>.generate(10, (i) => Payee(i, names[i]));
   }
 

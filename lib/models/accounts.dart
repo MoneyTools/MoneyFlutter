@@ -124,18 +124,7 @@ class Accounts {
   }
 
   loadDemoData() {
-    List<String> names = [
-      'BankOfAmerica',
-      'BECU',
-      'FirstTech',
-      'Fidelity',
-      'Bank of Japan',
-      'Trust Canada',
-      'ABC Corp',
-      'Royal Bank',
-      'Unicorn',
-      'God-Inc'
-    ];
+    List<String> names = ['BankOfAmerica', 'BECU', 'FirstTech', 'Fidelity', 'Bank of Japan', 'Trust Canada', 'ABC Corp', 'Royal Bank', 'Unicorn', 'God-Inc'];
     list = List<Account>.generate(10, (i) => Account(i, names[i]));
   }
 

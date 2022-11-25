@@ -73,8 +73,7 @@ class ViewCashFlowState extends State<ViewCashFlow> {
     // Clean up the Incomes, drop 0.00
     mapOfIncomes.removeWhere((k, v) => v <= 0.00);
     // Sort Descending
-    mapOfIncomes = Map.fromEntries(mapOfIncomes.entries.toList()
-      ..sort((e1, e2) => (e2.value - e1.value).toInt()));
+    mapOfIncomes = Map.fromEntries(mapOfIncomes.entries.toList()..sort((e1, e2) => (e2.value - e1.value).toInt()));
 
     mapOfIncomes.forEach((key, value) {
       sanKeyListOfIncomes.add(SanKeyEntry()
@@ -86,8 +85,7 @@ class ViewCashFlowState extends State<ViewCashFlow> {
     mapOfExpenses.removeWhere((k, v) => v == 0.00);
 
     // Sort Descending, in the case of expenses that means the largest negative number to the least negative number
-    mapOfExpenses = Map.fromEntries(mapOfExpenses.entries.toList()
-      ..sort((e1, e2) => (e1.value - e2.value).toInt()));
+    mapOfExpenses = Map.fromEntries(mapOfExpenses.entries.toList()..sort((e1, e2) => (e1.value - e2.value).toInt()));
 
     mapOfExpenses.forEach((key, value) {
       sanKeyListOfExpenses.add(SanKeyEntry()
@@ -116,8 +114,7 @@ class ViewCashFlowState extends State<ViewCashFlow> {
         width: 1000,
         height: totalHeight,
         child: CustomPaint(
-          painter:
-              SankyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, padding),
+          painter: SankyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, padding),
         ),
       ),
     ]));
@@ -125,8 +122,7 @@ class ViewCashFlowState extends State<ViewCashFlow> {
 
   widgetIncomes() {
     var widgets = <Widget>[];
-    mapOfIncomes.forEach(
-        (k, v) => widgets.add(Text("${k.name} ${getCurrencyText(v)}")));
+    mapOfIncomes.forEach((k, v) => widgets.add(Text("${k.name} ${getCurrencyText(v)}")));
     return widgets;
   }
 }

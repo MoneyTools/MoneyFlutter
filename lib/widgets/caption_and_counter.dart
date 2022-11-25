@@ -9,13 +9,7 @@ class CaptionAndCounter extends StatelessWidget {
   final bool small;
   final bool vertical;
 
-  const CaptionAndCounter(
-      {Key? key,
-      this.caption = "",
-      this.count = 0,
-      this.small = false,
-      this.vertical = false})
-      : super(key: key);
+  const CaptionAndCounter({Key? key, this.caption = "", this.count = 0, this.small = false, this.vertical = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,11 +17,7 @@ class CaptionAndCounter extends StatelessWidget {
       return Column(children: [renderCaption(context), renderCount(context)]);
     }
 
-    return Row(children: [
-      renderCaption(context),
-      const SizedBox(width: 10),
-      renderCount(context)
-    ]);
+    return Row(children: [renderCaption(context), const SizedBox(width: 10), renderCount(context)]);
   }
 
   Widget renderCaption(context) {

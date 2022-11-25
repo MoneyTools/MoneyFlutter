@@ -27,34 +27,17 @@ class ViewCategoriesState extends State<ViewCategories> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = getTextTheme(context)
-        .apply(displayColor: getColorTheme(context).onSurface);
+    final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
 
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Categories", numValueOrDefault(Categories.list.length),
-                  "Classification of your money transactions."),
+              Header("Categories", numValueOrDefault(Categories.list.length), "Classification of your money transactions."),
               Row(children: <Widget>[
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Name",
-                            textAlign: TextAlign.left,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Type",
-                            textAlign: TextAlign.center,
-                            style: textTheme.titleMedium))),
-                Expanded(
-                    child: Container(
-                        color: getColorTheme(context).secondaryContainer,
-                        child: Text("Balance",
-                            textAlign: TextAlign.right,
-                            style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Type", textAlign: TextAlign.center, style: textTheme.titleMedium))),
+                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
               ]),
               Expanded(
                   child: ListView.builder(
@@ -65,19 +48,13 @@ class ViewCategoriesState extends State<ViewCategories> {
                         return Row(
                           children: <Widget>[
                             Expanded(
-                              child: Text(Categories.list[index].name,
-                                  textAlign: TextAlign.left),
+                              child: Text(Categories.list[index].name, textAlign: TextAlign.left),
                             ),
                             Expanded(
-                              child: Text(
-                                  Categories.list[index].getTypeAsText(),
-                                  textAlign: TextAlign.center),
+                              child: Text(Categories.list[index].getTypeAsText(), textAlign: TextAlign.center),
                             ),
                             Expanded(
-                              child: Text(
-                                  getCurrencyText(
-                                      Categories.list[index].balance),
-                                  textAlign: TextAlign.right),
+                              child: Text(getCurrencyText(Categories.list[index].balance), textAlign: TextAlign.right),
                             ),
                           ],
                         );

@@ -31,8 +31,7 @@ class Data {
       }
 
       var databaseFactory = databaseFactoryFfi;
-      String? pathToDatabaseFile =
-          await validateDataBasePathIsValidAndExist(filePathToLoad);
+      String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
       if (pathToDatabaseFile != null) {
         var db = await databaseFactory.openDatabase(pathToDatabaseFile);
 

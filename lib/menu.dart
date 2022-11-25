@@ -53,8 +53,7 @@ class NavigationBars extends StatefulWidget {
   final void Function(int) onSelectItem;
   final int selectedIndex;
 
-  const NavigationBars(
-      {super.key, required this.onSelectItem, required this.selectedIndex});
+  const NavigationBars({super.key, required this.onSelectItem, required this.selectedIndex});
 
   @override
   State<NavigationBars> createState() => _NavigationBarsState();
@@ -88,8 +87,7 @@ class NavigationRailSection extends StatefulWidget {
   final void Function(int) onSelectItem;
   final int selectedIndex;
 
-  const NavigationRailSection(
-      {super.key, required this.onSelectItem, required this.selectedIndex});
+  const NavigationRailSection({super.key, required this.onSelectItem, required this.selectedIndex});
 
   @override
   State<NavigationRailSection> createState() => _NavigationRailSectionState();

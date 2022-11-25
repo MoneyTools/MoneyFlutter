@@ -11,8 +11,7 @@ class Transaction {
   double amount = 0.00;
   double balance = 0.00;
 
-  Transaction(this.accountId, this.dateTime, this.payeeId, this.categoryId,
-      this.amount, this.balance);
+  Transaction(this.accountId, this.dateTime, this.payeeId, this.categoryId, this.amount, this.balance);
 }
 
 class Transactions {
@@ -59,8 +58,7 @@ class Transactions {
   }
 
   getRandomAmount(index) {
-    var isExpense = (Random().nextInt(5) <
-        4); // Generate more expense transaction than income once
+    var isExpense = (Random().nextInt(5) < 4); // Generate more expense transaction than income once
     var amount = Random().nextDouble() * (isExpense ? -500 : 2500);
     return roundDouble(amount, 2);
   }
