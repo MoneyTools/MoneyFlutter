@@ -1,13 +1,34 @@
 import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:money/models/transactions.dart';
+
+enum CategoryType { none, income, expense, saving, investment }
 
 class Category {
   num id = -1;
+  num parentId = -1;
   String name = "";
+  CategoryType type = CategoryType.none;
   num count = 0;
   double balance = 0.00;
 
   Category(this.id, this.name);
+
+  getTypeAsText() {
+    switch (type) {
+      case CategoryType.income:
+        return "Income";
+      case CategoryType.expense:
+        return "Expense";
+      case CategoryType.saving:
+        return "Saving";
+      case CategoryType.investment:
+        return "Investment";
+      case CategoryType.none:
+      default:
+        return "None";
+    }
+  }
 }
 
 class Categories {
@@ -15,8 +36,8 @@ class Categories {
 
   static List<Category> list = [];
 
-  static Category? get(accountId) {
-    return list.firstWhereOrNull((item) => item.id == accountId);
+  static Category? get(id) {
+    return list.firstWhereOrNull((item) => item.id == id);
   }
 
   String getNameFromId(num id) {
@@ -25,6 +46,17 @@ class Categories {
       return id.toString();
     }
     return account.name;
+  }
+
+  static Category? getTopAncestor(Category category) {
+    if (category.parentId == -1) {
+      return category; // this is the top
+    }
+    var parent = get(category.parentId);
+    if (parent == null) {
+      return category;
+    }
+    return getTopAncestor(parent);
   }
 
   /*
@@ -45,7 +77,33 @@ class Categories {
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var name = row["Name"].toString();
-      list.add(Category(id, name));
+      var newEntry = Category(id, name);
+      newEntry.parentId = num.parse(row["ParentId"].toString());
+
+      try {
+        var rt = row["Type"];
+        var rtt = rt.toString();
+        switch (rtt) {
+          case "1":
+            newEntry.type = CategoryType.income;
+            break;
+          case "2":
+            newEntry.type = CategoryType.expense;
+            break;
+          case "3":
+            newEntry.type = CategoryType.saving;
+            break;
+          case "4":
+            newEntry.type = CategoryType.investment;
+            break;
+          case "0":
+          default:
+            newEntry.type = CategoryType.none;
+        }
+      } catch (e) {
+        print(e);
+      }
+      list.add(newEntry);
     }
     return list;
   }

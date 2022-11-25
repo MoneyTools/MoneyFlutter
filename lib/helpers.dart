@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'constants.dart';
 
@@ -39,4 +40,9 @@ getColorTheme(BuildContext context) {
 double roundDouble(double value, int places) {
   num mod = pow(10.0, places);
   return ((value * mod).round().toDouble() / mod);
+}
+
+String getCurrencyText(double value) {
+  final formatCurrency = NumberFormat("#,##0.00", "en_US");
+  return formatCurrency.format(value);
 }

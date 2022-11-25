@@ -46,6 +46,12 @@ class ViewCategoriesState extends State<ViewCategories> {
                 Expanded(
                     child: Container(
                         color: getColorTheme(context).secondaryContainer,
+                        child: Text("Type",
+                            textAlign: TextAlign.center,
+                            style: textTheme.titleMedium))),
+                Expanded(
+                    child: Container(
+                        color: getColorTheme(context).secondaryContainer,
                         child: Text("Balance",
                             textAlign: TextAlign.right,
                             style: textTheme.titleMedium))),
@@ -64,8 +70,13 @@ class ViewCategoriesState extends State<ViewCategories> {
                             ),
                             Expanded(
                               child: Text(
-                                  formatCurrency
-                                      .format(Categories.list[index].balance),
+                                  Categories.list[index].getTypeAsText(),
+                                  textAlign: TextAlign.center),
+                            ),
+                            Expanded(
+                              child: Text(
+                                  getCurrencyText(
+                                      Categories.list[index].balance),
                                   textAlign: TextAlign.right),
                             ),
                           ],

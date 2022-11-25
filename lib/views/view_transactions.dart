@@ -156,7 +156,8 @@ class ViewTransactionsState extends State<ViewTransactions> {
   }
 
   renderToggles() {
-    return Padding(
+    return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
         child: ToggleButtons(
           direction: Axis.horizontal,

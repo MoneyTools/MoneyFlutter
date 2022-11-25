@@ -2,6 +2,12 @@ import 'package:flutter/material.dart';
 
 const List<NavigationDestination> appBarDestinations = [
   NavigationDestination(
+    label: 'Cash Flow',
+    tooltip: "Cash Flow",
+    icon: Icon(Icons.analytics_outlined),
+    selectedIcon: Icon(Icons.analytics),
+  ),
+  NavigationDestination(
     label: 'Accounts',
     tooltip: "Accounts",
     icon: Icon(Icons.account_balance_outlined),
