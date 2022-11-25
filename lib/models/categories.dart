@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:money/models/transactions.dart';
 
 enum CategoryType { none, income, expense, saving, investment }
