@@ -3,6 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../helpers.dart';
+
 class SanKeyEntry {
   String name = "";
   double value = 0.00;
@@ -32,29 +34,66 @@ class SankyPaint extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const double targetWidth = 100.0;
     var targetLeft = size.width - targetWidth - padding;
-    var targetHeight = 200.0;
-    var quarterHeight = size.height / 4;
+    var targetHeight = 100.0;
+    var horizontalCenter = size.width / 2;
 
-    FunnelTarget targetIncome = FunnelTarget("Incomes", ui.Rect.fromLTWH(targetLeft, (quarterHeight * 1) - (targetWidth / 2), targetWidth, targetHeight), const Color(0xff254406), true);
-    FunnelTarget targetExpense = FunnelTarget("Expenses", ui.Rect.fromLTWH(targetLeft, (quarterHeight * 3) - (targetWidth / 2), targetWidth, targetHeight), const Color(0xFF4D0C05), false);
+    var verticalStackOfTargets = 0.0;
+
+    var totalIncome = listOfIncomes.fold(0.00, (sum, item) => sum + item.value);
+    var totalExpense = listOfExpenses.fold(0.00, (sum, item) => sum + item.value.abs());
+
+    var ratioIncomeToExpense = (targetHeight) / (totalIncome + totalExpense);
+
+    var lastHeight = ratioIncomeToExpense * totalIncome;
+
+    FunnelTarget targetIncome = FunnelTarget(
+      "Incomes\n${getCurrencyText(totalIncome)}",
+      ui.Rect.fromLTWH(
+        horizontalCenter,
+        verticalStackOfTargets,
+        targetWidth,
+        lastHeight,
+      ),
+      const Color(0xff254406),
+      true,
+    );
+
+    verticalStackOfTargets += padding + lastHeight;
+    lastHeight = ratioIncomeToExpense * totalExpense;
+    FunnelTarget targetExpense = FunnelTarget(
+      "Expenses\n${getCurrencyText(totalExpense)}",
+      ui.Rect.fromLTWH(
+        horizontalCenter,
+        verticalStackOfTargets,
+        targetWidth,
+        lastHeight,
+      ),
+      const Color(0xFF4D0C05),
+      false,
+    );
 
     var stackVerticalPosition = 0.0;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome);
     stackVerticalPosition += padding;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense);
+
+    FunnelTarget targetNet = FunnelTarget("Net\n${getCurrencyText(totalIncome - totalExpense)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, targetHeight / 2), const Color(0xFF003965), false);
+    drawBoxAndTextFromTarget(canvas, targetNet);
+
+    drawPathFromTarget(canvas, targetIncome, targetNet);
+    drawPathFromTarget(canvas, targetExpense, targetNet);
   }
 
   double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, FunnelTarget target) {
     double ratioPriceToHeight = getRatioFromMaxValue(list, useAsIncome);
+
+    drawBoxAndTextFromTarget(canvas, target);
 
     var verticalPosition = 0.0;
     var sourceWidth = 200.0;
 
     var destinationRightLeft = ui.Offset(target.rect.left, target.rect.top);
     var destinationRightBottom = ui.Offset(target.rect.left, target.rect.bottom);
-
-    drawBoxAndText(canvas, destinationRightLeft.dx, destinationRightLeft.dy, target.rect.width, target.rect.height, target.name, target.color);
-
     for (var element in list) {
       double height = element.value.abs() * ratioPriceToHeight;
       double boxTop = top + verticalPosition;
@@ -69,7 +108,14 @@ class SankyPaint extends CustomPainter {
     return verticalPosition;
   }
 
-  ui.Path drawPath(ui.Canvas canvas, ui.Offset topLeft, ui.Offset topRight, ui.Offset bottomLeft, ui.Offset bottomRight, color) {
+  ui.Path drawPath(
+    ui.Canvas canvas,
+    ui.Offset topLeft,
+    ui.Offset topRight,
+    ui.Offset bottomLeft,
+    ui.Offset bottomRight,
+    color,
+  ) {
     Path downwardPath = Path();
     downwardPath.moveTo(topLeft.dx, topLeft.dy);
 
@@ -84,12 +130,26 @@ class SankyPaint extends CustomPainter {
     return downwardPath;
   }
 
+  ui.Path drawPathFromTarget(ui.Canvas canvas, FunnelTarget source, FunnelTarget target) {
+    var offsetTopLeft = ui.Offset(source.rect.right, source.rect.top);
+    var offsetTopRight = ui.Offset(target.rect.left, target.rect.top);
+    var offsetBottomLeft = ui.Offset(source.rect.right, source.rect.bottom);
+    var offsetBottomRight = ui.Offset(target.rect.left, target.rect.bottom);
+
+    return drawPath(canvas, offsetTopLeft, offsetTopRight, offsetBottomLeft, offsetBottomRight, Colors.lightBlue);
+  }
+
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 
   void drawBoxAndText(canvas, x, y, w, h, text, Color color) {
     canvas.drawRect(Rect.fromLTWH(x, y, w, h), Paint()..color = color);
     drawText(canvas, text, x, y, color: Colors.white);
+  }
+
+  void drawBoxAndTextFromTarget(canvas, FunnelTarget target) {
+    canvas.drawRect(target.rect, Paint()..color = target.color);
+    drawText(canvas, target.name, target.rect.left, target.rect.top, color: Colors.white);
   }
 
   void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 10.0, double angleRotationInRadians = 0.0}) {
