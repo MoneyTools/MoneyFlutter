@@ -10,13 +10,13 @@ class SanKeyEntry {
   double value = 0.00;
 }
 
-class FunnelTarget {
+class Block {
   String name = "";
   Rect rect;
   Color color;
   bool useAsIncome = true;
 
-  FunnelTarget(this.name, this.rect, this.color, this.useAsIncome) {
+  Block(this.name, this.rect, this.color, this.useAsIncome) {
     //
   }
 }
@@ -46,26 +46,26 @@ class SankyPaint extends CustomPainter {
 
     var lastHeight = ratioIncomeToExpense * totalIncome;
 
-    FunnelTarget targetIncome = FunnelTarget("Incomes\n${getCurrencyText(totalIncome)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff254406), true);
+    Block targetIncome = Block("Incomes\n${getCurrencyText(totalIncome)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff254406), true);
 
     verticalStackOfTargets += padding + lastHeight;
     lastHeight = ratioIncomeToExpense * totalExpense;
 
-    FunnelTarget targetExpense = FunnelTarget("Expenses\n${getCurrencyText(totalExpense)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xFF4D0C05), false);
+    Block targetExpense = Block("Expenses\n${getCurrencyText(totalExpense)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xFF4D0C05), false);
 
     var stackVerticalPosition = 0.0;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome);
     stackVerticalPosition += padding * 5;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense);
 
-    FunnelTarget targetNet = FunnelTarget("Net\n${getCurrencyText(totalIncome - totalExpense)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, targetHeight / 2), const Color(0xFF003965), false);
+    Block targetNet = Block("Net\n${getCurrencyText(totalIncome - totalExpense)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, targetHeight / 2), const Color(0xFF003965), false);
     drawBoxAndTextFromTarget(canvas, targetNet);
 
     drawPathFromTarget(canvas, targetIncome, targetNet);
     drawPathFromTarget(canvas, targetExpense, targetNet);
   }
 
-  double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, FunnelTarget target) {
+  double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, Block target) {
     double ratioPriceToHeight = getRatioFromMaxValue(list, useAsIncome);
 
     drawBoxAndTextFromTarget(canvas, target);
@@ -77,7 +77,7 @@ class SankyPaint extends CustomPainter {
       double height = max(10, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
       Rect rect = Rect.fromLTWH(left, boxTop, sourceWidth, height);
-      FunnelTarget source = FunnelTarget(element.name + ": " + getCurrencyText(element.value), rect, target.color, useAsIncome);
+      Block source = Block(element.name + ": " + getCurrencyText(element.value), rect, target.color, useAsIncome);
       drawBoxAndTextFromTarget(canvas, source);
       drawPathFromTarget(canvas, source, target);
 
@@ -131,7 +131,7 @@ class SankyPaint extends CustomPainter {
     return downwardPath;
   }
 
-  ui.Path drawPathFromTarget(ui.Canvas canvas, FunnelTarget source, FunnelTarget target) {
+  ui.Path drawPathFromTarget(ui.Canvas canvas, Block source, Block target) {
     var offsetTopLeft = ui.Offset(source.rect.right, source.rect.top);
     var offsetTopRight = ui.Offset(target.rect.left, target.rect.top);
     var offsetBottomLeft = ui.Offset(source.rect.right, source.rect.bottom);
@@ -148,7 +148,7 @@ class SankyPaint extends CustomPainter {
     drawText(canvas, text, x, y, color: Colors.white);
   }
 
-  void drawBoxAndTextFromTarget(canvas, FunnelTarget target) {
+  void drawBoxAndTextFromTarget(canvas, Block target) {
     canvas.drawRect(target.rect, Paint()..color = target.color);
     drawText(canvas, target.name, target.rect.left, target.rect.top, color: Colors.white);
   }
