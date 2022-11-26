@@ -30,6 +30,12 @@ const List<NavigationDestination> appBarDestinations = [
     tooltip: "Transactions",
     icon: Icon(Icons.receipt_long_outlined),
     selectedIcon: Icon(Icons.receipt_long),
+  ),
+  NavigationDestination(
+    label: 'Test',
+    tooltip: "Test",
+    icon: Icon(Icons.assignment_turned_in_outlined),
+    selectedIcon: Icon(Icons.assignment_turned_in),
   )
 ];
 

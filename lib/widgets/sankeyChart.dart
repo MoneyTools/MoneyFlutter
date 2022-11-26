@@ -2,25 +2,13 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:money/widgets/sankeyBand.dart';
 
 import '../helpers.dart';
 
 class SanKeyEntry {
   String name = "";
   double value = 0.00;
-}
-
-class Block {
-  String name = "";
-  Rect rect;
-  Color color;
-  bool useAsIncome = true;
-
-  Block(this.name, this.rect, this.color, this.useAsIncome) {
-    //
-  }
-
-  static const minBlockHeight = 30.0;
 }
 
 class SankeyPaint extends CustomPainter {
@@ -41,8 +29,7 @@ class SankeyPaint extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const double targetWidth = 100.0;
-    var targetLeft = size.width - targetWidth - padding;
-    var targetHeight = 200.0;
+    const double targetHeight = 200.0;
     var horizontalCenter = size.width / 2;
 
     var verticalStackOfTargets = 0.0;
@@ -66,14 +53,15 @@ class SankeyPaint extends CustomPainter {
     stackVerticalPosition += padding * 5;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense, const Color(0x9b730000));
 
+    // Income and Expense to Net
     var netAmount = totalIncome - totalExpense;
     lastHeight = ratioIncomeToExpense * netAmount;
     lastHeight = max(Block.minBlockHeight, lastHeight);
-    Block targetNet = Block("Net\n${getCurrencyText(netAmount)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, lastHeight), const Color(0xff0061ad), false);
-    drawBoxAndTextFromTarget(canvas, targetNet);
 
-    drawPathFromTarget(canvas, targetIncome, targetNet);
-    drawPathFromTarget(canvas, targetExpense, targetNet);
+    var targetLeft = size.width - targetWidth - padding;
+    Block targetNet = Block("Net\n${getCurrencyText(netAmount)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, lastHeight), const Color(0xff0061ad), false);
+
+    renderSourcesToTargetAsPercentage(canvas, [targetIncome, targetExpense], targetNet);
   }
 
   double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, Block target, Color color) {
@@ -84,92 +72,24 @@ class SankeyPaint extends CustomPainter {
     var verticalPosition = 0.0;
     var sourceWidth = 200.0;
 
+    List<Block> sources = [];
+
+    // Prepare the sources (Left Side)
     for (var element in list) {
+      // Prepare a Left Block
       double height = max(10, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
       Rect rect = Rect.fromLTWH(left, boxTop, sourceWidth, height);
       Block source = Block(element.name + ": " + getCurrencyText(element.value), rect, color, useAsIncome);
-      drawBoxAndTextFromTarget(canvas, source);
-      drawPathFromTarget(canvas, source, target);
+      sources.add(source);
 
       verticalPosition += height + padding;
     }
 
+    renderSourcesToTargetAsPercentage(canvas, sources, target);
+
     // how much vertical space was needed to render this
     return verticalPosition;
-  }
-
-  ui.Path drawPath(ui.Canvas canvas, ui.Offset topLeft, ui.Offset topRight, ui.Offset bottomLeft, ui.Offset bottomRight, color, useCurve) {
-    Path downwardPath = Path();
-
-    // Move Top Left
-    downwardPath.moveTo(topLeft.dx, topLeft.dy);
-
-    // Draw Line to top Right
-    if (useCurve) {
-      var topWidth = topRight.dx - topLeft.dx;
-      downwardPath.quadraticBezierTo(
-        topRight.dx + 10,
-        topRight.dy + 10,
-        topRight.dx,
-        topRight.dy,
-      );
-    } else {
-      downwardPath.lineTo(topRight.dx, topRight.dy);
-    }
-
-    // Draw vertical line Top to bottom on to Right Side
-    downwardPath.lineTo(bottomRight.dx, bottomRight.dy);
-
-    // Draw a line back left to right at the bottom
-    if (useCurve) {
-      var bottomWidth = bottomRight.dx - bottomLeft.dx;
-      var bottomHeight = bottomRight.dy - bottomLeft.dy;
-      downwardPath.quadraticBezierTo(
-        bottomLeft.dx - 10,
-        bottomLeft.dy - 10,
-        bottomLeft.dx,
-        bottomLeft.dy,
-      );
-    } else {
-      downwardPath.lineTo(bottomLeft.dx, bottomLeft.dy);
-    }
-
-    Paint paint = Paint();
-    paint.color = color;
-    canvas.drawPath(downwardPath, paint);
-
-    return downwardPath;
-  }
-
-  ui.Path drawPathFromTarget(ui.Canvas canvas, Block source, Block target) {
-    var offsetTopLeft = ui.Offset(source.rect.right, source.rect.top);
-    var offsetTopRight = ui.Offset(target.rect.left, target.rect.top);
-    var offsetBottomLeft = ui.Offset(source.rect.right, source.rect.bottom);
-    var offsetBottomRight = ui.Offset(target.rect.left, target.rect.bottom);
-
-    return drawPath(canvas, offsetTopLeft, offsetTopRight, offsetBottomLeft, offsetBottomRight, const Color(0x4556687A), true);
-  }
-
-  void drawBoxAndText(canvas, x, y, w, h, text, Color color) {
-    canvas.drawRect(Rect.fromLTWH(x, y, w, h), Paint()..color = color);
-    drawText(canvas, text, x, y + (h / 2), color: Colors.white);
-  }
-
-  void drawBoxAndTextFromTarget(canvas, Block target) {
-    canvas.drawRect(target.rect, Paint()..color = target.color);
-    drawText(canvas, target.name, target.rect.left, target.rect.top, color: Colors.white);
-  }
-
-  void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 10.0, double angleRotationInRadians = 0.0}) {
-    context.save();
-    context.translate(x, y);
-    context.rotate(angleRotationInRadians);
-    TextSpan span = TextSpan(style: TextStyle(color: color, fontSize: fontSize, fontFamily: 'Roboto'), text: name);
-    TextPainter tp = TextPainter(text: span, textAlign: TextAlign.center, textDirection: ui.TextDirection.ltr);
-    tp.layout();
-    tp.paint(context, const Offset(0.0, 0.0));
-    context.restore();
   }
 }
 

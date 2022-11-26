@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:money/views/view_cashflow.dart';
+import 'package:money/views/view_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
@@ -164,8 +165,10 @@ class _MyMoneyState extends State<MyMoney> {
       case 3:
         return ViewPayees(data: data);
       case 4:
-      default:
         return ViewTransactions(data: data);
+      case 5:
+      default:
+        return const ViewTest();
     }
   }
 
