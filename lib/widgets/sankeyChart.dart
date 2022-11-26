@@ -19,6 +19,8 @@ class Block {
   Block(this.name, this.rect, this.color, this.useAsIncome) {
     //
   }
+
+  static const minBlockHeight = 30.0;
 }
 
 class SankyPaint extends CustomPainter {
@@ -34,7 +36,7 @@ class SankyPaint extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     const double targetWidth = 100.0;
     var targetLeft = size.width - targetWidth - padding;
-    var targetHeight = 100.0;
+    var targetHeight = 200.0;
     var horizontalCenter = size.width / 2;
 
     var verticalStackOfTargets = 0.0;
@@ -45,27 +47,30 @@ class SankyPaint extends CustomPainter {
     var ratioIncomeToExpense = (targetHeight) / (totalIncome + totalExpense);
 
     var lastHeight = ratioIncomeToExpense * totalIncome;
-
-    Block targetIncome = Block("Incomes\n${getCurrencyText(totalIncome)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff254406), true);
+    lastHeight = max(Block.minBlockHeight, lastHeight);
+    Block targetIncome = Block("Incomes\n${getCurrencyText(totalIncome)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff387000), true);
 
     verticalStackOfTargets += padding + lastHeight;
     lastHeight = ratioIncomeToExpense * totalExpense;
-
-    Block targetExpense = Block("Expenses\n${getCurrencyText(totalExpense)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xFF4D0C05), false);
+    lastHeight = max(Block.minBlockHeight, lastHeight);
+    Block targetExpense = Block("Expenses\n${getCurrencyText(totalExpense)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff8c0e00), false);
 
     var stackVerticalPosition = 0.0;
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome);
+    stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome, const Color(0xaa2f6001));
     stackVerticalPosition += padding * 5;
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense);
+    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense, const Color(0x9b730000));
 
-    Block targetNet = Block("Net\n${getCurrencyText(totalIncome - totalExpense)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, targetHeight / 2), const Color(0xFF003965), false);
+    var netAmount = totalIncome - totalExpense;
+    lastHeight = ratioIncomeToExpense * netAmount;
+    lastHeight = max(Block.minBlockHeight, lastHeight);
+    Block targetNet = Block("Net\n${getCurrencyText(netAmount)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, lastHeight), const Color(0xff0061ad), false);
     drawBoxAndTextFromTarget(canvas, targetNet);
 
     drawPathFromTarget(canvas, targetIncome, targetNet);
     drawPathFromTarget(canvas, targetExpense, targetNet);
   }
 
-  double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, Block target) {
+  double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, Block target, Color color) {
     double ratioPriceToHeight = getRatioFromMaxValue(list, useAsIncome);
 
     drawBoxAndTextFromTarget(canvas, target);
@@ -77,7 +82,7 @@ class SankyPaint extends CustomPainter {
       double height = max(10, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
       Rect rect = Rect.fromLTWH(left, boxTop, sourceWidth, height);
-      Block source = Block(element.name + ": " + getCurrencyText(element.value), rect, target.color, useAsIncome);
+      Block source = Block(element.name + ": " + getCurrencyText(element.value), rect, color, useAsIncome);
       drawBoxAndTextFromTarget(canvas, source);
       drawPathFromTarget(canvas, source, target);
 
