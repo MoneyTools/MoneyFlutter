@@ -3,6 +3,16 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+class ChannelPoint {
+  double x = 0.0;
+  double top = 0.0;
+  double bottom = 0 / 0;
+
+  ChannelPoint(this.x, this.top, this.bottom) {
+    //
+  }
+}
+
 class Block {
   String name = "";
   Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
@@ -34,24 +44,31 @@ class SankeyBandPaint extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     renderSourcesToTargetAsPercentage(canvas, blocksLeft, blockOnRight);
+
+    drawChanel(canvas, ChannelPoint(400.0, 100.0, 200.0), ChannelPoint(500, 50, 300));
   }
 }
 
-void renderSourcesToTargetAsPercentage(ui.Canvas canvas, list, target) {
+void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block target) {
   var sumOfHeight = list.fold(0.0, (previousValue, element) => previousValue + element.rect.height);
 
   drawBoxAndTextFromTarget(canvas, target);
 
-  var heightOfTarget = target.rect.height;
-  var rollingVerticalPositionDrawnOnTheTarget = 0.0;
-
-  print("Right $heightOfTarget");
+  var rollingVerticalPositionDrawnOnTheTarget = target.rect.top;
 
   for (var block in list) {
     drawBoxAndTextFromTarget(canvas, block);
+
     var ratioSourceBlockHeightToSumHeight = (block.rect.height / sumOfHeight);
-    drawPathFromBlockToBlockSlot(canvas, block, target, rollingVerticalPositionDrawnOnTheTarget, ratioSourceBlockHeightToSumHeight);
-    rollingVerticalPositionDrawnOnTheTarget += ratioSourceBlockHeightToSumHeight;
+    var targetSectionHeight = (target.rect.height * ratioSourceBlockHeightToSumHeight);
+
+    drawChanel(
+      canvas,
+      ChannelPoint(block.rect.right, block.rect.top, block.rect.bottom),
+      ChannelPoint(target.rect.left, rollingVerticalPositionDrawnOnTheTarget, rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
+    );
+
+    rollingVerticalPositionDrawnOnTheTarget += targetSectionHeight;
   }
 }
 
@@ -106,85 +123,14 @@ double getHeightRatioExpense(list) {
   return ratioPriceToHeight;
 }
 
-ui.Path drawPath(ui.Canvas canvas, ui.Offset topLeft, ui.Offset topRight, ui.Offset bottomLeft, ui.Offset bottomRight, color) {
-  // Move Top Left
-  var size = Size((topRight.dx - topLeft.dx).abs(), 100.0);
-  var halfWidth = size.width / 2;
-
-  Path path = Path();
-
-  path.moveTo(topLeft.dx, topLeft.dy);
-  path.cubicTo(
-    /*P1*/
-    topLeft.dx + halfWidth,
-    topLeft.dy,
-    /*P2*/
-    topRight.dx - halfWidth,
-    topRight.dy,
-    /*P3*/
-    topRight.dx,
-    topRight.dy,
-  );
-
-  path.lineTo(bottomRight.dx, bottomRight.dy);
-
-  path.cubicTo(
-    /*P1*/
-    bottomRight.dx - halfWidth,
-    bottomRight.dy,
-    /*P2*/
-    bottomLeft.dx + halfWidth,
-    bottomLeft.dy,
-    /*P3*/
-    bottomLeft.dx,
-    bottomLeft.dy,
-  );
-
-  path.close();
-
-  Paint paint = Paint();
-  paint.color = color;
-  canvas.drawPath(path, paint);
-
-  Paint paintStroke = Paint();
-  paintStroke.style = PaintingStyle.stroke;
-  paintStroke.strokeWidth = 0.5;
-  paintStroke.color = Colors.black.withOpacity(0.2);
-  canvas.drawPath(path, paintStroke);
-
-  return path;
-}
-
-ui.Path drawPathFromTarget(ui.Canvas canvas, Block source, Block target) {
-  var offsetTopLeft = ui.Offset(source.rect.right, source.rect.top);
-  var offsetTopRight = ui.Offset(target.rect.left, target.rect.top);
-  var offsetBottomLeft = ui.Offset(source.rect.right, source.rect.bottom);
-  var offsetBottomRight = ui.Offset(target.rect.left, target.rect.bottom);
-
-  return drawPath(canvas, offsetTopLeft, offsetTopRight, offsetBottomLeft, offsetBottomRight, const Color(0x4556687A));
-}
-
-ui.Path drawPathFromBlockToBlockSlot(ui.Canvas canvas, Block source, Block target, double targetStartPercentage, double heightPercentage) {
-  print("${source.name} targetH:${target.rect.height} vS:$targetStartPercentage vH:$heightPercentage");
-  var offsetTopLeft = ui.Offset(source.rect.right, source.rect.top);
-  var offsetBottomLeft = ui.Offset(source.rect.right, source.rect.bottom);
-
-  var targetTop = target.rect.top + (target.rect.height * targetStartPercentage);
-  var offsetTopRight = ui.Offset(target.rect.left, targetTop);
-  var targetSectionHeight = target.rect.height * heightPercentage;
-  var offsetBottomRight = ui.Offset(target.rect.left, targetTop + targetSectionHeight);
-
-  return drawPath(canvas, offsetTopLeft, offsetTopRight, offsetBottomLeft, offsetBottomRight, const Color(0x4556687A));
+void drawBoxAndTextFromTarget(canvas, Block target) {
+  canvas.drawRect(target.rect, Paint()..color = target.color);
+  drawText(canvas, target.name, target.rect.left, target.rect.top, color: Colors.white);
 }
 
 void drawBoxAndText(canvas, x, y, w, h, text, Color color) {
   canvas.drawRect(Rect.fromLTWH(x, y, w, h), Paint()..color = color);
   drawText(canvas, text, x, y + (h / 2), color: Colors.white);
-}
-
-void drawBoxAndTextFromTarget(canvas, Block target) {
-  canvas.drawRect(target.rect, Paint()..color = target.color);
-  drawText(canvas, target.name, target.rect.left, target.rect.top, color: Colors.white);
 }
 
 void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 10.0, double angleRotationInRadians = 0.0}) {
@@ -196,4 +142,52 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
   tp.layout();
   tp.paint(context, const Offset(0.0, 0.0));
   context.restore();
+}
+
+void drawChanel(canvas, ChannelPoint channelPointStart, ChannelPoint channelPointEnd) {
+  var size = Size((channelPointEnd.x - channelPointStart.x).abs(), 100.0);
+  var halfWidth = size.width / 2;
+
+  Path path = Path();
+
+  // Start from the Left-Top
+  path.moveTo(channelPointStart.x, channelPointStart.top);
+  path.cubicTo(
+    /*P1*/
+    channelPointStart.x + halfWidth,
+    channelPointStart.top,
+    /*P2*/
+    channelPointEnd.x - halfWidth,
+    channelPointEnd.top,
+    /*P3*/
+    channelPointEnd.x,
+    channelPointEnd.top,
+  );
+
+  path.lineTo(channelPointEnd.x, channelPointEnd.bottom);
+
+  path.cubicTo(
+    /*P1*/
+    channelPointEnd.x - halfWidth,
+    channelPointEnd.bottom,
+    /*P2*/
+    channelPointStart.x + halfWidth,
+    channelPointStart.bottom,
+    /*P3*/
+    channelPointStart.x,
+    channelPointStart.bottom,
+  );
+
+  // Close at the Left-Bottom
+  path.close();
+
+  Paint paint = Paint();
+  paint.color = const Color(0x4556687A);
+  canvas.drawPath(path, paint);
+
+  Paint paintStroke = Paint();
+  paintStroke.style = PaintingStyle.stroke;
+  paintStroke.strokeWidth = 0.5;
+  paintStroke.color = Colors.black.withOpacity(0.3);
+  canvas.drawPath(path, paintStroke);
 }

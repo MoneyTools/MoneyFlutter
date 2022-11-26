@@ -51,6 +51,7 @@ class SankeyPaint extends CustomPainter {
     var stackVerticalPosition = 0.0;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome, const Color(0xaa2f6001));
     stackVerticalPosition += padding * 5;
+
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense, const Color(0x9b730000));
 
     // Income and Expense to Net
