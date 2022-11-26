@@ -46,35 +46,16 @@ class SankyPaint extends CustomPainter {
 
     var lastHeight = ratioIncomeToExpense * totalIncome;
 
-    FunnelTarget targetIncome = FunnelTarget(
-      "Incomes\n${getCurrencyText(totalIncome)}",
-      ui.Rect.fromLTWH(
-        horizontalCenter,
-        verticalStackOfTargets,
-        targetWidth,
-        lastHeight,
-      ),
-      const Color(0xff254406),
-      true,
-    );
+    FunnelTarget targetIncome = FunnelTarget("Incomes\n${getCurrencyText(totalIncome)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff254406), true);
 
     verticalStackOfTargets += padding + lastHeight;
     lastHeight = ratioIncomeToExpense * totalExpense;
-    FunnelTarget targetExpense = FunnelTarget(
-      "Expenses\n${getCurrencyText(totalExpense)}",
-      ui.Rect.fromLTWH(
-        horizontalCenter,
-        verticalStackOfTargets,
-        targetWidth,
-        lastHeight,
-      ),
-      const Color(0xFF4D0C05),
-      false,
-    );
+
+    FunnelTarget targetExpense = FunnelTarget("Expenses\n${getCurrencyText(totalExpense)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xFF4D0C05), false);
 
     var stackVerticalPosition = 0.0;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome);
-    stackVerticalPosition += padding;
+    stackVerticalPosition += padding * 5;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, false, padding, stackVerticalPosition, targetExpense);
 
     FunnelTarget targetNet = FunnelTarget("Net\n${getCurrencyText(totalIncome - totalExpense)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, targetHeight / 2), const Color(0xFF003965), false);
@@ -92,15 +73,14 @@ class SankyPaint extends CustomPainter {
     var verticalPosition = 0.0;
     var sourceWidth = 200.0;
 
-    var destinationRightLeft = ui.Offset(target.rect.left, target.rect.top);
-    var destinationRightBottom = ui.Offset(target.rect.left, target.rect.bottom);
     for (var element in list) {
-      double height = element.value.abs() * ratioPriceToHeight;
+      double height = max(10, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
-      drawBoxAndText(canvas, left, boxTop, sourceWidth, height, element.name, target.color);
-      var offsetLeftTop = ui.Offset(left + sourceWidth, boxTop);
-      var offsetLeftBottom = ui.Offset(left + sourceWidth, boxTop + height);
-      drawPath(canvas, offsetLeftTop, offsetLeftBottom, destinationRightLeft, destinationRightBottom, Colors.grey);
+      Rect rect = Rect.fromLTWH(left, boxTop, sourceWidth, height);
+      FunnelTarget source = FunnelTarget(element.name + ": " + getCurrencyText(element.value), rect, target.color, useAsIncome);
+      drawBoxAndTextFromTarget(canvas, source);
+      drawPathFromTarget(canvas, source, target);
+
       verticalPosition += height + padding;
     }
 
@@ -108,20 +88,41 @@ class SankyPaint extends CustomPainter {
     return verticalPosition;
   }
 
-  ui.Path drawPath(
-    ui.Canvas canvas,
-    ui.Offset topLeft,
-    ui.Offset topRight,
-    ui.Offset bottomLeft,
-    ui.Offset bottomRight,
-    color,
-  ) {
+  ui.Path drawPath(ui.Canvas canvas, ui.Offset topLeft, ui.Offset topRight, ui.Offset bottomLeft, ui.Offset bottomRight, color, useCurve) {
     Path downwardPath = Path();
+
+    // Move Top Left
     downwardPath.moveTo(topLeft.dx, topLeft.dy);
 
-    downwardPath.lineTo(topRight.dx, topRight.dy);
+    // Draw Line to top Right
+    if (useCurve) {
+      var topWidth = topRight.dx - topLeft.dx;
+      downwardPath.quadraticBezierTo(
+        topRight.dx + 10,
+        topRight.dy + 10,
+        topRight.dx,
+        topRight.dy,
+      );
+    } else {
+      downwardPath.lineTo(topRight.dx, topRight.dy);
+    }
+
+    // Draw vertical line Top to bottom on to Right Side
     downwardPath.lineTo(bottomRight.dx, bottomRight.dy);
-    downwardPath.lineTo(bottomLeft.dx, bottomLeft.dy);
+
+    // Draw a line back left to right at the bottom
+    if (useCurve) {
+      var bottomWidth = bottomRight.dx - bottomLeft.dx;
+      var bottomHeight = bottomRight.dy - bottomLeft.dy;
+      downwardPath.quadraticBezierTo(
+        bottomLeft.dx - 10,
+        bottomLeft.dy - 10,
+        bottomLeft.dx,
+        bottomLeft.dy,
+      );
+    } else {
+      downwardPath.lineTo(bottomLeft.dx, bottomLeft.dy);
+    }
 
     Paint paint = Paint();
     paint.color = color;
@@ -136,7 +137,7 @@ class SankyPaint extends CustomPainter {
     var offsetBottomLeft = ui.Offset(source.rect.right, source.rect.bottom);
     var offsetBottomRight = ui.Offset(target.rect.left, target.rect.bottom);
 
-    return drawPath(canvas, offsetTopLeft, offsetTopRight, offsetBottomLeft, offsetBottomRight, Colors.lightBlue);
+    return drawPath(canvas, offsetTopLeft, offsetTopRight, offsetBottomLeft, offsetBottomRight, const Color(0x4556687A), true);
   }
 
   @override
