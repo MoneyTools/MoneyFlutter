@@ -11,7 +11,7 @@ class Category {
   num count = 0;
   double balance = 0.00;
 
-  Category(this.id, this.name);
+  Category(this.id, this.type, this.name);
 
   getTypeAsText() {
     switch (type) {
@@ -26,6 +26,24 @@ class Category {
       case CategoryType.none:
       default:
         return "None";
+    }
+  }
+
+  static getTypeFromText(text) {
+    switch (text) {
+      case "1":
+        return CategoryType.income;
+
+      case "2":
+        return CategoryType.expense;
+
+      case "3":
+        return CategoryType.saving;
+      case "4":
+        return CategoryType.investment;
+      case "0":
+      default:
+        return CategoryType.none;
     }
   }
 }
@@ -76,40 +94,26 @@ class Categories {
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var name = row["Name"].toString();
-      var newEntry = Category(id, name);
+      var rt = row["Type"];
+      var newEntry = Category(id, Category.getTypeFromText(rt.toString()), name);
       newEntry.parentId = num.parse(row["ParentId"].toString());
 
-      try {
-        var rt = row["Type"];
-        var rtt = rt.toString();
-        switch (rtt) {
-          case "1":
-            newEntry.type = CategoryType.income;
-            break;
-          case "2":
-            newEntry.type = CategoryType.expense;
-            break;
-          case "3":
-            newEntry.type = CategoryType.saving;
-            break;
-          case "4":
-            newEntry.type = CategoryType.investment;
-            break;
-          case "0":
-          default:
-            newEntry.type = CategoryType.none;
-        }
-      } catch (e) {
-        print(e);
-      }
       list.add(newEntry);
     }
     return list;
   }
 
   loadDemoData() {
-    List<String> names = ['BankOfAmerica', 'BECU', 'FirstTech', 'Fidelity', 'Bank of Japan', 'Trust Canada', 'ABC Corp', 'Royal Bank', 'Unicorn', 'God-Inc'];
-    list = List<Category>.generate(10, (i) => Category(i, names[i]));
+    list.add(Category(0, CategoryType.income, 'Paychecks'));
+    list.add(Category(1, CategoryType.investment, 'Investment'));
+    list.add(Category(2, CategoryType.income, 'Interests'));
+    list.add(Category(3, CategoryType.income, 'Rental'));
+    list.add(Category(4, CategoryType.none, 'Lottery'));
+    list.add(Category(5, CategoryType.expense, 'Mortgage'));
+    list.add(Category(6, CategoryType.income, 'Saving'));
+    list.add(Category(7, CategoryType.expense, 'Bills'));
+    list.add(Category(8, CategoryType.expense, 'Taxes'));
+    list.add(Category(9, CategoryType.expense, 'School'));
   }
 
   static onAllDataLoaded() {

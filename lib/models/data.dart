@@ -21,54 +21,52 @@ class Data {
       categories.loadDemoData();
       payees.loadDemoData();
       transactions.loadDemoData();
-      callbackWhenLoaded(true);
-      return;
+    } else {
+      try {
+        if (Platform.isWindows || Platform.isLinux) {
+          sqfliteFfiInit();
+        }
+
+        var databaseFactory = databaseFactoryFfi;
+        String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
+        if (pathToDatabaseFile != null) {
+          var db = await databaseFactory.openDatabase(pathToDatabaseFile);
+
+          // Accounts
+          {
+            var result = await db.query('Accounts');
+            await accounts.load(result);
+          }
+
+          // Categories
+          {
+            var result = await db.query('Categories');
+            await categories.load(result);
+          }
+
+          // Payees
+          {
+            var result = await db.query('Payees');
+            await payees.load(result);
+          }
+
+          // Transactions
+          {
+            var result = await db.query('Transactions');
+            await transactions.load(result);
+          }
+          await db.close();
+        }
+      } catch (e) {
+        callbackWhenLoaded(false);
+        return;
+      }
     }
 
-    try {
-      if (Platform.isWindows || Platform.isLinux) {
-        sqfliteFfiInit();
-      }
-
-      var databaseFactory = databaseFactoryFfi;
-      String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
-      if (pathToDatabaseFile != null) {
-        var db = await databaseFactory.openDatabase(pathToDatabaseFile);
-
-        // Accounts
-        {
-          var result = await db.query('Accounts');
-          await accounts.load(result);
-        }
-
-        // Categories
-        {
-          var result = await db.query('Categories');
-          await categories.load(result);
-        }
-
-        // Payees
-        {
-          var result = await db.query('Payees');
-          await payees.load(result);
-        }
-
-        // Transactions
-        {
-          var result = await db.query('Transactions');
-          await transactions.load(result);
-        }
-        await db.close();
-
-        Accounts.onAllDataLoaded();
-        Categories.onAllDataLoaded();
-        Payees.onAllDataLoaded();
-
-        callbackWhenLoaded(true);
-      }
-    } catch (e) {
-      callbackWhenLoaded(false);
-    }
+    Accounts.onAllDataLoaded();
+    Categories.onAllDataLoaded();
+    Payees.onAllDataLoaded();
+    callbackWhenLoaded(true);
   }
 
   Future<String?> validateDataBasePathIsValidAndExist(filePath) async {

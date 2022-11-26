@@ -37,7 +37,10 @@ class ViewCashFlowState extends State<ViewCashFlow> {
   @override
   void initState() {
     super.initState();
+    transformData();
+  }
 
+  void transformData() {
     for (var element in Transactions.list) {
       var category = Categories.get(element.categoryId);
       if (category != null) {
@@ -109,12 +112,11 @@ class ViewCashFlowState extends State<ViewCashFlow> {
         Text("Expenses ${getCurrencyText(totalExpenses)}"),
         Text("Other ${getCurrencyText(totalNones)}"),
       ]),
-      // Column(children: widgetIncomes()),
       SizedBox(
         width: 1000,
         height: totalHeight,
         child: CustomPaint(
-          painter: SankyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, padding),
+          painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, padding),
         ),
       ),
     ]));

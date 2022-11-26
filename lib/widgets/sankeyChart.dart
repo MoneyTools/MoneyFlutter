@@ -23,14 +23,20 @@ class Block {
   static const minBlockHeight = 30.0;
 }
 
-class SankyPaint extends CustomPainter {
+class SankeyPaint extends CustomPainter {
   List<SanKeyEntry> listOfIncomes;
   List<SanKeyEntry> listOfExpenses;
   double padding;
 
-  SankyPaint(this.listOfIncomes, this.listOfExpenses, this.padding) {
+  SankeyPaint(this.listOfIncomes, this.listOfExpenses, this.padding) {
     //
   }
+
+  @override
+  bool shouldRepaint(SankeyPaint oldDelegate) => false;
+
+  @override
+  bool shouldRebuildSemantics(SankeyPaint oldDelegate) => false;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -145,12 +151,9 @@ class SankyPaint extends CustomPainter {
     return drawPath(canvas, offsetTopLeft, offsetTopRight, offsetBottomLeft, offsetBottomRight, const Color(0x4556687A), true);
   }
 
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-
   void drawBoxAndText(canvas, x, y, w, h, text, Color color) {
     canvas.drawRect(Rect.fromLTWH(x, y, w, h), Paint()..color = color);
-    drawText(canvas, text, x, y, color: Colors.white);
+    drawText(canvas, text, x, y + (h / 2), color: Colors.white);
   }
 
   void drawBoxAndTextFromTarget(canvas, Block target) {
@@ -163,7 +166,7 @@ class SankyPaint extends CustomPainter {
     context.translate(x, y);
     context.rotate(angleRotationInRadians);
     TextSpan span = TextSpan(style: TextStyle(color: color, fontSize: fontSize, fontFamily: 'Roboto'), text: name);
-    TextPainter tp = TextPainter(text: span, textAlign: TextAlign.left, textDirection: ui.TextDirection.ltr);
+    TextPainter tp = TextPainter(text: span, textAlign: TextAlign.center, textDirection: ui.TextDirection.ltr);
     tp.layout();
     tp.paint(context, const Offset(0.0, 0.0));
     context.restore();
@@ -208,8 +211,8 @@ double getHeightRationIncome(list) {
 }
 
 double getHeightRatioExpense(list) {
-  var largest = double.minPositive;
-  var smallest = double.maxFinite;
+  var largest = double.maxFinite;
+  var smallest = double.minPositive;
 
   for (var element in list) {
     largest = min(largest, element.value);
