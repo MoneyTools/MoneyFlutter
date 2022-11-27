@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../helpers.dart';
 import '../models/categories.dart';
 import '../widgets/columns.dart';
@@ -6,7 +7,6 @@ import '../widgets/header.dart';
 import '../widgets/virtualTable.dart';
 
 class ViewCategories extends MyView {
-
   const ViewCategories({super.key});
 
   @override
@@ -14,51 +14,30 @@ class ViewCategories extends MyView {
 }
 
 class ViewCategoriesState extends MyViewState {
-  @override
-  final List<ColumnDefinition> columns = [
-    ColumnDefinition("Name", TextAlign.left, () {}),
-    ColumnDefinition("Type", TextAlign.left, () {}),
-    ColumnDefinition("Balance", TextAlign.right, () {}),
-  ];
-  @override
-  var list = Categories.list;
-
-  @override
-  onSort() {
-    switch (sortBy) {
-      case 0:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return a.name.toUpperCase().compareTo(b.name.toUpperCase());
-          } else {
-            return b.name.toUpperCase().compareTo(a.name.toUpperCase());
-          }
-        });
-        break;
-      case 1:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return a.getTypeAsText().compareTo(b.getTypeAsText());
-          } else {
-            return b.getTypeAsText().compareTo(a.getTypeAsText());
-          }
-        });
-        break;
-      case 2:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return (a.balance - b.balance).toInt();
-          } else {
-            return (b.balance - a.balance).toInt();
-          }
-        });
-        break;
-    }
-  }
 
   @override
   Widget getTitle() {
     return Header("Categories", numValueOrDefault(list.length), "Classification of your money transactions.");
+  }
+
+  @override
+  List<ColumnDefinition> getColumnDefinitions() {
+    return [
+      ColumnDefinition("Name", TextAlign.left, (a, b, sortAscending) {
+        return sortByString(a.name, b.name, sortAscending);
+      }),
+      ColumnDefinition("Type", TextAlign.left, (a, b, sortAscending) {
+        return sortByString(a.getTypeAsText(), b.getTypeAsText(), sortAscending);
+      }),
+      ColumnDefinition("Balance", TextAlign.right, (a, b, sortAscending) {
+        return sortByValue(a.balance, b.balance, sortAscending);
+      }),
+    ];
+  }
+
+  @override
+  getList() {
+    return Categories.list;
   }
 
   @override

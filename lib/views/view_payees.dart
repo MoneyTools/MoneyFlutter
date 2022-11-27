@@ -14,15 +14,30 @@ class ViewPayees extends MyView {
 }
 
 class ViewPayeesState extends MyViewState {
-  @override
-  final List<ColumnDefinition> columns = [
-    ColumnDefinition("Name", TextAlign.left, () {}),
-    ColumnDefinition("Balance", TextAlign.right, () {}),
-  ];
 
   @override
-  final list = Payees.list;
+  Widget getTitle() {
+    return Header("Payees", numValueOrDefault(list.length), "Who is getting your money.");
+  }
 
+  @override
+  List<ColumnDefinition> getColumnDefinitions() {
+    return [
+      ColumnDefinition("Name", TextAlign.left, (a, b, sortAscending) {
+        return sortByString(a.name, b.name, sortAscending);
+      }),
+      ColumnDefinition("Balance", TextAlign.right, (a, b, sortAscending) {
+        return sortByValue(a.balance, b.balance, sortAscending);
+      }),
+    ];
+  }
+
+  @override
+  getList() {
+    return Payees.list;
+  }
+
+  @override
   @override
   onSort() {
     switch (sortBy) {
@@ -47,10 +62,6 @@ class ViewPayeesState extends MyViewState {
     }
   }
 
-  @override
-  Widget getTitle() {
-    return Header("Payees", numValueOrDefault(list.length), "Who is getting your money.");
-  }
 
   @override
   Widget getRow(list, index) {

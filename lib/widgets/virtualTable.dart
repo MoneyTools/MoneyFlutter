@@ -13,10 +13,17 @@ class MyView extends StatefulWidget {
 }
 
 class MyViewState extends State<MyView> {
+
   List<ColumnDefinition> columns = [];
+  List<ColumnDefinition> getColumnDefinitions() {
+    return [];
+  }
+
   var list = [];
+
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
-  num sortBy = 0;
+
+  int sortBy = 0;
   bool sortAscending = true;
 
   MyViewState();
@@ -24,13 +31,18 @@ class MyViewState extends State<MyView> {
   @override
   void initState() {
     super.initState();
+    columns = getColumnDefinitions();
+    list = getList();
+  }
+
+  getList(){
+    return [];
   }
 
   onSort() {
-    switch (sortBy) {
-      default:
-        break;
-    }
+    return list.sort((a,b){
+      return columns[sortBy].sorting!(a,b,sortAscending);
+    });
   }
 
   Widget getTitle() {

@@ -22,16 +22,31 @@ class ViewTransactionsState extends MyViewState {
   final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
 
   @override
-  List<ColumnDefinition> columns = [
-    ColumnDefinition("Account", TextAlign.left, () {}),
-    ColumnDefinition("Date", TextAlign.left, () {}),
-    ColumnDefinition("Payee", TextAlign.left, () {}),
-    ColumnDefinition("Amount", TextAlign.right, () {}),
-    ColumnDefinition("Balance", TextAlign.right, () {}),
-  ];
-
-  @override
-  var list = [];
+  List<ColumnDefinition> getColumnDefinitions() {
+    return [
+      ColumnDefinition("Account", TextAlign.left, (a, b, ascending) {
+        var textA = Accounts.getNameFromId(a.accountId);
+        var textB = Accounts.getNameFromId(b.accountId);
+        return sortByString(textA, textB, ascending);
+      }),
+      ColumnDefinition("Date", TextAlign.left, (a, b, ascending) {
+        var textA = a.dateTime.toIso8601String().split('T').first;
+        var textB = b.dateTime.toIso8601String().split('T').first;
+        return sortByString(textA, textB, sortAscending);
+      }),
+      ColumnDefinition("Payee", TextAlign.left, (a, b, ascending) {
+        var textA = Payees.getNameFromId(a.payeeId);
+        var textB = Payees.getNameFromId(b.payeeId);
+        return sortByString(textA, textB, sortAscending);
+      }),
+      ColumnDefinition("Amount", TextAlign.right, (a, b, ascending) {
+        return sortByValue(a.amount, b.amount, sortAscending);
+      }),
+      ColumnDefinition("Balance", TextAlign.right, (a, b, ascending) {
+        return sortByValue(a.balance, b.balance, sortAscending);
+      }),
+    ];
+  }
 
   ViewTransactionsState();
 
@@ -46,45 +61,15 @@ class ViewTransactionsState extends MyViewState {
 
   @override
   Widget getTitle() {
-    return Header("Transactions", numValueOrDefault(list.length), "Details actions of your accounts.");
+    return Column(children: [
+      Header("Transactions", numValueOrDefault(list.length), "Details actions of your accounts."),
+      renderToggles(),
+    ]);
   }
 
   @override
-  onSort() {
-    list = getFilteredList();
-    switch (sortBy) {
-      case 0:
-        list.sort((a, b) {
-          var textA = Accounts.getNameFromId(a.accountId);
-          var textB = Accounts.getNameFromId(b.accountId);
-          return sortByString(textA, textB, sortAscending);
-        });
-        break;
-      case 1:
-        list.sort((a, b) {
-          var textA = a.dateTime.toIso8601String().split('T').first;
-          var textB = b.dateTime.toIso8601String().split('T').first;
-          return sortByString(textA, textB, sortAscending);
-        });
-        break;
-      case 2:
-        list.sort((a, b) {
-          var textA = Payees.getNameFromId(a.payeeId);
-          var textB = Payees.getNameFromId(b.payeeId);
-          return sortByString(textA, textB, sortAscending);
-        });
-        break;
-      case 3:
-        list.sort((a, b) {
-          return sortByValue(a.amount, b.amount, sortAscending);
-        });
-        break;
-      case 4:
-        list.sort((a, b) {
-          return sortByValue(a.balance, b.balance, sortAscending);
-        });
-        break;
-    }
+  getList() {
+    return getFilteredList();
   }
 
   getFilteredList() {
@@ -121,8 +106,7 @@ class ViewTransactionsState extends MyViewState {
   }
 
   Widget renderColumValueEntryCurrency(value) {
-    return Expanded(
-        child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: Padding(padding: const EdgeInsets.fromLTRB(1, 0, 1, 0), child: Text(formatCurrency.format(value), textAlign: TextAlign.right))));
+    return Expanded(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: Padding(padding: const EdgeInsets.fromLTRB(1, 0, 1, 0), child: Text(formatCurrency.format(value), textAlign: TextAlign.right))));
   }
 
   renderToggles() {
@@ -136,6 +120,7 @@ class ViewTransactionsState extends MyViewState {
               for (int i = 0; i < _selectedExpenseIncome.length; i++) {
                 _selectedExpenseIncome[i] = i == index;
               }
+              list = getList();
             });
           },
           borderRadius: const BorderRadius.all(Radius.circular(8)),
