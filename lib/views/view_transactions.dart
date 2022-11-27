@@ -1,25 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money/helpers.dart';
-import 'package:money/models/data.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/header.dart';
 
-class ViewTransactions extends StatefulWidget {
-  final Data data;
+import '../models/accounts.dart';
+import '../models/payees.dart';
+import '../widgets/columns.dart';
+import '../widgets/virtualTable.dart';
 
-  const ViewTransactions({super.key, required this.data});
+class ViewTransactions extends MyView {
+  const ViewTransactions({super.key});
 
   @override
-  State<ViewTransactions> createState() => ViewTransactionsState();
+  State<MyView> createState() => ViewTransactionsState();
 }
 
-class ViewTransactionsState extends State<ViewTransactions> {
+class ViewTransactionsState extends MyViewState {
   final styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
-  final formatCurrency = NumberFormat("#,##0.00", "en_US");
   final List<Widget> options = [];
   final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
+
+  @override
+  List<ColumnDefinition> columns = [
+    ColumnDefinition("Account", TextAlign.left, () {}),
+    ColumnDefinition("Date", TextAlign.left, () {}),
+    ColumnDefinition("Payee", TextAlign.left, () {}),
+    ColumnDefinition("Amount", TextAlign.right, () {}),
+    ColumnDefinition("Balance", TextAlign.right, () {}),
+  ];
+
+  @override
+  var list = [];
 
   ViewTransactionsState();
 
@@ -30,6 +42,49 @@ class ViewTransactionsState extends State<ViewTransactions> {
     options.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, count: Transactions.list.where((element) => element.amount > 0).length));
     options.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, count: Transactions.list.where((element) => element.amount < 0).length));
     options.add(CaptionAndCounter(caption: "All", small: true, vertical: true, count: Transactions.list.length));
+  }
+
+  @override
+  Widget getTitle() {
+    return Header("Transactions", numValueOrDefault(list.length), "Details actions of your accounts.");
+  }
+
+  @override
+  onSort() {
+    list = getFilteredList();
+    switch (sortBy) {
+      case 0:
+        list.sort((a, b) {
+          var textA = Accounts.getNameFromId(a.accountId);
+          var textB = Accounts.getNameFromId(b.accountId);
+          return sortByString(textA, textB, sortAscending);
+        });
+        break;
+      case 1:
+        list.sort((a, b) {
+          var textA = a.dateTime.toIso8601String().split('T').first;
+          var textB = b.dateTime.toIso8601String().split('T').first;
+          return sortByString(textA, textB, sortAscending);
+        });
+        break;
+      case 2:
+        list.sort((a, b) {
+          var textA = Payees.getNameFromId(a.payeeId);
+          var textB = Payees.getNameFromId(b.payeeId);
+          return sortByString(textA, textB, sortAscending);
+        });
+        break;
+      case 3:
+        list.sort((a, b) {
+          return sortByValue(a.amount, b.amount, sortAscending);
+        });
+        break;
+      case 4:
+        list.sort((a, b) {
+          return sortByValue(a.balance, b.balance, sortAscending);
+        });
+        break;
+    }
   }
 
   getFilteredList() {
@@ -49,41 +104,16 @@ class ViewTransactionsState extends State<ViewTransactions> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
-
-    var list = getFilteredList();
-
-    return Expanded(
-        child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Column(children: <Widget>[
-              Header("Transactions", intValueOrDefault(list.length), "Details actions of your accounts."),
-              renderToggles(),
-              Row(children: <Widget>[
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Account", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Date", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Payee", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Amount", textAlign: TextAlign.right, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
-              ]),
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: list.length,
-                      itemExtent: 30,
-                      // cacheExtent: 30*10000,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          children: <Widget>[
-                            renderColumValueEntryText(widget.data.accounts.getNameFromId(list[index].accountId)),
-                            renderColumValueEntryText(list[index].dateTime.toIso8601String().split('T').first),
-                            renderColumValueEntryText(widget.data.payees.getNameFromId(list[index].payeeId)),
-                            renderColumValueEntryCurrency(list[index].amount),
-                            renderColumValueEntryCurrency(list[index].balance),
-                          ],
-                        );
-                      })),
-            ])));
+  Widget getRow(list, index) {
+    return Row(
+      children: <Widget>[
+        renderColumValueEntryText(Accounts.getNameFromId(list[index].accountId)),
+        renderColumValueEntryText(list[index].dateTime.toIso8601String().split('T').first),
+        renderColumValueEntryText(Payees.getNameFromId(list[index].payeeId)),
+        renderColumValueEntryCurrency(list[index].amount),
+        renderColumValueEntryCurrency(list[index].balance),
+      ],
+    );
   }
 
   Widget renderColumValueEntryText(text) {

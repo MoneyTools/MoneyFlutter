@@ -2,97 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../helpers.dart';
-import '../models/categories.dart';
-import '../widgets/columns.dart';
 import '../widgets/header.dart';
+import 'columns.dart';
 
-class ViewCategories extends StatefulWidget {
-  final List<ColumnDefinition> columns = [
-    ColumnDefinition("Name", TextAlign.left, () {}),
-    ColumnDefinition("Type", TextAlign.left, () {}),
-    ColumnDefinition("Balance", TextAlign.right, () {}),
-  ];
-
-  ViewCategories({super.key});
+class MyView extends StatefulWidget {
+  const MyView({super.key});
 
   @override
-  State<ViewCategories> createState() => ViewCategoriesState();
+  State<MyView> createState() => MyViewState();
 }
 
-class ViewCategoriesState extends State<ViewCategories> {
+class MyViewState extends State<MyView> {
+  List<ColumnDefinition> columns = [];
+  var list = [];
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   num sortBy = 0;
   bool sortAscending = true;
 
-  ViewCategoriesState();
+  MyViewState();
 
   @override
   void initState() {
     super.initState();
   }
 
+  onSort() {
+    switch (sortBy) {
+      default:
+        break;
+    }
+  }
+
+  Widget getTitle() {
+    return const Header("", 0, "");
+  }
+
+  Widget getTableHeaders() {
+    List<Widget> headers = getHeadersWidgets(context, columns, changeListSortOrder);
+    return Row(children: headers);
+  }
+
+  Widget getRow(list, index) {
+    return Row(children: const <Widget>[]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    var list = Categories.list;
-    switch (sortBy) {
-      case 0:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return a.name.toUpperCase().compareTo(b.name.toUpperCase());
-          } else {
-            return b.name.toUpperCase().compareTo(a.name.toUpperCase());
-          }
-        });
-        break;
-      case 1:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return a.getTypeAsText().compareTo(b.getTypeAsText());
-          } else {
-            return b.getTypeAsText().compareTo(a.getTypeAsText());
-          }
-        });
-        break;
-      case 2:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return (a.balance - b.balance).toInt();
-          } else {
-            return (b.balance - a.balance).toInt();
-          }
-        });
-        break;
-    }
-    if (sortAscending == false) {
-      list.reversed;
-    }
+    onSort();
 
-    List<Widget> headers = getHeadersWidgets(context, widget.columns, changeListSortOrder);
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(children: <Widget>[
-              Header("Categories", numValueOrDefault(Categories.list.length), "Classification of your money transactions."),
-              Row(children: headers),
+              getTitle(),
+              getTableHeaders(),
               Expanded(
                   child: ListView.builder(
                       itemCount: list.length,
                       itemExtent: 30,
                       // cacheExtent: 30*10000,
                       itemBuilder: (context, index) {
-                        return Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(list[index].name, textAlign: TextAlign.left),
-                            ),
-                            Expanded(
-                              child: Text(list[index].getTypeAsText(), textAlign: TextAlign.center),
-                            ),
-                            Expanded(
-                              child: Text(getCurrencyText(list[index].balance), textAlign: TextAlign.right),
-                            ),
-                          ],
-                        );
+                        return getRow(list, index);
                       })),
             ])));
   }

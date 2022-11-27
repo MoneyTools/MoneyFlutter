@@ -1,6 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:money/models/transactions.dart';
 
+import '../widgets/virtualTable.dart';
+
 enum AccountType {
   savings,
   checking,
@@ -32,11 +34,10 @@ class Account {
     return (flags & AccountFlags.closed.index) != 0;
   }
 
-  typeAsText() {
+  getTypeAsText() {
     switch (type) {
       case AccountType.savings:
         return "Savings";
-
       case AccountType.checking:
         return "Checking";
       case AccountType.moneyMarket:
@@ -78,7 +79,7 @@ class Accounts {
     return list.firstWhereOrNull((item) => item.id == accountId);
   }
 
-  String getNameFromId(num id) {
+  static String getNameFromId(num id) {
     var account = get(id);
     if (account == null) {
       return id.toString();

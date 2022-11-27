@@ -45,3 +45,23 @@ String getCurrencyText(double value) {
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   return formatCurrency.format(value);
 }
+
+int sortByStringIgnoreCase(textA, textB) {
+  return textA.toUpperCase().compareTo(textB.toUpperCase());
+}
+
+int sortByString(a, b, ascending) {
+  if (ascending) {
+    return sortByStringIgnoreCase(a, b);
+  } else {
+    return sortByStringIgnoreCase(b, a);
+  }
+}
+
+int sortByValue(double a, double b, ascending) {
+  if (ascending) {
+    return (b - a).toInt();
+  } else {
+    return (a - b).toInt();
+  }
+}

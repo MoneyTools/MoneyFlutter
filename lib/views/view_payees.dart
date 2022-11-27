@@ -1,59 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money/helpers.dart';
-import 'package:money/models/data.dart';
 import 'package:money/widgets/header.dart';
 
 import '../models/payees.dart';
+import '../widgets/columns.dart';
+import '../widgets/virtualTable.dart';
 
-class ViewPayees extends StatefulWidget {
-  final Data data;
-
-  const ViewPayees({super.key, required this.data});
+class ViewPayees extends MyView {
+  const ViewPayees({super.key});
 
   @override
-  State<ViewPayees> createState() => ViewPayeesState();
+  State<MyView> createState() => ViewPayeesState();
 }
 
-class ViewPayeesState extends State<ViewPayees> {
-  final formatCurrency = NumberFormat("#,##0.00", "en_US");
-  ViewPayeesState();
+class ViewPayeesState extends MyViewState {
+  @override
+  final List<ColumnDefinition> columns = [
+    ColumnDefinition("Name", TextAlign.left, () {}),
+    ColumnDefinition("Balance", TextAlign.right, () {}),
+  ];
 
   @override
-  void initState() {
-    super.initState();
+  final list = Payees.list;
+
+  @override
+  onSort() {
+    switch (sortBy) {
+      case 0:
+        list.sort((a, b) {
+          if (sortAscending) {
+            return a.name.toUpperCase().compareTo(b.name.toUpperCase());
+          } else {
+            return b.name.toUpperCase().compareTo(a.name.toUpperCase());
+          }
+        });
+        break;
+      case 1:
+        list.sort((a, b) {
+          if (sortAscending) {
+            return (a.balance - b.balance).toInt();
+          } else {
+            return (b.balance - a.balance).toInt();
+          }
+        });
+        break;
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
+  Widget getTitle() {
+    return Header("Payees", numValueOrDefault(list.length), "Who is getting your money.");
+  }
 
-    return Expanded(
-        child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Column(children: <Widget>[
-              Header("Payees", numValueOrDefault(Payees.list.length), "Who is getting your money."),
-              Row(children: <Widget>[
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
-              ]),
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: Payees.list.length,
-                      itemExtent: 30,
-                      // cacheExtent: 30*10000,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(Payees.list[index].name, textAlign: TextAlign.left),
-                            ),
-                            Expanded(
-                              child: Text(formatCurrency.format(Payees.list[index].balance), textAlign: TextAlign.right),
-                            ),
-                          ],
-                        );
-                      })),
-            ])));
+  @override
+  Widget getRow(list, index) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(list[index].name, textAlign: TextAlign.left),
+        ),
+        Expanded(
+          child: Text(formatCurrency.format(list[index].balance), textAlign: TextAlign.right),
+        ),
+      ],
+    );
   }
 }

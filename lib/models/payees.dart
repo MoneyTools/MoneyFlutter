@@ -21,7 +21,7 @@ class Payees {
     return list.firstWhereOrNull((item) => item.id == id);
   }
 
-  String getNameFromId(num id) {
+  static String getNameFromId(num id) {
     var payee = get(id);
     if (payee == null) {
       return id.toString();
@@ -36,7 +36,6 @@ class Payees {
      */
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
-      // var accountId = row["AccountId"].toString();
       var name = row["Name"].toString();
       list.add(Payee(id, name));
     }

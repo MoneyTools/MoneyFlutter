@@ -157,15 +157,15 @@ class _MyMoneyState extends State<MyMoney> {
         return ViewCashFlow(data: data);
       // Accounts
       case 1:
-        return ViewAccounts(data: data);
+        return ViewAccounts();
       // Categories
       case 2:
-        return ViewCategories(data: data);
+        return ViewCategories();
       // Payees
       case 3:
-        return ViewPayees(data: data);
+        return ViewPayees();
       case 4:
-        return ViewTransactions(data: data);
+        return ViewTransactions();
       case 5:
       default:
         return const ViewTest();

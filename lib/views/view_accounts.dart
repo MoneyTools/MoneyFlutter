@@ -1,65 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import '../helpers.dart';
 import '../models/accounts.dart';
-import '../models/data.dart';
+import '../widgets/columns.dart';
 import '../widgets/header.dart';
+import '../widgets/virtualTable.dart';
 
-class ViewAccounts extends StatefulWidget {
-  final Data data;
-
-  const ViewAccounts({super.key, required this.data});
+class ViewAccounts extends MyView {
+  const ViewAccounts({super.key});
 
   @override
-  State<ViewAccounts> createState() => ViewAccountsState();
+  State<MyView> createState() => ViewAccountsState();
 }
 
-class ViewAccountsState extends State<ViewAccounts> {
-  final formatCurrency = NumberFormat("#,##0.00", "en_US");
-  var accountsOpened = Accounts.getOpenAccounts();
-
-  ViewAccountsState();
+class ViewAccountsState extends MyViewState {
+  @override
+  List<ColumnDefinition> columns = [
+    ColumnDefinition("Name", TextAlign.left, () {}),
+    ColumnDefinition("Type", TextAlign.center, () {}),
+    ColumnDefinition("Balance", TextAlign.right, () {}),
+  ];
+  @override
+  var list = Accounts.getOpenAccounts();
 
   @override
-  void initState() {
-    super.initState();
+  onSort() {
+    switch (sortBy) {
+      case 0:
+        list.sort((a, b) {
+          if (sortAscending) {
+            return a.name.toUpperCase().compareTo(b.name.toUpperCase());
+          } else {
+            return b.name.toUpperCase().compareTo(a.name.toUpperCase());
+          }
+        });
+        break;
+      case 1:
+        list.sort((a, b) {
+          if (sortAscending) {
+            return a.getTypeAsText().compareTo(b.getTypeAsText());
+          } else {
+            return b.getTypeAsText().compareTo(a.getTypeAsText());
+          }
+        });
+        break;
+      case 2:
+        list.sort((a, b) {
+          if (sortAscending) {
+            return (a.balance - b.balance).toInt();
+          } else {
+            return (b.balance - a.balance).toInt();
+          }
+        });
+        break;
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
-    final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
+  Widget getTitle() {
+    return Header("Accounts", numValueOrDefault(list.length), "Your main assets.");
+  }
 
-    return Expanded(
-        child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Column(children: <Widget>[
-              Header("Accounts", numValueOrDefault(accountsOpened.length), "Your main assets."),
-              Row(children: <Widget>[
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Name", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Type", textAlign: TextAlign.left, style: textTheme.titleMedium))),
-                Expanded(child: Container(color: getColorTheme(context).secondaryContainer, child: Text("Balance", textAlign: TextAlign.right, style: textTheme.titleMedium))),
-              ]),
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: accountsOpened.length,
-                      itemExtent: 30,
-                      // cacheExtent: 30*10000,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(accountsOpened[index].name, textAlign: TextAlign.left),
-                            ),
-                            Expanded(
-                              child: Text(accountsOpened[index].typeAsText(), textAlign: TextAlign.left),
-                            ),
-                            Expanded(
-                              child: Text(formatCurrency.format(accountsOpened[index].balance), textAlign: TextAlign.right),
-                            ),
-                          ],
-                        );
-                      })),
-            ])));
+  @override
+  Widget getRow(list, index) {
+    return Row(
+      children: <Widget>[
+        Expanded(
+          child: Text(list[index].name, textAlign: TextAlign.left),
+        ),
+        Expanded(
+          child: Text(list[index].getTypeAsText(), textAlign: TextAlign.left),
+        ),
+        Expanded(
+          child: Text(formatCurrency.format(list[index].balance), textAlign: TextAlign.right),
+        ),
+      ],
+    );
   }
 }
