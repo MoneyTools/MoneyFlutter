@@ -112,13 +112,15 @@ class ViewCashFlowState extends State<ViewCashFlow> {
         Text("Expenses ${getCurrencyText(totalExpenses)}"),
         Text("Other ${getCurrencyText(totalNones)}"),
       ]),
-      SizedBox(
-        width: 1000,
-        height: totalHeight,
-        child: CustomPaint(
-          painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, padding),
-        ),
-      ),
+      Padding(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+          child: SizedBox(
+            width: 1000,
+            height: totalHeight,
+            child: CustomPaint(
+              painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses),
+            ),
+          )),
     ]));
   }
 

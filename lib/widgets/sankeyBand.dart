@@ -62,10 +62,13 @@ void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block
     var ratioSourceBlockHeightToSumHeight = (block.rect.height / sumOfHeight);
     var targetSectionHeight = (target.rect.height * ratioSourceBlockHeightToSumHeight);
 
+    var blockSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? block.rect.right : block.rect.left;
+    var targetSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? target.rect.left : target.rect.right;
+
     drawChanel(
       canvas,
-      ChannelPoint(block.rect.right, block.rect.top, block.rect.bottom),
-      ChannelPoint(target.rect.left, rollingVerticalPositionDrawnOnTheTarget, rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
+      ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
+      ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget, rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
     );
 
     rollingVerticalPositionDrawnOnTheTarget += targetSectionHeight;

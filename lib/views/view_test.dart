@@ -28,7 +28,7 @@ class ViewTestState extends State<ViewTest> {
 
     return Expanded(
         child: ListView(children: [
-      const Header("Test", 0, "Experimentations."),
+      const Header("Test", 0, "Testing."),
       SizedBox(
         width: 1000,
         height: 1000,
