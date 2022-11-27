@@ -1,7 +1,15 @@
 import 'package:collection/collection.dart';
 import 'package:money/models/transactions.dart';
 
-enum CategoryType { none, income, expense, saving, investment }
+enum CategoryType {
+  none, // 0
+  income, // 1
+  expense, // 2
+  saving, // 3
+  reserved, // 4
+  transfer, // 5
+  investment, // 6
+}
 
 class Category {
   num id = -1;
@@ -21,6 +29,10 @@ class Category {
         return "Expense";
       case CategoryType.saving:
         return "Saving";
+      case CategoryType.reserved:
+        return "Reserved";
+      case CategoryType.transfer:
+        return "Transfer";
       case CategoryType.investment:
         return "Investment";
       case CategoryType.none:
@@ -33,13 +45,15 @@ class Category {
     switch (text) {
       case "1":
         return CategoryType.income;
-
       case "2":
         return CategoryType.expense;
-
       case "3":
         return CategoryType.saving;
       case "4":
+        return CategoryType.reserved;
+      case "5":
+        return CategoryType.transfer;
+      case "6":
         return CategoryType.investment;
       case "0":
       default:
