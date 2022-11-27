@@ -39,14 +39,16 @@ class SankeyPaint extends CustomPainter {
 
     var ratioIncomeToExpense = (targetHeight) / (totalIncome + totalExpense);
 
+    // Revenue
     var lastHeight = ratioIncomeToExpense * totalIncome;
     lastHeight = max(Block.minBlockHeight, lastHeight);
-    Block targetIncome = Block("Incomes\n${getCurrencyText(totalIncome)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff387000), true);
+    Block targetIncome = Block("Revenue\n${getCurrencyText(totalIncome)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff387000), true);
 
+    // Expanses
     verticalStackOfTargets += padding + lastHeight;
     lastHeight = ratioIncomeToExpense * totalExpense;
     lastHeight = max(Block.minBlockHeight, lastHeight);
-    Block targetExpense = Block("Expenses\n${getCurrencyText(totalExpense)}", ui.Rect.fromLTWH(horizontalCenter, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff8c0e00), false);
+    Block targetExpense = Block("Expenses\n${getCurrencyText(totalExpense)}", ui.Rect.fromLTWH(horizontalCenter + 300, verticalStackOfTargets, targetWidth, lastHeight), const Color(0xff8c0e00), false);
 
     var stackVerticalPosition = 0.0;
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, true, padding, stackVerticalPosition, targetIncome, const Color(0xaa2f6001));
@@ -59,10 +61,21 @@ class SankeyPaint extends CustomPainter {
     lastHeight = ratioIncomeToExpense * netAmount;
     lastHeight = max(Block.minBlockHeight, lastHeight);
 
+    var heightProfitFromIncomeSection = targetIncome.rect.height - targetExpense.rect.height;
+
+    // Render Channel from Expense to Income
+    drawChanel(
+      canvas,
+      ChannelPoint(targetExpense.rect.left, targetExpense.rect.top, targetExpense.rect.bottom),
+      ChannelPoint(targetIncome.rect.right, targetIncome.rect.top + heightProfitFromIncomeSection, targetIncome.rect.bottom),
+    );
+
     var targetLeft = size.width - targetWidth - padding;
     Block targetNet = Block("Net\n${getCurrencyText(netAmount)}", ui.Rect.fromLTWH(targetLeft, 0, targetWidth, lastHeight), const Color(0xff0061ad), false);
+    drawBoxAndTextFromTarget(canvas, targetNet);
 
-    renderSourcesToTargetAsPercentage(canvas, [targetIncome, targetExpense], targetNet);
+    // Render Income remaining profit to Net box
+    drawChanel(canvas, ChannelPoint(targetIncome.rect.right, targetIncome.rect.top, targetIncome.rect.top + heightProfitFromIncomeSection), ChannelPoint(targetNet.rect.left, targetNet.rect.top, targetNet.rect.bottom));
   }
 
   double renderSourcesToTarget(ui.Canvas canvas, list, useAsIncome, double left, double top, Block target, Color color) {

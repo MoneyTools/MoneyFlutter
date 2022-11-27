@@ -144,18 +144,22 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
   context.restore();
 }
 
-void drawChanel(canvas, ChannelPoint channelPointStart, ChannelPoint channelPointEnd) {
-  var size = Size((channelPointEnd.x - channelPointStart.x).abs(), 100.0);
+void drawChanel(canvas, ChannelPoint a, ChannelPoint b) {
+  // We render left to right, so lets see what channel goes on the left and the one that goes on the right
+  ChannelPoint channelPointLeft = (a.x < b.x) ? a : b;
+  ChannelPoint channelPointEnd = (a.x < b.x) ? b : a;
+
+  var size = Size((channelPointEnd.x - channelPointLeft.x).abs(), 100.0);
   var halfWidth = size.width / 2;
 
   Path path = Path();
 
   // Start from the Left-Top
-  path.moveTo(channelPointStart.x, channelPointStart.top);
+  path.moveTo(channelPointLeft.x, channelPointLeft.top);
   path.cubicTo(
     /*P1*/
-    channelPointStart.x + halfWidth,
-    channelPointStart.top,
+    channelPointLeft.x + halfWidth,
+    channelPointLeft.top,
     /*P2*/
     channelPointEnd.x - halfWidth,
     channelPointEnd.top,
@@ -171,11 +175,11 @@ void drawChanel(canvas, ChannelPoint channelPointStart, ChannelPoint channelPoin
     channelPointEnd.x - halfWidth,
     channelPointEnd.bottom,
     /*P2*/
-    channelPointStart.x + halfWidth,
-    channelPointStart.bottom,
+    channelPointLeft.x + halfWidth,
+    channelPointLeft.bottom,
     /*P3*/
-    channelPointStart.x,
-    channelPointStart.bottom,
+    channelPointLeft.x,
+    channelPointLeft.bottom,
   );
 
   // Close at the Left-Bottom
