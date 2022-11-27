@@ -16,9 +16,10 @@ class Payees {
   num runningBalance = 0;
 
   static List<Payee> list = [];
+  static Map<num, Payee> map = {};
 
   static Payee? get(id) {
-    return list.firstWhereOrNull((item) => item.id == id);
+    return map[id];
   }
 
   static String getNameFromId(num id) {
@@ -29,6 +30,11 @@ class Payees {
     return payee.name;
   }
 
+  static addEntry(Payee payee) {
+    list.add(payee);
+    map[payee.id] = payee;
+  }
+
   load(rows) async {
     runningBalance = 0;
 
@@ -37,14 +43,16 @@ class Payees {
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var name = row["Name"].toString();
-      list.add(Payee(id, name));
+      addEntry(Payee(id, name));
     }
     return list;
   }
 
   loadDemoData() {
     List<String> names = ['John', 'Paul', 'George', 'Ringo', 'Jean-Pierre', 'Chris', 'Bill', 'Steve', 'Sue', 'Barbara'];
-    list = List<Payee>.generate(10, (i) => Payee(i, names[i]));
+    for (var i = 0; i < names.length; i++) {
+      addEntry(Payee(i, names[i]));
+    }
   }
 
   static onAllDataLoaded() {
