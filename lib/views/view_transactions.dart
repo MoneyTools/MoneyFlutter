@@ -28,49 +28,43 @@ class ViewTransactionsState extends ViewWidgetState {
         "Account",
         ColumnType.text,
         TextAlign.left,
-        (index) {
+        /* cell */ (index) {
           return Accounts.getNameFromId(list[index].accountId);
         },
-        (a, b, ascending) {
-          var textA = Accounts.getNameFromId(a.accountId);
-          var textB = Accounts.getNameFromId(b.accountId);
-          return sortByString(textA, textB, ascending);
+        /* Sort */ (a, b, ascending) {
+          return sortByString(Accounts.getNameFromId(a.accountId), Accounts.getNameFromId(b.accountId), ascending);
         },
       ),
       ColumnDefinition(
         "Date",
         ColumnType.date,
         TextAlign.left,
-        (index) {
-          return list[index].dateTime.toIso8601String().split('T').first;
+        /* Cell */ (index) {
+          return getDateAsText(list[index].dateTime);
         },
-        (a, b, ascending) {
-          var textA = a.dateTime.toIso8601String().split('T').first;
-          var textB = b.dateTime.toIso8601String().split('T').first;
-          return sortByString(textA, textB, sortAscending);
+        /* Sort */ (a, b, ascending) {
+          return sortByString(getDateAsText(a.dateTime), getDateAsText(b.dateTime), sortAscending);
         },
       ),
       ColumnDefinition(
         "Payee",
         ColumnType.text,
         TextAlign.left,
-        (index) {
+        /* Cell */ (index) {
           return Payees.getNameFromId(list[index].payeeId);
         },
-        (a, b, ascending) {
-          var textA = Payees.getNameFromId(a.payeeId);
-          var textB = Payees.getNameFromId(b.payeeId);
-          return sortByString(textA, textB, sortAscending);
+        /* Sort */ (a, b, ascending) {
+          return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
         },
       ),
       ColumnDefinition(
         "Amount",
         ColumnType.amount,
         TextAlign.right,
-        (index) {
+        /* Cell */ (index) {
           return list[index].amount;
         },
-        (a, b, ascending) {
+        /* Sort */ (a, b, ascending) {
           return sortByValue(a.amount, b.amount, sortAscending);
         },
       ),
@@ -78,10 +72,10 @@ class ViewTransactionsState extends ViewWidgetState {
         "Balance",
         ColumnType.amount,
         TextAlign.right,
-        (index) {
+        /* Cell */ (index) {
           return list[index].balance;
         },
-        (a, b, ascending) {
+        /* Sort */ (a, b, ascending) {
           return sortByValue(a.balance, b.balance, sortAscending);
         },
       ),

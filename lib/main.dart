@@ -152,20 +152,16 @@ class _MyMoneyState extends State<MyMoney> {
     }
 
     switch (screenIndex) {
-      // Cash Flow
       case 0:
-        return ViewCashFlow(data: data);
-      // Accounts
+        return const ViewCashFlow();
       case 1:
-        return ViewAccounts();
-      // Categories
+        return const ViewAccounts();
       case 2:
-        return ViewCategories();
-      // Payees
+        return const ViewCategories();
       case 3:
-        return ViewPayees();
+        return const ViewPayees();
       case 4:
-        return ViewTransactions();
+        return const ViewTransactions();
       case 5:
       default:
         return const ViewTest();

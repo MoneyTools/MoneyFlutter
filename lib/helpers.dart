@@ -46,6 +46,10 @@ String getCurrencyText(double value) {
   return formatCurrency.format(value);
 }
 
+String getDateAsText(date) {
+  return date.toIso8601String().split('T').first;
+}
+
 int sortByStringIgnoreCase(textA, textB) {
   return textA.toUpperCase().compareTo(textB.toUpperCase());
 }

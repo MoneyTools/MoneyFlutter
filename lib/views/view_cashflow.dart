@@ -4,14 +4,11 @@ import 'package:money/models/transactions.dart';
 
 import '../helpers.dart';
 import '../models/accounts.dart';
-import '../models/data.dart';
 import '../widgets/header.dart';
 import '../widgets/sankeyChart.dart';
 
 class ViewCashFlow extends StatefulWidget {
-  final Data data;
-
-  const ViewCashFlow({super.key, required this.data});
+  const ViewCashFlow({super.key});
 
   @override
   State<ViewCashFlow> createState() => ViewCashFlowState();
