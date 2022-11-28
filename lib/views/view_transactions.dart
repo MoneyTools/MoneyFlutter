@@ -7,16 +7,16 @@ import 'package:money/widgets/header.dart';
 import '../models/accounts.dart';
 import '../models/payees.dart';
 import '../widgets/columns.dart';
-import '../widgets/virtualTable.dart';
+import '../widgets/widget_view.dart';
 
-class ViewTransactions extends MyView {
+class ViewTransactions extends ViewWidget {
   const ViewTransactions({super.key});
 
   @override
-  State<MyView> createState() => ViewTransactionsState();
+  State<ViewWidget> createState() => ViewTransactionsState();
 }
 
-class ViewTransactionsState extends MyViewState {
+class ViewTransactionsState extends ViewWidgetState {
   final styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final List<Widget> options = [];
   final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
@@ -24,27 +24,67 @@ class ViewTransactionsState extends MyViewState {
   @override
   List<ColumnDefinition> getColumnDefinitions() {
     return [
-      ColumnDefinition("Account", ColumnType.text, TextAlign.left, (a, b, ascending) {
-        var textA = Accounts.getNameFromId(a.accountId);
-        var textB = Accounts.getNameFromId(b.accountId);
-        return sortByString(textA, textB, ascending);
-      }),
-      ColumnDefinition("Date", ColumnType.date, TextAlign.left, (a, b, ascending) {
-        var textA = a.dateTime.toIso8601String().split('T').first;
-        var textB = b.dateTime.toIso8601String().split('T').first;
-        return sortByString(textA, textB, sortAscending);
-      }),
-      ColumnDefinition("Payee", ColumnType.text, TextAlign.left, (a, b, ascending) {
-        var textA = Payees.getNameFromId(a.payeeId);
-        var textB = Payees.getNameFromId(b.payeeId);
-        return sortByString(textA, textB, sortAscending);
-      }),
-      ColumnDefinition("Amount", ColumnType.amount, TextAlign.right, (a, b, ascending) {
-        return sortByValue(a.amount, b.amount, sortAscending);
-      }),
-      ColumnDefinition("Balance", ColumnType.amount, TextAlign.right, (a, b, ascending) {
-        return sortByValue(a.balance, b.balance, sortAscending);
-      }),
+      ColumnDefinition(
+        "Account",
+        ColumnType.text,
+        TextAlign.left,
+        (index) {
+          return Accounts.getNameFromId(list[index].accountId);
+        },
+        (a, b, ascending) {
+          var textA = Accounts.getNameFromId(a.accountId);
+          var textB = Accounts.getNameFromId(b.accountId);
+          return sortByString(textA, textB, ascending);
+        },
+      ),
+      ColumnDefinition(
+        "Date",
+        ColumnType.date,
+        TextAlign.left,
+        (index) {
+          return list[index].dateTime.toIso8601String().split('T').first;
+        },
+        (a, b, ascending) {
+          var textA = a.dateTime.toIso8601String().split('T').first;
+          var textB = b.dateTime.toIso8601String().split('T').first;
+          return sortByString(textA, textB, sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Payee",
+        ColumnType.text,
+        TextAlign.left,
+        (index) {
+          return Payees.getNameFromId(list[index].payeeId);
+        },
+        (a, b, ascending) {
+          var textA = Payees.getNameFromId(a.payeeId);
+          var textB = Payees.getNameFromId(b.payeeId);
+          return sortByString(textA, textB, sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Amount",
+        ColumnType.amount,
+        TextAlign.right,
+        (index) {
+          return list[index].amount;
+        },
+        (a, b, ascending) {
+          return sortByValue(a.amount, b.amount, sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Balance",
+        ColumnType.amount,
+        TextAlign.right,
+        (index) {
+          return list[index].balance;
+        },
+        (a, b, ascending) {
+          return sortByValue(a.balance, b.balance, sortAscending);
+        },
+      ),
     ];
   }
 
@@ -91,19 +131,6 @@ class ViewTransactionsState extends MyViewState {
     if (_selectedExpenseIncome[0]) {
       return Transactions.list.where((element) => element.amount > 0).toList();
     }
-  }
-
-  @override
-  Widget getRow(list, index) {
-    return Row(
-      children: <Widget>[
-        getCell(0, Accounts.getNameFromId(list[index].accountId)),
-        getCell(1, list[index].dateTime.toIso8601String().split('T').first),
-        getCell(2, Payees.getNameFromId(list[index].payeeId)),
-        getCell(3, list[index].amount),
-        getCell(4, list[index].balance),
-      ],
-    );
   }
 
   renderToggles() {

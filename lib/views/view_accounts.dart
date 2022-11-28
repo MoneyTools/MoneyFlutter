@@ -4,16 +4,16 @@ import '../helpers.dart';
 import '../models/accounts.dart';
 import '../widgets/columns.dart';
 import '../widgets/header.dart';
-import '../widgets/virtualTable.dart';
+import '../widgets/widget_view.dart';
 
-class ViewAccounts extends MyView {
+class ViewAccounts extends ViewWidget {
   const ViewAccounts({super.key});
 
   @override
-  State<MyView> createState() => ViewAccountsState();
+  State<ViewWidget> createState() => ViewAccountsState();
 }
 
-class ViewAccountsState extends MyViewState {
+class ViewAccountsState extends ViewWidgetState {
   @override
   Widget getTitle() {
     return Header("Accounts", numValueOrDefault(list.length), "Your main assets.");
@@ -22,15 +22,39 @@ class ViewAccountsState extends MyViewState {
   @override
   List<ColumnDefinition> getColumnDefinitions() {
     return [
-      ColumnDefinition("Name", ColumnType.text, TextAlign.left, (a, b, sortAscending) {
-        return sortByString(a.name, b.name, sortAscending);
-      }),
-      ColumnDefinition("Type", ColumnType.text, TextAlign.center, (a, b, sortAscending) {
-        return sortByString(a.getTypeAsText(), b.getTypeAsText(), sortAscending);
-      }),
-      ColumnDefinition("Balance", ColumnType.amount, TextAlign.right, (a, b, sortAscending) {
-        return sortByValue(a.balance, b.balance, sortAscending);
-      }),
+      ColumnDefinition(
+        "Name",
+        ColumnType.text,
+        TextAlign.left,
+        (index) {
+          return list[index].name;
+        },
+        (a, b, sortAscending) {
+          return sortByString(a.name, b.name, sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Type",
+        ColumnType.text,
+        TextAlign.center,
+        (index) {
+          return list[index].getTypeAsText();
+        },
+        (a, b, sortAscending) {
+          return sortByString(a.getTypeAsText(), b.getTypeAsText(), sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Balance",
+        ColumnType.amount,
+        TextAlign.right,
+        (index) {
+          return list[index].balance;
+        },
+        (a, b, sortAscending) {
+          return sortByValue(a.balance, b.balance, sortAscending);
+        },
+      ),
     ];
   }
 
@@ -42,16 +66,5 @@ class ViewAccountsState extends MyViewState {
   @override
   getList() {
     return Accounts.getOpenAccounts();
-  }
-
-  @override
-  Widget getRow(list, index) {
-    return Row(
-      children: <Widget>[
-        getCell(0, list[index].name),
-        getCell(1, list[index].getTypeAsText()),
-        getCell(2, list[index].balance),
-      ],
-    );
   }
 }

@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:money/models/transactions.dart';
 
-import '../widgets/virtualTable.dart';
+import '../widgets/widget_view.dart';
 
 enum AccountType {
   savings,

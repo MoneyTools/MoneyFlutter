@@ -5,14 +5,14 @@ import '../helpers.dart';
 import '../widgets/header.dart';
 import 'columns.dart';
 
-class MyView extends StatefulWidget {
-  const MyView({super.key});
+class ViewWidget extends StatefulWidget {
+  const ViewWidget({super.key});
 
   @override
-  State<MyView> createState() => MyViewState();
+  State<ViewWidget> createState() => ViewWidgetState();
 }
 
-class MyViewState extends State<MyView> {
+class ViewWidgetState extends State<ViewWidget> {
   List<ColumnDefinition> columns = [];
 
   List<ColumnDefinition> getColumnDefinitions() {
@@ -26,7 +26,7 @@ class MyViewState extends State<MyView> {
   int sortBy = 0;
   bool sortAscending = true;
 
-  MyViewState();
+  ViewWidgetState();
 
   @override
   void initState() {
@@ -60,7 +60,11 @@ class MyViewState extends State<MyView> {
   }
 
   Widget getRow(list, index) {
-    return Row(children: const <Widget>[]);
+    List<Widget> cells = [];
+    for (int i = 0; i < columns.length; i++) {
+      cells.add(getCell(i, columns[i].getCell!(index)));
+    }
+    return Row(children: cells);
   }
 
   Widget getCell(int columnId, Object value) {
