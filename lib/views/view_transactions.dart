@@ -24,28 +24,33 @@ class ViewTransactionsState extends MyViewState {
   @override
   List<ColumnDefinition> getColumnDefinitions() {
     return [
-      ColumnDefinition("Account", TextAlign.left, (a, b, ascending) {
+      ColumnDefinition("Account", ColumnType.text, TextAlign.left, (a, b, ascending) {
         var textA = Accounts.getNameFromId(a.accountId);
         var textB = Accounts.getNameFromId(b.accountId);
         return sortByString(textA, textB, ascending);
       }),
-      ColumnDefinition("Date", TextAlign.left, (a, b, ascending) {
+      ColumnDefinition("Date", ColumnType.date, TextAlign.left, (a, b, ascending) {
         var textA = a.dateTime.toIso8601String().split('T').first;
         var textB = b.dateTime.toIso8601String().split('T').first;
         return sortByString(textA, textB, sortAscending);
       }),
-      ColumnDefinition("Payee", TextAlign.left, (a, b, ascending) {
+      ColumnDefinition("Payee", ColumnType.text, TextAlign.left, (a, b, ascending) {
         var textA = Payees.getNameFromId(a.payeeId);
         var textB = Payees.getNameFromId(b.payeeId);
         return sortByString(textA, textB, sortAscending);
       }),
-      ColumnDefinition("Amount", TextAlign.right, (a, b, ascending) {
+      ColumnDefinition("Amount", ColumnType.amount, TextAlign.right, (a, b, ascending) {
         return sortByValue(a.amount, b.amount, sortAscending);
       }),
-      ColumnDefinition("Balance", TextAlign.right, (a, b, ascending) {
+      ColumnDefinition("Balance", ColumnType.amount, TextAlign.right, (a, b, ascending) {
         return sortByValue(a.balance, b.balance, sortAscending);
       }),
     ];
+  }
+
+  @override
+  getDefaultSortColumn() {
+    return 1; // Sort By Date
   }
 
   ViewTransactionsState();
@@ -92,21 +97,13 @@ class ViewTransactionsState extends MyViewState {
   Widget getRow(list, index) {
     return Row(
       children: <Widget>[
-        renderColumValueEntryText(Accounts.getNameFromId(list[index].accountId)),
-        renderColumValueEntryText(list[index].dateTime.toIso8601String().split('T').first),
-        renderColumValueEntryText(Payees.getNameFromId(list[index].payeeId)),
-        renderColumValueEntryCurrency(list[index].amount),
-        renderColumValueEntryCurrency(list[index].balance),
+        getCell(0, Accounts.getNameFromId(list[index].accountId)),
+        getCell(1, list[index].dateTime.toIso8601String().split('T').first),
+        getCell(2, Payees.getNameFromId(list[index].payeeId)),
+        getCell(3, list[index].amount),
+        getCell(4, list[index].balance),
       ],
     );
-  }
-
-  Widget renderColumValueEntryText(text) {
-    return Expanded(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerLeft, child: Padding(padding: const EdgeInsets.fromLTRB(0, 0, 8, 0), child: Text(text, textAlign: TextAlign.left))));
-  }
-
-  Widget renderColumValueEntryCurrency(value) {
-    return Expanded(child: FittedBox(fit: BoxFit.scaleDown, alignment: Alignment.centerRight, child: Padding(padding: const EdgeInsets.fromLTRB(1, 0, 1, 0), child: Text(formatCurrency.format(value), textAlign: TextAlign.right))));
   }
 
   renderToggles() {

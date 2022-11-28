@@ -13,8 +13,8 @@ class MyView extends StatefulWidget {
 }
 
 class MyViewState extends State<MyView> {
-
   List<ColumnDefinition> columns = [];
+
   List<ColumnDefinition> getColumnDefinitions() {
     return [];
   }
@@ -32,16 +32,21 @@ class MyViewState extends State<MyView> {
   void initState() {
     super.initState();
     columns = getColumnDefinitions();
+    sortBy = getDefaultSortColumn();
     list = getList();
   }
 
-  getList(){
+  getList() {
     return [];
   }
 
+  getDefaultSortColumn() {
+    return sortBy;
+  }
+
   onSort() {
-    return list.sort((a,b){
-      return columns[sortBy].sorting!(a,b,sortAscending);
+    return list.sort((a, b) {
+      return columns[sortBy].sorting!(a, b, sortAscending);
     });
   }
 
@@ -56,6 +61,17 @@ class MyViewState extends State<MyView> {
 
   Widget getRow(list, index) {
     return Row(children: const <Widget>[]);
+  }
+
+  Widget getCell(int columnId, Object value) {
+    var columnDefinition = columns[columnId];
+    switch (columnDefinition.type) {
+      case ColumnType.amount:
+        return renderColumValueEntryCurrency(value);
+      case ColumnType.text:
+      default:
+        return renderColumValueEntryText(value, textAlign: columnDefinition.align);
+    }
   }
 
   @override
@@ -128,22 +144,65 @@ getSortIconName(SortIndicator sortIndicator) {
 
 Widget headerButton(context, text, textAlign, SortIndicator sortIndicator, onClick) {
   return Expanded(
-    child: Container(color: getColorTheme(context).secondaryContainer, child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick)),
+    child: Container(
+      color: getColorTheme(context).secondaryContainer,
+      child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick),
+    ),
   );
 }
 
 TextButton textButtonOptionalIcon(context, String text, textAlign, SortIndicator sortIndicator, onClick) {
   final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
   var icon = getSortIconName(sortIndicator);
-  if (icon == null) {
-    return TextButton(
-      onPressed: onClick,
-      child: Text(text, textAlign: TextAlign.left, style: textTheme.titleMedium),
-    );
+
+  List<Widget> rowChildren = [
+    Text(text, style: textTheme.titleMedium),
+  ];
+
+  if (icon != null) {
+    rowChildren.add(icon);
   }
-  return TextButton.icon(
-    label: icon,
+
+  return TextButton(
     onPressed: onClick,
-    icon: Text(text, textAlign: TextAlign.left, style: textTheme.titleMedium),
+    child: Row(mainAxisAlignment: getRowAlignmentBasedOnTextAlign(textAlign), children: rowChildren),
   );
+}
+
+MainAxisAlignment getRowAlignmentBasedOnTextAlign(TextAlign textAlign) {
+  switch (textAlign) {
+    case TextAlign.left:
+      return MainAxisAlignment.start;
+    case TextAlign.right:
+      return MainAxisAlignment.end;
+    case TextAlign.center:
+    default:
+      return MainAxisAlignment.center;
+  }
+}
+
+Widget renderColumValueEntryText(text, {TextAlign textAlign = TextAlign.left}) {
+  return Expanded(
+      child: FittedBox(
+          fit: BoxFit.scaleDown,
+          alignment: textAlign == TextAlign.left ? Alignment.centerLeft : Alignment.center,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+            child: Text(text, textAlign: textAlign),
+          )));
+}
+
+Widget renderColumValueEntryCurrency(value) {
+  return Expanded(
+      child: FittedBox(
+    fit: BoxFit.scaleDown,
+    alignment: Alignment.centerRight,
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+      child: Text(
+        getCurrencyText(value),
+        textAlign: TextAlign.right,
+      ),
+    ),
+  ));
 }

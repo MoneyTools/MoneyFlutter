@@ -14,7 +14,6 @@ class ViewPayees extends MyView {
 }
 
 class ViewPayeesState extends MyViewState {
-
   @override
   Widget getTitle() {
     return Header("Payees", numValueOrDefault(list.length), "Who is getting your money.");
@@ -23,10 +22,10 @@ class ViewPayeesState extends MyViewState {
   @override
   List<ColumnDefinition> getColumnDefinitions() {
     return [
-      ColumnDefinition("Name", TextAlign.left, (a, b, sortAscending) {
+      ColumnDefinition("Name", ColumnType.text, TextAlign.left, (a, b, sortAscending) {
         return sortByString(a.name, b.name, sortAscending);
       }),
-      ColumnDefinition("Balance", TextAlign.right, (a, b, sortAscending) {
+      ColumnDefinition("Balance", ColumnType.amount, TextAlign.right, (a, b, sortAscending) {
         return sortByValue(a.balance, b.balance, sortAscending);
       }),
     ];
@@ -38,41 +37,16 @@ class ViewPayeesState extends MyViewState {
   }
 
   @override
-  @override
-  onSort() {
-    switch (sortBy) {
-      case 0:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return a.name.toUpperCase().compareTo(b.name.toUpperCase());
-          } else {
-            return b.name.toUpperCase().compareTo(a.name.toUpperCase());
-          }
-        });
-        break;
-      case 1:
-        list.sort((a, b) {
-          if (sortAscending) {
-            return (a.balance - b.balance).toInt();
-          } else {
-            return (b.balance - a.balance).toInt();
-          }
-        });
-        break;
-    }
+  getDefaultSortColumn() {
+    return 0; // Sort by name
   }
-
 
   @override
   Widget getRow(list, index) {
     return Row(
       children: <Widget>[
-        Expanded(
-          child: Text(list[index].name, textAlign: TextAlign.left),
-        ),
-        Expanded(
-          child: Text(formatCurrency.format(list[index].balance), textAlign: TextAlign.right),
-        ),
+        getCell(0, list[index].name),
+        getCell(1, list[index].balance),
       ],
     );
   }

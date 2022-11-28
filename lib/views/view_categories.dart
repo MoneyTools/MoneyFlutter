@@ -14,7 +14,6 @@ class ViewCategories extends MyView {
 }
 
 class ViewCategoriesState extends MyViewState {
-
   @override
   Widget getTitle() {
     return Header("Categories", numValueOrDefault(list.length), "Classification of your money transactions.");
@@ -23,16 +22,21 @@ class ViewCategoriesState extends MyViewState {
   @override
   List<ColumnDefinition> getColumnDefinitions() {
     return [
-      ColumnDefinition("Name", TextAlign.left, (a, b, sortAscending) {
+      ColumnDefinition("Name", ColumnType.text, TextAlign.left, (a, b, sortAscending) {
         return sortByString(a.name, b.name, sortAscending);
       }),
-      ColumnDefinition("Type", TextAlign.left, (a, b, sortAscending) {
+      ColumnDefinition("Type", ColumnType.text, TextAlign.center, (a, b, sortAscending) {
         return sortByString(a.getTypeAsText(), b.getTypeAsText(), sortAscending);
       }),
-      ColumnDefinition("Balance", TextAlign.right, (a, b, sortAscending) {
+      ColumnDefinition("Balance", ColumnType.amount, TextAlign.right, (a, b, sortAscending) {
         return sortByValue(a.balance, b.balance, sortAscending);
       }),
     ];
+  }
+
+  @override
+  getDefaultSortColumn() {
+    return 0; // Sort by name
   }
 
   @override
@@ -44,15 +48,9 @@ class ViewCategoriesState extends MyViewState {
   Widget getRow(list, index) {
     return Row(
       children: <Widget>[
-        Expanded(
-          child: Text(list[index].name, textAlign: TextAlign.left),
-        ),
-        Expanded(
-          child: Text(list[index].getTypeAsText(), textAlign: TextAlign.center),
-        ),
-        Expanded(
-          child: Text(formatCurrency.format(list[index].balance), textAlign: TextAlign.right),
-        ),
+        getCell(0, list[index].name),
+        getCell(1, list[index].getTypeAsText()),
+        getCell(2, list[index].balance),
       ],
     );
   }
