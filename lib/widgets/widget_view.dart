@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../helpers.dart';
@@ -14,6 +15,9 @@ class ViewWidget extends StatefulWidget {
 
 class ViewWidgetState extends State<ViewWidget> {
   List<ColumnDefinition> columns = [];
+  List<int> selectedItems = [0];
+  final double itemHeight = 30;
+  final scrollController = ScrollController();
 
   List<ColumnDefinition> getColumnDefinitions() {
     return [];
@@ -64,7 +68,19 @@ class ViewWidgetState extends State<ViewWidget> {
     for (int i = 0; i < columns.length; i++) {
       cells.add(getCell(i, columns[i].getCell!(index)));
     }
-    return Row(children: cells);
+    var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedItems.clear();
+          selectedItems.add(index);
+        });
+      },
+      child: Container(
+        color: backgroundColor,
+        child: Row(children: cells),
+      ),
+    );
   }
 
   Widget getCell(int columnId, Object value) {
@@ -85,18 +101,90 @@ class ViewWidgetState extends State<ViewWidget> {
     return Expanded(
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Column(children: <Widget>[
-              getTitle(),
-              getTableHeaders(),
-              Expanded(
-                  child: ListView.builder(
-                      itemCount: list.length,
-                      itemExtent: 30,
-                      // cacheExtent: 30*10000,
-                      itemBuilder: (context, index) {
-                        return getRow(list, index);
-                      })),
-            ])));
+            child: Column(
+              children: <Widget>[
+                getTitle(),
+                getTableHeaders(),
+                Expanded(
+                    child: Focus(
+                        autofocus: true,
+                        onFocusChange: (focused) {
+                          setState(() {
+                            // _color = focused ? Colors.black26 : Colors.white;
+                            // _label = focused ? 'Focused' : 'Unfocused';
+                          });
+                        },
+                        onKey: (node, event) {
+                          return onListViewKeyEvent(node, event);
+                        },
+                        child: getListViewBuilder())),
+              ],
+            )));
+  }
+
+  onListViewKeyEvent(FocusNode node, RawKeyEvent event) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowUp && event.runtimeType.toString() == 'RawKeyDownEvent') {
+      setState(() {
+        changeSelectionPosition(-1);
+      });
+      return KeyEventResult.handled;
+    }
+
+    if (event.logicalKey == LogicalKeyboardKey.arrowDown && event.runtimeType.toString() == 'RawKeyDownEvent') {
+      setState(() {
+        changeSelectionPosition(1);
+      });
+      return KeyEventResult.handled;
+    }
+
+    return KeyEventResult.ignored;
+  }
+
+  void changeSelectionPosition(int delta) {
+    int newPosition = 0;
+    if (selectedItems.isNotEmpty) {
+      newPosition = selectedItems[0] + delta;
+    }
+
+    if (newPosition.isBetween(-1, list.length)) {
+      selectedItems.clear();
+      selectedItems.add(newPosition);
+      scrollToIndex(newPosition);
+    }
+  }
+
+  void scrollToIndex(int index) {
+    var minMax = scrollListenerWithItemCount();
+
+    print("${minMax[0]} > $index < ${minMax[0]}");
+
+    if (!index.isBetween(minMax[0], minMax[1])) {
+      double desiredNewPosition = itemHeight * index;
+      scrollController.jumpTo(desiredNewPosition);
+    }
+  }
+
+  // use this if total item count is known
+  scrollListenerWithItemCount() {
+    int itemCount = list.length;
+    double scrollOffset = scrollController.position.pixels;
+    double viewportHeight = scrollController.position.viewportDimension;
+    double scrollRange = scrollController.position.maxScrollExtent - scrollController.position.minScrollExtent;
+    int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).ceil();
+    int lastVisibleItemIndex = (scrollOffset / itemHeight).ceil();
+    return [firstVisibleItemIndex, lastVisibleItemIndex];
+  }
+
+  getListViewBuilder() {
+    return ListView.builder(
+        physics: const ClampingScrollPhysics(),
+        controller: scrollController,
+        itemCount: list.length,
+        itemExtent: itemHeight,
+        // cacheExtent: itemHeight * 1000,
+        itemBuilder: (context, index) {
+          return getRow(list, index);
+        });
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, columns, Function changeSort) {

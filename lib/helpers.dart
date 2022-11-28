@@ -69,3 +69,23 @@ int sortByValue(double a, double b, ascending) {
     return (a - b).toInt();
   }
 }
+
+extension Range on num {
+  bool isBetween(num from, num to) {
+    return from < this && this < to;
+  }
+
+  bool isBetweenOrEqual(num from, num to) {
+    return from < this && this < to;
+  }
+}
+
+extension Range2 on double {
+  bool isBetween(num from, num to) {
+    return from < this && this < to;
+  }
+
+  bool isBetweenOrEqual(num from, num to) {
+    return from < this && this < to;
+  }
+}
