@@ -108,11 +108,12 @@ Color invertColor(Color color) {
   return Color.fromARGB((color.opacity * 255).round(), r, g, b);
 }
 
-getThemeDataFromPreference() async {
+Future<ThemeData> getThemeDataFromPreference() async {
   var preferences = await SharedPreferences.getInstance();
   var materialVersion = intValueOrDefault(preferences.getInt(prefMaterialVersion), defaultValueIfNull: 2);
   var colorSelected = intValueOrDefault(preferences.getInt(prefColor));
   var useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
+
   return ThemeData(
     colorSchemeSeed: colorOptions[colorSelected],
     useMaterial3: materialVersion == 3,

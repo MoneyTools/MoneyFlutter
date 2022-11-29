@@ -44,7 +44,6 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   loadLastPreference() async {
-    themeData = await getThemeDataFromPreference();
     SharedPreferences.getInstance().then((preferences) {
       pathToDatabase = preferences.getString(prefLastLoadedPathToDatabase);
       loadData();
@@ -255,22 +254,29 @@ class _MyMoneyState extends State<MyMoney> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'MyMoney',
-      theme: themeData,
-      home: LayoutBuilder(builder: (context, constraints) {
-        if (shouldShowOpenInstructions()) {
-          return welcomePanel(context);
-        }
-
-        if (isSmallWidth(constraints)) {
-          return getScaffoldingForSmallSurface(context);
-        } else {
-          return getScaffoldingForLargeSurface(context);
-        }
-      }),
-    );
+    return FutureBuilder<ThemeData>(
+        future: getThemeDataFromPreference(),
+        builder: (buildContext, snapshot) {
+          if (snapshot.hasData) {
+            return MaterialApp(
+                debugShowCheckedModeBanner: false,
+                title: 'MyMoney',
+                theme: snapshot.data,
+                home: LayoutBuilder(builder: (context, constraints) {
+                  if (shouldShowOpenInstructions()) {
+                    return welcomePanel(context);
+                  }
+                  if (isSmallWidth(constraints)) {
+                    return getScaffoldingForSmallSurface(context);
+                  } else {
+                    return getScaffoldingForLargeSurface(context);
+                  }
+                }));
+          } else {
+            // Return loading screen while reading preferences
+            return const Center(child: CircularProgressIndicator());
+          }
+        });
   }
 
   getScaffoldingForSmallSurface(context) {
