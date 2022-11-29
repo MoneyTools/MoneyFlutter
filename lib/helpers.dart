@@ -26,14 +26,16 @@ bool isSmallWidth(BoxConstraints constraints, {num minWidth = Constants.narrowSc
   return false;
 }
 
-TextTheme getTextTheme(BuildContext context) {
-  var theme = Theme.of(context);
-  return theme.textTheme;
+ThemeData getTheme(BuildContext context) {
+  return Theme.of(context);
 }
 
-getColorTheme(BuildContext context) {
-  var theme = Theme.of(context);
-  return theme.colorScheme;
+TextTheme getTextTheme(BuildContext context) {
+  return getTheme(context).textTheme;
+}
+
+ColorScheme getColorTheme(BuildContext context) {
+  return getTheme(context).colorScheme;
 }
 
 double roundDouble(double value, int places) {
@@ -88,4 +90,12 @@ extension Range2 on double {
   bool isBetweenOrEqual(num from, num to) {
     return from < this && this < to;
   }
+}
+
+Color invertColor(Color color) {
+  final r = 255 - color.red;
+  final g = 255 - color.green;
+  final b = 255 - color.blue;
+
+  return Color.fromARGB((color.opacity * 255).round(), r, g, b);
 }

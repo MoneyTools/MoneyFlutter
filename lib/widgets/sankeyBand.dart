@@ -3,6 +3,8 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../helpers.dart';
+
 class ChannelPoint {
   double x = 0.0;
   double top = 0.0;
@@ -17,13 +19,14 @@ class Block {
   String name = "";
   Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
   Color color;
+  Color textColor = Colors.black;
   bool useAsIncome = true;
 
-  Block(this.name, this.rect, this.color, this.useAsIncome) {
+  Block(this.name, this.rect, this.color, this.textColor, this.useAsIncome) {
     //
   }
 
-  static const minBlockHeight = 30.0;
+  static const minBlockHeight = 20.0;
   static const blockWidth = 50.0;
 }
 
@@ -79,7 +82,7 @@ double getHeightNeededToRender(list, useAsIncome) {
   var ratioPriceToHeight = useAsIncome ? getHeightRationIncome(list) : getHeightRatioExpense(list);
 
   var verticalPosition = 0.0;
-  var gap = 10.0;
+  var gap = 20.0;
 
   for (var element in list) {
     double height = element.value.abs() * ratioPriceToHeight;
@@ -127,23 +130,32 @@ double getHeightRatioExpense(list) {
 }
 
 void drawBoxAndTextFromTarget(canvas, Block target) {
-  canvas.drawRect(target.rect, Paint()..color = target.color);
-  drawText(canvas, target.name, target.rect.left, target.rect.top, color: Colors.white);
+  canvas.drawRect(target.rect, Paint()..color = target.color.withOpacity(0.5));
+  drawText(canvas, target.name, target.rect.left + 4, target.rect.top + 2, color: target.textColor);
 }
 
-void drawBoxAndText(canvas, x, y, w, h, text, Color color) {
-  canvas.drawRect(Rect.fromLTWH(x, y, w, h), Paint()..color = color);
-  drawText(canvas, text, x, y + (h / 2), color: Colors.white);
-}
-
-void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 10.0, double angleRotationInRadians = 0.0}) {
+void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 12.0, double angleRotationInRadians = 0.0}) {
   context.save();
   context.translate(x, y);
   context.rotate(angleRotationInRadians);
-  TextSpan span = TextSpan(style: TextStyle(color: color, fontSize: fontSize, fontFamily: 'Roboto'), text: name);
-  TextPainter tp = TextPainter(text: span, textAlign: TextAlign.center, textDirection: ui.TextDirection.ltr);
+  TextSpan span = TextSpan(
+      style: TextStyle(
+        color: invertColor(color),
+        fontSize: fontSize,
+        fontWeight: FontWeight.w800,
+        // shadows: [
+        //   Shadow(
+        //     color: color,
+        //     offset: const Offset(0, 0),
+        //     blurRadius: 2,
+        //   ),
+        // ],
+      ),
+      text: name);
+  TextPainter tp = TextPainter(text: span, textAlign: TextAlign.left, textDirection: ui.TextDirection.ltr);
   tp.layout();
   tp.paint(context, const Offset(0.0, 0.0));
+
   context.restore();
 }
 

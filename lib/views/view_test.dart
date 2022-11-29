@@ -21,10 +21,10 @@ class ViewTestState extends State<ViewTest> {
   @override
   Widget build(BuildContext context) {
     List<Block> lefts = [
-      Block("Left1", const Rect.fromLTWH(10, 10, 50, 100), Colors.blue, true),
-      Block("Left2", const Rect.fromLTWH(10, 210, 50, 80), Colors.blue, true),
+      Block("Left1", const Rect.fromLTWH(10, 10, 50, 100), Colors.blue, Colors.yellow, true),
+      Block("Left2", const Rect.fromLTWH(10, 210, 50, 80), Colors.blue, Colors.yellow, true),
     ];
-    Block right = Block("Right", const Rect.fromLTWH(400, 10, 25, 50), Colors.orange, true);
+    Block right = Block("Right", const Rect.fromLTWH(400, 10, 25, 50), Colors.orange, Colors.yellow, true);
 
     return Expanded(
         child: ListView(children: [

@@ -5,6 +5,7 @@ import 'package:money/models/transactions.dart';
 import '../helpers.dart';
 import '../models/accounts.dart';
 import '../widgets/header.dart';
+import '../widgets/sankeyBand.dart';
 import '../widgets/sankeyChart.dart';
 
 class ViewCashFlow extends StatefulWidget {
@@ -115,7 +116,7 @@ class ViewCashFlowState extends State<ViewCashFlow> {
             width: 1000,
             height: totalHeight,
             child: CustomPaint(
-              painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses),
+              painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, context),
             ),
           )),
     ]));
