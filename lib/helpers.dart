@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
 
@@ -13,6 +14,13 @@ numValueOrDefault(num? value, {num defaultValueIfNull = 0}) {
 }
 
 intValueOrDefault(int? value, {int defaultValueIfNull = 0}) {
+  if (value == null) {
+    return defaultValueIfNull;
+  }
+  return value;
+}
+
+boolValueOrDefault(bool? value, {bool defaultValueIfNull = false}) {
   if (value == null) {
     return defaultValueIfNull;
   }
@@ -98,4 +106,16 @@ Color invertColor(Color color) {
   final b = 255 - color.blue;
 
   return Color.fromARGB((color.opacity * 255).round(), r, g, b);
+}
+
+getThemeDataFromPreference() async {
+  var preferences = await SharedPreferences.getInstance();
+  var materialVersion = intValueOrDefault(preferences.getInt(prefMaterialVersion), defaultValueIfNull: 2);
+  var colorSelected = intValueOrDefault(preferences.getInt(prefColor));
+  var useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
+  return ThemeData(
+    colorSchemeSeed: colorOptions[colorSelected],
+    useMaterial3: materialVersion == 3,
+    brightness: useDarkMode ? Brightness.dark : Brightness.light,
+  );
 }

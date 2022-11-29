@@ -13,10 +13,6 @@ import 'views/view_categories.dart';
 import 'views/view_payees.dart';
 import 'views/view_transactions.dart';
 
-const prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
-const prefColor = 'color';
-const prefDarkMode = 'darkMode';
-
 void main() {
   runApp(const MyMoney());
 }
@@ -29,40 +25,30 @@ class MyMoney extends StatefulWidget {
 }
 
 class _MyMoneyState extends State<MyMoney> {
+  ThemeData themeData = ThemeData(
+    useMaterial3: true,
+    brightness: Brightness.dark,
+    colorSchemeSeed: colorOptions[1] /* Blue */,
+  );
   bool _isLoading = true;
-  bool useMaterial3 = true;
-  bool useLightMode = true;
   int colorSelected = 0;
   int screenIndex = 0;
   final Data data = Data();
   String? pathToDatabase;
   SharedPreferences? preferences;
 
-  late ThemeData themeData;
-
   @override
   initState() {
     super.initState();
-    themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
     loadLastPreference();
   }
 
   loadLastPreference() async {
-    // Obtain shared preferences.
-    preferences = await SharedPreferences.getInstance();
-    if (preferences != null) {
-      colorSelected = intValueOrDefault(preferences?.getInt(prefColor));
-      useLightMode = intValueOrDefault(preferences?.getInt(prefDarkMode)) == 1;
-
-      themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
-      pathToDatabase = preferences?.getString(prefLastLoadedPathToDatabase);
-      await Future.delayed(const Duration(seconds: 1), loadData());
-
-      setState(() {
-        pathToDatabase;
-        themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
-      });
-    }
+    themeData = await getThemeDataFromPreference();
+    SharedPreferences.getInstance().then((preferences) {
+      pathToDatabase = preferences.getString(prefLastLoadedPathToDatabase);
+      loadData();
+    });
   }
 
   shouldShowOpenInstructions() {
@@ -82,22 +68,21 @@ class _MyMoneyState extends State<MyMoney> {
     });
   }
 
-  ThemeData updateThemes(int colorIndex, bool useMaterial3, bool useLightMode) {
-    return ThemeData(colorSchemeSeed: colorOptions[colorSelected], useMaterial3: useMaterial3, brightness: useLightMode ? Brightness.light : Brightness.dark);
+  isDarkMode() {
+    return themeData.brightness == Brightness.dark;
+  }
+
+  getThemeData(int colorIndex, bool useMaterial3, bool useDarkMode) {
+    return ThemeData(
+      colorSchemeSeed: colorOptions[colorIndex],
+      useMaterial3: useMaterial3,
+      brightness: useDarkMode ? Brightness.dark : Brightness.light,
+    );
   }
 
   void handleScreenChanged(int selectedScreen) {
     setState(() {
       screenIndex = selectedScreen;
-    });
-  }
-
-  void handleBrightnessChange() {
-    preferences?.setInt(prefDarkMode, useLightMode ? 0 : 1);
-
-    setState(() {
-      useLightMode = !useLightMode;
-      themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
     });
   }
 
@@ -118,9 +103,26 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void handleMaterialVersionChange(useVersion3) {
-    setState(() {
-      useMaterial3 = useVersion3;
-      themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
+    SharedPreferences.getInstance().then((preferences) {
+      var version = themeData.useMaterial3 ? 2 : 3;
+      preferences.setInt(prefMaterialVersion, version);
+      setState(() {
+        themeData = getThemeData(colorSelected, version == 3, isDarkMode());
+      });
+    });
+  }
+
+  void handleBrightnessChange() {
+    SharedPreferences.getInstance().then((preferences) {
+      setState(() {
+        var useDarkMode = !isDarkMode();
+        preferences.setBool(prefDarkMode, useDarkMode);
+        themeData = getThemeData(
+          colorSelected,
+          themeData.useMaterial3,
+          useDarkMode,
+        );
+      });
     });
   }
 
@@ -134,11 +136,12 @@ class _MyMoneyState extends State<MyMoney> {
       return;
     }
 
-    preferences?.setInt(prefColor, value);
-
-    setState(() {
-      colorSelected = value;
-      themeData = updateThemes(colorSelected, useMaterial3, useLightMode);
+    SharedPreferences.getInstance().then((preferences) {
+      preferences.setInt(prefColor, value);
+      setState(() {
+        colorSelected = value;
+        themeData = getThemeData(colorSelected, themeData.useMaterial3, isDarkMode());
+      });
     });
   }
 
@@ -202,7 +205,7 @@ class _MyMoneyState extends State<MyMoney> {
           tooltip: "Open mmdb file",
         ),
         IconButton(
-          icon: useLightMode ? const Icon(Icons.wb_sunny_outlined) : const Icon(Icons.wb_sunny),
+          icon: isDarkMode() ? const Icon(Icons.wb_sunny_outlined) : const Icon(Icons.wb_sunny),
           onPressed: handleBrightnessChange,
           tooltip: "Toggle brightness",
         ),
@@ -226,8 +229,8 @@ class _MyMoneyState extends State<MyMoney> {
                     ],
                   ));
             });
-            l.add(PopupMenuItem(value: 1002, child: Text(!useMaterial3 ? "Using Material2" : "Switch to Material2")));
-            l.add(PopupMenuItem(value: 1003, child: Text(useMaterial3 ? "Using Material3" : "Switch to Material3")));
+            l.add(PopupMenuItem(value: 1002, child: Text(!themeData.useMaterial3 ? "Using Material2" : "Switch to Material2")));
+            l.add(PopupMenuItem(value: 1003, child: Text(themeData.useMaterial3 ? "Using Material3" : "Switch to Material3")));
             return l;
           },
           onSelected: handleColorSelect,
@@ -255,7 +258,6 @@ class _MyMoneyState extends State<MyMoney> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'MyMoney',
-      themeMode: useLightMode ? ThemeMode.light : ThemeMode.dark,
       theme: themeData,
       home: LayoutBuilder(builder: (context, constraints) {
         if (shouldShowOpenInstructions()) {

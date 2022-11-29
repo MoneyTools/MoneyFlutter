@@ -8,11 +8,18 @@ class Constants {
   static const double narrowScreenWidthThreshold = 450;
 }
 
-const Color m3BaseColor = Color(0xff6750a4);
-const List<Color> colorOptions = [m3BaseColor, Colors.blue, Colors.teal, Colors.green, Colors.yellow, Colors.orange, Colors.pink];
+const List<Color> colorOptions = [
+  Colors.deepPurple,
+  Colors.blue,
+  Colors.teal,
+  Colors.green,
+  Colors.yellow,
+  Colors.orange,
+  Colors.pink,
+];
 
 const List<String> colorText = <String>[
-  "Default palette",
+  "Purple",
   "Blue",
   "Teal",
   "Green",
@@ -20,3 +27,8 @@ const List<String> colorText = <String>[
   "Orange",
   "Pink",
 ];
+
+const prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
+const prefMaterialVersion = 'themeMaterialVersion';
+const prefColor = 'themeColor';
+const prefDarkMode = 'themeDarkMode';
