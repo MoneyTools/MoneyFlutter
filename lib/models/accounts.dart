@@ -1,7 +1,6 @@
-import 'package:collection/collection.dart';
 import 'package:money/models/transactions.dart';
 
-import '../widgets/widget_view.dart';
+import 'money_entity.dart';
 
 enum AccountType {
   savings,
@@ -20,15 +19,15 @@ enum AccountType {
 
 enum AccountFlags { none, budgeted, closed, raxDeferred }
 
-class Account {
-  num id = -1;
-  String name = "";
+class Account extends MoneyEntity {
   int count = 0;
   double balance = 0.00;
   int flags = 0;
   AccountType type = AccountType.checking;
 
-  Account(this.id, this.name);
+  Account(id, name) : super(id, name) {
+    //
+  }
 
   isClosed() {
     return (flags & AccountFlags.closed.index) != 0;
@@ -67,16 +66,14 @@ class Account {
 }
 
 class Accounts {
-  num runningBalance = 0;
-
-  static List<Account> list = [];
+  static MoneyObjects moneyObjects = MoneyObjects();
 
   static getOpenAccounts() {
-    return list.where((a) => !a.isClosed()).toList();
+    return moneyObjects.getAsList().where((a) => !(a as Account).isClosed()).toList();
   }
 
-  static Account? get(accountId) {
-    return list.firstWhereOrNull((item) => item.id == accountId);
+  static Account? get(id) {
+    return moneyObjects.get(id) as Account?;
   }
 
   static String getNameFromId(num id) {
@@ -107,8 +104,6 @@ class Accounts {
 16 = "CategoryIdForInterest"
  */
   load(rows) async {
-    runningBalance = 0;
-
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var name = row["Name"].toString();
@@ -119,20 +114,22 @@ class Accounts {
       a.flags = flags;
       a.type = AccountType.values[type];
 
-      list.add(a);
+      moneyObjects.addEntry(a);
     }
-    return list;
   }
 
   loadDemoData() {
     List<String> names = ['BankOfAmerica', 'BECU', 'FirstTech', 'Fidelity', 'Bank of Japan', 'Trust Canada', 'ABC Corp', 'Royal Bank', 'Unicorn', 'God-Inc'];
-    list = List<Account>.generate(10, (i) => Account(i, names[i]));
+    for (int i = 0; i < names.length; i++) {
+      moneyObjects.addEntry(Account(i, names[i]));
+    }
   }
 
   static onAllDataLoaded() {
-    for (var item in list) {
-      item.count = 0;
-      item.balance = 0;
+    for (var item in moneyObjects.getAsList()) {
+      var a = item as Account;
+      a.count = 0;
+      a.balance = 0;
     }
 
     for (var t in Transactions.list) {

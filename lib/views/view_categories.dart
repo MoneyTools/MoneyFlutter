@@ -65,6 +65,6 @@ class ViewCategoriesState extends ViewWidgetState {
 
   @override
   getList() {
-    return Categories.list;
+    return Categories.moneyObjects.getAsList();
   }
 }

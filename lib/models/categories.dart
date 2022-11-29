@@ -1,4 +1,4 @@
-import 'package:collection/collection.dart';
+import 'package:money/models/money_entity.dart';
 import 'package:money/models/transactions.dart';
 
 enum CategoryType {
@@ -11,15 +11,15 @@ enum CategoryType {
   investment, // 6
 }
 
-class Category {
-  num id = -1;
+class Category extends MoneyEntity {
   num parentId = -1;
-  String name = "";
   CategoryType type = CategoryType.none;
   num count = 0;
   double balance = 0.00;
 
-  Category(this.id, this.type, this.name);
+  Category(id, this.type, name) : super(id, name) {
+    //
+  }
 
   getTypeAsText() {
     switch (type) {
@@ -63,20 +63,10 @@ class Category {
 }
 
 class Categories {
-  num runningBalance = 0;
-
-  static List<Category> list = [];
+  static MoneyObjects moneyObjects = MoneyObjects();
 
   static Category? get(id) {
-    return list.firstWhereOrNull((item) => item.id == id);
-  }
-
-  String getNameFromId(num id) {
-    var account = get(id);
-    if (account == null) {
-      return id.toString();
-    }
-    return account.name;
+    return moneyObjects.get(id) as Category?;
   }
 
   static Category? getTopAncestor(Category category) {
@@ -103,8 +93,6 @@ class Categories {
       9 = "TaxRefNum"
    */
   load(rows) async {
-    runningBalance = 0;
-
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var name = row["Name"].toString();
@@ -112,28 +100,28 @@ class Categories {
       var newEntry = Category(id, Category.getTypeFromText(rt.toString()), name);
       newEntry.parentId = num.parse(row["ParentId"].toString());
 
-      list.add(newEntry);
+      moneyObjects.addEntry(newEntry);
     }
-    return list;
   }
 
   loadDemoData() {
-    list.add(Category(0, CategoryType.income, 'Paychecks'));
-    list.add(Category(1, CategoryType.investment, 'Investment'));
-    list.add(Category(2, CategoryType.income, 'Interests'));
-    list.add(Category(3, CategoryType.income, 'Rental'));
-    list.add(Category(4, CategoryType.none, 'Lottery'));
-    list.add(Category(5, CategoryType.expense, 'Mortgage'));
-    list.add(Category(6, CategoryType.income, 'Saving'));
-    list.add(Category(7, CategoryType.expense, 'Bills'));
-    list.add(Category(8, CategoryType.expense, 'Taxes'));
-    list.add(Category(9, CategoryType.expense, 'School'));
+    moneyObjects.addEntry(Category(0, CategoryType.income, 'Paychecks'));
+    moneyObjects.addEntry(Category(1, CategoryType.investment, 'Investment'));
+    moneyObjects.addEntry(Category(2, CategoryType.income, 'Interests'));
+    moneyObjects.addEntry(Category(3, CategoryType.income, 'Rental'));
+    moneyObjects.addEntry(Category(4, CategoryType.none, 'Lottery'));
+    moneyObjects.addEntry(Category(5, CategoryType.expense, 'Mortgage'));
+    moneyObjects.addEntry(Category(6, CategoryType.income, 'Saving'));
+    moneyObjects.addEntry(Category(7, CategoryType.expense, 'Bills'));
+    moneyObjects.addEntry(Category(8, CategoryType.expense, 'Taxes'));
+    moneyObjects.addEntry(Category(9, CategoryType.expense, 'School'));
   }
 
   static onAllDataLoaded() {
-    for (var item in list) {
-      item.count = 0;
-      item.balance = 0;
+    for (var item in moneyObjects.getAsList()) {
+      var c = item as Category;
+      c.count = 0;
+      c.balance = 0;
     }
 
     for (var t in Transactions.list) {
