@@ -8,6 +8,8 @@ class Constants {
   static const double narrowScreenWidthThreshold = 450;
 }
 
+const indexOfDefaultColor = 1; // Blue
+
 const List<Color> colorOptions = [
   Colors.deepPurple,
   Colors.blue,

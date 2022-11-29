@@ -114,7 +114,7 @@ class _NavigationRailSectionState extends State<NavigationRailSection> {
       minWidth: 50,
       destinations: navRailDestinations,
       selectedIndex: _selectedIndex,
-      useIndicator: true,
+      useIndicator: false,
       onDestinationSelected: (index) {
         setState(() {
           _selectedIndex = index;
