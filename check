@@ -1,0 +1,5 @@
+#!/bin/sh
+echo --- Formatting
+flutter format . -l 222
+echo --- Checking for unused code
+flutter pub run dart_code_metrics:metrics check-unused-code lib
