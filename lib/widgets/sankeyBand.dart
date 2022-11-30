@@ -3,7 +3,13 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
+import '../constants.dart';
 import '../helpers.dart';
+
+class SanKeyEntry {
+  String name = "";
+  double value = 0.00;
+}
 
 class ChannelPoint {
   double x = 0.0;
@@ -20,9 +26,8 @@ class Block {
   Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
   Color color;
   Color textColor = Colors.black;
-  bool useAsIncome = true;
 
-  Block(this.name, this.rect, this.color, this.textColor, this.useAsIncome) {
+  Block(this.name, this.rect, this.color, this.textColor) {
     //
   }
 
@@ -53,9 +58,7 @@ class SankeyBandPaint extends CustomPainter {
 }
 
 void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block target) {
-  var sumOfHeight = list.fold(0.0, (previousValue, element) => previousValue + element.rect.height);
-
-  drawBoxAndTextFromTarget(canvas, target);
+  var sumOfHeight = sumHeight(list);
 
   var rollingVerticalPositionDrawnOnTheTarget = target.rect.top;
 
@@ -78,30 +81,47 @@ void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block
   }
 }
 
-double getHeightNeededToRender(list, useAsIncome) {
-  var ratioPriceToHeight = useAsIncome ? getHeightRationIncome(list) : getHeightRatioExpense(list);
+double getHeightNeededToRender(List<SanKeyEntry> list) {
+  var sum = sumValue(list);
 
   var verticalPosition = 0.0;
-  var gap = 20.0;
 
   for (var element in list) {
-    double height = element.value.abs() * ratioPriceToHeight;
-    verticalPosition += height + gap;
+    double height = (element.value.abs() / sum.abs()) * Constants.targetHeight;
+    verticalPosition += height;
+    verticalPosition += Constants.gapBetweenChannels;
   }
 
   // how much vertical space was needed to render this
   return verticalPosition;
 }
 
-double getRatioFromMaxValue(list, useAsIncome) {
-  if (useAsIncome) {
-    return getHeightRationIncome(list);
+List<double> getMinMaxValues(List<SanKeyEntry> list) {
+  if (list.isEmpty) {
+    return [0, 0];
+  }
+  if (list.length == 1) {
+    return [list[0].value, list[0].value];
   }
 
-  return getHeightRatioExpense(list);
+  double valueMin = 0;
+  double valueMax = 0;
+  if (list[0].value < list[1].value) {
+    valueMin = list[0].value;
+    valueMax = list[1].value;
+  } else {
+    valueMin = list[1].value;
+    valueMax = list[0].value;
+
+    for (var element in list) {
+      valueMin = min(valueMin, element.value);
+      valueMax = max(valueMax, element.value);
+    }
+  }
+  return [valueMin, valueMax];
 }
 
-double getHeightRationIncome(list) {
+double getHeightRationIncome(List<SanKeyEntry> list) {
   var largest = double.minPositive;
   var smallest = double.maxFinite;
 
@@ -115,7 +135,7 @@ double getHeightRationIncome(list) {
   return ratioPriceToHeight;
 }
 
-double getHeightRatioExpense(list) {
+double getHeightRatioExpense(List<SanKeyEntry> list) {
   var largest = double.maxFinite;
   var smallest = double.minPositive;
 
@@ -129,9 +149,11 @@ double getHeightRatioExpense(list) {
   return ratioPriceToHeight;
 }
 
-void drawBoxAndTextFromTarget(canvas, Block target) {
-  canvas.drawRect(target.rect, Paint()..color = target.color.withOpacity(0.5));
-  drawText(canvas, target.name, target.rect.left + 4, target.rect.top + 2, color: target.textColor);
+void drawBoxAndTextFromTarget(canvas, Block block) {
+  var paint = Paint();
+  paint.color = block.color.withOpacity(0.5);
+  canvas.drawRect(block.rect, paint);
+  drawText(canvas, block.name, block.rect.left + 4, block.rect.top + 2, color: block.textColor);
 }
 
 void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 12.0, double angleRotationInRadians = 0.0}) {
@@ -142,7 +164,7 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
       style: TextStyle(
         color: invertColor(color),
         fontSize: fontSize,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w500,
         // shadows: [
         //   Shadow(
         //     color: color,
@@ -209,4 +231,14 @@ void drawChanel(canvas, ChannelPoint a, ChannelPoint b) {
   paintStroke.strokeWidth = 0.5;
   paintStroke.color = Colors.black.withOpacity(0.3);
   canvas.drawPath(path, paintStroke);
+}
+
+sumHeight(List<Block> list) {
+  var sumOfHeight = list.fold(0.0, (previousValue, element) => previousValue + element.rect.height);
+  return sumOfHeight;
+}
+
+sumValue(List<SanKeyEntry> list) {
+  var sumOfHeight = list.fold(0.0, (previousValue, element) => previousValue + element.value);
+  return sumOfHeight;
 }

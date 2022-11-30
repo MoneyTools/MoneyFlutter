@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
@@ -94,10 +96,9 @@ class ViewCashFlowState extends State<ViewCashFlow> {
         ..value = value);
     });
 
-    totalHeight = 0.0;
-    totalHeight += getHeightNeededToRender(sanKeyListOfIncomes, true);
-    totalHeight += padding;
-    totalHeight += getHeightNeededToRender(sanKeyListOfExpenses, false);
+    var heightNeededToRenderIncomes = getHeightNeededToRender(sanKeyListOfIncomes);
+    var heightNeededToRenderExpenses = getHeightNeededToRender(sanKeyListOfExpenses);
+    totalHeight = max(heightNeededToRenderIncomes, heightNeededToRenderExpenses);
   }
 
   @override
