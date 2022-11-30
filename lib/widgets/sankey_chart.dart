@@ -92,18 +92,14 @@ class SankeyPaint extends CustomPainter {
 
     // Render from "Revenue" remaining profit to "Net" box
     drawChanel(
-      canvas,
-      ChannelPoint(targetIncome.rect.right, targetIncome.rect.bottom - heightProfitFromIncomeSection, targetIncome.rect.bottom),
-      ChannelPoint(targetNet.rect.left, targetNet.rect.top, targetNet.rect.bottom),
-    );
+        canvas, ChannelPoint(targetIncome.rect.right, targetIncome.rect.bottom - heightProfitFromIncomeSection, targetIncome.rect.bottom), ChannelPoint(targetNet.rect.left, targetNet.rect.top, targetNet.rect.bottom),
+        color: Constants.colorNet);
   }
 
   double renderSourcesToTarget(ui.Canvas canvas, list, double left, double top, Block target, Color color, Color textColor) {
     var sumOfHeight = sumValue(list);
 
     double ratioPriceToHeight = target.rect.height / sumOfHeight.abs();
-
-    drawBoxAndTextFromTarget(canvas, target);
 
     var verticalPosition = 0.0;
 
@@ -123,6 +119,9 @@ class SankeyPaint extends CustomPainter {
     }
 
     renderSourcesToTargetAsPercentage(canvas, blocks, target);
+
+    // Draw the text last to ensure that its on top
+    drawBoxAndTextFromTarget(canvas, target);
 
     // how much vertical space was needed to render this
     return verticalPosition;
@@ -186,21 +185,18 @@ void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block
   var rollingVerticalPositionDrawnOnTheTarget = target.rect.top;
 
   for (var block in list) {
-    drawBoxAndTextFromTarget(canvas, block);
-
     var ratioSourceBlockHeightToSumHeight = (block.rect.height / sumOfHeight);
     var targetSectionHeight = (target.rect.height * ratioSourceBlockHeightToSumHeight);
 
     var blockSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? block.rect.right : block.rect.left;
     var targetSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? target.rect.left : target.rect.right;
 
-    drawChanel(
-      canvas,
-      ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
-      ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget, rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
-    );
+    drawChanel(canvas, ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
+        ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget, rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
+        color: block.color);
 
     rollingVerticalPositionDrawnOnTheTarget += targetSectionHeight;
+    drawBoxAndTextFromTarget(canvas, block);
   }
 }
 
@@ -304,7 +300,7 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
   context.restore();
 }
 
-void drawChanel(canvas, ChannelPoint a, ChannelPoint b) {
+void drawChanel(canvas, ChannelPoint a, ChannelPoint b, {Color color = const Color(0xFF56687A)}) {
   // We render left to right, so lets see what channel goes on the left and the one that goes on the right
   ChannelPoint channelPointLeft = (a.x < b.x) ? a : b;
   ChannelPoint channelPointEnd = (a.x < b.x) ? b : a;
@@ -346,7 +342,7 @@ void drawChanel(canvas, ChannelPoint a, ChannelPoint b) {
   path.close();
 
   Paint paint = Paint();
-  paint.color = const Color(0x4556687A);
+  paint.color = color.withOpacity(0.4);
   canvas.drawPath(path, paint);
 
   Paint paintStroke = Paint();
