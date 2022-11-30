@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
 import '../helpers.dart';
 import '../widgets/header.dart';
 import 'columns.dart';
+import 'widget_table.dart';
 
 class ViewWidget extends StatefulWidget {
   const ViewWidget({super.key});
@@ -102,126 +102,8 @@ class ViewWidgetState extends State<ViewWidget> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(
-              children: <Widget>[
-                getTitle(),
-                getTableHeaders(),
-                Expanded(
-                    child: Focus(
-                        autofocus: true,
-                        onFocusChange: (focused) {
-                          setState(() {
-                            // _color = focused ? Colors.black26 : Colors.white;
-                            // _label = focused ? 'Focused' : 'Unfocused';
-                          });
-                        },
-                        onKey: (node, event) {
-                          return onListViewKeyEvent(node, event);
-                        },
-                        child: getListViewBuilder())),
-              ],
+              children: <Widget>[getTitle(), getTableHeaders(), Expanded(child: TableWidget(list: getList(), columns: columns))],
             )));
-  }
-
-  onListViewKeyEvent(FocusNode node, RawKeyEvent event) {
-    if (event.runtimeType.toString() == 'RawKeyDownEvent') {
-      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        setState(() {
-          selectedItemOffset(-1);
-        });
-        return KeyEventResult.handled;
-      } else {
-        if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          setState(() {
-            selectedItemOffset(1);
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.home) {
-          setState(() {
-            setSelectedItem(0);
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.end) {
-          setState(() {
-            setSelectedItem(list.length - 1);
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.pageUp) {
-          setState(() {
-            selectedItemOffset(-numberOfItemOnViewPort());
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.pageDown) {
-          setState(() {
-            selectedItemOffset(numberOfItemOnViewPort());
-          });
-          return KeyEventResult.handled;
-        } else {
-          print(event.logicalKey);
-        }
-      }
-    }
-
-    return KeyEventResult.ignored;
-  }
-
-  void selectedItemOffset(int delta) {
-    int newPosition = 0;
-    if (selectedItems.isNotEmpty) {
-      newPosition = selectedItems[0] + delta;
-    }
-
-    setSelectedItem(newPosition);
-  }
-
-  void setSelectedItem(int newPosition) {
-    if (newPosition.isBetween(-1, list.length)) {
-      selectedItems.clear();
-      selectedItems.add(newPosition);
-      scrollToIndex(newPosition);
-    }
-  }
-
-  void scrollToIndex(int index) {
-    var minMax = scrollListenerWithItemCount();
-
-    // print("${minMax[0]} > $index < ${minMax[1]}");
-
-    if (!index.isBetween(minMax[0], minMax[1])) {
-      double desiredNewPosition = itemHeight * index;
-      scrollController.jumpTo(desiredNewPosition);
-    }
-  }
-
-  int numberOfItemOnViewPort() {
-    double viewportHeight = scrollController.position.viewportDimension;
-    int numberOfItemDisplayed = (viewportHeight / itemHeight).ceil();
-    return numberOfItemDisplayed;
-  }
-
-  // use this if total item count is known
-  scrollListenerWithItemCount() {
-    int itemCount = list.length;
-    double scrollOffset = scrollController.position.pixels;
-    double viewportHeight = scrollController.position.viewportDimension;
-    double scrollRange = scrollController.position.maxScrollExtent - scrollController.position.minScrollExtent;
-
-    int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
-    int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
-
-    return [firstVisibleItemIndex, lastVisibleItemIndex];
-  }
-
-  getListViewBuilder() {
-    return ListView.builder(
-        // physics: const NeverScrollableScrollPhysics(),
-        primary: false,
-        controller: scrollController,
-        itemCount: list.length,
-        itemExtent: itemHeight,
-        // cacheExtent: itemHeight * 1000,
-        itemBuilder: (context, index) {
-          return getRow(list, index);
-        });
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, columns, Function changeSort) {
