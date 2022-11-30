@@ -184,7 +184,7 @@ class _MyMoneyState extends State<MyMoney> {
           tooltip: "Open mmdb file",
         ),
         IconButton(
-          icon: isDarkMode() ? const Icon(Icons.wb_sunny_outlined) : const Icon(Icons.wb_sunny),
+          icon: isDarkMode() ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: handleBrightnessChange,
           tooltip: "Toggle brightness",
         ),
