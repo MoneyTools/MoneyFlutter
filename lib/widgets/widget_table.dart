@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 import 'package:money/models/money_entity.dart';
 
 import '../helpers.dart';
@@ -22,15 +21,11 @@ class TableWidgetState extends State<TableWidget> {
   final double itemHeight = 30;
   final scrollController = ScrollController();
   final FocusNode _focusNode = FocusNode();
+  FocusScopeNode? _focusScopeNode;
 
   List<ColumnDefinition> getColumnDefinitions() {
     return [];
   }
-
-  final formatCurrency = NumberFormat("#,##0.00", "en_US");
-
-  int sortBy = 0;
-  bool sortAscending = true;
 
   @override
   void dispose() {
@@ -40,24 +35,33 @@ class TableWidgetState extends State<TableWidget> {
 
   @override
   Widget build(BuildContext context) {
+    _focusScopeNode = FocusScope.of(context);
+
     return RawKeyboardListener(
         autofocus: true,
         onKey: onListViewKeyEvent,
         focusNode: _focusNode,
-        child: ListView.builder(
-            // physics: const NeverScrollableScrollPhysics(),
-            primary: false,
-            controller: scrollController,
-            itemCount: widget.list.length,
-            itemExtent: itemHeight,
-            // cacheExtent: itemHeight * 1000,
-            itemBuilder: (context, index) {
-              return getRow(widget.list, index);
-            }));
+        child: GestureDetector(
+            onTap: () {
+              if (_focusScopeNode != null && !_focusNode.hasFocus) {
+                _focusScopeNode?.requestFocus(_focusNode);
+              }
+            },
+            child: ListView.builder(
+                // physics: const NeverScrollableScrollPhysics(),
+                primary: false,
+                scrollDirection: Axis.vertical,
+                controller: scrollController,
+                itemCount: widget.list.length,
+                itemExtent: itemHeight,
+                // cacheExtent: itemHeight * 1000,
+                itemBuilder: (context, index) {
+                  return getRow(widget.list, index);
+                })));
   }
 
   onListViewKeyEvent(RawKeyEvent event) {
-    if (event.runtimeType.toString() == 'RawKeyDownEvent') {
+    if (event.runtimeType == RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
           selectedItemOffset(-1);
@@ -94,7 +98,6 @@ class TableWidgetState extends State<TableWidget> {
         }
       }
     }
-
     return KeyEventResult.ignored;
   }
 
@@ -106,6 +109,9 @@ class TableWidgetState extends State<TableWidget> {
     var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
     return GestureDetector(
       onTap: () {
+        if (_focusScopeNode != null && !_focusNode.hasFocus) {
+          _focusScopeNode?.requestFocus(_focusNode);
+        }
         setState(() {
           selectedItems.clear();
           selectedItems.add(index);
