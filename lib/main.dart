@@ -193,28 +193,37 @@ class _MyMoneyState extends State<MyMoney> {
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           itemBuilder: (context) {
             var l = List.generate(colorOptions.length, (index) {
-              return PopupMenuItem(
-                  value: index,
-                  child: Wrap(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(left: 10),
-                        child: Icon(
-                          index == colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
-                          color: colorOptions[index],
-                        ),
-                      ),
-                      Padding(padding: const EdgeInsets.only(left: 20), child: Text(colorText[index]))
-                    ],
-                  ));
+              return PopupMenuItem(value: index, child: renderIconAndText(Icon(index == colorSelected ? Icons.color_lens : Icons.color_lens_outlined, color: colorOptions[index]), colorText[index]));
             });
-            l.add(PopupMenuItem(value: 1002, child: Text(!themeData.useMaterial3 ? "Using Material2" : "Switch to Material2")));
-            l.add(PopupMenuItem(value: 1003, child: Text(themeData.useMaterial3 ? "Using Material3" : "Switch to Material3")));
+            l.add(
+              PopupMenuItem(
+                value: 1002,
+                child: renderIconAndText(Icon(themeData.useMaterial3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V2"),
+              ),
+            );
+            l.add(
+              PopupMenuItem(
+                value: 1003,
+                child: renderIconAndText(Icon(!themeData.useMaterial3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V3"),
+              ),
+            );
             return l;
           },
           onSelected: handleColorSelect,
         ),
       ],
+    );
+  }
+
+  renderIconAndText(icon, text) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 10),
+      child: Row(
+        children: [
+          icon,
+          Padding(padding: const EdgeInsets.only(left: 20), child: Text(text)),
+        ],
+      ),
     );
   }
 
