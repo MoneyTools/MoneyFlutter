@@ -128,4 +128,3 @@ class SankeyPaint extends CustomPainter {
     return verticalPosition;
   }
 }
-

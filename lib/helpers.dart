@@ -89,16 +89,6 @@ extension Range on num {
   }
 }
 
-extension Range2 on double {
-  bool isBetween(num from, num to) {
-    return from < this && this < to;
-  }
-
-  bool isBetweenOrEqual(num from, num to) {
-    return from < this && this < to;
-  }
-}
-
 Color invertColor(Color color) {
   final r = 255 - color.red;
   final g = 255 - color.green;

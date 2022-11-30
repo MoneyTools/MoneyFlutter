@@ -71,57 +71,30 @@ double getHeightNeededToRender(List<SanKeyEntry> list) {
   return verticalPosition;
 }
 
-List<double> getMinMaxValues(List<SanKeyEntry> list) {
+// ignore: unused-code
+List<num> getMinMaxValues(list) {
   if (list.isEmpty) {
     return [0, 0];
   }
   if (list.length == 1) {
-    return [list[0].value, list[0].value];
+    return [list[0], list[0]];
   }
 
   double valueMin = 0;
   double valueMax = 0;
-  if (list[0].value < list[1].value) {
-    valueMin = list[0].value;
-    valueMax = list[1].value;
+  if (list[0] < list[1]) {
+    valueMin = list[0];
+    valueMax = list[1];
   } else {
-    valueMin = list[1].value;
-    valueMax = list[0].value;
+    valueMin = list[1];
+    valueMax = list[0];
 
-    for (var element in list) {
-      valueMin = min(valueMin, element.value);
-      valueMax = max(valueMax, element.value);
+    for (var value in list) {
+      valueMin = min(valueMin, value);
+      valueMax = max(valueMax, value);
     }
   }
   return [valueMin, valueMax];
-}
-
-double getHeightRationIncome(List<SanKeyEntry> list) {
-  var largest = double.minPositive;
-  var smallest = double.maxFinite;
-
-  for (var element in list) {
-    largest = max(largest, element.value);
-    smallest = min(smallest, element.value);
-  }
-
-  const double heightOfSmallest = 100.0;
-  double ratioPriceToHeight = heightOfSmallest / largest;
-  return ratioPriceToHeight;
-}
-
-double getHeightRatioExpense(List<SanKeyEntry> list) {
-  var largest = double.maxFinite;
-  var smallest = double.minPositive;
-
-  for (var element in list) {
-    largest = min(largest, element.value);
-    smallest = max(smallest, element.value);
-  }
-
-  const double heightOfSmallest = 100.0;
-  double ratioPriceToHeight = (heightOfSmallest / largest).abs();
-  return ratioPriceToHeight;
 }
 
 void drawBoxAndTextFromTarget(canvas, Block block) {
