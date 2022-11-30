@@ -86,8 +86,9 @@ class _NavigationBarsState extends State<NavigationBars> {
 class NavigationRailSection extends StatefulWidget {
   final void Function(int) onSelectItem;
   final int selectedIndex;
+  final bool useIndicator;
 
-  const NavigationRailSection({super.key, required this.onSelectItem, required this.selectedIndex});
+  const NavigationRailSection({super.key, required this.onSelectItem, required this.selectedIndex, this.useIndicator = false});
 
   @override
   State<NavigationRailSection> createState() => _NavigationRailSectionState();
@@ -108,7 +109,7 @@ class _NavigationRailSectionState extends State<NavigationRailSection> {
       minWidth: 50,
       destinations: navRailDestinations,
       selectedIndex: _selectedIndex,
-      useIndicator: false,
+      useIndicator: widget.useIndicator,
       onDestinationSelected: (index) {
         setState(() {
           _selectedIndex = index;

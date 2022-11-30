@@ -130,7 +130,7 @@ class _MyMoneyState extends State<MyMoney> {
     return const Expanded(child: Center(child: CircularProgressIndicator()));
   }
 
-  Widget getWidgetForMainContent(BuildContext context, int screenIndex, bool showNavBarExample) {
+  Widget getWidgetForMainContent(BuildContext context, int screenIndex) {
     if (_isLoading) {
       return showLoading();
     }
@@ -277,7 +277,7 @@ class _MyMoneyState extends State<MyMoney> {
     return Scaffold(
       appBar: createAppBar(),
       body: Row(children: <Widget>[
-        getWidgetForMainContent(context, screenIndex, false),
+        getWidgetForMainContent(context, screenIndex),
       ]),
       bottomNavigationBar: NavigationBars(onSelectItem: handleScreenChanged, selectedIndex: screenIndex),
     );
@@ -291,9 +291,16 @@ class _MyMoneyState extends State<MyMoney> {
         top: false,
         child: Row(
           children: <Widget>[
-            Padding(padding: const EdgeInsets.symmetric(horizontal: 5), child: NavigationRailSection(onSelectItem: handleScreenChanged, selectedIndex: screenIndex)),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 5),
+              child: NavigationRailSection(
+                onSelectItem: handleScreenChanged,
+                selectedIndex: screenIndex,
+                useIndicator: themeData.useMaterial3,
+              ),
+            ),
             const VerticalDivider(thickness: 1, width: 1),
-            getWidgetForMainContent(context, screenIndex, true),
+            getWidgetForMainContent(context, screenIndex),
           ],
         ),
       ),

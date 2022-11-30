@@ -21,6 +21,7 @@ class TableWidgetState extends State<TableWidget> {
   List<int> selectedItems = [0];
   final double itemHeight = 30;
   final scrollController = ScrollController();
+  final FocusNode _focusNode = FocusNode();
 
   List<ColumnDefinition> getColumnDefinitions() {
     return [];
@@ -32,18 +33,17 @@ class TableWidgetState extends State<TableWidget> {
   bool sortAscending = true;
 
   @override
+  void dispose() {
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Focus(
+    return RawKeyboardListener(
         autofocus: true,
-        onFocusChange: (focused) {
-          setState(() {
-            // _color = focused ? Colors.black26 : Colors.white;
-            // _label = focused ? 'Focused' : 'Unfocused';
-          });
-        },
-        onKey: (node, event) {
-          return onListViewKeyEvent(node, event);
-        },
+        onKey: onListViewKeyEvent,
+        focusNode: _focusNode,
         child: ListView.builder(
             // physics: const NeverScrollableScrollPhysics(),
             primary: false,
@@ -56,7 +56,7 @@ class TableWidgetState extends State<TableWidget> {
             }));
   }
 
-  onListViewKeyEvent(FocusNode node, RawKeyEvent event) {
+  onListViewKeyEvent(RawKeyEvent event) {
     if (event.runtimeType.toString() == 'RawKeyDownEvent') {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
