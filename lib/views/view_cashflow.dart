@@ -7,7 +7,6 @@ import 'package:money/models/transactions.dart';
 import '../helpers.dart';
 import '../models/accounts.dart';
 import '../widgets/header.dart';
-import '../widgets/sankeyBand.dart';
 import '../widgets/sankeyChart.dart';
 
 class ViewCashFlow extends StatefulWidget {
