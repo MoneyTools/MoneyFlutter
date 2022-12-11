@@ -1,5 +1,5 @@
 name: money
-description: Money bugetting tools that runs on all platforms Windows, MacOS, iOS, Android, Web
+description: Money bugetting tools that runs on all known platforms Windows, MacOS, Linux, iOS, Android, Web
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -32,12 +32,11 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: ^0.17.0
-  path: ^1.8.0
+  intl: 0.17.0
+  path: 1.8.2
+  collection: 1.16.0
   sqflite_common_ffi: ^2.2.0+1
-  path_provider: ^2.0.11
   file_picker: ^5.2.2
-  collection: ^1.16.0
   shared_preferences: ^2.0.15
   flutter_launcher_icons:
     git:
@@ -54,7 +53,7 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
   lints: ^2.0.1
-  dart_code_metrics: ^5.0.1
+  dart_code_metrics: ^5.2.1
 
 
 # https://pub.dev/packages/flutter_launcher_icons
