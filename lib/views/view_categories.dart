@@ -20,8 +20,8 @@ class ViewCategoriesState extends ViewWidgetState {
   }
 
   @override
-  List<ColumnDefinition> getColumnDefinitions() {
-    return [
+  ColumnDefinitions getColumnDefinitions() {
+    return ColumnDefinitions([
       ColumnDefinition(
         "Name",
         ColumnType.text,
@@ -55,7 +55,7 @@ class ViewCategoriesState extends ViewWidgetState {
           return sortByValue(a.balance, b.balance, sortAscending);
         },
       ),
-    ];
+    ]);
   }
 
   @override

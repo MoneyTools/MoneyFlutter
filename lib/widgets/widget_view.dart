@@ -14,13 +14,13 @@ class ViewWidget extends StatefulWidget {
 }
 
 class ViewWidgetState extends State<ViewWidget> {
-  List<ColumnDefinition> columns = [];
+  ColumnDefinitions columns = ColumnDefinitions([]);
   List<int> selectedItems = [0];
   final double itemHeight = 30;
   final scrollController = ScrollController();
 
-  List<ColumnDefinition> getColumnDefinitions() {
-    return [];
+  ColumnDefinitions getColumnDefinitions() {
+    return ColumnDefinitions([]);
   }
 
   var list = [];
@@ -50,7 +50,7 @@ class ViewWidgetState extends State<ViewWidget> {
 
   onSort() {
     return list.sort((a, b) {
-      return columns[sortBy].sorting!(a, b, sortAscending);
+      return columns.list[sortBy].sorting!(a, b, sortAscending);
     });
   }
 
@@ -65,8 +65,8 @@ class ViewWidgetState extends State<ViewWidget> {
 
   Widget getRow(list, index) {
     List<Widget> cells = [];
-    for (int i = 0; i < columns.length; i++) {
-      cells.add(getCell(i, columns[i].getFieldValue!(index)));
+    for (int i = 0; i < columns.list.length; i++) {
+      cells.add(getCell(i, columns.list[i].getFieldValue!(index)));
     }
     var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
     return GestureDetector(
@@ -84,7 +84,7 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   Widget getCell(int columnId, Object value) {
-    var columnDefinition = columns[columnId];
+    var columnDefinition = columns.list[columnId];
     switch (columnDefinition.type) {
       case ColumnType.amount:
         return renderColumValueEntryCurrency(value);
@@ -143,14 +143,14 @@ class ViewWidgetState extends State<ViewWidget> {
     return Center(child: Column(children: [Text('Item $index'), Text(item.toString())]));
   }
 
-  List<Widget> getHeadersWidgets(BuildContext context, columns, Function changeSort) {
+  List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort) {
     List<Widget> headers = [];
-    for (var i = 0; i < columns.length; i++) {
+    for (var i = 0; i < columns.list.length; i++) {
       headers.add(
         headerButton(
           context,
-          columns[i].name,
-          columns[i].align,
+          columns.list[i].name,
+          columns.list[i].align,
           getSortIndicated(i),
           () {
             changeSort(i, !sortAscending);

@@ -7,7 +7,7 @@ import 'columns.dart';
 import 'widget_view.dart';
 
 class TableWidget extends StatefulWidget {
-  final List<ColumnDefinition> columns;
+  final ColumnDefinitions columns;
   final List<MoneyEntity> list;
   final Function onTap;
 
@@ -24,8 +24,8 @@ class TableWidgetState extends State<TableWidget> {
   final FocusNode _focusNode = FocusNode();
   FocusScopeNode? _focusScopeNode;
 
-  List<ColumnDefinition> getColumnDefinitions() {
-    return [];
+  ColumnDefinitions getColumnDefinitions() {
+    return ColumnDefinitions([]);
   }
 
   @override
@@ -126,15 +126,15 @@ class TableWidgetState extends State<TableWidget> {
 
   List<Widget> getCells(index) {
     List<Widget> cells = [];
-    for (int i = 0; i < widget.columns.length; i++) {
-      var fieldValue = widget.columns[i].getFieldValue!(index);
+    for (int i = 0; i < widget.columns.list.length; i++) {
+      var fieldValue = widget.columns.list[i].getFieldValue!(index);
       cells.add(getCellWidget(i, fieldValue));
     }
     return cells;
   }
 
   Widget getCellWidget(int columnId, Object value) {
-    var columnDefinition = widget.columns[columnId];
+    var columnDefinition = widget.columns.list[columnId];
     switch (columnDefinition.type) {
       case ColumnType.amount:
         return renderColumValueEntryCurrency(value);

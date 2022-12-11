@@ -18,3 +18,11 @@ class ColumnDefinition {
     //
   }
 }
+
+class ColumnDefinitions {
+  List<ColumnDefinition> list = [];
+
+  ColumnDefinitions(List<ColumnDefinition> initialList) {
+    list = initialList;
+  }
+}

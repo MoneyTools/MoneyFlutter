@@ -22,8 +22,8 @@ class ViewTransactionsState extends ViewWidgetState {
   final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
 
   @override
-  List<ColumnDefinition> getColumnDefinitions() {
-    return [
+  ColumnDefinitions getColumnDefinitions() {
+    return ColumnDefinitions([
       ColumnDefinition(
         "Account",
         ColumnType.text,
@@ -79,7 +79,7 @@ class ViewTransactionsState extends ViewWidgetState {
           return sortByValue(a.balance, b.balance, sortAscending);
         },
       ),
-    ];
+    ]);
   }
 
   @override
