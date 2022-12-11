@@ -66,7 +66,7 @@ class ViewWidgetState extends State<ViewWidget> {
   Widget getRow(list, index) {
     List<Widget> cells = [];
     for (int i = 0; i < columns.length; i++) {
-      cells.add(getCell(i, columns[i].getCell!(index)));
+      cells.add(getCell(i, columns[i].getFieldValue!(index)));
     }
     var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
     return GestureDetector(
@@ -102,8 +102,45 @@ class ViewWidgetState extends State<ViewWidget> {
         child: Padding(
             padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
             child: Column(
-              children: <Widget>[getTitle(), getTableHeaders(), Expanded(child: TableWidget(list: getList(), columns: columns))],
+              children: <Widget>[
+                getTitle(),
+                getTableHeaders(),
+                Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onShowPanelForItemDetails)),
+              ],
             )));
+  }
+
+  onShowPanelForItemDetails(context, index) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('This is a text'),
+            content: getDetailPanelContent(context, index, list[index]),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text('Discard'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Apply'),
+              )
+            ],
+          );
+        });
+  }
+
+  getDetailPanelHeader(context, index, item) {
+    return Text('Item $index');
+  }
+
+  getDetailPanelContent(context, index, item) {
+    return Center(child: Column(children: [Text('Item $index'), Text(item.toString())]));
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, columns, Function changeSort) {

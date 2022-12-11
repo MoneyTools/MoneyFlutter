@@ -9,8 +9,9 @@ import 'widget_view.dart';
 class TableWidget extends StatefulWidget {
   final List<ColumnDefinition> columns;
   final List<MoneyEntity> list;
+  final Function onTap;
 
-  const TableWidget({super.key, required this.columns, required this.list});
+  const TableWidget({super.key, required this.columns, required this.list, required this.onTap});
 
   @override
   State<TableWidget> createState() => TableWidgetState();
@@ -102,10 +103,8 @@ class TableWidgetState extends State<TableWidget> {
   }
 
   Widget getRow(list, index) {
-    List<Widget> cells = [];
-    for (int i = 0; i < widget.columns.length; i++) {
-      cells.add(getCell(i, widget.columns[i].getCell!(index)));
-    }
+    List<Widget> cells = getCells(index);
+
     var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
     return GestureDetector(
       onTap: () {
@@ -116,6 +115,7 @@ class TableWidgetState extends State<TableWidget> {
           selectedItems.clear();
           selectedItems.add(index);
         });
+        widget.onTap(context, index);
       },
       child: Container(
         color: backgroundColor,
@@ -124,7 +124,16 @@ class TableWidgetState extends State<TableWidget> {
     );
   }
 
-  Widget getCell(int columnId, Object value) {
+  List<Widget> getCells(index) {
+    List<Widget> cells = [];
+    for (int i = 0; i < widget.columns.length; i++) {
+      var fieldValue = widget.columns[i].getFieldValue!(index);
+      cells.add(getCellWidget(i, fieldValue));
+    }
+    return cells;
+  }
+
+  Widget getCellWidget(int columnId, Object value) {
     var columnDefinition = widget.columns[columnId];
     switch (columnDefinition.type) {
       case ColumnType.amount:

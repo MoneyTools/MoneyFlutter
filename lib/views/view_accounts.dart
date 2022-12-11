@@ -67,4 +67,14 @@ class ViewAccountsState extends ViewWidgetState {
   getList() {
     return Accounts.getOpenAccounts();
   }
+
+  @override
+  getDetailPanelHeader(context, index, item) {
+    return Center(child: Text('ACCOUNT Item $index'));
+  }
+
+  @override
+  getDetailPanelContent(context, index, item) {
+    return Column(children: [Text('ACCOUNT Item $index')]);
+  }
 }
