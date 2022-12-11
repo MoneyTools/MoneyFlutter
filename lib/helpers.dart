@@ -50,6 +50,10 @@ double roundDouble(double value, int places) {
   return ((value * mod).round().toDouble() / mod);
 }
 
+String getIntAsText(int value) {
+  return NumberFormat.decimalPattern().format(value);
+}
+
 String getCurrencyText(double value) {
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   return formatCurrency.format(value);

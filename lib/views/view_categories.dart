@@ -15,8 +15,18 @@ class ViewCategories extends ViewWidget {
 
 class ViewCategoriesState extends ViewWidgetState {
   @override
-  Widget getTitle() {
-    return Header("Categories", numValueOrDefault(list.length), "Classification of your money transactions.");
+  String getClassNamePlural() {
+    return "Categories";
+  }
+
+  @override
+  String getClassNameSingular() {
+    return "Category";
+  }
+
+  @override
+  String getDescription() {
+    return "Classification of your money transactions.";
   }
 
   @override

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../helpers.dart';
 import '../models/accounts.dart';
 import '../widgets/columns.dart';
-import '../widgets/header.dart';
 import '../widgets/widget_view.dart';
 
 class ViewAccounts extends ViewWidget {
@@ -15,8 +14,18 @@ class ViewAccounts extends ViewWidget {
 
 class ViewAccountsState extends ViewWidgetState {
   @override
-  Widget getTitle() {
-    return Header("Accounts", numValueOrDefault(list.length), "Your main assets.");
+  getClassNamePlural() {
+    return "Accounts";
+  }
+
+  @override
+  getClassNameSingular() {
+    return "Account";
+  }
+
+  @override
+  getDescription() {
+    return "Your main assets.";
   }
 
   @override
@@ -66,15 +75,5 @@ class ViewAccountsState extends ViewWidgetState {
   @override
   getList() {
     return Accounts.getOpenAccounts();
-  }
-
-  @override
-  getDetailPanelHeader(context, index, item) {
-    return Center(child: Text('ACCOUNT Item $index'));
-  }
-
-  @override
-  getDetailPanelContent(context, index, item) {
-    return Column(children: [Text('ACCOUNT Item $index')]);
   }
 }

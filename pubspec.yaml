@@ -97,7 +97,7 @@ flutter:
   # For details regarding adding assets from package dependencies, see
   # https://flutter.dev/assets-and-images/#from-packages
 
-  # find unsused code
+  # find unused code
   # flutter pub run dart_code_metrics:metrics check-unused-code lib
 
 

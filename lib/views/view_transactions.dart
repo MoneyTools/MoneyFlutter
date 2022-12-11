@@ -93,15 +93,30 @@ class ViewTransactionsState extends ViewWidgetState {
   void initState() {
     super.initState();
 
-    options.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, count: Transactions.list.where((element) => element.amount > 0).length));
-    options.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, count: Transactions.list.where((element) => element.amount < 0).length));
-    options.add(CaptionAndCounter(caption: "All", small: true, vertical: true, count: Transactions.list.length));
+    options.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
+    options.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
+    options.add(CaptionAndCounter(caption: "All", small: true, vertical: true, value: Transactions.list.length));
+  }
+
+  @override
+  getClassNamePlural() {
+    return "Transactions";
+  }
+
+  @override
+  getClassNameSingular() {
+    return "Transaction";
+  }
+
+  @override
+  getDescription() {
+    return "Details actions of your accounts.";
   }
 
   @override
   Widget getTitle() {
     return Column(children: [
-      Header("Transactions", numValueOrDefault(list.length), "Details actions of your accounts."),
+      Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
   }

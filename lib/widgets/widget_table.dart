@@ -4,7 +4,6 @@ import 'package:money/models/money_entity.dart';
 
 import '../helpers.dart';
 import 'columns.dart';
-import 'widget_view.dart';
 
 class TableWidget extends StatefulWidget {
   final ColumnDefinitions columns;
@@ -125,23 +124,7 @@ class TableWidgetState extends State<TableWidget> {
   }
 
   List<Widget> getCells(index) {
-    List<Widget> cells = [];
-    for (int i = 0; i < widget.columns.list.length; i++) {
-      var fieldValue = widget.columns.list[i].getFieldValue!(index);
-      cells.add(getCellWidget(i, fieldValue));
-    }
-    return cells;
-  }
-
-  Widget getCellWidget(int columnId, Object value) {
-    var columnDefinition = widget.columns.list[columnId];
-    switch (columnDefinition.type) {
-      case ColumnType.amount:
-        return renderColumValueEntryCurrency(value);
-      case ColumnType.text:
-      default:
-        return renderColumValueEntryText(value, textAlign: columnDefinition.align);
-    }
+    return widget.columns.getCellsForRow(index);
   }
 
   void selectedItemOffset(int delta) {

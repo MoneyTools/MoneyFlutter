@@ -40,6 +40,18 @@ class ViewWidgetState extends State<ViewWidget> {
     list = getList();
   }
 
+  String getClassNamePlural() {
+    return "Items";
+  }
+
+  String getClassNameSingular() {
+    return "Item";
+  }
+
+  String getDescription() {
+    return "Default list of items";
+  }
+
   getList() {
     return [];
   }
@@ -55,7 +67,7 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   Widget getTitle() {
-    return const Header("", 0, "");
+    return Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription());
   }
 
   Widget getTableHeaders() {
@@ -64,10 +76,7 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   Widget getRow(list, index) {
-    List<Widget> cells = [];
-    for (int i = 0; i < columns.list.length; i++) {
-      cells.add(getCell(i, columns.list[i].getFieldValue!(index)));
-    }
+    List<Widget> cells = columns.getCellsForRow(index);
     var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
     return GestureDetector(
       onTap: () {
@@ -81,17 +90,6 @@ class ViewWidgetState extends State<ViewWidget> {
         child: Row(children: cells),
       ),
     );
-  }
-
-  Widget getCell(int columnId, Object value) {
-    var columnDefinition = columns.list[columnId];
-    switch (columnDefinition.type) {
-      case ColumnType.amount:
-        return renderColumValueEntryCurrency(value);
-      case ColumnType.text:
-      default:
-        return renderColumValueEntryText(value, textAlign: columnDefinition.align);
-    }
   }
 
   @override
@@ -115,7 +113,7 @@ class ViewWidgetState extends State<ViewWidget> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('This is a text'),
+            title: getDetailPanelHeader(context, index, list[index]),
             content: getDetailPanelContent(context, index, list[index]),
             actions: [
               TextButton(
@@ -136,11 +134,11 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   getDetailPanelHeader(context, index, item) {
-    return Text('Item $index');
+    return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
   getDetailPanelContent(context, index, item) {
-    return Center(child: Column(children: [Text('Item $index'), Text(item.toString())]));
+    return Center(child: Column(children: columns.getCellsForDetailsPanel(index)));
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort) {
@@ -227,30 +225,4 @@ MainAxisAlignment getRowAlignmentBasedOnTextAlign(TextAlign textAlign) {
     default:
       return MainAxisAlignment.center;
   }
-}
-
-Widget renderColumValueEntryText(text, {TextAlign textAlign = TextAlign.left}) {
-  return Expanded(
-      child: FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: textAlign == TextAlign.left ? Alignment.centerLeft : Alignment.center,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-            child: Text(text, textAlign: textAlign),
-          )));
-}
-
-Widget renderColumValueEntryCurrency(value) {
-  return Expanded(
-      child: FittedBox(
-    fit: BoxFit.scaleDown,
-    alignment: Alignment.centerRight,
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-      child: Text(
-        getCurrencyText(value),
-        textAlign: TextAlign.right,
-      ),
-    ),
-  ));
 }

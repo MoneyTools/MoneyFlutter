@@ -105,12 +105,7 @@ class ViewCashFlowState extends State<ViewCashFlow> {
   Widget build(BuildContext context) {
     return Expanded(
         child: ListView(children: [
-      const Header("Cash Flow", 0, "See where assets are allocated"),
-      Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Text("Incomes ${getCurrencyText(totalIncomes)}"),
-        Text("Expenses ${getCurrencyText(totalExpenses)}"),
-        Text("Other ${getCurrencyText(totalNones)}"),
-      ]),
+      Header("Cash Flow", totalIncomes + totalExpenses, "See where assets are allocated"),
       Padding(
           padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
           child: SizedBox(

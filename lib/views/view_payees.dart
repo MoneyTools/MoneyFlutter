@@ -15,8 +15,18 @@ class ViewPayees extends ViewWidget {
 
 class ViewPayeesState extends ViewWidgetState {
   @override
-  Widget getTitle() {
-    return Header("Payees", numValueOrDefault(list.length), "Who is getting your money.");
+  getClassNamePlural() {
+    return "Payees";
+  }
+
+  @override
+  getClassNameSingular() {
+    return "Payee";
+  }
+
+  @override
+  String getDescription() {
+    return "Who is getting your money.";
   }
 
   @override
