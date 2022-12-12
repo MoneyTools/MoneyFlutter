@@ -36,7 +36,7 @@ dependencies:
   path: 1.8.2
   collection: 1.16.0
   sqflite_common_ffi: ^2.2.0+1
-  file_picker: ^5.2.2
+  file_picker: ^5.2.4
   shared_preferences: ^2.0.15
   flutter_launcher_icons:
     git:
@@ -44,6 +44,9 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+
+  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
