@@ -236,9 +236,10 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   widgetMainTitle() {
-    return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [const Text("MyMoney", textAlign: TextAlign.left), Text(getTitle(), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10))]);
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Text("MyMoney", textAlign: TextAlign.left),
+      Text(getTitle(), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
+    ]);
   }
 
   Future<ThemeData> getThemeDataFromPreference() async {

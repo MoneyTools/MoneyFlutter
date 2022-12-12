@@ -104,23 +104,19 @@ class ViewCashFlowState extends State<ViewCashFlow> {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-        child: ListView(children: [
-      Header("Cash Flow", totalIncomes + totalExpenses, "See where assets are allocated"),
-      Padding(
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-          child: SizedBox(
-            width: 1000,
-            height: totalHeight,
-            child: CustomPaint(
-              painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, context),
-            ),
-          )),
-    ]));
-  }
-
-  widgetIncomes() {
-    var widgets = <Widget>[];
-    mapOfIncomes.forEach((k, v) => widgets.add(Text("${k.name} ${getCurrencyText(v)}")));
-    return widgets;
+        child: ListView(
+      scrollDirection: Axis.vertical,
+      children: [
+        Header("Cash Flow", totalIncomes + totalExpenses, "See where assets are allocated"),
+        Padding(
+            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
+            child: SizedBox(
+              height: totalHeight,
+              child: CustomPaint(
+                painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, context),
+              ),
+            )),
+      ],
+    ));
   }
 }
