@@ -98,10 +98,12 @@ List<num> getMinMaxValues(list) {
 }
 
 void drawBoxAndTextFromTarget(canvas, Block block) {
-  var paint = Paint();
-  paint.color = block.color.withOpacity(0.5);
-  canvas.drawRect(block.rect, paint);
-  drawText(canvas, block.name, block.rect.left + 4, block.rect.top + 2, color: block.textColor);
+  if (!block.rect.hasNaN) {
+    var paint = Paint();
+    paint.color = block.color.withOpacity(0.5);
+    canvas.drawRect(block.rect, paint);
+    drawText(canvas, block.name, block.rect.left + 4, block.rect.top + 2, color: block.textColor);
+  }
 }
 
 void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 12.0, double angleRotationInRadians = 0.0}) {

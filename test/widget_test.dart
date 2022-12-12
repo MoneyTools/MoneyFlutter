@@ -7,24 +7,38 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:money/views/view_cashflow.dart';
 
-import 'package:money/main.dart';
+class DummyHostingApp extends StatefulWidget {
+  const DummyHostingApp({super.key});
+
+  @override
+  DummyHostingAppState createState() => DummyHostingAppState();
+}
+
+class DummyHostingAppState extends State<DummyHostingApp> {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: SizedBox(
+        height: 500,
+        width: 500,
+        child: Column(
+          children: const [
+            ViewCashFlow(),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 void main() {
-  testWidgets('Start App', (WidgetTester tester) async {
+  testWidgets('Cash Flow widget', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyMoney());
+    await tester.pumpWidget(const DummyHostingApp());
 
     // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Cash Flow'), findsOneWidget);
   });
 }
