@@ -44,7 +44,7 @@ class SankeyPaint extends CustomPainter {
     var lastHeight = ratioIncomeToExpense * totalIncome;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetIncome = Block(
-      "Revenue\n${getCurrencyText(totalIncome)}",
+      "Revenue  ${getNumberAsShorthandText(totalIncome)}",
       ui.Rect.fromLTWH(horizontalCenter - (withOfEntry * 1.2), verticalStackOfTargets, withOfEntry, lastHeight),
       Constants.colorIncome,
       getTheme(context).backgroundColor,
@@ -55,7 +55,7 @@ class SankeyPaint extends CustomPainter {
     lastHeight = ratioIncomeToExpense * totalExpense;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetExpense = Block(
-      "Expenses\n-${getCurrencyText(totalExpense)}",
+      "Expenses -${getNumberAsShorthandText(totalExpense)}",
       ui.Rect.fromLTWH(horizontalCenter + (withOfEntry * 0.2), topOfCenters, withOfEntry, lastHeight),
       Constants.colorExpense,
       getTheme(context).backgroundColor,
@@ -66,7 +66,7 @@ class SankeyPaint extends CustomPainter {
     lastHeight = ratioIncomeToExpense * netAmount;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetNet = Block(
-      "Net: ${getCurrencyText(netAmount)}",
+      "Net: ${getNumberAsShorthandText(netAmount)}",
       ui.Rect.fromLTWH(targetExpense.rect.left, targetExpense.rect.bottom + gap, withOfEntry, lastHeight),
       Constants.colorNet,
       getTheme(context).backgroundColor,
@@ -112,7 +112,7 @@ class SankeyPaint extends CustomPainter {
       double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
       Rect rect = Rect.fromLTWH(left, boxTop, withOfEntry, height);
-      Block source = Block(element.name + ": " + getCurrencyText(element.value), rect, color, textColor);
+      Block source = Block(element.name + ": " + getNumberAsShorthandText(element.value), rect, color, textColor);
       source.textColor = textColor;
       blocks.add(source);
 

@@ -58,6 +58,12 @@ String getCurrencyText(double value) {
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   return formatCurrency.format(value);
 }
+String getNumberAsShorthandText(num value, {symbol=''}) {
+  return NumberFormat.compactCurrency(
+    decimalDigits: 2,
+    symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
+  ).format(value);
+}
 
 String getDateAsText(date) {
   return date.toIso8601String().split('T').first;
