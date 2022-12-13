@@ -59,6 +59,8 @@ class ColumnDefinitions {
   Widget getCellWidget(int columnId, Object value) {
     var columnDefinition = list[columnId];
     switch (columnDefinition.type) {
+      case ColumnType.numeric:
+        return renderColumValueEntryNumber(value);
       case ColumnType.amount:
         return renderColumValueEntryCurrency(value);
       case ColumnType.text:
@@ -87,6 +89,21 @@ class ColumnDefinitions {
         padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
         child: Text(
           getCurrencyText(value),
+          textAlign: TextAlign.right,
+        ),
+      ),
+    ));
+  }
+
+  Widget renderColumValueEntryNumber(value) {
+    return Expanded(
+        child: FittedBox(
+      fit: BoxFit.scaleDown,
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+        child: Text(
+          getNumberAsShorthandText(value),
           textAlign: TextAlign.right,
         ),
       ),

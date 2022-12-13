@@ -54,6 +54,17 @@ class ViewAccountsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
+        "Count",
+        ColumnType.numeric,
+        TextAlign.right,
+        (index) {
+          return list[index].count;
+        },
+        (a, b, sortAscending) {
+          return sortByValue(a.count, b.count, sortAscending);
+        },
+      ),
+      ColumnDefinition(
         "Balance",
         ColumnType.amount,
         TextAlign.right,

@@ -58,9 +58,10 @@ String getCurrencyText(double value) {
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
   return formatCurrency.format(value);
 }
-String getNumberAsShorthandText(num value, {symbol=''}) {
+
+String getNumberAsShorthandText(num value, {decimalDigits = 0, symbol = ''}) {
   return NumberFormat.compactCurrency(
-    decimalDigits: 2,
+    decimalDigits: decimalDigits,
     symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
   ).format(value);
 }
@@ -81,7 +82,7 @@ int sortByString(a, b, ascending) {
   }
 }
 
-int sortByValue(double a, double b, ascending) {
+int sortByValue(num a, num b, ascending) {
   if (ascending) {
     return (b - a).toInt();
   } else {
