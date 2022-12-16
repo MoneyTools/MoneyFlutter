@@ -32,9 +32,9 @@ dependencies:
   flutter:
     sdk: flutter
 
-  intl: 0.17.0
-  path: 1.8.2
-  collection: 1.16.0
+  intl: ^0.18.0
+  path: ^1.8.2
+  collection: ^1.16.0
   sqflite_common_ffi: ^2.2.0+1
   file_picker: ^5.2.4
   shared_preferences: ^2.0.15
