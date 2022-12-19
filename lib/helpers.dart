@@ -5,6 +5,8 @@ import 'package:intl/intl.dart';
 
 import 'constants.dart';
 
+import 'package:flutter/foundation.dart';
+
 numValueOrDefault(num? value, {num defaultValueIfNull = 0}) {
   if (value == null) {
     return defaultValueIfNull;
@@ -106,17 +108,4 @@ Color invertColor(Color color) {
   final b = 255 - color.blue;
 
   return Color.fromARGB((color.opacity * 255).round(), r, g, b);
-}
-
-
-Widget renderIconAndText(icon, text) {
-  return Padding(
-    padding: const EdgeInsets.only(left: 10),
-    child: Row(
-      children: [
-        icon,
-        Padding(padding: const EdgeInsets.only(left: 20), child: Text(text)),
-      ],
-    ),
-  );
 }

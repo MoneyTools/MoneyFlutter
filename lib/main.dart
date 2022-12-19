@@ -1,6 +1,8 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:money/views/view_cashflow.dart';
+import 'package:money/widgets/details-panel.dart';
+import 'package:money/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'constants.dart';
@@ -11,6 +13,7 @@ import 'views/view_accounts.dart';
 import 'views/view_categories.dart';
 import 'views/view_payees.dart';
 import 'views/view_transactions.dart';
+import 'widgets/bottom.dart';
 
 void main() {
   runApp(const MyMoney());
@@ -31,6 +34,8 @@ class _MyMoneyState extends State<MyMoney> {
   int screenIndex = 0;
   final Data data = Data();
   String? pathToDatabase;
+  bool isBottomPanelExpanded = false;
+  Widget? detailPanelContent;
 
   @override
   initState() {
@@ -130,6 +135,12 @@ class _MyMoneyState extends State<MyMoney> {
     return const Expanded(child: Center(child: CircularProgressIndicator()));
   }
 
+  onSetDetailContent(Widget? content) {
+    setState(() {
+      detailPanelContent = content;
+    });
+  }
+
   Widget getWidgetForMainContent(BuildContext context, int screenIndex) {
     if (_isLoading) {
       return showLoading();
@@ -137,13 +148,13 @@ class _MyMoneyState extends State<MyMoney> {
 
     switch (screenIndex) {
       case 1:
-        return const ViewAccounts();
+        return ViewAccounts(setDetailsPanelContent: onSetDetailContent);
       case 2:
-        return const ViewCategories();
+        return ViewCategories(setDetailsPanelContent: onSetDetailContent);
       case 3:
-        return const ViewPayees();
+        return ViewPayees(setDetailsPanelContent: onSetDetailContent);
       case 4:
-        return const ViewTransactions();
+        return ViewTransactions(setDetailsPanelContent: onSetDetailContent);
       case 0:
       default:
         return const ViewCashFlow();
@@ -298,7 +309,20 @@ class _MyMoneyState extends State<MyMoney> {
               ),
             ),
             const VerticalDivider(thickness: 1, width: 1),
-            getWidgetForMainContent(context, screenIndex),
+            Expanded(
+                child: Column(
+              children: [
+                getWidgetForMainContent(context, screenIndex),
+                BottomPanel(
+                    details: detailPanelContent,
+                    isExpanded: isBottomPanelExpanded,
+                    onExpanded: (isExpanded) {
+                      setState(() {
+                        isBottomPanelExpanded = isExpanded;
+                      });
+                    })
+              ],
+            ))
           ],
         ),
       ),

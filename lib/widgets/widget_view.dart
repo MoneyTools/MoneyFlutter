@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money/widgets/widgets.dart';
 
 import '../helpers.dart';
 import '../widgets/header.dart';
@@ -7,7 +8,9 @@ import 'columns.dart';
 import 'widget_table.dart';
 
 class ViewWidget extends StatefulWidget {
-  const ViewWidget({super.key});
+  final Function? setDetailsPanelContent;
+
+  const ViewWidget({super.key, this.setDetailsPanelContent});
 
   @override
   State<ViewWidget> createState() => ViewWidgetState();
@@ -109,28 +112,34 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   onShowPanelForItemDetails(context, index) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: getDetailPanelHeader(context, index, list[index]),
-            content: getDetailPanelContent(context, index, list[index]),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: const Text('Discard'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: const Text('Apply'),
-              )
-            ],
-          );
-        });
+    var content = getDetailPanelContent(context, index, list[index]);
+
+    if (isMobile()) {
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: getDetailPanelHeader(context, index, list[index]),
+              content: content,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(false);
+                  },
+                  child: const Text('Discard'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: const Text('Apply'),
+                )
+              ],
+            );
+          });
+    } else {
+      widget.setDetailsPanelContent!(content);
+    }
   }
 
   getDetailPanelHeader(context, index, item) {
@@ -138,7 +147,7 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   getDetailPanelContent(context, index, item) {
-    return Center(child: Column(children: columns.getCellsForDetailsPanel(index)));
+    return Center(key: Key(index.toString()), child: Column(children: columns.getCellsForDetailsPanel(index)));
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort) {

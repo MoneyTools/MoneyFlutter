@@ -6,7 +6,7 @@ import '../widgets/columns.dart';
 import '../widgets/widget_view.dart';
 
 class ViewAccounts extends ViewWidget {
-  const ViewAccounts({super.key});
+  const ViewAccounts({super.key, super.setDetailsPanelContent});
 
   @override
   State<ViewWidget> createState() => ViewAccountsState();
