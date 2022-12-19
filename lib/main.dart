@@ -215,18 +215,6 @@ class _MyMoneyState extends State<MyMoney> {
     );
   }
 
-  renderIconAndText(icon, text) {
-    return Padding(
-      padding: const EdgeInsets.only(left: 10),
-      child: Row(
-        children: [
-          icon,
-          Padding(padding: const EdgeInsets.only(left: 20), child: Text(text)),
-        ],
-      ),
-    );
-  }
-
   String getTitle() {
     if (pathToDatabase == null) {
       return "No file loaded";

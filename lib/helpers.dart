@@ -107,3 +107,16 @@ Color invertColor(Color color) {
 
   return Color.fromARGB((color.opacity * 255).round(), r, g, b);
 }
+
+
+Widget renderIconAndText(icon, text) {
+  return Padding(
+    padding: const EdgeInsets.only(left: 10),
+    child: Row(
+      children: [
+        icon,
+        Padding(padding: const EdgeInsets.only(left: 20), child: Text(text)),
+      ],
+    ),
+  );
+}
