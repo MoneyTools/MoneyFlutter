@@ -3,10 +3,7 @@ import 'package:money/widgets/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'models/constants.dart';
 
-
-
-
-PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged ) {
+PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged) {
   return AppBar(
     title: widgetMainTitle(settings),
     actions: [
@@ -17,7 +14,9 @@ PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged ) {
       ),
       IconButton(
         icon: settings.isDarkMode() ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
-        onPressed: (){handleBrightnessChange(settings,onSettingsChanged);},
+        onPressed: () {
+          handleBrightnessChange(settings, onSettingsChanged);
+        },
         tooltip: "Toggle brightness",
       ),
       PopupMenuButton(
@@ -39,9 +38,17 @@ PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged ) {
               child: renderIconAndText(Icon(!settings.themeData.useMaterial3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V3"),
             ),
           );
+          l.add(
+            PopupMenuItem(
+              value: 2000,
+              child: renderIconAndText(Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Rentals"),
+            ),
+          );
           return l;
         },
-        onSelected: (value){handleColorSelect(settings,onSettingsChanged,value);},
+        onSelected: (value) {
+          handleColorSelect(settings, onSettingsChanged, value);
+        },
       ),
     ],
   );
@@ -49,13 +56,13 @@ PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged ) {
 
 void handleBrightnessChange(settings, onSettingsChanged) {
   SharedPreferences.getInstance().then((preferences) {
-      var useDarkMode = !settings.isDarkMode();
-      preferences.setBool(prefDarkMode, useDarkMode);
-      onSettingsChanged(settings);
+    var useDarkMode = !settings.isDarkMode();
+    preferences.setBool(prefDarkMode, useDarkMode);
+    onSettingsChanged(settings);
   });
 }
 
-void handleColorSelect(settings,onSettingsChanged, int value) {
+void handleColorSelect(settings, onSettingsChanged, int value) {
   if (value == 1002) {
     handleMaterialVersionChange(settings, false);
     onSettingsChanged(settings);
@@ -66,21 +73,29 @@ void handleColorSelect(settings,onSettingsChanged, int value) {
     onSettingsChanged(settings);
     return;
   }
+  if (value == 2000) {
+    SharedPreferences.getInstance().then((preferences) {
+      settings.rentals = !settings.rentals;
+      preferences.setBool(prefRentals, settings.rentals);
+      onSettingsChanged(settings);
+    });
+    onSettingsChanged(settings);
+    return;
+  }
 
   SharedPreferences.getInstance().then((preferences) {
-      preferences.setInt(prefColor, value);
-      settings.colorSelected = value;
-      onSettingsChanged(settings);
+    preferences.setInt(prefColor, value);
+    settings.colorSelected = value;
+    onSettingsChanged(settings);
   });
 }
 
 void handleMaterialVersionChange(settings, useVersion3) {
   SharedPreferences.getInstance().then((preferences) {
-      var version = settings.themeData.useMaterial3 ? 2 : 3;
-      preferences.setInt(prefMaterialVersion, version);
-    });
+    var version = settings.themeData.useMaterial3 ? 2 : 3;
+    preferences.setInt(prefMaterialVersion, version);
+  });
 }
-
 
 widgetMainTitle(settings) {
   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -88,7 +103,6 @@ widgetMainTitle(settings) {
     Text(getTitle(settings), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
   ]);
 }
-
 
 String getTitle(settings) {
   if (settings.pathToDatabase == null) {

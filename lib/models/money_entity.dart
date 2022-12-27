@@ -5,6 +5,32 @@ class MoneyEntity {
   MoneyEntity(this.id, this.name) {
     //
   }
+
+  static fromRowColumnToString(row, nameOfColumn) {
+    var rawValue = row[nameOfColumn];
+    if (rawValue == null) {
+      return "";
+    }
+    return rawValue.toString();
+  }
+
+  static fromRowColumnToNumber(row, nameOfColumn) {
+    var rawValue = row[nameOfColumn];
+    if (rawValue == null) {
+      return 0;
+    }
+    var rawValueAsText = rawValue.toString();
+    return num.parse(rawValueAsText);
+  }
+
+  static fromRowColumnToDouble(row, nameOfColumn) {
+    var rawValue = row[nameOfColumn];
+    if (rawValue == null) {
+      return 0.00;
+    }
+    var rawValueAsText = rawValue.toString();
+    return double.parse(rawValueAsText);
+  }
 }
 
 class MoneyObjects {

@@ -2,6 +2,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_cashflow.dart';
+import 'package:money/views/view_rentals.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appbar.dart';
@@ -29,7 +30,6 @@ class MyMoney extends StatefulWidget {
 class _MyMoneyState extends State<MyMoney> {
   Settings settings = Settings();
 
-
   bool _isLoading = true;
   final Data data = Data();
   bool isBottomPanelExpanded = false;
@@ -38,14 +38,7 @@ class _MyMoneyState extends State<MyMoney> {
   @override
   initState() {
     super.initState();
-    loadLastPreference();
-  }
-
-  loadLastPreference() async {
-    SharedPreferences.getInstance().then((preferences) {
-      settings.pathToDatabase = preferences.getString(prefLastLoadedPathToDatabase);
-      loadData();
-    });
+    settings.load(loadData);
   }
 
   shouldShowOpenInstructions() {
@@ -64,7 +57,6 @@ class _MyMoneyState extends State<MyMoney> {
       });
     });
   }
-
 
   void handleScreenChanged(int selectedScreen) {
     setState(() {
@@ -114,6 +106,8 @@ class _MyMoneyState extends State<MyMoney> {
         return ViewPayees(setDetailsPanelContent: onSetDetailContent);
       case 4:
         return ViewTransactions(setDetailsPanelContent: onSetDetailContent);
+      case 5:
+        return ViewRentals(setDetailsPanelContent: onSetDetailContent);
       case 0:
       default:
         return const ViewCashFlow();
@@ -122,7 +116,7 @@ class _MyMoneyState extends State<MyMoney> {
 
   welcomePanel(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen,onSettingsChanged),
+      appBar: createAppBar(settings, handleFileOpen, onSettingsChanged),
       body: Row(children: <Widget>[
         renderWelcomeAndOpen(context),
       ]),
@@ -187,17 +181,17 @@ class _MyMoneyState extends State<MyMoney> {
 
   getScaffoldingForSmallSurface(context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen,onSettingsChanged),
+      appBar: createAppBar(settings, handleFileOpen, onSettingsChanged),
       body: Row(children: <Widget>[
         getWidgetForMainContent(context, settings.screenIndex),
       ]),
-      bottomNavigationBar: NavigationBars(onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
+      bottomNavigationBar: MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
     );
   }
 
   getScaffoldingForLargeSurface(context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen,onSettingsChanged),
+      appBar: createAppBar(settings, handleFileOpen, onSettingsChanged),
       body: SafeArea(
         bottom: false,
         top: false,
@@ -205,7 +199,8 @@ class _MyMoneyState extends State<MyMoney> {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: NavigationRailSection(
+              child: MenuVertical(
+                settings: settings,
                 onSelectItem: handleScreenChanged,
                 selectedIndex: settings.screenIndex,
                 useIndicator: settings.themeData.useMaterial3,
@@ -232,7 +227,7 @@ class _MyMoneyState extends State<MyMoney> {
     );
   }
 
-  onSettingsChanged(settings){
+  onSettingsChanged(settings) {
     setState(() {
       this.settings = settings;
     });

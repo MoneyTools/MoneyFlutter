@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:money/models/rentals.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import './accounts.dart';
@@ -12,6 +13,8 @@ class Data {
   Accounts accounts = Accounts();
   Payees payees = Payees();
   Categories categories = Categories();
+  Rentals rentals = Rentals();
+  RentUnits rentUnits = RentUnits();
   Transactions transactions = Transactions();
 
   init(filePathToLoad, callbackWhenLoaded) async {
@@ -50,11 +53,24 @@ class Data {
             await payees.load(result);
           }
 
+          // Rentals
+          {
+            var result = await db.query('RentBuildings');
+            await rentals.load(result);
+          }
+
+          // // RentUnits
+          // {
+          //   var result = await db.query('RentUnits');
+          //   await rentUnits.load(result);
+          // }
+
           // Transactions
           {
             var result = await db.query('Transactions');
             await transactions.load(result);
           }
+
           await db.close();
         }
       } catch (e) {

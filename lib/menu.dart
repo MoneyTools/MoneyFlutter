@@ -1,65 +1,19 @@
 import 'package:flutter/material.dart';
 
-const List<NavigationDestination> appBarDestinations = [
-  NavigationDestination(
-    label: 'Cash Flow',
-    tooltip: "Cash Flow",
-    icon: Icon(Icons.analytics_outlined),
-    selectedIcon: Icon(Icons.analytics),
-  ),
-  NavigationDestination(
-    label: 'Accounts',
-    tooltip: "Accounts",
-    icon: Icon(Icons.account_balance_outlined),
-    selectedIcon: Icon(Icons.account_balance),
-  ),
-  NavigationDestination(
-    label: 'Categories',
-    tooltip: "Categories",
-    icon: Icon(Icons.type_specimen_outlined),
-    selectedIcon: Icon(Icons.type_specimen),
-  ),
-  NavigationDestination(
-    label: 'Payees',
-    tooltip: "Payees",
-    icon: Icon(Icons.groups_outlined),
-    selectedIcon: Icon(Icons.groups),
-  ),
-  NavigationDestination(
-    label: 'Transactions',
-    tooltip: "Transactions",
-    icon: Icon(Icons.receipt_long_outlined),
-    selectedIcon: Icon(Icons.receipt_long),
-  )
-];
+import 'models/settings.dart';
 
-final List<NavigationRailDestination> navRailDestinations = appBarDestinations
-    .map(
-      (destination) => NavigationRailDestination(
-        icon: Tooltip(
-          message: destination.label,
-          child: destination.icon,
-        ),
-        selectedIcon: Tooltip(
-          message: destination.label,
-          child: destination.selectedIcon,
-        ),
-        label: Text(destination.label),
-      ),
-    )
-    .toList();
-
-class NavigationBars extends StatefulWidget {
+class MenuHorizontal extends StatefulWidget {
   final void Function(int) onSelectItem;
   final int selectedIndex;
+  final Settings settings;
 
-  const NavigationBars({super.key, required this.onSelectItem, required this.selectedIndex});
+  const MenuHorizontal({super.key, required this.settings, required this.onSelectItem, required this.selectedIndex});
 
   @override
-  State<NavigationBars> createState() => _NavigationBarsState();
+  State<MenuHorizontal> createState() => _MenuHorizontalState();
 }
 
-class _NavigationBarsState extends State<NavigationBars> {
+class _MenuHorizontalState extends State<MenuHorizontal> {
   int _selectedIndex = 0;
 
   @override
@@ -78,23 +32,24 @@ class _NavigationBarsState extends State<NavigationBars> {
         });
         widget.onSelectItem(index);
       },
-      destinations: appBarDestinations,
+      destinations: getAppBarDestinations(widget.settings),
     );
   }
 }
 
-class NavigationRailSection extends StatefulWidget {
+class MenuVertical extends StatefulWidget {
   final void Function(int) onSelectItem;
   final int selectedIndex;
   final bool useIndicator;
+  final Settings settings;
 
-  const NavigationRailSection({super.key, required this.onSelectItem, required this.selectedIndex, this.useIndicator = false});
+  const MenuVertical({super.key, required this.settings, required this.onSelectItem, required this.selectedIndex, this.useIndicator = false});
 
   @override
-  State<NavigationRailSection> createState() => _NavigationRailSectionState();
+  State<MenuVertical> createState() => _MenuVerticalState();
 }
 
-class _NavigationRailSectionState extends State<NavigationRailSection> {
+class _MenuVerticalState extends State<MenuVertical> {
   int _selectedIndex = 0;
 
   @override
@@ -105,9 +60,10 @@ class _NavigationRailSectionState extends State<NavigationRailSection> {
 
   @override
   Widget build(BuildContext context) {
+    var destinations = getNavRailDestination(widget.settings);
     return NavigationRail(
       minWidth: 50,
-      destinations: navRailDestinations,
+      destinations: destinations,
       selectedIndex: _selectedIndex,
       useIndicator: widget.useIndicator,
       onDestinationSelected: (index) {
@@ -118,4 +74,68 @@ class _NavigationRailSectionState extends State<NavigationRailSection> {
       },
     );
   }
+}
+
+List<NavigationDestination> getAppBarDestinations(settings) {
+  List<NavigationDestination> appBarDestinations = [
+    const NavigationDestination(
+      label: 'Cash Flow',
+      tooltip: "Cash Flow",
+      icon: Icon(Icons.analytics_outlined),
+      selectedIcon: Icon(Icons.analytics),
+    ),
+    const NavigationDestination(
+      label: 'Accounts',
+      tooltip: "Accounts",
+      icon: Icon(Icons.account_balance_outlined),
+      selectedIcon: Icon(Icons.account_balance),
+    ),
+    const NavigationDestination(
+      label: 'Categories',
+      tooltip: "Categories",
+      icon: Icon(Icons.type_specimen_outlined),
+      selectedIcon: Icon(Icons.type_specimen),
+    ),
+    const NavigationDestination(
+      label: 'Payees',
+      tooltip: "Payees",
+      icon: Icon(Icons.groups_outlined),
+      selectedIcon: Icon(Icons.groups),
+    ),
+    const NavigationDestination(
+      label: 'Transactions',
+      tooltip: "Transactions",
+      icon: Icon(Icons.receipt_long_outlined),
+      selectedIcon: Icon(Icons.receipt_long),
+    )
+  ];
+  if (settings.rentals) {
+    appBarDestinations.add(const NavigationDestination(
+      label: 'Rentals',
+      tooltip: "Rentals",
+      icon: Icon(Icons.location_city_outlined),
+      selectedIcon: Icon(Icons.location_city),
+    ));
+  }
+
+  return appBarDestinations;
+}
+
+getNavRailDestination(settings) {
+  var list = getAppBarDestinations(settings);
+
+  var navRailDestinations = list.map(
+    (destination) => NavigationRailDestination(
+      icon: Tooltip(
+        message: destination.label,
+        child: destination.icon,
+      ),
+      selectedIcon: Tooltip(
+        message: destination.label,
+        child: destination.selectedIcon,
+      ),
+      label: Text(destination.label),
+    ),
+  );
+  return navRailDestinations.toList();
 }

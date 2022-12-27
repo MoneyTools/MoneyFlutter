@@ -109,3 +109,9 @@ Color invertColor(Color color) {
 
   return Color.fromARGB((color.opacity * 255).round(), r, g, b);
 }
+
+void debugLog(message) {
+  if (kDebugMode) {
+    print(message);
+  }
+}

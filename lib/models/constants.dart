@@ -42,3 +42,4 @@ const prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
 const prefMaterialVersion = 'themeMaterialVersion';
 const prefColor = 'themeColor';
 const prefDarkMode = 'themeDarkMode';
+const prefRentals = 'rentals';

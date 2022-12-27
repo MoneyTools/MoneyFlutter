@@ -31,7 +31,6 @@ class TableWidgetState extends State<TableWidget> {
 
   @override
   Widget build(BuildContext context) {
-
     return ListView.builder(
         // physics: const NeverScrollableScrollPhysics(),
         primary: false,
@@ -46,10 +45,8 @@ class TableWidgetState extends State<TableWidget> {
   }
 
   KeyEventResult onListViewKeyEvent(FocusNode node, RawKeyEvent event) {
-    print("on Key Event");
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-        print("Up Arrow");
         setState(() {
           selectedItemOffset(-1);
         });
@@ -81,7 +78,7 @@ class TableWidgetState extends State<TableWidget> {
           });
           return KeyEventResult.handled;
         } else {
-          // print(event.logicalKey);
+          debugLog(event.logicalKey);
         }
       }
     }
@@ -96,7 +93,7 @@ class TableWidgetState extends State<TableWidget> {
     return Focus(
         autofocus: autofocus,
         onFocusChange: (value) {
-          print('focus lost $value index ' + currentIndex.toString());
+          debugLog('focus lost $value index $currentIndex');
           if (value) {}
         },
         onKey: onListViewKeyEvent,
@@ -138,17 +135,17 @@ class TableWidgetState extends State<TableWidget> {
     }
   }
 
-  void fireOnTapToHost(index){
+  void fireOnTapToHost(index) {
     _timerForTap?.cancel();
-    _timerForTap = Timer(const Duration(milliseconds: 600),(){
-    widget.onTap(context, index);
+    _timerForTap = Timer(const Duration(milliseconds: 600), () {
+      widget.onTap(context, index);
     });
   }
 
   void scrollToIndex(int index) {
     var minMax = scrollListenerWithItemCount();
 
-    print("${minMax[0]} > $index < ${minMax[1]}");
+    debugLog("${minMax[0]} > $index < ${minMax[1]}");
 
     if (!index.isBetween(minMax[0], minMax[1])) {
       double desiredNewPosition = itemHeight * index;
