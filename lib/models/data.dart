@@ -6,7 +6,7 @@ import './accounts.dart';
 import './categories.dart';
 import './payees.dart';
 import './transactions.dart';
-import '../constants.dart';
+import 'constants.dart';
 
 class Data {
   Accounts accounts = Accounts();

@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import '../../constants.dart';
+import '../../models/constants.dart';
 import '../../helpers.dart';
 import 'sankey_helper.dart';
 
