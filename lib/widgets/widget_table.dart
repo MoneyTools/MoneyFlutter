@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/models/money_entity.dart';
@@ -20,49 +22,34 @@ class TableWidgetState extends State<TableWidget> {
   List<int> selectedItems = [0];
   final double itemHeight = 30;
   final scrollController = ScrollController();
-  final FocusNode _focusNode = FocusNode();
-  FocusScopeNode? _focusScopeNode;
+  num currentIndex = 0;
+  Timer? _timerForTap;
 
   ColumnDefinitions getColumnDefinitions() {
     return ColumnDefinitions([]);
   }
 
   @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    _focusScopeNode = FocusScope.of(context);
 
-    return RawKeyboardListener(
-        autofocus: true,
-        onKey: onListViewKeyEvent,
-        focusNode: _focusNode,
-        child: GestureDetector(
-            onTap: () {
-              if (_focusScopeNode != null && !_focusNode.hasFocus) {
-                _focusScopeNode?.requestFocus(_focusNode);
-              }
-            },
-            child: ListView.builder(
-                // physics: const NeverScrollableScrollPhysics(),
-                primary: false,
-                scrollDirection: Axis.vertical,
-                controller: scrollController,
-                itemCount: widget.list.length,
-                itemExtent: itemHeight,
-                // cacheExtent: itemHeight * 1000,
-                itemBuilder: (context, index) {
-                  return getRow(widget.list, index);
-                })));
+    return ListView.builder(
+        // physics: const NeverScrollableScrollPhysics(),
+        primary: false,
+        scrollDirection: Axis.vertical,
+        controller: scrollController,
+        itemCount: widget.list.length,
+        itemExtent: itemHeight,
+        // cacheExtent: itemHeight * 1000,
+        itemBuilder: (context, index) {
+          return getRow(widget.list, index, index == currentIndex);
+        });
   }
 
-  onListViewKeyEvent(RawKeyEvent event) {
-    if (event.runtimeType == RawKeyDownEvent) {
+  KeyEventResult onListViewKeyEvent(FocusNode node, RawKeyEvent event) {
+    print("on Key Event");
+    if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+        print("Up Arrow");
         setState(() {
           selectedItemOffset(-1);
         });
@@ -101,26 +88,28 @@ class TableWidgetState extends State<TableWidget> {
     return KeyEventResult.ignored;
   }
 
-  Widget getRow(list, index) {
+  Widget getRow(list, index, autofocus) {
     List<Widget> cells = getCells(index);
 
     var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
-    return GestureDetector(
-      onTap: () {
-        if (_focusScopeNode != null && !_focusNode.hasFocus) {
-          _focusScopeNode?.requestFocus(_focusNode);
-        }
-        setState(() {
-          selectedItems.clear();
-          selectedItems.add(index);
-        });
-        widget.onTap(context, index);
-      },
-      child: Container(
-        color: backgroundColor,
-        child: Row(children: cells),
-      ),
-    );
+
+    return Focus(
+        autofocus: autofocus,
+        onFocusChange: (value) {
+          print('focus lost $value index ' + currentIndex.toString());
+          if (value) {}
+        },
+        onKey: onListViewKeyEvent,
+        child: GestureDetector(
+          onTap: () {
+            setSelectedItem(index);
+            FocusScope.of(context).requestFocus();
+          },
+          child: Container(
+            color: backgroundColor,
+            child: Row(children: cells),
+          ),
+        ));
   }
 
   List<Widget> getCells(index) {
@@ -138,16 +127,28 @@ class TableWidgetState extends State<TableWidget> {
 
   void setSelectedItem(int newPosition) {
     if (newPosition.isBetween(-1, widget.list.length)) {
-      selectedItems.clear();
-      selectedItems.add(newPosition);
-      scrollToIndex(newPosition);
+      setState(() {
+        selectedItems.clear();
+        selectedItems.add(newPosition);
+
+        currentIndex = newPosition;
+        scrollToIndex(newPosition);
+        fireOnTapToHost(newPosition);
+      });
     }
+  }
+
+  void fireOnTapToHost(index){
+    _timerForTap?.cancel();
+    _timerForTap = Timer(const Duration(milliseconds: 600),(){
+    widget.onTap(context, index);
+    });
   }
 
   void scrollToIndex(int index) {
     var minMax = scrollListenerWithItemCount();
 
-    // print("${minMax[0]} > $index < ${minMax[1]}");
+    print("${minMax[0]} > $index < ${minMax[1]}");
 
     if (!index.isBetween(minMax[0], minMax[1])) {
       double desiredNewPosition = itemHeight * index;
