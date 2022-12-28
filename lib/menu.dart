@@ -25,15 +25,16 @@ class _MenuHorizontalState extends State<MenuHorizontal> {
   @override
   Widget build(BuildContext context) {
     return NavigationBar(
-      selectedIndex: _selectedIndex,
-      onDestinationSelected: (index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-        widget.onSelectItem(index);
-      },
-      destinations: getAppBarDestinations(widget.settings),
-    );
+        selectedIndex: _selectedIndex,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+          widget.onSelectItem(index);
+        },
+        destinations: getAppBarDestinations(widget.settings),
+        height: 52,
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide);
   }
 }
 
