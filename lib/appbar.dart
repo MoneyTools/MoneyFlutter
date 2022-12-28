@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:money/widgets/widgets.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'models/constants.dart';
 
-PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged) {
+PreferredSizeWidget createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged) {
   return AppBar(
-    title: widgetMainTitle(settings),
+    title: widgetMainTitle(settings, handleFileOpen, handleFileClose),
     actions: [
       IconButton(
-        icon: const Icon(Icons.file_open),
-        onPressed: handleFileOpen,
-        tooltip: "Open mmdb file",
-      ),
-      IconButton(
-        icon: settings.isDarkMode() ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
+        icon: settings.useDarkMode ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
         onPressed: () {
-          handleBrightnessChange(settings, onSettingsChanged);
+          handleLightDarkModeChanged(settings, onSettingsChanged);
         },
         tooltip: "Toggle brightness",
       ),
@@ -29,13 +23,13 @@ PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged) {
           l.add(
             PopupMenuItem(
               value: 1002,
-              child: renderIconAndText(Icon(settings.themeData.useMaterial3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V2"),
+              child: renderIconAndText(Icon(settings.materialVersion == 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V2"),
             ),
           );
           l.add(
             PopupMenuItem(
               value: 1003,
-              child: renderIconAndText(Icon(!settings.themeData.useMaterial3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V3"),
+              child: renderIconAndText(Icon(settings.materialVersion != 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V3"),
             ),
           );
           l.add(
@@ -54,53 +48,46 @@ PreferredSizeWidget createAppBar(settings, handleFileOpen, onSettingsChanged) {
   );
 }
 
-void handleBrightnessChange(settings, onSettingsChanged) {
-  SharedPreferences.getInstance().then((preferences) {
-    var useDarkMode = !settings.isDarkMode();
-    preferences.setBool(prefDarkMode, useDarkMode);
-    onSettingsChanged(settings);
-  });
+void handleLightDarkModeChanged(settings, onSettingsChanged) {
+  settings.useDarkMode = !settings.useDarkMode;
+  settings.save();
+  onSettingsChanged(settings);
 }
 
 void handleColorSelect(settings, onSettingsChanged, int value) {
   if (value == 1002) {
-    handleMaterialVersionChange(settings, false);
-    onSettingsChanged(settings);
-    return;
-  }
-  if (value == 1003) {
-    handleMaterialVersionChange(settings, true);
-    onSettingsChanged(settings);
-    return;
-  }
-  if (value == 2000) {
-    SharedPreferences.getInstance().then((preferences) {
-      settings.rentals = !settings.rentals;
-      preferences.setBool(prefRentals, settings.rentals);
-      onSettingsChanged(settings);
-    });
-    onSettingsChanged(settings);
-    return;
-  }
-
-  SharedPreferences.getInstance().then((preferences) {
-    preferences.setInt(prefColor, value);
+    settings.materialVersion = 2;
+  } else if (value == 1003) {
+    settings.materialVersion = 3;
+  } else if (value == 2000) {
+    settings.rentals = !settings.rentals;
+  } else {
     settings.colorSelected = value;
-    onSettingsChanged(settings);
-  });
+  }
+  settings.save();
+  onSettingsChanged(settings);
 }
 
-void handleMaterialVersionChange(settings, useVersion3) {
-  SharedPreferences.getInstance().then((preferences) {
-    var version = settings.themeData.useMaterial3 ? 2 : 3;
-    preferences.setInt(prefMaterialVersion, version);
-  });
-}
-
-widgetMainTitle(settings) {
+widgetMainTitle(settings, handleFileOpen, handleFileClose) {
   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
     const Text("MyMoney", textAlign: TextAlign.left),
-    Text(getTitle(settings), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
+    PopupMenuButton(
+      child: Text(getTitle(settings), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
+      itemBuilder: (context) {
+        List<PopupMenuItem> list = [];
+        list.add(const PopupMenuItem(value: 1, child: Text('Close')));
+        list.add(const PopupMenuItem(value: 2, child: Text('Open')));
+        return list;
+      },
+      onSelected: (index) {
+        if (index == 1) {
+          handleFileClose();
+        }
+        if (index == 2) {
+          handleFileOpen();
+        }
+      },
+    ),
   ]);
 }
 

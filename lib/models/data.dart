@@ -19,7 +19,7 @@ class Data {
 
   init(filePathToLoad, callbackWhenLoaded) async {
     if (filePathToLoad == null) {
-      return;
+      return callbackWhenLoaded(false);
     }
 
     if (filePathToLoad == Constants.demoData) {

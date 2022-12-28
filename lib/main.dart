@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_cashflow.dart';
 import 'package:money/views/view_rentals.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'appbar.dart';
 import 'models/constants.dart';
@@ -38,11 +37,13 @@ class _MyMoneyState extends State<MyMoney> {
   @override
   initState() {
     super.initState();
-    settings.load(loadData);
+    settings.load(onLoaded: () {
+      loadData();
+    });
   }
 
   shouldShowOpenInstructions() {
-    if (settings.pathToDatabase == null) {
+    if (settings.prefLoaded && settings.pathToDatabase == null) {
       return true;
     }
     return false;
@@ -69,16 +70,20 @@ class _MyMoneyState extends State<MyMoney> {
     if (fileSelected != null) {
       settings.pathToDatabase = fileSelected.paths[0];
       if (settings.pathToDatabase != null) {
-        SharedPreferences.getInstance().then((preferences) {
-          preferences.setString(prefLastLoadedPathToDatabase, settings.pathToDatabase.toString());
-          loadData();
-        });
+        settings.save();
+        loadData();
       }
     }
   }
 
+  void handleFileClose() async {
+    settings.pathToDatabase = null;
+    settings.save();
+  }
+
   void handleUseDemoData() async {
     settings.pathToDatabase = Constants.demoData;
+    settings.save();
     loadData();
   }
 
@@ -116,7 +121,7 @@ class _MyMoneyState extends State<MyMoney> {
 
   welcomePanel(BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen, onSettingsChanged),
+      appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
       body: Row(children: <Widget>[
         renderWelcomeAndOpen(context),
       ]),
@@ -138,50 +143,31 @@ class _MyMoneyState extends State<MyMoney> {
     ]));
   }
 
-  Future<ThemeData> getThemeDataFromPreference() async {
-    var preferences = await SharedPreferences.getInstance();
-    var materialVersion = intValueOrDefault(preferences.getInt(prefMaterialVersion), defaultValueIfNull: 2);
-    var colorSelected = intValueOrDefault(preferences.getInt(prefColor));
-    var useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
-
-    settings.themeData = ThemeData(
-      colorSchemeSeed: colorOptions[colorSelected],
-      useMaterial3: materialVersion == 3,
-      brightness: useDarkMode ? Brightness.dark : Brightness.light,
-    );
-    return settings.themeData;
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ThemeData>(
-        future: getThemeDataFromPreference(),
-        builder: (buildContext, snapshot) {
-          if (snapshot.hasData) {
-            return MaterialApp(
-                debugShowCheckedModeBanner: false,
-                title: 'MyMoney',
-                theme: snapshot.data,
-                home: LayoutBuilder(builder: (context, constraints) {
-                  if (shouldShowOpenInstructions()) {
-                    return welcomePanel(context);
-                  }
-                  if (isSmallWidth(constraints)) {
-                    return getScaffoldingForSmallSurface(context);
-                  } else {
-                    return getScaffoldingForLargeSurface(context);
-                  }
-                }));
-          } else {
-            // Return loading screen while reading preferences
-            return const Center(child: CircularProgressIndicator());
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'MyMoney',
+        theme: settings.getThemeData(),
+        home: LayoutBuilder(builder: (context, constraints) {
+          if (shouldShowOpenInstructions()) {
+            return welcomePanel(context);
           }
-        });
+          if (_isLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (isSmallWidth(constraints)) {
+              return getScaffoldingForSmallSurface(context);
+            } else {
+              return getScaffoldingForLargeSurface(context);
+            }
+          }
+        }));
   }
 
   getScaffoldingForSmallSurface(context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen, onSettingsChanged),
+      appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
       body: Row(children: <Widget>[
         getWidgetForMainContent(context, settings.screenIndex),
       ]),
@@ -191,7 +177,7 @@ class _MyMoneyState extends State<MyMoney> {
 
   getScaffoldingForLargeSurface(context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen, onSettingsChanged),
+      appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
       body: SafeArea(
         bottom: false,
         top: false,
@@ -203,7 +189,7 @@ class _MyMoneyState extends State<MyMoney> {
                 settings: settings,
                 onSelectItem: handleScreenChanged,
                 selectedIndex: settings.screenIndex,
-                useIndicator: settings.themeData.useMaterial3,
+                useIndicator: settings.materialVersion == 3,
               ),
             ),
             const VerticalDivider(thickness: 1, width: 1),
