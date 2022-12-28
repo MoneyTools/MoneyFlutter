@@ -79,7 +79,11 @@ class Rentals {
     }
   }
 
-  loadDemoData() {}
+  loadDemoData() {
+    var instance = Rental(0, "AirBnB");
+    instance.address = "One Washington DC";
+    moneyObjects.addEntry(instance);
+  }
 
   static onAllDataLoaded() {
     for (var item in moneyObjects.getAsList()) {

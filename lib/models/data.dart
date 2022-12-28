@@ -18,11 +18,16 @@ class Data {
   Transactions transactions = Transactions();
 
   init(filePathToLoad, callbackWhenLoaded) async {
+    if (filePathToLoad == null) {
+      return;
+    }
+
     if (filePathToLoad == Constants.demoData) {
       // Not supported on Web so generate some random data to see in the views
       accounts.loadDemoData();
       categories.loadDemoData();
       payees.loadDemoData();
+      rentals.loadDemoData();
       transactions.loadDemoData();
     } else {
       try {
