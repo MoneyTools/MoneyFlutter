@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../helpers.dart';
-import 'caption_and_counter.dart';
 
 class DetailsPanel extends StatelessWidget {
   final String title;

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import '../helpers.dart';
 import '../models/categories.dart';
 import '../widgets/columns.dart';
-import '../widgets/header.dart';
 import '../widgets/widget_view.dart';
 
 class ViewCategories extends ViewWidget {

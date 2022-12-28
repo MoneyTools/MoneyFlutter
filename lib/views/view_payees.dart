@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
-import 'package:money/widgets/header.dart';
 
 import '../models/payees.dart';
 import '../widgets/columns.dart';
