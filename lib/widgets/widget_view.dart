@@ -74,8 +74,12 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   Widget getTableHeaders() {
-    List<Widget> headers = getHeadersWidgets(context, columns, changeListSortOrder);
-    return Row(children: headers);
+    return Container(
+      color: getColorTheme(context).secondaryContainer,
+      child: Row(
+        children: getHeadersWidgets(context, columns, changeListSortOrder),
+      ),
+    );
   }
 
   Widget getRow(list, index) {
@@ -199,20 +203,17 @@ getSortIconName(SortIndicator sortIndicator) {
 
 Widget headerButton(context, text, textAlign, SortIndicator sortIndicator, onClick) {
   return Expanded(
-    child: Container(
-      color: getColorTheme(context).secondaryContainer,
-      child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick),
-    ),
+    child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick),
   );
 }
 
-TextButton textButtonOptionalIcon(context, String text, textAlign, SortIndicator sortIndicator, onClick) {
+Widget textButtonOptionalIcon(context, String text, textAlign, SortIndicator sortIndicator, onClick) {
   final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
   var icon = getSortIconName(sortIndicator);
 
-  List<Widget> rowChildren = [
-    Text(text, style: textTheme.titleMedium),
-  ];
+  List<Widget> rowChildren = [];
+
+  rowChildren.add(Text(text, style: textTheme.titleSmall));
 
   if (icon != null) {
     rowChildren.add(icon);

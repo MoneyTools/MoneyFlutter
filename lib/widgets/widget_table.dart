@@ -32,13 +32,11 @@ class TableWidgetState extends State<TableWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
-        // physics: const NeverScrollableScrollPhysics(),
         primary: false,
         scrollDirection: Axis.vertical,
         controller: scrollController,
         itemCount: widget.list.length,
         itemExtent: itemHeight,
-        // cacheExtent: itemHeight * 1000,
         itemBuilder: (context, index) {
           return getRow(widget.list, index, index == currentIndex);
         });
