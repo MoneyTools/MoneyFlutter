@@ -28,7 +28,6 @@ class MyMoney extends StatefulWidget {
 
 class _MyMoneyState extends State<MyMoney> {
   Settings settings = Settings();
-
   bool _isLoading = true;
   final Data data = Data();
   bool isBottomPanelExpanded = false;

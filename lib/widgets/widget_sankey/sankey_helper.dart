@@ -4,7 +4,6 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 import '../../models/constants.dart';
-import '../../helpers.dart';
 
 class SanKeyEntry {
   String name = "";
@@ -100,7 +99,7 @@ List<num> getMinMaxValues(list) {
 void drawBoxAndTextFromTarget(canvas, Block block) {
   if (!block.rect.hasNaN) {
     var paint = Paint();
-    paint.color = block.color.withOpacity(0.5);
+    paint.color = block.color;
     canvas.drawRect(block.rect, paint);
     drawText(canvas, block.name, block.rect.left + 4, block.rect.top + 2, color: block.textColor);
   }
@@ -112,7 +111,7 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
   context.rotate(angleRotationInRadians);
   TextSpan span = TextSpan(
       style: TextStyle(
-        color: invertColor(color),
+        color: color,
         fontSize: fontSize,
         fontWeight: FontWeight.w500,
         // shadows: [
@@ -173,9 +172,10 @@ void drawChanel(canvas, ChannelPoint a, ChannelPoint b, {Color color = const Col
   path.close();
 
   Paint paint = Paint();
-  paint.color = color.withOpacity(0.4);
+  paint.color = color;
   canvas.drawPath(path, paint);
 
+  // OUTLINE
   Paint paintStroke = Paint();
   paintStroke.style = PaintingStyle.stroke;
   paintStroke.strokeWidth = 0.5;

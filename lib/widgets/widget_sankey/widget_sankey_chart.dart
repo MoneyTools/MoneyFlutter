@@ -11,7 +11,7 @@ class SankeyPaint extends CustomPainter {
   List<SanKeyEntry> listOfIncomes;
   List<SanKeyEntry> listOfExpenses;
   double gap = Constants.gapBetweenChannels;
-  double withOfEntry = 100.0;
+  double columnWidth = 100.0;
   Color textColor = Colors.blue;
   BuildContext context;
 
@@ -20,14 +20,17 @@ class SankeyPaint extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(SankeyPaint oldDelegate) => false;
+  bool shouldRepaint(SankeyPaint oldDelegate) => true;
 
   @override
   bool shouldRebuildSemantics(SankeyPaint oldDelegate) => false;
 
   @override
   void paint(Canvas canvas, Size size) {
-    withOfEntry = size.width * 0.10; // 10% of width
+    var textColor = getTheme(context).textTheme.titleMedium?.color;
+    textColor ??= Colors.grey;
+
+    columnWidth = size.width / 7;
 
     var horizontalCenter = size.width / 2;
 
@@ -45,9 +48,9 @@ class SankeyPaint extends CustomPainter {
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetIncome = Block(
       "Revenue  ${getNumberAsShorthandText(totalIncome)}",
-      ui.Rect.fromLTWH(horizontalCenter - (withOfEntry * 1.2), verticalStackOfTargets, withOfEntry, lastHeight),
+      ui.Rect.fromLTWH(horizontalCenter - (columnWidth * 1.2), verticalStackOfTargets, columnWidth, lastHeight),
       Constants.colorIncome,
-      getTheme(context).backgroundColor,
+      textColor,
     );
 
     // Box for "Total Expenses"
@@ -56,9 +59,9 @@ class SankeyPaint extends CustomPainter {
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetExpense = Block(
       "Expenses -${getNumberAsShorthandText(totalExpense)}",
-      ui.Rect.fromLTWH(horizontalCenter + (withOfEntry * 0.2), topOfCenters, withOfEntry, lastHeight),
+      ui.Rect.fromLTWH(horizontalCenter + (columnWidth * 0.2), topOfCenters, columnWidth, lastHeight),
       Constants.colorExpense,
-      getTheme(context).backgroundColor,
+      textColor,
     );
 
     // Box for "Net Profit"
@@ -67,20 +70,21 @@ class SankeyPaint extends CustomPainter {
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetNet = Block(
       "Net: ${getNumberAsShorthandText(netAmount)}",
-      ui.Rect.fromLTWH(targetExpense.rect.left, targetExpense.rect.bottom + gap, withOfEntry, lastHeight),
+      ui.Rect.fromLTWH(targetExpense.rect.left, targetExpense.rect.bottom + gap, columnWidth, lastHeight),
       Constants.colorNet,
-      getTheme(context).backgroundColor,
+      textColor,
     );
     drawBoxAndTextFromTarget(canvas, targetNet);
 
     // Left Side - "Source of Incomes"
     var stackVerticalPosition = 0.0;
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, 0, stackVerticalPosition, targetIncome, Constants.colorIncome, getTheme(context).backgroundColor);
+
+    stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, 0, stackVerticalPosition, targetIncome, Constants.colorIncome, textColor);
 
     stackVerticalPosition += gap * 5;
 
     // Right Side - "Source of Expenses"
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, size.width - withOfEntry, 0, targetExpense, Constants.colorExpense, getTheme(context).backgroundColor);
+    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, size.width - columnWidth, 0, targetExpense, Constants.colorExpense, textColor);
 
     var heightProfitFromIncomeSection = targetIncome.rect.height - targetExpense.rect.height;
 
@@ -89,12 +93,16 @@ class SankeyPaint extends CustomPainter {
       canvas,
       ChannelPoint(targetExpense.rect.left, targetExpense.rect.top, targetExpense.rect.bottom),
       ChannelPoint(targetIncome.rect.right, targetIncome.rect.top, targetIncome.rect.bottom - heightProfitFromIncomeSection),
+      color: Colors.grey.withOpacity(0.5),
     );
 
     // Render from "Revenue" remaining profit to "Net" box
     drawChanel(
-        canvas, ChannelPoint(targetIncome.rect.right, targetIncome.rect.bottom - heightProfitFromIncomeSection, targetIncome.rect.bottom), ChannelPoint(targetNet.rect.left, targetNet.rect.top, targetNet.rect.bottom),
-        color: Constants.colorNet);
+      canvas,
+      ChannelPoint(targetIncome.rect.right, targetIncome.rect.bottom - heightProfitFromIncomeSection, targetIncome.rect.bottom),
+      ChannelPoint(targetNet.rect.left, targetNet.rect.top, targetNet.rect.bottom),
+      color: Colors.grey.withOpacity(0.5),
+    );
   }
 
   double renderSourcesToTarget(ui.Canvas canvas, list, double left, double top, Block target, Color color, Color textColor) {
@@ -111,7 +119,7 @@ class SankeyPaint extends CustomPainter {
       // Prepare a Left Block
       double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
-      Rect rect = Rect.fromLTWH(left, boxTop, withOfEntry, height);
+      Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
       Block source = Block(element.name + ": " + getNumberAsShorthandText(element.value), rect, color, textColor);
       source.textColor = textColor;
       blocks.add(source);

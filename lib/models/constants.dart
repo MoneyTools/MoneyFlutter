@@ -11,9 +11,9 @@ class Constants {
   static const double gapBetweenChannels = 14.0;
   static const double minBlockHeight = 3.0;
 
-  static const colorIncome = Color(0xff2f6001);
-  static const colorExpense = Color(0xff730000);
-  static const colorNet = Color(0xff0061AD);
+  static const colorIncome = Color(0xaa4b6735);
+  static const colorExpense = Color(0xaa813e3e);
+  static const colorNet = Color(0xaa5c8aab);
 }
 
 const indexOfDefaultColor = 1; // Blue
