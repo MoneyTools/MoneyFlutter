@@ -182,34 +182,37 @@ class _MyMoneyState extends State<MyMoney> {
         top: false,
         child: Row(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: MenuVertical(
-                settings: settings,
-                onSelectItem: handleScreenChanged,
-                selectedIndex: settings.screenIndex,
-                useIndicator: settings.materialVersion == 3,
-              ),
+            MenuVertical(
+              settings: settings,
+              onSelectItem: handleScreenChanged,
+              selectedIndex: settings.screenIndex,
+              useIndicator: settings.materialVersion == 3,
             ),
             const VerticalDivider(thickness: 1, width: 1),
-            Expanded(
-                child: Column(
-              children: [
-                getWidgetForMainContent(context, settings.screenIndex),
-                BottomPanel(
-                    details: detailPanelContent,
-                    isExpanded: isBottomPanelExpanded,
-                    onExpanded: (isExpanded) {
-                      setState(() {
-                        isBottomPanelExpanded = isExpanded;
-                      });
-                    })
-              ],
-            ))
+            Expanded(child: mainPanel(context))
           ],
         ),
       ),
     );
+  }
+
+  mainPanel(context) {
+    var widgets = [
+      getWidgetForMainContent(context, settings.screenIndex),
+    ];
+
+    if (settings.screenIndex != 0) {
+      widgets.add(BottomPanel(
+          details: detailPanelContent,
+          isExpanded: isBottomPanelExpanded,
+          onExpanded: (isExpanded) {
+            setState(() {
+              isBottomPanelExpanded = isExpanded;
+            });
+          }));
+    }
+
+    return Column(children: widgets);
   }
 
   onSettingsChanged(settings) {
