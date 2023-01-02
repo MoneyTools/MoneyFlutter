@@ -8,6 +8,7 @@ class Constants {
   static const double narrowScreenWidthThreshold = 450;
 
   static const double targetHeight = 200.0;
+  static const double sanKeyColumnWidth = 200.0;
   static const double gapBetweenChannels = 14.0;
   static const double minBlockHeight = 3.0;
 

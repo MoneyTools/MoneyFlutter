@@ -11,7 +11,10 @@ class SankeyPaint extends CustomPainter {
   List<SanKeyEntry> listOfIncomes;
   List<SanKeyEntry> listOfExpenses;
   double gap = Constants.gapBetweenChannels;
-  double columnWidth = 100.0;
+  double topOfCenters = Constants.gapBetweenChannels * 2;
+  double columnWidth = Constants.sanKeyColumnWidth;
+  double connectorWidth = Constants.sanKeyColumnWidth / 2;
+  double incomeHeight = Constants.targetHeight;
   Color textColor = Colors.blue;
   BuildContext context;
 
@@ -30,18 +33,21 @@ class SankeyPaint extends CustomPainter {
     var textColor = getTheme(context).textTheme.titleMedium?.color;
     textColor ??= Colors.grey;
 
-    columnWidth = size.width / 7;
+    columnWidth = Constants.sanKeyColumnWidth;
 
-    var horizontalCenter = size.width / 2;
-
-    var topOfCenters = 100.0;
+    var maxWidth = max(context.size!.width, size.width);
+    var horizontalCenter = maxWidth / 2;
 
     var verticalStackOfTargets = topOfCenters;
 
     var totalIncome = listOfIncomes.fold(0.00, (sum, item) => sum + item.value);
     var totalExpense = listOfExpenses.fold(0.00, (sum, item) => sum + item.value).abs();
 
-    var ratioIncomeToExpense = (Constants.targetHeight) / (totalIncome + totalExpense);
+    // var maNumberOfLeafItems = max(listOfIncomes.length, listOfExpenses.length);
+
+    var h = max(incomeHeight, context.size!.height);
+
+    var ratioIncomeToExpense = h / (totalIncome + totalExpense);
 
     // Box for "Revenue"
     var lastHeight = ratioIncomeToExpense * totalIncome;
@@ -74,7 +80,7 @@ class SankeyPaint extends CustomPainter {
       Constants.colorNet,
       textColor,
     );
-    drawBoxAndTextFromTarget(canvas, targetNet);
+    drawBlock(canvas, targetNet);
 
     // Left Side - "Source of Incomes"
     var stackVerticalPosition = 0.0;
@@ -84,7 +90,7 @@ class SankeyPaint extends CustomPainter {
     stackVerticalPosition += gap * 5;
 
     // Right Side - "Source of Expenses"
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, size.width - columnWidth, 0, targetExpense, Constants.colorExpense, textColor);
+    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, maxWidth - columnWidth, 0, targetExpense, Constants.colorExpense, textColor);
 
     var heightProfitFromIncomeSection = targetIncome.rect.height - targetExpense.rect.height;
 
@@ -130,7 +136,7 @@ class SankeyPaint extends CustomPainter {
     renderSourcesToTargetAsPercentage(canvas, blocks, target);
 
     // Draw the text last to ensure that its on top
-    drawBoxAndTextFromTarget(canvas, target);
+    drawBlock(canvas, target);
 
     // how much vertical space was needed to render this
     return verticalPosition;

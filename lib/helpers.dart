@@ -115,3 +115,7 @@ void debugLog(message) {
     print(message);
   }
 }
+
+Widget getViewExpandAndPadding(child) {
+  return Expanded(child: Padding(padding: const EdgeInsets.fromLTRB(8, 0, 8, 0), child: child));
+}

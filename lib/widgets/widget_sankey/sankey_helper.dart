@@ -51,7 +51,7 @@ void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block
         color: block.color);
 
     rollingVerticalPositionDrawnOnTheTarget += targetSectionHeight;
-    drawBoxAndTextFromTarget(canvas, block);
+    drawBlock(canvas, block);
   }
 }
 
@@ -96,7 +96,7 @@ List<num> getMinMaxValues(list) {
   return [valueMin, valueMax];
 }
 
-void drawBoxAndTextFromTarget(canvas, Block block) {
+void drawBlock(canvas, Block block) {
   if (!block.rect.hasNaN) {
     var paint = Paint();
     paint.color = block.color;

@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
 
+import '../helpers.dart';
 import '../models/accounts.dart';
+import '../models/constants.dart';
 import '../widgets/header.dart';
+import '../widgets/scroll_both_ways.dart';
 import '../widgets/widget_sankey/sankey_helper.dart';
 import '../widgets/widget_sankey/widget_sankey_chart.dart';
 
@@ -102,20 +105,24 @@ class ViewCashFlowState extends State<ViewCashFlow> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: ListView(
-      scrollDirection: Axis.vertical,
-      children: [
-        Header("Cash Flow", totalIncomes + totalExpenses, "See where assets are allocated"),
-        Padding(
-            padding: const EdgeInsets.fromLTRB(8, 8, 8, 8),
-            child: SizedBox(
-              height: totalHeight,
-              child: CustomPaint(
-                painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, context),
-              ),
-            )),
-      ],
-    ));
+    return getViewExpandAndPadding(
+      Column(
+        children: [
+          Header("Cash Flow", totalIncomes + totalExpenses, "See where assets are allocated."),
+          Expanded(child: ScrollBothWay(child: getView(context))),
+        ],
+      ),
+    );
+  }
+
+  getView(BuildContext context) {
+    return SizedBox(
+      height: 600, // let the child determine the height
+      width: Constants.sanKeyColumnWidth * 5, // let the child determine the width
+      child: CustomPaint(
+        size: const Size(double.infinity, double.infinity),
+        painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, context),
+      ),
+    );
   }
 }

@@ -103,16 +103,13 @@ class ViewWidgetState extends State<ViewWidget> {
   Widget build(BuildContext context) {
     onSort();
 
-    return Expanded(
-        child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 0),
-            child: Column(
-              children: <Widget>[
-                getTitle(),
-                getTableHeaders(),
-                Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onShowPanelForItemDetails)),
-              ],
-            )));
+    return getViewExpandAndPadding(Column(
+      children: <Widget>[
+        getTitle(),
+        getTableHeaders(),
+        Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onShowPanelForItemDetails)),
+      ],
+    ));
   }
 
   onShowPanelForItemDetails(context, index) {
