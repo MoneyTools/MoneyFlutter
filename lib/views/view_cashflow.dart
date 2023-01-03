@@ -120,7 +120,6 @@ class ViewCashFlowState extends State<ViewCashFlow> {
       height: 600, // let the child determine the height
       width: Constants.sanKeyColumnWidth * 5, // let the child determine the width
       child: CustomPaint(
-        size: const Size(double.infinity, double.infinity),
         painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, context),
       ),
     );

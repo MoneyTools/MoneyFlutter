@@ -35,7 +35,7 @@ class SankeyPaint extends CustomPainter {
 
     columnWidth = Constants.sanKeyColumnWidth;
 
-    var maxWidth = max(context.size!.width, size.width);
+    var maxWidth = max(context.size!.width, size.width) - 30;
     var horizontalCenter = maxWidth / 2;
 
     var verticalStackOfTargets = topOfCenters;
@@ -57,6 +57,8 @@ class SankeyPaint extends CustomPainter {
       ui.Rect.fromLTWH(horizontalCenter - (columnWidth * 1.2), verticalStackOfTargets, columnWidth, lastHeight),
       Constants.colorIncome,
       textColor,
+      TextAlign.center,
+      TextAlign.center,
     );
 
     // Box for "Total Expenses"
@@ -68,6 +70,8 @@ class SankeyPaint extends CustomPainter {
       ui.Rect.fromLTWH(horizontalCenter + (columnWidth * 0.2), topOfCenters, columnWidth, lastHeight),
       Constants.colorExpense,
       textColor,
+      TextAlign.center,
+      TextAlign.center,
     );
 
     // Box for "Net Profit"
@@ -79,8 +83,10 @@ class SankeyPaint extends CustomPainter {
       ui.Rect.fromLTWH(targetExpense.rect.left, targetExpense.rect.bottom + gap, columnWidth, lastHeight),
       Constants.colorNet,
       textColor,
+      TextAlign.center,
+      TextAlign.center,
     );
-    drawBlock(canvas, targetNet);
+    targetNet.draw(canvas);
 
     // Left Side - "Source of Incomes"
     var stackVerticalPosition = 0.0;
@@ -126,7 +132,7 @@ class SankeyPaint extends CustomPainter {
       double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
       Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
-      Block source = Block(element.name + ": " + getNumberAsShorthandText(element.value), rect, color, textColor);
+      Block source = Block(element.name + ": " + getNumberAsShorthandText(element.value), rect, color, textColor, TextAlign.center, TextAlign.center);
       source.textColor = textColor;
       blocks.add(source);
 
@@ -136,7 +142,7 @@ class SankeyPaint extends CustomPainter {
     renderSourcesToTargetAsPercentage(canvas, blocks, target);
 
     // Draw the text last to ensure that its on top
-    drawBlock(canvas, target);
+    target.draw(canvas);
 
     // how much vertical space was needed to render this
     return verticalPosition;

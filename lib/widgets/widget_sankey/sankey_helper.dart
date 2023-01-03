@@ -25,13 +25,24 @@ class Block {
   Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
   Color color;
   Color textColor = Colors.black;
+  TextAlign alignHorizontal = TextAlign.start;
+  TextAlign alignVertical = TextAlign.start;
 
-  Block(this.name, this.rect, this.color, this.textColor) {
+  Block(this.name, this.rect, this.color, this.textColor, this.alignHorizontal, this.alignVertical) {
     //
   }
 
   static const minBlockHeight = 20.0;
   static const blockWidth = 50.0;
+
+  draw(Canvas canvas) {
+    if (!rect.hasNaN) {
+      var paint = Paint();
+      paint.color = color;
+      canvas.drawRect(rect, paint);
+      drawTextInRect(canvas, name, rect, color: textColor, textAlign: alignHorizontal);
+    }
+  }
 }
 
 void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block target) {
@@ -51,7 +62,7 @@ void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block
         color: block.color);
 
     rollingVerticalPositionDrawnOnTheTarget += targetSectionHeight;
-    drawBlock(canvas, block);
+    block.draw(canvas);
   }
 }
 
@@ -96,15 +107,6 @@ List<num> getMinMaxValues(list) {
   return [valueMin, valueMax];
 }
 
-void drawBlock(canvas, Block block) {
-  if (!block.rect.hasNaN) {
-    var paint = Paint();
-    paint.color = block.color;
-    canvas.drawRect(block.rect, paint);
-    drawText(canvas, block.name, block.rect.left + 4, block.rect.top + 2, color: block.textColor);
-  }
-}
-
 void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 12.0, double angleRotationInRadians = 0.0}) {
   context.save();
   context.translate(x, y);
@@ -123,10 +125,39 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
         // ],
       ),
       text: name);
-  TextPainter tp = TextPainter(text: span, textAlign: TextAlign.left, textDirection: ui.TextDirection.ltr);
+  TextPainter tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
+
   tp.layout();
+
   tp.paint(context, const Offset(0.0, 0.0));
 
+  context.restore();
+}
+
+void drawTextInRect(Canvas context, String name, Rect rect, {TextAlign textAlign = TextAlign.left, Color color = Colors.black, double fontSize = 12.0, double angleRotationInRadians = 0.0}) {
+  context.save();
+  context.translate(rect.left, rect.top);
+  context.rotate(angleRotationInRadians);
+  TextSpan span = TextSpan(
+      style: TextStyle(
+        color: color,
+        fontSize: fontSize,
+        fontWeight: FontWeight.w500,
+      ),
+      text: name);
+
+  TextPainter textPainter = TextPainter(text: span, textAlign: textAlign, textDirection: ui.TextDirection.ltr);
+
+  textPainter.layout();
+
+  textPainter.paint(
+    context,
+    Offset(
+      // Do calculations here:
+      (rect.width - textPainter.width) * 0.5,
+      (rect.height - textPainter.height) * 0.5,
+    ),
+  );
   context.restore();
 }
 
