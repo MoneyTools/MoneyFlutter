@@ -27,11 +27,13 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   var list = [];
+  var listOfUniqueInstances = [];
 
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
 
   int sortBy = 0;
   bool sortAscending = true;
+  bool isChecked = true;
 
   ViewWidgetState();
 
@@ -77,7 +79,7 @@ class ViewWidgetState extends State<ViewWidget> {
     return Container(
       color: getColorTheme(context).secondaryContainer,
       child: Row(
-        children: getHeadersWidgets(context, columns, changeListSortOrder),
+        children: getHeadersWidgets(context, columns, changeListSortOrder, onCustomizeColumn),
       ),
     );
   }
@@ -151,7 +153,7 @@ class ViewWidgetState extends State<ViewWidget> {
     return Center(key: Key(index.toString()), child: Column(children: columns.getCellsForDetailsPanel(index)));
   }
 
-  List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort) {
+  List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {
     List<Widget> headers = [];
     for (var i = 0; i < columns.list.length; i++) {
       headers.add(
@@ -160,8 +162,13 @@ class ViewWidgetState extends State<ViewWidget> {
           columns.list[i].name,
           columns.list[i].align,
           getSortIndicated(i),
+          // Press
           () {
             changeSort(i, !sortAscending);
+          },
+          // Long Press
+          () {
+            customizeColumn(columns.list[i]);
           },
         ),
       );
@@ -174,6 +181,119 @@ class ViewWidgetState extends State<ViewWidget> {
       sortBy = newSortOrder;
       sortAscending = newSortAscending;
     });
+  }
+
+  getUniqueInstances(ColumnDefinition columnToCustomerFilterOn) {
+    var set = <String>{}; // This is a Set()
+    var list = getList();
+    for (var i = 0; i < list.length; i++) {
+      var fieldValue = columnToCustomerFilterOn.getFieldValue!(i);
+      set.add(fieldValue);
+    }
+    var uniqueValues = set.toList();
+    uniqueValues.sort();
+    return uniqueValues;
+  }
+
+  getMinMaxValues(ColumnDefinition columnToCustomerFilterOn) {
+    num min = 0;
+    num max = 0;
+    var list = getList();
+    for (var i = 0; i < list.length; i++) {
+      var fieldValue = columnToCustomerFilterOn.getFieldValue!(i);
+      if (min > fieldValue) {
+        min = fieldValue;
+      }
+      if (max < fieldValue) {
+        max = fieldValue;
+      }
+    }
+
+    return [min, max];
+  }
+
+  getMinMaxDates(ColumnDefinition columnToCustomerFilterOn) {
+    String min = "";
+    String max = "";
+
+    var list = getList();
+
+    for (var i = 0; i < list.length; i++) {
+      var fieldValue = columnToCustomerFilterOn.getFieldValue!(i);
+      if (min.isEmpty || min.compareTo(fieldValue) == 1) {
+        min = fieldValue;
+      }
+      if (max.isEmpty || max.compareTo(fieldValue) == -1) {
+        max = fieldValue;
+      }
+    }
+
+    return [min, max];
+  }
+
+  onCustomizeColumn(ColumnDefinition columnToCustomerFilterOn) {
+    Widget content;
+
+    switch (columnToCustomerFilterOn.type) {
+      case ColumnType.amount:
+        {
+          var minMax = getMinMaxValues(columnToCustomerFilterOn);
+          content = Column(children: [
+            Text(getCurrencyText(minMax[0])),
+            Text(getCurrencyText(minMax[1])),
+          ]);
+          break;
+        }
+
+      case ColumnType.date:
+        {
+          var minMax = getMinMaxDates(columnToCustomerFilterOn);
+          content = Column(children: [
+            Text(minMax[0]),
+            Text(minMax[1]),
+          ]);
+          break;
+        }
+      case ColumnType.text:
+      default:
+        {
+          listOfUniqueInstances = getUniqueInstances(columnToCustomerFilterOn);
+          content = ListView.builder(
+              itemCount: listOfUniqueInstances.length,
+              itemBuilder: (context, index) {
+                return CheckboxListTile(
+                  title: Text(listOfUniqueInstances[index].toString()),
+                  value: true,
+                  onChanged: (isChecked) {},
+                );
+              });
+          break;
+        }
+    }
+
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Material(
+              child: AlertDialog(
+            title: const Text("Filter"),
+            content: SizedBox(width: 400, height: 400, child: content),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: const Text('Discard'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: const Text('Apply'),
+              )
+            ],
+          ));
+        });
   }
 
   getSortIndicated(columnNumber) {
@@ -198,13 +318,13 @@ getSortIconName(SortIndicator sortIndicator) {
   }
 }
 
-Widget headerButton(context, text, textAlign, SortIndicator sortIndicator, onClick) {
+Widget headerButton(context, text, textAlign, SortIndicator sortIndicator, onClick, onLongPress) {
   return Expanded(
-    child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick),
+    child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick, onLongPress),
   );
 }
 
-Widget textButtonOptionalIcon(context, String text, textAlign, SortIndicator sortIndicator, onClick) {
+Widget textButtonOptionalIcon(context, String text, textAlign, SortIndicator sortIndicator, onClick, onLongPress) {
   final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
   var icon = getSortIconName(sortIndicator);
 
@@ -218,6 +338,7 @@ Widget textButtonOptionalIcon(context, String text, textAlign, SortIndicator sor
 
   return TextButton(
     onPressed: onClick,
+    onLongPress: onLongPress,
     child: Row(mainAxisAlignment: getRowAlignmentBasedOnTextAlign(textAlign), children: rowChildren),
   );
 }
