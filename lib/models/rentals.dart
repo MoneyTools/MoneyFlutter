@@ -1,4 +1,9 @@
+import 'package:flutter/foundation.dart';
+import 'package:money/models/categories.dart';
+import 'package:money/models/transactions.dart';
+
 import '../helpers.dart';
+import 'date_range.dart';
 import 'money_entity.dart';
 
 class Rental extends MoneyEntity {
@@ -21,8 +26,9 @@ class Rental extends MoneyEntity {
   double ownershipPercentage1 = 0.0;
   double ownershipPercentage2 = 0.0;
   String note = "";
-
   List<RentUnit> units = [];
+
+  DateRange dateRange = DateRange();
 
   Rental(id, name) : super(id, name) {
     //
@@ -91,25 +97,26 @@ class Rentals {
     var allUnits = RentUnits.moneyObjects.getAsList();
 
     for (var building in moneyObjects.getAsList()) {
-      var _ = building as Rental;
-      _.count = 0;
-      _.balance = 0;
-
+      var rental = building as Rental;
+      cumulateTransactions(rental);
       allUnits.forEach((unit) {
-        if (unit.building == building.id.toString()) {
-          building.units.add(unit);
+        if (unit.building == rental.id.toString()) {
+          rental.units.add(unit);
         }
       });
-      debugLog(building.units);
     }
+  }
 
-    // for (var t in Transactions.list) {
-    //   // var item = get(t.accountId);
-    //   // if (item != null) {
-    //   //   item.count++;
-    //   //   item.balance += t.amount;
-    //   // }
-    // }
+  static cumulateTransactions(Rental rental){
+    var listOfCategoryIdsToMatch = Categories.getTreeIds(rental.categoryForIncome);
+
+    for (var t in Transactions.list) {
+      if (listOfCategoryIdsToMatch.contains(t.categoryId) ){
+        rental.dateRange.inflate(t.dateTime);
+        rental.count ++;
+        rental.balance += t.amount;
+      }
+    }
   }
 }
 

@@ -77,7 +77,18 @@ class ViewRentalsState extends ViewWidgetState {
       getColumnForAddress(),
       getColumnForNote(),
       ColumnDefinition(
-        "Count",
+        "In Service",
+        ColumnType.text,
+        TextAlign.left,
+        (index) {
+          return list[index].dateRange.toStringYears();
+        },
+        (Rental a, Rental b, sortAscending) {
+          return sortByString(a.dateRange.toString(), b.dateRange.toString(), sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Transactions",
         ColumnType.numeric,
         TextAlign.right,
         (index) {
@@ -88,8 +99,8 @@ class ViewRentalsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Balance",
-        ColumnType.amount,
+        "Revenue",
+        ColumnType.amountShorthand,
         TextAlign.right,
         (index) {
           return list[index].balance;
@@ -191,17 +202,17 @@ class ViewRentUnitsState extends ViewWidgetState {
           return sortByString(a.Address, b.Address, sortAscending);
         },
       ),
-      ColumnDefinition(
-        "Note",
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
-          return list[index].note;
-        },
-        (a, b, sortAscending) {
-          return sortByString(a.note, b.note, sortAscending);
-        },
-      ),
+      // ColumnDefinition(
+      //   "Note",
+      //   ColumnType.text,
+      //   TextAlign.left,
+      //   (index) {
+      //     return list[index].note;
+      //   },
+      //   (a, b, sortAscending) {
+      //     return sortByString(a.note, b.note, sortAscending);
+      //   },
+      // ),
       ColumnDefinition(
         "Count",
         ColumnType.numeric,
@@ -214,7 +225,7 @@ class ViewRentUnitsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Balance",
+        "Revenue",
         ColumnType.amount,
         TextAlign.right,
         (index) {

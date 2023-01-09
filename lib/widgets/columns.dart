@@ -6,6 +6,7 @@ enum ColumnType {
   text,
   numeric,
   amount,
+  amountShorthand,
   date,
 }
 
@@ -89,7 +90,9 @@ class ColumnDefinitions {
       case ColumnType.numeric:
         return renderColumValueEntryNumber(value);
       case ColumnType.amount:
-        return renderColumValueEntryCurrency(value);
+        return renderColumValueEntryCurrency(value, false);
+      case ColumnType.amountShorthand:
+        return renderColumValueEntryCurrency(value, true);
       case ColumnType.text:
       default:
         return renderColumValueEntryText(value, textAlign: columnDefinition.align);
@@ -107,7 +110,7 @@ class ColumnDefinitions {
             )));
   }
 
-  Widget renderColumValueEntryCurrency(value) {
+  Widget renderColumValueEntryCurrency(value, shorthand) {
     return Expanded(
         child: FittedBox(
       fit: BoxFit.scaleDown,
@@ -115,7 +118,7 @@ class ColumnDefinitions {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
         child: Text(
-          getCurrencyText(value),
+          shorthand ? getNumberAsShorthandText(value) : getCurrencyText(value),
           textAlign: TextAlign.right,
         ),
       ),

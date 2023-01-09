@@ -1,3 +1,4 @@
+import 'package:money/helpers.dart';
 import 'package:money/models/money_entity.dart';
 import 'package:money/models/transactions.dart';
 
@@ -78,6 +79,30 @@ class Categories {
       return category;
     }
     return getTopAncestor(parent);
+  }
+
+  static List<int> getTreeIds(rootIdToStartFrom){
+    List<int> list = [];
+    list.add(rootIdToStartFrom);
+    var descendants = getCategoriesWithThisParent(rootIdToStartFrom);
+    for(var c in descendants){
+      list.add(c.id);
+    }
+    return list;
+  }
+
+  static getCategoriesWithThisParent(parentId){
+    debugLog(parentId.toString());
+
+    List<Category> list = [];
+    for (var item in Categories.moneyObjects.getAsList()) {
+      var c = item as Category;
+      if(c.parentId == parentId){
+        debugLog("match $parentId ${c.name}");
+        list.add(c);
+      }
+    }
+    return list;
   }
 
   /*
