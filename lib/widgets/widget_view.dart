@@ -155,7 +155,10 @@ class ViewWidgetState extends State<ViewWidget> {
 
   getDetailPanelContent(context, index, item) {
     var detailPanelFields = getColumnDefinitionsForDetailsPanel();
-    return Center(key: Key(index.toString()), child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)));
+    return Center(
+      key: Key(index.toString()),
+      child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
+    );
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {

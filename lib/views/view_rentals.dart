@@ -105,7 +105,7 @@ class ViewRentalsState extends ViewWidgetState {
   ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
     var fields = ColumnDefinitions([getColumnForName(), getColumnForAddress(), getColumnForNote()]);
 
-    fields.add(ColumnDefinition(
+    var fieldUnit = ColumnDefinition(
       "Unit",
       ColumnType.amount,
       TextAlign.right,
@@ -115,16 +115,21 @@ class ViewRentalsState extends ViewWidgetState {
       (a, b, sortAscending) {
         return sortByValue(a.balance, b.balance, sortAscending);
       },
-    ));
+    );
+    fieldUnit.isMultiLine = true;
+
+    fields.add(fieldUnit);
 
     return fields;
   }
 
-  getUnitsAsString(listOfUnits) {
-    var text = "";
-    listOfUnits.forEach((item) => {text += item.renter + ","});
+  getUnitsAsString(List<RentUnit> listOfUnits) {
+    var listAsText = [];
+    for (var unit in listOfUnits) {
+      listAsText.add("${unit.name}:${unit.renter}");
+    }
 
-    return text;
+    return listAsText.join("\n");
   }
 
   @override

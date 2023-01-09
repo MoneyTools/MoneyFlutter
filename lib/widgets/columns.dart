@@ -15,6 +15,8 @@ class ColumnDefinition {
   Function? getFieldValue;
   Function? sorting;
   ColumnType type = ColumnType.text;
+  bool readOnly = true;
+  bool isMultiLine = false;
 
   ColumnDefinition(this.name, this.type, this.align, this.getFieldValue, this.sorting) {
     //
@@ -45,18 +47,40 @@ class ColumnDefinitions {
   getCellsForDetailsPanel(index) {
     List<Widget> cells = [];
     for (int i = 0; i < list.length; i++) {
-      var fieldValue = list[i].getFieldValue!(index);
-      cells.add(
-        TextFormField(
-          initialValue: fieldValue.toString(),
-          decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
-            labelText: list[i].name,
-          ),
+      var widget = getBestWidgetForColumnDefinition(i, index);
+      cells.add(widget);
+    }
+    return cells;
+  }
+
+  getBestWidgetForColumnDefinition(columnIndex, rowIndex) {
+    var fieldDefinition = list[columnIndex];
+    var fieldValue = fieldDefinition.getFieldValue!(rowIndex);
+
+    if (fieldDefinition.isMultiLine) {
+      return TextFormField(
+        readOnly: fieldDefinition.readOnly,
+        initialValue: fieldValue.toString(),
+        keyboardType: TextInputType.multiline,
+        minLines: 1,
+        //Normal textInputField will be displayed
+        maxLines: 5,
+        // when user presses enter it will adapt to
+        decoration: InputDecoration(
+          border: const UnderlineInputBorder(),
+          labelText: fieldDefinition.name,
+        ),
+      );
+    } else {
+      return TextFormField(
+        readOnly: fieldDefinition.readOnly,
+        initialValue: fieldValue.toString(),
+        decoration: InputDecoration(
+          border: const UnderlineInputBorder(),
+          labelText: fieldDefinition.name,
         ),
       );
     }
-    return cells;
   }
 
   Widget getCellWidget(int columnId, Object value) {
