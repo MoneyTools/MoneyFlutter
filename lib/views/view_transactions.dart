@@ -22,7 +22,7 @@ class ViewTransactionsState extends ViewWidgetState {
   final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
 
   @override
-  ColumnDefinitions getColumnDefinitions() {
+  ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
       ColumnDefinition(
         "Account",

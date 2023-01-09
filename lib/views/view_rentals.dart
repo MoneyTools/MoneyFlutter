@@ -28,42 +28,54 @@ class ViewRentalsState extends ViewWidgetState {
     return "Properties to rent.";
   }
 
+  getColumnForName() {
+    return ColumnDefinition(
+      "Name",
+      ColumnType.text,
+      TextAlign.left,
+      (index) {
+        return list[index].name;
+      },
+      (a, b, sortAscending) {
+        return sortByString(a.name, b.name, sortAscending);
+      },
+    );
+  }
+
+  getColumnForAddress() {
+    return ColumnDefinition(
+      "Address",
+      ColumnType.text,
+      TextAlign.left,
+      (index) {
+        return list[index].address;
+      },
+      (a, b, sortAscending) {
+        return sortByString(a.address, b.address, sortAscending);
+      },
+    );
+  }
+
+  getColumnForNote() {
+    return ColumnDefinition(
+      "Note",
+      ColumnType.text,
+      TextAlign.left,
+      (index) {
+        return list[index].note;
+      },
+      (a, b, sortAscending) {
+        return sortByString(a.note, b.note, sortAscending);
+      },
+    );
+  }
+
   @override
-  ColumnDefinitions getColumnDefinitions() {
+  ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
-      ColumnDefinition(
-        "Name",
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
-          return list[index].name;
-        },
-        (a, b, sortAscending) {
-          return sortByString(a.name, b.name, sortAscending);
-        },
-      ),
-      ColumnDefinition(
-        "Address",
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
-          return list[index].address;
-        },
-        (a, b, sortAscending) {
-          return sortByString(a.address, b.address, sortAscending);
-        },
-      ),
-      ColumnDefinition(
-        "Note",
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
-          return list[index].note;
-        },
-        (a, b, sortAscending) {
-          return sortByString(a.note, b.note, sortAscending);
-        },
-      ),
+      getColumnForName(),
+      getColumnForAddress(),
+      getColumnForNote(),
       ColumnDefinition(
         "Count",
         ColumnType.numeric,
@@ -85,8 +97,34 @@ class ViewRentalsState extends ViewWidgetState {
         (a, b, sortAscending) {
           return sortByValue(a.balance, b.balance, sortAscending);
         },
-      ),
+      )
     ]);
+  }
+
+  @override
+  ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
+    var fields = ColumnDefinitions([getColumnForName(), getColumnForAddress(), getColumnForNote()]);
+
+    fields.add(ColumnDefinition(
+      "Unit",
+      ColumnType.amount,
+      TextAlign.right,
+      (index) {
+        return getUnitsAsString(list[index].units);
+      },
+      (a, b, sortAscending) {
+        return sortByValue(a.balance, b.balance, sortAscending);
+      },
+    ));
+
+    return fields;
+  }
+
+  getUnitsAsString(listOfUnits) {
+    var text = "";
+    listOfUnits.forEach((item) => {text += item.renter + ","});
+
+    return text;
   }
 
   @override
@@ -124,7 +162,7 @@ class ViewRentUnitsState extends ViewWidgetState {
   }
 
   @override
-  ColumnDefinitions getColumnDefinitions() {
+  ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
       ColumnDefinition(
         "Name",

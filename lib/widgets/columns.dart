@@ -37,6 +37,11 @@ class ColumnDefinitions {
     return cells;
   }
 
+  add(ColumnDefinition toAdd) {
+    list.add(toAdd);
+    return this;
+  }
+
   getCellsForDetailsPanel(index) {
     List<Widget> cells = [];
     for (int i = 0; i < list.length; i++) {

@@ -29,7 +29,7 @@ class ViewPayeesState extends ViewWidgetState {
   }
 
   @override
-  ColumnDefinitions getColumnDefinitions() {
+  ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
       ColumnDefinition(
         "Name",

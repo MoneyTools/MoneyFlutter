@@ -22,6 +22,8 @@ class Rental extends MoneyEntity {
   double ownershipPercentage2 = 0.0;
   String note = "";
 
+  List<RentUnit> units = [];
+
   Rental(id, name) : super(id, name) {
     //
   }
@@ -86,10 +88,19 @@ class Rentals {
   }
 
   static onAllDataLoaded() {
-    for (var item in moneyObjects.getAsList()) {
-      var a = item as Rental;
-      a.count = 0;
-      a.balance = 0;
+    var allUnits = RentUnits.moneyObjects.getAsList();
+
+    for (var building in moneyObjects.getAsList()) {
+      var _ = building as Rental;
+      _.count = 0;
+      _.balance = 0;
+
+      allUnits.forEach((unit) {
+        if (unit.building == building.id.toString()) {
+          building.units.add(unit);
+        }
+      });
+      debugLog(building.units);
     }
 
     // for (var t in Transactions.list) {

@@ -64,11 +64,11 @@ class Data {
             await rentals.load(result);
           }
 
-          // // RentUnits
-          // {
-          //   var result = await db.query('RentUnits');
-          //   await rentUnits.load(result);
-          // }
+          // RentUnits
+          {
+            var result = await db.query('RentUnits');
+            await rentUnits.load(result);
+          }
 
           // Transactions
           {
@@ -87,6 +87,7 @@ class Data {
     Accounts.onAllDataLoaded();
     Categories.onAllDataLoaded();
     Payees.onAllDataLoaded();
+    Rentals.onAllDataLoaded();
     callbackWhenLoaded(true);
   }
 

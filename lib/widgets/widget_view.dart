@@ -22,7 +22,11 @@ class ViewWidgetState extends State<ViewWidget> {
   final double itemHeight = 30;
   final scrollController = ScrollController();
 
-  ColumnDefinitions getColumnDefinitions() {
+  ColumnDefinitions getColumnDefinitionsForTable() {
+    return ColumnDefinitions([]);
+  }
+
+  ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
     return ColumnDefinitions([]);
   }
 
@@ -40,7 +44,7 @@ class ViewWidgetState extends State<ViewWidget> {
   @override
   void initState() {
     super.initState();
-    columns = getColumnDefinitions();
+    columns = getColumnDefinitionsForTable();
     sortBy = getDefaultSortColumn();
     list = getList();
   }
@@ -150,7 +154,8 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   getDetailPanelContent(context, index, item) {
-    return Center(key: Key(index.toString()), child: Column(children: columns.getCellsForDetailsPanel(index)));
+    var detailPanelFields = getColumnDefinitionsForDetailsPanel();
+    return Center(key: Key(index.toString()), child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)));
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {
