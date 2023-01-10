@@ -103,10 +103,32 @@ class ViewRentalsState extends ViewWidgetState {
         ColumnType.amountShorthand,
         TextAlign.right,
         (index) {
-          return list[index].balance;
+          return list[index].revenue;
         },
         (a, b, sortAscending) {
-          return sortByValue(a.balance, b.balance, sortAscending);
+          return sortByValue(a.revenue, b.revenue, sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Expense",
+        ColumnType.amountShorthand,
+        TextAlign.right,
+        (index) {
+          return list[index].expense;
+        },
+        (a, b, sortAscending) {
+          return sortByValue(a.expense, b.expense, sortAscending);
+        },
+      ),
+      ColumnDefinition(
+        "Profit",
+        ColumnType.amountShorthand,
+        TextAlign.right,
+        (index) {
+          return list[index].profit;
+        },
+        (a, b, sortAscending) {
+          return sortByValue(a.profit, b.profit, sortAscending);
         },
       )
     ]);
@@ -124,7 +146,7 @@ class ViewRentalsState extends ViewWidgetState {
         return getUnitsAsString(list[index].units);
       },
       (a, b, sortAscending) {
-        return sortByValue(a.balance, b.balance, sortAscending);
+        return sortByValue(a.revenue, b.revenue, sortAscending);
       },
     );
     fieldUnit.isMultiLine = true;
@@ -229,10 +251,10 @@ class ViewRentUnitsState extends ViewWidgetState {
         ColumnType.amount,
         TextAlign.right,
         (index) {
-          return list[index].balance;
+          return list[index].revenue;
         },
         (a, b, sortAscending) {
-          return sortByValue(a.balance, b.balance, sortAscending);
+          return sortByValue(a.revenue, b.revenue, sortAscending);
         },
       ),
     ]);

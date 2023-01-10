@@ -83,22 +83,30 @@ class Categories {
 
   static List<int> getTreeIds(rootIdToStartFrom){
     List<int> list = [];
-    list.add(rootIdToStartFrom);
-    var descendants = getCategoriesWithThisParent(rootIdToStartFrom);
-    for(var c in descendants){
-      list.add(c.id);
+    if(rootIdToStartFrom>0) {
+      getTreeIdsRecursive(rootIdToStartFrom, list);
     }
     return list;
   }
 
+  static void getTreeIdsRecursive(categoryId, list){
+    if(categoryId>0) {
+      list.add(categoryId);
+      var descendants = getCategoriesWithThisParent(categoryId);
+      for (var c in descendants) {
+        // debugLog(c.id.toString()+"="+c.name);
+        getTreeIdsRecursive(c.id, list);
+      }
+    }
+  }
+
+
   static getCategoriesWithThisParent(parentId){
-    debugLog(parentId.toString());
 
     List<Category> list = [];
     for (var item in Categories.moneyObjects.getAsList()) {
       var c = item as Category;
       if(c.parentId == parentId){
-        debugLog("match $parentId ${c.name}");
         list.add(c);
       }
     }

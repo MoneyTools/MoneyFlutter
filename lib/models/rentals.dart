@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
 
@@ -8,7 +7,11 @@ import 'money_entity.dart';
 
 class Rental extends MoneyEntity {
   int count = 0;
-  double balance = 0.00;
+
+  double revenue = 0.00;
+  double expense = 0.00;
+  double profit = 0.00;
+
   String address = "";
   DateTime purchasedDate = DateTime.now();
   double purchasedPrice = 0.00;
@@ -98,7 +101,12 @@ class Rentals {
 
     for (var building in moneyObjects.getAsList()) {
       var rental = building as Rental;
+      // debugLog(rental.name);
       cumulateTransactions(rental);
+
+      // expense is a negative number so we just do a Revenue + Expense
+      rental.profit = rental.revenue + rental.expense;
+
       allUnits.forEach((unit) {
         if (unit.building == rental.id.toString()) {
           rental.units.add(unit);
@@ -110,11 +118,32 @@ class Rentals {
   static cumulateTransactions(Rental rental){
     var listOfCategoryIdsToMatch = Categories.getTreeIds(rental.categoryForIncome);
 
+    var listOfCategoryIdsExpenses1 = Categories.getTreeIds(rental.categoryForMaintenance);
+    var listOfCategoryIdsExpenses2 = Categories.getTreeIds(rental.categoryForInterest);
+    var listOfCategoryIdsExpenses3 = Categories.getTreeIds(rental.categoryForManagement);
+    var listOfCategoryIdsExpenses4 = Categories.getTreeIds(rental.categoryForRepairs);
+    var listOfCategoryIdsExpenses5 = Categories.getTreeIds(rental.categoryForTaxes);
+
+    var listOfCategoryIdsExpenses = [];
+    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses1);
+    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses2);
+    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses3);
+    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses4);
+    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses5);
+
     for (var t in Transactions.list) {
-      if (listOfCategoryIdsToMatch.contains(t.categoryId) ){
+
+      if (listOfCategoryIdsToMatch.contains(t.categoryId)) {
         rental.dateRange.inflate(t.dateTime);
         rental.count ++;
-        rental.balance += t.amount;
+        rental.revenue += t.amount;
+      }
+      else {
+        if (listOfCategoryIdsExpenses.contains(t.categoryId)) {
+          rental.dateRange.inflate(t.dateTime);
+          rental.count ++;
+          rental.expense += t.amount;
+        }
       }
     }
   }
@@ -167,7 +196,7 @@ class RentUnits {
     for (var item in moneyObjects.getAsList()) {
       var a = item as Rental;
       a.count = 0;
-      a.balance = 0;
+      a.revenue = 0;
     }
 
     // for (var t in Transactions.list) {

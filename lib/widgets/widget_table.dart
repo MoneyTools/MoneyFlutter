@@ -91,7 +91,7 @@ class TableWidgetState extends State<TableWidget> {
     return Focus(
         autofocus: autofocus,
         onFocusChange: (value) {
-          debugLog('focus lost $value index $currentIndex');
+          // debugLog('focus lost $value index $currentIndex');
           if (value) {}
         },
         onKey: onListViewKeyEvent,
@@ -143,7 +143,7 @@ class TableWidgetState extends State<TableWidget> {
   void scrollToIndex(int index) {
     var minMax = scrollListenerWithItemCount();
 
-    debugLog("${minMax[0]} > $index < ${minMax[1]}");
+    // debugLog("${minMax[0]} > $index < ${minMax[1]}");
 
     if (!index.isBetween(minMax[0], minMax[1])) {
       double desiredNewPosition = itemHeight * index;
