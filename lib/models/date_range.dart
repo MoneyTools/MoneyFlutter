@@ -19,15 +19,15 @@ class DateRange {
     }
   }
 
-  valueOrZeroIfNull(value){
-    if(value==null){
+  valueOrZeroIfNull(value) {
+    if (value == null) {
       return 0;
     }
     return value;
   }
 
   durationInYears() {
-    if(min==null || max==null){
+    if (min == null || max == null) {
       return 0;
     }
 

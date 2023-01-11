@@ -115,7 +115,7 @@ class Rentals {
     }
   }
 
-  static cumulateTransactions(Rental rental){
+  static cumulateTransactions(Rental rental) {
     var listOfCategoryIdsToMatch = Categories.getTreeIds(rental.categoryForIncome);
 
     var listOfCategoryIdsExpenses1 = Categories.getTreeIds(rental.categoryForMaintenance);
@@ -132,16 +132,14 @@ class Rentals {
     listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses5);
 
     for (var t in Transactions.list) {
-
       if (listOfCategoryIdsToMatch.contains(t.categoryId)) {
         rental.dateRange.inflate(t.dateTime);
-        rental.count ++;
+        rental.count++;
         rental.revenue += t.amount;
-      }
-      else {
+      } else {
         if (listOfCategoryIdsExpenses.contains(t.categoryId)) {
           rental.dateRange.inflate(t.dateTime);
-          rental.count ++;
+          rental.count++;
           rental.expense += t.amount;
         }
       }

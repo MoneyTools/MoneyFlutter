@@ -1,4 +1,3 @@
-import 'package:money/helpers.dart';
 import 'package:money/models/money_entity.dart';
 import 'package:money/models/transactions.dart';
 
@@ -81,16 +80,16 @@ class Categories {
     return getTopAncestor(parent);
   }
 
-  static List<int> getTreeIds(rootIdToStartFrom){
+  static List<int> getTreeIds(rootIdToStartFrom) {
     List<int> list = [];
-    if(rootIdToStartFrom>0) {
+    if (rootIdToStartFrom > 0) {
       getTreeIdsRecursive(rootIdToStartFrom, list);
     }
     return list;
   }
 
-  static void getTreeIdsRecursive(categoryId, list){
-    if(categoryId>0) {
+  static void getTreeIdsRecursive(categoryId, list) {
+    if (categoryId > 0) {
       list.add(categoryId);
       var descendants = getCategoriesWithThisParent(categoryId);
       for (var c in descendants) {
@@ -100,13 +99,11 @@ class Categories {
     }
   }
 
-
-  static getCategoriesWithThisParent(parentId){
-
+  static getCategoriesWithThisParent(parentId) {
     List<Category> list = [];
     for (var item in Categories.moneyObjects.getAsList()) {
       var c = item as Category;
-      if(c.parentId == parentId){
+      if (c.parentId == parentId) {
         list.add(c);
       }
     }

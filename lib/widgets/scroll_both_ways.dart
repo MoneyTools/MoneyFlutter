@@ -23,7 +23,7 @@ class ScrollBothWay extends StatelessWidget {
           controller: _horizontal,
           thumbVisibility: true,
           trackVisibility: true,
-          notificationPredicate: (notif) => notif.depth == 1,
+          notificationPredicate: (notification) => notification.depth == 1,
           child: SingleChildScrollView(
             controller: _vertical,
             child: SingleChildScrollView(
