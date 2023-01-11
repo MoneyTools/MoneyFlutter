@@ -6,7 +6,7 @@ import '../widgets/columns.dart';
 import '../widgets/widget_view.dart';
 
 class ViewCategories extends ViewWidget {
-  const ViewCategories({super.key, super.setDetailsPanelContent});
+  const ViewCategories({super.key});
 
   @override
   State<ViewWidget> createState() => ViewCategoriesState();

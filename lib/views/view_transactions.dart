@@ -10,7 +10,7 @@ import '../widgets/columns.dart';
 import '../widgets/widget_view.dart';
 
 class ViewTransactions extends ViewWidget {
-  const ViewTransactions({super.key, super.setDetailsPanelContent});
+  const ViewTransactions({super.key});
 
   @override
   State<ViewWidget> createState() => ViewTransactionsState();

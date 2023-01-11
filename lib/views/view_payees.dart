@@ -6,7 +6,7 @@ import '../widgets/columns.dart';
 import '../widgets/widget_view.dart';
 
 class ViewPayees extends ViewWidget {
-  const ViewPayees({super.key, super.setDetailsPanelContent});
+  const ViewPayees({super.key});
 
   @override
   State<ViewWidget> createState() => ViewPayeesState();

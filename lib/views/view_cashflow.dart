@@ -11,15 +11,16 @@ import '../widgets/header.dart';
 import '../widgets/scroll_both_ways.dart';
 import '../widgets/widget_sankey/sankey_helper.dart';
 import '../widgets/widget_sankey/widget_sankey_chart.dart';
+import '../widgets/widget_view.dart';
 
-class ViewCashFlow extends StatefulWidget {
+class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});
 
   @override
-  State<ViewCashFlow> createState() => ViewCashFlowState();
+  State<ViewWidget> createState() => ViewCashFlowState();
 }
 
-class ViewCashFlowState extends State<ViewCashFlow> {
+class ViewCashFlowState extends ViewWidgetState {
   var accountsOpened = Accounts.getOpenAccounts();
   var totalIncomes = 0.00;
   var totalExpenses = 0.00;

@@ -4,13 +4,12 @@ import 'package:money/widgets/widgets.dart';
 
 import '../helpers.dart';
 import '../widgets/header.dart';
+import 'bottom.dart';
 import 'columns.dart';
 import 'widget_table.dart';
 
 class ViewWidget extends StatefulWidget {
-  final Function? setDetailsPanelContent;
-
-  const ViewWidget({super.key, this.setDetailsPanelContent});
+  const ViewWidget({super.key});
 
   @override
   State<ViewWidget> createState() => ViewWidgetState();
@@ -27,17 +26,20 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
-    return ColumnDefinitions([]);
+    return getColumnDefinitionsForTable();
   }
 
   var list = [];
   var listOfUniqueInstances = [];
 
   final formatCurrency = NumberFormat("#,##0.00", "en_US");
+  bool isBottomPanelExpanded = false;
+  num selectedBottomTabId = 0;
 
   int sortBy = 0;
   bool sortAscending = true;
   bool isChecked = true;
+  Object? subViewSelectedItem;
 
   ViewWidgetState();
 
@@ -114,20 +116,50 @@ class ViewWidgetState extends State<ViewWidget> {
         getTitle(),
         getTableHeaders(),
         Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onShowPanelForItemDetails)),
+        BottomPanel(
+          isExpanded: isBottomPanelExpanded,
+          onExpanded: (isExpanded) {
+            setState(() {
+              isBottomPanelExpanded = isExpanded;
+            });
+          },
+          selectedTabId: selectedBottomTabId,
+          selectedItems: selectedItems,
+          subViewSelectedItem: subViewSelectedItem,
+          onTabActivated: updateBottomContent,
+          getBottomContentToRender: getSubViewContent,
+        )
       ],
     ));
   }
 
-  onShowPanelForItemDetails(context, index) {
-    var content = getDetailPanelContent(context, index, list[index]);
+  updateBottomContent(tab) {
+    setState(() {
+      selectedBottomTabId = tab;
+    });
+  }
 
+  Widget getSubViewContent(subViewId, selectedItems) {
+    switch (subViewId) {
+      case 0:
+        return getDetailPanelContent(selectedItems);
+      case 1:
+        return const Text("the chart");
+      case 2:
+        return const Text("the transactions");
+      default:
+        return const Text("- empty -");
+    }
+  }
+
+  onShowPanelForItemDetails(context, index) {
     if (isMobile()) {
       showDialog(
           context: context,
           builder: (context) {
             return AlertDialog(
               title: getDetailPanelHeader(context, index, list[index]),
-              content: content,
+              content: getDetailPanelContent([index]),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -145,7 +177,11 @@ class ViewWidgetState extends State<ViewWidget> {
             );
           });
     } else {
-      widget.setDetailsPanelContent!(content);
+      // This will cause a UI update and the bottom details will get rendered if its expanded
+      setState(() {
+        selectedItems.clear();
+        selectedItems.add(index);
+      });
     }
   }
 
@@ -153,12 +189,15 @@ class ViewWidgetState extends State<ViewWidget> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  getDetailPanelContent(context, index, item) {
+  getDetailPanelContent(List<num> items) {
     var detailPanelFields = getColumnDefinitionsForDetailsPanel();
-    return Center(
-      key: Key(index.toString()),
-      child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
-    );
+    if (items.isNotEmpty) {
+      var index = items.first;
+      return Center(
+        key: Key(index.toString()),
+        child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
+      );
+    }
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {

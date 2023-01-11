@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 
 class BottomPanel extends StatelessWidget {
-  final Widget? details;
   final bool isExpanded;
   final Function onExpanded;
+  final List<num> selectedItems;
+  final Object? subViewSelectedItem;
+  final num selectedTabId;
+  final Function onTabActivated;
+  final Function(num, Object?) getBottomContentToRender;
 
-  const BottomPanel({super.key, this.details, required this.isExpanded, required this.onExpanded});
+  const BottomPanel({
+    super.key,
+    required this.selectedItems,
+    required this.selectedTabId,
+    required this.isExpanded,
+    required this.onExpanded,
+    required this.subViewSelectedItem,
+    required this.onTabActivated,
+    required this.getBottomContentToRender,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +34,8 @@ class BottomPanel extends StatelessWidget {
     ]));
 
     if (isExpanded) {
-      if (details != null) {
-        itemsToRender.add(Padding(padding: const EdgeInsets.all(20), child: details!));
-      }
+      Widget widgetToRender = getBottomContentToRender(selectedTabId, selectedItems);
+      itemsToRender.add(Padding(padding: const EdgeInsets.all(20), child: widgetToRender));
     }
 
     return SizedBox(height: isExpanded ? 400 : 50, child: Column(children: itemsToRender));
@@ -31,11 +43,26 @@ class BottomPanel extends StatelessWidget {
 
   getRowOfTabs() {
     return Row(
-      children: [TextButton(onPressed: onClickCharts, child: const Text('Chart')), TextButton(onPressed: onClickDetails, child: const Text('Details'))],
+      children: [
+        getTabButton(0, "Details"),
+        getTabButton(1, "Chart"),
+        getTabButton(2, "Transactions"),
+      ],
     );
   }
 
-  onClickDetails() {}
+  getTabButton(num id, String text) {
+    return TextButton(
+        onPressed: () {
+          if (!isExpanded) {
+            onExpanded(true);
+          }
 
-  onClickCharts() {}
+          onTabActivated(id);
+        },
+        style: TextButton.styleFrom(
+          textStyle: TextStyle(fontWeight: selectedTabId == id ? FontWeight.bold : FontWeight.normal),
+        ),
+        child: Text(text));
+  }
 }

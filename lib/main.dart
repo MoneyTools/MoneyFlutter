@@ -13,7 +13,6 @@ import 'views/view_accounts.dart';
 import 'views/view_categories.dart';
 import 'views/view_payees.dart';
 import 'views/view_transactions.dart';
-import 'widgets/bottom.dart';
 
 void main() {
   runApp(const MyMoney());
@@ -30,8 +29,6 @@ class _MyMoneyState extends State<MyMoney> {
   Settings settings = Settings();
   bool _isLoading = true;
   final Data data = Data();
-  bool isBottomPanelExpanded = false;
-  Widget? detailPanelContent;
 
   @override
   initState() {
@@ -90,12 +87,6 @@ class _MyMoneyState extends State<MyMoney> {
     return const Expanded(child: Center(child: CircularProgressIndicator()));
   }
 
-  onSetDetailContent(Widget? content) {
-    setState(() {
-      detailPanelContent = content;
-    });
-  }
-
   Widget getWidgetForMainContent(BuildContext context, int screenIndex) {
     if (_isLoading) {
       return showLoading();
@@ -103,15 +94,15 @@ class _MyMoneyState extends State<MyMoney> {
 
     switch (screenIndex) {
       case 1:
-        return ViewAccounts(setDetailsPanelContent: onSetDetailContent);
+        return const ViewAccounts();
       case 2:
-        return ViewCategories(setDetailsPanelContent: onSetDetailContent);
+        return const ViewCategories();
       case 3:
-        return ViewPayees(setDetailsPanelContent: onSetDetailContent);
+        return const ViewPayees();
       case 4:
-        return ViewTransactions(setDetailsPanelContent: onSetDetailContent);
+        return const ViewTransactions();
       case 5:
-        return ViewRentals(setDetailsPanelContent: onSetDetailContent);
+        return const ViewRentals();
       case 0:
       default:
         return const ViewCashFlow();
@@ -167,9 +158,7 @@ class _MyMoneyState extends State<MyMoney> {
   getScaffoldingForSmallSurface(context) {
     return Scaffold(
       appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
-      body: Row(children: <Widget>[
-        getWidgetForMainContent(context, settings.screenIndex),
-      ]),
+      body: Row(children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)]),
       bottomNavigationBar: MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
     );
   }
@@ -189,30 +178,11 @@ class _MyMoneyState extends State<MyMoney> {
               useIndicator: settings.materialVersion == 3,
             ),
             const VerticalDivider(thickness: 1, width: 1),
-            Expanded(child: mainPanel(context))
+            Expanded(child: Column(children: [getWidgetForMainContent(context, settings.screenIndex)]))
           ],
         ),
       ),
     );
-  }
-
-  mainPanel(context) {
-    var widgets = [
-      getWidgetForMainContent(context, settings.screenIndex),
-    ];
-
-    if (settings.screenIndex != 0) {
-      widgets.add(BottomPanel(
-          details: detailPanelContent,
-          isExpanded: isBottomPanelExpanded,
-          onExpanded: (isExpanded) {
-            setState(() {
-              isBottomPanelExpanded = isExpanded;
-            });
-          }));
-    }
-
-    return Column(children: widgets);
   }
 
   onSettingsChanged(settings) {
