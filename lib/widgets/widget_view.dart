@@ -6,6 +6,7 @@ import '../helpers.dart';
 import '../widgets/header.dart';
 import 'bottom.dart';
 import 'columns.dart';
+import 'widget_bar_chart.dart';
 import 'widget_table.dart';
 
 class ViewWidget extends StatefulWidget {
@@ -144,7 +145,7 @@ class ViewWidgetState extends State<ViewWidget> {
       case 0:
         return getDetailPanelContent(selectedItems);
       case 1:
-        return const Text("the chart");
+        return const WidgetBarChart();
       case 2:
         return const Text("the transactions");
       default:
