@@ -5,6 +5,7 @@ import '../models/rentals.dart';
 import '../widgets/columns.dart';
 import '../widgets/widget_bar_chart.dart';
 import '../widgets/widget_view.dart';
+import 'view_transactions.dart';
 
 class ViewRentals extends ViewWidget {
   const ViewRentals({super.key});
@@ -184,5 +185,14 @@ class ViewRentalsState extends ViewWidgetState {
     }
 
     return WidgetBarChart(list: list);
+  }
+
+  @override
+  getSubViewContentForTransactions(List<num> items) {
+    return const SizedBox(
+      width: 400,
+      height: 400,
+      child: ViewTransactions(),
+    );
   }
 }

@@ -147,7 +147,7 @@ class ViewWidgetState extends State<ViewWidget> {
       case 1:
         return getSubViewContentForChart(selectedItems);
       case 2:
-        return const Text("the transactions");
+        return getSubViewContentForTransactions(selectedItems);
       default:
         return const Text("- empty -");
     }
@@ -209,6 +209,10 @@ class ViewWidgetState extends State<ViewWidget> {
     list.add(CategoryValue("d", 14.2));
 
     return WidgetBarChart(list: list);
+  }
+
+  getSubViewContentForTransactions(List<num> items) {
+    return const Text("the transactions");
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {
