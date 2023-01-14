@@ -158,7 +158,7 @@ class _MyMoneyState extends State<MyMoney> {
   getScaffoldingForSmallSurface(context) {
     return Scaffold(
       appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
-      body: Row(children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)]),
+      body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
       bottomNavigationBar: MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
     );
   }

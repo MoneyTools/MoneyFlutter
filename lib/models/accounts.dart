@@ -33,6 +33,18 @@ class Account extends MoneyEntity {
     return (flags & AccountFlags.closed.index) != 0;
   }
 
+  isActive() {
+    return !isClosed();
+  }
+
+  isBankAccount() {
+    return type == AccountType.savings || type == AccountType.checking || type == AccountType.cash;
+  }
+
+  isActiveBankAccount() {
+    return isBankAccount() && isActive();
+  }
+
   getTypeAsText() {
     switch (type) {
       case AccountType.savings:
@@ -69,7 +81,11 @@ class Accounts {
   static MoneyObjects moneyObjects = MoneyObjects();
 
   static getOpenAccounts() {
-    return moneyObjects.getAsList().where((a) => !(a as Account).isClosed()).toList();
+    return moneyObjects.getAsList().where((moneyEntity) => activeBankAccount(moneyEntity)).toList();
+  }
+
+  static bool activeBankAccount(Account element) {
+    return element.isActiveBankAccount();
   }
 
   static Account? get(id) {

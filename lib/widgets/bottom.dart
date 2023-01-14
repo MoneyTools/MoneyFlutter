@@ -35,7 +35,7 @@ class BottomPanel extends StatelessWidget {
 
     if (isExpanded) {
       Widget widgetToRender = getBottomContentToRender(selectedTabId, selectedItems);
-      itemsToRender.add(Padding(padding: const EdgeInsets.all(20), child: widgetToRender));
+      itemsToRender.add(Expanded(child: Padding(padding: const EdgeInsets.all(20), child: widgetToRender)));
     }
 
     return SizedBox(height: isExpanded ? 400 : 50, child: Column(children: itemsToRender));

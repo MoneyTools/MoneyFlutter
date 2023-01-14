@@ -178,7 +178,7 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForChart(List<num> items) {
+  getSubViewContentForChart(List<int> indices) {
     List<CategoryValue> list = [];
     for (var entry in getList()) {
       list.add(CategoryValue(entry.name, entry.profit));
@@ -188,11 +188,7 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForTransactions(List<num> items) {
-    return const SizedBox(
-      width: 400,
-      height: 400,
-      child: ViewTransactions(),
-    );
+  getSubViewContentForTransactions(List<int> indices) {
+    return const ViewTransactions(showTitle: false, showBottom: false, expandAndPadding: false);
   }
 }

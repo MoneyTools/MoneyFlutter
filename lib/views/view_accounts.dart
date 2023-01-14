@@ -5,6 +5,7 @@ import '../models/accounts.dart';
 import '../widgets/columns.dart';
 import '../widgets/widget_bar_chart.dart';
 import '../widgets/widget_view.dart';
+import 'view_transactions.dart';
 
 class ViewAccounts extends ViewWidget {
   const ViewAccounts({super.key});
@@ -30,15 +31,27 @@ class ViewAccountsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForChart(List<num> items) {
+  getSubViewContentForChart(List<int> indices) {
     List<CategoryValue> list = [];
     for (var account in getList()) {
-      if (account.type == AccountType.checking || account.type == AccountType.savings || account.type == AccountType.cash) {
+      if (account.isActiveBankAccount()) {
         list.add(CategoryValue(account.name, account.balance));
       }
     }
 
-    return WidgetBarChart(list: list);
+    return WidgetBarChart(key: Key(indices.toString()), list: list);
+  }
+
+  @override
+  getSubViewContentForTransactions(List<int> indices) {
+    if (indices.isNotEmpty) {
+      int index = indices.first;
+      var account = list[index];
+      if (account != null && account.id > -1) {
+        return ViewTransactions(key: Key(index.toString()), showTitle: false, showBottom: false, expandAndPadding: false, filter: {"accountId": account.id});
+      }
+    }
+    return const Text("No account transactions");
   }
 
   @override

@@ -10,7 +10,7 @@ import '../widgets/columns.dart';
 import '../widgets/widget_view.dart';
 
 class ViewTransactions extends ViewWidget {
-  const ViewTransactions({super.key});
+  const ViewTransactions({super.key, super.showTitle, super.showBottom, super.expandAndPadding, super.filter});
 
   @override
   State<ViewWidget> createState() => ViewTransactionsState();
@@ -87,8 +87,6 @@ class ViewTransactionsState extends ViewWidgetState {
     return 1; // Sort By Date
   }
 
-  ViewTransactionsState();
-
   @override
   void initState() {
     super.initState();
@@ -127,18 +125,29 @@ class ViewTransactionsState extends ViewWidgetState {
   }
 
   getFilteredList() {
-    // All
-    if (_selectedExpenseIncome[2]) {
-      return Transactions.list;
+    return Transactions.list.where((transaction) => isMatchingAccountFilter(transaction) && isMatchingAccountFilter(transaction)).toList();
+  }
+
+  isMatchingAccountFilter(Transaction transaction) {
+    if (widget.filter != null) {
+      return widget.filter["accountId"] == transaction.accountId;
     }
+    return true;
+  }
+
+  isMatchingIncomeExpense(transaction) {
+    if (_selectedExpenseIncome[2]) {
+      return true;
+    }
+
     // Expanses
     if (_selectedExpenseIncome[1]) {
-      return Transactions.list.where((element) => element.amount < 0).toList();
+      return transaction.amount < 0;
     }
 
     // Incomes
     if (_selectedExpenseIncome[0]) {
-      return Transactions.list.where((element) => element.amount > 0).toList();
+      transaction.amount > 0;
     }
   }
 

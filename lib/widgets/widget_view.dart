@@ -10,7 +10,12 @@ import 'widget_bar_chart.dart';
 import 'widget_table.dart';
 
 class ViewWidget extends StatefulWidget {
-  const ViewWidget({super.key});
+  final bool showTitle;
+  final bool showBottom;
+  final bool expandAndPadding;
+  final dynamic filter;
+
+  const ViewWidget({super.key, this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.filter});
 
   @override
   State<ViewWidget> createState() => ViewWidgetState();
@@ -21,14 +26,6 @@ class ViewWidgetState extends State<ViewWidget> {
   List<int> selectedItems = [0];
   final double itemHeight = 30;
   final scrollController = ScrollController();
-
-  ColumnDefinitions getColumnDefinitionsForTable() {
-    return ColumnDefinitions([]);
-  }
-
-  ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
-    return getColumnDefinitionsForTable();
-  }
 
   var list = [];
   var listOfUniqueInstances = [];
@@ -43,6 +40,14 @@ class ViewWidgetState extends State<ViewWidget> {
   Object? subViewSelectedItem;
 
   ViewWidgetState();
+
+  ColumnDefinitions getColumnDefinitionsForTable() {
+    return ColumnDefinitions([]);
+  }
+
+  ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
+    return getColumnDefinitionsForTable();
+  }
 
   @override
   void initState() {
@@ -112,26 +117,38 @@ class ViewWidgetState extends State<ViewWidget> {
   Widget build(BuildContext context) {
     onSort();
 
-    return getViewExpandAndPadding(Column(
-      children: <Widget>[
-        getTitle(),
-        getTableHeaders(),
-        Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onShowPanelForItemDetails)),
-        BottomPanel(
-          isExpanded: isBottomPanelExpanded,
-          onExpanded: (isExpanded) {
-            setState(() {
-              isBottomPanelExpanded = isExpanded;
-            });
-          },
-          selectedTabId: selectedBottomTabId,
-          selectedItems: selectedItems,
-          subViewSelectedItem: subViewSelectedItem,
-          onTabActivated: updateBottomContent,
-          getBottomContentToRender: getSubViewContent,
-        )
-      ],
-    ));
+    // UI areas to display
+    List<Widget> list = [];
+
+    if (widget.showTitle) {
+      list.add(getTitle());
+    }
+
+    // UI for Table
+    list.add(getTableHeaders());
+    list.add(Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onRowTap)));
+
+    if (widget.showBottom) {
+      list.add(BottomPanel(
+        isExpanded: isBottomPanelExpanded,
+        onExpanded: (isExpanded) {
+          setState(() {
+            isBottomPanelExpanded = isExpanded;
+          });
+        },
+        selectedTabId: selectedBottomTabId,
+        selectedItems: selectedItems,
+        subViewSelectedItem: subViewSelectedItem,
+        onTabActivated: updateBottomContent,
+        getBottomContentToRender: getSubViewContent,
+      ));
+    }
+
+    if (widget.expandAndPadding) {
+      return getViewExpandAndPadding(Column(children: list));
+    }
+
+    return Column(children: list);
   }
 
   updateBottomContent(tab) {
@@ -153,7 +170,7 @@ class ViewWidgetState extends State<ViewWidget> {
     }
   }
 
-  onShowPanelForItemDetails(context, index) {
+  onRowTap(context, index) {
     if (isMobile()) {
       showDialog(
           context: context,
@@ -190,10 +207,10 @@ class ViewWidgetState extends State<ViewWidget> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  getSubViewContentForDetails(List<num> items) {
+  getSubViewContentForDetails(List<int> indices) {
     var detailPanelFields = getColumnDefinitionsForDetailsPanel();
-    if (items.isNotEmpty) {
-      var index = items.first;
+    if (indices.isNotEmpty) {
+      var index = indices.first;
       return Center(
         key: Key(index.toString()),
         child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
@@ -201,7 +218,7 @@ class ViewWidgetState extends State<ViewWidget> {
     }
   }
 
-  getSubViewContentForChart(List<num> items) {
+  getSubViewContentForChart(List<int> indices) {
     List<CategoryValue> list = [];
     list.add(CategoryValue("a", 12.2));
     list.add(CategoryValue("b", 22.2));
@@ -211,7 +228,7 @@ class ViewWidgetState extends State<ViewWidget> {
     return WidgetBarChart(list: list);
   }
 
-  getSubViewContentForTransactions(List<num> items) {
+  getSubViewContentForTransactions(List<int> indices) {
     return const Text("the transactions");
   }
 
