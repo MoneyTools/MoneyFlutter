@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../helpers.dart';
 import '../models/accounts.dart';
 import '../widgets/columns.dart';
+import '../widgets/widget_bar_chart.dart';
 import '../widgets/widget_view.dart';
 
 class ViewAccounts extends ViewWidget {
@@ -26,6 +27,18 @@ class ViewAccountsState extends ViewWidgetState {
   @override
   getDescription() {
     return "Your main assets.";
+  }
+
+  @override
+  getSubViewContentForChart(List<num> items) {
+    List<CategoryValue> list = [];
+    for (var account in getList()) {
+      if (account.type == AccountType.checking || account.type == AccountType.savings || account.type == AccountType.cash) {
+        list.add(CategoryValue(account.name, account.balance));
+      }
+    }
+
+    return WidgetBarChart(list: list);
   }
 
   @override

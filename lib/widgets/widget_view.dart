@@ -143,9 +143,9 @@ class ViewWidgetState extends State<ViewWidget> {
   Widget getSubViewContent(subViewId, selectedItems) {
     switch (subViewId) {
       case 0:
-        return getDetailPanelContent(selectedItems);
+        return getSubViewContentForDetails(selectedItems);
       case 1:
-        return const WidgetBarChart();
+        return getSubViewContentForChart(selectedItems);
       case 2:
         return const Text("the transactions");
       default:
@@ -160,7 +160,7 @@ class ViewWidgetState extends State<ViewWidget> {
           builder: (context) {
             return AlertDialog(
               title: getDetailPanelHeader(context, index, list[index]),
-              content: getDetailPanelContent([index]),
+              content: getSubViewContentForDetails([index]),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -190,7 +190,7 @@ class ViewWidgetState extends State<ViewWidget> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  getDetailPanelContent(List<num> items) {
+  getSubViewContentForDetails(List<num> items) {
     var detailPanelFields = getColumnDefinitionsForDetailsPanel();
     if (items.isNotEmpty) {
       var index = items.first;
@@ -199,6 +199,16 @@ class ViewWidgetState extends State<ViewWidget> {
         child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
       );
     }
+  }
+
+  getSubViewContentForChart(List<num> items) {
+    List<CategoryValue> list = [];
+    list.add(CategoryValue("a", 12.2));
+    list.add(CategoryValue("b", 22.2));
+    list.add(CategoryValue("c", 11.2));
+    list.add(CategoryValue("d", 14.2));
+
+    return WidgetBarChart(list: list);
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {

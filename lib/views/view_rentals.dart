@@ -3,6 +3,7 @@ import 'package:money/helpers.dart';
 
 import '../models/rentals.dart';
 import '../widgets/columns.dart';
+import '../widgets/widget_bar_chart.dart';
 import '../widgets/widget_view.dart';
 
 class ViewRentals extends ViewWidget {
@@ -173,5 +174,15 @@ class ViewRentalsState extends ViewWidgetState {
   @override
   getDefaultSortColumn() {
     return 0; // Sort by name
+  }
+
+  @override
+  getSubViewContentForChart(List<num> items) {
+    List<CategoryValue> list = [];
+    for (var entry in getList()) {
+      list.add(CategoryValue(entry.name, entry.profit));
+    }
+
+    return WidgetBarChart(list: list);
   }
 }
