@@ -9,13 +9,30 @@ import 'columns.dart';
 import 'widget_bar_chart.dart';
 import 'widget_table.dart';
 
+typedef FilterFunction = bool Function(dynamic);
+
+bool defaultFilter(element) {
+  return true; // filter nothing
+}
+
+T? getFirstElement<T>(List<int> indices, list) {
+  if (indices.isNotEmpty) {
+    int index = indices.first;
+    var T = list[index];
+    if (T != null) {
+      return T;
+    }
+  }
+  return null;
+}
+
 class ViewWidget extends StatefulWidget {
   final bool showTitle;
   final bool showBottom;
   final bool expandAndPadding;
-  final dynamic filter;
+  final FilterFunction filter;
 
-  const ViewWidget({super.key, this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.filter});
+  const ViewWidget({super.key, this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.filter = defaultFilter});
 
   @override
   State<ViewWidget> createState() => ViewWidgetState();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../helpers.dart';
 import '../models/accounts.dart';
+import '../models/transactions.dart';
 import '../widgets/columns.dart';
 import '../widgets/widget_bar_chart.dart';
 import '../widgets/widget_view.dart';
@@ -44,14 +45,21 @@ class ViewAccountsState extends ViewWidgetState {
 
   @override
   getSubViewContentForTransactions(List<int> indices) {
-    if (indices.isNotEmpty) {
-      int index = indices.first;
-      var account = list[index];
-      if (account != null && account.id > -1) {
-        return ViewTransactions(key: Key(index.toString()), showTitle: false, showBottom: false, expandAndPadding: false, filter: {"accountId": account.id});
-      }
+    var account = getFirstElement<Account>(indices, list);
+    if (account != null && account.id > -1) {
+      return ViewTransactions(
+        key: Key(account.id.toString()),
+        showTitle: false,
+        showBottom: false,
+        expandAndPadding: false,
+        filter: (t) => filterByAccountId(t, account.id),
+      );
     }
     return const Text("No account transactions");
+  }
+
+  bool filterByAccountId(Transaction t, accountId) {
+    return t.accountId == accountId;
   }
 
   @override

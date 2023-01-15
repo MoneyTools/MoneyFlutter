@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
 
 import '../models/rentals.dart';
+import '../models/transactions.dart';
 import '../widgets/columns.dart';
 import '../widgets/widget_bar_chart.dart';
 import '../widgets/widget_view.dart';
@@ -189,6 +190,25 @@ class ViewRentalsState extends ViewWidgetState {
 
   @override
   getSubViewContentForTransactions(List<int> indices) {
-    return const ViewTransactions(showTitle: false, showBottom: false, expandAndPadding: false);
+    var rental = getFirstElement<Rental>(indices, list);
+    if (rental != null) {
+      return ViewTransactions(
+        key: Key(rental.id.toString()),
+        showTitle: false,
+        showBottom: false,
+        expandAndPadding: false,
+        filter: (dynamic t) => filterByRentalCategories(t, rental),
+      );
+    }
+    return const Text("No transactions");
+  }
+
+  bool filterByRentalCategories(Transaction t, Rental rental) {
+    return t.categoryId == rental.categoryForIncome ||
+        t.categoryId == rental.categoryForInterest ||
+        t.categoryId == rental.categoryForMaintenance ||
+        t.categoryId == rental.categoryForManagement ||
+        t.categoryId == rental.categoryForRepairs ||
+        t.categoryId == rental.categoryForTaxes;
   }
 }

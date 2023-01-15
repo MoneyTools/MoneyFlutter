@@ -22,6 +22,70 @@ class ViewTransactionsState extends ViewWidgetState {
   final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
 
   @override
+  void initState() {
+    super.initState();
+
+    options.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
+    options.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
+    options.add(CaptionAndCounter(caption: "All", small: true, vertical: true, value: Transactions.list.length));
+  }
+
+  @override
+  getClassNamePlural() {
+    return "Transactions";
+  }
+
+  @override
+  getClassNameSingular() {
+    return "Transaction";
+  }
+
+  @override
+  getDescription() {
+    return "Details actions of your accounts.";
+  }
+
+  @override
+  Widget getTitle() {
+    return Column(children: [
+      Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
+      renderToggles(),
+    ]);
+  }
+
+  @override
+  getList() {
+    return getFilteredList();
+  }
+
+  getFilteredList() {
+    return Transactions.list.where((transaction) => isMatchingCallerFilter(transaction) && isMatchingCallerFilter(transaction)).toList();
+  }
+
+  isMatchingCallerFilter(Transaction transaction) {
+    if (widget.filter != null) {
+      return widget.filter!(transaction);
+    }
+    return true;
+  }
+
+  isMatchingIncomeExpense(transaction) {
+    if (_selectedExpenseIncome[2]) {
+      return true;
+    }
+
+    // Expanses
+    if (_selectedExpenseIncome[1]) {
+      return transaction.amount < 0;
+    }
+
+    // Incomes
+    if (_selectedExpenseIncome[0]) {
+      transaction.amount > 0;
+    }
+  }
+
+  @override
   ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
       ColumnDefinition(
@@ -85,70 +149,6 @@ class ViewTransactionsState extends ViewWidgetState {
   @override
   getDefaultSortColumn() {
     return 1; // Sort By Date
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    options.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
-    options.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
-    options.add(CaptionAndCounter(caption: "All", small: true, vertical: true, value: Transactions.list.length));
-  }
-
-  @override
-  getClassNamePlural() {
-    return "Transactions";
-  }
-
-  @override
-  getClassNameSingular() {
-    return "Transaction";
-  }
-
-  @override
-  getDescription() {
-    return "Details actions of your accounts.";
-  }
-
-  @override
-  Widget getTitle() {
-    return Column(children: [
-      Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
-      renderToggles(),
-    ]);
-  }
-
-  @override
-  getList() {
-    return getFilteredList();
-  }
-
-  getFilteredList() {
-    return Transactions.list.where((transaction) => isMatchingAccountFilter(transaction) && isMatchingAccountFilter(transaction)).toList();
-  }
-
-  isMatchingAccountFilter(Transaction transaction) {
-    if (widget.filter != null) {
-      return widget.filter["accountId"] == transaction.accountId;
-    }
-    return true;
-  }
-
-  isMatchingIncomeExpense(transaction) {
-    if (_selectedExpenseIncome[2]) {
-      return true;
-    }
-
-    // Expanses
-    if (_selectedExpenseIncome[1]) {
-      return transaction.amount < 0;
-    }
-
-    // Incomes
-    if (_selectedExpenseIncome[0]) {
-      transaction.amount > 0;
-    }
   }
 
   renderToggles() {
