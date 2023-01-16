@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
+import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/header.dart';
@@ -18,8 +19,8 @@ const String columnIdBalance = "Balance";
 
 const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: [columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
 
-const ViewWidgetToDisplay preferenceJustTableNoAccountColumn =
-    ViewWidgetToDisplay(showTitle: false, showBottom: false, expandAndPadding: false, columnsToInclude: [columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
+const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance =
+    ViewWidgetToDisplay(showTitle: false, showBottom: false, expandAndPadding: false, columnsToInclude: [columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
 
 class ViewTransactions extends ViewWidget {
   const ViewTransactions({super.key, super.filter, super.preference = preferenceFullView});
@@ -105,7 +106,7 @@ class ViewTransactionsState extends ViewWidgetState {
     switch (id) {
       case columnIdAccount:
         return ColumnDefinition(
-          "Account",
+          columnIdAccount,
           ColumnType.text,
           TextAlign.left,
           /* cell */ (index) {
@@ -116,7 +117,7 @@ class ViewTransactionsState extends ViewWidgetState {
           },
         );
       case columnIdDate:
-        return ColumnDefinition("Date", ColumnType.date, TextAlign.left, /* Cell */ (index) {
+        return ColumnDefinition(columnIdDate, ColumnType.date, TextAlign.left, /* Cell */ (index) {
           return getDateAsText(list[index].dateTime);
         }, /* Sort */ (a, b, ascending) {
           return sortByString(getDateAsText(a.dateTime), getDateAsText(b.dateTime), sortAscending);
@@ -124,7 +125,7 @@ class ViewTransactionsState extends ViewWidgetState {
 
       case columnIdPayee:
         return ColumnDefinition(
-          "Payee",
+          columnIdPayee,
           ColumnType.text,
           TextAlign.left,
           /* Cell */ (index) {
@@ -135,9 +136,22 @@ class ViewTransactionsState extends ViewWidgetState {
           },
         );
 
+      case columnIdCategory:
+        return ColumnDefinition(
+          columnIdCategory,
+          ColumnType.text,
+          TextAlign.left,
+          /* Cell */ (index) {
+            return Categories.getNameFromId(list[index].categoryId);
+          },
+          /* Sort */ (a, b, ascending) {
+            return sortByString(Categories.getNameFromId(a.payeeId), Categories.getNameFromId(b.payeeId), sortAscending);
+          },
+        );
+
       case columnIdAmount:
         return ColumnDefinition(
-          "Amount",
+          columnIdAmount,
           ColumnType.amount,
           TextAlign.right,
           /* Cell */ (index) {
@@ -149,7 +163,7 @@ class ViewTransactionsState extends ViewWidgetState {
         );
 
       case columnIdBalance:
-        return ColumnDefinition("Balance", ColumnType.amount, TextAlign.right, /* Cell */ (index) {
+        return ColumnDefinition(columnIdBalance, ColumnType.amount, TextAlign.right, /* Cell */ (index) {
           return list[index].balance;
         }, /* Sort */ (a, b, ascending) {
           return sortByValue(a.balance, b.balance, sortAscending);

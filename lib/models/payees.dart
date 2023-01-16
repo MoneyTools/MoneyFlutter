@@ -21,12 +21,8 @@ class Payees {
     return moneyObjects.get(id) as Payee?;
   }
 
-  static String getNameFromId(num id) {
-    var payee = get(id);
-    if (payee == null) {
-      return id.toString();
-    }
-    return payee.name;
+  static String getNameFromId(id) {
+    return moneyObjects.getNameFromId(id);
   }
 
   load(rows) async {

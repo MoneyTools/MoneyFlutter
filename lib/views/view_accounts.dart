@@ -50,7 +50,7 @@ class ViewAccountsState extends ViewWidgetState {
       return ViewTransactions(
         key: Key(account.id.toString()),
         filter: (t) => filterByAccountId(t, account.id),
-        preference: preferenceJustTableNoAccountColumn,
+        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
       );
     }
     return const Text("No account transactions");

@@ -195,7 +195,7 @@ class ViewRentalsState extends ViewWidgetState {
       return ViewTransactions(
         key: Key(rental.id.toString()),
         filter: (dynamic t) => filterByRentalCategories(t, rental),
-        preference: preferenceJustTableNoAccountColumn,
+        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
       );
     }
     return const Text("No transactions");

@@ -69,6 +69,10 @@ class Categories {
     return moneyObjects.get(id) as Category?;
   }
 
+  static String getNameFromId(id) {
+    return moneyObjects.getNameFromId(id);
+  }
+
   static Category? getTopAncestor(Category category) {
     if (category.parentId == -1) {
       return category; // this is the top
