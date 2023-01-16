@@ -9,8 +9,20 @@ import '../models/payees.dart';
 import '../widgets/columns.dart';
 import '../widgets/widget_view.dart';
 
+const String columnIdAccount = "Accounts";
+const String columnIdDate = "Date";
+const String columnIdPayee = "Payee";
+const String columnIdCategory = "Category";
+const String columnIdAmount = "Amount";
+const String columnIdBalance = "Balance";
+
+const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: [columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
+
+const ViewWidgetToDisplay preferenceJustTableNoAccountColumn =
+    ViewWidgetToDisplay(showTitle: false, showBottom: false, expandAndPadding: false, columnsToInclude: [columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
+
 class ViewTransactions extends ViewWidget {
-  const ViewTransactions({super.key, super.showTitle, super.showBottom, super.expandAndPadding, super.filter});
+  const ViewTransactions({super.key, super.filter, super.preference = preferenceFullView});
 
   @override
   State<ViewWidget> createState() => ViewTransactionsState();
@@ -59,14 +71,7 @@ class ViewTransactionsState extends ViewWidgetState {
   }
 
   getFilteredList() {
-    return Transactions.list.where((transaction) => isMatchingCallerFilter(transaction) && isMatchingCallerFilter(transaction)).toList();
-  }
-
-  isMatchingCallerFilter(Transaction transaction) {
-    if (widget.filter != null) {
-      return widget.filter!(transaction);
-    }
-    return true;
+    return Transactions.list.where((transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
   }
 
   isMatchingIncomeExpense(transaction) {
@@ -87,63 +92,69 @@ class ViewTransactionsState extends ViewWidgetState {
 
   @override
   ColumnDefinitions getColumnDefinitionsForTable() {
-    return ColumnDefinitions([
-      ColumnDefinition(
-        "Account",
-        ColumnType.text,
-        TextAlign.left,
-        /* cell */ (index) {
-          return Accounts.getNameFromId(list[index].accountId);
-        },
-        /* Sort */ (a, b, ascending) {
-          return sortByString(Accounts.getNameFromId(a.accountId), Accounts.getNameFromId(b.accountId), ascending);
-        },
-      ),
-      ColumnDefinition(
-        "Date",
-        ColumnType.date,
-        TextAlign.left,
-        /* Cell */ (index) {
+    List<ColumnDefinition> listOfColumns = [];
+
+    for (var columnId in widget.preference.columnsToInclude) {
+      listOfColumns.add(getColumnDefinitionFromId(columnId));
+    }
+
+    return ColumnDefinitions(listOfColumns);
+  }
+
+  getColumnDefinitionFromId(id) {
+    switch (id) {
+      case columnIdAccount:
+        return ColumnDefinition(
+          "Account",
+          ColumnType.text,
+          TextAlign.left,
+          /* cell */ (index) {
+            return Accounts.getNameFromId(list[index].accountId);
+          },
+          /* Sort */ (a, b, ascending) {
+            return sortByString(Accounts.getNameFromId(a.accountId), Accounts.getNameFromId(b.accountId), ascending);
+          },
+        );
+      case columnIdDate:
+        return ColumnDefinition("Date", ColumnType.date, TextAlign.left, /* Cell */ (index) {
           return getDateAsText(list[index].dateTime);
-        },
-        /* Sort */ (a, b, ascending) {
+        }, /* Sort */ (a, b, ascending) {
           return sortByString(getDateAsText(a.dateTime), getDateAsText(b.dateTime), sortAscending);
-        },
-      ),
-      ColumnDefinition(
-        "Payee",
-        ColumnType.text,
-        TextAlign.left,
-        /* Cell */ (index) {
-          return Payees.getNameFromId(list[index].payeeId);
-        },
-        /* Sort */ (a, b, ascending) {
-          return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
-        },
-      ),
-      ColumnDefinition(
-        "Amount",
-        ColumnType.amount,
-        TextAlign.right,
-        /* Cell */ (index) {
-          return list[index].amount;
-        },
-        /* Sort */ (a, b, ascending) {
-          return sortByValue(a.amount, b.amount, sortAscending);
-        },
-      ),
-      ColumnDefinition(
-        "Balance",
-        ColumnType.amount,
-        TextAlign.right,
-        /* Cell */ (index) {
+        });
+
+      case columnIdPayee:
+        return ColumnDefinition(
+          "Payee",
+          ColumnType.text,
+          TextAlign.left,
+          /* Cell */ (index) {
+            return Payees.getNameFromId(list[index].payeeId);
+          },
+          /* Sort */ (a, b, ascending) {
+            return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
+          },
+        );
+
+      case columnIdAmount:
+        return ColumnDefinition(
+          "Amount",
+          ColumnType.amount,
+          TextAlign.right,
+          /* Cell */ (index) {
+            return list[index].amount;
+          },
+          /* Sort */ (a, b, ascending) {
+            return sortByValue(a.amount, b.amount, sortAscending);
+          },
+        );
+
+      case columnIdBalance:
+        return ColumnDefinition("Balance", ColumnType.amount, TextAlign.right, /* Cell */ (index) {
           return list[index].balance;
-        },
-        /* Sort */ (a, b, ascending) {
+        }, /* Sort */ (a, b, ascending) {
           return sortByValue(a.balance, b.balance, sortAscending);
-        },
-      ),
-    ]);
+        });
+    }
   }
 
   @override

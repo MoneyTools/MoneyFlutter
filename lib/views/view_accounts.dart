@@ -49,10 +49,8 @@ class ViewAccountsState extends ViewWidgetState {
     if (account != null && account.id > -1) {
       return ViewTransactions(
         key: Key(account.id.toString()),
-        showTitle: false,
-        showBottom: false,
-        expandAndPadding: false,
         filter: (t) => filterByAccountId(t, account.id),
+        preference: preferenceJustTableNoAccountColumn,
       );
     }
     return const Text("No account transactions");

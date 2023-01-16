@@ -9,30 +9,11 @@ import 'columns.dart';
 import 'widget_bar_chart.dart';
 import 'widget_table.dart';
 
-typedef FilterFunction = bool Function(dynamic);
-
-bool defaultFilter(element) {
-  return true; // filter nothing
-}
-
-T? getFirstElement<T>(List<int> indices, list) {
-  if (indices.isNotEmpty) {
-    int index = indices.first;
-    var T = list[index];
-    if (T != null) {
-      return T;
-    }
-  }
-  return null;
-}
-
 class ViewWidget extends StatefulWidget {
-  final bool showTitle;
-  final bool showBottom;
-  final bool expandAndPadding;
   final FilterFunction filter;
+  final ViewWidgetToDisplay preference;
 
-  const ViewWidget({super.key, this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.filter = defaultFilter});
+  const ViewWidget({super.key, this.filter = defaultFilter, this.preference = const ViewWidgetToDisplay()});
 
   @override
   State<ViewWidget> createState() => ViewWidgetState();
@@ -137,7 +118,7 @@ class ViewWidgetState extends State<ViewWidget> {
     // UI areas to display
     List<Widget> list = [];
 
-    if (widget.showTitle) {
+    if (widget.preference.showTitle) {
       list.add(getTitle());
     }
 
@@ -145,7 +126,7 @@ class ViewWidgetState extends State<ViewWidget> {
     list.add(getTableHeaders());
     list.add(Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onRowTap)));
 
-    if (widget.showBottom) {
+    if (widget.preference.showBottom) {
       list.add(BottomPanel(
         isExpanded: isBottomPanelExpanded,
         onExpanded: (isExpanded) {
@@ -161,7 +142,7 @@ class ViewWidgetState extends State<ViewWidget> {
       ));
     }
 
-    if (widget.expandAndPadding) {
+    if (widget.preference.expandAndPadding) {
       return getViewExpandAndPadding(Column(children: list));
     }
 
@@ -449,4 +430,31 @@ MainAxisAlignment getRowAlignmentBasedOnTextAlign(TextAlign textAlign) {
     default:
       return MainAxisAlignment.center;
   }
+}
+
+class ViewWidgetToDisplay {
+  final bool showTitle;
+  final bool showBottom;
+  final bool expandAndPadding;
+  final bool columnAccount;
+  final List<String> columnsToInclude;
+
+  const ViewWidgetToDisplay({this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.columnAccount = true, this.columnsToInclude = const []});
+}
+
+typedef FilterFunction = bool Function(dynamic);
+
+bool defaultFilter(element) {
+  return true; // filter nothing
+}
+
+T? getFirstElement<T>(List<int> indices, list) {
+  if (indices.isNotEmpty) {
+    int index = indices.first;
+    var T = list[index];
+    if (T != null) {
+      return T;
+    }
+  }
+  return null;
 }

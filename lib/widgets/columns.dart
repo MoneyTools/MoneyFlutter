@@ -45,6 +45,11 @@ class ColumnDefinitions {
     return this;
   }
 
+  removeAt(int index) {
+    list.removeAt(index);
+    return this;
+  }
+
   getCellsForDetailsPanel(index) {
     List<Widget> cells = [];
     for (int i = 0; i < list.length; i++) {
