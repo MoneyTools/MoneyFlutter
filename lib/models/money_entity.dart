@@ -54,6 +54,15 @@ class MoneyObjects {
     return _map[id];
   }
 
+  MoneyEntity? getByName(name) {
+    for (var item in _list) {
+      if (item.name == name) {
+        return item;
+      }
+    }
+    return null;
+  }
+
   String getNameFromId(num id) {
     var item = get(id);
     if (item == null) {

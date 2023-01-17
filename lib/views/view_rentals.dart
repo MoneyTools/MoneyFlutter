@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
 
+import '../models/categories.dart';
 import '../models/rentals.dart';
+import '../models/splits.dart';
 import '../models/transactions.dart';
 import '../widgets/columns.dart';
 import '../widgets/widget_bar_chart.dart';
@@ -36,10 +38,10 @@ class ViewRentalsState extends ViewWidgetState {
       "Name",
       ColumnType.text,
       TextAlign.left,
-      (index) {
+          (index) {
         return list[index].name;
       },
-      (a, b, sortAscending) {
+          (a, b, sortAscending) {
         return sortByString(a.name, b.name, sortAscending);
       },
     );
@@ -50,10 +52,10 @@ class ViewRentalsState extends ViewWidgetState {
       "Address",
       ColumnType.text,
       TextAlign.left,
-      (index) {
+          (index) {
         return list[index].address;
       },
-      (a, b, sortAscending) {
+          (a, b, sortAscending) {
         return sortByString(a.address, b.address, sortAscending);
       },
     );
@@ -64,10 +66,10 @@ class ViewRentalsState extends ViewWidgetState {
       "Note",
       ColumnType.text,
       TextAlign.left,
-      (index) {
+          (index) {
         return list[index].note;
       },
-      (a, b, sortAscending) {
+          (a, b, sortAscending) {
         return sortByString(a.note, b.note, sortAscending);
       },
     );
@@ -83,10 +85,10 @@ class ViewRentalsState extends ViewWidgetState {
         "In Service",
         ColumnType.text,
         TextAlign.left,
-        (index) {
+            (index) {
           return list[index].dateRange.toStringYears();
         },
-        (Rental a, Rental b, sortAscending) {
+            (Rental a, Rental b, sortAscending) {
           return sortByString(a.dateRange.toString(), b.dateRange.toString(), sortAscending);
         },
       ),
@@ -94,10 +96,10 @@ class ViewRentalsState extends ViewWidgetState {
         "Transactions",
         ColumnType.numeric,
         TextAlign.right,
-        (index) {
+            (index) {
           return list[index].count;
         },
-        (a, b, sortAscending) {
+            (a, b, sortAscending) {
           return sortByValue(a.count, b.count, sortAscending);
         },
       ),
@@ -105,10 +107,10 @@ class ViewRentalsState extends ViewWidgetState {
         "Revenue",
         ColumnType.amountShorthand,
         TextAlign.right,
-        (index) {
+            (index) {
           return list[index].revenue;
         },
-        (a, b, sortAscending) {
+            (a, b, sortAscending) {
           return sortByValue(a.revenue, b.revenue, sortAscending);
         },
       ),
@@ -116,10 +118,10 @@ class ViewRentalsState extends ViewWidgetState {
         "Expense",
         ColumnType.amountShorthand,
         TextAlign.right,
-        (index) {
+            (index) {
           return list[index].expense;
         },
-        (a, b, sortAscending) {
+            (a, b, sortAscending) {
           return sortByValue(a.expense, b.expense, sortAscending);
         },
       ),
@@ -127,10 +129,10 @@ class ViewRentalsState extends ViewWidgetState {
         "Profit",
         ColumnType.amountShorthand,
         TextAlign.right,
-        (index) {
+            (index) {
           return list[index].profit;
         },
-        (a, b, sortAscending) {
+            (a, b, sortAscending) {
           return sortByValue(a.profit, b.profit, sortAscending);
         },
       )
@@ -145,10 +147,10 @@ class ViewRentalsState extends ViewWidgetState {
       "Unit",
       ColumnType.amount,
       TextAlign.right,
-      (index) {
+          (index) {
         return getUnitsAsString(list[index].units);
       },
-      (a, b, sortAscending) {
+          (a, b, sortAscending) {
         return sortByValue(a.revenue, b.revenue, sortAscending);
       },
     );
@@ -202,11 +204,33 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   bool filterByRentalCategories(Transaction t, Rental rental) {
-    return t.categoryId == rental.categoryForIncome ||
-        t.categoryId == rental.categoryForInterest ||
-        t.categoryId == rental.categoryForMaintenance ||
-        t.categoryId == rental.categoryForManagement ||
-        t.categoryId == rental.categoryForRepairs ||
-        t.categoryId == rental.categoryForTaxes;
+    var categoryIdToMatch = t.categoryId;
+
+    if (categoryIdToMatch == Categories.splitCategoryId()) {
+      var splits = Splits.get(t.id);
+      if (splits == null) {
+        return false;
+      }
+
+      for (var split in splits) {
+        if (isMatchingCategories(split.categoryId, rental)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    return isMatchingCategories(categoryIdToMatch, rental);
+  }
+
+  isMatchingCategories(num categoryIdToMatch, Rental rental) {
+    Categories.getTreeIds(rental.categoryForIncome);
+
+    return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||
+        rental.categoryForManagementTreeIds.contains(categoryIdToMatch) ||
+        rental.categoryForRepairsTreeIds.contains(categoryIdToMatch) ||
+        rental.categoryForMaintenanceTreeIds.contains(categoryIdToMatch) ||
+        rental.categoryForTaxesTreeIds.contains(categoryIdToMatch) ||
+        rental.categoryForInterestTreeIds.contains(categoryIdToMatch);
   }
 }

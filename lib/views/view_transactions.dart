@@ -145,7 +145,7 @@ class ViewTransactionsState extends ViewWidgetState {
             return Categories.getNameFromId(list[index].categoryId);
           },
           /* Sort */ (a, b, ascending) {
-            return sortByString(Categories.getNameFromId(a.payeeId), Categories.getNameFromId(b.payeeId), sortAscending);
+            return sortByString(Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), sortAscending);
           },
         );
 

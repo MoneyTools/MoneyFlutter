@@ -8,6 +8,7 @@ import './categories.dart';
 import './payees.dart';
 import './transactions.dart';
 import 'constants.dart';
+import 'splits.dart';
 
 class Data {
   Accounts accounts = Accounts();
@@ -15,6 +16,7 @@ class Data {
   Categories categories = Categories();
   Rentals rentals = Rentals();
   RentUnits rentUnits = RentUnits();
+  Splits splits = Splits();
   Transactions transactions = Transactions();
 
   init(filePathToLoad, callbackWhenLoaded) async {
@@ -68,6 +70,12 @@ class Data {
           {
             var result = await db.query('RentUnits');
             await rentUnits.load(result);
+          }
+
+          // Splits
+          {
+            var result = await db.query('Splits');
+            await splits.load(result);
           }
 
           // Transactions

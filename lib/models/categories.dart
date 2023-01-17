@@ -64,13 +64,31 @@ class Category extends MoneyEntity {
 
 class Categories {
   static MoneyObjects moneyObjects = MoneyObjects();
+  static num idOfSplitCategory = -1;
 
   static Category? get(id) {
     return moneyObjects.get(id) as Category?;
   }
 
   static String getNameFromId(id) {
+    if (id == -1) {
+      return "";
+    }
+
+    if (id == splitCategoryId()) {
+      return "<Split>";
+    }
     return moneyObjects.getNameFromId(id);
+  }
+
+  static num splitCategoryId() {
+    if (idOfSplitCategory == -1) {
+      var cat = moneyObjects.getByName("Split");
+      if (cat != null) {
+        idOfSplitCategory = cat.id;
+      }
+    }
+    return idOfSplitCategory;
   }
 
   static Category? getTopAncestor(Category category) {
@@ -84,8 +102,8 @@ class Categories {
     return getTopAncestor(parent);
   }
 
-  static List<int> getTreeIds(rootIdToStartFrom) {
-    List<int> list = [];
+  static List<num> getTreeIds(rootIdToStartFrom) {
+    List<num> list = [];
     if (rootIdToStartFrom > 0) {
       getTreeIdsRecursive(rootIdToStartFrom, list);
     }

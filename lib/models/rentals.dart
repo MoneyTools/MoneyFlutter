@@ -17,12 +17,26 @@ class Rental extends MoneyEntity {
   double purchasedPrice = 0.00;
   double landValue = 0.00;
   double estimatedValue = 0.00;
+
   num categoryForIncome = -1;
+  List<num> categoryForIncomeTreeIds = [];
+
   num categoryForTaxes = -1;
+  List<num> categoryForTaxesTreeIds = [];
+
   num categoryForInterest = -1;
+  List<num> categoryForInterestTreeIds = [];
+
   num categoryForRepairs = -1;
+  List<num> categoryForRepairsTreeIds = [];
+
   num categoryForMaintenance = -1;
+  List<num> categoryForMaintenanceTreeIds = [];
+
   num categoryForManagement = -1;
+  List<num> categoryForManagementTreeIds = [];
+
+  List<num> listOfCategoryIdsExpenses = [];
 
   String ownershipName1 = "";
   String ownershipName2 = "";
@@ -48,12 +62,31 @@ class Rental extends MoneyEntity {
     instance.purchasedPrice = MoneyEntity.fromRowColumnToDouble(row, "PurchasedPrice");
     instance.landValue = MoneyEntity.fromRowColumnToDouble(row, "LandValue");
     instance.estimatedValue = MoneyEntity.fromRowColumnToDouble(row, "EstimatedValue");
+
     instance.categoryForIncome = MoneyEntity.fromRowColumnToNumber(row, "CategoryForIncome");
+    instance.categoryForIncomeTreeIds = Categories.getTreeIds(instance.categoryForIncome);
+
     instance.categoryForTaxes = MoneyEntity.fromRowColumnToNumber(row, "CategoryForTaxes");
+    instance.categoryForTaxesTreeIds = Categories.getTreeIds(instance.categoryForTaxes);
+
     instance.categoryForInterest = MoneyEntity.fromRowColumnToNumber(row, "CategoryForInterest");
+    instance.categoryForInterestTreeIds = Categories.getTreeIds(instance.categoryForInterest);
+
     instance.categoryForRepairs = MoneyEntity.fromRowColumnToNumber(row, "CategoryForRepairs");
+    instance.categoryForRepairsTreeIds = Categories.getTreeIds(instance.categoryForRepairs);
+
     instance.categoryForMaintenance = MoneyEntity.fromRowColumnToNumber(row, "CategoryForMaintenance");
+    instance.categoryForMaintenanceTreeIds = Categories.getTreeIds(instance.categoryForMaintenance);
+
     instance.categoryForManagement = MoneyEntity.fromRowColumnToNumber(row, "CategoryForManagement");
+    instance.categoryForManagementTreeIds = Categories.getTreeIds(instance.categoryForManagement);
+
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForMaintenanceTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForManagementTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForRepairsTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForInterestTreeIds);
+
     instance.ownershipName1 = MoneyEntity.fromRowColumnToString(row, "OwnershipName1");
     instance.ownershipName2 = MoneyEntity.fromRowColumnToString(row, "OwnershipName2");
     instance.ownershipPercentage1 = MoneyEntity.fromRowColumnToDouble(row, "ownershipPercentage1");
@@ -116,32 +149,17 @@ class Rentals {
   }
 
   static cumulateTransactions(Rental rental) {
-    var listOfCategoryIdsToMatch = Categories.getTreeIds(rental.categoryForIncome);
-
-    var listOfCategoryIdsExpenses1 = Categories.getTreeIds(rental.categoryForMaintenance);
-    var listOfCategoryIdsExpenses2 = Categories.getTreeIds(rental.categoryForInterest);
-    var listOfCategoryIdsExpenses3 = Categories.getTreeIds(rental.categoryForManagement);
-    var listOfCategoryIdsExpenses4 = Categories.getTreeIds(rental.categoryForRepairs);
-    var listOfCategoryIdsExpenses5 = Categories.getTreeIds(rental.categoryForTaxes);
-
-    var listOfCategoryIdsExpenses = [];
-    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses1);
-    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses2);
-    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses3);
-    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses4);
-    listOfCategoryIdsExpenses.addAll(listOfCategoryIdsExpenses5);
-
     for (var t in Transactions.list) {
-      if (listOfCategoryIdsToMatch.contains(t.categoryId)) {
+      if (rental.categoryForIncomeTreeIds.contains(t.categoryId)) {
         rental.dateRange.inflate(t.dateTime);
         rental.count++;
         rental.revenue += t.amount;
       } else {
-        if (listOfCategoryIdsExpenses.contains(t.categoryId)) {
-          rental.dateRange.inflate(t.dateTime);
-          rental.count++;
-          rental.expense += t.amount;
-        }
+        // if (listOfCategoryIdsExpenses.contains(t.categoryId)) {
+        //   rental.dateRange.inflate(t.dateTime);
+        //   rental.count++;
+        //   rental.expense += t.amount;
+        // }
       }
     }
   }
