@@ -23,7 +23,7 @@ class Header extends StatelessWidget {
   }
 
   _buildWide(BuildContext context) {
-    return Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 5), child: Row(children: [CaptionAndCounter(caption: title, value: count), const Spacer(), Text(description, style: getTextTheme(context).caption)]));
+    return Padding(padding: const EdgeInsets.fromLTRB(0, 5, 0, 5), child: Row(children: [CaptionAndCounter(caption: title, value: count), const Spacer(), Text(description, style: getTextTheme(context).bodySmall)]));
   }
 
   _buildNarrow(BuildContext context) {

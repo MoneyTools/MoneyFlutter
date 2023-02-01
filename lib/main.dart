@@ -122,9 +122,9 @@ class _MyMoneyState extends State<MyMoney> {
     var textTheme = getTextTheme(context);
     return Expanded(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text("Welcome to MyMoney", textAlign: TextAlign.left, style: textTheme.headline5),
+      Text("Welcome to MyMoney", textAlign: TextAlign.left, style: textTheme.headlineSmall),
       const SizedBox(height: 40),
-      Text("No data loaded", textAlign: TextAlign.left, style: textTheme.caption),
+      Text("No data loaded", textAlign: TextAlign.left, style: textTheme.bodySmall),
       const SizedBox(height: 40),
       Wrap(
         spacing: 10,

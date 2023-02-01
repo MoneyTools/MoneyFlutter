@@ -20,16 +20,16 @@ class CaptionAndCounter extends StatelessWidget {
 
   Widget renderCaption(context) {
     if (small) {
-      return Text(caption, style: getTextTheme(context).button);
+      return Text(caption, style: getTextTheme(context).labelLarge);
     } else {
-      return Text(caption, style: getTextTheme(context).headline6);
+      return Text(caption, style: getTextTheme(context).titleLarge);
     }
   }
 
   Widget renderValue(context) {
     if (value is int) {
-      return Text(getIntAsText(value as int), style: getTextTheme(context).caption);
+      return Text(getIntAsText(value as int), style: getTextTheme(context).bodySmall);
     }
-    return Text(getCurrencyText(value as double), style: getTextTheme(context).caption);
+    return Text(getCurrencyText(value as double), style: getTextTheme(context).bodySmall);
   }
 }
