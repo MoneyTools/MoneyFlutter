@@ -187,7 +187,11 @@ class ViewRentalsState extends ViewWidgetState {
       list.add(CategoryValue(entry.name, entry.profit));
     }
 
-    return WidgetBarChart(list: list);
+    return WidgetBarChart(
+      list: list,
+      variableNameHorizontal: "Rental",
+      variableNameVertical: "Profit",
+    );
   }
 
   @override

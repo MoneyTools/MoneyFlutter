@@ -40,7 +40,12 @@ class ViewAccountsState extends ViewWidgetState {
       }
     }
 
-    return WidgetBarChart(key: Key(indices.toString()), list: list);
+    return WidgetBarChart(
+      key: Key(indices.toString()),
+      list: list,
+      variableNameHorizontal: "Account",
+      variableNameVertical: "Balance",
+    );
   }
 
   @override
