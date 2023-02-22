@@ -21,6 +21,7 @@ enum AccountFlags { none, budgeted, closed, raxDeferred }
 
 class Account extends MoneyEntity {
   int count = 0;
+  double openingBalance = 0.00;
   double balance = 0.00;
   int flags = 0;
   AccountType type = AccountType.checking;
@@ -134,6 +135,7 @@ class Accounts {
       var a = Account(id, name);
       a.flags = flags;
       a.type = AccountType.values[type];
+      a.openingBalance = double.parse(row["OpeningBalance"].toString());
 
       moneyObjects.addEntry(a);
     }
@@ -151,7 +153,7 @@ class Accounts {
     for (var item in moneyObjects.getAsList()) {
       var a = item as Account;
       a.count = 0;
-      a.balance = 0;
+      a.balance = a.openingBalance;
     }
 
     for (var t in Transactions.list) {
