@@ -20,7 +20,14 @@ class Transactions {
 
   static List<Transaction> list = [];
 
+  clear(){
+    list.clear();
+  }
+
   load(rows) async {
+
+    clear();
+
     runningBalance = 0.00;
 
     for (var row in rows) {
@@ -45,7 +52,10 @@ class Transactions {
   }
 
   loadDemoData() {
+    clear();
+
     runningBalance = 0;
+
     for (int i = 0; i <= 9999; i++) {
       double amount = getRandomAmount(i);
       runningBalance += amount;

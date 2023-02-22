@@ -132,6 +132,10 @@ class Categories {
     return list;
   }
 
+  clear(){
+    moneyObjects.clear();
+  }
+
   /*
       0 = "Id"
       1 = "ParentId"
@@ -145,6 +149,7 @@ class Categories {
       9 = "TaxRefNum"
    */
   load(rows) async {
+    clear();
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var name = row["Name"].toString();
@@ -157,6 +162,7 @@ class Categories {
   }
 
   loadDemoData() {
+    clear();
     moneyObjects.addEntry(Category(0, CategoryType.income, 'Paychecks'));
     moneyObjects.addEntry(Category(1, CategoryType.investment, 'Investment'));
     moneyObjects.addEntry(Category(2, CategoryType.income, 'Interests'));

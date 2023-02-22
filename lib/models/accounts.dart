@@ -100,6 +100,10 @@ class Accounts {
     return account.name;
   }
 
+  clear(){
+    moneyObjects.clear();
+  }
+
 /*
 0 = "Id"
 1 = "AccountId"
@@ -120,6 +124,7 @@ class Accounts {
 16 = "CategoryIdForInterest"
  */
   load(rows) async {
+    clear();
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var name = row["Name"].toString();
@@ -135,6 +140,7 @@ class Accounts {
   }
 
   loadDemoData() {
+    clear();
     List<String> names = ['BankOfAmerica', 'BECU', 'FirstTech', 'Fidelity', 'Bank of Japan', 'Trust Canada', 'ABC Corp', 'Royal Bank', 'Unicorn', 'God-Inc'];
     for (int i = 0; i < names.length; i++) {
       moneyObjects.addEntry(Account(i, names[i]));

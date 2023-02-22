@@ -67,7 +67,10 @@ class _MyMoneyState extends State<MyMoney> {
       settings.pathToDatabase = fileSelected.paths[0];
       if (settings.pathToDatabase != null) {
         settings.save();
-        loadData();
+        setState((){
+          _isLoading = true;
+          loadData();
+        });
       }
     }
   }
@@ -75,6 +78,9 @@ class _MyMoneyState extends State<MyMoney> {
   void handleFileClose() async {
     settings.pathToDatabase = null;
     settings.save();
+    data.close();
+    setState(() {
+    });
   }
 
   void handleUseDemoData() async {

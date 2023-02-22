@@ -30,6 +30,7 @@ class Data {
       categories.loadDemoData();
       payees.loadDemoData();
       rentals.loadDemoData();
+      splits.loadDemoData();
       transactions.loadDemoData();
     } else {
       try {
@@ -99,6 +100,14 @@ class Data {
     callbackWhenLoaded(true);
   }
 
+  close(){
+    accounts.clear();
+    categories.clear();
+    payees.clear();
+    rentals.clear();
+    splits.clear();
+    transactions.clear();
+  }
   Future<String?> validateDataBasePathIsValidAndExist(filePath) async {
     try {
       if (filePath != null) {

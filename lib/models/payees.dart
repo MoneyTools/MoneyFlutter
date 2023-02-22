@@ -15,7 +15,6 @@ class Payee extends MoneyEntity {
 class Payees {
   static MoneyObjects moneyObjects = MoneyObjects();
 
-  num runningBalance = 0;
 
   static Payee? get(id) {
     return moneyObjects.get(id) as Payee?;
@@ -25,9 +24,11 @@ class Payees {
     return moneyObjects.getNameFromId(id);
   }
 
+  clear(){
+    moneyObjects.clear();
+  }
   load(rows) async {
-    runningBalance = 0;
-
+    clear();
     /*
      */
     for (var row in rows) {
@@ -38,6 +39,8 @@ class Payees {
   }
 
   loadDemoData() {
+    clear();
+
     List<String> names = ['John', 'Paul', 'George', 'Ringo', 'Jean-Pierre', 'Chris', 'Bill', 'Steve', 'Sue', 'Barbara'];
     for (var i = 0; i < names.length; i++) {
       moneyObjects.addEntry(Payee(i, names[i]));

@@ -11,7 +11,6 @@ class Split extends MoneyEntity {
 }
 
 class Splits {
-  double runningBalance = 0.00;
 
   static List<Split> list = [];
 
@@ -19,9 +18,12 @@ class Splits {
     return list.where((item) => item.transactionId == transactionId);
   }
 
-  load(rows) async {
-    runningBalance = 0.00;
+  clear(){
+    list.clear();
+  }
 
+  load(rows) async {
+    clear();
     for (var row in rows) {
       var id = num.parse(row["Id"].toString());
       var transactionId = num.parse(row["Transaction"].toString());
@@ -36,6 +38,6 @@ class Splits {
   }
 
   loadDemoData() {
-    runningBalance = 0;
+    clear();
   }
 }

@@ -112,7 +112,13 @@ class Rentals {
     return found.name;
   }
 
+  clear(){
+    moneyObjects.clear();
+  }
+
   load(rows) async {
+    clear();
+
     for (var row in rows) {
       try {
         Rental instance = Rental.createInstanceFromRow(row);
@@ -124,6 +130,8 @@ class Rentals {
   }
 
   loadDemoData() {
+    clear();
+
     var instance = Rental(0, "AirBnB");
     instance.address = "One Washington DC";
     moneyObjects.addEntry(instance);

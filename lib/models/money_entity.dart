@@ -45,6 +45,10 @@ class MoneyObjects {
     return _list;
   }
 
+  clear(){
+    _list.clear();
+  }
+
   addEntry(MoneyEntity entry) {
     _list.add(entry);
     _map[entry.id] = entry;
