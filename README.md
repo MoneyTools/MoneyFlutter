@@ -1,16 +1,18 @@
-# money
+# myMoney - Flutter edition
 
-MoneyTools
+From the MoneyTools team
 
 ## Getting Started
 
 This is the Flutter version of MoneyTools
 
-A few resources to get you started if this is your first Flutter project:
+Build, Run the app and when stared tap/click "Use Demo Data"
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+This app builds and run on all platforms
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-
+* iOS
+* Android
+* MacOS
+* Windows
+* Web
+* Linux - (Not tested but should work)
