@@ -41,7 +41,7 @@ class MoneyObjects {
 //
   }
 
-  getAsList() {
+  List<MoneyEntity> getAsList() {
     return _list;
   }
 

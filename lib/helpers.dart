@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -63,9 +64,9 @@ String getIntAsText(int value) {
   return NumberFormat.decimalPattern().format(value);
 }
 
-String getCurrencyText(double value) {
-  final formatCurrency = NumberFormat("#,##0.00", "en_US");
-  return formatCurrency.format(value);
+String getCurrencyText(double amount) {
+  final formatCurrency = NumberFormat.simpleCurrency(locale: Platform.localeName);
+  return formatCurrency.format(amount);
 }
 
 String getNumberAsShorthandText(num value, {decimalDigits = 0, symbol = ''}) {

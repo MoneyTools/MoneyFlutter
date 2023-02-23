@@ -41,13 +41,13 @@ PreferredSizeWidget createAppBar(Settings settings, handleFileOpen, handleFileCl
           );
           l.add(
             PopupMenuItem(
-              value: Constants.commandTextScale_Increase,
+              value: Constants.commandTextScaleIncrease,
               child: renderIconAndText(const Icon(Icons.text_increase, color: Colors.grey), "Increase text size"),
             ),
           );
           l.add(
             PopupMenuItem(
-              value: Constants.commandTextScale_Decrease,
+              value: Constants.commandTextScaleDecrease,
               child: renderIconAndText(const Icon(Icons.text_decrease, color: Colors.grey), "Decrease text size"),
             ),
           );
@@ -74,9 +74,9 @@ void handleColorSelect(settings, onSettingsChanged, int value) {
     settings.materialVersion = 3;
   } else if (value == 2000) {
     settings.rentals = !settings.rentals;
-  } else if (value == Constants.commandTextScale_Increase) {
+  } else if (value == Constants.commandTextScaleIncrease) {
     settings.textScale = settings.textScale * 1.10;
-  } else if (value == Constants.commandTextScale_Decrease) {
+  } else if (value == Constants.commandTextScaleDecrease) {
     settings.textScale = settings.textScale * 0.9;
   } else {
     settings.colorSelected = value;

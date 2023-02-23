@@ -31,16 +31,16 @@ class ViewTransactions extends ViewWidget {
 
 class ViewTransactionsState extends ViewWidgetState {
   final styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
-  final List<Widget> options = [];
-  final List<bool> _selectedExpenseIncome = <bool>[false, false, true];
+  final List<Widget> pivots = [];
+  final List<bool> _selectedPivot = <bool>[false, false, true];
 
   @override
   void initState() {
     super.initState();
 
-    options.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
-    options.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
-    options.add(CaptionAndCounter(caption: "All", small: true, vertical: true, value: Transactions.list.length));
+    pivots.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
+    pivots.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
+    pivots.add(CaptionAndCounter(caption: "All", small: true, vertical: true, value: Transactions.list.length));
   }
 
   @override
@@ -76,17 +76,17 @@ class ViewTransactionsState extends ViewWidgetState {
   }
 
   isMatchingIncomeExpense(transaction) {
-    if (_selectedExpenseIncome[2]) {
+    if (_selectedPivot[2]) {
       return true;
     }
 
     // Expanses
-    if (_selectedExpenseIncome[1]) {
+    if (_selectedPivot[1]) {
       return transaction.amount < 0;
     }
 
     // Incomes
-    if (_selectedExpenseIncome[0]) {
+    if (_selectedPivot[0]) {
       transaction.amount > 0;
     }
   }
@@ -184,8 +184,8 @@ class ViewTransactionsState extends ViewWidgetState {
           direction: Axis.horizontal,
           onPressed: (int index) {
             setState(() {
-              for (int i = 0; i < _selectedExpenseIncome.length; i++) {
-                _selectedExpenseIncome[i] = i == index;
+              for (int i = 0; i < _selectedPivot.length; i++) {
+                _selectedPivot[i] = i == index;
               }
               list = getList();
             });
@@ -195,8 +195,8 @@ class ViewTransactionsState extends ViewWidgetState {
             minHeight: 40.0,
             minWidth: 100.0,
           ),
-          isSelected: _selectedExpenseIncome,
-          children: options,
+          isSelected: _selectedPivot,
+          children: pivots,
         ));
   }
 }

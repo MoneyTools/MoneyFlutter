@@ -38,6 +38,14 @@ class Account extends MoneyEntity {
     return !isClosed();
   }
 
+  matchType(List<AccountType> types) {
+    if (types.isEmpty) {
+      // All accounts except these
+      return type != AccountType._notUsed_7 && type != AccountType.categoryFund;
+    }
+    return types.contains(type);
+  }
+
   isBankAccount() {
     return type == AccountType.savings || type == AccountType.checking || type == AccountType.cash;
   }
@@ -81,12 +89,16 @@ class Account extends MoneyEntity {
 class Accounts {
   static MoneyObjects moneyObjects = MoneyObjects();
 
-  static getOpenAccounts() {
-    return moneyObjects.getAsList().where((moneyEntity) => activeBankAccount(moneyEntity)).toList();
+  static List<MoneyEntity> getOpenAccounts() {
+    return moneyObjects.getAsList().where((moneyEntity) => activeBankAccount(moneyEntity as Account)).toList();
   }
 
   static bool activeBankAccount(Account element) {
     return element.isActiveBankAccount();
+  }
+
+  static List<MoneyEntity> activeAccount(List<AccountType> types, {bool? isActive = true}) {
+    return moneyObjects.getAsList().where((x) => (x as Account).isActive() == isActive && x.matchType(types)).toList();
   }
 
   static Account? get(id) {

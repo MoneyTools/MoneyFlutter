@@ -112,11 +112,11 @@ class Rentals {
     return found.name;
   }
 
-  clear() {
+  void clear() {
     moneyObjects.clear();
   }
 
-  load(rows) async {
+  load(rows) {
     clear();
 
     for (var row in rows) {
@@ -129,7 +129,7 @@ class Rentals {
     }
   }
 
-  loadDemoData() {
+  void loadDemoData() {
     clear();
 
     var instance = Rental(0, "AirBnB");
@@ -148,11 +148,11 @@ class Rentals {
       // expense is a negative number so we just do a Revenue + Expense
       rental.profit = rental.revenue + rental.expense;
 
-      allUnits.forEach((unit) {
-        if (unit.building == rental.id.toString()) {
+      for (var unit in allUnits) {
+        if ((unit as RentUnit).building == rental.id.toString()) {
           rental.units.add(unit);
         }
-      });
+      }
     }
   }
 
