@@ -85,6 +85,7 @@ class ViewAccountsState extends ViewWidgetState {
         key: Key(account.id.toString()),
         filter: (t) => filterByAccountId(t, account.id),
         preference: preferenceJustTableDatePayeeCategoryAmountBalance,
+        startingBalance: account.openingBalance,
       );
     }
     return const Text("No account transactions");
@@ -181,6 +182,7 @@ class ViewAccountsState extends ViewWidgetState {
                 _selectedPivot[i] = i == index;
               }
               list = getList();
+              selectedItems.clear();
             });
           },
           borderRadius: const BorderRadius.all(Radius.circular(8)),

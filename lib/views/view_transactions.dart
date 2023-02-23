@@ -23,7 +23,9 @@ const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance =
     ViewWidgetToDisplay(showTitle: false, showBottom: false, expandAndPadding: false, columnsToInclude: [columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
 
 class ViewTransactions extends ViewWidget {
-  const ViewTransactions({super.key, super.filter, super.preference = preferenceFullView});
+  final double startingBalance;
+
+  const ViewTransactions({super.key, super.filter, super.preference = preferenceFullView, this.startingBalance = 0.00});
 
   @override
   State<ViewWidget> createState() => ViewTransactionsState();
@@ -37,6 +39,8 @@ class ViewTransactionsState extends ViewWidgetState {
   @override
   void initState() {
     super.initState();
+
+    super.sortAscending = false;
 
     pivots.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
     pivots.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
@@ -68,11 +72,16 @@ class ViewTransactionsState extends ViewWidgetState {
 
   @override
   getList() {
-    return getFilteredList();
-  }
+    var list = Transactions.list.where((transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
 
-  getFilteredList() {
-    return Transactions.list.where((transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
+    list.sort((a, b) => sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+
+    var runningBalance = 0.0;
+    for (var transaction in list) {
+      runningBalance += transaction.amount;
+      transaction.balance = runningBalance;
+    }
+    return list;
   }
 
   isMatchingIncomeExpense(transaction) {
@@ -80,14 +89,14 @@ class ViewTransactionsState extends ViewWidgetState {
       return true;
     }
 
-    // Expanses
+    // Expenses
     if (_selectedPivot[1]) {
       return transaction.amount < 0;
     }
 
     // Incomes
     if (_selectedPivot[0]) {
-      transaction.amount > 0;
+      return transaction.amount > 0;
     }
   }
 
@@ -173,7 +182,16 @@ class ViewTransactionsState extends ViewWidgetState {
 
   @override
   getDefaultSortColumn() {
-    return 1; // Sort By Date
+    // We want to default to sort by Date on startup
+    // regardless of where the "Data Column" is
+    var columnIndex = 0;
+    for (var columnId in widget.preference.columnsToInclude) {
+      if (columnId == columnIdDate) {
+        return columnIndex;
+      }
+      columnIndex++;
+    }
+    return columnIndex;
   }
 
   renderToggles() {
