@@ -15,6 +15,9 @@ class Constants {
   static const colorIncome = Color(0xaa4b6735);
   static const colorExpense = Color(0xaa813e3e);
   static const colorNet = Color(0xaa5c8aab);
+
+  static const commandTextScale_Increase = 3000;
+  static const commandTextScale_Decrease = 3001;
 }
 
 const indexOfDefaultColor = 1; // Blue
@@ -44,3 +47,4 @@ const prefMaterialVersion = 'themeMaterialVersion';
 const prefColor = 'themeColor';
 const prefDarkMode = 'themeDarkMode';
 const prefRentals = 'rentals';
+const prefTextScale = 'textScale';

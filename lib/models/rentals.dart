@@ -112,7 +112,7 @@ class Rentals {
     return found.name;
   }
 
-  clear(){
+  clear() {
     moneyObjects.clear();
   }
 

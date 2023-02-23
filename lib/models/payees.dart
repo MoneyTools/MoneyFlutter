@@ -15,7 +15,6 @@ class Payee extends MoneyEntity {
 class Payees {
   static MoneyObjects moneyObjects = MoneyObjects();
 
-
   static Payee? get(id) {
     return moneyObjects.get(id) as Payee?;
   }
@@ -24,9 +23,10 @@ class Payees {
     return moneyObjects.getNameFromId(id);
   }
 
-  clear(){
+  clear() {
     moneyObjects.clear();
   }
+
   load(rows) async {
     clear();
     /*

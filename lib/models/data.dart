@@ -100,7 +100,7 @@ class Data {
     callbackWhenLoaded(true);
   }
 
-  close(){
+  close() {
     accounts.clear();
     categories.clear();
     payees.clear();
@@ -108,6 +108,7 @@ class Data {
     splits.clear();
     transactions.clear();
   }
+
   Future<String?> validateDataBasePathIsValidAndExist(filePath) async {
     try {
       if (filePath != null) {

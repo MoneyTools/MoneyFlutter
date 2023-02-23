@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money/widgets/widgets.dart';
 import 'models/constants.dart';
+import 'models/settings.dart';
 
-PreferredSizeWidget createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged) {
+PreferredSizeWidget createAppBar(Settings settings, handleFileOpen, handleFileClose, onSettingsChanged) {
   return AppBar(
     title: widgetMainTitle(settings, handleFileOpen, handleFileClose),
     actions: [
@@ -38,6 +39,18 @@ PreferredSizeWidget createAppBar(settings, handleFileOpen, handleFileClose, onSe
               child: renderIconAndText(Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Rentals"),
             ),
           );
+          l.add(
+            PopupMenuItem(
+              value: Constants.commandTextScale_Increase,
+              child: renderIconAndText(const Icon(Icons.text_increase, color: Colors.grey), "Increase text size"),
+            ),
+          );
+          l.add(
+            PopupMenuItem(
+              value: Constants.commandTextScale_Decrease,
+              child: renderIconAndText(const Icon(Icons.text_decrease, color: Colors.grey), "Decrease text size"),
+            ),
+          );
           return l;
         },
         onSelected: (value) {
@@ -61,6 +74,10 @@ void handleColorSelect(settings, onSettingsChanged, int value) {
     settings.materialVersion = 3;
   } else if (value == 2000) {
     settings.rentals = !settings.rentals;
+  } else if (value == Constants.commandTextScale_Increase) {
+    settings.textScale = settings.textScale * 1.10;
+  } else if (value == Constants.commandTextScale_Decrease) {
+    settings.textScale = settings.textScale * 0.9;
   } else {
     settings.colorSelected = value;
   }

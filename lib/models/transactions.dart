@@ -20,12 +20,11 @@ class Transactions {
 
   static List<Transaction> list = [];
 
-  clear(){
+  clear() {
     list.clear();
   }
 
   load(rows) async {
-
     clear();
 
     runningBalance = 0.00;

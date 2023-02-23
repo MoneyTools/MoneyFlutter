@@ -45,7 +45,7 @@ class MoneyObjects {
     return _list;
   }
 
-  clear(){
+  clear() {
     _list.clear();
   }
 

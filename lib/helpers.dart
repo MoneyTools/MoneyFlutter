@@ -21,6 +21,13 @@ intValueOrDefault(int? value, {int defaultValueIfNull = 0}) {
   return value;
 }
 
+doubleValueOrDefault(double? value, {double defaultValueIfNull = 0}) {
+  if (value == null) {
+    return defaultValueIfNull;
+  }
+  return value;
+}
+
 boolValueOrDefault(bool? value, {bool defaultValueIfNull = false}) {
   if (value == null) {
     return defaultValueIfNull;

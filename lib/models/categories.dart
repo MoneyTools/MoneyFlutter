@@ -132,7 +132,7 @@ class Categories {
     return list;
   }
 
-  clear(){
+  clear() {
     moneyObjects.clear();
   }
 

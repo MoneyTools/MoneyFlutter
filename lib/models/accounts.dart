@@ -101,7 +101,7 @@ class Accounts {
     return account.name;
   }
 
-  clear(){
+  clear() {
     moneyObjects.clear();
   }
 

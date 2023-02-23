@@ -11,14 +11,13 @@ class Split extends MoneyEntity {
 }
 
 class Splits {
-
   static List<Split> list = [];
 
   static get(transactionId) {
     return list.where((item) => item.transactionId == transactionId);
   }
 
-  clear(){
+  clear() {
     list.clear();
   }
 

@@ -67,7 +67,7 @@ class _MyMoneyState extends State<MyMoney> {
       settings.pathToDatabase = fileSelected.paths[0];
       if (settings.pathToDatabase != null) {
         settings.save();
-        setState((){
+        setState(() {
           _isLoading = true;
           loadData();
         });
@@ -79,8 +79,7 @@ class _MyMoneyState extends State<MyMoney> {
     settings.pathToDatabase = null;
     settings.save();
     data.close();
-    setState(() {
-    });
+    setState(() {});
   }
 
   void handleUseDemoData() async {
@@ -146,19 +145,27 @@ class _MyMoneyState extends State<MyMoney> {
         title: 'MyMoney',
         theme: settings.getThemeData(),
         home: LayoutBuilder(builder: (context, constraints) {
-          if (shouldShowOpenInstructions()) {
-            return welcomePanel(context);
-          }
-          if (_isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (isSmallWidth(constraints)) {
-              return getScaffoldingForSmallSurface(context);
-            } else {
-              return getScaffoldingForLargeSurface(context);
-            }
-          }
+          final MediaQueryData data = MediaQuery.of(context);
+          return MediaQuery(
+            data: data.copyWith(textScaleFactor: data.textScaleFactor * settings.textScale),
+            child: getContent(context, constraints),
+          );
         }));
+  }
+
+  Widget getContent(context, constraints) {
+    if (shouldShowOpenInstructions()) {
+      return welcomePanel(context);
+    }
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      if (isSmallWidth(constraints)) {
+        return getScaffoldingForSmallSurface(context);
+      } else {
+        return getScaffoldingForLargeSurface(context);
+      }
+    }
   }
 
   getScaffoldingForSmallSurface(context) {
@@ -191,7 +198,7 @@ class _MyMoneyState extends State<MyMoney> {
     );
   }
 
-  onSettingsChanged(settings) {
+  onSettingsChanged(Settings settings) {
     setState(() {
       this.settings = settings;
     });
