@@ -1,3 +1,5 @@
+This is the readonly flutter edition of the MyMoney.net app
+
 # myMoney - Flutter edition
 
 From the MoneyTools team
