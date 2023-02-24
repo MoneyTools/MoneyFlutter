@@ -36,6 +36,8 @@ class ViewTransactionsState extends ViewWidgetState {
   final List<Widget> pivots = [];
   final List<bool> _selectedPivot = <bool>[false, false, true];
 
+  bool balanceDone = false;
+
   @override
   void initState() {
     super.initState();
@@ -74,12 +76,15 @@ class ViewTransactionsState extends ViewWidgetState {
   getList() {
     var list = Transactions.list.where((transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
 
-    list.sort((a, b) => sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+    if(!balanceDone) {
+      list.sort((a, b) => sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
 
-    var runningBalance = 0.0;
-    for (var transaction in list) {
-      runningBalance += transaction.amount;
-      transaction.balance = runningBalance;
+      var runningBalance = 0.0;
+      for (var transaction in list) {
+        runningBalance += transaction.amount;
+        transaction.balance = runningBalance;
+      }
+      balanceDone = true;
     }
     return list;
   }
