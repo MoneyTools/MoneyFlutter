@@ -36,7 +36,8 @@ boolValueOrDefault(bool? value, {bool defaultValueIfNull = false}) {
   return value;
 }
 
-bool isSmallWidth(BoxConstraints constraints, {num minWidth = Constants.narrowScreenWidthThreshold}) {
+bool isSmallWidth(BoxConstraints constraints,
+    {num minWidth = Constants.narrowScreenWidthThreshold}) {
   if (constraints.maxWidth < minWidth) {
     return true;
   }
@@ -65,14 +66,15 @@ String getIntAsText(int value) {
 }
 
 String getCurrencyText(double amount) {
-  final formatCurrency = NumberFormat.simpleCurrency(locale: Platform.localeName);
+  final formatCurrency = NumberFormat.simpleCurrency();
   return formatCurrency.format(amount);
 }
 
 String getNumberAsShorthandText(num value, {decimalDigits = 0, symbol = ''}) {
   return NumberFormat.compactCurrency(
     decimalDigits: decimalDigits,
-    symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
+    symbol:
+        symbol, // if you want to add currency symbol then pass that in this else leave it empty.
   ).format(value);
 }
 
@@ -125,5 +127,7 @@ void debugLog(message) {
 }
 
 Widget getViewExpandAndPadding(child) {
-  return Expanded(child: Padding(padding: const EdgeInsets.fromLTRB(8, 0, 8, 0), child: child));
+  return Expanded(
+      child: Padding(
+          padding: const EdgeInsets.fromLTRB(8, 0, 8, 0), child: child));
 }
