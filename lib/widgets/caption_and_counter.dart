@@ -7,7 +7,13 @@ class CaptionAndCounter extends StatelessWidget {
   final bool small;
   final bool vertical;
 
-  const CaptionAndCounter({Key? key, this.caption = "", this.value = 0, this.small = false, this.vertical = false}) : super(key: key);
+  const CaptionAndCounter(
+      {Key? key,
+      this.caption = "",
+      this.value = 0,
+      this.small = false,
+      this.vertical = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,21 +21,27 @@ class CaptionAndCounter extends StatelessWidget {
       return Column(children: [renderCaption(context), renderValue(context)]);
     }
 
-    return Row(children: [renderCaption(context), const SizedBox(width: 10), renderValue(context)]);
+    return Row(children: [
+      renderCaption(context),
+      const SizedBox(width: 10),
+      renderValue(context)
+    ]);
   }
 
   Widget renderCaption(context) {
     if (small) {
-      return Text(caption, style: getTextTheme(context).labelLarge);
+      return SelectableText(caption, style: getTextTheme(context).labelLarge);
     } else {
-      return Text(caption, style: getTextTheme(context).titleLarge);
+      return SelectableText(caption, style: getTextTheme(context).titleLarge);
     }
   }
 
   Widget renderValue(context) {
     if (value is int) {
-      return Text(getIntAsText(value as int), style: getTextTheme(context).bodySmall);
+      return Text(getIntAsText(value as int),
+          style: getTextTheme(context).bodySmall);
     }
-    return Text(getCurrencyText(value as double), style: getTextTheme(context).bodySmall);
+    return Text(getCurrencyText(value as double),
+        style: getTextTheme(context).bodySmall);
   }
 }

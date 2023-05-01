@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <!--
       If you are serving your web app in a path other than the root, change the
@@ -24,6 +24,8 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-title" content="myMoney">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="apple-touch-icon" href="icons/Icon-192.png">
 
     <!-- Favicon -->
@@ -36,53 +38,11 @@
         // The value below is injected by flutter build, do not touch.
         var serviceWorkerVersion = null;
     </script>
-
-    <style>
-        .center {
-            margin: auto;
-            width: 50%;
-            padding: 100px;
-            text-align: center;
-        }
-
-        .loader {
-            margin: auto;
-            text-align: center;
-            border: 8px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 8px solid #3498db;
-            width: 40px;
-            height: 40px;
-            -webkit-animation: spin 2s linear infinite; /* Safari */
-            animation: spin 2s linear infinite;
-        }
-
-        /* Safari */
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-    </style>
-
-    <!-- adds the flutter initialization JS code -->
-    <script src="flutter.js" defer></script>
-
 </head>
+
 <body>
-<div class="center" style="font-family: Arial, sans-serif; color:#3498db;">
+
+<div style="margin: auto;width: 50%; padding-top: 100px; text-align: center;font-family: Arial, sans-serif; color:#3498db;">
     <div style="font-size: 36px;">
         MyMoney
     </div>
@@ -93,6 +53,10 @@
     window.addEventListener('load', function (_ev) {
 
         document.body.style = null;
+        var metaTag = document.createElement('meta');
+        metaTag.name = "viewport"
+        metaTag.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0"
+        document.getElementsByTagName('head')[0].appendChild(metaTag);
 
         // Download main.dart.js
         _flutter.loader.loadEntrypoint({
@@ -102,9 +66,17 @@
         }).then(function (engineInitializer) {
             return engineInitializer.initializeEngine();
         }).then(function (appRunner) {
+            var metaTag = document.createElement('meta');
+            metaTag.name = "viewport"
+            metaTag.content = "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1.0"
+            document.getElementsByTagName('head')[0].appendChild(metaTag);
             return appRunner.runApp();
         });
     });
 </script>
+
+<!-- adds the flutter initialization JS code -->
+<script type="application/javascript" src="https://money.vteam.com/main.dart.js"></script>
+<script src="flutter.js" defer></script>
 </body>
 </html>
