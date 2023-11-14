@@ -1,4 +1,5 @@
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_cashflow.dart';
@@ -62,15 +63,37 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void handleFileOpen() async {
-    FilePickerResult? fileSelected = await FilePicker.platform.pickFiles();
-    if (fileSelected != null) {
-      settings.pathToDatabase = fileSelected.paths[0];
-      if (settings.pathToDatabase != null) {
-        settings.save();
-        setState(() {
-          _isLoading = true;
+    FilePickerResult? pickerResult;
+
+    try {
+      pickerResult = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
+      );
+    } catch (e) {
+      debugLog(e);
+    }
+
+    if (pickerResult != null) {
+      try {
+        if (kIsWeb) {
+          settings.pathToDatabase = pickerResult.files.single.path;
+
+          Uint8List? file = pickerResult.files.single.bytes;
+          if (file != null) {
+            // String s = String.fromCharCodes(file);
+            // var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
+            // debugLog("--------$s");
+          }
+        } else {
+          settings.pathToDatabase = pickerResult.files.single.path;
+        }
+        if (settings.pathToDatabase != null) {
+          settings.save();
           loadData();
-        });
+        }
+      } catch (e) {
+        debugLog(e);
       }
     }
   }
