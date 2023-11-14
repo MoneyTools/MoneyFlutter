@@ -76,7 +76,7 @@ class ViewTransactionsState extends ViewWidgetState {
   getList() {
     var list = Transactions.list.where((transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
 
-    if(!balanceDone) {
+    if (!balanceDone) {
       list.sort((a, b) => sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
 
       var runningBalance = 0.0;

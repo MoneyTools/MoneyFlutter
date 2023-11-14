@@ -19,12 +19,12 @@ class DummyHostingApp extends StatefulWidget {
 class DummyHostingAppState extends State<DummyHostingApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: SizedBox(
         height: 500,
         width: 500,
         child: Column(
-          children: const [
+          children: [
             ViewCashFlow(),
           ],
         ),

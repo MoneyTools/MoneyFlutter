@@ -41,27 +41,28 @@ class WidgetBarChart extends StatelessWidget {
           width: w,
           height: h,
           child: Chart(
-              data: data,
-              variables: {
-                variableNameHorizontal: Variable(accessor: (Map map) => map[variableNameHorizontal] as String),
-                variableNameVertical: Variable(accessor: (Map map) => map[variableNameVertical] as num, scale: LinearScale(formatter: (v) => getNumberAsShorthandText(v))),
-              },
-              elements: [IntervalElement()],
-              axes: [
-                Defaults.horizontalAxis,
-                Defaults.verticalAxis,
-              ],
-              selections: {
-                'touchMove': PointSelection(
-                  on: {GestureType.scaleUpdate, GestureType.tapDown, GestureType.longPressMoveUpdate},
-                  dim: Dim.x,
-                )
-              },
-              tooltip: TooltipGuide(
-                followPointer: [false, true],
-                align: Alignment.topLeft,
-                offset: const Offset(-20, -20),
-              ))),
+            data: data,
+            marks: [IntervalMark()],
+            variables: {
+              variableNameHorizontal: Variable(accessor: (Map map) => map[variableNameHorizontal] as String),
+              variableNameVertical: Variable(accessor: (Map map) => map[variableNameVertical] as num, scale: LinearScale(formatter: (v) => getNumberAsShorthandText(v))),
+            },
+            axes: [
+              Defaults.horizontalAxis,
+              Defaults.verticalAxis,
+            ],
+            selections: {
+              'touchMove': PointSelection(
+                on: {GestureType.scaleUpdate, GestureType.tapDown, GestureType.longPressMoveUpdate},
+                dim: Dim.x,
+              )
+            },
+            tooltip: TooltipGuide(
+              followPointer: [false, true],
+              align: Alignment.topLeft,
+              offset: const Offset(-20, -20),
+            ),
+          )),
     );
   }
 }
