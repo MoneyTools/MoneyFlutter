@@ -8,12 +8,12 @@ class CaptionAndCounter extends StatelessWidget {
   final bool vertical;
 
   const CaptionAndCounter({
-    Key? key,
+    super.key,
     this.caption = "",
     this.value = 0,
     this.small = false,
     this.vertical = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
