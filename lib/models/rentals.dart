@@ -47,9 +47,7 @@ class Rental extends MoneyEntity {
 
   DateRange dateRange = DateRange();
 
-  Rental(id, name) : super(id, name) {
-    //
-  }
+  Rental(super.id, super.name);
 
   static Rental createInstanceFromRow(row) {
     var id = MoneyEntity.fromRowColumnToNumber(row, "Id");
@@ -180,9 +178,7 @@ class RentUnit extends MoneyEntity {
   String renter = "";
   String note = "";
 
-  RentUnit(id, name) : super(id, name) {
-    //
-  }
+  RentUnit(super.id, super.name);
 }
 
 class RentUnits {

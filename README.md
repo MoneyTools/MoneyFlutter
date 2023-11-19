@@ -18,3 +18,12 @@ This app builds and run on all platforms
 * Windows
 * Web
 * Linux - (Not tested but should work)
+
+
+# Code Style
+## lines are using 222 column instead of the limiting 80
+Ensure your code is formated corrrectly by running this CLI before committing changes
+
+```bash
+dart format . -l 222
+```

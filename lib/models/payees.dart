@@ -7,9 +7,7 @@ class Payee extends MoneyEntity {
   double amount = 0.00;
   double balance = 0.00;
 
-  Payee(id, name) : super(id, name) {
-    //
-  }
+  Payee(super.id, super.name);
 }
 
 class Payees {

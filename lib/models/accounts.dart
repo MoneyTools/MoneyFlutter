@@ -26,9 +26,7 @@ class Account extends MoneyEntity {
   int flags = 0;
   AccountType type = AccountType.checking;
 
-  Account(id, name) : super(id, name) {
-    //
-  }
+  Account(super.id, super.name);
 
   isClosed() {
     return (flags & AccountFlags.closed.index) != 0;
