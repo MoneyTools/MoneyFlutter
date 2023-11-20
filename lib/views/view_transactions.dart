@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
 import 'package:money/models/categories.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/header.dart';
+import 'package:money/widgets/widget_bar_chart.dart';
 
 import '../models/accounts.dart';
 import '../models/payees.dart';
@@ -221,5 +223,38 @@ class ViewTransactionsState extends ViewWidgetState {
           isSelected: _selectedPivot,
           children: pivots,
         ));
+  }
+
+  @override
+  getSubViewContentForChart(List<int> indices) {
+    Map<String, num> tallyPerMonths = {};
+
+    final timePeriod = DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);
+
+    getList().forEach((Transaction transaction) {
+      if (timePeriod.isBetweenEqual(transaction.dateTime)) {
+        DateTime date = transaction.dateTime;
+        num value = transaction.amount;
+
+        // Format the date as year-month string (e.g., '2023-11')
+        String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
+
+        // Update the map or add a new entry
+        tallyPerMonths.update(yearMonth, (total) => total + value, ifAbsent: () => value);
+      }
+    });
+
+    final List<CategoryValue> list = [];
+    tallyPerMonths.forEach((key, value) {
+      list.add(CategoryValue(key, value));
+    });
+
+    list.sort((a, b) => a.category.compareTo(b.category));
+
+    return WidgetBarChart(
+      list: list,
+      variableNameHorizontal: 'Month',
+      variableNameVertical: 'Transactions',
+    );
   }
 }
