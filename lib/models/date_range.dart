@@ -38,12 +38,7 @@ class DateRange {
   }
 
   toStringYears() {
-    return yearToString(min) +
-        ' - ' +
-        yearToString(max) +
-        ' (' +
-        durationInYears().toString() +
-        ')';
+    return yearToString(min) + ' - ' + yearToString(max) + ' (' + durationInYears().toString() + ')';
   }
 
   dateToString(DateTime? dateTime) {

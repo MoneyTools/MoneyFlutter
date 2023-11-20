@@ -48,7 +48,7 @@ class _MyMoneyState extends State<MyMoney> {
 
   loadData() {
     data.init(settings.pathToDatabase, (success) {
-      _isLoading = success ? false : true;
+      _isLoading = false;
       setState(() {
         _isLoading;
         data;
