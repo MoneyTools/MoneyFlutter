@@ -9,7 +9,7 @@ class CaptionAndCounter extends StatelessWidget {
 
   const CaptionAndCounter({
     super.key,
-    this.caption = "",
+    this.caption = '',
     this.value = 0,
     this.small = false,
     this.vertical = false,

@@ -109,7 +109,7 @@ class ViewCashFlowState extends ViewWidgetState {
     return getViewExpandAndPadding(
       Column(
         children: [
-          Header("Cash Flow", totalIncomes + totalExpenses, "See where assets are allocated."),
+          Header('Cash Flow', totalIncomes + totalExpenses, 'See where assets are allocated.'),
           Expanded(child: ScrollBothWay(child: getView(context))),
         ],
       ),

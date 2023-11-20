@@ -81,31 +81,31 @@ List<NavigationDestination> getAppBarDestinations(settings) {
   List<NavigationDestination> appBarDestinations = [
     const NavigationDestination(
       label: 'Cash Flow',
-      tooltip: "Cash Flow",
+      tooltip: 'Cash Flow',
       icon: Icon(Icons.analytics_outlined),
       selectedIcon: Icon(Icons.analytics),
     ),
     const NavigationDestination(
       label: 'Accounts',
-      tooltip: "Accounts",
+      tooltip: 'Accounts',
       icon: Icon(Icons.account_balance_outlined),
       selectedIcon: Icon(Icons.account_balance),
     ),
     const NavigationDestination(
       label: 'Categories',
-      tooltip: "Categories",
+      tooltip: 'Categories',
       icon: Icon(Icons.type_specimen_outlined),
       selectedIcon: Icon(Icons.type_specimen),
     ),
     const NavigationDestination(
       label: 'Payees',
-      tooltip: "Payees",
+      tooltip: 'Payees',
       icon: Icon(Icons.groups_outlined),
       selectedIcon: Icon(Icons.groups),
     ),
     const NavigationDestination(
       label: 'Transactions',
-      tooltip: "Transactions",
+      tooltip: 'Transactions',
       icon: Icon(Icons.receipt_long_outlined),
       selectedIcon: Icon(Icons.receipt_long),
     )
@@ -113,7 +113,7 @@ List<NavigationDestination> getAppBarDestinations(settings) {
   if (settings.rentals) {
     appBarDestinations.add(const NavigationDestination(
       label: 'Rentals',
-      tooltip: "Rentals",
+      tooltip: 'Rentals',
       icon: Icon(Icons.location_city_outlined),
       selectedIcon: Icon(Icons.location_city),
     ));

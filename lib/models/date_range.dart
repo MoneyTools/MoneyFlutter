@@ -36,16 +36,16 @@ class DateRange {
 
   @override
   toString() {
-    return dateToString(min) + " : " + dateToString(max);
+    return dateToString(min) + ' : ' + dateToString(max);
   }
 
   toStringYears() {
-    return yearToString(min) + " - " + yearToString(max) + " (" + durationInYears().toString() + ")";
+    return yearToString(min) + ' - ' + yearToString(max) + ' (' + durationInYears().toString() + ')';
   }
 
   dateToString(DateTime? dateTime) {
     if (dateTime == null) {
-      return "____-__-__";
+      return '____-__-__';
     }
 
     return dateTime.toIso8601String();
@@ -53,7 +53,7 @@ class DateRange {
 
   yearToString(DateTime? dateTime) {
     if (dateTime == null) {
-      return "____";
+      return '____';
     }
 
     return dateTime.year.toString();

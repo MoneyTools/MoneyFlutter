@@ -55,32 +55,32 @@ class Account extends MoneyEntity {
   getTypeAsText() {
     switch (type) {
       case AccountType.savings:
-        return "Savings";
+        return 'Savings';
       case AccountType.checking:
-        return "Checking";
+        return 'Checking';
       case AccountType.moneyMarket:
-        return "MoneyMarket";
+        return 'MoneyMarket';
       case AccountType.cash:
-        return "Cash";
+        return 'Cash';
       case AccountType.credit:
-        return "Credit";
+        return 'Credit';
       case AccountType.investment:
-        return "Investment";
+        return 'Investment';
       case AccountType.retirement:
-        return "Retirement";
+        return 'Retirement';
       case AccountType.asset:
-        return "Asset";
+        return 'Asset';
       case AccountType.categoryFund:
-        return "CategoryFund";
+        return 'CategoryFund';
       case AccountType.loan:
-        return "Loan";
+        return 'Loan';
       case AccountType.creditLine:
-        return "CreditLine";
+        return 'CreditLine';
       default:
         break;
     }
 
-    return "other $type";
+    return 'other $type';
   }
 }
 
@@ -137,15 +137,15 @@ class Accounts {
   load(rows) async {
     clear();
     for (var row in rows) {
-      var id = num.parse(row["Id"].toString());
-      var name = row["Name"].toString();
-      var flags = int.parse(row["Flags"].toString());
-      var type = int.parse(row["Type"].toString());
+      var id = num.parse(row['Id'].toString());
+      var name = row['Name'].toString();
+      var flags = int.parse(row['Flags'].toString());
+      var type = int.parse(row['Type'].toString());
 
       var a = Account(id, name);
       a.flags = flags;
       a.type = AccountType.values[type];
-      a.openingBalance = double.parse(row["OpeningBalance"].toString());
+      a.openingBalance = double.parse(row['OpeningBalance'].toString());
 
       moneyObjects.addEntry(a);
     }

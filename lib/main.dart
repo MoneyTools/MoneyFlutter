@@ -150,13 +150,13 @@ class _MyMoneyState extends State<MyMoney> {
     var textTheme = getTextTheme(context);
     return Expanded(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-      Text("Welcome to MyMoney", textAlign: TextAlign.left, style: textTheme.headlineSmall),
+      Text('Welcome to MyMoney', textAlign: TextAlign.left, style: textTheme.headlineSmall),
       const SizedBox(height: 40),
-      Text("No data loaded", textAlign: TextAlign.left, style: textTheme.bodySmall),
+      Text('No data loaded', textAlign: TextAlign.left, style: textTheme.bodySmall),
       const SizedBox(height: 40),
       Wrap(
         spacing: 10,
-        children: [OutlinedButton(onPressed: handleFileOpen, child: const Text("Open File ...")), OutlinedButton(onPressed: handleUseDemoData, child: const Text("Use Demo Data"))],
+        children: [OutlinedButton(onPressed: handleFileOpen, child: const Text('Open File ...')), OutlinedButton(onPressed: handleUseDemoData, child: const Text('Use Demo Data'))],
       ),
     ]));
   }

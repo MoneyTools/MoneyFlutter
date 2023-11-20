@@ -112,6 +112,7 @@ extension Range on num {
   }
 }
 
+/// return the inverted color
 Color invertColor(Color color) {
   final r = 255 - color.red;
   final g = 255 - color.green;

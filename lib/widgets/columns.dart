@@ -11,7 +11,7 @@ enum ColumnType {
 }
 
 class ColumnDefinition {
-  String name = "";
+  String name = '';
   TextAlign align = TextAlign.center;
   Function? getFieldValue;
   Function? sorting;

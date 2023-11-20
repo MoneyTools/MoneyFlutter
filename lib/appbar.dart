@@ -12,7 +12,7 @@ PreferredSizeWidget createAppBar(Settings settings, handleFileOpen, handleFileCl
         onPressed: () {
           handleLightDarkModeChanged(settings, onSettingsChanged);
         },
-        tooltip: "Toggle brightness",
+        tooltip: 'Toggle brightness',
       ),
       PopupMenuButton(
         icon: const Icon(Icons.more_vert),
@@ -24,31 +24,31 @@ PreferredSizeWidget createAppBar(Settings settings, handleFileOpen, handleFileCl
           l.add(
             PopupMenuItem(
               value: 1002,
-              child: renderIconAndText(Icon(settings.materialVersion == 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V2"),
+              child: renderIconAndText(Icon(settings.materialVersion == 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), 'Material V2'),
             ),
           );
           l.add(
             PopupMenuItem(
               value: 1003,
-              child: renderIconAndText(Icon(settings.materialVersion != 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Material V3"),
+              child: renderIconAndText(Icon(settings.materialVersion != 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), 'Material V3'),
             ),
           );
           l.add(
             PopupMenuItem(
               value: 2000,
-              child: renderIconAndText(Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), "Rentals"),
+              child: renderIconAndText(Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), 'Rentals'),
             ),
           );
           l.add(
             PopupMenuItem(
               value: Constants.commandTextScaleIncrease,
-              child: renderIconAndText(const Icon(Icons.text_increase, color: Colors.grey), "Increase text size"),
+              child: renderIconAndText(const Icon(Icons.text_increase, color: Colors.grey), 'Increase text size'),
             ),
           );
           l.add(
             PopupMenuItem(
               value: Constants.commandTextScaleDecrease,
-              child: renderIconAndText(const Icon(Icons.text_decrease, color: Colors.grey), "Decrease text size"),
+              child: renderIconAndText(const Icon(Icons.text_decrease, color: Colors.grey), 'Decrease text size'),
             ),
           );
           return l;
@@ -87,7 +87,7 @@ void handleColorSelect(settings, onSettingsChanged, int value) {
 
 widgetMainTitle(settings, handleFileOpen, handleFileClose) {
   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-    const Text("MyMoney", textAlign: TextAlign.left),
+    const Text('MyMoney', textAlign: TextAlign.left),
     PopupMenuButton(
       child: Text(getTitle(settings), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
       itemBuilder: (context) {
@@ -110,7 +110,7 @@ widgetMainTitle(settings, handleFileOpen, handleFileClose) {
 
 String getTitle(settings) {
   if (settings.pathToDatabase == null) {
-    return "No file loaded";
+    return 'No file loaded';
   } else {
     return settings.pathToDatabase.toString();
   }

@@ -53,7 +53,7 @@ class SankeyPaint extends CustomPainter {
     var lastHeight = ratioIncomeToExpense * totalIncome;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetIncome = Block(
-      "Revenue  ${getNumberAsShorthandText(totalIncome)}",
+      'Revenue  ${getNumberAsShorthandText(totalIncome)}',
       ui.Rect.fromLTWH(horizontalCenter - (columnWidth * 1.2), verticalStackOfTargets, columnWidth, lastHeight),
       Constants.colorIncome,
       textColor,
@@ -66,7 +66,7 @@ class SankeyPaint extends CustomPainter {
     lastHeight = ratioIncomeToExpense * totalExpense;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetExpense = Block(
-      "Expenses -${getNumberAsShorthandText(totalExpense)}",
+      'Expenses -${getNumberAsShorthandText(totalExpense)}',
       ui.Rect.fromLTWH(horizontalCenter + (columnWidth * 0.2), topOfCenters, columnWidth, lastHeight),
       Constants.colorExpense,
       textColor,
@@ -79,7 +79,7 @@ class SankeyPaint extends CustomPainter {
     lastHeight = ratioIncomeToExpense * netAmount;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     Block targetNet = Block(
-      "Net: ${getNumberAsShorthandText(netAmount)}",
+      'Net: ${getNumberAsShorthandText(netAmount)}',
       ui.Rect.fromLTWH(targetExpense.rect.left, targetExpense.rect.bottom + gap, columnWidth, lastHeight),
       Constants.colorNet,
       textColor,
@@ -132,7 +132,7 @@ class SankeyPaint extends CustomPainter {
       double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
       double boxTop = top + verticalPosition;
       Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
-      Block source = Block(element.name + ": " + getNumberAsShorthandText(element.value), rect, color, textColor, TextAlign.center, TextAlign.center);
+      Block source = Block(element.name + ': ' + getNumberAsShorthandText(element.value), rect, color, textColor, TextAlign.center, TextAlign.center);
       source.textColor = textColor;
       blocks.add(source);
 

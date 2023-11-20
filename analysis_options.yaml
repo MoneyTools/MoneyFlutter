@@ -1,8 +1,13 @@
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options
+
 # This file configures the analyzer, which statically analyzes Dart code to
 # check for errors, warnings, and lints.
 #
 # The issues identified by the analyzer are surfaced in the UI of Dart-enabled
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+
+# invoked from the command line by running `dart analyze`.
 # invoked from the command line by running `flutter analyze`.
 
 # The following line activates a set of recommended lints for Flutter apps,
@@ -22,7 +27,7 @@ linter:
   # `// ignore_for_file: name_of_lint` syntax on the line or in the file
   # producing the lint.
   rules:
-    lines_longer_than_80_chars: # Specify the rule
+    - lines_longer_than_80_chars: # Specify the rule
       enabled: true             # Enable the rule
       severity: error           # Set the severity level (error, warning, info)
       options: # Provide configuration options for the rule
@@ -30,5 +35,11 @@ linter:
         avoid_print: false  # Uncomment to disable the `avoid_print` rule
         prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
-# Additional information about this file can be found at
-# https://dart.dev/guides/language/analysis-options
+    - prefer_single_quotes
+
+analyzer:
+  enable-experiment:
+    - non-nullable
+  errors:
+    unused_element: warning
+    unused_field: warning

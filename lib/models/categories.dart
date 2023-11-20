@@ -24,38 +24,38 @@ class Category extends MoneyEntity {
   getTypeAsText() {
     switch (type) {
       case CategoryType.income:
-        return "Income";
+        return 'Income';
       case CategoryType.expense:
-        return "Expense";
+        return 'Expense';
       case CategoryType.saving:
-        return "Saving";
+        return 'Saving';
       case CategoryType.reserved:
-        return "Reserved";
+        return 'Reserved';
       case CategoryType.transfer:
-        return "Transfer";
+        return 'Transfer';
       case CategoryType.investment:
-        return "Investment";
+        return 'Investment';
       case CategoryType.none:
       default:
-        return "None";
+        return 'None';
     }
   }
 
   static getTypeFromText(text) {
     switch (text) {
-      case "1":
+      case '1':
         return CategoryType.income;
-      case "2":
+      case '2':
         return CategoryType.expense;
-      case "3":
+      case '3':
         return CategoryType.saving;
-      case "4":
+      case '4':
         return CategoryType.reserved;
-      case "5":
+      case '5':
         return CategoryType.transfer;
-      case "6":
+      case '6':
         return CategoryType.investment;
-      case "0":
+      case '0':
       default:
         return CategoryType.none;
     }
@@ -72,18 +72,18 @@ class Categories {
 
   static String getNameFromId(id) {
     if (id == -1) {
-      return "";
+      return '';
     }
 
     if (id == splitCategoryId()) {
-      return "<Split>";
+      return '<Split>';
     }
     return moneyObjects.getNameFromId(id);
   }
 
   static num splitCategoryId() {
     if (idOfSplitCategory == -1) {
-      var cat = moneyObjects.getByName("Split");
+      var cat = moneyObjects.getByName('Split');
       if (cat != null) {
         idOfSplitCategory = cat.id;
       }
@@ -151,11 +151,11 @@ class Categories {
   load(rows) async {
     clear();
     for (var row in rows) {
-      var id = num.parse(row["Id"].toString());
-      var name = row["Name"].toString();
-      var rt = row["Type"];
+      var id = num.parse(row['Id'].toString());
+      var name = row['Name'].toString();
+      var rt = row['Type'];
       var newEntry = Category(id, Category.getTypeFromText(rt.toString()), name);
-      newEntry.parentId = num.parse(row["ParentId"].toString());
+      newEntry.parentId = num.parse(row['ParentId'].toString());
 
       moneyObjects.addEntry(newEntry);
     }

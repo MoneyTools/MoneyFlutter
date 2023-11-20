@@ -4,7 +4,7 @@ import 'package:graphic/graphic.dart';
 import '../helpers.dart';
 
 class CategoryValue {
-  String category = "";
+  String category = '';
   num value = 0.0;
 
   CategoryValue(this.category, this.value);

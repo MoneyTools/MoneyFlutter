@@ -10,12 +10,12 @@ import '../models/payees.dart';
 import '../widgets/columns.dart';
 import '../widgets/widget_view.dart';
 
-const String columnIdAccount = "Accounts";
-const String columnIdDate = "Date";
-const String columnIdPayee = "Payee";
-const String columnIdCategory = "Category";
-const String columnIdAmount = "Amount";
-const String columnIdBalance = "Balance";
+const String columnIdAccount = 'Accounts';
+const String columnIdDate = 'Date';
+const String columnIdPayee = 'Payee';
+const String columnIdCategory = 'Category';
+const String columnIdAmount = 'Amount';
+const String columnIdBalance = 'Balance';
 
 const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: [columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
 
@@ -44,24 +44,24 @@ class ViewTransactionsState extends ViewWidgetState {
 
     super.sortAscending = false;
 
-    pivots.add(CaptionAndCounter(caption: "Incomes", small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
-    pivots.add(CaptionAndCounter(caption: "Expenses", small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
-    pivots.add(CaptionAndCounter(caption: "All", small: true, vertical: true, value: Transactions.list.length));
+    pivots.add(CaptionAndCounter(caption: 'Incomes', small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
+    pivots.add(CaptionAndCounter(caption: 'Expenses', small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
+    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: Transactions.list.length));
   }
 
   @override
   getClassNamePlural() {
-    return "Transactions";
+    return 'Transactions';
   }
 
   @override
   getClassNameSingular() {
-    return "Transaction";
+    return 'Transaction';
   }
 
   @override
   getDescription() {
-    return "Details actions of your accounts.";
+    return 'Details actions of your accounts.';
   }
 
   @override

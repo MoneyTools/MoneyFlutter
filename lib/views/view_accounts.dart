@@ -25,10 +25,10 @@ class ViewAccountsState extends ViewWidgetState {
   void initState() {
     super.initState();
 
-    pivots.add(CaptionAndCounter(caption: "Banks", small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.checking, AccountType.savings])));
-    pivots.add(CaptionAndCounter(caption: "Cards", small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.credit])));
-    pivots.add(CaptionAndCounter(caption: "Assets", small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.asset])));
-    pivots.add(CaptionAndCounter(caption: "All", small: true, vertical: true, value: getTotalBalanceOfAccounts([])));
+    pivots.add(CaptionAndCounter(caption: 'Banks', small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.checking, AccountType.savings])));
+    pivots.add(CaptionAndCounter(caption: 'Cards', small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.credit])));
+    pivots.add(CaptionAndCounter(caption: 'Assets', small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.asset])));
+    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts([])));
   }
 
   double getTotalBalanceOfAccounts(List<AccountType> types) {
@@ -39,17 +39,17 @@ class ViewAccountsState extends ViewWidgetState {
 
   @override
   getClassNamePlural() {
-    return "Accounts";
+    return 'Accounts';
   }
 
   @override
   getClassNameSingular() {
-    return "Account";
+    return 'Account';
   }
 
   @override
   getDescription() {
-    return "Your main assets.";
+    return 'Your main assets.';
   }
 
   @override
@@ -72,8 +72,8 @@ class ViewAccountsState extends ViewWidgetState {
     return WidgetBarChart(
       key: Key(indices.toString()),
       list: list,
-      variableNameHorizontal: "Account",
-      variableNameVertical: "Balance",
+      variableNameHorizontal: 'Account',
+      variableNameVertical: 'Balance',
     );
   }
 
@@ -88,7 +88,7 @@ class ViewAccountsState extends ViewWidgetState {
         startingBalance: account.openingBalance,
       );
     }
-    return const Text("No account transactions");
+    return const Text('No account transactions');
   }
 
   bool filterByAccountId(Transaction t, accountId) {
@@ -99,7 +99,7 @@ class ViewAccountsState extends ViewWidgetState {
   ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
       ColumnDefinition(
-        "Name",
+        'Name',
         ColumnType.text,
         TextAlign.left,
         (index) {
@@ -110,7 +110,7 @@ class ViewAccountsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Type",
+        'Type',
         ColumnType.text,
         TextAlign.center,
         (index) {
@@ -121,7 +121,7 @@ class ViewAccountsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Count",
+        'Count',
         ColumnType.numeric,
         TextAlign.right,
         (index) {
@@ -132,7 +132,7 @@ class ViewAccountsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Balance",
+        'Balance',
         ColumnType.amount,
         TextAlign.right,
         (index) {

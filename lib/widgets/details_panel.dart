@@ -4,7 +4,7 @@ class DetailsPanel extends StatelessWidget {
   final String title;
   final String description;
 
-  const DetailsPanel({super.key, this.title = "", this.description = "Empty"});
+  const DetailsPanel({super.key, this.title = '', this.description = 'Empty'});
 
   @override
   Widget build(BuildContext context) {

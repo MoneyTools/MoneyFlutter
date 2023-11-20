@@ -24,12 +24,12 @@ class Splits {
   load(rows) async {
     clear();
     for (var row in rows) {
-      var id = num.parse(row["Id"].toString());
-      var transactionId = num.parse(row["Transaction"].toString());
-      var categoryId = num.parse(row["Category"].toString());
-      var amount = double.parse(row["Amount"].toString());
-      var payeeId = double.parse(row["Payee"].toString());
-      var memo = row["Memo"].toString();
+      var id = num.parse(row['Id'].toString());
+      var transactionId = num.parse(row['Transaction'].toString());
+      var categoryId = num.parse(row['Category'].toString());
+      var amount = double.parse(row['Amount'].toString());
+      var payeeId = double.parse(row['Payee'].toString());
+      var memo = row['Memo'].toString();
 
       list.add(Split(id, transactionId, categoryId, amount, payeeId, memo));
     }

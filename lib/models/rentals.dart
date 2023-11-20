@@ -12,7 +12,7 @@ class Rental extends MoneyEntity {
   double expense = 0.00;
   double profit = 0.00;
 
-  String address = "";
+  String address = '';
   DateTime purchasedDate = DateTime.now();
   double purchasedPrice = 0.00;
   double landValue = 0.00;
@@ -38,11 +38,11 @@ class Rental extends MoneyEntity {
 
   List<num> listOfCategoryIdsExpenses = [];
 
-  String ownershipName1 = "";
-  String ownershipName2 = "";
+  String ownershipName1 = '';
+  String ownershipName2 = '';
   double ownershipPercentage1 = 0.0;
   double ownershipPercentage2 = 0.0;
-  String note = "";
+  String note = '';
   List<RentUnit> units = [];
 
   DateRange dateRange = DateRange();
@@ -50,33 +50,33 @@ class Rental extends MoneyEntity {
   Rental(super.id, super.name);
 
   static Rental createInstanceFromRow(row) {
-    var id = MoneyEntity.fromRowColumnToNumber(row, "Id");
-    var name = MoneyEntity.fromRowColumnToString(row, "Name");
+    var id = MoneyEntity.fromRowColumnToNumber(row, 'Id');
+    var name = MoneyEntity.fromRowColumnToString(row, 'Name');
 
     var instance = Rental(id, name);
 
-    instance.address = MoneyEntity.fromRowColumnToString(row, "Address");
-    instance.purchasedDate = DateTime.parse(row["PurchasedDate"].toString());
-    instance.purchasedPrice = MoneyEntity.fromRowColumnToDouble(row, "PurchasedPrice");
-    instance.landValue = MoneyEntity.fromRowColumnToDouble(row, "LandValue");
-    instance.estimatedValue = MoneyEntity.fromRowColumnToDouble(row, "EstimatedValue");
+    instance.address = MoneyEntity.fromRowColumnToString(row, 'Address');
+    instance.purchasedDate = DateTime.parse(row['PurchasedDate'].toString());
+    instance.purchasedPrice = MoneyEntity.fromRowColumnToDouble(row, 'PurchasedPrice');
+    instance.landValue = MoneyEntity.fromRowColumnToDouble(row, 'LandValue');
+    instance.estimatedValue = MoneyEntity.fromRowColumnToDouble(row, 'EstimatedValue');
 
-    instance.categoryForIncome = MoneyEntity.fromRowColumnToNumber(row, "CategoryForIncome");
+    instance.categoryForIncome = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForIncome');
     instance.categoryForIncomeTreeIds = Categories.getTreeIds(instance.categoryForIncome);
 
-    instance.categoryForTaxes = MoneyEntity.fromRowColumnToNumber(row, "CategoryForTaxes");
+    instance.categoryForTaxes = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForTaxes');
     instance.categoryForTaxesTreeIds = Categories.getTreeIds(instance.categoryForTaxes);
 
-    instance.categoryForInterest = MoneyEntity.fromRowColumnToNumber(row, "CategoryForInterest");
+    instance.categoryForInterest = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForInterest');
     instance.categoryForInterestTreeIds = Categories.getTreeIds(instance.categoryForInterest);
 
-    instance.categoryForRepairs = MoneyEntity.fromRowColumnToNumber(row, "CategoryForRepairs");
+    instance.categoryForRepairs = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForRepairs');
     instance.categoryForRepairsTreeIds = Categories.getTreeIds(instance.categoryForRepairs);
 
-    instance.categoryForMaintenance = MoneyEntity.fromRowColumnToNumber(row, "CategoryForMaintenance");
+    instance.categoryForMaintenance = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForMaintenance');
     instance.categoryForMaintenanceTreeIds = Categories.getTreeIds(instance.categoryForMaintenance);
 
-    instance.categoryForManagement = MoneyEntity.fromRowColumnToNumber(row, "CategoryForManagement");
+    instance.categoryForManagement = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForManagement');
     instance.categoryForManagementTreeIds = Categories.getTreeIds(instance.categoryForManagement);
 
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
@@ -85,11 +85,11 @@ class Rental extends MoneyEntity {
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForRepairsTreeIds);
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForInterestTreeIds);
 
-    instance.ownershipName1 = MoneyEntity.fromRowColumnToString(row, "OwnershipName1");
-    instance.ownershipName2 = MoneyEntity.fromRowColumnToString(row, "OwnershipName2");
-    instance.ownershipPercentage1 = MoneyEntity.fromRowColumnToDouble(row, "ownershipPercentage1");
-    instance.ownershipPercentage2 = MoneyEntity.fromRowColumnToDouble(row, "ownershipPercentage1");
-    instance.note = MoneyEntity.fromRowColumnToString(row, "Note");
+    instance.ownershipName1 = MoneyEntity.fromRowColumnToString(row, 'OwnershipName1');
+    instance.ownershipName2 = MoneyEntity.fromRowColumnToString(row, 'OwnershipName2');
+    instance.ownershipPercentage1 = MoneyEntity.fromRowColumnToDouble(row, 'ownershipPercentage1');
+    instance.ownershipPercentage2 = MoneyEntity.fromRowColumnToDouble(row, 'ownershipPercentage1');
+    instance.note = MoneyEntity.fromRowColumnToString(row, 'Note');
 
     return instance;
   }
@@ -130,8 +130,8 @@ class Rentals {
   void loadDemoData() {
     clear();
 
-    var instance = Rental(0, "AirBnB");
-    instance.address = "One Washington DC";
+    var instance = Rental(0, 'AirBnB');
+    instance.address = 'One Washington DC';
     moneyObjects.addEntry(instance);
   }
 
@@ -174,9 +174,9 @@ class Rentals {
 class RentUnit extends MoneyEntity {
   int count = 0;
   double balance = 0.00;
-  String building = "";
-  String renter = "";
-  String note = "";
+  String building = '';
+  String renter = '';
+  String note = '';
 
   RentUnit(super.id, super.name);
 }
@@ -198,13 +198,13 @@ class RentUnits {
 
   load(rows) async {
     for (var row in rows) {
-      var id = num.parse(row["Id"].toString());
-      var name = row["Name"].toString();
+      var id = num.parse(row['Id'].toString());
+      var name = row['Name'].toString();
 
       var instance = RentUnit(id, name);
-      instance.building = row["Building"].toString();
-      instance.renter = row["Renter"].toString();
-      instance.note = row["Note"].toString();
+      instance.building = row['Building'].toString();
+      instance.renter = row['Renter'].toString();
+      instance.note = row['Note'].toString();
 
       moneyObjects.addEntry(instance);
     }

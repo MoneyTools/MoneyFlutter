@@ -15,24 +15,24 @@ class ViewPayees extends ViewWidget {
 class ViewPayeesState extends ViewWidgetState {
   @override
   getClassNamePlural() {
-    return "Payees";
+    return 'Payees';
   }
 
   @override
   getClassNameSingular() {
-    return "Payee";
+    return 'Payee';
   }
 
   @override
   String getDescription() {
-    return "Who is getting your money.";
+    return 'Who is getting your money.';
   }
 
   @override
   ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
       ColumnDefinition(
-        "Name",
+        'Name',
         ColumnType.text,
         TextAlign.left,
         (index) {
@@ -43,7 +43,7 @@ class ViewPayeesState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Count",
+        'Count',
         ColumnType.numeric,
         TextAlign.right,
         (index) {
@@ -54,7 +54,7 @@ class ViewPayeesState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Balance",
+        'Balance',
         ColumnType.amount,
         TextAlign.right,
         (index) {

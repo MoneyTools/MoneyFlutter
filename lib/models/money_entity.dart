@@ -1,6 +1,6 @@
 class MoneyEntity {
   num id = -1;
-  String name = "";
+  String name = '';
 
   MoneyEntity(this.id, this.name) {
     //
@@ -9,7 +9,7 @@ class MoneyEntity {
   static fromRowColumnToString(row, nameOfColumn) {
     var rawValue = row[nameOfColumn];
     if (rawValue == null) {
-      return "";
+      return '';
     }
     return rawValue.toString();
   }

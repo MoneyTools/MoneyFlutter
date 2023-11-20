@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../models/constants.dart';
 
 class SanKeyEntry {
-  String name = "";
+  String name = '';
   double value = 0.00;
 }
 
@@ -21,7 +21,7 @@ class ChannelPoint {
 }
 
 class Block {
-  String name = "";
+  String name = '';
   Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
   Color color;
   Color textColor = Colors.black;

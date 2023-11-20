@@ -20,22 +20,22 @@ class ViewRentals extends ViewWidget {
 class ViewRentalsState extends ViewWidgetState {
   @override
   getClassNamePlural() {
-    return "Rentals";
+    return 'Rentals';
   }
 
   @override
   getClassNameSingular() {
-    return "Rental";
+    return 'Rental';
   }
 
   @override
   String getDescription() {
-    return "Properties to rent.";
+    return 'Properties to rent.';
   }
 
   getColumnForName() {
     return ColumnDefinition(
-      "Name",
+      'Name',
       ColumnType.text,
       TextAlign.left,
       (index) {
@@ -49,7 +49,7 @@ class ViewRentalsState extends ViewWidgetState {
 
   getColumnForAddress() {
     return ColumnDefinition(
-      "Address",
+      'Address',
       ColumnType.text,
       TextAlign.left,
       (index) {
@@ -63,7 +63,7 @@ class ViewRentalsState extends ViewWidgetState {
 
   getColumnForNote() {
     return ColumnDefinition(
-      "Note",
+      'Note',
       ColumnType.text,
       TextAlign.left,
       (index) {
@@ -82,7 +82,7 @@ class ViewRentalsState extends ViewWidgetState {
       getColumnForAddress(),
       getColumnForNote(),
       ColumnDefinition(
-        "In Service",
+        'In Service',
         ColumnType.text,
         TextAlign.left,
         (index) {
@@ -93,7 +93,7 @@ class ViewRentalsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Transactions",
+        'Transactions',
         ColumnType.numeric,
         TextAlign.right,
         (index) {
@@ -104,7 +104,7 @@ class ViewRentalsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Revenue",
+        'Revenue',
         ColumnType.amountShorthand,
         TextAlign.right,
         (index) {
@@ -115,7 +115,7 @@ class ViewRentalsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Expense",
+        'Expense',
         ColumnType.amountShorthand,
         TextAlign.right,
         (index) {
@@ -126,7 +126,7 @@ class ViewRentalsState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Profit",
+        'Profit',
         ColumnType.amountShorthand,
         TextAlign.right,
         (index) {
@@ -144,7 +144,7 @@ class ViewRentalsState extends ViewWidgetState {
     var fields = ColumnDefinitions([getColumnForName(), getColumnForAddress(), getColumnForNote()]);
 
     var fieldUnit = ColumnDefinition(
-      "Unit",
+      'Unit',
       ColumnType.amount,
       TextAlign.right,
       (index) {
@@ -164,10 +164,10 @@ class ViewRentalsState extends ViewWidgetState {
   getUnitsAsString(List<RentUnit> listOfUnits) {
     var listAsText = [];
     for (var unit in listOfUnits) {
-      listAsText.add("${unit.name}:${unit.renter}");
+      listAsText.add('${unit.name}:${unit.renter}');
     }
 
-    return listAsText.join("\n");
+    return listAsText.join('\n');
   }
 
   @override
@@ -189,8 +189,8 @@ class ViewRentalsState extends ViewWidgetState {
 
     return WidgetBarChart(
       list: list,
-      variableNameHorizontal: "Rental",
-      variableNameVertical: "Profit",
+      variableNameHorizontal: 'Rental',
+      variableNameVertical: 'Profit',
     );
   }
 
@@ -204,7 +204,7 @@ class ViewRentalsState extends ViewWidgetState {
         preference: preferenceJustTableDatePayeeCategoryAmountBalance,
       );
     }
-    return const Text("No transactions");
+    return const Text('No transactions');
   }
 
   bool filterByRentalCategories(Transaction t, Rental rental) {

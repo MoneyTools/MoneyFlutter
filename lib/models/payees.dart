@@ -2,7 +2,7 @@ import 'package:money/models/money_entity.dart';
 import 'package:money/models/transactions.dart';
 
 class Payee extends MoneyEntity {
-  String accountId = "";
+  String accountId = '';
   num count = 0;
   double amount = 0.00;
   double balance = 0.00;
@@ -30,8 +30,8 @@ class Payees {
     /*
      */
     for (var row in rows) {
-      var id = num.parse(row["Id"].toString());
-      var name = row["Name"].toString();
+      var id = num.parse(row['Id'].toString());
+      var name = row['Name'].toString();
       moneyObjects.addEntry(Payee(id, name));
     }
   }

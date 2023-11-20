@@ -28,7 +28,7 @@ class ViewWidgetState extends State<ViewWidget> {
   var list = [];
   var listOfUniqueInstances = [];
 
-  final formatCurrency = NumberFormat("#,##0.00", "en_US");
+  final formatCurrency = NumberFormat('#,##0.00', 'en_US');
   bool isBottomPanelExpanded = false;
   num selectedBottomTabId = 0;
 
@@ -56,15 +56,15 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   String getClassNamePlural() {
-    return "Items";
+    return 'Items';
   }
 
   String getClassNameSingular() {
-    return "Item";
+    return 'Item';
   }
 
   String getDescription() {
-    return "Default list of items";
+    return 'Default list of items';
   }
 
   getList() {
@@ -164,7 +164,7 @@ class ViewWidgetState extends State<ViewWidget> {
       case 2:
         return getSubViewContentForTransactions(selectedItems);
       default:
-        return const Text("- empty -");
+        return const Text('- empty -');
     }
   }
 
@@ -218,16 +218,16 @@ class ViewWidgetState extends State<ViewWidget> {
 
   getSubViewContentForChart(List<int> indices) {
     List<CategoryValue> list = [];
-    list.add(CategoryValue("a", 12.2));
-    list.add(CategoryValue("b", 22.2));
-    list.add(CategoryValue("c", 11.2));
-    list.add(CategoryValue("d", 14.2));
+    list.add(CategoryValue('a', 12.2));
+    list.add(CategoryValue('b', 22.2));
+    list.add(CategoryValue('c', 11.2));
+    list.add(CategoryValue('d', 14.2));
 
     return WidgetBarChart(list: list);
   }
 
   getSubViewContentForTransactions(List<int> indices) {
-    return const Text("the transactions");
+    return const Text('the transactions');
   }
 
   List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {
@@ -290,8 +290,8 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   getMinMaxDates(ColumnDefinition columnToCustomerFilterOn) {
-    String min = "";
-    String max = "";
+    String min = '';
+    String max = '';
 
     var list = getList();
 
@@ -353,7 +353,7 @@ class ViewWidgetState extends State<ViewWidget> {
         builder: (context) {
           return Material(
               child: AlertDialog(
-            title: const Text("Filter"),
+            title: const Text('Filter'),
             content: SizedBox(width: 400, height: 400, child: content),
             actions: [
               TextButton(

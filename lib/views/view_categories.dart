@@ -15,24 +15,24 @@ class ViewCategories extends ViewWidget {
 class ViewCategoriesState extends ViewWidgetState {
   @override
   String getClassNamePlural() {
-    return "Categories";
+    return 'Categories';
   }
 
   @override
   String getClassNameSingular() {
-    return "Category";
+    return 'Category';
   }
 
   @override
   String getDescription() {
-    return "Classification of your money transactions.";
+    return 'Classification of your money transactions.';
   }
 
   @override
   ColumnDefinitions getColumnDefinitionsForTable() {
     return ColumnDefinitions([
       ColumnDefinition(
-        "Name",
+        'Name',
         ColumnType.text,
         TextAlign.left,
         (index) {
@@ -43,7 +43,7 @@ class ViewCategoriesState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Type",
+        'Type',
         ColumnType.text,
         TextAlign.center,
         (index) {
@@ -54,7 +54,7 @@ class ViewCategoriesState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Count",
+        'Count',
         ColumnType.numeric,
         TextAlign.right,
         (index) {
@@ -65,7 +65,7 @@ class ViewCategoriesState extends ViewWidgetState {
         },
       ),
       ColumnDefinition(
-        "Balance",
+        'Balance',
         ColumnType.amount,
         TextAlign.right,
         (index) {

@@ -44,9 +44,9 @@ class BottomPanel extends StatelessWidget {
   getRowOfTabs() {
     return Row(
       children: [
-        getTabButton(0, "Details"),
-        getTabButton(1, "Chart"),
-        getTabButton(2, "Transactions"),
+        getTabButton(0, 'Details'),
+        getTabButton(1, 'Chart'),
+        getTabButton(2, 'Transactions'),
       ],
     );
   }

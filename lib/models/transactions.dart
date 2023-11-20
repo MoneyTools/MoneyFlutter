@@ -30,12 +30,12 @@ class Transactions {
     runningBalance = 0.00;
 
     for (var row in rows) {
-      var id = num.parse(row["Id"].toString());
-      var accountId = num.parse(row["Account"].toString());
-      var date = row["Date"].toString();
-      var payee = num.parse(row["Payee"].toString());
-      var category = num.parse(row["Category"].toString());
-      var amount = double.parse(row["Amount"].toString());
+      var id = num.parse(row['Id'].toString());
+      var accountId = num.parse(row['Account'].toString());
+      var date = row['Date'].toString();
+      var payee = num.parse(row['Payee'].toString());
+      var category = num.parse(row['Category'].toString());
+      var amount = double.parse(row['Amount'].toString());
 
       list.add(Transaction(
           id,
