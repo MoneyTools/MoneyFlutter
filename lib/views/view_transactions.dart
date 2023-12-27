@@ -226,7 +226,7 @@ class ViewTransactionsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForChart(List<int> indices) {
+  getSubViewContentForChart(List<num> indices) {
     Map<String, num> tallyPerMonths = {};
 
     final timePeriod = DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);

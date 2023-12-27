@@ -181,7 +181,7 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForChart(List<int> indices) {
+  getSubViewContentForChart(List<num> indices) {
     List<CategoryValue> list = [];
     for (var entry in getList()) {
       list.add(CategoryValue(entry.name, entry.profit));
@@ -195,7 +195,7 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForTransactions(List<int> indices) {
+  getSubViewContentForTransactions(List<num> indices) {
     var rental = getFirstElement<Rental>(indices, list);
     if (rental != null) {
       return ViewTransactions(

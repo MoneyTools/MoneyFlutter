@@ -1,5 +1,6 @@
 ## [1.0.4] 2023-10-27
 
+- Fix Chart on ViewByAccounts
 - Add keyboard binding
 - Upgrade to Flutter 3.16.5
 

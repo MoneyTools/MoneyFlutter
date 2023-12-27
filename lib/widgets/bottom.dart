@@ -7,7 +7,7 @@ class BottomPanel extends StatelessWidget {
   final Object? subViewSelectedItem;
   final num selectedTabId;
   final Function onTabActivated;
-  final Function(num, Object?) getBottomContentToRender;
+  final Function(num, List<num>) getBottomContentToRender;
 
   const BottomPanel({
     super.key,

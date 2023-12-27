@@ -61,10 +61,10 @@ class ViewAccountsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForChart(List<int> indices) {
+  getSubViewContentForChart(List<num> indices) {
     List<CategoryValue> list = [];
     for (var account in getList()) {
-      if (account.isActiveBankAccount()) {
+      if (account.isActive()) {
         list.add(CategoryValue(account.name, account.balance));
       }
     }
@@ -78,7 +78,7 @@ class ViewAccountsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForTransactions(List<int> indices) {
+  getSubViewContentForTransactions(List<num> indices) {
     var account = getFirstElement<Account>(indices, list);
     if (account != null && account.id > -1) {
       return ViewTransactions(

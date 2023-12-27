@@ -21,7 +21,7 @@ class ViewWidget extends StatefulWidget {
 
 class ViewWidgetState extends State<ViewWidget> {
   ColumnDefinitions columns = ColumnDefinitions([]);
-  List<int> selectedItems = [0];
+  List<num> selectedItems = [];
   final double itemHeight = 30;
   final scrollController = ScrollController();
 
@@ -155,7 +155,7 @@ class ViewWidgetState extends State<ViewWidget> {
     });
   }
 
-  Widget getSubViewContent(subViewId, selectedItems) {
+  Widget getSubViewContent(num subViewId, List<num> selectedItems) {
     switch (subViewId) {
       case 0:
         return getSubViewContentForDetails(selectedItems);
@@ -205,8 +205,8 @@ class ViewWidgetState extends State<ViewWidget> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  getSubViewContentForDetails(List<int> indices) {
-    var detailPanelFields = getColumnDefinitionsForDetailsPanel();
+  Widget getSubViewContentForDetails(List<num> indices) {
+    final detailPanelFields = getColumnDefinitionsForDetailsPanel();
     if (indices.isNotEmpty) {
       var index = indices.first;
       return Center(
@@ -214,9 +214,10 @@ class ViewWidgetState extends State<ViewWidget> {
         child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
       );
     }
+    return const Text('No item selected');
   }
 
-  getSubViewContentForChart(List<int> indices) {
+  Widget getSubViewContentForChart(List<num> indices) {
     List<CategoryValue> list = [];
     list.add(CategoryValue('a', 12.2));
     list.add(CategoryValue('b', 22.2));
@@ -226,7 +227,7 @@ class ViewWidgetState extends State<ViewWidget> {
     return WidgetBarChart(list: list);
   }
 
-  getSubViewContentForTransactions(List<int> indices) {
+  Widget getSubViewContentForTransactions(List<num> indices) {
     return const Text('the transactions');
   }
 
@@ -448,9 +449,9 @@ bool defaultFilter(element) {
   return true; // filter nothing
 }
 
-T? getFirstElement<T>(List<int> indices, list) {
+T? getFirstElement<T>(List<num> indices, list) {
   if (indices.isNotEmpty) {
-    int index = indices.first;
+    num index = indices.first;
     var T = list[index];
     if (T != null) {
       return T;

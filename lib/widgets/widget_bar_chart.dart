@@ -25,12 +25,17 @@ class WidgetBarChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var data = [
-      {variableNameHorizontal: '', variableNameVertical: 0}, // TODO this is a hack, still don't know why I can just initialize directly
+      {variableNameHorizontal: '', variableNameVertical: 0},
+      // TODO this is a hack, still don't know why I can just initialize directly
     ];
     data.clear(); // TODO part of the hack
 
-    for (var entry in list) {
+    for (final entry in list) {
       data.add({variableNameHorizontal: entry.category, variableNameVertical: entry.value});
+    }
+
+    if (data.isEmpty) {
+      return Text('No chart to display ${list.length}');
     }
 
     var w = 800.0;

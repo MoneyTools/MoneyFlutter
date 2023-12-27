@@ -30,9 +30,9 @@ class CaptionAndCounter extends StatelessWidget {
 
   Widget renderCaption(context) {
     if (small) {
-      return SelectableText(caption, style: getTextTheme(context).labelLarge);
+      return Text(caption, style: getTextTheme(context).labelLarge);
     } else {
-      return SelectableText(caption, style: getTextTheme(context).titleLarge);
+      return Text(caption, style: getTextTheme(context).titleLarge);
     }
   }
 
