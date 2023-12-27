@@ -194,7 +194,18 @@ class _MyMoneyState extends State<MyMoney> {
                     'Decrease text size',
                     () {
                       setState(() {
-                        settings.textScale = max(1, settings.textScale * 0.90);
+                        settings.textScale = max(0.5, settings.textScale * 0.90);
+                        settings.save();
+                      });
+                    },
+                    isMetaPressed: true,
+                  ),
+                  KeyAction(
+                    LogicalKeyboardKey('0'.codeUnitAt(0)),
+                    'Normal text suze',
+                    () {
+                      setState(() {
+                        settings.textScale = 1;
                         settings.save();
                       });
                     },
