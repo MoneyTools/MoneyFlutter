@@ -170,7 +170,7 @@ class _MyMoneyState extends State<MyMoney> {
         home: LayoutBuilder(builder: (context, constraints) {
           final MediaQueryData data = MediaQuery.of(context);
           return MediaQuery(
-            data: data.copyWith(textScaler: TextScaler.linear(data.textScaleFactor * settings.textScale)),
+            data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
             child: getContent(context, constraints),
           );
         }));
