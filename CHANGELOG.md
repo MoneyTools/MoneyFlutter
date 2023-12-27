@@ -1,3 +1,8 @@
+## [1.0.4] 2023-10-27
+
+- Add keyboard binding
+- Upgrade to Flutter 3.16.5
+
 ## [1.0.2] 2023-10-19
 
 - macOS is working again

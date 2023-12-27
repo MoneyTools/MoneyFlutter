@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_cashflow.dart';
 import 'package:money/views/view_rentals.dart';
+import 'package:money/widgets/keyboard_widget.dart';
 
 import 'appbar.dart';
 import 'models/constants.dart';
@@ -170,9 +174,35 @@ class _MyMoneyState extends State<MyMoney> {
         home: LayoutBuilder(builder: (context, constraints) {
           final MediaQueryData data = MediaQuery.of(context);
           return MediaQuery(
-            data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
-            child: getContent(context, constraints),
-          );
+              data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
+              child: KeyboardWidget(
+                columnCount: 1,
+                bindings: [
+                  KeyAction(
+                    LogicalKeyboardKey.equal,
+                    'Increase text size',
+                    () {
+                      setState(() {
+                        settings.textScale = min(5, settings.textScale * 1.10);
+                        settings.save();
+                      });
+                    },
+                    isMetaPressed: true,
+                  ),
+                  KeyAction(
+                    LogicalKeyboardKey.minus,
+                    'Decrease text size',
+                    () {
+                      setState(() {
+                        settings.textScale = max(1, settings.textScale * 0.90);
+                        settings.save();
+                      });
+                    },
+                    isMetaPressed: true,
+                  ),
+                ],
+                child: getContent(context, constraints),
+              ));
         }));
   }
 
