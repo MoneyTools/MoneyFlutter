@@ -170,7 +170,7 @@ class _MyMoneyState extends State<MyMoney> {
         home: LayoutBuilder(builder: (context, constraints) {
           final MediaQueryData data = MediaQuery.of(context);
           return MediaQuery(
-            data: data.copyWith(textScaleFactor: data.textScaleFactor * settings.textScale),
+            data: data.copyWith(textScaler: TextScaler.linear(data.textScaleFactor * settings.textScale)),
             child: getContent(context, constraints),
           );
         }));
@@ -211,7 +211,7 @@ class _MyMoneyState extends State<MyMoney> {
               settings: settings,
               onSelectItem: handleScreenChanged,
               selectedIndex: settings.screenIndex,
-              useIndicator: settings.materialVersion == 3,
+              useIndicator: true,
             ),
             const VerticalDivider(thickness: 1, width: 1),
             Expanded(child: Column(children: [getWidgetForMainContent(context, settings.screenIndex)]))

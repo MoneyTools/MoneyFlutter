@@ -23,18 +23,6 @@ PreferredSizeWidget createAppBar(Settings settings, handleFileOpen, handleFileCl
           });
           l.add(
             PopupMenuItem(
-              value: 1002,
-              child: renderIconAndText(Icon(settings.materialVersion == 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), 'Material V2'),
-            ),
-          );
-          l.add(
-            PopupMenuItem(
-              value: 1003,
-              child: renderIconAndText(Icon(settings.materialVersion != 3 ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), 'Material V3'),
-            ),
-          );
-          l.add(
-            PopupMenuItem(
               value: 2000,
               child: renderIconAndText(Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), 'Rentals'),
             ),

@@ -10,14 +10,12 @@ class Settings {
   int screenIndex = 0;
   String? pathToDatabase;
   bool isBottomPanelExpanded = false;
-  int materialVersion = 2;
   bool rentals = false;
   bool useDarkMode = false;
   double textScale = 1.0;
 
   load({Function? onLoaded}) async {
     var preferences = await SharedPreferences.getInstance();
-    materialVersion = intValueOrDefault(preferences.getInt(prefMaterialVersion), defaultValueIfNull: 2);
     colorSelected = intValueOrDefault(preferences.getInt(prefColor));
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
     useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
@@ -32,7 +30,6 @@ class Settings {
 
   save() async {
     var preferences = await SharedPreferences.getInstance();
-    preferences.setInt(prefMaterialVersion, materialVersion);
     preferences.setDouble(prefTextScale, textScale);
     preferences.setInt(prefColor, colorSelected);
     preferences.setBool(prefDarkMode, useDarkMode);
@@ -52,7 +49,6 @@ class Settings {
 
     var themeData = ThemeData(
       colorSchemeSeed: colorOptions[colorSelected],
-      useMaterial3: materialVersion == 3,
       brightness: useDarkMode ? Brightness.dark : Brightness.light,
     );
     return themeData;
