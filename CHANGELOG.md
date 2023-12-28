@@ -1,3 +1,8 @@
+## [1.0.5] 2023-10-28
+
+- Double Click to open Details Panel
+- Package path: 1.9.0
+
 ## [1.0.4] 2023-10-27
 
 - Fix Chart on ViewByAccounts

@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.4
+version: 1.0.5
 
 environment:
   # This is the dart constraint
@@ -35,7 +35,7 @@ dependencies:
   flutter:
     sdk: flutter
   intl: ^0.19.0
-  path: ^1.8.3
+  path: 1.9.0
   collection: 1.18.0
   flutter_markdown: ^0.6.16
   file_picker: ^6.1.1
@@ -43,11 +43,11 @@ dependencies:
   sqflite_common_ffi: ^2.2.0+1
   graphic: ^2.2.1
 
+dependency_overrides:
+  path: 1.9.0
+
 dev_dependencies:
   flutter_test:
-    sdk: flutter
-
-  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
