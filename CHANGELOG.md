@@ -1,5 +1,6 @@
 ## [1.0.5] 2023-10-28
 
+- ViewCategories - filter by types
 - Double Click to open Details Panel
 - Package path: 1.9.0
 
