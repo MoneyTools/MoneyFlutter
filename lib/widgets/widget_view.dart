@@ -124,7 +124,21 @@ class ViewWidgetState extends State<ViewWidget> {
 
     // UI for Table
     list.add(getTableHeaders());
-    list.add(Expanded(child: TableWidget(list: getList(), columns: columns, onTap: onRowTap)));
+    list.add(
+      Expanded(
+        child: TableWidget(
+            list: getList(),
+            columns: columns,
+            onTap: onRowTap,
+            onDoubleTap: (context, index) {
+              if (widget.preference.showBottom) {
+                setState(() {
+                  isBottomPanelExpanded = true;
+                });
+              }
+            }),
+      ),
+    );
 
     if (widget.preference.showBottom) {
       list.add(BottomPanel(

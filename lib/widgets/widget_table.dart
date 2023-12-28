@@ -11,8 +11,15 @@ class TableWidget extends StatefulWidget {
   final ColumnDefinitions columns;
   final List<MoneyEntity> list;
   final Function onTap;
+  final Function onDoubleTap;
 
-  const TableWidget({super.key, required this.columns, required this.list, required this.onTap});
+  const TableWidget({
+    super.key,
+    required this.columns,
+    required this.list,
+    required this.onTap,
+    required this.onDoubleTap,
+  });
 
   @override
   State<TableWidget> createState() => TableWidgetState();
@@ -100,6 +107,10 @@ class TableWidgetState extends State<TableWidget> {
             setSelectedItem(index);
             FocusScope.of(context).requestFocus();
           },
+          onDoubleTap: () {
+            setSelectedItem(index, true);
+            FocusScope.of(context).requestFocus();
+          },
           child: Container(
             color: backgroundColor,
             child: Row(children: cells),
@@ -120,7 +131,7 @@ class TableWidgetState extends State<TableWidget> {
     setSelectedItem(newPosition);
   }
 
-  void setSelectedItem(int newPosition) {
+  void setSelectedItem(int newPosition, [bool isDoubleTap = false]) {
     if (newPosition.isBetween(-1, widget.list.length)) {
       setState(() {
         selectedItems.clear();
@@ -128,7 +139,11 @@ class TableWidgetState extends State<TableWidget> {
 
         currentIndex = newPosition;
         scrollToIndex(newPosition);
-        fireOnTapToHost(newPosition);
+        if (isDoubleTap) {
+          fireOnDoubleTapToHost(newPosition);
+        } else {
+          fireOnTapToHost(newPosition);
+        }
       });
     }
   }
@@ -137,6 +152,13 @@ class TableWidgetState extends State<TableWidget> {
     _timerForTap?.cancel();
     _timerForTap = Timer(const Duration(milliseconds: 600), () {
       widget.onTap(context, index);
+    });
+  }
+
+  void fireOnDoubleTapToHost(index) {
+    _timerForTap?.cancel();
+    _timerForTap = Timer(const Duration(milliseconds: 600), () {
+      widget.onDoubleTap(context, index);
     });
   }
 
