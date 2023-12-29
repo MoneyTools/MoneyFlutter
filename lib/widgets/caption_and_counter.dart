@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../helpers.dart';
+import 'package:money/helpers.dart';
 
 class CaptionAndCounter extends StatelessWidget {
   final String caption;
@@ -16,19 +16,19 @@ class CaptionAndCounter extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     if (vertical) {
-      return Column(children: [renderCaption(context), renderValue(context)]);
+      return Column(children: <Widget>[renderCaption(context), renderValue(context)]);
     }
 
-    return Row(children: [
+    return Row(children: <Widget>[
       renderCaption(context),
       const SizedBox(width: 10),
       renderValue(context),
     ]);
   }
 
-  Widget renderCaption(context) {
+  Widget renderCaption(final BuildContext context) {
     if (small) {
       return Text(caption, style: getTextTheme(context).labelLarge);
     } else {
@@ -36,7 +36,7 @@ class CaptionAndCounter extends StatelessWidget {
     }
   }
 
-  Widget renderValue(context) {
+  Widget renderValue(final BuildContext context) {
     if (value is int) {
       return Text(getIntAsText(value as int), style: getTextTheme(context).bodySmall);
     }

@@ -7,4 +7,5 @@ echo --- Formatting
 dart format . -l 222
 
 echo --- Analyze
+dart analyze
 flutter analyze

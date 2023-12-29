@@ -1,34 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money/models/transactions.dart';
 import 'package:money/widgets/widgets.dart';
 
-import '../helpers.dart';
-import '../widgets/header.dart';
-import 'bottom.dart';
-import 'columns.dart';
-import 'widget_bar_chart.dart';
-import 'widget_table.dart';
+import 'package:money/helpers.dart';
+import 'package:money/widgets/header.dart';
+import 'package:money/widgets/bottom.dart';
+import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/widget_bar_chart.dart';
+import 'package:money/widgets/widget_table.dart';
 
-class ViewWidget extends StatefulWidget {
+class ViewWidget<T> extends StatefulWidget {
   final FilterFunction filter;
   final ViewWidgetToDisplay preference;
 
   const ViewWidget({super.key, this.filter = defaultFilter, this.preference = const ViewWidgetToDisplay()});
 
   @override
-  State<ViewWidget> createState() => ViewWidgetState();
+  State<ViewWidget<T>> createState() => ViewWidgetState<T>();
 }
 
-class ViewWidgetState extends State<ViewWidget> {
-  ColumnDefinitions columns = ColumnDefinitions([]);
-  List<num> selectedItems = [];
+class ViewWidgetState<T> extends State<ViewWidget<T>> {
+  ColumnDefinitions<T> columns = ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
+  List<int> selectedItems = <int>[];
   final double itemHeight = 30;
-  final scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
 
-  var list = [];
-  var listOfUniqueInstances = [];
+  List<T> list = <T>[];
+  List<String> listOfUniqueInstances = <String>[];
 
-  final formatCurrency = NumberFormat('#,##0.00', 'en_US');
+  final NumberFormat formatCurrency = NumberFormat('#,##0.00', 'en_US');
   bool isBottomPanelExpanded = false;
   num selectedBottomTabId = 0;
 
@@ -37,13 +38,15 @@ class ViewWidgetState extends State<ViewWidget> {
   bool isChecked = true;
   Object? subViewSelectedItem;
 
-  ViewWidgetState();
-
-  ColumnDefinitions getColumnDefinitionsForTable() {
-    return ColumnDefinitions([]);
+  ViewWidgetState() {
+    assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
-  ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
+  ColumnDefinitions<T> getColumnDefinitionsForTable() {
+    return ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
+  }
+
+  ColumnDefinitions<T> getColumnDefinitionsForDetailsPanel() {
     return getColumnDefinitionsForTable();
   }
 
@@ -67,17 +70,20 @@ class ViewWidgetState extends State<ViewWidget> {
     return 'Default list of items';
   }
 
-  getList() {
-    return [];
+  List<T> getList() {
+    return <T>[];
   }
 
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     return sortBy;
   }
 
-  onSort() {
-    return list.sort((a, b) {
-      return columns.list[sortBy].sorting!(a, b, sortAscending);
+  void onSort() {
+    final ColumnDefinition<T> columnDefinition = columns.list[sortBy];
+    final int Function(T p1, T p2, bool p3) sortFunction = columnDefinition.sort;
+
+    list.sort((final T a, final T b) {
+      return sortFunction(a, b, sortAscending);
     });
   }
 
@@ -94,9 +100,9 @@ class ViewWidgetState extends State<ViewWidget> {
     );
   }
 
-  Widget getRow(list, index) {
-    List<Widget> cells = columns.getCellsForRow(index);
-    var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
+  Widget getRow(final List<T> list, final int index) {
+    final List<Widget> cells = columns.getCellsForRow(index);
+    final Color backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -112,11 +118,11 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     onSort();
 
     // UI areas to display
-    List<Widget> list = [];
+    final List<Widget> list = <Widget>[];
 
     if (widget.preference.showTitle) {
       list.add(getTitle());
@@ -126,11 +132,11 @@ class ViewWidgetState extends State<ViewWidget> {
     list.add(getTableHeaders());
     list.add(
       Expanded(
-        child: TableWidget(
+        child: TableWidget<T>(
             list: getList(),
             columns: columns,
             onTap: onRowTap,
-            onDoubleTap: (context, index) {
+            onDoubleTap: (final BuildContext context, final int index) {
               if (widget.preference.showBottom) {
                 setState(() {
                   isBottomPanelExpanded = true;
@@ -143,7 +149,7 @@ class ViewWidgetState extends State<ViewWidget> {
     if (widget.preference.showBottom) {
       list.add(BottomPanel(
         isExpanded: isBottomPanelExpanded,
-        onExpanded: (isExpanded) {
+        onExpanded: (final bool isExpanded) {
           setState(() {
             isBottomPanelExpanded = isExpanded;
           });
@@ -163,13 +169,13 @@ class ViewWidgetState extends State<ViewWidget> {
     return Column(children: list);
   }
 
-  updateBottomContent(tab) {
+  updateBottomContent(final num tab) {
     setState(() {
       selectedBottomTabId = tab;
     });
   }
 
-  Widget getSubViewContent(num subViewId, List<num> selectedItems) {
+  Widget getSubViewContent(final num subViewId, final List<int> selectedItems) {
     switch (subViewId) {
       case 0:
         return getSubViewContentForDetails(selectedItems);
@@ -182,15 +188,15 @@ class ViewWidgetState extends State<ViewWidget> {
     }
   }
 
-  onRowTap(context, index) {
+  onRowTap(final BuildContext context, final int index) {
     if (isMobile()) {
       showDialog(
           context: context,
-          builder: (context) {
+          builder: (final BuildContext context) {
             return AlertDialog(
               title: getDetailPanelHeader(context, index, list[index]),
-              content: getSubViewContentForDetails([index]),
-              actions: [
+              content: getSubViewContentForDetails(<int>[index]),
+              actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(false);
@@ -215,14 +221,14 @@ class ViewWidgetState extends State<ViewWidget> {
     }
   }
 
-  getDetailPanelHeader(context, index, item) {
+  Widget getDetailPanelHeader(final BuildContext context, final num index, final T item) {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getSubViewContentForDetails(List<num> indices) {
-    final detailPanelFields = getColumnDefinitionsForDetailsPanel();
+  Widget getSubViewContentForDetails(final List<int> indices) {
+    final ColumnDefinitions<T> detailPanelFields = getColumnDefinitionsForDetailsPanel();
     if (indices.isNotEmpty) {
-      var index = indices.first;
+      final int index = indices.first;
       return Center(
         key: Key(index.toString()),
         child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
@@ -231,8 +237,8 @@ class ViewWidgetState extends State<ViewWidget> {
     return const Text('No item selected');
   }
 
-  Widget getSubViewContentForChart(List<num> indices) {
-    List<CategoryValue> list = [];
+  Widget getSubViewContentForChart(final List<num> indices) {
+    final List<CategoryValue> list = <CategoryValue>[];
     list.add(CategoryValue('a', 12.2));
     list.add(CategoryValue('b', 22.2));
     list.add(CategoryValue('c', 11.2));
@@ -241,13 +247,13 @@ class ViewWidgetState extends State<ViewWidget> {
     return WidgetBarChart(list: list);
   }
 
-  Widget getSubViewContentForTransactions(List<num> indices) {
+  Widget getSubViewContentForTransactions(final List<int> indices) {
     return const Text('the transactions');
   }
 
-  List<Widget> getHeadersWidgets(BuildContext context, ColumnDefinitions columns, Function changeSort, Function customizeColumn) {
-    List<Widget> headers = [];
-    for (var i = 0; i < columns.list.length; i++) {
+  List<Widget> getHeadersWidgets(final BuildContext context, final ColumnDefinitions<T> columns, final Function changeSort, final Function customizeColumn) {
+    final List<Widget> headers = <Widget>[];
+    for (int i = 0; i < columns.list.length; i++) {
       headers.add(
         headerButton(
           context,
@@ -268,31 +274,31 @@ class ViewWidgetState extends State<ViewWidget> {
     return headers;
   }
 
-  changeListSortOrder(newSortOrder, newSortAscending) {
+  changeListSortOrder(final int newSortOrder, final bool newSortAscending) {
     setState(() {
       sortBy = newSortOrder;
       sortAscending = newSortAscending;
     });
   }
 
-  getUniqueInstances(ColumnDefinition columnToCustomerFilterOn) {
-    var set = <String>{}; // This is a Set()
-    var list = getList();
-    for (var i = 0; i < list.length; i++) {
-      var fieldValue = columnToCustomerFilterOn.getFieldValue!(i);
+  List<String> getUniqueInstances(final ColumnDefinition<T> columnToCustomerFilterOn) {
+    final Set<String> set = <String>{}; // This is a Set()
+    final List<T> list = getList();
+    for (int i = 0; i < list.length; i++) {
+      final String fieldValue = columnToCustomerFilterOn.value(i) as String;
       set.add(fieldValue);
     }
-    var uniqueValues = set.toList();
+    final List<String> uniqueValues = set.toList();
     uniqueValues.sort();
     return uniqueValues;
   }
 
-  getMinMaxValues(ColumnDefinition columnToCustomerFilterOn) {
-    num min = 0;
-    num max = 0;
-    var list = getList();
-    for (var i = 0; i < list.length; i++) {
-      var fieldValue = columnToCustomerFilterOn.getFieldValue!(i);
+  List<double> getMinMaxValues(final ColumnDefinition<T> columnToCustomerFilterOn) {
+    double min = 0;
+    double max = 0;
+    final List<T> list = getList();
+    for (int i = 0; i < list.length; i++) {
+      final double fieldValue = columnToCustomerFilterOn.value(i) as double;
       if (min > fieldValue) {
         min = fieldValue;
       }
@@ -301,17 +307,17 @@ class ViewWidgetState extends State<ViewWidget> {
       }
     }
 
-    return [min, max];
+    return <double>[min, max];
   }
 
-  getMinMaxDates(ColumnDefinition columnToCustomerFilterOn) {
+  List<String> getMinMaxDates(final ColumnDefinition<T> columnToCustomerFilterOn) {
     String min = '';
     String max = '';
 
-    var list = getList();
+    final List<T> list = getList();
 
-    for (var i = 0; i < list.length; i++) {
-      var fieldValue = columnToCustomerFilterOn.getFieldValue!(i);
+    for (int i = 0; i < list.length; i++) {
+      final String fieldValue = columnToCustomerFilterOn.value(i) as String;
       if (min.isEmpty || min.compareTo(fieldValue) == 1) {
         min = fieldValue;
       }
@@ -320,17 +326,17 @@ class ViewWidgetState extends State<ViewWidget> {
       }
     }
 
-    return [min, max];
+    return <String>[min, max];
   }
 
-  onCustomizeColumn(ColumnDefinition columnToCustomerFilterOn) {
+  onCustomizeColumn(final ColumnDefinition<T> columnToCustomerFilterOn) {
     Widget content;
 
     switch (columnToCustomerFilterOn.type) {
       case ColumnType.amount:
         {
-          var minMax = getMinMaxValues(columnToCustomerFilterOn);
-          content = Column(children: [
+          final List<double> minMax = getMinMaxValues(columnToCustomerFilterOn);
+          content = Column(children: <Widget>[
             Text(getCurrencyText(minMax[0])),
             Text(getCurrencyText(minMax[1])),
           ]);
@@ -339,8 +345,8 @@ class ViewWidgetState extends State<ViewWidget> {
 
       case ColumnType.date:
         {
-          var minMax = getMinMaxDates(columnToCustomerFilterOn);
-          content = Column(children: [
+          final List<String> minMax = getMinMaxDates(columnToCustomerFilterOn);
+          content = Column(children: <Widget>[
             Text(minMax[0]),
             Text(minMax[1]),
           ]);
@@ -352,11 +358,11 @@ class ViewWidgetState extends State<ViewWidget> {
           listOfUniqueInstances = getUniqueInstances(columnToCustomerFilterOn);
           content = ListView.builder(
               itemCount: listOfUniqueInstances.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (final BuildContext context, final int index) {
                 return CheckboxListTile(
                   title: Text(listOfUniqueInstances[index].toString()),
                   value: true,
-                  onChanged: (isChecked) {},
+                  onChanged: (final bool? isChecked) {},
                 );
               });
           break;
@@ -365,12 +371,12 @@ class ViewWidgetState extends State<ViewWidget> {
 
     showDialog(
         context: context,
-        builder: (context) {
+        builder: (final BuildContext context) {
           return Material(
               child: AlertDialog(
             title: const Text('Filter'),
             content: SizedBox(width: 400, height: 400, child: content),
-            actions: [
+            actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop(false);
@@ -388,7 +394,7 @@ class ViewWidgetState extends State<ViewWidget> {
         });
   }
 
-  getSortIndicated(columnNumber) {
+  SortIndicator getSortIndicated(final int columnNumber) {
     if (columnNumber == sortBy) {
       return sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
     }
@@ -398,7 +404,7 @@ class ViewWidgetState extends State<ViewWidget> {
 
 enum SortIndicator { none, sortAscending, sortDescending }
 
-getSortIconName(SortIndicator sortIndicator) {
+Widget? getSortIconName(final SortIndicator sortIndicator) {
   switch (sortIndicator) {
     case SortIndicator.sortAscending:
       return const Icon(Icons.arrow_upward, size: 20.0);
@@ -410,17 +416,17 @@ getSortIconName(SortIndicator sortIndicator) {
   }
 }
 
-Widget headerButton(context, text, textAlign, SortIndicator sortIndicator, onClick, onLongPress) {
+Widget headerButton(final BuildContext context, final String text, final TextAlign textAlign, final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
   return Expanded(
     child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick, onLongPress),
   );
 }
 
-Widget textButtonOptionalIcon(context, String text, textAlign, SortIndicator sortIndicator, onClick, onLongPress) {
-  final textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
-  var icon = getSortIconName(sortIndicator);
+Widget textButtonOptionalIcon(final BuildContext context, final String text, final TextAlign textAlign, final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
+  final TextTheme textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
+  final Widget? icon = getSortIconName(sortIndicator);
 
-  List<Widget> rowChildren = [];
+  final List<Widget> rowChildren = <Widget>[];
 
   rowChildren.add(Text(text, style: textTheme.titleSmall));
 
@@ -435,7 +441,7 @@ Widget textButtonOptionalIcon(context, String text, textAlign, SortIndicator sor
   );
 }
 
-MainAxisAlignment getRowAlignmentBasedOnTextAlign(TextAlign textAlign) {
+MainAxisAlignment getRowAlignmentBasedOnTextAlign(final TextAlign textAlign) {
   switch (textAlign) {
     case TextAlign.left:
       return MainAxisAlignment.start;
@@ -454,22 +460,11 @@ class ViewWidgetToDisplay {
   final bool columnAccount;
   final List<String> columnsToInclude;
 
-  const ViewWidgetToDisplay({this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.columnAccount = true, this.columnsToInclude = const []});
+  const ViewWidgetToDisplay({this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.columnAccount = true, this.columnsToInclude = const <String>[]});
 }
 
-typedef FilterFunction = bool Function(dynamic);
+typedef FilterFunction = bool Function(Transaction);
 
-bool defaultFilter(element) {
+bool defaultFilter(final Transaction element) {
   return true; // filter nothing
-}
-
-T? getFirstElement<T>(List<num> indices, list) {
-  if (indices.isNotEmpty) {
-    num index = indices.first;
-    var T = list[index];
-    if (T != null) {
-      return T;
-    }
-  }
-  return null;
 }

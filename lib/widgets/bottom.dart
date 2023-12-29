@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class BottomPanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
-  final List<num> selectedItems;
+  final List<int> selectedItems;
   final Object? subViewSelectedItem;
   final num selectedTabId;
   final Function onTabActivated;
-  final Function(num, List<num>) getBottomContentToRender;
+  final Widget Function(num, List<int>) getBottomContentToRender;
 
   const BottomPanel({
     super.key,
@@ -21,10 +21,10 @@ class BottomPanel extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    List<Widget> itemsToRender = [const Divider(thickness: 1, height: 1)];
+  Widget build(final BuildContext context) {
+    final List<Widget> itemsToRender = <Widget>[const Divider(thickness: 1, height: 1)];
 
-    itemsToRender.add(Row(children: [
+    itemsToRender.add(Row(children: <Widget>[
       Expanded(child: getRowOfTabs()),
       IconButton(
           onPressed: () {
@@ -34,16 +34,16 @@ class BottomPanel extends StatelessWidget {
     ]));
 
     if (isExpanded) {
-      Widget widgetToRender = getBottomContentToRender(selectedTabId, selectedItems);
+      final Widget widgetToRender = getBottomContentToRender(selectedTabId, selectedItems);
       itemsToRender.add(Expanded(child: Padding(padding: const EdgeInsets.all(20), child: widgetToRender)));
     }
 
     return SizedBox(height: isExpanded ? 400 : 50, child: Column(children: itemsToRender));
   }
 
-  getRowOfTabs() {
+  Widget getRowOfTabs() {
     return Row(
-      children: [
+      children: <Widget>[
         getTabButton(0, 'Details'),
         getTabButton(1, 'Chart'),
         getTabButton(2, 'Transactions'),
@@ -51,7 +51,7 @@ class BottomPanel extends StatelessWidget {
     );
   }
 
-  getTabButton(num id, String text) {
+  Widget getTabButton(final num id, final String text) {
     return TextButton(
         onPressed: () {
           if (!isExpanded) {

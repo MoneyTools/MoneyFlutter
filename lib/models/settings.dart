@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../helpers.dart';
-import 'constants.dart';
+import 'package:money/helpers.dart';
+import 'package:money/models/constants.dart';
 
 class Settings {
   bool prefLoaded = false;
@@ -14,8 +14,8 @@ class Settings {
   bool useDarkMode = false;
   double textScale = 1.0;
 
-  load({Function? onLoaded}) async {
-    var preferences = await SharedPreferences.getInstance();
+  load({final Function? onLoaded}) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
     colorSelected = intValueOrDefault(preferences.getInt(prefColor));
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
     useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
@@ -29,7 +29,7 @@ class Settings {
   }
 
   save() async {
-    var preferences = await SharedPreferences.getInstance();
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setDouble(prefTextScale, textScale);
     preferences.setInt(prefColor, colorSelected);
     preferences.setBool(prefDarkMode, useDarkMode);
@@ -47,7 +47,7 @@ class Settings {
       colorSelected = 0;
     }
 
-    var themeData = ThemeData(
+    final ThemeData themeData = ThemeData(
       colorSchemeSeed: colorOptions[colorSelected],
       brightness: useDarkMode ? Brightness.dark : Brightness.light,
     );

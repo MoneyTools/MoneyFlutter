@@ -2,14 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/models/money_entity.dart';
 
-import '../helpers.dart';
-import 'columns.dart';
+import 'package:money/helpers.dart';
+import 'package:money/widgets/columns.dart';
 
-class TableWidget extends StatefulWidget {
-  final ColumnDefinitions columns;
-  final List<MoneyEntity> list;
+class TableWidget<T> extends StatefulWidget {
+  final ColumnDefinitions<T> columns;
+  final List<T> list;
   final Function onTap;
   final Function onDoubleTap;
 
@@ -22,34 +21,34 @@ class TableWidget extends StatefulWidget {
   });
 
   @override
-  State<TableWidget> createState() => TableWidgetState();
+  State<TableWidget<T>> createState() => TableWidgetState<T>();
 }
 
-class TableWidgetState extends State<TableWidget> {
-  List<int> selectedItems = [0];
+class TableWidgetState<T> extends State<TableWidget<T>> {
+  List<int> selectedItems = <int>[0];
   final double itemHeight = 30;
-  final scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
   num currentIndex = 0;
   Timer? _timerForTap;
 
-  ColumnDefinitions getColumnDefinitions() {
-    return ColumnDefinitions([]);
+  ColumnDefinitions<T> getColumnDefinitions() {
+    return ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return ListView.builder(
         primary: false,
         scrollDirection: Axis.vertical,
         controller: scrollController,
         itemCount: widget.list.length,
         itemExtent: itemHeight,
-        itemBuilder: (context, index) {
+        itemBuilder: (final BuildContext context, final int index) {
           return getRow(widget.list, index, index == currentIndex);
         });
   }
 
-  KeyEventResult onListViewKeyEvent(FocusNode node, RawKeyEvent event) {
+  KeyEventResult onListViewKeyEvent(final FocusNode node, final RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
@@ -83,21 +82,21 @@ class TableWidgetState extends State<TableWidget> {
           });
           return KeyEventResult.handled;
         } else {
-          debugLog(event.logicalKey);
+          debugLog(event.logicalKey.toString());
         }
       }
     }
     return KeyEventResult.ignored;
   }
 
-  Widget getRow(list, index, autofocus) {
-    List<Widget> cells = getCells(index);
+  Widget getRow(final List<T> list, final int index, final bool autofocus) {
+    final List<Widget> cells = getCells(index);
 
-    var backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
+    final Color backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
 
     return Focus(
         autofocus: autofocus,
-        onFocusChange: (value) {
+        onFocusChange: (final bool value) {
           // debugLog('focus lost $value index $currentIndex');
           if (value) {}
         },
@@ -118,11 +117,11 @@ class TableWidgetState extends State<TableWidget> {
         ));
   }
 
-  List<Widget> getCells(index) {
+  List<Widget> getCells(final int index) {
     return widget.columns.getCellsForRow(index);
   }
 
-  void selectedItemOffset(int delta) {
+  void selectedItemOffset(final int delta) {
     int newPosition = 0;
     if (selectedItems.isNotEmpty) {
       newPosition = selectedItems[0] + delta;
@@ -131,7 +130,7 @@ class TableWidgetState extends State<TableWidget> {
     setSelectedItem(newPosition);
   }
 
-  void setSelectedItem(int newPosition, [bool isDoubleTap = false]) {
+  void setSelectedItem(final int newPosition, [final bool isDoubleTap = false]) {
     if (newPosition.isBetween(-1, widget.list.length)) {
       setState(() {
         selectedItems.clear();
@@ -148,47 +147,47 @@ class TableWidgetState extends State<TableWidget> {
     }
   }
 
-  void fireOnTapToHost(index) {
+  void fireOnTapToHost(final int index) {
     _timerForTap?.cancel();
     _timerForTap = Timer(const Duration(milliseconds: 600), () {
       widget.onTap(context, index);
     });
   }
 
-  void fireOnDoubleTapToHost(index) {
+  void fireOnDoubleTapToHost(final int index) {
     _timerForTap?.cancel();
     _timerForTap = Timer(const Duration(milliseconds: 600), () {
       widget.onDoubleTap(context, index);
     });
   }
 
-  void scrollToIndex(int index) {
-    var minMax = scrollListenerWithItemCount();
+  void scrollToIndex(final int index) {
+    final List<int> minMax = scrollListenerWithItemCount();
 
     // debugLog("${minMax[0]} > $index < ${minMax[1]}");
 
     if (!index.isBetween(minMax[0], minMax[1])) {
-      double desiredNewPosition = itemHeight * index;
+      final double desiredNewPosition = itemHeight * index;
       scrollController.jumpTo(desiredNewPosition);
     }
   }
 
   int numberOfItemOnViewPort() {
-    double viewportHeight = scrollController.position.viewportDimension;
-    int numberOfItemDisplayed = (viewportHeight / itemHeight).ceil();
+    final double viewportHeight = scrollController.position.viewportDimension;
+    final int numberOfItemDisplayed = (viewportHeight / itemHeight).ceil();
     return numberOfItemDisplayed;
   }
 
   // use this if total item count is known
-  scrollListenerWithItemCount() {
-    int itemCount = widget.list.length;
-    double scrollOffset = scrollController.position.pixels;
-    double viewportHeight = scrollController.position.viewportDimension;
-    double scrollRange = scrollController.position.maxScrollExtent - scrollController.position.minScrollExtent;
+  List<int> scrollListenerWithItemCount() {
+    final int itemCount = widget.list.length;
+    final double scrollOffset = scrollController.position.pixels;
+    final double viewportHeight = scrollController.position.viewportDimension;
+    final double scrollRange = scrollController.position.maxScrollExtent - scrollController.position.minScrollExtent;
 
-    int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
-    int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
+    final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
+    final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
 
-    return [firstVisibleItemIndex, lastVisibleItemIndex];
+    return <int>[firstVisibleItemIndex, lastVisibleItemIndex];
   }
 }

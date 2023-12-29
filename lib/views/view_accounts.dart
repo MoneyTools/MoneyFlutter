@@ -1,39 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/money_entity.dart';
 
-import '../helpers.dart';
-import '../models/accounts.dart';
-import '../models/transactions.dart';
-import '../widgets/caption_and_counter.dart';
-import '../widgets/columns.dart';
-import '../widgets/header.dart';
-import '../widgets/widget_bar_chart.dart';
-import '../widgets/widget_view.dart';
-import 'view_transactions.dart';
+import 'package:money/helpers.dart';
+import 'package:money/models/accounts.dart';
+import 'package:money/models/transactions.dart';
+import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/header.dart';
+import 'package:money/widgets/widget_bar_chart.dart';
+import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view_transactions.dart';
 
-class ViewAccounts extends ViewWidget {
+class ViewAccounts extends ViewWidget<Account> {
   const ViewAccounts({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewAccountsState();
+  State<ViewWidget<Account>> createState() => ViewAccountsState();
 }
 
-class ViewAccountsState extends ViewWidgetState {
-  final List<Widget> pivots = [];
+class ViewAccountsState extends ViewWidgetState<Account> {
+  final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, false, true];
 
   @override
   void initState() {
     super.initState();
 
-    pivots.add(CaptionAndCounter(caption: 'Banks', small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.checking, AccountType.savings])));
-    pivots.add(CaptionAndCounter(caption: 'Cards', small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.credit])));
-    pivots.add(CaptionAndCounter(caption: 'Assets', small: true, vertical: true, value: getTotalBalanceOfAccounts([AccountType.asset])));
-    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts([])));
+    pivots.add(CaptionAndCounter(caption: 'Banks', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings])));
+    pivots.add(CaptionAndCounter(caption: 'Cards', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[AccountType.credit])));
+    pivots.add(CaptionAndCounter(caption: 'Assets', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[AccountType.asset])));
+    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[])));
   }
 
-  double getTotalBalanceOfAccounts(List<AccountType> types) {
-    var total = 0.0;
-    Accounts.activeAccount(types).forEach((x) => total += (x as Account).balance);
+  double getTotalBalanceOfAccounts(final List<AccountType> types) {
+    double total = 0.0;
+    Accounts.activeAccount(types).forEach((final Account x) => total += x.balance);
     return total;
   }
 
@@ -54,16 +55,17 @@ class ViewAccountsState extends ViewWidgetState {
 
   @override
   Widget getTitle() {
-    return Column(children: [
+    return Column(children: <Widget>[
       Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
   }
 
   @override
-  getSubViewContentForChart(List<num> indices) {
-    List<CategoryValue> list = [];
-    for (var account in getList()) {
+  getSubViewContentForChart(final List<num> indices) {
+    final List<CategoryValue> list = <CategoryValue>[];
+    for (final MoneyEntity item in getList()) {
+      final Account account = item as Account;
       if (account.isActive()) {
         list.add(CategoryValue(account.name, account.balance));
       }
@@ -78,12 +80,12 @@ class ViewAccountsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForTransactions(List<num> indices) {
-    var account = getFirstElement<Account>(indices, list);
+  getSubViewContentForTransactions(final List<int> indices) {
+    final Account? account = getFirstElement<Account>(indices, list);
     if (account != null && account.id > -1) {
       return ViewTransactions(
         key: Key(account.id.toString()),
-        filter: (t) => filterByAccountId(t, account.id),
+        filter: (final Transaction transaction) => filterByAccountId(transaction, account.id),
         preference: preferenceJustTableDatePayeeCategoryAmountBalance,
         startingBalance: account.openingBalance,
       );
@@ -91,55 +93,71 @@ class ViewAccountsState extends ViewWidgetState {
     return const Text('No account transactions');
   }
 
-  bool filterByAccountId(Transaction t, accountId) {
+  bool filterByAccountId(final Transaction t, final num accountId) {
     return t.accountId == accountId;
   }
 
   @override
-  ColumnDefinitions getColumnDefinitionsForTable() {
-    return ColumnDefinitions([
-      ColumnDefinition(
-        'Name',
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
+  ColumnDefinitions<Account> getColumnDefinitionsForTable() {
+    return ColumnDefinitions<Account>(list: <ColumnDefinition<Account>>[
+      ColumnDefinition<Account>(
+        name: 'Name',
+        type: ColumnType.text,
+        align: TextAlign.left,
+        value: (final int index) {
           return list[index].name;
         },
-        (a, b, sortAscending) {
-          return sortByString(a.name, b.name, sortAscending);
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByString(
+            a.name,
+            b.name,
+            sortAscending,
+          );
         },
       ),
-      ColumnDefinition(
-        'Type',
-        ColumnType.text,
-        TextAlign.center,
-        (index) {
+      ColumnDefinition<Account>(
+        name: 'Type',
+        type: ColumnType.text,
+        align: TextAlign.center,
+        value: (final int index) {
           return list[index].getTypeAsText();
         },
-        (a, b, sortAscending) {
-          return sortByString(a.getTypeAsText(), b.getTypeAsText(), sortAscending);
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByString(
+            a.getTypeAsText(),
+            b.getTypeAsText(),
+            sortAscending,
+          );
         },
       ),
-      ColumnDefinition(
-        'Count',
-        ColumnType.numeric,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Account>(
+        name: 'Count',
+        type: ColumnType.numeric,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].count;
         },
-        (a, b, sortAscending) {
-          return sortByValue(a.count, b.count, sortAscending);
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByValue(
+            a.count,
+            b.count,
+            sortAscending,
+          );
         },
       ),
-      ColumnDefinition(
-        'Balance',
-        ColumnType.amount,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Account>(
+        name: 'Balance',
+        type: ColumnType.amount,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].balance;
         },
-        (a, b, sortAscending) {
-          return sortByValue(a.balance, b.balance, sortAscending);
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByValue(
+            a.balance,
+            b.balance,
+            sortAscending,
+          );
         },
       ),
     ]);
@@ -151,32 +169,32 @@ class ViewAccountsState extends ViewWidgetState {
   }
 
   @override
-  getList() {
+  List<Account> getList() {
     return Accounts.activeAccount(getSelectedAccountType());
   }
 
   List<AccountType> getSelectedAccountType() {
     if (_selectedPivot[0]) {
-      return [AccountType.checking, AccountType.savings];
+      return <AccountType>[AccountType.checking, AccountType.savings];
     }
 
     if (_selectedPivot[1]) {
-      return [AccountType.credit];
+      return <AccountType>[AccountType.credit];
     }
 
     if (_selectedPivot[2]) {
-      return [AccountType.asset];
+      return <AccountType>[AccountType.asset];
     }
-    return []; // all
+    return <AccountType>[]; // all
   }
 
-  renderToggles() {
+  Widget renderToggles() {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
         child: ToggleButtons(
           direction: Axis.horizontal,
-          onPressed: (int index) {
+          onPressed: (final int index) {
             setState(() {
               for (int i = 0; i < _selectedPivot.length; i++) {
                 _selectedPivot[i] = i == index;

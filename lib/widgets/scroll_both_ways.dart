@@ -11,7 +11,7 @@ class ScrollBothWay extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return SizedBox(
       height: 2500,
       width: 2400,
@@ -23,7 +23,7 @@ class ScrollBothWay extends StatelessWidget {
           controller: _horizontal,
           thumbVisibility: true,
           trackVisibility: true,
-          notificationPredicate: (notification) => notification.depth == 1,
+          notificationPredicate: (final ScrollNotification notification) => notification.depth == 1,
           child: SingleChildScrollView(
             controller: _vertical,
             child: SingleChildScrollView(

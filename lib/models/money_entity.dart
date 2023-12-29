@@ -6,72 +6,80 @@ class MoneyEntity {
     //
   }
 
-  static fromRowColumnToString(row, nameOfColumn) {
-    var rawValue = row[nameOfColumn];
+  static String fromRowColumnToString(final Map<String, Object?> row, final String nameOfColumn) {
+    final Object? rawValue = row[nameOfColumn];
     if (rawValue == null) {
       return '';
     }
     return rawValue.toString();
   }
 
-  static fromRowColumnToNumber(row, nameOfColumn) {
-    var rawValue = row[nameOfColumn];
+  static num fromRowColumnToNumber(final Map<String, Object?> row, final String nameOfColumn) {
+    final Object? rawValue = row[nameOfColumn];
     if (rawValue == null) {
       return 0;
     }
-    var rawValueAsText = rawValue.toString();
+    final String rawValueAsText = rawValue.toString();
     return num.parse(rawValueAsText);
   }
 
-  static fromRowColumnToDouble(row, nameOfColumn) {
-    var rawValue = row[nameOfColumn];
+  static double fromRowColumnToDouble(final Map<String, Object?> row, final String nameOfColumn) {
+    final Object? rawValue = row[nameOfColumn];
     if (rawValue == null) {
       return 0.00;
     }
-    var rawValueAsText = rawValue.toString();
+    final String rawValueAsText = rawValue.toString();
     return double.parse(rawValueAsText);
+  }
+
+  static DateTime? fromRowColumnToDateTime(final Map<String, Object?> row, final String nameOfColumn) {
+    final String rawValue = fromRowColumnToString(row, nameOfColumn);
+    if (rawValue.isEmpty) {
+      return null;
+    }
+    return DateTime.parse(rawValue);
   }
 }
 
-class MoneyObjects {
-  final List<MoneyEntity> _list = [];
-  final Map<num, MoneyEntity> _map = {};
+class MoneyObjects<T> {
+  final List<T> _list = <T>[];
+  final Map<num, T> _map = <num, T>{};
 
   MoneyObjects() {
-//
+    //
   }
 
-  List<MoneyEntity> getAsList() {
+  List<T> getAsList() {
     return _list;
   }
 
-  clear() {
+  void clear() {
     _list.clear();
   }
 
-  addEntry(MoneyEntity entry) {
-    _list.add(entry);
-    _map[entry.id] = entry;
+  void addEntry(final MoneyEntity entry) {
+    _list.add(entry as T);
+    _map[entry.id] = entry as T;
   }
 
-  MoneyEntity? get(id) {
+  T? get(final num id) {
     return _map[id];
   }
 
-  MoneyEntity? getByName(name) {
-    for (var item in _list) {
-      if (item.name == name) {
+  T? getByName(final String name) {
+    for (final T item in _list) {
+      if ((item as MoneyEntity).name == name) {
         return item;
       }
     }
     return null;
   }
 
-  String getNameFromId(num id) {
-    var item = get(id);
+  String getNameFromId(final num id) {
+    final T? item = get(id);
     if (item == null) {
       return id.toString();
     }
-    return item.name;
+    return (item as MoneyEntity).name;
   }
 }

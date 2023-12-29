@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'models/settings.dart';
+import 'package:money/models/settings.dart';
 
 class MenuHorizontal extends StatefulWidget {
   final void Function(int) onSelectItem;
@@ -23,10 +23,10 @@ class _MenuHorizontalState extends State<MenuHorizontal> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return NavigationBar(
         selectedIndex: _selectedIndex,
-        onDestinationSelected: (index) {
+        onDestinationSelected: (final int index) {
           setState(() {
             _selectedIndex = index;
           });
@@ -60,14 +60,14 @@ class _MenuVerticalState extends State<MenuVertical> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    var destinations = getNavRailDestination(widget.settings);
+  Widget build(final BuildContext context) {
+    final List<NavigationRailDestination> destinations = getNavRailDestination(widget.settings);
     return NavigationRail(
       minWidth: 50,
       destinations: destinations,
       selectedIndex: _selectedIndex,
       useIndicator: widget.useIndicator,
-      onDestinationSelected: (index) {
+      onDestinationSelected: (final int index) {
         setState(() {
           _selectedIndex = index;
         });
@@ -77,8 +77,8 @@ class _MenuVerticalState extends State<MenuVertical> {
   }
 }
 
-List<NavigationDestination> getAppBarDestinations(settings) {
-  List<NavigationDestination> appBarDestinations = [
+List<NavigationDestination> getAppBarDestinations(final Settings settings) {
+  final List<NavigationDestination> appBarDestinations = <NavigationDestination>[
     const NavigationDestination(
       label: 'Cash Flow',
       tooltip: 'Cash Flow',
@@ -122,11 +122,11 @@ List<NavigationDestination> getAppBarDestinations(settings) {
   return appBarDestinations;
 }
 
-getNavRailDestination(settings) {
-  var list = getAppBarDestinations(settings);
+List<NavigationRailDestination> getNavRailDestination(final Settings settings) {
+  final List<NavigationDestination> list = getAppBarDestinations(settings);
 
-  var navRailDestinations = list.map(
-    (destination) => NavigationRailDestination(
+  final Iterable<NavigationRailDestination> navRailDestinations = list.map(
+    (final NavigationDestination destination) => NavigationRailDestination(
       icon: Tooltip(
         message: destination.label,
         child: destination.icon,

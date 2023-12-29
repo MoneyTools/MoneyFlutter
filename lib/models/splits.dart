@@ -7,29 +7,29 @@ class Split extends MoneyEntity {
   num payeeId;
   String memo;
 
-  Split(id, this.transactionId, this.categoryId, this.amount, this.payeeId, this.memo) : super(id, '');
+  Split(final num id, this.transactionId, this.categoryId, this.amount, this.payeeId, this.memo) : super(id, '');
 }
 
 class Splits {
-  static List<Split> list = [];
+  static List<Split> list = <Split>[];
 
-  static get(transactionId) {
-    return list.where((item) => item.transactionId == transactionId);
+  static List<Split> get(final num transactionId) {
+    return list.where((final Split item) => item.transactionId == transactionId).toList();
   }
 
   clear() {
     list.clear();
   }
 
-  load(rows) async {
+  load(final List<Map<String, Object?>> rows) async {
     clear();
-    for (var row in rows) {
-      var id = num.parse(row['Id'].toString());
-      var transactionId = num.parse(row['Transaction'].toString());
-      var categoryId = num.parse(row['Category'].toString());
-      var amount = double.parse(row['Amount'].toString());
-      var payeeId = double.parse(row['Payee'].toString());
-      var memo = row['Memo'].toString();
+    for (final Map<String, Object?> row in rows) {
+      final num id = num.parse(row['Id'].toString());
+      final num transactionId = num.parse(row['Transaction'].toString());
+      final num categoryId = num.parse(row['Category'].toString());
+      final double amount = double.parse(row['Amount'].toString());
+      final double payeeId = double.parse(row['Payee'].toString());
+      final String memo = row['Memo'].toString();
 
       list.add(Split(id, transactionId, categoryId, amount, payeeId, memo));
     }

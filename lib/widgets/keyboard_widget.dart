@@ -103,7 +103,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   }
 
   @override
-  void didUpdateWidget(KeyboardWidget oldWidget) {
+  void didUpdateWidget(final KeyboardWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.hasFocus) {
       _focusNode.requestFocus();
@@ -117,8 +117,8 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   }
 
   Widget _getAltText(
-    String text,
-    TextStyle textStyle,
+    final String text,
+    final TextStyle textStyle,
   ) {
     return Container(
       margin: const EdgeInsets.only(right: 8),
@@ -131,7 +131,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   }
 
   //returns text surrounded with a rounded-rect
-  Widget _getBubble(String text, Color color, Color color2, TextStyle textStyle, {bool invert = false}) {
+  Widget _getBubble(final String text, final Color color, final Color color2, final TextStyle textStyle, {final bool invert = false}) {
     // bool isDark = background.computeLuminance() < .5;
     return Container(
       margin: const EdgeInsets.only(left: 6),
@@ -142,8 +142,8 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   }
 
   //returns the modifier key as text or a symbol (where possible)
-  String _getModifiers(KeyAction rep) {
-    StringBuffer buffer = StringBuffer();
+  String _getModifiers(final KeyAction rep) {
+    final StringBuffer buffer = StringBuffer();
     if (rep.isMetaPressed) {
       //Platform operating system is not available in the web platform
       if (!kIsWeb && Platform.isMacOS) {
@@ -180,7 +180,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     }
   }
 
-  KeyAction? _findMatch(RawKeyEvent event) {
+  KeyAction? _findMatch(final RawKeyEvent event) {
     for (KeyAction rep in widget.bindings) {
       if (rep.matchesEvent(event)) {
         return rep;
@@ -192,9 +192,9 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   static const double horizontalMargin = 16.0;
 
   Map<String, List<KeyAction>> _getBindingsMap() {
-    Map<String, List<KeyAction>> map = {};
+    final Map<String, List<KeyAction>> map = <String, List<KeyAction>>{};
     for (KeyAction ka in widget.bindings) {
-      String category = ka.categoryHeader;
+      final String category = ka.categoryHeader;
       if (!map.containsKey(category)) {
         map[category] = <KeyAction>[];
       }
@@ -205,22 +205,22 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
 
   OverlayEntry _buildCategoryOverlay() {
     final ThemeData theme = Theme.of(context);
-    TextStyle? bodyText = theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold);
-    TextStyle categoryTextStyle = bodyText ?? const TextStyle().copyWith(fontWeight: FontWeight.bold);
+    final TextStyle? bodyText = theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold);
+    final TextStyle categoryTextStyle = bodyText ?? const TextStyle().copyWith(fontWeight: FontWeight.bold);
 
-    Map<String, List<KeyAction>> map = _getBindingsMap();
-    int length = map.length + widget.bindings.length;
+    final Map<String, List<KeyAction>> map = _getBindingsMap();
+    final int length = map.length + widget.bindings.length;
 
     final MediaQueryData media = MediaQuery.of(context);
-    Size size = media.size;
-    List<List<DataCell>> tableRows = [];
+    final Size size = media.size;
+    final List<List<DataCell>> tableRows = <List<DataCell>>[];
     for (int k = 0; k < length; k++) {
       tableRows.add(<DataCell>[]);
     }
 
-    List<Widget> rows = [];
+    final List<Widget> rows = <Widget>[];
     for (String category in map.keys) {
-      Container header = Container(
+      final Container header = Container(
           decoration: const BoxDecoration(
             border: Border(bottom: BorderSide(width: 2.0)),
           ),
@@ -231,11 +231,11 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
           ));
       rows.add(header);
 
-      List<KeyAction> actions = map[category]!;
-      Widget table = _getTableForActions(actions);
+      final List<KeyAction> actions = map[category]!;
+      final Widget table = _getTableForActions(actions);
       rows.add(table);
     }
-    Widget dataTable = SingleChildScrollView(
+    final Widget dataTable = SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: ListView(
         shrinkWrap: true,
@@ -243,7 +243,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       ),
     );
 
-    return OverlayEntry(builder: (context) {
+    return OverlayEntry(builder: (final BuildContext context) {
       return Positioned(
         child: GestureDetector(
           onTap: () {
@@ -271,39 +271,39 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     });
   }
 
-  Widget _getTableForActions(List<KeyAction> actions) {
-    int colCount = widget.columnCount;
+  Widget _getTableForActions(final List<KeyAction> actions) {
+    final int colCount = widget.columnCount;
     final ThemeData theme = Theme.of(context);
-    TextStyle textStyle = widget.textStyle ?? theme.textTheme.labelSmall ?? defaultTextStyle;
-    TextStyle altTextStyle = textStyle.copyWith(fontWeight: FontWeight.bold);
-    Color background = widget.backgroundColor ?? theme.cardColor;
-    Color textColor = textStyle.color ?? defaultTextColor;
+    final TextStyle textStyle = widget.textStyle ?? theme.textTheme.labelSmall ?? defaultTextStyle;
+    final TextStyle altTextStyle = textStyle.copyWith(fontWeight: FontWeight.bold);
+    final Color background = widget.backgroundColor ?? theme.cardColor;
+    final Color textColor = textStyle.color ?? defaultTextColor;
 
-    List<DataColumn> columns = [];
+    final List<DataColumn> columns = <DataColumn>[];
     for (int k = 0; k < colCount; k++) {
       columns.add(const DataColumn(label: Text('d')));
       columns.add(const DataColumn(label: Text('m'), numeric: true));
       columns.add(const DataColumn(label: Text('k')));
     }
 
-    int rowCount = (actions.length / colCount).ceil();
-    int fullRows = actions.length ~/ colCount;
+    final int rowCount = (actions.length / colCount).ceil();
+    final int fullRows = actions.length ~/ colCount;
 
-    List<List<DataCell>> tableRows = [];
+    final List<List<DataCell>> tableRows = <List<DataCell>>[];
     for (int k = 0; k < rowCount; k++) {
       tableRows.add(<DataCell>[]);
     }
 
     for (int k = 0; k < fullRows; k++) {
-      List<DataCell> dataRow = tableRows[k];
+      final List<DataCell> dataRow = tableRows[k];
       for (int t = 0; t < colCount; t++) {
-        KeyAction rep = actions[k * colCount + t];
+        final KeyAction rep = actions[k * colCount + t];
         dataRow.addAll(_getDataRow(rep, textStyle, altTextStyle, background, textColor));
       }
     }
     if (actions.length % colCount != 0) {
       for (int k = fullRows * colCount; k < actions.length; k++) {
-        KeyAction rep = actions[k];
+        final KeyAction rep = actions[k];
         tableRows[k].addAll(_getDataRow(rep, textStyle, altTextStyle, background, textColor));
       }
       for (int k = actions.length; k < rowCount * colCount; k++) {
@@ -312,13 +312,13 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
         tableRows[k].add(DataCell.empty);
       }
     }
-    List<DataRow> rows = [];
+    final List<DataRow> rows = <DataRow>[];
     for (List<DataCell> cells in tableRows) {
       rows.add(DataRow(cells: cells));
     }
 
-    ThemeData data = Theme.of(context);
-    Color dividerColor = widget.showLines ? data.dividerColor : Colors.transparent;
+    final ThemeData data = Theme.of(context);
+    final Color dividerColor = widget.showLines ? data.dividerColor : Colors.transparent;
     return Theme(
       data: data.copyWith(dividerColor: dividerColor),
       child: DataTable(
@@ -333,9 +333,9 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     );
   }
 
-  List<DataCell> _getDataRow(KeyAction rep, TextStyle textStyle, TextStyle altTextStyle, Color background, Color textColor) {
-    List<DataCell> dataRow = [];
-    String modifiers = _getModifiers(rep);
+  List<DataCell> _getDataRow(final KeyAction rep, final TextStyle textStyle, final TextStyle altTextStyle, final Color background, final Color textColor) {
+    final List<DataCell> dataRow = <DataCell>[];
+    final String modifiers = _getModifiers(rep);
     dataRow.add(DataCell(Text(
       rep.description,
       overflow: TextOverflow.ellipsis,
@@ -350,31 +350,31 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
 
   OverlayEntry _buildOverlay() {
     final ThemeData themeData = Theme.of(context);
-    TextStyle textStyle = widget.textStyle ?? themeData.textTheme.labelSmall ?? defaultTextStyle;
-    Color background = widget.backgroundColor ?? themeData.cardColor;
-    Color textColor = textStyle.color ?? defaultTextColor;
+    final TextStyle textStyle = widget.textStyle ?? themeData.textTheme.labelSmall ?? defaultTextStyle;
+    final Color background = widget.backgroundColor ?? themeData.cardColor;
+    final Color textColor = textStyle.color ?? defaultTextColor;
 
     final MediaQueryData media = MediaQuery.of(context);
-    Size size = media.size;
-    int length = widget.bindings.length;
+    final Size size = media.size;
+    final int length = widget.bindings.length;
 
-    int rowCount = (length / widget.columnCount).ceil();
-    List<List<DataCell>> tableRows = [];
+    final int rowCount = (length / widget.columnCount).ceil();
+    final List<List<DataCell>> tableRows = <List<DataCell>>[];
     for (int k = 0; k < rowCount; k++) {
       tableRows.add(<DataCell>[]);
     }
-    List<DataColumn> columns = [];
+    final List<DataColumn> columns = <DataColumn>[];
     for (int k = 0; k < widget.columnCount; k++) {
       columns.add(const DataColumn(label: Text('d')));
       columns.add(const DataColumn(label: Text('m'), numeric: true));
       columns.add(const DataColumn(label: Text('k')));
     }
-    int fullRows = length ~/ widget.columnCount;
+    final int fullRows = length ~/ widget.columnCount;
     for (int k = 0; k < fullRows; k++) {
-      List<DataCell> dataRow = tableRows[k];
+      final List<DataCell> dataRow = tableRows[k];
       for (int t = 0; t < widget.columnCount; t++) {
-        KeyAction rep = widget.bindings[k * widget.columnCount + t];
-        String modifiers = _getModifiers(rep);
+        final KeyAction rep = widget.bindings[k * widget.columnCount + t];
+        final String modifiers = _getModifiers(rep);
 
         dataRow.add(
           DataCell(
@@ -390,10 +390,10 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       }
     }
     if (widget.bindings.length % widget.columnCount != 0) {
-      List<DataCell> dataRow = tableRows[fullRows];
+      final List<DataCell> dataRow = tableRows[fullRows];
       for (int k = fullRows * widget.columnCount; k < widget.bindings.length; k++) {
-        KeyAction rep = widget.bindings[k];
-        String modifiers = _getModifiers(rep);
+        final KeyAction rep = widget.bindings[k];
+        final String modifiers = _getModifiers(rep);
         dataRow.add(DataCell(Text(
           rep.description,
           overflow: TextOverflow.ellipsis,
@@ -408,15 +408,15 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
         dataRow.add(DataCell.empty);
       }
     }
-    List<DataRow> rows = [];
+    final List<DataRow> rows = <DataRow>[];
     for (List<DataCell> cells in tableRows) {
       rows.add(DataRow(
         cells: cells,
       ));
     }
 
-    Color dividerColor = widget.showLines ? themeData.dividerColor : Colors.transparent;
-    Widget dataTable = Theme(
+    final Color dividerColor = widget.showLines ? themeData.dividerColor : Colors.transparent;
+    final Widget dataTable = Theme(
         data: Theme.of(context).copyWith(dividerColor: dividerColor),
         child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
@@ -431,13 +431,14 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
           ),
         ));
 
-    Widget grid = Container(
+    final Widget grid = Container(
       alignment: Alignment.center,
       height: double.infinity,
       width: double.infinity,
-      decoration: BoxDecoration(color: background, border: Border.all(color: background, width: 12), borderRadius: BorderRadius.circular(12), boxShadow: const [BoxShadow(color: shadow, blurRadius: 30, spreadRadius: 1)]),
+      decoration: BoxDecoration(
+          color: background, border: Border.all(color: background, width: 12), borderRadius: BorderRadius.circular(12), boxShadow: const <BoxShadow>[BoxShadow(color: shadow, blurRadius: 30, spreadRadius: 1)]),
       child: (widget.helpText != null)
-          ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: [
+          ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
               Flexible(
                   child: Markdown(
                 shrinkWrap: true,
@@ -456,7 +457,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
           : dataTable,
     );
 
-    return OverlayEntry(builder: (context) {
+    return OverlayEntry(builder: (final BuildContext context) {
       return Positioned(
           child: GestureDetector(
         onTap: () {
@@ -488,7 +489,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   ///Returns the keyboard widget on desktop platforms. It does not
   ///provide shortcuts on IOS or Android
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Focus(
       canRequestFocus: true,
       descendantsAreFocusable: true,
@@ -496,9 +497,9 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       focusNode: _focusNode,
       autofocus: false,
       //widget.hasFocus,
-      onKey: (FocusNode node, RawKeyEvent event) {
+      onKey: (final FocusNode node, final RawKeyEvent event) {
         if (event.runtimeType == RawKeyDownEvent && node.hasPrimaryFocus) {
-          LogicalKeyboardKey key = event.logicalKey;
+          final LogicalKeyboardKey key = event.logicalKey;
 
           if (key == widget.showDismissKey) {
             toggleOverlay();
@@ -509,7 +510,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
             }
             return KeyEventResult.handled;
           } else {
-            KeyAction? rep = _findMatch(event);
+            final KeyAction? rep = _findMatch(event);
             if (rep != null) {
               rep.callback();
               return KeyEventResult.handled;
@@ -564,14 +565,16 @@ class KeyAction {
   ///[description] and [callback] method. Includes optional bool values (defaulting
   ///to false) for key modifiers for meta [isMetaPressed], shift [isShiftPressed],
   ///alt [isAltPressed]
-  KeyAction(LogicalKeyboardKey keyStroke, this.description, this.callback, {this.categoryHeader = '', bool isControlPressed = false, bool isMetaPressed = false, bool isShiftPressed = false, bool isAltPressed = false})
+  KeyAction(final LogicalKeyboardKey keyStroke, this.description, this.callback,
+      {this.categoryHeader = '', final bool isControlPressed = false, final bool isMetaPressed = false, final bool isShiftPressed = false, final bool isAltPressed = false})
       : keyActivator = SingleActivator(keyStroke, control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
 
   ///Creates a key action from the first letter of any string [string] with,
   ///[description] and [callback] method. Includes optional bool values (defaulting
   ///to false) for key modifiers for meta [isMetaPressed], shift [isShiftPressed],
   ///alt [isAltPressed]
-  KeyAction.fromString(String string, this.description, this.callback, {this.categoryHeader = '', bool isControlPressed = false, bool isMetaPressed = false, bool isShiftPressed = false, bool isAltPressed = false})
+  KeyAction.fromString(final String string, this.description, this.callback,
+      {this.categoryHeader = '', final bool isControlPressed = false, final bool isMetaPressed = false, final bool isShiftPressed = false, final bool isAltPressed = false})
       : keyActivator = SingleActivator(LogicalKeyboardKey(string.toLowerCase().codeUnitAt(0)), control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
 
   bool get isControlPressed => keyActivator.control;
@@ -583,7 +586,7 @@ class KeyAction {
   bool get isAltPressed => keyActivator.alt;
 
   String get label {
-    LogicalKeyboardKey key = keyActivator.trigger;
+    final LogicalKeyboardKey key = keyActivator.trigger;
     String label = keyActivator.trigger.keyLabel;
     if (key == LogicalKeyboardKey.arrowRight) {
       if (kIsWeb) {
@@ -627,7 +630,7 @@ class KeyAction {
     return label;
   }
 
-  bool matchesEvent(RawKeyEvent event) {
+  bool matchesEvent(final RawKeyEvent event) {
     return event.logicalKey == keyActivator.trigger && isControlPressed == event.isControlPressed && isMetaPressed == event.isMetaPressed && isShiftPressed == event.isShiftPressed && isAltPressed == event.isAltPressed;
   }
 }

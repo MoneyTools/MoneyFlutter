@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
+import 'package:money/models/money_entity.dart';
 
-import '../models/categories.dart';
-import '../models/rentals.dart';
-import '../models/splits.dart';
-import '../models/transactions.dart';
-import '../widgets/columns.dart';
-import '../widgets/widget_bar_chart.dart';
-import '../widgets/widget_view.dart';
-import 'view_transactions.dart';
+import 'package:money/models/categories.dart';
+import 'package:money/models/rentals.dart';
+import 'package:money/models/splits.dart';
+import 'package:money/models/transactions.dart';
+import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/widget_bar_chart.dart';
+import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view_transactions.dart';
 
-class ViewRentals extends ViewWidget {
+class ViewRentals extends ViewWidget<Rental> {
   const ViewRentals({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewRentalsState();
+  State<ViewWidget<Rental>> createState() => ViewRentalsState();
 }
 
-class ViewRentalsState extends ViewWidgetState {
+class ViewRentalsState extends ViewWidgetState<Rental> {
   @override
   getClassNamePlural() {
     return 'Rentals';
@@ -33,106 +34,106 @@ class ViewRentalsState extends ViewWidgetState {
     return 'Properties to rent.';
   }
 
-  getColumnForName() {
-    return ColumnDefinition(
-      'Name',
-      ColumnType.text,
-      TextAlign.left,
-      (index) {
+  ColumnDefinition<Rental> getColumnForName() {
+    return ColumnDefinition<Rental>(
+      name: 'Name',
+      type: ColumnType.text,
+      align: TextAlign.left,
+      value: (final int index) {
         return list[index].name;
       },
-      (a, b, sortAscending) {
+      sort: (final Rental a, final Rental b, final bool sortAscending) {
         return sortByString(a.name, b.name, sortAscending);
       },
     );
   }
 
-  getColumnForAddress() {
-    return ColumnDefinition(
-      'Address',
-      ColumnType.text,
-      TextAlign.left,
-      (index) {
+  ColumnDefinition<Rental> getColumnForAddress() {
+    return ColumnDefinition<Rental>(
+      name: 'Address',
+      type: ColumnType.text,
+      align: TextAlign.left,
+      value: (final int index) {
         return list[index].address;
       },
-      (a, b, sortAscending) {
-        return sortByString(a.address, b.address, sortAscending);
+      sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
+        return sortByString((a as Rental).address, (b as Rental).address, sortAscending);
       },
     );
   }
 
-  getColumnForNote() {
-    return ColumnDefinition(
-      'Note',
-      ColumnType.text,
-      TextAlign.left,
-      (index) {
+  ColumnDefinition<Rental> getColumnForNote() {
+    return ColumnDefinition<Rental>(
+      name: 'Note',
+      type: ColumnType.text,
+      align: TextAlign.left,
+      value: (final int index) {
         return list[index].note;
       },
-      (a, b, sortAscending) {
-        return sortByString(a.note, b.note, sortAscending);
+      sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
+        return sortByString((a as Rental).note, (b as Rental).note, sortAscending);
       },
     );
   }
 
   @override
-  ColumnDefinitions getColumnDefinitionsForTable() {
-    return ColumnDefinitions([
+  ColumnDefinitions<Rental> getColumnDefinitionsForTable() {
+    return ColumnDefinitions<Rental>(list: <ColumnDefinition<Rental>>[
       getColumnForName(),
       getColumnForAddress(),
       getColumnForNote(),
-      ColumnDefinition(
-        'In Service',
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
-          return list[index].dateRange.toStringYears();
+      ColumnDefinition<Rental>(
+        name: 'In Service',
+        type: ColumnType.text,
+        align: TextAlign.left,
+        value: (final int index) {
+          return (list[index]).dateRange.toStringYears();
         },
-        (Rental a, Rental b, sortAscending) {
-          return sortByString(a.dateRange.toString(), b.dateRange.toString(), sortAscending);
+        sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
+          return sortByString((a as Rental).dateRange.toString(), (b as Rental).dateRange.toString(), sortAscending);
         },
       ),
-      ColumnDefinition(
-        'Transactions',
-        ColumnType.numeric,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Rental>(
+        name: 'Transactions',
+        type: ColumnType.numeric,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].count;
         },
-        (a, b, sortAscending) {
+        sort: (final Rental a, final Rental b, final bool sortAscending) {
           return sortByValue(a.count, b.count, sortAscending);
         },
       ),
-      ColumnDefinition(
-        'Revenue',
-        ColumnType.amountShorthand,
-        TextAlign.right,
-        (index) {
-          return list[index].revenue;
+      ColumnDefinition<Rental>(
+        name: 'Revenue',
+        type: ColumnType.amountShorthand,
+        align: TextAlign.right,
+        value: (final int index) {
+          return (list[index]).revenue;
         },
-        (a, b, sortAscending) {
+        sort: (final Rental a, final Rental b, final bool sortAscending) {
           return sortByValue(a.revenue, b.revenue, sortAscending);
         },
       ),
-      ColumnDefinition(
-        'Expense',
-        ColumnType.amountShorthand,
-        TextAlign.right,
-        (index) {
-          return list[index].expense;
+      ColumnDefinition<Rental>(
+        name: 'Expense',
+        type: ColumnType.amountShorthand,
+        align: TextAlign.right,
+        value: (final int index) {
+          return (list[index]).expense;
         },
-        (a, b, sortAscending) {
-          return sortByValue(a.expense, b.expense, sortAscending);
+        sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
+          return sortByValue((a as Rental).expense, (b as Rental).expense, sortAscending);
         },
       ),
-      ColumnDefinition(
-        'Profit',
-        ColumnType.amountShorthand,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Rental>(
+        name: 'Profit',
+        type: ColumnType.amountShorthand,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].profit;
         },
-        (a, b, sortAscending) {
+        sort: (final Rental a, final Rental b, final bool sortAscending) {
           return sortByValue(a.profit, b.profit, sortAscending);
         },
       )
@@ -140,30 +141,30 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  ColumnDefinitions getColumnDefinitionsForDetailsPanel() {
-    var fields = ColumnDefinitions([getColumnForName(), getColumnForAddress(), getColumnForNote()]);
+  ColumnDefinitions<Rental> getColumnDefinitionsForDetailsPanel() {
+    final ColumnDefinitions<Rental> fields = ColumnDefinitions<Rental>(list: <ColumnDefinition<Rental>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
 
-    var fieldUnit = ColumnDefinition(
-      'Unit',
-      ColumnType.amount,
-      TextAlign.right,
-      (index) {
-        return getUnitsAsString(list[index].units);
+    final ColumnDefinition<Rental> fieldUnit = ColumnDefinition<Rental>(
+      name: 'Unit',
+      type: ColumnType.amount,
+      align: TextAlign.right,
+      isMultiLine: true,
+      value: (final int index) {
+        return getUnitsAsString((list[index]).units);
       },
-      (a, b, sortAscending) {
-        return sortByValue(a.revenue, b.revenue, sortAscending);
+      sort: (final MoneyEntity a, final MoneyEntity b, final bool ascending) {
+        return sortByValue((a as Rental).revenue, (b as Rental).revenue, sortAscending);
       },
     );
-    fieldUnit.isMultiLine = true;
 
     fields.add(fieldUnit);
 
     return fields;
   }
 
-  getUnitsAsString(List<RentUnit> listOfUnits) {
-    var listAsText = [];
-    for (var unit in listOfUnits) {
+  getUnitsAsString(final List<RentUnit> listOfUnits) {
+    final List<String> listAsText = <String>[];
+    for (RentUnit unit in listOfUnits) {
       listAsText.add('${unit.name}:${unit.renter}');
     }
 
@@ -171,7 +172,7 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  getList() {
+  List<Rental> getList() {
     return Rentals.moneyObjects.getAsList();
   }
 
@@ -181,9 +182,9 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForChart(List<num> indices) {
-    List<CategoryValue> list = [];
-    for (var entry in getList()) {
+  getSubViewContentForChart(final List<num> indices) {
+    final List<CategoryValue> list = <CategoryValue>[];
+    for (final Rental entry in getList()) {
       list.add(CategoryValue(entry.name, entry.profit));
     }
 
@@ -195,28 +196,25 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForTransactions(List<num> indices) {
-    var rental = getFirstElement<Rental>(indices, list);
+  getSubViewContentForTransactions(final List<int> indices) {
+    final Rental? rental = getFirstElement<Rental>(indices, list);
     if (rental != null) {
       return ViewTransactions(
         key: Key(rental.id.toString()),
-        filter: (dynamic t) => filterByRentalCategories(t, rental),
+        filter: (final Transaction t) => filterByRentalCategories(t, rental),
         preference: preferenceJustTableDatePayeeCategoryAmountBalance,
       );
     }
     return const Text('No transactions');
   }
 
-  bool filterByRentalCategories(Transaction t, Rental rental) {
-    var categoryIdToMatch = t.categoryId;
+  bool filterByRentalCategories(final Transaction t, final Rental rental) {
+    final num categoryIdToMatch = t.categoryId;
 
     if (categoryIdToMatch == Categories.splitCategoryId()) {
-      var splits = Splits.get(t.id);
-      if (splits == null) {
-        return false;
-      }
+      final List<Split> splits = Splits.get(t.id);
 
-      for (var split in splits) {
+      for (final Split split in splits) {
         if (isMatchingCategories(split.categoryId, rental)) {
           return true;
         }
@@ -227,7 +225,7 @@ class ViewRentalsState extends ViewWidgetState {
     return isMatchingCategories(categoryIdToMatch, rental);
   }
 
-  isMatchingCategories(num categoryIdToMatch, Rental rental) {
+  bool isMatchingCategories(final num categoryIdToMatch, final Rental rental) {
     Categories.getTreeIds(rental.categoryForIncome);
 
     return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||

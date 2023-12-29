@@ -3,7 +3,7 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import '../../models/constants.dart';
+import 'package:money/models/constants.dart';
 
 class SanKeyEntry {
   String name = '';
@@ -32,12 +32,12 @@ class Block {
     //
   }
 
-  static const minBlockHeight = 20.0;
-  static const blockWidth = 50.0;
+  static const double minBlockHeight = 20.0;
+  static const double blockWidth = 50.0;
 
-  draw(Canvas canvas) {
+  draw(final Canvas canvas) {
     if (!rect.hasNaN) {
-      var paint = Paint();
+      final ui.Paint paint = Paint();
       paint.color = color;
       canvas.drawRect(rect, paint);
       drawTextInRect(canvas, name, rect, color: textColor, textAlign: alignHorizontal);
@@ -45,17 +45,17 @@ class Block {
   }
 }
 
-void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block target) {
-  var sumOfHeight = sumHeight(list);
+void renderSourcesToTargetAsPercentage(final ui.Canvas canvas, final List<Block> list, final Block target) {
+  final double sumOfHeight = sumHeight(list);
 
-  var rollingVerticalPositionDrawnOnTheTarget = target.rect.top;
+  double rollingVerticalPositionDrawnOnTheTarget = target.rect.top;
 
-  for (var block in list) {
-    var ratioSourceBlockHeightToSumHeight = (block.rect.height / sumOfHeight);
-    var targetSectionHeight = (target.rect.height * ratioSourceBlockHeightToSumHeight);
+  for (Block block in list) {
+    final double ratioSourceBlockHeightToSumHeight = (block.rect.height / sumOfHeight);
+    final double targetSectionHeight = (target.rect.height * ratioSourceBlockHeightToSumHeight);
 
-    var blockSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? block.rect.right : block.rect.left;
-    var targetSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? target.rect.left : target.rect.right;
+    final double blockSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? block.rect.right : block.rect.left;
+    final double targetSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? target.rect.left : target.rect.right;
 
     drawChanel(canvas, ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
         ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget, rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
@@ -66,13 +66,13 @@ void renderSourcesToTargetAsPercentage(ui.Canvas canvas, List<Block> list, Block
   }
 }
 
-double getHeightNeededToRender(List<SanKeyEntry> list) {
-  var sum = sumValue(list);
+double getHeightNeededToRender(final List<SanKeyEntry> list) {
+  final double sum = sumValue(list);
 
-  var verticalPosition = 0.0;
+  double verticalPosition = 0.0;
 
-  for (var element in list) {
-    double height = (element.value.abs() / sum.abs()) * Constants.targetHeight;
+  for (SanKeyEntry element in list) {
+    final double height = (element.value.abs() / sum.abs()) * Constants.targetHeight;
     verticalPosition += height;
     verticalPosition += Constants.gapBetweenChannels;
   }
@@ -82,12 +82,12 @@ double getHeightNeededToRender(List<SanKeyEntry> list) {
 }
 
 // ignore: unused-code
-List<num> getMinMaxValues(list) {
+List<num> getMinMaxValues(final List<double> list) {
   if (list.isEmpty) {
-    return [0, 0];
+    return <num>[0, 0];
   }
   if (list.length == 1) {
-    return [list[0], list[0]];
+    return <num>[list[0], list[0]];
   }
 
   double valueMin = 0;
@@ -99,19 +99,19 @@ List<num> getMinMaxValues(list) {
     valueMin = list[1];
     valueMax = list[0];
 
-    for (var value in list) {
+    for (double value in list) {
       valueMin = min(valueMin, value);
       valueMax = max(valueMax, value);
     }
   }
-  return [valueMin, valueMax];
+  return <num>[valueMin, valueMax];
 }
 
-void drawText(Canvas context, String name, double x, double y, {Color color = Colors.black, double fontSize = 12.0, double angleRotationInRadians = 0.0}) {
+void drawText(final Canvas context, final String name, final double x, final double y, {final Color color = Colors.black, final double fontSize = 12.0, final double angleRotationInRadians = 0.0}) {
   context.save();
   context.translate(x, y);
   context.rotate(angleRotationInRadians);
-  TextSpan span = TextSpan(
+  final TextSpan span = TextSpan(
       style: TextStyle(
         color: color,
         fontSize: fontSize,
@@ -125,7 +125,7 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
         // ],
       ),
       text: name);
-  TextPainter tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
+  final TextPainter tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
 
   tp.layout();
 
@@ -134,11 +134,12 @@ void drawText(Canvas context, String name, double x, double y, {Color color = Co
   context.restore();
 }
 
-void drawTextInRect(Canvas context, String name, Rect rect, {TextAlign textAlign = TextAlign.left, Color color = Colors.black, double fontSize = 12.0, double angleRotationInRadians = 0.0}) {
+void drawTextInRect(final Canvas context, final String name, final Rect rect,
+    {final TextAlign textAlign = TextAlign.left, final Color color = Colors.black, final double fontSize = 12.0, final double angleRotationInRadians = 0.0}) {
   context.save();
   context.translate(rect.left, rect.top);
   context.rotate(angleRotationInRadians);
-  TextSpan span = TextSpan(
+  final TextSpan span = TextSpan(
       style: TextStyle(
         color: color,
         fontSize: fontSize,
@@ -146,7 +147,7 @@ void drawTextInRect(Canvas context, String name, Rect rect, {TextAlign textAlign
       ),
       text: name);
 
-  TextPainter textPainter = TextPainter(text: span, textAlign: textAlign, textDirection: ui.TextDirection.ltr);
+  final TextPainter textPainter = TextPainter(text: span, textAlign: textAlign, textDirection: ui.TextDirection.ltr);
 
   textPainter.layout();
 
@@ -161,15 +162,15 @@ void drawTextInRect(Canvas context, String name, Rect rect, {TextAlign textAlign
   context.restore();
 }
 
-void drawChanel(canvas, ChannelPoint a, ChannelPoint b, {Color color = const Color(0xFF56687A)}) {
+void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint b, {final Color color = const Color(0xFF56687A)}) {
   // We render left to right, so lets see what channel goes on the left and the one that goes on the right
-  ChannelPoint channelPointLeft = (a.x < b.x) ? a : b;
-  ChannelPoint channelPointEnd = (a.x < b.x) ? b : a;
+  final ChannelPoint channelPointLeft = (a.x < b.x) ? a : b;
+  final ChannelPoint channelPointEnd = (a.x < b.x) ? b : a;
 
-  var size = Size((channelPointEnd.x - channelPointLeft.x).abs(), 100.0);
-  var halfWidth = size.width / 2;
+  final ui.Size size = Size((channelPointEnd.x - channelPointLeft.x).abs(), 100.0);
+  final double halfWidth = size.width / 2;
 
-  Path path = Path();
+  final Path path = Path();
 
   // Start from the Left-Top
   path.moveTo(channelPointLeft.x, channelPointLeft.top);
@@ -202,24 +203,24 @@ void drawChanel(canvas, ChannelPoint a, ChannelPoint b, {Color color = const Col
   // Close at the Left-Bottom
   path.close();
 
-  Paint paint = Paint();
+  final Paint paint = Paint();
   paint.color = color;
   canvas.drawPath(path, paint);
 
   // OUTLINE
-  Paint paintStroke = Paint();
+  final Paint paintStroke = Paint();
   paintStroke.style = PaintingStyle.stroke;
   paintStroke.strokeWidth = 0.5;
   paintStroke.color = Colors.black.withOpacity(0.3);
   canvas.drawPath(path, paintStroke);
 }
 
-sumHeight(List<Block> list) {
-  var sumOfHeight = list.fold(0.0, (previousValue, element) => previousValue + element.rect.height);
+double sumHeight(final List<Block> list) {
+  final double sumOfHeight = list.fold(0.0, (final double previousValue, final Block element) => previousValue + element.rect.height);
   return sumOfHeight;
 }
 
-sumValue(List<SanKeyEntry> list) {
-  var sumOfHeight = list.fold(0.0, (previousValue, element) => previousValue + element.value);
+double sumValue(final List<SanKeyEntry> list) {
+  final double sumOfHeight = list.fold(0.0, (final double previousValue, final SanKeyEntry element) => previousValue + element.value);
   return sumOfHeight;
 }

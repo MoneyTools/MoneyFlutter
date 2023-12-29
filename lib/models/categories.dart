@@ -17,7 +17,7 @@ class Category extends MoneyEntity {
   num count = 0;
   double balance = 0.00;
 
-  Category(id, this.type, name) : super(id, name) {
+  Category(final num id, this.type, final String name) : super(id, name) {
     //
   }
 
@@ -41,7 +41,7 @@ class Category extends MoneyEntity {
     }
   }
 
-  static getTypeFromText(text) {
+  static CategoryType getTypeFromText(final String text) {
     switch (text) {
       case '1':
         return CategoryType.income;
@@ -63,14 +63,14 @@ class Category extends MoneyEntity {
 }
 
 class Categories {
-  static MoneyObjects moneyObjects = MoneyObjects();
+  static MoneyObjects<Category> moneyObjects = MoneyObjects<Category>();
   static num idOfSplitCategory = -1;
 
-  static Category? get(id) {
-    return moneyObjects.get(id) as Category?;
+  static Category? get(final num id) {
+    return moneyObjects.get(id);
   }
 
-  static String getNameFromId(id) {
+  static String getNameFromId(final num id) {
     if (id == -1) {
       return '';
     }
@@ -83,7 +83,7 @@ class Categories {
 
   static num splitCategoryId() {
     if (idOfSplitCategory == -1) {
-      var cat = moneyObjects.getByName('Split');
+      final Category? cat = moneyObjects.getByName('Split');
       if (cat != null) {
         idOfSplitCategory = cat.id;
       }
@@ -91,42 +91,41 @@ class Categories {
     return idOfSplitCategory;
   }
 
-  static Category? getTopAncestor(Category category) {
+  static Category? getTopAncestor(final Category category) {
     if (category.parentId == -1) {
       return category; // this is the top
     }
-    var parent = get(category.parentId);
+    final Category? parent = get(category.parentId);
     if (parent == null) {
       return category;
     }
     return getTopAncestor(parent);
   }
 
-  static List<num> getTreeIds(rootIdToStartFrom) {
-    List<num> list = [];
+  static List<num> getTreeIds(final num rootIdToStartFrom) {
+    final List<num> list = <num>[];
     if (rootIdToStartFrom > 0) {
       getTreeIdsRecursive(rootIdToStartFrom, list);
     }
     return list;
   }
 
-  static void getTreeIdsRecursive(categoryId, list) {
+  static void getTreeIdsRecursive(final num categoryId, final List<num> list) {
     if (categoryId > 0) {
       list.add(categoryId);
-      var descendants = getCategoriesWithThisParent(categoryId);
-      for (var c in descendants) {
+      final List<Category> descendants = getCategoriesWithThisParent(categoryId);
+      for (final Category c in descendants) {
         // debugLog(c.id.toString()+"="+c.name);
         getTreeIdsRecursive(c.id, list);
       }
     }
   }
 
-  static getCategoriesWithThisParent(parentId) {
-    List<Category> list = [];
-    for (var item in Categories.moneyObjects.getAsList()) {
-      var c = item as Category;
-      if (c.parentId == parentId) {
-        list.add(c);
+  static List<Category> getCategoriesWithThisParent(final num parentId) {
+    final List<Category> list = <Category>[];
+    for (final Category item in Categories.moneyObjects.getAsList()) {
+      if (item.parentId == parentId) {
+        list.add(item);
       }
     }
     return list;
@@ -148,13 +147,17 @@ class Categories {
       8 = "Frequency"
       9 = "TaxRefNum"
    */
-  load(rows) async {
+  load(final List<Map<String, Object?>> rows) async {
     clear();
-    for (var row in rows) {
-      var id = num.parse(row['Id'].toString());
-      var name = row['Name'].toString();
-      var rt = row['Type'];
-      var newEntry = Category(id, Category.getTypeFromText(rt.toString()), name);
+    for (final Map<String, Object?> row in rows) {
+      final num id = num.parse(row['Id'].toString());
+      final String name = row['Name'].toString();
+      final Object? rt = row['Type'];
+      final Category newEntry = Category(
+        id,
+        Category.getTypeFromText(rt.toString()),
+        name,
+      );
       newEntry.parentId = num.parse(row['ParentId'].toString());
 
       moneyObjects.addEntry(newEntry);
@@ -176,14 +179,13 @@ class Categories {
   }
 
   static onAllDataLoaded() {
-    for (var item in moneyObjects.getAsList()) {
-      var c = item as Category;
-      c.count = 0;
-      c.balance = 0;
+    for (final Category category in moneyObjects.getAsList()) {
+      category.count = 0;
+      category.balance = 0;
     }
 
-    for (var t in Transactions.list) {
-      var item = get(t.categoryId);
+    for (final Transaction t in Transactions.list) {
+      final Category? item = get(t.categoryId);
       if (item != null) {
         item.count++;
         item.balance += t.amount;

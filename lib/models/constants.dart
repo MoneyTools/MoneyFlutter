@@ -12,15 +12,15 @@ class Constants {
   static const double gapBetweenChannels = 14.0;
   static const double minBlockHeight = 3.0;
 
-  static const colorIncome = Color(0xaa4b6735);
-  static const colorExpense = Color(0xaa813e3e);
-  static const colorNet = Color(0xaa5c8aab);
+  static const Color colorIncome = Color(0xaa4b6735);
+  static const Color colorExpense = Color(0xaa813e3e);
+  static const Color colorNet = Color(0xaa5c8aab);
 
-  static const commandTextScaleIncrease = 3000;
-  static const commandTextScaleDecrease = 3001;
+  static const int commandTextScaleIncrease = 3000;
+  static const int commandTextScaleDecrease = 3001;
 }
 
-const List<Color> colorOptions = [
+const List<Color> colorOptions = <Color>[
   Colors.deepPurple,
   Colors.blue,
   Colors.teal,
@@ -40,8 +40,8 @@ const List<String> colorText = <String>[
   'Pink',
 ];
 
-const prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
-const prefColor = 'themeColor';
-const prefDarkMode = 'themeDarkMode';
-const prefRentals = 'rentals';
-const prefTextScale = 'textScale';
+const String prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
+const String prefColor = 'themeColor';
+const String prefDarkMode = 'themeDarkMode';
+const String prefRentals = 'rentals';
+const String prefTextScale = 'textScale';

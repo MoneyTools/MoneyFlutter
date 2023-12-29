@@ -1,40 +1,40 @@
 import 'package:flutter/material.dart';
 
-import '../helpers.dart';
-import '../models/categories.dart';
-import '../widgets/columns.dart';
-import '../widgets/header.dart';
-import '../widgets/caption_and_counter.dart';
-import '../widgets/widget_view.dart';
+import 'package:money/helpers.dart';
+import 'package:money/models/categories.dart';
+import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/header.dart';
+import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/widgets/widget_view.dart';
 
-class ViewCategories extends ViewWidget {
+class ViewCategories extends ViewWidget<Category> {
   const ViewCategories({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewCategoriesState();
+  State<ViewWidget<Category>> createState() => ViewCategoriesState();
 }
 
-class ViewCategoriesState extends ViewWidgetState {
-  final List<Widget> pivots = [];
+class ViewCategoriesState extends ViewWidgetState<Category> {
+  final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
 
   @override
   void initState() {
     super.initState();
 
-    pivots.add(CaptionAndCounter(caption: 'None', small: true, vertical: true, value: getTotalBalanceOfAccounts([CategoryType.none])));
-    pivots.add(CaptionAndCounter(caption: 'Expense', small: true, vertical: true, value: getTotalBalanceOfAccounts([CategoryType.expense])));
-    pivots.add(CaptionAndCounter(caption: 'Income', small: true, vertical: true, value: getTotalBalanceOfAccounts([CategoryType.income])));
-    pivots.add(CaptionAndCounter(caption: 'Saving', small: true, vertical: true, value: getTotalBalanceOfAccounts([CategoryType.saving])));
-    pivots.add(CaptionAndCounter(caption: 'Investment', small: true, vertical: true, value: getTotalBalanceOfAccounts([CategoryType.investment])));
-    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts([])));
+    pivots.add(CaptionAndCounter(caption: 'None', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none])));
+    pivots.add(CaptionAndCounter(caption: 'Expense', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense])));
+    pivots.add(CaptionAndCounter(caption: 'Income', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income])));
+    pivots.add(CaptionAndCounter(caption: 'Saving', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving])));
+    pivots.add(CaptionAndCounter(caption: 'Investment', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment])));
+    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[])));
   }
 
-  double getTotalBalanceOfAccounts(List<CategoryType> types) {
-    var total = 0.0;
-    getList().forEach((x) {
-      if (types.isEmpty || x.type == types.first) {
-        total += x.balance;
+  double getTotalBalanceOfAccounts(final List<CategoryType> types) {
+    double total = 0.0;
+    getList().forEach((final Category x) {
+      if (types.isEmpty || (x).type == types.first) {
+        total += (x).balance;
       }
     });
     return total;
@@ -57,56 +57,60 @@ class ViewCategoriesState extends ViewWidgetState {
 
   @override
   Widget getTitle() {
-    return Column(children: [
+    return Column(children: <Widget>[
       Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
   }
 
   @override
-  ColumnDefinitions getColumnDefinitionsForTable() {
-    return ColumnDefinitions([
-      ColumnDefinition(
-        'Name',
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
+  ColumnDefinitions<Category> getColumnDefinitionsForTable() {
+    return ColumnDefinitions<Category>(list: <ColumnDefinition<Category>>[
+      ColumnDefinition<Category>(
+        name: 'Name',
+        type: ColumnType.text,
+        align: TextAlign.left,
+        value: (final int index) {
           return list[index].name;
         },
-        (a, b, sortAscending) {
+        sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByString(a.name, b.name, sortAscending);
         },
       ),
-      ColumnDefinition(
-        'Type',
-        ColumnType.text,
-        TextAlign.center,
-        (index) {
-          return list[index].getTypeAsText();
+      ColumnDefinition<Category>(
+        name: 'Type',
+        type: ColumnType.text,
+        align: TextAlign.center,
+        value: (final int index) {
+          return (list[index]).getTypeAsText();
         },
-        (a, b, sortAscending) {
-          return sortByString(a.getTypeAsText(), b.getTypeAsText(), sortAscending);
+        sort: (final Category a, final Category b, final bool sortAscending) {
+          return sortByString(
+            a.getTypeAsText(),
+            b.getTypeAsText(),
+            sortAscending,
+          );
         },
       ),
-      ColumnDefinition(
-        'Count',
-        ColumnType.numeric,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Category>(
+        name: 'Count',
+        type: ColumnType.numeric,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].count;
         },
-        (a, b, sortAscending) {
+        sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByValue(a.count, b.count, sortAscending);
         },
       ),
-      ColumnDefinition(
-        'Balance',
-        ColumnType.amount,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Category>(
+        name: 'Balance',
+        type: ColumnType.amount,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].balance;
         },
-        (a, b, sortAscending) {
+        sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByValue(a.balance, b.balance, sortAscending);
         },
       ),
@@ -119,9 +123,9 @@ class ViewCategoriesState extends ViewWidgetState {
   }
 
   @override
-  getList() {
-    final filterType = getSelectedCategoryType();
-    return Categories.moneyObjects.getAsList().where((x) => filterType == null || (x as Category).type == filterType).toList();
+  List<Category> getList() {
+    final CategoryType? filterType = getSelectedCategoryType();
+    return Categories.moneyObjects.getAsList().where((final Category x) => filterType == null || x.type == filterType).toList();
   }
 
   CategoryType? getSelectedCategoryType() {
@@ -145,13 +149,13 @@ class ViewCategoriesState extends ViewWidgetState {
     return null; // all
   }
 
-  renderToggles() {
+  Widget renderToggles() {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
         child: ToggleButtons(
           direction: Axis.horizontal,
-          onPressed: (int index) {
+          onPressed: (final int index) {
             setState(() {
               for (int i = 0; i < _selectedPivot.length; i++) {
                 _selectedPivot[i] = i == index;

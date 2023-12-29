@@ -7,10 +7,10 @@ import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 
-import '../models/accounts.dart';
-import '../models/payees.dart';
-import '../widgets/columns.dart';
-import '../widgets/widget_view.dart';
+import 'package:money/models/accounts.dart';
+import 'package:money/models/payees.dart';
+import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/widget_view.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
@@ -19,23 +19,23 @@ const String columnIdCategory = 'Category';
 const String columnIdAmount = 'Amount';
 const String columnIdBalance = 'Balance';
 
-const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: [columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
+const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: <String>[columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
 
 const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance =
-    ViewWidgetToDisplay(showTitle: false, showBottom: false, expandAndPadding: false, columnsToInclude: [columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
+    ViewWidgetToDisplay(showTitle: false, showBottom: false, expandAndPadding: false, columnsToInclude: <String>[columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
 
-class ViewTransactions extends ViewWidget {
+class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;
 
   const ViewTransactions({super.key, super.filter, super.preference = preferenceFullView, this.startingBalance = 0.00});
 
   @override
-  State<ViewWidget> createState() => ViewTransactionsState();
+  State<ViewWidget<Transaction>> createState() => ViewTransactionsState();
 }
 
-class ViewTransactionsState extends ViewWidgetState {
-  final styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
-  final List<Widget> pivots = [];
+class ViewTransactionsState extends ViewWidgetState<Transaction> {
+  final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+  final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, true];
 
   bool balanceDone = false;
@@ -46,8 +46,8 @@ class ViewTransactionsState extends ViewWidgetState {
 
     super.sortAscending = false;
 
-    pivots.add(CaptionAndCounter(caption: 'Incomes', small: true, vertical: true, value: Transactions.list.where((element) => element.amount > 0).length));
-    pivots.add(CaptionAndCounter(caption: 'Expenses', small: true, vertical: true, value: Transactions.list.where((element) => element.amount < 0).length));
+    pivots.add(CaptionAndCounter(caption: 'Incomes', small: true, vertical: true, value: Transactions.list.where((final Transaction element) => element.amount > 0).length));
+    pivots.add(CaptionAndCounter(caption: 'Expenses', small: true, vertical: true, value: Transactions.list.where((final Transaction element) => element.amount < 0).length));
     pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: Transactions.list.length));
   }
 
@@ -68,21 +68,21 @@ class ViewTransactionsState extends ViewWidgetState {
 
   @override
   Widget getTitle() {
-    return Column(children: [
+    return Column(children: <Widget>[
       Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
   }
 
   @override
-  getList() {
-    var list = Transactions.list.where((transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
+  List<Transaction> getList() {
+    final List<Transaction> list = Transactions.list.where((final Transaction transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
 
     if (!balanceDone) {
-      list.sort((a, b) => sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+      list.sort((final Transaction a, final Transaction b) => sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
 
-      var runningBalance = 0.0;
-      for (var transaction in list) {
+      double runningBalance = 0.0;
+      for (Transaction transaction in list) {
         runningBalance += transaction.amount;
         transaction.balance = runningBalance;
       }
@@ -91,7 +91,7 @@ class ViewTransactionsState extends ViewWidgetState {
     return list;
   }
 
-  isMatchingIncomeExpense(transaction) {
+  bool isMatchingIncomeExpense(final Transaction transaction) {
     if (_selectedPivot[2]) {
       return true;
     }
@@ -105,94 +105,107 @@ class ViewTransactionsState extends ViewWidgetState {
     if (_selectedPivot[0]) {
       return transaction.amount > 0;
     }
+    return false;
   }
 
   @override
-  ColumnDefinitions getColumnDefinitionsForTable() {
-    List<ColumnDefinition> listOfColumns = [];
+  ColumnDefinitions<Transaction> getColumnDefinitionsForTable() {
+    final List<ColumnDefinition<Transaction>> listOfColumns = <ColumnDefinition<Transaction>>[];
 
-    for (var columnId in widget.preference.columnsToInclude) {
-      listOfColumns.add(getColumnDefinitionFromId(columnId));
+    for (String columnId in widget.preference.columnsToInclude) {
+      listOfColumns.add(getColumnDefinitionFromId(columnId)!);
     }
 
-    return ColumnDefinitions(listOfColumns);
+    return ColumnDefinitions<Transaction>(list: listOfColumns);
   }
 
-  getColumnDefinitionFromId(id) {
+  ColumnDefinition<Transaction>? getColumnDefinitionFromId(final String id) {
     switch (id) {
       case columnIdAccount:
-        return ColumnDefinition(
-          columnIdAccount,
-          ColumnType.text,
-          TextAlign.left,
-          /* cell */ (index) {
-            return Accounts.getNameFromId(list[index].accountId);
+        return ColumnDefinition<Transaction>(
+          name: columnIdAccount,
+          type: ColumnType.text,
+          align: TextAlign.left,
+          value: (final int index) {
+            return Accounts.getNameFromId((list[index]).accountId);
           },
-          /* Sort */ (a, b, ascending) {
+          sort: (final Transaction a, final Transaction b, final bool ascending) {
             return sortByString(Accounts.getNameFromId(a.accountId), Accounts.getNameFromId(b.accountId), ascending);
           },
         );
       case columnIdDate:
-        return ColumnDefinition(columnIdDate, ColumnType.date, TextAlign.left, /* Cell */ (index) {
-          return getDateAsText(list[index].dateTime);
-        }, /* Sort */ (a, b, ascending) {
-          return sortByString(getDateAsText(a.dateTime), getDateAsText(b.dateTime), sortAscending);
-        });
+        return ColumnDefinition<Transaction>(
+            name: columnIdDate,
+            type: ColumnType.date,
+            align: TextAlign.left,
+            value: (final int index) {
+              return getDateAsText((list[index]).dateTime);
+            },
+            sort: (final Transaction a, final Transaction b, final bool ascending) {
+              return sortByString(getDateAsText(a.dateTime), getDateAsText(b.dateTime), sortAscending);
+            });
 
       case columnIdPayee:
-        return ColumnDefinition(
-          columnIdPayee,
-          ColumnType.text,
-          TextAlign.left,
-          /* Cell */ (index) {
-            return Payees.getNameFromId(list[index].payeeId);
+        return ColumnDefinition<Transaction>(
+          name: columnIdPayee,
+          type: ColumnType.text,
+          align: TextAlign.left,
+          value: (final int index) {
+            return Payees.getNameFromId((list[index]).payeeId);
           },
-          /* Sort */ (a, b, ascending) {
+          sort: (final Transaction a, final Transaction b, final bool ascending) {
             return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
           },
         );
 
       case columnIdCategory:
-        return ColumnDefinition(
-          columnIdCategory,
-          ColumnType.text,
-          TextAlign.left,
-          /* Cell */ (index) {
-            return Categories.getNameFromId(list[index].categoryId);
+        return ColumnDefinition<Transaction>(
+          name: columnIdCategory,
+          type: ColumnType.text,
+          align: TextAlign.left,
+          value: (final int index) {
+            return Categories.getNameFromId((list[index]).categoryId);
           },
-          /* Sort */ (a, b, ascending) {
+          sort: (final Transaction a, final Transaction b, final bool ascending) {
             return sortByString(Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), sortAscending);
           },
         );
 
       case columnIdAmount:
-        return ColumnDefinition(
-          columnIdAmount,
-          ColumnType.amount,
-          TextAlign.right,
-          /* Cell */ (index) {
-            return list[index].amount;
+        return ColumnDefinition<Transaction>(
+          name: columnIdAmount,
+          type: ColumnType.amount,
+          align: TextAlign.right,
+          value: (final int index) {
+            return (list[index]).amount;
           },
-          /* Sort */ (a, b, ascending) {
+          sort: (final Transaction a, final Transaction b, final bool ascending) {
             return sortByValue(a.amount, b.amount, sortAscending);
           },
         );
 
       case columnIdBalance:
-        return ColumnDefinition(columnIdBalance, ColumnType.amount, TextAlign.right, /* Cell */ (index) {
-          return list[index].balance;
-        }, /* Sort */ (a, b, ascending) {
-          return sortByValue(a.balance, b.balance, sortAscending);
-        });
+        return ColumnDefinition<Transaction>(
+          name: columnIdBalance,
+          type: ColumnType.amount,
+          align: TextAlign.right,
+          value: (final int index) {
+            return (list[index]).balance;
+          },
+          sort: (final Transaction a, final Transaction b, final bool ascending) {
+            return sortByValue(a.balance, b.balance, sortAscending);
+          },
+        );
     }
+    return null;
   }
 
   @override
   getDefaultSortColumn() {
     // We want to default to sort by Date on startup
     // regardless of where the "Data Column" is
-    var columnIndex = 0;
-    for (var columnId in widget.preference.columnsToInclude) {
+    int columnIndex = 0;
+    for (String columnId in widget.preference.columnsToInclude) {
       if (columnId == columnIdDate) {
         return columnIndex;
       }
@@ -201,13 +214,13 @@ class ViewTransactionsState extends ViewWidgetState {
     return columnIndex;
   }
 
-  renderToggles() {
+  Widget renderToggles() {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
         child: ToggleButtons(
           direction: Axis.horizontal,
-          onPressed: (int index) {
+          onPressed: (final int index) {
             setState(() {
               for (int i = 0; i < _selectedPivot.length; i++) {
                 _selectedPivot[i] = i == index;
@@ -226,30 +239,32 @@ class ViewTransactionsState extends ViewWidgetState {
   }
 
   @override
-  getSubViewContentForChart(List<num> indices) {
-    Map<String, num> tallyPerMonths = {};
+  getSubViewContentForChart(final List<num> indices) {
+    final Map<String, num> tallyPerMonths = <String, num>{};
 
-    final timePeriod = DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);
+    final DateRange timePeriod = DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);
 
-    getList().forEach((Transaction transaction) {
+    getList().forEach((final Transaction transaction) {
+      transaction;
+
       if (timePeriod.isBetweenEqual(transaction.dateTime)) {
-        DateTime date = transaction.dateTime;
-        num value = transaction.amount;
+        final DateTime date = transaction.dateTime;
+        final num value = transaction.amount;
 
         // Format the date as year-month string (e.g., '2023-11')
-        String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
+        final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
 
         // Update the map or add a new entry
-        tallyPerMonths.update(yearMonth, (total) => total + value, ifAbsent: () => value);
+        tallyPerMonths.update(yearMonth, (final num total) => total + value, ifAbsent: () => value);
       }
     });
 
-    final List<CategoryValue> list = [];
-    tallyPerMonths.forEach((key, value) {
+    final List<CategoryValue> list = <CategoryValue>[];
+    tallyPerMonths.forEach((final String key, final num value) {
       list.add(CategoryValue(key, value));
     });
 
-    list.sort((a, b) => a.category.compareTo(b.category));
+    list.sort((final CategoryValue a, final CategoryValue b) => a.category.compareTo(b.category));
 
     return WidgetBarChart(
       list: list,

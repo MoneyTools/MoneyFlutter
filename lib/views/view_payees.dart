@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
+import 'package:money/models/money_entity.dart';
 
-import '../models/payees.dart';
-import '../widgets/columns.dart';
-import '../widgets/widget_view.dart';
+import 'package:money/models/payees.dart';
+import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/widget_view.dart';
 
-class ViewPayees extends ViewWidget {
+class ViewPayees extends ViewWidget<Payee> {
   const ViewPayees({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewPayeesState();
+  State<ViewWidget<Payee>> createState() => ViewPayeesState();
 }
 
-class ViewPayeesState extends ViewWidgetState {
+class ViewPayeesState extends ViewWidgetState<Payee> {
   @override
   getClassNamePlural() {
     return 'Payees';
@@ -29,46 +30,54 @@ class ViewPayeesState extends ViewWidgetState {
   }
 
   @override
-  ColumnDefinitions getColumnDefinitionsForTable() {
-    return ColumnDefinitions([
-      ColumnDefinition(
-        'Name',
-        ColumnType.text,
-        TextAlign.left,
-        (index) {
+  ColumnDefinitions<Payee> getColumnDefinitionsForTable() {
+    return ColumnDefinitions<Payee>(list: <ColumnDefinition<Payee>>[
+      ColumnDefinition<Payee>(
+        name: 'Name',
+        type: ColumnType.text,
+        align: TextAlign.left,
+        value: (final int index) {
           return list[index].name;
         },
-        (a, b, sortAscending) {
+        sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
           return sortByString(a.name, b.name, sortAscending);
         },
       ),
-      ColumnDefinition(
-        'Count',
-        ColumnType.numeric,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Payee>(
+        name: 'Count',
+        type: ColumnType.numeric,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].count;
         },
-        (a, b, sortAscending) {
-          return sortByValue(a.count, b.count, sortAscending);
+        sort: (final Payee a, final Payee b, final bool sortAscending) {
+          return sortByValue(
+            a.count,
+            b.count,
+            sortAscending,
+          );
         },
       ),
-      ColumnDefinition(
-        'Balance',
-        ColumnType.amount,
-        TextAlign.right,
-        (index) {
+      ColumnDefinition<Payee>(
+        name: 'Balance',
+        type: ColumnType.amount,
+        align: TextAlign.right,
+        value: (final int index) {
           return list[index].balance;
         },
-        (a, b, sortAscending) {
-          return sortByValue(a.balance, b.balance, sortAscending);
+        sort: (final Payee a, final Payee b, final bool sortAscending) {
+          return sortByValue(
+            a.balance,
+            b.balance,
+            sortAscending,
+          );
         },
       ),
     ]);
   }
 
   @override
-  getList() {
+  List<Payee> getList() {
     return Payees.moneyObjects.getAsList();
   }
 

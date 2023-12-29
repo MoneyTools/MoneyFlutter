@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../helpers.dart';
+import 'package:money/helpers.dart';
 
 enum ColumnType {
   text,
@@ -10,58 +10,64 @@ enum ColumnType {
   date,
 }
 
-class ColumnDefinition {
-  String name = '';
-  TextAlign align = TextAlign.center;
-  Function? getFieldValue;
-  Function? sorting;
-  ColumnType type = ColumnType.text;
-  bool readOnly = true;
-  bool isMultiLine = false;
+class ColumnDefinition<T> {
+  final String name;
+  final ColumnType type;
+  final TextAlign align;
+  final dynamic Function(int) value;
+  final int Function(T, T, bool) sort;
+  final bool readOnly;
+  final bool isMultiLine;
 
-  ColumnDefinition(this.name, this.type, this.align, this.getFieldValue, this.sorting) {
-    //
-  }
+  ColumnDefinition({
+    required this.name,
+    required this.type,
+    required this.align,
+    required this.value,
+    required this.sort,
+    this.readOnly = true,
+    this.isMultiLine = false,
+  });
 }
 
-class ColumnDefinitions {
-  List<ColumnDefinition> list = [];
+class ColumnDefinitions<T> {
+  final List<ColumnDefinition<T>> list;
 
-  ColumnDefinitions(List<ColumnDefinition> initialList) {
-    list = initialList;
+  ColumnDefinitions({required this.list}) {
+    assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
-  getCellsForRow(index) {
-    List<Widget> cells = [];
+  List<Widget> getCellsForRow(final int index) {
+    final List<Widget> cells = <Widget>[];
     for (int i = 0; i < list.length; i++) {
-      var fieldValue = list[i].getFieldValue!(index);
+      final dynamic fieldValue = list[i].value(index);
       cells.add(getCellWidget(i, fieldValue));
     }
     return cells;
   }
 
-  add(ColumnDefinition toAdd) {
+  ColumnDefinitions<T> add(final ColumnDefinition<T> toAdd) {
     list.add(toAdd);
     return this;
   }
 
-  removeAt(int index) {
+  ColumnDefinitions<T> removeAt(final int index) {
     list.removeAt(index);
     return this;
   }
 
-  getCellsForDetailsPanel(index) {
-    List<Widget> cells = [];
+  List<Widget> getCellsForDetailsPanel(final int index) {
+    final List<Widget> cells = <Widget>[];
     for (int i = 0; i < list.length; i++) {
-      var widget = getBestWidgetForColumnDefinition(i, index);
+      final Widget widget = getBestWidgetForColumnDefinition(i, index);
       cells.add(widget);
     }
     return cells;
   }
 
-  getBestWidgetForColumnDefinition(columnIndex, rowIndex) {
-    var fieldDefinition = list[columnIndex];
-    var fieldValue = fieldDefinition.getFieldValue!(rowIndex);
+  Widget getBestWidgetForColumnDefinition(final int columnIndex, final int rowIndex) {
+    final ColumnDefinition<T> fieldDefinition = list[columnIndex];
+    final dynamic fieldValue = fieldDefinition.value(rowIndex);
 
     if (fieldDefinition.isMultiLine) {
       return TextFormField(
@@ -89,22 +95,22 @@ class ColumnDefinitions {
     }
   }
 
-  Widget getCellWidget(int columnId, Object value) {
-    var columnDefinition = list[columnId];
+  Widget getCellWidget(final int columnId, final dynamic value) {
+    final ColumnDefinition<T> columnDefinition = list[columnId];
     switch (columnDefinition.type) {
       case ColumnType.numeric:
-        return renderColumValueEntryNumber(value);
+        return renderColumValueEntryNumber(value as num);
       case ColumnType.amount:
         return renderColumValueEntryCurrency(value, false);
       case ColumnType.amountShorthand:
         return renderColumValueEntryCurrency(value, true);
       case ColumnType.text:
       default:
-        return renderColumValueEntryText(value, textAlign: columnDefinition.align);
+        return renderColumValueEntryText(value as String, textAlign: columnDefinition.align);
     }
   }
 
-  Widget renderColumValueEntryText(text, {TextAlign textAlign = TextAlign.left}) {
+  Widget renderColumValueEntryText(final String text, {final TextAlign textAlign = TextAlign.left}) {
     return Expanded(
         child: FittedBox(
             fit: BoxFit.scaleDown,
@@ -115,7 +121,7 @@ class ColumnDefinitions {
             )));
   }
 
-  Widget renderColumValueEntryCurrency(value, shorthand) {
+  Widget renderColumValueEntryCurrency(final dynamic value, final bool shorthand) {
     return Expanded(
         child: FittedBox(
       fit: BoxFit.scaleDown,
@@ -123,14 +129,14 @@ class ColumnDefinitions {
       child: Padding(
         padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
         child: Text(
-          shorthand ? getNumberAsShorthandText(value) : getCurrencyText(value),
+          shorthand ? getNumberAsShorthandText(value as num) : getCurrencyText(value as double),
           textAlign: TextAlign.right,
         ),
       ),
     ));
   }
 
-  Widget renderColumValueEntryNumber(value) {
+  Widget renderColumValueEntryNumber(final num value) {
     return Expanded(
         child: FittedBox(
       fit: BoxFit.scaleDown,

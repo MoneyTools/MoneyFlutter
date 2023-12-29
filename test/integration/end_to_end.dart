@@ -8,8 +8,8 @@ void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   group('end-to-end test', () {
-    testWidgets('Landing page', (tester) async {
-      SharedPreferences.setMockInitialValues({});
+    testWidgets('Landing page', (final WidgetTester tester) async {
+      SharedPreferences.setMockInitialValues(<String, Object>{});
       app.main();
       await tester.pumpAndSettle();
 

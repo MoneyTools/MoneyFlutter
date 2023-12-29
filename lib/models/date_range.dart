@@ -4,7 +4,7 @@ class DateRange {
 
   DateRange({this.min, this.max});
 
-  inflate(DateTime dateTime) {
+  inflate(final DateTime dateTime) {
     min ??= dateTime;
     max ??= dateTime;
 
@@ -17,7 +17,7 @@ class DateRange {
     }
   }
 
-  valueOrZeroIfNull(value) {
+  valueOrZeroIfNull(final num? value) {
     if (value == null) {
       return 0;
     }
@@ -33,15 +33,15 @@ class DateRange {
   }
 
   @override
-  toString() {
-    return dateToString(min) + ' : ' + dateToString(max);
+  String toString() {
+    return '${dateToString(min)} : ${dateToString(max)}';
   }
 
   toStringYears() {
     return yearToString(min) + ' - ' + yearToString(max) + ' (' + durationInYears().toString() + ')';
   }
 
-  dateToString(DateTime? dateTime) {
+  String dateToString(final DateTime? dateTime) {
     if (dateTime == null) {
       return '____-__-__';
     }
@@ -49,7 +49,7 @@ class DateRange {
     return dateTime.toIso8601String();
   }
 
-  yearToString(DateTime? dateTime) {
+  yearToString(final DateTime? dateTime) {
     if (dateTime == null) {
       return '____';
     }
@@ -57,11 +57,11 @@ class DateRange {
     return dateTime.year.toString();
   }
 
-  bool isBetween(DateTime date) {
+  bool isBetween(final DateTime date) {
     return min!.isBefore(date) && max!.isAfter(date);
   }
 
-  bool isBetweenEqual(DateTime date) {
+  bool isBetweenEqual(final DateTime date) {
     if (min == date || max == date) {
       return true;
     }

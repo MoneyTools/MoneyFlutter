@@ -11,13 +11,13 @@ class Payee extends MoneyEntity {
 }
 
 class Payees {
-  static MoneyObjects moneyObjects = MoneyObjects();
+  static MoneyObjects<Payee> moneyObjects = MoneyObjects<Payee>();
 
-  static Payee? get(id) {
-    return moneyObjects.get(id) as Payee?;
+  static Payee? get(final num id) {
+    return moneyObjects.get(id);
   }
 
-  static String getNameFromId(id) {
+  static String getNameFromId(final num id) {
     return moneyObjects.getNameFromId(id);
   }
 
@@ -25,13 +25,13 @@ class Payees {
     moneyObjects.clear();
   }
 
-  load(rows) async {
+  load(final List<Map<String, Object?>> rows) async {
     clear();
     /*
      */
-    for (var row in rows) {
-      var id = num.parse(row['Id'].toString());
-      var name = row['Name'].toString();
+    for (final Map<String, Object?> row in rows) {
+      final num id = num.parse(row['Id'].toString());
+      final String name = row['Name'].toString();
       moneyObjects.addEntry(Payee(id, name));
     }
   }
@@ -39,21 +39,20 @@ class Payees {
   loadDemoData() {
     clear();
 
-    List<String> names = ['John', 'Paul', 'George', 'Ringo', 'Jean-Pierre', 'Chris', 'Bill', 'Steve', 'Sue', 'Barbara'];
-    for (var i = 0; i < names.length; i++) {
+    final List<String> names = <String>['John', 'Paul', 'George', 'Ringo', 'Jean-Pierre', 'Chris', 'Bill', 'Steve', 'Sue', 'Barbara'];
+    for (int i = 0; i < names.length; i++) {
       moneyObjects.addEntry(Payee(i, names[i]));
     }
   }
 
   static onAllDataLoaded() {
-    for (var item in moneyObjects.getAsList()) {
-      var payee = item as Payee;
+    for (final Payee payee in moneyObjects.getAsList()) {
       payee.count = 0;
       payee.balance = 0;
     }
 
-    for (var t in Transactions.list) {
-      var item = get(t.payeeId);
+    for (Transaction t in Transactions.list) {
+      final Payee? item = get(t.payeeId);
       if (item != null) {
         item.count++;
         item.balance += t.amount;

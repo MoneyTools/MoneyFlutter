@@ -18,13 +18,13 @@ class DummyHostingApp extends StatefulWidget {
 
 class DummyHostingAppState extends State<DummyHostingApp> {
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return const MaterialApp(
       home: SizedBox(
         height: 500,
         width: 500,
         child: Column(
-          children: [
+          children: <Widget>[
             ViewCashFlow(),
           ],
         ),
@@ -34,7 +34,7 @@ class DummyHostingAppState extends State<DummyHostingApp> {
 }
 
 void main() {
-  testWidgets('Cash Flow widget', (WidgetTester tester) async {
+  testWidgets('Cash Flow widget', (final WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const DummyHostingApp());
 

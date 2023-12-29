@@ -3,9 +3,9 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
 
-import '../../models/constants.dart';
-import '../../helpers.dart';
-import 'sankey_helper.dart';
+import 'package:money/models/constants.dart';
+import 'package:money/helpers.dart';
+import 'package:money/widgets/widget_sankey/sankey_helper.dart';
 
 class SankeyPaint extends CustomPainter {
   List<SanKeyEntry> listOfIncomes;
@@ -23,36 +23,36 @@ class SankeyPaint extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(SankeyPaint oldDelegate) => true;
+  bool shouldRepaint(final SankeyPaint oldDelegate) => true;
 
   @override
-  bool shouldRebuildSemantics(SankeyPaint oldDelegate) => false;
+  bool shouldRebuildSemantics(final SankeyPaint oldDelegate) => false;
 
   @override
-  void paint(Canvas canvas, Size size) {
-    var textColor = getTheme(context).textTheme.titleMedium?.color;
+  void paint(final Canvas canvas, final Size size) {
+    ui.Color? textColor = getTheme(context).textTheme.titleMedium?.color;
     textColor ??= Colors.grey;
 
     columnWidth = Constants.sanKeyColumnWidth;
 
-    var maxWidth = max(context.size!.width, size.width) - 30;
-    var horizontalCenter = maxWidth / 2;
+    final double maxWidth = max(context.size!.width, size.width) - 30;
+    final double horizontalCenter = maxWidth / 2;
 
-    var verticalStackOfTargets = topOfCenters;
+    double verticalStackOfTargets = topOfCenters;
 
-    var totalIncome = listOfIncomes.fold(0.00, (sum, item) => sum + item.value);
-    var totalExpense = listOfExpenses.fold(0.00, (sum, item) => sum + item.value).abs();
+    final double totalIncome = listOfIncomes.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value);
+    final double totalExpense = listOfExpenses.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value).abs();
 
     // var maNumberOfLeafItems = max(listOfIncomes.length, listOfExpenses.length);
 
-    var h = max(incomeHeight, context.size!.height);
+    final double h = max(incomeHeight, context.size!.height);
 
-    var ratioIncomeToExpense = h / (totalIncome + totalExpense);
+    final double ratioIncomeToExpense = h / (totalIncome + totalExpense);
 
     // Box for "Revenue"
-    var lastHeight = ratioIncomeToExpense * totalIncome;
+    double lastHeight = ratioIncomeToExpense * totalIncome;
     lastHeight = max(Block.minBlockHeight, lastHeight);
-    Block targetIncome = Block(
+    final Block targetIncome = Block(
       'Revenue  ${getNumberAsShorthandText(totalIncome)}',
       ui.Rect.fromLTWH(horizontalCenter - (columnWidth * 1.2), verticalStackOfTargets, columnWidth, lastHeight),
       Constants.colorIncome,
@@ -65,7 +65,7 @@ class SankeyPaint extends CustomPainter {
     verticalStackOfTargets += gap + lastHeight;
     lastHeight = ratioIncomeToExpense * totalExpense;
     lastHeight = max(Block.minBlockHeight, lastHeight);
-    Block targetExpense = Block(
+    final Block targetExpense = Block(
       'Expenses -${getNumberAsShorthandText(totalExpense)}',
       ui.Rect.fromLTWH(horizontalCenter + (columnWidth * 0.2), topOfCenters, columnWidth, lastHeight),
       Constants.colorExpense,
@@ -75,10 +75,10 @@ class SankeyPaint extends CustomPainter {
     );
 
     // Box for "Net Profit"
-    var netAmount = totalIncome - totalExpense;
+    final double netAmount = totalIncome - totalExpense;
     lastHeight = ratioIncomeToExpense * netAmount;
     lastHeight = max(Block.minBlockHeight, lastHeight);
-    Block targetNet = Block(
+    final Block targetNet = Block(
       'Net: ${getNumberAsShorthandText(netAmount)}',
       ui.Rect.fromLTWH(targetExpense.rect.left, targetExpense.rect.bottom + gap, columnWidth, lastHeight),
       Constants.colorNet,
@@ -89,7 +89,7 @@ class SankeyPaint extends CustomPainter {
     targetNet.draw(canvas);
 
     // Left Side - "Source of Incomes"
-    var stackVerticalPosition = 0.0;
+    double stackVerticalPosition = 0.0;
 
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, 0, stackVerticalPosition, targetIncome, Constants.colorIncome, textColor);
 
@@ -98,7 +98,7 @@ class SankeyPaint extends CustomPainter {
     // Right Side - "Source of Expenses"
     stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, maxWidth - columnWidth, 0, targetExpense, Constants.colorExpense, textColor);
 
-    var heightProfitFromIncomeSection = targetIncome.rect.height - targetExpense.rect.height;
+    final double heightProfitFromIncomeSection = targetIncome.rect.height - targetExpense.rect.height;
 
     // Render Channel from "Expenses" to "Revenue"
     drawChanel(
@@ -117,22 +117,30 @@ class SankeyPaint extends CustomPainter {
     );
   }
 
-  double renderSourcesToTarget(ui.Canvas canvas, list, double left, double top, Block target, Color color, Color textColor) {
-    var sumOfHeight = sumValue(list);
+  double renderSourcesToTarget(
+    final ui.Canvas canvas,
+    final List<SanKeyEntry> list,
+    final double left,
+    final double top,
+    final Block target,
+    final Color color,
+    final Color textColor,
+  ) {
+    final double sumOfHeight = sumValue(list);
 
-    double ratioPriceToHeight = target.rect.height / sumOfHeight.abs();
+    final double ratioPriceToHeight = target.rect.height / sumOfHeight.abs();
 
-    var verticalPosition = 0.0;
+    double verticalPosition = 0.0;
 
-    List<Block> blocks = [];
+    final List<Block> blocks = <Block>[];
 
     // Prepare the sources (Left Side)
-    for (var element in list) {
+    for (SanKeyEntry element in list) {
       // Prepare a Left Block
-      double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
-      double boxTop = top + verticalPosition;
-      Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
-      Block source = Block(element.name + ': ' + getNumberAsShorthandText(element.value), rect, color, textColor, TextAlign.center, TextAlign.center);
+      final double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
+      final double boxTop = top + verticalPosition;
+      final Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
+      final Block source = Block('${element.name}: ${getNumberAsShorthandText(element.value)}', rect, color, textColor, TextAlign.center, TextAlign.center);
       source.textColor = textColor;
       blocks.add(source);
 

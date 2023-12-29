@@ -9,15 +9,15 @@ import 'package:money/views/view_cashflow.dart';
 import 'package:money/views/view_rentals.dart';
 import 'package:money/widgets/keyboard_widget.dart';
 
-import 'appbar.dart';
-import 'models/constants.dart';
-import 'helpers.dart';
-import 'menu.dart';
-import 'models/data.dart';
-import 'views/view_accounts.dart';
-import 'views/view_categories.dart';
-import 'views/view_payees.dart';
-import 'views/view_transactions.dart';
+import 'package:money/appbar.dart';
+import 'package:money/models/constants.dart';
+import 'package:money/helpers.dart';
+import 'package:money/menu.dart';
+import 'package:money/models/data.dart';
+import 'package:money/views/view_accounts.dart';
+import 'package:money/views/view_categories.dart';
+import 'package:money/views/view_payees.dart';
+import 'package:money/views/view_transactions.dart';
 
 void main() {
   runApp(const MyMoney());
@@ -43,7 +43,7 @@ class _MyMoneyState extends State<MyMoney> {
     });
   }
 
-  shouldShowOpenInstructions() {
+  bool shouldShowOpenInstructions() {
     if (settings.prefLoaded && settings.pathToDatabase == null) {
       return true;
     }
@@ -51,7 +51,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   loadData() {
-    data.init(settings.pathToDatabase, (success) {
+    data.init(settings.pathToDatabase, (final bool success) {
       _isLoading = false;
       setState(() {
         _isLoading;
@@ -60,7 +60,7 @@ class _MyMoneyState extends State<MyMoney> {
     });
   }
 
-  void handleScreenChanged(int selectedScreen) {
+  void handleScreenChanged(final int selectedScreen) {
     setState(() {
       settings.screenIndex = selectedScreen;
     });
@@ -72,10 +72,10 @@ class _MyMoneyState extends State<MyMoney> {
     try {
       pickerResult = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
+        allowedExtensions: <String>['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
       );
     } catch (e) {
-      debugLog(e);
+      debugLog(e.toString());
     }
 
     if (pickerResult != null) {
@@ -83,7 +83,7 @@ class _MyMoneyState extends State<MyMoney> {
         if (kIsWeb) {
           settings.pathToDatabase = pickerResult.files.single.path;
 
-          Uint8List? file = pickerResult.files.single.bytes;
+          final Uint8List? file = pickerResult.files.single.bytes;
           if (file != null) {
             // String s = String.fromCharCodes(file);
             // var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
@@ -97,7 +97,7 @@ class _MyMoneyState extends State<MyMoney> {
           loadData();
         }
       } catch (e) {
-        debugLog(e);
+        debugLog(e.toString());
       }
     }
   }
@@ -115,11 +115,11 @@ class _MyMoneyState extends State<MyMoney> {
     loadData();
   }
 
-  showLoading() {
+  Widget showLoading() {
     return const Expanded(child: Center(child: CircularProgressIndicator()));
   }
 
-  Widget getWidgetForMainContent(BuildContext context, int screenIndex) {
+  Widget getWidgetForMainContent(final BuildContext context, final int screenIndex) {
     if (_isLoading) {
       return showLoading();
     }
@@ -141,7 +141,7 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
-  welcomePanel(BuildContext context) {
+  Widget welcomePanel(final BuildContext context) {
     return Scaffold(
       appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
       body: Row(children: <Widget>[
@@ -150,34 +150,34 @@ class _MyMoneyState extends State<MyMoney> {
     );
   }
 
-  renderWelcomeAndOpen(BuildContext context) {
-    var textTheme = getTextTheme(context);
+  Widget renderWelcomeAndOpen(final BuildContext context) {
+    final TextTheme textTheme = getTextTheme(context);
     return Expanded(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
       Text('Welcome to MyMoney', textAlign: TextAlign.left, style: textTheme.headlineSmall),
       const SizedBox(height: 40),
       Text('No data loaded', textAlign: TextAlign.left, style: textTheme.bodySmall),
       const SizedBox(height: 40),
       Wrap(
         spacing: 10,
-        children: [OutlinedButton(onPressed: handleFileOpen, child: const Text('Open File ...')), OutlinedButton(onPressed: handleUseDemoData, child: const Text('Use Demo Data'))],
+        children: <Widget>[OutlinedButton(onPressed: handleFileOpen, child: const Text('Open File ...')), OutlinedButton(onPressed: handleUseDemoData, child: const Text('Use Demo Data'))],
       ),
     ]));
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'MyMoney',
         theme: settings.getThemeData(),
-        home: LayoutBuilder(builder: (context, constraints) {
+        home: LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
           final MediaQueryData data = MediaQuery.of(context);
           return MediaQuery(
               data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
               child: KeyboardWidget(
                 columnCount: 1,
-                bindings: [
+                bindings: <KeyAction>[
                   KeyAction(
                     LogicalKeyboardKey.equal,
                     'Increase text size',
@@ -217,7 +217,7 @@ class _MyMoneyState extends State<MyMoney> {
         }));
   }
 
-  Widget getContent(context, constraints) {
+  Widget getContent(final BuildContext context, final BoxConstraints constraints) {
     if (shouldShowOpenInstructions()) {
       return welcomePanel(context);
     }
@@ -232,7 +232,7 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
-  getScaffoldingForSmallSurface(context) {
+  Widget getScaffoldingForSmallSurface(final BuildContext context) {
     return Scaffold(
       appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
       body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
@@ -240,7 +240,7 @@ class _MyMoneyState extends State<MyMoney> {
     );
   }
 
-  getScaffoldingForLargeSurface(context) {
+  Widget getScaffoldingForLargeSurface(final BuildContext context) {
     return Scaffold(
       appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
       body: SafeArea(
@@ -255,14 +255,14 @@ class _MyMoneyState extends State<MyMoney> {
               useIndicator: true,
             ),
             const VerticalDivider(thickness: 1, width: 1),
-            Expanded(child: Column(children: [getWidgetForMainContent(context, settings.screenIndex)]))
+            Expanded(child: Column(children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)]))
           ],
         ),
       ),
     );
   }
 
-  onSettingsChanged(Settings settings) {
+  void onSettingsChanged(final Settings settings) {
     setState(() {
       this.settings = settings;
     });

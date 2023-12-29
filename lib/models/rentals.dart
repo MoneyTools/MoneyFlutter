@@ -1,9 +1,9 @@
 import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
 
-import '../helpers.dart';
-import 'date_range.dart';
-import 'money_entity.dart';
+import 'package:money/helpers.dart';
+import 'package:money/models/date_range.dart';
+import 'package:money/models/money_entity.dart';
 
 class Rental extends MoneyEntity {
   int count = 0;
@@ -19,44 +19,44 @@ class Rental extends MoneyEntity {
   double estimatedValue = 0.00;
 
   num categoryForIncome = -1;
-  List<num> categoryForIncomeTreeIds = [];
+  List<num> categoryForIncomeTreeIds = <num>[];
 
   num categoryForTaxes = -1;
-  List<num> categoryForTaxesTreeIds = [];
+  List<num> categoryForTaxesTreeIds = <num>[];
 
   num categoryForInterest = -1;
-  List<num> categoryForInterestTreeIds = [];
+  List<num> categoryForInterestTreeIds = <num>[];
 
   num categoryForRepairs = -1;
-  List<num> categoryForRepairsTreeIds = [];
+  List<num> categoryForRepairsTreeIds = <num>[];
 
   num categoryForMaintenance = -1;
-  List<num> categoryForMaintenanceTreeIds = [];
+  List<num> categoryForMaintenanceTreeIds = <num>[];
 
   num categoryForManagement = -1;
-  List<num> categoryForManagementTreeIds = [];
+  List<num> categoryForManagementTreeIds = <num>[];
 
-  List<num> listOfCategoryIdsExpenses = [];
+  List<num> listOfCategoryIdsExpenses = <num>[];
 
   String ownershipName1 = '';
   String ownershipName2 = '';
   double ownershipPercentage1 = 0.0;
   double ownershipPercentage2 = 0.0;
   String note = '';
-  List<RentUnit> units = [];
+  List<RentUnit> units = <RentUnit>[];
 
   DateRange dateRange = DateRange();
 
   Rental(super.id, super.name);
 
-  static Rental createInstanceFromRow(row) {
-    var id = MoneyEntity.fromRowColumnToNumber(row, 'Id');
-    var name = MoneyEntity.fromRowColumnToString(row, 'Name');
+  static Rental createInstanceFromRow(final Map<String, Object?> row) {
+    final num id = MoneyEntity.fromRowColumnToNumber(row, 'Id');
+    final String name = MoneyEntity.fromRowColumnToString(row, 'Name');
 
-    var instance = Rental(id, name);
+    final Rental instance = Rental(id, name);
 
     instance.address = MoneyEntity.fromRowColumnToString(row, 'Address');
-    instance.purchasedDate = DateTime.parse(row['PurchasedDate'].toString());
+    instance.purchasedDate = MoneyEntity.fromRowColumnToDateTime(row, 'PurchasedDate') ?? DateTime.now();
     instance.purchasedPrice = MoneyEntity.fromRowColumnToDouble(row, 'PurchasedPrice');
     instance.landValue = MoneyEntity.fromRowColumnToDouble(row, 'LandValue');
     instance.estimatedValue = MoneyEntity.fromRowColumnToDouble(row, 'EstimatedValue');
@@ -96,14 +96,14 @@ class Rental extends MoneyEntity {
 }
 
 class Rentals {
-  static MoneyObjects moneyObjects = MoneyObjects();
+  static MoneyObjects<Rental> moneyObjects = MoneyObjects<Rental>();
 
-  static Rental? get(id) {
-    return moneyObjects.get(id) as Rental?;
+  static Rental? get(final num id) {
+    return moneyObjects.get(id);
   }
 
-  static String getNameFromId(num id) {
-    var found = get(id);
+  static String getNameFromId(final num id) {
+    final Rental? found = get(id);
     if (found == null) {
       return id.toString();
     }
@@ -114,15 +114,15 @@ class Rentals {
     moneyObjects.clear();
   }
 
-  load(rows) {
+  load(final List<Map<String, Object?>> rows) {
     clear();
 
-    for (var row in rows) {
+    for (final Map<String, Object?> row in rows) {
       try {
-        Rental instance = Rental.createInstanceFromRow(row);
+        final Rental instance = Rental.createInstanceFromRow(row);
         moneyObjects.addEntry(instance);
       } catch (error) {
-        debugLog(error);
+        debugLog(error.toString());
       }
     }
   }
@@ -130,32 +130,30 @@ class Rentals {
   void loadDemoData() {
     clear();
 
-    var instance = Rental(0, 'AirBnB');
+    final Rental instance = Rental(0, 'AirBnB');
     instance.address = 'One Washington DC';
     moneyObjects.addEntry(instance);
   }
 
   static onAllDataLoaded() {
-    var allUnits = RentUnits.moneyObjects.getAsList();
+    final List<RentUnit> allUnits = RentUnits.moneyObjects.getAsList();
 
-    for (var building in moneyObjects.getAsList()) {
-      var rental = building as Rental;
-      // debugLog(rental.name);
+    for (final Rental rental in moneyObjects.getAsList()) {
       cumulateTransactions(rental);
 
       // expense is a negative number so we just do a Revenue + Expense
       rental.profit = rental.revenue + rental.expense;
 
-      for (var unit in allUnits) {
-        if ((unit as RentUnit).building == rental.id.toString()) {
+      for (final RentUnit unit in allUnits) {
+        if (unit.building == rental.id.toString()) {
           rental.units.add(unit);
         }
       }
     }
   }
 
-  static cumulateTransactions(Rental rental) {
-    for (var t in Transactions.list) {
+  static cumulateTransactions(final Rental rental) {
+    for (Transaction t in Transactions.list) {
       if (rental.categoryForIncomeTreeIds.contains(t.categoryId)) {
         rental.dateRange.inflate(t.dateTime);
         rental.count++;
@@ -182,26 +180,26 @@ class RentUnit extends MoneyEntity {
 }
 
 class RentUnits {
-  static MoneyObjects moneyObjects = MoneyObjects();
+  static MoneyObjects<RentUnit> moneyObjects = MoneyObjects<RentUnit>();
 
-  static RentUnit? get(id) {
-    return moneyObjects.get(id) as RentUnit?;
+  static RentUnit? get(final num id) {
+    return moneyObjects.get(id);
   }
 
-  static String getNameFromId(num id) {
-    var found = get(id);
+  static String getNameFromId(final num id) {
+    final RentUnit? found = get(id);
     if (found == null) {
       return id.toString();
     }
     return found.name;
   }
 
-  load(rows) async {
-    for (var row in rows) {
-      var id = num.parse(row['Id'].toString());
-      var name = row['Name'].toString();
+  load(final List<Map<String, Object?>> rows) async {
+    for (final Map<String, Object?> row in rows) {
+      final num id = num.parse(row['Id'].toString());
+      final String name = row['Name'].toString();
 
-      var instance = RentUnit(id, name);
+      final RentUnit instance = RentUnit(id, name);
       instance.building = row['Building'].toString();
       instance.renter = row['Renter'].toString();
       instance.note = row['Note'].toString();
@@ -213,8 +211,8 @@ class RentUnits {
   loadDemoData() {}
 
   static onAllDataLoaded() {
-    for (var item in moneyObjects.getAsList()) {
-      var a = item as Rental;
+    for (RentUnit item in moneyObjects.getAsList()) {
+      final Rental a = item as Rental;
       a.count = 0;
       a.revenue = 0;
     }

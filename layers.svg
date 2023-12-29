@@ -225,25 +225,22 @@
         <rect x="3189" y="464" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_flutter'>
-        <rect x="1089" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="1239" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_test_api'>
-        <rect x="1389" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="1539" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_file'>
-        <rect x="1689" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
-      </g>
-      <g id='Node_ffi'>
-        <rect x="1989" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="1839" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_plugin_platform_interface'>
-        <rect x="2289" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="2139" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_js'>
-        <rect x="2589" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="2439" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_convert'>
-        <rect x="2889" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="2739" y="544" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_vector_math'>
         <rect x="1089" y="624" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -276,43 +273,46 @@
         <rect x="1989" y="784" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_meta'>
-        <rect x="189" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="39" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_path'>
-        <rect x="489" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="339" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_collection'>
-        <rect x="789" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="639" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_term_glyph'>
-        <rect x="1089" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="939" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_web'>
-        <rect x="1389" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="1239" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_characters'>
-        <rect x="1689" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="1539" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_clock'>
-        <rect x="1989" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="1839" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+      </g>
+      <g id='Node_ffi'>
+        <rect x="2139" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_platform'>
-        <rect x="2289" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="2439" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_sync_http'>
-        <rect x="2589" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="2739" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_vm_service'>
-        <rect x="2889" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="3039" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_args'>
-        <rect x="3189" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="3339" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_lints'>
-        <rect x="3489" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="3639" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
       <g id='Node_synchronized'>
-        <rect x="3789" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+        <rect x="3939" y="864" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
       </g>
     </g>
     <g id='Node_path'>
@@ -328,7 +328,7 @@
 ⬇
 crypto</title>
     </path>
-    <path class="line" d="M3015 440 C 3029 660,491 660, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3015 440 C 3029 660,341 660, 355 880" fill="none" stroke="#377E22">
       <title>archive
 ⬇
 path</title>
@@ -338,12 +338,12 @@ path</title>
 ⬇
 pointycastle</title>
     </path>
-    <path class="line" d="M2115 760 C 2125 820,795 820, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2115 760 C 2125 820,645 820, 655 880" fill="none" stroke="#377E22">
       <title>async
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M2115 760 C 2125 820,195 820, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2115 760 C 2125 820,45 820, 55 880" fill="none" stroke="#377E22">
       <title>async
 ⬇
 meta</title>
@@ -373,17 +373,17 @@ source_span</title>
 ⬇
 yaml</title>
     </path>
-    <path class="line" d="M3015 360 C 3032 620,188 620, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3015 360 C 3032 620,38 620, 55 880" fill="none" stroke="#377E22">
       <title>cli_util
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M3015 360 C 3032 620,488 620, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3015 360 C 3032 620,338 620, 355 880" fill="none" stroke="#377E22">
       <title>cli_util
 ⬇
 path</title>
     </path>
-    <path class="line" d="M3165 600 C 3175 620,2595 620, 2605 640" fill="none" stroke="#377E22">
+    <path class="line" d="M3015 600 C 3025 620,2595 620, 2605 640" fill="none" stroke="#377E22">
       <title>convert
 ⬇
 typed_data</title>
@@ -393,32 +393,32 @@ typed_data</title>
 ⬇
 typed_data</title>
     </path>
-    <path class="line" d="M1965 520 C 1977 700,1993 700, 2005 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1965 520 C 1977 700,1843 700, 1855 880" fill="none" stroke="#377E22">
       <title>fake_async
 ⬇
 clock</title>
     </path>
-    <path class="line" d="M1965 520 C 1977 700,793 700, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1965 520 C 1977 700,643 700, 655 880" fill="none" stroke="#377E22">
       <title>fake_async
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M1965 600 C 1975 740,195 740, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2115 600 C 2125 740,45 740, 55 880" fill="none" stroke="#377E22">
       <title>file
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M1965 600 C 1975 740,495 740, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2115 600 C 2125 740,345 740, 355 880" fill="none" stroke="#377E22">
       <title>file
 ⬇
 path</title>
     </path>
-    <path class="line" d="M1365 280 C 1375 420,1995 420, 2005 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1365 280 C 1385 580,2135 580, 2155 880" fill="none" stroke="#377E22">
       <title>file_picker
 ⬇
 ffi</title>
     </path>
-    <path class="line" d="M1365 280 C 1375 420,1095 420, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1365 280 C 1375 420,1245 420, 1255 560" fill="none" stroke="#377E22">
       <title>file_picker
 ⬇
 flutter</title>
@@ -433,12 +433,12 @@ flutter_plugin_android_lifecycle</title>
 ⬇
 flutter_web_plugins</title>
     </path>
-    <path class="line" d="M1365 280 C 1385 580,485 580, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1365 280 C 1385 580,335 580, 355 880" fill="none" stroke="#377E22">
       <title>file_picker
 ⬇
 path</title>
     </path>
-    <path class="line" d="M1365 280 C 1375 420,2295 420, 2305 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1365 280 C 1375 420,2145 420, 2155 560" fill="none" stroke="#377E22">
       <title>file_picker
 ⬇
 plugin_platform_interface</title>
@@ -448,37 +448,37 @@ plugin_platform_interface</title>
 ⬇
 win32</title>
     </path>
-    <path class="line" d="M1365 600 C 1375 740,1695 740, 1705 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 600 C 1525 740,1545 740, 1555 880" fill="none" stroke="#377E22">
       <title>flutter
 ⬇
 characters</title>
     </path>
-    <path class="line" d="M1365 600 C 1375 740,795 740, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 600 C 1525 740,645 740, 655 880" fill="none" stroke="#377E22">
       <title>flutter
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M1365 600 C 1375 620,1995 620, 2005 640" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 600 C 1525 620,1995 620, 2005 640" fill="none" stroke="#377E22">
       <title>flutter
 ⬇
 material_color_utilities</title>
     </path>
-    <path class="line" d="M1365 600 C 1375 740,195 740, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 600 C 1525 740,45 740, 55 880" fill="none" stroke="#377E22">
       <title>flutter
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M1365 600 C 1375 620,2895 620, 2905 640" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 600 C 1525 620,2895 620, 2905 640" fill="none" stroke="#377E22">
       <title>flutter
 ⬇
 sky_engine</title>
     </path>
-    <path class="line" d="M1365 600 C 1375 620,1095 620, 1105 640" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 600 C 1525 620,1095 620, 1105 640" fill="none" stroke="#377E22">
       <title>flutter
 ⬇
 vector_math</title>
     </path>
-    <path class="line" d="M1365 600 C 1375 740,1395 740, 1405 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 600 C 1525 740,1245 740, 1255 880" fill="none" stroke="#377E22">
       <title>flutter
 ⬇
 web</title>
@@ -493,27 +493,27 @@ async</title>
 ⬇
 boolean_selector</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,1688 620, 1705 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,1538 620, 1555 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 characters</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,1988 620, 2005 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,1838 620, 1855 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 clock</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,788 620, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,638 620, 655 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M315 360 C 325 460,1695 460, 1705 560" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 325 460,1845 460, 1855 560" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 file</title>
     </path>
-    <path class="line" d="M315 360 C 325 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 325 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 flutter</title>
@@ -538,17 +538,17 @@ matcher</title>
 ⬇
 material_color_utilities</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,188 620, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,38 620, 55 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,488 620, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,338 620, 355 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 path</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,2288 620, 2305 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,2438 620, 2455 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 platform</title>
@@ -578,17 +578,17 @@ stream_channel</title>
 ⬇
 string_scanner</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,2588 620, 2605 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,2738 620, 2755 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 sync_http</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,1088 620, 1105 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,938 620, 955 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 term_glyph</title>
     </path>
-    <path class="line" d="M315 360 C 325 460,1395 460, 1405 560" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 325 460,1545 460, 1555 560" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 test_api</title>
@@ -598,12 +598,12 @@ test_api</title>
 ⬇
 vector_math</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,2888 620, 2905 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,3038 620, 3055 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 vm_service</title>
     </path>
-    <path class="line" d="M315 360 C 332 620,1388 620, 1405 880" fill="none" stroke="#377E22">
+    <path class="line" d="M315 360 C 332 620,1238 620, 1255 880" fill="none" stroke="#377E22">
       <title>flutter_driver
 ⬇
 web</title>
@@ -613,7 +613,7 @@ web</title>
 ⬇
 webdriver</title>
     </path>
-    <path class="line" d="M1665 280 C 1685 580,3185 580, 3205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1665 280 C 1685 580,3335 580, 3355 880" fill="none" stroke="#377E22">
       <title>flutter_launcher_icons
 ⬇
 args</title>
@@ -638,7 +638,7 @@ image</title>
 ⬇
 json_annotation</title>
     </path>
-    <path class="line" d="M1665 280 C 1685 580,485 580, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1665 280 C 1685 580,335 580, 355 880" fill="none" stroke="#377E22">
       <title>flutter_launcher_icons
 ⬇
 path</title>
@@ -648,12 +648,12 @@ path</title>
 ⬇
 yaml</title>
     </path>
-    <path class="line" d="M3465 280 C 3485 580,3485 580, 3505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3465 280 C 3485 580,3635 580, 3655 880" fill="none" stroke="#377E22">
       <title>flutter_lints
 ⬇
 lints</title>
     </path>
-    <path class="line" d="M2565 280 C 2575 420,1095 420, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2565 280 C 2575 420,1245 420, 1255 560" fill="none" stroke="#377E22">
       <title>flutter_markdown
 ⬇
 flutter</title>
@@ -663,17 +663,17 @@ flutter</title>
 ⬇
 markdown</title>
     </path>
-    <path class="line" d="M2565 280 C 2585 580,185 580, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2565 280 C 2585 580,35 580, 55 880" fill="none" stroke="#377E22">
       <title>flutter_markdown
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M2565 280 C 2585 580,485 580, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2565 280 C 2585 580,335 580, 355 880" fill="none" stroke="#377E22">
       <title>flutter_markdown
 ⬇
 path</title>
     </path>
-    <path class="line" d="M4215 360 C 4225 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M4215 360 C 4225 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>flutter_plugin_android_lifecycle
 ⬇
 flutter</title>
@@ -688,17 +688,17 @@ async</title>
 ⬇
 boolean_selector</title>
     </path>
-    <path class="line" d="M615 440 C 629 660,1691 660, 1705 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 629 660,1541 660, 1555 880" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 characters</title>
     </path>
-    <path class="line" d="M615 440 C 629 660,1991 660, 2005 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 629 660,1841 660, 1855 880" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 clock</title>
     </path>
-    <path class="line" d="M615 440 C 629 660,791 660, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 629 660,641 660, 655 880" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 collection</title>
@@ -708,7 +708,7 @@ collection</title>
 ⬇
 fake_async</title>
     </path>
-    <path class="line" d="M615 440 C 625 500,1095 500, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 625 500,1245 500, 1255 560" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 flutter</title>
@@ -723,12 +723,12 @@ matcher</title>
 ⬇
 material_color_utilities</title>
     </path>
-    <path class="line" d="M615 440 C 629 660,191 660, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 629 660,41 660, 55 880" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M615 440 C 629 660,491 660, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 629 660,341 660, 355 880" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 path</title>
@@ -753,12 +753,12 @@ stream_channel</title>
 ⬇
 string_scanner</title>
     </path>
-    <path class="line" d="M615 440 C 629 660,1091 660, 1105 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 629 660,941 660, 955 880" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 term_glyph</title>
     </path>
-    <path class="line" d="M615 440 C 625 500,1395 500, 1405 560" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 625 500,1545 500, 1555 560" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 test_api</title>
@@ -768,22 +768,22 @@ test_api</title>
 ⬇
 vector_math</title>
     </path>
-    <path class="line" d="M615 440 C 629 660,1391 660, 1405 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 440 C 629 660,1241 660, 1255 880" fill="none" stroke="#377E22">
       <title>flutter_test
 ⬇
 web</title>
     </path>
-    <path class="line" d="M915 440 C 929 660,1691 660, 1705 880" fill="none" stroke="#377E22">
+    <path class="line" d="M915 440 C 929 660,1541 660, 1555 880" fill="none" stroke="#377E22">
       <title>flutter_web_plugins
 ⬇
 characters</title>
     </path>
-    <path class="line" d="M915 440 C 929 660,791 660, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M915 440 C 929 660,641 660, 655 880" fill="none" stroke="#377E22">
       <title>flutter_web_plugins
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M915 440 C 925 500,1095 500, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M915 440 C 925 500,1245 500, 1255 560" fill="none" stroke="#377E22">
       <title>flutter_web_plugins
 ⬇
 flutter</title>
@@ -793,7 +793,7 @@ flutter</title>
 ⬇
 material_color_utilities</title>
     </path>
-    <path class="line" d="M915 440 C 929 660,191 660, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M915 440 C 929 660,41 660, 55 880" fill="none" stroke="#377E22">
       <title>flutter_web_plugins
 ⬇
 meta</title>
@@ -803,27 +803,27 @@ meta</title>
 ⬇
 vector_math</title>
     </path>
-    <path class="line" d="M915 440 C 929 660,1391 660, 1405 880" fill="none" stroke="#377E22">
+    <path class="line" d="M915 440 C 929 660,1241 660, 1255 880" fill="none" stroke="#377E22">
       <title>flutter_web_plugins
 ⬇
 web</title>
     </path>
-    <path class="line" d="M1515 440 C 1525 500,1695 500, 1705 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 440 C 1525 500,1845 500, 1855 560" fill="none" stroke="#377E22">
       <title>fuchsia_remote_debug_protocol
 ⬇
 file</title>
     </path>
-    <path class="line" d="M1515 440 C 1529 660,191 660, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 440 C 1529 660,41 660, 55 880" fill="none" stroke="#377E22">
       <title>fuchsia_remote_debug_protocol
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M1515 440 C 1529 660,491 660, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 440 C 1529 660,341 660, 355 880" fill="none" stroke="#377E22">
       <title>fuchsia_remote_debug_protocol
 ⬇
 path</title>
     </path>
-    <path class="line" d="M1515 440 C 1529 660,2291 660, 2305 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 440 C 1529 660,2441 660, 2455 880" fill="none" stroke="#377E22">
       <title>fuchsia_remote_debug_protocol
 ⬇
 platform</title>
@@ -833,17 +833,17 @@ platform</title>
 ⬇
 process</title>
     </path>
-    <path class="line" d="M1515 440 C 1529 660,2891 660, 2905 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 440 C 1529 660,3041 660, 3055 880" fill="none" stroke="#377E22">
       <title>fuchsia_remote_debug_protocol
 ⬇
 vm_service</title>
     </path>
-    <path class="line" d="M2865 280 C 2885 580,785 580, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2865 280 C 2885 580,635 580, 655 880" fill="none" stroke="#377E22">
       <title>graphic
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M2865 280 C 2875 420,1095 420, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2865 280 C 2875 420,1245 420, 1255 560" fill="none" stroke="#377E22">
       <title>graphic
 ⬇
 flutter</title>
@@ -863,7 +863,7 @@ vector_math</title>
 ⬇
 archive</title>
     </path>
-    <path class="line" d="M2415 360 C 2432 620,188 620, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2415 360 C 2432 620,38 620, 55 880" fill="none" stroke="#377E22">
       <title>image
 ⬇
 meta</title>
@@ -883,17 +883,17 @@ async</title>
 ⬇
 boolean_selector</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,1685 580, 1705 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,1535 580, 1555 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 characters</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,1985 580, 2005 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,1835 580, 1855 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 clock</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,785 580, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,635 580, 655 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 collection</title>
@@ -903,12 +903,12 @@ collection</title>
 ⬇
 fake_async</title>
     </path>
-    <path class="line" d="M1065 280 C 1075 420,1695 420, 1705 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1075 420,1845 420, 1855 560" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 file</title>
     </path>
-    <path class="line" d="M1065 280 C 1075 420,1095 420, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1075 420,1245 420, 1255 560" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 flutter</title>
@@ -933,12 +933,12 @@ matcher</title>
 ⬇
 material_color_utilities</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,185 580, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,35 580, 55 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,485 580, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,335 580, 355 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 path</title>
@@ -963,17 +963,17 @@ stream_channel</title>
 ⬇
 string_scanner</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,2585 580, 2605 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,2735 580, 2755 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 sync_http</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,1085 580, 1105 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,935 580, 955 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 term_glyph</title>
     </path>
-    <path class="line" d="M1065 280 C 1075 420,1395 420, 1405 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1075 420,1545 420, 1555 560" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 test_api</title>
@@ -983,12 +983,12 @@ test_api</title>
 ⬇
 vector_math</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,2885 580, 2905 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,3035 580, 3055 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 vm_service</title>
     </path>
-    <path class="line" d="M1065 280 C 1085 580,1385 580, 1405 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 280 C 1085 580,1235 580, 1255 880" fill="none" stroke="#377E22">
       <title>integration_test
 ⬇
 web</title>
@@ -998,37 +998,37 @@ web</title>
 ⬇
 webdriver</title>
     </path>
-    <path class="line" d="M3165 280 C 3185 580,1985 580, 2005 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3165 280 C 3185 580,1835 580, 1855 880" fill="none" stroke="#377E22">
       <title>intl
 ⬇
 clock</title>
     </path>
-    <path class="line" d="M3165 280 C 3185 580,185 580, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3165 280 C 3185 580,35 580, 55 880" fill="none" stroke="#377E22">
       <title>intl
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M3165 280 C 3185 580,485 580, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3165 280 C 3185 580,335 580, 355 880" fill="none" stroke="#377E22">
       <title>intl
 ⬇
 path</title>
     </path>
-    <path class="line" d="M2865 600 C 2875 740,195 740, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2715 600 C 2725 740,45 740, 55 880" fill="none" stroke="#377E22">
       <title>js
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M3615 440 C 3629 660,191 660, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3615 440 C 3629 660,41 660, 55 880" fill="none" stroke="#377E22">
       <title>json_annotation
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M3315 360 C 3332 620,3188 620, 3205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3315 360 C 3332 620,3338 620, 3355 880" fill="none" stroke="#377E22">
       <title>markdown
 ⬇
 args</title>
     </path>
-    <path class="line" d="M3315 360 C 3332 620,188 620, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3315 360 C 3332 620,38 620, 55 880" fill="none" stroke="#377E22">
       <title>markdown
 ⬇
 meta</title>
@@ -1038,7 +1038,7 @@ meta</title>
 ⬇
 async</title>
     </path>
-    <path class="line" d="M1065 520 C 1077 700,193 700, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 520 C 1077 700,43 700, 55 880" fill="none" stroke="#377E22">
       <title>matcher
 ⬇
 meta</title>
@@ -1048,22 +1048,22 @@ meta</title>
 ⬇
 stack_trace</title>
     </path>
-    <path class="line" d="M1065 520 C 1077 700,1093 700, 1105 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 520 C 1077 700,943 700, 955 880" fill="none" stroke="#377E22">
       <title>matcher
 ⬇
 term_glyph</title>
     </path>
-    <path class="line" d="M1065 520 C 1075 540,1395 540, 1405 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1065 520 C 1075 540,1545 540, 1555 560" fill="none" stroke="#377E22">
       <title>matcher
 ⬇
 test_api</title>
     </path>
-    <path class="line" d="M2265 680 C 2275 780,795 780, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 680 C 2275 780,645 780, 655 880" fill="none" stroke="#377E22">
       <title>material_color_utilities
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M2265 130 C 2290 505,780 505, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 130 C 2290 505,630 505, 655 880" fill="none" stroke="#377E22">
       <title>money
 ⬇
 collection</title>
@@ -1073,7 +1073,7 @@ collection</title>
 ⬇
 file_picker</title>
     </path>
-    <path class="line" d="M2265 130 C 2279 345,1091 345, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 130 C 2279 345,1241 345, 1255 560" fill="none" stroke="#377E22">
       <title>money
 ⬇
 flutter</title>
@@ -1113,12 +1113,12 @@ integration_test</title>
 ⬇
 intl</title>
     </path>
-    <path class="line" d="M2265 130 C 2290 505,3480 505, 3505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 130 C 2290 505,3630 505, 3655 880" fill="none" stroke="#377E22">
       <title>money
 ⬇
 lints</title>
     </path>
-    <path class="line" d="M2265 130 C 2290 505,480 505, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 130 C 2290 505,330 505, 355 880" fill="none" stroke="#377E22">
       <title>money
 ⬇
 path</title>
@@ -1133,12 +1133,12 @@ shared_preferences</title>
 ⬇
 sqflite_common_ffi</title>
     </path>
-    <path class="line" d="M1515 360 C 1525 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 360 C 1525 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>path_drawing
 ⬇
 flutter</title>
     </path>
-    <path class="line" d="M1515 360 C 1532 620,188 620, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1515 360 C 1532 620,38 620, 55 880" fill="none" stroke="#377E22">
       <title>path_drawing
 ⬇
 meta</title>
@@ -1153,7 +1153,7 @@ path_parsing</title>
 ⬇
 vector_math</title>
     </path>
-    <path class="line" d="M3915 440 C 3929 660,191 660, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3915 440 C 3929 660,41 660, 55 880" fill="none" stroke="#377E22">
       <title>path_parsing
 ⬇
 meta</title>
@@ -1163,17 +1163,17 @@ meta</title>
 ⬇
 vector_math</title>
     </path>
-    <path class="line" d="M1815 440 C 1825 500,1995 500, 2005 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 440 C 1829 660,2141 660, 2155 880" fill="none" stroke="#377E22">
       <title>path_provider_linux
 ⬇
 ffi</title>
     </path>
-    <path class="line" d="M1815 440 C 1825 500,1095 500, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 440 C 1825 500,1245 500, 1255 560" fill="none" stroke="#377E22">
       <title>path_provider_linux
 ⬇
 flutter</title>
     </path>
-    <path class="line" d="M1815 440 C 1829 660,491 660, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 440 C 1829 660,341 660, 355 880" fill="none" stroke="#377E22">
       <title>path_provider_linux
 ⬇
 path</title>
@@ -1188,32 +1188,32 @@ path_provider_platform_interface</title>
 ⬇
 xdg_directories</title>
     </path>
-    <path class="line" d="M1365 520 C 1375 540,1095 540, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1365 520 C 1375 540,1245 540, 1255 560" fill="none" stroke="#377E22">
       <title>path_provider_platform_interface
 ⬇
 flutter</title>
     </path>
-    <path class="line" d="M1365 520 C 1377 700,2293 700, 2305 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1365 520 C 1377 700,2443 700, 2455 880" fill="none" stroke="#377E22">
       <title>path_provider_platform_interface
 ⬇
 platform</title>
     </path>
-    <path class="line" d="M1365 520 C 1375 540,2295 540, 2305 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1365 520 C 1375 540,2145 540, 2155 560" fill="none" stroke="#377E22">
       <title>path_provider_platform_interface
 ⬇
 plugin_platform_interface</title>
     </path>
-    <path class="line" d="M2115 440 C 2125 500,1995 500, 2005 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2115 440 C 2129 660,2141 660, 2155 880" fill="none" stroke="#377E22">
       <title>path_provider_windows
 ⬇
 ffi</title>
     </path>
-    <path class="line" d="M2115 440 C 2125 500,1095 500, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2115 440 C 2125 500,1245 500, 1255 560" fill="none" stroke="#377E22">
       <title>path_provider_windows
 ⬇
 flutter</title>
     </path>
-    <path class="line" d="M2115 440 C 2129 660,491 660, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2115 440 C 2129 660,341 660, 355 880" fill="none" stroke="#377E22">
       <title>path_provider_windows
 ⬇
 path</title>
@@ -1228,47 +1228,47 @@ path_provider_platform_interface</title>
 ⬇
 win32</title>
     </path>
-    <path class="line" d="M3465 520 C 3477 700,193 700, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3465 520 C 3477 700,43 700, 55 880" fill="none" stroke="#377E22">
       <title>petitparser
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M2565 600 C 2575 740,195 740, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2415 600 C 2425 740,45 740, 55 880" fill="none" stroke="#377E22">
       <title>plugin_platform_interface
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M2265 520 C 2277 700,793 700, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 520 C 2277 700,643 700, 655 880" fill="none" stroke="#377E22">
       <title>pointycastle
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M2265 520 C 2275 540,2895 540, 2905 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 520 C 2275 540,2745 540, 2755 560" fill="none" stroke="#377E22">
       <title>pointycastle
 ⬇
 convert</title>
     </path>
-    <path class="line" d="M2265 520 C 2275 540,2595 540, 2605 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 520 C 2275 540,2445 540, 2455 560" fill="none" stroke="#377E22">
       <title>pointycastle
 ⬇
 js</title>
     </path>
-    <path class="line" d="M1665 520 C 1675 540,1695 540, 1705 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1665 520 C 1675 540,1845 540, 1855 560" fill="none" stroke="#377E22">
       <title>process
 ⬇
 file</title>
     </path>
-    <path class="line" d="M1665 520 C 1677 700,493 700, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1665 520 C 1677 700,343 700, 355 880" fill="none" stroke="#377E22">
       <title>process
 ⬇
 path</title>
     </path>
-    <path class="line" d="M1665 520 C 1677 700,2293 700, 2305 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1665 520 C 1677 700,2443 700, 2455 880" fill="none" stroke="#377E22">
       <title>process
 ⬇
 platform</title>
     </path>
-    <path class="line" d="M1965 280 C 1975 420,1095 420, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1965 280 C 1975 420,1245 420, 1255 560" fill="none" stroke="#377E22">
       <title>shared_preferences
 ⬇
 flutter</title>
@@ -1303,7 +1303,7 @@ shared_preferences_web</title>
 ⬇
 shared_preferences_windows</title>
     </path>
-    <path class="line" d="M3615 360 C 3625 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M3615 360 C 3625 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>shared_preferences_android
 ⬇
 flutter</title>
@@ -1313,7 +1313,7 @@ flutter</title>
 ⬇
 shared_preferences_platform_interface</title>
     </path>
-    <path class="line" d="M3915 360 C 3925 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M3915 360 C 3925 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>shared_preferences_foundation
 ⬇
 flutter</title>
@@ -1323,17 +1323,17 @@ flutter</title>
 ⬇
 shared_preferences_platform_interface</title>
     </path>
-    <path class="line" d="M615 360 C 625 460,1695 460, 1705 560" fill="none" stroke="#377E22">
+    <path class="line" d="M615 360 C 625 460,1845 460, 1855 560" fill="none" stroke="#377E22">
       <title>shared_preferences_linux
 ⬇
 file</title>
     </path>
-    <path class="line" d="M615 360 C 625 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M615 360 C 625 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>shared_preferences_linux
 ⬇
 flutter</title>
     </path>
-    <path class="line" d="M615 360 C 632 620,488 620, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M615 360 C 632 620,338 620, 355 880" fill="none" stroke="#377E22">
       <title>shared_preferences_linux
 ⬇
 path</title>
@@ -1353,17 +1353,17 @@ path_provider_platform_interface</title>
 ⬇
 shared_preferences_platform_interface</title>
     </path>
-    <path class="line" d="M1215 440 C 1225 500,1095 500, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1215 440 C 1225 500,1245 500, 1255 560" fill="none" stroke="#377E22">
       <title>shared_preferences_platform_interface
 ⬇
 flutter</title>
     </path>
-    <path class="line" d="M1215 440 C 1225 500,2295 500, 2305 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1215 440 C 1225 500,2145 500, 2155 560" fill="none" stroke="#377E22">
       <title>shared_preferences_platform_interface
 ⬇
 plugin_platform_interface</title>
     </path>
-    <path class="line" d="M1815 360 C 1825 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 360 C 1825 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>shared_preferences_web
 ⬇
 flutter</title>
@@ -1378,22 +1378,22 @@ flutter_web_plugins</title>
 ⬇
 shared_preferences_platform_interface</title>
     </path>
-    <path class="line" d="M1815 360 C 1832 620,1388 620, 1405 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 360 C 1832 620,1238 620, 1255 880" fill="none" stroke="#377E22">
       <title>shared_preferences_web
 ⬇
 web</title>
     </path>
-    <path class="line" d="M915 360 C 925 460,1695 460, 1705 560" fill="none" stroke="#377E22">
+    <path class="line" d="M915 360 C 925 460,1845 460, 1855 560" fill="none" stroke="#377E22">
       <title>shared_preferences_windows
 ⬇
 file</title>
     </path>
-    <path class="line" d="M915 360 C 925 460,1095 460, 1105 560" fill="none" stroke="#377E22">
+    <path class="line" d="M915 360 C 925 460,1245 460, 1255 560" fill="none" stroke="#377E22">
       <title>shared_preferences_windows
 ⬇
 flutter</title>
     </path>
-    <path class="line" d="M915 360 C 932 620,488 620, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M915 360 C 932 620,338 620, 355 880" fill="none" stroke="#377E22">
       <title>shared_preferences_windows
 ⬇
 path</title>
@@ -1413,42 +1413,42 @@ path_provider_windows</title>
 ⬇
 shared_preferences_platform_interface</title>
     </path>
-    <path class="line" d="M2265 840 C 2275 860,795 860, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 840 C 2275 860,645 860, 655 880" fill="none" stroke="#377E22">
       <title>source_span
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M2265 840 C 2275 860,495 860, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 840 C 2275 860,345 860, 355 880" fill="none" stroke="#377E22">
       <title>source_span
 ⬇
 path</title>
     </path>
-    <path class="line" d="M2265 840 C 2275 860,1095 860, 1105 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 840 C 2275 860,945 860, 955 880" fill="none" stroke="#377E22">
       <title>source_span
 ⬇
 term_glyph</title>
     </path>
-    <path class="line" d="M2715 360 C 2732 620,188 620, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2715 360 C 2732 620,38 620, 55 880" fill="none" stroke="#377E22">
       <title>sqflite_common
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M2715 360 C 2732 620,488 620, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2715 360 C 2732 620,338 620, 355 880" fill="none" stroke="#377E22">
       <title>sqflite_common
 ⬇
 path</title>
     </path>
-    <path class="line" d="M2715 360 C 2732 620,3788 620, 3805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2715 360 C 2732 620,3938 620, 3955 880" fill="none" stroke="#377E22">
       <title>sqflite_common
 ⬇
 synchronized</title>
     </path>
-    <path class="line" d="M2265 280 C 2285 580,185 580, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 280 C 2285 580,35 580, 55 880" fill="none" stroke="#377E22">
       <title>sqflite_common_ffi
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M2265 280 C 2285 580,485 580, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 280 C 2285 580,335 580, 355 880" fill="none" stroke="#377E22">
       <title>sqflite_common_ffi
 ⬇
 path</title>
@@ -1463,37 +1463,37 @@ sqflite_common</title>
 ⬇
 sqlite3</title>
     </path>
-    <path class="line" d="M2265 280 C 2285 580,3785 580, 3805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2265 280 C 2285 580,3935 580, 3955 880" fill="none" stroke="#377E22">
       <title>sqflite_common_ffi
 ⬇
 synchronized</title>
     </path>
-    <path class="line" d="M1215 360 C 1232 620,788 620, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1215 360 C 1232 620,638 620, 655 880" fill="none" stroke="#377E22">
       <title>sqlite3
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M1215 360 C 1225 460,1995 460, 2005 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1215 360 C 1232 620,2138 620, 2155 880" fill="none" stroke="#377E22">
       <title>sqlite3
 ⬇
 ffi</title>
     </path>
-    <path class="line" d="M1215 360 C 1225 460,2595 460, 2605 560" fill="none" stroke="#377E22">
+    <path class="line" d="M1215 360 C 1225 460,2445 460, 2455 560" fill="none" stroke="#377E22">
       <title>sqlite3
 ⬇
 js</title>
     </path>
-    <path class="line" d="M1215 360 C 1232 620,188 620, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1215 360 C 1232 620,38 620, 55 880" fill="none" stroke="#377E22">
       <title>sqlite3
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M1215 360 C 1232 620,488 620, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1215 360 C 1232 620,338 620, 355 880" fill="none" stroke="#377E22">
       <title>sqlite3
 ⬇
 path</title>
     </path>
-    <path class="line" d="M1665 680 C 1675 780,495 780, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1665 680 C 1675 780,345 780, 355 880" fill="none" stroke="#377E22">
       <title>stack_trace
 ⬇
 path</title>
@@ -1508,52 +1508,52 @@ async</title>
 ⬇
 source_span</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 660,1845 660, 1855 720" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 660,1845 660, 1855 720" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 async</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 620,1695 620, 1705 640" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 620,1695 620, 1705 640" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 boolean_selector</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 740,795 740, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 740,645 740, 655 880" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 740,195 740, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 740,45 740, 55 880" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 700,1995 700, 2005 800" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 700,1995 700, 2005 800" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 source_span</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 620,1395 620, 1405 640" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 620,1395 620, 1405 640" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 stack_trace</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 620,2295 620, 2305 640" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 620,2295 620, 2305 640" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 stream_channel</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 660,2145 660, 2155 720" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 660,2145 660, 2155 720" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 string_scanner</title>
     </path>
-    <path class="line" d="M1665 600 C 1675 740,1095 740, 1105 880" fill="none" stroke="#377E22">
+    <path class="line" d="M1815 600 C 1825 740,945 740, 955 880" fill="none" stroke="#377E22">
       <title>test_api
 ⬇
 term_glyph</title>
     </path>
-    <path class="line" d="M2865 680 C 2875 780,795 780, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2865 680 C 2875 780,645 780, 655 880" fill="none" stroke="#377E22">
       <title>typed_data
 ⬇
 collection</title>
@@ -1563,7 +1563,7 @@ collection</title>
 ⬇
 matcher</title>
     </path>
-    <path class="line" d="M2415 440 C 2429 660,491 660, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2415 440 C 2429 660,341 660, 355 880" fill="none" stroke="#377E22">
       <title>webdriver
 ⬇
 path</title>
@@ -1573,32 +1573,32 @@ path</title>
 ⬇
 stack_trace</title>
     </path>
-    <path class="line" d="M2415 440 C 2429 660,2591 660, 2605 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2415 440 C 2429 660,2741 660, 2755 880" fill="none" stroke="#377E22">
       <title>webdriver
 ⬇
 sync_http</title>
     </path>
-    <path class="line" d="M2565 520 C 2575 540,1995 540, 2005 560" fill="none" stroke="#377E22">
+    <path class="line" d="M2565 520 C 2577 700,2143 700, 2155 880" fill="none" stroke="#377E22">
       <title>win32
 ⬇
 ffi</title>
     </path>
-    <path class="line" d="M2865 520 C 2877 700,193 700, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2865 520 C 2877 700,43 700, 55 880" fill="none" stroke="#377E22">
       <title>xdg_directories
 ⬇
 meta</title>
     </path>
-    <path class="line" d="M2865 520 C 2877 700,493 700, 505 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2865 520 C 2877 700,343 700, 355 880" fill="none" stroke="#377E22">
       <title>xdg_directories
 ⬇
 path</title>
     </path>
-    <path class="line" d="M3315 440 C 3329 660,791 660, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3315 440 C 3329 660,641 660, 655 880" fill="none" stroke="#377E22">
       <title>xml
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M3315 440 C 3329 660,191 660, 205 880" fill="none" stroke="#377E22">
+    <path class="line" d="M3315 440 C 3329 660,41 660, 55 880" fill="none" stroke="#377E22">
       <title>xml
 ⬇
 meta</title>
@@ -1608,7 +1608,7 @@ meta</title>
 ⬇
 petitparser</title>
     </path>
-    <path class="line" d="M2715 440 C 2729 660,791 660, 805 880" fill="none" stroke="#377E22">
+    <path class="line" d="M2715 440 C 2729 660,641 660, 655 880" fill="none" stroke="#377E22">
       <title>yaml
 ⬇
 collection</title>
@@ -2521,8 +2521,8 @@ petitparser</title>
       </g>
       <g id='Counters_flutter'>
         <g>
-          <circle cx="1365" cy="600" r="10" fill="green"/>
-          <text x="1365" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">7</text>
+          <circle cx="1515" cy="600" r="10" fill="green"/>
+          <text x="1515" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">7</text>
           <title>flutter
 ⬇
 1 /External/characters
@@ -2534,8 +2534,8 @@ petitparser</title>
 7 /External/web</title>
         </g>
         <g>
-          <circle cx="1105" cy="560" r="10" fill="blue"/>
-          <text x="1105" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">20</text>
+          <circle cx="1255" cy="560" r="10" fill="blue"/>
+          <text x="1255" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">20</text>
           <title>1 /path/money
 2 /External/file_picker
 3 /External/flutter_driver
@@ -2562,8 +2562,8 @@ flutter</title>
       </g>
       <g id='Counters_test_api'>
         <g>
-          <circle cx="1665" cy="600" r="10" fill="green"/>
-          <text x="1665" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">9</text>
+          <circle cx="1815" cy="600" r="10" fill="green"/>
+          <text x="1815" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">9</text>
           <title>test_api
 ⬇
 1 /External/async
@@ -2577,8 +2577,8 @@ flutter</title>
 9 /External/term_glyph</title>
         </g>
         <g>
-          <circle cx="1405" cy="560" r="10" fill="blue"/>
-          <text x="1405" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">4</text>
+          <circle cx="1555" cy="560" r="10" fill="blue"/>
+          <text x="1555" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">4</text>
           <title>1 /External/flutter_driver
 2 /External/flutter_test
 3 /External/integration_test
@@ -2589,16 +2589,16 @@ test_api</title>
       </g>
       <g id='Counters_file'>
         <g>
-          <circle cx="1965" cy="600" r="10" fill="green"/>
-          <text x="1965" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+          <circle cx="2115" cy="600" r="10" fill="green"/>
+          <text x="2115" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
           <title>file
 ⬇
 1 /External/meta
 2 /External/path</title>
         </g>
         <g>
-          <circle cx="1705" cy="560" r="10" fill="blue"/>
-          <text x="1705" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">6</text>
+          <circle cx="1855" cy="560" r="10" fill="blue"/>
+          <text x="1855" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">6</text>
           <title>1 /External/flutter_driver
 2 /External/fuchsia_remote_debug_protocol
 3 /External/integration_test
@@ -2609,30 +2609,17 @@ test_api</title>
 file</title>
         </g>
       </g>
-      <g id='Counters_ffi'>
-        <g>
-          <circle cx="2005" cy="560" r="10" fill="blue"/>
-          <text x="2005" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">5</text>
-          <title>1 /External/file_picker
-2 /External/path_provider_linux
-3 /External/path_provider_windows
-4 /External/sqlite3
-5 /External/win32
-⬇
-ffi</title>
-        </g>
-      </g>
       <g id='Counters_plugin_platform_interface'>
         <g>
-          <circle cx="2565" cy="600" r="10" fill="green"/>
-          <text x="2565" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+          <circle cx="2415" cy="600" r="10" fill="green"/>
+          <text x="2415" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
           <title>plugin_platform_interface
 ⬇
 1 /External/meta</title>
         </g>
         <g>
-          <circle cx="2305" cy="560" r="10" fill="blue"/>
-          <text x="2305" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
+          <circle cx="2155" cy="560" r="10" fill="blue"/>
+          <text x="2155" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
           <title>1 /External/file_picker
 2 /External/path_provider_platform_interface
 3 /External/shared_preferences_platform_interface
@@ -2642,15 +2629,15 @@ plugin_platform_interface</title>
       </g>
       <g id='Counters_js'>
         <g>
-          <circle cx="2865" cy="600" r="10" fill="green"/>
-          <text x="2865" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+          <circle cx="2715" cy="600" r="10" fill="green"/>
+          <text x="2715" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
           <title>js
 ⬇
 1 /External/meta</title>
         </g>
         <g>
-          <circle cx="2605" cy="560" r="10" fill="blue"/>
-          <text x="2605" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+          <circle cx="2455" cy="560" r="10" fill="blue"/>
+          <text x="2455" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
           <title>1 /External/pointycastle
 2 /External/sqlite3
 ⬇
@@ -2659,15 +2646,15 @@ js</title>
       </g>
       <g id='Counters_convert'>
         <g>
-          <circle cx="3165" cy="600" r="10" fill="green"/>
-          <text x="3165" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+          <circle cx="3015" cy="600" r="10" fill="green"/>
+          <text x="3015" y="600" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
           <title>convert
 ⬇
 1 /External/typed_data</title>
         </g>
         <g>
-          <circle cx="2905" cy="560" r="10" fill="blue"/>
-          <text x="2905" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+          <circle cx="2755" cy="560" r="10" fill="blue"/>
+          <text x="2755" y="560" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
           <title>1 /External/pointycastle
 ⬇
 convert</title>
@@ -2865,8 +2852,8 @@ source_span</title>
       </g>
       <g id='Counters_meta'>
         <g>
-          <circle cx="205" cy="880" r="10" fill="blue"/>
-          <text x="205" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">26</text>
+          <circle cx="55" cy="880" r="10" fill="blue"/>
+          <text x="55" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">26</text>
           <title>1 /External/async
 2 /External/cli_util
 3 /External/file
@@ -2899,8 +2886,8 @@ meta</title>
       </g>
       <g id='Counters_path'>
         <g>
-          <circle cx="505" cy="880" r="10" fill="blue"/>
-          <text x="505" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">24</text>
+          <circle cx="355" cy="880" r="10" fill="blue"/>
+          <text x="355" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">24</text>
           <title>1 /path/money
 2 /External/archive
 3 /External/cli_util
@@ -2931,8 +2918,8 @@ path</title>
       </g>
       <g id='Counters_collection'>
         <g>
-          <circle cx="805" cy="880" r="10" fill="blue"/>
-          <text x="805" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">17</text>
+          <circle cx="655" cy="880" r="10" fill="blue"/>
+          <text x="655" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">17</text>
           <title>1 /path/money
 2 /External/async
 3 /External/fake_async
@@ -2956,8 +2943,8 @@ collection</title>
       </g>
       <g id='Counters_term_glyph'>
         <g>
-          <circle cx="1105" cy="880" r="10" fill="blue"/>
-          <text x="1105" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">6</text>
+          <circle cx="955" cy="880" r="10" fill="blue"/>
+          <text x="955" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">6</text>
           <title>1 /External/flutter_driver
 2 /External/flutter_test
 3 /External/integration_test
@@ -2970,8 +2957,8 @@ term_glyph</title>
       </g>
       <g id='Counters_web'>
         <g>
-          <circle cx="1405" cy="880" r="10" fill="blue"/>
-          <text x="1405" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">6</text>
+          <circle cx="1255" cy="880" r="10" fill="blue"/>
+          <text x="1255" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">6</text>
           <title>1 /External/flutter
 2 /External/flutter_driver
 3 /External/flutter_test
@@ -2984,8 +2971,8 @@ web</title>
       </g>
       <g id='Counters_characters'>
         <g>
-          <circle cx="1705" cy="880" r="10" fill="blue"/>
-          <text x="1705" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">5</text>
+          <circle cx="1555" cy="880" r="10" fill="blue"/>
+          <text x="1555" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">5</text>
           <title>1 /External/flutter
 2 /External/flutter_driver
 3 /External/flutter_test
@@ -2997,8 +2984,8 @@ characters</title>
       </g>
       <g id='Counters_clock'>
         <g>
-          <circle cx="2005" cy="880" r="10" fill="blue"/>
-          <text x="2005" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">5</text>
+          <circle cx="1855" cy="880" r="10" fill="blue"/>
+          <text x="1855" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">5</text>
           <title>1 /External/fake_async
 2 /External/flutter_driver
 3 /External/flutter_test
@@ -3008,10 +2995,23 @@ characters</title>
 clock</title>
         </g>
       </g>
+      <g id='Counters_ffi'>
+        <g>
+          <circle cx="2155" cy="880" r="10" fill="blue"/>
+          <text x="2155" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">5</text>
+          <title>1 /External/file_picker
+2 /External/path_provider_linux
+3 /External/path_provider_windows
+4 /External/sqlite3
+5 /External/win32
+⬇
+ffi</title>
+        </g>
+      </g>
       <g id='Counters_platform'>
         <g>
-          <circle cx="2305" cy="880" r="10" fill="blue"/>
-          <text x="2305" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">4</text>
+          <circle cx="2455" cy="880" r="10" fill="blue"/>
+          <text x="2455" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">4</text>
           <title>1 /External/flutter_driver
 2 /External/fuchsia_remote_debug_protocol
 3 /External/path_provider_platform_interface
@@ -3022,8 +3022,8 @@ platform</title>
       </g>
       <g id='Counters_sync_http'>
         <g>
-          <circle cx="2605" cy="880" r="10" fill="blue"/>
-          <text x="2605" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
+          <circle cx="2755" cy="880" r="10" fill="blue"/>
+          <text x="2755" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
           <title>1 /External/flutter_driver
 2 /External/integration_test
 3 /External/webdriver
@@ -3033,8 +3033,8 @@ sync_http</title>
       </g>
       <g id='Counters_vm_service'>
         <g>
-          <circle cx="2905" cy="880" r="10" fill="blue"/>
-          <text x="2905" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
+          <circle cx="3055" cy="880" r="10" fill="blue"/>
+          <text x="3055" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
           <title>1 /External/flutter_driver
 2 /External/fuchsia_remote_debug_protocol
 3 /External/integration_test
@@ -3044,8 +3044,8 @@ vm_service</title>
       </g>
       <g id='Counters_args'>
         <g>
-          <circle cx="3205" cy="880" r="10" fill="blue"/>
-          <text x="3205" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+          <circle cx="3355" cy="880" r="10" fill="blue"/>
+          <text x="3355" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
           <title>1 /External/flutter_launcher_icons
 2 /External/markdown
 ⬇
@@ -3054,8 +3054,8 @@ args</title>
       </g>
       <g id='Counters_lints'>
         <g>
-          <circle cx="3505" cy="880" r="10" fill="blue"/>
-          <text x="3505" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+          <circle cx="3655" cy="880" r="10" fill="blue"/>
+          <text x="3655" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
           <title>1 /path/money
 2 /External/flutter_lints
 ⬇
@@ -3064,8 +3064,8 @@ lints</title>
       </g>
       <g id='Counters_synchronized'>
         <g>
-          <circle cx="3805" cy="880" r="10" fill="blue"/>
-          <text x="3805" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+          <circle cx="3955" cy="880" r="10" fill="blue"/>
+          <text x="3955" y="880" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
           <title>1 /External/sqflite_common
 2 /External/sqflite_common_ffi
 ⬇
@@ -3280,32 +3280,28 @@ synchronized</title>
         <text class="nodeName" x="3335" y="520" font-size="80%">6.0.2</text>
       </g>
       <g id='Labels_flutter'>
-        <text class="nodeName" x="1235" y="580" font-size="120%">flutter</text>
-        <text class="nodeName" x="1235" y="600" font-size="80%">0.0.0</text>
+        <text class="nodeName" x="1385" y="580" font-size="120%">flutter</text>
+        <text class="nodeName" x="1385" y="600" font-size="80%">0.0.0</text>
       </g>
       <g id='Labels_test_api'>
-        <text class="nodeName" x="1535" y="580" font-size="120%">test_api</text>
-        <text class="nodeName" x="1535" y="600" font-size="80%">0.6.1</text>
+        <text class="nodeName" x="1685" y="580" font-size="120%">test_api</text>
+        <text class="nodeName" x="1685" y="600" font-size="80%">0.6.1</text>
       </g>
       <g id='Labels_file'>
-        <text class="nodeName" x="1835" y="580" font-size="120%">file</text>
-        <text class="nodeName" x="1835" y="600" font-size="80%">6.1.4</text>
-      </g>
-      <g id='Labels_ffi'>
-        <text class="nodeName" x="2135" y="580" font-size="120%">ffi</text>
-        <text class="nodeName" x="2135" y="600" font-size="80%">2.1.0</text>
+        <text class="nodeName" x="1985" y="580" font-size="120%">file</text>
+        <text class="nodeName" x="1985" y="600" font-size="80%">6.1.4</text>
       </g>
       <g id='Labels_plugin_platform_interface'>
-        <text class="nodeName" x="2435" y="580" font-size="120%">plugin_platform_interface</text>
-        <text class="nodeName" x="2435" y="600" font-size="80%">2.1.7</text>
+        <text class="nodeName" x="2285" y="580" font-size="120%">plugin_platform_interface</text>
+        <text class="nodeName" x="2285" y="600" font-size="80%">2.1.7</text>
       </g>
       <g id='Labels_js'>
-        <text class="nodeName" x="2735" y="580" font-size="120%">js</text>
-        <text class="nodeName" x="2735" y="600" font-size="80%">0.6.7</text>
+        <text class="nodeName" x="2585" y="580" font-size="120%">js</text>
+        <text class="nodeName" x="2585" y="600" font-size="80%">0.6.7</text>
       </g>
       <g id='Labels_convert'>
-        <text class="nodeName" x="3035" y="580" font-size="120%">convert</text>
-        <text class="nodeName" x="3035" y="600" font-size="80%">3.1.1</text>
+        <text class="nodeName" x="2885" y="580" font-size="120%">convert</text>
+        <text class="nodeName" x="2885" y="600" font-size="80%">3.1.1</text>
       </g>
       <g id='Labels_vector_math'>
         <text class="nodeName" x="1235" y="660" font-size="120%">vector_math</text>
@@ -3348,63 +3344,67 @@ synchronized</title>
         <text class="nodeName" x="2135" y="840" font-size="80%">1.10.0</text>
       </g>
       <g id='Labels_meta'>
-        <text class="nodeName" x="335" y="900" font-size="120%">meta</text>
-        <text class="nodeName" x="335" y="920" font-size="80%">1.10.0</text>
+        <text class="nodeName" x="185" y="900" font-size="120%">meta</text>
+        <text class="nodeName" x="185" y="920" font-size="80%">1.10.0</text>
       </g>
       <g id='Labels_path'>
-        <text class="nodeName" x="635" y="900" font-size="120%">path</text>
-        <text class="nodeName" x="635" y="920" font-size="80%">1.8.3</text>
+        <text class="nodeName" x="485" y="900" font-size="120%">path</text>
+        <text class="nodeName" x="485" y="920" font-size="80%">1.9.0</text>
       </g>
       <g id='Labels_collection'>
-        <text class="nodeName" x="935" y="900" font-size="120%">collection</text>
-        <text class="nodeName" x="935" y="920" font-size="80%">1.18.0</text>
+        <text class="nodeName" x="785" y="900" font-size="120%">collection</text>
+        <text class="nodeName" x="785" y="920" font-size="80%">1.18.0</text>
       </g>
       <g id='Labels_term_glyph'>
-        <text class="nodeName" x="1235" y="900" font-size="120%">term_glyph</text>
-        <text class="nodeName" x="1235" y="920" font-size="80%">1.2.1</text>
+        <text class="nodeName" x="1085" y="900" font-size="120%">term_glyph</text>
+        <text class="nodeName" x="1085" y="920" font-size="80%">1.2.1</text>
       </g>
       <g id='Labels_web'>
-        <text class="nodeName" x="1535" y="900" font-size="120%">web</text>
-        <text class="nodeName" x="1535" y="920" font-size="80%">0.3.0</text>
+        <text class="nodeName" x="1385" y="900" font-size="120%">web</text>
+        <text class="nodeName" x="1385" y="920" font-size="80%">0.3.0</text>
       </g>
       <g id='Labels_characters'>
-        <text class="nodeName" x="1835" y="900" font-size="120%">characters</text>
-        <text class="nodeName" x="1835" y="920" font-size="80%">1.3.0</text>
+        <text class="nodeName" x="1685" y="900" font-size="120%">characters</text>
+        <text class="nodeName" x="1685" y="920" font-size="80%">1.3.0</text>
       </g>
       <g id='Labels_clock'>
-        <text class="nodeName" x="2135" y="900" font-size="120%">clock</text>
-        <text class="nodeName" x="2135" y="920" font-size="80%">1.1.1</text>
+        <text class="nodeName" x="1985" y="900" font-size="120%">clock</text>
+        <text class="nodeName" x="1985" y="920" font-size="80%">1.1.1</text>
+      </g>
+      <g id='Labels_ffi'>
+        <text class="nodeName" x="2285" y="900" font-size="120%">ffi</text>
+        <text class="nodeName" x="2285" y="920" font-size="80%">2.1.0</text>
       </g>
       <g id='Labels_platform'>
-        <text class="nodeName" x="2435" y="900" font-size="120%">platform</text>
-        <text class="nodeName" x="2435" y="920" font-size="80%">3.1.2</text>
+        <text class="nodeName" x="2585" y="900" font-size="120%">platform</text>
+        <text class="nodeName" x="2585" y="920" font-size="80%">3.1.2</text>
       </g>
       <g id='Labels_sync_http'>
-        <text class="nodeName" x="2735" y="900" font-size="120%">sync_http</text>
-        <text class="nodeName" x="2735" y="920" font-size="80%">0.3.1</text>
+        <text class="nodeName" x="2885" y="900" font-size="120%">sync_http</text>
+        <text class="nodeName" x="2885" y="920" font-size="80%">0.3.1</text>
       </g>
       <g id='Labels_vm_service'>
-        <text class="nodeName" x="3035" y="900" font-size="120%">vm_service</text>
-        <text class="nodeName" x="3035" y="920" font-size="80%">11.10.0</text>
+        <text class="nodeName" x="3185" y="900" font-size="120%">vm_service</text>
+        <text class="nodeName" x="3185" y="920" font-size="80%">11.10.0</text>
       </g>
       <g id='Labels_args'>
-        <text class="nodeName" x="3335" y="900" font-size="120%">args</text>
-        <text class="nodeName" x="3335" y="920" font-size="80%">2.4.2</text>
+        <text class="nodeName" x="3485" y="900" font-size="120%">args</text>
+        <text class="nodeName" x="3485" y="920" font-size="80%">2.4.2</text>
       </g>
       <g id='Labels_lints'>
-        <text class="nodeName" x="3635" y="900" font-size="120%">lints</text>
-        <text class="nodeName" x="3635" y="920" font-size="80%">3.0.0</text>
+        <text class="nodeName" x="3785" y="900" font-size="120%">lints</text>
+        <text class="nodeName" x="3785" y="920" font-size="80%">3.0.0</text>
       </g>
       <g id='Labels_synchronized'>
-        <text class="nodeName" x="3935" y="900" font-size="120%">synchronized</text>
-        <text class="nodeName" x="3935" y="920" font-size="80%">3.1.0+1</text>
+        <text class="nodeName" x="4085" y="900" font-size="120%">synchronized</text>
+        <text class="nodeName" x="4085" y="920" font-size="80%">3.1.0+1</text>
       </g>
     </g>
     <g id='Labels_path'>
       <text class="folderName" x="1977.5" y="45">path</text>
       <g id='Labels_money'>
         <text class="nodeName" x="2135" y="110" font-size="120%">money</text>
-        <text class="nodeName" x="2135" y="130" font-size="80%">1.0.4</text>
+        <text class="nodeName" x="2135" y="130" font-size="80%">1.0.6</text>
       </g>
     </g>
   </g>
