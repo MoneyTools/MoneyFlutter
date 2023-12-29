@@ -1,5 +1,6 @@
 ## [1.0.6] 2023-10-29
 
+- Migrate to FL_CHART
 - Refactor to use strong typed everywhere
 
 ## [1.0.5] 2023-10-28

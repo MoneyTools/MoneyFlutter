@@ -1,7 +1,5 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:graphic/graphic.dart';
-
-import 'package:money/helpers.dart';
 
 class CategoryValue {
   String category = '';
@@ -24,62 +22,68 @@ class WidgetBarChart extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final List<Map<String, Object>> data = <Map<String, Object>>[
-      <String, Object>{variableNameHorizontal: '', variableNameVertical: 0},
-      // TODO this is a hack, still don't know why I can just initialize directly
-    ];
-    data.clear(); // TODO part of the hack
-
-    for (final CategoryValue entry in list) {
-      data.add(<String, Object>{
-        variableNameHorizontal: entry.category,
-        variableNameVertical: entry.value
-      });
-    }
-
-    if (data.isEmpty) {
+    if (list.isEmpty) {
       return Text('No chart to display ${list.length}');
     }
+    final List<BarChartGroupData> barCharts = <BarChartGroupData>[];
 
-    const double w = 800.0;
-    const double h = 300.0;
+    for (int i = 0; i < list.length; i++) {
+      final CategoryValue entry = list[i];
+      final BarChartGroupData bar = BarChartGroupData(
+        x: i,
+        barRods: <BarChartRodData>[
+          BarChartRodData(toY: entry.value.toDouble()),
+        ],
+      );
 
-    return Center(
-      child: SizedBox(
-          width: w,
-          height: h,
-          child: Chart(
-            data: data,
-            marks: <Mark<Shape>>[IntervalMark()],
-            variables: <String, Variable<Map, dynamic>>{
-              variableNameHorizontal: Variable(
-                  accessor: (final Map map) =>
-                      map[variableNameHorizontal] as String),
-              variableNameVertical: Variable(
-                  accessor: (final Map map) => map[variableNameVertical] as num,
-                  scale: LinearScale(
-                      formatter: (final num v) => getNumberAsShorthandText(v))),
-            },
-            axes: <AxisGuide>[
-              Defaults.horizontalAxis,
-              Defaults.verticalAxis,
-            ],
-            selections: <String, Selection>{
-              'touchMove': PointSelection(
-                on: <GestureType>{
-                  GestureType.scaleUpdate,
-                  GestureType.tapDown,
-                  GestureType.longPressMoveUpdate
-                },
-                dim: Dim.x,
-              )
-            },
-            tooltip: TooltipGuide(
-              followPointer: <bool>[false, true],
-              align: Alignment.topLeft,
-              offset: const Offset(-20, -20),
+      barCharts.add(bar);
+    }
+
+    return BarChart(
+      BarChartData(
+        // maxY: 100,
+        backgroundColor: Colors.transparent,
+        titlesData: FlTitlesData(
+          topTitles: const AxisTitles(), // hide
+          rightTitles: const AxisTitles(), // hide
+          leftTitles: const AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 80,
+              // getTitlesWidget: _buildTitlesForLeftAxis,
             ),
-          )),
+          ),
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 30,
+              getTitlesWidget: _buildBottomLegend,
+              interval: 1,
+            ),
+          ),
+        ),
+        gridData: FlGridData(
+          drawVerticalLine: false,
+          getDrawingHorizontalLine: (final double value) {
+            return FlLine(
+              color: Theme.of(context).colorScheme.outline,
+              strokeWidth: 1, // Set the thickness of the grid lines
+            );
+          },
+        ),
+        barGroups: barCharts,
+        barTouchData: BarTouchData(
+          enabled: true,
+          // touchTooltipData: BarTouchTooltipData(
+          //   tooltipRoundedRadius: 8,
+          //   getTooltipItem: _tooltipItem,
+          // ),
+        ),
+      ),
     );
+  }
+
+  Widget _buildBottomLegend(final double value, final TitleMeta meta) {
+    return Text(list[value.toInt()].category);
   }
 }
