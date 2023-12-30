@@ -1,5 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:money/helpers.dart';
 
 class PairXY {
   num yValue = 0.0;
@@ -44,6 +45,7 @@ class WidgetBarChart extends StatelessWidget {
         // maxY: 100,
         barGroups: barCharts,
         backgroundColor: Colors.transparent,
+        borderData: FlBorderData(show: false),
         titlesData: FlTitlesData(
           topTitles: const AxisTitles(), // hide
           rightTitles: const AxisTitles(), // hide
@@ -67,17 +69,29 @@ class WidgetBarChart extends StatelessWidget {
           drawVerticalLine: false,
           getDrawingHorizontalLine: (final double value) {
             return FlLine(
-              color: Theme.of(context).colorScheme.outline,
+              color: getHorizontalLineColorBasedOnValue(value),
               strokeWidth: 1, // Set the thickness of the grid lines
             );
           },
         ),
         barTouchData: BarTouchData(
           enabled: true,
-          // touchTooltipData: BarTouchTooltipData(
-          //   tooltipRoundedRadius: 8,
-          //   getTooltipItem: _tooltipItem,
-          // ),
+          touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: Theme.of(context).colorScheme.secondaryContainer,
+            tooltipRoundedRadius: 8,
+            getTooltipItem: (
+              final BarChartGroupData group,
+              final int groupIndex,
+              final BarChartRodData rod,
+              final int rodIndex,
+            ) {
+              return BarTooltipItem(
+                '${list[group.x].xText}\n${getCurrencyText(rod.toY)}',
+                TextStyle(color: Theme.of(context).colorScheme.primary),
+                textAlign: TextAlign.start,
+              );
+            },
+          ),
         ),
       ),
     );
@@ -85,5 +99,16 @@ class WidgetBarChart extends StatelessWidget {
 
   Widget _buildBottomLegend(final double value, final TitleMeta meta) {
     return Text(list[value.toInt()].xText);
+  }
+
+  Color getHorizontalLineColorBasedOnValue(final double value) {
+    if (value > 0) {
+      return Colors.green.withOpacity(0.2);
+    }
+    if (value < 0) {
+      return Colors.red.withOpacity(0.2);
+    }
+    // value == 0
+    return Colors.grey.withOpacity(0.8);
   }
 }
