@@ -5,6 +5,7 @@ import 'package:money/models/categories.dart';
 import 'package:money/widgets/columns.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_view.dart';
 
 class ViewCategories extends ViewWidget<Category> {
@@ -172,5 +173,35 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
           isSelected: _selectedPivot,
           children: pivots,
         ));
+  }
+
+  @override
+  Widget getSubViewContentForChart(final List<num> indices) {
+    final Map<String, num> map = <String, num>{};
+
+    for (final Category item in getList()) {
+      if (item.name != 'Split' && item.name != 'Xfer to Deleted Account') {
+        final Category topCategory = Categories.getTopAncestor(item);
+        if (map[topCategory.name] == null) {
+          map[topCategory.name] = 0;
+        }
+        map[topCategory.name] = map[topCategory.name]! + item.balance;
+      }
+    }
+    final List<PairXY> list = <PairXY>[];
+    map.forEach((final String key, final num value) {
+      list.add(PairXY(key, value));
+    });
+
+    list.sort((final PairXY a, final PairXY b) {
+      return (b.yValue.abs() - a.yValue.abs()).toInt();
+    });
+
+    return WidgetBarChart(
+      key: Key(indices.toString()),
+      list: list.take(8).toList(),
+      variableNameHorizontal: 'Category',
+      variableNameVertical: 'Balance',
+    );
   }
 }

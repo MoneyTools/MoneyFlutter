@@ -39,17 +39,17 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  getClassNamePlural() {
+  String getClassNamePlural() {
     return 'Accounts';
   }
 
   @override
-  getClassNameSingular() {
+  String getClassNameSingular() {
     return 'Account';
   }
 
   @override
-  getDescription() {
+  String getDescription() {
     return 'Your main assets.';
   }
 
@@ -62,12 +62,12 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  getSubViewContentForChart(final List<num> indices) {
-    final List<CategoryValue> list = <CategoryValue>[];
+  Widget getSubViewContentForChart(final List<num> indices) {
+    final List<PairXY> list = <PairXY>[];
     for (final MoneyEntity item in getList()) {
       final Account account = item as Account;
       if (account.isActive()) {
-        list.add(CategoryValue(account.name, account.balance));
+        list.add(PairXY(account.name, account.balance));
       }
     }
 

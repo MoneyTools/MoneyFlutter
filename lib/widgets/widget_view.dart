@@ -238,11 +238,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   Widget getSubViewContentForChart(final List<num> indices) {
-    final List<CategoryValue> list = <CategoryValue>[];
-    list.add(CategoryValue('a', 12.2));
-    list.add(CategoryValue('b', 22.2));
-    list.add(CategoryValue('c', 11.2));
-    list.add(CategoryValue('d', 14.2));
+    final List<PairXY> list = <PairXY>[];
+    list.add(PairXY('a', 12.2));
+    list.add(PairXY('b', 22.2));
+    list.add(PairXY('c', 11.2));
+    list.add(PairXY('d', 14.2));
 
     return WidgetBarChart(list: list);
   }

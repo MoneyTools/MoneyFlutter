@@ -239,7 +239,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  getSubViewContentForChart(final List<num> indices) {
+  Widget getSubViewContentForChart(final List<num> indices) {
     final Map<String, num> tallyPerMonths = <String, num>{};
 
     final DateRange timePeriod = DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);
@@ -259,12 +259,12 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
       }
     });
 
-    final List<CategoryValue> list = <CategoryValue>[];
+    final List<PairXY> list = <PairXY>[];
     tallyPerMonths.forEach((final String key, final num value) {
-      list.add(CategoryValue(key, value));
+      list.add(PairXY(key, value));
     });
 
-    list.sort((final CategoryValue a, final CategoryValue b) => a.category.compareTo(b.category));
+    list.sort((final PairXY a, final PairXY b) => a.xText.compareTo(b.xText));
 
     return WidgetBarChart(
       list: list,
