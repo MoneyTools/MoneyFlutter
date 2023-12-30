@@ -38,7 +38,7 @@ class BottomPanel extends StatelessWidget {
       itemsToRender.add(Expanded(child: Padding(padding: const EdgeInsets.all(20), child: widgetToRender)));
     }
 
-    return SizedBox(height: isExpanded ? 400 : 50, child: Column(children: itemsToRender));
+    return Column(children: itemsToRender);
   }
 
   Widget getRowOfTabs() {

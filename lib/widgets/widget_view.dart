@@ -7,7 +7,6 @@ import 'package:money/helpers.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/bottom.dart';
 import 'package:money/widgets/columns.dart';
-import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_table.dart';
 
 class ViewWidget<T> extends StatefulWidget {
@@ -121,52 +120,52 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   Widget build(final BuildContext context) {
     onSort();
 
-    // UI areas to display
-    final List<Widget> list = <Widget>[];
+    return getViewExpandAndPadding(
+      Column(
+        children: <Widget>[
+          // Optional upper Title area
+          if (widget.preference.showTitle) getTitle(),
 
-    if (widget.preference.showTitle) {
-      list.add(getTitle());
-    }
+          // Table Header
+          getTableHeaders(),
+          // Table rows
+          Expanded(
+            flex: 1,
+            child: TableWidget<T>(
+                list: getList(),
+                columns: columns,
+                onTap: onRowTap,
+                onDoubleTap: (final BuildContext context, final int index) {
+                  if (widget.preference.showBottom) {
+                    setState(() {
+                      isBottomPanelExpanded = true;
+                    });
+                  }
+                }),
+          ),
 
-    // UI for Table
-    list.add(getTableHeaders());
-    list.add(
-      Expanded(
-        child: TableWidget<T>(
-            list: getList(),
-            columns: columns,
-            onTap: onRowTap,
-            onDoubleTap: (final BuildContext context, final int index) {
-              if (widget.preference.showBottom) {
-                setState(() {
-                  isBottomPanelExpanded = true;
-                });
-              }
-            }),
+          // Optional bottom details panel
+          if (widget.preference.showBottom)
+            Expanded(
+              flex: isBottomPanelExpanded ? 1 : 0,
+              // this will split the vertical view when expanded
+              child: BottomPanel(
+                isExpanded: isBottomPanelExpanded,
+                onExpanded: (final bool isExpanded) {
+                  setState(() {
+                    isBottomPanelExpanded = isExpanded;
+                  });
+                },
+                selectedTabId: selectedBottomTabId,
+                selectedItems: selectedItems,
+                subViewSelectedItem: subViewSelectedItem,
+                onTabActivated: updateBottomContent,
+                getBottomContentToRender: getSubViewContent,
+              ),
+            ),
+        ],
       ),
     );
-
-    if (widget.preference.showBottom) {
-      list.add(BottomPanel(
-        isExpanded: isBottomPanelExpanded,
-        onExpanded: (final bool isExpanded) {
-          setState(() {
-            isBottomPanelExpanded = isExpanded;
-          });
-        },
-        selectedTabId: selectedBottomTabId,
-        selectedItems: selectedItems,
-        subViewSelectedItem: subViewSelectedItem,
-        onTabActivated: updateBottomContent,
-        getBottomContentToRender: getSubViewContent,
-      ));
-    }
-
-    if (widget.preference.expandAndPadding) {
-      return getViewExpandAndPadding(Column(children: list));
-    }
-
-    return Column(children: list);
   }
 
   updateBottomContent(final num tab) {
@@ -231,20 +230,18 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       final int index = indices.first;
       return Center(
         key: Key(index.toString()),
-        child: Column(children: detailPanelFields.getCellsForDetailsPanel(index)),
+        child: SingleChildScrollView(
+          child: Column(
+            children: detailPanelFields.getCellsForDetailsPanel(index),
+          ),
+        ),
       );
     }
     return const Text('No item selected');
   }
 
   Widget getSubViewContentForChart(final List<num> indices) {
-    final List<PairXY> list = <PairXY>[];
-    list.add(PairXY('a', 12.2));
-    list.add(PairXY('b', 22.2));
-    list.add(PairXY('c', 11.2));
-    list.add(PairXY('d', 14.2));
-
-    return WidgetBarChart(list: list);
+    return const Text('No chart to display');
   }
 
   Widget getSubViewContentForTransactions(final List<int> indices) {
@@ -456,11 +453,10 @@ MainAxisAlignment getRowAlignmentBasedOnTextAlign(final TextAlign textAlign) {
 class ViewWidgetToDisplay {
   final bool showTitle;
   final bool showBottom;
-  final bool expandAndPadding;
   final bool columnAccount;
   final List<String> columnsToInclude;
 
-  const ViewWidgetToDisplay({this.showTitle = true, this.showBottom = true, this.expandAndPadding = true, this.columnAccount = true, this.columnsToInclude = const <String>[]});
+  const ViewWidgetToDisplay({this.showTitle = true, this.showBottom = true, this.columnAccount = true, this.columnsToInclude = const <String>[]});
 }
 
 typedef FilterFunction = bool Function(Transaction);

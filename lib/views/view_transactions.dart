@@ -22,7 +22,7 @@ const String columnIdBalance = 'Balance';
 const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: <String>[columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
 
 const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance =
-    ViewWidgetToDisplay(showTitle: false, showBottom: false, expandAndPadding: false, columnsToInclude: <String>[columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
+    ViewWidgetToDisplay(showTitle: false, showBottom: false, columnsToInclude: <String>[columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
 
 class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;
