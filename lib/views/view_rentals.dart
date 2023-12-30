@@ -89,8 +89,8 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
         value: (final int index) {
           return (list[index]).dateRange.toStringYears();
         },
-        sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
-          return sortByString((a as Rental).dateRange.toString(), (b as Rental).dateRange.toString(), sortAscending);
+        sort: (final Rental a, final Rental b, final bool sortAscending) {
+          return sortByString(a.dateRange.toString(), b.dateRange.toString(), sortAscending);
         },
       ),
       ColumnDefinition<Rental>(
@@ -122,8 +122,8 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
         value: (final int index) {
           return (list[index]).expense;
         },
-        sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
-          return sortByValue((a as Rental).expense, (b as Rental).expense, sortAscending);
+        sort: (final Rental a, final Rental b, final bool sortAscending) {
+          return sortByValue(a.expense, b.expense, sortAscending);
         },
       ),
       ColumnDefinition<Rental>(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
-import 'package:money/models/money_entity.dart';
 
 import 'package:money/models/payees.dart';
 import 'package:money/widgets/columns.dart';
@@ -40,7 +39,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
         value: (final int index) {
           return list[index].name;
         },
-        sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
+        sort: (final Payee a, final Payee b, final bool sortAscending) {
           return sortByString(a.name, b.name, sortAscending);
         },
       ),
