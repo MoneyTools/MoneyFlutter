@@ -62,17 +62,21 @@ class _MenuVerticalState extends State<MenuVertical> {
   @override
   Widget build(final BuildContext context) {
     final List<NavigationRailDestination> destinations = getNavRailDestination(widget.settings);
-    return NavigationRail(
-      minWidth: 50,
-      destinations: destinations,
-      selectedIndex: _selectedIndex,
-      useIndicator: widget.useIndicator,
-      onDestinationSelected: (final int index) {
-        setState(() {
-          _selectedIndex = index;
-        });
-        widget.onSelectItem(index);
-      },
+    return SingleChildScrollView(
+      child: IntrinsicHeight(
+        child: NavigationRail(
+          minWidth: 50,
+          destinations: destinations,
+          selectedIndex: _selectedIndex,
+          useIndicator: widget.useIndicator,
+          onDestinationSelected: (final int index) {
+            setState(() {
+              _selectedIndex = index;
+            });
+            widget.onSelectItem(index);
+          },
+        ),
+      ),
     );
   }
 }

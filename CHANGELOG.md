@@ -1,5 +1,6 @@
 ## [1.0.7] 2023-10-30
 
+- Center & scrollable left menu bar
 - Improve Chart tooltips
 - Migrate to sqlite3 & sqlite3_flutter_libs
 
