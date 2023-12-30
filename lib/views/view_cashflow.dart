@@ -53,21 +53,17 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
           case CategoryType.investment:
             totalIncomes += element.amount;
 
-            final Category? topCategory = Categories.getTopAncestor(category);
-            if (topCategory != null) {
-              double? mapValue = mapOfIncomes[topCategory];
-              mapValue ??= 0;
-              mapOfIncomes[topCategory] = mapValue + element.amount;
-            }
+            final Category topCategory = Categories.getTopAncestor(category);
+            double? mapValue = mapOfIncomes[topCategory];
+            mapValue ??= 0;
+            mapOfIncomes[topCategory] = mapValue + element.amount;
             break;
           case CategoryType.expense:
             totalExpenses += element.amount;
-            final Category? topCategory = Categories.getTopAncestor(category);
-            if (topCategory != null) {
-              double? mapValue = mapOfExpenses[topCategory];
-              mapValue ??= 0;
-              mapOfExpenses[topCategory] = mapValue + element.amount;
-            }
+            final Category topCategory = Categories.getTopAncestor(category);
+            double? mapValue = mapOfExpenses[topCategory];
+            mapValue ??= 0;
+            mapOfExpenses[topCategory] = mapValue + element.amount;
             break;
           default:
             totalNones += element.amount;

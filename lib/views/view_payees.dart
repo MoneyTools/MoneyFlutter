@@ -4,6 +4,7 @@ import 'package:money/models/money_entity.dart';
 
 import 'package:money/models/payees.dart';
 import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_view.dart';
 
 class ViewPayees extends ViewWidget<Payee> {
@@ -84,5 +85,26 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   @override
   getDefaultSortColumn() {
     return 0; // Sort by name
+  }
+
+  @override
+  Widget getSubViewContentForChart(final List<num> indices) {
+    final List<PairXY> list = <PairXY>[];
+    for (final Payee item in getList()) {
+      if (item.name != 'Transfer') {
+        list.add(PairXY(item.name, item.count));
+      }
+    }
+
+    list.sort((final PairXY a, final PairXY b) {
+      return (b.yValue.abs() - a.yValue.abs()).toInt();
+    });
+
+    return WidgetBarChart(
+      key: Key(indices.toString()),
+      list: list.take(10).toList(),
+      variableNameHorizontal: 'Payee',
+      variableNameVertical: 'Transactions',
+    );
   }
 }
