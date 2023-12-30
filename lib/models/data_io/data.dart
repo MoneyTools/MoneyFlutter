@@ -1,7 +1,8 @@
 import 'dart:io';
 
+import 'package:money/helpers.dart';
+
 import 'package:money/models/rentals.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'package:money/models/accounts.dart';
 import 'package:money/models/categories.dart';
@@ -9,6 +10,7 @@ import 'package:money/models/payees.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/splits.dart';
+import 'package:money/models/data_io/data_others.dart' if (dart.library.html) 'package:money/models/data_io/data_web.dart';
 
 class Data {
   Accounts accounts = Accounts();
@@ -19,7 +21,10 @@ class Data {
   Splits splits = Splits();
   Transactions transactions = Transactions();
 
-  init(final String? filePathToLoad, final Function callbackWhenLoaded) async {
+  init({
+    required final String? filePathToLoad,
+    required final Function callbackWhenLoaded,
+  }) async {
     if (filePathToLoad == null) {
       return callbackWhenLoaded(false);
     }
@@ -34,60 +39,58 @@ class Data {
       transactions.loadDemoData();
     } else {
       try {
-        if (Platform.isWindows || Platform.isLinux) {
-          sqfliteFfiInit();
-        }
-
-        final DatabaseFactory databaseFactory = databaseFactoryFfi;
         final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
+
         if (pathToDatabaseFile != null) {
-          final Database db = await databaseFactory.openDatabase(pathToDatabaseFile);
+          // Open or create the database
+          final MyDatabase db = MyDatabase(pathToDatabaseFile);
 
           // Accounts
           {
-            final List<Map<String, Object?>> result = await db.query('Accounts');
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM Accounts');
             await accounts.load(result);
           }
-
           // Categories
           {
-            final List<Map<String, Object?>> result = await db.query('Categories');
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM Categories');
             await categories.load(result);
           }
 
           // Payees
           {
-            final List<Map<String, Object?>> result = await db.query('Payees');
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM Payees');
             await payees.load(result);
           }
 
           // Rentals
           {
-            final List<Map<String, Object?>> result = await db.query('RentBuildings');
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM RentBuildings');
             await rentals.load(result);
           }
 
           // RentUnits
           {
-            final List<Map<String, Object?>> result = await db.query('RentUnits');
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM RentUnits');
             await rentUnits.load(result);
           }
 
           // Splits
           {
-            final List<Map<String, Object?>> result = await db.query('Splits');
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM Splits');
             await splits.load(result);
           }
 
           // Transactions
           {
-            final List<Map<String, Object?>> result = await db.query('Transactions');
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM Transactions');
             await transactions.load(result);
           }
 
-          await db.close();
+          // Close the database when done
+          db.dispose();
         }
       } catch (e) {
+        debugLog(e.toString());
         callbackWhenLoaded(false);
         return;
       }

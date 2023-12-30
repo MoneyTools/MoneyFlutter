@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
@@ -13,7 +14,7 @@ import 'package:money/appbar.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/helpers.dart';
 import 'package:money/menu.dart';
-import 'package:money/models/data.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/views/view_accounts.dart';
 import 'package:money/views/view_categories.dart';
 import 'package:money/views/view_payees.dart';
@@ -51,13 +52,15 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   loadData() {
-    data.init(settings.pathToDatabase, (final bool success) {
-      _isLoading = false;
-      setState(() {
-        _isLoading;
-        data;
-      });
-    });
+    data.init(
+        filePathToLoad: settings.pathToDatabase,
+        callbackWhenLoaded: (final bool success) {
+          _isLoading = false;
+          setState(() {
+            _isLoading;
+            data;
+          });
+        });
   }
 
   void handleScreenChanged(final int selectedScreen) {
@@ -70,31 +73,41 @@ class _MyMoneyState extends State<MyMoney> {
     FilePickerResult? pickerResult;
 
     try {
-      pickerResult = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: <String>['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
-      );
+      if (Platform.isAndroid || Platform.isIOS) {
+        // Special case for Android
+        // See https://github.com/miguelpruivo/flutter_file_picker/issues/729
+        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
+      } else {
+        pickerResult = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: <String>['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
+        );
+      }
     } catch (e) {
       debugLog(e.toString());
     }
 
     if (pickerResult != null) {
       try {
-        if (kIsWeb) {
-          settings.pathToDatabase = pickerResult.files.single.path;
+        if (pickerResult.files.single.extension == "mmdb") {
+          if (kIsWeb) {
+            settings.pathToDatabase = pickerResult.files.single.path;
 
-          final Uint8List? file = pickerResult.files.single.bytes;
-          if (file != null) {
-            // String s = String.fromCharCodes(file);
-            // var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
-            // debugLog("--------$s");
+            final Uint8List? file = pickerResult.files.single.bytes;
+            if (file != null) {
+              // String s = String.fromCharCodes(file);
+              // var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
+              // debugLog("--------$s");
+            }
+          } else {
+            settings.pathToDatabase = pickerResult.files.single.path;
+          }
+          if (settings.pathToDatabase != null) {
+            settings.save();
+            loadData();
           }
         } else {
-          settings.pathToDatabase = pickerResult.files.single.path;
-        }
-        if (settings.pathToDatabase != null) {
-          settings.save();
-          loadData();
+          // todo: handle qfx, ofx, pdf, json, etc.
         }
       } catch (e) {
         debugLog(e.toString());

@@ -1,3 +1,7 @@
+## [1.0.7] 2023-10-30
+
+- Migrate to sqlite3 & sqlite3_flutter_libs
+
 ## [1.0.6] 2023-10-29
 
 - Migrate to FL_CHART
