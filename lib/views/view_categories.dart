@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:money/helpers.dart';
 import 'package:money/models/categories.dart';
+import 'package:money/models/transactions.dart';
+import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/columns.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/caption_and_counter.dart';
@@ -203,5 +205,19 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
       variableNameHorizontal: 'Category',
       variableNameVertical: 'Balance',
     );
+  }
+
+  @override
+  getSubViewContentForTransactions(final List<int> indices) {
+    final Category? category = getFirstElement<Category>(indices, list);
+    if (category != null && category.id > -1) {
+      return ViewTransactions(
+        key: Key(category.id.toString()),
+        filter: (final Transaction transaction) => transaction.categoryId == category.id,
+        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
+        startingBalance: 0,
+      );
+    }
+    return const Text('No transactions');
   }
 }

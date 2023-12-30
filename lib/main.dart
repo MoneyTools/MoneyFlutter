@@ -17,7 +17,7 @@ import 'package:money/menu.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/views/view_accounts/view_accounts.dart';
 import 'package:money/views/view_categories.dart';
-import 'package:money/views/view_payees.dart';
+import 'package:money/views/view_payees/view_payees.dart';
 import 'package:money/views/view_transactions.dart';
 
 void main() {

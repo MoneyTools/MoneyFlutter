@@ -2,9 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
 
 import 'package:money/models/payees.dart';
+import 'package:money/models/transactions.dart';
+import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/columns.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_view.dart';
+
+part 'view_payees_columns.dart';
 
 class ViewPayees extends ViewWidget<Payee> {
   const ViewPayees({super.key});
@@ -31,49 +35,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
 
   @override
   ColumnDefinitions<Payee> getColumnDefinitionsForTable() {
-    return ColumnDefinitions<Payee>(list: <ColumnDefinition<Payee>>[
-      ColumnDefinition<Payee>(
-        name: 'Name',
-        type: ColumnType.text,
-        align: TextAlign.left,
-        value: (final int index) {
-          return list[index].name;
-        },
-        sort: (final Payee a, final Payee b, final bool sortAscending) {
-          return sortByString(a.name, b.name, sortAscending);
-        },
-      ),
-      ColumnDefinition<Payee>(
-        name: 'Count',
-        type: ColumnType.numeric,
-        align: TextAlign.right,
-        value: (final int index) {
-          return list[index].count;
-        },
-        sort: (final Payee a, final Payee b, final bool sortAscending) {
-          return sortByValue(
-            a.count,
-            b.count,
-            sortAscending,
-          );
-        },
-      ),
-      ColumnDefinition<Payee>(
-        name: 'Balance',
-        type: ColumnType.amount,
-        align: TextAlign.right,
-        value: (final int index) {
-          return list[index].balance;
-        },
-        sort: (final Payee a, final Payee b, final bool sortAscending) {
-          return sortByValue(
-            a.balance,
-            b.balance,
-            sortAscending,
-          );
-        },
-      ),
-    ]);
+    return _getColumnDefinitionsForTable();
   }
 
   @override
@@ -105,5 +67,19 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
       variableNameHorizontal: 'Payee',
       variableNameVertical: 'Transactions',
     );
+  }
+
+  @override
+  getSubViewContentForTransactions(final List<int> indices) {
+    final Payee? payee = getFirstElement<Payee>(indices, list);
+    if (payee != null && payee.id > -1) {
+      return ViewTransactions(
+        key: Key(payee.id.toString()),
+        filter: (final Transaction transaction) => transaction.payeeId == payee.id,
+        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
+        startingBalance: 0,
+      );
+    }
+    return const Text('No transactions');
   }
 }
