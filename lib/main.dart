@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:file_picker/file_picker.dart';
@@ -13,7 +14,7 @@ import 'package:money/appbar.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/helpers.dart';
 import 'package:money/menu.dart';
-import 'package:money/models/data.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/views/view_accounts.dart';
 import 'package:money/views/view_categories.dart';
 import 'package:money/views/view_payees.dart';
@@ -51,13 +52,15 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   loadData() {
-    data.init(settings.pathToDatabase, (final bool success) {
-      _isLoading = false;
-      setState(() {
-        _isLoading;
-        data;
-      });
-    });
+    data.init(
+        filePathToLoad: settings.pathToDatabase,
+        callbackWhenLoaded: (final bool success) {
+          _isLoading = false;
+          setState(() {
+            _isLoading;
+            data;
+          });
+        });
   }
 
   void handleScreenChanged(final int selectedScreen) {
@@ -70,11 +73,16 @@ class _MyMoneyState extends State<MyMoney> {
     FilePickerResult? pickerResult;
 
     try {
-      pickerResult = await FilePicker.platform.pickFiles(
-        type: FileType.any,
+      if (Platform.isAndroid || Platform.isIOS) {
+        // Special case for Android
         // See https://github.com/miguelpruivo/flutter_file_picker/issues/729
-        // allowedExtensions: <String>['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
-      );
+        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
+      } else {
+        pickerResult = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: <String>['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
+        );
+      }
     } catch (e) {
       debugLog(e.toString());
     }
