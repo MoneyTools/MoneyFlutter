@@ -91,7 +91,7 @@ class Categories {
     return idOfSplitCategory;
   }
 
-  static Category? getTopAncestor(final Category category) {
+  static Category getTopAncestor(final Category category) {
     if (category.parentId == -1) {
       return category; // this is the top
     }
