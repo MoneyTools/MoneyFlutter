@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
@@ -28,8 +30,13 @@ class WidgetBarChart extends StatelessWidget {
     }
     final List<BarChartGroupData> barCharts = <BarChartGroupData>[];
 
+    double maxY = 0;
+    double minY = 0;
+
     for (int i = 0; i < list.length; i++) {
       final PairXY entry = list[i];
+      maxY = max(maxY, entry.yValue.toDouble());
+      minY = min(minY, entry.yValue.toDouble());
       final BarChartGroupData bar = BarChartGroupData(
         x: i,
         barRods: <BarChartRodData>[
@@ -42,25 +49,26 @@ class WidgetBarChart extends StatelessWidget {
 
     return BarChart(
       BarChartData(
-        // maxY: 100,
+        maxY: roundToTheNextNaturalFit(maxY.toInt()).toDouble(),
+        minY: minY == 0 ? null : roundToTheNextNaturalFit(minY.toInt().abs()) * -1.0,
         barGroups: barCharts,
         backgroundColor: Colors.transparent,
         borderData: FlBorderData(show: false),
         titlesData: FlTitlesData(
           topTitles: const AxisTitles(), // hide
           rightTitles: const AxisTitles(), // hide
-          leftTitles: const AxisTitles(
+          leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 80,
-              // getTitlesWidget: _buildTitlesForLeftAxis,
+              getTitlesWidget: _buildLegendLeft,
             ),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 30,
-              getTitlesWidget: _buildBottomLegend,
+              reservedSize: 50,
+              getTitlesWidget: _buildLegendBottom,
               interval: 1,
             ),
           ),
@@ -97,8 +105,35 @@ class WidgetBarChart extends StatelessWidget {
     );
   }
 
-  Widget _buildBottomLegend(final double value, final TitleMeta meta) {
-    return Text(list[value.toInt()].xText);
+  Widget _buildLegendLeft(final double value, final TitleMeta meta) {
+    if (value != 0 && (value == meta.min || value == meta.max)) {
+      // do not show
+      return const SizedBox();
+    }
+
+    final Widget widget = Text(
+      getCurrencyText(value, 0),
+      textAlign: TextAlign.end,
+      softWrap: false,
+      style: const TextStyle(fontSize: 10),
+    );
+
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: widget,
+    );
+  }
+
+  Widget _buildLegendBottom(final double value, final TitleMeta meta) {
+    return Container(
+      padding: const EdgeInsets.only(top: 8),
+      constraints: const BoxConstraints(maxWidth: 60),
+      child: Text(
+        list[value.toInt()].xText,
+        softWrap: true,
+        style: const TextStyle(fontSize: 10),
+      ),
+    );
   }
 
   Color getHorizontalLineColorBasedOnValue(final double value) {

@@ -66,8 +66,9 @@ String getIntAsText(final int value) {
   return NumberFormat.decimalPattern().format(value);
 }
 
-String getCurrencyText(final double amount) {
-  final NumberFormat formatCurrency = NumberFormat.simpleCurrency();
+String getCurrencyText(final double amount, [final int decimalDigits = 2]) {
+  final NumberFormat formatCurrency = NumberFormat.simpleCurrency(decimalDigits: decimalDigits);
+
   return formatCurrency.format(amount);
 }
 
@@ -138,4 +139,48 @@ T? getFirstElement<T>(final List<int> indices, final List<dynamic> list) {
     return list[index] as T?;
   }
   return null;
+}
+
+/// Next rounded upper value
+/// 1912 > 2000
+/// 777 > 1000
+/// 34 > 100
+/// 5 > 10
+int roundToTheNextNaturalFit(final int value) {
+  if (value > 100000) {
+    return roundToNextNaturalFit(value, 100000);
+  }
+
+  if (value > 10000) {
+    return roundToNextNaturalFit(value, 10000);
+  }
+
+  if (value > 1000) {
+    return roundToNextNaturalFit(value, 1000);
+  }
+
+  if (value > 100) {
+    return roundToNextNaturalFit(value, 100);
+  }
+
+  if (value > 50) {
+    return roundToNextNaturalFit(value, 50);
+  }
+
+  if (value > 10) {
+    return roundToNextNaturalFit(value, 10);
+  }
+  return 10;
+}
+
+/// Round up to next divisor level
+int roundToNextNaturalFit(final int number, final int divisor) {
+  if (number % divisor == 0) {
+    // already at the nature next fit
+    return number;
+  }
+  // Calculate the remainder when dividing the number by the divisor.
+  final int remainder = number % divisor;
+  final int base = number - remainder;
+  return base + divisor;
 }

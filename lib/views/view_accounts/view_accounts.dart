@@ -71,9 +71,11 @@ class ViewAccountsState extends ViewWidgetState<Account> {
       }
     }
 
+    list.sort((final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt());
+
     return WidgetBarChart(
       key: Key(indices.toString()),
-      list: list,
+      list: list.take(10).toList(),
       variableNameHorizontal: 'Account',
       variableNameVertical: 'Balance',
     );
