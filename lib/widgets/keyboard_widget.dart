@@ -131,13 +131,16 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
   }
 
   //returns text surrounded with a rounded-rect
-  Widget _getBubble(final String text, final Color color, final Color color2, final TextStyle textStyle, {final bool invert = false}) {
+  Widget _getBubble(final String text, final Color color, final Color color2, final TextStyle textStyle,
+      {final bool invert = false}) {
     // bool isDark = background.computeLuminance() < .5;
     return Container(
       margin: const EdgeInsets.only(left: 6),
       padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-      decoration: BoxDecoration(color: invert ? color : color2, borderRadius: BorderRadius.circular(4), border: Border.all(color: color)),
-      child: Text(text, style: textStyle.copyWith(color: invert ? color2 : color)), //isDark? _whiteStyle :_blackStyle,),
+      decoration: BoxDecoration(
+          color: invert ? color : color2, borderRadius: BorderRadius.circular(4), border: Border.all(color: color)),
+      child:
+          Text(text, style: textStyle.copyWith(color: invert ? color2 : color)), //isDark? _whiteStyle :_blackStyle,),
     );
   }
 
@@ -333,7 +336,8 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     );
   }
 
-  List<DataCell> _getDataRow(final KeyAction rep, final TextStyle textStyle, final TextStyle altTextStyle, final Color background, final Color textColor) {
+  List<DataCell> _getDataRow(final KeyAction rep, final TextStyle textStyle, final TextStyle altTextStyle,
+      final Color background, final Color textColor) {
     final List<DataCell> dataRow = <DataCell>[];
     final String modifiers = _getModifiers(rep);
     dataRow.add(DataCell(Text(
@@ -341,7 +345,8 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       overflow: TextOverflow.ellipsis,
       style: textStyle,
     )));
-    dataRow.add(modifiers.isNotEmpty ? DataCell(_getBubble(modifiers, textColor, background, altTextStyle)) : DataCell.empty);
+    dataRow.add(
+        modifiers.isNotEmpty ? DataCell(_getBubble(modifiers, textColor, background, altTextStyle)) : DataCell.empty);
     dataRow.add(DataCell(
       _getAltText(rep.label, altTextStyle),
     ));
@@ -385,7 +390,9 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
             ),
           ),
         );
-        dataRow.add(modifiers.isNotEmpty ? DataCell(_getBubble(modifiers, textColor, background, textStyle, invert: true)) : DataCell.empty);
+        dataRow.add(modifiers.isNotEmpty
+            ? DataCell(_getBubble(modifiers, textColor, background, textStyle, invert: true))
+            : DataCell.empty);
         dataRow.add(DataCell(_getBubble(rep.label, textColor, background, textStyle)));
       }
     }
@@ -399,7 +406,8 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
           overflow: TextOverflow.ellipsis,
           style: textStyle,
         )));
-        dataRow.add(modifiers.isNotEmpty ? DataCell(_getBubble(modifiers, textColor, background, textStyle)) : DataCell.empty);
+        dataRow.add(
+            modifiers.isNotEmpty ? DataCell(_getBubble(modifiers, textColor, background, textStyle)) : DataCell.empty);
         dataRow.add(DataCell(_getBubble(rep.label, textColor, background, textStyle, invert: true)));
       }
       for (int k = widget.bindings.length; k < rowCount * widget.columnCount; k++) {
@@ -436,24 +444,31 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       height: double.infinity,
       width: double.infinity,
       decoration: BoxDecoration(
-          color: background, border: Border.all(color: background, width: 12), borderRadius: BorderRadius.circular(12), boxShadow: const <BoxShadow>[BoxShadow(color: shadow, blurRadius: 30, spreadRadius: 1)]),
+          color: background,
+          border: Border.all(color: background, width: 12),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: const <BoxShadow>[BoxShadow(color: shadow, blurRadius: 30, spreadRadius: 1)]),
       child: (widget.helpText != null)
-          ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.center, children: <Widget>[
-              Flexible(
-                  child: Markdown(
-                shrinkWrap: true,
-                data: widget.helpText!,
-                styleSheet: MarkdownStyleSheet(
-                  h1: const TextStyle(fontWeight: FontWeight.bold),
-                  h1Align: WrapAlignment.center,
-                ),
-              )),
-              const Divider(height: 0.5, thickness: 0.5),
-              const SizedBox(
-                height: 18,
-              ),
-              dataTable,
-            ])
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                  Flexible(
+                      child: Markdown(
+                    shrinkWrap: true,
+                    data: widget.helpText!,
+                    styleSheet: MarkdownStyleSheet(
+                      h1: const TextStyle(fontWeight: FontWeight.bold),
+                      h1Align: WrapAlignment.center,
+                    ),
+                  )),
+                  const Divider(height: 0.5, thickness: 0.5),
+                  const SizedBox(
+                    height: 18,
+                  ),
+                  dataTable,
+                ])
           : dataTable,
     );
 
@@ -566,16 +581,26 @@ class KeyAction {
   ///to false) for key modifiers for meta [isMetaPressed], shift [isShiftPressed],
   ///alt [isAltPressed]
   KeyAction(final LogicalKeyboardKey keyStroke, this.description, this.callback,
-      {this.categoryHeader = '', final bool isControlPressed = false, final bool isMetaPressed = false, final bool isShiftPressed = false, final bool isAltPressed = false})
-      : keyActivator = SingleActivator(keyStroke, control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
+      {this.categoryHeader = '',
+      final bool isControlPressed = false,
+      final bool isMetaPressed = false,
+      final bool isShiftPressed = false,
+      final bool isAltPressed = false})
+      : keyActivator = SingleActivator(keyStroke,
+            control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
 
   ///Creates a key action from the first letter of any string [string] with,
   ///[description] and [callback] method. Includes optional bool values (defaulting
   ///to false) for key modifiers for meta [isMetaPressed], shift [isShiftPressed],
   ///alt [isAltPressed]
   KeyAction.fromString(final String string, this.description, this.callback,
-      {this.categoryHeader = '', final bool isControlPressed = false, final bool isMetaPressed = false, final bool isShiftPressed = false, final bool isAltPressed = false})
-      : keyActivator = SingleActivator(LogicalKeyboardKey(string.toLowerCase().codeUnitAt(0)), control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
+      {this.categoryHeader = '',
+      final bool isControlPressed = false,
+      final bool isMetaPressed = false,
+      final bool isShiftPressed = false,
+      final bool isAltPressed = false})
+      : keyActivator = SingleActivator(LogicalKeyboardKey(string.toLowerCase().codeUnitAt(0)),
+            control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
 
   bool get isControlPressed => keyActivator.control;
 
@@ -631,6 +656,10 @@ class KeyAction {
   }
 
   bool matchesEvent(final RawKeyEvent event) {
-    return event.logicalKey == keyActivator.trigger && isControlPressed == event.isControlPressed && isMetaPressed == event.isMetaPressed && isShiftPressed == event.isShiftPressed && isAltPressed == event.isAltPressed;
+    return event.logicalKey == keyActivator.trigger &&
+        isControlPressed == event.isControlPressed &&
+        isMetaPressed == event.isMetaPressed &&
+        isShiftPressed == event.isShiftPressed &&
+        isAltPressed == event.isAltPressed;
   }
 }

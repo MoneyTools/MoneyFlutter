@@ -10,7 +10,8 @@ import 'package:money/models/payees.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/splits.dart';
-import 'package:money/models/data_io/data_others.dart' if (dart.library.html) 'package:money/models/data_io/data_web.dart';
+import 'package:money/models/data_io/data_others.dart'
+    if (dart.library.html) 'package:money/models/data_io/data_web.dart';
 
 class Data {
   Accounts accounts = Accounts();

@@ -32,10 +32,23 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   void initState() {
     super.initState();
 
-    pivots.add(CaptionAndCounter(caption: 'Banks', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings])));
-    pivots.add(CaptionAndCounter(caption: 'Cards', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[AccountType.credit])));
-    pivots.add(CaptionAndCounter(caption: 'Assets', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[AccountType.asset])));
-    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[])));
+    pivots.add(CaptionAndCounter(
+        caption: 'Banks',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings])));
+    pivots.add(CaptionAndCounter(
+        caption: 'Cards',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<AccountType>[AccountType.credit])));
+    pivots.add(CaptionAndCounter(
+        caption: 'Assets',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<AccountType>[AccountType.asset])));
+    pivots.add(CaptionAndCounter(
+        caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[])));
   }
 
   @override

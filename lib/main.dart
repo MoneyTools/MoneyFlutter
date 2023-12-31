@@ -173,7 +173,10 @@ class _MyMoneyState extends State<MyMoney> {
       const SizedBox(height: 40),
       Wrap(
         spacing: 10,
-        children: <Widget>[OutlinedButton(onPressed: handleFileOpen, child: const Text('Open File ...')), OutlinedButton(onPressed: handleUseDemoData, child: const Text('Use Demo Data'))],
+        children: <Widget>[
+          OutlinedButton(onPressed: handleFileOpen, child: const Text('Open File ...')),
+          OutlinedButton(onPressed: handleUseDemoData, child: const Text('Use Demo Data'))
+        ],
       ),
     ]));
   }
@@ -249,7 +252,8 @@ class _MyMoneyState extends State<MyMoney> {
     return Scaffold(
       appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
       body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
-      bottomNavigationBar: MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
+      bottomNavigationBar:
+          MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
     );
   }
 

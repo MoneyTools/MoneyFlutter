@@ -142,7 +142,8 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
 
   @override
   ColumnDefinitions<Rental> getColumnDefinitionsForDetailsPanel() {
-    final ColumnDefinitions<Rental> fields = ColumnDefinitions<Rental>(list: <ColumnDefinition<Rental>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
+    final ColumnDefinitions<Rental> fields = ColumnDefinitions<Rental>(
+        list: <ColumnDefinition<Rental>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
 
     final ColumnDefinition<Rental> fieldUnit = ColumnDefinition<Rental>(
       name: 'Unit',

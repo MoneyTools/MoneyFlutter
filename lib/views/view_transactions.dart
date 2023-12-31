@@ -19,10 +19,13 @@ const String columnIdCategory = 'Category';
 const String columnIdAmount = 'Amount';
 const String columnIdBalance = 'Balance';
 
-const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: <String>[columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
+const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(
+    columnsToInclude: <String>[columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
 
-const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance =
-    ViewWidgetToDisplay(showTitle: false, showBottom: false, columnsToInclude: <String>[columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
+const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance = ViewWidgetToDisplay(
+    showTitle: false,
+    showBottom: false,
+    columnsToInclude: <String>[columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
 
 class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;
@@ -46,8 +49,16 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
     super.sortAscending = false;
 
-    pivots.add(CaptionAndCounter(caption: 'Incomes', small: true, vertical: true, value: Transactions.list.where((final Transaction element) => element.amount > 0).length));
-    pivots.add(CaptionAndCounter(caption: 'Expenses', small: true, vertical: true, value: Transactions.list.where((final Transaction element) => element.amount < 0).length));
+    pivots.add(CaptionAndCounter(
+        caption: 'Incomes',
+        small: true,
+        vertical: true,
+        value: Transactions.list.where((final Transaction element) => element.amount > 0).length));
+    pivots.add(CaptionAndCounter(
+        caption: 'Expenses',
+        small: true,
+        vertical: true,
+        value: Transactions.list.where((final Transaction element) => element.amount < 0).length));
     pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: Transactions.list.length));
   }
 
@@ -76,10 +87,13 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   List<Transaction> getList() {
-    final List<Transaction> list = Transactions.list.where((final Transaction transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction)).toList();
+    final List<Transaction> list = Transactions.list
+        .where((final Transaction transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction))
+        .toList();
 
     if (!balanceDone) {
-      list.sort((final Transaction a, final Transaction b) => sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+      list.sort((final Transaction a, final Transaction b) =>
+          sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
 
       double runningBalance = 0.0;
       for (Transaction transaction in list) {
@@ -167,7 +181,8 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
             return Categories.getNameFromId((list[index]).categoryId);
           },
           sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return sortByString(Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), sortAscending);
+            return sortByString(
+                Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), sortAscending);
           },
         );
 
@@ -242,7 +257,8 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   Widget getSubViewContentForChart(final List<num> indices) {
     final Map<String, num> tallyPerMonths = <String, num>{};
 
-    final DateRange timePeriod = DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);
+    final DateRange timePeriod =
+        DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);
 
     getList().forEach((final Transaction transaction) {
       transaction;

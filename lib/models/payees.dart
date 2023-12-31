@@ -39,7 +39,18 @@ class Payees {
   loadDemoData() {
     clear();
 
-    final List<String> names = <String>['John', 'Paul', 'George', 'Ringo', 'Jean-Pierre', 'Chris', 'Bill', 'Steve', 'Sue', 'Barbara'];
+    final List<String> names = <String>[
+      'John',
+      'Paul',
+      'George',
+      'Ringo',
+      'Jean-Pierre',
+      'Chris',
+      'Bill',
+      'Steve',
+      'Sue',
+      'Barbara'
+    ];
     for (int i = 0; i < names.length; i++) {
       moneyObjects.addEntry(Payee(i, names[i]));
     }

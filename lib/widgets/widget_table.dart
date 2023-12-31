@@ -92,7 +92,8 @@ class TableWidgetState<T> extends State<TableWidget<T>> {
   Widget getRow(final List<T> list, final int index, final bool autofocus) {
     final List<Widget> cells = getCells(index);
 
-    final Color backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
+    final Color backgroundColor =
+        selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
 
     return Focus(
         autofocus: autofocus,

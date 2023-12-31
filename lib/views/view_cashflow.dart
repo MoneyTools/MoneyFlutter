@@ -75,7 +75,9 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
     // Clean up the Incomes, drop 0.00
     mapOfIncomes.removeWhere((final Category k, final double v) => v <= 0.00);
     // Sort Descending
-    mapOfIncomes = Map<Category, double>.fromEntries(mapOfIncomes.entries.toList()..sort((final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e2.value - e1.value).toInt()));
+    mapOfIncomes = Map<Category, double>.fromEntries(mapOfIncomes.entries.toList()
+      ..sort(
+          (final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e2.value - e1.value).toInt()));
 
     mapOfIncomes.forEach((final Category key, final double value) {
       sanKeyListOfIncomes.add(SanKeyEntry()
@@ -87,7 +89,9 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
     mapOfExpenses.removeWhere((final Category k, final double v) => v == 0.00);
 
     // Sort Descending, in the case of expenses that means the largest negative number to the least negative number
-    mapOfExpenses = Map<Category, double>.fromEntries(mapOfExpenses.entries.toList()..sort((final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e1.value - e2.value).toInt()));
+    mapOfExpenses = Map<Category, double>.fromEntries(mapOfExpenses.entries.toList()
+      ..sort(
+          (final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e1.value - e2.value).toInt()));
 
     mapOfExpenses.forEach((final Category key, final double value) {
       sanKeyListOfExpenses.add(SanKeyEntry()

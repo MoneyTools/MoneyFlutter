@@ -25,12 +25,33 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   void initState() {
     super.initState();
 
-    pivots.add(CaptionAndCounter(caption: 'None', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none])));
-    pivots.add(CaptionAndCounter(caption: 'Expense', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense])));
-    pivots.add(CaptionAndCounter(caption: 'Income', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income])));
-    pivots.add(CaptionAndCounter(caption: 'Saving', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving])));
-    pivots.add(CaptionAndCounter(caption: 'Investment', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment])));
-    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[])));
+    pivots.add(CaptionAndCounter(
+        caption: 'None',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none])));
+    pivots.add(CaptionAndCounter(
+        caption: 'Expense',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense])));
+    pivots.add(CaptionAndCounter(
+        caption: 'Income',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income])));
+    pivots.add(CaptionAndCounter(
+        caption: 'Saving',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving])));
+    pivots.add(CaptionAndCounter(
+        caption: 'Investment',
+        small: true,
+        vertical: true,
+        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment])));
+    pivots.add(CaptionAndCounter(
+        caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[])));
   }
 
   double getTotalBalanceOfAccounts(final List<CategoryType> types) {
@@ -128,7 +149,10 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   @override
   List<Category> getList() {
     final CategoryType? filterType = getSelectedCategoryType();
-    return Categories.moneyObjects.getAsList().where((final Category x) => filterType == null || x.type == filterType).toList();
+    return Categories.moneyObjects
+        .getAsList()
+        .where((final Category x) => filterType == null || x.type == filterType)
+        .toList();
   }
 
   CategoryType? getSelectedCategoryType() {

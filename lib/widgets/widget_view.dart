@@ -101,7 +101,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   Widget getRow(final List<T> list, final int index) {
     final List<Widget> cells = columns.getCellsForRow(index);
-    final Color backgroundColor = selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
+    final Color backgroundColor =
+        selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -248,7 +249,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return const Text('the transactions');
   }
 
-  List<Widget> getHeadersWidgets(final BuildContext context, final ColumnDefinitions<T> columns, final Function changeSort, final Function customizeColumn) {
+  List<Widget> getHeadersWidgets(final BuildContext context, final ColumnDefinitions<T> columns,
+      final Function changeSort, final Function customizeColumn) {
     final List<Widget> headers = <Widget>[];
     for (int i = 0; i < columns.list.length; i++) {
       headers.add(
@@ -413,13 +415,15 @@ Widget? getSortIconName(final SortIndicator sortIndicator) {
   }
 }
 
-Widget headerButton(final BuildContext context, final String text, final TextAlign textAlign, final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
+Widget headerButton(final BuildContext context, final String text, final TextAlign textAlign,
+    final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
   return Expanded(
     child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick, onLongPress),
   );
 }
 
-Widget textButtonOptionalIcon(final BuildContext context, final String text, final TextAlign textAlign, final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
+Widget textButtonOptionalIcon(final BuildContext context, final String text, final TextAlign textAlign,
+    final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
   final TextTheme textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
   final Widget? icon = getSortIconName(sortIndicator);
 
@@ -456,7 +460,11 @@ class ViewWidgetToDisplay {
   final bool columnAccount;
   final List<String> columnsToInclude;
 
-  const ViewWidgetToDisplay({this.showTitle = true, this.showBottom = true, this.columnAccount = true, this.columnsToInclude = const <String>[]});
+  const ViewWidgetToDisplay(
+      {this.showTitle = true,
+      this.showBottom = true,
+      this.columnAccount = true,
+      this.columnsToInclude = const <String>[]});
 }
 
 typedef FilterFunction = bool Function(Transaction);

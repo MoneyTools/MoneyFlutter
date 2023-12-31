@@ -4,7 +4,7 @@ echo --- Fix
 dart fix --apply
 
 echo --- Formatting
-call flutter format . -l 222
+dart format . -l 120
 
 echo --- Analyze
 flutter analyze

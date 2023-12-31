@@ -54,11 +54,16 @@ void renderSourcesToTargetAsPercentage(final ui.Canvas canvas, final List<Block>
     final double ratioSourceBlockHeightToSumHeight = (block.rect.height / sumOfHeight);
     final double targetSectionHeight = (target.rect.height * ratioSourceBlockHeightToSumHeight);
 
-    final double blockSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? block.rect.right : block.rect.left;
-    final double targetSideToStartFrom = target.rect.center.dx > block.rect.center.dx ? target.rect.left : target.rect.right;
+    final double blockSideToStartFrom =
+        target.rect.center.dx > block.rect.center.dx ? block.rect.right : block.rect.left;
+    final double targetSideToStartFrom =
+        target.rect.center.dx > block.rect.center.dx ? target.rect.left : target.rect.right;
 
-    drawChanel(canvas, ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
-        ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget, rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
+    drawChanel(
+        canvas,
+        ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
+        ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget,
+            rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
         color: block.color);
 
     rollingVerticalPositionDrawnOnTheTarget += targetSectionHeight;
@@ -107,7 +112,8 @@ List<num> getMinMaxValues(final List<double> list) {
   return <num>[valueMin, valueMax];
 }
 
-void drawText(final Canvas context, final String name, final double x, final double y, {final Color color = Colors.black, final double fontSize = 12.0, final double angleRotationInRadians = 0.0}) {
+void drawText(final Canvas context, final String name, final double x, final double y,
+    {final Color color = Colors.black, final double fontSize = 12.0, final double angleRotationInRadians = 0.0}) {
   context.save();
   context.translate(x, y);
   context.rotate(angleRotationInRadians);
@@ -135,7 +141,10 @@ void drawText(final Canvas context, final String name, final double x, final dou
 }
 
 void drawTextInRect(final Canvas context, final String name, final Rect rect,
-    {final TextAlign textAlign = TextAlign.left, final Color color = Colors.black, final double fontSize = 12.0, final double angleRotationInRadians = 0.0}) {
+    {final TextAlign textAlign = TextAlign.left,
+    final Color color = Colors.black,
+    final double fontSize = 12.0,
+    final double angleRotationInRadians = 0.0}) {
   context.save();
   context.translate(rect.left, rect.top);
   context.rotate(angleRotationInRadians);
@@ -162,7 +171,8 @@ void drawTextInRect(final Canvas context, final String name, final Rect rect,
   context.restore();
 }
 
-void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint b, {final Color color = const Color(0xFF56687A)}) {
+void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint b,
+    {final Color color = const Color(0xFF56687A)}) {
   // We render left to right, so lets see what channel goes on the left and the one that goes on the right
   final ChannelPoint channelPointLeft = (a.x < b.x) ? a : b;
   final ChannelPoint channelPointEnd = (a.x < b.x) ? b : a;
@@ -216,11 +226,13 @@ void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint
 }
 
 double sumHeight(final List<Block> list) {
-  final double sumOfHeight = list.fold(0.0, (final double previousValue, final Block element) => previousValue + element.rect.height);
+  final double sumOfHeight =
+      list.fold(0.0, (final double previousValue, final Block element) => previousValue + element.rect.height);
   return sumOfHeight;
 }
 
 double sumValue(final List<SanKeyEntry> list) {
-  final double sumOfHeight = list.fold(0.0, (final double previousValue, final SanKeyEntry element) => previousValue + element.value);
+  final double sumOfHeight =
+      list.fold(0.0, (final double previousValue, final SanKeyEntry element) => previousValue + element.value);
   return sumOfHeight;
 }

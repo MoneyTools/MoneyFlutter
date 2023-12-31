@@ -44,7 +44,12 @@ class MenuVertical extends StatefulWidget {
   final bool useIndicator;
   final Settings settings;
 
-  const MenuVertical({super.key, required this.settings, required this.onSelectItem, required this.selectedIndex, this.useIndicator = false});
+  const MenuVertical(
+      {super.key,
+      required this.settings,
+      required this.onSelectItem,
+      required this.selectedIndex,
+      this.useIndicator = false});
 
   @override
   State<MenuVertical> createState() => _MenuVerticalState();

@@ -155,7 +155,18 @@ class Accounts {
 
   loadDemoData() {
     clear();
-    final List<String> names = <String>['BankOfAmerica', 'BECU', 'FirstTech', 'Fidelity', 'Bank of Japan', 'Trust Canada', 'ABC Corp', 'Royal Bank', 'Unicorn', 'God-Inc'];
+    final List<String> names = <String>[
+      'BankOfAmerica',
+      'BECU',
+      'FirstTech',
+      'Fidelity',
+      'Bank of Japan',
+      'Trust Canada',
+      'ABC Corp',
+      'Royal Bank',
+      'Unicorn',
+      'God-Inc'
+    ];
     for (int i = 0; i < names.length; i++) {
       moneyObjects.addEntry(Account(i, names[i]));
     }

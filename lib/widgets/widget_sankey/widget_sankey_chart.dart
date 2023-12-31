@@ -41,7 +41,8 @@ class SankeyPaint extends CustomPainter {
     double verticalStackOfTargets = topOfCenters;
 
     final double totalIncome = listOfIncomes.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value);
-    final double totalExpense = listOfExpenses.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value).abs();
+    final double totalExpense =
+        listOfExpenses.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value).abs();
 
     // var maNumberOfLeafItems = max(listOfIncomes.length, listOfExpenses.length);
 
@@ -91,12 +92,14 @@ class SankeyPaint extends CustomPainter {
     // Left Side - "Source of Incomes"
     double stackVerticalPosition = 0.0;
 
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfIncomes, 0, stackVerticalPosition, targetIncome, Constants.colorIncome, textColor);
+    stackVerticalPosition += renderSourcesToTarget(
+        canvas, listOfIncomes, 0, stackVerticalPosition, targetIncome, Constants.colorIncome, textColor);
 
     stackVerticalPosition += gap * 5;
 
     // Right Side - "Source of Expenses"
-    stackVerticalPosition += renderSourcesToTarget(canvas, listOfExpenses, maxWidth - columnWidth, 0, targetExpense, Constants.colorExpense, textColor);
+    stackVerticalPosition += renderSourcesToTarget(
+        canvas, listOfExpenses, maxWidth - columnWidth, 0, targetExpense, Constants.colorExpense, textColor);
 
     final double heightProfitFromIncomeSection = targetIncome.rect.height - targetExpense.rect.height;
 
@@ -104,14 +107,16 @@ class SankeyPaint extends CustomPainter {
     drawChanel(
       canvas,
       ChannelPoint(targetExpense.rect.left, targetExpense.rect.top, targetExpense.rect.bottom),
-      ChannelPoint(targetIncome.rect.right, targetIncome.rect.top, targetIncome.rect.bottom - heightProfitFromIncomeSection),
+      ChannelPoint(
+          targetIncome.rect.right, targetIncome.rect.top, targetIncome.rect.bottom - heightProfitFromIncomeSection),
       color: Colors.grey.withOpacity(0.5),
     );
 
     // Render from "Revenue" remaining profit to "Net" box
     drawChanel(
       canvas,
-      ChannelPoint(targetIncome.rect.right, targetIncome.rect.bottom - heightProfitFromIncomeSection, targetIncome.rect.bottom),
+      ChannelPoint(
+          targetIncome.rect.right, targetIncome.rect.bottom - heightProfitFromIncomeSection, targetIncome.rect.bottom),
       ChannelPoint(targetNet.rect.left, targetNet.rect.top, targetNet.rect.bottom),
       color: Colors.grey.withOpacity(0.5),
     );
@@ -140,7 +145,8 @@ class SankeyPaint extends CustomPainter {
       final double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
       final double boxTop = top + verticalPosition;
       final Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
-      final Block source = Block('${element.name}: ${getNumberAsShorthandText(element.value)}', rect, color, textColor, TextAlign.center, TextAlign.center);
+      final Block source = Block('${element.name}: ${getNumberAsShorthandText(element.value)}', rect, color, textColor,
+          TextAlign.center, TextAlign.center);
       source.textColor = textColor;
       blocks.add(source);
 

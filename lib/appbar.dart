@@ -3,7 +3,8 @@ import 'package:money/widgets/widgets.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 
-PreferredSizeWidget createAppBar(final Settings settings, final void Function() handleFileOpen, final void Function() handleFileClose, final void Function(Settings) onSettingsChanged) {
+PreferredSizeWidget createAppBar(final Settings settings, final void Function() handleFileOpen,
+    final void Function() handleFileClose, final void Function(Settings) onSettingsChanged) {
   return AppBar(
     title: widgetMainTitle(settings, handleFileOpen, handleFileClose),
     actions: <Widget>[
@@ -19,12 +20,20 @@ PreferredSizeWidget createAppBar(final Settings settings, final void Function() 
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         itemBuilder: (final BuildContext context) {
           final List<PopupMenuItem<int>> l = List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
-            return PopupMenuItem<int>(value: index, child: renderIconAndText(Icon(index == settings.colorSelected ? Icons.color_lens : Icons.color_lens_outlined, color: colorOptions[index]), colorText[index]));
+            return PopupMenuItem<int>(
+                value: index,
+                child: renderIconAndText(
+                    Icon(index == settings.colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
+                        color: colorOptions[index]),
+                    colorText[index]));
           });
           l.add(
             PopupMenuItem<int>(
               value: 2000,
-              child: renderIconAndText(Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined, color: Colors.grey), 'Rentals'),
+              child: renderIconAndText(
+                  Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
+                      color: Colors.grey),
+                  'Rentals'),
             ),
           );
           l.add(
@@ -69,11 +78,13 @@ void handleColorSelect(final Settings settings, final void Function(Settings) on
   onSettingsChanged(settings);
 }
 
-Widget widgetMainTitle(final Settings settings, final void Function() handleFileOpen, final void Function() handleFileClose) {
+Widget widgetMainTitle(
+    final Settings settings, final void Function() handleFileOpen, final void Function() handleFileClose) {
   return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
     const Text('MyMoney', textAlign: TextAlign.left),
     PopupMenuButton<int>(
-      child: Text(getTitle(settings), textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
+      child: Text(getTitle(settings),
+          textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
       itemBuilder: (final BuildContext context) {
         final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
         list.add(const PopupMenuItem<int>(value: 1, child: Text('Close')));

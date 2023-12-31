@@ -12,7 +12,8 @@ class Transaction extends MoneyEntity {
   double amount = 0.00;
   double balance = 0.00;
 
-  Transaction(final num id, this.accountId, this.dateTime, this.payeeId, this.categoryId, this.amount, this.balance) : super(id, '');
+  Transaction(final num id, this.accountId, this.dateTime, this.payeeId, this.categoryId, this.amount, this.balance)
+      : super(id, '');
 }
 
 class Transactions {
