@@ -9,8 +9,8 @@ import 'package:money/widgets/columns.dart';
 class TableWidget<T> extends StatefulWidget {
   final ColumnDefinitions<T> columns;
   final List<T> list;
-  final Function onTap;
-  final Function onDoubleTap;
+  final Function? onTap;
+  final Function? onDoubleTap;
 
   const TableWidget({
     super.key,
@@ -103,14 +103,18 @@ class TableWidgetState<T> extends State<TableWidget<T>> {
         },
         onKey: onListViewKeyEvent,
         child: GestureDetector(
-          onTap: () {
-            setSelectedItem(index);
-            FocusScope.of(context).requestFocus();
-          },
-          onDoubleTap: () {
-            setSelectedItem(index, true);
-            FocusScope.of(context).requestFocus();
-          },
+          onTap: widget.onTap == null
+              ? null
+              : () {
+                  setSelectedItem(index);
+                  FocusScope.of(context).requestFocus();
+                },
+          onDoubleTap: widget.onDoubleTap == null
+              ? null
+              : () {
+                  setSelectedItem(index, true);
+                  FocusScope.of(context).requestFocus();
+                },
           child: Container(
             color: backgroundColor,
             child: Row(children: cells),
@@ -149,17 +153,21 @@ class TableWidgetState<T> extends State<TableWidget<T>> {
   }
 
   void fireOnTapToHost(final int index) {
-    _timerForTap?.cancel();
-    _timerForTap = Timer(const Duration(milliseconds: 600), () {
-      widget.onTap(context, index);
-    });
+    if (widget.onTap != null) {
+      _timerForTap?.cancel();
+      _timerForTap = Timer(const Duration(milliseconds: 600), () {
+        widget.onTap!(context, index);
+      });
+    }
   }
 
   void fireOnDoubleTapToHost(final int index) {
-    _timerForTap?.cancel();
-    _timerForTap = Timer(const Duration(milliseconds: 600), () {
-      widget.onDoubleTap(context, index);
-    });
+    if (widget.onDoubleTap != null) {
+      _timerForTap?.cancel();
+      _timerForTap = Timer(const Duration(milliseconds: 600), () {
+        widget.onDoubleTap!(context, index);
+      });
+    }
   }
 
   void scrollToIndex(final int index) {
