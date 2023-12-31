@@ -15,8 +15,8 @@ class MyTableView<T> extends StatefulWidget {
     super.key,
     required this.columns,
     required this.list,
-    required this.onTap,
-    required this.onDoubleTap,
+    this.onTap,
+    this.onDoubleTap,
   });
 
   @override
