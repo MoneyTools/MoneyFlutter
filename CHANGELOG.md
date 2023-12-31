@@ -1,3 +1,7 @@
+## [1.0.8] 2023-10-31
+
+- Improve performance of Table View Row selection
+
 ## [1.0.7] 2023-10-30
 
 - Detail Transactions for Payees and Categories

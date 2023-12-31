@@ -1,18 +1,17 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:money/helpers.dart';
 import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/table_view/table_row.dart';
 
-class TableWidget<T> extends StatefulWidget {
+class MyTableView<T> extends StatefulWidget {
   final ColumnDefinitions<T> columns;
   final List<T> list;
   final Function? onTap;
   final Function? onDoubleTap;
 
-  const TableWidget({
+  const MyTableView({
     super.key,
     required this.columns,
     required this.list,
@@ -21,15 +20,14 @@ class TableWidget<T> extends StatefulWidget {
   });
 
   @override
-  State<TableWidget<T>> createState() => TableWidgetState<T>();
+  State<MyTableView<T>> createState() => MyTableViewState<T>();
 }
 
-class TableWidgetState<T> extends State<TableWidget<T>> {
+class MyTableViewState<T> extends State<MyTableView<T>> {
   List<int> selectedItems = <int>[0];
   final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
   num currentIndex = 0;
-  Timer? _timerForTap;
 
   ColumnDefinitions<T> getColumnDefinitions() {
     return ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
@@ -44,7 +42,20 @@ class TableWidgetState<T> extends State<TableWidget<T>> {
         itemCount: widget.list.length,
         itemExtent: itemHeight,
         itemBuilder: (final BuildContext context, final int index) {
-          return getRow(widget.list, index, index == currentIndex);
+          return MyTableRow(
+            onListViewKeyEvent: onListViewKeyEvent,
+            onTap: () {
+              setSelectedItem(index);
+              FocusScope.of(context).requestFocus();
+            },
+            // onDoubleTap: () {
+            //   setSelectedItem(index, true);
+            //   FocusScope.of(context).requestFocus();
+            // },
+            autoFocus: index == currentIndex,
+            isSelected: selectedItems.contains(index),
+            children: getCells(index),
+          );
         });
   }
 
@@ -89,39 +100,6 @@ class TableWidgetState<T> extends State<TableWidget<T>> {
     return KeyEventResult.ignored;
   }
 
-  Widget getRow(final List<T> list, final int index, final bool autofocus) {
-    final List<Widget> cells = getCells(index);
-
-    final Color backgroundColor =
-        selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
-
-    return Focus(
-        autofocus: autofocus,
-        onFocusChange: (final bool value) {
-          // debugLog('focus lost $value index $currentIndex');
-          if (value) {}
-        },
-        onKey: onListViewKeyEvent,
-        child: GestureDetector(
-          onTap: widget.onTap == null
-              ? null
-              : () {
-                  setSelectedItem(index);
-                  FocusScope.of(context).requestFocus();
-                },
-          onDoubleTap: widget.onDoubleTap == null
-              ? null
-              : () {
-                  setSelectedItem(index, true);
-                  FocusScope.of(context).requestFocus();
-                },
-          child: Container(
-            color: backgroundColor,
-            child: Row(children: cells),
-          ),
-        ));
-  }
-
   List<Widget> getCells(final int index) {
     return widget.columns.getCellsForRow(index);
   }
@@ -135,38 +113,23 @@ class TableWidgetState<T> extends State<TableWidget<T>> {
     setSelectedItem(newPosition);
   }
 
-  void setSelectedItem(final int newPosition, [final bool isDoubleTap = false]) {
+  void setSelectedItem(
+    final int newPosition, [
+    final bool isDoubleTap = false,
+  ]) {
     if (newPosition.isBetween(-1, widget.list.length)) {
       setState(() {
         selectedItems.clear();
         selectedItems.add(newPosition);
-
         currentIndex = newPosition;
-        scrollToIndex(newPosition);
-        if (isDoubleTap) {
-          fireOnDoubleTapToHost(newPosition);
-        } else {
-          fireOnTapToHost(newPosition);
-        }
       });
-    }
-  }
 
-  void fireOnTapToHost(final int index) {
-    if (widget.onTap != null) {
-      _timerForTap?.cancel();
-      _timerForTap = Timer(const Duration(milliseconds: 600), () {
-        widget.onTap!(context, index);
-      });
-    }
-  }
-
-  void fireOnDoubleTapToHost(final int index) {
-    if (widget.onDoubleTap != null) {
-      _timerForTap?.cancel();
-      _timerForTap = Timer(const Duration(milliseconds: 600), () {
-        widget.onDoubleTap!(context, index);
-      });
+      scrollToIndex(newPosition);
+      if (isDoubleTap) {
+        widget.onDoubleTap?.call(context, newPosition);
+      } else {
+        widget.onTap?.call(context, newPosition);
+      }
     }
   }
 

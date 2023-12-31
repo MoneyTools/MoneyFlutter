@@ -7,7 +7,7 @@ import 'package:money/helpers.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/bottom.dart';
 import 'package:money/widgets/columns.dart';
-import 'package:money/widgets/widget_table.dart';
+import 'package:money/widgets/table_view/table_view.dart';
 
 class ViewWidget<T> extends StatefulWidget {
   final FilterFunction filter;
@@ -21,7 +21,8 @@ class ViewWidget<T> extends StatefulWidget {
 
 class ViewWidgetState<T> extends State<ViewWidget<T>> {
   ColumnDefinitions<T> columns = ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
-  List<int> selectedItems = <int>[];
+
+  final ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
   final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
 
@@ -99,24 +100,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     );
   }
 
-  Widget getRow(final List<T> list, final int index) {
-    final List<Widget> cells = columns.getCellsForRow(index);
-    final Color backgroundColor =
-        selectedItems.contains(index) ? getColorTheme(context).tertiaryContainer : Colors.transparent;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedItems.clear();
-          selectedItems.add(index);
-        });
-      },
-      child: Container(
-        color: backgroundColor,
-        child: Row(children: cells),
-      ),
-    );
-  }
-
   @override
   Widget build(final BuildContext context) {
     onSort();
@@ -132,7 +115,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           // Table rows
           Expanded(
             flex: 1,
-            child: TableWidget<T>(
+            child: MyTableView<T>(
                 list: getList(),
                 columns: columns,
                 onTap: onRowTap,
@@ -214,10 +197,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           });
     } else {
       // This will cause a UI update and the bottom details will get rendered if its expanded
-      setState(() {
-        selectedItems.clear();
-        selectedItems.add(index);
-      });
+      selectedItems.value = <int>[index];
     }
   }
 

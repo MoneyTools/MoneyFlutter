@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class BottomPanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
-  final List<int> selectedItems;
+  final ValueNotifier<List<int>> selectedItems;
   final Object? subViewSelectedItem;
   final num selectedTabId;
   final Function onTabActivated;
@@ -22,23 +22,30 @@ class BottomPanel extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final List<Widget> itemsToRender = <Widget>[const Divider(thickness: 1, height: 1)];
-
-    itemsToRender.add(Row(children: <Widget>[
-      Expanded(child: getRowOfTabs()),
-      IconButton(
-          onPressed: () {
-            onExpanded(!isExpanded);
-          },
-          icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less))
-    ]));
-
-    if (isExpanded) {
-      final Widget widgetToRender = getBottomContentToRender(selectedTabId, selectedItems);
-      itemsToRender.add(Expanded(child: Padding(padding: const EdgeInsets.all(20), child: widgetToRender)));
-    }
-
-    return Column(children: itemsToRender);
+    return Column(
+      children: <Widget>[
+        const Divider(thickness: 1, height: 1),
+        Row(children: <Widget>[
+          Expanded(child: getRowOfTabs()),
+          IconButton(
+              onPressed: () {
+                onExpanded(!isExpanded);
+              },
+              icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less))
+        ]),
+        if (isExpanded)
+          ValueListenableBuilder<List<int>>(
+            valueListenable: selectedItems,
+            builder: (final BuildContext context, final List<int> list, final _) {
+              return Expanded(
+                  child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: getBottomContentToRender(selectedTabId, list),
+              ));
+            },
+          ),
+      ],
+    );
   }
 
   Widget getRowOfTabs() {

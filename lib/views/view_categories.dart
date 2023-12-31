@@ -188,7 +188,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
                 _selectedPivot[i] = i == index;
               }
               list = getList();
-              selectedItems.clear();
+              selectedItems.value.clear();
             });
           },
           borderRadius: const BorderRadius.all(Radius.circular(8)),
