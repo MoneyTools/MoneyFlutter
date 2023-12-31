@@ -35,7 +35,7 @@ linter:
       enabled: true             # Enable the rule
       severity: error           # Set the severity level (error, warning, info)
       options: # Provide configuration options for the rule
-        line_length: 222
+        line_length: 120
         avoid_print: false  # Uncomment to disable the `avoid_print` rule
         prefer_single_quotes: true  # Uncomment to enable the `prefer_single_quotes` rule
 
