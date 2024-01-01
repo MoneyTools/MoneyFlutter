@@ -87,6 +87,24 @@ int sortByStringIgnoreCase(final String textA, final String textB) {
   return textA.toUpperCase().compareTo(textB.toUpperCase());
 }
 
+int sortByStringIgnoreCase2(final String str1, final String str2) {
+  final int minLength = min(str1.length, str2.length);
+
+  for (int i = 0; i < minLength; i++) {
+    final int result = str1[i].toLowerCase().compareTo(str2[i].toLowerCase());
+    if (result != 0) {
+      return result;
+    }
+  }
+  if (str1.length == str2.length) {
+    return 0;
+  }
+  if (str1.length > str2.length) {
+    return 1;
+  }
+  return -1;
+}
+
 int sortByString(final dynamic a, final dynamic b, final bool ascending) {
   if (ascending) {
     return sortByStringIgnoreCase(a as String, b as String);

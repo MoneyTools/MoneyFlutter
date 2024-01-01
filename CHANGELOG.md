@@ -1,15 +1,20 @@
-## [1.0.8] 2023-10-31
+## [1.0.8] 2024-01-01
+
+- Improve Table performance
+- Refactor Transaction Table view
+
+## [1.0.8] 2023-12-31
 
 - Improve performance of Table View Row selection
 
-## [1.0.7] 2023-10-30
+## [1.0.7] 2023-12-30
 
 - Detail Transactions for Payees and Categories
 - Center & scrollable left menu bar
 - Improve Chart tooltips
 - Migrate to sqlite3 & sqlite3_flutter_libs
 
-## [1.0.6] 2023-10-29
+## [1.0.6] 2023-12-29
 
 - Migrate to FL_CHART
 - Refactor to use strong typed everywhere

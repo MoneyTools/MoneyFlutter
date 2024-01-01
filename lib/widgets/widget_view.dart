@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:money/models/transactions.dart';
+import 'package:money/widgets/table_view/table_header.dart';
+import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widgets.dart';
 
 import 'package:money/helpers.dart';
@@ -33,7 +34,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   bool isBottomPanelExpanded = false;
   num selectedBottomTabId = 0;
 
-  int sortBy = 0;
+  int sortByColumn = 0;
   bool sortAscending = true;
   bool isChecked = true;
   Object? subViewSelectedItem;
@@ -54,8 +55,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void initState() {
     super.initState();
     columns = getColumnDefinitionsForTable();
-    sortBy = getDefaultSortColumn();
+    sortByColumn = getDefaultSortColumn();
     list = getList();
+    onSort();
   }
 
   String getClassNamePlural() {
@@ -75,35 +77,26 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   int getDefaultSortColumn() {
-    return sortBy;
+    return sortByColumn;
   }
 
   void onSort() {
-    final ColumnDefinition<T> columnDefinition = columns.list[sortBy];
-    final int Function(T p1, T p2, bool p3) sortFunction = columnDefinition.sort;
+    if (columns.list.isNotEmpty) {
+      final ColumnDefinition<T> columnDefinition = columns.list[sortByColumn];
+      final int Function(T p1, T p2, bool p3) sortFunction = columnDefinition.sort;
 
-    list.sort((final T a, final T b) {
-      return sortFunction(a, b, sortAscending);
-    });
+      list.sort((final T a, final T b) {
+        return sortFunction(a, b, sortAscending);
+      });
+    }
   }
 
   Widget getTitle() {
     return Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription());
   }
 
-  Widget getTableHeaders() {
-    return Container(
-      color: getColorTheme(context).secondaryContainer,
-      child: Row(
-        children: getHeadersWidgets(context, columns, changeListSortOrder, onCustomizeColumn),
-      ),
-    );
-  }
-
   @override
   Widget build(final BuildContext context) {
-    onSort();
-
     return getViewExpandAndPadding(
       Column(
         children: <Widget>[
@@ -111,7 +104,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           if (widget.preference.showTitle) getTitle(),
 
           // Table Header
-          getTableHeaders(),
+          MyTableHeader<T>(
+            columns: columns,
+            sortByColumn: sortByColumn,
+            sortAscending: sortAscending,
+            onTap: changeListSortOrder,
+            onLongPress: onCustomizeColumn,
+          ),
+
           // Table rows
           Expanded(
             flex: 1,
@@ -229,35 +229,23 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return const Text('the transactions');
   }
 
-  List<Widget> getHeadersWidgets(final BuildContext context, final ColumnDefinitions<T> columns,
-      final Function changeSort, final Function customizeColumn) {
-    final List<Widget> headers = <Widget>[];
-    for (int i = 0; i < columns.list.length; i++) {
-      headers.add(
-        headerButton(
-          context,
-          columns.list[i].name,
-          columns.list[i].align,
-          getSortIndicated(i),
-          // Press
-          () {
-            changeSort(i, !sortAscending);
-          },
-          // Long Press
-          () {
-            customizeColumn(columns.list[i]);
-          },
-        ),
-      );
-    }
-    return headers;
+  changeListSortOrder(final int columnNumber) {
+    setState(() {
+      if (columnNumber == sortByColumn) {
+        // toggle order
+        sortAscending = !sortAscending;
+      } else {
+        sortByColumn = columnNumber;
+      }
+      onSort();
+    });
   }
 
-  changeListSortOrder(final int newSortOrder, final bool newSortAscending) {
-    setState(() {
-      sortBy = newSortOrder;
-      sortAscending = newSortAscending;
-    });
+  SortIndicator getSortIndicated(final int columnNumber) {
+    if (columnNumber == sortByColumn) {
+      return sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
+    }
+    return SortIndicator.none;
   }
 
   List<String> getUniqueInstances(final ColumnDefinition<T> columnToCustomerFilterOn) {
@@ -372,54 +360,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           ));
         });
   }
-
-  SortIndicator getSortIndicated(final int columnNumber) {
-    if (columnNumber == sortBy) {
-      return sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
-    }
-    return SortIndicator.none;
-  }
-}
-
-enum SortIndicator { none, sortAscending, sortDescending }
-
-Widget? getSortIconName(final SortIndicator sortIndicator) {
-  switch (sortIndicator) {
-    case SortIndicator.sortAscending:
-      return const Icon(Icons.arrow_upward, size: 20.0);
-    case SortIndicator.sortDescending:
-      return const Icon(Icons.arrow_downward, size: 20.0);
-    case SortIndicator.none:
-    default:
-      return null;
-  }
-}
-
-Widget headerButton(final BuildContext context, final String text, final TextAlign textAlign,
-    final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
-  return Expanded(
-    child: textButtonOptionalIcon(context, text, textAlign, sortIndicator, onClick, onLongPress),
-  );
-}
-
-Widget textButtonOptionalIcon(final BuildContext context, final String text, final TextAlign textAlign,
-    final SortIndicator sortIndicator, final VoidCallback? onClick, final VoidCallback? onLongPress) {
-  final TextTheme textTheme = getTextTheme(context).apply(displayColor: getColorTheme(context).onSurface);
-  final Widget? icon = getSortIconName(sortIndicator);
-
-  final List<Widget> rowChildren = <Widget>[];
-
-  rowChildren.add(Text(text, style: textTheme.titleSmall));
-
-  if (icon != null) {
-    rowChildren.add(icon);
-  }
-
-  return TextButton(
-    onPressed: onClick,
-    onLongPress: onLongPress,
-    child: Row(mainAxisAlignment: getRowAlignmentBasedOnTextAlign(textAlign), children: rowChildren),
-  );
 }
 
 MainAxisAlignment getRowAlignmentBasedOnTextAlign(final TextAlign textAlign) {
@@ -445,10 +385,4 @@ class ViewWidgetToDisplay {
       this.showBottom = true,
       this.columnAccount = true,
       this.columnsToInclude = const <String>[]});
-}
-
-typedef FilterFunction = bool Function(Transaction);
-
-bool defaultFilter(final Transaction element) {
-  return true; // filter nothing
 }

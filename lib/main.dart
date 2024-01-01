@@ -272,7 +272,11 @@ class _MyMoneyState extends State<MyMoney> {
               useIndicator: true,
             ),
             const VerticalDivider(thickness: 1, width: 1),
-            Expanded(child: Column(children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)]))
+            Expanded(
+              child: Column(
+                children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)],
+              ),
+            )
           ],
         ),
       ),

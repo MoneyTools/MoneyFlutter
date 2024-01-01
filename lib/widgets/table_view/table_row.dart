@@ -41,7 +41,7 @@ class MyTableRowState extends State<MyTableRow> {
 
   @override
   Widget build(final BuildContext context) {
-    final Color backgroundColor = isSelected ? getColorTheme(context).tertiaryContainer : Colors.transparent;
+    final Color backgroundColor = isSelected ? getColorTheme(context).inversePrimary : Colors.transparent;
 
     return Focus(
         autofocus: widget.autoFocus,

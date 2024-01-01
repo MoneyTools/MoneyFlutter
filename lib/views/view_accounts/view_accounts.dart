@@ -8,9 +8,9 @@ import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/columns.dart';
 
 import 'package:money/widgets/header.dart';
+import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_view.dart';
-import 'package:money/views/view_transactions.dart';
 
 part 'view_accounts_columns.dart';
 
@@ -98,11 +98,19 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   getSubViewContentForTransactions(final List<int> indices) {
     final Account? account = getFirstElement<Account>(indices, list);
     if (account != null && account.id > -1) {
-      return ViewTransactions(
+      filter(final Transaction transaction) => filterByAccountId(transaction, account.id);
+
+      final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
+
+      return TableTransactions(
         key: Key(account.id.toString()),
-        filter: (final Transaction transaction) => filterByAccountId(transaction, account.id),
-        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
-        startingBalance: account.openingBalance,
+        columnsToInclude: const <String>[
+          columnIdDate,
+          columnIdPayee,
+          columnIdCategory,
+          columnIdAmount,
+        ],
+        getList: () => listOfTransactionForThisAccount,
       );
     }
     return const Text('No account transactions');

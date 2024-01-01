@@ -1,23 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers.dart';
-import 'package:money/models/categories.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/header.dart';
+import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 
-import 'package:money/models/accounts.dart';
-import 'package:money/models/payees.dart';
 import 'package:money/widgets/columns.dart';
 import 'package:money/widgets/widget_view.dart';
-
-const String columnIdAccount = 'Accounts';
-const String columnIdDate = 'Date';
-const String columnIdPayee = 'Payee';
-const String columnIdCategory = 'Category';
-const String columnIdAmount = 'Amount';
-const String columnIdBalance = 'Balance';
 
 const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(
     columnsToInclude: <String>[columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
@@ -93,7 +84,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
     if (!balanceDone) {
       list.sort((final Transaction a, final Transaction b) =>
-          sortByStringIgnoreCase(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+          sortByStringIgnoreCase2(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
 
       double runningBalance = 0.0;
       for (Transaction transaction in list) {
@@ -127,92 +118,10 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     final List<ColumnDefinition<Transaction>> listOfColumns = <ColumnDefinition<Transaction>>[];
 
     for (String columnId in widget.preference.columnsToInclude) {
-      listOfColumns.add(getColumnDefinitionFromId(columnId)!);
+      listOfColumns.add(getColumnDefinitionFromId(columnId, () => list)!);
     }
 
     return ColumnDefinitions<Transaction>(list: listOfColumns);
-  }
-
-  ColumnDefinition<Transaction>? getColumnDefinitionFromId(final String id) {
-    switch (id) {
-      case columnIdAccount:
-        return ColumnDefinition<Transaction>(
-          name: columnIdAccount,
-          type: ColumnType.text,
-          align: TextAlign.left,
-          value: (final int index) {
-            return Accounts.getNameFromId((list[index]).accountId);
-          },
-          sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return sortByString(Accounts.getNameFromId(a.accountId), Accounts.getNameFromId(b.accountId), ascending);
-          },
-        );
-      case columnIdDate:
-        return ColumnDefinition<Transaction>(
-            name: columnIdDate,
-            type: ColumnType.date,
-            align: TextAlign.left,
-            value: (final int index) {
-              return getDateAsText((list[index]).dateTime);
-            },
-            sort: (final Transaction a, final Transaction b, final bool ascending) {
-              return sortByString(getDateAsText(a.dateTime), getDateAsText(b.dateTime), sortAscending);
-            });
-
-      case columnIdPayee:
-        return ColumnDefinition<Transaction>(
-          name: columnIdPayee,
-          type: ColumnType.text,
-          align: TextAlign.left,
-          value: (final int index) {
-            return Payees.getNameFromId((list[index]).payeeId);
-          },
-          sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
-          },
-        );
-
-      case columnIdCategory:
-        return ColumnDefinition<Transaction>(
-          name: columnIdCategory,
-          type: ColumnType.text,
-          align: TextAlign.left,
-          value: (final int index) {
-            return Categories.getNameFromId((list[index]).categoryId);
-          },
-          sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return sortByString(
-                Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), sortAscending);
-          },
-        );
-
-      case columnIdAmount:
-        return ColumnDefinition<Transaction>(
-          name: columnIdAmount,
-          type: ColumnType.amount,
-          align: TextAlign.right,
-          value: (final int index) {
-            return (list[index]).amount;
-          },
-          sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return sortByValue(a.amount, b.amount, sortAscending);
-          },
-        );
-
-      case columnIdBalance:
-        return ColumnDefinition<Transaction>(
-          name: columnIdBalance,
-          type: ColumnType.amount,
-          align: TextAlign.right,
-          value: (final int index) {
-            return (list[index]).balance;
-          },
-          sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return sortByValue(a.balance, b.balance, sortAscending);
-          },
-        );
-    }
-    return null;
   }
 
   @override
