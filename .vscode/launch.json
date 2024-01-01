@@ -2,19 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Mac (debug)",
+            "name": "Desktop debug",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug"
         },
         {
-            "name": "Mac (profile)",
+            "name": "Desktop profile",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Mac (release)",
+            "name": "Desktop release",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
