@@ -5,6 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money/models/import_qfx.dart';
+import 'package:money/models/import_qif.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_cashflow.dart';
 import 'package:money/views/view_rentals.dart';
@@ -106,8 +108,6 @@ class _MyMoneyState extends State<MyMoney> {
             settings.save();
             loadData();
           }
-        } else {
-          // todo: handle qfx, ofx, pdf, json, etc.
         }
       } catch (e) {
         debugLog(e.toString());
@@ -126,6 +126,18 @@ class _MyMoneyState extends State<MyMoney> {
     settings.pathToDatabase = Constants.demoData;
     settings.save();
     loadData();
+  }
+
+  void handleImport() async {
+    final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
+    if (pickerResult != null) {
+      switch (pickerResult.files.single.extension?.toLowerCase()) {
+        case "qif":
+          importQIF(pickerResult.files.single.path.toString());
+        case "qfx":
+          importQFX(pickerResult.files.single.path.toString());
+      }
+    }
   }
 
   Widget showLoading() {
@@ -156,7 +168,13 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget welcomePanel(final BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
+      appBar: createAppBar(
+        settings,
+        handleFileOpen,
+        handleFileClose,
+        handleImport,
+        onSettingsChanged,
+      ),
       body: Row(children: <Widget>[
         renderWelcomeAndOpen(context),
       ]),
@@ -250,7 +268,13 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget getScaffoldingForSmallSurface(final BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
+      appBar: createAppBar(
+        settings,
+        handleFileOpen,
+        handleFileClose,
+        handleImport,
+        onSettingsChanged,
+      ),
       body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
       bottomNavigationBar:
           MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
@@ -259,7 +283,13 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget getScaffoldingForLargeSurface(final BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(settings, handleFileOpen, handleFileClose, onSettingsChanged),
+      appBar: createAppBar(
+        settings,
+        handleFileOpen,
+        handleFileClose,
+        handleImport,
+        onSettingsChanged,
+      ),
       body: SafeArea(
         bottom: false,
         top: false,

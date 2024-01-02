@@ -3,11 +3,23 @@ import 'package:money/widgets/widgets.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 
-PreferredSizeWidget createAppBar(final Settings settings, final void Function() handleFileOpen,
-    final void Function() handleFileClose, final void Function(Settings) onSettingsChanged) {
+PreferredSizeWidget createAppBar(
+  final Settings settings,
+  final void Function() handleFileOpen,
+  final void Function() handleFileClose,
+  final void Function() handleImport,
+  final void Function(Settings) onSettingsChanged,
+) {
   return AppBar(
     title: widgetMainTitle(settings, handleFileOpen, handleFileClose),
     actions: <Widget>[
+      IconButton(
+        icon: const Icon(Icons.cloud_download),
+        onPressed: () async {
+          handleImport();
+        },
+        tooltip: 'Import',
+      ),
       IconButton(
         icon: settings.useDarkMode ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
         onPressed: () {
@@ -57,6 +69,8 @@ PreferredSizeWidget createAppBar(final Settings settings, final void Function() 
     ],
   );
 }
+
+void onButtonImport(final Settings settings, final void Function(Settings) onSettingsChanged) {}
 
 void handleLightDarkModeChanged(final Settings settings, final void Function(Settings) onSettingsChanged) {
   settings.useDarkMode = !settings.useDarkMode;

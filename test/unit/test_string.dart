@@ -1,4 +1,3 @@
-// import 'package:test/test.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/helpers.dart';
 
@@ -55,6 +54,19 @@ void main() {
       }
       stopwatch.stop(); // Stop the stopwatch after the operation
       debugLog('Elapsed time incremental: ${stopwatch.elapsedMilliseconds} milliseconds');
+    });
+  });
+
+  group('String getStringBetweenTwoTokens:', () {
+    test('getStringBetweenTwoTokens', () {
+      expect(
+        getStringBetweenTwoTokens(
+          'hello Sun in the Sky tonight',
+          'Sun',
+          'Sky',
+        ),
+        ' in the ',
+      );
     });
   });
 }
