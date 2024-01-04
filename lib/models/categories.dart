@@ -12,12 +12,12 @@ enum CategoryType {
 }
 
 class Category extends MoneyEntity {
-  num parentId = -1;
+  int parentId = -1;
   CategoryType type = CategoryType.none;
-  num count = 0;
+  int count = 0;
   double balance = 0.00;
 
-  Category(final num id, this.type, final String name) : super(id, name) {
+  Category(final int id, this.type, final String name) : super(id, name) {
     //
   }
 
@@ -64,13 +64,13 @@ class Category extends MoneyEntity {
 
 class Categories {
   static MoneyObjects<Category> moneyObjects = MoneyObjects<Category>();
-  static num idOfSplitCategory = -1;
+  static int idOfSplitCategory = -1;
 
-  static Category? get(final num id) {
+  static Category? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final num id) {
+  static String getNameFromId(final int id) {
     if (id == -1) {
       return '';
     }
@@ -81,7 +81,7 @@ class Categories {
     return moneyObjects.getNameFromId(id);
   }
 
-  static num splitCategoryId() {
+  static int splitCategoryId() {
     if (idOfSplitCategory == -1) {
       final Category? cat = moneyObjects.getByName('Split');
       if (cat != null) {
@@ -102,15 +102,15 @@ class Categories {
     return getTopAncestor(parent);
   }
 
-  static List<num> getTreeIds(final num rootIdToStartFrom) {
-    final List<num> list = <num>[];
+  static List<int> getTreeIds(final int rootIdToStartFrom) {
+    final List<int> list = <int>[];
     if (rootIdToStartFrom > 0) {
       getTreeIdsRecursive(rootIdToStartFrom, list);
     }
     return list;
   }
 
-  static void getTreeIdsRecursive(final num categoryId, final List<num> list) {
+  static void getTreeIdsRecursive(final int categoryId, final List<int> list) {
     if (categoryId > 0) {
       list.add(categoryId);
       final List<Category> descendants = getCategoriesWithThisParent(categoryId);
@@ -121,7 +121,7 @@ class Categories {
     }
   }
 
-  static List<Category> getCategoriesWithThisParent(final num parentId) {
+  static List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
     for (final Category item in Categories.moneyObjects.getAsList()) {
       if (item.parentId == parentId) {
@@ -150,7 +150,7 @@ class Categories {
   load(final List<Map<String, Object?>> rows) async {
     clear();
     for (final Map<String, Object?> row in rows) {
-      final num id = num.parse(row['Id'].toString());
+      final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
       final Object? rt = row['Type'];
       final Category newEntry = Category(
@@ -158,7 +158,7 @@ class Categories {
         Category.getTypeFromText(rt.toString()),
         name,
       );
-      newEntry.parentId = num.parse(row['ParentId'].toString());
+      newEntry.parentId = int.parse(row['ParentId'].toString());
 
       moneyObjects.addEntry(newEntry);
     }

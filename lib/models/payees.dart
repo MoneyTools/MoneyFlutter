@@ -30,7 +30,7 @@ class Payees {
     /*
      */
     for (final Map<String, Object?> row in rows) {
-      final num id = num.parse(row['Id'].toString());
+      final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
       moneyObjects.addEntry(Payee(id, name));
     }

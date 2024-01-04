@@ -49,7 +49,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
-  Widget getSubViewContentForChart(final List<num> indices) {
+  Widget getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
     for (final Payee item in getList()) {
       if (item.name != 'Transfer') {
