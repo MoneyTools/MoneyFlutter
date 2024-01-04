@@ -202,3 +202,36 @@ int roundToNextNaturalFit(final int number, final int divisor) {
   final int base = number - remainder;
   return base + divisor;
 }
+
+String getStringBetweenTwoTokens(
+  final String input,
+  final String start,
+  final String end,
+) {
+  final String content = getStringContentBetweenTwoTokens(input, start, end);
+  return start + content + end;
+}
+
+String getStringContentBetweenTwoTokens(
+  final String input,
+  final String start,
+  final String end,
+) {
+  final int indexStart = input.indexOf(start);
+  if (indexStart != -1) {
+    final int indexEnd = input.indexOf(end);
+    if (indexEnd != -1) {
+      return input.substring(indexStart + start.length, indexEnd);
+    }
+  }
+  return '';
+}
+
+/// Clean up input string by removing "white noise"
+String getNormalizedValue(final String? s) {
+  if (s == null) {
+    return '';
+  }
+
+  return s.replaceAll("\r\n", " ").replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
+}

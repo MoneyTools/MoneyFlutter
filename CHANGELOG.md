@@ -1,5 +1,6 @@
 ## [1.0.10] 2024-01-04
 
+- Basic QFX import
 - View Aliases
 - Convert MoneyEntity ID from [num] to [int]
 

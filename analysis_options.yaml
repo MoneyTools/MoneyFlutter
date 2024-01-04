@@ -41,6 +41,7 @@ linter:
 
 analyzer:
   strong-mode: true
+  avoid_function_literals_in_foreach_calls: true
   errors:
     unused_element: warning
     unused_field: warning
