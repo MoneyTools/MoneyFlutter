@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:money/models/import_qfx.dart';
 import 'package:money/models/import_qif.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/views/view_aliases.dart';
 import 'package:money/views/view_cashflow.dart';
 import 'package:money/views/view_rentals.dart';
 import 'package:money/widgets/keyboard_widget.dart';
@@ -157,8 +158,10 @@ class _MyMoneyState extends State<MyMoney> {
       case 3:
         return const ViewPayees();
       case 4:
-        return const ViewTransactions();
+        return const ViewAliases();
       case 5:
+        return const ViewTransactions();
+      case 6:
         return const ViewRentals();
       case 0:
       default:
