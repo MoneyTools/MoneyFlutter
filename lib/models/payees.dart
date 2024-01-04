@@ -13,11 +13,11 @@ class Payee extends MoneyEntity {
 class Payees {
   static MoneyObjects<Payee> moneyObjects = MoneyObjects<Payee>();
 
-  static Payee? get(final num id) {
+  static Payee? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final num id) {
+  static String getNameFromId(final int id) {
     return moneyObjects.getNameFromId(id);
   }
 
