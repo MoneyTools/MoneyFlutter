@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:money/helpers.dart';
+import 'package:money/models/aliases.dart';
 
 import 'package:money/models/rentals.dart';
 
@@ -16,6 +17,7 @@ import 'package:money/models/data_io/data_others.dart'
 class Data {
   Accounts accounts = Accounts();
   Payees payees = Payees();
+  Aliases aliases = Aliases();
   Categories categories = Categories();
   Rentals rentals = Rentals();
   RentUnits rentUnits = RentUnits();
@@ -35,6 +37,7 @@ class Data {
       accounts.loadDemoData();
       categories.loadDemoData();
       payees.loadDemoData();
+      aliases.loadDemoData();
       rentals.loadDemoData();
       splits.loadDemoData();
       transactions.loadDemoData();
@@ -61,6 +64,12 @@ class Data {
           {
             final List<Map<String, Object?>> result = db.select('SELECT * FROM Payees');
             await payees.load(result);
+          }
+
+          // Aliases
+          {
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM Aliases');
+            await aliases.load(result);
           }
 
           // Rentals

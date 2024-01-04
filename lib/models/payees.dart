@@ -13,16 +13,31 @@ class Payee extends MoneyEntity {
 class Payees {
   static MoneyObjects<Payee> moneyObjects = MoneyObjects<Payee>();
 
-  static Payee? get(final num id) {
+  static Payee? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final num id) {
+  static String getNameFromId(final int id) {
     return moneyObjects.getNameFromId(id);
+  }
+
+  /// Attempts to find payee wih the given name
+  /// if not found create a new payee and return that instance
+  static Payee findOrAddPayee(final String name) {
+    // find or add account of given name
+    Payee? payee = moneyObjects.getByName(name);
+
+    // if not found add new payee
+    payee ??= Payee(moneyObjects.length, name);
+    return payee;
   }
 
   clear() {
     moneyObjects.clear();
+  }
+
+  int length() {
+    return moneyObjects.getAsList().length;
   }
 
   load(final List<Map<String, Object?>> rows) async {

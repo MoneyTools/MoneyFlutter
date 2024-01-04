@@ -12,6 +12,7 @@ const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
 const String columnIdPayee = 'Payee';
 const String columnIdCategory = 'Category';
+const String columnIdMemo = 'Memo';
 const String columnIdAmount = 'Amount';
 const String columnIdBalance = 'Balance';
 
@@ -181,6 +182,19 @@ ColumnDefinition<Transaction>? getColumnDefinitionFromId(
         sort: (final Transaction a, final Transaction b, final bool ascending) {
           return sortByString(
               Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), ascending);
+        },
+      );
+
+    case columnIdMemo:
+      return ColumnDefinition<Transaction>(
+        name: columnIdMemo,
+        type: ColumnType.text,
+        align: TextAlign.left,
+        value: (final int index) {
+          return getList()[index].memo;
+        },
+        sort: (final Transaction a, final Transaction b, final bool ascending) {
+          return sortByString(a.memo, b.memo, ascending);
         },
       );
 
