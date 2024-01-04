@@ -5,8 +5,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/models/import_qfx.dart';
-import 'package:money/models/import_qif.dart';
+import 'package:money/models/data_io/import_qfx.dart';
+import 'package:money/models/data_io/import_qif.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_aliases.dart';
 import 'package:money/views/view_cashflow.dart';
@@ -136,8 +136,11 @@ class _MyMoneyState extends State<MyMoney> {
         case "qif":
           importQIF(pickerResult.files.single.path.toString());
         case "qfx":
-          importQFX(pickerResult.files.single.path.toString());
+          importQFX(pickerResult.files.single.path.toString(), data);
       }
+      setState(() {
+        // update UI
+      });
     }
   }
 

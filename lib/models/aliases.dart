@@ -1,3 +1,5 @@
+import 'package:collection/collection.dart';
+import 'package:money/helpers.dart';
 import 'package:money/models/money_entity.dart';
 import 'package:money/models/payees.dart';
 
@@ -9,7 +11,7 @@ enum AliasType {
 class Alias extends MoneyEntity {
   AliasType type = AliasType.none;
   int payeeId = -1;
-  RegExp regex = RegExp('');
+  RegExp? regex;
   late final Payee payee;
 
   Alias(
@@ -19,6 +21,23 @@ class Alias extends MoneyEntity {
     this.payeeId = -1,
   }) {
     payee = Payees.get(payeeId)!;
+  }
+
+  bool isMatch(final String text) {
+    if (type == AliasType.regex) {
+      // just in time creation of RegEx property
+      regex ??= RegExp(name);
+      final Match? matched = regex?.firstMatch(text);
+      if (matched != null) {
+        debugLog('First email found: ${matched.group(0)}');
+        return true;
+      }
+    } else {
+      if (sortByStringIgnoreCase2(name, text) == 0) {
+        return true;
+      }
+    }
+    return false;
   }
 }
 
@@ -31,6 +50,14 @@ class Aliases {
 
   static String getNameFromId(final num id) {
     return moneyObjects.getNameFromId(id);
+  }
+
+  static Payee? findByMatch(final String text) {
+    final Alias? aliasFound = moneyObjects.getAsList().firstWhereOrNull((final Alias item) => item.isMatch(text));
+    if (aliasFound == null) {
+      return null;
+    }
+    return aliasFound.payee;
   }
 
   clear() {

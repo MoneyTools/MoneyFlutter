@@ -36,7 +36,7 @@ List<Map<String, dynamic>> loadQIF(final List<String> lines) {
       // In some cases the QIF will
       // have the date in the following format 01/30'2000
       // so before processing the date we replace the "'" with "/"
-      currentTransaction['date'] = DateFormat('MM/dd/yyyy').parse(line.substring(1));
+      currentTransaction['date'] = DateFormat('MM/dd/yyyy').parse(getNormalizedValue(line.substring(1)));
     } else if (line.startsWith('T') || line.startsWith('U')) {
       // Amount
       currentTransaction ??= <String, dynamic>{};
@@ -48,11 +48,11 @@ List<Map<String, dynamic>> loadQIF(final List<String> lines) {
     } else if (line.startsWith('P')) {
       // Amount
       currentTransaction ??= <String, dynamic>{};
-      currentTransaction['payee'] = line.substring(1);
+      currentTransaction['payee'] = getNormalizedValue(line.substring(1));
     } else if (line.startsWith('M')) {
       // Amount
       currentTransaction ??= <String, dynamic>{};
-      currentTransaction['memo'] = line.substring(1);
+      currentTransaction['memo'] = getNormalizedValue(line.substring(1));
     }
   }
 

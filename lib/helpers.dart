@@ -226,3 +226,12 @@ String getStringContentBetweenTwoTokens(
   }
   return '';
 }
+
+/// Clean up input string by removing "white noise"
+String getNormalizedValue(final String? s) {
+  if (s == null) {
+    return '';
+  }
+
+  return s.replaceAll("\r\n", " ").replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
+}

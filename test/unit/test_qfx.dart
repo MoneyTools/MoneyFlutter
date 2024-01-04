@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/helpers.dart';
-import 'package:money/models/import_qfx.dart';
+import 'package:money/models/data_io/import_qfx.dart';
 
 void main() {
   group('QFX:', () {
@@ -18,6 +18,7 @@ void main() {
 
       expect(list[1].type, 'DEBIT');
       expect(list[1].amount, -2373.71);
+      expect(list[1].memo, 'Thank You for Paying');
     });
   });
 }
@@ -47,10 +48,10 @@ NEWFILEUID:NONE
 <DTACCTUP>20231230224748.000[0:UTC]
 <FI>
 <ORG>Bank of America
-<FID>5959
+<FID>1234
 </FI>
-<INTU.BID>6526
-<INTU.USERID>jpnancy
+<INTU.BID>5678
+<INTU.USERID>MyName
 </SONRS>
 </SIGNONMSGSRSV1>
 <BANKMSGSRSV1>
@@ -66,8 +67,8 @@ NEWFILEUID:NONE
 <CURDEF>USD
 
 <BANKACCTFROM>
-  <BANKID>125000024
-  <ACCTID>000091590869
+  <BANKID>89898989
+  <ACCTID>000011223344
   <ACCTTYPE>CHECKING
 </BANKACCTFROM>
 
@@ -90,6 +91,7 @@ NEWFILEUID:NONE
     <TRNAMT>-2373.71
     <FITID>129482.520231228129482.52
     <NAME>CreditCard AUTOPAY
+    <MEMO>Thank You for Paying
   </STMTTRN>
 
 </BANKTRANLIST>

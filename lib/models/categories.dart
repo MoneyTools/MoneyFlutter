@@ -131,11 +131,124 @@ class Categories {
     return list;
   }
 
+  static Category getOrCreateCategory(
+    final String name,
+    final CategoryType type,
+  ) {
+    Category? category = moneyObjects.getByName(name);
+
+    if (category == null) {
+      category = Category(moneyObjects.length, type, name);
+      moneyObjects.addEntry(category);
+    }
+    // TODO
+    // else if (result.IsDeleted) {
+    //   result.Undelete();
+    // }
+    return category;
+  }
+
   clear() {
     moneyObjects.clear();
   }
 
-  /*
+  static Category get split {
+    return Categories.getOrCreateCategory("Split", CategoryType.none);
+  }
+
+  static Category get salesTax {
+    return Categories.getOrCreateCategory("Taxes:Sales Tax", CategoryType.expense);
+  }
+
+  static Category get interestEarned {
+    return Categories.getOrCreateCategory("Savings:Interest", CategoryType.income);
+  }
+
+  static Category get savings {
+    return Categories.getOrCreateCategory("Savings", CategoryType.income);
+  }
+
+  static Category get investmentCredit {
+    return getOrCreateCategory("Investments:Credit", CategoryType.income);
+  }
+
+  static Category get investmentDebit {
+    return getOrCreateCategory("Investments:Debit", CategoryType.expense);
+  }
+
+  static Category get investmentInterest {
+    return getOrCreateCategory("Investments:Interest", CategoryType.income);
+  }
+
+  static Category get investmentDividends {
+    return getOrCreateCategory("Investments:Dividends", CategoryType.income);
+  }
+
+  static Category get investmentTransfer {
+    return getOrCreateCategory("Investments:Transfer", CategoryType.none);
+  }
+
+  static Category get investmentFees {
+    return getOrCreateCategory("Investments:Fees", CategoryType.expense);
+  }
+
+  static Category get investmentMutualFunds {
+    return Categories.getOrCreateCategory("Investments:Mutual Funds", CategoryType.expense);
+  }
+
+  static Category get investmentStocks {
+    return Categories.getOrCreateCategory("Investments:Stocks", CategoryType.expense);
+  }
+
+  static Category get investmentOther {
+    return Categories.getOrCreateCategory("Investments:Other", CategoryType.expense);
+  }
+
+  static Category get investmentBonds {
+    return Categories.getOrCreateCategory("Investments:Bonds", CategoryType.expense);
+  }
+
+  static Category get investmentOptions {
+    return Categories.getOrCreateCategory("Investments:Options", CategoryType.expense);
+  }
+
+  static Category get investmentReinvest {
+    return Categories.getOrCreateCategory("Investments:Reinvest", CategoryType.none);
+  }
+
+  static Category get investmentLongTermCapitalGainsDistribution {
+    return Categories.getOrCreateCategory("Investments:Long Term Capital Gains Distribution", CategoryType.income);
+  }
+
+  static Category get investmentShortTermCapitalGainsDistribution {
+    return Categories.getOrCreateCategory("Investments:Short Term Capital Gains Distribution", CategoryType.income);
+  }
+
+  static Category get investmentMiscellaneous {
+    return Categories.getOrCreateCategory("Investments:Miscellaneous", CategoryType.expense);
+  }
+
+  static Category get transferToDeletedAccount {
+    return Categories.getOrCreateCategory("Xfer to Deleted Account", CategoryType.none);
+  }
+
+  static Category get transferFromDeletedAccount {
+    return Categories.getOrCreateCategory("Xfer from Deleted Account", CategoryType.none);
+  }
+
+  static Category get transfer {
+    return Categories.getOrCreateCategory("Transfer", CategoryType.none);
+  }
+
+  static Category get unknown {
+    return Categories.getOrCreateCategory("Unknown", CategoryType.none);
+  }
+
+  static Category get unassignedSplit {
+    return Categories.getOrCreateCategory("UnassignedSplit", CategoryType.none);
+  }
+
+/*
       0 = "Id"
       1 = "ParentId"
       2 = "Name"

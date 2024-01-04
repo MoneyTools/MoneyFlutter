@@ -1,13 +1,21 @@
 import 'package:money/models/money_entity.dart';
 
 class Split extends MoneyEntity {
-  int transactionId;
-  int categoryId;
+  num transactionId;
+  num categoryId;
   double amount;
-  int payeeId;
+  num payeeId;
   String memo;
 
-  Split(final int id, this.transactionId, this.categoryId, this.amount, this.payeeId, this.memo) : super(id, '');
+  Split(
+    super.id,
+    super.name, {
+    required this.transactionId,
+    required this.categoryId,
+    required this.amount,
+    required this.payeeId,
+    required this.memo,
+  });
 }
 
 class Splits {
@@ -28,10 +36,18 @@ class Splits {
       final int transactionId = int.parse(row['Transaction'].toString());
       final int categoryId = int.parse(row['Category'].toString());
       final double amount = double.parse(row['Amount'].toString());
-      final int payeeId = int.parse(row['Payee'].toString());
+      final double payeeId = double.parse(row['Payee'].toString());
       final String memo = row['Memo'].toString();
 
-      list.add(Split(id, transactionId, categoryId, amount, payeeId, memo));
+      list.add(Split(
+        id,
+        '',
+        transactionId: transactionId,
+        categoryId: categoryId,
+        amount: amount,
+        payeeId: payeeId,
+        memo: memo,
+      ));
     }
     return list;
   }

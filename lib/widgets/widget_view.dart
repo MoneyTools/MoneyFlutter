@@ -380,9 +380,10 @@ class ViewWidgetToDisplay {
   final bool columnAccount;
   final List<String> columnsToInclude;
 
-  const ViewWidgetToDisplay(
-      {this.showTitle = true,
-      this.showBottom = true,
-      this.columnAccount = true,
-      this.columnsToInclude = const <String>[]});
+  const ViewWidgetToDisplay({
+    this.showTitle = true,
+    this.showBottom = true,
+    this.columnAccount = true,
+    this.columnsToInclude = const <String>[],
+  });
 }

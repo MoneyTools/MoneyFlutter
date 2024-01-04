@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:money/models/transactions.dart';
 
 import 'package:money/models/money_entity.dart';
@@ -24,6 +25,9 @@ class Account extends MoneyEntity {
   double openingBalance = 0.00;
   double balance = 0.00;
   int flags = 0;
+  String accountId = '';
+  String ofxAccountId = '';
+  String description = '';
   AccountType type = AccountType.checking;
 
   Account(super.id, super.name);
@@ -82,6 +86,36 @@ class Account extends MoneyEntity {
 
     return 'other $type';
   }
+
+  static AccountType getTypeFromText(final String text) {
+    switch (text.toLowerCase()) {
+      case 'savings':
+        return AccountType.savings;
+      case 'checking':
+        return AccountType.checking;
+      case 'moneymarket':
+        return AccountType.moneyMarket;
+      case 'cash':
+        return AccountType.cash;
+      case 'credit':
+      case 'creditcard': // as seen in OFX <ACCTTYPE>
+        return AccountType.credit;
+      case 'investment':
+        return AccountType.investment;
+      case 'retirement':
+        return AccountType.retirement;
+      case 'asset':
+        return AccountType.asset;
+      case 'categoryfund':
+        return AccountType.categoryFund;
+      case 'loan':
+        return AccountType.loan;
+      case 'creditLine':
+        return AccountType.creditLine;
+      default:
+        return AccountType._notUsed_7;
+    }
+  }
 }
 
 class Accounts {
@@ -113,6 +147,15 @@ class Accounts {
     return account.name;
   }
 
+  static Account? findByIdAndType(
+    final String accountId,
+    final AccountType accountType,
+  ) {
+    return moneyObjects.getAsList().firstWhereOrNull((final Account item) {
+      return item.accountId == accountId && item.type == accountType;
+    });
+  }
+
   clear() {
     moneyObjects.clear();
   }
@@ -139,14 +182,13 @@ class Accounts {
   load(final List<Map<String, Object?>> rows) async {
     clear();
     for (final Map<String, Object?> row in rows) {
-      final int id = int.parse(row['Id'].toString());
-      final String name = row['Name'].toString();
-      final int flags = int.parse(row['Flags'].toString());
-      final int type = int.parse(row['Type'].toString());
-
-      final Account a = Account(id, name);
-      a.flags = flags;
-      a.type = AccountType.values[type];
+      final Account a = Account(
+        int.parse(row['Id'].toString()),
+        row['Name'].toString(),
+      );
+      a.accountId = row['AccountId'].toString();
+      a.flags = int.parse(row['Flags'].toString());
+      a.type = AccountType.values[int.parse(row['Type'].toString())];
       a.openingBalance = double.parse(row['OpeningBalance'].toString());
 
       moneyObjects.addEntry(a);
