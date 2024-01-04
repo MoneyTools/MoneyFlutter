@@ -50,7 +50,7 @@ class Rental extends MoneyEntity {
   Rental(super.id, super.name);
 
   static Rental createInstanceFromRow(final Map<String, Object?> row) {
-    final num id = MoneyEntity.fromRowColumnToNumber(row, 'Id');
+    final int id = MoneyEntity.fromRowColumnToNumber(row, 'Id');
     final String name = MoneyEntity.fromRowColumnToString(row, 'Name');
 
     final Rental instance = Rental(id, name);
@@ -196,7 +196,7 @@ class RentUnits {
 
   load(final List<Map<String, Object?>> rows) async {
     for (final Map<String, Object?> row in rows) {
-      final num id = num.parse(row['Id'].toString());
+      final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
 
       final RentUnit instance = RentUnit(id, name);

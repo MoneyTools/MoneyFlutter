@@ -1,4 +1,8 @@
-## [1.0.8] 2024-01-01
+## [1.0.10] 2024-01-04
+
+- Convert MoneyEntity ID from [num] to [int]
+
+## [1.0.9] 2024-01-01
 
 - Improve Table performance
 - Refactor Transaction Table view

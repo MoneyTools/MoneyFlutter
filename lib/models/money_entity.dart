@@ -1,5 +1,5 @@
 class MoneyEntity {
-  num id = -1;
+  int id = -1;
   String name = '';
 
   MoneyEntity(this.id, this.name) {
@@ -14,13 +14,13 @@ class MoneyEntity {
     return rawValue.toString();
   }
 
-  static num fromRowColumnToNumber(final Map<String, Object?> row, final String nameOfColumn) {
+  static int fromRowColumnToNumber(final Map<String, Object?> row, final String nameOfColumn) {
     final Object? rawValue = row[nameOfColumn];
     if (rawValue == null) {
       return 0;
     }
     final String rawValueAsText = rawValue.toString();
-    return num.parse(rawValueAsText);
+    return int.parse(rawValueAsText);
   }
 
   static double fromRowColumnToDouble(final Map<String, Object?> row, final String nameOfColumn) {
