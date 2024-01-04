@@ -18,25 +18,25 @@ class Rental extends MoneyEntity {
   double landValue = 0.00;
   double estimatedValue = 0.00;
 
-  num categoryForIncome = -1;
-  List<num> categoryForIncomeTreeIds = <num>[];
+  int categoryForIncome = -1;
+  List<int> categoryForIncomeTreeIds = <int>[];
 
-  num categoryForTaxes = -1;
-  List<num> categoryForTaxesTreeIds = <num>[];
+  int categoryForTaxes = -1;
+  List<int> categoryForTaxesTreeIds = <int>[];
 
-  num categoryForInterest = -1;
-  List<num> categoryForInterestTreeIds = <num>[];
+  int categoryForInterest = -1;
+  List<int> categoryForInterestTreeIds = <int>[];
 
-  num categoryForRepairs = -1;
-  List<num> categoryForRepairsTreeIds = <num>[];
+  int categoryForRepairs = -1;
+  List<int> categoryForRepairsTreeIds = <int>[];
 
-  num categoryForMaintenance = -1;
-  List<num> categoryForMaintenanceTreeIds = <num>[];
+  int categoryForMaintenance = -1;
+  List<int> categoryForMaintenanceTreeIds = <int>[];
 
-  num categoryForManagement = -1;
-  List<num> categoryForManagementTreeIds = <num>[];
+  int categoryForManagement = -1;
+  List<int> categoryForManagementTreeIds = <int>[];
 
-  List<num> listOfCategoryIdsExpenses = <num>[];
+  List<int> listOfCategoryIdsExpenses = <int>[];
 
   String ownershipName1 = '';
   String ownershipName2 = '';
@@ -98,11 +98,11 @@ class Rental extends MoneyEntity {
 class Rentals {
   static MoneyObjects<Rental> moneyObjects = MoneyObjects<Rental>();
 
-  static Rental? get(final num id) {
+  static Rental? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final num id) {
+  static String getNameFromId(final int id) {
     final Rental? found = get(id);
     if (found == null) {
       return id.toString();
@@ -182,11 +182,11 @@ class RentUnit extends MoneyEntity {
 class RentUnits {
   static MoneyObjects<RentUnit> moneyObjects = MoneyObjects<RentUnit>();
 
-  static RentUnit? get(final num id) {
+  static RentUnit? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final num id) {
+  static String getNameFromId(final int id) {
     final RentUnit? found = get(id);
     if (found == null) {
       return id.toString();

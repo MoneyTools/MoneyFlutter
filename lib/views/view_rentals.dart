@@ -183,7 +183,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
   }
 
   @override
-  Widget getSubViewContentForChart(final List<num> indices) {
+  Widget getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
     for (final Rental entry in getList()) {
       list.add(PairXY(entry.name, entry.profit));

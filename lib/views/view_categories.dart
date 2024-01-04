@@ -202,7 +202,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   }
 
   @override
-  Widget getSubViewContentForChart(final List<num> indices) {
+  Widget getSubViewContentForChart(final List<int> indices) {
     final Map<String, num> map = <String, num>{};
 
     for (final Category item in getList()) {

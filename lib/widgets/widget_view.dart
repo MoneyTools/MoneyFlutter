@@ -32,7 +32,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   final NumberFormat formatCurrency = NumberFormat('#,##0.00', 'en_US');
   bool isBottomPanelExpanded = false;
-  num selectedBottomTabId = 0;
+  int selectedBottomTabId = 0;
 
   int sortByColumn = 0;
   bool sortAscending = true;
@@ -152,13 +152,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     );
   }
 
-  updateBottomContent(final num tab) {
+  updateBottomContent(final int tab) {
     setState(() {
       selectedBottomTabId = tab;
     });
   }
 
-  Widget getSubViewContent(final num subViewId, final List<int> selectedItems) {
+  Widget getSubViewContent(final int subViewId, final List<int> selectedItems) {
     switch (subViewId) {
       case 0:
         return getSubViewContentForDetails(selectedItems);
@@ -221,7 +221,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return const Text('No item selected');
   }
 
-  Widget getSubViewContentForChart(final List<num> indices) {
+  Widget getSubViewContentForChart(final List<int> indices) {
     return const Text('No chart to display');
   }
 

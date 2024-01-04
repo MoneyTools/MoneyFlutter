@@ -5,9 +5,9 @@ class BottomPanel extends StatelessWidget {
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
   final Object? subViewSelectedItem;
-  final num selectedTabId;
+  final int selectedTabId;
   final Function onTabActivated;
-  final Widget Function(num, List<int>) getBottomContentToRender;
+  final Widget Function(int, List<int>) getBottomContentToRender;
 
   const BottomPanel({
     super.key,

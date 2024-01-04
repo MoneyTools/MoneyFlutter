@@ -75,7 +75,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  Widget getSubViewContentForChart(final List<num> indices) {
+  Widget getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
     for (final MoneyEntity item in getList()) {
       final Account account = item as Account;
