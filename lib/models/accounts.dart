@@ -139,7 +139,7 @@ class Accounts {
   load(final List<Map<String, Object?>> rows) async {
     clear();
     for (final Map<String, Object?> row in rows) {
-      final num id = num.parse(row['Id'].toString());
+      final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
       final int flags = int.parse(row['Flags'].toString());
       final int type = int.parse(row['Type'].toString());

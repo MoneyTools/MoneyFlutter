@@ -7,12 +7,12 @@ import 'package:money/helpers.dart';
 class Transaction extends MoneyEntity {
   num accountId = -1;
   DateTime dateTime = DateTime(0);
-  num payeeId = -1;
-  num categoryId = -1;
+  int payeeId = -1;
+  int categoryId = -1;
   double amount = 0.00;
   double balance = 0.00;
 
-  Transaction(final num id, this.accountId, this.dateTime, this.payeeId, this.categoryId, this.amount, this.balance)
+  Transaction(final int id, this.accountId, this.dateTime, this.payeeId, this.categoryId, this.amount, this.balance)
       : super(id, '');
 }
 
@@ -31,11 +31,11 @@ class Transactions {
     runningBalance = 0.00;
 
     for (final Map<String, Object?> row in rows) {
-      final num id = num.parse(row['Id'].toString());
-      final num accountId = num.parse(row['Account'].toString());
+      final int id = int.parse(row['Id'].toString());
+      final int accountId = int.parse(row['Account'].toString());
       final String date = row['Date'].toString();
-      final num payee = num.parse(row['Payee'].toString());
-      final num category = num.parse(row['Category'].toString());
+      final int payee = int.parse(row['Payee'].toString());
+      final int category = int.parse(row['Category'].toString());
       final double amount = double.parse(row['Amount'].toString());
 
       list.add(Transaction(

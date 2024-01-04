@@ -12,12 +12,12 @@ enum CategoryType {
 }
 
 class Category extends MoneyEntity {
-  num parentId = -1;
+  int parentId = -1;
   CategoryType type = CategoryType.none;
-  num count = 0;
+  int count = 0;
   double balance = 0.00;
 
-  Category(final num id, this.type, final String name) : super(id, name) {
+  Category(final int id, this.type, final String name) : super(id, name) {
     //
   }
 
@@ -150,7 +150,7 @@ class Categories {
   load(final List<Map<String, Object?>> rows) async {
     clear();
     for (final Map<String, Object?> row in rows) {
-      final num id = num.parse(row['Id'].toString());
+      final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
       final Object? rt = row['Type'];
       final Category newEntry = Category(
@@ -158,7 +158,7 @@ class Categories {
         Category.getTypeFromText(rt.toString()),
         name,
       );
-      newEntry.parentId = num.parse(row['ParentId'].toString());
+      newEntry.parentId = int.parse(row['ParentId'].toString());
 
       moneyObjects.addEntry(newEntry);
     }
