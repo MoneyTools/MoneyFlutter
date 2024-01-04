@@ -1,5 +1,6 @@
 ## [1.0.10] 2024-01-04
 
+- View Aliases
 - Convert MoneyEntity ID from [num] to [int]
 
 ## [1.0.9] 2024-01-01

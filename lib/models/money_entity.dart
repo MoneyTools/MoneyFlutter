@@ -57,6 +57,10 @@ class MoneyObjects<T> {
     _list.clear();
   }
 
+  int get length {
+    return _list.length;
+  }
+
   void addEntry(final MoneyEntity entry) {
     _list.add(entry as T);
     _map[entry.id] = entry as T;

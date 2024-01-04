@@ -108,6 +108,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
           columnIdDate,
           columnIdPayee,
           columnIdCategory,
+          columnIdMemo,
           columnIdAmount,
         ],
         getList: () => listOfTransactionForThisAccount,

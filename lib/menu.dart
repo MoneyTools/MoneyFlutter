@@ -91,31 +91,37 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
     const NavigationDestination(
       label: 'Cash Flow',
       tooltip: 'Cash Flow',
-      icon: Icon(Icons.analytics_outlined),
+      icon: Icon(Icons.analytics),
       selectedIcon: Icon(Icons.analytics),
     ),
     const NavigationDestination(
       label: 'Accounts',
       tooltip: 'Accounts',
-      icon: Icon(Icons.account_balance_outlined),
+      icon: Icon(Icons.account_balance),
       selectedIcon: Icon(Icons.account_balance),
     ),
     const NavigationDestination(
       label: 'Categories',
       tooltip: 'Categories',
-      icon: Icon(Icons.type_specimen_outlined),
+      icon: Icon(Icons.type_specimen),
       selectedIcon: Icon(Icons.type_specimen),
     ),
     const NavigationDestination(
       label: 'Payees',
       tooltip: 'Payees',
-      icon: Icon(Icons.groups_outlined),
+      icon: Icon(Icons.groups),
       selectedIcon: Icon(Icons.groups),
+    ),
+    const NavigationDestination(
+      label: 'Aliases',
+      tooltip: 'Aliases',
+      icon: Icon(Icons.how_to_reg),
+      selectedIcon: Icon(Icons.how_to_reg),
     ),
     const NavigationDestination(
       label: 'Transactions',
       tooltip: 'Transactions',
-      icon: Icon(Icons.receipt_long_outlined),
+      icon: Icon(Icons.receipt_long),
       selectedIcon: Icon(Icons.receipt_long),
     )
   ];
@@ -123,7 +129,7 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
     appBarDestinations.add(const NavigationDestination(
       label: 'Rentals',
       tooltip: 'Rentals',
-      icon: Icon(Icons.location_city_outlined),
+      icon: Icon(Icons.location_city),
       selectedIcon: Icon(Icons.location_city),
     ));
   }

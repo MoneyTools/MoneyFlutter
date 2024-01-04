@@ -10,14 +10,6 @@ import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/columns.dart';
 import 'package:money/widgets/widget_view.dart';
 
-const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(
-    columnsToInclude: <String>[columnIdAccount, columnIdDate, columnIdPayee, columnIdAmount, columnIdBalance]);
-
-const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance = ViewWidgetToDisplay(
-    showTitle: false,
-    showBottom: false,
-    columnsToInclude: <String>[columnIdDate, columnIdPayee, columnIdCategory, columnIdAmount, columnIdBalance]);
-
 class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;
 
@@ -198,3 +190,25 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     );
   }
 }
+
+const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: <String>[
+  columnIdAccount,
+  columnIdDate,
+  columnIdPayee,
+  columnIdCategory,
+  columnIdMemo,
+  columnIdAmount,
+  columnIdBalance
+]);
+
+const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance = ViewWidgetToDisplay(
+    showTitle: false,
+    showBottom: false,
+    columnsToInclude: <String>[
+      columnIdDate,
+      columnIdPayee,
+      columnIdCategory,
+      columnIdMemo,
+      columnIdAmount,
+      columnIdBalance
+    ]);
