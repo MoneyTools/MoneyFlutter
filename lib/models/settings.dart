@@ -10,9 +10,18 @@ class Settings {
   int screenIndex = 0;
   String? pathToDatabase;
   bool isBottomPanelExpanded = false;
+  bool includeClosedAccounts = false;
   bool rentals = false;
   bool useDarkMode = false;
   double textScale = 1.0;
+
+  static final Settings _singleton = Settings._internal();
+
+  factory Settings() {
+    return _singleton;
+  }
+
+  Settings._internal();
 
   load({final Function? onLoaded}) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -22,6 +31,7 @@ class Settings {
 
     pathToDatabase = preferences.getString(prefLastLoadedPathToDatabase);
     rentals = preferences.getBool(prefRentals) == true;
+    includeClosedAccounts = preferences.getBool(prefIncludeClosedAccounts) == true;
     prefLoaded = true;
     if (onLoaded != null) {
       onLoaded();
@@ -33,6 +43,7 @@ class Settings {
     preferences.setDouble(prefTextScale, textScale);
     preferences.setInt(prefColor, colorSelected);
     preferences.setBool(prefDarkMode, useDarkMode);
+    preferences.setBool(prefIncludeClosedAccounts, includeClosedAccounts);
     preferences.setBool(prefRentals, rentals);
     if (pathToDatabase == null) {
       preferences.remove(prefLastLoadedPathToDatabase);

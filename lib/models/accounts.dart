@@ -129,9 +129,18 @@ class Accounts {
     return element.isActiveBankAccount();
   }
 
-  static List<Account> activeAccount(final List<AccountType> types, {final bool? isActive = true}) {
+  static List<Account> activeAccount(
+    final List<AccountType> types, {
+    final bool? isActive = true,
+  }) {
     return moneyObjects.getAsList().where((final Account item) {
-      return item.isActive() == isActive && item.matchType(types);
+      if (!item.matchType(types)) {
+        return false;
+      }
+      if (isActive == null) {
+        return true;
+      }
+      return item.isActive() == isActive;
     }).toList();
   }
 

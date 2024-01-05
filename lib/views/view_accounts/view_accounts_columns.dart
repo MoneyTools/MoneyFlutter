@@ -2,7 +2,7 @@ part of 'view_accounts.dart';
 
 extension ViewAccountsColumns on ViewAccountsState {
   ColumnDefinitions<Account> _getColumnDefinitionsForTable() {
-    return ColumnDefinitions<Account>(list: <ColumnDefinition<Account>>[
+    final List<ColumnDefinition<Account>> fieldDefinitions = <ColumnDefinition<Account>>[
       ColumnDefinition<Account>(
         name: 'Name',
         type: ColumnType.text,
@@ -63,6 +63,28 @@ extension ViewAccountsColumns on ViewAccountsState {
           );
         },
       ),
-    ]);
+    ];
+
+    if (Settings().includeClosedAccounts) {
+      fieldDefinitions.add(
+        ColumnDefinition<Account>(
+          name: 'Status',
+          type: ColumnType.text,
+          align: TextAlign.center,
+          value: (final int index) {
+            return list[index].isClosed() ? 'Closed' : 'Active';
+          },
+          sort: (final Account a, final Account b, final bool sortAscending) {
+            return sortByString(
+              a.isClosed().toString(),
+              b.isClosed().toString(),
+              sortAscending,
+            );
+          },
+        ),
+      );
+    }
+
+    return ColumnDefinitions<Account>(list: fieldDefinitions);
   }
 }

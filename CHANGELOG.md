@@ -1,5 +1,6 @@
 ## [1.0.11] 2024-01-05
 
+- User choice "Include Closed Accounts"
 - Fix the execution of tests
 
 ## [1.0.10] 2024-01-04

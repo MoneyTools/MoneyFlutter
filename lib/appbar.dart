@@ -41,7 +41,19 @@ PreferredSizeWidget createAppBar(
           });
           l.add(
             PopupMenuItem<int>(
-              value: 2000,
+              value: Constants.commandIncludeClosedAccount,
+              child: renderIconAndText(
+                  Icon(
+                      !settings.includeClosedAccounts
+                          ? Icons.check_box_outline_blank_outlined
+                          : Icons.check_box_outlined,
+                      color: Colors.grey),
+                  'Closed Accounts'),
+            ),
+          );
+          l.add(
+            PopupMenuItem<int>(
+              value: Constants.commandIncludeRentals,
               child: renderIconAndText(
                   Icon(!settings.rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
                       color: Colors.grey),
@@ -63,7 +75,7 @@ PreferredSizeWidget createAppBar(
           return l;
         },
         onSelected: (final int value) {
-          handleColorSelect(settings, onSettingsChanged, value);
+          onAppBarAction(settings, onSettingsChanged, value);
         },
       ),
     ],
@@ -78,15 +90,22 @@ void handleLightDarkModeChanged(final Settings settings, final void Function(Set
   onSettingsChanged(settings);
 }
 
-void handleColorSelect(final Settings settings, final void Function(Settings) onSettingsChanged, final int value) {
-  if (value == 2000) {
-    settings.rentals = !settings.rentals;
-  } else if (value == Constants.commandTextScaleIncrease) {
-    settings.textScale = settings.textScale * 1.10;
-  } else if (value == Constants.commandTextScaleDecrease) {
-    settings.textScale = settings.textScale * 0.9;
-  } else {
-    settings.colorSelected = value;
+void onAppBarAction(
+  final Settings settings,
+  final void Function(Settings) onSettingsChanged,
+  final int value,
+) {
+  switch (value) {
+    case Constants.commandIncludeClosedAccount:
+      settings.includeClosedAccounts = !settings.includeClosedAccounts;
+    case Constants.commandIncludeRentals:
+      settings.rentals = !settings.rentals;
+    case Constants.commandTextScaleIncrease:
+      settings.textScale = settings.textScale * 1.10;
+    case Constants.commandTextScaleDecrease:
+      settings.textScale = settings.textScale * 0.9;
+    default:
+      settings.colorSelected = value;
   }
   settings.save();
   onSettingsChanged(settings);

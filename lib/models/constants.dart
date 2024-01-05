@@ -18,6 +18,8 @@ class Constants {
 
   static const int commandTextScaleIncrease = 3000;
   static const int commandTextScaleDecrease = 3001;
+  static const int commandIncludeClosedAccount = 4000;
+  static const int commandIncludeRentals = 5000;
 }
 
 const List<Color> colorOptions = <Color>[
@@ -43,5 +45,6 @@ const List<String> colorText = <String>[
 const String prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
 const String prefColor = 'themeColor';
 const String prefDarkMode = 'themeDarkMode';
+const String prefIncludeClosedAccounts = 'includeClosedAccounts';
 const String prefRentals = 'rentals';
 const String prefTextScale = 'textScale';

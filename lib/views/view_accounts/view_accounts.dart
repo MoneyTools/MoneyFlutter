@@ -3,6 +3,7 @@ import 'package:money/models/money_entity.dart';
 
 import 'package:money/helpers.dart';
 import 'package:money/models/accounts.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/columns.dart';
@@ -129,6 +130,9 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
   @override
   List<Account> getList() {
-    return Accounts.activeAccount(getSelectedAccountType());
+    return Accounts.activeAccount(
+      getSelectedAccountType(),
+      isActive: Settings().includeClosedAccounts ? null : true,
+    );
   }
 }
