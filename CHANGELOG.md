@@ -1,3 +1,7 @@
+## [1.0.11] 2024-01-05
+
+- Fix the execution of tests
+
 ## [1.0.10] 2024-01-04
 
 - Basic QFX import

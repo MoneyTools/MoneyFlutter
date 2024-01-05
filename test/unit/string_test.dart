@@ -60,12 +60,12 @@ void main() {
   group('String getStringBetweenTwoTokens:', () {
     test('getStringBetweenTwoTokens', () {
       expect(
-        getStringBetweenTwoTokens(
+        getStringDelimitedStartEndTokens(
           'hello Sun in the Sky tonight',
           'Sun',
           'Sky',
         ),
-        ' in the ',
+        'Sun in the Sky',
       );
     });
   });

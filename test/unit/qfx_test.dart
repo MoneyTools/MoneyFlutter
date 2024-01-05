@@ -7,7 +7,7 @@ void main() {
     test('Read', () {
       final String qfxString = getQfxSample();
 
-      final String ofxString = getStringBetweenTwoTokens(qfxString, '<OFX>', '</OFX>');
+      final String ofxString = getStringDelimitedStartEndTokens(qfxString, '<OFX>', '</OFX>');
       expect(ofxString.isEmpty, false);
 
       final List<QFXTransaction> list = getTransactionFromOFX(ofxString);

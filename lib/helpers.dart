@@ -203,7 +203,7 @@ int roundToNextNaturalFit(final int number, final int divisor) {
   return base + divisor;
 }
 
-String getStringBetweenTwoTokens(
+String getStringDelimitedStartEndTokens(
   final String input,
   final String start,
   final String end,

@@ -16,7 +16,7 @@ void importQFX(
   final File file = File(filePath);
 
   final String text = file.readAsStringSync();
-  final String ofx = getStringBetweenTwoTokens(text, '<OFX>', '</OFX>');
+  final String ofx = getStringDelimitedStartEndTokens(text, '<OFX>', '</OFX>');
 
   final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofx);
   final Account? account = Accounts.findByIdAndType(
