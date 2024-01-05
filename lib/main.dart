@@ -6,6 +6,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/data_io/import_qfx.dart';
 import 'package:money/models/data_io/import_qif.dart';
 import 'package:money/models/settings.dart';
@@ -16,7 +17,7 @@ import 'package:money/widgets/keyboard_widget.dart';
 
 import 'package:money/appbar.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/menu.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/views/view_accounts/view_accounts.dart';

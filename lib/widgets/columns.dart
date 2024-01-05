@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/string_helper.dart';
 
 enum ColumnType {
   text,

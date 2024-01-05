@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/color_helper.dart';
 
 /// A Row for a Table view
 class MyTableRow extends StatefulWidget {

@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/widgets/table_view/table_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widgets.dart';
 
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/bottom.dart';
 import 'package:money/widgets/columns.dart';

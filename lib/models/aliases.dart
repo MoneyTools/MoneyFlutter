@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_entity.dart';
 import 'package:money/models/payees.dart';
 
@@ -33,7 +34,7 @@ class Alias extends MoneyEntity {
         return true;
       }
     } else {
-      if (sortByStringIgnoreCase2(name, text) == 0) {
+      if (stringCompareIgnoreCasing2(name, text) == 0) {
         return true;
       }
     }

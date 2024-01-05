@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_entity.dart';
 
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/accounts.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/transactions.dart';

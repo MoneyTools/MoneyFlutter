@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/color_helper.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 
 class Header extends StatelessWidget {

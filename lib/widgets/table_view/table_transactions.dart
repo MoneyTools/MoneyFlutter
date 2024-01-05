@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/accounts.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/payees.dart';
@@ -119,7 +120,7 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
       Transactions.list.where((final Transaction transaction) => filter(transaction)).toList();
 
   list.sort((final Transaction a, final Transaction b) =>
-      sortByStringIgnoreCase2(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+      stringCompareIgnoreCasing2(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {

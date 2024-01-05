@@ -1,7 +1,8 @@
 import 'dart:io';
 
 import 'package:intl/intl.dart';
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/helpers/string_helper.dart';
 
 void importQIF(final String filePath) {
   final File file = File(filePath);

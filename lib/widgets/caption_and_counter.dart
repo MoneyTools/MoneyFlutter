@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/color_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 
 class CaptionAndCounter extends StatelessWidget {
   final String caption;

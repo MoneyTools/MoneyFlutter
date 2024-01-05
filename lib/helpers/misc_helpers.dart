@@ -1,10 +1,7 @@
 import 'dart:math';
-
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
-
 import 'package:flutter/foundation.dart';
 
 num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
@@ -45,71 +42,16 @@ bool isSmallWidth(
   return false;
 }
 
-ThemeData getTheme(final BuildContext context) {
-  return Theme.of(context);
-}
-
-TextTheme getTextTheme(final BuildContext context) {
-  return getTheme(context).textTheme;
-}
-
-ColorScheme getColorTheme(final BuildContext context) {
-  return getTheme(context).colorScheme;
-}
-
 double roundDouble(final double value, final int places) {
   final num mod = pow(10.0, places);
   return ((value * mod).round().toDouble() / mod);
 }
 
-String getIntAsText(final int value) {
-  return NumberFormat.decimalPattern().format(value);
-}
-
-String getCurrencyText(final double amount, [final int decimalDigits = 2]) {
-  final NumberFormat formatCurrency = NumberFormat.simpleCurrency(decimalDigits: decimalDigits);
-
-  return formatCurrency.format(amount);
-}
-
-String getNumberAsShorthandText(final num value, {final int decimalDigits = 0, final String symbol = ''}) {
-  return NumberFormat.compactCurrency(
-    decimalDigits: decimalDigits,
-    symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
-  ).format(value);
-}
-
-String getDateAsText(final DateTime date) {
-  return date.toIso8601String().split('T').first;
-}
-
-int sortByStringIgnoreCase(final String textA, final String textB) {
-  return textA.toUpperCase().compareTo(textB.toUpperCase());
-}
-
-int sortByStringIgnoreCase2(final String str1, final String str2) {
-  final int minLength = min(str1.length, str2.length);
-
-  for (int i = 0; i < minLength; i++) {
-    final int result = str1[i].toLowerCase().compareTo(str2[i].toLowerCase());
-    if (result != 0) {
-      return result;
-    }
-  }
-  if (str1.length == str2.length) {
-    return 0;
-  }
-  if (str1.length > str2.length) {
-    return 1;
-  }
-  return -1;
-}
-
 int sortByString(final dynamic a, final dynamic b, final bool ascending) {
   if (ascending) {
-    return sortByStringIgnoreCase(a as String, b as String);
+    return stringCompareIgnoreCasing1(a as String, b as String);
   } else {
-    return sortByStringIgnoreCase(b as String, a as String);
+    return stringCompareIgnoreCasing1(b as String, a as String);
   }
 }
 
@@ -129,15 +71,6 @@ extension Range on num {
   bool isBetweenOrEqual(final num from, final num to) {
     return from < this && this < to;
   }
-}
-
-/// return the inverted color
-Color invertColor(final Color color) {
-  final int r = 255 - color.red;
-  final int g = 255 - color.green;
-  final int b = 255 - color.blue;
-
-  return Color.fromARGB((color.opacity * 255).round(), r, g, b);
 }
 
 void debugLog(final String message) {
@@ -201,37 +134,4 @@ int roundToNextNaturalFit(final int number, final int divisor) {
   final int remainder = number % divisor;
   final int base = number - remainder;
   return base + divisor;
-}
-
-String getStringDelimitedStartEndTokens(
-  final String input,
-  final String start,
-  final String end,
-) {
-  final String content = getStringContentBetweenTwoTokens(input, start, end);
-  return start + content + end;
-}
-
-String getStringContentBetweenTwoTokens(
-  final String input,
-  final String start,
-  final String end,
-) {
-  final int indexStart = input.indexOf(start);
-  if (indexStart != -1) {
-    final int indexEnd = input.indexOf(end);
-    if (indexEnd != -1) {
-      return input.substring(indexStart + start.length, indexEnd);
-    }
-  }
-  return '';
-}
-
-/// Clean up input string by removing "white noise"
-String getNormalizedValue(final String? s) {
-  if (s == null) {
-    return '';
-  }
-
-  return s.replaceAll("\r\n", " ").replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
 }

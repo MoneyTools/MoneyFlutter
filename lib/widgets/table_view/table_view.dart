@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:money/helpers/helpers.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/widgets/columns.dart';
 import 'package:money/widgets/table_view/table_row.dart';
 
