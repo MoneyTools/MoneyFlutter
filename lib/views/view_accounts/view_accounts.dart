@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_entity.dart';
 
-import 'package:money/helpers.dart';
+import 'package:money/helpers/helpers.dart';
 import 'package:money/models/accounts.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/transactions.dart';
@@ -125,7 +125,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
   @override
   getDefaultSortColumn() {
-    return 0; // Sort by name
+    return Settings().viewAccountSortBy; // Sort by name
   }
 
   @override

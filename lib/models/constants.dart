@@ -48,3 +48,6 @@ const String prefDarkMode = 'themeDarkMode';
 const String prefIncludeClosedAccounts = 'includeClosedAccounts';
 const String prefRentals = 'rentals';
 const String prefTextScale = 'textScale';
+const String prefViews = 'views';
+const String prefSortBy = 'sortBy';
+const String prefSortAscending = 'sortAscending';

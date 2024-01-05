@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/helpers.dart';
+import 'package:money/helpers/helpers.dart';
 
 void main() {
   group('String Comparison:', () {

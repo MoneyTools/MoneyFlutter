@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
-import 'package:money/helpers.dart';
+import 'package:money/helpers/helpers.dart';
 
 class PairXY {
   num yValue = 0.0;

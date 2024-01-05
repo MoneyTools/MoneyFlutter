@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/helpers.dart';
+import 'package:money/helpers/helpers.dart';
 import 'package:money/models/data_io/import_qfx.dart';
 
 void main() {

@@ -1,5 +1,6 @@
 ## [1.0.11] 2024-01-05
 
+- Persist user sorting preference of all Views
 - User choice "Include Closed Accounts"
 - Fix the execution of tests
 

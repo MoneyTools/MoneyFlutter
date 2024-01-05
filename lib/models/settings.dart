@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/json_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:money/helpers.dart';
+import 'package:money/helpers/helpers.dart';
 import 'package:money/models/constants.dart';
+import 'dart:convert';
 
 class Settings {
   bool prefLoaded = false;
@@ -14,7 +16,14 @@ class Settings {
   bool rentals = false;
   bool useDarkMode = false;
   double textScale = 1.0;
+  Map<String, Json> views = <String, Json>{};
+
   Function? onChanged;
+
+  // Views
+  int viewAccountSortBy = 0;
+  bool viewAccountSortAscending = false;
+
   static final Settings _singleton = Settings._internal();
 
   factory Settings() {
@@ -36,6 +45,9 @@ class Settings {
     pathToDatabase = preferences.getString(prefLastLoadedPathToDatabase);
     rentals = preferences.getBool(prefRentals) == true;
     includeClosedAccounts = preferences.getBool(prefIncludeClosedAccounts) == true;
+
+    views = loadMapFromPrefs(preferences, prefViews);
+
     prefLoaded = true;
     if (onLoaded != null) {
       onLoaded();
@@ -49,6 +61,9 @@ class Settings {
     preferences.setBool(prefDarkMode, useDarkMode);
     preferences.setBool(prefIncludeClosedAccounts, includeClosedAccounts);
     preferences.setBool(prefRentals, rentals);
+
+    saveMapToPrefs(preferences, prefViews, views);
+
     if (pathToDatabase == null) {
       preferences.remove(prefLastLoadedPathToDatabase);
     } else {
@@ -67,5 +82,36 @@ class Settings {
       brightness: useDarkMode ? Brightness.dark : Brightness.light,
     );
     return themeData;
+  }
+
+  Map<String, Json> loadMapFromPrefs(
+    final SharedPreferences prefs,
+    final String key,
+  ) {
+    try {
+      final String? serializedMap = prefs.getString(key);
+      if (serializedMap != null) {
+        // first deserialize
+        final Map<String, dynamic> parsedMap = json.decode(serializedMap) as Map<String, dynamic>;
+
+        // second to JSon map
+        final Map<String, Json> resultMap =
+            parsedMap.map((final String key, final dynamic value) => MapEntry<String, Json>(key, value as Json));
+
+        return resultMap;
+      }
+    } catch (_) {
+      //
+    }
+
+    return <String, Json>{};
+  }
+
+  void saveMapToPrefs(
+    final SharedPreferences prefs,
+    final String key,
+    final Map<String, Json> mapOfJson,
+  ) {
+    prefs.setString(key, json.encode(mapOfJson));
   }
 }

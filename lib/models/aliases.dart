@@ -1,5 +1,5 @@
 import 'package:collection/collection.dart';
-import 'package:money/helpers.dart';
+import 'package:money/helpers/helpers.dart';
 import 'package:money/models/money_entity.dart';
 import 'package:money/models/payees.dart';
 

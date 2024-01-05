@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:money/helpers/json_helper.dart';
+import 'package:money/models/constants.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/widgets/table_view/table_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widgets.dart';
 
-import 'package:money/helpers.dart';
+import 'package:money/helpers/helpers.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/bottom.dart';
 import 'package:money/widgets/columns.dart';
@@ -55,8 +58,23 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void initState() {
     super.initState();
     columns = getColumnDefinitionsForTable();
-    sortByColumn = getDefaultSortColumn();
+
+    final Json? viewSetting = Settings().views[getClassNameSingular()];
+    if (viewSetting != null) {
+      sortByColumn = jsonGetInt(
+        viewSetting,
+        prefSortBy,
+        getDefaultSortColumn(),
+      );
+      sortAscending = jsonGetBool(
+        viewSetting,
+        prefSortAscending,
+        true,
+      );
+    }
+
     list = getList();
+
     onSort();
   }
 
@@ -116,16 +134,16 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           Expanded(
             flex: 1,
             child: MyTableView<T>(
-                list: getList(),
-                columns: columns,
-                onTap: onRowTap,
-                onDoubleTap: (final BuildContext context, final int index) {
-                  if (widget.preference.showBottom) {
-                    setState(() {
-                      isBottomPanelExpanded = true;
-                    });
-                  }
-                }),
+              list: getList(),
+              columns: columns,
+              onTap: onRowTap,
+              // onDoubleTap: (final BuildContext context, final int index) {
+              //   if (widget.preference.showBottom) {
+              //     setState(() {
+              //       isBottomPanelExpanded = true;
+              //     });
+              //   }
+            ),
           ),
 
           // Optional bottom details panel
@@ -237,6 +255,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       } else {
         sortByColumn = columnNumber;
       }
+
+      // Persist users choice
+      Settings().views[getClassNameSingular()] = <String, dynamic>{
+        prefSortBy: sortByColumn,
+        prefSortAscending: sortAscending,
+      };
+
+      Settings().save();
       onSort();
     });
   }
