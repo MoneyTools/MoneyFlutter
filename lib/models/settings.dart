@@ -14,7 +14,7 @@ class Settings {
   bool rentals = false;
   bool useDarkMode = false;
   double textScale = 1.0;
-
+  Function? onChanged;
   static final Settings _singleton = Settings._internal();
 
   factory Settings() {
@@ -22,6 +22,10 @@ class Settings {
   }
 
   Settings._internal();
+
+  fireOnChanged() {
+    onChanged?.call();
+  }
 
   load({final Function? onLoaded}) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();

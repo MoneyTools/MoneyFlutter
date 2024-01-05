@@ -14,6 +14,7 @@ dtposted
 dtposted
 fitid
 fitid
+mmdb
 moneymarket
 repeatpmt
 srvchg
@@ -23,4 +24,5 @@ trnamt
 trnamt
 trntype
 trntype
+uint
 xfer

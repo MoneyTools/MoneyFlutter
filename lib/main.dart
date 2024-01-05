@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
@@ -45,6 +46,21 @@ class _MyMoneyState extends State<MyMoney> {
     settings.load(onLoaded: () {
       loadData();
     });
+
+    settings.onChanged = () {
+      // Brute force refresh the app UI
+      setState(() {
+        _isLoading = true;
+      });
+      Timer(
+        const Duration(milliseconds: 1),
+        () {
+          setState(() {
+            _isLoading = false;
+          });
+        },
+      );
+    };
   }
 
   bool shouldShowOpenInstructions() {
@@ -120,7 +136,7 @@ class _MyMoneyState extends State<MyMoney> {
     settings.pathToDatabase = null;
     settings.save();
     data.close();
-    setState(() {});
+    settings.fireOnChanged();
   }
 
   void handleUseDemoData() async {
@@ -138,9 +154,7 @@ class _MyMoneyState extends State<MyMoney> {
         case "qfx":
           importQFX(pickerResult.files.single.path.toString(), data);
       }
-      setState(() {
-        // update UI
-      });
+      settings.fireOnChanged();
     }
   }
 
@@ -175,11 +189,9 @@ class _MyMoneyState extends State<MyMoney> {
   Widget welcomePanel(final BuildContext context) {
     return Scaffold(
       appBar: createAppBar(
-        settings,
         handleFileOpen,
         handleFileClose,
         handleImport,
-        onSettingsChanged,
       ),
       body: Row(children: <Widget>[
         renderWelcomeAndOpen(context),
@@ -233,10 +245,9 @@ class _MyMoneyState extends State<MyMoney> {
                     LogicalKeyboardKey.minus,
                     'Decrease text size',
                     () {
-                      setState(() {
-                        settings.textScale = max(0.5, settings.textScale * 0.90);
-                        settings.save();
-                      });
+                      settings.textScale = max(0.5, settings.textScale * 0.90);
+                      settings.save();
+                      settings.fireOnChanged();
                     },
                     isMetaPressed: true,
                   ),
@@ -244,10 +255,9 @@ class _MyMoneyState extends State<MyMoney> {
                     LogicalKeyboardKey('0'.codeUnitAt(0)),
                     'Normal text suze',
                     () {
-                      setState(() {
-                        settings.textScale = 1;
-                        settings.save();
-                      });
+                      settings.textScale = 1;
+                      settings.save();
+                      settings.fireOnChanged();
                     },
                     isMetaPressed: true,
                   ),
@@ -275,11 +285,9 @@ class _MyMoneyState extends State<MyMoney> {
   Widget getScaffoldingForSmallSurface(final BuildContext context) {
     return Scaffold(
       appBar: createAppBar(
-        settings,
         handleFileOpen,
         handleFileClose,
         handleImport,
-        onSettingsChanged,
       ),
       body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
       bottomNavigationBar:
@@ -290,11 +298,9 @@ class _MyMoneyState extends State<MyMoney> {
   Widget getScaffoldingForLargeSurface(final BuildContext context) {
     return Scaffold(
       appBar: createAppBar(
-        settings,
         handleFileOpen,
         handleFileClose,
         handleImport,
-        onSettingsChanged,
       ),
       body: SafeArea(
         bottom: false,
@@ -320,8 +326,6 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void onSettingsChanged(final Settings settings) {
-    setState(() {
-      this.settings = settings;
-    });
+    settings.fireOnChanged();
   }
 }
