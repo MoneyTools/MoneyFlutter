@@ -229,12 +229,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final FieldDefinitions<T> detailPanelFields = getFieldDefinitionsForDetailsPanel();
     if (indices.isNotEmpty) {
       final int index = indices.first;
-      return Center(
+      return SingleChildScrollView(
         key: Key(index.toString()),
-        child: SingleChildScrollView(
-          child: Column(
-            children: detailPanelFields.getCellsForDetailsPanel(index),
-          ),
+        child: Column(
+          children: detailPanelFields.getCellsForDetailsPanel(index),
         ),
       );
     }

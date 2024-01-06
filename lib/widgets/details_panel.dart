@@ -23,53 +23,73 @@ class DetailsPanel extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         const Divider(thickness: 1, height: 1),
-        Row(children: <Widget>[
-          Expanded(child: getRowOfTabs()),
-          IconButton(
-              onPressed: () {
-                onExpanded(!isExpanded);
-              },
-              icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less))
-        ]),
-        if (isExpanded)
-          ValueListenableBuilder<List<int>>(
-            valueListenable: selectedItems,
-            builder: (final BuildContext context, final List<int> list, final _) {
-              return Expanded(
-                  child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: getBottomContentToRender(selectedTabId, list),
-              ));
-            },
-          ),
+        _buildTabs(context),
+        if (isExpanded) _buildContent(),
       ],
     );
   }
 
-  Widget getRowOfTabs() {
+  Widget getTabButton(final BuildContext context, final num id, final String text) {
+    final bool isSelected = selectedTabId == id;
+
+    return Container(
+      decoration: BoxDecoration(
+        color: isSelected ? Theme.of(context).colorScheme.secondaryContainer : null,
+        borderRadius: const BorderRadius.horizontal(
+          left: Radius.circular(50),
+          right: Radius.circular(50),
+        ),
+      ),
+      child: TextButton(
+          onPressed: () {
+            // is use tap directly on one of the tabs
+            if (!isExpanded) {
+              onExpanded(true);
+            }
+            onTabActivated(id);
+          },
+          style: TextButton.styleFrom(
+            textStyle: TextStyle(fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
+          ),
+          child: Text(text)),
+    );
+  }
+
+  Widget getRowOfTabs(final BuildContext context) {
     return Row(
       children: <Widget>[
-        getTabButton(0, 'Details'),
-        getTabButton(1, 'Chart'),
-        getTabButton(2, 'Transactions'),
+        getTabButton(context, 0, 'Details'),
+        getTabButton(context, 1, 'Chart'),
+        getTabButton(context, 2, 'Transactions'),
       ],
     );
   }
 
-  Widget getTabButton(final num id, final String text) {
-    return TextButton(
-        onPressed: () {
-          if (!isExpanded) {
-            onExpanded(true);
-          }
+  Widget _buildTabs(final BuildContext context) {
+    return Row(children: <Widget>[
+      // List of tab buttons
+      Expanded(child: getRowOfTabs(context)),
 
-          onTabActivated(id);
+      // Expando
+      IconButton(
+          onPressed: () {
+            onExpanded(!isExpanded);
+          },
+          icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less))
+    ]);
+  }
+
+  Widget _buildContent() {
+    return Expanded(
+      child: ValueListenableBuilder<List<int>>(
+        valueListenable: selectedItems,
+        builder: (final BuildContext context, final List<int> list, final _) {
+          return getBottomContentToRender(selectedTabId, list);
         },
-        style: TextButton.styleFrom(
-          textStyle: TextStyle(fontWeight: selectedTabId == id ? FontWeight.bold : FontWeight.normal),
-        ),
-        child: Text(text));
+      ),
+    );
   }
 }
