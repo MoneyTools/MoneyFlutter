@@ -3,6 +3,8 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/aliases.dart';
 import 'package:money/models/payees.dart';
 import 'package:money/models/rentals.dart';
+import 'package:money/models/transactions.dart';
+import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/widget_view.dart';
@@ -39,7 +41,8 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
         return Payees.getNameFromId(list[index].payeeId);
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
-        return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
+        return sortByString(Payees.getNameFromId(a.payeeId),
+            Payees.getNameFromId(b.payeeId), sortAscending);
       },
     );
   }
@@ -67,7 +70,8 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
         return list[index].type.toString();
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
-        return sortByString(a.type.toString(), b.type.toString(), sortAscending);
+        return sortByString(
+            a.type.toString(), b.type.toString(), sortAscending);
       },
     );
   }
@@ -83,7 +87,8 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   FieldDefinitions<Alias> getFieldDefinitionsForDetailsPanel() {
-    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
+    final FieldDefinitions<Alias> fields =
+        FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
       getFieldForPattern(),
       getFieldForType(),
     ]);
@@ -117,6 +122,17 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   getSubViewContentForTransactions(final List<int> indices) {
+    final Alias? alias = getFirstElement<Alias>(indices, list);
+    if (alias != null && alias.id > -1) {
+      final Payee payee = alias.payee;
+      return ViewTransactions(
+        key: Key(payee.id.toString()),
+        filter: (final Transaction transaction) =>
+            transaction.payeeId == payee.id,
+        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
+        startingBalance: 0,
+      );
+    }
     return const Text('No transactions');
   }
 }
