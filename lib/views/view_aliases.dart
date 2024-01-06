@@ -41,8 +41,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
         return Payees.getNameFromId(list[index].payeeId);
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
-        return sortByString(Payees.getNameFromId(a.payeeId),
-            Payees.getNameFromId(b.payeeId), sortAscending);
+        return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
       },
     );
   }
@@ -70,8 +69,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
         return list[index].type.toString();
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
-        return sortByString(
-            a.type.toString(), b.type.toString(), sortAscending);
+        return sortByString(a.type.toString(), b.type.toString(), sortAscending);
       },
     );
   }
@@ -87,8 +85,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   FieldDefinitions<Alias> getFieldDefinitionsForDetailsPanel() {
-    final FieldDefinitions<Alias> fields =
-        FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
+    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
       getFieldForPattern(),
       getFieldForType(),
     ]);
@@ -127,8 +124,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
       final Payee payee = alias.payee;
       return ViewTransactions(
         key: Key(payee.id.toString()),
-        filter: (final Transaction transaction) =>
-            transaction.payeeId == payee.id,
+        filter: (final Transaction transaction) => transaction.payeeId == payee.id,
         preference: preferenceJustTableDatePayeeCategoryAmountBalance,
         startingBalance: 0,
       );

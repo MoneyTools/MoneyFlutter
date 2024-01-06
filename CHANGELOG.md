@@ -1,3 +1,7 @@
+## [1.0.12] 2024-01-06
+
+- View Aliases - Show transactions for the selected alias
+
 ## [1.0.11] 2024-01-05
 
 - Persist user sorting preference of all Views
