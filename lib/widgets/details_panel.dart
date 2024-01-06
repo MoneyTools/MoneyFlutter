@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class BottomPanel extends StatelessWidget {
+class DetailsPanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
@@ -9,7 +9,7 @@ class BottomPanel extends StatelessWidget {
   final Function onTabActivated;
   final Widget Function(int, List<int>) getBottomContentToRender;
 
-  const BottomPanel({
+  const DetailsPanel({
     super.key,
     required this.selectedItems,
     required this.selectedTabId,
@@ -39,7 +39,7 @@ class BottomPanel extends StatelessWidget {
             builder: (final BuildContext context, final List<int> list, final _) {
               return Expanded(
                   child: Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: getBottomContentToRender(selectedTabId, list),
               ));
             },

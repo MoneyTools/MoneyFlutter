@@ -11,7 +11,7 @@ import 'package:money/widgets/widgets.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/widgets/header.dart';
-import 'package:money/widgets/bottom.dart';
+import 'package:money/widgets/details_panel.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
@@ -153,7 +153,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             Expanded(
               flex: isBottomPanelExpanded ? 1 : 0,
               // this will split the vertical view when expanded
-              child: BottomPanel(
+              child: DetailsPanel(
                 isExpanded: isBottomPanelExpanded,
                 onExpanded: (final bool isExpanded) {
                   setState(() {
