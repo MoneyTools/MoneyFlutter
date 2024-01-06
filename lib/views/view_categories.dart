@@ -4,7 +4,8 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/views/view_transactions.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/field.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
@@ -88,11 +89,11 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   }
 
   @override
-  ColumnDefinitions<Category> getColumnDefinitionsForTable() {
-    return ColumnDefinitions<Category>(list: <ColumnDefinition<Category>>[
-      ColumnDefinition<Category>(
+  FieldDefinitions<Category> getFieldDefinitionsForTable() {
+    return FieldDefinitions<Category>(list: <FieldDefinition<Category>>[
+      FieldDefinition<Category>(
         name: 'Name',
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return list[index].name;
@@ -101,9 +102,9 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
           return sortByString(a.name, b.name, sortAscending);
         },
       ),
-      ColumnDefinition<Category>(
+      FieldDefinition<Category>(
         name: 'Type',
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.center,
         value: (final int index) {
           return (list[index]).getTypeAsText();
@@ -116,9 +117,9 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
           );
         },
       ),
-      ColumnDefinition<Category>(
+      FieldDefinition<Category>(
         name: 'Count',
-        type: ColumnType.numeric,
+        type: FieldType.numeric,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].count;
@@ -127,9 +128,9 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
           return sortByValue(a.count, b.count, sortAscending);
         },
       ),
-      ColumnDefinition<Category>(
+      FieldDefinition<Category>(
         name: 'Balance',
-        type: ColumnType.amount,
+        type: FieldType.amount,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].balance;

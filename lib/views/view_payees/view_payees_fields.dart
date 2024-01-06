@@ -1,11 +1,11 @@
 part of 'view_payees.dart';
 
 extension ViewPayeesColumns on ViewPayeesState {
-  ColumnDefinitions<Payee> _getColumnDefinitionsForTable() {
-    return ColumnDefinitions<Payee>(list: <ColumnDefinition<Payee>>[
-      ColumnDefinition<Payee>(
+  FieldDefinitions<Payee> _getFieldDefinitionsForTable() {
+    return FieldDefinitions<Payee>(list: <FieldDefinition<Payee>>[
+      FieldDefinition<Payee>(
         name: 'Name',
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return list[index].name;
@@ -14,9 +14,9 @@ extension ViewPayeesColumns on ViewPayeesState {
           return sortByString(a.name, b.name, sortAscending);
         },
       ),
-      ColumnDefinition<Payee>(
+      FieldDefinition<Payee>(
         name: 'Count',
-        type: ColumnType.numeric,
+        type: FieldType.numeric,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].count;
@@ -29,9 +29,9 @@ extension ViewPayeesColumns on ViewPayeesState {
           );
         },
       ),
-      ColumnDefinition<Payee>(
+      FieldDefinition<Payee>(
         name: 'Balance',
-        type: ColumnType.amount,
+        type: FieldType.amount,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].balance;

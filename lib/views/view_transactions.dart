@@ -4,11 +4,12 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/widget_view.dart';
 
 class ViewTransactions extends ViewWidget<Transaction> {
@@ -107,14 +108,14 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  ColumnDefinitions<Transaction> getColumnDefinitionsForTable() {
-    final List<ColumnDefinition<Transaction>> listOfColumns = <ColumnDefinition<Transaction>>[];
+  FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
+    final List<FieldDefinition<Transaction>> listOfColumns = <FieldDefinition<Transaction>>[];
 
     for (String columnId in widget.preference.columnsToInclude) {
-      listOfColumns.add(getColumnDefinitionFromId(columnId, () => list)!);
+      listOfColumns.add(getFieldDefinitionFromId(columnId, () => list)!);
     }
 
-    return ColumnDefinitions<Transaction>(list: listOfColumns);
+    return FieldDefinitions<Transaction>(list: listOfColumns);
   }
 
   @override

@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/field.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/table_view/table_row.dart';
 
 class MyTableView<T> extends StatefulWidget {
-  final ColumnDefinitions<T> columns;
+  final FieldDefinitions<T> columns;
   final List<T> list;
   final Function? onTap;
   final Function? onDoubleTap;
@@ -29,8 +30,8 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   final ScrollController scrollController = ScrollController();
   num currentIndex = 0;
 
-  ColumnDefinitions<T> getColumnDefinitions() {
-    return ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
+  FieldDefinitions<T> getFieldDefinitions() {
+    return FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
   }
 
   @override

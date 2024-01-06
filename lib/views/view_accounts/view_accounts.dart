@@ -6,14 +6,15 @@ import 'package:money/models/accounts.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/caption_and_counter.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/field.dart';
+import 'package:money/widgets/fields/fields.dart';
 
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_view.dart';
 
-part 'view_accounts_columns.dart';
+part 'view_accounts_fields.dart';
 
 part 'view_accounts_helpers.dart';
 
@@ -119,8 +120,8 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  ColumnDefinitions<Account> getColumnDefinitionsForTable() {
-    return _getColumnDefinitionsForTable();
+  FieldDefinitions<Account> getFieldDefinitionsForTable() {
+    return _getFieldDefinitionsForTable();
   }
 
   @override

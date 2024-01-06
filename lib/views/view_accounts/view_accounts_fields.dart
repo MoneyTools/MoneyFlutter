@@ -1,11 +1,11 @@
 part of 'view_accounts.dart';
 
 extension ViewAccountsColumns on ViewAccountsState {
-  ColumnDefinitions<Account> _getColumnDefinitionsForTable() {
-    final List<ColumnDefinition<Account>> fieldDefinitions = <ColumnDefinition<Account>>[
-      ColumnDefinition<Account>(
+  FieldDefinitions<Account> _getFieldDefinitionsForTable() {
+    final List<FieldDefinition<Account>> fieldDefinitions = <FieldDefinition<Account>>[
+      FieldDefinition<Account>(
         name: 'Name',
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return list[index].name;
@@ -18,9 +18,9 @@ extension ViewAccountsColumns on ViewAccountsState {
           );
         },
       ),
-      ColumnDefinition<Account>(
+      FieldDefinition<Account>(
         name: 'Type',
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.center,
         value: (final int index) {
           return list[index].getTypeAsText();
@@ -33,9 +33,9 @@ extension ViewAccountsColumns on ViewAccountsState {
           );
         },
       ),
-      ColumnDefinition<Account>(
+      FieldDefinition<Account>(
         name: 'Count',
-        type: ColumnType.numeric,
+        type: FieldType.numeric,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].count;
@@ -48,9 +48,9 @@ extension ViewAccountsColumns on ViewAccountsState {
           );
         },
       ),
-      ColumnDefinition<Account>(
+      FieldDefinition<Account>(
         name: 'Balance',
-        type: ColumnType.amount,
+        type: FieldType.amount,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].balance;
@@ -67,9 +67,9 @@ extension ViewAccountsColumns on ViewAccountsState {
 
     if (Settings().includeClosedAccounts) {
       fieldDefinitions.add(
-        ColumnDefinition<Account>(
+        FieldDefinition<Account>(
           name: 'Status',
-          type: ColumnType.text,
+          type: FieldType.text,
           align: TextAlign.center,
           value: (final int index) {
             return list[index].isClosed() ? 'Closed' : 'Active';
@@ -85,6 +85,6 @@ extension ViewAccountsColumns on ViewAccountsState {
       );
     }
 
-    return ColumnDefinitions<Account>(list: fieldDefinitions);
+    return FieldDefinitions<Account>(list: fieldDefinitions);
   }
 }

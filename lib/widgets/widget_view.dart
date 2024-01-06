@@ -4,6 +4,7 @@ import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/table_view/table_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widgets.dart';
@@ -11,7 +12,7 @@ import 'package:money/widgets/widgets.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/bottom.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
 class ViewWidget<T> extends StatefulWidget {
@@ -25,7 +26,7 @@ class ViewWidget<T> extends StatefulWidget {
 }
 
 class ViewWidgetState<T> extends State<ViewWidget<T>> {
-  ColumnDefinitions<T> columns = ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
+  FieldDefinitions<T> columns = FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
 
   final ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
   final double itemHeight = 30;
@@ -47,18 +48,18 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
-  ColumnDefinitions<T> getColumnDefinitionsForTable() {
-    return ColumnDefinitions<T>(list: <ColumnDefinition<T>>[]);
+  FieldDefinitions<T> getFieldDefinitionsForTable() {
+    return FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
   }
 
-  ColumnDefinitions<T> getColumnDefinitionsForDetailsPanel() {
-    return getColumnDefinitionsForTable();
+  FieldDefinitions<T> getFieldDefinitionsForDetailsPanel() {
+    return getFieldDefinitionsForTable();
   }
 
   @override
   void initState() {
     super.initState();
-    columns = getColumnDefinitionsForTable();
+    columns = getFieldDefinitionsForTable();
 
     final Json? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
@@ -101,8 +102,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   void onSort() {
     if (columns.list.isNotEmpty) {
-      final ColumnDefinition<T> columnDefinition = columns.list[sortByColumn];
-      final int Function(T p1, T p2, bool p3) sortFunction = columnDefinition.sort;
+      final FieldDefinition<T> fieldDefinition = columns.list[sortByColumn];
+      final int Function(T p1, T p2, bool p3) sortFunction = fieldDefinition.sort;
 
       list.sort((final T a, final T b) {
         return sortFunction(a, b, sortAscending);
@@ -225,7 +226,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   Widget getSubViewContentForDetails(final List<int> indices) {
-    final ColumnDefinitions<T> detailPanelFields = getColumnDefinitionsForDetailsPanel();
+    final FieldDefinitions<T> detailPanelFields = getFieldDefinitionsForDetailsPanel();
     if (indices.isNotEmpty) {
       final int index = indices.first;
       return Center(
@@ -275,7 +276,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return SortIndicator.none;
   }
 
-  List<String> getUniqueInstances(final ColumnDefinition<T> columnToCustomerFilterOn) {
+  List<String> getUniqueInstances(final FieldDefinition<T> columnToCustomerFilterOn) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
@@ -287,7 +288,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return uniqueValues;
   }
 
-  List<double> getMinMaxValues(final ColumnDefinition<T> columnToCustomerFilterOn) {
+  List<double> getMinMaxValues(final FieldDefinition<T> columnToCustomerFilterOn) {
     double min = 0;
     double max = 0;
     final List<T> list = getList();
@@ -304,7 +305,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <double>[min, max];
   }
 
-  List<String> getMinMaxDates(final ColumnDefinition<T> columnToCustomerFilterOn) {
+  List<String> getMinMaxDates(final FieldDefinition<T> columnToCustomerFilterOn) {
     String min = '';
     String max = '';
 
@@ -323,11 +324,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <String>[min, max];
   }
 
-  onCustomizeColumn(final ColumnDefinition<T> columnToCustomerFilterOn) {
+  onCustomizeColumn(final FieldDefinition<T> columnToCustomerFilterOn) {
     Widget content;
 
     switch (columnToCustomerFilterOn.type) {
-      case ColumnType.amount:
+      case FieldType.amount:
         {
           final List<double> minMax = getMinMaxValues(columnToCustomerFilterOn);
           content = Column(children: <Widget>[
@@ -337,7 +338,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           break;
         }
 
-      case ColumnType.date:
+      case FieldType.date:
         {
           final List<String> minMax = getMinMaxDates(columnToCustomerFilterOn);
           content = Column(children: <Widget>[
@@ -346,7 +347,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           ]);
           break;
         }
-      case ColumnType.text:
+      case FieldType.text:
       default:
         {
           listOfUniqueInstances = getUniqueInstances(columnToCustomerFilterOn);

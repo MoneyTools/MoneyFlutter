@@ -3,7 +3,8 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/aliases.dart';
 import 'package:money/models/payees.dart';
 import 'package:money/models/rentals.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/field.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/widget_view.dart';
 
 class ViewAliases extends ViewWidget<Alias> {
@@ -29,10 +30,10 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
     return 'Payee aliases.';
   }
 
-  ColumnDefinition<Alias> getColumnForPayee() {
-    return ColumnDefinition<Alias>(
+  FieldDefinition<Alias> getFieldForPayee() {
+    return FieldDefinition<Alias>(
       name: 'Payee',
-      type: ColumnType.text,
+      type: FieldType.text,
       align: TextAlign.left,
       value: (final int index) {
         return Payees.getNameFromId(list[index].payeeId);
@@ -43,10 +44,10 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
     );
   }
 
-  ColumnDefinition<Alias> getColumnForPattern() {
-    return ColumnDefinition<Alias>(
+  FieldDefinition<Alias> getFieldForPattern() {
+    return FieldDefinition<Alias>(
       name: 'Pattern',
-      type: ColumnType.text,
+      type: FieldType.text,
       align: TextAlign.left,
       value: (final int index) {
         return list[index].name;
@@ -57,10 +58,10 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
     );
   }
 
-  ColumnDefinition<Alias> getColumnForType() {
-    return ColumnDefinition<Alias>(
+  FieldDefinition<Alias> getFieldForType() {
+    return FieldDefinition<Alias>(
       name: 'Type',
-      type: ColumnType.text,
+      type: FieldType.text,
       align: TextAlign.left,
       value: (final int index) {
         return list[index].type.toString();
@@ -72,19 +73,19 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   }
 
   @override
-  ColumnDefinitions<Alias> getColumnDefinitionsForTable() {
-    return ColumnDefinitions<Alias>(list: <ColumnDefinition<Alias>>[
-      getColumnForPayee(),
-      getColumnForPattern(),
-      getColumnForType(),
+  FieldDefinitions<Alias> getFieldDefinitionsForTable() {
+    return FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
+      getFieldForPayee(),
+      getFieldForPattern(),
+      getFieldForType(),
     ]);
   }
 
   @override
-  ColumnDefinitions<Alias> getColumnDefinitionsForDetailsPanel() {
-    final ColumnDefinitions<Alias> fields = ColumnDefinitions<Alias>(list: <ColumnDefinition<Alias>>[
-      getColumnForPattern(),
-      getColumnForType(),
+  FieldDefinitions<Alias> getFieldDefinitionsForDetailsPanel() {
+    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
+      getFieldForPattern(),
+      getFieldForType(),
     ]);
 
     return fields;

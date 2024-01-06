@@ -6,7 +6,8 @@ import 'package:money/models/categories.dart';
 import 'package:money/models/rentals.dart';
 import 'package:money/models/splits.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/field.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_view.dart';
 import 'package:money/views/view_transactions.dart';
@@ -34,10 +35,10 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
     return 'Properties to rent.';
   }
 
-  ColumnDefinition<Rental> getColumnForName() {
-    return ColumnDefinition<Rental>(
+  FieldDefinition<Rental> getColumnForName() {
+    return FieldDefinition<Rental>(
       name: 'Name',
-      type: ColumnType.text,
+      type: FieldType.text,
       align: TextAlign.left,
       value: (final int index) {
         return list[index].name;
@@ -48,10 +49,10 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
     );
   }
 
-  ColumnDefinition<Rental> getColumnForAddress() {
-    return ColumnDefinition<Rental>(
+  FieldDefinition<Rental> getColumnForAddress() {
+    return FieldDefinition<Rental>(
       name: 'Address',
-      type: ColumnType.text,
+      type: FieldType.text,
       align: TextAlign.left,
       value: (final int index) {
         return list[index].address;
@@ -62,10 +63,10 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
     );
   }
 
-  ColumnDefinition<Rental> getColumnForNote() {
-    return ColumnDefinition<Rental>(
+  FieldDefinition<Rental> getColumnForNote() {
+    return FieldDefinition<Rental>(
       name: 'Note',
-      type: ColumnType.text,
+      type: FieldType.text,
       align: TextAlign.left,
       value: (final int index) {
         return list[index].note;
@@ -77,14 +78,14 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
   }
 
   @override
-  ColumnDefinitions<Rental> getColumnDefinitionsForTable() {
-    return ColumnDefinitions<Rental>(list: <ColumnDefinition<Rental>>[
+  FieldDefinitions<Rental> getFieldDefinitionsForTable() {
+    return FieldDefinitions<Rental>(list: <FieldDefinition<Rental>>[
       getColumnForName(),
       getColumnForAddress(),
       getColumnForNote(),
-      ColumnDefinition<Rental>(
+      FieldDefinition<Rental>(
         name: 'In Service',
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return (list[index]).dateRange.toStringYears();
@@ -93,9 +94,9 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
           return sortByString(a.dateRange.toString(), b.dateRange.toString(), sortAscending);
         },
       ),
-      ColumnDefinition<Rental>(
+      FieldDefinition<Rental>(
         name: 'Transactions',
-        type: ColumnType.numeric,
+        type: FieldType.numeric,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].count;
@@ -104,9 +105,9 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
           return sortByValue(a.count, b.count, sortAscending);
         },
       ),
-      ColumnDefinition<Rental>(
+      FieldDefinition<Rental>(
         name: 'Revenue',
-        type: ColumnType.amountShorthand,
+        type: FieldType.amountShorthand,
         align: TextAlign.right,
         value: (final int index) {
           return (list[index]).revenue;
@@ -115,9 +116,9 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
           return sortByValue(a.revenue, b.revenue, sortAscending);
         },
       ),
-      ColumnDefinition<Rental>(
+      FieldDefinition<Rental>(
         name: 'Expense',
-        type: ColumnType.amountShorthand,
+        type: FieldType.amountShorthand,
         align: TextAlign.right,
         value: (final int index) {
           return (list[index]).expense;
@@ -126,9 +127,9 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
           return sortByValue(a.expense, b.expense, sortAscending);
         },
       ),
-      ColumnDefinition<Rental>(
+      FieldDefinition<Rental>(
         name: 'Profit',
-        type: ColumnType.amountShorthand,
+        type: FieldType.amountShorthand,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].profit;
@@ -141,13 +142,13 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
   }
 
   @override
-  ColumnDefinitions<Rental> getColumnDefinitionsForDetailsPanel() {
-    final ColumnDefinitions<Rental> fields = ColumnDefinitions<Rental>(
-        list: <ColumnDefinition<Rental>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
+  FieldDefinitions<Rental> getFieldDefinitionsForDetailsPanel() {
+    final FieldDefinitions<Rental> fields = FieldDefinitions<Rental>(
+        list: <FieldDefinition<Rental>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
 
-    final ColumnDefinition<Rental> fieldUnit = ColumnDefinition<Rental>(
+    final FieldDefinition<Rental> fieldUnit = FieldDefinition<Rental>(
       name: 'Unit',
-      type: ColumnType.amount,
+      type: FieldType.amount,
       align: TextAlign.right,
       isMultiLine: true,
       value: (final int index) {

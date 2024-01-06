@@ -5,7 +5,8 @@ import 'package:money/models/accounts.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/payees.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/field.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/table_view/table_header.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
@@ -34,12 +35,12 @@ class TableTransactions extends StatefulWidget {
 class _TableTransactionsState extends State<TableTransactions> {
   int sortBy = 0;
   bool sortAscending = true;
-  late final ColumnDefinitions<Transaction> columns;
+  late final FieldDefinitions<Transaction> columns;
 
   @override
   void initState() {
     super.initState();
-    columns = getColumnDefinitionsForTable();
+    columns = getFieldDefinitionsForTable();
     onSort();
   }
 
@@ -79,12 +80,12 @@ class _TableTransactionsState extends State<TableTransactions> {
   }
 
   void onSort() {
-    final ColumnDefinition<Transaction> columnDefinition = columns.list[sortBy];
+    final FieldDefinition<Transaction> fieldDefinition = columns.list[sortBy];
     final int Function(
       Transaction p1,
       Transaction p2,
       bool p3,
-    ) sortFunction = columnDefinition.sort;
+    ) sortFunction = fieldDefinition.sort;
 
     widget.getList().sort((final Transaction a, final Transaction b) {
       return sortFunction(a, b, sortAscending);
@@ -98,14 +99,14 @@ class _TableTransactionsState extends State<TableTransactions> {
     return SortIndicator.none;
   }
 
-  ColumnDefinitions<Transaction> getColumnDefinitionsForTable() {
-    final List<ColumnDefinition<Transaction>> listOfColumns = <ColumnDefinition<Transaction>>[];
+  FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
+    final List<FieldDefinition<Transaction>> listOfColumns = <FieldDefinition<Transaction>>[];
 
     for (String columnId in widget.columnsToInclude) {
-      listOfColumns.add(getColumnDefinitionFromId(columnId, widget.getList)!);
+      listOfColumns.add(getFieldDefinitionFromId(columnId, widget.getList)!);
     }
 
-    return ColumnDefinitions<Transaction>(list: listOfColumns);
+    return FieldDefinitions<Transaction>(list: listOfColumns);
   }
 }
 
@@ -130,15 +131,15 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
   return list;
 }
 
-ColumnDefinition<Transaction>? getColumnDefinitionFromId(
+FieldDefinition<Transaction>? getFieldDefinitionFromId(
   final String id,
   final List<Transaction> Function() getList,
 ) {
   switch (id) {
     case columnIdAccount:
-      return ColumnDefinition<Transaction>(
+      return FieldDefinition<Transaction>(
         name: columnIdAccount,
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return Accounts.getNameFromId((getList()[index]).accountId);
@@ -148,9 +149,9 @@ ColumnDefinition<Transaction>? getColumnDefinitionFromId(
         },
       );
     case columnIdDate:
-      return ColumnDefinition<Transaction>(
+      return FieldDefinition<Transaction>(
           name: columnIdDate,
-          type: ColumnType.date,
+          type: FieldType.date,
           align: TextAlign.left,
           value: (final int index) {
             return getDateAsText((getList()[index]).dateTime);
@@ -160,9 +161,9 @@ ColumnDefinition<Transaction>? getColumnDefinitionFromId(
           });
 
     case columnIdPayee:
-      return ColumnDefinition<Transaction>(
+      return FieldDefinition<Transaction>(
         name: columnIdPayee,
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return Payees.getNameFromId((getList()[index]).payeeId);
@@ -173,9 +174,9 @@ ColumnDefinition<Transaction>? getColumnDefinitionFromId(
       );
 
     case columnIdCategory:
-      return ColumnDefinition<Transaction>(
+      return FieldDefinition<Transaction>(
         name: columnIdCategory,
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return Categories.getNameFromId((getList()[index]).categoryId);
@@ -187,9 +188,9 @@ ColumnDefinition<Transaction>? getColumnDefinitionFromId(
       );
 
     case columnIdMemo:
-      return ColumnDefinition<Transaction>(
+      return FieldDefinition<Transaction>(
         name: columnIdMemo,
-        type: ColumnType.text,
+        type: FieldType.text,
         align: TextAlign.left,
         value: (final int index) {
           return getList()[index].memo;
@@ -200,9 +201,9 @@ ColumnDefinition<Transaction>? getColumnDefinitionFromId(
       );
 
     case columnIdAmount:
-      return ColumnDefinition<Transaction>(
+      return FieldDefinition<Transaction>(
         name: columnIdAmount,
-        type: ColumnType.amount,
+        type: FieldType.amount,
         align: TextAlign.right,
         value: (final int index) {
           return (getList()[index]).amount;
@@ -213,9 +214,9 @@ ColumnDefinition<Transaction>? getColumnDefinitionFromId(
       );
 
     case columnIdBalance:
-      return ColumnDefinition<Transaction>(
+      return FieldDefinition<Transaction>(
         name: columnIdBalance,
-        type: ColumnType.amount,
+        type: FieldType.amount,
         align: TextAlign.right,
         value: (final int index) {
           return (getList()[index]).balance;

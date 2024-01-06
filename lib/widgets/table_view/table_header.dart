@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/widget_view.dart';
 
 enum SortIndicator { none, sortAscending, sortDescending }
 
 /// A Row for a Table view
 class MyTableHeader<T> extends StatelessWidget {
-  final ColumnDefinitions<T> columns;
+  final FieldDefinitions<T> columns;
   final int sortByColumn;
   final bool sortAscending;
   final Function onTap;

@@ -1,39 +1,12 @@
 import 'package:flutter/material.dart';
 
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/widgets/fields/field.dart';
 
-enum ColumnType {
-  text,
-  numeric,
-  amount,
-  amountShorthand,
-  date,
-}
+class FieldDefinitions<T> {
+  final List<FieldDefinition<T>> list;
 
-class ColumnDefinition<T> {
-  final String name;
-  final ColumnType type;
-  final TextAlign align;
-  final dynamic Function(int) value;
-  final int Function(T, T, bool) sort;
-  final bool readOnly;
-  final bool isMultiLine;
-
-  ColumnDefinition({
-    required this.name,
-    required this.type,
-    required this.align,
-    required this.value,
-    required this.sort,
-    this.readOnly = true,
-    this.isMultiLine = false,
-  });
-}
-
-class ColumnDefinitions<T> {
-  final List<ColumnDefinition<T>> list;
-
-  ColumnDefinitions({required this.list}) {
+  FieldDefinitions({required this.list}) {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
@@ -46,12 +19,12 @@ class ColumnDefinitions<T> {
     return cells;
   }
 
-  ColumnDefinitions<T> add(final ColumnDefinition<T> toAdd) {
+  FieldDefinitions<T> add(final FieldDefinition<T> toAdd) {
     list.add(toAdd);
     return this;
   }
 
-  ColumnDefinitions<T> removeAt(final int index) {
+  FieldDefinitions<T> removeAt(final int index) {
     list.removeAt(index);
     return this;
   }
@@ -59,14 +32,14 @@ class ColumnDefinitions<T> {
   List<Widget> getCellsForDetailsPanel(final int index) {
     final List<Widget> cells = <Widget>[];
     for (int i = 0; i < list.length; i++) {
-      final Widget widget = getBestWidgetForColumnDefinition(i, index);
+      final Widget widget = getBestWidgetForFieldDefinition(i, index);
       cells.add(widget);
     }
     return cells;
   }
 
-  Widget getBestWidgetForColumnDefinition(final int columnIndex, final int rowIndex) {
-    final ColumnDefinition<T> fieldDefinition = list[columnIndex];
+  Widget getBestWidgetForFieldDefinition(final int columnIndex, final int rowIndex) {
+    final FieldDefinition<T> fieldDefinition = list[columnIndex];
     final dynamic fieldValue = fieldDefinition.value(rowIndex);
 
     if (fieldDefinition.isMultiLine) {
@@ -96,17 +69,17 @@ class ColumnDefinitions<T> {
   }
 
   Widget getCellWidget(final int columnId, final dynamic value) {
-    final ColumnDefinition<T> columnDefinition = list[columnId];
-    switch (columnDefinition.type) {
-      case ColumnType.numeric:
+    final FieldDefinition<T> fieldDefinition = list[columnId];
+    switch (fieldDefinition.type) {
+      case FieldType.numeric:
         return renderColumValueEntryNumber(value as num);
-      case ColumnType.amount:
+      case FieldType.amount:
         return renderColumValueEntryCurrency(value, false);
-      case ColumnType.amountShorthand:
+      case FieldType.amountShorthand:
         return renderColumValueEntryCurrency(value, true);
-      case ColumnType.text:
+      case FieldType.text:
       default:
-        return renderColumValueEntryText(value as String, textAlign: columnDefinition.align);
+        return renderColumValueEntryText(value as String, textAlign: fieldDefinition.align);
     }
   }
 

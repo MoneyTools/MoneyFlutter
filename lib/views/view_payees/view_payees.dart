@@ -4,11 +4,12 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/payees.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/views/view_transactions.dart';
-import 'package:money/widgets/columns.dart';
+import 'package:money/widgets/fields/field.dart';
+import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/widget_bar_chart.dart';
 import 'package:money/widgets/widget_view.dart';
 
-part 'view_payees_columns.dart';
+part 'view_payees_fields.dart';
 
 class ViewPayees extends ViewWidget<Payee> {
   const ViewPayees({super.key});
@@ -34,8 +35,8 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
-  ColumnDefinitions<Payee> getColumnDefinitionsForTable() {
-    return _getColumnDefinitionsForTable();
+  FieldDefinitions<Payee> getFieldDefinitionsForTable() {
+    return _getFieldDefinitionsForTable();
   }
 
   @override
