@@ -51,10 +51,10 @@ class WidgetBarChart extends StatelessWidget {
     return BarChart(
       BarChartData(
         maxY: roundToTheNextNaturalFit(maxY.toInt()).toDouble(),
-        minY: minY == 0 ? null : roundToTheNextNaturalFit(minY.toInt().abs()) * -1.0,
+        minY: minY == 0 ? 0 : -roundToTheNextNaturalFit(minY.toInt().abs()).toDouble(),
         barGroups: barCharts,
         backgroundColor: Colors.transparent,
-        borderData: FlBorderData(show: false),
+        borderData: getBorders(minY, maxY),
         titlesData: FlTitlesData(
           topTitles: const AxisTitles(), // hide
           rightTitles: const AxisTitles(), // hide
@@ -63,6 +63,7 @@ class WidgetBarChart extends StatelessWidget {
               showTitles: true,
               reservedSize: 80,
               getTitlesWidget: _buildLegendLeft,
+              //interval: (maxY+minY.abs())/6,
             ),
           ),
           bottomTitles: AxisTitles(
@@ -107,11 +108,6 @@ class WidgetBarChart extends StatelessWidget {
   }
 
   Widget _buildLegendLeft(final double value, final TitleMeta meta) {
-    if (value != 0 && (value == meta.min || value == meta.max)) {
-      // do not show
-      return const SizedBox();
-    }
-
     final Widget widget = Text(
       getCurrencyText(value, 0),
       textAlign: TextAlign.end,
@@ -146,5 +142,18 @@ class WidgetBarChart extends StatelessWidget {
     }
     // value == 0
     return Colors.grey.withOpacity(0.8);
+  }
+
+  FlBorderData getBorders(final double min, final double max) {
+    return FlBorderData(
+      show: true,
+      border: Border(
+          top: BorderSide(
+            color: getHorizontalLineColorBasedOnValue(max),
+          ),
+          bottom: BorderSide(
+            color: getHorizontalLineColorBasedOnValue(min),
+          )),
+    );
   }
 }

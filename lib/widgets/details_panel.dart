@@ -52,7 +52,7 @@ class DetailsPanel extends StatelessWidget {
       const Spacer(),
       // List of tab buttons
       SegmentedButton<int>(
-        style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+          style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
           segments: <ButtonSegment<int>>[
             ButtonSegment<int>(
                 value: 0,
@@ -69,9 +69,7 @@ class DetailsPanel extends StatelessWidget {
               icon: const Icon(Icons.calendar_view_day),
             ),
           ],
-          selected: <int>{
-            selectedTabId
-          },
+          selected: <int>{selectedTabId},
           onSelectionChanged: (final Set<int> newSelection) {
             if (!isExpanded) {
               onExpanded(true);

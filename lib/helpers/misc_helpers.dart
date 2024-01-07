@@ -98,6 +98,10 @@ T? getFirstElement<T>(final List<int> indices, final List<dynamic> list) {
 /// 34 > 100
 /// 5 > 10
 int roundToTheNextNaturalFit(final int value) {
+  if (value > 1000000) {
+    return roundToNextNaturalFit(value, 1000000);
+  }
+
   if (value > 100000) {
     return roundToNextNaturalFit(value, 100000);
   }
