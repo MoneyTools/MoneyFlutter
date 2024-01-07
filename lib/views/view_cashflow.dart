@@ -11,7 +11,7 @@ import 'package:money/widgets/header.dart';
 import 'package:money/widgets/scroll_both_ways.dart';
 import 'package:money/widgets/widget_sankey/sankey_helper.dart';
 import 'package:money/widgets/widget_sankey/widget_sankey_chart.dart';
-import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view.dart';
 
 class ViewCashFlow extends ViewWidget<SanKeyEntry> {
   const ViewCashFlow({super.key});

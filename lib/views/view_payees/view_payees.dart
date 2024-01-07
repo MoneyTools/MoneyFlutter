@@ -7,7 +7,7 @@ import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view.dart';
 
 part 'view_payees_fields.dart';
 

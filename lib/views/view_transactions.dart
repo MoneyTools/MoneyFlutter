@@ -10,7 +10,7 @@ import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/chart.dart';
 
 import 'package:money/widgets/fields/fields.dart';
-import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view.dart';
 
 class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;

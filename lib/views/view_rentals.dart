@@ -9,7 +9,7 @@ import 'package:money/models/transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view.dart';
 import 'package:money/views/view_transactions.dart';
 
 class ViewRentals extends ViewWidget<Rental> {

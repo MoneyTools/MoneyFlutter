@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/widgets/fields/fields.dart';
-import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view.dart';
 
 enum SortIndicator { none, sortAscending, sortDescending }
 

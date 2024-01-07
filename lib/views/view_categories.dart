@@ -9,7 +9,7 @@ import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/widgets/widget_view.dart';
+import 'package:money/views/view.dart';
 
 class ViewCategories extends ViewWidget<Category> {
   const ViewCategories({super.key});
