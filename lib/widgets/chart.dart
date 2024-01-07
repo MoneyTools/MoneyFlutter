@@ -12,12 +12,12 @@ class PairXY {
   PairXY(this.xText, this.yValue);
 }
 
-class WidgetBarChart extends StatelessWidget {
+class Chart extends StatelessWidget {
   final List<PairXY> list;
   final String variableNameHorizontal;
   final String variableNameVertical;
 
-  const WidgetBarChart({
+  const Chart({
     super.key,
     required this.list,
     this.variableNameVertical = 'Y',

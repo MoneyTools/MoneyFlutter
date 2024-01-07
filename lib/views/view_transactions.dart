@@ -7,7 +7,7 @@ import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
-import 'package:money/widgets/widget_bar_chart.dart';
+import 'package:money/widgets/chart.dart';
 
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/widget_view.dart';
@@ -185,7 +185,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
     list.sort((final PairXY a, final PairXY b) => a.xText.compareTo(b.xText));
 
-    return WidgetBarChart(
+    return Chart(
       list: list,
       variableNameHorizontal: 'Month',
       variableNameVertical: 'Transactions',

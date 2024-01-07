@@ -6,7 +6,7 @@ import 'package:money/models/transactions.dart';
 import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
-import 'package:money/widgets/widget_bar_chart.dart';
+import 'package:money/widgets/chart.dart';
 import 'package:money/widgets/widget_view.dart';
 
 part 'view_payees_fields.dart';
@@ -62,7 +62,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
       return (b.yValue.abs() - a.yValue.abs()).toInt();
     });
 
-    return WidgetBarChart(
+    return Chart(
       key: Key(indices.toString()),
       list: list.take(10).toList(),
       variableNameHorizontal: 'Payee',

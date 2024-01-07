@@ -11,7 +11,7 @@ import 'package:money/widgets/fields/fields.dart';
 
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
-import 'package:money/widgets/widget_bar_chart.dart';
+import 'package:money/widgets/chart.dart';
 import 'package:money/widgets/widget_view.dart';
 
 part 'view_accounts_fields.dart';
@@ -88,7 +88,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
     list.sort((final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt());
 
-    return WidgetBarChart(
+    return Chart(
       key: Key(indices.toString()),
       list: list.take(10).toList(),
       variableNameHorizontal: 'Account',

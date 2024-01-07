@@ -8,7 +8,7 @@ import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/caption_and_counter.dart';
-import 'package:money/widgets/widget_bar_chart.dart';
+import 'package:money/widgets/chart.dart';
 import 'package:money/widgets/widget_view.dart';
 
 class ViewCategories extends ViewWidget<Category> {
@@ -224,7 +224,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
       return (b.yValue.abs() - a.yValue.abs()).toInt();
     });
 
-    return WidgetBarChart(
+    return Chart(
       key: Key(indices.toString()),
       list: list.take(8).toList(),
       variableNameHorizontal: 'Category',
