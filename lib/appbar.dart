@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/widgets/widgets.dart';
+import 'package:money/widgets/three_part_label.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 
@@ -51,44 +51,69 @@ class _MyAppBarState extends State<MyAppBar> {
           itemBuilder: (final BuildContext context) {
             final List<PopupMenuItem<int>> actionList =
                 List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
+              final bool isSelected = index == Settings().colorSelected;
               return PopupMenuItem<int>(
-                  value: index,
-                  child: renderIconAndText(
-                      Icon(index == Settings().colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
-                          color: colorOptions[index]),
-                      colorText[index]));
+                value: index,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  decoration: BoxDecoration(
+                    color: isSelected ? Theme.of(context).colorScheme.secondaryContainer : null,
+                    borderRadius: const BorderRadius.all(Radius.circular(4)),
+                  ),
+                  child: ThreePartLabel(
+                    icon: Icon(index == Settings().colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
+                        color: colorOptions[index]),
+                    text1: colorText[index],
+                    small: true,
+                  ),
+                ),
+              );
             });
             actionList.add(
               PopupMenuItem<int>(
                 value: Constants.commandIncludeClosedAccount,
-                child: renderIconAndText(
-                    Icon(
-                        !Settings().includeClosedAccounts
-                            ? Icons.check_box_outline_blank_outlined
-                            : Icons.check_box_outlined,
-                        color: Colors.grey),
-                    'Closed Accounts'),
+                child: ThreePartLabel(
+                  icon: Icon(
+                      !Settings().includeClosedAccounts
+                          ? Icons.check_box_outline_blank_outlined
+                          : Icons.check_box_outlined,
+                      color: Colors.grey),
+                  text1: 'Closed Accounts',
+                  small: true,
+                ),
               ),
             );
             actionList.add(
               PopupMenuItem<int>(
                 value: Constants.commandIncludeRentals,
-                child: renderIconAndText(
-                    Icon(!Settings().rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
-                        color: Colors.grey),
-                    'Rentals'),
+                child: ThreePartLabel(
+                  icon: Icon(!Settings().rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
+                      color: Colors.grey),
+                  text1: 'Rentals',
+                  small: true,
+                ),
               ),
             );
             actionList.add(
               PopupMenuItem<int>(
                 value: Constants.commandTextScaleIncrease,
-                child: renderIconAndText(const Icon(Icons.text_increase, color: Colors.grey), 'Increase text size'),
+                child: ThreePartLabel(
+                  icon: const Icon(Icons.text_increase, color: Colors.grey),
+                  text1: 'Increase text size',
+                  text2: '${((Settings().textScale * 1.10) * 100).toInt()}%',
+                  small: true,
+                ),
               ),
             );
             actionList.add(
               PopupMenuItem<int>(
                 value: Constants.commandTextScaleDecrease,
-                child: renderIconAndText(const Icon(Icons.text_decrease, color: Colors.grey), 'Decrease text size'),
+                child: ThreePartLabel(
+                  icon: const Icon(Icons.text_decrease, color: Colors.grey),
+                  text1: 'Decrease text size',
+                  text2: '${((Settings().textScale * 0.9) * 100).toInt()}%',
+                  small: true,
+                ),
               ),
             );
             return actionList;

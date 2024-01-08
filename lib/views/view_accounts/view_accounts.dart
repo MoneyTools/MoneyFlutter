@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_entity.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/accounts.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 
@@ -36,23 +37,26 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   void initState() {
     super.initState();
 
-    pivots.add(CaptionAndCounter(
-        caption: 'Banks',
+    pivots.add(ThreePartLabel(
+        text1: 'Banks',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings])));
-    pivots.add(CaptionAndCounter(
-        caption: 'Cards',
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings]))));
+    pivots.add(ThreePartLabel(
+        text1: 'Cards',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<AccountType>[AccountType.credit])));
-    pivots.add(CaptionAndCounter(
-        caption: 'Assets',
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.credit]))));
+    pivots.add(ThreePartLabel(
+        text1: 'Assets',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<AccountType>[AccountType.asset])));
-    pivots.add(CaptionAndCounter(
-        caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<AccountType>[])));
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.asset]))));
+    pivots.add(ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[]))));
   }
 
   @override

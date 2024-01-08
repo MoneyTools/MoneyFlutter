@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/helpers/string_helper.dart';
+import 'package:money/widgets/three_part_label.dart';
 
 class Header extends StatelessWidget {
   final String title;
@@ -27,7 +28,7 @@ class Header extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Row(children: <Widget>[
-          CaptionAndCounter(caption: title, value: count),
+          ThreePartLabel(text1: title, text2: getIntAsText(count.toInt())),
           const Spacer(),
           Text(description, style: getTextTheme(context).bodySmall)
         ]));
@@ -37,7 +38,7 @@ class Header extends StatelessWidget {
     return Padding(
         padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
         child: Column(
-          children: <Widget>[CaptionAndCounter(caption: title, value: count)],
+          children: <Widget>[ThreePartLabel(text1: title, text2: getIntAsText(count.toInt()))],
         ));
   }
 }

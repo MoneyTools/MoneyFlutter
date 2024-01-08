@@ -37,8 +37,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-        (final _) => scrollToIndex(widget.selectedItems.value.first));
+    WidgetsBinding.instance.addPostFrameCallback((final _) => scrollToIndex(widget.selectedItems.value.first));
   }
 
   @override
@@ -67,8 +66,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         });
   }
 
-  KeyEventResult onListViewKeyEvent(
-      final FocusNode node, final RawKeyEvent event) {
+  KeyEventResult onListViewKeyEvent(final FocusNode node, final RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
@@ -163,13 +161,10 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
     final int itemCount = widget.list.length;
     final double scrollOffset = scrollController.position.pixels;
     final double viewportHeight = scrollController.position.viewportDimension;
-    final double scrollRange = scrollController.position.maxScrollExtent -
-        scrollController.position.minScrollExtent;
+    final double scrollRange = scrollController.position.maxScrollExtent - scrollController.position.minScrollExtent;
 
-    final int firstVisibleItemIndex =
-        (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
-    final int lastVisibleItemIndex =
-        firstVisibleItemIndex + numberOfItemOnViewPort();
+    final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
+    final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
 
     return <int>[firstVisibleItemIndex, lastVisibleItemIndex];
   }

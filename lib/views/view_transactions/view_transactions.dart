@@ -3,7 +3,7 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
@@ -34,17 +34,18 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
     super.sortAscending = false;
 
-    pivots.add(CaptionAndCounter(
-        caption: 'Incomes',
+    pivots.add(ThreePartLabel(
+        text1: 'Incomes',
         small: true,
-        vertical: true,
-        value: Transactions.list.where((final Transaction element) => element.amount > 0).length));
-    pivots.add(CaptionAndCounter(
-        caption: 'Expenses',
+        isVertical: true,
+        text2: getIntAsText(Transactions.list.where((final Transaction element) => element.amount > 0).length)));
+    pivots.add(ThreePartLabel(
+        text1: 'Expenses',
         small: true,
-        vertical: true,
-        value: Transactions.list.where((final Transaction element) => element.amount < 0).length));
-    pivots.add(CaptionAndCounter(caption: 'All', small: true, vertical: true, value: Transactions.list.length));
+        isVertical: true,
+        text2: getIntAsText(Transactions.list.where((final Transaction element) => element.amount < 0).length)));
+    pivots.add(
+        ThreePartLabel(text1: 'All', small: true, isVertical: true, text2: getIntAsText(Transactions.list.length)));
   }
 
   @override

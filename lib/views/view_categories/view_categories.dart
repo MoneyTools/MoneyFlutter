@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/header.dart';
-import 'package:money/widgets/caption_and_counter.dart';
+import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
@@ -28,33 +29,36 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   void initState() {
     super.initState();
 
-    pivots.add(CaptionAndCounter(
-        caption: 'None',
+    pivots.add(ThreePartLabel(
+        text1: 'None',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none])));
-    pivots.add(CaptionAndCounter(
-        caption: 'Expense',
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
+    pivots.add(ThreePartLabel(
+        text1: 'Expense',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense])));
-    pivots.add(CaptionAndCounter(
-        caption: 'Income',
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense]))));
+    pivots.add(ThreePartLabel(
+        text1: 'Income',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income])));
-    pivots.add(CaptionAndCounter(
-        caption: 'Saving',
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
+    pivots.add(ThreePartLabel(
+        text1: 'Saving',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving])));
-    pivots.add(CaptionAndCounter(
-        caption: 'Investment',
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
+    pivots.add(ThreePartLabel(
+        text1: 'Investment',
         small: true,
-        vertical: true,
-        value: getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment])));
-    pivots.add(CaptionAndCounter(
-        caption: 'All', small: true, vertical: true, value: getTotalBalanceOfAccounts(<CategoryType>[])));
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
+    pivots.add(ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[]))));
   }
 
   double getTotalBalanceOfAccounts(final List<CategoryType> types) {
