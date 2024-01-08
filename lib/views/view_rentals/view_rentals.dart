@@ -10,7 +10,9 @@ import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
-import 'package:money/views/view_transactions.dart';
+import 'package:money/widgets/table_view/table_transactions.dart';
+
+part 'view_rentals_details_panels.dart';
 
 class ViewRentals extends ViewWidget<Rental> {
   const ViewRentals({super.key});
@@ -185,56 +187,11 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
 
   @override
   Widget getSubViewContentForChart(final List<int> indices) {
-    final List<PairXY> list = <PairXY>[];
-    for (final Rental entry in getList()) {
-      list.add(PairXY(entry.name, entry.profit));
-    }
-
-    return Chart(
-      list: list,
-      variableNameHorizontal: 'Rental',
-      variableNameVertical: 'Profit',
-    );
+    return _getSubViewContentForChart(indices);
   }
 
   @override
-  getSubViewContentForTransactions(final List<int> indices) {
-    final Rental? rental = getFirstElement<Rental>(indices, list);
-    if (rental != null) {
-      return ViewTransactions(
-        key: Key(rental.id.toString()),
-        filter: (final Transaction t) => filterByRentalCategories(t, rental),
-        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
-      );
-    }
-    return const Text('No transactions');
-  }
-
-  bool filterByRentalCategories(final Transaction t, final Rental rental) {
-    final num categoryIdToMatch = t.categoryId;
-
-    if (categoryIdToMatch == Categories.splitCategoryId()) {
-      final List<Split> splits = Splits.get(t.id);
-
-      for (final Split split in splits) {
-        if (isMatchingCategories(split.categoryId, rental)) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    return isMatchingCategories(categoryIdToMatch, rental);
-  }
-
-  bool isMatchingCategories(final num categoryIdToMatch, final Rental rental) {
-    Categories.getTreeIds(rental.categoryForIncome);
-
-    return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForManagementTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForRepairsTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForMaintenanceTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForTaxesTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForInterestTreeIds.contains(categoryIdToMatch);
+  Widget getSubViewContentForTransactions(final List<int> indices) {
+    return _getSubViewContentForTransactions(indices);
   }
 }

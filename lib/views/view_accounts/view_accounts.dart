@@ -16,6 +16,8 @@ import 'package:money/views/view.dart';
 
 part 'view_accounts_fields.dart';
 
+part 'view_accounts_details_panels.dart';
+
 part 'view_accounts_helpers.dart';
 
 /// Main view for all Accounts
@@ -54,13 +56,13 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  String getClassNamePlural() {
-    return 'Accounts';
+  String getClassNameSingular() {
+    return 'Account';
   }
 
   @override
-  String getClassNameSingular() {
-    return 'Account';
+  String getClassNamePlural() {
+    return 'Accounts';
   }
 
   @override
@@ -74,49 +76,6 @@ class ViewAccountsState extends ViewWidgetState<Account> {
       Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
-  }
-
-  @override
-  Widget getSubViewContentForChart(final List<int> indices) {
-    final List<PairXY> list = <PairXY>[];
-    for (final MoneyEntity item in getList()) {
-      final Account account = item as Account;
-      if (account.isActive()) {
-        list.add(PairXY(account.name, account.balance));
-      }
-    }
-
-    list.sort((final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt());
-
-    return Chart(
-      key: Key(indices.toString()),
-      list: list.take(10).toList(),
-      variableNameHorizontal: 'Account',
-      variableNameVertical: 'Balance',
-    );
-  }
-
-  @override
-  getSubViewContentForTransactions(final List<int> indices) {
-    final Account? account = getFirstElement<Account>(indices, list);
-    if (account != null && account.id > -1) {
-      filter(final Transaction transaction) => filterByAccountId(transaction, account.id);
-
-      final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
-
-      return TableTransactions(
-        key: Key(account.id.toString()),
-        columnsToInclude: const <String>[
-          columnIdDate,
-          columnIdPayee,
-          columnIdCategory,
-          columnIdMemo,
-          columnIdAmount,
-        ],
-        getList: () => listOfTransactionForThisAccount,
-      );
-    }
-    return const Text('No account transactions');
   }
 
   @override
@@ -135,5 +94,15 @@ class ViewAccountsState extends ViewWidgetState<Account> {
       getSelectedAccountType(),
       isActive: Settings().includeClosedAccounts ? null : true,
     );
+  }
+
+  @override
+  Widget getSubViewContentForChart(final List<int> indices) {
+    return _getSubViewContentForChart(indices);
+  }
+
+  @override
+  Widget getSubViewContentForTransactions(final List<int> indices) {
+    return _getSubViewContentForTransactions(indices);
   }
 }

@@ -3,13 +3,15 @@ import 'package:money/helpers/misc_helpers.dart';
 
 import 'package:money/models/payees.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
+import 'package:money/widgets/table_view/table_transactions.dart';
 
 part 'view_payees_fields.dart';
+
+part 'view_payees_details_panels.dart';
 
 class ViewPayees extends ViewWidget<Payee> {
   const ViewPayees({super.key});
@@ -51,36 +53,11 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
 
   @override
   Widget getSubViewContentForChart(final List<int> indices) {
-    final List<PairXY> list = <PairXY>[];
-    for (final Payee item in getList()) {
-      if (item.name != 'Transfer') {
-        list.add(PairXY(item.name, item.count));
-      }
-    }
-
-    list.sort((final PairXY a, final PairXY b) {
-      return (b.yValue.abs() - a.yValue.abs()).toInt();
-    });
-
-    return Chart(
-      key: Key(indices.toString()),
-      list: list.take(10).toList(),
-      variableNameHorizontal: 'Payee',
-      variableNameVertical: 'Transactions',
-    );
+    return _getSubViewContentForChart(indices);
   }
 
   @override
-  getSubViewContentForTransactions(final List<int> indices) {
-    final Payee? payee = getFirstElement<Payee>(indices, list);
-    if (payee != null && payee.id > -1) {
-      return ViewTransactions(
-        key: Key(payee.id.toString()),
-        filter: (final Transaction transaction) => transaction.payeeId == payee.id,
-        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
-        startingBalance: 0,
-      );
-    }
-    return const Text('No transactions');
+  Widget getSubViewContentForTransactions(final List<int> indices) {
+    return _getSubViewContentForTransactions(indices);
   }
 }

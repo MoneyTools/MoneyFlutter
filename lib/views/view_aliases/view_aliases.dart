@@ -4,10 +4,10 @@ import 'package:money/models/aliases.dart';
 import 'package:money/models/payees.dart';
 import 'package:money/models/rentals.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/views/view.dart';
+import 'package:money/widgets/table_view/table_transactions.dart';
 
 class ViewAliases extends ViewWidget<Alias> {
   const ViewAliases({super.key});
@@ -118,15 +118,21 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   }
 
   @override
-  getSubViewContentForTransactions(final List<int> indices) {
+  Widget getSubViewContentForTransactions(final List<int> indices) {
     final Alias? alias = getFirstElement<Alias>(indices, list);
     if (alias != null && alias.id > -1) {
-      final Payee payee = alias.payee;
-      return ViewTransactions(
-        key: Key(payee.id.toString()),
-        filter: (final Transaction transaction) => transaction.payeeId == payee.id,
-        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
-        startingBalance: 0,
+      return TableTransactions(
+        key: Key(alias.id.toString()),
+        columnsToInclude: const <String>[
+          columnIdAccount,
+          columnIdDate,
+          columnIdCategory,
+          columnIdMemo,
+          columnIdAmount,
+        ],
+        getList: () => getFilteredTransactions(
+          (final Transaction transaction) => transaction.payeeId == alias.payeeId,
+        ),
       );
     }
     return const Text('No transactions');

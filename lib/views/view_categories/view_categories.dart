@@ -3,13 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/categories.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/views/view_transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/caption_and_counter.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
+import 'package:money/widgets/table_view/table_transactions.dart';
+
+part 'view_categories_details_panels.dart';
 
 class ViewCategories extends ViewWidget<Category> {
   const ViewCategories({super.key});
@@ -204,45 +206,11 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
 
   @override
   Widget getSubViewContentForChart(final List<int> indices) {
-    final Map<String, num> map = <String, num>{};
-
-    for (final Category item in getList()) {
-      if (item.name != 'Split' && item.name != 'Xfer to Deleted Account') {
-        final Category topCategory = Categories.getTopAncestor(item);
-        if (map[topCategory.name] == null) {
-          map[topCategory.name] = 0;
-        }
-        map[topCategory.name] = map[topCategory.name]! + item.balance;
-      }
-    }
-    final List<PairXY> list = <PairXY>[];
-    map.forEach((final String key, final num value) {
-      list.add(PairXY(key, value));
-    });
-
-    list.sort((final PairXY a, final PairXY b) {
-      return (b.yValue.abs() - a.yValue.abs()).toInt();
-    });
-
-    return Chart(
-      key: Key(indices.toString()),
-      list: list.take(8).toList(),
-      variableNameHorizontal: 'Category',
-      variableNameVertical: 'Balance',
-    );
+    return _getSubViewContentForChart(indices);
   }
 
   @override
-  getSubViewContentForTransactions(final List<int> indices) {
-    final Category? category = getFirstElement<Category>(indices, list);
-    if (category != null && category.id > -1) {
-      return ViewTransactions(
-        key: Key(category.id.toString()),
-        filter: (final Transaction transaction) => transaction.categoryId == category.id,
-        preference: preferenceJustTableDatePayeeCategoryAmountBalance,
-        startingBalance: 0,
-      );
-    }
-    return const Text('No transactions');
+  Widget getSubViewContentForTransactions(final List<int> indices) {
+    return _getSubViewContentForTransactions(indices);
   }
 }

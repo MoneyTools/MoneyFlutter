@@ -10,9 +10,9 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/data_io/import_qfx.dart';
 import 'package:money/models/data_io/import_qif.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/views/view_aliases.dart';
-import 'package:money/views/view_cashflow.dart';
-import 'package:money/views/view_rentals.dart';
+import 'package:money/views/view_aliases/view_aliases.dart';
+import 'package:money/views/view_cashflow/view_cashflow.dart';
+import 'package:money/views/view_rentals/view_rentals.dart';
 import 'package:money/widgets/keyboard_widget.dart';
 
 import 'package:money/appbar.dart';
@@ -21,9 +21,9 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/menu.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/views/view_accounts/view_accounts.dart';
-import 'package:money/views/view_categories.dart';
+import 'package:money/views/view_categories/view_categories.dart';
 import 'package:money/views/view_payees/view_payees.dart';
-import 'package:money/views/view_transactions.dart';
+import 'package:money/views/view_transactions/view_transactions.dart';
 
 void main() {
   runApp(const MyMoney());

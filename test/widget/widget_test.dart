@@ -7,7 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/views/view_cashflow.dart';
+import 'package:money/views/view_cashflow/view_cashflow.dart';
 
 class DummyHostingApp extends StatefulWidget {
   const DummyHostingApp({super.key});

@@ -240,8 +240,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       final int index = indices.first;
       return SingleChildScrollView(
         key: Key(index.toString()),
-        child: Column(
-          children: detailPanelFields.getCellsForDetailsPanel(index),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: Column(
+            children: detailPanelFields.getCellsForDetailsPanel(index),
+          ),
         ),
       );
     }

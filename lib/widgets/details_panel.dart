@@ -25,7 +25,11 @@ class DetailsPanel extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceVariant,
-          border: Border.all(color: Theme.of(context).colorScheme.outline),
+          border: Border(
+            left: BorderSide(color: Theme.of(context).colorScheme.outline),
+            top: BorderSide(color: Theme.of(context).colorScheme.outline),
+            right: BorderSide(color: Theme.of(context).colorScheme.outline),
+          ),
           borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
       child: LayoutBuilder(builder: (
         final BuildContext context,

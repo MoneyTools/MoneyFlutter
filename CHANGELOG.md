@@ -1,5 +1,6 @@
 ## [1.0.13] 2024-01-08
 
+- Refactor views - use TableTransactions for details panel
 - Improve theme color layout
 
 ## [1.0.12] 2024-01-06

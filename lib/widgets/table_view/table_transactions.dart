@@ -21,11 +21,13 @@ const String columnIdBalance = 'Balance';
 class TableTransactions extends StatefulWidget {
   final List<String> columnsToInclude;
   final List<Transaction> Function() getList;
+  final int defaultSortingField;
 
   const TableTransactions({
     super.key,
     required this.columnsToInclude,
     required this.getList,
+    this.defaultSortingField = 0,
   });
 
   @override
@@ -33,7 +35,7 @@ class TableTransactions extends StatefulWidget {
 }
 
 class _TableTransactionsState extends State<TableTransactions> {
-  int sortBy = 0;
+  late int sortBy = widget.defaultSortingField;
   bool sortAscending = true;
   late final FieldDefinitions<Transaction> columns;
 
