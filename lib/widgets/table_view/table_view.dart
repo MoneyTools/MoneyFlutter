@@ -37,7 +37,9 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((final _) => scrollToIndex(widget.selectedItems.value.first));
+    if (widget.selectedItems.value.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((final _) => scrollToIndex(widget.selectedItems.value.first));
+    }
   }
 
   @override
