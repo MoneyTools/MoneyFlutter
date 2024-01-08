@@ -172,6 +172,15 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     );
   }
 
+  Widget getViewExpandAndPadding(final Widget child) {
+    return Expanded(
+      child: Container(
+          color: Theme.of(context).colorScheme.background,
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: child),
+    );
+  }
+
   updateBottomContent(final int tab) {
     setState(() {
       selectedBottomTabId = tab;

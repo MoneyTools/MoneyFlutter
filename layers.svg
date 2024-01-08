@@ -422,7 +422,7 @@ sqlite3_flutter_libs</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.0.12</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.0.13</text>
   </g>
   <g id='Labels_collection'>
     <text class="nodeName" x="450" y="375" font-size="120%">collection</text>

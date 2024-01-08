@@ -74,6 +74,8 @@ class _MenuVerticalState extends State<MenuVertical> {
           destinations: destinations,
           selectedIndex: _selectedIndex,
           useIndicator: widget.useIndicator,
+          indicatorColor: Theme.of(context).colorScheme.onSecondary,
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           onDestinationSelected: (final int index) {
             setState(() {
               _selectedIndex = index;

@@ -3,12 +3,14 @@ import 'package:money/widgets/widgets.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 
-PreferredSizeWidget createAppBar(
+PreferredSizeWidget buildAppBar(
+  final BuildContext context,
   final void Function() onFileOpen,
   final void Function() onFileClose,
   final void Function() onImport,
 ) {
   return AppBar(
+    backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
     title: widgetMainTitle(onFileOpen, onFileClose),
     actions: <Widget>[
       IconButton(

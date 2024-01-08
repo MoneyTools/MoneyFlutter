@@ -22,19 +22,24 @@ class DetailsPanel extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return LayoutBuilder(builder: (
-      final BuildContext context,
-      final BoxConstraints constraints,
-    ) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          const Divider(thickness: 1, height: 1),
-          _buildHeaderWithTabsAndExpando(context, constraints),
-          if (isExpanded) _buildContent(),
-        ],
-      );
-    });
+    return Container(
+      decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surfaceVariant,
+          border: Border.all(color: Theme.of(context).colorScheme.outline),
+          borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+      child: LayoutBuilder(builder: (
+        final BuildContext context,
+        final BoxConstraints constraints,
+      ) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            _buildHeaderWithTabsAndExpando(context, constraints),
+            if (isExpanded) _buildContent(),
+          ],
+        );
+      }),
+    );
   }
 
   Widget _buildHeaderWithTabsAndExpando(
@@ -47,39 +52,46 @@ class DetailsPanel extends StatelessWidget {
         },
         icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less));
 
-    return Row(children: <Widget>[
-      expando,
-      const Spacer(),
-      // List of tab buttons
-      SegmentedButton<int>(
-          style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-          segments: <ButtonSegment<int>>[
-            ButtonSegment<int>(
-                value: 0,
-                label: constraints.maxWidth < 600 ? null : const Text('Details'),
-                icon: const Icon(Icons.info_outline)),
-            ButtonSegment<int>(
-              value: 1,
-              label: constraints.maxWidth < 600 ? null : const Text('Chart'),
-              icon: const Icon(Icons.bar_chart),
-            ),
-            ButtonSegment<int>(
-              value: 2,
-              label: constraints.maxWidth < 600 ? null : const Text('Transactions'),
-              icon: const Icon(Icons.calendar_view_day),
-            ),
-          ],
-          selected: <int>{selectedTabId},
-          onSelectionChanged: (final Set<int> newSelection) {
-            if (!isExpanded) {
-              onExpanded(true);
-            }
-            onTabActivated(newSelection.first);
-          }),
-      const Spacer(),
-      // Expando
-      expando,
-    ]);
+    return InkWell(
+      onTap: () {
+        if (isExpanded == false) {
+          onExpanded(true);
+        }
+      },
+      child: Row(children: <Widget>[
+        expando,
+        const Spacer(),
+        // List of tab buttons
+        SegmentedButton<int>(
+            style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+            segments: <ButtonSegment<int>>[
+              ButtonSegment<int>(
+                  value: 0,
+                  label: constraints.maxWidth < 600 ? null : const Text('Details'),
+                  icon: const Icon(Icons.info_outline)),
+              ButtonSegment<int>(
+                value: 1,
+                label: constraints.maxWidth < 600 ? null : const Text('Chart'),
+                icon: const Icon(Icons.bar_chart),
+              ),
+              ButtonSegment<int>(
+                value: 2,
+                label: constraints.maxWidth < 600 ? null : const Text('Transactions'),
+                icon: const Icon(Icons.calendar_view_day),
+              ),
+            ],
+            selected: <int>{selectedTabId},
+            onSelectionChanged: (final Set<int> newSelection) {
+              if (!isExpanded) {
+                onExpanded(true);
+              }
+              onTabActivated(newSelection.first);
+            }),
+        const Spacer(),
+        // Expando
+        expando,
+      ]),
+    );
   }
 
   Widget _buildContent() {

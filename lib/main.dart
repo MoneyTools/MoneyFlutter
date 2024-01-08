@@ -100,7 +100,14 @@ class _MyMoneyState extends State<MyMoney> {
       } else {
         pickerResult = await FilePicker.platform.pickFiles(
           type: FileType.custom,
-          allowedExtensions: <String>['mmdb', 'sdf', 'qfx', 'ofx', 'pdf', 'json'],
+          allowedExtensions: <String>[
+            'mmdb',
+            'sdf',
+            'qfx',
+            'ofx',
+            'pdf',
+            'json',
+          ],
         );
       }
     } catch (e) {
@@ -189,7 +196,8 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget welcomePanel(final BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(
+      appBar: buildAppBar(
+        context,
         handleFileOpen,
         handleFileClose,
         handleImport,
@@ -263,7 +271,8 @@ class _MyMoneyState extends State<MyMoney> {
                     isMetaPressed: true,
                   ),
                 ],
-                child: getContent(context, constraints),
+                child: Container(
+                    color: Theme.of(context).colorScheme.primaryContainer, child: getContent(context, constraints)),
               ));
         }));
   }
@@ -285,7 +294,8 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget getScaffoldingForSmallSurface(final BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(
+      appBar: buildAppBar(
+        context,
         handleFileOpen,
         handleFileClose,
         handleImport,
@@ -298,7 +308,8 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget getScaffoldingForLargeSurface(final BuildContext context) {
     return Scaffold(
-      appBar: createAppBar(
+      appBar: buildAppBar(
+        context,
         handleFileOpen,
         handleFileClose,
         handleImport,
@@ -306,21 +317,28 @@ class _MyMoneyState extends State<MyMoney> {
       body: SafeArea(
         bottom: false,
         top: false,
-        child: Row(
-          children: <Widget>[
-            MenuVertical(
-              settings: settings,
-              onSelectItem: handleScreenChanged,
-              selectedIndex: settings.screenIndex,
-              useIndicator: true,
-            ),
-            const VerticalDivider(thickness: 1, width: 1),
-            Expanded(
-              child: Column(
-                children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)],
+        child: Container(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              MenuVertical(
+                settings: settings,
+                onSelectItem: handleScreenChanged,
+                selectedIndex: settings.screenIndex,
+                useIndicator: true,
               ),
-            )
-          ],
+              const VerticalDivider(thickness: 1, width: 1),
+              Expanded(
+                child: Container(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  child: Column(
+                    children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)],
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

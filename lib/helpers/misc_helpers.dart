@@ -79,10 +79,6 @@ void debugLog(final String message) {
   }
 }
 
-Widget getViewExpandAndPadding(final Widget child) {
-  return Expanded(child: Padding(padding: const EdgeInsets.fromLTRB(8, 0, 8, 0), child: child));
-}
-
 /// Return the first element of type T in a list given a list of possible index;
 T? getFirstElement<T>(final List<int> indices, final List<dynamic> list) {
   if (indices.isNotEmpty) {
