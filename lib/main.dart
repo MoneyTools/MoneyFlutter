@@ -196,11 +196,10 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget welcomePanel(final BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(
-        context,
-        handleFileOpen,
-        handleFileClose,
-        handleImport,
+      appBar: MyAppBar(
+        onFileOpen: handleFileOpen,
+        onFileClose: handleFileClose,
+        onImport: handleImport,
       ),
       body: Row(children: <Widget>[
         renderWelcomeAndOpen(context),
@@ -294,11 +293,10 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget getScaffoldingForSmallSurface(final BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(
-        context,
-        handleFileOpen,
-        handleFileClose,
-        handleImport,
+      appBar: MyAppBar(
+        onFileOpen: handleFileOpen,
+        onFileClose: handleFileClose,
+        onImport: handleImport,
       ),
       body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
       bottomNavigationBar:
@@ -308,11 +306,10 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget getScaffoldingForLargeSurface(final BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(
-        context,
-        handleFileOpen,
-        handleFileClose,
-        handleImport,
+      appBar: MyAppBar(
+        onFileOpen: handleFileOpen,
+        onFileClose: handleFileClose,
+        onImport: handleImport,
       ),
       body: SafeArea(
         bottom: false,
