@@ -4,7 +4,6 @@ class DetailsPanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
-  final Object? subViewSelectedItem;
   final int selectedTabId;
   final Function onTabActivated;
   final Widget Function(int, List<int>) getBottomContentToRender;
@@ -15,7 +14,6 @@ class DetailsPanel extends StatelessWidget {
     required this.selectedTabId,
     required this.isExpanded,
     required this.onExpanded,
-    required this.subViewSelectedItem,
     required this.onTabActivated,
     required this.getBottomContentToRender,
   });

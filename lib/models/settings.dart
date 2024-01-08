@@ -11,7 +11,7 @@ class Settings {
   int colorSelected = 0;
   int screenIndex = 0;
   String? pathToDatabase;
-  bool isBottomPanelExpanded = false;
+  bool isDetailsPanelExpanded = false;
   bool includeClosedAccounts = false;
   bool rentals = false;
   bool useDarkMode = false;
@@ -45,6 +45,7 @@ class Settings {
     pathToDatabase = preferences.getString(prefLastLoadedPathToDatabase);
     rentals = preferences.getBool(prefRentals) == true;
     includeClosedAccounts = preferences.getBool(prefIncludeClosedAccounts) == true;
+    isDetailsPanelExpanded = preferences.getBool(prefIsDetailsPanelExpanded) == true;
 
     views = loadMapFromPrefs(preferences, prefViews);
 
@@ -58,6 +59,7 @@ class Settings {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setDouble(prefTextScale, textScale);
     preferences.setInt(prefColor, colorSelected);
+
     preferences.setBool(prefDarkMode, useDarkMode);
     preferences.setBool(prefIncludeClosedAccounts, includeClosedAccounts);
     preferences.setBool(prefRentals, rentals);

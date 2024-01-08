@@ -9,6 +9,7 @@ import 'package:money/widgets/table_view/table_row.dart';
 class MyTableView<T> extends StatefulWidget {
   final FieldDefinitions<T> columns;
   final List<T> list;
+  final ValueNotifier<List<int>> selectedItems;
   final Function? onTap;
   final Function? onDoubleTap;
 
@@ -16,6 +17,7 @@ class MyTableView<T> extends StatefulWidget {
     super.key,
     required this.columns,
     required this.list,
+    required this.selectedItems,
     this.onTap,
     this.onDoubleTap,
   });
@@ -25,13 +27,18 @@ class MyTableView<T> extends StatefulWidget {
 }
 
 class MyTableViewState<T> extends State<MyTableView<T>> {
-  List<int> selectedItems = <int>[0];
   final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
-  num currentIndex = 0;
 
   FieldDefinitions<T> getFieldDefinitions() {
     return FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback(
+        (final _) => scrollToIndex(widget.selectedItems.value.first));
   }
 
   @override
@@ -53,14 +60,15 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
             //   setSelectedItem(index, true);
             //   FocusScope.of(context).requestFocus();
             // },
-            autoFocus: index == currentIndex,
-            isSelected: selectedItems.contains(index),
+            autoFocus: index == widget.selectedItems.value.firstOrNull,
+            isSelected: widget.selectedItems.value.contains(index),
             children: getCells(index),
           );
         });
   }
 
-  KeyEventResult onListViewKeyEvent(final FocusNode node, final RawKeyEvent event) {
+  KeyEventResult onListViewKeyEvent(
+      final FocusNode node, final RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
       if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
         setState(() {
@@ -107,8 +115,8 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
 
   void selectedItemOffset(final int delta) {
     int newPosition = 0;
-    if (selectedItems.isNotEmpty) {
-      newPosition = selectedItems[0] + delta;
+    if (widget.selectedItems.value.isNotEmpty) {
+      newPosition = widget.selectedItems.value[0] + delta;
     }
 
     setSelectedItem(newPosition);
@@ -120,9 +128,8 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   ]) {
     if (newPosition.isBetween(-1, widget.list.length)) {
       setState(() {
-        selectedItems.clear();
-        selectedItems.add(newPosition);
-        currentIndex = newPosition;
+        widget.selectedItems.value.clear();
+        widget.selectedItems.value.add(newPosition);
       });
 
       scrollToIndex(newPosition);
@@ -156,10 +163,13 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
     final int itemCount = widget.list.length;
     final double scrollOffset = scrollController.position.pixels;
     final double viewportHeight = scrollController.position.viewportDimension;
-    final double scrollRange = scrollController.position.maxScrollExtent - scrollController.position.minScrollExtent;
+    final double scrollRange = scrollController.position.maxScrollExtent -
+        scrollController.position.minScrollExtent;
 
-    final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
-    final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
+    final int firstVisibleItemIndex =
+        (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
+    final int lastVisibleItemIndex =
+        firstVisibleItemIndex + numberOfItemOnViewPort();
 
     return <int>[firstVisibleItemIndex, lastVisibleItemIndex];
   }

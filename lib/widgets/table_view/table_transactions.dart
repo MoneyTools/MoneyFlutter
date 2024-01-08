@@ -75,6 +75,7 @@ class _TableTransactionsState extends State<TableTransactions> {
           child: MyTableView<Transaction>(
             columns: columns,
             list: widget.getList(),
+            selectedItems: ValueNotifier<List<int>>(<int>[]),
           ),
         ),
       ],

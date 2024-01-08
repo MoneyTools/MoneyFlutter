@@ -28,7 +28,9 @@ class ViewWidget<T> extends StatefulWidget {
 class ViewWidgetState<T> extends State<ViewWidget<T>> {
   FieldDefinitions<T> columns = FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
 
-  final ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
+  int lastSelectedItemIndex = 0;
+  ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
+
   final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
 
@@ -36,7 +38,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   List<String> listOfUniqueInstances = <String>[];
 
   final NumberFormat formatCurrency = NumberFormat('#,##0.00', 'en_US');
-  bool isBottomPanelExpanded = false;
+
   int selectedBottomTabId = 0;
 
   int sortByColumn = 0;
@@ -73,11 +75,20 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         prefSortAscending,
         true,
       );
+      lastSelectedItemIndex = jsonGetInt(viewSetting, prefSelectedListItemIndex, 0);
     }
 
     list = getList();
 
     onSort();
+
+    /// restore selection of items
+    if (lastSelectedItemIndex >= 0 && lastSelectedItemIndex < list.length) {
+      // index is valid
+    } else {
+      lastSelectedItemIndex = 0;
+    }
+    selectedItems.value = <int>[lastSelectedItemIndex];
   }
 
   String getClassNamePlural() {
@@ -137,12 +148,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             flex: 1,
             child: MyTableView<T>(
               list: getList(),
+              selectedItems: selectedItems,
               columns: columns,
               onTap: onRowTap,
               // onDoubleTap: (final BuildContext context, final int index) {
               //   if (widget.preference.showBottom) {
               //     setState(() {
-              //       isBottomPanelExpanded = true;
+              //       isDetailsPanelExpanded = true;
               //     });
               //   }
             ),
@@ -151,18 +163,18 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           // Optional bottom details panel
           if (widget.preference.showBottom)
             Expanded(
-              flex: isBottomPanelExpanded ? 1 : 0,
+              flex: Settings().isDetailsPanelExpanded ? 1 : 0,
               // this will split the vertical view when expanded
               child: DetailsPanel(
-                isExpanded: isBottomPanelExpanded,
+                isExpanded: Settings().isDetailsPanelExpanded,
                 onExpanded: (final bool isExpanded) {
                   setState(() {
-                    isBottomPanelExpanded = isExpanded;
+                    Settings().isDetailsPanelExpanded = isExpanded;
+                    Settings().save();
                   });
                 },
                 selectedTabId: selectedBottomTabId,
                 selectedItems: selectedItems,
-                subViewSelectedItem: subViewSelectedItem,
                 onTabActivated: updateBottomContent,
                 getBottomContentToRender: getSubViewContent,
               ),
@@ -227,6 +239,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     } else {
       // This will cause a UI update and the bottom details will get rendered if its expanded
       selectedItems.value = <int>[index];
+
+      // call this to persist the last selected item index
+      saveLastUserActionOnThisView();
     }
   }
 
@@ -269,14 +284,20 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       }
 
       // Persist users choice
-      Settings().views[getClassNameSingular()] = <String, dynamic>{
-        prefSortBy: sortByColumn,
-        prefSortAscending: sortAscending,
-      };
-
-      Settings().save();
+      saveLastUserActionOnThisView();
       onSort();
     });
+  }
+
+  void saveLastUserActionOnThisView() {
+    // Persist users choice
+    Settings().views[getClassNameSingular()] = <String, dynamic>{
+      prefSortBy: sortByColumn,
+      prefSortAscending: sortAscending,
+      prefSelectedListItemIndex: selectedItems.value.firstOrNull,
+    };
+
+    Settings().save();
   }
 
   SortIndicator getSortIndicated(final int columnNumber) {
