@@ -44,6 +44,7 @@ enum TransactionFlags {
 class Transaction extends MoneyEntity {
   final int accountId;
   final DateTime dateTime;
+  late final String dateTimeAsText;
   final int payeeId;
   String originalPayee = ''; // before auto-aliasing, helps with future merging.
   final int categoryId;
@@ -85,7 +86,9 @@ class Transaction extends MoneyEntity {
     this.balance = 0.00,
     this.memo = '',
     this.fitid = '',
-  });
+  }) {
+    dateTimeAsText = getDateAsText(dateTime);
+  }
 
   @override
   String toString([final bool multiline = false]) {

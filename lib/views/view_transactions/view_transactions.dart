@@ -4,10 +4,10 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
+import 'package:money/widgets/table_view/table_transactions_fields.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/header.dart';
-import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/chart.dart';
 
 import 'package:money/widgets/fields/fields.dart';
@@ -98,8 +98,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         .toList();
 
     if (!balanceDone) {
-      list.sort((final Transaction a, final Transaction b) =>
-          stringCompareIgnoreCasing2(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+      list.sort((final Transaction a, final Transaction b) => a.dateTime.compareTo(b.dateTime));
 
       double runningBalance = 0.0;
       for (Transaction transaction in list) {

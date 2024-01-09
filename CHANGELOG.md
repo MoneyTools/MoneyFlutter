@@ -1,3 +1,7 @@
+## [1.0.14] 2024-01-09
+
+- Performance improvement on Transaction list
+
 ## [1.0.13] 2024-01-08
 
 - UX for Delete from the [DetailsPanel]

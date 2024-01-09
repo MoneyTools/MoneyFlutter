@@ -1,22 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/accounts.dart';
-import 'package:money/models/categories.dart';
-import 'package:money/models/payees.dart';
 import 'package:money/models/transactions.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/table_view/table_header.dart';
+import 'package:money/widgets/table_view/table_transactions_fields.dart';
 import 'package:money/widgets/table_view/table_view.dart';
-
-const String columnIdAccount = 'Accounts';
-const String columnIdDate = 'Date';
-const String columnIdPayee = 'Payee';
-const String columnIdCategory = 'Category';
-const String columnIdMemo = 'Memo';
-const String columnIdAmount = 'Amount';
-const String columnIdBalance = 'Balance';
 
 class TableTransactions extends StatefulWidget {
   final List<String> columnsToInclude;
@@ -123,8 +111,9 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
   final List<Transaction> list =
       Transactions.list.where((final Transaction transaction) => filter(transaction)).toList();
 
-  list.sort((final Transaction a, final Transaction b) =>
-      stringCompareIgnoreCasing2(getDateAsText(a.dateTime), getDateAsText(b.dateTime)));
+  list.sort(
+    (final Transaction a, final Transaction b) => a.dateTime.compareTo(b.dateTime),
+  );
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {
@@ -132,102 +121,4 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
     transaction.balance = runningBalance;
   }
   return list;
-}
-
-FieldDefinition<Transaction>? getFieldDefinitionFromId(
-  final String id,
-  final List<Transaction> Function() getList,
-) {
-  switch (id) {
-    case columnIdAccount:
-      return FieldDefinition<Transaction>(
-        name: columnIdAccount,
-        type: FieldType.text,
-        align: TextAlign.left,
-        value: (final int index) {
-          return Accounts.getNameFromId((getList()[index]).accountId);
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByString(Accounts.getNameFromId(a.accountId), Accounts.getNameFromId(b.accountId), ascending);
-        },
-      );
-    case columnIdDate:
-      return FieldDefinition<Transaction>(
-          name: columnIdDate,
-          type: FieldType.date,
-          align: TextAlign.left,
-          value: (final int index) {
-            return getDateAsText((getList()[index]).dateTime);
-          },
-          sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return sortByString(getDateAsText(a.dateTime), getDateAsText(b.dateTime), ascending);
-          });
-
-    case columnIdPayee:
-      return FieldDefinition<Transaction>(
-        name: columnIdPayee,
-        type: FieldType.text,
-        align: TextAlign.left,
-        value: (final int index) {
-          return Payees.getNameFromId((getList()[index]).payeeId);
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), ascending);
-        },
-      );
-
-    case columnIdCategory:
-      return FieldDefinition<Transaction>(
-        name: columnIdCategory,
-        type: FieldType.text,
-        align: TextAlign.left,
-        value: (final int index) {
-          return Categories.getNameFromId((getList()[index]).categoryId);
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByString(
-              Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), ascending);
-        },
-      );
-
-    case columnIdMemo:
-      return FieldDefinition<Transaction>(
-        name: columnIdMemo,
-        type: FieldType.text,
-        align: TextAlign.left,
-        value: (final int index) {
-          return getList()[index].memo;
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByString(a.memo, b.memo, ascending);
-        },
-      );
-
-    case columnIdAmount:
-      return FieldDefinition<Transaction>(
-        name: columnIdAmount,
-        type: FieldType.amount,
-        align: TextAlign.right,
-        value: (final int index) {
-          return (getList()[index]).amount;
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByValue(a.amount, b.amount, ascending);
-        },
-      );
-
-    case columnIdBalance:
-      return FieldDefinition<Transaction>(
-        name: columnIdBalance,
-        type: FieldType.amount,
-        align: TextAlign.right,
-        value: (final int index) {
-          return (getList()[index]).balance;
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByValue(a.balance, b.balance, ascending);
-        },
-      );
-  }
-  return null;
 }

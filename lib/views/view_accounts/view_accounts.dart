@@ -6,6 +6,7 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/accounts.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/transactions.dart';
+import 'package:money/widgets/table_view/table_transactions_fields.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';

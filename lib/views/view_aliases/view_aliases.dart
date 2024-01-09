@@ -8,6 +8,7 @@ import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/fields/fields.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
+import 'package:money/widgets/table_view/table_transactions_fields.dart';
 
 class ViewAliases extends ViewWidget<Alias> {
   const ViewAliases({super.key});

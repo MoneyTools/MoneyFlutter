@@ -11,6 +11,7 @@ import 'package:money/widgets/fields/fields.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
+import 'package:money/widgets/table_view/table_transactions_fields.dart';
 
 part 'view_rentals_details_panels.dart';
 
