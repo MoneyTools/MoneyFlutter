@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_entity.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
@@ -85,6 +86,12 @@ class Transaction extends MoneyEntity {
     this.memo = '',
     this.fitid = '',
   });
+
+  @override
+  String toString([final bool multiline = false]) {
+    final String delimiter = multiline ? '\n' : ', ';
+    return '${getDateAsText(dateTime)}$delimiter${getCurrencyText(amount)}$delimiter$memo';
+  }
 }
 
 class Transactions {

@@ -35,7 +35,7 @@ extension ViewAccountsColumns on ViewAccountsState {
       ),
       FieldDefinition<Account>(
         name: 'Count',
-        type: FieldType.numeric,
+        type: FieldType.numericShorthand,
         align: TextAlign.right,
         value: (final int index) {
           return list[index].count;

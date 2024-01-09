@@ -11,6 +11,10 @@ String getCurrencyText(final double amount, [final int decimalDigits = 2]) {
   return formatCurrency.format(amount);
 }
 
+String getNumberText(final num value) {
+  return NumberFormat.compact().format(value);
+}
+
 String getNumberAsShorthandText(final num value, {final int decimalDigits = 0, final String symbol = ''}) {
   return NumberFormat.compactCurrency(
     decimalDigits: decimalDigits,

@@ -3,6 +3,7 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/transactions.dart';
+import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/fields/field.dart';
 import 'package:money/widgets/header.dart';
@@ -69,6 +70,25 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
       Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
+  }
+
+  @override
+  void onDelete(final BuildContext context, final int index) {
+    final List<String> itemToDelete = getFieldDefinitionsForTable().getFieldValuesAstString(index);
+
+    showDialog(
+      context: context,
+      builder: (final BuildContext context) {
+        return DeleteConfirmationDialog(
+          title: 'Delete Item',
+          message: 'Are you sure you want to delete this item?\n\n${itemToDelete.join('\n')}',
+          onConfirm: () {
+            // Delete the item
+            // ...
+          },
+        );
+      },
+    );
   }
 
   @override

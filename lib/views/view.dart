@@ -126,6 +126,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription());
   }
 
+  void onDelete(final BuildContext context, final int index) {
+    // the derived class is responsible for implementing the delete operation
+  }
+
   @override
   Widget build(final BuildContext context) {
     return getViewExpandAndPadding(
@@ -253,14 +257,31 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final FieldDefinitions<T> detailPanelFields = getFieldDefinitionsForDetailsPanel();
     if (indices.isNotEmpty) {
       final int index = indices.first;
-      return SingleChildScrollView(
-        key: Key(index.toString()),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: Column(
-            children: detailPanelFields.getCellsForDetailsPanel(index),
+      return Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Expanded(
+            child: SingleChildScrollView(
+              key: Key(index.toString()),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Column(
+                  children: detailPanelFields.getCellsForDetailsPanel(index),
+                ),
+              ),
+            ),
           ),
-        ),
+          Column(
+            children: <Widget>[
+              IconButton(
+                  onPressed: () {
+                    onDelete(context, index);
+                  },
+                  icon: const Icon(Icons.delete),
+                  tooltip: 'Delete'),
+            ],
+          ),
+        ],
       );
     }
     return const Text('No item selected');

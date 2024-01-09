@@ -110,7 +110,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   }
 
   List<Widget> getCells(final int index) {
-    return widget.columns.getCellsForRow(index);
+    return widget.columns.getRowOfColumns(index);
   }
 
   void selectedItemOffset(final int delta) {
