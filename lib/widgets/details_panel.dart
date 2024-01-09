@@ -6,7 +6,7 @@ class DetailsPanel extends StatelessWidget {
   final ValueNotifier<List<int>> selectedItems;
   final int selectedTabId;
   final Function onTabActivated;
-  final Widget Function(int, List<int>) getBottomContentToRender;
+  final Widget Function(int, List<int>) getDetailPanelContent;
 
   const DetailsPanel({
     super.key,
@@ -15,7 +15,7 @@ class DetailsPanel extends StatelessWidget {
     required this.isExpanded,
     required this.onExpanded,
     required this.onTabActivated,
-    required this.getBottomContentToRender,
+    required this.getDetailPanelContent,
   });
 
   @override
@@ -101,7 +101,7 @@ class DetailsPanel extends StatelessWidget {
       child: ValueListenableBuilder<List<int>>(
         valueListenable: selectedItems,
         builder: (final BuildContext context, final List<int> list, final _) {
-          return getBottomContentToRender(selectedTabId, list);
+          return getDetailPanelContent(selectedTabId, list);
         },
       ),
     );

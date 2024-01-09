@@ -158,7 +158,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  Widget getSubViewContentForChart(final List<int> indices) {
+  Widget getPanelForChart(final List<int> indices) {
     final Map<String, num> tallyPerMonths = <String, num>{};
 
     final DateRange timePeriod =

@@ -176,7 +176,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 selectedTabId: selectedBottomTabId,
                 selectedItems: selectedItems,
                 onTabActivated: updateBottomContent,
-                getBottomContentToRender: getSubViewContent,
+                getDetailPanelContent: getDetailPanelContent,
               ),
             ),
         ],
@@ -199,14 +199,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     });
   }
 
-  Widget getSubViewContent(final int subViewId, final List<int> selectedItems) {
+  Widget getDetailPanelContent(final int subViewId, final List<int> selectedItems) {
     switch (subViewId) {
       case 0:
-        return getSubViewContentForDetails(selectedItems);
+        return getPanelForDetails(selectedItems);
       case 1:
-        return getSubViewContentForChart(selectedItems);
+        return getPanelForChart(selectedItems);
       case 2:
-        return getSubViewContentForTransactions(selectedItems);
+        return getPanelForTransactions(selectedItems);
       default:
         return const Text('- empty -');
     }
@@ -219,7 +219,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           builder: (final BuildContext context) {
             return AlertDialog(
               title: getDetailPanelHeader(context, index, list[index]),
-              content: getSubViewContentForDetails(<int>[index]),
+              content: getPanelForDetails(<int>[index]),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -249,7 +249,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getSubViewContentForDetails(final List<int> indices) {
+  Widget getPanelForDetails(final List<int> indices) {
     final FieldDefinitions<T> detailPanelFields = getFieldDefinitionsForDetailsPanel();
     if (indices.isNotEmpty) {
       final int index = indices.first;
@@ -266,11 +266,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return const Text('No item selected');
   }
 
-  Widget getSubViewContentForChart(final List<int> indices) {
+  Widget getPanelForChart(final List<int> indices) {
     return const Text('No chart to display');
   }
 
-  Widget getSubViewContentForTransactions(final List<int> indices) {
+  Widget getPanelForTransactions(final List<int> indices) {
     return const Text('the transactions');
   }
 

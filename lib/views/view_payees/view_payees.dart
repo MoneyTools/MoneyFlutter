@@ -52,12 +52,12 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
-  Widget getSubViewContentForChart(final List<int> indices) {
+  Widget getPanelForChart(final List<int> indices) {
     return _getSubViewContentForChart(indices);
   }
 
   @override
-  Widget getSubViewContentForTransactions(final List<int> indices) {
+  Widget getPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
   }
 }
