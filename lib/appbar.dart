@@ -6,13 +6,17 @@ import 'package:money/models/settings.dart';
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final void Function() onFileOpen;
   final void Function() onFileClose;
+  final void Function() onShowFileLocation;
   final void Function() onImport;
+  final void Function() onSave;
 
   const MyAppBar({
     super.key,
     required this.onFileOpen,
     required this.onFileClose,
+    required this.onShowFileLocation,
     required this.onImport,
+    required this.onSave,
   });
 
   @override
@@ -27,8 +31,15 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget build(final BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      title: widgetMainTitle(widget.onFileOpen, widget.onFileClose),
+      title: widgetMainTitle(widget.onFileOpen, widget.onFileClose, widget.onShowFileLocation),
       actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.save),
+          onPressed: () async {
+            widget.onSave();
+          },
+          tooltip: 'Save',
+        ),
         IconButton(
           icon: const Icon(Icons.cloud_download),
           onPressed: () async {
@@ -148,6 +159,7 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget widgetMainTitle(
     final void Function() handleFileOpen,
     final void Function() handleFileClose,
+    final void Function() handleShowFileLocation,
   ) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
       const Text('MyMoney', textAlign: TextAlign.left),
@@ -158,6 +170,7 @@ class _MyAppBarState extends State<MyAppBar> {
           final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
           list.add(const PopupMenuItem<int>(value: 1, child: Text('Close')));
           list.add(const PopupMenuItem<int>(value: 2, child: Text('Open')));
+          list.add(const PopupMenuItem<int>(value: 3, child: Text('File location')));
           return list;
         },
         onSelected: (final int index) {
@@ -166,6 +179,9 @@ class _MyAppBarState extends State<MyAppBar> {
           }
           if (index == 2) {
             handleFileOpen();
+          }
+          if (index == 3) {
+            handleShowFileLocation();
           }
         },
       ),

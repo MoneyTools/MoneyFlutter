@@ -305,4 +305,18 @@ class Categories {
       }
     }
   }
+
+  static String toCSV() {
+    final StringBuffer csv = StringBuffer();
+    csv.writeln('"id","parentId","type"');
+
+    for (final Category category in Categories.moneyObjects.getAsList()) {
+      csv.writeln(
+        '"${category.id}","${category.parentId}","${category.type.index}"',
+      );
+    }
+    // Add the UTF-8 BOM for Excel
+    // This does not affect clients like Google sheets
+    return '\uFEFF$csv';
+  }
 }

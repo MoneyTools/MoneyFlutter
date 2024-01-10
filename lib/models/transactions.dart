@@ -175,4 +175,18 @@ class Transactions {
     final double amount = Random().nextDouble() * (isExpense ? -500 : 2500);
     return roundDouble(amount, 2);
   }
+
+  static String toCSV() {
+    final StringBuffer csv = StringBuffer();
+    csv.writeln('"id","accountId","date","payeeId","categoryId","memo"');
+
+    for (final Transaction t in Transactions.list) {
+      csv.writeln(
+        '"${t.id}","${t.accountId}","${t.dateTimeAsText}","${t.payeeId}","${t.categoryId}","${t.memo}"',
+      );
+    }
+    // Add the UTF-8 BOM for Excel
+    // This does not affect clients like Google sheets
+    return '\uFEFF$csv';
+  }
 }

@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/data_io/file_systems.dart';
 import 'package:money/models/data_io/import_qfx.dart';
 import 'package:money/models/data_io/import_qif.dart';
 import 'package:money/models/settings.dart';
@@ -166,6 +167,14 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
+  void handleShowFileLocation() {
+    openFolder(Settings().pathToDatabaseFolder!);
+  }
+
+  void handleOnSave() {
+    data.save(Settings().pathToDatabaseFolder!);
+  }
+
   Widget showLoading() {
     return const Expanded(child: Center(child: CircularProgressIndicator()));
   }
@@ -195,15 +204,26 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   Widget welcomePanel(final BuildContext context) {
+    return myScaffold(
+      body: Row(
+        children: <Widget>[
+          renderWelcomeAndOpen(context),
+        ],
+      ),
+    );
+  }
+
+  Widget myScaffold({required final Widget body, final Widget? bottomNavigationBar}) {
     return Scaffold(
       appBar: MyAppBar(
         onFileOpen: handleFileOpen,
         onFileClose: handleFileClose,
+        onShowFileLocation: handleShowFileLocation,
         onImport: handleImport,
+        onSave: handleOnSave,
       ),
-      body: Row(children: <Widget>[
-        renderWelcomeAndOpen(context),
-      ]),
+      body: body,
+      bottomNavigationBar: bottomNavigationBar,
     );
   }
 
@@ -292,12 +312,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   Widget getScaffoldingForSmallSurface(final BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
-        onFileOpen: handleFileOpen,
-        onFileClose: handleFileClose,
-        onImport: handleImport,
-      ),
+    return myScaffold(
       body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
       bottomNavigationBar:
           MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
@@ -305,12 +320,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   Widget getScaffoldingForLargeSurface(final BuildContext context) {
-    return Scaffold(
-      appBar: MyAppBar(
-        onFileOpen: handleFileOpen,
-        onFileClose: handleFileClose,
-        onImport: handleImport,
-      ),
+    return myScaffold(
       body: SafeArea(
         bottom: false,
         top: false,

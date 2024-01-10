@@ -17,7 +17,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.14
+version: 1.0.15
 
 environment:
   # This is the dart constraint
@@ -43,6 +43,8 @@ dependencies:
   shared_preferences: ^2.0.15
   sqlite3: ^2.3.0
   sqlite3_flutter_libs: ^0.5.18
+  url_launcher: ^6.0.13
+  csv: ^5.1.1
 
 dependency_overrides:
   path: 1.9.0

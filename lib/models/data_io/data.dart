@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/aliases.dart';
+import 'package:money/models/data_io/file_systems.dart';
 
 import 'package:money/models/rentals.dart';
 
@@ -133,5 +134,30 @@ class Data {
       // next line will handle things
     }
     return null;
+  }
+
+  void save(final String containerFolder) {
+    final TimeLapse timeLapse = TimeLapse();
+
+    final String folder = MyFileSystems.append(containerFolder, 'moneyCSV');
+
+    MyFileSystems.ensureFolderExist(folder).then((final _) {
+      MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'accounts.csv'),
+        Accounts.toCSV(),
+      );
+
+      MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'categories.csv'),
+        Categories.toCSV(),
+      );
+
+      MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'transactions.csv'),
+        Transactions.toCSV(),
+      );
+
+      timeLapse.endAndPrint();
+    });
   }
 }

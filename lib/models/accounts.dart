@@ -116,6 +116,27 @@ class Account extends MoneyEntity {
         return AccountType._notUsed_7;
     }
   }
+
+  @override
+  Map<String, dynamic> toJSon() {
+    return <String, dynamic>{
+      'accountId': accountId,
+      'flags': flags,
+      'ofxAccountId': ofxAccountId,
+      'description': description,
+      'type': type.index,
+    };
+  }
+
+  List<dynamic> toCSV() {
+    return <dynamic>[
+      accountId,
+      flags,
+      ofxAccountId,
+      description,
+      type.index,
+    ];
+  }
 }
 
 class Accounts {
@@ -167,6 +188,10 @@ class Accounts {
 
   clear() {
     moneyObjects.clear();
+  }
+
+  static List<Account> list() {
+    return moneyObjects.getAsList();
   }
 
 /*
@@ -236,5 +261,19 @@ class Accounts {
         item.balance += t.amount;
       }
     }
+  }
+
+  static String toCSV() {
+    final StringBuffer csv = StringBuffer();
+    csv.writeln('"id","accountId","type","ofxAccountId","description","flags"');
+
+    for (final Account account in Accounts.moneyObjects.getAsList()) {
+      csv.writeln(
+        '"${account.id}","${account.accountId}","${account.type.index}","${account.ofxAccountId}","${account.description}","${account.flags}"',
+      );
+    }
+    // Add the UTF-8 BOM for Excel
+    // This does not affect clients like Google sheets
+    return '\uFEFF$csv';
   }
 }

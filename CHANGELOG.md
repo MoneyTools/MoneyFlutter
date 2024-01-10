@@ -1,3 +1,8 @@
+## [1.0.15] 2024-01-10
+
+- Basic Save as CSV
+- Show OS container folder
+
 ## [1.0.14] 2024-01-09
 
 - Performance improvement on Transaction list

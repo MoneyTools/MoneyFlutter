@@ -6,11 +6,14 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'dart:convert';
 
+import 'package:path/path.dart' as p;
+
 class Settings {
   bool prefLoaded = false;
   int colorSelected = 0;
   int screenIndex = 0;
   String? pathToDatabase;
+  String? get pathToDatabaseFolder => p.dirname(Settings().pathToDatabase!);
   bool isDetailsPanelExpanded = false;
   bool includeClosedAccounts = false;
   bool rentals = false;

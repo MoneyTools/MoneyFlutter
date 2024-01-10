@@ -135,3 +135,15 @@ int roundToNextNaturalFit(final int number, final int divisor) {
   final int base = number - remainder;
   return base + divisor;
 }
+
+class TimeLapse {
+  Stopwatch? stopwatch;
+  TimeLapse() {
+    stopwatch = Stopwatch()..start();
+  }
+
+  // End stopwatch and print time spent
+  void endAndPrint() {
+    // print('Elapsed time: ${stopwatch?.elapsedMilliseconds} milliseconds');
+  }
+}
