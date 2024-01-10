@@ -37,7 +37,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
       name: 'Payee',
       type: FieldType.text,
       align: TextAlign.left,
-      value: (final int index) {
+      valueFromList: (final int index) {
         return Payees.getNameFromId(list[index].payeeId);
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
@@ -51,7 +51,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
       name: 'Pattern',
       type: FieldType.text,
       align: TextAlign.left,
-      value: (final int index) {
+      valueFromList: (final int index) {
         return list[index].name;
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
@@ -65,7 +65,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
       name: 'Type',
       type: FieldType.text,
       align: TextAlign.left,
-      value: (final int index) {
+      valueFromList: (final int index) {
         return list[index].type.toString();
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {

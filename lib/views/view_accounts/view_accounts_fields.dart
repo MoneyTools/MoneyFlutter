@@ -7,7 +7,7 @@ extension ViewAccountsColumns on ViewAccountsState {
         name: 'Name',
         type: FieldType.text,
         align: TextAlign.left,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].name;
         },
         sort: (final Account a, final Account b, final bool sortAscending) {
@@ -22,7 +22,7 @@ extension ViewAccountsColumns on ViewAccountsState {
         name: 'Type',
         type: FieldType.text,
         align: TextAlign.center,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].getTypeAsText();
         },
         sort: (final Account a, final Account b, final bool sortAscending) {
@@ -37,7 +37,7 @@ extension ViewAccountsColumns on ViewAccountsState {
         name: 'Count',
         type: FieldType.numericShorthand,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].count;
         },
         sort: (final Account a, final Account b, final bool sortAscending) {
@@ -52,7 +52,7 @@ extension ViewAccountsColumns on ViewAccountsState {
         name: 'Balance',
         type: FieldType.amount,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].balance;
         },
         sort: (final Account a, final Account b, final bool sortAscending) {
@@ -71,7 +71,7 @@ extension ViewAccountsColumns on ViewAccountsState {
           name: 'Status',
           type: FieldType.text,
           align: TextAlign.center,
-          value: (final int index) {
+          valueFromList: (final int index) {
             return list[index].isClosed() ? 'Closed' : 'Active';
           },
           sort: (final Account a, final Account b, final bool sortAscending) {

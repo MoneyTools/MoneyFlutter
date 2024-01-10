@@ -12,18 +12,22 @@ enum FieldType {
 
 class FieldDefinition<T> {
   final String name;
+  String? serializeName;
   final FieldType type;
   final TextAlign align;
-  final dynamic Function(int) value;
   final int Function(T, T, bool) sort;
   final bool readOnly;
   final bool isMultiLine;
+  dynamic Function(int)? valueFromList;
+  dynamic Function(T)? valueFromInstance;
 
   FieldDefinition({
     required this.name,
+    this.serializeName,
     required this.type,
     required this.align,
-    required this.value,
+    this.valueFromList,
+    this.valueFromInstance,
     required this.sort,
     this.readOnly = true,
     this.isMultiLine = false,

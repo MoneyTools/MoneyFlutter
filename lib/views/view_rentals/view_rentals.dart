@@ -43,7 +43,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
       name: 'Name',
       type: FieldType.text,
       align: TextAlign.left,
-      value: (final int index) {
+      valueFromList: (final int index) {
         return list[index].name;
       },
       sort: (final Rental a, final Rental b, final bool sortAscending) {
@@ -57,7 +57,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
       name: 'Address',
       type: FieldType.text,
       align: TextAlign.left,
-      value: (final int index) {
+      valueFromList: (final int index) {
         return list[index].address;
       },
       sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
@@ -71,7 +71,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
       name: 'Note',
       type: FieldType.text,
       align: TextAlign.left,
-      value: (final int index) {
+      valueFromList: (final int index) {
         return list[index].note;
       },
       sort: (final MoneyEntity a, final MoneyEntity b, final bool sortAscending) {
@@ -90,7 +90,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
         name: 'In Service',
         type: FieldType.text,
         align: TextAlign.left,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return (list[index]).dateRange.toStringYears();
         },
         sort: (final Rental a, final Rental b, final bool sortAscending) {
@@ -101,7 +101,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
         name: 'Transactions',
         type: FieldType.numeric,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].count;
         },
         sort: (final Rental a, final Rental b, final bool sortAscending) {
@@ -112,7 +112,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
         name: 'Revenue',
         type: FieldType.amountShorthand,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return (list[index]).revenue;
         },
         sort: (final Rental a, final Rental b, final bool sortAscending) {
@@ -123,7 +123,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
         name: 'Expense',
         type: FieldType.amountShorthand,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return (list[index]).expense;
         },
         sort: (final Rental a, final Rental b, final bool sortAscending) {
@@ -134,7 +134,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
         name: 'Profit',
         type: FieldType.amountShorthand,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].profit;
         },
         sort: (final Rental a, final Rental b, final bool sortAscending) {
@@ -154,7 +154,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
       type: FieldType.amount,
       align: TextAlign.right,
       isMultiLine: true,
-      value: (final int index) {
+      valueFromList: (final int index) {
         return getUnitsAsString((list[index]).units);
       },
       sort: (final MoneyEntity a, final MoneyEntity b, final bool ascending) {

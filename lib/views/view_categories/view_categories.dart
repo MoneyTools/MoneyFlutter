@@ -101,7 +101,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Name',
         type: FieldType.text,
         align: TextAlign.left,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].name;
         },
         sort: (final Category a, final Category b, final bool sortAscending) {
@@ -112,7 +112,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Type',
         type: FieldType.text,
         align: TextAlign.center,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return (list[index]).getTypeAsText();
         },
         sort: (final Category a, final Category b, final bool sortAscending) {
@@ -127,7 +127,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Count',
         type: FieldType.numeric,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].count;
         },
         sort: (final Category a, final Category b, final bool sortAscending) {
@@ -138,7 +138,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Balance',
         type: FieldType.amount,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return list[index].balance;
         },
         sort: (final Category a, final Category b, final bool sortAscending) {

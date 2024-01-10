@@ -63,6 +63,14 @@ int sortByValue(final num a, final num b, final bool ascending) {
   }
 }
 
+int sortByDate(final DateTime a, final DateTime b, final bool ascending) {
+  if (ascending) {
+    return b.compareTo(a);
+  } else {
+    return a.compareTo(b);
+  }
+}
+
 extension Range on num {
   bool isBetween(final num from, final num to) {
     return from < this && this < to;
@@ -138,6 +146,7 @@ int roundToNextNaturalFit(final int number, final int divisor) {
 
 class TimeLapse {
   Stopwatch? stopwatch;
+
   TimeLapse() {
     stopwatch = Stopwatch()..start();
   }

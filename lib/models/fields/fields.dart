@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/fields/field.dart';
 export 'package:money/models/fields/field.dart';
@@ -7,6 +8,10 @@ class FieldDefinitions<T> {
 
   FieldDefinitions({required this.list}) {
     assert(T != dynamic, 'Type T cannot be dynamic');
+  }
+
+  FieldDefinition<T>? getFieldById(final String fieldName) {
+    return list.firstWhereOrNull((final FieldDefinition<T> item) => item.name == fieldName);
   }
 
   List<Widget> getRowOfColumns(final int index) {
@@ -20,7 +25,7 @@ class FieldDefinitions<T> {
 
   Widget getWidgetForField(final int columnIndex, final int index) {
     final FieldDefinition<T> fieldDefinition = list[columnIndex];
-    final dynamic fieldValue = list[columnIndex].value(index);
+    final dynamic fieldValue = list[columnIndex].valueFromList!(index);
     return fieldDefinition.getWidget(fieldValue);
   }
 
@@ -47,14 +52,14 @@ class FieldDefinitions<T> {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < list.length; fieldIndex++) {
       final FieldDefinition<T> fieldDefinition = list[fieldIndex];
-      strings.add(fieldDefinition.getString(fieldDefinition.value(rowIndex)));
+      strings.add(fieldDefinition.getString(fieldDefinition.valueFromList!(rowIndex)));
     }
     return strings;
   }
 
   Widget getBestWidgetForFieldDefinition(final int columnIndex, final int rowIndex) {
     final FieldDefinition<T> fieldDefinition = list[columnIndex];
-    final dynamic fieldValue = fieldDefinition.value(rowIndex);
+    final dynamic fieldValue = fieldDefinition.valueFromList!(rowIndex);
 
     if (fieldDefinition.isMultiLine) {
       return TextFormField(
@@ -80,5 +85,25 @@ class FieldDefinitions<T> {
         ),
       );
     }
+  }
+
+  String getCsvHeader() {
+    final List<String> headerList = <String>[];
+    for (final FieldDefinition<T> field in list) {
+      if (field.serializeName != null) {
+        headerList.add('"${field.serializeName!}"');
+      }
+    }
+    return headerList.join(',');
+  }
+
+  String getCsvRowValues(final T item) {
+    final List<dynamic> listOfValues = <dynamic>[];
+    for (final FieldDefinition<T> field in list) {
+      if (field.serializeName != null && field.valueFromInstance != null) {
+        listOfValues.add('"${field.valueFromInstance!(item)}"');
+      }
+    }
+    return listOfValues.join(',');
   }
 }

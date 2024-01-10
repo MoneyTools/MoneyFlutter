@@ -25,7 +25,7 @@ FieldDefinition<Transaction>? getFieldDefinitionFromId(
         name: columnIdAccount,
         type: FieldType.text,
         align: TextAlign.left,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return Accounts.getNameFromId((getList()[index]).accountId);
         },
         sort: (final Transaction a, final Transaction b, final bool ascending) {
@@ -37,11 +37,11 @@ FieldDefinition<Transaction>? getFieldDefinitionFromId(
           name: columnIdDate,
           type: FieldType.text,
           align: TextAlign.left,
-          value: (final int index) {
+          valueFromList: (final int index) {
             return getList()[index].dateTimeAsText;
           },
           sort: (final Transaction a, final Transaction b, final bool ascending) {
-            return a.dateTime.compareTo(b.dateTime) * (ascending ? 1 : -1);
+            return sortByDate(a.dateTime, b.dateTime, ascending);
           });
 
     case columnIdPayee:
@@ -49,7 +49,7 @@ FieldDefinition<Transaction>? getFieldDefinitionFromId(
         name: columnIdPayee,
         type: FieldType.text,
         align: TextAlign.left,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return Payees.getNameFromId((getList()[index]).payeeId);
         },
         sort: (final Transaction a, final Transaction b, final bool ascending) {
@@ -62,7 +62,7 @@ FieldDefinition<Transaction>? getFieldDefinitionFromId(
         name: columnIdCategory,
         type: FieldType.text,
         align: TextAlign.left,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return Categories.getNameFromId((getList()[index]).categoryId);
         },
         sort: (final Transaction a, final Transaction b, final bool ascending) {
@@ -76,7 +76,7 @@ FieldDefinition<Transaction>? getFieldDefinitionFromId(
         name: columnIdMemo,
         type: FieldType.text,
         align: TextAlign.left,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return getList()[index].memo;
         },
         sort: (final Transaction a, final Transaction b, final bool ascending) {
@@ -89,7 +89,7 @@ FieldDefinition<Transaction>? getFieldDefinitionFromId(
         name: columnIdAmount,
         type: FieldType.amount,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return (getList()[index]).amount;
         },
         sort: (final Transaction a, final Transaction b, final bool ascending) {
@@ -102,7 +102,7 @@ FieldDefinition<Transaction>? getFieldDefinitionFromId(
         name: columnIdBalance,
         type: FieldType.amount,
         align: TextAlign.right,
-        value: (final int index) {
+        valueFromList: (final int index) {
           return (getList()[index]).balance;
         },
         sort: (final Transaction a, final Transaction b, final bool ascending) {
