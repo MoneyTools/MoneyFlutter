@@ -113,11 +113,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void onSort() {
     if (columns.list.isNotEmpty) {
       final FieldDefinition<T> fieldDefinition = columns.list[sortByColumn];
-      final int Function(T p1, T p2, bool p3) sortFunction = fieldDefinition.sort;
+      final int Function(T p1, T p2, bool p3)? sortFunction = fieldDefinition.sort;
 
-      list.sort((final T a, final T b) {
-        return sortFunction(a, b, sortAscending);
-      });
+      if (sortFunction != null) {
+        list.sort((final T a, final T b) {
+          return sortFunction(a, b, sortAscending);
+        });
+      }
     }
   }
 

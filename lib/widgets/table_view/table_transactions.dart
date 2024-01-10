@@ -72,15 +72,13 @@ class _TableTransactionsState extends State<TableTransactions> {
 
   void onSort() {
     final FieldDefinition<Transaction> fieldDefinition = columns.list[sortBy];
-    final int Function(
-      Transaction p1,
-      Transaction p2,
-      bool p3,
-    ) sortFunction = fieldDefinition.sort;
-
-    widget.getList().sort((final Transaction a, final Transaction b) {
-      return sortFunction(a, b, sortAscending);
-    });
+    if (fieldDefinition.sort != null) {
+      widget.getList().sort(
+        (final Transaction a, final Transaction b) {
+          return fieldDefinition.sort!(a, b, sortAscending);
+        },
+      );
+    }
   }
 
   SortIndicator getSortIndicated(final int columnNumber) {

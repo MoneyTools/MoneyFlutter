@@ -1,3 +1,7 @@
+import 'dart:ui';
+
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entity.dart';
 import 'package:money/models/transactions.dart';
 
@@ -59,6 +63,62 @@ class Category extends MoneyEntity {
       default:
         return CategoryType.none;
     }
+  }
+
+  static FieldDefinition<Category> getFieldForType() {
+    return FieldDefinition<Category>(
+      name: 'Type',
+      type: FieldType.text,
+      align: TextAlign.left,
+      valueFromInstance: (final Category item) {
+        return item.type.toString();
+      },
+      sort: (final Category a, final Category b, final bool sortAscending) {
+        return sortByString(a.type.toString(), b.type.toString(), sortAscending);
+      },
+    );
+  }
+
+  static FieldDefinitions<Category> getFieldDefinitions() {
+    final FieldDefinitions<Category> fields = FieldDefinitions<Category>(list: <FieldDefinition<Category>>[
+      FieldDefinition<Category>(
+        name: 'Id',
+        serializeName: 'id',
+        type: FieldType.text,
+        align: TextAlign.left,
+        valueFromList: (final int index) => '',
+        valueFromInstance: (final Category entity) => entity.id,
+        sort: (final Category a, final Category b, final bool sortAscending) {
+          return sortByValue(a.id, b.id, sortAscending);
+        },
+      ),
+      FieldDefinition<Category>(
+        name: 'Name',
+        serializeName: 'name',
+        type: FieldType.text,
+        align: TextAlign.left,
+        valueFromInstance: (final Category entity) => entity.name,
+        sort: (final Category a, final Category b, final bool sortAscending) {
+          return sortByString(a.name, b.name, sortAscending);
+        },
+      ),
+      getFieldForType(),
+      FieldDefinition<Category>(
+        serializeName: 'parentId',
+        valueFromInstance: (final Category entity) => entity.parentId,
+      ),
+    ]);
+    return fields;
+  }
+
+  static getCsvHeader() {
+    final List<String> headerList = <String>[];
+    getFieldDefinitions().list.forEach((final FieldDefinition<Category> field) {
+      if (field.serializeName != null) {
+        headerList.add(field.serializeName!);
+      }
+    });
+    return headerList.join(',');
   }
 }
 
@@ -308,12 +368,13 @@ class Categories {
 
   static String toCSV() {
     final StringBuffer csv = StringBuffer();
-    csv.writeln('"id","parentId","type"');
 
-    for (final Category category in Categories.moneyObjects.getAsList()) {
-      csv.writeln(
-        '"${category.id}","${category.parentId}","${category.type.index}"',
-      );
+    // CSV Header
+    csv.writeln(Category.getFieldDefinitions().getCsvHeader());
+
+    // CSV Rows
+    for (final Category item in Categories.moneyObjects.getAsList()) {
+      csv.writeln(Category.getFieldDefinitions().getCsvRowValues(item));
     }
     // Add the UTF-8 BOM for Excel
     // This does not affect clients like Google sheets

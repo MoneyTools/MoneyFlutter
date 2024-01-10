@@ -27,22 +27,24 @@ class MyTableHeader<T> extends StatelessWidget {
   Widget build(final BuildContext context) {
     final List<Widget> headers = <Widget>[];
     for (int i = 0; i < columns.list.length; i++) {
-      headers.add(
-        widgetHeaderButton(
-          context,
-          columns.list[i].name,
-          columns.list[i].align,
-          getSortIndicated(i),
-          // Press
-          () {
-            onTap(i);
-          },
-          // Long Press
-          () {
-            onLongPress(i);
-          },
-        ),
-      );
+      if (columns.list[i].name != null) {
+        headers.add(
+          widgetHeaderButton(
+            context,
+            columns.list[i].name!,
+            columns.list[i].align,
+            getSortIndicated(i),
+            // Press
+            () {
+              onTap(i);
+            },
+            // Long Press
+            () {
+              onLongPress(i);
+            },
+          ),
+        );
+      }
     }
     return Row(children: headers);
   }

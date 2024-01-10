@@ -148,13 +148,18 @@ class Data {
       );
 
       MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'categories.csv'),
+        Categories.toCSV(),
+      );
+
+      MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'payees.csv'),
         Payees.toCSV(),
       );
 
       MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'categories.csv'),
-        Categories.toCSV(),
+        MyFileSystems.append(folder, 'aliases.csv'),
+        Aliases.toCSV(),
       );
 
       MyFileSystems.writeToFile(
