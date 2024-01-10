@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entity.dart';
 
 import 'package:money/models/categories.dart';
 import 'package:money/models/rentals.dart';
 import 'package:money/models/splits.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/widgets/fields/field.dart';
-import 'package:money/widgets/fields/fields.dart';
+
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';

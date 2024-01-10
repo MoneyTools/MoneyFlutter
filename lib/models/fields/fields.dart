@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:money/widgets/fields/field.dart';
+import 'package:money/models/fields/field.dart';
+export 'package:money/models/fields/field.dart';
 
 class FieldDefinitions<T> {
   final List<FieldDefinition<T>> list;

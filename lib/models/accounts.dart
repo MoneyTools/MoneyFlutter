@@ -117,17 +117,6 @@ class Account extends MoneyEntity {
     }
   }
 
-  @override
-  Map<String, dynamic> toJSon() {
-    return <String, dynamic>{
-      'accountId': accountId,
-      'flags': flags,
-      'ofxAccountId': ofxAccountId,
-      'description': description,
-      'type': type.index,
-    };
-  }
-
   List<dynamic> toCSV() {
     return <dynamic>[
       accountId,

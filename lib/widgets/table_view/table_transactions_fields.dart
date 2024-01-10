@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/accounts.dart';
 import 'package:money/models/categories.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/payees.dart';
 import 'package:money/models/transactions.dart';
-import 'package:money/widgets/fields/field.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
