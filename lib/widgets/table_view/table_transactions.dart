@@ -72,7 +72,7 @@ class _TableTransactionsState extends State<TableTransactions> {
   }
 
   void onSort() {
-    final FieldDefinition<Transaction> fieldDefinition = columns.list[sortBy];
+    final FieldDefinition<Transaction> fieldDefinition = columns.definitions[sortBy];
     if (fieldDefinition.sort != null) {
       widget.getList().sort(
         (final Transaction a, final Transaction b) {
@@ -96,7 +96,7 @@ class _TableTransactionsState extends State<TableTransactions> {
       listOfColumns.add(getFieldDefinitionFromId(columnId, widget.getList)!);
     }
 
-    return FieldDefinitions<Transaction>(list: listOfColumns);
+    return FieldDefinitions<Transaction>(definitions: listOfColumns);
   }
 }
 

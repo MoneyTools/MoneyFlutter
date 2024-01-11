@@ -69,7 +69,7 @@ class Category extends MoneyEntity {
   }
 
   static FieldDefinitions<Category> getFieldDefinitions() {
-    final FieldDefinitions<Category> fields = FieldDefinitions<Category>(list: <FieldDefinition<Category>>[
+    final FieldDefinitions<Category> fields = FieldDefinitions<Category>(definitions: <FieldDefinition<Category>>[
       FieldDefinition<Category>(
         name: 'Id',
         serializeName: 'id',
@@ -102,7 +102,7 @@ class Category extends MoneyEntity {
 
   static getCsvHeader() {
     final List<String> headerList = <String>[];
-    getFieldDefinitions().list.forEach((final FieldDefinition<Category> field) {
+    getFieldDefinitions().definitions.forEach((final FieldDefinition<Category> field) {
       if (field.serializeName != null) {
         headerList.add(field.serializeName!);
       }

@@ -84,7 +84,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
 
   @override
   FieldDefinitions<Rental> getFieldDefinitionsForTable() {
-    return FieldDefinitions<Rental>(list: <FieldDefinition<Rental>>[
+    return FieldDefinitions<Rental>(definitions: <FieldDefinition<Rental>>[
       getColumnForName(),
       getColumnForAddress(),
       getColumnForNote(),
@@ -149,7 +149,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
   @override
   FieldDefinitions<Rental> getFieldDefinitionsForDetailsPanel() {
     final FieldDefinitions<Rental> fields = FieldDefinitions<Rental>(
-        list: <FieldDefinition<Rental>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
+        definitions: <FieldDefinition<Rental>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
 
     final FieldDefinition<Rental> fieldUnit = FieldDefinition<Rental>(
       name: 'Unit',

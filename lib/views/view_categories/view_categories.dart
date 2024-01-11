@@ -97,7 +97,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
 
   @override
   FieldDefinitions<Category> getFieldDefinitionsForTable() {
-    return FieldDefinitions<Category>(list: <FieldDefinition<Category>>[
+    return FieldDefinitions<Category>(definitions: <FieldDefinition<Category>>[
       FieldDefinition<Category>(
         name: 'Name',
         type: FieldType.text,

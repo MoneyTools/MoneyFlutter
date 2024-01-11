@@ -11,7 +11,7 @@ class Payee extends MoneyEntity {
   Payee(super.id, super.name);
 
   static FieldDefinitions<Payee> getFieldDefinitions() {
-    final FieldDefinitions<Payee> fields = FieldDefinitions<Payee>(list: <FieldDefinition<Payee>>[
+    final FieldDefinitions<Payee> fields = FieldDefinitions<Payee>(definitions: <FieldDefinition<Payee>>[
       FieldDefinition<Payee>(
         name: 'Id',
         serializeName: 'id',
@@ -65,7 +65,7 @@ class Payee extends MoneyEntity {
 
   static getCsvHeader() {
     final List<String> headerList = <String>[];
-    getFieldDefinitions().list.forEach((final FieldDefinition<Payee> field) {
+    getFieldDefinitions().definitions.forEach((final FieldDefinition<Payee> field) {
       if (field.serializeName != null) {
         headerList.add(field.serializeName!);
       }

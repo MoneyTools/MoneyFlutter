@@ -136,7 +136,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
       listOfColumns.add(getFieldDefinitionFromId(columnId, () => list)!);
     }
 
-    return FieldDefinitions<Transaction>(list: listOfColumns);
+    return FieldDefinitions<Transaction>(definitions: listOfColumns);
   }
 
   @override

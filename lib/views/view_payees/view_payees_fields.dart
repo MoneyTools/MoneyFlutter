@@ -17,7 +17,7 @@ extension ViewPayeesColumns on ViewPayeesState {
       return list[index].balance;
     };
 
-    return FieldDefinitions<Payee>(list: <FieldDefinition<Payee>>[
+    return FieldDefinitions<Payee>(definitions: <FieldDefinition<Payee>>[
       fieldName,
       fieldCount,
       fieldBalance,

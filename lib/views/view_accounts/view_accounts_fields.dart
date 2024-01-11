@@ -85,6 +85,6 @@ extension ViewAccountsColumns on ViewAccountsState {
       );
     }
 
-    return FieldDefinitions<Account>(list: fieldDefinitions);
+    return FieldDefinitions<Account>(definitions: fieldDefinitions);
   }
 }

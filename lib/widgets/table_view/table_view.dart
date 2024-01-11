@@ -31,7 +31,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   final ScrollController scrollController = ScrollController();
 
   FieldDefinitions<T> getFieldDefinitions() {
-    return FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
+    return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
   }
 
   @override

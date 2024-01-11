@@ -34,7 +34,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   FieldDefinitions<Alias> getFieldDefinitionsForTable() {
-    return FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
+    return FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
       Alias.getFieldForPayee(),
       Alias.getFieldForPattern(),
       Alias.getFieldForType(),
@@ -43,7 +43,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   FieldDefinitions<Alias> getFieldDefinitionsForDetailsPanel() {
-    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
+    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
       Alias.getFieldForPattern(),
       Alias.getFieldForType(),
     ]);

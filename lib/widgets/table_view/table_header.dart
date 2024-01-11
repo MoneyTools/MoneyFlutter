@@ -26,13 +26,13 @@ class MyTableHeader<T> extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final List<Widget> headers = <Widget>[];
-    for (int i = 0; i < columns.list.length; i++) {
-      if (columns.list[i].name != null) {
+    for (int i = 0; i < columns.definitions.length; i++) {
+      if (columns.definitions[i].name != null) {
         headers.add(
           widgetHeaderButton(
             context,
-            columns.list[i].name!,
-            columns.list[i].align,
+            columns.definitions[i].name!,
+            columns.definitions[i].align,
             getSortIndicated(i),
             // Press
             () {

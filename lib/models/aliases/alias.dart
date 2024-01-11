@@ -82,7 +82,7 @@ class Alias extends MoneyEntity {
   }
 
   static FieldDefinitions<Alias> getFieldDefinitions() {
-    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(list: <FieldDefinition<Alias>>[
+    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
       FieldDefinition<Alias>(
         name: 'Id',
         serializeName: 'id',
@@ -117,7 +117,7 @@ class Alias extends MoneyEntity {
 
   static getCsvHeader() {
     final List<String> headerList = <String>[];
-    getFieldDefinitions().list.forEach((final FieldDefinition<Alias> field) {
+    getFieldDefinitions().definitions.forEach((final FieldDefinition<Alias> field) {
       if (field.serializeName != null) {
         headerList.add(field.serializeName!);
       }

@@ -25,7 +25,7 @@ class ViewWidget<T> extends StatefulWidget {
 }
 
 class ViewWidgetState<T> extends State<ViewWidget<T>> {
-  FieldDefinitions<T> columns = FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
+  FieldDefinitions<T> columns = FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
 
   int lastSelectedItemIndex = 0;
   ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
@@ -50,7 +50,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   FieldDefinitions<T> getFieldDefinitionsForTable() {
-    return FieldDefinitions<T>(list: <FieldDefinition<T>>[]);
+    return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
   }
 
   FieldDefinitions<T> getFieldDefinitionsForDetailsPanel() {
@@ -111,8 +111,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   void onSort() {
-    if (columns.list.isNotEmpty) {
-      final FieldDefinition<T> fieldDefinition = columns.list[sortByColumn];
+    if (columns.definitions.isNotEmpty) {
+      final FieldDefinition<T> fieldDefinition = columns.definitions[sortByColumn];
       final int Function(T p1, T p2, bool p3)? sortFunction = fieldDefinition.sort;
 
       if (sortFunction != null) {
