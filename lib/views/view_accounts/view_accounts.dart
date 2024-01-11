@@ -10,7 +10,7 @@ import 'package:money/models/settings.dart';
 import 'package:money/models/transactions/transaction.dart';
 import 'package:money/widgets/three_part_label.dart';
 
-import 'package:money/widgets/header.dart';
+import 'package:money/views/view_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
@@ -75,7 +75,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   @override
   Widget getTitle() {
     return Column(children: <Widget>[
-      Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
+      ViewHeader(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
   }

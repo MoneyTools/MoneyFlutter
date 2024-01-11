@@ -4,12 +4,12 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/widgets/three_part_label.dart';
 
-class Header extends StatelessWidget {
+class ViewHeader extends StatelessWidget {
   final String title;
   final num count;
   final String description;
 
-  const Header(this.title, this.count, this.description, {super.key});
+  const ViewHeader(this.title, this.count, this.description, {super.key});
 
   @override
   Widget build(final BuildContext context) {

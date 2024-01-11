@@ -8,7 +8,7 @@ import 'package:money/models/transactions/transactions.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/three_part_label.dart';
 
-import 'package:money/widgets/header.dart';
+import 'package:money/views/view_header.dart';
 import 'package:money/widgets/chart.dart';
 
 import 'package:money/views/view.dart';
@@ -67,7 +67,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   @override
   Widget getTitle() {
     return Column(children: <Widget>[
-      Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
+      ViewHeader(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
   }

@@ -9,7 +9,7 @@ import 'package:money/models/transactions/transactions.dart';
 
 import 'package:money/models/accounts/accounts.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/widgets/header.dart';
+import 'package:money/views/view_header.dart';
 import 'package:money/widgets/scroll_both_ways.dart';
 import 'package:money/widgets/widget_sankey/sankey_helper.dart';
 import 'package:money/widgets/widget_sankey/widget_sankey_chart.dart';
@@ -111,7 +111,7 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
     return getViewExpandAndPadding(
       Column(
         children: <Widget>[
-          Header('Cash Flow', totalIncomes + totalExpenses, 'See where assets are allocated.'),
+          ViewHeader('Cash Flow', totalIncomes + totalExpenses, 'See where assets are allocated.'),
           Expanded(child: ScrollBothWay(child: getView(context))),
         ],
       ),

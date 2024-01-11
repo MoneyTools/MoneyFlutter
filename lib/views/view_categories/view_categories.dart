@@ -6,7 +6,7 @@ import 'package:money/models/categories/categories.dart';
 import 'package:money/models/categories/category.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/transactions/transaction.dart';
-import 'package:money/widgets/header.dart';
+import 'package:money/views/view_header.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
@@ -89,7 +89,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   @override
   Widget getTitle() {
     return Column(children: <Widget>[
-      Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
+      ViewHeader(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
       renderToggles(),
     ]);
   }

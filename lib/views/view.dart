@@ -10,7 +10,7 @@ import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widgets.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/widgets/header.dart';
+import 'package:money/views/view_header.dart';
 import 'package:money/widgets/details_panel.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
@@ -122,7 +122,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   Widget getTitle() {
-    return Header(getClassNamePlural(), numValueOrDefault(list.length), getDescription());
+    return ViewHeader(getClassNamePlural(), numValueOrDefault(list.length), getDescription());
   }
 
   void onDelete(final BuildContext context, final int index) {
