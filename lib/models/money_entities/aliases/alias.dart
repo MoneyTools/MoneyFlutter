@@ -3,9 +3,9 @@ import 'dart:ui';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entity.dart';
-import 'package:money/models/payees/payee.dart';
-import 'package:money/models/payees/payees.dart';
+import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_entities/payees/payee.dart';
+import 'package:money/models/money_entities/payees/payees.dart';
 
 class Alias extends MoneyEntity {
   AliasType type = AliasType.none;

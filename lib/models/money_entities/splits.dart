@@ -1,4 +1,4 @@
-import 'package:money/models/money_entity.dart';
+import 'package:money/models/money_entities/money_entity.dart';
 
 class Split extends MoneyEntity {
   num transactionId;

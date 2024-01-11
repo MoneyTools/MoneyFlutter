@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entity.dart';
+import 'package:money/models/money_entities/money_entity.dart';
 
-import 'package:money/models/categories/categories.dart';
-import 'package:money/models/rentals/rental.dart';
-import 'package:money/models/rentals/rental_unit.dart';
-import 'package:money/models/rentals/rentals.dart';
-import 'package:money/models/splits.dart';
-import 'package:money/models/transactions/transaction.dart';
+import 'package:money/models/money_entities/categories/categories.dart';
+import 'package:money/models/money_entities/rentals/rental.dart';
+import 'package:money/models/money_entities/rentals/rental_unit.dart';
+import 'package:money/models/money_entities/rentals/rentals.dart';
+import 'package:money/models/money_entities/splits.dart';
+import 'package:money/models/money_entities/transactions/transaction.dart';
 
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';

@@ -1,9 +1,9 @@
 import 'package:collection/collection.dart';
-import 'package:money/models/accounts/account.dart';
-import 'package:money/models/transactions/transaction.dart';
-import 'package:money/models/transactions/transactions.dart';
+import 'package:money/models/money_entities/accounts/account.dart';
+import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_entities/transactions/transactions.dart';
 
-import 'package:money/models/money_entity.dart';
+import 'package:money/models/money_entities/money_entity.dart';
 
 class Accounts {
   static MoneyObjects<Account> moneyObjects = MoneyObjects<Account>();

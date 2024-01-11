@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entity.dart';
+import 'package:money/models/money_entities/money_entity.dart';
 
 class Category extends MoneyEntity {
   int parentId = -1;

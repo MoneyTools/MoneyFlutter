@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/payees/payee.dart';
+import 'package:money/models/money_entities/payees/payee.dart';
 
-import 'package:money/models/payees/payees.dart';
-import 'package:money/models/transactions/transaction.dart';
+import 'package:money/models/money_entities/payees/payees.dart';
+import 'package:money/models/money_entities/transactions/transaction.dart';
 
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';

@@ -3,15 +3,15 @@ import 'dart:io';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/accounts/account.dart';
-import 'package:money/models/accounts/accounts.dart';
-import 'package:money/models/aliases/aliases.dart';
-import 'package:money/models/categories/categories.dart';
+import 'package:money/models/money_entities/accounts/account.dart';
+import 'package:money/models/money_entities/accounts/accounts.dart';
+import 'package:money/models/money_entities/aliases/aliases.dart';
+import 'package:money/models/money_entities/categories/categories.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/payees/payee.dart';
-import 'package:money/models/payees/payees.dart';
-import 'package:money/models/transactions/transaction.dart';
-import 'package:money/models/transactions/transactions.dart';
+import 'package:money/models/money_entities/payees/payee.dart';
+import 'package:money/models/money_entities/payees/payees.dart';
+import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_entities/transactions/transactions.dart';
 
 void importQFX(
   final String filePath,

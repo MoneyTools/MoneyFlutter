@@ -1,7 +1,7 @@
-import 'package:money/models/categories/categories.dart';
-import 'package:money/models/rentals/rental_unit.dart';
+import 'package:money/models/money_entities/categories/categories.dart';
+import 'package:money/models/money_entities/rentals/rental_unit.dart';
 import 'package:money/models/date_range.dart';
-import 'package:money/models/money_entity.dart';
+import 'package:money/models/money_entities/money_entity.dart';
 
 class Rental extends MoneyEntity {
   int count = 0;

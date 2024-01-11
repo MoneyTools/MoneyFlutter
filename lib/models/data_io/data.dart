@@ -1,18 +1,16 @@
 import 'dart:io';
 
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/aliases/aliases.dart';
+import 'package:money/models/money_entities/aliases/aliases.dart';
 import 'package:money/models/data_io/file_systems.dart';
-import 'package:money/models/rentals/rental_units.dart';
-
-import 'package:money/models/rentals/rentals.dart';
-
-import 'package:money/models/accounts/accounts.dart';
-import 'package:money/models/categories/categories.dart';
-import 'package:money/models/payees/payees.dart';
-import 'package:money/models/transactions/transactions.dart';
+import 'package:money/models/money_entities/rentals/rental_units.dart';
+import 'package:money/models/money_entities/rentals/rentals.dart';
+import 'package:money/models/money_entities/accounts/accounts.dart';
+import 'package:money/models/money_entities/categories/categories.dart';
+import 'package:money/models/money_entities/payees/payees.dart';
+import 'package:money/models/money_entities/transactions/transactions.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/splits.dart';
+import 'package:money/models/money_entities/splits.dart';
 import 'package:money/models/data_io/data_others.dart'
     if (dart.library.html) 'package:money/models/data_io/data_web.dart';
 

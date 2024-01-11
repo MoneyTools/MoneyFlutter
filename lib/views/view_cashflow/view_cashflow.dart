@@ -1,13 +1,13 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:money/models/accounts/account.dart';
-import 'package:money/models/categories/categories.dart';
-import 'package:money/models/categories/category.dart';
-import 'package:money/models/transactions/transaction.dart';
-import 'package:money/models/transactions/transactions.dart';
+import 'package:money/models/money_entities/accounts/account.dart';
+import 'package:money/models/money_entities/categories/categories.dart';
+import 'package:money/models/money_entities/categories/category.dart';
+import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_entities/transactions/transactions.dart';
 
-import 'package:money/models/accounts/accounts.dart';
+import 'package:money/models/money_entities/accounts/accounts.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/scroll_both_ways.dart';

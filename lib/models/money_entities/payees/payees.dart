@@ -1,7 +1,7 @@
-import 'package:money/models/money_entity.dart';
-import 'package:money/models/payees/payee.dart';
-import 'package:money/models/transactions/transaction.dart';
-import 'package:money/models/transactions/transactions.dart';
+import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_entities/payees/payee.dart';
+import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_entities/transactions/transactions.dart';
 
 class Payees {
   static MoneyObjects<Payee> moneyObjects = MoneyObjects<Payee>();
