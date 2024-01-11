@@ -14,23 +14,18 @@ class FieldDefinitions<T> {
     return definitions.firstWhereOrNull((final FieldDefinition<T> item) => item.name == fieldName);
   }
 
-  List<Widget> getRowOfColumns(final int index) {
+  List<Widget> getRowOfColumns(final T objectInstance) {
     final List<Widget> cells = <Widget>[];
     for (int columnIndex = 0; columnIndex < definitions.length; columnIndex++) {
-      final Widget widget = getWidgetForField(columnIndex, index);
-      cells.add(widget);
+      final FieldDefinition<T> fieldDefinition = definitions[columnIndex];
+      if (fieldDefinition.useAsColumn) {
+        final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
+        final Widget widgetForThatField = fieldDefinition.getWidget(fieldValue);
+
+        cells.add(widgetForThatField);
+      }
     }
     return cells;
-  }
-
-  Widget getWidgetForField(final int columnIndex, final int index) {
-    final FieldDefinition<T> fieldDefinition = definitions[columnIndex];
-    if (fieldDefinition.valueFromList == null) {
-      return const SizedBox();
-    }
-
-    final dynamic fieldValue = fieldDefinition.valueFromList!(index);
-    return fieldDefinition.getWidget(fieldValue);
   }
 
   FieldDefinitions<T> add(final FieldDefinition<T> toAdd) {
@@ -43,31 +38,28 @@ class FieldDefinitions<T> {
     return this;
   }
 
-  List<Widget> getCellsForDetailsPanel(final int index) {
+  List<Widget> getCellsForDetailsPanel(final T objectInstance) {
     final List<Widget> cells = <Widget>[];
     for (int i = 0; i < definitions.length; i++) {
-      final Widget widget = getBestWidgetForFieldDefinition(i, index);
+      final Widget widget = getBestWidgetForFieldDefinition(i, objectInstance);
       cells.add(widget);
     }
     return cells;
   }
 
-  List<String> getFieldValuesAstString(final int rowIndex) {
+  List<String> getFieldValuesAstString(final T objectInstance) {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
       final FieldDefinition<T> fieldDefinition = definitions[fieldIndex];
-      strings.add(fieldDefinition.getString(fieldDefinition.valueFromList!(rowIndex)));
+      strings.add(fieldDefinition.getString(fieldDefinition.valueFromInstance(objectInstance)));
     }
     return strings;
   }
 
-  Widget getBestWidgetForFieldDefinition(final int columnIndex, final int rowIndex) {
+  Widget getBestWidgetForFieldDefinition(final int columnIndex, final T objectInstance) {
     final FieldDefinition<T> fieldDefinition = definitions[columnIndex];
-    if (fieldDefinition.valueFromList == null) {
-      return const SizedBox();
-    }
 
-    final dynamic fieldValue = fieldDefinition.valueFromList!(rowIndex);
+    final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
 
     if (fieldDefinition.isMultiLine) {
       return TextFormField(
@@ -108,8 +100,8 @@ class FieldDefinitions<T> {
   String getCsvRowValues(final T item) {
     final List<dynamic> listOfValues = <dynamic>[];
     for (final FieldDefinition<T> field in definitions) {
-      if (field.serializeName != null && field.valueFromInstance != null) {
-        listOfValues.add('"${field.valueFromInstance!(item)}"');
+      if (field.serializeName != null) {
+        listOfValues.add('"${field.valueForSerialization!(item)}"');
       }
     }
     return listOfValues.join(',');

@@ -84,12 +84,13 @@ class Transactions {
 
   static String toCSV() {
     final StringBuffer csv = StringBuffer();
-    csv.writeln('"id","accountId","date","payeeId","categoryId","memo"');
 
-    for (final Transaction t in Transactions.list) {
-      csv.writeln(
-        '"${t.id}","${t.accountId}","${t.dateTimeAsText}","${t.payeeId}","${t.categoryId}","${t.memo}"',
-      );
+    // CSV Header
+    csv.writeln(Transaction.getFieldDefinitions().getCsvHeader());
+
+    // CSV Rows
+    for (final Transaction item in Transactions.list) {
+      csv.writeln(Transaction.getFieldDefinitions().getCsvRowValues(item));
     }
     // Add the UTF-8 BOM for Excel
     // This does not affect clients like Google sheets

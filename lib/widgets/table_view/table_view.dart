@@ -63,7 +63,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
             // },
             autoFocus: index == widget.selectedItems.value.firstOrNull,
             isSelected: widget.selectedItems.value.contains(index),
-            children: getCells(index),
+            children: widget.columns.getRowOfColumns(widget.list[index]),
           );
         });
   }
@@ -107,10 +107,6 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
       }
     }
     return KeyEventResult.ignored;
-  }
-
-  List<Widget> getCells(final int index) {
-    return widget.columns.getRowOfColumns(index);
   }
 
   void selectedItemOffset(final int delta) {

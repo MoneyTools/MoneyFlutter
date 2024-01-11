@@ -66,6 +66,7 @@ class Aliases {
     for (final Alias item in Aliases.moneyObjects.getAsList()) {
       csv.writeln(Alias.getFieldDefinitions().getCsvRowValues(item));
     }
+
     // Add the UTF-8 BOM for Excel
     // This does not affect clients like Google sheets
     return '\uFEFF$csv';

@@ -1,4 +1,9 @@
+import 'dart:ui';
+
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entity.dart';
+import 'package:money/models/settings.dart';
 
 class Account extends MoneyEntity {
   int count = 0;
@@ -95,6 +100,93 @@ class Account extends MoneyEntity {
       default:
         return AccountType._notUsed_7;
     }
+  }
+
+  static FieldDefinitions<Account> getFieldDefinitions() {
+    final FieldDefinitions<Account> fields = FieldDefinitions<Account>(definitions: <FieldDefinition<Account>>[
+      FieldDefinition<Account>(
+        name: 'Name',
+        type: FieldType.text,
+        align: TextAlign.left,
+        valueFromInstance: (final Account account) {
+          return account.name;
+        },
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByString(
+            a.name,
+            b.name,
+            sortAscending,
+          );
+        },
+      ),
+      FieldDefinition<Account>(
+        name: 'Type',
+        type: FieldType.text,
+        align: TextAlign.center,
+        valueFromInstance: (final Account account) {
+          return account.getTypeAsText();
+        },
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByString(
+            a.getTypeAsText(),
+            b.getTypeAsText(),
+            sortAscending,
+          );
+        },
+      ),
+      FieldDefinition<Account>(
+        name: 'Count',
+        type: FieldType.numericShorthand,
+        align: TextAlign.right,
+        valueFromInstance: (final Account account) {
+          return account.count;
+        },
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByValue(
+            a.count,
+            b.count,
+            sortAscending,
+          );
+        },
+      ),
+      FieldDefinition<Account>(
+        name: 'Balance',
+        type: FieldType.amount,
+        align: TextAlign.right,
+        valueFromInstance: (final Account account) {
+          return account.balance;
+        },
+        sort: (final Account a, final Account b, final bool sortAscending) {
+          return sortByValue(
+            a.balance,
+            b.balance,
+            sortAscending,
+          );
+        },
+      ),
+    ]);
+
+    if (Settings().includeClosedAccounts) {
+      fields.definitions.add(
+        FieldDefinition<Account>(
+          name: 'Status',
+          type: FieldType.text,
+          align: TextAlign.center,
+          valueFromInstance: (final Account account) {
+            return account.isClosed() ? 'Closed' : 'Active';
+          },
+          sort: (final Account a, final Account b, final bool sortAscending) {
+            return sortByString(
+              a.isClosed().toString(),
+              b.isClosed().toString(),
+              sortAscending,
+            );
+          },
+        ),
+      );
+    }
+
+    return fields;
   }
 
   List<dynamic> toCSV() {

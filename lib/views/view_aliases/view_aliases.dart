@@ -7,7 +7,6 @@ import 'package:money/models/rentals/rental_unit.dart';
 import 'package:money/models/transactions/transaction.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
-import 'package:money/widgets/table_view/table_transactions_fields.dart';
 
 class ViewAliases extends ViewWidget<Alias> {
   const ViewAliases({super.key});

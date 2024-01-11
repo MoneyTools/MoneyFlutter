@@ -8,15 +8,12 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/accounts/accounts.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/transactions/transaction.dart';
-import 'package:money/widgets/table_view/table_transactions_fields.dart';
 import 'package:money/widgets/three_part_label.dart';
 
 import 'package:money/widgets/header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
-
-part 'view_accounts_fields.dart';
 
 part 'view_accounts_details_panels.dart';
 
@@ -85,7 +82,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
   @override
   FieldDefinitions<Account> getFieldDefinitionsForTable() {
-    return _getFieldDefinitionsForTable();
+    return Account.getFieldDefinitions();
   }
 
   @override

@@ -6,7 +6,6 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/transactions/transaction.dart';
 import 'package:money/models/transactions/transactions.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
-import 'package:money/widgets/table_view/table_transactions_fields.dart';
 import 'package:money/widgets/three_part_label.dart';
 
 import 'package:money/widgets/header.dart';
@@ -75,7 +74,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   void onDelete(final BuildContext context, final int index) {
-    final List<String> itemToDelete = getFieldDefinitionsForTable().getFieldValuesAstString(index);
+    final List<String> itemToDelete = getFieldDefinitionsForTable().getFieldValuesAstString(list[index]);
 
     showDialog(
       context: context,
@@ -133,7 +132,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     final List<FieldDefinition<Transaction>> listOfColumns = <FieldDefinition<Transaction>>[];
 
     for (String columnId in widget.preference.columnsToInclude) {
-      listOfColumns.add(getFieldDefinitionFromId(columnId, () => list)!);
+      listOfColumns.add(Transaction.getFieldDefinitionFromId(columnId, () => list)!);
     }
 
     return FieldDefinitions<Transaction>(definitions: listOfColumns);
@@ -219,6 +218,7 @@ const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToIncl
   columnIdDate,
   columnIdPayee,
   columnIdCategory,
+  columnIdStatus,
   columnIdMemo,
   columnIdAmount,
   columnIdBalance

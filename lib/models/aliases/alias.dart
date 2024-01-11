@@ -83,33 +83,17 @@ class Alias extends MoneyEntity {
 
   static FieldDefinitions<Alias> getFieldDefinitions() {
     final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
+      MoneyObjects<Alias>().getFieldId(),
+      MoneyObjects<Alias>().getFieldName(),
       FieldDefinition<Alias>(
-        name: 'Id',
-        serializeName: 'id',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final Alias entity) => entity.id,
-        sort: (final Alias a, final Alias b, final bool sortAscending) {
-          return sortByValue(a.id, b.id, sortAscending);
-        },
-      ),
-      FieldDefinition<Alias>(
-        name: 'Name',
-        serializeName: 'name',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final Alias entity) => entity.name,
-        sort: (final Alias a, final Alias b, final bool sortAscending) {
-          return sortByString(a.name, b.name, sortAscending);
-        },
-      ),
-      FieldDefinition<Alias>(
+        useAsColumn: false,
+        name: 'PayeeId',
         serializeName: 'payeeId',
         valueFromInstance: (final Alias entity) => entity.payeeId,
       ),
       getFieldForPayee(),
-      getFieldForType(),
       getFieldForPattern(),
+      getFieldForType(),
     ]);
     return fields;
   }

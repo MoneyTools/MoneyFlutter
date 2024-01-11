@@ -7,7 +7,6 @@ import 'package:money/models/categories/category.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/transactions/transaction.dart';
 import 'package:money/widgets/header.dart';
-import 'package:money/widgets/table_view/table_transactions_fields.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
@@ -102,8 +101,8 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Name',
         type: FieldType.text,
         align: TextAlign.left,
-        valueFromList: (final int index) {
-          return list[index].name;
+        valueFromInstance: (final Category category) {
+          return category.name;
         },
         sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByString(a.name, b.name, sortAscending);
@@ -113,8 +112,8 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Type',
         type: FieldType.text,
         align: TextAlign.center,
-        valueFromList: (final int index) {
-          return (list[index]).getTypeAsText();
+        valueFromInstance: (final Category category) {
+          return category.getTypeAsText();
         },
         sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByString(
@@ -128,8 +127,8 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Count',
         type: FieldType.numeric,
         align: TextAlign.right,
-        valueFromList: (final int index) {
-          return list[index].count;
+        valueFromInstance: (final Category category) {
+          return category.count;
         },
         sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByValue(a.count, b.count, sortAscending);
@@ -139,8 +138,8 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         name: 'Balance',
         type: FieldType.amount,
         align: TextAlign.right,
-        valueFromList: (final int index) {
-          return list[index].balance;
+        valueFromInstance: (final Category category) {
+          return category.balance;
         },
         sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByValue(a.balance, b.balance, sortAscending);

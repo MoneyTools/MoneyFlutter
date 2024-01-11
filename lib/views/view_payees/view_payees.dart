@@ -9,9 +9,6 @@ import 'package:money/models/transactions/transaction.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
-import 'package:money/widgets/table_view/table_transactions_fields.dart';
-
-part 'view_payees_fields.dart';
 
 part 'view_payees_details_panels.dart';
 
@@ -40,7 +37,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
 
   @override
   FieldDefinitions<Payee> getFieldDefinitionsForTable() {
-    return _getFieldDefinitionsForTable();
+    return Payee.getFieldDefinitions();
   }
 
   @override

@@ -131,13 +131,15 @@ class Accounts {
 
   static String toCSV() {
     final StringBuffer csv = StringBuffer();
-    csv.writeln('"id","accountId","type","ofxAccountId","description","flags"');
 
-    for (final Account account in Accounts.moneyObjects.getAsList()) {
-      csv.writeln(
-        '"${account.id}","${account.accountId}","${account.type.index}","${account.ofxAccountId}","${account.description}","${account.flags}"',
-      );
+    // CSV Header
+    csv.writeln(Account.getFieldDefinitions().getCsvHeader());
+
+    // CSV Rows
+    for (final Account item in Accounts.moneyObjects.getAsList()) {
+      csv.writeln(Account.getFieldDefinitions().getCsvRowValues(item));
     }
+
     // Add the UTF-8 BOM for Excel
     // This does not affect clients like Google sheets
     return '\uFEFF$csv';

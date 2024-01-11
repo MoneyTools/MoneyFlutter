@@ -1,37 +1,32 @@
 import 'package:flutter/widgets.dart';
 import 'package:money/helpers/string_helper.dart';
 
-enum FieldType {
-  text,
-  numeric,
-  numericShorthand,
-  amount,
-  amountShorthand,
-  date,
-}
-
 class FieldDefinition<T> {
-  String? name;
+  String name;
   String? serializeName;
   final FieldType type;
   final TextAlign align;
   final int Function(T, T, bool)? sort;
+  final bool useAsColumn;
   final bool readOnly;
   final bool isMultiLine;
-  dynamic Function(int)? valueFromList;
-  dynamic Function(T)? valueFromInstance;
+  dynamic Function(T) valueFromInstance;
+  late dynamic Function(T)? valueForSerialization;
 
   FieldDefinition({
-    this.name,
+    required this.name,
     this.serializeName,
     this.type = FieldType.text,
     this.align = TextAlign.left,
-    this.valueFromList,
-    this.valueFromInstance,
+    required this.valueFromInstance,
+    this.valueForSerialization,
     this.sort,
+    this.useAsColumn = true,
     this.readOnly = true,
     this.isMultiLine = false,
-  });
+  }) {
+    valueForSerialization ??= (final T t) => this.valueFromInstance(t);
+  }
 
   Widget getWidget(final dynamic value) {
     switch (type) {
@@ -114,4 +109,13 @@ Widget buildFieldWidgetForNumber(
       ),
     ),
   ));
+}
+
+enum FieldType {
+  text,
+  numeric,
+  numericShorthand,
+  amount,
+  amountShorthand,
+  date,
 }

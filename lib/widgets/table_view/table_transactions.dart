@@ -4,7 +4,6 @@ import 'package:money/models/transactions/transaction.dart';
 import 'package:money/models/transactions/transactions.dart';
 
 import 'package:money/widgets/table_view/table_header.dart';
-import 'package:money/widgets/table_view/table_transactions_fields.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
 class TableTransactions extends StatefulWidget {
@@ -93,7 +92,7 @@ class _TableTransactionsState extends State<TableTransactions> {
     final List<FieldDefinition<Transaction>> listOfColumns = <FieldDefinition<Transaction>>[];
 
     for (String columnId in widget.columnsToInclude) {
-      listOfColumns.add(getFieldDefinitionFromId(columnId, widget.getList)!);
+      listOfColumns.add(Transaction.getFieldDefinitionFromId(columnId, widget.getList)!);
     }
 
     return FieldDefinitions<Transaction>(definitions: listOfColumns);

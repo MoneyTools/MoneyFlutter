@@ -92,6 +92,7 @@ class Category extends MoneyEntity {
       ),
       getFieldForType(),
       FieldDefinition<Category>(
+        name: 'ParentId',
         serializeName: 'parentId',
         valueFromInstance: (final Category entity) => entity.parentId,
       ),

@@ -13,6 +13,7 @@ class Payee extends MoneyEntity {
   static FieldDefinitions<Payee> getFieldDefinitions() {
     final FieldDefinitions<Payee> fields = FieldDefinitions<Payee>(definitions: <FieldDefinition<Payee>>[
       FieldDefinition<Payee>(
+        useAsColumn: false,
         name: 'Id',
         serializeName: 'id',
         type: FieldType.text,

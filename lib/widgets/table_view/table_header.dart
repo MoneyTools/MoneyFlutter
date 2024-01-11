@@ -27,11 +27,11 @@ class MyTableHeader<T> extends StatelessWidget {
   Widget build(final BuildContext context) {
     final List<Widget> headers = <Widget>[];
     for (int i = 0; i < columns.definitions.length; i++) {
-      if (columns.definitions[i].name != null) {
+      if (columns.definitions[i].useAsColumn) {
         headers.add(
           widgetHeaderButton(
             context,
-            columns.definitions[i].name!,
+            columns.definitions[i].name,
             columns.definitions[i].align,
             getSortIndicated(i),
             // Press

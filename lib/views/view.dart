@@ -113,11 +113,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void onSort() {
     if (columns.definitions.isNotEmpty) {
       final FieldDefinition<T> fieldDefinition = columns.definitions[sortByColumn];
-      final int Function(T p1, T p2, bool p3)? sortFunction = fieldDefinition.sort;
-
-      if (sortFunction != null) {
+      if (fieldDefinition.sort != null) {
         list.sort((final T a, final T b) {
-          return sortFunction(a, b, sortAscending);
+          return fieldDefinition.sort!(a, b, sortAscending);
         });
       }
     }
@@ -152,7 +150,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           Expanded(
             flex: 1,
             child: MyTableView<T>(
-              list: getList(),
+              list: list,
               selectedItems: selectedItems,
               columns: columns,
               onTap: onRowTap,
@@ -267,7 +265,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Column(
-                  children: detailPanelFields.getCellsForDetailsPanel(index),
+                  children: detailPanelFields.getCellsForDetailsPanel(list[index]),
                 ),
               ),
             ),
@@ -333,10 +331,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      if (columnToCustomerFilterOn.valueFromList != null) {
-        final String fieldValue = columnToCustomerFilterOn.valueFromList!(i) as String;
-        set.add(fieldValue);
-      }
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as String;
+      set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
     uniqueValues.sort();
@@ -348,7 +344,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     double max = 0;
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final double fieldValue = columnToCustomerFilterOn.valueFromList!(i) as double;
+      final double fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as double;
       if (min > fieldValue) {
         min = fieldValue;
       }
@@ -367,14 +363,12 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final List<T> list = getList();
 
     for (int i = 0; i < list.length; i++) {
-      if (columnToCustomerFilterOn.valueFromList != null) {
-        final String fieldValue = columnToCustomerFilterOn.valueFromList!(i) as String;
-        if (min.isEmpty || min.compareTo(fieldValue) == 1) {
-          min = fieldValue;
-        }
-        if (max.isEmpty || max.compareTo(fieldValue) == -1) {
-          max = fieldValue;
-        }
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as String;
+      if (min.isEmpty || min.compareTo(fieldValue) == 1) {
+        min = fieldValue;
+      }
+      if (max.isEmpty || max.compareTo(fieldValue) == -1) {
+        max = fieldValue;
       }
     }
 
