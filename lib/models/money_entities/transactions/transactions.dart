@@ -35,6 +35,8 @@ class Transactions {
         payeeId: int.parse(row['Payee'].toString()),
         // Category Id
         categoryId: int.parse(row['Category'].toString()),
+        // Status
+        status: TransactionStatus.values[int.parse(row['Status'].toString())],
         // Amount
         amount: double.parse(row['Amount'].toString()),
         // Balance

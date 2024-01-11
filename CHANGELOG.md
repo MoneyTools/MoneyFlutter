@@ -1,5 +1,6 @@
 ## [1.0.16] 2024-01-11
 
+- Load data for Transaction.Status
 - Refactor use [Field Definition] model
 
 ## [1.0.15] 2024-01-10

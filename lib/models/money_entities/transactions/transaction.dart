@@ -58,6 +58,7 @@ class Transaction extends MoneyEntity {
     this.accountId = -1,
     this.payeeId = -1,
     this.categoryId = -1,
+    this.status = TransactionStatus.none,
     this.amount = 0.00,
     this.balance = 0.00,
     this.memo = '',
