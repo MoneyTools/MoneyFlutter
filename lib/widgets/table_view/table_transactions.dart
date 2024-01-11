@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/transactions.dart';
+import 'package:money/models/transactions/transaction.dart';
+import 'package:money/models/transactions/transactions.dart';
 
 import 'package:money/widgets/table_view/table_header.dart';
 import 'package:money/widgets/table_view/table_transactions_fields.dart';

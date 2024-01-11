@@ -1,15 +1,16 @@
 import 'dart:io';
 
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/aliases.dart';
+import 'package:money/models/aliases/aliases.dart';
 import 'package:money/models/data_io/file_systems.dart';
+import 'package:money/models/rentals/rental_units.dart';
 
-import 'package:money/models/rentals.dart';
+import 'package:money/models/rentals/rentals.dart';
 
-import 'package:money/models/accounts.dart';
-import 'package:money/models/categories.dart';
-import 'package:money/models/payees.dart';
-import 'package:money/models/transactions.dart';
+import 'package:money/models/accounts/accounts.dart';
+import 'package:money/models/categories/categories.dart';
+import 'package:money/models/payees/payees.dart';
+import 'package:money/models/transactions/transactions.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/splits.dart';
 import 'package:money/models/data_io/data_others.dart'

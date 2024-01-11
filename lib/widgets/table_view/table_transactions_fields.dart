@@ -1,11 +1,11 @@
 import 'dart:ui';
 
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/accounts.dart';
-import 'package:money/models/categories.dart';
+import 'package:money/models/accounts/accounts.dart';
+import 'package:money/models/categories/categories.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/payees.dart';
-import 'package:money/models/transactions.dart';
+import 'package:money/models/payees/payees.dart';
+import 'package:money/models/transactions/transaction.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
