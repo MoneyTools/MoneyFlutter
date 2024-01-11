@@ -333,8 +333,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromList!(i) as String;
-      set.add(fieldValue);
+      if (columnToCustomerFilterOn.valueFromList != null) {
+        final String fieldValue = columnToCustomerFilterOn.valueFromList!(i) as String;
+        set.add(fieldValue);
+      }
     }
     final List<String> uniqueValues = set.toList();
     uniqueValues.sort();
@@ -365,12 +367,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final List<T> list = getList();
 
     for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromList!(i) as String;
-      if (min.isEmpty || min.compareTo(fieldValue) == 1) {
-        min = fieldValue;
-      }
-      if (max.isEmpty || max.compareTo(fieldValue) == -1) {
-        max = fieldValue;
+      if (columnToCustomerFilterOn.valueFromList != null) {
+        final String fieldValue = columnToCustomerFilterOn.valueFromList!(i) as String;
+        if (min.isEmpty || min.compareTo(fieldValue) == 1) {
+          min = fieldValue;
+        }
+        if (max.isEmpty || max.compareTo(fieldValue) == -1) {
+          max = fieldValue;
+        }
       }
     }
 

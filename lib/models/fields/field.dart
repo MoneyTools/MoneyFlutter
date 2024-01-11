@@ -45,7 +45,7 @@ class FieldDefinition<T> {
         return buildFieldWidgetForCurrency(value, true);
       case FieldType.text:
       default:
-        return buildFieldWidgetForText(value as String, textAlign: align);
+        return buildFieldWidgetForText(value.toString(), textAlign: align);
     }
   }
 
@@ -61,7 +61,7 @@ class FieldDefinition<T> {
         return getNumberAsShorthandText(value as double);
       case FieldType.text:
       default:
-        return value as String;
+        return value.toString();
     }
   }
 }

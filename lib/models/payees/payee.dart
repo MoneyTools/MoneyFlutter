@@ -17,7 +17,6 @@ class Payee extends MoneyEntity {
         serializeName: 'id',
         type: FieldType.text,
         align: TextAlign.left,
-        valueFromList: (final int index) => '',
         valueFromInstance: (final Payee entity) => entity.id,
         sort: (final Payee a, final Payee b, final bool sortAscending) {
           return sortByValue(a.id, b.id, sortAscending);

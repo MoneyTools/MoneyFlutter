@@ -75,7 +75,6 @@ class Category extends MoneyEntity {
         serializeName: 'id',
         type: FieldType.text,
         align: TextAlign.left,
-        valueFromList: (final int index) => '',
         valueFromInstance: (final Category entity) => entity.id,
         sort: (final Category a, final Category b, final bool sortAscending) {
           return sortByValue(a.id, b.id, sortAscending);

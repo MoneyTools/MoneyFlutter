@@ -25,7 +25,11 @@ class FieldDefinitions<T> {
 
   Widget getWidgetForField(final int columnIndex, final int index) {
     final FieldDefinition<T> fieldDefinition = definitions[columnIndex];
-    final dynamic fieldValue = definitions[columnIndex].valueFromList!(index);
+    if (fieldDefinition.valueFromList == null) {
+      return const SizedBox();
+    }
+
+    final dynamic fieldValue = fieldDefinition.valueFromList!(index);
     return fieldDefinition.getWidget(fieldValue);
   }
 
@@ -59,6 +63,10 @@ class FieldDefinitions<T> {
 
   Widget getBestWidgetForFieldDefinition(final int columnIndex, final int rowIndex) {
     final FieldDefinition<T> fieldDefinition = definitions[columnIndex];
+    if (fieldDefinition.valueFromList == null) {
+      return const SizedBox();
+    }
+
     final dynamic fieldValue = fieldDefinition.valueFromList!(rowIndex);
 
     if (fieldDefinition.isMultiLine) {

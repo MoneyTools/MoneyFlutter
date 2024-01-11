@@ -88,7 +88,6 @@ class Alias extends MoneyEntity {
         serializeName: 'id',
         type: FieldType.text,
         align: TextAlign.left,
-        valueFromList: (final int index) => '',
         valueFromInstance: (final Alias entity) => entity.id,
         sort: (final Alias a, final Alias b, final bool sortAscending) {
           return sortByValue(a.id, b.id, sortAscending);
