@@ -111,7 +111,11 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
     return getViewExpandAndPadding(
       Column(
         children: <Widget>[
-          ViewHeader('Cash Flow', totalIncomes + totalExpenses, 'See where assets are allocated.'),
+          ViewHeader(
+            title: 'Cash Flow',
+            count: totalIncomes + totalExpenses,
+            description: 'See where assets are allocated.',
+          ),
           Expanded(child: ScrollBothWay(child: getView(context))),
         ],
       ),

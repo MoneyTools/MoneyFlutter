@@ -47,11 +47,13 @@ class FieldDefinitions<T> {
     return cells;
   }
 
-  List<String> getFieldValuesAstString(final T objectInstance) {
+  List<String> getListOfFieldValueAsString(final T objectInstance, [final bool includeHiddenFields = false]) {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
       final FieldDefinition<T> fieldDefinition = definitions[fieldIndex];
-      strings.add(fieldDefinition.getString(fieldDefinition.valueFromInstance(objectInstance)));
+      if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
+        strings.add(fieldDefinition.getString(fieldDefinition.valueFromInstance(objectInstance)));
+      }
     }
     return strings;
   }

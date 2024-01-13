@@ -1,3 +1,7 @@
+## [1.0.17] 2024-01-13
+
+- Add Filter input to ViewTransaction List
+
 ## [1.0.16] 2024-01-11
 
 - Load data for Transaction.Status

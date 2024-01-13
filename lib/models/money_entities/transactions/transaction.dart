@@ -191,7 +191,7 @@ class Transaction extends MoneyEntity {
     final FieldDefinitions<Transaction> fields =
         FieldDefinitions<Transaction>(definitions: <FieldDefinition<Transaction>>[
       MoneyObjects<Transaction>().getFieldId(),
-      MoneyObjects<Transaction>().getFieldName(),
+      MoneyObjects<Transaction>().getFieldName(useAsColumn: false),
       FieldDefinition<Transaction>(
         useAsColumn: false,
         name: 'AccountId',
@@ -256,9 +256,8 @@ class Transaction extends MoneyEntity {
   }
 
   @override
-  String toString([final bool multiline = false]) {
-    final String delimiter = multiline ? '\n' : ', ';
-    return '${getDateAsText(dateTime)}$delimiter${getCurrencyText(amount)}$delimiter$memo';
+  String toString([final bool includeHiddenFields = false]) {
+    return Transaction.getFieldDefinitions().getListOfFieldValueAsString(this, includeHiddenFields).join();
   }
 }
 

@@ -74,10 +74,12 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
   @override
   Widget getTitle() {
-    return Column(children: <Widget>[
-      ViewHeader(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
-      renderToggles(),
-    ]);
+    return ViewHeader(
+      title: getClassNamePlural(),
+      count: numValueOrDefault(list.length),
+      description: getDescription(),
+      child: renderToggles(),
+    );
   }
 
   @override

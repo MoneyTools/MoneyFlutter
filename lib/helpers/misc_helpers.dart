@@ -156,3 +156,11 @@ class TimeLapse {
     // print('Elapsed time: ${stopwatch?.elapsedMilliseconds} milliseconds');
   }
 }
+
+bool isBetween(final num value, final num min, final num max) {
+  return value > min && value < max;
+}
+
+bool isBetweenOrEqual(final num value, final num min, final num max) {
+  return value >= min && value <= max;
+}

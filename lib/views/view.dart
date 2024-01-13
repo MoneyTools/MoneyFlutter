@@ -35,6 +35,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   List<T> list = <T>[];
   List<String> listOfUniqueInstances = <String>[];
+  String filterText = '';
 
   final NumberFormat formatCurrency = NumberFormat('#,##0.00', 'en_US');
 
@@ -49,10 +50,12 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
+  /// Derived class will override to customize the fields to display in the Adaptive Table
   FieldDefinitions<T> getFieldDefinitionsForTable() {
     return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
   }
 
+  /// Derived class will override to customize the fields to display in the details panel
   FieldDefinitions<T> getFieldDefinitionsForDetailsPanel() {
     return getFieldDefinitionsForTable();
   }
@@ -122,11 +125,22 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   Widget getTitle() {
-    return ViewHeader(getClassNamePlural(), numValueOrDefault(list.length), getDescription());
+    return ViewHeader(
+      title: getClassNamePlural(),
+      count: numValueOrDefault(list.length),
+      description: getDescription(),
+    );
   }
 
   void onDelete(final BuildContext context, final int index) {
     // the derived class is responsible for implementing the delete operation
+  }
+
+  void onFilterTextChanged(final String text) {
+    setState(() {
+      filterText = text;
+      list = getList();
+    });
   }
 
   @override
@@ -135,9 +149,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       Column(
         children: <Widget>[
           // Optional upper Title area
-          if (widget.preference.showTitle) getTitle(),
+          if (widget.preference.displayHeader) getTitle(),
 
-          // Table Header
           MyTableHeader<T>(
             columns: columns,
             sortByColumn: sortByColumn,
@@ -190,9 +203,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   Widget getViewExpandAndPadding(final Widget child) {
     return Expanded(
       child: Container(
-          color: Theme.of(context).colorScheme.background,
-          padding: const EdgeInsets.symmetric(horizontal: 8),
-          child: child),
+        color: Theme.of(context).colorScheme.background,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: child,
+      ),
     );
   }
 
@@ -256,32 +270,34 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final FieldDefinitions<T> detailPanelFields = getFieldDefinitionsForDetailsPanel();
     if (indices.isNotEmpty) {
       final int index = indices.first;
-      return Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Expanded(
-            child: SingleChildScrollView(
-              key: Key(index.toString()),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Column(
-                  children: detailPanelFields.getCellsForDetailsPanel(list[index]),
+      if (isBetweenOrEqual(index, 0, list.length - 1)) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                key: Key(index.toString()),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    children: detailPanelFields.getCellsForDetailsPanel(list[index]),
+                  ),
                 ),
               ),
             ),
-          ),
-          Column(
-            children: <Widget>[
-              IconButton(
-                  onPressed: () {
-                    onDelete(context, index);
-                  },
-                  icon: const Icon(Icons.delete),
-                  tooltip: 'Delete'),
-            ],
-          ),
-        ],
-      );
+            Column(
+              children: <Widget>[
+                IconButton(
+                    onPressed: () {
+                      onDelete(context, index);
+                    },
+                    icon: const Icon(Icons.delete),
+                    tooltip: 'Delete'),
+              ],
+            ),
+          ],
+        );
+      }
     }
     return const Text('No item selected');
   }
@@ -454,13 +470,13 @@ MainAxisAlignment getRowAlignmentBasedOnTextAlign(final TextAlign textAlign) {
 }
 
 class ViewWidgetToDisplay {
-  final bool showTitle;
+  final bool displayHeader;
   final bool showBottom;
   final bool columnAccount;
   final List<String> columnsToInclude;
 
   const ViewWidgetToDisplay({
-    this.showTitle = true,
+    this.displayHeader = true,
     this.showBottom = true,
     this.columnAccount = true,
     this.columnsToInclude = const <String>[],

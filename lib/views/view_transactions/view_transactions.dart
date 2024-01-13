@@ -26,7 +26,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, true];
-
   bool balanceDone = false;
 
   @override
@@ -66,15 +65,20 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   Widget getTitle() {
-    return Column(children: <Widget>[
-      ViewHeader(getClassNamePlural(), numValueOrDefault(list.length), getDescription()),
-      renderToggles(),
-    ]);
+    return ViewHeader(
+      title: getClassNamePlural(),
+      count: numValueOrDefault(list.length),
+      description: getDescription(),
+      onFilterChanged: (final String text) {
+        onFilterTextChanged(text);
+      },
+      child: renderToggles(),
+    );
   }
 
   @override
   void onDelete(final BuildContext context, final int index) {
-    final List<String> itemToDelete = getFieldDefinitionsForTable().getFieldValuesAstString(list[index]);
+    final List<String> itemToDelete = getFieldDefinitionsForTable().getListOfFieldValueAsString(list[index]);
 
     showDialog(
       context: context,
@@ -94,7 +98,8 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   @override
   List<Transaction> getList() {
     final List<Transaction> list = Transactions.list
-        .where((final Transaction transaction) => isMatchingIncomeExpense(transaction) && widget.filter(transaction))
+        .where((final Transaction transaction) =>
+            isMatchingIncomeExpense(transaction) && widget.filter(transaction) && isMatchingFilterText(transaction))
         .toList();
 
     if (!balanceDone) {
@@ -127,15 +132,26 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     return false;
   }
 
-  @override
-  FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
-    final List<FieldDefinition<Transaction>> listOfColumns = <FieldDefinition<Transaction>>[];
-
-    for (String columnId in widget.preference.columnsToInclude) {
-      listOfColumns.add(Transaction.getFieldDefinitionFromId(columnId, () => list)!);
+  bool isMatchingFilterText(final Transaction transaction) {
+    if (filterText.isEmpty) {
+      return true;
     }
 
-    return FieldDefinitions<Transaction>(definitions: listOfColumns);
+    final List<String> fieldInstances = getFieldDefinitionsForTable().getListOfFieldValueAsString(transaction);
+    // debugLog(fieldInstances.join('|'));
+
+    for (final String fieldInstance in fieldInstances) {
+      if (fieldInstance.toString().toLowerCase().contains(filterText.toLowerCase())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  @override
+  FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
+    return Transaction.getFieldDefinitions();
   }
 
   @override
@@ -225,7 +241,7 @@ const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToIncl
 ]);
 
 const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance = ViewWidgetToDisplay(
-    showTitle: false,
+    displayHeader: false,
     showBottom: false,
     columnsToInclude: <String>[
       columnIdDate,

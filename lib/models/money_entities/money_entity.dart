@@ -106,8 +106,9 @@ class MoneyObjects<T> {
     );
   }
 
-  FieldDefinition<T> getFieldName() {
+  FieldDefinition<T> getFieldName({final bool useAsColumn = true}) {
     return FieldDefinition<T>(
+      useAsColumn: useAsColumn,
       name: 'Name',
       serializeName: 'name',
       type: FieldType.text,
