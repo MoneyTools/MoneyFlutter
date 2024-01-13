@@ -38,8 +38,8 @@ void importQFX(
       }
 
       Data().transactions.add(Transaction(
-            -1,
-            '',
+            id: -1,
+            name: '',
             accountId: account.id,
             dateTime: item.date,
             payeeId: payee.id,

@@ -7,5 +7,8 @@ class RentUnit extends MoneyEntity {
   String renter = '';
   String note = '';
 
-  RentUnit(super.id, super.name);
+  RentUnit({
+    required super.id,
+    required super.name,
+  });
 }

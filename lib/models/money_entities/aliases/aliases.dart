@@ -19,7 +19,7 @@ class Aliases {
     if (aliasFound == null) {
       return null;
     }
-    return aliasFound.payee;
+    return aliasFound.payeeInstance;
   }
 
   clear() {
@@ -33,25 +33,12 @@ class Aliases {
   load(final List<Map<String, Object?>> rows) async {
     clear();
     for (final Map<String, Object?> row in rows) {
-      final AliasType type = row['Flags'] == 0 ? AliasType.none : AliasType.regex;
-      moneyObjects.addEntry(Alias(
-        // id
-        row['Id'] as int,
-        // name
-        row['Pattern'].toString(),
-        type: type,
-        payeeId: row['Payee'] as int,
-      ));
+      moneyObjects.addEntry(Alias.fromSqlite(row));
     }
   }
 
   loadDemoData() {
     clear();
-
-    final List<String> names = <String>[];
-    for (int i = 0; i < names.length; i++) {
-      moneyObjects.addEntry(Alias(i, names[i]));
-    }
   }
 
   static onAllDataLoaded() {}

@@ -25,8 +25,9 @@ class Transactions {
     for (final Map<String, Object?> row in rows) {
       final Transaction t = Transaction(
         // id
-        int.parse(row['Id'].toString()),
-        '', // name
+        id: int.parse(row['Id'].toString()),
+        // name
+        name: '',
         // Account Id
         accountId: int.parse(row['Account'].toString()),
         // Date
@@ -60,8 +61,8 @@ class Transactions {
       final double amount = getRandomAmount(i);
       runningBalance += amount;
       list.add(Transaction(
-        i,
-        '',
+        id: i,
+        name: '',
         // Account Id
         accountId: Random().nextInt(10),
         // Date

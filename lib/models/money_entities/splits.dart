@@ -7,9 +7,9 @@ class Split extends MoneyEntity {
   num payeeId;
   String memo;
 
-  Split(
-    super.id,
-    super.name, {
+  Split({
+    required super.id,
+    required super.name,
     required this.transactionId,
     required this.categoryId,
     required this.amount,
@@ -40,8 +40,8 @@ class Splits {
       final String memo = row['Memo'].toString();
 
       list.add(Split(
-        id,
-        '',
+        id: id,
+        name: '',
         transactionId: transactionId,
         categoryId: categoryId,
         amount: amount,

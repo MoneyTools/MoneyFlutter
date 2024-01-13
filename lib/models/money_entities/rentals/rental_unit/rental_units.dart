@@ -22,7 +22,7 @@ class RentUnits {
       final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
 
-      final RentUnit instance = RentUnit(id, name);
+      final RentUnit instance = RentUnit(id: id, name: name);
       instance.building = row['Building'].toString();
       instance.renter = row['Renter'].toString();
       instance.note = row['Note'].toString();

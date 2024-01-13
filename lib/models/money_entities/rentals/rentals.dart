@@ -40,7 +40,7 @@ class Rentals {
   void loadDemoData() {
     clear();
 
-    final Rental instance = Rental(0, 'AirBnB');
+    final Rental instance = Rental(id: 0, name: 'AirBnB');
     instance.address = 'One Washington DC';
     moneyObjects.addEntry(instance);
   }

@@ -8,7 +8,10 @@ class Payee extends MoneyEntity {
   num count = 0;
   double balance = 0.00;
 
-  Payee(super.id, super.name);
+  Payee({
+    required super.id,
+    required super.name,
+  });
 
   static FieldDefinitions<Payee> getFieldDefinitions() {
     final FieldDefinitions<Payee> fields = FieldDefinitions<Payee>(definitions: <FieldDefinition<Payee>>[

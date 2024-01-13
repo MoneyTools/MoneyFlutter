@@ -4,10 +4,10 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/field.dart';
 
 class MoneyEntity {
-  int id = -1;
-  String name = '';
+  int id;
+  String name;
 
-  MoneyEntity(this.id, this.name) {
+  MoneyEntity({required this.id, required this.name}) {
     //
   }
 

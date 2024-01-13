@@ -49,9 +49,9 @@ class Transaction extends MoneyEntity {
   // DateTime? mergeDate;
   //TransactionViewFlags viewState; // ui transient state only, not persisted.
 
-  Transaction(
-    super.id,
-    super.name, {
+  Transaction({
+    required super.id,
+    required super.name,
     required this.dateTime,
     this.accountId = -1,
     this.payeeId = -1,

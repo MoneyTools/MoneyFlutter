@@ -26,4 +26,5 @@ trnamt
 trntype
 trntype
 uint
+uniqueidentifier
 xfer

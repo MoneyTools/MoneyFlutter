@@ -45,13 +45,16 @@ class Rental extends MoneyEntity {
 
   DateRange dateRange = DateRange();
 
-  Rental(super.id, super.name);
+  Rental({
+    required super.id,
+    required super.name,
+  });
 
   static Rental createInstanceFromRow(final Map<String, Object?> row) {
     final int id = MoneyEntity.fromRowColumnToNumber(row, 'Id');
     final String name = MoneyEntity.fromRowColumnToString(row, 'Name');
 
-    final Rental instance = Rental(id, name);
+    final Rental instance = Rental(id: id, name: name);
 
     instance.address = MoneyEntity.fromRowColumnToString(row, 'Address');
     instance.purchasedDate = MoneyEntity.fromRowColumnToDateTime(row, 'PurchasedDate') ?? DateTime.now();

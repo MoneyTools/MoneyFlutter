@@ -1,3 +1,4 @@
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/categories/category.dart';
 import 'package:money/models/money_entities/money_entity.dart';
@@ -79,7 +80,11 @@ class Categories {
     Category? category = moneyObjects.getByName(name);
 
     if (category == null) {
-      category = Category(moneyObjects.length, type, name);
+      category = Category(
+        id: moneyObjects.length,
+        name: name,
+        type: type,
+      );
       moneyObjects.addEntry(category);
     }
     // TODO
@@ -189,47 +194,25 @@ class Categories {
     return getOrCreateCategory("UnassignedSplit", CategoryType.none);
   }
 
-/*
-      0 = "Id"
-      1 = "ParentId"
-      2 = "Name"
-      3 = "Description"
-      4 = "Type"
-      5 = "Color"
-      6 = "Budget"
-      7 = "Balance"
-      8 = "Frequency"
-      9 = "TaxRefNum"
-   */
   load(final List<Map<String, Object?>> rows) async {
     clear();
-    for (final Map<String, Object?> row in rows) {
-      final int id = int.parse(row['Id'].toString());
-      final String name = row['Name'].toString();
-      final Object? rt = row['Type'];
-      final Category newEntry = Category(
-        id,
-        Category.getTypeFromText(rt.toString()),
-        name,
-      );
-      newEntry.parentId = int.parse(row['ParentId'].toString());
-
-      moneyObjects.addEntry(newEntry);
+    for (final Json row in rows) {
+      moneyObjects.addEntry(Category.fromSqlite(row));
     }
   }
 
   loadDemoData() {
     clear();
-    moneyObjects.addEntry(Category(0, CategoryType.income, 'Paychecks'));
-    moneyObjects.addEntry(Category(1, CategoryType.investment, 'Investment'));
-    moneyObjects.addEntry(Category(2, CategoryType.income, 'Interests'));
-    moneyObjects.addEntry(Category(3, CategoryType.income, 'Rental'));
-    moneyObjects.addEntry(Category(4, CategoryType.none, 'Lottery'));
-    moneyObjects.addEntry(Category(5, CategoryType.expense, 'Mortgage'));
-    moneyObjects.addEntry(Category(6, CategoryType.income, 'Saving'));
-    moneyObjects.addEntry(Category(7, CategoryType.expense, 'Bills'));
-    moneyObjects.addEntry(Category(8, CategoryType.expense, 'Taxes'));
-    moneyObjects.addEntry(Category(9, CategoryType.expense, 'School'));
+    moneyObjects.addEntry(Category(id: 0, description: '', type: CategoryType.income, name: 'Paychecks'));
+    moneyObjects.addEntry(Category(id: 1, description: '', type: CategoryType.investment, name: 'Investment'));
+    moneyObjects.addEntry(Category(id: 2, description: '', type: CategoryType.income, name: 'Interests'));
+    moneyObjects.addEntry(Category(id: 3, description: '', type: CategoryType.income, name: 'Rental'));
+    moneyObjects.addEntry(Category(id: 4, description: '', type: CategoryType.none, name: 'Lottery'));
+    moneyObjects.addEntry(Category(id: 5, description: '', type: CategoryType.expense, name: 'Mortgage'));
+    moneyObjects.addEntry(Category(id: 6, description: '', type: CategoryType.income, name: 'Saving'));
+    moneyObjects.addEntry(Category(id: 7, description: '', type: CategoryType.expense, name: 'Bills'));
+    moneyObjects.addEntry(Category(id: 8, description: '', type: CategoryType.expense, name: 'Taxes'));
+    moneyObjects.addEntry(Category(id: 9, description: '', type: CategoryType.expense, name: 'School'));
   }
 
   onAllDataLoaded() {

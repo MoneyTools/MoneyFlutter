@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
@@ -7,19 +8,47 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/payees/payee.dart';
 
+/*
+  0|Id|INT|0||1
+  1|Pattern|nvarchar(255)|1||0
+  2|Flags|INT|1||0
+  3|Payee|INT|1||0
+ */
 class Alias extends MoneyEntity {
+  // 0
+  // int MoneyEntity.Id
+
+  // 1
+  final String pattern;
   AliasType type = AliasType.none;
   int payeeId = -1;
   RegExp? regex;
-  late final Payee payee;
+  late final Payee payeeInstance;
 
-  Alias(
-    super.id,
-    super.name, {
+  Alias({
+    required super.id,
+    required super.name,
+    required this.pattern,
     this.type = AliasType.none,
     this.payeeId = -1,
   }) {
-    payee = Data().payees.get(payeeId)!;
+    payeeInstance = Data().payees.get(payeeId)!;
+  }
+
+  /// Constructor from a SQLite row
+  factory Alias.fromSqlite(final Json row) {
+    return Alias(
+      // 0
+      id: jsonGetInt(row, 'Id'),
+      // 1
+      pattern: jsonGetString(row, 'Pattern'),
+      // 2
+      type: jsonGetInt(row, 'Flags') == 0 ? AliasType.none : AliasType.regex,
+      // 3
+      payeeId: jsonGetInt(row, 'Payee'),
+      // note used
+      name: jsonGetString(row, 'Pattern'),
+    );
   }
 
   bool isMatch(final String text) {
@@ -41,43 +70,55 @@ class Alias extends MoneyEntity {
 
   static FieldDefinition<Alias> getFieldForPayee() {
     return FieldDefinition<Alias>(
-      name: 'Payee',
       type: FieldType.text,
+      name: 'Payee',
+      serializeName: 'payee',
       align: TextAlign.left,
       valueFromInstance: (final Alias item) {
-        return Data().payees.getNameFromId(item.payeeId);
+        return item.payeeInstance.name;
+      },
+      valueForSerialization: (final Alias item) {
+        return item.payeeId;
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
         return sortByString(
-            Data().payees.getNameFromId(a.payeeId), Data().payees.getNameFromId(b.payeeId), sortAscending);
+          a.payeeInstance.name,
+          b.payeeInstance.name,
+          sortAscending,
+        );
       },
     );
   }
 
   static FieldDefinition<Alias> getFieldForType() {
     return FieldDefinition<Alias>(
-      name: 'Type',
       type: FieldType.text,
+      name: 'Type',
+      serializeName: 'Flags',
       align: TextAlign.left,
       valueFromInstance: (final Alias item) {
-        return item.type.toString();
+        return item.type.name;
+      },
+      valueForSerialization: (final Alias item) {
+        return item.type.index;
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
-        return sortByString(a.type.toString(), b.type.toString(), sortAscending);
+        return sortByString(a.type.name, b.type.name, sortAscending);
       },
     );
   }
 
   static FieldDefinition<Alias> getFieldForPattern() {
     return FieldDefinition<Alias>(
-      name: 'Pattern',
       type: FieldType.text,
+      name: 'Pattern',
+      serializeName: 'pattern',
       align: TextAlign.left,
       valueFromInstance: (final Alias item) {
-        return item.name;
+        return item.pattern;
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
-        return sortByString(a.name, b.name, sortAscending);
+        return sortByString(a.pattern, b.pattern, sortAscending);
       },
     );
   }
@@ -111,6 +152,6 @@ class Alias extends MoneyEntity {
 }
 
 enum AliasType {
-  none,
-  regex,
+  none, // 0
+  regex, // 1
 }

@@ -1,5 +1,6 @@
 ## [1.0.17] 2024-01-13
 
+- Load all Account,Alias,Category SQLite fields
 - Add Filter input to ViewTransaction List
 
 ## [1.0.16] 2024-01-11

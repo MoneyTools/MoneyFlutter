@@ -45,6 +45,7 @@ dependencies:
   sqlite3_flutter_libs: ^0.5.18
   url_launcher: ^6.0.13
   csv: ^5.1.1
+  uuid: ^4.3.3
 
 dependency_overrides:
   path: 1.9.0

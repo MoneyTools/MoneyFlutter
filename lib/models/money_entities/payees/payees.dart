@@ -21,7 +21,10 @@ class Payees {
     Payee? payee = moneyObjects.getByName(name);
 
     // if not found add new payee
-    payee ??= Payee(moneyObjects.length, name);
+    payee ??= Payee(
+      id: moneyObjects.length,
+      name: name,
+    );
     return payee;
   }
 
@@ -40,7 +43,7 @@ class Payees {
     for (final Map<String, Object?> row in rows) {
       final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
-      moneyObjects.addEntry(Payee(id, name));
+      moneyObjects.addEntry(Payee(id: id, name: name));
     }
   }
 
@@ -60,7 +63,7 @@ class Payees {
       'Barbara'
     ];
     for (int i = 0; i < names.length; i++) {
-      moneyObjects.addEntry(Payee(i, names[i]));
+      moneyObjects.addEntry(Payee(id: i, name: names[i]));
     }
   }
 

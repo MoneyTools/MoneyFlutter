@@ -125,6 +125,8 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
           );
         },
       ),
+      Category.getFieldForDescription(),
+      Category.getFieldForColor(),
       FieldDefinition<Category>(
         name: 'Count',
         type: FieldType.numeric,
