@@ -3,7 +3,7 @@ part of 'view_accounts.dart';
 extension ViewAccountsHelpers on ViewAccountsState {
   double getTotalBalanceOfAccounts(final List<AccountType> types) {
     double total = 0.0;
-    Accounts.activeAccount(types).forEach((final Account x) => total += x.balance);
+    Data().accounts.activeAccount(types).forEach((final Account x) => total += x.balance);
     return total;
   }
 

@@ -1,17 +1,17 @@
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/categories/category.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
 
 class Categories {
-  static MoneyObjects<Category> moneyObjects = MoneyObjects<Category>();
+  MoneyObjects<Category> moneyObjects = MoneyObjects<Category>();
   static int idOfSplitCategory = -1;
 
-  static Category? get(final int id) {
+  Category? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final int id) {
+  String getNameFromId(final int id) {
     if (id == -1) {
       return '';
     }
@@ -22,7 +22,7 @@ class Categories {
     return moneyObjects.getNameFromId(id);
   }
 
-  static int splitCategoryId() {
+  int splitCategoryId() {
     if (idOfSplitCategory == -1) {
       final Category? cat = moneyObjects.getByName('Split');
       if (cat != null) {
@@ -32,7 +32,7 @@ class Categories {
     return idOfSplitCategory;
   }
 
-  static Category getTopAncestor(final Category category) {
+  Category getTopAncestor(final Category category) {
     if (category.parentId == -1) {
       return category; // this is the top
     }
@@ -43,7 +43,7 @@ class Categories {
     return getTopAncestor(parent);
   }
 
-  static List<int> getTreeIds(final int rootIdToStartFrom) {
+  List<int> getTreeIds(final int rootIdToStartFrom) {
     final List<int> list = <int>[];
     if (rootIdToStartFrom > 0) {
       getTreeIdsRecursive(rootIdToStartFrom, list);
@@ -51,7 +51,7 @@ class Categories {
     return list;
   }
 
-  static void getTreeIdsRecursive(final int categoryId, final List<int> list) {
+  void getTreeIdsRecursive(final int categoryId, final List<int> list) {
     if (categoryId > 0) {
       list.add(categoryId);
       final List<Category> descendants = getCategoriesWithThisParent(categoryId);
@@ -62,9 +62,9 @@ class Categories {
     }
   }
 
-  static List<Category> getCategoriesWithThisParent(final int parentId) {
+  List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
-    for (final Category item in Categories.moneyObjects.getAsList()) {
+    for (final Category item in moneyObjects.getAsList()) {
       if (item.parentId == parentId) {
         list.add(item);
       }
@@ -72,7 +72,7 @@ class Categories {
     return list;
   }
 
-  static Category getOrCreateCategory(
+  Category getOrCreateCategory(
     final String name,
     final CategoryType type,
   ) {
@@ -93,100 +93,100 @@ class Categories {
     moneyObjects.clear();
   }
 
-  static Category get split {
-    return Categories.getOrCreateCategory("Split", CategoryType.none);
+  Category get split {
+    return getOrCreateCategory("Split", CategoryType.none);
   }
 
-  static Category get salesTax {
-    return Categories.getOrCreateCategory("Taxes:Sales Tax", CategoryType.expense);
+  Category get salesTax {
+    return getOrCreateCategory("Taxes:Sales Tax", CategoryType.expense);
   }
 
-  static Category get interestEarned {
-    return Categories.getOrCreateCategory("Savings:Interest", CategoryType.income);
+  Category get interestEarned {
+    return getOrCreateCategory("Savings:Interest", CategoryType.income);
   }
 
-  static Category get savings {
-    return Categories.getOrCreateCategory("Savings", CategoryType.income);
+  Category get savings {
+    return getOrCreateCategory("Savings", CategoryType.income);
   }
 
-  static Category get investmentCredit {
+  Category get investmentCredit {
     return getOrCreateCategory("Investments:Credit", CategoryType.income);
   }
 
-  static Category get investmentDebit {
+  Category get investmentDebit {
     return getOrCreateCategory("Investments:Debit", CategoryType.expense);
   }
 
-  static Category get investmentInterest {
+  Category get investmentInterest {
     return getOrCreateCategory("Investments:Interest", CategoryType.income);
   }
 
-  static Category get investmentDividends {
+  Category get investmentDividends {
     return getOrCreateCategory("Investments:Dividends", CategoryType.income);
   }
 
-  static Category get investmentTransfer {
+  Category get investmentTransfer {
     return getOrCreateCategory("Investments:Transfer", CategoryType.none);
   }
 
-  static Category get investmentFees {
+  Category get investmentFees {
     return getOrCreateCategory("Investments:Fees", CategoryType.expense);
   }
 
-  static Category get investmentMutualFunds {
-    return Categories.getOrCreateCategory("Investments:Mutual Funds", CategoryType.expense);
+  Category get investmentMutualFunds {
+    return getOrCreateCategory("Investments:Mutual Funds", CategoryType.expense);
   }
 
-  static Category get investmentStocks {
-    return Categories.getOrCreateCategory("Investments:Stocks", CategoryType.expense);
+  Category get investmentStocks {
+    return getOrCreateCategory("Investments:Stocks", CategoryType.expense);
   }
 
-  static Category get investmentOther {
-    return Categories.getOrCreateCategory("Investments:Other", CategoryType.expense);
+  Category get investmentOther {
+    return getOrCreateCategory("Investments:Other", CategoryType.expense);
   }
 
-  static Category get investmentBonds {
-    return Categories.getOrCreateCategory("Investments:Bonds", CategoryType.expense);
+  Category get investmentBonds {
+    return getOrCreateCategory("Investments:Bonds", CategoryType.expense);
   }
 
-  static Category get investmentOptions {
-    return Categories.getOrCreateCategory("Investments:Options", CategoryType.expense);
+  Category get investmentOptions {
+    return getOrCreateCategory("Investments:Options", CategoryType.expense);
   }
 
-  static Category get investmentReinvest {
-    return Categories.getOrCreateCategory("Investments:Reinvest", CategoryType.none);
+  Category get investmentReinvest {
+    return getOrCreateCategory("Investments:Reinvest", CategoryType.none);
   }
 
-  static Category get investmentLongTermCapitalGainsDistribution {
-    return Categories.getOrCreateCategory("Investments:Long Term Capital Gains Distribution", CategoryType.income);
+  Category get investmentLongTermCapitalGainsDistribution {
+    return getOrCreateCategory("Investments:Long Term Capital Gains Distribution", CategoryType.income);
   }
 
-  static Category get investmentShortTermCapitalGainsDistribution {
-    return Categories.getOrCreateCategory("Investments:Short Term Capital Gains Distribution", CategoryType.income);
+  Category get investmentShortTermCapitalGainsDistribution {
+    return getOrCreateCategory("Investments:Short Term Capital Gains Distribution", CategoryType.income);
   }
 
-  static Category get investmentMiscellaneous {
-    return Categories.getOrCreateCategory("Investments:Miscellaneous", CategoryType.expense);
+  Category get investmentMiscellaneous {
+    return getOrCreateCategory("Investments:Miscellaneous", CategoryType.expense);
   }
 
-  static Category get transferToDeletedAccount {
-    return Categories.getOrCreateCategory("Xfer to Deleted Account", CategoryType.none);
+  Category get transferToDeletedAccount {
+    return getOrCreateCategory("Xfer to Deleted Account", CategoryType.none);
   }
 
-  static Category get transferFromDeletedAccount {
-    return Categories.getOrCreateCategory("Xfer from Deleted Account", CategoryType.none);
+  Category get transferFromDeletedAccount {
+    return getOrCreateCategory("Xfer from Deleted Account", CategoryType.none);
   }
 
-  static Category get transfer {
-    return Categories.getOrCreateCategory("Transfer", CategoryType.none);
+  Category get transfer {
+    return getOrCreateCategory("Transfer", CategoryType.none);
   }
 
-  static Category get unknown {
-    return Categories.getOrCreateCategory("Unknown", CategoryType.none);
+  Category get unknown {
+    return getOrCreateCategory("Unknown", CategoryType.none);
   }
 
-  static Category get unassignedSplit {
-    return Categories.getOrCreateCategory("UnassignedSplit", CategoryType.none);
+  Category get unassignedSplit {
+    return getOrCreateCategory("UnassignedSplit", CategoryType.none);
   }
 
 /*
@@ -232,13 +232,13 @@ class Categories {
     moneyObjects.addEntry(Category(9, CategoryType.expense, 'School'));
   }
 
-  static onAllDataLoaded() {
+  onAllDataLoaded() {
     for (final Category category in moneyObjects.getAsList()) {
       category.count = 0;
       category.balance = 0;
     }
 
-    for (final Transaction t in Transactions.list) {
+    for (final Transaction t in Data().transactions.list) {
       final Category? item = get(t.categoryId);
       if (item != null) {
         item.count++;
@@ -247,14 +247,14 @@ class Categories {
     }
   }
 
-  static String toCSV() {
+  String toCSV() {
     final StringBuffer csv = StringBuffer();
 
     // CSV Header
     csv.writeln(Category.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Category item in Categories.moneyObjects.getAsList()) {
+    for (final Category item in moneyObjects.getAsList()) {
       csv.writeln(Category.getFieldDefinitions().getCsvRowValues(item));
     }
     // Add the UTF-8 BOM for Excel

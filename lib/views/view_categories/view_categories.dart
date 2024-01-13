@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/money_entities/categories/categories.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/categories/category.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
@@ -158,7 +158,9 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   @override
   List<Category> getList() {
     final CategoryType? filterType = getSelectedCategoryType();
-    return Categories.moneyObjects
+    return Data()
+        .categories
+        .moneyObjects
         .getAsList()
         .where((final Category x) => filterType == null || x.type == filterType)
         .toList();

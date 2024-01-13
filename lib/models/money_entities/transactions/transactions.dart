@@ -6,9 +6,9 @@ import 'package:money/models/money_entities/transactions/transaction.dart';
 class Transactions {
   double runningBalance = 0.00;
 
-  static List<Transaction> list = <Transaction>[];
+  List<Transaction> list = <Transaction>[];
 
-  static void add(final Transaction transaction) {
+  void add(final Transaction transaction) {
     transaction.id = list.length;
     list.add(transaction);
   }
@@ -84,14 +84,14 @@ class Transactions {
     return roundDouble(amount, 2);
   }
 
-  static String toCSV() {
+  String toCSV() {
     final StringBuffer csv = StringBuffer();
 
     // CSV Header
     csv.writeln(Transaction.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Transaction item in Transactions.list) {
+    for (final Transaction item in list) {
       csv.writeln(Transaction.getFieldDefinitions().getCsvRowValues(item));
     }
     // Add the UTF-8 BOM for Excel

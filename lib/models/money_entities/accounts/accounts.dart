@@ -1,22 +1,22 @@
 import 'package:collection/collection.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/accounts/account.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
 
 import 'package:money/models/money_entities/money_entity.dart';
 
 class Accounts {
-  static MoneyObjects<Account> moneyObjects = MoneyObjects<Account>();
+  MoneyObjects<Account> moneyObjects = MoneyObjects<Account>();
 
-  static List<Account> getOpenAccounts() {
+  List<Account> getOpenAccounts() {
     return moneyObjects.getAsList().where((final Account item) => activeBankAccount(item)).toList();
   }
 
-  static bool activeBankAccount(final Account element) {
+  bool activeBankAccount(final Account element) {
     return element.isActiveBankAccount();
   }
 
-  static List<Account> activeAccount(
+  List<Account> activeAccount(
     final List<AccountType> types, {
     final bool? isActive = true,
   }) {
@@ -31,11 +31,11 @@ class Accounts {
     }).toList();
   }
 
-  static Account? get(final num id) {
+  Account? get(final num id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final num id) {
+  String getNameFromId(final num id) {
     final Account? account = get(id);
     if (account == null) {
       return id.toString();
@@ -43,7 +43,7 @@ class Accounts {
     return account.name;
   }
 
-  static Account? findByIdAndType(
+  Account? findByIdAndType(
     final String accountId,
     final AccountType accountType,
   ) {
@@ -56,7 +56,7 @@ class Accounts {
     moneyObjects.clear();
   }
 
-  static List<Account> list() {
+  List<Account> list() {
     return moneyObjects.getAsList();
   }
 
@@ -114,13 +114,13 @@ class Accounts {
     }
   }
 
-  static onAllDataLoaded() {
+  onAllDataLoaded() {
     for (final Account account in moneyObjects.getAsList()) {
       account.count = 0;
       account.balance = account.openingBalance;
     }
 
-    for (final Transaction t in Transactions.list) {
+    for (final Transaction t in Data().transactions.list) {
       final Account? item = get(t.accountId);
       if (item != null) {
         item.count++;
@@ -129,14 +129,14 @@ class Accounts {
     }
   }
 
-  static String toCSV() {
+  String toCSV() {
     final StringBuffer csv = StringBuffer();
 
     // CSV Header
     csv.writeln(Account.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Account item in Accounts.moneyObjects.getAsList()) {
+    for (final Account item in moneyObjects.getAsList()) {
       csv.writeln(Account.getFieldDefinitions().getCsvRowValues(item));
     }
 

@@ -1,19 +1,18 @@
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/rentals/rental.dart';
 import 'package:money/models/money_entities/rentals/rental_unit.dart';
-import 'package:money/models/money_entities/rentals/rental_units.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 
 class Rentals {
-  static MoneyObjects<Rental> moneyObjects = MoneyObjects<Rental>();
+  MoneyObjects<Rental> moneyObjects = MoneyObjects<Rental>();
 
-  static Rental? get(final int id) {
+  Rental? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final int id) {
+  String getNameFromId(final int id) {
     final Rental? found = get(id);
     if (found == null) {
       return id.toString();
@@ -46,8 +45,8 @@ class Rentals {
     moneyObjects.addEntry(instance);
   }
 
-  static onAllDataLoaded() {
-    final List<RentUnit> allUnits = RentUnits.moneyObjects.getAsList();
+  onAllDataLoaded() {
+    final List<RentUnit> allUnits = Data().rentUnits.moneyObjects.getAsList();
 
     for (final Rental rental in moneyObjects.getAsList()) {
       cumulateTransactions(rental);
@@ -63,8 +62,8 @@ class Rentals {
     }
   }
 
-  static cumulateTransactions(final Rental rental) {
-    for (Transaction t in Transactions.list) {
+  cumulateTransactions(final Rental rental) {
+    for (Transaction t in Data().transactions.list) {
       if (rental.categoryForIncomeTreeIds.contains(t.categoryId)) {
         rental.dateRange.inflate(t.dateTime);
         rental.count++;

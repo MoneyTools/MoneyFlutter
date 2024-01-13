@@ -4,17 +4,17 @@ import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/payees/payee.dart';
 
 class Aliases {
-  static MoneyObjects<Alias> moneyObjects = MoneyObjects<Alias>();
+  MoneyObjects<Alias> moneyObjects = MoneyObjects<Alias>();
 
-  static Alias? get(final num id) {
+  Alias? get(final num id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final num id) {
+  String getNameFromId(final num id) {
     return moneyObjects.getNameFromId(id);
   }
 
-  static Payee? findByMatch(final String text) {
+  Payee? findByMatch(final String text) {
     final Alias? aliasFound = moneyObjects.getAsList().firstWhereOrNull((final Alias item) => item.isMatch(text));
     if (aliasFound == null) {
       return null;
@@ -56,14 +56,14 @@ class Aliases {
 
   static onAllDataLoaded() {}
 
-  static String toCSV() {
+  String toCSV() {
     final StringBuffer csv = StringBuffer();
 
     // CSV Header
     csv.writeln(Alias.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Alias item in Aliases.moneyObjects.getAsList()) {
+    for (final Alias item in moneyObjects.getAsList()) {
       csv.writeln(Alias.getFieldDefinitions().getCsvRowValues(item));
     }
 

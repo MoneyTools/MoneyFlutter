@@ -24,6 +24,14 @@ class Data {
   Splits splits = Splits();
   Transactions transactions = Transactions();
 
+  static final Data _instance = Data._internal();
+
+  Data._internal(); // private constructor
+
+  factory Data() {
+    return _instance;
+  }
+
   init({
     required final String? filePathToLoad,
     required final Function callbackWhenLoaded,
@@ -106,10 +114,10 @@ class Data {
       }
     }
 
-    Accounts.onAllDataLoaded();
-    Categories.onAllDataLoaded();
-    Payees.onAllDataLoaded();
-    Rentals.onAllDataLoaded();
+    accounts.onAllDataLoaded();
+    Data().categories.onAllDataLoaded();
+    Data().payees.onAllDataLoaded();
+    Data().rentals.onAllDataLoaded();
     callbackWhenLoaded(true);
   }
 
@@ -143,27 +151,27 @@ class Data {
     MyFileSystems.ensureFolderExist(folder).then((final _) {
       MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'accounts.csv'),
-        Accounts.toCSV(),
+        accounts.toCSV(),
       );
 
       MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'categories.csv'),
-        Categories.toCSV(),
+        Data().categories.toCSV(),
       );
 
       MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'payees.csv'),
-        Payees.toCSV(),
+        Data().payees.toCSV(),
       );
 
       MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'aliases.csv'),
-        Aliases.toCSV(),
+        Data().aliases.toCSV(),
       );
 
       MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'transactions.csv'),
-        Transactions.toCSV(),
+        Data().transactions.toCSV(),
       );
 
       timeLapse.endAndPrint();

@@ -1,17 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_entities/accounts/account.dart';
-import 'package:money/models/money_entities/accounts/accounts.dart';
-import 'package:money/models/money_entities/aliases/aliases.dart';
-import 'package:money/models/money_entities/categories/categories.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/payees/payee.dart';
-import 'package:money/models/money_entities/payees/payees.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
 
 void importQFX(
   final String filePath,
@@ -23,7 +17,7 @@ void importQFX(
   final String ofx = getStringDelimitedStartEndTokens(text, '<OFX>', '</OFX>');
 
   final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofx);
-  final Account? account = Accounts.findByIdAndType(
+  final Account? account = data.accounts.findByIdAndType(
     bankInfo.accountId,
     Account.getTypeFromText(bankInfo.accountType),
   );
@@ -35,26 +29,26 @@ void importQFX(
       debugLog(item.toString());
 
       // find by fuzzy match
-      Payee? payee = Aliases.findByMatch(item.name);
+      Payee? payee = Data().aliases.findByMatch(item.name);
 
       // ignore: prefer_conditional_assignment
       if (payee == null) {
         // if null find match or add
-        payee = Payees.findOrAddPayee(item.name);
+        payee = Data().payees.findOrAddPayee(item.name);
       }
 
-      Transactions.add(Transaction(
-        -1,
-        '',
-        accountId: account.id,
-        dateTime: item.date,
-        payeeId: payee.id,
-        categoryId: getCategoryFromOfxType(item),
-        amount: item.amount,
-        balance: 0,
-        fitid: item.fitid,
-        memo: item.memo,
-      ));
+      Data().transactions.add(Transaction(
+            -1,
+            '',
+            accountId: account.id,
+            dateTime: item.date,
+            payeeId: payee.id,
+            categoryId: getCategoryFromOfxType(item),
+            amount: item.amount,
+            balance: 0,
+            fitid: item.fitid,
+            memo: item.memo,
+          ));
     }
   }
 }
@@ -93,20 +87,20 @@ int getCategoryFromOfxType(final QFXTransaction ofxTransaction) {
   int categoryId = -1;
   switch (ofxTransaction.type) {
     case "CREDIT":
-      categoryId = Categories.investmentCredit.id;
+      categoryId = Data().categories.investmentCredit.id;
       break;
     case "DEBIT":
-      categoryId = Categories.investmentDebit.id;
+      categoryId = Data().categories.investmentDebit.id;
       break;
     case "INT":
-      categoryId = Categories.investmentInterest.id;
+      categoryId = Data().categories.investmentInterest.id;
       break;
     case "DIV":
-      categoryId = Categories.investmentDividends.id;
+      categoryId = Data().categories.investmentDividends.id;
       break;
     case "FEE":
     case "SRVCHG": // service charge
-      categoryId = Categories.investmentFees.id;
+      categoryId = Data().categories.investmentFees.id;
       break;
     case "DEP": // deposit
     case "ATM": // automatic teller machine
@@ -119,13 +113,13 @@ int getCategoryFromOfxType(final QFXTransaction ofxTransaction) {
     case "CHECK": // check
     case "OTHER":
       if (ofxTransaction.amount > 0) {
-        categoryId = Categories.investmentCredit.id;
+        categoryId = Data().categories.investmentCredit.id;
       } else {
-        categoryId = Categories.investmentDebit.id;
+        categoryId = Data().categories.investmentDebit.id;
       }
       break;
     case "XFER":
-      categoryId = Categories.investmentTransfer.id;
+      categoryId = Data().categories.investmentTransfer.id;
       break;
   }
   return categoryId;

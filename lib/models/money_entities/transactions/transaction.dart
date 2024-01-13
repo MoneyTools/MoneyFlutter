@@ -2,11 +2,9 @@ import 'dart:ui';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/money_entities/accounts/accounts.dart';
-import 'package:money/models/money_entities/categories/categories.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/money_entity.dart';
-import 'package:money/models/money_entities/payees/payees.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
@@ -73,10 +71,11 @@ class Transaction extends MoneyEntity {
       type: FieldType.text,
       align: TextAlign.left,
       valueFromInstance: (final Transaction transaction) {
-        return Accounts.getNameFromId(transaction.accountId);
+        return Data().accounts.getNameFromId(transaction.accountId);
       },
       sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByString(Accounts.getNameFromId(a.accountId), Accounts.getNameFromId(b.accountId), ascending);
+        return sortByString(
+            Data().accounts.getNameFromId(a.accountId), Data().accounts.getNameFromId(b.accountId), ascending);
       },
     );
   }
@@ -104,10 +103,10 @@ class Transaction extends MoneyEntity {
       type: FieldType.text,
       align: TextAlign.left,
       valueFromInstance: (final Transaction transaction) {
-        return Payees.getNameFromId(transaction.payeeId);
+        return Data().payees.getNameFromId(transaction.payeeId);
       },
       sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), ascending);
+        return sortByString(Data().payees.getNameFromId(a.payeeId), Data().payees.getNameFromId(b.payeeId), ascending);
       },
     );
   }
@@ -118,10 +117,11 @@ class Transaction extends MoneyEntity {
       type: FieldType.text,
       align: TextAlign.left,
       valueFromInstance: (final Transaction transaction) {
-        return Categories.getNameFromId(transaction.categoryId);
+        return Data().categories.getNameFromId(transaction.categoryId);
       },
       sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByString(Categories.getNameFromId(a.categoryId), Categories.getNameFromId(b.categoryId), ascending);
+        return sortByString(
+            Data().categories.getNameFromId(a.categoryId), Data().categories.getNameFromId(b.categoryId), ascending);
       },
     );
   }

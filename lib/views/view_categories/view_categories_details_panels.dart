@@ -7,7 +7,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
 
     for (final Category item in getList()) {
       if (item.name != 'Split' && item.name != 'Xfer to Deleted Account') {
-        final Category topCategory = Categories.getTopAncestor(item);
+        final Category topCategory = Data().categories.getTopAncestor(item);
         if (map[topCategory.name] == null) {
           map[topCategory.name] = 0;
         }

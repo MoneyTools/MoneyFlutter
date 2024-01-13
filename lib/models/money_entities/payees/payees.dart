@@ -1,22 +1,22 @@
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/payees/payee.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
 
 class Payees {
-  static MoneyObjects<Payee> moneyObjects = MoneyObjects<Payee>();
+  MoneyObjects<Payee> moneyObjects = MoneyObjects<Payee>();
 
-  static Payee? get(final int id) {
+  Payee? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final int id) {
+  String getNameFromId(final int id) {
     return moneyObjects.getNameFromId(id);
   }
 
   /// Attempts to find payee wih the given name
   /// if not found create a new payee and return that instance
-  static Payee findOrAddPayee(final String name) {
+  Payee findOrAddPayee(final String name) {
     // find or add account of given name
     Payee? payee = moneyObjects.getByName(name);
 
@@ -64,13 +64,13 @@ class Payees {
     }
   }
 
-  static onAllDataLoaded() {
+  onAllDataLoaded() {
     for (final Payee payee in moneyObjects.getAsList()) {
       payee.count = 0;
       payee.balance = 0;
     }
 
-    for (Transaction t in Transactions.list) {
+    for (Transaction t in Data().transactions.list) {
       final Payee? item = get(t.payeeId);
       if (item != null) {
         item.count++;
@@ -79,14 +79,14 @@ class Payees {
     }
   }
 
-  static String toCSV() {
+  String toCSV() {
     final StringBuffer csv = StringBuffer();
 
     // CSV Header
     csv.writeln(Payee.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Payee item in Payees.moneyObjects.getAsList()) {
+    for (final Payee item in moneyObjects.getAsList()) {
       csv.writeln(Payee.getFieldDefinitions().getCsvRowValues(item));
     }
     // Add the UTF-8 BOM for Excel

@@ -45,7 +45,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   bool filterByRentalCategories(final Transaction t, final Rental rental) {
     final num categoryIdToMatch = t.categoryId;
 
-    if (categoryIdToMatch == Categories.splitCategoryId()) {
+    if (categoryIdToMatch == Data().categories.splitCategoryId()) {
       final List<Split> splits = Splits.get(t.id);
 
       for (final Split split in splits) {
@@ -60,7 +60,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   }
 
   bool isMatchingCategories(final num categoryIdToMatch, final Rental rental) {
-    Categories.getTreeIds(rental.categoryForIncome);
+    Data().categories.getTreeIds(rental.categoryForIncome);
 
     return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||
         rental.categoryForManagementTreeIds.contains(categoryIdToMatch) ||

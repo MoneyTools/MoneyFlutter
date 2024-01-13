@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 
-import 'package:money/models/money_entities/categories/categories.dart';
 import 'package:money/models/money_entities/rentals/rental.dart';
 import 'package:money/models/money_entities/rentals/rental_unit.dart';
-import 'package:money/models/money_entities/rentals/rentals.dart';
 import 'package:money/models/money_entities/splits.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
 
@@ -179,7 +178,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
 
   @override
   List<Rental> getList() {
-    return Rentals.moneyObjects.getAsList();
+    return Data().rentals.moneyObjects.getAsList();
   }
 
   @override

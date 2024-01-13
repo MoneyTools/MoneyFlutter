@@ -1,4 +1,4 @@
-import 'package:money/models/money_entities/categories/categories.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/rentals/rental_unit.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_entities/money_entity.dart';
@@ -60,22 +60,22 @@ class Rental extends MoneyEntity {
     instance.estimatedValue = MoneyEntity.fromRowColumnToDouble(row, 'EstimatedValue');
 
     instance.categoryForIncome = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForIncome');
-    instance.categoryForIncomeTreeIds = Categories.getTreeIds(instance.categoryForIncome);
+    instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome);
 
     instance.categoryForTaxes = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForTaxes');
-    instance.categoryForTaxesTreeIds = Categories.getTreeIds(instance.categoryForTaxes);
+    instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes);
 
     instance.categoryForInterest = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForInterest');
-    instance.categoryForInterestTreeIds = Categories.getTreeIds(instance.categoryForInterest);
+    instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest);
 
     instance.categoryForRepairs = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForRepairs');
-    instance.categoryForRepairsTreeIds = Categories.getTreeIds(instance.categoryForRepairs);
+    instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs);
 
     instance.categoryForMaintenance = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForMaintenance');
-    instance.categoryForMaintenanceTreeIds = Categories.getTreeIds(instance.categoryForMaintenance);
+    instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance);
 
     instance.categoryForManagement = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForManagement');
-    instance.categoryForManagementTreeIds = Categories.getTreeIds(instance.categoryForManagement);
+    instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement);
 
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForMaintenanceTreeIds);

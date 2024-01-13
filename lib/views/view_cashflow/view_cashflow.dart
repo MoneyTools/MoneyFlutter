@@ -1,13 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/accounts/account.dart';
-import 'package:money/models/money_entities/categories/categories.dart';
 import 'package:money/models/money_entities/categories/category.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
-
-import 'package:money/models/money_entities/accounts/accounts.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/scroll_both_ways.dart';
@@ -23,7 +20,7 @@ class ViewCashFlow extends ViewWidget<SanKeyEntry> {
 }
 
 class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
-  List<Account> accountsOpened = Accounts.getOpenAccounts();
+  List<Account> accountsOpened = Data().accounts.getOpenAccounts();
   double totalIncomes = 0.00;
   double totalExpenses = 0.00;
   double totalSavings = 0.00;
@@ -46,8 +43,8 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
   }
 
   void transformData() {
-    for (Transaction element in Transactions.list) {
-      final Category? category = Categories.get(element.categoryId);
+    for (Transaction element in Data().transactions.list) {
+      final Category? category = Data().categories.get(element.categoryId);
       if (category != null) {
         switch (category.type) {
           case CategoryType.income:
@@ -55,14 +52,14 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
           case CategoryType.investment:
             totalIncomes += element.amount;
 
-            final Category topCategory = Categories.getTopAncestor(category);
+            final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfIncomes[topCategory];
             mapValue ??= 0;
             mapOfIncomes[topCategory] = mapValue + element.amount;
             break;
           case CategoryType.expense:
             totalExpenses += element.amount;
-            final Category topCategory = Categories.getTopAncestor(category);
+            final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfExpenses[topCategory];
             mapValue ??= 0;
             mapOfExpenses[topCategory] = mapValue + element.amount;

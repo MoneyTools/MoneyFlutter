@@ -3,13 +3,13 @@ import 'package:money/models/money_entities/rentals/rental.dart';
 import 'package:money/models/money_entities/rentals/rental_unit.dart';
 
 class RentUnits {
-  static MoneyObjects<RentUnit> moneyObjects = MoneyObjects<RentUnit>();
+  MoneyObjects<RentUnit> moneyObjects = MoneyObjects<RentUnit>();
 
-  static RentUnit? get(final int id) {
+  RentUnit? get(final int id) {
     return moneyObjects.get(id);
   }
 
-  static String getNameFromId(final int id) {
+  String getNameFromId(final int id) {
     final RentUnit? found = get(id);
     if (found == null) {
       return id.toString();
@@ -33,7 +33,7 @@ class RentUnits {
 
   loadDemoData() {}
 
-  static onAllDataLoaded() {
+  onAllDataLoaded() {
     for (RentUnit item in moneyObjects.getAsList()) {
       final Rental a = item as Rental;
       a.count = 0;

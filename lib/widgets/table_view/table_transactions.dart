@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
 
 import 'package:money/widgets/table_view/table_header.dart';
 import 'package:money/widgets/table_view/table_view.dart';
@@ -107,7 +107,7 @@ bool defaultFilter(final Transaction element) {
 
 List<Transaction> getFilteredTransactions(final FilterFunction filter) {
   final List<Transaction> list =
-      Transactions.list.where((final Transaction transaction) => filter(transaction)).toList();
+      Data().transactions.list.where((final Transaction transaction) => filter(transaction)).toList();
 
   list.sort(
     (final Transaction a, final Transaction b) => a.dateTime.compareTo(b.dateTime),

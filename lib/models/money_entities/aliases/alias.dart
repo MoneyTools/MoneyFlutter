@@ -2,10 +2,10 @@ import 'dart:ui';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/payees/payee.dart';
-import 'package:money/models/money_entities/payees/payees.dart';
 
 class Alias extends MoneyEntity {
   AliasType type = AliasType.none;
@@ -19,7 +19,7 @@ class Alias extends MoneyEntity {
     this.type = AliasType.none,
     this.payeeId = -1,
   }) {
-    payee = Payees.get(payeeId)!;
+    payee = Data().payees.get(payeeId)!;
   }
 
   bool isMatch(final String text) {
@@ -45,10 +45,11 @@ class Alias extends MoneyEntity {
       type: FieldType.text,
       align: TextAlign.left,
       valueFromInstance: (final Alias item) {
-        return Payees.getNameFromId(item.payeeId);
+        return Data().payees.getNameFromId(item.payeeId);
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
-        return sortByString(Payees.getNameFromId(a.payeeId), Payees.getNameFromId(b.payeeId), sortAscending);
+        return sortByString(
+            Data().payees.getNameFromId(a.payeeId), Data().payees.getNameFromId(b.payeeId), sortAscending);
       },
     );
   }

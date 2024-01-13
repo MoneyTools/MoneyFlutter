@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/transactions/transactions.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/three_part_label.dart';
 
@@ -38,14 +38,14 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         text1: 'Incomes',
         small: true,
         isVertical: true,
-        text2: getIntAsText(Transactions.list.where((final Transaction element) => element.amount > 0).length)));
+        text2: getIntAsText(Data().transactions.list.where((final Transaction element) => element.amount > 0).length)));
     pivots.add(ThreePartLabel(
         text1: 'Expenses',
         small: true,
         isVertical: true,
-        text2: getIntAsText(Transactions.list.where((final Transaction element) => element.amount < 0).length)));
-    pivots.add(
-        ThreePartLabel(text1: 'All', small: true, isVertical: true, text2: getIntAsText(Transactions.list.length)));
+        text2: getIntAsText(Data().transactions.list.where((final Transaction element) => element.amount < 0).length)));
+    pivots.add(ThreePartLabel(
+        text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.list.length)));
   }
 
   @override
@@ -97,7 +97,9 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   List<Transaction> getList() {
-    final List<Transaction> list = Transactions.list
+    final List<Transaction> list = Data()
+        .transactions
+        .list
         .where((final Transaction transaction) =>
             isMatchingIncomeExpense(transaction) && widget.filter(transaction) && isMatchingFilterText(transaction))
         .toList();
