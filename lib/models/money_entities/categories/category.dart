@@ -1,5 +1,4 @@
-import 'dart:ui';
-
+import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
@@ -149,11 +148,18 @@ class Category extends MoneyEntity {
 
   static FieldDefinition<Category> getFieldForColor() {
     return FieldDefinition<Category>(
-      type: FieldType.text,
+      type: FieldType.widget,
       name: 'Color',
       serializeName: 'color',
-      align: TextAlign.left,
+      align: TextAlign.center,
       valueFromInstance: (final Category item) {
+        return Container(
+          color: getColorFromHex(item.color),
+          width: 10,
+          height: 10,
+        );
+      },
+      valueForSerialization: (final Category item) {
         return item.color;
       },
       sort: (final Category a, final Category b, final bool sortAscending) {

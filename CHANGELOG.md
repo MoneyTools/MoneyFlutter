@@ -1,6 +1,7 @@
 ## [1.0.17] 2024-01-13
 
-- Load all Account,Alias,Category SQLite fields
+- Field [type.widget] used in CategoryList for Color
+- Load all Account,Alias,Category,Payee,Rental,RentUnit SQLite fields
 - Add Filter input to ViewTransaction List
 
 ## [1.0.16] 2024-01-11

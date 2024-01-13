@@ -38,6 +38,8 @@ class FieldDefinition<T> {
         return buildFieldWidgetForCurrency(value, false);
       case FieldType.amountShorthand:
         return buildFieldWidgetForCurrency(value, true);
+      case FieldType.widget:
+        return Expanded(child: Center(child: value as Widget));
       case FieldType.text:
       default:
         return buildFieldWidgetForText(value.toString(), textAlign: align);
@@ -118,4 +120,5 @@ enum FieldType {
   amount,
   amountShorthand,
   date,
+  widget,
 }
