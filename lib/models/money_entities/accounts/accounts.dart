@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/accounts/account.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
@@ -61,9 +62,9 @@ class Accounts {
     return moneyObjects.getAsList();
   }
 
-  load(final List<Map<String, Object?>> rows) async {
+  load(final List<Json> rows) async {
     clear();
-    for (final Map<String, Object?> row in rows) {
+    for (final Json row in rows) {
       final Account a = Account.fromSqlite(row);
       moneyObjects.addEntry(a);
     }

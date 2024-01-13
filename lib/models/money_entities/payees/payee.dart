@@ -4,6 +4,13 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 
+/*
+  the SQLite table definition
+
+  0|Id|INT|0||1
+  1|Name|nvarchar(255)|1||0
+
+ */
 class Payee extends MoneyEntity {
   num count = 0;
   double balance = 0.00;

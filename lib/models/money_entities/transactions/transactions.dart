@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
 
@@ -17,12 +18,12 @@ class Transactions {
     list.clear();
   }
 
-  load(final List<Map<String, Object?>> rows) async {
+  load(final List<Json> rows) async {
     clear();
 
     runningBalance = 0.00;
 
-    for (final Map<String, Object?> row in rows) {
+    for (final Json row in rows) {
       final Transaction t = Transaction(
         // id
         id: int.parse(row['Id'].toString()),

@@ -194,7 +194,7 @@ class Categories {
     return getOrCreateCategory("UnassignedSplit", CategoryType.none);
   }
 
-  load(final List<Map<String, Object?>> rows) async {
+  load(final List<Json> rows) async {
     clear();
     for (final Json row in rows) {
       moneyObjects.addEntry(Category.fromSqlite(row));

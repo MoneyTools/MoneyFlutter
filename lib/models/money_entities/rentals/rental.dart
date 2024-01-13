@@ -1,3 +1,4 @@
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/date_range.dart';
@@ -45,39 +46,60 @@ class Rental extends MoneyEntity {
 
   DateRange dateRange = DateRange();
 
+  /*
+    SQLite table definition
+
+     0|Id|INT|0||1
+     1|Name|nvarchar(255)|1||0
+     2|Address|nvarchar(255)|0||0
+     3|PurchasedDate|datetime|0||0
+     4|PurchasedPrice|money|0||0
+     5|LandValue|money|0||0
+     6|EstimatedValue|money|0||0
+     7|OwnershipName1|nvarchar(255)|0||0
+     8|OwnershipName2|nvarchar(255)|0||0
+     9|OwnershipPercentage1|money|0||0
+    10|OwnershipPercentage2|money|0||0
+    11|Note|nvarchar(255)|0||0
+    12|CategoryForTaxes|INT|0||0
+    13|CategoryForIncome|INT|0||0
+    14|CategoryForInterest|INT|0||0
+    15|CategoryForRepairs|INT|0||0
+    16|CategoryForMaintenance|INT|0||0
+    17|CategoryForManagement|INT|0||0
+   */
   Rental({
     required super.id,
     required super.name,
   });
 
-  static Rental createInstanceFromRow(final Map<String, Object?> row) {
-    final int id = MoneyEntity.fromRowColumnToNumber(row, 'Id');
-    final String name = MoneyEntity.fromRowColumnToString(row, 'Name');
+  factory Rental.fromSqlite(final Json row) {
+    final Rental instance = Rental(
+      id: jsonGetInt(row, 'Id'),
+      name: jsonGetString(row, 'Name'),
+    );
+    instance.address = jsonGetString(row, 'Address');
+    instance.purchasedDate = jsonGetDate(row, 'PurchasedDate', defaultIfNotFound: DateTime.now());
+    instance.purchasedPrice = jsonGetDouble(row, 'PurchasedPrice');
+    instance.landValue = jsonGetDouble(row, 'LandValue');
+    instance.estimatedValue = jsonGetDouble(row, 'EstimatedValue');
 
-    final Rental instance = Rental(id: id, name: name);
-
-    instance.address = MoneyEntity.fromRowColumnToString(row, 'Address');
-    instance.purchasedDate = MoneyEntity.fromRowColumnToDateTime(row, 'PurchasedDate') ?? DateTime.now();
-    instance.purchasedPrice = MoneyEntity.fromRowColumnToDouble(row, 'PurchasedPrice');
-    instance.landValue = MoneyEntity.fromRowColumnToDouble(row, 'LandValue');
-    instance.estimatedValue = MoneyEntity.fromRowColumnToDouble(row, 'EstimatedValue');
-
-    instance.categoryForIncome = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForIncome');
+    instance.categoryForIncome = jsonGetInt(row, 'CategoryForIncome');
     instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome);
 
-    instance.categoryForTaxes = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForTaxes');
+    instance.categoryForTaxes = jsonGetInt(row, 'CategoryForTaxes');
     instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes);
 
-    instance.categoryForInterest = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForInterest');
+    instance.categoryForInterest = jsonGetInt(row, 'CategoryForInterest');
     instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest);
 
-    instance.categoryForRepairs = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForRepairs');
+    instance.categoryForRepairs = jsonGetInt(row, 'CategoryForRepairs');
     instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs);
 
-    instance.categoryForMaintenance = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForMaintenance');
+    instance.categoryForMaintenance = jsonGetInt(row, 'CategoryForMaintenance');
     instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance);
 
-    instance.categoryForManagement = MoneyEntity.fromRowColumnToNumber(row, 'CategoryForManagement');
+    instance.categoryForManagement = jsonGetInt(row, 'CategoryForManagement');
     instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement);
 
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
@@ -86,11 +108,11 @@ class Rental extends MoneyEntity {
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForRepairsTreeIds);
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForInterestTreeIds);
 
-    instance.ownershipName1 = MoneyEntity.fromRowColumnToString(row, 'OwnershipName1');
-    instance.ownershipName2 = MoneyEntity.fromRowColumnToString(row, 'OwnershipName2');
-    instance.ownershipPercentage1 = MoneyEntity.fromRowColumnToDouble(row, 'ownershipPercentage1');
-    instance.ownershipPercentage2 = MoneyEntity.fromRowColumnToDouble(row, 'ownershipPercentage1');
-    instance.note = MoneyEntity.fromRowColumnToString(row, 'Note');
+    instance.ownershipName1 = jsonGetString(row, 'OwnershipName1');
+    instance.ownershipName2 = jsonGetString(row, 'OwnershipName2');
+    instance.ownershipPercentage1 = jsonGetDouble(row, 'ownershipPercentage1');
+    instance.ownershipPercentage2 = jsonGetDouble(row, 'ownershipPercentage1');
+    instance.note = jsonGetString(row, 'Note');
 
     return instance;
   }

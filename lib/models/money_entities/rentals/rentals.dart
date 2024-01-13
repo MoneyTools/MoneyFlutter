@@ -1,8 +1,8 @@
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/rentals/rental.dart';
 import 'package:money/models/money_entities/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 
 class Rentals {
@@ -24,16 +24,11 @@ class Rentals {
     moneyObjects.clear();
   }
 
-  load(final List<Map<String, Object?>> rows) {
+  load(final List<Json> rows) {
     clear();
 
-    for (final Map<String, Object?> row in rows) {
-      try {
-        final Rental instance = Rental.createInstanceFromRow(row);
-        moneyObjects.addEntry(instance);
-      } catch (error) {
-        debugLog(error.toString());
-      }
+    for (final Json row in rows) {
+      moneyObjects.addEntry(Rental.fromSqlite(row));
     }
   }
 

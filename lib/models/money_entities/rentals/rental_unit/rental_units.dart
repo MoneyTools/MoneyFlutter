@@ -1,3 +1,4 @@
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/rentals/rental.dart';
 import 'package:money/models/money_entities/rentals/rental_unit/rental_unit.dart';
@@ -17,17 +18,9 @@ class RentUnits {
     return found.name;
   }
 
-  load(final List<Map<String, Object?>> rows) async {
-    for (final Map<String, Object?> row in rows) {
-      final int id = int.parse(row['Id'].toString());
-      final String name = row['Name'].toString();
-
-      final RentUnit instance = RentUnit(id: id, name: name);
-      instance.building = row['Building'].toString();
-      instance.renter = row['Renter'].toString();
-      instance.note = row['Note'].toString();
-
-      moneyObjects.addEntry(instance);
+  load(final List<Json> rows) async {
+    for (final Json row in rows) {
+      moneyObjects.addEntry(RentUnit.fromSqlite(row));
     }
   }
 

@@ -15,6 +15,28 @@ const String columnIdMemo = 'Memo';
 const String columnIdAmount = 'Amount';
 const String columnIdBalance = 'Balance';
 
+/*
+  SQLite definition of [Transaction] table
+
+   0|Id|bigint|0||1
+   1|Account|INT|1||0
+   2|Date|datetime|1||0
+   3|Status|INT|0||0
+   4|Payee|INT|0||0
+   5|OriginalPayee|nvarchar(255)|0||0
+   6|Category|INT|0||0
+   7|Memo|nvarchar(255)|0||0
+   8|Number|nchar(10)|0||0
+   9|ReconciledDate|datetime|0||0
+  10|BudgetBalanceDate|datetime|0||0
+  11|Transfer|bigint|0||0
+  12|FITID|nchar(40)|0||0
+  13|Flags|INT|1||0
+  14|Amount|money|1||0
+  15|SalesTax|money|0||0
+  16|TransferSplit|INT|0||0
+  17|MergeDate|datetime|0||0
+ */
 class Transaction extends MoneyEntity {
   final int accountId;
   final DateTime dateTime;

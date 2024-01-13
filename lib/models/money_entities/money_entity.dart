@@ -10,40 +10,6 @@ class MoneyEntity {
   MoneyEntity({required this.id, required this.name}) {
     //
   }
-
-  static String fromRowColumnToString(final Map<String, Object?> row, final String nameOfColumn) {
-    final Object? rawValue = row[nameOfColumn];
-    if (rawValue == null) {
-      return '';
-    }
-    return rawValue.toString();
-  }
-
-  static int fromRowColumnToNumber(final Map<String, Object?> row, final String nameOfColumn) {
-    final Object? rawValue = row[nameOfColumn];
-    if (rawValue == null) {
-      return 0;
-    }
-    final String rawValueAsText = rawValue.toString();
-    return int.parse(rawValueAsText);
-  }
-
-  static double fromRowColumnToDouble(final Map<String, Object?> row, final String nameOfColumn) {
-    final Object? rawValue = row[nameOfColumn];
-    if (rawValue == null) {
-      return 0.00;
-    }
-    final String rawValueAsText = rawValue.toString();
-    return double.parse(rawValueAsText);
-  }
-
-  static DateTime? fromRowColumnToDateTime(final Map<String, Object?> row, final String nameOfColumn) {
-    final String rawValue = fromRowColumnToString(row, nameOfColumn);
-    if (rawValue.isEmpty) {
-      return null;
-    }
-    return DateTime.parse(rawValue);
-  }
 }
 
 class MoneyObjects<T> {

@@ -66,9 +66,9 @@ String jsonGetString(
 
 DateTime jsonGetDate(
   final Json json,
-  final String key, [
+  final String key, {
   final DateTime? defaultIfNotFound,
-]) {
+}) {
   final dynamic value = json[key];
   if (value == null) {
     return defaultIfNotFound ?? DateTime.parse('19070-01-01');

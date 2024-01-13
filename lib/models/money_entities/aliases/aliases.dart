@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_entities/aliases/alias.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/payees/payee.dart';
@@ -30,9 +31,9 @@ class Aliases {
     return moneyObjects.getAsList().length;
   }
 
-  load(final List<Map<String, Object?>> rows) async {
+  load(final List<Json> rows) async {
     clear();
-    for (final Map<String, Object?> row in rows) {
+    for (final Json row in rows) {
       moneyObjects.addEntry(Alias.fromSqlite(row));
     }
   }
