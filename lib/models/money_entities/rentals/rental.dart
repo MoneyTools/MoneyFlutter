@@ -1,5 +1,5 @@
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/money_entities/rentals/rental_unit.dart';
+import 'package:money/models/money_entities/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 

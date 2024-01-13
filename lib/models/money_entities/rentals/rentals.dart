@@ -1,6 +1,6 @@
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/rentals/rental.dart';
-import 'package:money/models/money_entities/rentals/rental_unit.dart';
+import 'package:money/models/money_entities/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_entities/money_entity.dart';

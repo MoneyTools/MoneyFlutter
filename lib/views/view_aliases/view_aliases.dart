@@ -3,7 +3,7 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/aliases/alias.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/rentals/rental_unit.dart';
+import 'package:money/models/money_entities/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
