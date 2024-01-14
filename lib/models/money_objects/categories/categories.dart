@@ -1,8 +1,7 @@
-import 'package:collection/collection.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Categories {

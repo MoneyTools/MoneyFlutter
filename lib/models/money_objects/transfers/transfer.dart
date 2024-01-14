@@ -1,4 +1,4 @@
-import 'package:money/models/money_objects/splits.dart';
+import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Transfer {

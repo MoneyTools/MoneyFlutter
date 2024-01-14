@@ -1,5 +1,5 @@
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/rentals/rental.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart';
 

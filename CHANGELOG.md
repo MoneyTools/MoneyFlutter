@@ -1,3 +1,7 @@
+## [1.0.18] 2024-01-14
+
+- Refactor MoneyObjects
+
 ## [1.0.17] 2024-01-13
 
 - Field [type.widget] used in CategoryList for Color

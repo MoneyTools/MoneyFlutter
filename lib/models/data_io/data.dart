@@ -10,7 +10,7 @@ import 'package:money/models/money_objects/categories/categories.dart';
 import 'package:money/models/money_objects/payees/payees.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/money_objects/splits.dart';
+import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/data_io/data_others.dart'
     if (dart.library.html) 'package:money/models/data_io/data_web.dart';
 

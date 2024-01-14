@@ -1,7 +1,6 @@
-import 'package:collection/collection.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 class Aliases {

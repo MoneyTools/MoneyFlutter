@@ -1,11 +1,7 @@
-import 'dart:ui';
-
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 /*
@@ -122,7 +118,7 @@ class Alias extends MoneyObject {
 
   static FieldDefinitions<Alias> getFieldDefinitions() {
     final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
-      MoneyObjects<Alias>().getFieldId(),
+      MoneyObject.getFieldId<Alias>(),
       FieldDefinition<Alias>(
         useAsColumn: false,
         name: 'PayeeId',

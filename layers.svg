@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="no"?>
-<svg width="2100" height="450" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="2400" height="450" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
   <style>
     .layerRectangle {
       stroke: black;
@@ -96,10 +96,10 @@
     <rect x="4" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_flutter_markdown'>
-    <rect x="1204" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="1504" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_intl'>
-    <rect x="1504" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="1804" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_money'>
     <rect x="4" y="39" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -111,7 +111,7 @@
     <rect x="604" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_fl_chart'>
-    <rect x="1804" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="2104" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_shared_preferences'>
     <rect x="604" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -125,18 +125,21 @@
   <g id='Node_url_launcher'>
     <rect x="4" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
+  <g id='Node_uuid'>
+    <rect x="1204" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+  </g>
   <g id='Edges'>
     <path class="line" d="M580 245 C 590 300,10 300, 20 355" fill="none" stroke="#377E22">
       <title>file_picker
 ⬇
 path</title>
     </path>
-    <path class="line" d="M1480 245 C 1490 300,10 300, 20 355" fill="none" stroke="#377E22">
+    <path class="line" d="M1780 245 C 1790 300,10 300, 20 355" fill="none" stroke="#377E22">
       <title>flutter_markdown
 ⬇
 path</title>
     </path>
-    <path class="line" d="M1780 245 C 1790 300,10 300, 20 355" fill="none" stroke="#377E22">
+    <path class="line" d="M2080 245 C 2090 300,10 300, 20 355" fill="none" stroke="#377E22">
       <title>intl
 ⬇
 path</title>
@@ -156,17 +159,17 @@ csv</title>
 ⬇
 file_picker</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,1810 150, 1820 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,2110 150, 2120 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 fl_chart</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,1210 150, 1220 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,1510 150, 1520 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 flutter_markdown</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,1510 150, 1520 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,1810 150, 1820 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 intl</title>
@@ -195,6 +198,11 @@ sqlite3_flutter_libs</title>
       <title>money
 ⬇
 url_launcher</title>
+    </path>
+    <path class="line" d="M280 95 C 290 150,1210 150, 1220 205" fill="none" stroke="#377E22">
+      <title>money
+⬇
+uuid</title>
     </path>
     <path class="line" d="M1180 245 C 1190 300,310 300, 320 355" fill="none" stroke="#377E22">
       <title>sqlite3
@@ -260,8 +268,8 @@ path</title>
   </g>
   <g id='Counters_flutter_markdown'>
     <g>
-      <circle cx="1480" cy="245" r="10" fill="green"/>
-      <text x="1480" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
+      <circle cx="1780" cy="245" r="10" fill="green"/>
+      <text x="1780" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
       <title>flutter_markdown
 ⬇
 1 /direct/path
@@ -269,8 +277,8 @@ path</title>
 3 /transitive/meta</title>
     </g>
     <g>
-      <circle cx="1220" cy="205" r="10" fill="blue"/>
-      <text x="1220" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="1520" cy="205" r="10" fill="blue"/>
+      <text x="1520" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 flutter_markdown</title>
@@ -278,8 +286,8 @@ flutter_markdown</title>
   </g>
   <g id='Counters_intl'>
     <g>
-      <circle cx="1780" cy="245" r="10" fill="green"/>
-      <text x="1780" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
+      <circle cx="2080" cy="245" r="10" fill="green"/>
+      <text x="2080" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
       <title>intl
 ⬇
 1 /direct/path
@@ -287,8 +295,8 @@ flutter_markdown</title>
 3 /transitive/meta</title>
     </g>
     <g>
-      <circle cx="1520" cy="205" r="10" fill="blue"/>
-      <text x="1520" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="1820" cy="205" r="10" fill="blue"/>
+      <text x="1820" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 intl</title>
@@ -297,7 +305,7 @@ intl</title>
   <g id='Counters_money'>
     <g>
       <circle cx="280" cy="95" r="10" fill="green"/>
-      <text x="280" y="95" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">16</text>
+      <text x="280" y="95" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">17</text>
       <title>money
 ⬇
 1 /dev/flutter_launcher_icons
@@ -315,7 +323,8 @@ intl</title>
 13 /direct/shared_preferences
 14 /direct/sqlite3
 15 /direct/sqlite3_flutter_libs
-16 /direct/url_launcher</title>
+16 /direct/url_launcher
+17 /direct/uuid</title>
     </g>
   </g>
   <g id='Counters_collection'>
@@ -353,15 +362,15 @@ csv</title>
   </g>
   <g id='Counters_fl_chart'>
     <g>
-      <circle cx="2080" cy="245" r="10" fill="green"/>
-      <text x="2080" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="2380" cy="245" r="10" fill="green"/>
+      <text x="2380" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>fl_chart
 ⬇
 1 /transitive/equatable</title>
     </g>
     <g>
-      <circle cx="1820" cy="205" r="10" fill="blue"/>
-      <text x="1820" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="2120" cy="205" r="10" fill="blue"/>
+      <text x="2120" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 fl_chart</title>
@@ -439,6 +448,25 @@ sqlite3_flutter_libs</title>
 url_launcher</title>
     </g>
   </g>
+  <g id='Counters_uuid'>
+    <g>
+      <circle cx="1480" cy="245" r="10" fill="green"/>
+      <text x="1480" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">4</text>
+      <title>uuid
+⬇
+1 /transitive/crypto
+2 /transitive/fixnum
+3 /transitive/meta
+4 /transitive/sprintf</title>
+    </g>
+    <g>
+      <circle cx="1220" cy="205" r="10" fill="blue"/>
+      <text x="1220" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <title>1 /root/money
+⬇
+uuid</title>
+    </g>
+  </g>
   <g id='Labels_file_picker'>
     <text class="nodeName" x="450" y="225" font-size="120%">file_picker</text>
     <text class="nodeName" x="450" y="245" font-size="80%">6.1.1</text>
@@ -448,16 +476,16 @@ url_launcher</title>
     <text class="nodeName" x="150" y="395" font-size="80%">1.9.0</text>
   </g>
   <g id='Labels_flutter_markdown'>
-    <text class="nodeName" x="1350" y="225" font-size="120%">flutter_markdown</text>
-    <text class="nodeName" x="1350" y="245" font-size="80%">0.6.18+3</text>
+    <text class="nodeName" x="1650" y="225" font-size="120%">flutter_markdown</text>
+    <text class="nodeName" x="1650" y="245" font-size="80%">0.6.18+3</text>
   </g>
   <g id='Labels_intl'>
-    <text class="nodeName" x="1650" y="225" font-size="120%">intl</text>
-    <text class="nodeName" x="1650" y="245" font-size="80%">0.19.0</text>
+    <text class="nodeName" x="1950" y="225" font-size="120%">intl</text>
+    <text class="nodeName" x="1950" y="245" font-size="80%">0.19.0</text>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.0.17</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.0.18</text>
   </g>
   <g id='Labels_collection'>
     <text class="nodeName" x="450" y="375" font-size="120%">collection</text>
@@ -468,8 +496,8 @@ url_launcher</title>
     <text class="nodeName" x="750" y="395" font-size="80%">5.1.1</text>
   </g>
   <g id='Labels_fl_chart'>
-    <text class="nodeName" x="1950" y="225" font-size="120%">fl_chart</text>
-    <text class="nodeName" x="1950" y="245" font-size="80%">0.66.0</text>
+    <text class="nodeName" x="2250" y="225" font-size="120%">fl_chart</text>
+    <text class="nodeName" x="2250" y="245" font-size="80%">0.66.0</text>
   </g>
   <g id='Labels_shared_preferences'>
     <text class="nodeName" x="750" y="225" font-size="120%">shared_preferences</text>
@@ -486,5 +514,9 @@ url_launcher</title>
   <g id='Labels_url_launcher'>
     <text class="nodeName" x="150" y="225" font-size="120%">url_launcher</text>
     <text class="nodeName" x="150" y="245" font-size="80%">6.2.3</text>
+  </g>
+  <g id='Labels_uuid'>
+    <text class="nodeName" x="1350" y="225" font-size="120%">uuid</text>
+    <text class="nodeName" x="1350" y="245" font-size="80%">4.3.3</text>
   </g>
 </svg>

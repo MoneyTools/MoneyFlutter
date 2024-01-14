@@ -1,10 +1,6 @@
-import 'dart:ui';
-
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 const String columnIdAccount = 'Accounts';
@@ -214,7 +210,7 @@ class Transaction extends MoneyObject {
   static FieldDefinitions<Transaction> getFieldDefinitions() {
     final FieldDefinitions<Transaction> fields =
         FieldDefinitions<Transaction>(definitions: <FieldDefinition<Transaction>>[
-      MoneyObjects<Transaction>().getFieldId(),
+      MoneyObject.getFieldId<Transaction>(),
       FieldDefinition<Transaction>(
         useAsColumn: false,
         name: 'AccountId',

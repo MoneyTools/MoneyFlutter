@@ -1,46 +1,23 @@
+// Imports
 import 'dart:ui';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/field.dart';
 
+// Exports
+export 'dart:ui';
+export 'package:money/helpers/misc_helpers.dart';
+export 'package:money/models/fields/field.dart';
+
 class MoneyObject {
+  // All MoneyObject have a unique Id
   int id; // Mandatory
 
   MoneyObject({required this.id}) {
-    //
-  }
-}
-
-class MoneyObjects<T> {
-  final List<T> _list = <T>[];
-  final Map<num, T> _map = <num, T>{};
-
-  MoneyObjects() {
-    //
+    // its up to the derived class to build their instance
   }
 
-  List<T> getAsList() {
-    return _list;
-  }
-
-  void clear() {
-    _list.clear();
-  }
-
-  int get length {
-    return _list.length;
-  }
-
-  void addEntry(final MoneyObject entry) {
-    _list.add(entry as T);
-    _map[entry.id] = entry as T;
-  }
-
-  T? get(final num id) {
-    return _map[id];
-  }
-
-  FieldDefinition<T> getFieldId() {
+  static FieldDefinition<T> getFieldId<T>() {
     return FieldDefinition<T>(
       useAsColumn: false,
       name: 'Id',
