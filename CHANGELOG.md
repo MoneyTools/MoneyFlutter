@@ -1,5 +1,6 @@
 ## [1.0.18] 2024-01-14
 
+- Start basic documentation
 - Refactor MoneyObjects
 
 ## [1.0.17] 2024-01-13
