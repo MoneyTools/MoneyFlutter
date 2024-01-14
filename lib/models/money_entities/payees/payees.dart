@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/payees/payee.dart';
@@ -11,14 +12,22 @@ class Payees {
   }
 
   String getNameFromId(final int id) {
-    return moneyObjects.getNameFromId(id);
+    final Payee? payee = moneyObjects.get(id);
+    if (payee == null) {
+      return '';
+    }
+    return payee.name;
+  }
+
+  Payee? getByName(final String name) {
+    return moneyObjects.getAsList().firstWhereOrNull((final Payee payee) => payee.name == name);
   }
 
   /// Attempts to find payee wih the given name
   /// if not found create a new payee and return that instance
   Payee findOrAddPayee(final String name) {
     // find or add account of given name
-    Payee? payee = moneyObjects.getByName(name);
+    Payee? payee = getByName(name);
 
     // if not found add new payee
     payee ??= Payee(

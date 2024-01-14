@@ -4,10 +4,9 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/field.dart';
 
 class MoneyEntity {
-  int id;
-  String name;
+  int id; // Mandatory
 
-  MoneyEntity({required this.id, required this.name}) {
+  MoneyEntity({required this.id}) {
     //
   }
 }
@@ -41,23 +40,6 @@ class MoneyObjects<T> {
     return _map[id];
   }
 
-  T? getByName(final String name) {
-    for (final T item in _list) {
-      if ((item as MoneyEntity).name == name) {
-        return item;
-      }
-    }
-    return null;
-  }
-
-  String getNameFromId(final num id) {
-    final T? item = get(id);
-    if (item == null) {
-      return id.toString();
-    }
-    return (item as MoneyEntity).name;
-  }
-
   FieldDefinition<T> getFieldId() {
     return FieldDefinition<T>(
       useAsColumn: false,
@@ -68,20 +50,6 @@ class MoneyObjects<T> {
       valueFromInstance: (final T entity) => (entity as MoneyEntity).id,
       sort: (final T a, final T b, final bool sortAscending) {
         return sortByValue((a as MoneyEntity).id, (b as MoneyEntity).id, sortAscending);
-      },
-    );
-  }
-
-  FieldDefinition<T> getFieldName({final bool useAsColumn = true}) {
-    return FieldDefinition<T>(
-      useAsColumn: useAsColumn,
-      name: 'Name',
-      serializeName: 'name',
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final T entity) => (entity as MoneyEntity).name,
-      sort: (final T a, final T b, final bool sortAscending) {
-        return sortByString((a as MoneyEntity).name, (b as MoneyEntity).name, sortAscending);
       },
     );
   }

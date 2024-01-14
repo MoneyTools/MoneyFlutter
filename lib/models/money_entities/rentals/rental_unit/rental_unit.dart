@@ -15,7 +15,7 @@ class RentUnit extends MoneyEntity {
   // MoneyEntity.Id
 
   // 1
-  // MoneyEntity.Name
+  String name;
 
   // 2
   String building = '';
@@ -32,7 +32,7 @@ class RentUnit extends MoneyEntity {
 
   RentUnit({
     required super.id,
-    required super.name,
+    required this.name,
     required this.building,
     required this.renter,
     required this.note,

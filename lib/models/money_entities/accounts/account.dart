@@ -37,7 +37,8 @@ class Account extends MoneyEntity {
   String ofxAccountId = '';
 
   // 3 -
-  // String MoneyEntity.Name
+  String name;
+
   // 4
   String description = '';
 
@@ -90,7 +91,7 @@ class Account extends MoneyEntity {
     // 2
     required this.ofxAccountId,
     // 3
-    required super.name,
+    required this.name,
     // 4
     required this.description,
     // 5

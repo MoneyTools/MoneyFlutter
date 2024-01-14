@@ -1,6 +1,7 @@
 import 'package:money/models/money_entities/money_entity.dart';
 
 class Split extends MoneyEntity {
+  String name;
   num transactionId;
   num categoryId;
   double amount;
@@ -9,7 +10,7 @@ class Split extends MoneyEntity {
 
   Split({
     required super.id,
-    required super.name,
+    required this.name,
     required this.transactionId,
     required this.categoryId,
     required this.amount,

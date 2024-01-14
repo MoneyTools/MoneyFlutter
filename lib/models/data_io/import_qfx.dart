@@ -39,7 +39,6 @@ void importQFX(
 
       Data().transactions.add(Transaction(
             id: -1,
-            name: '',
             accountId: account.id,
             dateTime: item.date,
             payeeId: payee.id,

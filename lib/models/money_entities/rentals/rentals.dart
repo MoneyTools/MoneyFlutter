@@ -1,9 +1,9 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
+import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/rentals/rental.dart';
 import 'package:money/models/money_entities/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
-import 'package:money/models/money_entities/money_entity.dart';
 
 class Rentals {
   MoneyObjects<Rental> moneyObjects = MoneyObjects<Rental>();

@@ -2,9 +2,9 @@ import 'package:collection/collection.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/accounts/account.dart';
+import 'package:money/models/money_entities/money_entity.dart';
 import 'package:money/models/money_entities/transactions/transaction.dart';
 
-import 'package:money/models/money_entities/money_entity.dart';
 import 'package:uuid/uuid.dart';
 
 class Accounts {

@@ -27,7 +27,6 @@ class Alias extends MoneyEntity {
 
   Alias({
     required super.id,
-    required super.name,
     required this.pattern,
     this.type = AliasType.none,
     this.payeeId = -1,
@@ -46,22 +45,20 @@ class Alias extends MoneyEntity {
       type: jsonGetInt(row, 'Flags') == 0 ? AliasType.none : AliasType.regex,
       // 3
       payeeId: jsonGetInt(row, 'Payee'),
-      // note used
-      name: jsonGetString(row, 'Pattern'),
     );
   }
 
   bool isMatch(final String text) {
     if (type == AliasType.regex) {
       // just in time creation of RegEx property
-      regex ??= RegExp(name);
+      regex ??= RegExp(pattern);
       final Match? matched = regex?.firstMatch(text);
       if (matched != null) {
         debugLog('First email found: ${matched.group(0)}');
         return true;
       }
     } else {
-      if (stringCompareIgnoreCasing2(name, text) == 0) {
+      if (stringCompareIgnoreCasing2(pattern, text) == 0) {
         return true;
       }
     }
@@ -126,7 +123,6 @@ class Alias extends MoneyEntity {
   static FieldDefinitions<Alias> getFieldDefinitions() {
     final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
       MoneyObjects<Alias>().getFieldId(),
-      MoneyObjects<Alias>().getFieldName(),
       FieldDefinition<Alias>(
         useAsColumn: false,
         name: 'PayeeId',

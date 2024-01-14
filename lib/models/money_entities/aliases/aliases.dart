@@ -11,10 +11,6 @@ class Aliases {
     return moneyObjects.get(id);
   }
 
-  String getNameFromId(final num id) {
-    return moneyObjects.getNameFromId(id);
-  }
-
   Payee? findByMatch(final String text) {
     final Alias? aliasFound = moneyObjects.getAsList().firstWhereOrNull((final Alias item) => item.isMatch(text));
     if (aliasFound == null) {

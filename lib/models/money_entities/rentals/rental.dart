@@ -5,6 +5,7 @@ import 'package:money/models/date_range.dart';
 import 'package:money/models/money_entities/money_entity.dart';
 
 class Rental extends MoneyEntity {
+  String name;
   int count = 0;
 
   double revenue = 0.00;
@@ -70,7 +71,7 @@ class Rental extends MoneyEntity {
    */
   Rental({
     required super.id,
-    required super.name,
+    required this.name,
   });
 
   factory Rental.fromSqlite(final Json row) {

@@ -12,12 +12,13 @@ import 'package:money/models/money_entities/money_entity.dart';
 
  */
 class Payee extends MoneyEntity {
+  String name;
   num count = 0;
   double balance = 0.00;
 
   Payee({
     required super.id,
-    required super.name,
+    required this.name,
   });
 
   static FieldDefinitions<Payee> getFieldDefinitions() {

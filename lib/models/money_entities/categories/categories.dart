@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_entities/categories/category.dart';
@@ -20,17 +21,22 @@ class Categories {
     if (id == splitCategoryId()) {
       return '<Split>';
     }
-    return moneyObjects.getNameFromId(id);
+    final Category? category = moneyObjects.get(id);
+    return category == null ? '' : category.name;
   }
 
   int splitCategoryId() {
     if (idOfSplitCategory == -1) {
-      final Category? cat = moneyObjects.getByName('Split');
+      final Category? cat = getByName('Split');
       if (cat != null) {
         idOfSplitCategory = cat.id;
       }
     }
     return idOfSplitCategory;
+  }
+
+  Category? getByName(final String name) {
+    return moneyObjects.getAsList().firstWhereOrNull((final Category category) => category.name == name);
   }
 
   Category getTopAncestor(final Category category) {
@@ -77,7 +83,7 @@ class Categories {
     final String name,
     final CategoryType type,
   ) {
-    Category? category = moneyObjects.getByName(name);
+    Category? category = getByName(name);
 
     if (category == null) {
       category = Category(
@@ -203,16 +209,16 @@ class Categories {
 
   loadDemoData() {
     clear();
-    moneyObjects.addEntry(Category(id: 0, description: '', type: CategoryType.income, name: 'Paychecks'));
-    moneyObjects.addEntry(Category(id: 1, description: '', type: CategoryType.investment, name: 'Investment'));
-    moneyObjects.addEntry(Category(id: 2, description: '', type: CategoryType.income, name: 'Interests'));
-    moneyObjects.addEntry(Category(id: 3, description: '', type: CategoryType.income, name: 'Rental'));
-    moneyObjects.addEntry(Category(id: 4, description: '', type: CategoryType.none, name: 'Lottery'));
-    moneyObjects.addEntry(Category(id: 5, description: '', type: CategoryType.expense, name: 'Mortgage'));
-    moneyObjects.addEntry(Category(id: 6, description: '', type: CategoryType.income, name: 'Saving'));
-    moneyObjects.addEntry(Category(id: 7, description: '', type: CategoryType.expense, name: 'Bills'));
-    moneyObjects.addEntry(Category(id: 8, description: '', type: CategoryType.expense, name: 'Taxes'));
-    moneyObjects.addEntry(Category(id: 9, description: '', type: CategoryType.expense, name: 'School'));
+    moneyObjects.addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
+    moneyObjects.addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment));
+    moneyObjects.addEntry(Category(id: 2, name: 'Interests', description: '', type: CategoryType.income));
+    moneyObjects.addEntry(Category(id: 3, name: 'Rental', description: '', type: CategoryType.income));
+    moneyObjects.addEntry(Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none));
+    moneyObjects.addEntry(Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense));
+    moneyObjects.addEntry(Category(id: 6, name: 'Saving', description: '', type: CategoryType.income));
+    moneyObjects.addEntry(Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense));
+    moneyObjects.addEntry(Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense));
+    moneyObjects.addEntry(Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
   }
 
   onAllDataLoaded() {

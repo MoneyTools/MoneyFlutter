@@ -5,6 +5,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_entities/payees/payee.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
@@ -42,6 +43,7 @@ class Transaction extends MoneyEntity {
   final DateTime dateTime;
   late final String dateTimeAsText;
   final int payeeId;
+  late final Payee? payee;
   String originalPayee = ''; // before auto-aliasing, helps with future merging.
   final int categoryId;
   final double amount;
@@ -73,7 +75,6 @@ class Transaction extends MoneyEntity {
 
   Transaction({
     required super.id,
-    required super.name,
     required this.dateTime,
     this.accountId = -1,
     this.payeeId = -1,
@@ -85,6 +86,7 @@ class Transaction extends MoneyEntity {
     this.fitid = '',
   }) {
     dateTimeAsText = getDateAsText(dateTime);
+    payee = Data().payees.moneyObjects.get(payeeId);
   }
 
   static FieldDefinition<Transaction> getFieldAccountName() {
@@ -213,7 +215,6 @@ class Transaction extends MoneyEntity {
     final FieldDefinitions<Transaction> fields =
         FieldDefinitions<Transaction>(definitions: <FieldDefinition<Transaction>>[
       MoneyObjects<Transaction>().getFieldId(),
-      MoneyObjects<Transaction>().getFieldName(useAsColumn: false),
       FieldDefinition<Transaction>(
         useAsColumn: false,
         name: 'AccountId',

@@ -24,7 +24,7 @@ class Category extends MoneyEntity {
   int parentId = -1;
 
   // 2
-  // String Name
+  String name;
 
   // 3
   String description;
@@ -53,7 +53,7 @@ class Category extends MoneyEntity {
   Category({
     required super.id,
     this.parentId = -1,
-    required super.name,
+    required this.name,
     this.description = '',
     required this.type,
     this.color = '',
