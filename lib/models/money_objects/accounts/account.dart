@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 
 /*
@@ -26,7 +26,7 @@ SQLite fields of the [Accounts] table
   15|CategoryIdForPrincipal|INT|0||0
   16|CategoryIdForInterest|INT|0||0
 */
-class Account extends MoneyEntity {
+class Account extends MoneyObject {
   // 0
   // int MoneyEntity.Id
 

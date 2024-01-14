@@ -4,8 +4,8 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/money_entity.dart';
-import 'package:money/models/money_entities/payees/payee.dart';
+import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/payees/payee.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
@@ -38,7 +38,7 @@ const String columnIdBalance = 'Balance';
   16|TransferSplit|INT|0||0
   17|MergeDate|datetime|0||0
  */
-class Transaction extends MoneyEntity {
+class Transaction extends MoneyObject {
   final int accountId;
   final DateTime dateTime;
   late final String dateTimeAsText;

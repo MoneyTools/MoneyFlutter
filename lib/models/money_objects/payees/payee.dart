@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_objects/money_object.dart';
 
 /*
   the SQLite table definition
@@ -11,7 +11,7 @@ import 'package:money/models/money_entities/money_entity.dart';
   1|Name|nvarchar(255)|1||0
 
  */
-class Payee extends MoneyEntity {
+class Payee extends MoneyObject {
   String name;
   num count = 0;
   double balance = 0.00;

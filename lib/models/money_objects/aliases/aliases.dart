@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/models/money_entities/aliases/alias.dart';
-import 'package:money/models/money_entities/money_entity.dart';
-import 'package:money/models/money_entities/payees/payee.dart';
+import 'package:money/models/money_objects/aliases/alias.dart';
+import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/payees/payee.dart';
 
 class Aliases {
   MoneyObjects<Alias> moneyObjects = MoneyObjects<Alias>();

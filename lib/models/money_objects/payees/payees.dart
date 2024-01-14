@@ -1,8 +1,8 @@
 import 'package:collection/collection.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/money_entities/money_entity.dart';
-import 'package:money/models/money_entities/payees/payee.dart';
-import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/payees/payee.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Payees {
   MoneyObjects<Payee> moneyObjects = MoneyObjects<Payee>();

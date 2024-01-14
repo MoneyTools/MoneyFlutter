@@ -4,7 +4,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/three_part_label.dart';
 

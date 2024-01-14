@@ -5,8 +5,8 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/money_entity.dart';
-import 'package:money/models/money_entities/payees/payee.dart';
+import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/payees/payee.dart';
 
 /*
   0|Id|INT|0||1
@@ -14,7 +14,7 @@ import 'package:money/models/money_entities/payees/payee.dart';
   2|Flags|INT|1||0
   3|Payee|INT|1||0
  */
-class Alias extends MoneyEntity {
+class Alias extends MoneyObject {
   // 0
   // int MoneyEntity.Id
 

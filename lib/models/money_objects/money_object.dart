@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/field.dart';
 
-class MoneyEntity {
+class MoneyObject {
   int id; // Mandatory
 
-  MoneyEntity({required this.id}) {
+  MoneyObject({required this.id}) {
     //
   }
 }
@@ -31,7 +31,7 @@ class MoneyObjects<T> {
     return _list.length;
   }
 
-  void addEntry(final MoneyEntity entry) {
+  void addEntry(final MoneyObject entry) {
     _list.add(entry as T);
     _map[entry.id] = entry as T;
   }
@@ -47,9 +47,9 @@ class MoneyObjects<T> {
       serializeName: 'id',
       type: FieldType.numeric,
       align: TextAlign.right,
-      valueFromInstance: (final T entity) => (entity as MoneyEntity).id,
+      valueFromInstance: (final T entity) => (entity as MoneyObject).id,
       sort: (final T a, final T b, final bool sortAscending) {
-        return sortByValue((a as MoneyEntity).id, (b as MoneyEntity).id, sortAscending);
+        return sortByValue((a as MoneyObject).id, (b as MoneyObject).id, sortAscending);
       },
     );
   }

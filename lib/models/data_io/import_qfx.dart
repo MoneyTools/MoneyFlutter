@@ -2,10 +2,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/money_entities/accounts/account.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/money_entities/payees/payee.dart';
-import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_objects/payees/payee.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 
 void importQFX(
   final String filePath,

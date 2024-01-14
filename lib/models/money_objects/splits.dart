@@ -1,6 +1,6 @@
-import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_objects/money_object.dart';
 
-class Split extends MoneyEntity {
+class Split extends MoneyObject {
   String name;
   num transactionId;
   num categoryId;

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/money_entities/accounts/account.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';

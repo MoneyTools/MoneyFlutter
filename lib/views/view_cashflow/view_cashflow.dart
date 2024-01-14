@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/money_entities/accounts/account.dart';
-import 'package:money/models/money_entities/categories/category.dart';
-import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
+import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/scroll_both_ways.dart';

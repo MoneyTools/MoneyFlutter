@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_entities/money_entity.dart';
+import 'package:money/models/money_objects/money_object.dart';
 
 /*
   0|Id|INT|0||1
@@ -16,7 +16,7 @@ import 'package:money/models/money_entities/money_entity.dart';
   8|Frequency|INT|0||0
   9|TaxRefNum|INT|0||0
  */
-class Category extends MoneyEntity {
+class Category extends MoneyObject {
   // 0
   // int MoneyEntity.id
 

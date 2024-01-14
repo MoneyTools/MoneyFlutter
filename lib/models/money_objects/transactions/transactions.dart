@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Transactions {
   double runningBalance = 0.00;

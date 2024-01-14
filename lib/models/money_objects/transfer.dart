@@ -1,5 +1,5 @@
-import 'package:money/models/money_entities/splits.dart';
-import 'package:money/models/money_entities/transactions/transaction.dart';
+import 'package:money/models/money_objects/splits.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Transfer {
   final num id;
