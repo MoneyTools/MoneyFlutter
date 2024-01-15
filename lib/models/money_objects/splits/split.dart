@@ -1,4 +1,8 @@
+import 'package:money/models/data_io/data.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/money_objects/payees/payee.dart';
 
 /*
   SQLite table definition
@@ -16,16 +20,16 @@ import 'package:money/models/money_objects/money_object.dart';
 
 class Split extends MoneyObject {
   // 0
-  num transactionId;
+  int transactionId;
 
   // 1
   // MoneyObject.id
 
   // 2
-  num categoryId;
+  int categoryId;
 
   // 3
-  num payeeId;
+  int payeeId;
 
   // 4
   double amount;
@@ -42,6 +46,12 @@ class Split extends MoneyObject {
   // 8
   DateTime budgetBalanceDate;
 
+  // Not serialized
+  Category? categoryInstance;
+
+  Payee? payeeInstance;
+
+  /// Constructor
   Split({
     // 0
     required this.transactionId,
@@ -61,5 +71,95 @@ class Split extends MoneyObject {
     required this.flags,
     // 8
     required this.budgetBalanceDate,
-  });
+  }) {
+    categoryInstance = Data().categories.get(categoryId);
+    payeeInstance = Data().payees.get(payeeId);
+  }
+
+  String getCategoryName() {
+    if (categoryInstance == null) {
+      return '';
+    }
+    return categoryInstance!.name;
+  }
+
+  String getPayeeName() {
+    if (payeeInstance == null) {
+      return '';
+    }
+    return payeeInstance!.name;
+  }
+
+  static FieldDefinitions<Split> getFieldDefinitions() {
+    final FieldDefinitions<Split> fields = FieldDefinitions<Split>(definitions: <FieldDefinition<Split>>[
+      FieldDefinition<Split>(
+        useAsColumn: false,
+        name: 'Id',
+        serializeName: 'id',
+        type: FieldType.text,
+        align: TextAlign.left,
+        valueFromInstance: (final Split entity) => entity.id,
+        sort: (final Split a, final Split b, final bool sortAscending) {
+          return sortByValue(a.id, b.id, sortAscending);
+        },
+      ),
+      FieldDefinition<Split>(
+        type: FieldType.numeric,
+        useAsColumn: false,
+        name: 'CategoryId',
+        serializeName: 'categoryId',
+        valueFromInstance: (final Split entity) => entity.categoryId,
+        sort: (final Split a, final Split b, final bool sortAscending) {
+          return sortByValue(a.categoryId, b.categoryId, sortAscending);
+        },
+      ),
+      FieldDefinition<Split>(
+        type: FieldType.text,
+        name: 'Category',
+        valueFromInstance: (final Split item) => item.getCategoryName(),
+        sort: (final Split a, final Split b, final bool sortAscending) {
+          return sortByString(a.getCategoryName(), b.getCategoryName(), sortAscending);
+        },
+      ),
+      FieldDefinition<Split>(
+        type: FieldType.numeric,
+        useAsColumn: false,
+        name: 'PayeeId',
+        serializeName: 'payeeId',
+        valueFromInstance: (final Split entity) => entity.payeeId,
+        sort: (final Split a, final Split b, final bool sortAscending) {
+          return sortByValue(a.payeeId, b.payeeId, sortAscending);
+        },
+      ),
+      FieldDefinition<Split>(
+        type: FieldType.text,
+        name: 'Payee',
+        valueFromInstance: (final Split item) => item.getPayeeName(),
+        sort: (final Split a, final Split b, final bool sortAscending) {
+          return sortByString(a.getPayeeName(), b.getPayeeName(), sortAscending);
+        },
+      ),
+      FieldDefinition<Split>(
+        type: FieldType.text,
+        name: 'Memo',
+        serializeName: 'memo',
+        align: TextAlign.left,
+        valueFromInstance: (final Split entity) => entity.memo,
+        sort: (final Split a, final Split b, final bool sortAscending) {
+          return sortByString(a.memo, b.memo, sortAscending);
+        },
+      ),
+      FieldDefinition<Split>(
+        type: FieldType.amount,
+        name: 'Amount',
+        serializeName: 'amount',
+        align: TextAlign.right,
+        valueFromInstance: (final Split entity) => entity.amount,
+        sort: (final Split a, final Split b, final bool sortAscending) {
+          return sortByValue(a.amount, b.amount, sortAscending);
+        },
+      ),
+    ]);
+    return fields;
+  }
 }

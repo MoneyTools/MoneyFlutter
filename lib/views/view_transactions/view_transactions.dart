@@ -6,6 +6,7 @@ import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
+import 'package:money/widgets/table_view/table_splits.dart';
 import 'package:money/widgets/three_part_label.dart';
 
 import 'package:money/views/view_header.dart';
@@ -228,6 +229,19 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
       variableNameHorizontal: 'Month',
       variableNameVertical: 'Transactions',
     );
+  }
+
+  @override
+  getPanelForTransactions(final List<int> indices) {
+    final Transaction? transaction = getFirstElement<Transaction>(indices, list);
+    if (transaction != null && transaction.id > -1 && transaction.categoryId == Data().categories.splitCategoryId()) {
+      final List<Split> l = Data().splits.list.where((final Split s) => s.transactionId == transaction.id).toList();
+      return TableSplits(
+        key: Key('split_transactions ${transaction.id}'),
+        getList: () => l,
+      );
+    }
+    return const Text('No related transactions');
   }
 }
 

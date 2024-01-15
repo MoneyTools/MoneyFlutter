@@ -5,9 +5,10 @@ import 'package:money/models/money_objects/splits/split.dart';
 export 'package:money/models/money_objects/splits/split.dart';
 
 class Splits {
-  static List<Split> list = <Split>[];
+  /// List of split
+  List<Split> list = <Split>[];
 
-  static List<Split> get(final num transactionId) {
+  List<Split> get(final num transactionId) {
     return list.where((final Split item) => item.transactionId == transactionId).toList();
   }
 

@@ -1,3 +1,7 @@
+## [1.0.19] 2024-01-15
+
+- Detail Panel Split transaction
+
 ## [1.0.18] 2024-01-14
 
 - Start basic documentation
