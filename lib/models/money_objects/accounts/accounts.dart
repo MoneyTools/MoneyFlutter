@@ -7,11 +7,9 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 
 import 'package:uuid/uuid.dart';
 
-class Accounts {
-  MoneyObjects<Account> moneyObjects = MoneyObjects<Account>();
-
+class Accounts extends MoneyObjects<Account> {
   List<Account> getOpenAccounts() {
-    return moneyObjects.getAsList().where((final Account item) => activeBankAccount(item)).toList();
+    return getList().where((final Account item) => activeBankAccount(item)).toList();
   }
 
   bool activeBankAccount(final Account element) {
@@ -22,7 +20,7 @@ class Accounts {
     final List<AccountType> types, {
     final bool? isActive = true,
   }) {
-    return moneyObjects.getAsList().where((final Account item) {
+    return getList().where((final Account item) {
       if (!item.matchType(types)) {
         return false;
       }
@@ -31,10 +29,6 @@ class Accounts {
       }
       return item.isActive() == isActive;
     }).toList();
-  }
-
-  Account? get(final num id) {
-    return moneyObjects.get(id);
   }
 
   String getNameFromId(final num id) {
@@ -49,24 +43,20 @@ class Accounts {
     final String accountId,
     final AccountType accountType,
   ) {
-    return moneyObjects.getAsList().firstWhereOrNull((final Account item) {
+    return getList().firstWhereOrNull((final Account item) {
       return item.accountId == accountId && item.type == accountType;
     });
   }
 
-  clear() {
-    moneyObjects.clear();
-  }
-
   List<Account> list() {
-    return moneyObjects.getAsList();
+    return getList();
   }
 
   load(final List<Json> rows) async {
     clear();
     for (final Json row in rows) {
       final Account a = Account.fromSqlite(row);
-      moneyObjects.addEntry(a);
+      addEntry(a);
     }
   }
 
@@ -74,7 +64,7 @@ class Accounts {
     clear();
     final List<String> names = <String>[
       'BankOfAmerica',
-      'BECU',
+      'Revolut',
       'FirstTech',
       'Fidelity',
       'Bank of Japan',
@@ -85,7 +75,7 @@ class Accounts {
       'God-Inc'
     ];
     for (int i = 0; i < names.length; i++) {
-      moneyObjects.addEntry(Account(
+      addEntry(Account(
         id: i,
         name: names[i],
         accountId: i.toString(),
@@ -108,12 +98,12 @@ class Accounts {
   }
 
   onAllDataLoaded() {
-    for (final Account account in moneyObjects.getAsList()) {
+    for (final Account account in getList()) {
       account.count = 0;
       account.balance = account.openingBalance;
     }
 
-    for (final Transaction t in Data().transactions.list) {
+    for (final Transaction t in Data().transactions.getList()) {
       final Account? item = get(t.accountId);
       if (item != null) {
         item.count++;
@@ -129,7 +119,7 @@ class Accounts {
     csv.writeln(Account.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Account item in moneyObjects.getAsList()) {
+    for (final Account item in getList()) {
       csv.writeln(Account.getFieldDefinitions().getCsvRowValues(item));
     }
 

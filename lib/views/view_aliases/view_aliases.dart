@@ -61,7 +61,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   List<Alias> getList() {
-    return Data().aliases.moneyObjects.getAsList();
+    return Data().aliases.getList();
   }
 
   @override

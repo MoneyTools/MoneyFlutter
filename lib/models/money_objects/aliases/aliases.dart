@@ -3,33 +3,19 @@ import 'package:money/models/money_objects/aliases/alias.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
-class Aliases {
-  MoneyObjects<Alias> moneyObjects = MoneyObjects<Alias>();
-
-  Alias? get(final num id) {
-    return moneyObjects.get(id);
-  }
-
+class Aliases extends MoneyObjects<Alias> {
   Payee? findByMatch(final String text) {
-    final Alias? aliasFound = moneyObjects.getAsList().firstWhereOrNull((final Alias item) => item.isMatch(text));
+    final Alias? aliasFound = getList().firstWhereOrNull((final Alias item) => item.isMatch(text));
     if (aliasFound == null) {
       return null;
     }
     return aliasFound.payeeInstance;
   }
 
-  clear() {
-    moneyObjects.clear();
-  }
-
-  int length() {
-    return moneyObjects.getAsList().length;
-  }
-
   load(final List<Json> rows) async {
     clear();
     for (final Json row in rows) {
-      moneyObjects.addEntry(Alias.fromSqlite(row));
+      addEntry(Alias.fromSqlite(row));
     }
   }
 
@@ -46,7 +32,7 @@ class Aliases {
     csv.writeln(Alias.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Alias item in moneyObjects.getAsList()) {
+    for (final Alias item in getList()) {
       csv.writeln(Alias.getFieldDefinitions().getCsvRowValues(item));
     }
 

@@ -160,12 +160,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   @override
   List<Category> getList() {
     final CategoryType? filterType = getSelectedCategoryType();
-    return Data()
-        .categories
-        .moneyObjects
-        .getAsList()
-        .where((final Category x) => filterType == null || x.type == filterType)
-        .toList();
+    return Data().categories.getList().where((final Category x) => filterType == null || x.type == filterType).toList();
   }
 
   CategoryType? getSelectedCategoryType() {

@@ -42,7 +42,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
 
   @override
   List<Payee> getList() {
-    return Data().payees.moneyObjects.getAsList();
+    return Data().payees.getList();
   }
 
   @override

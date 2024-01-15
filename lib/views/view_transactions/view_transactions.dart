@@ -39,14 +39,16 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         text1: 'Incomes',
         small: true,
         isVertical: true,
-        text2: getIntAsText(Data().transactions.list.where((final Transaction element) => element.amount > 0).length)));
+        text2: getIntAsText(
+            Data().transactions.getList().where((final Transaction element) => element.amount > 0).length)));
     pivots.add(ThreePartLabel(
         text1: 'Expenses',
         small: true,
         isVertical: true,
-        text2: getIntAsText(Data().transactions.list.where((final Transaction element) => element.amount < 0).length)));
+        text2: getIntAsText(
+            Data().transactions.getList().where((final Transaction element) => element.amount < 0).length)));
     pivots.add(ThreePartLabel(
-        text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.list.length)));
+        text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.getList().length)));
   }
 
   @override
@@ -100,7 +102,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   List<Transaction> getList() {
     final List<Transaction> list = Data()
         .transactions
-        .list
+        .getList()
         .where((final Transaction transaction) =>
             isMatchingIncomeExpense(transaction) && widget.filter(transaction) && isMatchingFilterText(transaction))
         .toList();
@@ -235,7 +237,8 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   getPanelForTransactions(final List<int> indices) {
     final Transaction? transaction = getFirstElement<Transaction>(indices, list);
     if (transaction != null && transaction.id > -1 && transaction.categoryId == Data().categories.splitCategoryId()) {
-      final List<Split> l = Data().splits.list.where((final Split s) => s.transactionId == transaction.id).toList();
+      final List<Split> l =
+          Data().splits.getList().where((final Split s) => s.transactionId == transaction.id).toList();
       return TableSplits(
         key: Key('split_transactions ${transaction.id}'),
         getList: () => l,

@@ -177,7 +177,7 @@ class ViewRentalsState extends ViewWidgetState<Rental> {
 
   @override
   List<Rental> getList() {
-    return Data().rentals.moneyObjects.getAsList();
+    return Data().rentals.getList();
   }
 
   @override

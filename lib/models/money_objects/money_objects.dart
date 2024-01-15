@@ -13,7 +13,7 @@ class MoneyObjects<T> {
   /// Constructor
   MoneyObjects();
 
-  List<T> getAsList() {
+  List<T> getList() {
     return _list;
   }
 
@@ -25,9 +25,9 @@ class MoneyObjects<T> {
     return _list.length;
   }
 
-  void addEntry(final MoneyObject entry) {
-    _list.add(entry as T);
-    _map[entry.id] = entry as T;
+  void addEntry(final T entry) {
+    _list.add(entry);
+    _map[(entry as MoneyObject).id] = entry;
   }
 
   T? get(final num id) {

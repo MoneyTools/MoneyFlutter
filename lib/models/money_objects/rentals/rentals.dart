@@ -5,13 +5,7 @@ import 'package:money/models/money_objects/rentals/rental.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
-class Rentals {
-  MoneyObjects<Rental> moneyObjects = MoneyObjects<Rental>();
-
-  Rental? get(final int id) {
-    return moneyObjects.get(id);
-  }
-
+class Rentals extends MoneyObjects<Rental> {
   String getNameFromId(final int id) {
     final Rental? found = get(id);
     if (found == null) {
@@ -20,15 +14,11 @@ class Rentals {
     return found.name;
   }
 
-  void clear() {
-    moneyObjects.clear();
-  }
-
   load(final List<Json> rows) {
     clear();
 
     for (final Json row in rows) {
-      moneyObjects.addEntry(Rental.fromSqlite(row));
+      addEntry(Rental.fromSqlite(row));
     }
   }
 
@@ -37,13 +27,13 @@ class Rentals {
 
     final Rental instance = Rental(id: 0, name: 'AirBnB');
     instance.address = 'One Washington DC';
-    moneyObjects.addEntry(instance);
+    addEntry(instance);
   }
 
   onAllDataLoaded() {
-    final List<RentUnit> allUnits = Data().rentUnits.moneyObjects.getAsList();
+    final List<RentUnit> allUnits = Data().rentUnits.getList();
 
-    for (final Rental rental in moneyObjects.getAsList()) {
+    for (final Rental rental in getList()) {
       cumulateTransactions(rental);
 
       // expense is a negative number so we just do a Revenue + Expense
@@ -58,7 +48,7 @@ class Rentals {
   }
 
   cumulateTransactions(final Rental rental) {
-    for (Transaction t in Data().transactions.list) {
+    for (Transaction t in Data().transactions.getList()) {
       if (rental.categoryForIncomeTreeIds.contains(t.categoryId)) {
         rental.dateRange.inflate(t.dateTime);
         rental.count++;

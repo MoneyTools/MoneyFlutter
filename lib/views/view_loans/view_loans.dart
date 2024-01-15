@@ -51,7 +51,7 @@ class ViewLoansState extends ViewWidgetState<Loan> {
 
   @override
   List<Loan> getList() {
-    return Data().loans.moneyObjects.getAsList();
+    return Data().loans.getList();
   }
 
   @override

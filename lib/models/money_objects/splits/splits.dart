@@ -1,25 +1,19 @@
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/splits/split.dart';
 
 // Exports
 export 'package:money/models/money_objects/splits/split.dart';
 
-class Splits {
-  /// List of split
-  List<Split> list = <Split>[];
-
-  List<Split> get(final num transactionId) {
-    return list.where((final Split item) => item.transactionId == transactionId).toList();
-  }
-
-  clear() {
-    list.clear();
+class Splits extends MoneyObjects<Split> {
+  List<Split> getListFromTransactionId(final num transactionId) {
+    return getList().where((final Split item) => item.transactionId == transactionId).toList();
   }
 
   load(final List<Map<String, Object?>> rows) async {
     clear();
     for (final Map<String, Object?> row in rows) {
-      list.add(Split(
+      getList().add(Split(
         // 0
         transactionId: jsonGetInt(row, 'Transaction'),
         // 1
@@ -40,7 +34,7 @@ class Splits {
         budgetBalanceDate: jsonGetDate(row, 'BudgetBalanceDate'),
       ));
     }
-    return list;
+    return getList();
   }
 
   loadDemoData() {

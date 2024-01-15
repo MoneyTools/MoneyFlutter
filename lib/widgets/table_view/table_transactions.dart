@@ -107,7 +107,7 @@ bool defaultFilter(final Transaction element) {
 
 List<Transaction> getFilteredTransactions(final FilterFunction filter) {
   final List<Transaction> list =
-      Data().transactions.list.where((final Transaction transaction) => filter(transaction)).toList();
+      Data().transactions.getList().where((final Transaction transaction) => filter(transaction)).toList();
 
   list.sort(
     (final Transaction a, final Transaction b) => a.dateTime.compareTo(b.dateTime),

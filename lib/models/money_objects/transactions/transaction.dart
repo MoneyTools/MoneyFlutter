@@ -82,7 +82,7 @@ class Transaction extends MoneyObject {
     this.fitid = '',
   }) {
     dateTimeAsText = getDateAsText(dateTime);
-    payee = Data().payees.moneyObjects.get(payeeId);
+    payee = Data().payees.get(payeeId);
   }
 
   static FieldDefinition<Transaction> getFieldAccountName() {

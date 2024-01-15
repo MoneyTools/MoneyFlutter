@@ -1,21 +1,15 @@
 import 'dart:math';
 
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
-class Transactions {
+class Transactions extends MoneyObjects<Transaction> {
   double runningBalance = 0.00;
 
-  List<Transaction> list = <Transaction>[];
-
   void add(final Transaction transaction) {
-    transaction.id = list.length;
-    list.add(transaction);
-  }
-
-  clear() {
-    list.clear();
+    transaction.id = getList().length;
+    getList().add(transaction);
   }
 
   load(final List<Json> rows) async {
@@ -46,9 +40,9 @@ class Transactions {
       runningBalance += t.amount;
       t.balance = runningBalance;
 
-      list.add(t);
+      getList().add(t);
     }
-    return list;
+    return getList();
   }
 
   loadDemoData() {
@@ -59,7 +53,7 @@ class Transactions {
     for (int i = 0; i <= 9999; i++) {
       final double amount = getRandomAmount(i);
       runningBalance += amount;
-      list.add(Transaction(
+      getList().add(Transaction(
         id: i,
         // Account Id
         accountId: Random().nextInt(10),
@@ -90,7 +84,7 @@ class Transactions {
     csv.writeln(Transaction.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Transaction item in list) {
+    for (final Transaction item in getList()) {
       csv.writeln(Transaction.getFieldDefinitions().getCsvRowValues(item));
     }
     // Add the UTF-8 BOM for Excel

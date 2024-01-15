@@ -2,25 +2,11 @@ import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_objects/loans/loan.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
-class Loans {
-  MoneyObjects<Loan> moneyObjects = MoneyObjects<Loan>();
-
-  Loan? get(final num id) {
-    return moneyObjects.get(id);
-  }
-
-  clear() {
-    moneyObjects.clear();
-  }
-
-  int length() {
-    return moneyObjects.getAsList().length;
-  }
-
+class Loans extends MoneyObjects<Loan> {
   load(final List<Json> rows) async {
     clear();
     for (final Json row in rows) {
-      moneyObjects.addEntry(Loan.fromSqlite(row));
+      addEntry(Loan.fromSqlite(row));
     }
   }
 
@@ -37,7 +23,7 @@ class Loans {
     csv.writeln(Loan.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Loan item in moneyObjects.getAsList()) {
+    for (final Loan item in getList()) {
       csv.writeln(Loan.getFieldDefinitions().getCsvRowValues(item));
     }
 

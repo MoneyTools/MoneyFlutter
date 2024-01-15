@@ -4,13 +4,8 @@ import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
-class Categories {
-  MoneyObjects<Category> moneyObjects = MoneyObjects<Category>();
+class Categories extends MoneyObjects<Category> {
   static int idOfSplitCategory = -1;
-
-  Category? get(final int id) {
-    return moneyObjects.get(id);
-  }
 
   String getNameFromId(final int id) {
     if (id == -1) {
@@ -20,7 +15,7 @@ class Categories {
     if (id == splitCategoryId()) {
       return '<Split>';
     }
-    final Category? category = moneyObjects.get(id);
+    final Category? category = get(id);
     return category == null ? '' : category.name;
   }
 
@@ -35,7 +30,7 @@ class Categories {
   }
 
   Category? getByName(final String name) {
-    return moneyObjects.getAsList().firstWhereOrNull((final Category category) => category.name == name);
+    return getList().firstWhereOrNull((final Category category) => category.name == name);
   }
 
   Category getTopAncestor(final Category category) {
@@ -70,7 +65,7 @@ class Categories {
 
   List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
-    for (final Category item in moneyObjects.getAsList()) {
+    for (final Category item in getList()) {
       if (item.parentId == parentId) {
         list.add(item);
       }
@@ -86,21 +81,17 @@ class Categories {
 
     if (category == null) {
       category = Category(
-        id: moneyObjects.length,
+        id: length,
         name: name,
         type: type,
       );
-      moneyObjects.addEntry(category);
+      addEntry(category);
     }
     // TODO
     // else if (result.IsDeleted) {
     //   result.Undelete();
     // }
     return category;
-  }
-
-  clear() {
-    moneyObjects.clear();
   }
 
   Category get split {
@@ -202,31 +193,31 @@ class Categories {
   load(final List<Json> rows) async {
     clear();
     for (final Json row in rows) {
-      moneyObjects.addEntry(Category.fromSqlite(row));
+      addEntry(Category.fromSqlite(row));
     }
   }
 
   loadDemoData() {
     clear();
-    moneyObjects.addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
-    moneyObjects.addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment));
-    moneyObjects.addEntry(Category(id: 2, name: 'Interests', description: '', type: CategoryType.income));
-    moneyObjects.addEntry(Category(id: 3, name: 'Rental', description: '', type: CategoryType.income));
-    moneyObjects.addEntry(Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none));
-    moneyObjects.addEntry(Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense));
-    moneyObjects.addEntry(Category(id: 6, name: 'Saving', description: '', type: CategoryType.income));
-    moneyObjects.addEntry(Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense));
-    moneyObjects.addEntry(Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense));
-    moneyObjects.addEntry(Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
+    addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment));
+    addEntry(Category(id: 2, name: 'Interests', description: '', type: CategoryType.income));
+    addEntry(Category(id: 3, name: 'Rental', description: '', type: CategoryType.income));
+    addEntry(Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none));
+    addEntry(Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 6, name: 'Saving', description: '', type: CategoryType.income));
+    addEntry(Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
   }
 
   onAllDataLoaded() {
-    for (final Category category in moneyObjects.getAsList()) {
+    for (final Category category in getList()) {
       category.count = 0;
       category.balance = 0;
     }
 
-    for (final Transaction t in Data().transactions.list) {
+    for (final Transaction t in Data().transactions.getList()) {
       final Category? item = get(t.categoryId);
       if (item != null) {
         item.count++;
@@ -242,7 +233,7 @@ class Categories {
     csv.writeln(Category.getFieldDefinitions().getCsvHeader());
 
     // CSV Rows
-    for (final Category item in moneyObjects.getAsList()) {
+    for (final Category item in getList()) {
       csv.writeln(Category.getFieldDefinitions().getCsvRowValues(item));
     }
     // Add the UTF-8 BOM for Excel
