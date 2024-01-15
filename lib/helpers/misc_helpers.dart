@@ -4,6 +4,13 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:flutter/foundation.dart';
 
+String stringValueOrDefault(final String? value, {final String defaultValueIfNull = ''}) {
+  if (value == null) {
+    return defaultValueIfNull;
+  }
+  return value;
+}
+
 num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
   if (value == null) {
     return defaultValueIfNull;

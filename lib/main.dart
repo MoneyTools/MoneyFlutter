@@ -13,6 +13,7 @@ import 'package:money/models/data_io/import_qif.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_aliases/view_aliases.dart';
 import 'package:money/views/view_cashflow/view_cashflow.dart';
+import 'package:money/views/view_loans/view_loans.dart';
 import 'package:money/views/view_rentals/view_rentals.dart';
 import 'package:money/widgets/keyboard_widget.dart';
 
@@ -188,14 +189,16 @@ class _MyMoneyState extends State<MyMoney> {
       case 1:
         return const ViewAccounts();
       case 2:
-        return const ViewCategories();
+        return const ViewLoans();
       case 3:
-        return const ViewPayees();
+        return const ViewCategories();
       case 4:
-        return const ViewAliases();
+        return const ViewPayees();
       case 5:
-        return const ViewTransactions();
+        return const ViewAliases();
       case 6:
+        return const ViewTransactions();
+      case 7:
         return const ViewRentals();
       case 0:
       default:

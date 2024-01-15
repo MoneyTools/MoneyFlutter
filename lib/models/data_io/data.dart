@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_objects/aliases/aliases.dart';
 import 'package:money/models/data_io/file_systems.dart';
+import 'package:money/models/money_objects/loans/loans.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_units.dart';
 import 'package:money/models/money_objects/rentals/rentals.dart';
 import 'package:money/models/money_objects/accounts/accounts.dart';
@@ -16,6 +17,7 @@ import 'package:money/models/data_io/data_others.dart'
 
 class Data {
   Accounts accounts = Accounts();
+  Loans loans = Loans();
   Payees payees = Payees();
   Aliases aliases = Aliases();
   Categories categories = Categories();
@@ -43,6 +45,7 @@ class Data {
     if (filePathToLoad == Constants.demoData) {
       // Not supported on Web so generate some random data to see in the views
       accounts.loadDemoData();
+      loans.loadDemoData();
       categories.loadDemoData();
       payees.loadDemoData();
       aliases.loadDemoData();
@@ -61,6 +64,11 @@ class Data {
           {
             final List<Map<String, Object?>> result = db.select('SELECT * FROM Accounts');
             await accounts.load(result);
+          }
+          // Loans
+          {
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM LoanPayments');
+            await loans.load(result);
           }
           // Categories
           {
