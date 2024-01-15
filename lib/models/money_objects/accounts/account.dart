@@ -337,7 +337,7 @@ class Account extends MoneyObject {
         serializeName: 'website',
         align: TextAlign.left,
         valueFromInstance: (final Account account) {
-          return account.description;
+          return account.webSite;
         },
       ),
       // 6
