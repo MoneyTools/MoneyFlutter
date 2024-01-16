@@ -64,17 +64,17 @@ int sortByString(final dynamic a, final dynamic b, final bool ascending) {
 
 int sortByValue(final num a, final num b, final bool ascending) {
   if (ascending) {
-    return (b - a).toInt();
-  } else {
     return (a - b).toInt();
+  } else {
+    return (b - a).toInt();
   }
 }
 
 int sortByDate(final DateTime a, final DateTime b, final bool ascending) {
   if (ascending) {
-    return b.compareTo(a);
-  } else {
     return a.compareTo(b);
+  } else {
+    return b.compareTo(a);
   }
 }
 

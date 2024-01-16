@@ -76,18 +76,11 @@ class Payees extends MoneyObjects<Payee> {
     }
   }
 
+  @override
   String toCSV() {
-    final StringBuffer csv = StringBuffer();
-
-    // CSV Header
-    csv.writeln(Payee.getFieldDefinitions().getCsvHeader());
-
-    // CSV Rows
-    for (final Payee item in getList()) {
-      csv.writeln(Payee.getFieldDefinitions().getCsvRowValues(item));
-    }
-    // Add the UTF-8 BOM for Excel
-    // This does not affect clients like Google sheets
-    return '\uFEFF$csv';
+    return super.getCsvFromList(
+      Payee.getFieldDefinitions(),
+      getListSortedById(),
+    );
   }
 }

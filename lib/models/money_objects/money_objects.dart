@@ -1,3 +1,4 @@
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
 // exports
@@ -17,6 +18,17 @@ class MoneyObjects<T> {
     return _list;
   }
 
+  List<T> getListSortedById() {
+    _list.sort((final T a, final T b) {
+      return sortByValue(
+        (a as MoneyObject).id,
+        (b as MoneyObject).id,
+        true,
+      );
+    });
+    return _list;
+  }
+
   void clear() {
     _list.clear();
   }
@@ -32,5 +44,28 @@ class MoneyObjects<T> {
 
   T? get(final num id) {
     return _map[id];
+  }
+
+  String toCSV() {
+    return getCsvFromList(
+      MoneyObject.getFieldDefinitions<T>(),
+      getListSortedById(),
+    );
+  }
+
+  String getCsvFromList(final FieldDefinitions<T> fieldDefinitions, final List<T> sortedList) {
+    final StringBuffer csv = StringBuffer();
+
+    // CSV Header
+    csv.writeln(fieldDefinitions.getCsvHeader());
+
+    // CSV Rows
+    for (final T item in sortedList) {
+      csv.writeln(fieldDefinitions.getCsvRowValues(item));
+    }
+
+    // Add the UTF-8 BOM for Excel
+    // This does not affect clients like Google sheets
+    return '\uFEFF$csv';
   }
 }

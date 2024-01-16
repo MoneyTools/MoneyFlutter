@@ -1,5 +1,6 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -116,5 +117,22 @@ class Rental extends MoneyObject {
     instance.note = jsonGetString(row, 'Note');
 
     return instance;
+  }
+
+  static FieldDefinitions<Rental> getFieldDefinitions() {
+    final FieldDefinitions<Rental> fields = FieldDefinitions<Rental>(definitions: <FieldDefinition<Rental>>[
+      FieldDefinition<Rental>(
+        useAsColumn: false,
+        name: 'Id',
+        serializeName: 'id',
+        type: FieldType.text,
+        align: TextAlign.left,
+        valueFromInstance: (final Rental entity) => entity.id,
+        sort: (final Rental a, final Rental b, final bool sortAscending) {
+          return sortByValue(a.id, b.id, sortAscending);
+        },
+      ),
+    ]);
+    return fields;
   }
 }

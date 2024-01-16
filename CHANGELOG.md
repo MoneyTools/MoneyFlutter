@@ -1,3 +1,7 @@
+## [1.0.20] 2024-01-16
+
+- Refactor saving toCSV
+
 ## [1.0.19] 2024-01-15
 
 - Detail Panel Split transaction

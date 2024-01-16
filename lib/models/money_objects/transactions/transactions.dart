@@ -77,18 +77,11 @@ class Transactions extends MoneyObjects<Transaction> {
     return roundDouble(amount, 2);
   }
 
+  @override
   String toCSV() {
-    final StringBuffer csv = StringBuffer();
-
-    // CSV Header
-    csv.writeln(Transaction.getFieldDefinitions().getCsvHeader());
-
-    // CSV Rows
-    for (final Transaction item in getList()) {
-      csv.writeln(Transaction.getFieldDefinitions().getCsvRowValues(item));
-    }
-    // Add the UTF-8 BOM for Excel
-    // This does not affect clients like Google sheets
-    return '\uFEFF$csv';
+    return super.getCsvFromList(
+      Transaction.getFieldDefinitions(),
+      getListSortedById(),
+    );
   }
 }

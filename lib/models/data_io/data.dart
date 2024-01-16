@@ -182,6 +182,21 @@ class Data {
         Data().transactions.toCSV(),
       );
 
+      MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'splits.csv'),
+        Data().splits.toCSV(),
+      );
+
+      MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'rent_units.csv'),
+        Data().rentUnits.toCSV(),
+      );
+
+      MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'rentals.csv'),
+        Data().rentals.toCSV(),
+      );
+
       timeLapse.endAndPrint();
     });
   }

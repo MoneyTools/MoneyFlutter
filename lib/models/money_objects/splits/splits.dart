@@ -40,4 +40,12 @@ class Splits extends MoneyObjects<Split> {
   loadDemoData() {
     clear();
   }
+
+  @override
+  String toCSV() {
+    return super.getCsvFromList(
+      Split.getFieldDefinitions(),
+      getListSortedById(),
+    );
+  }
 }

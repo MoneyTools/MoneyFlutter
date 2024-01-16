@@ -62,4 +62,12 @@ class Rentals extends MoneyObjects<Rental> {
       }
     }
   }
+
+  @override
+  String toCSV() {
+    return super.getCsvFromList(
+      Rental.getFieldDefinitions(),
+      getListSortedById(),
+    );
+  }
 }

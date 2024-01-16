@@ -226,18 +226,11 @@ class Categories extends MoneyObjects<Category> {
     }
   }
 
+  @override
   String toCSV() {
-    final StringBuffer csv = StringBuffer();
-
-    // CSV Header
-    csv.writeln(Category.getFieldDefinitions().getCsvHeader());
-
-    // CSV Rows
-    for (final Category item in getList()) {
-      csv.writeln(Category.getFieldDefinitions().getCsvRowValues(item));
-    }
-    // Add the UTF-8 BOM for Excel
-    // This does not affect clients like Google sheets
-    return '\uFEFF$csv';
+    return super.getCsvFromList(
+      Category.getFieldDefinitions(),
+      getListSortedById(),
+    );
   }
 }

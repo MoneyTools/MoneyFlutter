@@ -2,7 +2,7 @@
 import 'dart:ui';
 
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/fields/field.dart';
+import 'package:money/models/fields/fields.dart';
 
 // Exports
 export 'dart:ui';
@@ -29,5 +29,11 @@ class MoneyObject {
         return sortByValue((a as MoneyObject).id, (b as MoneyObject).id, sortAscending);
       },
     );
+  }
+
+  static FieldDefinitions<T> getFieldDefinitions<T>() {
+    return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[
+      MoneyObject.getFieldId<T>(),
+    ]);
   }
 }

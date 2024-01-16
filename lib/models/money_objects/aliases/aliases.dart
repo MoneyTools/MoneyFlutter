@@ -25,19 +25,11 @@ class Aliases extends MoneyObjects<Alias> {
 
   static onAllDataLoaded() {}
 
+  @override
   String toCSV() {
-    final StringBuffer csv = StringBuffer();
-
-    // CSV Header
-    csv.writeln(Alias.getFieldDefinitions().getCsvHeader());
-
-    // CSV Rows
-    for (final Alias item in getList()) {
-      csv.writeln(Alias.getFieldDefinitions().getCsvRowValues(item));
-    }
-
-    // Add the UTF-8 BOM for Excel
-    // This does not affect clients like Google sheets
-    return '\uFEFF$csv';
+    return super.getCsvFromList(
+      Alias.getFieldDefinitions(),
+      getListSortedById(),
+    );
   }
 }
