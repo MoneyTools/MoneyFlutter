@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_objects/aliases/aliases.dart';
 import 'package:money/models/data_io/file_systems.dart';
+import 'package:money/models/money_objects/currencies/currencies.dart';
 import 'package:money/models/money_objects/loans/loans.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_units.dart';
 import 'package:money/models/money_objects/rentals/rent_buildings/rent_buildings.dart';
@@ -24,6 +25,7 @@ class Data {
   RentBuildings rentals = RentBuildings();
   RentUnits rentUnits = RentUnits();
   Splits splits = Splits();
+  Currencies currencies = Currencies();
   Transactions transactions = Transactions();
 
   static final Data _instance = Data._internal();
@@ -45,6 +47,7 @@ class Data {
     if (filePathToLoad == Constants.demoData) {
       // Not supported on Web so generate some random data to see in the views
       accounts.loadDemoData();
+      currencies.loadDemoData();
       loans.loadDemoData();
       categories.loadDemoData();
       payees.loadDemoData();
@@ -64,6 +67,11 @@ class Data {
           {
             final List<Map<String, Object?>> result = db.select('SELECT * FROM Accounts');
             await accounts.load(result);
+          }
+          // Currencies
+          {
+            final List<Map<String, Object?>> result = db.select('SELECT * FROM Currencies');
+            await currencies.load(result);
           }
           // Loans
           {
@@ -163,6 +171,11 @@ class Data {
       );
 
       MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'currencies.csv'),
+        currencies.toCSV(),
+      );
+
+      MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'categories.csv'),
         Data().categories.toCSV(),
       );
@@ -190,6 +203,11 @@ class Data {
       MyFileSystems.writeToFile(
         MyFileSystems.append(folder, 'rent_units.csv'),
         Data().rentUnits.toCSV(),
+      );
+
+      MyFileSystems.writeToFile(
+        MyFileSystems.append(folder, 'rent_buildings.csv'),
+        Data().rentals.toCSV(),
       );
 
       MyFileSystems.writeToFile(
