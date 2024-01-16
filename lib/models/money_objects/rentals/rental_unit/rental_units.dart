@@ -1,6 +1,6 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/models/money_objects/rentals/rental.dart';
+import 'package:money/models/money_objects/rentals/rent_buildings/rent_building.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart';
 
 class RentUnits extends MoneyObjects<RentUnit> {
@@ -22,7 +22,7 @@ class RentUnits extends MoneyObjects<RentUnit> {
 
   onAllDataLoaded() {
     for (RentUnit item in getList()) {
-      final Rental a = item as Rental;
+      final RentBuilding a = item as RentBuilding;
       a.count = 0;
       a.revenue = 0;
     }

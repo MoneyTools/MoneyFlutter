@@ -1,13 +1,13 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/models/money_objects/rentals/rental.dart';
+import 'package:money/models/money_objects/rentals/rent_buildings/rent_building.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
-class Rentals extends MoneyObjects<Rental> {
+class RentBuildings extends MoneyObjects<RentBuilding> {
   String getNameFromId(final int id) {
-    final Rental? found = get(id);
+    final RentBuilding? found = get(id);
     if (found == null) {
       return id.toString();
     }
@@ -18,14 +18,14 @@ class Rentals extends MoneyObjects<Rental> {
     clear();
 
     for (final Json row in rows) {
-      addEntry(Rental.fromSqlite(row));
+      addEntry(RentBuilding.fromSqlite(row));
     }
   }
 
   void loadDemoData() {
     clear();
 
-    final Rental instance = Rental(id: 0, name: 'AirBnB');
+    final RentBuilding instance = RentBuilding(id: 0, name: 'AirBnB');
     instance.address = 'One Washington DC';
     addEntry(instance);
   }
@@ -33,7 +33,7 @@ class Rentals extends MoneyObjects<Rental> {
   onAllDataLoaded() {
     final List<RentUnit> allUnits = Data().rentUnits.getList();
 
-    for (final Rental rental in getList()) {
+    for (final RentBuilding rental in getList()) {
       cumulateTransactions(rental);
 
       // expense is a negative number so we just do a Revenue + Expense
@@ -47,7 +47,7 @@ class Rentals extends MoneyObjects<Rental> {
     }
   }
 
-  cumulateTransactions(final Rental rental) {
+  cumulateTransactions(final RentBuilding rental) {
     for (Transaction t in Data().transactions.getList()) {
       if (rental.categoryForIncomeTreeIds.contains(t.categoryId)) {
         rental.dateRange.inflate(t.dateTime);
@@ -66,7 +66,7 @@ class Rentals extends MoneyObjects<Rental> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Rental.getFieldDefinitions(),
+      RentBuilding.getFieldDefinitions(),
       getListSortedById(),
     );
   }

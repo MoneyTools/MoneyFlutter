@@ -5,7 +5,7 @@ import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart'
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
-class Rental extends MoneyObject {
+class RentBuilding extends MoneyObject {
   String name;
   int count = 0;
 
@@ -70,13 +70,13 @@ class Rental extends MoneyObject {
     16|CategoryForMaintenance|INT|0||0
     17|CategoryForManagement|INT|0||0
    */
-  Rental({
+  RentBuilding({
     required super.id,
     required this.name,
   });
 
-  factory Rental.fromSqlite(final Json row) {
-    final Rental instance = Rental(
+  factory RentBuilding.fromSqlite(final Json row) {
+    final RentBuilding instance = RentBuilding(
       id: jsonGetInt(row, 'Id'),
       name: jsonGetString(row, 'Name'),
     );
@@ -119,16 +119,17 @@ class Rental extends MoneyObject {
     return instance;
   }
 
-  static FieldDefinitions<Rental> getFieldDefinitions() {
-    final FieldDefinitions<Rental> fields = FieldDefinitions<Rental>(definitions: <FieldDefinition<Rental>>[
-      FieldDefinition<Rental>(
+  static FieldDefinitions<RentBuilding> getFieldDefinitions() {
+    final FieldDefinitions<RentBuilding> fields =
+        FieldDefinitions<RentBuilding>(definitions: <FieldDefinition<RentBuilding>>[
+      FieldDefinition<RentBuilding>(
         useAsColumn: false,
         name: 'Id',
         serializeName: 'id',
         type: FieldType.text,
         align: TextAlign.left,
-        valueFromInstance: (final Rental entity) => entity.id,
-        sort: (final Rental a, final Rental b, final bool sortAscending) {
+        valueFromInstance: (final RentBuilding entity) => entity.id,
+        sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
           return sortByValue(a.id, b.id, sortAscending);
         },
       ),

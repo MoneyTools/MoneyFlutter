@@ -4,7 +4,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   /// Details panels Chart panel for Payees
   Widget _getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
-    for (final Rental entry in getList()) {
+    for (final RentBuilding entry in getList()) {
       list.add(PairXY(entry.name, entry.profit));
     }
 
@@ -17,7 +17,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
 
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final Rental? rental = getFirstElement<Rental>(indices, list);
+    final RentBuilding? rental = getFirstElement<RentBuilding>(indices, list);
     if (rental != null) {
       final List<Transaction> list = getFilteredTransactions(
         (final Transaction transaction) => filterByRentalCategories(
@@ -42,7 +42,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     return const Text('No transactions');
   }
 
-  bool filterByRentalCategories(final Transaction t, final Rental rental) {
+  bool filterByRentalCategories(final Transaction t, final RentBuilding rental) {
     final num categoryIdToMatch = t.categoryId;
 
     if (categoryIdToMatch == Data().categories.splitCategoryId()) {
@@ -59,7 +59,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     return isMatchingCategories(categoryIdToMatch, rental);
   }
 
-  bool isMatchingCategories(final num categoryIdToMatch, final Rental rental) {
+  bool isMatchingCategories(final num categoryIdToMatch, final RentBuilding rental) {
     Data().categories.getTreeIds(rental.categoryForIncome);
 
     return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||

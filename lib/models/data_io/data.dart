@@ -5,7 +5,7 @@ import 'package:money/models/money_objects/aliases/aliases.dart';
 import 'package:money/models/data_io/file_systems.dart';
 import 'package:money/models/money_objects/loans/loans.dart';
 import 'package:money/models/money_objects/rentals/rental_unit/rental_units.dart';
-import 'package:money/models/money_objects/rentals/rentals.dart';
+import 'package:money/models/money_objects/rentals/rent_buildings/rent_buildings.dart';
 import 'package:money/models/money_objects/accounts/accounts.dart';
 import 'package:money/models/money_objects/categories/categories.dart';
 import 'package:money/models/money_objects/payees/payees.dart';
@@ -21,7 +21,7 @@ class Data {
   Payees payees = Payees();
   Aliases aliases = Aliases();
   Categories categories = Categories();
-  Rentals rentals = Rentals();
+  RentBuildings rentals = RentBuildings();
   RentUnits rentUnits = RentUnits();
   Splits splits = Splits();
   Transactions transactions = Transactions();
@@ -193,7 +193,7 @@ class Data {
       );
 
       MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'rentals.csv'),
+        MyFileSystems.append(folder, 'rent_buildings.csv'),
         Data().rentals.toCSV(),
       );
 
