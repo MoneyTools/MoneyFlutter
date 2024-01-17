@@ -5,6 +5,16 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Categories extends MoneyObjects<Category> {
+  @override
+  String sqlQuery() {
+    return 'SELECT * FROM Categories';
+  }
+
+  @override
+  Category instanceFromSqlite(final Json row) {
+    return Category.fromSqlite(row);
+  }
+
   static int idOfSplitCategory = -1;
 
   String getNameFromId(final int id) {
@@ -190,13 +200,7 @@ class Categories extends MoneyObjects<Category> {
     return getOrCreateCategory("UnassignedSplit", CategoryType.none);
   }
 
-  load(final List<Json> rows) async {
-    clear();
-    for (final Json row in rows) {
-      addEntry(Category.fromSqlite(row));
-    }
-  }
-
+  @override
   loadDemoData() {
     clear();
     addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
@@ -211,7 +215,8 @@ class Categories extends MoneyObjects<Category> {
     addEntry(Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
   }
 
-  onAllDataLoaded() {
+  @override
+  void onAllDataLoaded() {
     for (final Category category in getList()) {
       category.count = 0;
       category.balance = 0;

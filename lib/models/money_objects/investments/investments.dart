@@ -6,18 +6,13 @@ import 'package:money/models/money_objects/money_objects.dart';
 export 'package:money/models/money_objects/investments/investment.dart';
 
 class Investments extends MoneyObjects<Investment> {
-  load(final List<Json> rows) async {
+  @override
+  loadFromJson(final List<Json> rows) {
     clear();
     for (final Json row in rows) {
       addEntry(Investment.fromSqlite(row));
     }
   }
-
-  loadDemoData() {
-    clear();
-  }
-
-  static onAllDataLoaded() {}
 
   @override
   String toCSV() {

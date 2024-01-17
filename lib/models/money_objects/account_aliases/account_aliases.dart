@@ -3,16 +3,13 @@ import 'package:money/models/money_objects/account_aliases/account_alias.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
 class AccountAliases extends MoneyObjects<AccountAlias> {
-  load(final List<Json> rows) async {
-    clear();
-    for (final Json row in rows) {
-      addEntry(AccountAlias.fromSqlite(row));
-    }
+  @override
+  String sqlQuery() {
+    return 'SELECT * FROM AccountAliases';
   }
 
-  loadDemoData() {
-    clear();
+  @override
+  AccountAlias instanceFromSqlite(final Json row) {
+    return AccountAlias.fromSqlite(row);
   }
-
-  static onAllDataLoaded() {}
 }

@@ -12,7 +12,8 @@ class Transactions extends MoneyObjects<Transaction> {
     getList().add(transaction);
   }
 
-  load(final List<Json> rows) async {
+  @override
+  loadFromJson(final List<Json> rows) {
     clear();
 
     runningBalance = 0.00;
@@ -45,6 +46,7 @@ class Transactions extends MoneyObjects<Transaction> {
     return getList();
   }
 
+  @override
   loadDemoData() {
     clear();
 

@@ -10,9 +10,10 @@ class Splits extends MoneyObjects<Split> {
     return getList().where((final Split item) => item.transactionId == transactionId).toList();
   }
 
-  load(final List<Map<String, Object?>> rows) async {
+  @override
+  loadFromJson(final List<Json> rows) {
     clear();
-    for (final Map<String, Object?> row in rows) {
+    for (final Json row in rows) {
       getList().add(Split(
         // 0
         transactionId: jsonGetInt(row, 'Transaction'),
@@ -35,10 +36,6 @@ class Splits extends MoneyObjects<Split> {
       ));
     }
     return getList();
-  }
-
-  loadDemoData() {
-    clear();
   }
 
   @override

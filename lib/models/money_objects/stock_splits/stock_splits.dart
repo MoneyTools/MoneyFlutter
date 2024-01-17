@@ -6,18 +6,13 @@ import 'package:money/models/money_objects/money_objects.dart';
 export 'package:money/models/money_objects/stock_splits/stock_split.dart';
 
 class StockSplits extends MoneyObjects<StockSplit> {
-  load(final List<Json> rows) async {
+  @override
+  loadFromJson(final List<Json> rows) {
     clear();
     for (final Json row in rows) {
       addEntry(StockSplit.fromSqlite(row));
     }
   }
-
-  loadDemoData() {
-    clear();
-  }
-
-  onAllDataLoaded() {}
 
   @override
   String toCSV() {

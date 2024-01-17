@@ -14,7 +14,8 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     return found.name;
   }
 
-  load(final List<Json> rows) {
+  @override
+  loadFromJson(final List<Json> rows) {
     clear();
 
     for (final Json row in rows) {
@@ -22,6 +23,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     }
   }
 
+  @override
   void loadDemoData() {
     clear();
 
@@ -30,7 +32,8 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     addEntry(instance);
   }
 
-  onAllDataLoaded() {
+  @override
+  void onAllDataLoaded() {
     final List<RentUnit> allUnits = Data().rentUnits.getList();
 
     for (final RentBuilding rental in getList()) {

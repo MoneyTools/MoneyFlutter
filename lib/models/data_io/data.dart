@@ -1,14 +1,14 @@
 import 'dart:io';
 
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/data_io/database/database.dart';
 import 'package:money/models/money_objects/account_aliases/account_aliases.dart';
 import 'package:money/models/money_objects/aliases/aliases.dart';
 import 'package:money/models/data_io/file_systems.dart';
 import 'package:money/models/money_objects/currencies/currencies.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/online_accounts/online_accounts.dart';
-
 import 'package:money/models/money_objects/rental_unit/rental_units.dart';
 import 'package:money/models/money_objects/rent_buildings/rent_buildings.dart';
 import 'package:money/models/money_objects/accounts/accounts.dart';
@@ -20,10 +20,38 @@ import 'package:money/models/money_objects/transaction_extras/transaction_extras
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
-import 'package:money/models/data_io/data_others.dart'
-    if (dart.library.html) 'package:money/models/data_io/data_web.dart';
 
 class Data {
+  /// singleton
+  static final Data _instance = Data._internal();
+
+  /// private constructor
+  Data._internal() {
+    _listOfTables = <MoneyObjects<dynamic>>[
+      accountAliases,
+      accounts,
+      aliases,
+      categories,
+      currencies,
+      investments,
+      loanPayments,
+      onlineAccounts,
+      payees,
+      rentBuildings,
+      rentUnits,
+      securities,
+      splits,
+      stockSplits,
+      transactionExtras,
+      transactions,
+    ];
+  } // private constructor
+
+  /// singleton access
+  factory Data() {
+    return _instance;
+  }
+
   // 1
   AccountAliases accountAliases = AccountAliases();
 
@@ -72,13 +100,7 @@ class Data {
   // 16
   Transactions transactions = Transactions();
 
-  static final Data _instance = Data._internal();
-
-  Data._internal(); // private constructor
-
-  factory Data() {
-    return _instance;
-  }
+  late final List<MoneyObjects<dynamic>> _listOfTables;
 
   init({
     required final String? filePathToLoad,
@@ -89,21 +111,12 @@ class Data {
     }
 
     if (filePathToLoad == Constants.demoData) {
-      // Not supported on Web so generate some random data to see in the views
-      accountAliases.loadDemoData();
-      accounts.loadDemoData();
-      categories.loadDemoData();
-      currencies.loadDemoData();
-      investments.loadDemoData();
-      loanPayments.loadDemoData();
-      onlineAccounts.loadDemoData();
-      payees.loadDemoData();
-      aliases.loadDemoData();
-      rentBuildings.loadDemoData();
-      splits.loadDemoData();
-      transactionExtras.loadDemoData();
-      transactions.loadDemoData();
+      // Generate a data set to demo the application
+      for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+        moneyObjects.loadDemoData();
+      }
     } else {
+      // Load from SQLite
       try {
         final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
 
@@ -112,100 +125,52 @@ class Data {
           final MyDatabase db = MyDatabase(pathToDatabaseFile);
 
           // Account_Aliases
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM AccountAliases');
-            await accountAliases.load(result);
-          }
+          accountAliases.loadFromSql(db);
 
           // Accounts
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Accounts');
-            await accounts.load(result);
-          }
+          accounts.loadFromSql(db);
 
           // Aliases
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Aliases');
-            await aliases.load(result);
-          }
+          aliases.loadFromSql(db);
 
           // Categories
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Categories');
-            await categories.load(result);
-          }
+          categories.loadFromSql(db);
 
           // Currencies
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Currencies');
-            await currencies.load(result);
-          }
+          currencies.loadFromSql(db, 'SELECT * FROM Currencies');
 
           // Investments
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Investments');
-            await investments.load(result);
-          }
+          investments.loadFromSql(db, 'SELECT * FROM Investments');
 
           // Loan Payments
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM LoanPayments');
-            await loanPayments.load(result);
-          }
+          loanPayments.loadFromSql(db, 'SELECT * FROM LoanPayments');
 
           // Online Accounts
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM OnlineAccounts');
-            await onlineAccounts.load(result);
-          }
+          onlineAccounts.loadFromSql(db, 'SELECT * FROM OnlineAccounts');
 
           // Payees
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Payees');
-            await payees.load(result);
-          }
+          payees.loadFromSql(db, 'SELECT * FROM Payees');
 
           // Rent Buildings
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM RentBuildings');
-            await rentBuildings.load(result);
-          }
+          rentBuildings.loadFromSql(db, 'SELECT * FROM RentBuildings');
 
           // Rent Units
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM RentUnits');
-            await rentUnits.load(result);
-          }
+          rentUnits.loadFromSql(db, 'SELECT * FROM RentUnits');
 
           // Securities
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Securities');
-            await securities.load(result);
-          }
+          securities.loadFromSql(db, 'SELECT * FROM Securities');
 
           // Splits
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Splits');
-            await splits.load(result);
-          }
+          splits.loadFromSql(db, 'SELECT * FROM Splits');
 
           // Stock Splits
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM StockSplits');
-            await stockSplits.load(result);
-          }
+          stockSplits.loadFromSql(db, 'SELECT * FROM StockSplits');
 
           // Transactions
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM Transactions');
-            await transactions.load(result);
-          }
+          transactions.loadFromSql(db, 'SELECT * FROM Transactions');
 
-          // Transaction Extras
-          {
-            final List<Map<String, Object?>> result = db.select('SELECT * FROM TransactionExtras');
-            await transactionExtras.load(result);
-          }
+          // Transaction Extras{
+          transactionExtras.loadFromSql(db, 'SELECT * FROM TransactionExtras');
 
           // Close the database when done
           db.dispose();
@@ -217,27 +182,20 @@ class Data {
       }
     }
 
-    accounts.onAllDataLoaded();
-    categories.onAllDataLoaded();
-    payees.onAllDataLoaded();
-    aliases.onAllDataLoaded();
-    rentBuildings.onAllDataLoaded();
-    stockSplits.onAllDataLoaded();
+    // All individual table were loaded, now let the cross reference money object create linked to other tables
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.onAllDataLoaded();
+    }
+
+    // Notify that loading is completed
     callbackWhenLoaded(true);
   }
 
+  /// Close all tables
   close() {
-    aliases.clear();
-    accounts.clear();
-    categories.clear();
-    investments.clear();
-    onlineAccounts.clear();
-    payees.clear();
-    rentBuildings.clear();
-    splits.clear();
-    stockSplits.clear();
-    transactionExtras.clear();
-    transactions.clear();
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.clear();
+    }
   }
 
   Future<String?> validateDataBasePathIsValidAndExist(final String? filePath) async {

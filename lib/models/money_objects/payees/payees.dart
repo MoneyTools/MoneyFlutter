@@ -1,3 +1,4 @@
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
@@ -30,17 +31,19 @@ class Payees extends MoneyObjects<Payee> {
     return payee;
   }
 
-  load(final List<Map<String, Object?>> rows) async {
+  @override
+  loadFromJson(final List<Json> rows) {
     clear();
     /*
      */
-    for (final Map<String, Object?> row in rows) {
+    for (final Json row in rows) {
       final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
       addEntry(Payee(id: id, name: name));
     }
   }
 
+  @override
   loadDemoData() {
     clear();
 
@@ -61,7 +64,8 @@ class Payees extends MoneyObjects<Payee> {
     }
   }
 
-  onAllDataLoaded() {
+  @override
+  void onAllDataLoaded() {
     for (final Payee payee in getList()) {
       payee.count = 0;
       payee.balance = 0;

@@ -8,6 +8,70 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:uuid/uuid.dart';
 
 class Accounts extends MoneyObjects<Account> {
+  @override
+  String sqlQuery() {
+    return 'SELECT * FROM Accounts';
+  }
+
+  @override
+  Account instanceFromSqlite(final Json row) {
+    return Account.fromSqlite(row);
+  }
+
+  @override
+  loadDemoData() {
+    clear();
+    final List<String> names = <String>[
+      'BankOfAmerica',
+      'Revolut',
+      'FirstTech',
+      'Fidelity',
+      'Bank of Japan',
+      'Trust Canada',
+      'ABC Corp',
+      'Royal Bank',
+      'Unicorn',
+      'God-Inc'
+    ];
+    for (int i = 0; i < names.length; i++) {
+      addEntry(Account(
+        id: i,
+        name: names[i],
+        accountId: i.toString(),
+        type: AccountType.checking,
+        description: 'Some description',
+        currency: 'USD',
+        lastSync: DateTime.now(),
+        syncGuid: const Uuid().v4().toString(),
+        flags: 0,
+        openingBalance: 0,
+        ofxAccountId: '',
+        onlineAccount: -1,
+        webSite: '',
+        reconcileWarning: 0,
+        lastBalance: DateTime.now().subtract(const Duration(days: 20)),
+        categoryIdForPrincipal: 0,
+        categoryIdForInterest: 0,
+      ));
+    }
+  }
+
+  @override
+  void onAllDataLoaded() {
+    for (final Account account in getList()) {
+      account.count = 0;
+      account.balance = account.openingBalance;
+    }
+
+    for (final Transaction t in Data().transactions.getList()) {
+      final Account? item = get(t.accountId);
+      if (item != null) {
+        item.count++;
+        item.balance += t.amount;
+      }
+    }
+  }
+
   List<Account> getOpenAccounts() {
     return getList().where((final Account item) => activeBankAccount(item)).toList();
   }
@@ -46,70 +110,6 @@ class Accounts extends MoneyObjects<Account> {
     return getList().firstWhereOrNull((final Account item) {
       return item.accountId == accountId && item.type == accountType;
     });
-  }
-
-  List<Account> list() {
-    return getList();
-  }
-
-  load(final List<Json> rows) async {
-    clear();
-    for (final Json row in rows) {
-      final Account a = Account.fromSqlite(row);
-      addEntry(a);
-    }
-  }
-
-  loadDemoData() {
-    clear();
-    final List<String> names = <String>[
-      'BankOfAmerica',
-      'Revolut',
-      'FirstTech',
-      'Fidelity',
-      'Bank of Japan',
-      'Trust Canada',
-      'ABC Corp',
-      'Royal Bank',
-      'Unicorn',
-      'God-Inc'
-    ];
-    for (int i = 0; i < names.length; i++) {
-      addEntry(Account(
-        id: i,
-        name: names[i],
-        accountId: i.toString(),
-        type: AccountType.checking,
-        description: 'Some description',
-        currency: 'USD',
-        lastSync: DateTime.now(),
-        syncGuid: const Uuid().v4().toString(),
-        flags: 0,
-        openingBalance: 0,
-        ofxAccountId: '',
-        onlineAccount: -1,
-        webSite: '',
-        reconcileWarning: 0,
-        lastBalance: DateTime.now().subtract(const Duration(days: 20)),
-        categoryIdForPrincipal: 0,
-        categoryIdForInterest: 0,
-      ));
-    }
-  }
-
-  onAllDataLoaded() {
-    for (final Account account in getList()) {
-      account.count = 0;
-      account.balance = account.openingBalance;
-    }
-
-    for (final Transaction t in Data().transactions.getList()) {
-      final Account? item = get(t.accountId);
-      if (item != null) {
-        item.count++;
-        item.balance += t.amount;
-      }
-    }
   }
 
   @override

@@ -7,18 +7,13 @@ import 'package:money/models/money_objects/securities/security.dart';
 export 'package:money/models/money_objects/securities/security.dart';
 
 class Securities extends MoneyObjects<Security> {
-  load(final List<Json> rows) async {
+  @override
+  loadFromJson(final List<Json> rows) {
     clear();
     for (final Json row in rows) {
       addEntry(Security.fromSqlite(row));
     }
   }
-
-  loadDemoData() {
-    clear();
-  }
-
-  static onAllDataLoaded() {}
 
   @override
   String toCSV() {

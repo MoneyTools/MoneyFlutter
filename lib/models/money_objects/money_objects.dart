@@ -1,3 +1,5 @@
+import 'package:money/helpers/json_helper.dart';
+import 'package:money/models/data_io/database/database.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
@@ -44,6 +46,40 @@ class MoneyObjects<T> {
 
   T? get(final num id) {
     return _map[id];
+  }
+
+  /// Must be override by derived class
+  String sqlQuery() {
+    return 'SELECT * FROM ?';
+  }
+
+  loadFromSql(final MyDatabase db, [final String? query]) {
+    final List<Json> result = db.select(query ?? sqlQuery());
+    loadFromJson(result);
+  }
+
+  loadFromJson(final List<Json> rows) {
+    clear();
+    for (final Json row in rows) {
+      final T? newInstance = instanceFromSqlite(row);
+      if (newInstance != null) {
+        addEntry(newInstance);
+      }
+    }
+  }
+
+  loadDemoData() {
+    clear();
+  }
+
+  /// Must be override by derived class
+  T? instanceFromSqlite(final Json row) {
+    return null;
+  }
+
+  /// Override in derived classes
+  void onAllDataLoaded() {
+    // implement in the override derived classes
   }
 
   String toCSV() {

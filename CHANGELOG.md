@@ -1,5 +1,6 @@
 ## [1.0.21] 2024-01-17
 
+- Refactor reduce code to deal with al tables
 - All 16 tables now have Load & Save implementations, not all fields are implemented
 
 ## [1.0.20] 2024-01-16
