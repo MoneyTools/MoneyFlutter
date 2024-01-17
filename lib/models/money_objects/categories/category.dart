@@ -167,16 +167,6 @@ class Category extends MoneyObject {
     );
   }
 
-  static getCsvHeader() {
-    final List<String> headerList = <String>[];
-    getFieldDefinitions().definitions.forEach((final FieldDefinition<Category> field) {
-      if (field.serializeName != null) {
-        headerList.add(field.serializeName!);
-      }
-    });
-    return headerList.join(',');
-  }
-
   getTypeAsText() {
     switch (type) {
       case CategoryType.income:

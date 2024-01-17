@@ -21,7 +21,7 @@ This app builds and run on all platforms
 
 ### SQLite Tables
 
-#### AccountAliases
+#### 1 - AccountAliases
 
 ```
 cid  name       type           notnull  dflt_value  pk
@@ -32,7 +32,7 @@ cid  name       type           notnull  dflt_value  pk
 3    AccountId  nchar(20)      1                    0 
 ```
 
-#### Accounts
+#### 2 - Accounts
 
 ```
 cid  name                    type              notnull  dflt_value  pk
@@ -56,7 +56,7 @@ cid  name                    type              notnull  dflt_value  pk
 16   CategoryIdForInterest   INT               0                    0
 ```
 
-#### Aliases
+#### 3 - Aliases
 
 ```
 cid  name     type           notnull  dflt_value  pk
@@ -67,7 +67,7 @@ cid  name     type           notnull  dflt_value  pk
 3    Payee    INT            1                    0
 ```
 
-#### Categories
+#### 4 - Categories
 
 ```
 cid  name         type           notnull  dflt_value  pk
@@ -84,7 +84,7 @@ cid  name         type           notnull  dflt_value  pk
 9    TaxRefNum    INT            0                    0
 ```
 
-#### Currencies
+#### 5 - Currencies
 
 ```
 cid  name         type          notnull  dflt_value  pk
@@ -97,7 +97,27 @@ cid  name         type          notnull  dflt_value  pk
 5    CultureCode  nvarchar(80)  0                    0 
 ```
 
-#### LoanPayments
+#### 6 - Investments
+
+```
+cid  name            type    notnull  dflt_value  pk
+---  --------------  ------  -------  ----------  --
+0    Id              bigint  0                    1 
+1    Security        INT     1                    0 
+2    UnitPrice       money   1                    0 
+3    Units           money   0                    0 
+4    Commission      money   0                    0 
+5    MarkUpDown      money   0                    0 
+6    Taxes           money   0                    0 
+7    Fees            money   0                    0 
+8    Load            money   0                    0 
+9    InvestmentType  INT     1                    0 
+10   TradeType       INT     0                    0 
+11   TaxExempt       bit     0                    0 
+12   Withholding     money   0                    0 
+```
+
+#### 7 - LoanPayments
 
 ```
 cid  name       type           notnull  dflt_value  pk
@@ -110,7 +130,7 @@ cid  name       type           notnull  dflt_value  pk
 5    Memo       nvarchar(255)  0                    0
 ```
 
-#### OnlineAccounts
+#### 8 - OnlineAccounts
 
 ```
 cid  name               type            notnull  dflt_value  pk
@@ -138,7 +158,7 @@ cid  name               type            notnull  dflt_value  pk
 20   UserKeyExpireDate  datetime        0                    0
 ```
 
-#### Payees
+#### 9 - Payees
 
 ```
 cid  name  type           notnull  dflt_value  pk
@@ -148,27 +168,7 @@ cid  name  type           notnull  dflt_value  pk
 jp@JPMac14 ~ % 
 ```
 
-#### Investments
-
-```
-cid  name            type    notnull  dflt_value  pk
----  --------------  ------  -------  ----------  --
-0    Id              bigint  0                    1 
-1    Security        INT     1                    0 
-2    UnitPrice       money   1                    0 
-3    Units           money   0                    0 
-4    Commission      money   0                    0 
-5    MarkUpDown      money   0                    0 
-6    Taxes           money   0                    0 
-7    Fees            money   0                    0 
-8    Load            money   0                    0 
-9    InvestmentType  INT     1                    0 
-10   TradeType       INT     0                    0 
-11   TaxExempt       bit     0                    0 
-12   Withholding     money   0                    0 
-```
-
-#### RentBuildings
+#### 10 - RentBuildings
 
 ```
 cid  name                    type           notnull  dflt_value  pk
@@ -193,7 +193,7 @@ cid  name                    type           notnull  dflt_value  pk
 17   CategoryForManagement   INT            0                    0
 ```
 
-#### RentUnits
+#### 11 - RentUnits
 
 ```
 cid  name      type           notnull  dflt_value  pk
@@ -205,35 +205,7 @@ cid  name      type           notnull  dflt_value  pk
 4    Note      nvarchar(255)  0                    0 
 ```
 
-#### Splits
-
-```
-cid  name               type           notnull  dflt_value  pk
----  -----------------  -------------  -------  ----------  --
-0    Transaction        bigint         1                    0 
-1    Id                 INT            1                    0 
-2    Category           INT            0                    0 
-3    Payee              INT            0                    0 
-4    Amount             money          1                    0 
-5    Transfer           bigint         0                    0 
-6    Memo               nvarchar(255)  0                    0 
-7    Flags              INT            0                    0 
-8    BudgetBalanceDate  datetime       0                    0 
-```
-
-#### StockSplits
-
-```
-cid  name         type      notnull  dflt_value  pk
----  -----------  --------  -------  ----------  --
-0    Id           bigint    0                    1 
-1    Date         datetime  1                    0 
-2    Security     INT       1                    0 
-3    Numerator    money     1                    0 
-4    Denominator  money     1                    0 
-```
-
-#### Securities
+#### 12 - Securities
 
 ```
 cid  name          type          notnull  dflt_value  pk
@@ -249,7 +221,35 @@ cid  name          type          notnull  dflt_value  pk
 8    PriceDate     datetime      0                    0
 ```
 
-#### TransactionExtras
+#### 13 - Splits
+
+```
+cid  name               type           notnull  dflt_value  pk
+---  -----------------  -------------  -------  ----------  --
+0    Transaction        bigint         1                    0 
+1    Id                 INT            1                    0 
+2    Category           INT            0                    0 
+3    Payee              INT            0                    0 
+4    Amount             money          1                    0 
+5    Transfer           bigint         0                    0 
+6    Memo               nvarchar(255)  0                    0 
+7    Flags              INT            0                    0 
+8    BudgetBalanceDate  datetime       0                    0 
+```
+
+#### 14 - StockSplits
+
+```
+cid  name         type      notnull  dflt_value  pk
+---  -----------  --------  -------  ----------  --
+0    Id           bigint    0                    1 
+1    Date         datetime  1                    0 
+2    Security     INT       1                    0 
+3    Numerator    money     1                    0 
+4    Denominator  money     1                    0 
+```
+
+#### 15 - TransactionExtras
 
 ```
 cid  name         type      notnull  dflt_value  pk
@@ -260,7 +260,7 @@ cid  name         type      notnull  dflt_value  pk
 3    TaxDate      datetime  0                    0
 ```
 
-#### Transactions
+#### 16 - Transactions
 
 ```
 cid  name               type           notnull  dflt_value  pk

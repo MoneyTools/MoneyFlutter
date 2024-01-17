@@ -1,14 +1,15 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 /*
-  0|Id|INT|0||1
-  1|Pattern|nvarchar(255)|1||0
-  2|Flags|INT|1||0
-  3|Payee|INT|1||0
+  cid  name     type           notnull  default  pk
+  ---  -------  -------------  -------  -------  --
+  0    Id       INT            0                 1
+  1    Pattern  nvarchar(255)  1                 0
+  2    Flags    INT            1                 0
+  3    Payee    INT            1                 0
  */
 class Alias extends MoneyObject {
   // 0
@@ -16,19 +17,23 @@ class Alias extends MoneyObject {
 
   // 1
   final String pattern;
-  AliasType type = AliasType.none;
-  int payeeId = -1;
+
+  // 2
+  final int flags;
+
+  // 3
+  final int payeeId;
+
+  // Not persisted
+  Payee? payeeInstance;
   RegExp? regex;
-  late final Payee payeeInstance;
 
   Alias({
     required super.id,
     required this.pattern,
-    this.type = AliasType.none,
-    this.payeeId = -1,
-  }) {
-    payeeInstance = Data().payees.get(payeeId)!;
-  }
+    required this.flags,
+    required this.payeeId,
+  });
 
   /// Constructor from a SQLite row
   factory Alias.fromSqlite(final Json row) {
@@ -38,10 +43,14 @@ class Alias extends MoneyObject {
       // 1
       pattern: jsonGetString(row, 'Pattern'),
       // 2
-      type: jsonGetInt(row, 'Flags') == 0 ? AliasType.none : AliasType.regex,
+      flags: jsonGetInt(row, 'Flags'),
       // 3
       payeeId: jsonGetInt(row, 'Payee'),
     );
+  }
+
+  AliasType get type {
+    return flags == 0 ? AliasType.none : AliasType.regex;
   }
 
   bool isMatch(final String text) {
@@ -68,15 +77,15 @@ class Alias extends MoneyObject {
       serializeName: 'payee',
       align: TextAlign.left,
       valueFromInstance: (final Alias item) {
-        return item.payeeInstance.name;
+        return Payee.getName(item.payeeInstance);
       },
       valueForSerialization: (final Alias item) {
         return item.payeeId;
       },
       sort: (final Alias a, final Alias b, final bool sortAscending) {
         return sortByString(
-          a.payeeInstance.name,
-          b.payeeInstance.name,
+          Payee.getName(a.payeeInstance),
+          Payee.getName(b.payeeInstance),
           sortAscending,
         );
       },
@@ -130,16 +139,6 @@ class Alias extends MoneyObject {
       getFieldForType(),
     ]);
     return fields;
-  }
-
-  static getCsvHeader() {
-    final List<String> headerList = <String>[];
-    getFieldDefinitions().definitions.forEach((final FieldDefinition<Alias> field) {
-      if (field.serializeName != null) {
-        headerList.add(field.serializeName!);
-      }
-    });
-    return headerList.join(',');
   }
 }
 

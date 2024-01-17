@@ -1,12 +1,15 @@
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/models/money_objects/loans/loan.dart';
+import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
-class Loans extends MoneyObjects<Loan> {
+// Exports
+export 'package:money/models/money_objects/investments/investment.dart';
+
+class Investments extends MoneyObjects<Investment> {
   load(final List<Json> rows) async {
     clear();
     for (final Json row in rows) {
-      addEntry(Loan.fromSqlite(row));
+      addEntry(Investment.fromSqlite(row));
     }
   }
 
@@ -19,7 +22,7 @@ class Loans extends MoneyObjects<Loan> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Loan.getFieldDefinitions(),
+      Investment.getFieldDefinitions(),
       getListSortedById(),
     );
   }

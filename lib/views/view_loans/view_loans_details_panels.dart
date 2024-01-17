@@ -17,7 +17,7 @@ extension ViewLoansDetailsPanels on ViewLoansState {
 
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final Loan? loan = getFirstElement<Loan>(indices, list);
+    final LoanPayment? loan = getFirstElement<LoanPayment>(indices, list);
 
     if (loan != null) {
       final List<Transaction> list =

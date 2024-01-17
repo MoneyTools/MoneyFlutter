@@ -26,6 +26,9 @@ double jsonGetDouble(
     return defaultIfNotFound;
   }
   try {
+    if (value is int) {
+      return (value).toDouble();
+    }
     return value as double;
   } catch (_) {
     return defaultIfNotFound;
@@ -74,7 +77,7 @@ DateTime jsonGetDate(
     return defaultIfNotFound ?? DateTime.parse('19070-01-01');
   }
   try {
-    return value as DateTime;
+    return DateTime.parse(value.toString());
   } catch (_) {
     return defaultIfNotFound ?? DateTime.parse('19070-01-01');
   }

@@ -1,8 +1,8 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/models/money_objects/rentals/rent_buildings/rent_building.dart';
-import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart';
+import 'package:money/models/money_objects/rent_buildings/rent_building.dart';
+import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class RentBuildings extends MoneyObjects<RentBuilding> {
@@ -40,7 +40,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
       rental.profit = rental.revenue + rental.expense;
 
       for (final RentUnit unit in allUnits) {
-        if (unit.building == rental.id.toString()) {
+        if (unit.building == rental.id) {
           rental.units.add(unit);
         }
       }

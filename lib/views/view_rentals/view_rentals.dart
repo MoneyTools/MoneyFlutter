@@ -3,8 +3,8 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
-import 'package:money/models/money_objects/rentals/rent_buildings/rent_building.dart';
-import 'package:money/models/money_objects/rentals/rental_unit/rental_unit.dart';
+import 'package:money/models/money_objects/rent_buildings/rent_building.dart';
+import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
@@ -177,7 +177,7 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
 
   @override
   List<RentBuilding> getList() {
-    return Data().rentals.getList();
+    return Data().rentBuildings.getList();
   }
 
   @override

@@ -67,7 +67,7 @@ class Account extends MoneyObject {
   int flags = 0;
 
   // 14
-  double lastBalance = 0.00;
+  DateTime lastBalance;
 
   // 15
   int categoryIdForPrincipal = 0;
@@ -149,7 +149,7 @@ class Account extends MoneyObject {
       // 13
       flags: jsonGetInt(row, 'Flags'),
       // 14
-      lastBalance: jsonGetDouble(row, 'LastBalance'),
+      lastBalance: jsonGetDate(row, 'LastBalance'),
       // 15
       categoryIdForPrincipal: jsonGetInt(row, 'CategoryIdForPrincipal'),
       // 16

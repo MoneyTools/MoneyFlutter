@@ -12,7 +12,7 @@ import 'package:money/models/money_objects/money_objects.dart';
   5|Memo|nvarchar(255)|0||0
  */
 
-class Loan extends MoneyObject {
+class LoanPayment extends MoneyObject {
   // 0
   // int MoneyEntity.Id
 
@@ -34,7 +34,7 @@ class Loan extends MoneyObject {
   // Not persisted
   Account? accountInstance;
 
-  Loan({
+  LoanPayment({
     required super.id,
     required this.accountId,
     required this.date,
@@ -46,8 +46,8 @@ class Loan extends MoneyObject {
   }
 
   /// Constructor from a SQLite row
-  factory Loan.fromSqlite(final Json row) {
-    return Loan(
+  factory LoanPayment.fromSqlite(final Json row) {
+    return LoanPayment(
       // 0
       id: jsonGetInt(row, 'Id'),
       // 1
@@ -63,18 +63,18 @@ class Loan extends MoneyObject {
     );
   }
 
-  static FieldDefinition<Loan> getFieldForAccountId() {
-    return FieldDefinition<Loan>(
+  static FieldDefinition<LoanPayment> getFieldForAccountId() {
+    return FieldDefinition<LoanPayment>(
       type: FieldType.numeric,
       name: 'AccountID',
       serializeName: 'accountId',
-      valueFromInstance: (final Loan item) {
+      valueFromInstance: (final LoanPayment item) {
         return item.memo;
       },
-      valueForSerialization: (final Loan item) {
+      valueForSerialization: (final LoanPayment item) {
         return item.accountId;
       },
-      sort: (final Loan a, final Loan b, final bool sortAscending) {
+      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
         return sortByValue(
           a.accountId,
           b.accountId,
@@ -84,14 +84,14 @@ class Loan extends MoneyObject {
     );
   }
 
-  static FieldDefinition<Loan> getFieldForAccountName() {
-    return FieldDefinition<Loan>(
+  static FieldDefinition<LoanPayment> getFieldForAccountName() {
+    return FieldDefinition<LoanPayment>(
       type: FieldType.text,
       name: 'Name',
-      valueFromInstance: (final Loan item) {
+      valueFromInstance: (final LoanPayment item) {
         return item.accountInstance == null ? '' : item.accountInstance!.name;
       },
-      sort: (final Loan a, final Loan b, final bool sortAscending) {
+      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
         return sortByString(
           a.accountInstance == null ? '' : a.accountInstance!.name,
           b.accountInstance == null ? '' : b.accountInstance!.name,
@@ -101,18 +101,18 @@ class Loan extends MoneyObject {
     );
   }
 
-  static FieldDefinition<Loan> getFieldForDate() {
-    return FieldDefinition<Loan>(
+  static FieldDefinition<LoanPayment> getFieldForDate() {
+    return FieldDefinition<LoanPayment>(
       type: FieldType.date,
       name: 'Date',
       serializeName: 'date',
-      valueFromInstance: (final Loan item) {
+      valueFromInstance: (final LoanPayment item) {
         return item.date;
       },
-      valueForSerialization: (final Loan item) {
+      valueForSerialization: (final LoanPayment item) {
         return item.date;
       },
-      sort: (final Loan a, final Loan b, final bool sortAscending) {
+      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
         return sortByString(
           a.date,
           b.date,
@@ -122,18 +122,18 @@ class Loan extends MoneyObject {
     );
   }
 
-  static FieldDefinition<Loan> getFieldForMemo() {
-    return FieldDefinition<Loan>(
+  static FieldDefinition<LoanPayment> getFieldForMemo() {
+    return FieldDefinition<LoanPayment>(
       type: FieldType.text,
       name: 'Memo',
       serializeName: 'memo',
-      valueFromInstance: (final Loan item) {
+      valueFromInstance: (final LoanPayment item) {
         return item.memo;
       },
-      valueForSerialization: (final Loan item) {
+      valueForSerialization: (final LoanPayment item) {
         return item.memo;
       },
-      sort: (final Loan a, final Loan b, final bool sortAscending) {
+      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
         return sortByString(
           a.memo,
           b.memo,
@@ -143,28 +143,14 @@ class Loan extends MoneyObject {
     );
   }
 
-  static FieldDefinitions<Loan> getFieldDefinitions() {
-    final FieldDefinitions<Loan> fields = FieldDefinitions<Loan>(definitions: <FieldDefinition<Loan>>[
-      MoneyObject.getFieldId<Loan>(),
+  static FieldDefinitions<LoanPayment> getFieldDefinitions() {
+    final FieldDefinitions<LoanPayment> fields =
+        FieldDefinitions<LoanPayment>(definitions: <FieldDefinition<LoanPayment>>[
+      MoneyObject.getFieldId<LoanPayment>(),
       getFieldForAccountId(),
       getFieldForDate(),
       getFieldForMemo(),
     ]);
     return fields;
   }
-
-  static getCsvHeader() {
-    final List<String> headerList = <String>[];
-    getFieldDefinitions().definitions.forEach((final FieldDefinition<Loan> field) {
-      if (field.serializeName != null) {
-        headerList.add(field.serializeName!);
-      }
-    });
-    return headerList.join(',');
-  }
-}
-
-enum AliasType {
-  none, // 0
-  regex, // 1
 }

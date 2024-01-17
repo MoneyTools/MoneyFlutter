@@ -1,3 +1,7 @@
+## [1.0.21] 2024-01-17
+
+- All 16 tables now have Load & Save implementations, not all fields are implemented
+
 ## [1.0.20] 2024-01-16
 
 - Refactor saving toCSV

@@ -18,6 +18,10 @@ class Payee extends MoneyObject {
     required this.name,
   });
 
+  static getName(final Payee? payee) {
+    return payee == null ? '' : payee.name;
+  }
+
   static FieldDefinitions<Payee> getFieldDefinitions() {
     final FieldDefinitions<Payee> fields = FieldDefinitions<Payee>(definitions: <FieldDefinition<Payee>>[
       FieldDefinition<Payee>(
@@ -69,15 +73,5 @@ class Payee extends MoneyObject {
       ),
     ]);
     return fields;
-  }
-
-  static getCsvHeader() {
-    final List<String> headerList = <String>[];
-    getFieldDefinitions().definitions.forEach((final FieldDefinition<Payee> field) {
-      if (field.serializeName != null) {
-        headerList.add(field.serializeName!);
-      }
-    });
-    return headerList.join(',');
   }
 }

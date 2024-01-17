@@ -18,7 +18,7 @@ class RentUnit extends MoneyObject {
   String name;
 
   // 2
-  String building = '';
+  int building;
 
   // 3
   String renter = '';
@@ -42,7 +42,7 @@ class RentUnit extends MoneyObject {
     return RentUnit(
       id: jsonGetInt(row, 'Id'),
       name: jsonGetString(row, 'Name'),
-      building: jsonGetString(row, 'Building'),
+      building: jsonGetInt(row, 'Building', -1),
       renter: jsonGetString(row, 'Renter'),
       note: jsonGetString(row, 'Note'),
     );

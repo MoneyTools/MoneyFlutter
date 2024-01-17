@@ -90,7 +90,7 @@ class Accounts extends MoneyObjects<Account> {
         onlineAccount: -1,
         webSite: '',
         reconcileWarning: 0,
-        lastBalance: 0.0,
+        lastBalance: DateTime.now().subtract(const Duration(days: 20)),
         categoryIdForPrincipal: 0,
         categoryIdForInterest: 0,
       ));

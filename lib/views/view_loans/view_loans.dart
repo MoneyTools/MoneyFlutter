@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/loans/loan.dart';
+import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/chart.dart';
@@ -10,14 +10,14 @@ import 'package:money/widgets/table_view/table_transactions.dart';
 
 part 'view_loans_details_panels.dart';
 
-class ViewLoans extends ViewWidget<Loan> {
+class ViewLoans extends ViewWidget<LoanPayment> {
   const ViewLoans({super.key});
 
   @override
-  State<ViewWidget<Loan>> createState() => ViewLoansState();
+  State<ViewWidget<LoanPayment>> createState() => ViewLoansState();
 }
 
-class ViewLoansState extends ViewWidgetState<Loan> {
+class ViewLoansState extends ViewWidgetState<LoanPayment> {
   @override
   getClassNameSingular() {
     return 'Loan';
@@ -34,24 +34,24 @@ class ViewLoansState extends ViewWidgetState<Loan> {
   }
 
   @override
-  FieldDefinitions<Loan> getFieldDefinitionsForTable() {
-    return FieldDefinitions<Loan>(definitions: <FieldDefinition<Loan>>[
-      Loan.getFieldForAccountName(),
-      Loan.getFieldForMemo(),
+  FieldDefinitions<LoanPayment> getFieldDefinitionsForTable() {
+    return FieldDefinitions<LoanPayment>(definitions: <FieldDefinition<LoanPayment>>[
+      LoanPayment.getFieldForAccountName(),
+      LoanPayment.getFieldForMemo(),
     ]);
   }
 
   @override
-  FieldDefinitions<Loan> getFieldDefinitionsForDetailsPanel() {
-    final FieldDefinitions<Loan> fields =
-        FieldDefinitions<Loan>(definitions: <FieldDefinition<Loan>>[Loan.getFieldForMemo()]);
+  FieldDefinitions<LoanPayment> getFieldDefinitionsForDetailsPanel() {
+    final FieldDefinitions<LoanPayment> fields =
+        FieldDefinitions<LoanPayment>(definitions: <FieldDefinition<LoanPayment>>[LoanPayment.getFieldForMemo()]);
 
     return fields;
   }
 
   @override
-  List<Loan> getList() {
-    return Data().loans.getList();
+  List<LoanPayment> getList() {
+    return Data().loanPayments.getList();
   }
 
   @override

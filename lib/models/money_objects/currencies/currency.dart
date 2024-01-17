@@ -126,7 +126,6 @@ class Currency extends MoneyObject {
           return sortByString(a.cultureCode, b.cultureCode, sortAscending);
         },
       ),
-
     ]);
     return fields;
   }
@@ -147,15 +146,5 @@ class Currency extends MoneyObject {
         return sortByString(a.name, b.name, sortAscending);
       },
     );
-  }
-
-  static getCsvHeader() {
-    final List<String> headerList = <String>[];
-    getFieldDefinitions().definitions.forEach((final FieldDefinition<Currency> field) {
-      if (field.serializeName != null) {
-        headerList.add(field.serializeName!);
-      }
-    });
-    return headerList.join(',');
   }
 }
