@@ -171,15 +171,3 @@ bool isBetween(final num value, final num min, final num max) {
 bool isBetweenOrEqual(final num value, final num min, final num max) {
   return value >= min && value <= max;
 }
-
-/// convert a hex string value into a Flutter color
-Color getColorFromHex(String hexColor) {
-  hexColor = hexColor.replaceAll("#", "");
-  if (hexColor.length == 6) {
-    hexColor = 'FF$hexColor';
-  }
-  if (hexColor.length == 8) {
-    return Color(int.parse("0x$hexColor"));
-  }
-  return Colors.black;
-}

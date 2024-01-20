@@ -321,6 +321,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 ),
               ),
             ),
+
+            //
+            // Right side Action Panel
+            //
             Column(
               children: <Widget>[
                 IconButton(

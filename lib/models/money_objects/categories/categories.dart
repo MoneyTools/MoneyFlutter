@@ -43,10 +43,10 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category getTopAncestor(final Category category) {
-    if (category.parentId == -1) {
+    if (category.parentId.value == -1) {
       return category; // this is the top
     }
-    final Category? parent = get(category.parentId);
+    final Category? parent = get(category.parentId.value);
     if (parent == null) {
       return category;
     }
@@ -75,7 +75,7 @@ class Categories extends MoneyObjects<Category> {
   List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
     for (final Category item in getList()) {
-      if (item.parentId == parentId) {
+      if (item.parentId.value == parentId) {
         list.add(item);
       }
     }
@@ -90,8 +90,10 @@ class Categories extends MoneyObjects<Category> {
 
     if (category == null) {
       category = Category(
+        id: Data().categories.length,
         name: name,
-      )..type.value = type;
+        type: type,
+      );
 
       addEntry(category);
     }
@@ -201,16 +203,16 @@ class Categories extends MoneyObjects<Category> {
   @override
   loadDemoData() {
     clear();
-    addEntry(Category(name: 'Paychecks', description: '', type: CategoryType.income)..id.value = 0);
-    addEntry(Category(name: 'Investment', description: '', type: CategoryType.investment)..id.value = 1);
-    addEntry(Category(name: 'Interests', description: '', type: CategoryType.income)..id.value = 2);
-    addEntry(Category(name: 'Rental', description: '', type: CategoryType.income)..id.value = 3);
-    addEntry(Category(name: 'Lottery', description: '', type: CategoryType.none)..id.value = 4);
-    addEntry(Category(name: 'Mortgage', description: '', type: CategoryType.expense)..id.value = 5);
-    addEntry(Category(name: 'Saving', description: '', type: CategoryType.income)..id.value = 6);
-    addEntry(Category(name: 'Bills', description: '', type: CategoryType.expense)..id.value = 7);
-    addEntry(Category(name: 'Taxes', description: '', type: CategoryType.expense)..id.value = 8);
-    addEntry(Category(name: 'School', description: '', type: CategoryType.expense)..id.value = 9);
+    addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
+    addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment));
+    addEntry(Category(id: 2, name: 'Interests', description: '', type: CategoryType.income));
+    addEntry(Category(id: 3, name: 'Rental', description: '', type: CategoryType.income));
+    addEntry(Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none));
+    addEntry(Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 6, name: 'Saving', description: '', type: CategoryType.income));
+    addEntry(Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
   }
 
   @override
