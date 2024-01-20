@@ -117,7 +117,7 @@ class Transaction extends MoneyObject<Transaction> {
 
   // Amount
   // 14|Amount|money|1||0
-  FieldDouble<Transaction> amount = FieldDouble<Transaction>(
+  FieldAmount<Transaction> amount = FieldAmount<Transaction>(
     importance: 98,
     name: 'Amount',
     serializeName: 'Amount',
@@ -132,7 +132,7 @@ class Transaction extends MoneyObject<Transaction> {
   // 17|MergeDate|datetime|0||0
 
   // Balance
-  FieldDouble<Transaction> balance = FieldDouble<Transaction>(
+  FieldAmount<Transaction> balance = FieldAmount<Transaction>(
     importance: 99,
     name: 'Balance',
     useAsColumn: true,
