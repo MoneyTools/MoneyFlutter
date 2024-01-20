@@ -18,7 +18,7 @@ class Account extends MoneyObject<Account> {
 
   // Id
   // 0|Id|INT|0||1
-  Declare<Account, int> id = Declare<Account, int>(
+  Field<Account, int> id = Field<Account, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
@@ -29,7 +29,7 @@ class Account extends MoneyObject<Account> {
 
   // Account ID
   // 1|AccountId|nchar(20)|0||0
-  Declare<Account, String> accountId = Declare<Account, String>(
+  Field<Account, String> accountId = Field<Account, String>(
     importance: 90,
     name: 'AccountId',
     serializeName: 'AccountId',
@@ -40,7 +40,7 @@ class Account extends MoneyObject<Account> {
 
   // OFX Account Id
   // 2|OfxAccountId|nvarchar(50)|0||0
-  Declare<Account, String> ofxAccountId = Declare<Account, String>(
+  Field<Account, String> ofxAccountId = Field<Account, String>(
     importance: 1,
     name: 'OfxAccountId',
     serializeName: 'OfxAccountId',
@@ -52,7 +52,7 @@ class Account extends MoneyObject<Account> {
 
   // Name
   // 3|Name|nvarchar(80)|1||0
-  Declare<Account, String> name = Declare<Account, String>(
+  Field<Account, String> name = Field<Account, String>(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
@@ -63,7 +63,7 @@ class Account extends MoneyObject<Account> {
 
   // Description
   // 4|Description|nvarchar(255)|0||0
-  Declare<Account, String> description = Declare<Account, String>(
+  Field<Account, String> description = Field<Account, String>(
     importance: 3,
     name: 'Description',
     serializeName: 'Description',
@@ -74,7 +74,7 @@ class Account extends MoneyObject<Account> {
 
   // Type of account
   // 5|Type|INT|1||0
-  Declare<Account, AccountType> type = Declare<Account, AccountType>(
+  Field<Account, AccountType> type = Field<Account, AccountType>(
     importance: 2,
     type: FieldType.text,
     align: TextAlign.center,
@@ -86,7 +86,7 @@ class Account extends MoneyObject<Account> {
   );
 
   // 6
-  Declare<Account, double> openingBalance = Declare<Account, double>(
+  Field<Account, double> openingBalance = Field<Account, double>(
     name: 'Opening Balance',
     serializeName: 'OpeningBalance',
     defaultValue: 0,
@@ -96,7 +96,7 @@ class Account extends MoneyObject<Account> {
   );
 
   // 7
-  Declare<Account, String> currency = Declare<Account, String>(
+  Field<Account, String> currency = Field<Account, String>(
     importance: 4,
     name: 'Currency',
     serializeName: 'Currency',
@@ -110,7 +110,7 @@ class Account extends MoneyObject<Account> {
   int onlineAccount = -1;
 
   // 9
-  Declare<Account, String> webSite = Declare<Account, String>(
+  Field<Account, String> webSite = Field<Account, String>(
     importance: 4,
     name: 'WebSite',
     serializeName: 'WebSite',
@@ -125,7 +125,7 @@ class Account extends MoneyObject<Account> {
 
   /// lastSync
   /// 11|LastSync|datetime|0||0
-  Declare<Account, DateTime> lastSync = Declare<Account, DateTime>(
+  Field<Account, DateTime> lastSync = Field<Account, DateTime>(
     importance: 90,
     type: FieldType.date,
     serializeName: 'Date',
@@ -143,7 +143,7 @@ class Account extends MoneyObject<Account> {
 
   /// Last Balance date
   /// 14|LastBalance|datetime|0||0
-  Declare<Account, DateTime> lastBalance = Declare<Account, DateTime>(
+  Field<Account, DateTime> lastBalance = Field<Account, DateTime>(
     importance: 98,
     serializeName: 'LastBalance',
     defaultValue: DateTime.parse('1970-01-01'),
@@ -154,7 +154,7 @@ class Account extends MoneyObject<Account> {
 
   /// categoryIdForPrincipal
   /// 15 | CategoryIdForPrincipal|INT|0||0
-  Declare<Account, int> categoryIdForPrincipal = Declare<Account, int>(
+  Field<Account, int> categoryIdForPrincipal = Field<Account, int>(
     importance: 98,
     serializeName: 'CategoryIdForPrincipal',
     defaultValue: 0,
@@ -165,7 +165,7 @@ class Account extends MoneyObject<Account> {
 
   /// categoryIdForInterest
   /// 16|CategoryIdForInterest|INT|0||0
-  Declare<Account, int> categoryIdForInterest = Declare<Account, int>(
+  Field<Account, int> categoryIdForInterest = Field<Account, int>(
     importance: -1,
     serializeName: 'CategoryIdForInterest',
     defaultValue: 0,
@@ -178,7 +178,7 @@ class Account extends MoneyObject<Account> {
   // Properties that are not persisted
 
   /// Count
-  Declare<Account, int> count = Declare<Account, int>(
+  Field<Account, int> count = Field<Account, int>(
     importance: 98,
     type: FieldType.numeric,
     align: TextAlign.right,
@@ -190,7 +190,7 @@ class Account extends MoneyObject<Account> {
   );
 
   /// Balance
-  Declare<Account, double> balance = Declare<Account, double>(
+  Field<Account, double> balance = Field<Account, double>(
     importance: 99,
     type: FieldType.amount,
     align: TextAlign.right,

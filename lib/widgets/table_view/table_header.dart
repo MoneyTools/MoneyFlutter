@@ -8,11 +8,11 @@ enum SortIndicator { none, sortAscending, sortDescending }
 
 /// A Row for a Table view
 class MyTableHeader<T> extends StatelessWidget {
-  final FieldDefinitions<T> columns;
+  final Fields<T> columns;
   final int sortByColumn;
   final bool sortAscending;
   final Function onTap;
-  final Function(Declare<T, dynamic>)? onLongPress;
+  final Function(Field<T, dynamic>)? onLongPress;
 
   const MyTableHeader({
     super.key,
@@ -40,7 +40,7 @@ class MyTableHeader<T> extends StatelessWidget {
             },
             // Long Press
             () {
-              final Declare<T, dynamic> column = columns.definitions[i];
+              final Field<T, dynamic> column = columns.definitions[i];
               onLongPress?.call(column);
             },
           ),

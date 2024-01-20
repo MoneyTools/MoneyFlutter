@@ -13,7 +13,7 @@ class TransactionExtra extends MoneyObject<TransactionExtra> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<TransactionExtra, int> id = Declare<TransactionExtra, int>(
+  Field<TransactionExtra, int> id = Field<TransactionExtra, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,

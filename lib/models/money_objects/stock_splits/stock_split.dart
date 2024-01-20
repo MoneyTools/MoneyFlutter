@@ -16,7 +16,7 @@ class StockSplit extends MoneyObject<StockSplit> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<StockSplit, int> id = Declare<StockSplit, int>(
+  Field<StockSplit, int> id = Field<StockSplit, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,

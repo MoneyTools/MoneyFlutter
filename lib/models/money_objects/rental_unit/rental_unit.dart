@@ -15,7 +15,7 @@ class RentUnit extends MoneyObject<RentUnit> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<RentUnit, int> id = Declare<RentUnit, int>(
+  Field<RentUnit, int> id = Field<RentUnit, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,

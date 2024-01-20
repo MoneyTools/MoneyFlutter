@@ -16,7 +16,7 @@ class Currency extends MoneyObject<Currency> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<Currency, int> id = Declare<Currency, int>(
+  Field<Currency, int> id = Field<Currency, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
@@ -37,7 +37,7 @@ class Currency extends MoneyObject<Currency> {
   final double lastRatio;
 
   // 5
-  Declare<Currency, String> cultureCode = Declare<Currency, String>(
+  Field<Currency, String> cultureCode = Field<Currency, String>(
     serializeName: 'CultureCode',
     defaultValue: '',
   );

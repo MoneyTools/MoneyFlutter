@@ -22,7 +22,7 @@ class Investment extends MoneyObject<Investment> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<Investment, int> id = Declare<Investment, int>(
+  Field<Investment, int> id = Field<Investment, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,

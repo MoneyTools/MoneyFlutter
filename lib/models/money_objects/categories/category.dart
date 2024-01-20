@@ -18,7 +18,7 @@ class Category extends MoneyObject<Category> {
 
   /// Id
   /// 0|Id|INT|0||1
-  Declare<Category, int> id = Declare<Category, int>(
+  Field<Category, int> id = Field<Category, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
@@ -31,7 +31,7 @@ class Category extends MoneyObject<Category> {
   int parentId = -1;
 
   // 2
-  Declare<Category, String> name = Declare<Category, String>(
+  Field<Category, String> name = Field<Category, String>(
     importance: 0,
     type: FieldType.text,
     name: 'Name',
@@ -43,7 +43,7 @@ class Category extends MoneyObject<Category> {
 
   /// Description
   /// 3|Description|nvarchar(255)|0||0
-  Declare<Category, String> description = Declare<Category, String>(
+  Field<Category, String> description = Field<Category, String>(
     importance: 1,
     type: FieldType.text,
     name: 'Description',
@@ -55,7 +55,7 @@ class Category extends MoneyObject<Category> {
 
   /// Type
   /// 4|Type|INT|1||0
-  Declare<Category, CategoryType> type = Declare<Category, CategoryType>(
+  Field<Category, CategoryType> type = Field<Category, CategoryType>(
     importance: 3,
     type: FieldType.text,
     align: TextAlign.center,
@@ -67,7 +67,7 @@ class Category extends MoneyObject<Category> {
 
   /// Color
   /// 5|Color|nchar(10)|0||0
-  Declare<Category, String> color = Declare<Category, String>(
+  Field<Category, String> color = Field<Category, String>(
     importance: 4,
     type: FieldType.widget,
     serializeName: 'Color',
@@ -86,7 +86,7 @@ class Category extends MoneyObject<Category> {
 
   /// Budget Balance
   /// 7|Balance|money|0||0
-  Declare<Category, double> budgetBalance = Declare<Category, double>(
+  Field<Category, double> budgetBalance = Field<Category, double>(
     importance: 99,
     type: FieldType.amount,
     align: TextAlign.right,
@@ -107,7 +107,7 @@ class Category extends MoneyObject<Category> {
   // These properties are not persisted
 
   /// Count
-  Declare<Category, int> count = Declare<Category, int>(
+  Field<Category, int> count = Field<Category, int>(
     importance: 98,
     type: FieldType.numeric,
     align: TextAlign.right,
@@ -119,7 +119,7 @@ class Category extends MoneyObject<Category> {
   );
 
   /// Running Balance
-  Declare<Category, double> runningBalance = Declare<Category, double>(
+  Field<Category, double> runningBalance = Field<Category, double>(
     importance: 99,
     type: FieldType.amount,
     align: TextAlign.right,

@@ -11,7 +11,7 @@ import 'package:money/models/money_objects/money_objects.dart';
  */
 class AccountAlias extends MoneyObject<AccountAlias> {
   // 0
-  Declare<AccountAlias, int> id = Declare<AccountAlias, int>(
+  Field<AccountAlias, int> id = Field<AccountAlias, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
@@ -20,21 +20,21 @@ class AccountAlias extends MoneyObject<AccountAlias> {
   );
 
   // 1
-  Declare<AccountAlias, String> pattern = Declare<AccountAlias, String>(
+  Field<AccountAlias, String> pattern = Field<AccountAlias, String>(
     importance: 1,
     serializeName: 'Pattern',
     defaultValue: '',
   );
 
   // 2
-  Declare<AccountAlias, int> flags = Declare<AccountAlias, int>(
+  Field<AccountAlias, int> flags = Field<AccountAlias, int>(
     importance: 2,
     serializeName: 'Flags',
     defaultValue: 0,
   );
 
   // 3
-  Declare<AccountAlias, String> accountId = Declare<AccountAlias, String>(
+  Field<AccountAlias, String> accountId = Field<AccountAlias, String>(
     importance: 3,
     serializeName: 'AccountId',
     defaultValue: '',

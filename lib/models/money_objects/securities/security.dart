@@ -20,7 +20,7 @@ class Security extends MoneyObject<Security> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<Security, int> id = Declare<Security, int>(
+  Field<Security, int> id = Field<Security, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,

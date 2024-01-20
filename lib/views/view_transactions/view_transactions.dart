@@ -80,7 +80,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   void onDelete(final BuildContext context, final int index) {
-    final List<String> itemToDelete = getFieldDefinitionsForTable().getListOfFieldValueAsString(list[index]);
+    final List<String> itemToDelete = getFieldsForTable().getListOfFieldValueAsString(list[index]);
 
     showDialog(
       context: context,
@@ -142,7 +142,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
       return true;
     }
 
-    final List<String> fieldInstances = getFieldDefinitionsForTable().getListOfFieldValueAsString(transaction);
+    final List<String> fieldInstances = getFieldsForTable().getListOfFieldValueAsString(transaction);
     // debugLog(fieldInstances.join('|'));
 
     for (final String fieldInstance in fieldInstances) {

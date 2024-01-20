@@ -30,7 +30,7 @@ class OnlineAccount extends MoneyObject<OnlineAccount> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<OnlineAccount, int> id = Declare<OnlineAccount, int>(
+  Field<OnlineAccount, int> id = Field<OnlineAccount, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,

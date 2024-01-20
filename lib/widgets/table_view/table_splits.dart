@@ -23,7 +23,7 @@ class TableSplits extends StatefulWidget {
 }
 
 class _TableSplitsState extends State<TableSplits> {
-  final FieldDefinitions<Split> _tableFields = FieldDefinitions<Split>(definitions: <Declare<Split, dynamic>>[]);
+  final Fields<Split> _tableFields = Fields<Split>(definitions: <Field<Split, dynamic>>[]);
   late final List<Split> rows;
   late int _sortBy = widget.defaultSortingField;
   bool _sortAscending = true;

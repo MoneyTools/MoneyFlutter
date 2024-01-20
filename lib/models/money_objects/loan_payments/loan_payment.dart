@@ -9,13 +9,13 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   /// ID
   /// 0|Id|INT|1||0
-  DeclareId<LoanPayment> id = DeclareId<LoanPayment>(
+  FieldId<LoanPayment> id = FieldId<LoanPayment>(
     importance: 0,
     valueForSerialization: (final LoanPayment instance) => instance.id.value,
   );
 
   /// 1|AccountId|INT|1||0
-  Declare<LoanPayment, int> accountId = Declare<LoanPayment, int>(
+  Field<LoanPayment, int> accountId = Field<LoanPayment, int>(
     importance: 1,
     name: 'AccountId',
     serializeName: 'AccountId',
@@ -26,7 +26,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   /// Date
   /// 2|Date|datetime|1||0
-  Declare<LoanPayment, DateTime> date = Declare<LoanPayment, DateTime>(
+  Field<LoanPayment, DateTime> date = Field<LoanPayment, DateTime>(
     importance: 2,
     type: FieldType.date,
     serializeName: 'Date',
@@ -38,7 +38,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   /// 3
   /// 3|Principal|money|0||0
-  DeclareDouble<LoanPayment> principal = DeclareDouble<LoanPayment>(
+  FieldDouble<LoanPayment> principal = FieldDouble<LoanPayment>(
     importance: 3,
     name: 'Principal',
     serializeName: 'Principal',
@@ -48,7 +48,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   /// Interest
   /// 4|Interest|money|0||0
-  DeclareDouble<LoanPayment> interest = DeclareDouble<LoanPayment>(
+  FieldDouble<LoanPayment> interest = FieldDouble<LoanPayment>(
     importance: 4,
     name: 'Interest',
     serializeName: 'Interest',
@@ -58,7 +58,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   // 5
   // 5|Memo|nvarchar(255)|0||0
-  Declare<LoanPayment, String> memo = Declare<LoanPayment, String>(
+  Field<LoanPayment, String> memo = Field<LoanPayment, String>(
     importance: 99,
     type: FieldType.text,
     name: 'Memo',

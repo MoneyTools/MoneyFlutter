@@ -22,7 +22,7 @@ class Transaction extends MoneyObject<Transaction> {
   int get uniqueId => id.value;
 
   // SQLite  0|Id|bigint|0||1
-  Declare<Transaction, int> id = Declare<Transaction, int>(
+  Field<Transaction, int> id = Field<Transaction, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
@@ -32,7 +32,7 @@ class Transaction extends MoneyObject<Transaction> {
   );
 
   // SQLite  1|Account|INT|1||0
-  Declare<Transaction, int> accountId = Declare<Transaction, int>(
+  Field<Transaction, int> accountId = Field<Transaction, int>(
     importance: 1,
     name: 'Account',
     serializeName: 'AccountId',
@@ -45,7 +45,7 @@ class Transaction extends MoneyObject<Transaction> {
 
   // Date
   // SQLite 2|Date|datetime|1||0
-  Declare<Transaction, DateTime> dateTime = Declare<Transaction, DateTime>(
+  Field<Transaction, DateTime> dateTime = Field<Transaction, DateTime>(
     importance: 2,
     type: FieldType.text,
     align: TextAlign.center,
@@ -62,7 +62,7 @@ class Transaction extends MoneyObject<Transaction> {
 
   // Payee Id
   // SQLite 4|Payee|INT|0||0
-  Declare<Transaction, int> payeeId = Declare<Transaction, int>(
+  Field<Transaction, int> payeeId = Field<Transaction, int>(
     importance: 1,
     type: FieldType.text,
     serializeName: 'Payee',
@@ -78,7 +78,7 @@ class Transaction extends MoneyObject<Transaction> {
 
   // Category Id
   // SQLite 6|Category|INT|0||0
-  Declare<Transaction, int> categoryId = Declare<Transaction, int>(
+  Field<Transaction, int> categoryId = Field<Transaction, int>(
     importance: 1,
     type: FieldType.text,
     name: 'Category',
@@ -92,7 +92,7 @@ class Transaction extends MoneyObject<Transaction> {
 
   // Memo
   // 7|Memo|nvarchar(255)|0||0
-  Declare<Transaction, String> memo = Declare<Transaction, String>(
+  Field<Transaction, String> memo = Field<Transaction, String>(
     importance: 80,
     type: FieldType.text,
     name: 'Memo',
@@ -117,7 +117,7 @@ class Transaction extends MoneyObject<Transaction> {
 
   // Amount
   // 14|Amount|money|1||0
-  DeclareDouble<Transaction> amount = DeclareDouble<Transaction>(
+  FieldDouble<Transaction> amount = FieldDouble<Transaction>(
     importance: 98,
     name: 'Amount',
     serializeName: 'Amount',
@@ -132,7 +132,7 @@ class Transaction extends MoneyObject<Transaction> {
   // 17|MergeDate|datetime|0||0
 
   // Balance
-  DeclareDouble<Transaction> balance = DeclareDouble<Transaction>(
+  FieldDouble<Transaction> balance = FieldDouble<Transaction>(
     importance: 99,
     name: 'Balance',
     useAsColumn: true,

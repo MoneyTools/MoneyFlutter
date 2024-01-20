@@ -25,7 +25,7 @@ class Split extends MoneyObject<Split> {
   int transactionId;
 
   // 1
-  Declare<Split, int> id = Declare<Split, int>(
+  Field<Split, int> id = Field<Split, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,

@@ -11,7 +11,7 @@ class Payee extends MoneyObject<Payee> {
   int get uniqueId => id.value;
 
   // 0
-  Declare<Payee, int> id = Declare<Payee, int>(
+  Field<Payee, int> id = Field<Payee, int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
@@ -20,7 +20,7 @@ class Payee extends MoneyObject<Payee> {
   );
 
   // 1
-  Declare<Payee, String> name = Declare<Payee, String>(
+  Field<Payee, String> name = Field<Payee, String>(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
@@ -29,7 +29,7 @@ class Payee extends MoneyObject<Payee> {
     valueForSerialization: (final Payee instance) => instance.name.value,
   );
 
-  Declare<Payee, int> count = DeclareNoSerialized<Payee, int>(
+  Field<Payee, int> count = DeclareNoSerialized<Payee, int>(
     type: FieldType.numeric,
     name: 'Count',
     defaultValue: 0,
@@ -38,7 +38,7 @@ class Payee extends MoneyObject<Payee> {
     valueForSerialization: (final Payee instance) => instance.count.value,
   );
 
-  Declare<Payee, double> balance = DeclareNoSerialized<Payee, double>(
+  Field<Payee, double> balance = DeclareNoSerialized<Payee, double>(
     type: FieldType.amount,
     name: 'Balance',
     defaultValue: 0,

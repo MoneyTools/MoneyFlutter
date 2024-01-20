@@ -9,14 +9,14 @@ class Alias extends MoneyObject<Alias> {
 
   /// ID
   /// 0    Id       INT            0                 1
-  DeclareId<Alias> id = DeclareId<Alias>(
+  FieldId<Alias> id = FieldId<Alias>(
     importance: 0,
     valueForSerialization: (final Alias instance) => instance.id.value,
   );
 
   /// Pattern
   /// 1    Pattern  nvarchar(255)  1                 0
-  Declare<Alias, String> pattern = Declare<Alias, String>(
+  Field<Alias, String> pattern = Field<Alias, String>(
     type: FieldType.text,
     importance: 2,
     name: 'Pattern',
@@ -27,7 +27,7 @@ class Alias extends MoneyObject<Alias> {
   );
 
   /// 2    Flags    INT            1                 0
-  Declare<Alias, int> flags = Declare<Alias, int>(
+  Field<Alias, int> flags = Field<Alias, int>(
     type: FieldType.text,
     importance: 3,
     name: 'Flag',
@@ -39,7 +39,7 @@ class Alias extends MoneyObject<Alias> {
 
   /// Payee
   /// 3 Payee INT 1 0
-  Declare<Alias, int> payeeId = Declare<Alias, int>(
+  Field<Alias, int> payeeId = Field<Alias, int>(
     type: FieldType.text,
     importance: 1,
     name: 'Payee',

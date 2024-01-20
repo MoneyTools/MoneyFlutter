@@ -9,14 +9,14 @@ class RentBuilding extends MoneyObject<RentBuilding> {
   int get uniqueId => id.value;
 
   // 0    Id                      INT            0                    1
-  DeclareId<RentBuilding> id = DeclareId<RentBuilding>(
+  FieldId<RentBuilding> id = FieldId<RentBuilding>(
     importance: 0,
     valueFromInstance: (final RentBuilding instance) => instance.id.value,
     valueForSerialization: (final RentBuilding instance) => instance.id.value,
   );
 
   // 1    Name                    nvarchar(255)  1                    0
-  DeclareString<RentBuilding> name = DeclareString<RentBuilding>(
+  FieldString<RentBuilding> name = FieldString<RentBuilding>(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
@@ -25,7 +25,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
   );
 
   // 2    Address                 nvarchar(255)  0                    0
-  DeclareString<RentBuilding> address = DeclareString<RentBuilding>(
+  FieldString<RentBuilding> address = FieldString<RentBuilding>(
     importance: 2,
     name: 'Address',
     serializeName: 'Address',
@@ -51,21 +51,21 @@ class RentBuilding extends MoneyObject<RentBuilding> {
   int count = 0;
 
   /// Revenue
-  DeclareDouble<RentBuilding> revenue = DeclareDouble<RentBuilding>(
+  FieldDouble<RentBuilding> revenue = FieldDouble<RentBuilding>(
     importance: 20,
     name: 'Revenue',
     valueFromInstance: (final RentBuilding instance) => instance.revenue.value,
   );
 
   /// Expenses
-  DeclareDouble<RentBuilding> expense = DeclareDouble<RentBuilding>(
+  FieldDouble<RentBuilding> expense = FieldDouble<RentBuilding>(
     importance: 21,
     name: 'Expenses',
     valueFromInstance: (final RentBuilding instance) => instance.expense.value,
   );
 
   /// Profit
-  DeclareDouble<RentBuilding> profit = DeclareDouble<RentBuilding>(
+  FieldDouble<RentBuilding> profit = FieldDouble<RentBuilding>(
     importance: 22,
     name: 'Profit',
     valueFromInstance: (final RentBuilding instance) => instance.profit.value,

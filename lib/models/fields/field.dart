@@ -1,11 +1,10 @@
 import 'package:flutter/widgets.dart';
 import 'package:money/helpers/string_helper.dart';
-
-Map<String, Declare<dynamic, dynamic>> classToFieldMapping = <String, Declare<dynamic, dynamic>>{};
+import 'package:money/models/data_io/data.dart';
 
 dynamic defaultCallbackValue(final dynamic instance) => '';
 
-class Declare<C, T> {
+class Field<C, T> {
   late T value;
   String name;
   String serializeName;
@@ -24,7 +23,7 @@ class Declare<C, T> {
   //   _value = newValue;
   // };
 
-  Declare({
+  Field({
     this.type = FieldType.text,
     this.align = TextAlign.left,
     this.name = '',
@@ -37,8 +36,8 @@ class Declare<C, T> {
     this.useAsDetailPanels = true,
     this.sort,
   }) {
-    final String key = '$C.${getBestDescribingNameForDeclaration()}';
-    classToFieldMapping[key] = this;
+    final String key = '$C.${getBestFieldDescribingName()}';
+    Data().mapClassToFields[key] = this;
 
     value = defaultValue;
     if (name.isEmpty) {
@@ -66,7 +65,7 @@ class Declare<C, T> {
     }
   }
 
-  String getBestDescribingNameForDeclaration() {
+  String getBestFieldDescribingName() {
     if (serializeName.isNotEmpty) {
       return serializeName;
     }
@@ -74,10 +73,6 @@ class Declare<C, T> {
       return name;
     }
     return T.toString();
-  }
-
-  factory Declare.id() {
-    return Declare<C, T>(serializeName: 'Id', defaultValue: -1 as T);
   }
 
   String getString(final dynamic value) {
@@ -117,21 +112,8 @@ class Declare<C, T> {
   }
 }
 
-class DeclareId<C> extends Declare<C, int> {
-  DeclareId({
-    super.importance,
-    super.valueFromInstance,
-    super.valueForSerialization,
-  }) : super(
-          serializeName: 'Id',
-          useAsColumn: false,
-          useAsDetailPanels: false,
-          defaultValue: -1,
-        );
-}
-
-class DeclareDouble<C> extends Declare<C, double> {
-  DeclareDouble({
+class FieldDouble<C> extends Field<C, double> {
+  FieldDouble({
     super.importance,
     super.name,
     super.serializeName,
@@ -147,8 +129,8 @@ class DeclareDouble<C> extends Declare<C, double> {
         );
 }
 
-class DeclareString<C> extends Declare<C, String> {
-  DeclareString({
+class FieldString<C> extends Field<C, String> {
+  FieldString({
     super.importance,
     super.name,
     super.serializeName,
@@ -163,7 +145,7 @@ class DeclareString<C> extends Declare<C, String> {
         );
 }
 
-class DeclareNoSerialized<C, T> extends Declare<C, T> {
+class DeclareNoSerialized<C, T> extends Field<C, T> {
   DeclareNoSerialized({
     required super.defaultValue,
     super.type,
@@ -174,16 +156,29 @@ class DeclareNoSerialized<C, T> extends Declare<C, T> {
   }) : super(serializeName: '');
 }
 
-List<Declare<C, dynamic>> getFieldsForClass<C>() {
-  final List<Declare<C, dynamic>> list = <Declare<C, dynamic>>[];
+class FieldId<C> extends Field<C, int> {
+  FieldId({
+    super.importance,
+    super.valueFromInstance,
+    super.valueForSerialization,
+  }) : super(
+          serializeName: 'Id',
+          useAsColumn: false,
+          useAsDetailPanels: false,
+          defaultValue: -1,
+        );
+}
 
-  for (final MapEntry<String, Declare<dynamic, dynamic>> entry in classToFieldMapping.entries) {
+List<Field<C, dynamic>> getFieldsForClass<C>() {
+  final List<Field<C, dynamic>> list = <Field<C, dynamic>>[];
+
+  for (final MapEntry<String, Field<dynamic, dynamic>> entry in Data().mapClassToFields.entries) {
     if (entry.key.startsWith('$C.')) {
-      list.add(entry.value as Declare<C, dynamic>);
+      list.add(entry.value as Field<C, dynamic>);
     }
   }
 
-  list.sort((final Declare<dynamic, dynamic> a, final Declare<dynamic, dynamic> b) {
+  list.sort((final Field<dynamic, dynamic> a, final Field<dynamic, dynamic> b) {
     int result = 0;
 
     if (a.importance == -1 && b.importance >= 0) {
@@ -206,41 +201,13 @@ List<Declare<C, dynamic>> getFieldsForClass<C>() {
   return list;
 }
 
-Declare<C, dynamic>? getFieldByNameForClass<C>(final String fieldName) {
-  for (final MapEntry<Object, Object> entry in classToFieldMapping.entries) {
+Field<C, dynamic>? getFieldByNameForClass<C>(final String fieldName) {
+  for (final MapEntry<Object, Object> entry in Data().mapClassToFields.entries) {
     if (entry.key == '$C.$fieldName') {
-      return entry.value as Declare<C, dynamic>;
+      return entry.value as Field<C, dynamic>;
     }
   }
   return null;
-}
-
-class FieldDefinitionX<T> {
-  String name;
-  String? serializeName;
-  final FieldType type;
-  final TextAlign align;
-  final int Function(T, T, bool)? sort;
-  final bool useAsColumn;
-  final bool readOnly;
-  final bool isMultiLine;
-  dynamic Function(T)? valueFromInstance;
-  dynamic Function(T)? valueForSerialization;
-
-  FieldDefinitionX({
-    required this.name,
-    this.valueFromInstance,
-    this.serializeName,
-    this.type = FieldType.text,
-    this.align = TextAlign.left,
-    this.valueForSerialization,
-    this.sort,
-    this.useAsColumn = true,
-    this.readOnly = true,
-    this.isMultiLine = false,
-  }) {
-    valueForSerialization ??= (final T t) => this.valueFromInstance!(t);
-  }
 }
 
 Widget buildFieldWidgetForText({

@@ -25,12 +25,12 @@ class TableTransactions extends StatefulWidget {
 class _TableTransactionsState extends State<TableTransactions> {
   late int sortBy = widget.defaultSortingField;
   bool sortAscending = true;
-  late final FieldDefinitions<Transaction> columns;
+  late final Fields<Transaction> columns;
 
   @override
   void initState() {
     super.initState();
-    columns = getFieldDefinitionsForTable();
+    columns = getFieldsForTable();
     onSort();
   }
 
@@ -69,7 +69,7 @@ class _TableTransactionsState extends State<TableTransactions> {
 
   void onSort() {
     if (columns.definitions.isNotEmpty) {
-      final Declare<Transaction, dynamic> fieldDefinition = columns.definitions[sortBy];
+      final Field<Transaction, dynamic> fieldDefinition = columns.definitions[sortBy];
       if (fieldDefinition.sort != null) {
         widget.getList().sort(
           (final Transaction a, final Transaction b) {
@@ -87,17 +87,17 @@ class _TableTransactionsState extends State<TableTransactions> {
     return SortIndicator.none;
   }
 
-  FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
-    final List<Declare<Transaction, dynamic>> listOfFields = <Declare<Transaction, dynamic>>[];
+  Fields<Transaction> getFieldsForTable() {
+    final List<Field<Transaction, dynamic>> listOfFields = <Field<Transaction, dynamic>>[];
 
     for (String columnId in widget.columnsToInclude) {
-      final Declare<Transaction, dynamic>? declared = getFieldByNameForClass<Transaction>(columnId);
+      final Field<Transaction, dynamic>? declared = getFieldByNameForClass<Transaction>(columnId);
       if (declared != null) {
         listOfFields.add(declared);
       }
     }
 
-    return FieldDefinitions<Transaction>(definitions: listOfFields);
+    return Fields<Transaction>(definitions: listOfFields);
   }
 }
 
