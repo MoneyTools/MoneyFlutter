@@ -20,3 +20,24 @@ TextTheme getTextTheme(final BuildContext context) {
 ColorScheme getColorTheme(final BuildContext context) {
   return getTheme(context).colorScheme;
 }
+
+/// convert a hex string value into a Flutter color
+Color getColorFromString(final String hexColor) {
+  String newHexColor = hexColor.trim().replaceAll("#", "");
+  if (newHexColor.length == 6) {
+    newHexColor = 'FF$newHexColor';
+  }
+  if (newHexColor.length == 8) {
+    return Color(int.parse("0x$newHexColor"));
+  }
+  return Colors.transparent;
+}
+
+String colorToHexString(final Color color) {
+  final String red = color.red.toRadixString(16).padLeft(2, '0');
+  final String green = color.green.toRadixString(16).padLeft(2, '0');
+  final String blue = color.blue.toRadixString(16).padLeft(2, '0');
+  final String alpha = color.alpha.toRadixString(16).padLeft(2, '0');
+
+  return '#$red$green$blue$alpha';
+}

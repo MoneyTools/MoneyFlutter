@@ -21,6 +21,7 @@ class Transaction extends MoneyObject<Transaction> {
   @override
   int get uniqueId => id.value;
 
+  // ID
   // SQLite  0|Id|bigint|0||1
   Field<Transaction, int> id = Field<Transaction, int>(
     importance: 0,
@@ -31,6 +32,7 @@ class Transaction extends MoneyObject<Transaction> {
     valueForSerialization: (final Transaction instance) => instance.id.value,
   );
 
+  // Account
   // SQLite  1|Account|INT|1||0
   Field<Transaction, int> accountId = Field<Transaction, int>(
     importance: 1,
