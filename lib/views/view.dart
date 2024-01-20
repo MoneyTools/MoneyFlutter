@@ -25,7 +25,7 @@ class ViewWidget<T> extends StatefulWidget {
 }
 
 class ViewWidgetState<T> extends State<ViewWidget<T>> {
-  FieldDefinitions<T> columns = FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
+  Fields<T> columns = Fields<T>(definitions: <Field<T, dynamic>>[]);
 
   int lastSelectedItemIndex = 0;
   ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
@@ -51,19 +51,21 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
-  FieldDefinitions<T> getFieldDefinitionsForTable() {
-    return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
+  Fields<T> getFieldsForTable() {
+    return Fields<T>(definitions: getFieldsForClass<T>());
   }
 
   /// Derived class will override to customize the fields to display in the details panel
-  FieldDefinitions<T> getFieldDefinitionsForDetailsPanel() {
-    return getFieldDefinitionsForTable();
+  Fields<T> getFieldsForDetailsPanel() {
+    final List<Field<T, dynamic>> fields =
+        getFieldsForClass<T>().where((final Field<T, dynamic> item) => item.useAsDetailPanels).toList();
+    return Fields<T>(definitions: fields);
   }
 
   @override
   void initState() {
     super.initState();
-    columns = getFieldDefinitionsForTable();
+    columns = getFieldsForTable();
 
     final Json? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
@@ -115,11 +117,45 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   void onSort() {
     if (columns.definitions.isNotEmpty) {
-      final FieldDefinition<T> fieldDefinition = columns.definitions[sortByColumn];
-      if (fieldDefinition.sort != null) {
-        list.sort((final T a, final T b) {
-          return fieldDefinition.sort!(a, b, sortAscending);
-        });
+      if (isBetween(sortByColumn, -1, columns.definitions.length)) {
+        final Field<T, dynamic> fieldDefinition = columns.definitions[sortByColumn];
+        if (fieldDefinition.sort == null) {
+          list.sort((final T a, final T b) {
+            switch (fieldDefinition.type) {
+              case FieldType.numeric:
+              case FieldType.numericShorthand:
+                return sortByValue(
+                  fieldDefinition.valueFromInstance(a) as num,
+                  fieldDefinition.valueFromInstance(b) as num,
+                  sortAscending,
+                );
+              case FieldType.amount:
+              case FieldType.amountShorthand:
+                return sortByValue(
+                  fieldDefinition.valueFromInstance(a) as double,
+                  fieldDefinition.valueFromInstance(b) as double,
+                  sortAscending,
+                );
+              case FieldType.date:
+                return sortByDate(
+                  fieldDefinition.valueFromInstance(a) as DateTime,
+                  fieldDefinition.valueFromInstance(b) as DateTime,
+                  sortAscending,
+                );
+              case FieldType.text:
+              default:
+                return sortByString(
+                  fieldDefinition.valueFromInstance(a).toString(),
+                  fieldDefinition.valueFromInstance(b).toString(),
+                  sortAscending,
+                );
+            }
+          });
+        } else {
+          list.sort((final T a, final T b) {
+            return fieldDefinition.sort!(a, b, sortAscending);
+          });
+        }
       }
     }
   }
@@ -267,7 +303,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   Widget getPanelForDetails(final List<int> indices) {
-    final FieldDefinitions<T> detailPanelFields = getFieldDefinitionsForDetailsPanel();
+    final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
     if (indices.isNotEmpty) {
       final int index = indices.first;
       if (isBetweenOrEqual(index, 0, list.length - 1)) {
@@ -343,11 +379,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return SortIndicator.none;
   }
 
-  List<String> getUniqueInstances(final FieldDefinition<T> columnToCustomerFilterOn) {
+  List<String> getUniqueInstances(final Field<T, dynamic> columnToCustomerFilterOn) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as String;
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]).toString();
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
@@ -355,12 +391,12 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return uniqueValues;
   }
 
-  List<double> getMinMaxValues(final FieldDefinition<T> columnToCustomerFilterOn) {
+  List<double> getMinMaxValues(final Field<T, dynamic> fieldDefinition) {
     double min = 0;
     double max = 0;
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final double fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as double;
+      final double fieldValue = fieldDefinition.valueFromInstance(list[i]) as double;
       if (min > fieldValue) {
         min = fieldValue;
       }
@@ -372,7 +408,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <double>[min, max];
   }
 
-  List<String> getMinMaxDates(final FieldDefinition<T> columnToCustomerFilterOn) {
+  List<String> getMinMaxDates(final Field<T, dynamic> columnToCustomerFilterOn) {
     String min = '';
     String max = '';
 
@@ -391,13 +427,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <String>[min, max];
   }
 
-  onCustomizeColumn(final FieldDefinition<T> columnToCustomerFilterOn) {
+  onCustomizeColumn(final Field<T, dynamic> fieldDefinition) {
     Widget content;
 
-    switch (columnToCustomerFilterOn.type) {
+    switch (fieldDefinition.type) {
       case FieldType.amount:
         {
-          final List<double> minMax = getMinMaxValues(columnToCustomerFilterOn);
+          final List<double> minMax = getMinMaxValues(fieldDefinition);
           content = Column(children: <Widget>[
             Text(getCurrencyText(minMax[0])),
             Text(getCurrencyText(minMax[1])),
@@ -407,7 +443,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
       case FieldType.date:
         {
-          final List<String> minMax = getMinMaxDates(columnToCustomerFilterOn);
+          final List<String> minMax = getMinMaxDates(fieldDefinition);
           content = Column(children: <Widget>[
             Text(minMax[0]),
             Text(minMax[1]),
@@ -417,7 +453,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       case FieldType.text:
       default:
         {
-          listOfUniqueInstances = getUniqueInstances(columnToCustomerFilterOn);
+          listOfUniqueInstances = getUniqueInstances(fieldDefinition);
           content = ListView.builder(
               itemCount: listOfUniqueInstances.length,
               itemBuilder: (final BuildContext context, final int index) {

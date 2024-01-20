@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -31,22 +30,6 @@ class ViewLoansState extends ViewWidgetState<LoanPayment> {
   @override
   String getDescription() {
     return 'Properties to rent.';
-  }
-
-  @override
-  FieldDefinitions<LoanPayment> getFieldDefinitionsForTable() {
-    return FieldDefinitions<LoanPayment>(definitions: <FieldDefinition<LoanPayment>>[
-      LoanPayment.getFieldForAccountName(),
-      LoanPayment.getFieldForMemo(),
-    ]);
-  }
-
-  @override
-  FieldDefinitions<LoanPayment> getFieldDefinitionsForDetailsPanel() {
-    final FieldDefinitions<LoanPayment> fields =
-        FieldDefinitions<LoanPayment>(definitions: <FieldDefinition<LoanPayment>>[LoanPayment.getFieldForMemo()]);
-
-    return fields;
   }
 
   @override

@@ -10,11 +10,11 @@ class Payees extends MoneyObjects<Payee> {
     if (payee == null) {
       return '';
     }
-    return payee.name;
+    return payee.name.value;
   }
 
   Payee? getByName(final String name) {
-    return getList().firstWhereOrNull((final Payee payee) => payee.name == name);
+    return getList().firstWhereOrNull((final Payee payee) => payee.name.value == name);
   }
 
   /// Attempts to find payee wih the given name
@@ -24,10 +24,9 @@ class Payees extends MoneyObjects<Payee> {
     Payee? payee = getByName(name);
 
     // if not found add new payee
-    payee ??= Payee(
-      id: getList().length,
-      name: name,
-    );
+    payee ??= Payee()
+      ..id.value = getList().length
+      ..name.value = name;
     return payee;
   }
 
@@ -39,7 +38,9 @@ class Payees extends MoneyObjects<Payee> {
     for (final Json row in rows) {
       final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
-      addEntry(Payee(id: id, name: name));
+      addEntry(Payee()
+        ..id.value = id
+        ..name.value = name);
     }
   }
 
@@ -60,22 +61,24 @@ class Payees extends MoneyObjects<Payee> {
       'Barbara'
     ];
     for (int i = 0; i < names.length; i++) {
-      addEntry(Payee(id: i, name: names[i]));
+      addEntry(Payee()
+        ..id.value = i
+        ..name.value = names[i]);
     }
   }
 
   @override
   void onAllDataLoaded() {
     for (final Payee payee in getList()) {
-      payee.count = 0;
-      payee.balance = 0;
+      payee.count.value = 0;
+      payee.balance.value = 0;
     }
 
     for (Transaction t in Data().transactions.getList()) {
-      final Payee? item = get(t.payeeId);
+      final Payee? item = get(t.payeeId.value);
       if (item != null) {
-        item.count++;
-        item.balance += t.amount;
+        item.count.value++;
+        item.balance.value += t.amount.value;
       }
     }
   }
@@ -83,7 +86,6 @@ class Payees extends MoneyObjects<Payee> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Payee.getFieldDefinitions(),
       getListSortedById(),
     );
   }

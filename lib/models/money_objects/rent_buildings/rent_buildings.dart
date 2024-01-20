@@ -11,7 +11,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     if (found == null) {
       return id.toString();
     }
-    return found.name;
+    return found.name.value;
   }
 
   @override
@@ -27,8 +27,10 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
   void loadDemoData() {
     clear();
 
-    final RentBuilding instance = RentBuilding(id: 0, name: 'AirBnB');
-    instance.address = 'One Washington DC';
+    final RentBuilding instance = RentBuilding();
+    instance.id.value = 0;
+    instance.name.value = 'AirBnB';
+    instance.address.value = 'One Washington DC';
     addEntry(instance);
   }
 
@@ -40,10 +42,10 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
       cumulateTransactions(rental);
 
       // expense is a negative number so we just do a Revenue + Expense
-      rental.profit = rental.revenue + rental.expense;
+      rental.profit.value = rental.revenue.value + rental.expense.value;
 
       for (final RentUnit unit in allUnits) {
-        if (unit.building == rental.id) {
+        if (unit.building == rental.id.value) {
           rental.units.add(unit);
         }
       }
@@ -52,10 +54,10 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
 
   cumulateTransactions(final RentBuilding rental) {
     for (Transaction t in Data().transactions.getList()) {
-      if (rental.categoryForIncomeTreeIds.contains(t.categoryId)) {
-        rental.dateRange.inflate(t.dateTime);
+      if (rental.categoryForIncomeTreeIds.contains(t.categoryId.value)) {
+        rental.dateRange.inflate(t.dateTime.value);
         rental.count++;
-        rental.revenue += t.amount;
+        rental.revenue.value += t.amount.value;
       } else {
         // if (listOfCategoryIdsExpenses.contains(t.categoryId)) {
         //   rental.dateRange.inflate(t.dateTime);
@@ -69,7 +71,6 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      RentBuilding.getFieldDefinitions(),
       getListSortedById(),
     );
   }

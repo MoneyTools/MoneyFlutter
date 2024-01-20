@@ -25,12 +25,12 @@ class TableTransactions extends StatefulWidget {
 class _TableTransactionsState extends State<TableTransactions> {
   late int sortBy = widget.defaultSortingField;
   bool sortAscending = true;
-  late final FieldDefinitions<Transaction> columns;
+  late final Fields<Transaction> columns;
 
   @override
   void initState() {
     super.initState();
-    columns = getFieldDefinitionsForTable();
+    columns = getFieldsForTable();
     onSort();
   }
 
@@ -54,9 +54,6 @@ class _TableTransactionsState extends State<TableTransactions> {
               onSort();
             });
           },
-          onLongPress: () {
-            // todo - for example add filtering
-          },
         ),
         // Table list of rows
         Expanded(
@@ -71,13 +68,15 @@ class _TableTransactionsState extends State<TableTransactions> {
   }
 
   void onSort() {
-    final FieldDefinition<Transaction> fieldDefinition = columns.definitions[sortBy];
-    if (fieldDefinition.sort != null) {
-      widget.getList().sort(
-        (final Transaction a, final Transaction b) {
-          return fieldDefinition.sort!(a, b, sortAscending);
-        },
-      );
+    if (columns.definitions.isNotEmpty) {
+      final Field<Transaction, dynamic> fieldDefinition = columns.definitions[sortBy];
+      if (fieldDefinition.sort != null) {
+        widget.getList().sort(
+          (final Transaction a, final Transaction b) {
+            return fieldDefinition.sort!(a, b, sortAscending);
+          },
+        );
+      }
     }
   }
 
@@ -88,14 +87,17 @@ class _TableTransactionsState extends State<TableTransactions> {
     return SortIndicator.none;
   }
 
-  FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
-    final List<FieldDefinition<Transaction>> listOfColumns = <FieldDefinition<Transaction>>[];
+  Fields<Transaction> getFieldsForTable() {
+    final List<Field<Transaction, dynamic>> listOfFields = <Field<Transaction, dynamic>>[];
 
     for (String columnId in widget.columnsToInclude) {
-      listOfColumns.add(Transaction.getFieldDefinitionFromId(columnId, widget.getList)!);
+      final Field<Transaction, dynamic>? declared = getFieldByNameForClass<Transaction>(columnId);
+      if (declared != null) {
+        listOfFields.add(declared);
+      }
     }
 
-    return FieldDefinitions<Transaction>(definitions: listOfColumns);
+    return Fields<Transaction>(definitions: listOfFields);
   }
 }
 
@@ -110,13 +112,13 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
       Data().transactions.getList().where((final Transaction transaction) => filter(transaction)).toList();
 
   list.sort(
-    (final Transaction a, final Transaction b) => a.dateTime.compareTo(b.dateTime),
+    (final Transaction a, final Transaction b) => a.dateTime.value.compareTo(b.dateTime.value),
   );
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {
-    runningBalance += transaction.amount;
-    transaction.balance = runningBalance;
+    runningBalance += transaction.amount.value;
+    transaction.balance.value = runningBalance;
   }
   return list;
 }

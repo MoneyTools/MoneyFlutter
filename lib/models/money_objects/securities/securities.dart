@@ -18,7 +18,6 @@ class Securities extends MoneyObjects<Security> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Security.getFieldDefinitions(),
       getListSortedById(),
     );
   }

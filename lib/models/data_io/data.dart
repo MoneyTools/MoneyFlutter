@@ -28,22 +28,22 @@ class Data {
   /// private constructor
   Data._internal() {
     _listOfTables = <MoneyObjects<dynamic>>[
-      accountAliases,
-      accounts,
-      aliases,
-      categories,
-      currencies,
-      investments,
-      loanPayments,
-      onlineAccounts,
-      payees,
-      rentBuildings,
-      rentUnits,
-      securities,
-      splits,
-      stockSplits,
-      transactionExtras,
-      transactions,
+      accountAliases, // 1
+      accounts, // 2
+      aliases, // 3
+      categories, // 4
+      currencies, // 5
+      investments, // 6
+      loanPayments, // 7
+      onlineAccounts, // 8
+      payees, // 9
+      rentBuildings, // 10
+      rentUnits, // 11
+      securities, // 12
+      splits, // 13
+      stockSplits, // 14
+      transactionExtras, // 15
+      transactions, // 16
     ];
   } // private constructor
 
@@ -52,52 +52,55 @@ class Data {
     return _instance;
   }
 
-  // 1
+  /// All Field definitions
+  Map<String, Field<dynamic, dynamic>> mapClassToFields = <String, Field<dynamic, dynamic>>{};
+
+  /// 1 Account Aliases
   AccountAliases accountAliases = AccountAliases();
 
-  // 2
+  /// 2 Accounts
   Accounts accounts = Accounts();
 
-  // 3
+  /// 3 Aliases of Payees
   Aliases aliases = Aliases();
 
-  // 4
+  /// 4 Categories of Transactions
   Categories categories = Categories();
 
-  // 5
+  /// 5 Currencies definitions used in the money files
   Currencies currencies = Currencies();
 
-  // 6
+  /// 6 Investment transactions
   Investments investments = Investments();
 
-  // 7
+  /// 7
   LoanPayments loanPayments = LoanPayments();
 
-  // 8
+  /// 8
   OnlineAccounts onlineAccounts = OnlineAccounts();
 
-  // 9
+  /// 9
   Payees payees = Payees();
 
-  // 10
+  /// 10
   RentBuildings rentBuildings = RentBuildings();
 
-  // 11
+  /// 11
   RentUnits rentUnits = RentUnits();
 
-  // 12
+  /// 12
   Securities securities = Securities();
 
-  // 13
+  /// 13
   Splits splits = Splits();
 
-  // 14
+  /// 14
   StockSplits stockSplits = StockSplits();
 
-  // 15
+  /// 15
   TransactionExtras transactionExtras = TransactionExtras();
 
-  // 16
+  /// 16 All Transactions in the Money file
   Transactions transactions = Transactions();
 
   late final List<MoneyObjects<dynamic>> _listOfTables;

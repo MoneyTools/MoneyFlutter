@@ -23,7 +23,7 @@ class TableSplits extends StatefulWidget {
 }
 
 class _TableSplitsState extends State<TableSplits> {
-  final FieldDefinitions<Split> _tableFields = Split.getFieldDefinitions();
+  final Fields<Split> _tableFields = Fields<Split>(definitions: <Field<Split, dynamic>>[]);
   late final List<Split> rows;
   late int _sortBy = widget.defaultSortingField;
   bool _sortAscending = true;
@@ -55,9 +55,6 @@ class _TableSplitsState extends State<TableSplits> {
               onSort();
             });
           },
-          onLongPress: () {
-            // todo - for example add filtering
-          },
         ),
         // Table list of rows
         Expanded(
@@ -72,14 +69,14 @@ class _TableSplitsState extends State<TableSplits> {
   }
 
   void onSort() {
-    final FieldDefinition<Split> fieldDefinition = _tableFields.definitions[_sortBy];
-    if (fieldDefinition.sort != null) {
-      rows.sort(
-        (final Split a, final Split b) {
-          return fieldDefinition.sort!(a, b, _sortAscending);
-        },
-      );
-    }
+    // final FieldDefinition<Split> fieldDefinition = _tableFields.definitions[_sortBy];
+    // if (fieldDefinition.sort != null) {
+    //   rows.sort(
+    //     (final Split a, final Split b) {
+    //       return fieldDefinition.sort!(a, b, _sortAscending);
+    //     },
+    //   );
+    // }
   }
 
   SortIndicator getSortIndicated(final int columnNumber) {

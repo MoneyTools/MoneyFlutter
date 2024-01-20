@@ -3,7 +3,6 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/date_range.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/table_view/table_splits.dart';
@@ -40,13 +39,13 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         small: true,
         isVertical: true,
         text2: getIntAsText(
-            Data().transactions.getList().where((final Transaction element) => element.amount > 0).length)));
+            Data().transactions.getList().where((final Transaction element) => element.amount.value > 0).length)));
     pivots.add(ThreePartLabel(
         text1: 'Expenses',
         small: true,
         isVertical: true,
         text2: getIntAsText(
-            Data().transactions.getList().where((final Transaction element) => element.amount < 0).length)));
+            Data().transactions.getList().where((final Transaction element) => element.amount.value < 0).length)));
     pivots.add(ThreePartLabel(
         text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.getList().length)));
   }
@@ -81,7 +80,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   void onDelete(final BuildContext context, final int index) {
-    final List<String> itemToDelete = getFieldDefinitionsForTable().getListOfFieldValueAsString(list[index]);
+    final List<String> itemToDelete = getFieldsForTable().getListOfFieldValueAsString(list[index]);
 
     showDialog(
       context: context,
@@ -108,12 +107,13 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         .toList();
 
     if (!balanceDone) {
-      list.sort((final Transaction a, final Transaction b) => a.dateTime.compareTo(b.dateTime));
+      list.sort((final Transaction a, final Transaction b) => a.dateTime.value.compareTo(b.dateTime.value));
 
       double runningBalance = 0.0;
+
       for (Transaction transaction in list) {
-        runningBalance += transaction.amount;
-        transaction.balance = runningBalance;
+        runningBalance += transaction.amount.value;
+        transaction.balance.value = runningBalance;
       }
       balanceDone = true;
     }
@@ -127,12 +127,12 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
     // Expenses
     if (_selectedPivot[1]) {
-      return transaction.amount < 0;
+      return transaction.amount.value < 0;
     }
 
     // Incomes
     if (_selectedPivot[0]) {
-      return transaction.amount > 0;
+      return transaction.amount.value > 0;
     }
     return false;
   }
@@ -142,7 +142,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
       return true;
     }
 
-    final List<String> fieldInstances = getFieldDefinitionsForTable().getListOfFieldValueAsString(transaction);
+    final List<String> fieldInstances = getFieldsForTable().getListOfFieldValueAsString(transaction);
     // debugLog(fieldInstances.join('|'));
 
     for (final String fieldInstance in fieldInstances) {
@@ -152,11 +152,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     }
 
     return false;
-  }
-
-  @override
-  FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
-    return Transaction.getFieldDefinitions();
   }
 
   @override
@@ -207,9 +202,9 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     getList().forEach((final Transaction transaction) {
       transaction;
 
-      if (timePeriod.isBetweenEqual(transaction.dateTime)) {
-        final DateTime date = transaction.dateTime;
-        final num value = transaction.amount;
+      if (timePeriod.isBetweenEqual(transaction.dateTime.value)) {
+        final DateTime date = transaction.dateTime.value;
+        final num value = transaction.amount.value;
 
         // Format the date as year-month string (e.g., '2023-11')
         final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
@@ -236,9 +231,11 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   @override
   getPanelForTransactions(final List<int> indices) {
     final Transaction? transaction = getFirstElement<Transaction>(indices, list);
-    if (transaction != null && transaction.id > -1 && transaction.categoryId == Data().categories.splitCategoryId()) {
+    if (transaction != null &&
+        transaction.id.value > -1 &&
+        transaction.categoryId.value == Data().categories.splitCategoryId()) {
       final List<Split> l =
-          Data().splits.getList().where((final Split s) => s.transactionId == transaction.id).toList();
+          Data().splits.getList().where((final Split s) => s.transactionId == transaction.id.value).toList();
       return TableSplits(
         key: Key('split_transactions ${transaction.id}'),
         getList: () => l,

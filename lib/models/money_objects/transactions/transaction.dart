@@ -1,7 +1,10 @@
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
+import 'package:money/models/money_objects/categories/category.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
@@ -12,44 +15,142 @@ const String columnIdMemo = 'Memo';
 const String columnIdAmount = 'Amount';
 const String columnIdBalance = 'Balance';
 
-/*
-  SQLite definition of [Transaction] table
+/// Main source of information for this App
+/// All transactions are loaded in this class [Transaction] and [Split]
+class Transaction extends MoneyObject<Transaction> {
+  @override
+  int get uniqueId => id.value;
 
-   0|Id|bigint|0||1
-   1|Account|INT|1||0
-   2|Date|datetime|1||0
-   3|Status|INT|0||0
-   4|Payee|INT|0||0
-   5|OriginalPayee|nvarchar(255)|0||0
-   6|Category|INT|0||0
-   7|Memo|nvarchar(255)|0||0
-   8|Number|nchar(10)|0||0
-   9|ReconciledDate|datetime|0||0
-  10|BudgetBalanceDate|datetime|0||0
-  11|Transfer|bigint|0||0
-  12|FITID|nchar(40)|0||0
-  13|Flags|INT|1||0
-  14|Amount|money|1||0
-  15|SalesTax|money|0||0
-  16|TransferSplit|INT|0||0
-  17|MergeDate|datetime|0||0
- */
-class Transaction extends MoneyObject {
-  final int accountId;
-  final DateTime dateTime;
-  late final String dateTimeAsText;
-  final int payeeId;
-  late final Payee? payee;
+  // SQLite  0|Id|bigint|0||1
+  Field<Transaction, int> id = Field<Transaction, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    useAsDetailPanels: false,
+    valueForSerialization: (final Transaction instance) => instance.id.value,
+  );
+
+  // SQLite  1|Account|INT|1||0
+  Field<Transaction, int> accountId = Field<Transaction, int>(
+    importance: 1,
+    name: 'Account',
+    serializeName: 'AccountId',
+    defaultValue: -1,
+    valueFromInstance: (final Transaction instance) => Account.getName(instance.accountInstance),
+    valueForSerialization: (final Transaction instance) => instance.accountId.value,
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByString(Account.getName(a.accountInstance), Account.getName(b.accountInstance), ascending),
+  );
+
+  // Date
+  // SQLite 2|Date|datetime|1||0
+  Field<Transaction, DateTime> dateTime = Field<Transaction, DateTime>(
+    importance: 2,
+    type: FieldType.text,
+    align: TextAlign.center,
+    name: 'Date',
+    serializeName: 'Date',
+    defaultValue: DateTime.parse('1970-01-01'),
+    valueFromInstance: (final Transaction instance) => instance.dateTimeAsText,
+    valueForSerialization: (final Transaction instance) => instance.dateTime.value.toIso8601String(),
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByDate(a.dateTime.value, b.dateTime.value, ascending),
+  );
+
+  // SQLite 3|Status|INT|0||0
+
+  // Payee Id
+  // SQLite 4|Payee|INT|0||0
+  Field<Transaction, int> payeeId = Field<Transaction, int>(
+    importance: 1,
+    type: FieldType.text,
+    serializeName: 'Payee',
+    defaultValue: -1,
+    valueFromInstance: (final Transaction instance) => Payee.getName(instance.payeeInstance),
+    valueForSerialization: (final Transaction instance) => instance.payeeId.value,
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByString(Payee.getName(a.payeeInstance), Payee.getName(b.payeeInstance), ascending),
+  );
+
+  // SQLite 5|OriginalPayee|nvarchar(255)|0||0
   String originalPayee = ''; // before auto-aliasing, helps with future merging.
-  final int categoryId;
-  final double amount;
-  double balance;
+
+  // Category Id
+  // SQLite 6|Category|INT|0||0
+  Field<Transaction, int> categoryId = Field<Transaction, int>(
+    importance: 1,
+    type: FieldType.text,
+    name: 'Category',
+    serializeName: 'Category',
+    defaultValue: -1,
+    valueFromInstance: (final Transaction instance) => Category.getName(instance.categoryInstance),
+    valueForSerialization: (final Transaction instance) => instance.categoryId.value,
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByString(Category.getName(a.categoryInstance), Category.getName(b.categoryInstance), ascending),
+  );
+
+  // Memo
+  // 7|Memo|nvarchar(255)|0||0
+  Field<Transaction, String> memo = Field<Transaction, String>(
+    importance: 80,
+    type: FieldType.text,
+    name: 'Memo',
+    serializeName: 'Memo',
+    useAsColumn: false,
+    defaultValue: '',
+    valueFromInstance: (final Transaction instance) => instance.memo.value,
+    valueForSerialization: (final Transaction instance) => instance.memo.value,
+  );
+
+  // 8|Number|nchar(10)|0||0
+
+  // 9|ReconciledDate|datetime|0||0
+
+  // 10|BudgetBalanceDate|datetime|0||0
+
+  // 11|Transfer|bigint|0||0
+
+  // 12|FITID|nchar(40)|0||0
+
+  // 13|Flags|INT|1||0
+
+  // Amount
+  // 14|Amount|money|1||0
+  FieldDouble<Transaction> amount = FieldDouble<Transaction>(
+    importance: 98,
+    name: 'Amount',
+    serializeName: 'Amount',
+    valueFromInstance: (final Transaction instance) => instance.amount.value,
+    valueForSerialization: (final Transaction instance) => instance.amount.value,
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByValue(a.amount.value, b.amount.value, ascending),
+  );
+
+  // 15|SalesTax|money|0||0
+  // 16|TransferSplit|INT|0||0
+  // 17|MergeDate|datetime|0||0
+
+  // Balance
+  FieldDouble<Transaction> balance = FieldDouble<Transaction>(
+    importance: 99,
+    name: 'Balance',
+    useAsColumn: true,
+    useAsDetailPanels: false,
+    valueFromInstance: (final Transaction instance) => instance.balance.value,
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByValue(a.balance.value, b.balance.value, ascending),
+  );
 
   double salesTax = 0;
   TransactionStatus status = TransactionStatus.none;
-
-  String memo;
   String fitid;
+
+  // derived property used for display
+  Account? accountInstance;
+  late final String dateTimeAsText;
+  Payee? payeeInstance;
+  Category? categoryInstance;
 
   // String number; // requires value.Length < 10
   // // Investment investment;
@@ -70,213 +171,30 @@ class Transaction extends MoneyObject {
   //TransactionViewFlags viewState; // ui transient state only, not persisted.
 
   Transaction({
-    required super.id,
-    required this.dateTime,
-    this.accountId = -1,
-    this.payeeId = -1,
-    this.categoryId = -1,
     this.status = TransactionStatus.none,
-    this.amount = 0.00,
-    this.balance = 0.00,
-    this.memo = '',
     this.fitid = '',
-  }) {
-    dateTimeAsText = getDateAsText(dateTime);
-    payee = Data().payees.get(payeeId);
-  }
+  });
 
-  static FieldDefinition<Transaction> getFieldAccountName() {
-    return FieldDefinition<Transaction>(
-      name: columnIdAccount,
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final Transaction transaction) {
-        return Data().accounts.getNameFromId(transaction.accountId);
-      },
-      sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByString(
-            Data().accounts.getNameFromId(a.accountId), Data().accounts.getNameFromId(b.accountId), ascending);
-      },
+  factory Transaction.fromJSon(final Json json, final double runningBalance) {
+    final Transaction t = Transaction(
+      // Status
+      status: TransactionStatus.values[jsonGetInt(json, 'Status')],
+      // Amount
     );
-  }
+    t.id.value = jsonGetInt(json, 'Id');
+    t.accountId.value = jsonGetInt(json, 'Account');
+    t.accountInstance = Data().accounts.get(t.accountId.value);
+    t.dateTime.value = jsonGetDate(json, 'Date');
+    t.dateTimeAsText = getDateAsText(t.dateTime.value);
+    t.categoryId.value = jsonGetInt(json, 'Category');
+    t.categoryInstance = Data().categories.get(t.categoryId.value);
+    t.payeeId.value = jsonGetInt(json, 'Payee');
+    t.payeeInstance = Data().payees.get(t.payeeId.value);
+    t.amount.value = jsonGetDouble(json, 'Amount');
+    t.memo.value = jsonGetString(json, 'Memo');
+    t.balance.value = runningBalance;
 
-  static FieldDefinition<Transaction> getFieldDate() {
-    return FieldDefinition<Transaction>(
-        name: columnIdDate,
-        serializeName: 'date',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final Transaction transaction) {
-          return transaction.dateTimeAsText;
-        },
-        valueForSerialization: (final Transaction transaction) {
-          return transaction.dateTime.toIso8601String();
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByDate(a.dateTime, b.dateTime, ascending);
-        });
-  }
-
-  static FieldDefinition<Transaction> getFieldPayeeName() {
-    return FieldDefinition<Transaction>(
-      name: columnIdPayee,
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final Transaction transaction) {
-        return Data().payees.getNameFromId(transaction.payeeId);
-      },
-      sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByString(Data().payees.getNameFromId(a.payeeId), Data().payees.getNameFromId(b.payeeId), ascending);
-      },
-    );
-  }
-
-  static FieldDefinition<Transaction> getFieldCategoryName() {
-    return FieldDefinition<Transaction>(
-      name: columnIdCategory,
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final Transaction transaction) {
-        return Data().categories.getNameFromId(transaction.categoryId);
-      },
-      sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByString(
-            Data().categories.getNameFromId(a.categoryId), Data().categories.getNameFromId(b.categoryId), ascending);
-      },
-    );
-  }
-
-  static FieldDefinition<Transaction> getFieldStatus() {
-    return FieldDefinition<Transaction>(
-      name: columnIdStatus,
-      serializeName: 'status',
-      type: FieldType.text,
-      align: TextAlign.center,
-      valueFromInstance: (final Transaction transaction) {
-        return transaction.status.name[0].toUpperCase();
-      },
-      valueForSerialization: (final Transaction transaction) {
-        return transaction.status.index;
-      },
-      sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByValue(a.status.index, b.status.index, ascending);
-      },
-    );
-  }
-
-  static FieldDefinition<Transaction> getFieldAmount() {
-    return FieldDefinition<Transaction>(
-      name: columnIdAmount,
-      type: FieldType.amount,
-      align: TextAlign.right,
-      valueFromInstance: (final Transaction transaction) {
-        return transaction.amount;
-      },
-      sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByValue(a.amount, b.amount, ascending);
-      },
-    );
-  }
-
-  static FieldDefinition<Transaction> getFieldBalance() {
-    return FieldDefinition<Transaction>(
-      name: columnIdBalance,
-      type: FieldType.amount,
-      align: TextAlign.right,
-      valueFromInstance: (final Transaction transaction) {
-        return transaction.balance;
-      },
-      sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByValue(a.balance, b.balance, ascending);
-      },
-    );
-  }
-
-  static FieldDefinition<Transaction> getFieldMemo() {
-    return FieldDefinition<Transaction>(
-      name: columnIdMemo,
-      serializeName: 'memo',
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final Transaction transaction) {
-        return transaction.memo;
-      },
-      sort: (final Transaction a, final Transaction b, final bool ascending) {
-        return sortByString(a.memo, b.memo, ascending);
-      },
-    );
-  }
-
-  static FieldDefinitions<Transaction> getFieldDefinitions() {
-    final FieldDefinitions<Transaction> fields =
-        FieldDefinitions<Transaction>(definitions: <FieldDefinition<Transaction>>[
-      MoneyObject.getFieldId<Transaction>(),
-      FieldDefinition<Transaction>(
-        useAsColumn: false,
-        name: 'AccountId',
-        serializeName: 'accountId',
-        type: FieldType.numeric,
-        align: TextAlign.right,
-        valueFromInstance: (final Transaction transaction) {
-          return transaction.accountId;
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByValue(a.accountId, b.accountId, ascending);
-        },
-      ),
-      FieldDefinition<Transaction>(
-        useAsColumn: false,
-        name: columnIdCategory,
-        serializeName: 'categoryId',
-        type: FieldType.numeric,
-        align: TextAlign.right,
-        valueFromInstance: (final Transaction transaction) {
-          return transaction.categoryId;
-        },
-        sort: (final Transaction a, final Transaction b, final bool ascending) {
-          return sortByValue(a.categoryId, b.categoryId, ascending);
-        },
-      ),
-      getFieldAccountName(),
-      getFieldDate(),
-      getFieldPayeeName(),
-      getFieldCategoryName(),
-      getFieldStatus(),
-      getFieldMemo(),
-      getFieldAmount(),
-      getFieldBalance(),
-    ]);
-    return fields;
-  }
-
-  static FieldDefinition<Transaction>? getFieldDefinitionFromId(
-    final String id,
-    final List<Transaction> Function() getList,
-  ) {
-    switch (id) {
-      case columnIdAccount:
-        return getFieldAccountName();
-      case columnIdDate:
-        return getFieldDate();
-      case columnIdPayee:
-        return getFieldPayeeName();
-      case columnIdCategory:
-        return getFieldCategoryName();
-      case columnIdMemo:
-        return getFieldMemo();
-      case columnIdStatus:
-        return getFieldStatus();
-      case columnIdAmount:
-        return getFieldAmount();
-      case columnIdBalance:
-        return getFieldBalance();
-    }
-    return null;
-  }
-
-  @override
-  String toString([final bool includeHiddenFields = false]) {
-    return Transaction.getFieldDefinitions().getListOfFieldValueAsString(this, includeHiddenFields).join();
+    return t;
   }
 }
 

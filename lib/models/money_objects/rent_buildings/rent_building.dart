@@ -1,19 +1,76 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
-class RentBuilding extends MoneyObject {
-  String name;
+class RentBuilding extends MoneyObject<RentBuilding> {
+  @override
+  int get uniqueId => id.value;
+
+  // 0    Id                      INT            0                    1
+  FieldId<RentBuilding> id = FieldId<RentBuilding>(
+    importance: 0,
+    valueFromInstance: (final RentBuilding instance) => instance.id.value,
+    valueForSerialization: (final RentBuilding instance) => instance.id.value,
+  );
+
+  // 1    Name                    nvarchar(255)  1                    0
+  FieldString<RentBuilding> name = FieldString<RentBuilding>(
+    importance: 1,
+    name: 'Name',
+    serializeName: 'Name',
+    valueFromInstance: (final RentBuilding instance) => instance.name.value,
+    valueForSerialization: (final RentBuilding instance) => instance.name.value,
+  );
+
+  // 2    Address                 nvarchar(255)  0                    0
+  FieldString<RentBuilding> address = FieldString<RentBuilding>(
+    importance: 2,
+    name: 'Address',
+    serializeName: 'Address',
+    valueFromInstance: (final RentBuilding instance) => instance.address.value,
+    valueForSerialization: (final RentBuilding instance) => instance.address.value,
+  );
+
+  // 3    PurchasedDate           datetime       0                    0
+  // 4    PurchasedPrice          money          0                    0
+  // 5    LandValue               money          0                    0
+  // 6    EstimatedValue          money          0                    0
+  // 7    OwnershipName1          nvarchar(255)  0                    0
+  // 8    OwnershipName2          nvarchar(255)  0                    0
+  // 9    OwnershipPercentage1    money          0                    0
+  // 10   OwnershipPercentage2    money          0                    0
+  // 11   Note                    nvarchar(255)  0                    0
+  // 12   CategoryForTaxes        INT            0                    0
+  // 13   CategoryForIncome       INT            0                    0
+  // 14   CategoryForInterest     INT            0                    0
+  // 15   CategoryForRepairs      INT            0                    0
+  // 16   CategoryForMaintenance  INT            0                    0
+  // 17   CategoryForManagement   INT            0                    0
   int count = 0;
 
-  double revenue = 0.00;
-  double expense = 0.00;
-  double profit = 0.00;
+  /// Revenue
+  FieldDouble<RentBuilding> revenue = FieldDouble<RentBuilding>(
+    importance: 20,
+    name: 'Revenue',
+    valueFromInstance: (final RentBuilding instance) => instance.revenue.value,
+  );
 
-  String address = '';
+  /// Expenses
+  FieldDouble<RentBuilding> expense = FieldDouble<RentBuilding>(
+    importance: 21,
+    name: 'Expenses',
+    valueFromInstance: (final RentBuilding instance) => instance.expense.value,
+  );
+
+  /// Profit
+  FieldDouble<RentBuilding> profit = FieldDouble<RentBuilding>(
+    importance: 22,
+    name: 'Profit',
+    valueFromInstance: (final RentBuilding instance) => instance.profit.value,
+  );
+
   DateTime purchasedDate = DateTime.now();
   double purchasedPrice = 0.00;
   double landValue = 0.00;
@@ -70,17 +127,15 @@ class RentBuilding extends MoneyObject {
     16|CategoryForMaintenance|INT|0||0
     17|CategoryForManagement|INT|0||0
    */
-  RentBuilding({
-    required super.id,
-    required this.name,
-  });
+  RentBuilding();
 
   factory RentBuilding.fromSqlite(final Json row) {
-    final RentBuilding instance = RentBuilding(
-      id: jsonGetInt(row, 'Id'),
-      name: jsonGetString(row, 'Name'),
-    );
-    instance.address = jsonGetString(row, 'Address');
+    final RentBuilding instance = RentBuilding();
+
+    instance.id.value = jsonGetInt(row, 'Id');
+    instance.name.value = jsonGetString(row, 'Name');
+    instance.address.value = jsonGetString(row, 'Address');
+
     instance.purchasedDate = jsonGetDate(row, 'PurchasedDate', defaultIfNotFound: DateTime.now());
     instance.purchasedPrice = jsonGetDouble(row, 'PurchasedPrice');
     instance.landValue = jsonGetDouble(row, 'LandValue');
@@ -117,23 +172,5 @@ class RentBuilding extends MoneyObject {
     instance.note = jsonGetString(row, 'Note');
 
     return instance;
-  }
-
-  static FieldDefinitions<RentBuilding> getFieldDefinitions() {
-    final FieldDefinitions<RentBuilding> fields =
-        FieldDefinitions<RentBuilding>(definitions: <FieldDefinition<RentBuilding>>[
-      FieldDefinition<RentBuilding>(
-        useAsColumn: false,
-        name: 'Id',
-        serializeName: 'id',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final RentBuilding entity) => entity.id,
-        sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-          return sortByValue(a.id, b.id, sortAscending);
-        },
-      ),
-    ]);
-    return fields;
   }
 }

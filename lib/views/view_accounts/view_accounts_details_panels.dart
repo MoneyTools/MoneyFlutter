@@ -4,10 +4,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   /// Details panels Chart panel for Accounts
   Widget _getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
-    for (final MoneyObject item in getList()) {
+
+    for (final MoneyObject<Account> item in getList()) {
       final Account account = item as Account;
       if (account.isActive()) {
-        list.add(PairXY(account.name, account.balance));
+        list.add(PairXY(account.name.value, account.balance.value));
       }
     }
 
@@ -24,13 +25,13 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   // Details Panel for Transactions
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final Account? account = getFirstElement<Account>(indices, list);
-    if (account != null && account.id > -1) {
-      filter(final Transaction transaction) => filterByAccountId(transaction, account.id);
+    if (account != null && account.id.value > -1) {
+      filter(final Transaction transaction) => filterByAccountId(transaction, account.id.value);
 
       final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
 
       return TableTransactions(
-        key: Key(account.id.toString()),
+        key: Key(account.id.value.toString()),
         columnsToInclude: const <String>[
           columnIdDate,
           columnIdPayee,

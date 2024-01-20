@@ -18,14 +18,13 @@ class Aliases extends MoneyObjects<Alias> {
   @override
   void onAllDataLoaded() {
     for (final Alias item in getList()) {
-      item.payeeInstance = Data().payees.get(item.payeeId);
+      item.payeeInstance = Data().payees.get(item.payeeId.value);
     }
   }
 
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Alias.getFieldDefinitions(),
       getListSortedById(),
     );
   }

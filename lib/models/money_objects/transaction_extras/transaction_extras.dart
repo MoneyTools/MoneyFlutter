@@ -9,7 +9,7 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
   double runningBalance = 0.00;
 
   void add(final TransactionExtra transaction) {
-    transaction.id = getList().length;
+    transaction.id.value = getList().length;
     getList().add(transaction);
   }
 
@@ -22,14 +22,13 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
     for (final Json row in rows) {
       final TransactionExtra t = TransactionExtra(
         // id
-        id: jsonGetInt(row, 'Id'),
         // Account Id
         transaction: jsonGetInt(row, 'Transaction'),
         // Tax Year
         taxYear: jsonGetInt(row, 'TaxYear'),
         // Tax Date
         taxDate: jsonGetInt(row, 'TaxDate'),
-      );
+      )..id.value = jsonGetInt(row, 'Id');
 
       getList().add(t);
     }

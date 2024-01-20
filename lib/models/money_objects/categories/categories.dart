@@ -25,22 +25,21 @@ class Categories extends MoneyObjects<Category> {
     if (id == splitCategoryId()) {
       return '<Split>';
     }
-    final Category? category = get(id);
-    return category == null ? '' : category.name;
+    return Category.getName(get(id));
   }
 
   int splitCategoryId() {
     if (idOfSplitCategory == -1) {
       final Category? cat = getByName('Split');
       if (cat != null) {
-        idOfSplitCategory = cat.id;
+        idOfSplitCategory = cat.id.value;
       }
     }
     return idOfSplitCategory;
   }
 
   Category? getByName(final String name) {
-    return getList().firstWhereOrNull((final Category category) => category.name == name);
+    return getList().firstWhereOrNull((final Category category) => category.name.value == name);
   }
 
   Category getTopAncestor(final Category category) {
@@ -68,7 +67,7 @@ class Categories extends MoneyObjects<Category> {
       final List<Category> descendants = getCategoriesWithThisParent(categoryId);
       for (final Category c in descendants) {
         // debugLog(c.id.toString()+"="+c.name);
-        getTreeIdsRecursive(c.id, list);
+        getTreeIdsRecursive(c.id.value, list);
       }
     }
   }
@@ -91,10 +90,9 @@ class Categories extends MoneyObjects<Category> {
 
     if (category == null) {
       category = Category(
-        id: length,
         name: name,
-        type: type,
-      );
+      )..type.value = type;
+
       addEntry(category);
     }
     // TODO
@@ -203,30 +201,30 @@ class Categories extends MoneyObjects<Category> {
   @override
   loadDemoData() {
     clear();
-    addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
-    addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment));
-    addEntry(Category(id: 2, name: 'Interests', description: '', type: CategoryType.income));
-    addEntry(Category(id: 3, name: 'Rental', description: '', type: CategoryType.income));
-    addEntry(Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none));
-    addEntry(Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense));
-    addEntry(Category(id: 6, name: 'Saving', description: '', type: CategoryType.income));
-    addEntry(Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense));
-    addEntry(Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense));
-    addEntry(Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
+    addEntry(Category(name: 'Paychecks', description: '', type: CategoryType.income)..id.value = 0);
+    addEntry(Category(name: 'Investment', description: '', type: CategoryType.investment)..id.value = 1);
+    addEntry(Category(name: 'Interests', description: '', type: CategoryType.income)..id.value = 2);
+    addEntry(Category(name: 'Rental', description: '', type: CategoryType.income)..id.value = 3);
+    addEntry(Category(name: 'Lottery', description: '', type: CategoryType.none)..id.value = 4);
+    addEntry(Category(name: 'Mortgage', description: '', type: CategoryType.expense)..id.value = 5);
+    addEntry(Category(name: 'Saving', description: '', type: CategoryType.income)..id.value = 6);
+    addEntry(Category(name: 'Bills', description: '', type: CategoryType.expense)..id.value = 7);
+    addEntry(Category(name: 'Taxes', description: '', type: CategoryType.expense)..id.value = 8);
+    addEntry(Category(name: 'School', description: '', type: CategoryType.expense)..id.value = 9);
   }
 
   @override
   void onAllDataLoaded() {
     for (final Category category in getList()) {
-      category.count = 0;
-      category.balance = 0;
+      category.count.value = 0;
+      category.runningBalance.value = 0;
     }
 
     for (final Transaction t in Data().transactions.getList()) {
-      final Category? item = get(t.categoryId);
+      final Category? item = get(t.categoryId.value);
       if (item != null) {
-        item.count++;
-        item.balance += t.amount;
+        item.count.value++;
+        item.runningBalance.value += t.amount.value;
       }
     }
   }
@@ -234,7 +232,6 @@ class Categories extends MoneyObjects<Category> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Category.getFieldDefinitions(),
       getListSortedById(),
     );
   }

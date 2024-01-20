@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/fields/fields.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -33,11 +32,6 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   @override
   String getDescription() {
     return 'Who is getting your money.';
-  }
-
-  @override
-  FieldDefinitions<Payee> getFieldDefinitionsForTable() {
-    return Payee.getFieldDefinitions();
   }
 
   @override

@@ -17,7 +17,6 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      LoanPayment.getFieldDefinitions(),
       getListSortedById(),
     );
   }

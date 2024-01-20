@@ -1,41 +1,24 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/fields/field.dart';
 export 'package:money/models/fields/field.dart';
 
-class FieldDefinitions<T> {
-  final List<FieldDefinition<T>> definitions;
+class Fields<T> {
+  final List<Field<T, dynamic>> definitions;
 
-  FieldDefinitions({required this.definitions}) {
+  Fields({required this.definitions}) {
     assert(T != dynamic, 'Type T cannot be dynamic');
-  }
-
-  FieldDefinition<T>? getFieldById(final String fieldName) {
-    return definitions.firstWhereOrNull((final FieldDefinition<T> item) => item.name == fieldName);
   }
 
   List<Widget> getRowOfColumns(final T objectInstance) {
     final List<Widget> cells = <Widget>[];
     for (int columnIndex = 0; columnIndex < definitions.length; columnIndex++) {
-      final FieldDefinition<T> fieldDefinition = definitions[columnIndex];
+      final Field<dynamic, dynamic> fieldDefinition = definitions[columnIndex];
       if (fieldDefinition.useAsColumn) {
-        final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
-        final Widget widgetForThatField = fieldDefinition.getWidget(fieldValue);
-
+        final Widget widgetForThatField = fieldDefinition.getWidget(objectInstance);
         cells.add(widgetForThatField);
       }
     }
     return cells;
-  }
-
-  FieldDefinitions<T> add(final FieldDefinition<T> toAdd) {
-    definitions.add(toAdd);
-    return this;
-  }
-
-  FieldDefinitions<T> removeAt(final int index) {
-    definitions.removeAt(index);
-    return this;
   }
 
   List<Widget> getCellsForDetailsPanel(final T objectInstance) {
@@ -50,7 +33,7 @@ class FieldDefinitions<T> {
   List<String> getListOfFieldValueAsString(final T objectInstance, [final bool includeHiddenFields = false]) {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
-      final FieldDefinition<T> fieldDefinition = definitions[fieldIndex];
+      final Field<dynamic, dynamic> fieldDefinition = definitions[fieldIndex];
       if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
         strings.add(fieldDefinition.getString(fieldDefinition.valueFromInstance(objectInstance)));
       }
@@ -59,7 +42,7 @@ class FieldDefinitions<T> {
   }
 
   Widget getBestWidgetForFieldDefinition(final int columnIndex, final T objectInstance) {
-    final FieldDefinition<T> fieldDefinition = definitions[columnIndex];
+    final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
 
     final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
 
@@ -89,22 +72,10 @@ class FieldDefinitions<T> {
     }
   }
 
-  String getCsvHeader() {
-    final List<String> headerList = <String>[];
-    for (final FieldDefinition<T> field in definitions) {
-      if (field.serializeName != null) {
-        headerList.add('"${field.serializeName!}"');
-      }
-    }
-    return headerList.join(',');
-  }
-
   String getCsvRowValues(final T item) {
     final List<dynamic> listOfValues = <dynamic>[];
-    for (final FieldDefinition<T> field in definitions) {
-      if (field.serializeName != null) {
-        listOfValues.add('"${field.valueForSerialization!(item)}"');
-      }
+    for (final Field<dynamic, dynamic> field in definitions) {
+      listOfValues.add('"${field.valueForSerialization(item)}"');
     }
     return listOfValues.join(',');
   }

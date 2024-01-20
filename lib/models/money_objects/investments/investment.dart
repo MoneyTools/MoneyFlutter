@@ -17,9 +17,18 @@ import 'package:money/models/money_objects/money_objects.dart';
   12   Withholding     money   0                    0
  */
 
-class Investment extends MoneyObject {
+class Investment extends MoneyObject<Investment> {
+  @override
+  int get uniqueId => id.value;
+
   // 0
-  // int MoneyEntity.Id
+  Field<Investment, int> id = Field<Investment, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    valueForSerialization: (final Investment instance) => instance.id.value,
+  );
 
   // 1
   final int security;
@@ -37,7 +46,6 @@ class Investment extends MoneyObject {
   double markUpDown;
 
   Investment({
-    required super.id,
     required this.security,
     required this.unitPrice,
     required this.units,
@@ -48,8 +56,6 @@ class Investment extends MoneyObject {
   /// Constructor from a SQLite row
   factory Investment.fromSqlite(final Json row) {
     return Investment(
-      // 0
-      id: jsonGetInt(row, 'Id'),
       // 1
       security: jsonGetInt(row, 'Security'),
       // 2
@@ -60,35 +66,6 @@ class Investment extends MoneyObject {
       commission: jsonGetDouble(row, 'Commission'),
       // 5
       markUpDown: jsonGetDouble(row, 'MarkUpDown'),
-    );
-  }
-
-  static FieldDefinitions<Investment> getFieldDefinitions() {
-    final FieldDefinitions<Investment> fields = FieldDefinitions<Investment>(definitions: <FieldDefinition<Investment>>[
-      MoneyObject.getFieldId<Investment>(),
-      getFieldForSecurity(),
-    ]);
-    return fields;
-  }
-
-  static FieldDefinition<Investment> getFieldForSecurity() {
-    return FieldDefinition<Investment>(
-      type: FieldType.numeric,
-      name: 'Security',
-      serializeName: 'security',
-      valueFromInstance: (final Investment item) {
-        return item.security;
-      },
-      valueForSerialization: (final Investment item) {
-        return item.security;
-      },
-      sort: (final Investment a, final Investment b, final bool sortAscending) {
-        return sortByValue(
-          a.security,
-          b.security,
-          sortAscending,
-        );
-      },
-    );
+    )..id.value = jsonGetInt(row, 'Id');
   }
 }

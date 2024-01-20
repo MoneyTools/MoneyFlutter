@@ -37,17 +37,18 @@ void importQFX(
         payee = Data().payees.findOrAddPayee(item.name);
       }
 
-      Data().transactions.add(Transaction(
-            id: -1,
-            accountId: account.id,
-            dateTime: item.date,
-            payeeId: payee.id,
-            categoryId: getCategoryFromOfxType(item),
-            amount: item.amount,
-            balance: 0,
-            fitid: item.fitid,
-            memo: item.memo,
-          ));
+      final Transaction t = Transaction(
+        fitid: item.fitid,
+      )
+        ..id.value = -1
+        ..accountId.value = account.id.value
+        ..dateTime.value = item.date
+        ..payeeId.value = payee.id.value
+        ..categoryId.value = getCategoryFromOfxType(item)
+        ..amount.value = item.amount
+        ..memo.value = item.memo;
+
+      Data().transactions.add(t);
     }
   }
 }
@@ -86,20 +87,20 @@ int getCategoryFromOfxType(final QFXTransaction ofxTransaction) {
   int categoryId = -1;
   switch (ofxTransaction.type) {
     case "CREDIT":
-      categoryId = Data().categories.investmentCredit.id;
+      categoryId = Data().categories.investmentCredit.id.value;
       break;
     case "DEBIT":
-      categoryId = Data().categories.investmentDebit.id;
+      categoryId = Data().categories.investmentDebit.id.value;
       break;
     case "INT":
-      categoryId = Data().categories.investmentInterest.id;
+      categoryId = Data().categories.investmentInterest.id.value;
       break;
     case "DIV":
-      categoryId = Data().categories.investmentDividends.id;
+      categoryId = Data().categories.investmentDividends.id.value;
       break;
     case "FEE":
     case "SRVCHG": // service charge
-      categoryId = Data().categories.investmentFees.id;
+      categoryId = Data().categories.investmentFees.id.value;
       break;
     case "DEP": // deposit
     case "ATM": // automatic teller machine
@@ -112,13 +113,13 @@ int getCategoryFromOfxType(final QFXTransaction ofxTransaction) {
     case "CHECK": // check
     case "OTHER":
       if (ofxTransaction.amount > 0) {
-        categoryId = Data().categories.investmentCredit.id;
+        categoryId = Data().categories.investmentCredit.id.value;
       } else {
-        categoryId = Data().categories.investmentDebit.id;
+        categoryId = Data().categories.investmentDebit.id.value;
       }
       break;
     case "XFER":
-      categoryId = Data().categories.investmentTransfer.id;
+      categoryId = Data().categories.investmentTransfer.id.value;
       break;
   }
   return categoryId;

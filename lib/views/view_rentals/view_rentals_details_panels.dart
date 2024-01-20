@@ -5,7 +5,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   Widget _getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
     for (final RentBuilding entry in getList()) {
-      list.add(PairXY(entry.name, entry.profit));
+      list.add(PairXY(entry.name.value, entry.profit.value));
     }
 
     return Chart(
@@ -43,10 +43,10 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   }
 
   bool filterByRentalCategories(final Transaction t, final RentBuilding rental) {
-    final num categoryIdToMatch = t.categoryId;
+    final num categoryIdToMatch = t.categoryId.value;
 
     if (categoryIdToMatch == Data().categories.splitCategoryId()) {
-      final List<Split> splits = Data().splits.getListFromTransactionId(t.id);
+      final List<Split> splits = Data().splits.getListFromTransactionId(t.id.value);
 
       for (final Split split in splits) {
         if (isMatchingCategories(split.categoryId, rental)) {

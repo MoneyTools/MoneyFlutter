@@ -1,4 +1,3 @@
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
 /*
@@ -9,9 +8,18 @@ import 'package:money/models/money_objects/money_object.dart';
   3    TaxDate      datetime  0                    0
  */
 
-class TransactionExtra extends MoneyObject {
+class TransactionExtra extends MoneyObject<TransactionExtra> {
+  @override
+  int get uniqueId => id.value;
+
   // 0
-  // MoneyObject.id
+  Field<TransactionExtra, int> id = Field<TransactionExtra, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    valueForSerialization: (final TransactionExtra instance) => instance.id.value,
+  );
 
   // 1
   int transaction;
@@ -25,7 +33,7 @@ class TransactionExtra extends MoneyObject {
   /// Constructor
   TransactionExtra({
     // 0
-    required super.id,
+    // id
     // 1
     required this.transaction,
     // 2
@@ -33,50 +41,4 @@ class TransactionExtra extends MoneyObject {
     // 3
     required this.taxDate,
   });
-
-  static FieldDefinitions<TransactionExtra> getFieldDefinitions() {
-    final FieldDefinitions<TransactionExtra> fields =
-        FieldDefinitions<TransactionExtra>(definitions: <FieldDefinition<TransactionExtra>>[
-      FieldDefinition<TransactionExtra>(
-        useAsColumn: false,
-        name: 'Id',
-        serializeName: 'id',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final TransactionExtra entity) => entity.id,
-        sort: (final TransactionExtra a, final TransactionExtra b, final bool sortAscending) {
-          return sortByValue(a.id, b.id, sortAscending);
-        },
-      ),
-      FieldDefinition<TransactionExtra>(
-        type: FieldType.numeric,
-        useAsColumn: false,
-        name: 'Transaction',
-        serializeName: 'transaction',
-        valueFromInstance: (final TransactionExtra entity) => entity.transaction,
-        sort: (final TransactionExtra a, final TransactionExtra b, final bool sortAscending) {
-          return sortByValue(a.transaction, b.transaction, sortAscending);
-        },
-      ),
-      FieldDefinition<TransactionExtra>(
-        type: FieldType.numeric,
-        name: 'Tax Year',
-        serializeName: 'tax_year',
-        valueFromInstance: (final TransactionExtra item) => item.taxYear,
-        sort: (final TransactionExtra a, final TransactionExtra b, final bool sortAscending) {
-          return sortByString(a.taxYear, b.taxYear, sortAscending);
-        },
-      ),
-      FieldDefinition<TransactionExtra>(
-        type: FieldType.numeric,
-        name: 'Tax Date',
-        serializeName: 'tax_date',
-        valueFromInstance: (final TransactionExtra item) => item.taxDate,
-        sort: (final TransactionExtra a, final TransactionExtra b, final bool sortAscending) {
-          return sortByString(a.taxDate, b.taxDate, sortAscending);
-        },
-      ),
-    ]);
-    return fields;
-  }
 }

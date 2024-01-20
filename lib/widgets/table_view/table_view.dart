@@ -7,7 +7,7 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/widgets/table_view/table_row.dart';
 
 class MyTableView<T> extends StatefulWidget {
-  final FieldDefinitions<T> columns;
+  final Fields<T> columns;
   final List<T> list;
   final ValueNotifier<List<int>> selectedItems;
   final Function? onTap;
@@ -29,10 +29,6 @@ class MyTableView<T> extends StatefulWidget {
 class MyTableViewState<T> extends State<MyTableView<T>> {
   final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
-
-  FieldDefinitions<T> getFieldDefinitions() {
-    return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
-  }
 
   @override
   void initState() {

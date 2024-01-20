@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view.dart';
@@ -29,25 +28,6 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   @override
   String getDescription() {
     return 'Payee aliases.';
-  }
-
-  @override
-  FieldDefinitions<Alias> getFieldDefinitionsForTable() {
-    return FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
-      Alias.getFieldForPayee(),
-      Alias.getFieldForPattern(),
-      Alias.getFieldForType(),
-    ]);
-  }
-
-  @override
-  FieldDefinitions<Alias> getFieldDefinitionsForDetailsPanel() {
-    final FieldDefinitions<Alias> fields = FieldDefinitions<Alias>(definitions: <FieldDefinition<Alias>>[
-      Alias.getFieldForPattern(),
-      Alias.getFieldForType(),
-    ]);
-
-    return fields;
   }
 
   getUnitsAsString(final List<RentUnit> listOfUnits) {
@@ -77,7 +57,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   @override
   Widget getPanelForTransactions(final List<int> indices) {
     final Alias? alias = getFirstElement<Alias>(indices, list);
-    if (alias != null && alias.id > -1) {
+    if (alias != null && alias.id.value > -1) {
       return TableTransactions(
         key: Key(alias.id.toString()),
         columnsToInclude: const <String>[
@@ -88,7 +68,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
           columnIdAmount,
         ],
         getList: () => getFilteredTransactions(
-          (final Transaction transaction) => transaction.payeeId == alias.payeeId,
+          (final Transaction transaction) => transaction.payeeId.value == alias.payeeId.value,
         ),
       );
     }

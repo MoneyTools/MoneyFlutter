@@ -5,8 +5,8 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
   Widget _getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
     for (final Payee item in getList()) {
-      if (item.name != 'Transfer') {
-        list.add(PairXY(item.name, item.count));
+      if (item.name.value != 'Transfer') {
+        list.add(PairXY(item.name.value, item.count.value));
       }
     }
 
@@ -25,7 +25,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final Payee? payee = getFirstElement<Payee>(indices, list);
-    if (payee != null && payee.id > -1) {
+    if (payee != null && payee.id.value > -1) {
       return TableTransactions(
         key: Key(payee.id.toString()),
         columnsToInclude: const <String>[
@@ -36,7 +36,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
           columnIdAmount,
         ],
         getList: () => getFilteredTransactions(
-          (final Transaction transaction) => transaction.payeeId == payee.id,
+          (final Transaction transaction) => transaction.payeeId.value == payee.id.value,
         ),
       );
     }

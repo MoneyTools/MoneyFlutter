@@ -3,53 +3,91 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
-/*
-  0|Id|INT|1||0
-  1|AccountId|INT|1||0
-  2|Date|datetime|1||0
-  3|Principal|money|0||0
-  4|Interest|money|0||0
-  5|Memo|nvarchar(255)|0||0
- */
+class LoanPayment extends MoneyObject<LoanPayment> {
+  @override
+  int get uniqueId => id.value;
 
-class LoanPayment extends MoneyObject {
-  // 0
-  // int MoneyEntity.Id
+  /// ID
+  /// 0|Id|INT|1||0
+  FieldId<LoanPayment> id = FieldId<LoanPayment>(
+    importance: 0,
+    valueForSerialization: (final LoanPayment instance) => instance.id.value,
+  );
 
-  // 1
-  final int accountId;
+  /// 1|AccountId|INT|1||0
+  Field<LoanPayment, int> accountId = Field<LoanPayment, int>(
+    importance: 1,
+    name: 'AccountId',
+    serializeName: 'AccountId',
+    defaultValue: -1,
+    valueFromInstance: (final LoanPayment instance) => Account.getName(instance.accountInstance),
+    valueForSerialization: (final LoanPayment instance) => instance.accountId.value,
+  );
 
-  // 2
-  DateTime date;
+  /// Date
+  /// 2|Date|datetime|1||0
+  Field<LoanPayment, DateTime> date = Field<LoanPayment, DateTime>(
+    importance: 2,
+    type: FieldType.date,
+    serializeName: 'Date',
+    useAsColumn: false,
+    defaultValue: DateTime.parse('1970-01-01'),
+    valueFromInstance: (final LoanPayment instance) => instance.date.value.toIso8601String(),
+    valueForSerialization: (final LoanPayment instance) => instance.date.value.toIso8601String(),
+  );
 
-  // 3
-  double principal;
+  /// 3
+  /// 3|Principal|money|0||0
+  FieldDouble<LoanPayment> principal = FieldDouble<LoanPayment>(
+    importance: 3,
+    name: 'Principal',
+    serializeName: 'Principal',
+    valueFromInstance: (final LoanPayment instance) => instance.principal.value,
+    valueForSerialization: (final LoanPayment instance) => instance.principal.value,
+  );
 
-  // 4
-  double interest;
+  /// Interest
+  /// 4|Interest|money|0||0
+  FieldDouble<LoanPayment> interest = FieldDouble<LoanPayment>(
+    importance: 4,
+    name: 'Interest',
+    serializeName: 'Interest',
+    valueFromInstance: (final LoanPayment instance) => instance.interest.value,
+    valueForSerialization: (final LoanPayment instance) => instance.interest.value,
+  );
 
   // 5
-  String memo;
+  // 5|Memo|nvarchar(255)|0||0
+  Field<LoanPayment, String> memo = Field<LoanPayment, String>(
+    importance: 99,
+    type: FieldType.text,
+    name: 'Memo',
+    serializeName: 'Memo',
+    defaultValue: '',
+    valueFromInstance: (final LoanPayment instance) => instance.memo.value,
+    valueForSerialization: (final LoanPayment instance) => instance.memo.value,
+  );
 
   // Not persisted
   Account? accountInstance;
 
   LoanPayment({
-    required super.id,
-    required this.accountId,
-    required this.date,
-    required this.principal,
-    required this.interest,
-    required this.memo,
+    required final int accountId,
+    required final DateTime date,
+    required final double principal,
+    required final double interest,
+    required final String memo,
   }) {
-    accountInstance = Data().accounts.get(accountId);
+    this.accountId.value = accountId;
+    accountInstance = Data().accounts.get(this.accountId.value);
+    this.date.value = date;
+    this.principal.value = principal;
+    this.interest.value = interest;
   }
 
   /// Constructor from a SQLite row
   factory LoanPayment.fromSqlite(final Json row) {
     return LoanPayment(
-      // 0
-      id: jsonGetInt(row, 'Id'),
       // 1
       accountId: jsonGetInt(row, 'AccountId'),
       // 2
@@ -60,97 +98,6 @@ class LoanPayment extends MoneyObject {
       interest: jsonGetDouble(row, 'Interest'),
       // 3
       memo: jsonGetString(row, 'Memo'),
-    );
-  }
-
-  static FieldDefinition<LoanPayment> getFieldForAccountId() {
-    return FieldDefinition<LoanPayment>(
-      type: FieldType.numeric,
-      name: 'AccountID',
-      serializeName: 'accountId',
-      valueFromInstance: (final LoanPayment item) {
-        return item.memo;
-      },
-      valueForSerialization: (final LoanPayment item) {
-        return item.accountId;
-      },
-      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
-        return sortByValue(
-          a.accountId,
-          b.accountId,
-          sortAscending,
-        );
-      },
-    );
-  }
-
-  static FieldDefinition<LoanPayment> getFieldForAccountName() {
-    return FieldDefinition<LoanPayment>(
-      type: FieldType.text,
-      name: 'Name',
-      valueFromInstance: (final LoanPayment item) {
-        return item.accountInstance == null ? '' : item.accountInstance!.name;
-      },
-      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
-        return sortByString(
-          a.accountInstance == null ? '' : a.accountInstance!.name,
-          b.accountInstance == null ? '' : b.accountInstance!.name,
-          sortAscending,
-        );
-      },
-    );
-  }
-
-  static FieldDefinition<LoanPayment> getFieldForDate() {
-    return FieldDefinition<LoanPayment>(
-      type: FieldType.date,
-      name: 'Date',
-      serializeName: 'date',
-      valueFromInstance: (final LoanPayment item) {
-        return item.date;
-      },
-      valueForSerialization: (final LoanPayment item) {
-        return item.date;
-      },
-      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
-        return sortByString(
-          a.date,
-          b.date,
-          sortAscending,
-        );
-      },
-    );
-  }
-
-  static FieldDefinition<LoanPayment> getFieldForMemo() {
-    return FieldDefinition<LoanPayment>(
-      type: FieldType.text,
-      name: 'Memo',
-      serializeName: 'memo',
-      valueFromInstance: (final LoanPayment item) {
-        return item.memo;
-      },
-      valueForSerialization: (final LoanPayment item) {
-        return item.memo;
-      },
-      sort: (final LoanPayment a, final LoanPayment b, final bool sortAscending) {
-        return sortByString(
-          a.memo,
-          b.memo,
-          sortAscending,
-        );
-      },
-    );
-  }
-
-  static FieldDefinitions<LoanPayment> getFieldDefinitions() {
-    final FieldDefinitions<LoanPayment> fields =
-        FieldDefinitions<LoanPayment>(definitions: <FieldDefinition<LoanPayment>>[
-      MoneyObject.getFieldId<LoanPayment>(),
-      getFieldForAccountId(),
-      getFieldForDate(),
-      getFieldForMemo(),
-    ]);
-    return fields;
+    )..id.value = jsonGetInt(row, 'Id');
   }
 }

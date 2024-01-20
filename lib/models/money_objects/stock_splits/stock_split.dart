@@ -11,9 +11,18 @@ import 'package:money/models/money_objects/money_objects.dart';
   4    Denominator  money     1                    0
  */
 
-class StockSplit extends MoneyObject {
+class StockSplit extends MoneyObject<StockSplit> {
+  @override
+  int get uniqueId => id.value;
+
   // 0
-  // int MoneyEntity.Id
+  Field<StockSplit, int> id = Field<StockSplit, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    valueForSerialization: (final StockSplit instance) => instance.id.value,
+  );
 
   // 1
   final DateTime date;
@@ -28,7 +37,6 @@ class StockSplit extends MoneyObject {
   final int denominator;
 
   StockSplit({
-    required super.id,
     required this.date,
     required this.security,
     required this.numerator,
@@ -39,7 +47,7 @@ class StockSplit extends MoneyObject {
   factory StockSplit.fromSqlite(final Json row) {
     return StockSplit(
       // 0
-      id: jsonGetInt(row, 'Id'),
+      // id
       // 1
       date: jsonGetDate(row, 'Date'),
       // 2
@@ -48,53 +56,6 @@ class StockSplit extends MoneyObject {
       numerator: jsonGetInt(row, 'Numerator'),
       // 4
       denominator: jsonGetInt(row, 'Denominator'),
-    );
-  }
-
-  static FieldDefinitions<StockSplit> getFieldDefinitions() {
-    final FieldDefinitions<StockSplit> fields = FieldDefinitions<StockSplit>(definitions: <FieldDefinition<StockSplit>>[
-      MoneyObject.getFieldId<StockSplit>(),
-      FieldDefinition<StockSplit>(
-        type: FieldType.date,
-        name: 'Date',
-        serializeName: 'date',
-        valueFromInstance: (final StockSplit item) {
-          return item.date;
-        },
-        valueForSerialization: (final StockSplit item) {
-          return item.date;
-        },
-        sort: (final StockSplit a, final StockSplit b, final bool sortAscending) {
-          return sortByDate(
-            a.date,
-            b.date,
-            sortAscending,
-          );
-        },
-      ),
-      getFieldForSecurity(),
-    ]);
-    return fields;
-  }
-
-  static FieldDefinition<StockSplit> getFieldForSecurity() {
-    return FieldDefinition<StockSplit>(
-      type: FieldType.numeric,
-      name: 'Security',
-      serializeName: 'security',
-      valueFromInstance: (final StockSplit item) {
-        return item.security;
-      },
-      valueForSerialization: (final StockSplit item) {
-        return item.security;
-      },
-      sort: (final StockSplit a, final StockSplit b, final bool sortAscending) {
-        return sortByValue(
-          a.security,
-          b.security,
-          sortAscending,
-        );
-      },
-    );
+    )..id.value = jsonGetInt(row, 'Id');
   }
 }

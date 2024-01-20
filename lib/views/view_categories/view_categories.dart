@@ -4,7 +4,6 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/three_part_label.dart';
@@ -63,9 +62,9 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
 
   double getTotalBalanceOfAccounts(final List<CategoryType> types) {
     double total = 0.0;
-    getList().forEach((final Category x) {
-      if (types.isEmpty || (x).type == types.first) {
-        total += (x).balance;
+    getList().forEach((final Category category) {
+      if (types.isEmpty || (category).type.value == types.first) {
+        total += category.runningBalance.value;
       }
     });
     return total;
@@ -97,62 +96,6 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   }
 
   @override
-  FieldDefinitions<Category> getFieldDefinitionsForTable() {
-    return FieldDefinitions<Category>(definitions: <FieldDefinition<Category>>[
-      FieldDefinition<Category>(
-        name: 'Name',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final Category category) {
-          return category.name;
-        },
-        sort: (final Category a, final Category b, final bool sortAscending) {
-          return sortByString(a.name, b.name, sortAscending);
-        },
-      ),
-      FieldDefinition<Category>(
-        name: 'Type',
-        type: FieldType.text,
-        align: TextAlign.center,
-        valueFromInstance: (final Category category) {
-          return category.getTypeAsText();
-        },
-        sort: (final Category a, final Category b, final bool sortAscending) {
-          return sortByString(
-            a.getTypeAsText(),
-            b.getTypeAsText(),
-            sortAscending,
-          );
-        },
-      ),
-      Category.getFieldForDescription(),
-      Category.getFieldForColor(),
-      FieldDefinition<Category>(
-        name: 'Count',
-        type: FieldType.numeric,
-        align: TextAlign.right,
-        valueFromInstance: (final Category category) {
-          return category.count;
-        },
-        sort: (final Category a, final Category b, final bool sortAscending) {
-          return sortByValue(a.count, b.count, sortAscending);
-        },
-      ),
-      FieldDefinition<Category>(
-        name: 'Balance',
-        type: FieldType.amount,
-        align: TextAlign.right,
-        valueFromInstance: (final Category category) {
-          return category.balance;
-        },
-        sort: (final Category a, final Category b, final bool sortAscending) {
-          return sortByValue(a.balance, b.balance, sortAscending);
-        },
-      ),
-    ]);
-  }
-
-  @override
   getDefaultSortColumn() {
     return 0; // Sort by name
   }
@@ -160,7 +103,11 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   @override
   List<Category> getList() {
     final CategoryType? filterType = getSelectedCategoryType();
-    return Data().categories.getList().where((final Category x) => filterType == null || x.type == filterType).toList();
+    return Data()
+        .categories
+        .getList()
+        .where((final Category x) => filterType == null || x.type.value == filterType)
+        .toList();
   }
 
   CategoryType? getSelectedCategoryType() {
