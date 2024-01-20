@@ -74,11 +74,11 @@ DateTime jsonGetDate(
 }) {
   final dynamic value = json[key];
   if (value == null) {
-    return defaultIfNotFound ?? DateTime.parse('19070-01-01');
+    return defaultIfNotFound ?? DateTime.parse('1970-01-01');
   }
   try {
     return DateTime.parse(value.toString());
   } catch (_) {
-    return defaultIfNotFound ?? DateTime.parse('19070-01-01');
+    return defaultIfNotFound ?? DateTime.parse('1970-01-01');
   }
 }
