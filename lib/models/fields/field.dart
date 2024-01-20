@@ -112,8 +112,42 @@ class Field<C, T> {
   }
 }
 
+class FieldInt<C> extends Field<C, int> {
+  FieldInt({
+    super.importance,
+    super.name,
+    super.serializeName,
+    super.valueFromInstance,
+    super.valueForSerialization,
+    super.useAsColumn,
+    super.useAsDetailPanels,
+    super.sort,
+  }) : super(
+          defaultValue: 0,
+          align: TextAlign.right,
+          type: FieldType.numeric,
+        );
+}
+
 class FieldDouble<C> extends Field<C, double> {
   FieldDouble({
+    super.importance,
+    super.name,
+    super.serializeName,
+    super.valueFromInstance,
+    super.valueForSerialization,
+    super.useAsColumn,
+    super.useAsDetailPanels,
+    super.sort,
+  }) : super(
+          defaultValue: 0.00,
+          align: TextAlign.right,
+          type: FieldType.numeric,
+        );
+}
+
+class FieldAmount<C> extends Field<C, double> {
+  FieldAmount({
     super.importance,
     super.name,
     super.serializeName,

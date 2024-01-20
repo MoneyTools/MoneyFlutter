@@ -38,7 +38,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   /// 3
   /// 3|Principal|money|0||0
-  FieldDouble<LoanPayment> principal = FieldDouble<LoanPayment>(
+  FieldAmount<LoanPayment> principal = FieldAmount<LoanPayment>(
     importance: 3,
     name: 'Principal',
     serializeName: 'Principal',
@@ -48,7 +48,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   /// Interest
   /// 4|Interest|money|0||0
-  FieldDouble<LoanPayment> interest = FieldDouble<LoanPayment>(
+  FieldAmount<LoanPayment> interest = FieldAmount<LoanPayment>(
     importance: 4,
     name: 'Interest',
     serializeName: 'Interest',

@@ -51,21 +51,21 @@ class RentBuilding extends MoneyObject<RentBuilding> {
   int count = 0;
 
   /// Revenue
-  FieldDouble<RentBuilding> revenue = FieldDouble<RentBuilding>(
+  FieldAmount<RentBuilding> revenue = FieldAmount<RentBuilding>(
     importance: 20,
     name: 'Revenue',
     valueFromInstance: (final RentBuilding instance) => instance.revenue.value,
   );
 
   /// Expenses
-  FieldDouble<RentBuilding> expense = FieldDouble<RentBuilding>(
+  FieldAmount<RentBuilding> expense = FieldAmount<RentBuilding>(
     importance: 21,
     name: 'Expenses',
     valueFromInstance: (final RentBuilding instance) => instance.expense.value,
   );
 
   /// Profit
-  FieldDouble<RentBuilding> profit = FieldDouble<RentBuilding>(
+  FieldAmount<RentBuilding> profit = FieldAmount<RentBuilding>(
     importance: 22,
     name: 'Profit',
     valueFromInstance: (final RentBuilding instance) => instance.profit.value,
