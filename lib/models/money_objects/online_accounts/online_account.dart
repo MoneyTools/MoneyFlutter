@@ -25,9 +25,18 @@ import 'package:money/models/money_objects/money_objects.dart';
   20   UserKeyExpireDate  datetime        0                    0
  */
 
-class OnlineAccount extends MoneyObject {
+class OnlineAccount extends MoneyObject<OnlineAccount> {
+  @override
+  int get uniqueId => id.value;
+
   // 0
-  // int MoneyEntity.Id
+  Declare<OnlineAccount, int> id = Declare<OnlineAccount, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    valueForSerialization: (final OnlineAccount instance) => instance.id.value,
+  );
 
   // 1
   final String name;
@@ -66,7 +75,6 @@ class OnlineAccount extends MoneyObject {
   final String branchId;
 
   OnlineAccount({
-    required super.id,
     required this.name,
     required this.institution,
     required this.ofx,
@@ -84,8 +92,6 @@ class OnlineAccount extends MoneyObject {
   /// Constructor from a SQLite row
   factory OnlineAccount.fromSqlite(final Json row) {
     return OnlineAccount(
-      // 0
-      id: jsonGetInt(row, 'Id'),
       // 1
       name: jsonGetString(row, 'Name'),
       // 2
@@ -110,44 +116,6 @@ class OnlineAccount extends MoneyObject {
       bankId: jsonGetString(row, 'BankId'),
       // 12
       branchId: jsonGetString(row, 'BranchId'),
-    );
-  }
-
-  static FieldDefinitions<OnlineAccount> getFieldDefinitions() {
-    final FieldDefinitions<OnlineAccount> fields =
-        FieldDefinitions<OnlineAccount>(definitions: <FieldDefinition<OnlineAccount>>[
-      MoneyObject.getFieldId<OnlineAccount>(),
-      getFieldForName(),
-      FieldDefinition<OnlineAccount>(
-        type: FieldType.text,
-        name: 'Institution',
-        serializeName: 'institution',
-        valueFromInstance: (final OnlineAccount item) {
-          return item.institution;
-        },
-      ),
-    ]);
-    return fields;
-  }
-
-  static FieldDefinition<OnlineAccount> getFieldForName() {
-    return FieldDefinition<OnlineAccount>(
-      type: FieldType.text,
-      name: 'Name',
-      serializeName: 'name',
-      valueFromInstance: (final OnlineAccount item) {
-        return item.name;
-      },
-      valueForSerialization: (final OnlineAccount item) {
-        return item.name;
-      },
-      sort: (final OnlineAccount a, final OnlineAccount b, final bool sortAscending) {
-        return sortByString(
-          a.name,
-          b.name,
-          sortAscending,
-        );
-      },
-    );
+    )..id.value = jsonGetInt(row, 'Id');
   }
 }

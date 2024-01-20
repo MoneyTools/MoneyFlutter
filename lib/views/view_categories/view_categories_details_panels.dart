@@ -6,12 +6,12 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
     final Map<String, num> map = <String, num>{};
 
     for (final Category item in getList()) {
-      if (item.name != 'Split' && item.name != 'Xfer to Deleted Account') {
+      if (item.name.value != 'Split' && item.name.value != 'Xfer to Deleted Account') {
         final Category topCategory = Data().categories.getTopAncestor(item);
-        if (map[topCategory.name] == null) {
-          map[topCategory.name] = 0;
+        if (map[topCategory.name.value] == null) {
+          map[topCategory.name.value] = 0;
         }
-        map[topCategory.name] = map[topCategory.name]! + item.balance;
+        map[topCategory.name.value] = map[topCategory.name.value]! + item.runningBalance.value;
       }
     }
     final List<PairXY> list = <PairXY>[];
@@ -34,7 +34,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
   // Details Panel for Transactions Categories
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final Category? category = getFirstElement<Category>(indices, list);
-    if (category != null && category.id > -1) {
+    if (category != null && category.id.value > -1) {
       return TableTransactions(
         key: Key(category.id.toString()),
         columnsToInclude: const <String>[
@@ -45,7 +45,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
           columnIdAmount,
         ],
         getList: () => getFilteredTransactions(
-          (final Transaction transaction) => transaction.categoryId == category.id,
+          (final Transaction transaction) => transaction.categoryId.value == category.id.value,
         ),
       );
     }

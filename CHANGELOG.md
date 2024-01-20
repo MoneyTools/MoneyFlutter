@@ -1,3 +1,7 @@
+## [1.1.00] 2024-01-20
+
+- Major refactor moved to Self describing Declarative Properties
+
 ## [1.0.21] 2024-01-17
 
 - Refactor reduce code to deal with al tables

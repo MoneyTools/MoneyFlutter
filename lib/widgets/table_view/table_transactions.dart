@@ -71,13 +71,15 @@ class _TableTransactionsState extends State<TableTransactions> {
   }
 
   void onSort() {
-    final FieldDefinition<Transaction> fieldDefinition = columns.definitions[sortBy];
-    if (fieldDefinition.sort != null) {
-      widget.getList().sort(
-        (final Transaction a, final Transaction b) {
-          return fieldDefinition.sort!(a, b, sortAscending);
-        },
-      );
+    if (columns.definitions.isNotEmpty) {
+      final Declare<Transaction, dynamic> fieldDefinition = columns.definitions[sortBy];
+      if (fieldDefinition.sort != null) {
+        widget.getList().sort(
+          (final Transaction a, final Transaction b) {
+            return fieldDefinition.sort!(a, b, sortAscending);
+          },
+        );
+      }
     }
   }
 
@@ -89,13 +91,16 @@ class _TableTransactionsState extends State<TableTransactions> {
   }
 
   FieldDefinitions<Transaction> getFieldDefinitionsForTable() {
-    final List<FieldDefinition<Transaction>> listOfColumns = <FieldDefinition<Transaction>>[];
+    final List<Declare<Transaction, dynamic>> listOfFields = <Declare<Transaction, dynamic>>[];
 
     for (String columnId in widget.columnsToInclude) {
-      listOfColumns.add(Transaction.getFieldDefinitionFromId(columnId, widget.getList)!);
+      final Declare<Transaction, dynamic>? declared = getFieldByNameForClass<Transaction>(columnId);
+      if (declared != null) {
+        listOfFields.add(declared);
+      }
     }
 
-    return FieldDefinitions<Transaction>(definitions: listOfColumns);
+    return FieldDefinitions<Transaction>(definitions: listOfFields);
   }
 }
 
@@ -110,13 +115,13 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
       Data().transactions.getList().where((final Transaction transaction) => filter(transaction)).toList();
 
   list.sort(
-    (final Transaction a, final Transaction b) => a.dateTime.compareTo(b.dateTime),
+    (final Transaction a, final Transaction b) => a.dateTime.value.compareTo(b.dateTime.value),
   );
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {
-    runningBalance += transaction.amount;
-    transaction.balance = runningBalance;
+    runningBalance += transaction.amount.value;
+    transaction.balance.value = runningBalance;
   }
   return list;
 }

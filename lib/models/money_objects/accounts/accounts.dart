@@ -2,9 +2,7 @@ import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-
 import 'package:money/models/money_objects/transactions/transaction.dart';
-
 import 'package:uuid/uuid.dart';
 
 class Accounts extends MoneyObjects<Account> {
@@ -34,40 +32,39 @@ class Accounts extends MoneyObjects<Account> {
       'God-Inc'
     ];
     for (int i = 0; i < names.length; i++) {
-      addEntry(Account(
-        id: i,
-        name: names[i],
-        accountId: i.toString(),
-        type: AccountType.checking,
-        description: 'Some description',
-        currency: 'USD',
-        lastSync: DateTime.now(),
-        syncGuid: const Uuid().v4().toString(),
-        flags: 0,
-        openingBalance: 0,
-        ofxAccountId: '',
-        onlineAccount: -1,
-        webSite: '',
-        reconcileWarning: 0,
-        lastBalance: DateTime.now().subtract(const Duration(days: 20)),
-        categoryIdForPrincipal: 0,
-        categoryIdForInterest: 0,
-      ));
+      addEntry(Account()
+        ..id.value = i
+        ..accountId.value = i.toString()
+        ..name.value = names[i]
+        ..type.value = AccountType.checking
+        ..description.value = 'Some description'
+        ..currency.value = 'USD'
+        ..lastSync.value = DateTime.now()
+        ..syncGuid = const Uuid().v4().toString()
+        ..flags = 0
+        ..openingBalance.value = 0
+        ..ofxAccountId.value = ''
+        ..onlineAccount = -1
+        ..webSite.value = ''
+        ..reconcileWarning = 0
+        ..lastBalance.value = DateTime.now().subtract(const Duration(days: 20))
+        ..categoryIdForPrincipal.value = 0
+        ..categoryIdForInterest.value = 0);
     }
   }
 
   @override
   void onAllDataLoaded() {
     for (final Account account in getList()) {
-      account.count = 0;
-      account.balance = account.openingBalance;
+      account.count.value = 0;
+      account.balance.value = account.openingBalance.value;
     }
 
     for (final Transaction t in Data().transactions.getList()) {
-      final Account? item = get(t.accountId);
+      final Account? item = get(t.accountId.value);
       if (item != null) {
-        item.count++;
-        item.balance += t.amount;
+        item.count.value++;
+        item.balance.value += t.amount.value;
       }
     }
   }
@@ -100,7 +97,7 @@ class Accounts extends MoneyObjects<Account> {
     if (account == null) {
       return id.toString();
     }
-    return account.name;
+    return account.name.value;
   }
 
   Account? findByIdAndType(
@@ -108,14 +105,13 @@ class Accounts extends MoneyObjects<Account> {
     final AccountType accountType,
   ) {
     return getList().firstWhereOrNull((final Account item) {
-      return item.accountId == accountId && item.type == accountType;
+      return item.accountId.value == accountId && item.type.value == accountType;
     });
   }
 
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Account.getFieldDefinitions(),
       getListSortedById(),
     );
   }

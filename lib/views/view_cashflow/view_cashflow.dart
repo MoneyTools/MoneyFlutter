@@ -44,28 +44,28 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
 
   void transformData() {
     for (Transaction element in Data().transactions.getList()) {
-      final Category? category = Data().categories.get(element.categoryId);
+      final Category? category = Data().categories.get(element.categoryId.value);
       if (category != null) {
-        switch (category.type) {
+        switch (category.type.value) {
           case CategoryType.income:
           case CategoryType.saving:
           case CategoryType.investment:
-            totalIncomes += element.amount;
+            totalIncomes += element.amount.value;
 
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfIncomes[topCategory];
             mapValue ??= 0;
-            mapOfIncomes[topCategory] = mapValue + element.amount;
+            mapOfIncomes[topCategory] = mapValue + element.amount.value;
             break;
           case CategoryType.expense:
-            totalExpenses += element.amount;
+            totalExpenses += element.amount.value;
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfExpenses[topCategory];
             mapValue ??= 0;
-            mapOfExpenses[topCategory] = mapValue + element.amount;
+            mapOfExpenses[topCategory] = mapValue + element.amount.value;
             break;
           default:
-            totalNones += element.amount;
+            totalNones += element.amount.value;
             break;
         }
       }
@@ -80,7 +80,7 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
 
     mapOfIncomes.forEach((final Category key, final double value) {
       sanKeyListOfIncomes.add(SanKeyEntry()
-        ..name = key.name
+        ..name = key.name.value
         ..value = value);
     });
 
@@ -94,7 +94,7 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
 
     mapOfExpenses.forEach((final Category key, final double value) {
       sanKeyListOfExpenses.add(SanKeyEntry()
-        ..name = key.name
+        ..name = key.name.value
         ..value = value);
     });
 

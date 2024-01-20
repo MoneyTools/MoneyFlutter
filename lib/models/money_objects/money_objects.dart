@@ -1,6 +1,5 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/data_io/database/database.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
 // exports
@@ -23,8 +22,8 @@ class MoneyObjects<T> {
   List<T> getListSortedById() {
     _list.sort((final T a, final T b) {
       return sortByValue(
-        (a as MoneyObject).id,
-        (b as MoneyObject).id,
+        (a as MoneyObject<T>).uniqueId,
+        (b as MoneyObject<T>).uniqueId,
         true,
       );
     });
@@ -41,7 +40,7 @@ class MoneyObjects<T> {
 
   void addEntry(final T entry) {
     _list.add(entry);
-    _map[(entry as MoneyObject).id] = entry;
+    _map[(entry as MoneyObject<T>).uniqueId] = entry;
   }
 
   T? get(final num id) {
@@ -83,21 +82,38 @@ class MoneyObjects<T> {
   }
 
   String toCSV() {
-    return getCsvFromList(
-      MoneyObject.getFieldDefinitions<T>(),
-      getListSortedById(),
-    );
+    return getCsvFromList(getListSortedById());
   }
 
-  String getCsvFromList(final FieldDefinitions<T> fieldDefinitions, final List<T> sortedList) {
+  String getCsvHeader(final List<Object> declarations) {
+    final List<String> headerList = <String>[];
+
+    for (final dynamic field in declarations) {
+      if (field.serializeName != '') {
+        headerList.add('"${field.serializeName}"');
+      }
+    }
+    return headerList.join(',');
+  }
+
+  String getCsvFromList(final List<T> sortedList) {
     final StringBuffer csv = StringBuffer();
 
-    // CSV Header
-    csv.writeln(fieldDefinitions.getCsvHeader());
+    final List<Object> declarations = getFieldsForClass<T>();
 
-    // CSV Rows
+    // CSV Header
+    csv.writeln(getCsvHeader(declarations));
+
+    // CSV Rows values
     for (final T item in sortedList) {
-      csv.writeln(fieldDefinitions.getCsvRowValues(item));
+      final List<String> listValues = <String>[];
+
+      for (final dynamic field in declarations) {
+        if (field.serializeName != '') {
+          listValues.add('"${field.valueForSerialization(item)}"');
+        }
+      }
+      csv.writeln(listValues.join(','));
     }
 
     // Add the UTF-8 BOM for Excel

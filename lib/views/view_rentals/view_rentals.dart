@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
 import 'package:money/models/money_objects/rent_buildings/rent_building.dart';
@@ -77,93 +76,6 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
         return sortByString(a.note, b.note, sortAscending);
       },
     );
-  }
-
-  @override
-  FieldDefinitions<RentBuilding> getFieldDefinitionsForTable() {
-    return FieldDefinitions<RentBuilding>(definitions: <FieldDefinition<RentBuilding>>[
-      getColumnForName(),
-      getColumnForAddress(),
-      getColumnForNote(),
-      FieldDefinition<RentBuilding>(
-        name: 'In Service',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final RentBuilding rental) {
-          return rental.dateRange.toStringYears();
-        },
-        sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-          return sortByString(a.dateRange.toString(), b.dateRange.toString(), sortAscending);
-        },
-      ),
-      FieldDefinition<RentBuilding>(
-        name: 'Transactions',
-        type: FieldType.numeric,
-        align: TextAlign.right,
-        valueFromInstance: (final RentBuilding rental) {
-          return rental.count;
-        },
-        sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-          return sortByValue(a.count, b.count, sortAscending);
-        },
-      ),
-      FieldDefinition<RentBuilding>(
-        name: 'Revenue',
-        type: FieldType.amountShorthand,
-        align: TextAlign.right,
-        valueFromInstance: (final RentBuilding rental) {
-          return rental.revenue;
-        },
-        sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-          return sortByValue(a.revenue, b.revenue, sortAscending);
-        },
-      ),
-      FieldDefinition<RentBuilding>(
-        name: 'Expense',
-        type: FieldType.amountShorthand,
-        align: TextAlign.right,
-        valueFromInstance: (final RentBuilding rental) {
-          return rental.expense;
-        },
-        sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-          return sortByValue(a.expense, b.expense, sortAscending);
-        },
-      ),
-      FieldDefinition<RentBuilding>(
-        name: 'Profit',
-        type: FieldType.amountShorthand,
-        align: TextAlign.right,
-        valueFromInstance: (final RentBuilding rental) {
-          return rental.profit;
-        },
-        sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-          return sortByValue(a.profit, b.profit, sortAscending);
-        },
-      )
-    ]);
-  }
-
-  @override
-  FieldDefinitions<RentBuilding> getFieldDefinitionsForDetailsPanel() {
-    final FieldDefinitions<RentBuilding> fields = FieldDefinitions<RentBuilding>(
-        definitions: <FieldDefinition<RentBuilding>>[getColumnForName(), getColumnForAddress(), getColumnForNote()]);
-
-    final FieldDefinition<RentBuilding> fieldUnit = FieldDefinition<RentBuilding>(
-      name: 'Unit',
-      type: FieldType.amount,
-      align: TextAlign.right,
-      isMultiLine: true,
-      valueFromInstance: (final RentBuilding rental) {
-        return getUnitsAsString(rental.units);
-      },
-      sort: (final MoneyObject a, final MoneyObject b, final bool ascending) {
-        return sortByValue((a as RentBuilding).revenue, (b as RentBuilding).revenue, sortAscending);
-      },
-    );
-
-    fields.add(fieldUnit);
-
-    return fields;
   }
 
   getUnitsAsString(final List<RentUnit> listOfUnits) {

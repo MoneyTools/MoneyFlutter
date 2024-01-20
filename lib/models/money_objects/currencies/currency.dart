@@ -11,9 +11,18 @@ import 'package:money/models/money_objects/money_objects.dart';
   4    LastRatio    money         0                 0 
   5    CultureCode  nvarchar(80)  0                 0 
  */
-class Currency extends MoneyObject {
+class Currency extends MoneyObject<Currency> {
+  @override
+  int get uniqueId => id.value;
+
   // 0
-  // int MoneyEntity.Id
+  Declare<Currency, int> id = Declare<Currency, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    valueForSerialization: (final Currency instance) => instance.id.value,
+  );
 
   // 1
   final String symbol;
@@ -28,22 +37,21 @@ class Currency extends MoneyObject {
   final double lastRatio;
 
   // 5
-  final String cultureCode;
+  Declare<Currency, String> cultureCode = Declare<Currency, String>(
+    serializeName: 'CultureCode',
+    defaultValue: '',
+  );
 
   Currency({
-    required super.id,
     required this.symbol,
     required this.name,
     required this.ratio,
     this.lastRatio = 0,
-    required this.cultureCode,
   });
 
   /// Constructor from a SQLite row
   factory Currency.fromSqlite(final Json row) {
     return Currency(
-      // 0
-      id: jsonGetInt(row, 'Id'),
       // 1
       symbol: jsonGetString(row, 'Symbol'),
       // 2
@@ -53,98 +61,8 @@ class Currency extends MoneyObject {
       // 4
       lastRatio: jsonGetDouble(row, 'LastRatio'),
       // 5
-      cultureCode: jsonGetString(row, 'CultureCode'),
-    );
-  }
-
-  static FieldDefinitions<Currency> getFieldDefinitions() {
-    final FieldDefinitions<Currency> fields = FieldDefinitions<Currency>(definitions: <FieldDefinition<Currency>>[
-      MoneyObject.getFieldId<Currency>(),
-      FieldDefinition<Currency>(
-        useAsColumn: false,
-        name: 'Id',
-        serializeName: 'id',
-        valueFromInstance: (final Currency entity) => entity.id,
-      ),
-      FieldDefinition<Currency>(
-        type: FieldType.text,
-        name: 'Symbol',
-        serializeName: 'symbol',
-        align: TextAlign.left,
-        valueFromInstance: (final Currency item) {
-          return item.symbol;
-        },
-        valueForSerialization: (final Currency item) {
-          return item.symbol;
-        },
-        sort: (final Currency a, final Currency b, final bool sortAscending) {
-          return sortByString(a.symbol, b.symbol, sortAscending);
-        },
-      ),
-      getFieldForName(),
-      FieldDefinition<Currency>(
-        type: FieldType.numeric,
-        name: 'Ratio',
-        serializeName: 'ratio',
-        align: TextAlign.left,
-        valueFromInstance: (final Currency item) {
-          return item.ratio;
-        },
-        valueForSerialization: (final Currency item) {
-          return item.ratio;
-        },
-        sort: (final Currency a, final Currency b, final bool sortAscending) {
-          return sortByValue(a.ratio, b.ratio, sortAscending);
-        },
-      ),
-      FieldDefinition<Currency>(
-        type: FieldType.numeric,
-        name: 'Last Ratio',
-        serializeName: 'last_ratio',
-        align: TextAlign.left,
-        valueFromInstance: (final Currency item) {
-          return item.lastRatio;
-        },
-        valueForSerialization: (final Currency item) {
-          return item.lastRatio;
-        },
-        sort: (final Currency a, final Currency b, final bool sortAscending) {
-          return sortByValue(a.lastRatio, b.lastRatio, sortAscending);
-        },
-      ),
-      FieldDefinition<Currency>(
-        type: FieldType.text,
-        name: 'CultureCode',
-        serializeName: 'culture_code',
-        valueFromInstance: (final Currency item) {
-          return item.cultureCode;
-        },
-        valueForSerialization: (final Currency item) {
-          return item.cultureCode;
-        },
-        sort: (final Currency a, final Currency b, final bool sortAscending) {
-          return sortByString(a.cultureCode, b.cultureCode, sortAscending);
-        },
-      ),
-    ]);
-    return fields;
-  }
-
-  static FieldDefinition<Currency> getFieldForName() {
-    return FieldDefinition<Currency>(
-      type: FieldType.text,
-      name: 'Name',
-      serializeName: 'name',
-      align: TextAlign.left,
-      valueFromInstance: (final Currency item) {
-        return item.name;
-      },
-      valueForSerialization: (final Currency item) {
-        return item.name;
-      },
-      sort: (final Currency a, final Currency b, final bool sortAscending) {
-        return sortByString(a.name, b.name, sortAscending);
-      },
-    );
+    )
+      ..id.value = jsonGetInt(row, 'Id')
+      ..cultureCode.value = jsonGetString(row, 'CultureCode');
   }
 }

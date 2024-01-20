@@ -1,64 +1,139 @@
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/models/settings.dart';
 
 /*
-SQLite fields of the [Accounts] table
-   0|Id|INT|0||1
-   1|AccountId|nchar(20)|0||0
-   2|OfxAccountId|nvarchar(50)|0||0
-   3|Name|nvarchar(80)|1||0
-   4|Description|nvarchar(255)|0||0
-   5|Type|INT|1||0
    6|OpeningBalance|money|0||0
    7|Currency|nchar(3)|0||0
    8|OnlineAccount|INT|0||0
    9|WebSite|nvarchar(512)|0||0
   10|ReconcileWarning|INT|0||0
-  11|LastSync|datetime|0||0
+
   12|SyncGuid|uniqueidentifier|0||0
   13|Flags|INT|0||0
-  14|LastBalance|datetime|0||0
-  15|CategoryIdForPrincipal|INT|0||0
-  16|CategoryIdForInterest|INT|0||0
+
 */
-class Account extends MoneyObject {
-  // 0
-  // int MoneyEntity.Id
+class Account extends MoneyObject<Account> {
+  @override
+  int get uniqueId => id.value;
 
-  // 1
-  String accountId = '';
+  // Id
+  // 0|Id|INT|0||1
+  Declare<Account, int> id = Declare<Account, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    useAsDetailPanels: false,
+    valueForSerialization: (final Account instance) => instance.id.value,
+  );
 
-  // 2
-  String ofxAccountId = '';
+  // Account ID
+  // 1|AccountId|nchar(20)|0||0
+  Declare<Account, String> accountId = Declare<Account, String>(
+    importance: 90,
+    name: 'AccountId',
+    serializeName: 'AccountId',
+    defaultValue: '',
+    useAsColumn: false,
+    valueForSerialization: (final Account instance) => instance.accountId.value,
+  );
 
-  // 3 -
-  String name;
+  // OFX Account Id
+  // 2|OfxAccountId|nvarchar(50)|0||0
+  Declare<Account, String> ofxAccountId = Declare<Account, String>(
+    importance: 1,
+    name: 'OfxAccountId',
+    serializeName: 'OfxAccountId',
+    defaultValue: '',
+    useAsColumn: false,
+    valueFromInstance: (final Account instance) => instance.ofxAccountId.value,
+    valueForSerialization: (final Account instance) => instance.ofxAccountId.value,
+  );
 
-  // 4
-  String description = '';
+  // Name
+  // 3|Name|nvarchar(80)|1||0
+  Declare<Account, String> name = Declare<Account, String>(
+    importance: 1,
+    name: 'Name',
+    serializeName: 'Name',
+    defaultValue: '',
+    valueFromInstance: (final Account instance) => instance.name.value,
+    valueForSerialization: (final Account instance) => instance.name.value,
+  );
 
-  // 5
-  AccountType type = AccountType.checking;
+  // Description
+  // 4|Description|nvarchar(255)|0||0
+  Declare<Account, String> description = Declare<Account, String>(
+    importance: 3,
+    name: 'Description',
+    serializeName: 'Description',
+    defaultValue: '',
+    valueFromInstance: (final Account instance) => instance.description.value,
+    valueForSerialization: (final Account instance) => instance.description.value,
+  );
+
+  // Type of account
+  // 5|Type|INT|1||0
+  Declare<Account, AccountType> type = Declare<Account, AccountType>(
+    importance: 2,
+    type: FieldType.text,
+    align: TextAlign.center,
+    name: 'Type',
+    serializeName: 'Type',
+    defaultValue: AccountType.checking,
+    valueFromInstance: (final Account instance) => instance.getTypeAsText(),
+    valueForSerialization: (final Account instance) => instance.type.value.index,
+  );
 
   // 6
-  double openingBalance = 0.00;
+  Declare<Account, double> openingBalance = Declare<Account, double>(
+    name: 'Opening Balance',
+    serializeName: 'OpeningBalance',
+    defaultValue: 0,
+    useAsColumn: false,
+    valueFromInstance: (final Account instance) => instance.openingBalance.value,
+    valueForSerialization: (final Account instance) => instance.openingBalance.value,
+  );
 
   // 7
-  String currency = '';
+  Declare<Account, String> currency = Declare<Account, String>(
+    importance: 4,
+    name: 'Currency',
+    serializeName: 'Currency',
+    align: TextAlign.center,
+    defaultValue: '',
+    valueFromInstance: (final Account instance) => instance.currency.value,
+    valueForSerialization: (final Account instance) => instance.currency.value,
+  );
 
   // 8
   int onlineAccount = -1;
 
   // 9
-  String webSite = '';
+  Declare<Account, String> webSite = Declare<Account, String>(
+    importance: 4,
+    name: 'WebSite',
+    serializeName: 'WebSite',
+    defaultValue: '',
+    useAsColumn: false,
+    valueFromInstance: (final Account instance) => instance.webSite.value,
+    valueForSerialization: (final Account instance) => instance.webSite.value,
+  );
 
   // 10
   int reconcileWarning = 0;
 
-  // 11
-  DateTime lastSync;
+  /// lastSync
+  /// 11|LastSync|datetime|0||0
+  Declare<Account, DateTime> lastSync = Declare<Account, DateTime>(
+    importance: 90,
+    type: FieldType.date,
+    serializeName: 'Date',
+    useAsColumn: false,
+    defaultValue: DateTime.parse('1970-01-01'),
+    valueFromInstance: (final Account instance) => instance.lastSync.value.toIso8601String(),
+    valueForSerialization: (final Account instance) => instance.lastSync.value.toIso8601String(),
+  );
 
   // 12
   String syncGuid = '';
@@ -66,95 +141,93 @@ class Account extends MoneyObject {
   // 13
   int flags = 0;
 
-  // 14
-  DateTime lastBalance;
+  /// Last Balance date
+  /// 14|LastBalance|datetime|0||0
+  Declare<Account, DateTime> lastBalance = Declare<Account, DateTime>(
+    importance: 98,
+    serializeName: 'LastBalance',
+    defaultValue: DateTime.parse('1970-01-01'),
+    useAsColumn: false,
+    valueFromInstance: (final Account instance) => instance.lastBalance.value,
+    valueForSerialization: (final Account instance) => instance.lastBalance.value,
+  );
 
-  // 15
-  int categoryIdForPrincipal = 0;
+  /// categoryIdForPrincipal
+  /// 15 | CategoryIdForPrincipal|INT|0||0
+  Declare<Account, int> categoryIdForPrincipal = Declare<Account, int>(
+    importance: 98,
+    serializeName: 'CategoryIdForPrincipal',
+    defaultValue: 0,
+    useAsColumn: false,
+    valueFromInstance: (final Account instance) => instance.categoryIdForPrincipal.value,
+    valueForSerialization: (final Account instance) => instance.categoryIdForPrincipal.value,
+  );
 
-  // 16
-  int categoryIdForInterest = 0;
+  /// categoryIdForInterest
+  /// 16|CategoryIdForInterest|INT|0||0
+  Declare<Account, int> categoryIdForInterest = Declare<Account, int>(
+    importance: -1,
+    serializeName: 'CategoryIdForInterest',
+    defaultValue: 0,
+    useAsColumn: false,
+    valueFromInstance: (final Account instance) => instance.categoryIdForInterest.value,
+    valueForSerialization: (final Account instance) => instance.categoryIdForInterest.value,
+  );
 
-  // Not serialized
-  int count = 0;
-  double balance = 0.00;
+  // ------------------------------------------------
+  // Properties that are not persisted
+
+  /// Count
+  Declare<Account, int> count = Declare<Account, int>(
+    importance: 98,
+    type: FieldType.numeric,
+    align: TextAlign.right,
+    name: 'Count',
+    useAsDetailPanels: false,
+    defaultValue: 0,
+    valueFromInstance: (final Account instance) => instance.count.value,
+    valueForSerialization: (final Account instance) => instance.count.value,
+  );
+
+  /// Balance
+  Declare<Account, double> balance = Declare<Account, double>(
+    importance: 99,
+    type: FieldType.amount,
+    align: TextAlign.right,
+    name: 'Balance',
+    useAsDetailPanels: false,
+    defaultValue: 0,
+    valueFromInstance: (final Account instance) => instance.balance.value,
+    valueForSerialization: (final Account instance) => instance.balance.value,
+  );
 
   /// Constructor
-  Account({
-    // 0
-    required super.id,
-    // 1
-    required this.accountId,
-    // 2
-    required this.ofxAccountId,
-    // 3
-    required this.name,
-    // 4
-    required this.description,
-    // 5
-    required this.type,
-    // 6
-    required this.openingBalance,
-    // 7
-    required this.currency,
-    // 8
-    required this.onlineAccount,
-    // 9
-    required this.webSite,
-    // 10
-    required this.reconcileWarning,
-    // 11
-    required this.lastSync,
-    // 12
-    required this.syncGuid,
-    // 13
-    required this.flags,
-    // 14
-    required this.lastBalance,
-    // 15
-    required this.categoryIdForPrincipal,
-    // 16
-    required this.categoryIdForInterest,
-  });
+  Account();
 
   /// Constructor from a SQLite row
   factory Account.fromSqlite(final Json row) {
-    return Account(
-      // 0
-      id: jsonGetInt(row, 'Id'),
-      // 1
-      accountId: jsonGetString(row, 'AccountId'),
-      // 2
-      ofxAccountId: jsonGetString(row, 'OfxAccountId'),
-      // 3
-      name: jsonGetString(row, 'Name'),
-      // 4
-      description: jsonGetString(row, 'Description'),
-      // 5
-      type: AccountType.values[jsonGetInt(row, 'Type')],
-      // 6
-      openingBalance: jsonGetDouble(row, 'OpeningBalance'),
-      // 7
-      currency: jsonGetString(row, 'Currency'),
-      // 8
-      onlineAccount: jsonGetInt(row, 'OnlineAccount'),
-      // 9
-      webSite: jsonGetString(row, 'WebSite'),
-      // 10
-      reconcileWarning: jsonGetInt(row, 'ReconcileWarning'),
-      // 11
-      lastSync: jsonGetDate(row, 'LastSync'),
-      // 12
-      syncGuid: jsonGetString(row, 'SyncGuid'),
-      // 13
-      flags: jsonGetInt(row, 'Flags'),
-      // 14
-      lastBalance: jsonGetDate(row, 'LastBalance'),
-      // 15
-      categoryIdForPrincipal: jsonGetInt(row, 'CategoryIdForPrincipal'),
-      // 16
-      categoryIdForInterest: jsonGetInt(row, 'CategoryIdForInterest'),
-    );
+    return Account()
+      ..id.value = jsonGetInt(row, 'Id')
+      ..accountId.value = jsonGetString(row, 'AccountId')
+      ..ofxAccountId.value = jsonGetString(row, 'OfxAccountId')
+      ..name.value = jsonGetString(row, 'Name')
+      ..description.value = jsonGetString(row, 'Description')
+      ..type.value = AccountType.values[jsonGetInt(row, 'Type')]
+      ..openingBalance.value = jsonGetDouble(row, 'OpeningBalance')
+      ..currency.value = jsonGetString(row, 'Currency')
+      ..onlineAccount = jsonGetInt(row, 'OnlineAccount')
+      ..webSite.value = jsonGetString(row, 'WebSite')
+      ..reconcileWarning = jsonGetInt(row, 'ReconcileWarning')
+      ..lastSync.value = jsonGetDate(row, 'LastSync')
+      ..syncGuid = jsonGetString(row, 'SyncGuid')
+      ..flags = jsonGetInt(row, 'Flags')
+      ..lastBalance.value = jsonGetDate(row, 'LastBalance')
+      ..categoryIdForPrincipal.value = jsonGetInt(row, 'CategoryIdForPrincipal')
+      ..categoryIdForInterest.value = jsonGetInt(row, 'CategoryIdForInterest');
+  }
+
+  static getName(final Account? instance) {
+    return instance == null ? '' : instance.name.value;
   }
 
   bool isBitOn(final int value, final int bitIndex) {
@@ -172,13 +245,13 @@ class Account extends MoneyObject {
   bool matchType(final List<AccountType> types) {
     if (types.isEmpty) {
       // All accounts except these
-      return type != AccountType._notUsed_7 && type != AccountType.categoryFund;
+      return type.value != AccountType._notUsed_7 && type.value != AccountType.categoryFund;
     }
-    return types.contains(type);
+    return types.contains(type.value);
   }
 
   bool isBankAccount() {
-    return type == AccountType.savings || type == AccountType.checking || type == AccountType.cash;
+    return type.value == AccountType.savings || type.value == AccountType.checking || type.value == AccountType.cash;
   }
 
   bool isActiveBankAccount() {
@@ -186,7 +259,7 @@ class Account extends MoneyObject {
   }
 
   getTypeAsText() {
-    switch (type) {
+    switch (type.value) {
       case AccountType.savings:
         return 'Savings';
       case AccountType.checking:
@@ -244,168 +317,6 @@ class Account extends MoneyObject {
       default:
         return AccountType._notUsed_7;
     }
-  }
-
-  static FieldDefinitions<Account> getFieldDefinitions() {
-    final FieldDefinitions<Account> fields = FieldDefinitions<Account>(definitions: <FieldDefinition<Account>>[
-      // 0
-      FieldDefinition<Account>(
-        type: FieldType.numeric,
-        name: 'Id',
-        serializeName: 'id',
-        useAsColumn: false,
-        valueFromInstance: (final Account account) {
-          return account.id;
-        },
-      ),
-      // 1
-      FieldDefinition<Account>(
-        type: FieldType.text,
-        name: 'Name',
-        serializeName: 'name',
-        align: TextAlign.left,
-        valueFromInstance: (final Account account) {
-          return account.name;
-        },
-        sort: (final Account a, final Account b, final bool sortAscending) {
-          return sortByString(
-            a.name,
-            b.name,
-            sortAscending,
-          );
-        },
-      ),
-      // 2
-      FieldDefinition<Account>(
-        type: FieldType.text,
-        name: 'Type',
-        serializeName: 'type',
-        align: TextAlign.center,
-        valueFromInstance: (final Account account) {
-          return account.getTypeAsText();
-        },
-        valueForSerialization: (final Account account) {
-          return account.type.index;
-        },
-        sort: (final Account a, final Account b, final bool sortAscending) {
-          return sortByString(
-            a.getTypeAsText(),
-            b.getTypeAsText(),
-            sortAscending,
-          );
-        },
-      ),
-      // 3
-      FieldDefinition<Account>(
-        type: FieldType.text,
-        name: 'Currency',
-        serializeName: 'currency',
-        align: TextAlign.left,
-        valueFromInstance: (final Account account) {
-          return account.currency;
-        },
-        sort: (final Account a, final Account b, final bool sortAscending) {
-          return sortByString(
-            a.currency,
-            b.currency,
-            sortAscending,
-          );
-        },
-      ),
-      // 4
-      FieldDefinition<Account>(
-        type: FieldType.text,
-        name: 'Description',
-        serializeName: 'Description',
-        align: TextAlign.left,
-        valueFromInstance: (final Account account) {
-          return account.description;
-        },
-        sort: (final Account a, final Account b, final bool sortAscending) {
-          return sortByString(
-            a.description,
-            b.description,
-            sortAscending,
-          );
-        },
-      ),
-      // 5
-      FieldDefinition<Account>(
-        type: FieldType.text,
-        useAsColumn: false,
-        name: 'WebSite',
-        serializeName: 'website',
-        align: TextAlign.left,
-        valueFromInstance: (final Account account) {
-          return account.webSite;
-        },
-      ),
-      // 6
-      FieldDefinition<Account>(
-        type: FieldType.numericShorthand,
-        name: 'Count',
-        align: TextAlign.right,
-        valueFromInstance: (final Account account) {
-          return account.count;
-        },
-        sort: (final Account a, final Account b, final bool sortAscending) {
-          return sortByValue(
-            a.count,
-            b.count,
-            sortAscending,
-          );
-        },
-      ),
-      // 7
-      FieldDefinition<Account>(
-        type: FieldType.amount,
-        name: 'Balance',
-        align: TextAlign.right,
-        valueFromInstance: (final Account account) {
-          return account.balance;
-        },
-        sort: (final Account a, final Account b, final bool sortAscending) {
-          return sortByValue(
-            a.balance,
-            b.balance,
-            sortAscending,
-          );
-        },
-      ),
-      // 8
-      FieldDefinition<Account>(
-          type: FieldType.text,
-          name: 'Status',
-          serializeName: 'status',
-          align: TextAlign.center,
-          useAsColumn: Settings().includeClosedAccounts,
-          valueFromInstance: (final Account account) {
-            return account.isClosed() ? 'Closed' : 'Active';
-          },
-          valueForSerialization: (final Account account) {
-            return account.flags;
-          },
-          sort: (final Account a, final Account b, final bool sortAscending) {
-            return sortByString(
-              a.isClosed().toString(),
-              b.isClosed().toString(),
-              sortAscending,
-            );
-          }),
-      // 9
-    ]);
-
-    return fields;
-  }
-
-  List<dynamic> toCSV() {
-    return <dynamic>[
-      accountId,
-      flags,
-      ofxAccountId,
-      description,
-      type.index,
-    ];
   }
 }
 

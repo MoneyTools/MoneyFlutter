@@ -3,12 +3,12 @@ part of 'view_accounts.dart';
 extension ViewAccountsHelpers on ViewAccountsState {
   double getTotalBalanceOfAccounts(final List<AccountType> types) {
     double total = 0.0;
-    Data().accounts.activeAccount(types).forEach((final Account x) => total += x.balance);
+    Data().accounts.activeAccount(types).forEach((final Account x) => total += x.balance.value);
     return total;
   }
 
   bool filterByAccountId(final Transaction t, final num accountId) {
-    return t.accountId == accountId;
+    return t.accountId.value == accountId;
   }
 
   List<AccountType> getSelectedAccountType() {

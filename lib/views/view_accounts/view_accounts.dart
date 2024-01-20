@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -77,11 +76,6 @@ class ViewAccountsState extends ViewWidgetState<Account> {
       description: getDescription(),
       child: renderToggles(),
     );
-  }
-
-  @override
-  FieldDefinitions<Account> getFieldDefinitionsForTable() {
-    return Account.getFieldDefinitions();
   }
 
   @override

@@ -32,7 +32,7 @@ class MyTableHeader<T> extends StatelessWidget {
           widgetHeaderButton(
             context,
             columns.definitions[i].name,
-            columns.definitions[i].align,
+            TextAlign.center, // columns.definitions[i].align,
             getSortIndicated(i),
             // Press
             () {

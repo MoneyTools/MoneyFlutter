@@ -25,7 +25,7 @@ class ViewWidget<T> extends StatefulWidget {
 }
 
 class ViewWidgetState<T> extends State<ViewWidget<T>> {
-  FieldDefinitions<T> columns = FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
+  FieldDefinitions<T> columns = FieldDefinitions<T>(definitions: <Declare<T, dynamic>>[]);
 
   int lastSelectedItemIndex = 0;
   ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
@@ -52,12 +52,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   FieldDefinitions<T> getFieldDefinitionsForTable() {
-    return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
+    return FieldDefinitions<T>(definitions: getFieldsForClass<T>());
   }
 
   /// Derived class will override to customize the fields to display in the details panel
   FieldDefinitions<T> getFieldDefinitionsForDetailsPanel() {
-    return getFieldDefinitionsForTable();
+    final List<Declare<T, dynamic>> fields =
+        getFieldsForClass<T>().where((final Declare<T, dynamic> item) => item.useAsDetailPanels).toList();
+    return FieldDefinitions<T>(definitions: fields);
   }
 
   @override
@@ -115,11 +117,45 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   void onSort() {
     if (columns.definitions.isNotEmpty) {
-      final FieldDefinition<T> fieldDefinition = columns.definitions[sortByColumn];
-      if (fieldDefinition.sort != null) {
-        list.sort((final T a, final T b) {
-          return fieldDefinition.sort!(a, b, sortAscending);
-        });
+      if (isBetween(sortByColumn, -1, columns.definitions.length)) {
+        final Declare<T, dynamic> fieldDefinition = columns.definitions[sortByColumn];
+        if (fieldDefinition.sort == null) {
+          list.sort((final T a, final T b) {
+            switch (fieldDefinition.type) {
+              case FieldType.numeric:
+              case FieldType.numericShorthand:
+                return sortByValue(
+                  fieldDefinition.valueFromInstance(a) as num,
+                  fieldDefinition.valueFromInstance(b) as num,
+                  sortAscending,
+                );
+              case FieldType.amount:
+              case FieldType.amountShorthand:
+                return sortByValue(
+                  fieldDefinition.valueFromInstance(a) as double,
+                  fieldDefinition.valueFromInstance(b) as double,
+                  sortAscending,
+                );
+              case FieldType.date:
+                return sortByDate(
+                  fieldDefinition.valueFromInstance(a) as DateTime,
+                  fieldDefinition.valueFromInstance(b) as DateTime,
+                  sortAscending,
+                );
+              case FieldType.text:
+              default:
+                return sortByString(
+                  fieldDefinition.valueFromInstance(a).toString(),
+                  fieldDefinition.valueFromInstance(b).toString(),
+                  sortAscending,
+                );
+            }
+          });
+        } else {
+          list.sort((final T a, final T b) {
+            return fieldDefinition.sort!(a, b, sortAscending);
+          });
+        }
       }
     }
   }
@@ -347,7 +383,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as String;
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance!(list[i]) as String;
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
@@ -360,7 +396,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     double max = 0;
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final double fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as double;
+      final double fieldValue = columnToCustomerFilterOn.valueFromInstance!(list[i]) as double;
       if (min > fieldValue) {
         min = fieldValue;
       }
@@ -379,7 +415,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     final List<T> list = getList();
 
     for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as String;
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance!(list[i]) as String;
       if (min.isEmpty || min.compareTo(fieldValue) == 1) {
         min = fieldValue;
       }

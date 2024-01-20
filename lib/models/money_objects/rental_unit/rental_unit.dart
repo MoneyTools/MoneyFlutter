@@ -10,9 +10,18 @@ import 'package:money/models/money_objects/money_object.dart';
   3|Renter|nvarchar(255)|0||0
   4|Note|nvarchar(255)|0||0
  */
-class RentUnit extends MoneyObject {
+class RentUnit extends MoneyObject<RentUnit> {
+  @override
+  int get uniqueId => id.value;
+
   // 0
-  // MoneyEntity.Id
+  Declare<RentUnit, int> id = Declare<RentUnit, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    valueForSerialization: (final RentUnit instance) => instance.id.value,
+  );
 
   // 1
   String name;
@@ -31,7 +40,6 @@ class RentUnit extends MoneyObject {
   double balance = 0.00;
 
   RentUnit({
-    required super.id,
     required this.name,
     required this.building,
     required this.renter,
@@ -40,11 +48,10 @@ class RentUnit extends MoneyObject {
 
   factory RentUnit.fromSqlite(final Json row) {
     return RentUnit(
-      id: jsonGetInt(row, 'Id'),
       name: jsonGetString(row, 'Name'),
       building: jsonGetInt(row, 'Building', -1),
       renter: jsonGetString(row, 'Renter'),
       note: jsonGetString(row, 'Note'),
-    );
+    )..id.value = jsonGetInt(row, 'Id');
   }
 }

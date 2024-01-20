@@ -17,7 +17,6 @@ class Investments extends MoneyObjects<Investment> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Investment.getFieldDefinitions(),
       getListSortedById(),
     );
   }

@@ -30,10 +30,6 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
 
-  FieldDefinitions<T> getFieldDefinitions() {
-    return FieldDefinitions<T>(definitions: <FieldDefinition<T>>[]);
-  }
-
   @override
   void initState() {
     super.initState();

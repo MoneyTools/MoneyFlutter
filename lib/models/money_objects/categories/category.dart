@@ -1,44 +1,101 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
 /*
-  0|Id|INT|0||1
+
   1|ParentId|INT|0||0
   2|Name|nvarchar(80)|1||0
-  3|Description|nvarchar(255)|0||0
-  4|Type|INT|1||0
-  5|Color|nchar(10)|0||0
-  6|Budget|money|0||0
-  7|Balance|money|0||0
+
+
+
   8|Frequency|INT|0||0
   9|TaxRefNum|INT|0||0
  */
-class Category extends MoneyObject {
-  // 0
-  // int MoneyEntity.id
+class Category extends MoneyObject<Category> {
+  @override
+  int get uniqueId => id.value;
+
+  /// Id
+  /// 0|Id|INT|0||1
+  Declare<Category, int> id = Declare<Category, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    useAsDetailPanels: false,
+    valueForSerialization: (final Category instance) => instance.id.value,
+  );
 
   // 1
   int parentId = -1;
 
   // 2
-  String name;
+  Declare<Category, String> name = Declare<Category, String>(
+    importance: 0,
+    type: FieldType.text,
+    name: 'Name',
+    serializeName: 'Name',
+    defaultValue: '',
+    valueFromInstance: (final Category instance) => instance.name.value,
+    valueForSerialization: (final Category instance) => instance.name.value,
+  );
 
-  // 3
-  String description;
+  /// Description
+  /// 3|Description|nvarchar(255)|0||0
+  Declare<Category, String> description = Declare<Category, String>(
+    importance: 1,
+    type: FieldType.text,
+    name: 'Description',
+    serializeName: 'Description',
+    defaultValue: '',
+    valueFromInstance: (final Category instance) => instance.description.value,
+    valueForSerialization: (final Category instance) => instance.description.value,
+  );
 
-  // 4
-  CategoryType type = CategoryType.none;
+  /// Type
+  /// 4|Type|INT|1||0
+  Declare<Category, CategoryType> type = Declare<Category, CategoryType>(
+    importance: 3,
+    type: FieldType.text,
+    align: TextAlign.center,
+    serializeName: 'Type',
+    defaultValue: CategoryType.none,
+    valueFromInstance: (final Category instance) => instance.getTypeAsText(),
+    valueForSerialization: (final Category instance) => instance.type.value.index,
+  );
 
-  // 5
-  String color;
+  /// Color
+  /// 5|Color|nchar(10)|0||0
+  Declare<Category, String> color = Declare<Category, String>(
+    importance: 4,
+    type: FieldType.widget,
+    serializeName: 'Color',
+    defaultValue: '',
+    valueFromInstance: (final Category instance) => Container(
+      color: getColorFromHex(instance.color.value),
+      width: 10,
+      height: 10,
+    ),
+    valueForSerialization: (final Category instance) => instance.color.value,
+  );
 
-  // 6
+  /// Budget
+  /// 6|Budget|money|0||0
   double budget;
 
-  // 7
-  double balance = 0.00;
+  /// Budget Balance
+  /// 7|Balance|money|0||0
+  Declare<Category, double> budgetBalance = Declare<Category, double>(
+    importance: 99,
+    type: FieldType.amount,
+    align: TextAlign.right,
+    name: 'BudgetBalance',
+    useAsColumn: false,
+    defaultValue: 0,
+    valueFromInstance: (final Category instance) => instance.budgetBalance.value,
+    valueForSerialization: (final Category instance) => instance.budgetBalance.value,
+  );
 
   // 8
   int frequency = 0;
@@ -46,69 +103,66 @@ class Category extends MoneyObject {
   // 9
   int taxRefNum = 0;
 
-  // Not serialized
-  int count = 0;
+  //-----------------------------------
+  // These properties are not persisted
+
+  /// Count
+  Declare<Category, int> count = Declare<Category, int>(
+    importance: 98,
+    type: FieldType.numeric,
+    align: TextAlign.right,
+    name: 'Count',
+    useAsDetailPanels: false,
+    defaultValue: 0,
+    valueFromInstance: (final Category instance) => instance.count.value,
+    valueForSerialization: (final Category instance) => instance.count.value,
+  );
+
+  /// Running Balance
+  Declare<Category, double> runningBalance = Declare<Category, double>(
+    importance: 99,
+    type: FieldType.amount,
+    align: TextAlign.right,
+    name: 'Balance',
+    useAsDetailPanels: false,
+    defaultValue: 0,
+    valueFromInstance: (final Category instance) => instance.runningBalance.value,
+    valueForSerialization: (final Category instance) => instance.runningBalance.value,
+  );
 
   Category({
-    required super.id,
     this.parentId = -1,
-    required this.name,
-    this.description = '',
-    required this.type,
-    this.color = '',
+    final String description = '',
+    final CategoryType type = CategoryType.none,
     this.budget = 0,
-    this.balance = 0,
+    final double budgetBalance = 0,
     this.frequency = 0,
     this.taxRefNum = 0,
-  });
+    final String name = '',
+  }) {
+    this.name.value = name;
+    this.description.value = description;
+    this.type.value = type;
+    this.budgetBalance.value = budgetBalance;
+  }
 
   factory Category.fromSqlite(final Json row) {
     return Category(
-      id: jsonGetInt(row, 'Id'),
-      name: jsonGetString(row, 'Name'),
       parentId: jsonGetInt(row, 'ParentId'),
       description: jsonGetString(row, 'Description'),
       type: Category.getTypeFromInt(jsonGetInt(row, 'Type')),
-      color: jsonGetString(row, 'Color').trim(),
       budget: jsonGetDouble(row, 'Budget'),
-      balance: jsonGetDouble(row, 'Balance'),
+      budgetBalance: jsonGetDouble(row, 'Balance'),
       frequency: jsonGetInt(row, 'Frequency'),
       taxRefNum: jsonGetInt(row, 'TaxRefNum'),
-    );
+    )
+      ..id.value = jsonGetInt(row, 'Id')
+      ..name.value = jsonGetString(row, 'Name')
+      ..color.value = jsonGetString(row, 'Color').trim();
   }
 
-  static FieldDefinitions<Category> getFieldDefinitions() {
-    final FieldDefinitions<Category> fields = FieldDefinitions<Category>(definitions: <FieldDefinition<Category>>[
-      FieldDefinition<Category>(
-        name: 'Id',
-        serializeName: 'id',
-        type: FieldType.text,
-        align: TextAlign.left,
-        valueFromInstance: (final Category entity) => entity.id,
-        sort: (final Category a, final Category b, final bool sortAscending) {
-          return sortByValue(a.id, b.id, sortAscending);
-        },
-      ),
-      FieldDefinition<Category>(
-        type: FieldType.text,
-        name: 'Name',
-        serializeName: 'name',
-        align: TextAlign.left,
-        valueFromInstance: (final Category entity) => entity.name,
-        sort: (final Category a, final Category b, final bool sortAscending) {
-          return sortByString(a.name, b.name, sortAscending);
-        },
-      ),
-      getFieldForType(),
-      getFieldForDescription(),
-      FieldDefinition<Category>(
-        name: 'ParentId',
-        serializeName: 'parentId',
-        valueFromInstance: (final Category entity) => entity.parentId,
-      ),
-      getFieldForColor(),
-    ]);
-    return fields;
+  static String getName(final Category? instance) {
+    return instance == null ? '' : instance.name.value;
   }
 
   static CategoryType getTypeFromInt(final int index) {
@@ -145,30 +199,8 @@ class Category extends MoneyObject {
     );
   }
 
-  static FieldDefinition<Category> getFieldForColor() {
-    return FieldDefinition<Category>(
-      type: FieldType.widget,
-      name: 'Color',
-      serializeName: 'color',
-      align: TextAlign.center,
-      valueFromInstance: (final Category item) {
-        return Container(
-          color: getColorFromHex(item.color),
-          width: 10,
-          height: 10,
-        );
-      },
-      valueForSerialization: (final Category item) {
-        return item.color;
-      },
-      sort: (final Category a, final Category b, final bool sortAscending) {
-        return sortByString(a.color, b.color, sortAscending);
-      },
-    );
-  }
-
   getTypeAsText() {
-    switch (type) {
+    switch (type.value) {
       case CategoryType.income:
         return 'Income';
       case CategoryType.expense:

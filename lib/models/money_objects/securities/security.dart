@@ -15,9 +15,18 @@ import 'package:money/models/money_objects/money_objects.dart';
   8    PriceDate     datetime      0                    0
  */
 
-class Security extends MoneyObject {
+class Security extends MoneyObject<Security> {
+  @override
+  int get uniqueId => id.value;
+
   // 0
-  // int MoneyEntity.Id
+  Declare<Security, int> id = Declare<Security, int>(
+    importance: 0,
+    serializeName: 'Id',
+    defaultValue: -1,
+    useAsColumn: false,
+    valueForSerialization: (final Security instance) => instance.id.value,
+  );
 
   // 1
   final String name;
@@ -44,7 +53,6 @@ class Security extends MoneyObject {
   final DateTime priceDate;
 
   Security({
-    required super.id,
     required this.name,
     required this.symbol,
     required this.price,
@@ -58,8 +66,6 @@ class Security extends MoneyObject {
   /// Constructor from a SQLite row
   factory Security.fromSqlite(final Json row) {
     return Security(
-      // 0
-      id: jsonGetInt(row, 'Id'),
       // 1
       name: jsonGetString(row, 'Name'),
       // 2
@@ -76,53 +82,6 @@ class Security extends MoneyObject {
       taxable: jsonGetInt(row, 'Taxable'),
       // 8
       priceDate: jsonGetDate(row, 'PriceDate'),
-    );
-  }
-
-  static FieldDefinitions<Security> getFieldDefinitions() {
-    final FieldDefinitions<Security> fields = FieldDefinitions<Security>(definitions: <FieldDefinition<Security>>[
-      MoneyObject.getFieldId<Security>(),
-      FieldDefinition<Security>(
-        type: FieldType.date,
-        name: 'Date',
-        serializeName: 'date',
-        valueFromInstance: (final Security item) {
-          return item.priceDate;
-        },
-        valueForSerialization: (final Security item) {
-          return item.priceDate;
-        },
-        sort: (final Security a, final Security b, final bool sortAscending) {
-          return sortByDate(
-            a.priceDate,
-            b.priceDate,
-            sortAscending,
-          );
-        },
-      ),
-      getFieldForPrice(),
-    ]);
-    return fields;
-  }
-
-  static FieldDefinition<Security> getFieldForPrice() {
-    return FieldDefinition<Security>(
-      type: FieldType.amount,
-      name: 'Security',
-      serializeName: 'security',
-      valueFromInstance: (final Security item) {
-        return item.price;
-      },
-      valueForSerialization: (final Security item) {
-        return item.price;
-      },
-      sort: (final Security a, final Security b, final bool sortAscending) {
-        return sortByValue(
-          a.price,
-          b.price,
-          sortAscending,
-        );
-      },
-    );
+    )..id.value = jsonGetInt(row, 'Id');
   }
 }

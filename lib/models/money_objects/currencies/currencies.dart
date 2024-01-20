@@ -16,7 +16,6 @@ class Currencies extends MoneyObjects<Currency> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      Currency.getFieldDefinitions(),
       getListSortedById(),
     );
   }

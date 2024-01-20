@@ -17,7 +17,6 @@ class StockSplits extends MoneyObjects<StockSplit> {
   @override
   String toCSV() {
     return super.getCsvFromList(
-      StockSplit.getFieldDefinitions(),
       getListSortedById(),
     );
   }
