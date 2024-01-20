@@ -54,9 +54,6 @@ class _TableTransactionsState extends State<TableTransactions> {
               onSort();
             });
           },
-          onLongPress: () {
-            // todo - for example add filtering
-          },
         ),
         // Table list of rows
         Expanded(

@@ -379,11 +379,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return SortIndicator.none;
   }
 
-  List<String> getUniqueInstances(final FieldDefinition<T> columnToCustomerFilterOn) {
+  List<String> getUniqueInstances(final Declare<T, dynamic> columnToCustomerFilterOn) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance!(list[i]) as String;
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]).toString();
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
@@ -391,12 +391,12 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return uniqueValues;
   }
 
-  List<double> getMinMaxValues(final FieldDefinition<T> columnToCustomerFilterOn) {
+  List<double> getMinMaxValues(final Declare<T, dynamic> fieldDefinition) {
     double min = 0;
     double max = 0;
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final double fieldValue = columnToCustomerFilterOn.valueFromInstance!(list[i]) as double;
+      final double fieldValue = fieldDefinition.valueFromInstance(list[i]) as double;
       if (min > fieldValue) {
         min = fieldValue;
       }
@@ -408,14 +408,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <double>[min, max];
   }
 
-  List<String> getMinMaxDates(final FieldDefinition<T> columnToCustomerFilterOn) {
+  List<String> getMinMaxDates(final Declare<T, dynamic> columnToCustomerFilterOn) {
     String min = '';
     String max = '';
 
     final List<T> list = getList();
 
     for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance!(list[i]) as String;
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as String;
       if (min.isEmpty || min.compareTo(fieldValue) == 1) {
         min = fieldValue;
       }
@@ -427,13 +427,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <String>[min, max];
   }
 
-  onCustomizeColumn(final FieldDefinition<T> columnToCustomerFilterOn) {
+  onCustomizeColumn(final Declare<T, dynamic> fieldDefinition) {
     Widget content;
 
-    switch (columnToCustomerFilterOn.type) {
+    switch (fieldDefinition.type) {
       case FieldType.amount:
         {
-          final List<double> minMax = getMinMaxValues(columnToCustomerFilterOn);
+          final List<double> minMax = getMinMaxValues(fieldDefinition);
           content = Column(children: <Widget>[
             Text(getCurrencyText(minMax[0])),
             Text(getCurrencyText(minMax[1])),
@@ -443,7 +443,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
       case FieldType.date:
         {
-          final List<String> minMax = getMinMaxDates(columnToCustomerFilterOn);
+          final List<String> minMax = getMinMaxDates(fieldDefinition);
           content = Column(children: <Widget>[
             Text(minMax[0]),
             Text(minMax[1]),
@@ -453,7 +453,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       case FieldType.text:
       default:
         {
-          listOfUniqueInstances = getUniqueInstances(columnToCustomerFilterOn);
+          listOfUniqueInstances = getUniqueInstances(fieldDefinition);
           content = ListView.builder(
               itemCount: listOfUniqueInstances.length,
               itemBuilder: (final BuildContext context, final int index) {

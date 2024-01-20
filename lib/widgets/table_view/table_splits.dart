@@ -55,9 +55,6 @@ class _TableSplitsState extends State<TableSplits> {
               onSort();
             });
           },
-          onLongPress: () {
-            // todo - for example add filtering
-          },
         ),
         // Table list of rows
         Expanded(

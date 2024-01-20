@@ -172,33 +172,6 @@ class Category extends MoneyObject<Category> {
     return CategoryType.none;
   }
 
-  static FieldDefinition<Category> getFieldForType() {
-    return FieldDefinition<Category>(
-      name: 'Type',
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final Category item) {
-        return item.type.toString();
-      },
-      sort: (final Category a, final Category b, final bool sortAscending) {
-        return sortByString(a.type.toString(), b.type.toString(), sortAscending);
-      },
-    );
-  }
-
-  static FieldDefinition<Category> getFieldForDescription() {
-    return FieldDefinition<Category>(
-      type: FieldType.text,
-      name: 'Description',
-      serializeName: 'description',
-      align: TextAlign.left,
-      valueFromInstance: (final Category entity) => entity.description,
-      sort: (final Category a, final Category b, final bool sortAscending) {
-        return sortByString(a.description, b.description, sortAscending);
-      },
-    );
-  }
-
   getTypeAsText() {
     switch (type.value) {
       case CategoryType.income:

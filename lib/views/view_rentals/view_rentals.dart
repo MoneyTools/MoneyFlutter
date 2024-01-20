@@ -36,48 +36,6 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
     return 'Properties to rent.';
   }
 
-  FieldDefinition<RentBuilding> getColumnForName() {
-    return FieldDefinition<RentBuilding>(
-      name: 'Name',
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final RentBuilding rental) {
-        return rental.name;
-      },
-      sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-        return sortByString(a.name, b.name, sortAscending);
-      },
-    );
-  }
-
-  FieldDefinition<RentBuilding> getColumnForAddress() {
-    return FieldDefinition<RentBuilding>(
-      name: 'Address',
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final RentBuilding rental) {
-        return rental.address;
-      },
-      sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-        return sortByString(a.address, b.address, sortAscending);
-      },
-    );
-  }
-
-  FieldDefinition<RentBuilding> getColumnForNote() {
-    return FieldDefinition<RentBuilding>(
-      name: 'Note',
-      type: FieldType.text,
-      align: TextAlign.left,
-      valueFromInstance: (final RentBuilding rental) {
-        return rental.note;
-      },
-      sort: (final RentBuilding a, final RentBuilding b, final bool sortAscending) {
-        return sortByString(a.note, b.note, sortAscending);
-      },
-    );
-  }
-
   getUnitsAsString(final List<RentUnit> listOfUnits) {
     final List<String> listAsText = <String>[];
     for (RentUnit unit in listOfUnits) {

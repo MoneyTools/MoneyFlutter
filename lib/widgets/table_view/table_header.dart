@@ -12,7 +12,7 @@ class MyTableHeader<T> extends StatelessWidget {
   final int sortByColumn;
   final bool sortAscending;
   final Function onTap;
-  final Function onLongPress;
+  final Function(Declare<T, dynamic>)? onLongPress;
 
   const MyTableHeader({
     super.key,
@@ -20,7 +20,7 @@ class MyTableHeader<T> extends StatelessWidget {
     required this.sortByColumn,
     required this.sortAscending,
     required this.onTap,
-    required this.onLongPress,
+    this.onLongPress,
   });
 
   @override
@@ -40,7 +40,8 @@ class MyTableHeader<T> extends StatelessWidget {
             },
             // Long Press
             () {
-              onLongPress(i);
+              final Declare<T, dynamic> column = columns.definitions[i];
+              onLongPress?.call(column);
             },
           ),
         );

@@ -215,7 +215,7 @@ Declare<C, dynamic>? getFieldByNameForClass<C>(final String fieldName) {
   return null;
 }
 
-class FieldDefinition<T> {
+class FieldDefinitionX<T> {
   String name;
   String? serializeName;
   final FieldType type;
@@ -227,7 +227,7 @@ class FieldDefinition<T> {
   dynamic Function(T)? valueFromInstance;
   dynamic Function(T)? valueForSerialization;
 
-  FieldDefinition({
+  FieldDefinitionX({
     required this.name,
     this.valueFromInstance,
     this.serializeName,
