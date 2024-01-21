@@ -21,11 +21,11 @@ class DummyHostingAppState extends State<DummyHostingApp> {
   Widget build(final BuildContext context) {
     return const MaterialApp(
       home: SizedBox(
-        height: 500,
-        width: 500,
+        height: 600,
+        width: 800,
         child: Column(
           children: <Widget>[
-            ViewCashFlow(),
+            Expanded(child: ViewCashFlow()),
           ],
         ),
       ),
