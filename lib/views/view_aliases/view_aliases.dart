@@ -35,12 +35,12 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   }
 
   @override
-  Widget getPanelForChart(final List<int> indices) {
+  Widget buildPanelForChart(final List<int> indices) {
     return const Text('No chart for Aliases');
   }
 
   @override
-  Widget getPanelForTransactions(final List<int> indices) {
+  Widget buildPanelForTransactions(final List<int> indices) {
     final Alias? alias = getFirstElement<Alias>(indices, list);
     if (alias != null && alias.id.value > -1) {
       return TableTransactions(

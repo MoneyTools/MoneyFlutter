@@ -16,11 +16,9 @@ import 'package:money/widgets/table_view/table_view.dart';
 
 class ViewWidget<T> extends StatefulWidget {
   final FilterFunction filter;
+  final ViewWidgetToDisplay preference;
 
-  const ViewWidget({
-    super.key,
-    this.filter = defaultFilter,
-  });
+  const ViewWidget({super.key, this.filter = defaultFilter, this.preference = const ViewWidgetToDisplay()});
 
   @override
   State<ViewWidget<T>> createState() => ViewWidgetState<T>();
@@ -97,6 +95,132 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     selectedItems.value = <int>[lastSelectedItemIndex];
   }
 
+  @override
+  Widget build(final BuildContext context) {
+    return getViewExpandAndPadding(
+      Column(
+        children: <Widget>[
+          // Optional upper Title area
+          if (widget.preference.displayHeader) buildHeader(),
+
+          MyTableHeader<T>(
+            columns: columns,
+            sortByColumn: sortByColumn,
+            sortAscending: sortAscending,
+            onTap: changeListSortOrder,
+            onLongPress: onCustomizeColumn,
+          ),
+
+          // Table rows
+          Expanded(
+            flex: 1,
+            child: MyTableView<T>(
+              list: list,
+              selectedItems: selectedItems,
+              columns: columns,
+              onTap: onRowTap,
+              // onDoubleTap: (final BuildContext context, final int index) {
+              //   if (widget.preference.showBottom) {
+              //     setState(() {
+              //       isDetailsPanelExpanded = true;
+              //     });
+              //   }
+            ),
+          ),
+
+          // Optional bottom details panel
+          if (widget.preference.showBottom)
+            Expanded(
+              flex: Settings().isDetailsPanelExpanded ? 1 : 0,
+              // this will split the vertical view when expanded
+              child: DetailsPanel(
+                isExpanded: Settings().isDetailsPanelExpanded,
+                onExpanded: (final bool isExpanded) {
+                  setState(() {
+                    Settings().isDetailsPanelExpanded = isExpanded;
+                    Settings().save();
+                  });
+                },
+                selectedTabId: selectedBottomTabId,
+                selectedItems: selectedItems,
+                onTabActivated: updateBottomContent,
+                getDetailPanelContent: buildDetailPanelContent,
+              ),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildHeader() {
+    return ViewHeader(
+      title: getClassNamePlural(),
+      count: numValueOrDefault(list.length),
+      description: getDescription(),
+    );
+  }
+
+  Widget buildDetailPanelContent(final int subViewId, final List<int> selectedItems) {
+    switch (subViewId) {
+      case 0:
+        return buildPanelForDetails(selectedItems);
+      case 1:
+        return buildPanelForChart(selectedItems);
+      case 2:
+        return buildPanelForTransactions(selectedItems);
+      default:
+        return const Text('- empty -');
+    }
+  }
+
+  Widget buildPanelForDetails(final List<int> indices) {
+    final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
+    if (indices.isNotEmpty) {
+      final int index = indices.first;
+      if (isBetweenOrEqual(index, 0, list.length - 1)) {
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Expanded(
+              child: SingleChildScrollView(
+                key: Key(index.toString()),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    children: detailPanelFields.getCellsForDetailsPanel(list[index]),
+                  ),
+                ),
+              ),
+            ),
+
+            //
+            // Right side Action Panel
+            //
+            Column(
+              children: <Widget>[
+                IconButton(
+                    onPressed: () {
+                      onDelete(context, index);
+                    },
+                    icon: const Icon(Icons.delete),
+                    tooltip: 'Delete'),
+              ],
+            ),
+          ],
+        );
+      }
+    }
+    return const Text('No item selected');
+  }
+
+  Widget buildPanelForChart(final List<int> indices) {
+    return const Text('No chart to display');
+  }
+
+  Widget buildPanelForTransactions(final List<int> indices) {
+    return const Text('the transactions');
+  }
+
   String getClassNamePlural() {
     return 'Items';
   }
@@ -158,14 +282,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  Widget getTitle() {
-    return ViewHeader(
-      title: getClassNamePlural(),
-      count: numValueOrDefault(list.length),
-      description: getDescription(),
-    );
-  }
-
   void onDelete(final BuildContext context, final int index) {
     // the derived class is responsible for implementing the delete operation
   }
@@ -177,71 +293,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     });
   }
 
-  @override
-  Widget build(final BuildContext context) {
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      return getViewExpandAndPadding(
-        Column(
-          children: <Widget>[
-            // Optional upper Title area
-            getTitle(),
-
-            if (!isSmallWidth(constraints))
-              MyTableHeader<T>(
-                columns: columns,
-                sortByColumn: sortByColumn,
-                sortAscending: sortAscending,
-                onTap: changeListSortOrder,
-                onLongPress: onCustomizeColumn,
-              ),
-
-            // Table rows
-            Expanded(
-              flex: 1,
-              child: MyTableView<T>(
-                list: list,
-                selectedItems: selectedItems,
-                columns: columns,
-                asColumnView: !isSmallWidth(constraints),
-                onTap: onRowTap,
-                // onDoubleTap: (final BuildContext context, final int index) {
-                //   if (widget.preference.showBottom) {
-                //     setState(() {
-                //       isDetailsPanelExpanded = true;
-                //     });
-                //   }
-              ),
-            ),
-
-            // Optional bottom details panel
-            Expanded(
-              flex: Settings().isDetailsPanelExpanded ? 1 : 0,
-              // this will split the vertical view when expanded
-              child: DetailsPanel(
-                isExpanded: Settings().isDetailsPanelExpanded,
-                onExpanded: (final bool isExpanded) {
-                  setState(() {
-                    Settings().isDetailsPanelExpanded = isExpanded;
-                    Settings().save();
-                  });
-                },
-                selectedTabId: selectedBottomTabId,
-                selectedItems: selectedItems,
-                onTabActivated: updateBottomContent,
-                getDetailPanelContent: getDetailPanelContent,
-              ),
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
   Widget getViewExpandAndPadding(final Widget child) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: child,
+    return Expanded(
+      child: Container(
+        color: Theme.of(context).colorScheme.background,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        child: child,
+      ),
     );
   }
 
@@ -251,27 +309,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     });
   }
 
-  Widget getDetailPanelContent(final int subViewId, final List<int> selectedItems) {
-    switch (subViewId) {
-      case 0:
-        return getPanelForDetails(selectedItems);
-      case 1:
-        return getPanelForChart(selectedItems);
-      case 2:
-        return getPanelForTransactions(selectedItems);
-      default:
-        return const Text('- empty -');
-    }
-  }
-
   void onRowTap(final BuildContext context, final int index) {
     if (isMobile()) {
       showDialog(
           context: context,
           builder: (final BuildContext context) {
             return AlertDialog(
-              title: getDetailPanelHeader(context, index, list[index]),
-              content: getPanelForDetails(<int>[index]),
+              title: Center(child: Text('${getClassNameSingular()} #${index + 1}')),
+              content: buildPanelForDetails(<int>[index]),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
@@ -295,58 +340,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       // call this to persist the last selected item index
       saveLastUserActionOnThisView();
     }
-  }
-
-  Widget getDetailPanelHeader(final BuildContext context, final num index, final T item) {
-    return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
-  }
-
-  Widget getPanelForDetails(final List<int> indices) {
-    final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
-    if (indices.isNotEmpty) {
-      final int index = indices.first;
-      if (isBetweenOrEqual(index, 0, list.length - 1)) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                key: Key(index.toString()),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: detailPanelFields.getCellsForDetailsPanel(list[index]),
-                  ),
-                ),
-              ),
-            ),
-
-            //
-            // Right side Action Panel
-            //
-            Column(
-              children: <Widget>[
-                IconButton(
-                    onPressed: () {
-                      onDelete(context, index);
-                    },
-                    icon: const Icon(Icons.delete),
-                    tooltip: 'Delete'),
-              ],
-            ),
-          ],
-        );
-      }
-    }
-    return const Text('No item selected');
-  }
-
-  Widget getPanelForChart(final List<int> indices) {
-    return const Text('No chart to display');
-  }
-
-  Widget getPanelForTransactions(final List<int> indices) {
-    return const Text('the transactions');
   }
 
   void changeListSortOrder(final int columnNumber) {
@@ -509,10 +502,12 @@ MainAxisAlignment getRowAlignmentBasedOnTextAlign(final TextAlign textAlign) {
 }
 
 class ViewWidgetToDisplay {
+  final bool displayHeader;
   final bool showBottom;
   final bool columnAccount;
 
   const ViewWidgetToDisplay({
+    this.displayHeader = true,
     this.showBottom = true,
     this.columnAccount = true,
   });

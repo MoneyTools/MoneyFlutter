@@ -38,12 +38,12 @@ class ViewLoansState extends ViewWidgetState<LoanPayment> {
   }
 
   @override
-  Widget getPanelForChart(final List<int> indices) {
+  Widget buildPanelForChart(final List<int> indices) {
     return _getSubViewContentForChart(indices);
   }
 
   @override
-  Widget getPanelForTransactions(final List<int> indices) {
+  Widget buildPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
   }
 }

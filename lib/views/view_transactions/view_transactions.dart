@@ -70,7 +70,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  Widget getTitle() {
+  Widget buildHeader() {
     return ViewHeader(
       title: getClassNamePlural(),
       count: numValueOrDefault(list.length),
@@ -183,7 +183,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  Widget getPanelForChart(final List<int> indices) {
+  Widget buildPanelForChart(final List<int> indices) {
     final Map<String, num> tallyPerMonths = <String, num>{};
 
     final DateRange timePeriod =
@@ -219,7 +219,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  Widget getPanelForTransactions(final List<int> indices) {
+  Widget buildPanelForTransactions(final List<int> indices) {
     final Transaction? transaction = getFirstElement<Transaction>(indices, list);
     if (transaction != null &&
         transaction.id.value > -1 &&
