@@ -97,6 +97,66 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     selectedItems.value = <int>[lastSelectedItemIndex];
   }
 
+  @override
+  Widget build(final BuildContext context) {
+    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+      return getViewExpandAndPadding(
+        Column(
+          children: <Widget>[
+            // Optional upper Title area
+            getTitle(),
+
+            if (!isSmallWidth(constraints))
+              MyTableHeader<T>(
+                columns: columns,
+                sortByColumn: sortByColumn,
+                sortAscending: sortAscending,
+                onTap: changeListSortOrder,
+                onLongPress: onCustomizeColumn,
+              ),
+
+            // Table rows
+            Expanded(
+              flex: 1,
+              child: MyTableView<T>(
+                list: list,
+                selectedItems: selectedItems,
+                columns: columns,
+                asColumnView: !isSmallWidth(constraints),
+                onTap: onRowTap,
+                // onDoubleTap: (final BuildContext context, final int index) {
+                //   if (widget.preference.showBottom) {
+                //     setState(() {
+                //       isDetailsPanelExpanded = true;
+                //     });
+                //   }
+              ),
+            ),
+
+            // Optional bottom details panel
+            Expanded(
+              flex: Settings().isDetailsPanelExpanded ? 1 : 0,
+              // this will split the vertical view when expanded
+              child: DetailsPanel(
+                isExpanded: Settings().isDetailsPanelExpanded,
+                onExpanded: (final bool isExpanded) {
+                  setState(() {
+                    Settings().isDetailsPanelExpanded = isExpanded;
+                    Settings().save();
+                  });
+                },
+                selectedTabId: selectedBottomTabId,
+                selectedItems: selectedItems,
+                onTabActivated: updateBottomContent,
+                getDetailPanelContent: getDetailPanelContent,
+              ),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
   String getClassNamePlural() {
     return 'Items';
   }
@@ -174,66 +234,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     setState(() {
       filterText = text;
       list = getList();
-    });
-  }
-
-  @override
-  Widget build(final BuildContext context) {
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      return getViewExpandAndPadding(
-        Column(
-          children: <Widget>[
-            // Optional upper Title area
-            getTitle(),
-
-            if (!isSmallWidth(constraints))
-              MyTableHeader<T>(
-                columns: columns,
-                sortByColumn: sortByColumn,
-                sortAscending: sortAscending,
-                onTap: changeListSortOrder,
-                onLongPress: onCustomizeColumn,
-              ),
-
-            // Table rows
-            Expanded(
-              flex: 1,
-              child: MyTableView<T>(
-                list: list,
-                selectedItems: selectedItems,
-                columns: columns,
-                asColumnView: !isSmallWidth(constraints),
-                onTap: onRowTap,
-                // onDoubleTap: (final BuildContext context, final int index) {
-                //   if (widget.preference.showBottom) {
-                //     setState(() {
-                //       isDetailsPanelExpanded = true;
-                //     });
-                //   }
-              ),
-            ),
-
-            // Optional bottom details panel
-            Expanded(
-              flex: Settings().isDetailsPanelExpanded ? 1 : 0,
-              // this will split the vertical view when expanded
-              child: DetailsPanel(
-                isExpanded: Settings().isDetailsPanelExpanded,
-                onExpanded: (final bool isExpanded) {
-                  setState(() {
-                    Settings().isDetailsPanelExpanded = isExpanded;
-                    Settings().save();
-                  });
-                },
-                selectedTabId: selectedBottomTabId,
-                selectedItems: selectedItems,
-                onTabActivated: updateBottomContent,
-                getDetailPanelContent: getDetailPanelContent,
-              ),
-            ),
-          ],
-        ),
-      );
     });
   }
 
