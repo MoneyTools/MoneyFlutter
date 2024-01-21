@@ -7,7 +7,7 @@ export 'package:money/models/money_objects/investments/investment.dart';
 
 class Investments extends MoneyObjects<Investment> {
   @override
-  loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<Json> rows) {
     clear();
     for (final Json row in rows) {
       addEntry(Investment.fromSqlite(row));

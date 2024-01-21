@@ -26,7 +26,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final Account? account = getFirstElement<Account>(indices, list);
     if (account != null && account.id.value > -1) {
-      filter(final Transaction transaction) => filterByAccountId(transaction, account.id.value);
+      bool filter(final Transaction transaction) => filterByAccountId(transaction, account.id.value);
 
       final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
 

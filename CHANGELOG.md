@@ -1,6 +1,10 @@
+## [1.1.01] 2024-01-21
+
+- LINT enforce all Functions and Methods must have a return type
+
 ## [1.1.00] 2024-01-20
-- 
-- Category list & Details panel show Colors 
+
+- Category list & Details panel show Colors
 - Major refactor moved to Self describing Declarative Properties
 
 ## [1.0.21] 2024-01-17

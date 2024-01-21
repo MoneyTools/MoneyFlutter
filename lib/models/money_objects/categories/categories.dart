@@ -105,103 +105,103 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category get split {
-    return getOrCreateCategory("Split", CategoryType.none);
+    return getOrCreateCategory('Split', CategoryType.none);
   }
 
   Category get salesTax {
-    return getOrCreateCategory("Taxes:Sales Tax", CategoryType.expense);
+    return getOrCreateCategory('Taxes:Sales Tax', CategoryType.expense);
   }
 
   Category get interestEarned {
-    return getOrCreateCategory("Savings:Interest", CategoryType.income);
+    return getOrCreateCategory('Savings:Interest', CategoryType.income);
   }
 
   Category get savings {
-    return getOrCreateCategory("Savings", CategoryType.income);
+    return getOrCreateCategory('Savings', CategoryType.income);
   }
 
   Category get investmentCredit {
-    return getOrCreateCategory("Investments:Credit", CategoryType.income);
+    return getOrCreateCategory('Investments:Credit', CategoryType.income);
   }
 
   Category get investmentDebit {
-    return getOrCreateCategory("Investments:Debit", CategoryType.expense);
+    return getOrCreateCategory('Investments:Debit', CategoryType.expense);
   }
 
   Category get investmentInterest {
-    return getOrCreateCategory("Investments:Interest", CategoryType.income);
+    return getOrCreateCategory('Investments:Interest', CategoryType.income);
   }
 
   Category get investmentDividends {
-    return getOrCreateCategory("Investments:Dividends", CategoryType.income);
+    return getOrCreateCategory('Investments:Dividends', CategoryType.income);
   }
 
   Category get investmentTransfer {
-    return getOrCreateCategory("Investments:Transfer", CategoryType.none);
+    return getOrCreateCategory('Investments:Transfer', CategoryType.none);
   }
 
   Category get investmentFees {
-    return getOrCreateCategory("Investments:Fees", CategoryType.expense);
+    return getOrCreateCategory('Investments:Fees', CategoryType.expense);
   }
 
   Category get investmentMutualFunds {
-    return getOrCreateCategory("Investments:Mutual Funds", CategoryType.expense);
+    return getOrCreateCategory('Investments:Mutual Funds', CategoryType.expense);
   }
 
   Category get investmentStocks {
-    return getOrCreateCategory("Investments:Stocks", CategoryType.expense);
+    return getOrCreateCategory('Investments:Stocks', CategoryType.expense);
   }
 
   Category get investmentOther {
-    return getOrCreateCategory("Investments:Other", CategoryType.expense);
+    return getOrCreateCategory('Investments:Other', CategoryType.expense);
   }
 
   Category get investmentBonds {
-    return getOrCreateCategory("Investments:Bonds", CategoryType.expense);
+    return getOrCreateCategory('Investments:Bonds', CategoryType.expense);
   }
 
   Category get investmentOptions {
-    return getOrCreateCategory("Investments:Options", CategoryType.expense);
+    return getOrCreateCategory('Investments:Options', CategoryType.expense);
   }
 
   Category get investmentReinvest {
-    return getOrCreateCategory("Investments:Reinvest", CategoryType.none);
+    return getOrCreateCategory('Investments:Reinvest', CategoryType.none);
   }
 
   Category get investmentLongTermCapitalGainsDistribution {
-    return getOrCreateCategory("Investments:Long Term Capital Gains Distribution", CategoryType.income);
+    return getOrCreateCategory('Investments:Long Term Capital Gains Distribution', CategoryType.income);
   }
 
   Category get investmentShortTermCapitalGainsDistribution {
-    return getOrCreateCategory("Investments:Short Term Capital Gains Distribution", CategoryType.income);
+    return getOrCreateCategory('Investments:Short Term Capital Gains Distribution', CategoryType.income);
   }
 
   Category get investmentMiscellaneous {
-    return getOrCreateCategory("Investments:Miscellaneous", CategoryType.expense);
+    return getOrCreateCategory('Investments:Miscellaneous', CategoryType.expense);
   }
 
   Category get transferToDeletedAccount {
-    return getOrCreateCategory("Xfer to Deleted Account", CategoryType.none);
+    return getOrCreateCategory('Xfer to Deleted Account', CategoryType.none);
   }
 
   Category get transferFromDeletedAccount {
-    return getOrCreateCategory("Xfer from Deleted Account", CategoryType.none);
+    return getOrCreateCategory('Xfer from Deleted Account', CategoryType.none);
   }
 
   Category get transfer {
-    return getOrCreateCategory("Transfer", CategoryType.none);
+    return getOrCreateCategory('Transfer', CategoryType.none);
   }
 
   Category get unknown {
-    return getOrCreateCategory("Unknown", CategoryType.none);
+    return getOrCreateCategory('Unknown', CategoryType.none);
   }
 
   Category get unassignedSplit {
-    return getOrCreateCategory("UnassignedSplit", CategoryType.none);
+    return getOrCreateCategory('UnassignedSplit', CategoryType.none);
   }
 
   @override
-  loadDemoData() {
+  void loadDemoData() {
     clear();
     addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
     addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment));

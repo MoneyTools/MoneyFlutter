@@ -105,7 +105,7 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
-  init({
+  Future<void> init({
     required final String? filePathToLoad,
     required final Function callbackWhenLoaded,
   }) async {
@@ -195,7 +195,7 @@ class Data {
   }
 
   /// Close all tables
-  close() {
+  void close() {
     for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
       moneyObjects.clear();
     }

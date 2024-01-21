@@ -4,7 +4,7 @@ import 'package:money/models/money_objects/money_object.dart';
 
 import 'package:money/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
-import 'package:money/models/money_objects/splits/splits.dart';
+import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 import 'package:money/widgets/chart.dart';
@@ -22,12 +22,12 @@ class ViewRentals extends ViewWidget<RentBuilding> {
 
 class ViewRentalsState extends ViewWidgetState<RentBuilding> {
   @override
-  getClassNamePlural() {
+  String getClassNamePlural() {
     return 'Rentals';
   }
 
   @override
-  getClassNameSingular() {
+  String getClassNameSingular() {
     return 'Rental';
   }
 
@@ -36,7 +36,7 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
     return 'Properties to rent.';
   }
 
-  getUnitsAsString(final List<RentUnit> listOfUnits) {
+  String getUnitsAsString(final List<RentUnit> listOfUnits) {
     final List<String> listAsText = <String>[];
     for (RentUnit unit in listOfUnits) {
       listAsText.add('${unit.name}:${unit.renter}');
@@ -51,7 +51,7 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
   }
 
   @override
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     return 0; // Sort by name
   }
 

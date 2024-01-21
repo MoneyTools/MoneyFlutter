@@ -79,7 +79,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     return Settings().viewAccountSortBy; // Sort by name
   }
 

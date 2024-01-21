@@ -226,7 +226,7 @@ class Account extends MoneyObject<Account> {
       ..categoryIdForInterest.value = jsonGetInt(row, 'CategoryIdForInterest');
   }
 
-  static getName(final Account? instance) {
+  static String getName(final Account? instance) {
     return instance == null ? '' : instance.name.value;
   }
 
@@ -258,7 +258,7 @@ class Account extends MoneyObject<Account> {
     return isBankAccount() && isActive();
   }
 
-  getTypeAsText() {
+  String getTypeAsText() {
     switch (type.value) {
       case AccountType.savings:
         return 'Savings';

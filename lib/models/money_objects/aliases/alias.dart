@@ -29,6 +29,7 @@ class Alias extends MoneyObject<Alias> {
   /// 2    Flags    INT            1                 0
   Field<Alias, int> flags = Field<Alias, int>(
     type: FieldType.text,
+    align: TextAlign.center,
     importance: 3,
     name: 'Flag',
     serializeName: 'Flag',

@@ -51,17 +51,17 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  getClassNamePlural() {
+  String getClassNamePlural() {
     return 'Transactions';
   }
 
   @override
-  getClassNameSingular() {
+  String getClassNameSingular() {
     return 'Transaction';
   }
 
   @override
-  getDescription() {
+  String getDescription() {
     return 'Details actions of your accounts.';
   }
 
@@ -155,7 +155,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     // We want to default to sort by Date on startup
     // regardless of where the "Data Column" is
     int columnIndex = 0;
@@ -229,7 +229,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  getPanelForTransactions(final List<int> indices) {
+  Widget getPanelForTransactions(final List<int> indices) {
     final Transaction? transaction = getFirstElement<Transaction>(indices, list);
     if (transaction != null &&
         transaction.id.value > -1 &&

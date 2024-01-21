@@ -44,7 +44,7 @@ class _MyMoneyState extends State<MyMoney> {
   final Data data = Data();
 
   @override
-  initState() {
+  void initState() {
     super.initState();
     settings.load(onLoaded: () {
       loadData();
@@ -73,7 +73,7 @@ class _MyMoneyState extends State<MyMoney> {
     return false;
   }
 
-  loadData() {
+  void loadData() {
     data.init(
         filePathToLoad: settings.pathToDatabase,
         callbackWhenLoaded: (final bool success) {
@@ -118,7 +118,7 @@ class _MyMoneyState extends State<MyMoney> {
 
     if (pickerResult != null) {
       try {
-        if (pickerResult.files.single.extension == "mmdb") {
+        if (pickerResult.files.single.extension == 'mmdb') {
           if (kIsWeb) {
             settings.pathToDatabase = pickerResult.files.single.path;
 
@@ -159,9 +159,9 @@ class _MyMoneyState extends State<MyMoney> {
     final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
     if (pickerResult != null) {
       switch (pickerResult.files.single.extension?.toLowerCase()) {
-        case "qif":
+        case 'qif':
           importQIF(pickerResult.files.single.path.toString());
-        case "qfx":
+        case 'qfx':
           importQFX(pickerResult.files.single.path.toString(), data);
       }
       settings.fireOnChanged();

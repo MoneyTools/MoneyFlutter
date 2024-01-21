@@ -15,7 +15,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
   }
 
   @override
-  loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<Json> rows) {
     clear();
 
     for (final Json row in rows) {
@@ -52,7 +52,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     }
   }
 
-  cumulateTransactions(final RentBuilding rental) {
+  void cumulateTransactions(final RentBuilding rental) {
     for (Transaction t in Data().transactions.getList()) {
       if (rental.categoryForIncomeTreeIds.contains(t.categoryId.value)) {
         rental.dateRange.inflate(t.dateTime.value);

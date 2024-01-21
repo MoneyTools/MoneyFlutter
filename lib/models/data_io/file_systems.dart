@@ -27,7 +27,7 @@ class MyFileSystems {
     final String pathToFile,
   ) async {
     final String containerFolder = p.dirname(pathToFile);
-    MyFileSystems.ensureFolderExist(containerFolder);
+    await MyFileSystems.ensureFolderExist(containerFolder);
 
     final File file = File(pathToFile);
 

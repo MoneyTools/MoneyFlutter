@@ -20,12 +20,12 @@ class ViewPayees extends ViewWidget<Payee> {
 
 class ViewPayeesState extends ViewWidgetState<Payee> {
   @override
-  getClassNamePlural() {
+  String getClassNamePlural() {
     return 'Payees';
   }
 
   @override
-  getClassNameSingular() {
+  String getClassNameSingular() {
     return 'Payee';
   }
 
@@ -40,7 +40,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     return 0; // Sort by name
   }
 

@@ -35,11 +35,11 @@ class Settings {
 
   Settings._internal();
 
-  fireOnChanged() {
+  void fireOnChanged() {
     onChanged?.call();
   }
 
-  load({final Function? onLoaded}) async {
+  void load({final Function? onLoaded}) async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     colorSelected = intValueOrDefault(preferences.getInt(prefColor));
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
@@ -58,21 +58,21 @@ class Settings {
     }
   }
 
-  save() async {
+  void save() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setDouble(prefTextScale, textScale);
-    preferences.setInt(prefColor, colorSelected);
+    await preferences.setDouble(prefTextScale, textScale);
+    await preferences.setInt(prefColor, colorSelected);
 
-    preferences.setBool(prefDarkMode, useDarkMode);
-    preferences.setBool(prefIncludeClosedAccounts, includeClosedAccounts);
-    preferences.setBool(prefRentals, rentals);
+    await preferences.setBool(prefDarkMode, useDarkMode);
+    await preferences.setBool(prefIncludeClosedAccounts, includeClosedAccounts);
+    await preferences.setBool(prefRentals, rentals);
 
     saveMapToPrefs(preferences, prefViews, views);
 
     if (pathToDatabase == null) {
-      preferences.remove(prefLastLoadedPathToDatabase);
+      await preferences.remove(prefLastLoadedPathToDatabase);
     } else {
-      preferences.setString(prefLastLoadedPathToDatabase, pathToDatabase.toString());
+      await preferences.setString(prefLastLoadedPathToDatabase, pathToDatabase.toString());
     }
   }
 

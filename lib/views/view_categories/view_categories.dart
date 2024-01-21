@@ -96,7 +96,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   }
 
   @override
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     return 0; // Sort by name
   }
 

@@ -14,7 +14,7 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
   }
 
   @override
-  loadFromJson(final List<Json> rows) {
+  List<TransactionExtra> loadFromJson(final List<Json> rows) {
     clear();
 
     runningBalance = 0.00;

@@ -35,7 +35,7 @@ class Block {
   static const double minBlockHeight = 20.0;
   static const double blockWidth = 50.0;
 
-  draw(final Canvas canvas) {
+  void draw(final Canvas canvas) {
     if (!rect.hasNaN) {
       final ui.Paint paint = Paint();
       paint.color = color;
@@ -95,8 +95,8 @@ List<num> getMinMaxValues(final List<double> list) {
     return <num>[list[0], list[0]];
   }
 
-  double valueMin = 0;
-  double valueMax = 0;
+  double valueMin = 0.0;
+  double valueMax = 0.0;
   if (list[0] < list[1]) {
     valueMin = list[0];
     valueMax = list[1];
@@ -180,7 +180,7 @@ void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint
   final ui.Size size = Size((channelPointEnd.x - channelPointLeft.x).abs(), 100.0);
   final double halfWidth = size.width / 2;
 
-  final Path path = Path();
+  final ui.Path path = Path();
 
   // Start from the Left-Top
   path.moveTo(channelPointLeft.x, channelPointLeft.top);
@@ -213,12 +213,12 @@ void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint
   // Close at the Left-Bottom
   path.close();
 
-  final Paint paint = Paint();
+  final ui.Paint paint = Paint();
   paint.color = color;
   canvas.drawPath(path, paint);
 
   // OUTLINE
-  final Paint paintStroke = Paint();
+  final ui.Paint paintStroke = Paint();
   paintStroke.style = PaintingStyle.stroke;
   paintStroke.strokeWidth = 0.5;
   paintStroke.color = Colors.black.withOpacity(0.3);
