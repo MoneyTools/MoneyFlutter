@@ -11,6 +11,7 @@ import 'package:path/path.dart' as p;
 class Settings {
   bool prefLoaded = false;
   int colorSelected = 0;
+  bool isSmallDevice = true;
   int screenIndex = 0;
   String? pathToDatabase;
   String? get pathToDatabaseFolder => p.dirname(Settings().pathToDatabase!);

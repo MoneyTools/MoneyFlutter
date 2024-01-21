@@ -250,6 +250,8 @@ class _MyMoneyState extends State<MyMoney> {
 
   @override
   Widget build(final BuildContext context) {
+    Settings().isSmallDevice = MediaQuery.of(context).size.width < 800;
+
     return MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'MyMoney',
@@ -294,27 +296,27 @@ class _MyMoneyState extends State<MyMoney> {
                   ),
                 ],
                 child: Container(
-                    color: Theme.of(context).colorScheme.primaryContainer, child: getContent(context, constraints)),
+                    color: Theme.of(context).colorScheme.primaryContainer, child: buildContent(context, constraints)),
               ));
         }));
   }
 
-  Widget getContent(final BuildContext context, final BoxConstraints constraints) {
+  Widget buildContent(final BuildContext context, final BoxConstraints constraints) {
     if (shouldShowOpenInstructions()) {
       return welcomePanel(context);
     }
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
     } else {
-      if (isSmallWidth(constraints)) {
-        return getScaffoldingForSmallSurface(context);
+      if (Settings().isSmallDevice) {
+        return buildContentForSmallSurface(context);
       } else {
-        return getScaffoldingForLargeSurface(context);
+        return buildContentForLargeSurface(context);
       }
     }
   }
 
-  Widget getScaffoldingForSmallSurface(final BuildContext context) {
+  Widget buildContentForSmallSurface(final BuildContext context) {
     return myScaffold(
       body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
       bottomNavigationBar:
@@ -322,7 +324,7 @@ class _MyMoneyState extends State<MyMoney> {
     );
   }
 
-  Widget getScaffoldingForLargeSurface(final BuildContext context) {
+  Widget buildContentForLargeSurface(final BuildContext context) {
     return myScaffold(
       body: SafeArea(
         bottom: false,

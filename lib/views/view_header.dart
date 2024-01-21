@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/widgets/filter_input.dart';
 import 'package:money/widgets/three_part_label.dart';
 
@@ -36,7 +36,7 @@ class ViewHeader extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (final BuildContext context, final BoxConstraints constraints) {
-          if (isSmallWidth(constraints)) {
+          if (Settings().isSmallDevice) {
             return _buildSmall(context);
           } else {
             return _buildLarge(context);
