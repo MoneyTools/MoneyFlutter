@@ -16,9 +16,11 @@ import 'package:money/widgets/table_view/table_view.dart';
 
 class ViewWidget<T> extends StatefulWidget {
   final FilterFunction filter;
-  final ViewWidgetToDisplay preference;
 
-  const ViewWidget({super.key, this.filter = defaultFilter, this.preference = const ViewWidgetToDisplay()});
+  const ViewWidget({
+    super.key,
+    this.filter = defaultFilter,
+  });
 
   @override
   State<ViewWidget<T>> createState() => ViewWidgetState<T>();
@@ -177,39 +179,41 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   @override
   Widget build(final BuildContext context) {
-    return getViewExpandAndPadding(
-      Column(
-        children: <Widget>[
-          // Optional upper Title area
-          if (widget.preference.displayHeader) getTitle(),
+    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+      return getViewExpandAndPadding(
+        Column(
+          children: <Widget>[
+            // Optional upper Title area
+            getTitle(),
 
-          MyTableHeader<T>(
-            columns: columns,
-            sortByColumn: sortByColumn,
-            sortAscending: sortAscending,
-            onTap: changeListSortOrder,
-            onLongPress: onCustomizeColumn,
-          ),
+            if (!isSmallWidth(constraints))
+              MyTableHeader<T>(
+                columns: columns,
+                sortByColumn: sortByColumn,
+                sortAscending: sortAscending,
+                onTap: changeListSortOrder,
+                onLongPress: onCustomizeColumn,
+              ),
 
-          // Table rows
-          Expanded(
-            flex: 1,
-            child: MyTableView<T>(
-              list: list,
-              selectedItems: selectedItems,
-              columns: columns,
-              onTap: onRowTap,
-              // onDoubleTap: (final BuildContext context, final int index) {
-              //   if (widget.preference.showBottom) {
-              //     setState(() {
-              //       isDetailsPanelExpanded = true;
-              //     });
-              //   }
+            // Table rows
+            Expanded(
+              flex: 1,
+              child: MyTableView<T>(
+                list: list,
+                selectedItems: selectedItems,
+                columns: columns,
+                asColumnView: !isSmallWidth(constraints),
+                onTap: onRowTap,
+                // onDoubleTap: (final BuildContext context, final int index) {
+                //   if (widget.preference.showBottom) {
+                //     setState(() {
+                //       isDetailsPanelExpanded = true;
+                //     });
+                //   }
+              ),
             ),
-          ),
 
-          // Optional bottom details panel
-          if (widget.preference.showBottom)
+            // Optional bottom details panel
             Expanded(
               flex: Settings().isDetailsPanelExpanded ? 1 : 0,
               // this will split the vertical view when expanded
@@ -227,18 +231,17 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 getDetailPanelContent: getDetailPanelContent,
               ),
             ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget getViewExpandAndPadding(final Widget child) {
-    return Expanded(
-      child: Container(
-        color: Theme.of(context).colorScheme.background,
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: child,
-      ),
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: child,
     );
   }
 
@@ -506,12 +509,10 @@ MainAxisAlignment getRowAlignmentBasedOnTextAlign(final TextAlign textAlign) {
 }
 
 class ViewWidgetToDisplay {
-  final bool displayHeader;
   final bool showBottom;
   final bool columnAccount;
 
   const ViewWidgetToDisplay({
-    this.displayHeader = true,
     this.showBottom = true,
     this.columnAccount = true,
   });

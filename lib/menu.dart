@@ -7,7 +7,12 @@ class MenuHorizontal extends StatefulWidget {
   final int selectedIndex;
   final Settings settings;
 
-  const MenuHorizontal({super.key, required this.settings, required this.onSelectItem, required this.selectedIndex});
+  const MenuHorizontal({
+    super.key,
+    required this.settings,
+    required this.onSelectItem,
+    required this.selectedIndex,
+  });
 
   @override
   State<MenuHorizontal> createState() => _MenuHorizontalState();
@@ -25,16 +30,19 @@ class _MenuHorizontalState extends State<MenuHorizontal> {
   @override
   Widget build(final BuildContext context) {
     return NavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (final int index) {
-          setState(() {
-            _selectedIndex = index;
-          });
-          widget.onSelectItem(index);
-        },
-        destinations: getAppBarDestinations(widget.settings),
-        height: 52,
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysHide);
+      selectedIndex: _selectedIndex,
+      onDestinationSelected: (final int index) {
+        setState(() {
+          _selectedIndex = index;
+        });
+        widget.onSelectItem(index);
+      },
+      destinations: getAppBarDestinations(widget.settings),
+      height: 52,
+      indicatorColor: Theme.of(context).colorScheme.onSecondary,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+    );
   }
 }
 
@@ -44,12 +52,13 @@ class MenuVertical extends StatefulWidget {
   final bool useIndicator;
   final Settings settings;
 
-  const MenuVertical(
-      {super.key,
-      required this.settings,
-      required this.onSelectItem,
-      required this.selectedIndex,
-      this.useIndicator = false});
+  const MenuVertical({
+    super.key,
+    required this.settings,
+    required this.onSelectItem,
+    required this.selectedIndex,
+    this.useIndicator = false,
+  });
 
   @override
   State<MenuVertical> createState() => _MenuVerticalState();

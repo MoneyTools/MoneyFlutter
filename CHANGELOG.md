@@ -1,5 +1,6 @@
 ## [1.1.01] 2024-01-21
 
+- Adaptive View content (Accounts and Transactions)
 - LINT enforce all Functions and Methods must have a return type
 
 ## [1.1.00] 2024-01-20

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
-
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/table_view/table_row.dart';
+import 'package:money/widgets/table_view/table_row_small.dart';
 
 class MyTableView<T> extends StatefulWidget {
   final Fields<T> columns;
@@ -12,12 +11,14 @@ class MyTableView<T> extends StatefulWidget {
   final ValueNotifier<List<int>> selectedItems;
   final Function? onTap;
   final Function? onDoubleTap;
+  final bool asColumnView;
 
   const MyTableView({
     super.key,
     required this.columns,
     required this.list,
     required this.selectedItems,
+    this.asColumnView = true,
     this.onTap,
     this.onDoubleTap,
   });
@@ -45,22 +46,31 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         scrollDirection: Axis.vertical,
         controller: scrollController,
         itemCount: widget.list.length,
-        itemExtent: itemHeight,
+        itemExtent: widget.asColumnView ? itemHeight : 80,
         itemBuilder: (final BuildContext context, final int index) {
-          return MyTableRow(
-            onListViewKeyEvent: onListViewKeyEvent,
-            onTap: () {
-              setSelectedItem(index);
-              FocusScope.of(context).requestFocus();
-            },
-            // onDoubleTap: () {
-            //   setSelectedItem(index, true);
-            //   FocusScope.of(context).requestFocus();
-            // },
-            autoFocus: index == widget.selectedItems.value.firstOrNull,
-            isSelected: widget.selectedItems.value.contains(index),
-            children: widget.columns.getRowOfColumns(widget.list[index]),
-          );
+          final MoneyObject<T> itemInstance = (widget.list[index] as MoneyObject<T>);
+          if (!widget.asColumnView && itemInstance.supportSmallList) {
+            return MyTableRowSmall(
+              onListViewKeyEvent: onListViewKeyEvent,
+              onTap: () {
+                setSelectedItem(index);
+                FocusScope.of(context).requestFocus();
+              },
+              autoFocus: index == widget.selectedItems.value.firstOrNull,
+              isSelected: widget.selectedItems.value.contains(index),
+              child: itemInstance.buildInstanceWidgetSmallScreen(),
+            );
+          } else {
+            return MyTableRow(
+                onListViewKeyEvent: onListViewKeyEvent,
+                onTap: () {
+                  setSelectedItem(index);
+                  FocusScope.of(context).requestFocus();
+                },
+                autoFocus: index == widget.selectedItems.value.firstOrNull,
+                isSelected: widget.selectedItems.value.contains(index),
+                children: widget.columns.getRowOfColumns(itemInstance as T));
+          }
         });
   }
 

@@ -1,5 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/widgets/table_view/table_row_compact.dart';
 
 /*
    6|OpeningBalance|money|0||0
@@ -15,6 +18,9 @@ import 'package:money/models/money_objects/money_object.dart';
 class Account extends MoneyObject<Account> {
   @override
   int get uniqueId => id.value;
+
+  @override
+  bool get supportSmallList => true;
 
   // Id
   // 0|Id|INT|0||1
@@ -85,7 +91,7 @@ class Account extends MoneyObject<Account> {
     valueForSerialization: (final Account instance) => instance.type.value.index,
   );
 
-  // 6
+  // 6 Open Balance
   Field<Account, double> openingBalance = Field<Account, double>(
     name: 'Opening Balance',
     serializeName: 'OpeningBalance',
@@ -95,7 +101,7 @@ class Account extends MoneyObject<Account> {
     valueForSerialization: (final Account instance) => instance.openingBalance.value,
   );
 
-  // 7
+  // 7 Currency
   Field<Account, String> currency = Field<Account, String>(
     importance: 4,
     name: 'Currency',
@@ -109,7 +115,7 @@ class Account extends MoneyObject<Account> {
   // 8
   int onlineAccount = -1;
 
-  // 9
+  // 9 WebSite
   Field<Account, String> webSite = Field<Account, String>(
     importance: 4,
     name: 'WebSite',
@@ -317,6 +323,21 @@ class Account extends MoneyObject<Account> {
       default:
         return AccountType._notUsed_7;
     }
+  }
+
+  @override
+  Widget buildInstanceWidgetSmallScreen() {
+    return TableRowCompact(
+      leftTopAsWidget: Text(
+        name.value,
+        textAlign: TextAlign.left,
+      ),
+      leftBottomAsWidget: Text(
+        getTypeAsText(),
+        textAlign: TextAlign.left,
+      ),
+      rightTopAsWidget: Text(getCurrencyText(balance.value)),
+    );
   }
 }
 
