@@ -145,7 +145,7 @@ class SankeyPaint extends CustomPainter {
       // Prepare a Left Block
       final double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
       final double boxTop = top + verticalPosition;
-      final Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
+      final ui.Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
       final Block source = Block('${element.name}: ${getNumberAsShorthandText(element.value)}', rect, color, textColor,
           TextAlign.center, TextAlign.center);
       source.textColor = textColor;

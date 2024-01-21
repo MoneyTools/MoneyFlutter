@@ -11,7 +11,7 @@ class Splits extends MoneyObjects<Split> {
   }
 
   @override
-  loadFromJson(final List<Json> rows) {
+  List<Split> loadFromJson(final List<Json> rows) {
     clear();
     for (final Json row in rows) {
       getList().add(

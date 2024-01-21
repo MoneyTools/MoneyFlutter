@@ -18,12 +18,12 @@ class ViewLoans extends ViewWidget<LoanPayment> {
 
 class ViewLoansState extends ViewWidgetState<LoanPayment> {
   @override
-  getClassNameSingular() {
+  String getClassNameSingular() {
     return 'Loan';
   }
 
   @override
-  getClassNamePlural() {
+  String getClassNamePlural() {
     return 'Loans';
   }
 
@@ -38,7 +38,7 @@ class ViewLoansState extends ViewWidgetState<LoanPayment> {
   }
 
   @override
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     return 0; // Sort by name
   }
 

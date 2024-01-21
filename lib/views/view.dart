@@ -67,7 +67,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     super.initState();
     columns = getFieldsForTable();
 
-    final Json? viewSetting = Settings().views[getClassNameSingular()];
+    final Map<String, dynamic>? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
       sortByColumn = jsonGetInt(
         viewSetting,
@@ -246,7 +246,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     );
   }
 
-  updateBottomContent(final int tab) {
+  void updateBottomContent(final int tab) {
     setState(() {
       selectedBottomTabId = tab;
     });
@@ -265,7 +265,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  onRowTap(final BuildContext context, final int index) {
+  void onRowTap(final BuildContext context, final int index) {
     if (isMobile()) {
       showDialog(
           context: context,
@@ -350,7 +350,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return const Text('the transactions');
   }
 
-  changeListSortOrder(final int columnNumber) {
+  void changeListSortOrder(final int columnNumber) {
     setState(() {
       if (columnNumber == sortByColumn) {
         // toggle order
@@ -396,8 +396,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   List<double> getMinMaxValues(final Field<T, dynamic> fieldDefinition) {
-    double min = 0;
-    double max = 0;
+    double min = 0.0;
+    double max = 0.0;
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
       final double fieldValue = fieldDefinition.valueFromInstance(list[i]) as double;
@@ -431,7 +431,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <String>[min, max];
   }
 
-  onCustomizeColumn(final Field<T, dynamic> fieldDefinition) {
+  void onCustomizeColumn(final Field<T, dynamic> fieldDefinition) {
     Widget content;
 
     switch (fieldDefinition.type) {

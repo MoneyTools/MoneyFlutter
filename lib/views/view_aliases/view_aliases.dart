@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
-import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
@@ -16,12 +15,12 @@ class ViewAliases extends ViewWidget<Alias> {
 
 class ViewAliasesState extends ViewWidgetState<Alias> {
   @override
-  getClassNamePlural() {
+  String getClassNamePlural() {
     return 'Aliases';
   }
 
   @override
-  getClassNameSingular() {
+  String getClassNameSingular() {
     return 'Alias';
   }
 
@@ -30,22 +29,13 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
     return 'Payee aliases.';
   }
 
-  getUnitsAsString(final List<RentUnit> listOfUnits) {
-    final List<String> listAsText = <String>[];
-    for (RentUnit unit in listOfUnits) {
-      listAsText.add('${unit.name}:${unit.renter}');
-    }
-
-    return listAsText.join('\n');
-  }
-
   @override
   List<Alias> getList() {
     return Data().aliases.getList();
   }
 
   @override
-  getDefaultSortColumn() {
+  int getDefaultSortColumn() {
     return 0; // Sort by name
   }
 

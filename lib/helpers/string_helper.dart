@@ -78,5 +78,5 @@ String getNormalizedValue(final String? s) {
     return '';
   }
 
-  return s.replaceAll("\r\n", " ").replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
+  return s.replaceAll('\r\n', ' ').replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
 }

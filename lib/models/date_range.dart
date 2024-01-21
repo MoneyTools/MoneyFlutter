@@ -4,7 +4,7 @@ class DateRange {
 
   DateRange({this.min, this.max});
 
-  inflate(final DateTime dateTime) {
+  void inflate(final DateTime dateTime) {
     min ??= dateTime;
     max ??= dateTime;
 
@@ -17,14 +17,14 @@ class DateRange {
     }
   }
 
-  valueOrZeroIfNull(final num? value) {
+  num valueOrZeroIfNull(final num? value) {
     if (value == null) {
       return 0;
     }
     return value;
   }
 
-  durationInYears() {
+  num durationInYears() {
     if (min == null || max == null) {
       return 0;
     }
@@ -37,7 +37,7 @@ class DateRange {
     return '${dateToString(min)} : ${dateToString(max)}';
   }
 
-  toStringYears() {
+  String toStringYears() {
     return yearToString(min) + ' - ' + yearToString(max) + ' (' + durationInYears().toString() + ')';
   }
 
@@ -49,7 +49,7 @@ class DateRange {
     return dateTime.toIso8601String();
   }
 
-  yearToString(final DateTime? dateTime) {
+  String yearToString(final DateTime? dateTime) {
     if (dateTime == null) {
       return '____';
     }

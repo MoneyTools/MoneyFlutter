@@ -49,7 +49,7 @@ class Payee extends MoneyObject<Payee> {
 
   Payee();
 
-  static getName(final Payee? payee) {
+  static String getName(final Payee? payee) {
     return payee == null ? '' : payee.name.value;
   }
 }

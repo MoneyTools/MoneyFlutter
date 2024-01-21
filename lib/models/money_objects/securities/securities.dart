@@ -8,7 +8,7 @@ export 'package:money/models/money_objects/securities/security.dart';
 
 class Securities extends MoneyObjects<Security> {
   @override
-  loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<Json> rows) {
     clear();
     for (final Json row in rows) {
       addEntry(Security.fromSqlite(row));

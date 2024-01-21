@@ -17,7 +17,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   @override
-  loadDemoData() {
+  void loadDemoData() {
     clear();
     final List<String> names = <String>[
       'BankOfAmerica',

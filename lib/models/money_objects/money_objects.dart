@@ -52,12 +52,12 @@ class MoneyObjects<T> {
     return 'SELECT * FROM ?';
   }
 
-  loadFromSql(final MyDatabase db, [final String? query]) {
+  void loadFromSql(final MyDatabase db, [final String? query]) {
     final List<Json> result = db.select(query ?? sqlQuery());
     loadFromJson(result);
   }
 
-  loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<Json> rows) {
     clear();
     for (final Json row in rows) {
       final T? newInstance = instanceFromSqlite(row);
@@ -67,7 +67,7 @@ class MoneyObjects<T> {
     }
   }
 
-  loadDemoData() {
+  void loadDemoData() {
     clear();
   }
 

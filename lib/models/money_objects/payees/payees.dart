@@ -31,7 +31,7 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   @override
-  loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<Json> rows) {
     clear();
     /*
      */
@@ -45,7 +45,7 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   @override
-  loadDemoData() {
+  void loadDemoData() {
     clear();
 
     final List<String> names = <String>[

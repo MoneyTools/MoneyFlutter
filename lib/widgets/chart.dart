@@ -31,8 +31,8 @@ class Chart extends StatelessWidget {
     }
     final List<BarChartGroupData> barCharts = <BarChartGroupData>[];
 
-    double maxY = 0;
-    double minY = 0;
+    double maxY = 0.0;
+    double minY = 0.0;
 
     for (int i = 0; i < list.length; i++) {
       final PairXY entry = list[i];

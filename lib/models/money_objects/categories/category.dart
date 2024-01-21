@@ -196,7 +196,7 @@ class Category extends MoneyObject<Category> {
     return CategoryType.none;
   }
 
-  getTypeAsText() {
+  String getTypeAsText() {
     switch (type.value) {
       case CategoryType.income:
         return 'Income';

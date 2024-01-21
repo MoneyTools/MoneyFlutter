@@ -23,12 +23,12 @@ ColorScheme getColorTheme(final BuildContext context) {
 
 /// convert a hex string value into a Flutter color
 Color getColorFromString(final String hexColor) {
-  String newHexColor = hexColor.trim().replaceAll("#", "");
+  String newHexColor = hexColor.trim().replaceAll('#', '');
   if (newHexColor.length == 6) {
     newHexColor = 'FF$newHexColor';
   }
   if (newHexColor.length == 8) {
-    return Color(int.parse("0x$newHexColor"));
+    return Color(int.parse('0x$newHexColor'));
   }
   return Colors.transparent;
 }
