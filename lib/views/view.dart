@@ -509,12 +509,10 @@ class ViewWidgetToDisplay {
   final bool displayHeader;
   final bool showBottom;
   final bool columnAccount;
-  final List<String> columnsToInclude;
 
   const ViewWidgetToDisplay({
     this.displayHeader = true,
     this.showBottom = true,
     this.columnAccount = true,
-    this.columnsToInclude = const <String>[],
   });
 }

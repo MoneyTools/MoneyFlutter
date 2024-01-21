@@ -16,7 +16,7 @@ import 'package:money/views/view.dart';
 class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;
 
-  const ViewTransactions({super.key, super.filter, super.preference = preferenceFullView, this.startingBalance = 0.00});
+  const ViewTransactions({super.key, super.filter, this.startingBalance = 0.00});
 
   @override
   State<ViewWidget<Transaction>> createState() => ViewTransactionsState();
@@ -230,26 +230,3 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     return const Text('No related transactions');
   }
 }
-
-const ViewWidgetToDisplay preferenceFullView = ViewWidgetToDisplay(columnsToInclude: <String>[
-  columnIdAccount,
-  columnIdDate,
-  columnIdPayee,
-  columnIdCategory,
-  columnIdStatus,
-  columnIdMemo,
-  columnIdAmount,
-  columnIdBalance
-]);
-
-const ViewWidgetToDisplay preferenceJustTableDatePayeeCategoryAmountBalance = ViewWidgetToDisplay(
-    displayHeader: false,
-    showBottom: false,
-    columnsToInclude: <String>[
-      columnIdDate,
-      columnIdPayee,
-      columnIdCategory,
-      columnIdMemo,
-      columnIdAmount,
-      columnIdBalance
-    ]);
