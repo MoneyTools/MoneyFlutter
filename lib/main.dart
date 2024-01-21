@@ -138,12 +138,34 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget buildContentForSmallSurface(final BuildContext context) {
     return myScaffold(
-      body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
-      bottomNavigationBar:
-          MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          child: Column(
+            children: <Widget>[
+              getWidgetForMainContent(context, settings.screenIndex),
+              MenuHorizontal(
+                settings: settings,
+                onSelectItem: handleScreenChanged,
+                selectedIndex: settings.screenIndex,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
+  // -------------------------------------
+  // |                                    |
+  // -------------------------------------
+  // |  |                                 |
+  // |  |                                 |
+  // |  |                                 |
+  // |  |                                 |
+  // |  |  _____________________________  |
+  // |  | [                             ] |
+  // --------------------------------------
   Widget buildContentForLargeSurface(final BuildContext context) {
     return myScaffold(
       body: SafeArea(

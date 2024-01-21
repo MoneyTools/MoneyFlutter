@@ -7,7 +7,12 @@ class MenuHorizontal extends StatefulWidget {
   final int selectedIndex;
   final Settings settings;
 
-  const MenuHorizontal({super.key, required this.settings, required this.onSelectItem, required this.selectedIndex});
+  const MenuHorizontal({
+    super.key,
+    required this.settings,
+    required this.onSelectItem,
+    required this.selectedIndex,
+  });
 
   @override
   State<MenuHorizontal> createState() => _MenuHorizontalState();
@@ -32,6 +37,8 @@ class _MenuHorizontalState extends State<MenuHorizontal> {
           });
           widget.onSelectItem(index);
         },
+        indicatorColor: Theme.of(context).colorScheme.onSecondary,
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         destinations: getAppBarDestinations(widget.settings),
         height: 52,
         labelBehavior: NavigationDestinationLabelBehavior.alwaysHide);
