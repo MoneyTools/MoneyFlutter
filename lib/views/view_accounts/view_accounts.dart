@@ -79,11 +79,6 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  int getDefaultSortColumn() {
-    return Settings().viewAccountSortBy; // Sort by name
-  }
-
-  @override
   List<Account> getList() {
     return Data().accounts.activeAccount(
           getSelectedAccountType(),

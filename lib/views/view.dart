@@ -72,7 +72,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       sortByColumn = jsonGetInt(
         viewSetting,
         prefSortBy,
-        getDefaultSortColumn(),
+        0,
       );
       sortAscending = jsonGetBool(
         viewSetting,
@@ -109,10 +109,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   List<T> getList() {
     return <T>[];
-  }
-
-  int getDefaultSortColumn() {
-    return sortByColumn;
   }
 
   void onSort() {

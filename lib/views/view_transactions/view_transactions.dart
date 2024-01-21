@@ -154,20 +154,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     return false;
   }
 
-  @override
-  int getDefaultSortColumn() {
-    // We want to default to sort by Date on startup
-    // regardless of where the "Data Column" is
-    int columnIndex = 0;
-    for (String columnId in widget.preference.columnsToInclude) {
-      if (columnId == columnIdDate) {
-        return columnIndex;
-      }
-      columnIndex++;
-    }
-    return columnIndex;
-  }
-
   Widget renderToggles() {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,

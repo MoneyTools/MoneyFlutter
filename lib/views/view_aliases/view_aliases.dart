@@ -35,11 +35,6 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   }
 
   @override
-  int getDefaultSortColumn() {
-    return 0; // Sort by name
-  }
-
-  @override
   Widget getPanelForChart(final List<int> indices) {
     return const Text('No chart for Aliases');
   }

@@ -51,11 +51,6 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
   }
 
   @override
-  int getDefaultSortColumn() {
-    return 0; // Sort by name
-  }
-
-  @override
   Widget getPanelForChart(final List<int> indices) {
     return _getSubViewContentForChart(indices);
   }

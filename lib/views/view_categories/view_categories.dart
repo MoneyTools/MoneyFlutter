@@ -96,11 +96,6 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   }
 
   @override
-  int getDefaultSortColumn() {
-    return 0; // Sort by name
-  }
-
-  @override
   List<Category> getList() {
     final CategoryType? filterType = getSelectedCategoryType();
     return Data()

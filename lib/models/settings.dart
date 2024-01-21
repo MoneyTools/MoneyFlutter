@@ -23,10 +23,6 @@ class Settings {
 
   Function? onChanged;
 
-  // Views
-  int viewAccountSortBy = 0;
-  bool viewAccountSortAscending = false;
-
   static final Settings _singleton = Settings._internal();
 
   factory Settings() {
