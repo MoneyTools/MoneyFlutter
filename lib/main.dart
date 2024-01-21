@@ -66,6 +66,116 @@ class _MyMoneyState extends State<MyMoney> {
     };
   }
 
+  @override
+  Widget build(final BuildContext context) {
+    Settings().isSmallDevice = MediaQuery.of(context).size.width < 800;
+
+    return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'MyMoney',
+        theme: settings.getThemeData(),
+        home: LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+          final MediaQueryData data = MediaQuery.of(context);
+          return MediaQuery(
+              data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
+              child: KeyboardWidget(
+                columnCount: 1,
+                bindings: <KeyAction>[
+                  KeyAction(
+                    LogicalKeyboardKey.equal,
+                    'Increase text size',
+                    () {
+                      setState(() {
+                        settings.textScale = min(5, settings.textScale * 1.10);
+                        settings.save();
+                      });
+                    },
+                    isMetaPressed: true,
+                  ),
+                  KeyAction(
+                    LogicalKeyboardKey.minus,
+                    'Decrease text size',
+                    () {
+                      settings.textScale = max(0.5, settings.textScale * 0.90);
+                      settings.save();
+                      settings.fireOnChanged();
+                    },
+                    isMetaPressed: true,
+                  ),
+                  KeyAction(
+                    LogicalKeyboardKey('0'.codeUnitAt(0)),
+                    'Normal text suze',
+                    () {
+                      settings.textScale = 1;
+                      settings.save();
+                      settings.fireOnChanged();
+                    },
+                    isMetaPressed: true,
+                  ),
+                ],
+                child: Container(
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  child: buildContent(context, constraints),
+                ),
+              ));
+        }));
+  }
+
+  Widget buildContent(final BuildContext context, final BoxConstraints constraints) {
+    if (shouldShowOpenInstructions()) {
+      return welcomePanel(context);
+    }
+    if (_isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      if (Settings().isSmallDevice) {
+        return buildContentForSmallSurface(context);
+      } else {
+        return buildContentForLargeSurface(context);
+      }
+    }
+  }
+
+  Widget buildContentForSmallSurface(final BuildContext context) {
+    return myScaffold(
+      body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
+      bottomNavigationBar:
+          MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
+    );
+  }
+
+  Widget buildContentForLargeSurface(final BuildContext context) {
+    return myScaffold(
+      body: SafeArea(
+        bottom: false,
+        top: false,
+        child: Container(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              MenuVertical(
+                settings: settings,
+                onSelectItem: handleScreenChanged,
+                selectedIndex: settings.screenIndex,
+                useIndicator: true,
+              ),
+              const VerticalDivider(thickness: 1, width: 1),
+              Expanded(
+                child: Container(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  child: Column(
+                    children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)],
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   bool shouldShowOpenInstructions() {
     if (settings.prefLoaded && settings.pathToDatabase == null) {
       return true;
@@ -246,114 +356,6 @@ class _MyMoneyState extends State<MyMoney> {
         ],
       ),
     ]));
-  }
-
-  @override
-  Widget build(final BuildContext context) {
-    Settings().isSmallDevice = MediaQuery.of(context).size.width < 800;
-
-    return MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'MyMoney',
-        theme: settings.getThemeData(),
-        home: LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-          final MediaQueryData data = MediaQuery.of(context);
-          return MediaQuery(
-              data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
-              child: KeyboardWidget(
-                columnCount: 1,
-                bindings: <KeyAction>[
-                  KeyAction(
-                    LogicalKeyboardKey.equal,
-                    'Increase text size',
-                    () {
-                      setState(() {
-                        settings.textScale = min(5, settings.textScale * 1.10);
-                        settings.save();
-                      });
-                    },
-                    isMetaPressed: true,
-                  ),
-                  KeyAction(
-                    LogicalKeyboardKey.minus,
-                    'Decrease text size',
-                    () {
-                      settings.textScale = max(0.5, settings.textScale * 0.90);
-                      settings.save();
-                      settings.fireOnChanged();
-                    },
-                    isMetaPressed: true,
-                  ),
-                  KeyAction(
-                    LogicalKeyboardKey('0'.codeUnitAt(0)),
-                    'Normal text suze',
-                    () {
-                      settings.textScale = 1;
-                      settings.save();
-                      settings.fireOnChanged();
-                    },
-                    isMetaPressed: true,
-                  ),
-                ],
-                child: Container(
-                    color: Theme.of(context).colorScheme.primaryContainer, child: buildContent(context, constraints)),
-              ));
-        }));
-  }
-
-  Widget buildContent(final BuildContext context, final BoxConstraints constraints) {
-    if (shouldShowOpenInstructions()) {
-      return welcomePanel(context);
-    }
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    } else {
-      if (Settings().isSmallDevice) {
-        return buildContentForSmallSurface(context);
-      } else {
-        return buildContentForLargeSurface(context);
-      }
-    }
-  }
-
-  Widget buildContentForSmallSurface(final BuildContext context) {
-    return myScaffold(
-      body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
-      bottomNavigationBar:
-          MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
-    );
-  }
-
-  Widget buildContentForLargeSurface(final BuildContext context) {
-    return myScaffold(
-      body: SafeArea(
-        bottom: false,
-        top: false,
-        child: Container(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              MenuVertical(
-                settings: settings,
-                onSelectItem: handleScreenChanged,
-                selectedIndex: settings.screenIndex,
-                useIndicator: true,
-              ),
-              const VerticalDivider(thickness: 1, width: 1),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  child: Column(
-                    children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)],
-                  ),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   void onSettingsChanged(final Settings settings) {
