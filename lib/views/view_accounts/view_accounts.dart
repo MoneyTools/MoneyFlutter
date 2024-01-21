@@ -69,7 +69,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  Widget buildHeader() {
+  Widget getTitle() {
     return ViewHeader(
       title: getClassNamePlural(),
       count: numValueOrDefault(list.length),
@@ -87,12 +87,12 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  Widget buildPanelForChart(final List<int> indices) {
+  Widget getPanelForChart(final List<int> indices) {
     return _getSubViewContentForChart(indices);
   }
 
   @override
-  Widget buildPanelForTransactions(final List<int> indices) {
+  Widget getPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
   }
 }
