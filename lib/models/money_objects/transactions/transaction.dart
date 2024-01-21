@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
@@ -5,6 +6,7 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/widgets/table_view/table_row_compact.dart';
 
 const String columnIdAccount = 'Accounts';
 const String columnIdDate = 'Date';
@@ -20,6 +22,9 @@ const String columnIdBalance = 'Balance';
 class Transaction extends MoneyObject<Transaction> {
   @override
   int get uniqueId => id.value;
+
+  @override
+  bool get supportSmallList => true;
 
   // ID
   // SQLite  0|Id|bigint|0||1
@@ -197,6 +202,16 @@ class Transaction extends MoneyObject<Transaction> {
     t.balance.value = runningBalance;
 
     return t;
+  }
+
+  @override
+  Widget buildInstanceWidgetSmallScreen() {
+    return TableRowCompact(
+      leftTopAsString: Payee.getName(payeeInstance),
+      leftBottomAsString: '${Category.getName(categoryInstance)}\n${memo.value}',
+      rightTopAsString: getCurrencyText(amount.value),
+      rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
+    );
   }
 }
 

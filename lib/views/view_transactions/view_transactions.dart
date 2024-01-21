@@ -16,7 +16,11 @@ import 'package:money/views/view.dart';
 class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;
 
-  const ViewTransactions({super.key, super.filter, this.startingBalance = 0.00});
+  const ViewTransactions({
+    super.key,
+    super.filter,
+    this.startingBalance = 0.00,
+  });
 
   @override
   State<ViewWidget<Transaction>> createState() => ViewTransactionsState();

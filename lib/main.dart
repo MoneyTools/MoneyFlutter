@@ -138,9 +138,23 @@ class _MyMoneyState extends State<MyMoney> {
 
   Widget buildContentForSmallSurface(final BuildContext context) {
     return myScaffold(
-      body: Row(children: <Widget>[Expanded(child: getWidgetForMainContent(context, settings.screenIndex))]),
-      bottomNavigationBar:
-          MenuHorizontal(settings: settings, onSelectItem: handleScreenChanged, selectedIndex: settings.screenIndex),
+      body: SafeArea(
+        child: Container(
+          color: Theme.of(context).colorScheme.secondaryContainer,
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: getWidgetForMainContent(context, settings.screenIndex),
+              ),
+              MenuHorizontal(
+                settings: settings,
+                onSelectItem: handleScreenChanged,
+                selectedIndex: settings.screenIndex,
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -160,13 +174,10 @@ class _MyMoneyState extends State<MyMoney> {
                 selectedIndex: settings.screenIndex,
                 useIndicator: true,
               ),
-              const VerticalDivider(thickness: 1, width: 1),
               Expanded(
                 child: Container(
                   color: Theme.of(context).colorScheme.secondaryContainer,
-                  child: Column(
-                    children: <Widget>[getWidgetForMainContent(context, settings.screenIndex)],
-                  ),
+                  child: getWidgetForMainContent(context, settings.screenIndex),
                 ),
               )
             ],
@@ -287,7 +298,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   Widget showLoading() {
-    return const Expanded(child: Center(child: CircularProgressIndicator()));
+    return const Center(child: CircularProgressIndicator());
   }
 
   Widget getWidgetForMainContent(final BuildContext context, final int screenIndex) {
