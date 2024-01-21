@@ -41,3 +41,9 @@ String colorToHexString(final Color color) {
 
   return '#$red$green$blue$alpha';
 }
+
+TextStyle adjustOpacityOfTextStyle(final TextStyle textStyle, [final double opacity = 0.7]) {
+  return textStyle.copyWith(
+    color: textStyle.color!.withOpacity(opacity),
+  );
+}
