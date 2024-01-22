@@ -50,19 +50,19 @@ class Currency extends MoneyObject<Currency> {
   });
 
   /// Constructor from a SQLite row
-  factory Currency.fromSqlite(final Json row) {
+  factory Currency.fromSqlite(final MyJson row) {
     return Currency(
       // 1
-      symbol: jsonGetString(row, 'Symbol'),
+      symbol: row.getString('Symbol'),
       // 2
-      name: jsonGetString(row, 'Name'),
+      name: row.getString('Name'),
       // 3
-      ratio: jsonGetDouble(row, 'Ratio'),
+      ratio: row.getDouble('Ratio'),
       // 4
-      lastRatio: jsonGetDouble(row, 'LastRatio'),
+      lastRatio: row.getDouble('LastRatio'),
       // 5
     )
-      ..id.value = jsonGetInt(row, 'Id')
-      ..cultureCode.value = jsonGetString(row, 'CultureCode');
+      ..id.value = row.getInt('Id')
+      ..cultureCode.value = row.getString('CultureCode');
   }
 }

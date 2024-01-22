@@ -53,13 +53,13 @@ class MoneyObjects<T> {
   }
 
   void loadFromSql(final MyDatabase db, [final String? query]) {
-    final List<Json> result = db.select(query ?? sqlQuery());
+    final List<MyJson> result = db.select(query ?? sqlQuery());
     loadFromJson(result);
   }
 
-  void loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<MyJson> rows) {
     clear();
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       final T? newInstance = instanceFromSqlite(row);
       if (newInstance != null) {
         addEntry(newInstance);
@@ -72,7 +72,7 @@ class MoneyObjects<T> {
   }
 
   /// Must be override by derived class
-  T? instanceFromSqlite(final Json row) {
+  T? instanceFromSqlite(final MyJson row) {
     return null;
   }
 

@@ -14,21 +14,21 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
   }
 
   @override
-  List<TransactionExtra> loadFromJson(final List<Json> rows) {
+  List<TransactionExtra> loadFromJson(final List<MyJson> rows) {
     clear();
 
     runningBalance = 0.00;
 
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       final TransactionExtra t = TransactionExtra(
         // id
         // Account Id
-        transaction: jsonGetInt(row, 'Transaction'),
+        transaction: row.getInt('Transaction'),
         // Tax Year
-        taxYear: jsonGetInt(row, 'TaxYear'),
+        taxYear: row.getInt('TaxYear'),
         // Tax Date
-        taxDate: jsonGetInt(row, 'TaxDate'),
-      )..id.value = jsonGetInt(row, 'Id');
+        taxDate: row.getInt('TaxDate'),
+      )..id.value = row.getInt('Id');
 
       getList().add(t);
     }

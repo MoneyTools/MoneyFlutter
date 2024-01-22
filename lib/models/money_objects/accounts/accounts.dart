@@ -12,7 +12,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   @override
-  Account instanceFromSqlite(final Json row) {
+  Account instanceFromSqlite(final MyJson row) {
     return Account.fromSqlite(row);
   }
 

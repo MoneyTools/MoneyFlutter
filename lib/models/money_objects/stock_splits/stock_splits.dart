@@ -7,9 +7,9 @@ export 'package:money/models/money_objects/stock_splits/stock_split.dart';
 
 class StockSplits extends MoneyObjects<StockSplit> {
   @override
-  void loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<MyJson> rows) {
     clear();
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       addEntry(StockSplit.fromSqlite(row));
     }
   }

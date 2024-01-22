@@ -11,30 +11,30 @@ class Splits extends MoneyObjects<Split> {
   }
 
   @override
-  List<Split> loadFromJson(final List<Json> rows) {
+  List<Split> loadFromJson(final List<MyJson> rows) {
     clear();
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       getList().add(
         Split(
           // 0
-          transactionId: jsonGetInt(row, 'Transaction'),
+          transactionId: row.getInt('Transaction'),
           // 1
           // id
           // 2
-          categoryId: jsonGetInt(row, 'Category'),
+          categoryId: row.getInt('Category'),
           // 3
-          payeeId: jsonGetInt(row, 'Payee'),
+          payeeId: row.getInt('Payee'),
           // 4
-          amount: jsonGetDouble(row, 'Amount'),
+          amount: row.getDouble('Amount'),
           // 5
-          transferId: jsonGetInt(row, 'Transfer'),
+          transferId: row.getInt('Transfer'),
           // 6
-          memo: jsonGetString(row, 'Memo'),
+          memo: row.getString('Memo'),
           // 7
-          flags: jsonGetInt(row, 'Flags'),
+          flags: row.getInt('Flags'),
           // 8
-          budgetBalanceDate: jsonGetDate(row, 'BudgetBalanceDate'),
-        )..id.value = jsonGetInt(row, 'Id'),
+          budgetBalanceDate: row.getDate('BudgetBalanceDate'),
+        )..id.value = row.getInt('Id'),
       );
     }
     return getList();

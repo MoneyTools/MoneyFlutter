@@ -31,11 +31,11 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   @override
-  void loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<MyJson> rows) {
     clear();
     /*
      */
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
       addEntry(Payee()

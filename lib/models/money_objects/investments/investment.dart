@@ -142,34 +142,34 @@ class Investment extends MoneyObject<Investment> {
   }
 
   /// Constructor from a SQLite row
-  factory Investment.fromSqlite(final Json row) {
+  factory Investment.fromSqlite(final MyJson row) {
     return Investment(
       // 1
-      id: jsonGetInt(row, 'Id'),
+      id: row.getInt('Id'),
       // 1
-      security: jsonGetInt(row, 'Security'),
+      security: row.getInt('Security'),
       // 2
-      unitPrice: jsonGetDouble(row, 'UnitPrice'),
+      unitPrice: row.getDouble('UnitPrice'),
       // 3
-      units: jsonGetDouble(row, 'Units'),
+      units: row.getDouble('Units'),
       // 4
-      commission: jsonGetDouble(row, 'Commission'),
+      commission: row.getDouble('Commission'),
       // 5
-      markUpDown: jsonGetDouble(row, 'MarkUpDown'),
+      markUpDown: row.getDouble('MarkUpDown'),
       // 6
-      taxes: jsonGetDouble(row, 'Taxes'),
+      taxes: row.getDouble('Taxes'),
       // 7
-      fees: jsonGetDouble(row, 'Fees'),
+      fees: row.getDouble('Fees'),
       // 8
-      load: jsonGetDouble(row, 'Load'),
+      load: row.getDouble('Load'),
       // 9
-      investmentType: jsonGetInt(row, 'InvestmentType'),
+      investmentType: row.getInt('InvestmentType'),
       // 10
-      tradeType: jsonGetInt(row, 'TradeType'),
+      tradeType: row.getInt('TradeType'),
       // 11
-      taxExempt: jsonGetInt(row, 'TaxExempt'),
+      taxExempt: row.getInt('TaxExempt'),
       // 12
-      withholding: jsonGetDouble(row, 'Withholding'),
+      withholding: row.getDouble('Withholding'),
     );
   }
 }

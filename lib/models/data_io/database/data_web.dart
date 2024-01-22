@@ -6,8 +6,8 @@ class MyDatabaseImplementation {
     //
   }
 
-  List<Json> select(final String query) {
-    return <Json>[];
+  List<MyJson> select(final String query) {
+    return <MyJson>[];
   }
 
   void dispose() {}

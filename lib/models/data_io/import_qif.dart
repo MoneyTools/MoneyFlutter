@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 
@@ -8,9 +9,9 @@ void importQIF(final String filePath) {
   final File file = File(filePath);
 
   file.readAsLines().then((final List<String> lines) {
-    final List<Map<String, dynamic>> transactions = loadQIF(lines);
+    final List<MyJson> transactions = loadQIF(lines);
     // Process transactions list
-    for (final Map<String, dynamic> transaction in transactions) {
+    for (final MyJson transaction in transactions) {
       // TODO
       debugLog(transaction.toString());
     }
@@ -19,9 +20,9 @@ void importQIF(final String filePath) {
   });
 }
 
-List<Map<String, dynamic>> loadQIF(final List<String> lines) {
-  final List<Map<String, dynamic>> transactions = <Map<String, dynamic>>[];
-  Map<String, dynamic>? currentTransaction;
+List<MyJson> loadQIF(final List<String> lines) {
+  final List<MyJson> transactions = <MyJson>[];
+  MyJson? currentTransaction;
 
   for (final String line in lines) {
     if (line.startsWith('^')) {
