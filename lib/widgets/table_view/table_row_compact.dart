@@ -36,7 +36,7 @@ class TableRowCompact extends StatelessWidget {
               either(
                 leftTopAsWidget,
                 leftTopAsString,
-                Theme.of(context).textTheme.titleLarge,
+                Theme.of(context).textTheme.titleMedium,
                 TextAlign.left,
               ),
               either(

@@ -1,4 +1,8 @@
-## [1.1.01] 2024-01-21
+## [1.1.02] 2024-01-21
+
+- Compact List for Categories
+
+## [1.1.01] 2024-01-22
 
 - Adaptive View content (Accounts and Transactions)
 - LINT enforce all Functions and Methods must have a return type

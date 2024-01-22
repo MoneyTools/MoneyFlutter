@@ -1,12 +1,23 @@
+// Imports
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/data_io/data.dart';
+import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/circle.dart';
+import 'package:money/widgets/table_view/table_row_compact.dart';
+
+// Exports
+export 'package:money/models/money_objects/categories/category_types.dart';
 
 class Category extends MoneyObject<Category> {
   @override
   int get uniqueId => id.value;
+
+  @override
+  bool get supportSmallList => true;
 
   /// Id
   /// 0|Id|INT|0||1
@@ -73,7 +84,6 @@ class Category extends MoneyObject<Category> {
     defaultValue: '',
     valueFromInstance: (final Category instance) => MyCircle(
       colorFill: getColorFromString(instance.color.value),
-      colorBorder: Colors.grey,
       size: 12,
     ),
     valueForSerialization: (final Category instance) => instance.color.value,
@@ -215,14 +225,33 @@ class Category extends MoneyObject<Category> {
         return 'None';
     }
   }
-}
 
-enum CategoryType {
-  none, // 0
-  income, // 1
-  expense, // 2
-  saving, // 3
-  reserved, // 4
-  transfer, // 5
-  investment, // 6
+  @override
+  Widget buildInstanceWidgetSmallScreen() {
+    String top = '';
+    String bottom = '';
+
+    if (parentId.value == -1) {
+      top = name.value;
+      bottom = '';
+    } else {
+      top = getName(Data().categories.get(parentId.value));
+      bottom = name.value.substring(top.length);
+    }
+
+    return TableRowCompact(
+      leftTopAsString: top,
+      leftBottomAsString: bottom,
+      rightTopAsString: getCurrencyText(runningBalance.value),
+      rightBottomAsWidget: Row(
+        children: <Widget>[
+          Text(getTypeAsText()),
+          SizedBox(
+            width: 8,
+          ),
+          MyCircle(colorFill: getColorFromString(color.value), size: 12),
+        ],
+      ),
+    );
+  }
 }
