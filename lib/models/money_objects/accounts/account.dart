@@ -1,8 +1,13 @@
+// Imports
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/table_view/table_row_compact.dart';
+
+// Exports
+export 'package:money/models/money_objects/accounts/account_types.dart';
 
 /*
    6|OpeningBalance|money|0||0
@@ -84,7 +89,7 @@ class Account extends MoneyObject<Account> {
     name: 'Type',
     serializeName: 'Type',
     defaultValue: AccountType.checking,
-    valueFromInstance: (final Account instance) => instance.getTypeAsText(),
+    valueFromInstance: (final Account instance) => getTypeAsText(instance.type.value),
     valueForSerialization: (final Account instance) => instance.type.value.index,
   );
 
@@ -212,7 +217,7 @@ class Account extends MoneyObject<Account> {
             textAlign: TextAlign.left,
           ),
           leftBottomAsWidget: Text(
-            getTypeAsText(),
+            getTypeAsText(type.value),
             textAlign: TextAlign.left,
           ),
           rightTopAsWidget: Text(getCurrencyText(balance.value)),
@@ -260,7 +265,7 @@ class Account extends MoneyObject<Account> {
   bool matchType(final List<AccountType> types) {
     if (types.isEmpty) {
       // All accounts except these
-      return type.value != AccountType._notUsed_7 && type.value != AccountType.categoryFund;
+      return type.value != AccountType.notUsed_7 && type.value != AccountType.categoryFund;
     }
     return types.contains(type.value);
   }
@@ -272,87 +277,4 @@ class Account extends MoneyObject<Account> {
   bool isActiveBankAccount() {
     return isBankAccount() && isActive();
   }
-
-  String getTypeAsText() {
-    switch (type.value) {
-      case AccountType.savings:
-        return 'Savings';
-      case AccountType.checking:
-        return 'Checking';
-      case AccountType.moneyMarket:
-        return 'MoneyMarket';
-      case AccountType.cash:
-        return 'Cash';
-      case AccountType.credit:
-        return 'Credit';
-      case AccountType.investment:
-        return 'Investment';
-      case AccountType.retirement:
-        return 'Retirement';
-      case AccountType.asset:
-        return 'Asset';
-      case AccountType.categoryFund:
-        return 'CategoryFund';
-      case AccountType.loan:
-        return 'Loan';
-      case AccountType.creditLine:
-        return 'CreditLine';
-      default:
-        break;
-    }
-
-    return 'other $type';
-  }
-
-  static AccountType getTypeFromText(final String text) {
-    switch (text.toLowerCase()) {
-      case 'savings':
-        return AccountType.savings;
-      case 'checking':
-        return AccountType.checking;
-      case 'moneymarket':
-        return AccountType.moneyMarket;
-      case 'cash':
-        return AccountType.cash;
-      case 'credit':
-      case 'creditcard': // as seen in OFX <ACCTTYPE>
-        return AccountType.credit;
-      case 'investment':
-        return AccountType.investment;
-      case 'retirement':
-        return AccountType.retirement;
-      case 'asset':
-        return AccountType.asset;
-      case 'categoryfund':
-        return AccountType.categoryFund;
-      case 'loan':
-        return AccountType.loan;
-      case 'creditLine':
-        return AccountType.creditLine;
-      default:
-        return AccountType._notUsed_7;
-    }
-  }
-}
-
-enum AccountType {
-  savings, // 0
-  checking, // 1
-  moneyMarket, // 2
-  cash, // 3
-  credit, // 4
-  investment, // 5
-  retirement, // 6
-  _notUsed_7, // 7 There is a hole here from deleted type which we can fill when we invent new types, but the types 8-10 have to keep those numbers or else we mess up the existing databases.
-  asset, // 8 Used for tracking Assets like "House, Car, Boat, Jewelry, this helps to make NetWorth more accurate
-  categoryFund, // 9 a pseudo account for managing category budgets
-  loan, // 10
-  creditLine, // 11
-}
-
-enum AccountFlags {
-  none, // 0
-  budgeted, // 1
-  closed, // 2
-  taxDeferred, // 3
 }

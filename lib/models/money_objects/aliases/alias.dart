@@ -1,8 +1,13 @@
+// Imports
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/money_objects/aliases/alias_types.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/widgets/table_view/table_row_compact.dart';
+
+// Export
+export 'package:money/models/money_objects/aliases/alias_types.dart';
 
 class Alias extends MoneyObject<Alias> {
   @override
@@ -35,7 +40,7 @@ class Alias extends MoneyObject<Alias> {
     name: 'Flag',
     serializeName: 'Flag',
     defaultValue: 0,
-    valueFromInstance: (final Alias instance) => instance.type.name,
+    valueFromInstance: (final Alias instance) => getAliasTypeAsString(instance.type),
     valueForSerialization: (final Alias instance) => instance.flags.value,
   );
 
@@ -68,7 +73,7 @@ class Alias extends MoneyObject<Alias> {
     buildListWidgetForSmallScreen = () => TableRowCompact(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: this.pattern.value,
-          rightBottomAsString: type.name,
+          rightBottomAsString: getAliasTypeAsString(type),
         );
   }
 
@@ -102,9 +107,4 @@ class Alias extends MoneyObject<Alias> {
     }
     return false;
   }
-}
-
-enum AliasType {
-  none, // 0
-  regex, // 1
 }

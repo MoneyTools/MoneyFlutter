@@ -5,6 +5,7 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/widgets/table_view/table_row_compact.dart';
 
 const String columnIdAccount = 'Accounts';
@@ -206,40 +207,4 @@ class Transaction extends MoneyObject<Transaction> {
 
     return t;
   }
-}
-
-enum TransactionStatus {
-  none,
-  electronic,
-  cleared,
-  reconciled,
-  voided,
-}
-
-enum TransactionFlags {
-  none, // 0
-  unaccepted, // 1
-  // 2
-  budgeted,
-  // 3
-  filler3,
-  // 4
-  hasAttachment,
-  // 5
-  filler5,
-  // 6
-  filler6,
-  // 7
-  filler7,
-  // 8
-  notDuplicate,
-  filler9,
-  filler10,
-  filler11,
-  filler12,
-  filler13,
-  filler14,
-  filler15,
-  // 16
-  hasStatement,
 }

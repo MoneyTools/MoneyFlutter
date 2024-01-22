@@ -19,7 +19,7 @@ void importQFX(
   final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofx);
   final Account? account = data.accounts.findByIdAndType(
     bankInfo.accountId,
-    Account.getTypeFromText(bankInfo.accountType),
+    getAccountTypeFromText(bankInfo.accountType),
   );
 
   if (account != null) {

@@ -54,8 +54,3 @@ class AccountAlias extends MoneyObject<AccountAlias> {
       ..accountId.value = jsonGetString(row, 'AccountId');
   }
 }
-
-enum AccountAliasType {
-  none, // 0
-  regex, // 1
-}
