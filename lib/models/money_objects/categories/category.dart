@@ -16,9 +16,6 @@ class Category extends MoneyObject<Category> {
   @override
   int get uniqueId => id.value;
 
-  @override
-  bool get supportSmallList => true;
-
   /// Id
   /// 0|Id|INT|0||1
   Field<Category, int> id = Field<Category, int>(
@@ -178,6 +175,34 @@ class Category extends MoneyObject<Category> {
     this.budgetBalance.value = budgetBalance;
     this.frequency.value = frequency;
     this.taxRefNum.value = taxRefNum;
+
+    this.buildListWidgetForSmallScreen = () {
+      String top = '';
+      String bottom = '';
+
+      if (this.parentId.value == -1) {
+        top = this.name.value;
+        bottom = '';
+      } else {
+        top = getName(Data().categories.get(this.parentId.value));
+        bottom = this.name.value.substring(top.length);
+      }
+
+      return TableRowCompact(
+        leftTopAsString: top,
+        leftBottomAsString: bottom,
+        rightTopAsString: getCurrencyText(runningBalance.value),
+        rightBottomAsWidget: Row(
+          children: <Widget>[
+            Text(getTypeAsText()),
+            SizedBox(
+              width: 8,
+            ),
+            MyCircle(colorFill: getColorFromString(this.color.value), size: 12),
+          ],
+        ),
+      );
+    };
   }
 
   factory Category.fromSqlite(final Json row) {
@@ -224,34 +249,5 @@ class Category extends MoneyObject<Category> {
       default:
         return 'None';
     }
-  }
-
-  @override
-  Widget buildInstanceWidgetSmallScreen() {
-    String top = '';
-    String bottom = '';
-
-    if (parentId.value == -1) {
-      top = name.value;
-      bottom = '';
-    } else {
-      top = getName(Data().categories.get(parentId.value));
-      bottom = name.value.substring(top.length);
-    }
-
-    return TableRowCompact(
-      leftTopAsString: top,
-      leftBottomAsString: bottom,
-      rightTopAsString: getCurrencyText(runningBalance.value),
-      rightBottomAsWidget: Row(
-        children: <Widget>[
-          Text(getTypeAsText()),
-          SizedBox(
-            width: 8,
-          ),
-          MyCircle(colorFill: getColorFromString(color.value), size: 12),
-        ],
-      ),
-    );
   }
 }

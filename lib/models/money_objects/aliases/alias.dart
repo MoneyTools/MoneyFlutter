@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -8,9 +7,6 @@ import 'package:money/widgets/table_view/table_row_compact.dart';
 class Alias extends MoneyObject<Alias> {
   @override
   int get uniqueId => id.value;
-
-  @override
-  bool get supportSmallList => true;
 
   /// ID
   /// 0    Id       INT            0                 1
@@ -69,6 +65,11 @@ class Alias extends MoneyObject<Alias> {
     this.pattern.value = pattern;
     this.flags.value = flags;
     this.payeeId.value = payeeId;
+    buildListWidgetForSmallScreen = () => TableRowCompact(
+          leftTopAsString: Payee.getName(payeeInstance),
+          leftBottomAsString: this.pattern.value,
+          rightBottomAsString: type.name,
+        );
   }
 
   /// Constructor from a SQLite row
@@ -100,15 +101,6 @@ class Alias extends MoneyObject<Alias> {
       }
     }
     return false;
-  }
-
-  @override
-  Widget buildInstanceWidgetSmallScreen() {
-    return TableRowCompact(
-      leftTopAsString: Payee.getName(payeeInstance),
-      leftBottomAsString: pattern.value,
-      rightBottomAsString: type.name,
-    );
   }
 }
 

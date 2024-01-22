@@ -19,9 +19,6 @@ class Account extends MoneyObject<Account> {
   @override
   int get uniqueId => id.value;
 
-  @override
-  bool get supportSmallList => true;
-
   // Id
   // 0|Id|INT|0||1
   Field<Account, int> id = Field<Account, int>(
@@ -208,7 +205,19 @@ class Account extends MoneyObject<Account> {
   );
 
   /// Constructor
-  Account();
+  Account() {
+    buildListWidgetForSmallScreen = () => TableRowCompact(
+          leftTopAsWidget: Text(
+            name.value,
+            textAlign: TextAlign.left,
+          ),
+          leftBottomAsWidget: Text(
+            getTypeAsText(),
+            textAlign: TextAlign.left,
+          ),
+          rightTopAsWidget: Text(getCurrencyText(balance.value)),
+        );
+  }
 
   /// Constructor from a SQLite row
   factory Account.fromSqlite(final Json row) {
@@ -323,21 +332,6 @@ class Account extends MoneyObject<Account> {
       default:
         return AccountType._notUsed_7;
     }
-  }
-
-  @override
-  Widget buildInstanceWidgetSmallScreen() {
-    return TableRowCompact(
-      leftTopAsWidget: Text(
-        name.value,
-        textAlign: TextAlign.left,
-      ),
-      leftBottomAsWidget: Text(
-        getTypeAsText(),
-        textAlign: TextAlign.left,
-      ),
-      rightTopAsWidget: Text(getCurrencyText(balance.value)),
-    );
   }
 }
 
