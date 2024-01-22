@@ -9,17 +9,7 @@ import 'package:money/widgets/table_view/table_row_compact.dart';
 // Exports
 export 'package:money/models/money_objects/accounts/account_types.dart';
 
-/*
-   6|OpeningBalance|money|0||0
-   7|Currency|nchar(3)|0||0
-   8|OnlineAccount|INT|0||0
-   9|WebSite|nvarchar(512)|0||0
-  10|ReconcileWarning|INT|0||0
-
-  12|SyncGuid|uniqueidentifier|0||0
-  13|Flags|INT|0||0
-
-*/
+/// Accounts like Banks
 class Account extends MoneyObject<Account> {
   @override
   int get uniqueId => id.value;
@@ -94,6 +84,7 @@ class Account extends MoneyObject<Account> {
   );
 
   // 6 Open Balance
+  // 6|OpeningBalance|money|0||0
   Field<Account, double> openingBalance = Field<Account, double>(
     name: 'Opening Balance',
     serializeName: 'OpeningBalance',
@@ -103,7 +94,8 @@ class Account extends MoneyObject<Account> {
     valueForSerialization: (final Account instance) => instance.openingBalance.value,
   );
 
-  // 7 Currency
+  /// Currency
+  /// 7|Currency|nchar(3)|0||0
   Field<Account, String> currency = Field<Account, String>(
     importance: 4,
     name: 'Currency',
@@ -114,10 +106,17 @@ class Account extends MoneyObject<Account> {
     valueForSerialization: (final Account instance) => instance.currency.value,
   );
 
-  // 8
-  int onlineAccount = -1;
+  /// 8
+  /// 8|OnlineAccount|INT|0||0
+  FieldInt<Account> onlineAccount = FieldInt<Account>(
+    name: 'OnlineAccount',
+    serializeName: 'OnlineAccount',
+    useAsColumn: false,
+    valueForSerialization: (final Account instance) => instance.onlineAccount.value,
+  );
 
-  // 9 WebSite
+  /// WebSite
+  /// 9|WebSite|nvarchar(512)|0||0
   Field<Account, String> webSite = Field<Account, String>(
     importance: 4,
     name: 'WebSite',
@@ -128,8 +127,13 @@ class Account extends MoneyObject<Account> {
     valueForSerialization: (final Account instance) => instance.webSite.value,
   );
 
-  // 10
-  int reconcileWarning = 0;
+  /// 10
+  /// 10|ReconcileWarning|INT|0||0
+  FieldInt<Account> reconcileWarning = FieldInt<Account>(
+    serializeName: 'ReconcileWarning',
+    useAsColumn: false,
+    valueForSerialization: (final Account instance) => instance.reconcileWarning.value,
+  );
 
   /// lastSync
   /// 11|LastSync|datetime|0||0
@@ -143,11 +147,21 @@ class Account extends MoneyObject<Account> {
     valueForSerialization: (final Account instance) => instance.lastSync.value.toIso8601String(),
   );
 
-  // 12
-  String syncGuid = '';
+  /// SyncGuid
+  /// 12|SyncGuid|uniqueidentifier|0||0
+  FieldString<Account> syncGuid = FieldString<Account>(
+    serializeName: 'SyncGuid',
+    useAsColumn: false,
+    valueForSerialization: (final Account instance) => instance.syncGuid.value,
+  );
 
-  // 13
-  int flags = 0;
+  /// Flags
+  /// 13|Flags|INT|0||0
+  FieldInt<Account> flags = FieldInt<Account>(
+    serializeName: 'Flags',
+    useAsColumn: false,
+    valueForSerialization: (final Account instance) => instance.flags.value,
+  );
 
   /// Last Balance date
   /// 14|LastBalance|datetime|0||0
@@ -235,12 +249,12 @@ class Account extends MoneyObject<Account> {
       ..type.value = AccountType.values[row.getInt('Type')]
       ..openingBalance.value = row.getDouble('OpeningBalance')
       ..currency.value = row.getString('Currency')
-      ..onlineAccount = row.getInt('OnlineAccount')
+      ..onlineAccount.value = row.getInt('OnlineAccount')
       ..webSite.value = row.getString('WebSite')
-      ..reconcileWarning = row.getInt('ReconcileWarning')
+      ..reconcileWarning.value = row.getInt('ReconcileWarning')
       ..lastSync.value = row.getDate('LastSync')
-      ..syncGuid = row.getString('SyncGuid')
-      ..flags = row.getInt('Flags')
+      ..syncGuid.value = row.getString('SyncGuid')
+      ..flags.value = row.getInt('Flags')
       ..lastBalance.value = row.getDate('LastBalance')
       ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal')
       ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest');
@@ -255,7 +269,7 @@ class Account extends MoneyObject<Account> {
   }
 
   bool isClosed() {
-    return isBitOn(flags, AccountFlags.closed.index);
+    return isBitOn(flags.value, AccountFlags.closed.index);
   }
 
   bool isActive() {

@@ -32,24 +32,26 @@ class Accounts extends MoneyObjects<Account> {
       'God-Inc'
     ];
     for (int i = 0; i < names.length; i++) {
-      addEntry(Account()
-        ..id.value = i
-        ..accountId.value = i.toString()
-        ..name.value = names[i]
-        ..type.value = AccountType.checking
-        ..description.value = 'Some description'
-        ..currency.value = 'USD'
-        ..lastSync.value = DateTime.now()
-        ..syncGuid = const Uuid().v4().toString()
-        ..flags = 0
-        ..openingBalance.value = 0
-        ..ofxAccountId.value = ''
-        ..onlineAccount = -1
-        ..webSite.value = ''
-        ..reconcileWarning = 0
-        ..lastBalance.value = DateTime.now().subtract(const Duration(days: 20))
-        ..categoryIdForPrincipal.value = 0
-        ..categoryIdForInterest.value = 0);
+      addEntry(
+        Account()
+          ..id.value = i
+          ..accountId.value = i.toString()
+          ..name.value = names[i]
+          ..type.value = AccountType.checking
+          ..description.value = 'Some description'
+          ..currency.value = 'USD'
+          ..lastSync.value = DateTime.now()
+          ..syncGuid.value = const Uuid().v4().toString()
+          ..flags.value = 0
+          ..openingBalance.value = 0
+          ..ofxAccountId.value = ''
+          ..onlineAccount.value = -1
+          ..webSite.value = ''
+          ..reconcileWarning.value = 0
+          ..lastBalance.value = DateTime.now().subtract(const Duration(days: 20))
+          ..categoryIdForPrincipal.value = 0
+          ..categoryIdForInterest.value = 0,
+      );
     }
   }
 
