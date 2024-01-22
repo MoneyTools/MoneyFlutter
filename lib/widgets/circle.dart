@@ -10,7 +10,7 @@ class MyCircle extends StatelessWidget {
   const MyCircle({
     super.key,
     required this.colorFill,
-    required this.colorBorder,
+    this.colorBorder = Colors.grey,
     required this.size,
     this.showBorder = false,
   });

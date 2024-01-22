@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="no"?>
-<svg width="2400" height="450" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
+<svg width="2700" height="450" xmlns="http://www.w3.org/2000/svg" font-family="Arial, Helvetica, sans-serif">
   <style>
     .layerRectangle {
       stroke: black;
@@ -110,8 +110,11 @@
   <g id='Node_csv'>
     <rect x="604" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
-  <g id='Node_fl_chart'>
+  <g id='Node_dotted_border'>
     <rect x="2104" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+  </g>
+  <g id='Node_fl_chart'>
+    <rect x="2404" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_shared_preferences'>
     <rect x="604" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -154,12 +157,17 @@ collection</title>
 ⬇
 csv</title>
     </path>
+    <path class="line" d="M280 95 C 290 150,2110 150, 2120 205" fill="none" stroke="#377E22">
+      <title>money
+⬇
+dotted_border</title>
+    </path>
     <path class="line" d="M280 95 C 290 150,310 150, 320 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 file_picker</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,2110 150, 2120 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,2410 150, 2420 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 fl_chart</title>
@@ -309,12 +317,12 @@ intl</title>
       <title>money
 ⬇
 1 /dev/flutter_launcher_icons
-2 /dev/flutter_lints
-3 /dev/flutter_test
-4 /dev/integration_test
-5 /dev/lints
-6 /direct/collection
-7 /direct/csv
+2 /dev/flutter_test
+3 /dev/integration_test
+4 /dev/pedantic
+5 /direct/collection
+6 /direct/csv
+7 /direct/dotted_border
 8 /direct/file_picker
 9 /direct/fl_chart
 10 /direct/flutter_markdown
@@ -360,17 +368,33 @@ collection</title>
 csv</title>
     </g>
   </g>
-  <g id='Counters_fl_chart'>
+  <g id='Counters_dotted_border'>
     <g>
       <circle cx="2380" cy="245" r="10" fill="green"/>
       <text x="2380" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <title>dotted_border
+⬇
+1 /transitive/path_drawing</title>
+    </g>
+    <g>
+      <circle cx="2120" cy="205" r="10" fill="blue"/>
+      <text x="2120" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <title>1 /root/money
+⬇
+dotted_border</title>
+    </g>
+  </g>
+  <g id='Counters_fl_chart'>
+    <g>
+      <circle cx="2680" cy="245" r="10" fill="green"/>
+      <text x="2680" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>fl_chart
 ⬇
 1 /transitive/equatable</title>
     </g>
     <g>
-      <circle cx="2120" cy="205" r="10" fill="blue"/>
-      <text x="2120" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="2420" cy="205" r="10" fill="blue"/>
+      <text x="2420" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 fl_chart</title>
@@ -485,7 +509,7 @@ uuid</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.1.00</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.1.02</text>
   </g>
   <g id='Labels_collection'>
     <text class="nodeName" x="450" y="375" font-size="120%">collection</text>
@@ -495,9 +519,13 @@ uuid</title>
     <text class="nodeName" x="750" y="375" font-size="120%">csv</text>
     <text class="nodeName" x="750" y="395" font-size="80%">5.1.1</text>
   </g>
+  <g id='Labels_dotted_border'>
+    <text class="nodeName" x="2250" y="225" font-size="120%">dotted_border</text>
+    <text class="nodeName" x="2250" y="245" font-size="80%">2.1.0</text>
+  </g>
   <g id='Labels_fl_chart'>
-    <text class="nodeName" x="2250" y="225" font-size="120%">fl_chart</text>
-    <text class="nodeName" x="2250" y="245" font-size="80%">0.66.0</text>
+    <text class="nodeName" x="2550" y="225" font-size="120%">fl_chart</text>
+    <text class="nodeName" x="2550" y="245" font-size="80%">0.66.0</text>
   </g>
   <g id='Labels_shared_preferences'>
     <text class="nodeName" x="750" y="225" font-size="120%">shared_preferences</text>
