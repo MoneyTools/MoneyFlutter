@@ -15,10 +15,10 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
   }
 
   @override
-  void loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<MyJson> rows) {
     clear();
 
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       addEntry(RentBuilding.fromSqlite(row));
     }
   }

@@ -64,24 +64,24 @@ class Security extends MoneyObject<Security> {
   });
 
   /// Constructor from a SQLite row
-  factory Security.fromSqlite(final Json row) {
+  factory Security.fromSqlite(final MyJson row) {
     return Security(
       // 1
-      name: jsonGetString(row, 'Name'),
+      name: row.getString('Name'),
       // 2
-      symbol: jsonGetString(row, 'Symbol'),
+      symbol: row.getString('Symbol'),
       // 3
-      price: jsonGetDouble(row, 'Price'),
+      price: row.getDouble('Price'),
       // 4
-      lastPrice: jsonGetDouble(row, 'LastPrice'),
+      lastPrice: row.getDouble('LastPrice'),
       // 5
-      cuspid: jsonGetString(row, 'CUSPID'),
+      cuspid: row.getString('CUSPID'),
       // 6
-      securityType: jsonGetInt(row, 'SecurityType'),
+      securityType: row.getInt('SecurityType'),
       // 7
-      taxable: jsonGetInt(row, 'Taxable'),
+      taxable: row.getInt('Taxable'),
       // 8
-      priceDate: jsonGetDate(row, 'PriceDate'),
-    )..id.value = jsonGetInt(row, 'Id');
+      priceDate: row.getDate('PriceDate'),
+    )..id.value = row.getInt('Id');
   }
 }

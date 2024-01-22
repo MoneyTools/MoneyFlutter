@@ -33,3 +33,12 @@ enum TransactionFlags {
   // 16
   hasStatement,
 }
+
+const String columnIdAccount = 'Accounts';
+const String columnIdDate = 'Date';
+const String columnIdPayee = 'Payee';
+const String columnIdCategory = 'Category';
+const String columnIdStatus = 'Status';
+const String columnIdMemo = 'Memo';
+const String columnIdAmount = 'Amount';
+const String columnIdBalance = 'Balance';

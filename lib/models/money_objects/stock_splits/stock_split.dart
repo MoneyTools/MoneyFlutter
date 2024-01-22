@@ -44,18 +44,18 @@ class StockSplit extends MoneyObject<StockSplit> {
   });
 
   /// Constructor from a SQLite row
-  factory StockSplit.fromSqlite(final Json row) {
+  factory StockSplit.fromSqlite(final MyJson row) {
     return StockSplit(
       // 0
       // id
       // 1
-      date: jsonGetDate(row, 'Date'),
+      date: row.getDate('Date'),
       // 2
-      security: jsonGetInt(row, 'Security'),
+      security: row.getInt('Security'),
       // 3
-      numerator: jsonGetInt(row, 'Numerator'),
+      numerator: row.getInt('Numerator'),
       // 4
-      denominator: jsonGetInt(row, 'Denominator'),
-    )..id.value = jsonGetInt(row, 'Id');
+      denominator: row.getInt('Denominator'),
+    )..id.value = row.getInt('Id');
   }
 }

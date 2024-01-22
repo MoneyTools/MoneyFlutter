@@ -69,19 +69,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     super.initState();
     columns = getFieldsForTable();
 
-    final Map<String, dynamic>? viewSetting = Settings().views[getClassNameSingular()];
+    final MyJson? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
-      sortByColumn = jsonGetInt(
-        viewSetting,
-        prefSortBy,
-        0,
-      );
-      sortAscending = jsonGetBool(
-        viewSetting,
-        prefSortAscending,
-        true,
-      );
-      lastSelectedItemIndex = jsonGetInt(viewSetting, prefSelectedListItemIndex, 0);
+      sortByColumn = viewSetting.getInt(prefSortBy, 0);
+      sortAscending = viewSetting.getBool(prefSortAscending, true);
+      lastSelectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
     }
 
     list = getList();

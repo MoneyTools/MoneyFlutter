@@ -9,7 +9,7 @@ class Currencies extends MoneyObjects<Currency> {
   }
 
   @override
-  Currency instanceFromSqlite(final Json row) {
+  Currency instanceFromSqlite(final MyJson row) {
     return Currency.fromSqlite(row);
   }
 

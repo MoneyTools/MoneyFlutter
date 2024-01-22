@@ -86,18 +86,18 @@ class LoanPayment extends MoneyObject<LoanPayment> {
   }
 
   /// Constructor from a SQLite row
-  factory LoanPayment.fromSqlite(final Json row) {
+  factory LoanPayment.fromSqlite(final MyJson row) {
     return LoanPayment(
       // 1
-      accountId: jsonGetInt(row, 'AccountId'),
+      accountId: row.getInt('AccountId'),
       // 2
-      date: jsonGetDate(row, 'Date'),
+      date: row.getDate('Date'),
       // 3
-      principal: jsonGetDouble(row, 'Principal'),
+      principal: row.getDouble('Principal'),
       // 4
-      interest: jsonGetDouble(row, 'Interest'),
+      interest: row.getDouble('Interest'),
       // 3
-      memo: jsonGetString(row, 'Memo'),
-    )..id.value = jsonGetInt(row, 'Id');
+      memo: row.getString('Memo'),
+    )..id.value = row.getInt('Id');
   }
 }

@@ -46,11 +46,11 @@ class AccountAlias extends MoneyObject<AccountAlias> {
   int get uniqueId => id.value;
 
   /// Constructor from a SQLite row
-  factory AccountAlias.fromSqlite(final Json row) {
+  factory AccountAlias.fromSqlite(final MyJson row) {
     return AccountAlias()
-      ..id.value = jsonGetInt(row, 'Id')
-      ..pattern.value = jsonGetString(row, 'Pattern')
-      ..flags.value = jsonGetInt(row, 'Flag')
-      ..accountId.value = jsonGetString(row, 'AccountId');
+      ..id.value = row.getInt('Id')
+      ..pattern.value = row.getString('Pattern')
+      ..flags.value = row.getInt('Flag')
+      ..accountId.value = row.getString('AccountId');
   }
 }

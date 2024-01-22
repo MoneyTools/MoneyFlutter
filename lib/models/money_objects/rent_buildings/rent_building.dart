@@ -129,34 +129,34 @@ class RentBuilding extends MoneyObject<RentBuilding> {
    */
   RentBuilding();
 
-  factory RentBuilding.fromSqlite(final Json row) {
+  factory RentBuilding.fromSqlite(final MyJson row) {
     final RentBuilding instance = RentBuilding();
 
-    instance.id.value = jsonGetInt(row, 'Id');
-    instance.name.value = jsonGetString(row, 'Name');
-    instance.address.value = jsonGetString(row, 'Address');
+    instance.id.value = row.getInt('Id');
+    instance.name.value = row.getString('Name');
+    instance.address.value = row.getString('Address');
 
-    instance.purchasedDate = jsonGetDate(row, 'PurchasedDate', defaultIfNotFound: DateTime.now());
-    instance.purchasedPrice = jsonGetDouble(row, 'PurchasedPrice');
-    instance.landValue = jsonGetDouble(row, 'LandValue');
-    instance.estimatedValue = jsonGetDouble(row, 'EstimatedValue');
+    instance.purchasedDate = row.getDate('PurchasedDate', DateTime.now());
+    instance.purchasedPrice = row.getDouble('PurchasedPrice');
+    instance.landValue = row.getDouble('LandValue');
+    instance.estimatedValue = row.getDouble('EstimatedValue');
 
-    instance.categoryForIncome = jsonGetInt(row, 'CategoryForIncome');
+    instance.categoryForIncome = row.getInt('CategoryForIncome');
     instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome);
 
-    instance.categoryForTaxes = jsonGetInt(row, 'CategoryForTaxes');
+    instance.categoryForTaxes = row.getInt('CategoryForTaxes');
     instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes);
 
-    instance.categoryForInterest = jsonGetInt(row, 'CategoryForInterest');
+    instance.categoryForInterest = row.getInt('CategoryForInterest');
     instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest);
 
-    instance.categoryForRepairs = jsonGetInt(row, 'CategoryForRepairs');
+    instance.categoryForRepairs = row.getInt('CategoryForRepairs');
     instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs);
 
-    instance.categoryForMaintenance = jsonGetInt(row, 'CategoryForMaintenance');
+    instance.categoryForMaintenance = row.getInt('CategoryForMaintenance');
     instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance);
 
-    instance.categoryForManagement = jsonGetInt(row, 'CategoryForManagement');
+    instance.categoryForManagement = row.getInt('CategoryForManagement');
     instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement);
 
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
@@ -165,11 +165,11 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForRepairsTreeIds);
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForInterestTreeIds);
 
-    instance.ownershipName1 = jsonGetString(row, 'OwnershipName1');
-    instance.ownershipName2 = jsonGetString(row, 'OwnershipName2');
-    instance.ownershipPercentage1 = jsonGetDouble(row, 'ownershipPercentage1');
-    instance.ownershipPercentage2 = jsonGetDouble(row, 'ownershipPercentage1');
-    instance.note = jsonGetString(row, 'Note');
+    instance.ownershipName1 = row.getString('OwnershipName1');
+    instance.ownershipName2 = row.getString('OwnershipName2');
+    instance.ownershipPercentage1 = row.getDouble('ownershipPercentage1');
+    instance.ownershipPercentage2 = row.getDouble('ownershipPercentage1');
+    instance.note = row.getString('Note');
 
     return instance;
   }

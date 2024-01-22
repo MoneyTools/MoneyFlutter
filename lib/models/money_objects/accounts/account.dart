@@ -225,25 +225,25 @@ class Account extends MoneyObject<Account> {
   }
 
   /// Constructor from a SQLite row
-  factory Account.fromSqlite(final Json row) {
+  factory Account.fromSqlite(final MyJson row) {
     return Account()
-      ..id.value = jsonGetInt(row, 'Id')
-      ..accountId.value = jsonGetString(row, 'AccountId')
-      ..ofxAccountId.value = jsonGetString(row, 'OfxAccountId')
-      ..name.value = jsonGetString(row, 'Name')
-      ..description.value = jsonGetString(row, 'Description')
-      ..type.value = AccountType.values[jsonGetInt(row, 'Type')]
-      ..openingBalance.value = jsonGetDouble(row, 'OpeningBalance')
-      ..currency.value = jsonGetString(row, 'Currency')
-      ..onlineAccount = jsonGetInt(row, 'OnlineAccount')
-      ..webSite.value = jsonGetString(row, 'WebSite')
-      ..reconcileWarning = jsonGetInt(row, 'ReconcileWarning')
-      ..lastSync.value = jsonGetDate(row, 'LastSync')
-      ..syncGuid = jsonGetString(row, 'SyncGuid')
-      ..flags = jsonGetInt(row, 'Flags')
-      ..lastBalance.value = jsonGetDate(row, 'LastBalance')
-      ..categoryIdForPrincipal.value = jsonGetInt(row, 'CategoryIdForPrincipal')
-      ..categoryIdForInterest.value = jsonGetInt(row, 'CategoryIdForInterest');
+      ..id.value = row.getInt('Id')
+      ..accountId.value = row.getString('AccountId')
+      ..ofxAccountId.value = row.getString('OfxAccountId')
+      ..name.value = row.getString('Name')
+      ..description.value = row.getString('Description')
+      ..type.value = AccountType.values[row.getInt('Type')]
+      ..openingBalance.value = row.getDouble('OpeningBalance')
+      ..currency.value = row.getString('Currency')
+      ..onlineAccount = row.getInt('OnlineAccount')
+      ..webSite.value = row.getString('WebSite')
+      ..reconcileWarning = row.getInt('ReconcileWarning')
+      ..lastSync.value = row.getDate('LastSync')
+      ..syncGuid = row.getString('SyncGuid')
+      ..flags = row.getInt('Flags')
+      ..lastBalance.value = row.getDate('LastBalance')
+      ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal')
+      ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest');
   }
 
   static String getName(final Account? instance) {

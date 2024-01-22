@@ -90,32 +90,32 @@ class OnlineAccount extends MoneyObject<OnlineAccount> {
   });
 
   /// Constructor from a SQLite row
-  factory OnlineAccount.fromSqlite(final Json row) {
+  factory OnlineAccount.fromSqlite(final MyJson row) {
     return OnlineAccount(
       // 1
-      name: jsonGetString(row, 'Name'),
+      name: row.getString('Name'),
       // 2
-      institution: jsonGetString(row, 'Institution'),
+      institution: row.getString('Institution'),
       // 3
-      ofx: jsonGetString(row, 'Ofx'),
+      ofx: row.getString('Ofx'),
       // 4
-      ofxVersion: jsonGetString(row, 'OfxVersion'),
+      ofxVersion: row.getString('OfxVersion'),
       // 5
-      fdic: jsonGetString(row, 'Fdic'),
+      fdic: row.getString('Fdic'),
       // 6
-      userId: jsonGetString(row, 'UserId'),
+      userId: row.getString('UserId'),
       // 7
-      password: jsonGetString(row, 'Password'),
+      password: row.getString('Password'),
       // 8
-      userCred1: jsonGetString(row, 'UserCred1'),
+      userCred1: row.getString('UserCred1'),
       // 9
-      userCred2: jsonGetString(row, 'UserCred2'),
+      userCred2: row.getString('UserCred2'),
       // 10
-      authToken: jsonGetString(row, 'AuthToken'),
+      authToken: row.getString('AuthToken'),
       // 11
-      bankId: jsonGetString(row, 'BankId'),
+      bankId: row.getString('BankId'),
       // 12
-      branchId: jsonGetString(row, 'BranchId'),
-    )..id.value = jsonGetInt(row, 'Id');
+      branchId: row.getString('BranchId'),
+    )..id.value = row.getInt('Id');
   }
 }

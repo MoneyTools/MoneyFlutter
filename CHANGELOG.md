@@ -1,5 +1,6 @@
 ## [1.1.02] 2024-01-21
 
+- MyJson helper
 - Compact List for Categories
 
 ## [1.1.01] 2024-01-22

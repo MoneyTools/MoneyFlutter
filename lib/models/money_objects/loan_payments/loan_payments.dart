@@ -7,9 +7,9 @@ export 'package:money/models/money_objects/loan_payments/loan_payment.dart';
 
 class LoanPayments extends MoneyObjects<LoanPayment> {
   @override
-  void loadFromJson(final List<Json> rows) {
+  void loadFromJson(final List<MyJson> rows) {
     clear();
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       addEntry(LoanPayment.fromSqlite(row));
     }
   }

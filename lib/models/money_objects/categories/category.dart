@@ -205,18 +205,18 @@ class Category extends MoneyObject<Category> {
     };
   }
 
-  factory Category.fromSqlite(final Json row) {
+  factory Category.fromSqlite(final MyJson row) {
     return Category(
-      id: jsonGetInt(row, 'Id'),
-      parentId: jsonGetInt(row, 'ParentId'),
-      name: jsonGetString(row, 'Name'),
-      description: jsonGetString(row, 'Description'),
-      color: jsonGetString(row, 'Color').trim(),
-      type: Category.getTypeFromInt(jsonGetInt(row, 'Type')),
-      budget: jsonGetDouble(row, 'Budget'),
-      budgetBalance: jsonGetDouble(row, 'Balance'),
-      frequency: jsonGetInt(row, 'Frequency'),
-      taxRefNum: jsonGetInt(row, 'TaxRefNum'),
+      id: row.getInt('Id'),
+      parentId: row.getInt('ParentId'),
+      name: row.getString('Name'),
+      description: row.getString('Description'),
+      color: row.getString('Color').trim(),
+      type: Category.getTypeFromInt(row.getInt('Type')),
+      budget: row.getDouble('Budget'),
+      budgetBalance: row.getDouble('Balance'),
+      frequency: row.getInt('Frequency'),
+      taxRefNum: row.getInt('TaxRefNum'),
     );
   }
 

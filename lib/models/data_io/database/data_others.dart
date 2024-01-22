@@ -8,7 +8,7 @@ class MyDatabaseImplementation {
     _db = sqlite3.open(fileToOpen);
   }
 
-  List<Json> select(final String query) {
+  List<MyJson> select(final String query) {
     return _db.select(query);
   }
 

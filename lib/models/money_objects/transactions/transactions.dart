@@ -13,12 +13,12 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   @override
-  List<Transaction> loadFromJson(final List<Json> rows) {
+  List<Transaction> loadFromJson(final List<MyJson> rows) {
     clear();
 
     runningBalance = 0.00;
 
-    for (final Json row in rows) {
+    for (final MyJson row in rows) {
       final Transaction t = Transaction.fromJSon(row, runningBalance);
       runningBalance += t.amount.value;
       getList().add(t);

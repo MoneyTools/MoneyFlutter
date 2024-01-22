@@ -20,7 +20,7 @@ class Settings {
   bool rentals = false;
   bool useDarkMode = false;
   double textScale = 1.0;
-  Map<String, Json> views = <String, Json>{};
+  Map<String, MyJson> views = <String, MyJson>{};
 
   Function? onChanged;
 
@@ -86,7 +86,7 @@ class Settings {
     return themeData;
   }
 
-  Map<String, Json> loadMapFromPrefs(
+  Map<String, MyJson> loadMapFromPrefs(
     final SharedPreferences prefs,
     final String key,
   ) {
@@ -94,11 +94,11 @@ class Settings {
       final String? serializedMap = prefs.getString(key);
       if (serializedMap != null) {
         // first deserialize
-        final Map<String, dynamic> parsedMap = json.decode(serializedMap) as Map<String, dynamic>;
+        final MyJson parsedMap = json.decode(serializedMap) as MyJson;
 
         // second to JSon map
-        final Map<String, Json> resultMap =
-            parsedMap.map((final String key, final dynamic value) => MapEntry<String, Json>(key, value as Json));
+        final Map<String, MyJson> resultMap =
+            parsedMap.map((final String key, final dynamic value) => MapEntry<String, MyJson>(key, value as MyJson));
 
         return resultMap;
       }
@@ -106,13 +106,13 @@ class Settings {
       //
     }
 
-    return <String, Json>{};
+    return <String, MyJson>{};
   }
 
   void saveMapToPrefs(
     final SharedPreferences prefs,
     final String key,
-    final Map<String, Json> mapOfJson,
+    final Map<String, MyJson> mapOfJson,
   ) {
     prefs.setString(key, json.encode(mapOfJson));
   }

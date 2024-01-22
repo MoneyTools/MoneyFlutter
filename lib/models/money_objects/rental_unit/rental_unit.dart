@@ -46,12 +46,12 @@ class RentUnit extends MoneyObject<RentUnit> {
     required this.note,
   });
 
-  factory RentUnit.fromSqlite(final Json row) {
+  factory RentUnit.fromSqlite(final MyJson row) {
     return RentUnit(
-      name: jsonGetString(row, 'Name'),
-      building: jsonGetInt(row, 'Building', -1),
-      renter: jsonGetString(row, 'Renter'),
-      note: jsonGetString(row, 'Note'),
-    )..id.value = jsonGetInt(row, 'Id');
+      name: row.getString('Name'),
+      building: row.getInt('Building', -1),
+      renter: row.getString('Renter'),
+      note: row.getString('Note'),
+    )..id.value = row.getInt('Id');
   }
 }

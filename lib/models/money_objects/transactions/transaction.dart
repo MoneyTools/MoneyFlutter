@@ -1,3 +1,4 @@
+// Imports
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
@@ -8,14 +9,8 @@ import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/widgets/table_view/table_row_compact.dart';
 
-const String columnIdAccount = 'Accounts';
-const String columnIdDate = 'Date';
-const String columnIdPayee = 'Payee';
-const String columnIdCategory = 'Category';
-const String columnIdStatus = 'Status';
-const String columnIdMemo = 'Memo';
-const String columnIdAmount = 'Amount';
-const String columnIdBalance = 'Balance';
+// Exports
+export 'package:money/models/money_objects/transactions/transaction_types.dart';
 
 /// Main source of information for this App
 /// All transactions are loaded in this class [Transaction] and [Split]
@@ -186,23 +181,23 @@ class Transaction extends MoneyObject<Transaction> {
         );
   }
 
-  factory Transaction.fromJSon(final Json json, final double runningBalance) {
+  factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction(
       // Status
-      status: TransactionStatus.values[jsonGetInt(json, 'Status')],
+      status: TransactionStatus.values[json.getInt('Status')],
       // Amount
     );
-    t.id.value = jsonGetInt(json, 'Id');
-    t.accountId.value = jsonGetInt(json, 'Account');
+    t.id.value = json.getInt('Id');
+    t.accountId.value = json.getInt('Account');
     t.accountInstance = Data().accounts.get(t.accountId.value);
-    t.dateTime.value = jsonGetDate(json, 'Date');
+    t.dateTime.value = json.getDate('Date');
     t.dateTimeAsText = getDateAsText(t.dateTime.value);
-    t.categoryId.value = jsonGetInt(json, 'Category');
+    t.categoryId.value = json.getInt('Category');
     t.categoryInstance = Data().categories.get(t.categoryId.value);
-    t.payeeId.value = jsonGetInt(json, 'Payee');
+    t.payeeId.value = json.getInt('Payee');
     t.payeeInstance = Data().payees.get(t.payeeId.value);
-    t.amount.value = jsonGetDouble(json, 'Amount');
-    t.memo.value = jsonGetString(json, 'Memo');
+    t.amount.value = json.getDouble('Amount');
+    t.memo.value = json.getString('Memo');
     t.balance.value = runningBalance;
 
     return t;
