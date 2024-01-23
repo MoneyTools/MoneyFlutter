@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/widgets/table_view/table_row.dart';
-import 'package:money/widgets/table_view/table_row_small.dart';
+import 'package:money/widgets/table_view/list_item_columns.dart';
 
 class MyTableView<T> extends StatefulWidget {
-  final Fields<T> columns;
+  final Fields<T> fields;
   final List<T> list;
   final ValueNotifier<List<int>> selectedItems;
   final Function? onTap;
@@ -15,7 +14,7 @@ class MyTableView<T> extends StatefulWidget {
 
   const MyTableView({
     super.key,
-    required this.columns,
+    required this.fields,
     required this.list,
     required this.selectedItems,
     this.asColumnView = true,
@@ -49,28 +48,18 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         itemExtent: widget.asColumnView ? itemHeight : 80,
         itemBuilder: (final BuildContext context, final int index) {
           final MoneyObject<T> itemInstance = (widget.list[index] as MoneyObject<T>);
-          if (!widget.asColumnView && itemInstance.buildListWidgetForSmallScreen != null) {
-            return MyTableRowSmall(
-              onListViewKeyEvent: onListViewKeyEvent,
-              onTap: () {
-                setSelectedItem(index);
-                FocusScope.of(context).requestFocus();
-              },
-              autoFocus: index == widget.selectedItems.value.firstOrNull,
-              isSelected: widget.selectedItems.value.contains(index),
-              child: itemInstance.buildListWidgetForSmallScreen!(),
-            );
-          } else {
-            return MyTableRow(
-                onListViewKeyEvent: onListViewKeyEvent,
-                onTap: () {
-                  setSelectedItem(index);
-                  FocusScope.of(context).requestFocus();
-                },
-                autoFocus: index == widget.selectedItems.value.firstOrNull,
-                isSelected: widget.selectedItems.value.contains(index),
-                children: widget.columns.getRowOfColumns(itemInstance as T));
-          }
+          return MyListItemAsColumn(
+            onListViewKeyEvent: onListViewKeyEvent,
+            onTap: () {
+              setSelectedItem(index);
+              FocusScope.of(context).requestFocus();
+            },
+            autoFocus: index == widget.selectedItems.value.firstOrNull,
+            isSelected: widget.selectedItems.value.contains(index),
+            child: widget.asColumnView
+                ? itemInstance.buildListWidgetForLargeScreen!(widget.fields, itemInstance as T)
+                : itemInstance.buildListWidgetForSmallScreen!(),
+          );
         });
   }
 
@@ -160,7 +149,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
     return numberOfItemDisplayed;
   }
 
-  // use this if total item count is known
+// use this if total item count is known
   List<int> scrollListenerWithItemCount() {
     final int itemCount = widget.list.length;
     final double scrollOffset = scrollController.position.pixels;

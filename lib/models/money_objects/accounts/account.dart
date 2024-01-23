@@ -4,7 +4,7 @@ import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/widgets/table_view/table_row_compact.dart';
+import 'package:money/widgets/table_view/list_item_card.dart';
 
 // Exports
 export 'package:money/models/money_objects/accounts/account_types.dart';
@@ -225,7 +225,9 @@ class Account extends MoneyObject<Account> {
 
   /// Constructor
   Account() {
-    buildListWidgetForSmallScreen = () => TableRowCompact(
+    // buildListWidgetForLargeScreen = (final Fields<Account> fields, Account instance) => fields.getRowOfColumns(instance);
+
+    buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsWidget: Text(
             name.value,
             textAlign: TextAlign.left,

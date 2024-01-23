@@ -92,8 +92,18 @@ class Field<C, T> {
   }
 
   Widget getWidget(final C objectInstance) {
-    final dynamic liveValue = valueFromInstance(objectInstance);
+    return buildWidgetFromTypeAndValue(
+      type,
+      valueFromInstance(objectInstance),
+      align,
+    );
+  }
 
+  static Widget buildWidgetFromTypeAndValue(
+    final FieldType type,
+    final dynamic liveValue,
+    final TextAlign align,
+  ) {
     switch (type) {
       case FieldType.numeric:
         return buildFieldWidgetForNumber(value: liveValue as num, shorthand: false, align: align);

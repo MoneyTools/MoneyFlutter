@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 
-class TableRowCompact extends StatelessWidget {
+class MyListItemAsCard extends StatelessWidget {
   final String? leftTopAsString;
   final String? leftBottomAsString;
   final String? rightTopAsString;
@@ -13,7 +13,7 @@ class TableRowCompact extends StatelessWidget {
   final Widget? rightBottomAsWidget;
 
   /// Constructor
-  const TableRowCompact({
+  const MyListItemAsCard({
     super.key,
     this.leftTopAsString,
     this.leftBottomAsString,

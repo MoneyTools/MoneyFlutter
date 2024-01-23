@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 
 /// A Row for a Table view
-class MyTableRowSmall extends StatefulWidget {
+class MyListItemAsColumn extends StatefulWidget {
   final KeyEventResult Function(FocusNode, RawKeyEvent) onListViewKeyEvent;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDoubleTap;
@@ -11,7 +11,7 @@ class MyTableRowSmall extends StatefulWidget {
   final bool asColumnView;
   final Widget child;
 
-  const MyTableRowSmall({
+  const MyListItemAsColumn({
     super.key,
     required this.onListViewKeyEvent,
     required this.isSelected,
@@ -23,10 +23,10 @@ class MyTableRowSmall extends StatefulWidget {
   });
 
   @override
-  State<MyTableRowSmall> createState() => MyTableRowSmallState();
+  State<MyListItemAsColumn> createState() => MyListItemAsColumnState();
 }
 
-class MyTableRowSmallState extends State<MyTableRowSmall> {
+class MyListItemAsColumnState extends State<MyListItemAsColumn> {
   bool isSelected = false;
 
   @override
@@ -36,7 +36,7 @@ class MyTableRowSmallState extends State<MyTableRowSmall> {
   }
 
   @override
-  void didUpdateWidget(final MyTableRowSmall oldWidget) {
+  void didUpdateWidget(final MyListItemAsColumn oldWidget) {
     super.didUpdateWidget(oldWidget);
     isSelected = widget.isSelected;
   }
@@ -61,7 +61,6 @@ class MyTableRowSmallState extends State<MyTableRowSmall> {
           },
           onDoubleTap: widget.onDoubleTap,
           child: Container(
-            padding: const EdgeInsets.all(4),
             color: backgroundColor,
             child: widget.child,
           ),

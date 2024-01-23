@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/splits/split.dart';
 
-import 'package:money/widgets/table_view/table_header.dart';
+import 'package:money/widgets/table_view/list_item_header.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
 // Export
@@ -40,7 +40,7 @@ class _TableSplitsState extends State<TableSplits> {
     return Column(
       children: <Widget>[
         // Table Header
-        MyTableHeader<Split>(
+        MyListItemHeader<Split>(
           columns: _tableFields,
           sortByColumn: _sortBy,
           sortAscending: _sortAscending,
@@ -59,7 +59,7 @@ class _TableSplitsState extends State<TableSplits> {
         // Table list of rows
         Expanded(
           child: MyTableView<Split>(
-            columns: _tableFields,
+            fields: _tableFields,
             list: rows,
             selectedItems: ValueNotifier<List<int>>(<int>[]),
           ),
