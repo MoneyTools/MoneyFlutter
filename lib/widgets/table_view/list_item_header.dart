@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/fields.dart';
 
-import 'package:money/views/view.dart';
-
 /// A Row for a Table view
 class MyListItemHeader<T> extends StatelessWidget {
   final Fields<T> columns;
@@ -25,12 +23,15 @@ class MyListItemHeader<T> extends StatelessWidget {
   Widget build(final BuildContext context) {
     final List<Widget> headers = <Widget>[];
     for (int i = 0; i < columns.definitions.length; i++) {
-      if (columns.definitions[i].useAsColumn) {
+      final Field<T, dynamic> columnDefinition = columns.definitions[i];
+      if (columnDefinition.useAsColumn) {
         headers.add(
           widgetHeaderButton(
             context,
-            columns.definitions[i].name,
-            TextAlign.center, // columns.definitions[i].align,
+            columnDefinition.name,
+            TextAlign.center,
+            // columns.definitions[i].align,
+            columnDefinition.flex,
             getSortIndicated(i),
             // Press
             () {
@@ -38,8 +39,7 @@ class MyListItemHeader<T> extends StatelessWidget {
             },
             // Long Press
             () {
-              final Field<T, dynamic> column = columns.definitions[i];
-              onLongPress?.call(column);
+              onLongPress?.call(columnDefinition);
             },
           ),
         );
@@ -60,24 +60,33 @@ Widget widgetHeaderButton(
   final BuildContext context,
   final String text,
   final TextAlign textAlign,
+  final int flex,
   final SortIndicator sortIndicator,
   final VoidCallback? onClick,
   final VoidCallback? onLongPress,
 ) {
-  final Widget? icon = buildSortIconNameWidget(sortIndicator);
+  final Widget icon = buildSortIconNameWidget(sortIndicator);
   return Expanded(
-    child: TextButton(
-      onPressed: onClick,
-      onLongPress: onLongPress,
-      child: Row(mainAxisAlignment: getRowAlignmentBasedOnTextAlign(textAlign), children: <Widget>[
-        Text(text, style: getTextTheme(context).labelSmall!.copyWith(color: Theme.of(context).colorScheme.secondary)),
-        if (icon != null) icon,
-      ]),
+    flex: flex,
+    child: Tooltip(
+      message: (text + '\n' + getSortingTooltipText(sortIndicator)).trim(),
+      child: TextButton.icon(
+        onPressed: onClick,
+        onLongPress: onLongPress,
+        clipBehavior: Clip.hardEdge,
+        label: Text(
+          text,
+          softWrap: false,
+          overflow: TextOverflow.fade,
+          style: getTextTheme(context).labelSmall!.copyWith(color: Theme.of(context).colorScheme.secondary),
+        ),
+        icon: icon,
+      ),
     ),
   );
 }
 
-Widget? buildSortIconNameWidget(final SortIndicator sortIndicator) {
+Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
   switch (sortIndicator) {
     case SortIndicator.sortAscending:
       return const Icon(Icons.arrow_upward, size: 20.0);
@@ -85,8 +94,26 @@ Widget? buildSortIconNameWidget(final SortIndicator sortIndicator) {
       return const Icon(Icons.arrow_downward, size: 20.0);
     case SortIndicator.none:
     default:
-      return null;
+      return SizedBox(
+        width: 20,
+      );
   }
 }
 
-enum SortIndicator { none, sortAscending, sortDescending }
+String getSortingTooltipText(final SortIndicator sortIndicator) {
+  switch (sortIndicator) {
+    case SortIndicator.sortAscending:
+      return 'Ascending';
+    case SortIndicator.sortDescending:
+      return 'Descending';
+    case SortIndicator.none:
+    default:
+      return '';
+  }
+}
+
+enum SortIndicator {
+  none,
+  sortAscending,
+  sortDescending,
+}

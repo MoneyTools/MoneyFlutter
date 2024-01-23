@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 
 /// A Row for a Table view
-class MyListItemAsColumn extends StatefulWidget {
+class MyListItem extends StatefulWidget {
   final KeyEventResult Function(FocusNode, RawKeyEvent) onListViewKeyEvent;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDoubleTap;
@@ -11,7 +11,7 @@ class MyListItemAsColumn extends StatefulWidget {
   final bool asColumnView;
   final Widget child;
 
-  const MyListItemAsColumn({
+  const MyListItem({
     super.key,
     required this.onListViewKeyEvent,
     required this.isSelected,
@@ -23,10 +23,10 @@ class MyListItemAsColumn extends StatefulWidget {
   });
 
   @override
-  State<MyListItemAsColumn> createState() => MyListItemAsColumnState();
+  State<MyListItem> createState() => MyListItemState();
 }
 
-class MyListItemAsColumnState extends State<MyListItemAsColumn> {
+class MyListItemState extends State<MyListItem> {
   bool isSelected = false;
 
   @override
@@ -36,7 +36,7 @@ class MyListItemAsColumnState extends State<MyListItemAsColumn> {
   }
 
   @override
-  void didUpdateWidget(final MyListItemAsColumn oldWidget) {
+  void didUpdateWidget(final MyListItem oldWidget) {
     super.didUpdateWidget(oldWidget);
     isSelected = widget.isSelected;
   }

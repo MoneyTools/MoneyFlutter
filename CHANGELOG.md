@@ -1,3 +1,7 @@
+## [1.1.03] 2024-01-23
+
+- Improve Table List column by using adjustable widths
+
 ## [1.1.02] 2024-01-21
 
 - MyJson helper

@@ -9,6 +9,7 @@ class Field<C, T> {
   String name;
   String serializeName;
   FieldType type;
+  int flex;
   TextAlign align;
   bool useAsColumn;
   bool useAsDetailPanels;
@@ -26,6 +27,7 @@ class Field<C, T> {
   Field({
     this.type = FieldType.text,
     this.align = TextAlign.left,
+    this.flex = 3,
     this.name = '',
     this.serializeName = '',
     required final T defaultValue,
@@ -88,36 +90,6 @@ class Field<C, T> {
       case FieldType.text:
       default:
         return value.toString();
-    }
-  }
-
-  Widget getWidget(final C objectInstance) {
-    return buildWidgetFromTypeAndValue(
-      type,
-      valueFromInstance(objectInstance),
-      align,
-    );
-  }
-
-  static Widget buildWidgetFromTypeAndValue(
-    final FieldType type,
-    final dynamic liveValue,
-    final TextAlign align,
-  ) {
-    switch (type) {
-      case FieldType.numeric:
-        return buildFieldWidgetForNumber(value: liveValue as num, shorthand: false, align: align);
-      case FieldType.numericShorthand:
-        return buildFieldWidgetForNumber(value: liveValue as num, shorthand: true, align: align);
-      case FieldType.amount:
-        return buildFieldWidgetForCurrency(value: liveValue, shorthand: false, align: align);
-      case FieldType.amountShorthand:
-        return buildFieldWidgetForCurrency(value: liveValue, shorthand: true, align: align);
-      case FieldType.widget:
-        return Expanded(child: Center(child: liveValue as Widget));
-      case FieldType.text:
-      default:
-        return buildFieldWidgetForText(text: liveValue.toString(), align: align);
     }
   }
 }
@@ -258,14 +230,14 @@ Widget buildFieldWidgetForText({
   final String text = '',
   final TextAlign align = TextAlign.left,
 }) {
-  return Expanded(
-      child: FittedBox(
-          fit: BoxFit.scaleDown,
-          alignment: textAlignToAlignment(align),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-            child: Text(text, textAlign: align),
-          )));
+  return FittedBox(
+    fit: BoxFit.scaleDown,
+    alignment: textAlignToAlignment(align),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+      child: Text(text, textAlign: align),
+    ),
+  );
 }
 
 Widget buildFieldWidgetForCurrency({
@@ -273,8 +245,7 @@ Widget buildFieldWidgetForCurrency({
   final bool shorthand = false,
   final TextAlign align = TextAlign.right,
 }) {
-  return Expanded(
-      child: FittedBox(
+  return FittedBox(
     fit: BoxFit.scaleDown,
     alignment: textAlignToAlignment(align),
     child: Padding(
@@ -284,7 +255,7 @@ Widget buildFieldWidgetForCurrency({
         textAlign: align,
       ),
     ),
-  ));
+  );
 }
 
 Widget buildFieldWidgetForNumber({
@@ -292,8 +263,7 @@ Widget buildFieldWidgetForNumber({
   final bool shorthand = false,
   final TextAlign align = TextAlign.right,
 }) {
-  return Expanded(
-      child: FittedBox(
+  return FittedBox(
     fit: BoxFit.scaleDown,
     alignment: textAlignToAlignment(align),
     child: Padding(
@@ -303,7 +273,7 @@ Widget buildFieldWidgetForNumber({
         textAlign: align,
       ),
     ),
-  ));
+  );
 }
 
 Alignment textAlignToAlignment(final TextAlign textAlign) {
@@ -326,4 +296,26 @@ enum FieldType {
   amountShorthand,
   date,
   widget,
+}
+
+Widget buildWidgetFromTypeAndValue(
+  final dynamic value,
+  final FieldType type,
+  final TextAlign align,
+) {
+  switch (type) {
+    case FieldType.numeric:
+      return buildFieldWidgetForNumber(value: value as num, shorthand: false, align: align);
+    case FieldType.numericShorthand:
+      return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);
+    case FieldType.amount:
+      return buildFieldWidgetForCurrency(value: value, shorthand: false, align: align);
+    case FieldType.amountShorthand:
+      return buildFieldWidgetForCurrency(value: value, shorthand: true, align: align);
+    case FieldType.widget:
+      return Center(child: value as Widget);
+    case FieldType.text:
+    default:
+      return buildFieldWidgetForText(text: value.toString(), align: align);
+  }
 }

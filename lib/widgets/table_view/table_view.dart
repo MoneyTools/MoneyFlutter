@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/widgets/table_view/list_item_columns.dart';
+import 'package:money/widgets/table_view/list_item.dart';
 
 class MyTableView<T> extends StatefulWidget {
   final Fields<T> fields;
@@ -48,7 +48,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         itemExtent: widget.asColumnView ? itemHeight : 80,
         itemBuilder: (final BuildContext context, final int index) {
           final MoneyObject<T> itemInstance = (widget.list[index] as MoneyObject<T>);
-          return MyListItemAsColumn(
+          return MyListItem(
             onListViewKeyEvent: onListViewKeyEvent,
             onTap: () {
               setSelectedItem(index);

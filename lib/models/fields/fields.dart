@@ -13,11 +13,21 @@ class Fields<T> {
 
   Widget getRowOfColumns(final T objectInstance) {
     final List<Widget> cells = <Widget>[];
+
     for (int columnIndex = 0; columnIndex < definitions.length; columnIndex++) {
-      final Field<dynamic, dynamic> fieldDefinition = definitions[columnIndex];
+      final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
       if (fieldDefinition.useAsColumn) {
-        final Widget widgetForThatField = fieldDefinition.getWidget(objectInstance);
-        cells.add(widgetForThatField);
+        final dynamic value = fieldDefinition.valueFromInstance(objectInstance);
+        cells.add(
+          Expanded(
+            flex: fieldDefinition.flex,
+            child: buildWidgetFromTypeAndValue(
+              value,
+              fieldDefinition.type,
+              fieldDefinition.align,
+            ),
+          ),
+        );
       }
     }
 
