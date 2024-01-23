@@ -3,7 +3,7 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
-import 'package:money/widgets/table_view/table_header.dart';
+import 'package:money/widgets/table_view/list_item_header.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
 class TableTransactions extends StatefulWidget {
@@ -39,7 +39,7 @@ class _TableTransactionsState extends State<TableTransactions> {
     return Column(
       children: <Widget>[
         // Table Header
-        MyTableHeader<Transaction>(
+        MyListItemHeader<Transaction>(
           columns: columns,
           sortByColumn: sortBy,
           sortAscending: sortAscending,
@@ -58,7 +58,7 @@ class _TableTransactionsState extends State<TableTransactions> {
         // Table list of rows
         Expanded(
           child: MyTableView<Transaction>(
-            columns: columns,
+            fields: columns,
             list: widget.getList(),
             selectedItems: ValueNotifier<List<int>>(<int>[]),
           ),

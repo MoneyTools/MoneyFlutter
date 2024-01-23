@@ -7,7 +7,7 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
-import 'package:money/widgets/table_view/table_row_compact.dart';
+import 'package:money/widgets/table_view/list_item_card.dart';
 
 // Exports
 export 'package:money/models/money_objects/transactions/transaction_types.dart';
@@ -173,7 +173,7 @@ class Transaction extends MoneyObject<Transaction> {
     this.status = TransactionStatus.none,
     this.fitid = '',
   }) {
-    this.buildListWidgetForSmallScreen = () => TableRowCompact(
+    this.buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: '${Category.getName(categoryInstance)}\n${memo.value}',
           rightTopAsString: getCurrencyText(amount.value),

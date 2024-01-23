@@ -4,7 +4,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/aliases/alias_types.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
-import 'package:money/widgets/table_view/table_row_compact.dart';
+import 'package:money/widgets/table_view/list_item_card.dart';
 
 // Export
 export 'package:money/models/money_objects/aliases/alias_types.dart';
@@ -70,7 +70,7 @@ class Alias extends MoneyObject<Alias> {
     this.pattern.value = pattern;
     this.flags.value = flags;
     this.payeeId.value = payeeId;
-    buildListWidgetForSmallScreen = () => TableRowCompact(
+    buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: this.pattern.value,
           rightBottomAsString: getAliasTypeAsString(type),

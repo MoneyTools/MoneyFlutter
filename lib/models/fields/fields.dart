@@ -11,7 +11,7 @@ class Fields<T> {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
-  List<Widget> getRowOfColumns(final T objectInstance) {
+  Widget getRowOfColumns(final T objectInstance) {
     final List<Widget> cells = <Widget>[];
     for (int columnIndex = 0; columnIndex < definitions.length; columnIndex++) {
       final Field<dynamic, dynamic> fieldDefinition = definitions[columnIndex];
@@ -20,7 +20,8 @@ class Fields<T> {
         cells.add(widgetForThatField);
       }
     }
-    return cells;
+
+    return Row(children: cells);
   }
 
   List<Widget> getCellsForDetailsPanel(final T objectInstance) {

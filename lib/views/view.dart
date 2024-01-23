@@ -5,7 +5,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/widgets/table_view/table_header.dart';
+import 'package:money/widgets/table_view/list_item_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widgets.dart';
 
@@ -99,7 +99,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             getTitle(),
 
             if (!isSmallWidth(constraints))
-              MyTableHeader<T>(
+              MyListItemHeader<T>(
                 columns: columns,
                 sortByColumn: sortByColumn,
                 sortAscending: sortAscending,
@@ -113,7 +113,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               child: MyTableView<T>(
                 list: list,
                 selectedItems: selectedItems,
-                columns: columns,
+                fields: columns,
                 asColumnView: !isSmallWidth(constraints),
                 onTap: onRowTap,
                 // onDoubleTap: (final BuildContext context, final int index) {

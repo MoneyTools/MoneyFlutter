@@ -4,17 +4,15 @@ import 'package:money/models/fields/fields.dart';
 
 import 'package:money/views/view.dart';
 
-enum SortIndicator { none, sortAscending, sortDescending }
-
 /// A Row for a Table view
-class MyTableHeader<T> extends StatelessWidget {
+class MyListItemHeader<T> extends StatelessWidget {
   final Fields<T> columns;
   final int sortByColumn;
   final bool sortAscending;
   final Function onTap;
   final Function(Field<T, dynamic>)? onLongPress;
 
-  const MyTableHeader({
+  const MyListItemHeader({
     super.key,
     required this.columns,
     required this.sortByColumn,
@@ -90,3 +88,5 @@ Widget? buildSortIconNameWidget(final SortIndicator sortIndicator) {
       return null;
   }
 }
+
+enum SortIndicator { none, sortAscending, sortDescending }
