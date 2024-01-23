@@ -1,5 +1,6 @@
 ## [1.1.03] 2024-01-23
 
+- Add Text Filter for Views of [Payees], [Payee Alias]
 - Improve Table List column by using adjustable widths
 
 ## [1.1.02] 2024-01-21

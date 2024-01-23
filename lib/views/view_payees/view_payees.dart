@@ -4,6 +4,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/views/view_header.dart';
 
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
@@ -35,8 +36,20 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
+  Widget getTitle() {
+    return ViewHeader(
+      title: getClassNamePlural(),
+      count: numValueOrDefault(list.length),
+      description: getDescription(),
+      onFilterChanged: (final String text) {
+        onFilterTextChanged(text);
+      },
+    );
+  }
+
+  @override
   List<Payee> getList() {
-    return Data().payees.getList();
+    return Data().payees.getList().where((final Payee instance) => isMatchingFilterText(instance)).toList();
   }
 
   @override

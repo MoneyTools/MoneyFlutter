@@ -46,7 +46,7 @@ class Fields<T> {
   List<String> getListOfFieldValueAsString(final T objectInstance, [final bool includeHiddenFields = false]) {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
-      final Field<dynamic, dynamic> fieldDefinition = definitions[fieldIndex];
+      final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
       if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
         strings.add(fieldDefinition.getString(fieldDefinition.valueFromInstance(objectInstance)));
       }

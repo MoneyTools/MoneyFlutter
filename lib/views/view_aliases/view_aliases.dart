@@ -4,6 +4,7 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view.dart';
+import 'package:money/views/view_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 
 class ViewAliases extends ViewWidget<Alias> {
@@ -30,8 +31,20 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   }
 
   @override
+  Widget getTitle() {
+    return ViewHeader(
+      title: getClassNamePlural(),
+      count: numValueOrDefault(list.length),
+      description: getDescription(),
+      onFilterChanged: (final String text) {
+        onFilterTextChanged(text);
+      },
+    );
+  }
+
+  @override
   List<Alias> getList() {
-    return Data().aliases.getList();
+    return Data().aliases.getList().where((final Alias instance) => isMatchingFilterText(instance)).toList();
   }
 
   @override

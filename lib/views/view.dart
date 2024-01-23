@@ -165,6 +165,22 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <T>[];
   }
 
+  bool isMatchingFilterText(final T instance) {
+    if (filterText.isEmpty) {
+      return true;
+    }
+
+    final List<String> fieldInstances = getFieldsForTable().getListOfFieldValueAsString(instance);
+
+    for (final String fieldInstance in fieldInstances) {
+      if (fieldInstance.toString().toLowerCase().contains(filterText.toLowerCase())) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   void onSort() {
     if (columns.definitions.isNotEmpty) {
       if (isBetween(sortByColumn, -1, columns.definitions.length)) {

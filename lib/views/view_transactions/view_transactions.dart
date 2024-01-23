@@ -141,23 +141,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     return false;
   }
 
-  bool isMatchingFilterText(final Transaction transaction) {
-    if (filterText.isEmpty) {
-      return true;
-    }
-
-    final List<String> fieldInstances = getFieldsForTable().getListOfFieldValueAsString(transaction);
-    // debugLog(fieldInstances.join('|'));
-
-    for (final String fieldInstance in fieldInstances) {
-      if (fieldInstance.toString().toLowerCase().contains(filterText.toLowerCase())) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   Widget renderToggles() {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
