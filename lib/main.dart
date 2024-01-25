@@ -1,7 +1,4 @@
-import 'dart:async';
 import 'dart:io';
-import 'dart:math';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +13,6 @@ import 'package:money/views/view_cashflow/view_cashflow.dart';
 import 'package:money/views/view_loans/view_loans.dart';
 import 'package:money/views/view_rentals/view_rentals.dart';
 import 'package:money/widgets/keyboard_widget.dart';
-
 import 'package:money/appbar.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/helpers/misc_helpers.dart';
@@ -51,18 +47,11 @@ class _MyMoneyState extends State<MyMoney> {
     });
 
     settings.onChanged = () {
-      // Brute force refresh the app UI
+      // force refresh the app UI
       setState(() {
-        _isLoading = true;
+        settings = Settings();
+        // _isLoading = true;
       });
-      Timer(
-        const Duration(milliseconds: 1),
-        () {
-          setState(() {
-            _isLoading = false;
-          });
-        },
-      );
     };
   }
 
@@ -86,8 +75,7 @@ class _MyMoneyState extends State<MyMoney> {
                     'Increase text size',
                     () {
                       setState(() {
-                        settings.textScale = min(5, settings.textScale * 1.10);
-                        settings.save();
+                        Settings().fontScaleIncrease();
                       });
                     },
                     isMetaPressed: true,
@@ -96,9 +84,7 @@ class _MyMoneyState extends State<MyMoney> {
                     LogicalKeyboardKey.minus,
                     'Decrease text size',
                     () {
-                      settings.textScale = max(0.5, settings.textScale * 0.90);
-                      settings.save();
-                      settings.fireOnChanged();
+                      Settings().fontScaleDecrease();
                     },
                     isMetaPressed: true,
                   ),
@@ -106,9 +92,7 @@ class _MyMoneyState extends State<MyMoney> {
                     LogicalKeyboardKey('0'.codeUnitAt(0)),
                     'Normal text suze',
                     () {
-                      settings.textScale = 1;
-                      settings.save();
-                      settings.fireOnChanged();
+                      Settings().setFontScaleTo(1);
                     },
                     isMetaPressed: true,
                   ),

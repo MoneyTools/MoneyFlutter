@@ -27,8 +27,8 @@ class MyTableView<T> extends StatefulWidget {
 }
 
 class MyTableViewState<T> extends State<MyTableView<T>> {
-  final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
+  double rowHeight = 30;
 
   @override
   void initState() {
@@ -40,12 +40,15 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
 
   @override
   Widget build(final BuildContext context) {
+    final TextScaler textScaler = MediaQuery.textScalerOf(context);
+    rowHeight = textScaler.scale(widget.asColumnView ? 30 : 80);
+
     return ListView.builder(
         primary: false,
         scrollDirection: Axis.vertical,
         controller: scrollController,
         itemCount: widget.list.length,
-        itemExtent: widget.asColumnView ? itemHeight : 80,
+        itemExtent: rowHeight,
         itemBuilder: (final BuildContext context, final int index) {
           final MoneyObject<T> itemInstance = (widget.list[index] as MoneyObject<T>);
           return MyListItem(
@@ -138,14 +141,14 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
     // debugLog("${minMax[0]} > $index < ${minMax[1]}");
 
     if (!index.isBetween(minMax[0], minMax[1])) {
-      final double desiredNewPosition = itemHeight * index;
+      final double desiredNewPosition = rowHeight * index;
       scrollController.jumpTo(desiredNewPosition);
     }
   }
 
   int numberOfItemOnViewPort() {
     final double viewportHeight = scrollController.position.viewportDimension;
-    final int numberOfItemDisplayed = (viewportHeight / itemHeight).ceil();
+    final int numberOfItemDisplayed = (viewportHeight / rowHeight).ceil();
     return numberOfItemDisplayed;
   }
 

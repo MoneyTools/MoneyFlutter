@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/widgets/zoom.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final void Function() onFileOpen;
@@ -107,23 +108,15 @@ class _MyAppBarState extends State<MyAppBar> {
             );
             actionList.add(
               PopupMenuItem<int>(
-                value: Constants.commandTextScaleIncrease,
-                child: ThreePartLabel(
-                  icon: const Icon(Icons.text_increase, color: Colors.grey),
-                  text1: 'Increase text size',
-                  text2: '${((Settings().textScale * 1.10) * 100).toInt()}%',
-                  small: true,
-                ),
-              ),
-            );
-            actionList.add(
-              PopupMenuItem<int>(
-                value: Constants.commandTextScaleDecrease,
-                child: ThreePartLabel(
-                  icon: const Icon(Icons.text_decrease, color: Colors.grey),
-                  text1: 'Decrease text size',
-                  text2: '${((Settings().textScale * 0.9) * 100).toInt()}%',
-                  small: true,
+                value: Constants.commandTextZoom,
+                child: ZoomIncreaseDecrease(
+                  title: 'Zoom',
+                  onDecrease: () {
+                    Settings().fontScaleDecrease();
+                  },
+                  onIncrease: () {
+                    Settings().fontScaleIncrease();
+                  },
                 ),
               ),
             );
@@ -145,10 +138,6 @@ class _MyAppBarState extends State<MyAppBar> {
         Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
       case Constants.commandIncludeRentals:
         Settings().rentals = !Settings().rentals;
-      case Constants.commandTextScaleIncrease:
-        Settings().textScale = Settings().textScale * 1.10;
-      case Constants.commandTextScaleDecrease:
-        Settings().textScale = Settings().textScale * 0.9;
       default:
         Settings().colorSelected = value;
     }

@@ -92,6 +92,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   @override
   Widget build(final BuildContext context) {
     return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+      final bool useColumns = !isSmallWidth(constraints);
+
       return getViewExpandAndPadding(
         Column(
           children: <Widget>[
@@ -114,7 +116,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 list: list,
                 selectedItems: selectedItems,
                 fields: columns,
-                asColumnView: !isSmallWidth(constraints),
+                asColumnView: useColumns,
                 onTap: onRowTap,
                 // onDoubleTap: (final BuildContext context, final int index) {
                 //   if (widget.preference.showBottom) {
@@ -486,26 +488,4 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           ));
         });
   }
-}
-
-MainAxisAlignment getRowAlignmentBasedOnTextAlign(final TextAlign textAlign) {
-  switch (textAlign) {
-    case TextAlign.left:
-      return MainAxisAlignment.start;
-    case TextAlign.right:
-      return MainAxisAlignment.end;
-    case TextAlign.center:
-    default:
-      return MainAxisAlignment.center;
-  }
-}
-
-class ViewWidgetToDisplay {
-  final bool showBottom;
-  final bool columnAccount;
-
-  const ViewWidgetToDisplay({
-    this.showBottom = true,
-    this.columnAccount = true,
-  });
 }

@@ -14,12 +14,46 @@ class Settings {
   bool isSmallDevice = true;
   int screenIndex = 0;
   String? pathToDatabase;
+
   String? get pathToDatabaseFolder => p.dirname(Settings().pathToDatabase!);
   bool isDetailsPanelExpanded = false;
   bool includeClosedAccounts = false;
   bool rentals = false;
   bool useDarkMode = false;
+
+  //--------------------------------------------------------
+  // Font scaling
+
+  void fontScaleDecrease() {
+    fontScaleDelta(-0.10);
+  }
+
+  void fontScaleIncrease() {
+    fontScaleDelta(0.10);
+  }
+
+  void fontScaleMultiplyBy(final double factor) {
+    setFontScaleTo(textScale * factor);
+  }
+
+  void fontScaleDelta(final double addOrSubtract) {
+    setFontScaleTo(textScale + addOrSubtract);
+  }
+
+  bool setFontScaleTo(final double newScale) {
+    final int cleanValue = (newScale * 100).round();
+    if (isBetweenOrEqual(cleanValue, 40, 400)) {
+      textScale = cleanValue / 100.0;
+      save();
+      fireOnChanged();
+      return true;
+    }
+    return false;
+  }
+
   double textScale = 1.0;
+
+  //--------------------------------------------------------
   Map<String, MyJson> views = <String, MyJson>{};
 
   Function? onChanged;
