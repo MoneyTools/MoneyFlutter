@@ -6,6 +6,21 @@ enum TransactionStatus {
   voided,
 }
 
+String TransactionStatusToLetter(final TransactionStatus status) {
+  switch (status) {
+    case TransactionStatus.none:
+      return 'N';
+    case TransactionStatus.electronic:
+      return 'E';
+    case TransactionStatus.cleared:
+      return 'C';
+    case TransactionStatus.reconciled:
+      return 'R';
+    case TransactionStatus.voided:
+      return 'V';
+  }
+}
+
 enum TransactionFlags {
   none, // 0
   unaccepted, // 1

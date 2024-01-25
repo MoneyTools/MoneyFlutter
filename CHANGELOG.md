@@ -1,5 +1,6 @@
 ## [1.1.04] 2024-01-25
 
+- Add Status column to Transaction Table
 - Improve font scaling UX
 
 ## [1.1.03] 2024-01-23
