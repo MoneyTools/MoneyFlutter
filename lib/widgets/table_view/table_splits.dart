@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/splits/split.dart';
-
 import 'package:money/widgets/table_view/list_item_header.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
