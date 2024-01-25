@@ -58,7 +58,20 @@ class Transaction extends MoneyObject<Transaction> {
         sortByDate(a.dateTime.value, b.dateTime.value, ascending),
   );
 
-  // SQLite 3|Status|INT|0||0
+  /// Status N | E | C | R
+  /// SQLite 3|Status|INT|0||0
+  // TransactionStatus status = TransactionStatus.none;
+  Field<Transaction, TransactionStatus> status = Field<Transaction, TransactionStatus>(
+    importance: 1,
+    type: FieldType.text,
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.small,
+    defaultValue: TransactionStatus.none,
+    name: 'Status',
+    serializeName: 'Status',
+    valueFromInstance: (final Transaction instance) => TransactionStatusToLetter(instance.status.value),
+    valueForSerialization: (final Transaction instance) => instance.status.value.index,
+  );
 
   // Payee Id
   // SQLite 4|Payee|INT|0||0
@@ -143,7 +156,6 @@ class Transaction extends MoneyObject<Transaction> {
   );
 
   double salesTax = 0;
-  TransactionStatus status = TransactionStatus.none;
   String fitid;
 
   // derived property used for display
@@ -171,9 +183,10 @@ class Transaction extends MoneyObject<Transaction> {
   //TransactionViewFlags viewState; // ui transient state only, not persisted.
 
   Transaction({
-    this.status = TransactionStatus.none,
+    final TransactionStatus status = TransactionStatus.none,
     this.fitid = '',
   }) {
+    this.status.value = status;
     this.buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: '${Category.getName(categoryInstance)}\n${memo.value}',
@@ -183,11 +196,7 @@ class Transaction extends MoneyObject<Transaction> {
   }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
-    final Transaction t = Transaction(
-      // Status
-      status: TransactionStatus.values[json.getInt('Status')],
-      // Amount
-    );
+    final Transaction t = Transaction();
     t.id.value = json.getInt('Id');
     t.accountId.value = json.getInt('Account');
     t.accountInstance = Data().accounts.get(t.accountId.value);
@@ -198,6 +207,7 @@ class Transaction extends MoneyObject<Transaction> {
     t.payeeId.value = json.getInt('Payee');
     t.payeeInstance = Data().payees.get(t.payeeId.value);
     t.amount.value = json.getDouble('Amount');
+    t.status.value = TransactionStatus.values[json.getInt('Status')];
     t.memo.value = json.getString('Memo');
     t.balance.value = runningBalance;
 
