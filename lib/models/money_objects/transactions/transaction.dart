@@ -48,6 +48,7 @@ class Transaction extends MoneyObject<Transaction> {
     importance: 2,
     type: FieldType.text,
     align: TextAlign.center,
+    columnWidth: ColumnWidth.small,
     name: 'Date',
     serializeName: 'Date',
     defaultValue: DateTime.parse('1970-01-01'),

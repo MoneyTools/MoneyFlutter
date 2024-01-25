@@ -20,7 +20,7 @@ class Fields<T> {
         final dynamic value = fieldDefinition.valueFromInstance(objectInstance);
         cells.add(
           Expanded(
-            flex: fieldDefinition.flex,
+            flex: fieldDefinition.columnWidth.index,
             child: buildWidgetFromTypeAndValue(
               value,
               fieldDefinition.type,

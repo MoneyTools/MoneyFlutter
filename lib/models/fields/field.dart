@@ -4,12 +4,21 @@ import 'package:money/models/data_io/data.dart';
 
 dynamic defaultCallbackValue(final dynamic instance) => '';
 
+enum ColumnWidth {
+  hide, // 0
+  tiny, // 1
+  small, // 2
+  normal, // 3
+  large, // 4
+  largest, // 5
+}
+
 class Field<C, T> {
   late T value;
   String name;
   String serializeName;
   FieldType type;
-  int flex;
+  ColumnWidth columnWidth;
   TextAlign align;
   bool useAsColumn;
   bool useAsDetailPanels;
@@ -27,7 +36,7 @@ class Field<C, T> {
   Field({
     this.type = FieldType.text,
     this.align = TextAlign.left,
-    this.flex = 3,
+    this.columnWidth = ColumnWidth.normal,
     this.name = '',
     this.serializeName = '',
     required final T defaultValue,

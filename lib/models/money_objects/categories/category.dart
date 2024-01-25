@@ -78,6 +78,7 @@ class Category extends MoneyObject<Category> {
     importance: 5,
     serializeName: 'Color',
     type: FieldType.widget,
+    columnWidth: ColumnWidth.small,
     defaultValue: '',
     valueFromInstance: (final Category instance) => MyCircle(
       colorFill: getColorFromString(instance.color.value),

@@ -31,7 +31,7 @@ class MyListItemHeader<T> extends StatelessWidget {
             columnDefinition.name,
             TextAlign.center,
             // columns.definitions[i].align,
-            columnDefinition.flex,
+            columnDefinition.columnWidth.index,
             getSortIndicated(i),
             // Press
             () {
