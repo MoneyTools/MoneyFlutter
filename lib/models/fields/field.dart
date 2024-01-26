@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 
@@ -154,6 +155,23 @@ class FieldAmount<C> extends Field<C, double> {
         );
 }
 
+class FieldDate<C> extends Field<C, DateTime> {
+  FieldDate({
+    super.importance,
+    super.name,
+    super.serializeName,
+    super.valueFromInstance,
+    super.valueForSerialization,
+    super.useAsColumn,
+    super.useAsDetailPanels,
+    super.sort,
+  }) : super(
+          defaultValue: DateTime.parse('1970-01-01'),
+          align: TextAlign.center,
+          type: FieldType.date,
+        );
+}
+
 class FieldString<C> extends Field<C, String> {
   FieldString({
     super.importance,
@@ -164,10 +182,12 @@ class FieldString<C> extends Field<C, String> {
     super.useAsColumn = true,
     super.useAsDetailPanels = true,
   }) : super(
-          defaultValue: '',
-          align: TextAlign.left,
-          type: FieldType.text,
-        );
+            defaultValue: '',
+            align: TextAlign.left,
+            type: FieldType.text,
+            sort: (final C a, final C b, final bool ascending) {
+              return sortByString(valueFromInstance(a), valueFromInstance(b), ascending);
+            });
 }
 
 class DeclareNoSerialized<C, T> extends Field<C, T> {

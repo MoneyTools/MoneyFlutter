@@ -37,15 +37,14 @@ void importQFX(
         payee = Data().payees.findOrAddPayee(item.name);
       }
 
-      final Transaction t = Transaction(
-        fitid: item.fitid,
-      )
+      final Transaction t = Transaction()
         ..id.value = -1
         ..accountId.value = account.id.value
         ..dateTime.value = item.date
         ..payeeId.value = payee.id.value
         ..categoryId.value = getCategoryFromOfxType(item)
         ..amount.value = item.amount
+        ..fitid.value = item.fitid
         ..memo.value = item.memo;
 
       Data().transactions.add(t);

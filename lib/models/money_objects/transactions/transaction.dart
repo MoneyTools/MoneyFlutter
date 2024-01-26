@@ -5,7 +5,6 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
-import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/widgets/table_view/list_item_card.dart';
 
@@ -18,40 +17,36 @@ class Transaction extends MoneyObject<Transaction> {
   @override
   int get uniqueId => id.value;
 
-  // ID
-  // SQLite  0|Id|bigint|0||1
-  Field<Transaction, int> id = Field<Transaction, int>(
+  /// ID
+  /// SQLite  0|Id|bigint|0||1
+  FieldInt<Transaction> id = FieldInt<Transaction>(
     importance: 0,
     serializeName: 'Id',
-    defaultValue: -1,
     useAsColumn: false,
     useAsDetailPanels: false,
     valueForSerialization: (final Transaction instance) => instance.id.value,
   );
 
-  // Account
-  // SQLite  1|Account|INT|1||0
+  /// Account Id
+  /// SQLite  1|Account|INT|1||0
   Field<Transaction, int> accountId = Field<Transaction, int>(
     importance: 1,
+    type: FieldType.text,
     name: 'Account',
-    serializeName: 'AccountId',
+    serializeName: 'Account',
     defaultValue: -1,
-    valueFromInstance: (final Transaction instance) => Account.getName(instance.accountInstance),
+    // useAsColumn: false,
+    // useAsDetailPanels: false,
+    valueFromInstance: (final Transaction instance) => Data().accounts.getNameFromId(instance.accountId.value),
     valueForSerialization: (final Transaction instance) => instance.accountId.value,
-    sort: (final Transaction a, final Transaction b, final bool ascending) =>
-        sortByString(Account.getName(a.accountInstance), Account.getName(b.accountInstance), ascending),
   );
 
-  // Date
-  // SQLite 2|Date|datetime|1||0
-  Field<Transaction, DateTime> dateTime = Field<Transaction, DateTime>(
+  /// Date
+  /// SQLite 2|Date|datetime|1||0
+  FieldDate<Transaction> dateTime = FieldDate<Transaction>(
     importance: 2,
-    type: FieldType.text,
-    align: TextAlign.center,
-    columnWidth: ColumnWidth.small,
     name: 'Date',
     serializeName: 'Date',
-    defaultValue: DateTime.parse('1970-01-01'),
     valueFromInstance: (final Transaction instance) => instance.dateTimeAsText,
     valueForSerialization: (final Transaction instance) => instance.dateTime.value.toIso8601String(),
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
@@ -60,9 +55,8 @@ class Transaction extends MoneyObject<Transaction> {
 
   /// Status N | E | C | R
   /// SQLite 3|Status|INT|0||0
-  // TransactionStatus status = TransactionStatus.none;
   Field<Transaction, TransactionStatus> status = Field<Transaction, TransactionStatus>(
-    importance: 1,
+    importance: 20,
     type: FieldType.text,
     align: TextAlign.center,
     columnWidth: ColumnWidth.small,
@@ -73,63 +67,130 @@ class Transaction extends MoneyObject<Transaction> {
     valueForSerialization: (final Transaction instance) => instance.status.value.index,
   );
 
-  // Payee Id
-  // SQLite 4|Payee|INT|0||0
-  Field<Transaction, int> payeeId = Field<Transaction, int>(
-    importance: 1,
-    type: FieldType.text,
+  /// Payee Id
+  /// Payee Id
+  /// SQLite 4|Payee|INT|0||0
+  FieldInt<Transaction> payeeId = FieldInt<Transaction>(
+    importance: 4,
     serializeName: 'Payee',
-    defaultValue: -1,
-    valueFromInstance: (final Transaction instance) => Payee.getName(instance.payeeInstance),
+    useAsColumn: false,
+    useAsDetailPanels: false,
+    valueFromInstance: (final Transaction instance) => instance.payeeId.value,
     valueForSerialization: (final Transaction instance) => instance.payeeId.value,
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
         sortByString(Payee.getName(a.payeeInstance), Payee.getName(b.payeeInstance), ascending),
   );
 
-  // SQLite 5|OriginalPayee|nvarchar(255)|0||0
-  String originalPayee = ''; // before auto-aliasing, helps with future merging.
+  /// Payee Name
+  FieldString<Transaction> payeeName = FieldString<Transaction>(
+    importance: 4,
+    name: 'Payee',
+    valueFromInstance: (final Transaction instance) => Payee.getName(instance.payeeInstance),
+  );
 
-  // Category Id
-  // SQLite 6|Category|INT|0||0
+  /// OriginalPayee
+  /// before auto-aliasing, helps with future merging.
+  /// SQLite 5|OriginalPayee|nvarchar(255)|0||0
+  FieldString<Transaction> originalPayee = FieldString<Transaction>(
+    importance: 10,
+    name: 'Original Payee',
+    serializeName: 'OriginalPayee',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.originalPayee.value,
+    valueForSerialization: (final Transaction instance) => instance.originalPayee.value,
+  );
+
+  /// Category Id
+  /// SQLite 6|Category|INT|0||0
   Field<Transaction, int> categoryId = Field<Transaction, int>(
-    importance: 1,
+    importance: 10,
     type: FieldType.text,
     name: 'Category',
     serializeName: 'Category',
     defaultValue: -1,
-    valueFromInstance: (final Transaction instance) => Category.getName(instance.categoryInstance),
+    valueFromInstance: (final Transaction instance) => Data().categories.getNameFromId(instance.categoryId.value),
     valueForSerialization: (final Transaction instance) => instance.categoryId.value,
-    sort: (final Transaction a, final Transaction b, final bool ascending) =>
-        sortByString(Category.getName(a.categoryInstance), Category.getName(b.categoryInstance), ascending),
   );
 
-  // Memo
-  // 7|Memo|nvarchar(255)|0||0
-  Field<Transaction, String> memo = Field<Transaction, String>(
+  /// Memo
+  /// 7|Memo|nvarchar(255)|0||0
+  FieldString<Transaction> memo = FieldString<Transaction>(
     importance: 80,
-    type: FieldType.text,
     name: 'Memo',
     serializeName: 'Memo',
     useAsColumn: false,
-    defaultValue: '',
     valueFromInstance: (final Transaction instance) => instance.memo.value,
     valueForSerialization: (final Transaction instance) => instance.memo.value,
   );
 
-  // 8|Number|nchar(10)|0||0
+  /// Number
+  /// 8|Number|nchar(10)|0||0
+  FieldInt<Transaction> number = FieldInt<Transaction>(
+    importance: 10,
+    name: 'Number',
+    serializeName: 'Number',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.number.value,
+    valueForSerialization: (final Transaction instance) => instance.number.value,
+  );
 
-  // 9|ReconciledDate|datetime|0||0
+  /// Reconciled Date
+  /// 9|ReconciledDate|datetime|0||0
+  FieldDate<Transaction> reconciledDate = FieldDate<Transaction>(
+    importance: 10,
+    name: 'ReconciledDate',
+    serializeName: 'ReconciledDate',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.reconciledDate.value,
+    valueForSerialization: (final Transaction instance) => instance.reconciledDate.value,
+  );
 
-  // 10|BudgetBalanceDate|datetime|0||0
+  /// Budget Balance Date
+  /// 10|BudgetBalanceDate|datetime|0||0
+  FieldDate<Transaction> budgetBalanceDate = FieldDate<Transaction>(
+    importance: 10,
+    name: 'ReconciledDate',
+    serializeName: 'ReconciledDate',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.budgetBalanceDate.value,
+    valueForSerialization: (final Transaction instance) => instance.budgetBalanceDate.value,
+  );
 
-  // 11|Transfer|bigint|0||0
+  /// Transfer
+  /// 11|Transfer|bigint|0||0
+  FieldInt<Transaction> transfer = FieldInt<Transaction>(
+    importance: 10,
+    name: 'Transfer',
+    serializeName: 'Transfer',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.transfer.value,
+    valueForSerialization: (final Transaction instance) => instance.transfer.value,
+  );
 
-  // 12|FITID|nchar(40)|0||0
+  /// FITID
+  /// 12|FITID|nchar(40)|0||0
+  FieldString<Transaction> fitid = FieldString<Transaction>(
+    importance: 20,
+    name: 'FITID',
+    serializeName: 'FITID',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.fitid.value,
+    valueForSerialization: (final Transaction instance) => instance.fitid.value,
+  );
 
-  // 13|Flags|INT|1||0
+  /// Flags
+  /// 13|Flags|INT|1||0
+  FieldInt<Transaction> flags = FieldInt<Transaction>(
+    importance: 20,
+    name: 'Flags',
+    serializeName: 'Flags',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.flags.value,
+    valueForSerialization: (final Transaction instance) => instance.flags.value,
+  );
 
-  // Amount
-  // 14|Amount|money|1||0
+  /// Amount
+  /// 14|Amount|money|1||0
   FieldAmount<Transaction> amount = FieldAmount<Transaction>(
     importance: 98,
     name: 'Amount',
@@ -140,11 +201,46 @@ class Transaction extends MoneyObject<Transaction> {
         sortByValue(a.amount.value, b.amount.value, ascending),
   );
 
-  // 15|SalesTax|money|0||0
-  // 16|TransferSplit|INT|0||0
-  // 17|MergeDate|datetime|0||0
+  /// Sales Tax
+  /// 15|SalesTax|money|0||0
+  FieldAmount<Transaction> salesTax = FieldAmount<Transaction>(
+    importance: 98,
+    name: 'Sales Tax',
+    serializeName: 'SalesTax',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.salesTax.value,
+    valueForSerialization: (final Transaction instance) => instance.salesTax.value,
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByValue(a.salesTax.value, b.salesTax.value, ascending),
+  );
 
-  // Balance
+  /// Transfer Split
+  /// 16|TransferSplit|INT|0||0
+  FieldInt<Transaction> transferSplit = FieldInt<Transaction>(
+    importance: 10,
+    name: 'TransferSplit',
+    serializeName: 'TransferSplit',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.transferSplit.value,
+    valueForSerialization: (final Transaction instance) => instance.transferSplit.value,
+  );
+
+  /// MergeDate
+  /// 17|MergeDate|datetime|0||0
+  FieldDate<Transaction> mergeDate = FieldDate<Transaction>(
+    importance: 10,
+    name: 'Merge Date',
+    serializeName: 'Merge Date',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) => instance.mergeDate.value,
+    valueForSerialization: (final Transaction instance) => instance.mergeDate.value,
+  );
+
+  //------------------------------------------------------------------------
+  // Not serialized
+  // derived property used for display
+
+  /// Balance
   FieldAmount<Transaction> balance = FieldAmount<Transaction>(
     importance: 99,
     name: 'Balance',
@@ -155,41 +251,17 @@ class Transaction extends MoneyObject<Transaction> {
         sortByValue(a.balance.value, b.balance.value, ascending),
   );
 
-  double salesTax = 0;
-  String fitid;
-
-  // derived property used for display
   Account? accountInstance;
   late final String dateTimeAsText;
   Payee? payeeInstance;
-  Category? categoryInstance;
-
-  // String number; // requires value.Length < 10
-  // // Investment investment;
-  // Transfer transfer;
-  // double runningUnits;
-  // double runningBalance;
-  // String routingPath;
-  // TransactionFlags flags;
-  // DateTime? reconciledDate;
-  //
-  // //Splits splits;
-  // String pendingTransfer;
-  // DateTime? budgetBalanceDate;
-  //
-  // //readonly Transaction related;
-  // //readonly Split relatedSplit;
-  // DateTime? mergeDate;
-  //TransactionViewFlags viewState; // ui transient state only, not persisted.
 
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
-    this.fitid = '',
   }) {
     this.status.value = status;
     this.buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
-          leftBottomAsString: '${Category.getName(categoryInstance)}\n${memo.value}',
+          leftBottomAsString: '${Data().categories.getNameFromId(this.categoryId.value)}\n${memo.value}',
           rightTopAsString: getCurrencyText(amount.value),
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
@@ -197,18 +269,20 @@ class Transaction extends MoneyObject<Transaction> {
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();
-    t.id.value = json.getInt('Id');
-    t.accountId.value = json.getInt('Account');
-    t.accountInstance = Data().accounts.get(t.accountId.value);
-    t.dateTime.value = json.getDate('Date');
-    t.dateTimeAsText = getDateAsText(t.dateTime.value);
+    t.id.value = json.getInt('Id'); // 0
+    t.accountId.value = json.getInt('Account'); // 1
+    t.accountInstance = Data().accounts.get(t.accountId.value); // 2
+    t.dateTime.value = json.getDate('Date'); // 3
+    t.dateTimeAsText = getDateAsText(t.dateTime.value); // 5
+    t.originalPayee.value = json.getString('OriginalPayee'); // 6
     t.categoryId.value = json.getInt('Category');
-    t.categoryInstance = Data().categories.get(t.categoryId.value);
     t.payeeId.value = json.getInt('Payee');
     t.payeeInstance = Data().payees.get(t.payeeId.value);
     t.amount.value = json.getDouble('Amount');
     t.status.value = TransactionStatus.values[json.getInt('Status')];
     t.memo.value = json.getString('Memo');
+
+    // not serialized
     t.balance.value = runningBalance;
 
     return t;

@@ -1,3 +1,7 @@
+## [1.1.05] 2024-01-26
+
+- All the fields for Transaction
+
 ## [1.1.04] 2024-01-25
 
 - Add Status column to Transaction Table
