@@ -105,7 +105,7 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
 
   @override
   Widget build(final BuildContext context) {
-    return getViewExpandAndPadding(
+    return buildViewContent(
       Column(
         children: <Widget>[
           ViewHeader(

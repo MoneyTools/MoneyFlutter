@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
@@ -7,7 +6,6 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/widgets/table_view/list_item_header.dart';
 import 'package:money/widgets/widgets.dart';
-
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/details_panel.dart';
@@ -23,30 +21,26 @@ class ViewWidget<T> extends StatefulWidget {
 }
 
 class ViewWidgetState<T> extends State<ViewWidget<T>> {
-  Fields<T> columns = Fields<T>(definitions: <Field<T, dynamic>>[]);
-
-  int lastSelectedItemIndex = 0;
-  ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
-
-  final double itemHeight = 30;
-  final ScrollController scrollController = ScrollController();
-
-  List<T> list = <T>[];
-  List<String> listOfUniqueInstances = <String>[];
-  String filterText = '';
-
-  final NumberFormat formatCurrency = NumberFormat('#,##0.00', 'en_US');
-
-  int selectedBottomTabId = 0;
-
-  int sortByColumn = 0;
-  bool sortAscending = true;
-  bool isChecked = true;
-  Object? subViewSelectedItem;
-
   ViewWidgetState() {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
+
+  // list management
+  List<T> list = <T>[];
+  Fields<T> columns = Fields<T>(definitions: <Field<T, dynamic>>[]);
+  ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
+  List<String> listOfUniqueInstances = <String>[];
+  final double itemHeight = 30;
+  final ScrollController scrollController = ScrollController();
+  int lastSelectedItemIndex = 0;
+  String filterText = '';
+  int sortByColumn = 0;
+  bool sortAscending = true;
+  bool isChecked = true;
+
+  // detail panel
+  Object? subViewSelectedItem;
+  int selectedBottomTabId = 0;
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<T> getFieldsForTable() {
@@ -90,7 +84,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
       final bool useColumns = !isSmallWidth(constraints);
 
-      return getViewExpandAndPadding(
+      return buildViewContent(
         Column(
           children: <Widget>[
             // Optional upper Title area
@@ -145,6 +139,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         ),
       );
     });
+  }
+
+  Widget buildViewContent(final Widget child) {
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: child,
+    );
   }
 
   Widget buildHeader([final Widget? child]) {
@@ -244,14 +246,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
 
     return false;
-  }
-
-  Widget getViewExpandAndPadding(final Widget child) {
-    return Container(
-      color: Theme.of(context).colorScheme.background,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      child: child,
-    );
   }
 
   void updateBottomContent(final int tab) {
