@@ -1,8 +1,10 @@
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/widgets/table_view/list_item_card.dart';
 
 class RentBuilding extends MoneyObject<RentBuilding> {
   @override
@@ -127,7 +129,13 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     16|CategoryForMaintenance|INT|0||0
     17|CategoryForManagement|INT|0||0
    */
-  RentBuilding();
+  RentBuilding() {
+    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: name.value,
+          leftBottomAsString: address.value,
+          rightTopAsString: getCurrencyText(profit.value),
+        );
+  }
 
   factory RentBuilding.fromSqlite(final MyJson row) {
     final RentBuilding instance = RentBuilding();

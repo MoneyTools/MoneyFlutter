@@ -22,5 +22,5 @@ class MoneyObject<C> {
   /// ------------+ Right
   /// SubTitle    |
   ///
-  Widget Function()? buildListWidgetForSmallScreen;
+  Widget Function()? buildListWidgetForSmallScreen = () => Text('Small screen content goes here');
 }

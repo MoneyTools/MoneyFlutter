@@ -15,13 +15,31 @@ class MyListItemAsCard extends StatelessWidget {
   /// Constructor
   const MyListItemAsCard({
     super.key,
+    // Left
+    //       Top
+    //            String
     this.leftTopAsString,
-    this.leftBottomAsString,
-    this.rightTopAsString,
-    this.rightBottomAsString,
+    //            Widget
     this.leftTopAsWidget,
+
+    //       Bottom
+    //            String
+    this.leftBottomAsString,
+    //            Widget
     this.leftBottomAsWidget,
+
+    // Right
+    //       Top
+    //            String
+    this.rightTopAsString,
+    //            Widget
     this.rightTopAsWidget,
+
+    //       Bottom
+    //            String
+    this.rightBottomAsString,
+    //       Bottom
+    //            Widget
     this.rightBottomAsWidget,
   });
 

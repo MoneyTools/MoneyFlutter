@@ -1,4 +1,6 @@
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/widgets/table_view/list_item_card.dart';
 
 /*
   SQLite table definition
@@ -47,7 +49,13 @@ class Payee extends MoneyObject<Payee> {
     valueForSerialization: (final Payee instance) => instance.balance.value,
   );
 
-  Payee();
+  Payee() {
+    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: name.value,
+          rightTopAsString: getCurrencyText(balance.value),
+          rightBottomAsString: getNumberAsShorthandText(count.value),
+        );
+  }
 
   static String getName(final Payee? payee) {
     return payee == null ? '' : payee.name.value;

@@ -1,7 +1,9 @@
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/widgets/table_view/list_item_card.dart';
 
 class LoanPayment extends MoneyObject<LoanPayment> {
   @override
@@ -17,7 +19,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
   /// 1|AccountId|INT|1||0
   Field<LoanPayment, int> accountId = Field<LoanPayment, int>(
     importance: 1,
-    name: 'AccountId',
+    name: 'Account',
     serializeName: 'AccountId',
     defaultValue: -1,
     valueFromInstance: (final LoanPayment instance) => Account.getName(instance.accountInstance),
@@ -83,6 +85,12 @@ class LoanPayment extends MoneyObject<LoanPayment> {
     this.date.value = date;
     this.principal.value = principal;
     this.interest.value = interest;
+
+    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: Account.getName(accountInstance),
+          rightTopAsString: getCurrencyText(principal),
+          rightBottomAsString: getCurrencyText(interest),
+        );
   }
 
   /// Constructor from a SQLite row
