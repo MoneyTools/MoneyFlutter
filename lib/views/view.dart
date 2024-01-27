@@ -94,7 +94,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         Column(
           children: <Widget>[
             // Optional upper Title area
-            getTitle(),
+            buildHeader(),
 
             if (!isSmallWidth(constraints))
               MyListItemHeader<T>(
@@ -145,6 +145,16 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         ),
       );
     });
+  }
+
+  Widget buildHeader([final Widget? child]) {
+    return ViewHeader(
+      title: getClassNamePlural(),
+      count: numValueOrDefault(list.length),
+      description: getDescription(),
+      onFilterChanged: onFilterTextChanged,
+      child: child,
+    );
   }
 
   String getClassNamePlural() {
@@ -206,16 +216,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         }
       }
     }
-  }
-
-  Widget getTitle([final Widget? child]) {
-    return ViewHeader(
-      title: getClassNamePlural(),
-      count: numValueOrDefault(list.length),
-      description: getDescription(),
-      onFilterChanged: onFilterTextChanged,
-      child: child,
-    );
   }
 
   void onDelete(final BuildContext context, final int index) {

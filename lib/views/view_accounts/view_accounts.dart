@@ -68,8 +68,8 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  Widget getTitle([final Widget? child]) {
-    return super.getTitle(renderToggles());
+  Widget buildHeader([final Widget? child]) {
+    return super.buildHeader(renderToggles());
   }
 
   @override
