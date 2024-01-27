@@ -55,6 +55,19 @@ class Fields<T> {
     return strings;
   }
 
+  bool columnValueContainString(final T objectInstance, final String lowerCaseTextToFind) {
+    for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
+      final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
+      if (fieldDefinition.useAsColumn == true) {
+        final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
+        if (fieldDefinition.getString(rawValue).toLowerCase().contains(lowerCaseTextToFind)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   Widget getBestWidgetForFieldDefinition(final int columnIndex, final T objectInstance) {
     final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
 

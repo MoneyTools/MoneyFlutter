@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
@@ -33,7 +35,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   final double itemHeight = 30;
   final ScrollController scrollController = ScrollController();
   int lastSelectedItemIndex = 0;
-  String filterText = '';
   int sortByColumn = 0;
   bool sortAscending = true;
   bool isChecked = true;
@@ -41,6 +42,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   // detail panel
   Object? subViewSelectedItem;
   int selectedBottomTabId = 0;
+
+  // header
+  String filterText = '';
+  Timer? _deadlineTimer;
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<T> getFieldsForTable() {
@@ -225,9 +230,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   void onFilterTextChanged(final String text) {
-    setState(() {
-      filterText = text;
-      list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();
+    _deadlineTimer?.cancel();
+    _deadlineTimer = Timer(Duration(milliseconds: 500), () {
+      setState(() {
+        filterText = text.toLowerCase();
+        list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();
+      });
+      _deadlineTimer = null;
     });
   }
 
@@ -236,16 +245,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       return true;
     }
 
-    final List<String> fieldInstances = getFieldsForTable().getListOfFieldValueAsString(instance);
-    // debugLog(fieldInstances.join('|'));
-
-    for (final String fieldInstance in fieldInstances) {
-      if (fieldInstance.toString().toLowerCase().contains(filterText.toLowerCase())) {
-        return true;
-      }
-    }
-
-    return false;
+    return getFieldsForTable().columnValueContainString(instance, filterText);
   }
 
   void updateBottomContent(final int tab) {
