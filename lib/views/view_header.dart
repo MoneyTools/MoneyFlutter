@@ -80,9 +80,18 @@ class ViewHeader extends StatelessWidget {
 
   Widget _buildSmall(final BuildContext context) {
     return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-        child: Column(
-          children: <Widget>[ThreePartLabel(text1: title, text2: getIntAsText(count.toInt()))],
-        ));
+      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: ThreePartLabel(text1: title, text2: getIntAsText(count.toInt())),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
