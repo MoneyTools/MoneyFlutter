@@ -1,3 +1,4 @@
+import 'package:money/helpers/string_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -15,7 +16,13 @@ class Settings {
   int screenIndex = 0;
   String? pathToDatabase;
 
-  String? get pathToDatabaseFolder => p.dirname(Settings().pathToDatabase!);
+  Future<String?> get pathToDatabaseFolder async {
+    if (Settings().pathToDatabase! == Constants.demoData) {
+      return getDocumentDirectory();
+    }
+    return p.dirname(Settings().pathToDatabase!);
+  }
+
   bool isDetailsPanelExpanded = false;
   bool includeClosedAccounts = false;
   bool rentals = false;

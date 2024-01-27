@@ -33,7 +33,6 @@ class RentUnit extends MoneyObject<RentUnit> {
     valueForSerialization: (final RentUnit instance) => instance.building.value,
   );
 
-
   /// 2
   /// 2|Name|nvarchar(255)|1||0
   FieldString<RentUnit> name = FieldString<RentUnit>(
@@ -60,7 +59,6 @@ class RentUnit extends MoneyObject<RentUnit> {
     serializeName: 'Note',
     valueForSerialization: (final RentUnit instance) => instance.note.value,
   );
-
 
   // not persisted field
   int count = 0;

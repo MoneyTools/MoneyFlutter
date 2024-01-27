@@ -274,11 +274,15 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void handleShowFileLocation() {
-    openFolder(Settings().pathToDatabaseFolder!);
+    Settings().pathToDatabaseFolder.then((final String? director) {
+      openFolder(director!);
+    });
   }
 
   void handleOnSave() {
-    data.save(Settings().pathToDatabaseFolder!);
+    Settings().pathToDatabaseFolder.then((final String? director) {
+      data.save(director!);
+    });
   }
 
   Widget showLoading() {

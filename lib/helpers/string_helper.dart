@@ -1,5 +1,7 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 String getIntAsText(final int value) {
   return NumberFormat.decimalPattern().format(value);
@@ -79,4 +81,9 @@ String getNormalizedValue(final String? s) {
   }
 
   return s.replaceAll('\r\n', ' ').replaceAll('\r', ' ').replaceAll('\n', ' ').trim();
+}
+
+Future<String> getDocumentDirectory() async {
+  final Directory directory = await getApplicationDocumentsDirectory();
+  return directory.path;
 }
