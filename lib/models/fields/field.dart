@@ -3,17 +3,6 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 
-dynamic defaultCallbackValue(final dynamic instance) => '';
-
-enum ColumnWidth {
-  hide, // 0
-  tiny, // 1
-  small, // 2
-  normal, // 3
-  large, // 4
-  largest, // 5
-}
-
 class Field<C, T> {
   late T value;
   String name;
@@ -347,4 +336,15 @@ Widget buildWidgetFromTypeAndValue(
     default:
       return buildFieldWidgetForText(text: value.toString(), align: align);
   }
+}
+
+dynamic defaultCallbackValue(final dynamic instance) => '';
+
+enum ColumnWidth {
+  hide, // 0
+  tiny, // 1
+  small, // 2
+  normal, // 3
+  large, // 4
+  largest, // 5
 }

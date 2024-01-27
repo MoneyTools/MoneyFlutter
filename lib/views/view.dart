@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
@@ -29,22 +28,19 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   // list management
   List<T> list = <T>[];
-  Fields<T> columns = Fields<T>(definitions: <Field<T, dynamic>>[]);
   ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
+  Fields<T> _fieldToDisplay = Fields<T>(definitions: <Field<T, dynamic>>[]);
   List<String> listOfUniqueInstances = <String>[];
-  final double itemHeight = 30;
-  final ScrollController scrollController = ScrollController();
-  int lastSelectedItemIndex = 0;
-  int sortByColumn = 0;
-  bool sortAscending = true;
-  bool isChecked = true;
+  int _lastSelectedItemIndex = 0;
+  int _sortByFieldIndex = 0;
+  bool _sortAscending = true;
 
   // detail panel
   Object? subViewSelectedItem;
   int selectedBottomTabId = 0;
 
   // header
-  String filterText = '';
+  String _filterText = '';
   Timer? _deadlineTimer;
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
@@ -62,13 +58,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   @override
   void initState() {
     super.initState();
-    columns = getFieldsForTable();
+    _fieldToDisplay = getFieldsForTable();
 
     final MyJson? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
-      sortByColumn = viewSetting.getInt(prefSortBy, 0);
-      sortAscending = viewSetting.getBool(prefSortAscending, true);
-      lastSelectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
+      _sortByFieldIndex = viewSetting.getInt(prefSortBy, 0);
+      _sortAscending = viewSetting.getBool(prefSortAscending, true);
+      _lastSelectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
     }
 
     list = getList();
@@ -76,12 +72,12 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     onSort();
 
     /// restore selection of items
-    if (lastSelectedItemIndex >= 0 && lastSelectedItemIndex < list.length) {
+    if (_lastSelectedItemIndex >= 0 && _lastSelectedItemIndex < list.length) {
       // index is valid
     } else {
-      lastSelectedItemIndex = 0;
+      _lastSelectedItemIndex = 0;
     }
-    selectedItems.value = <int>[lastSelectedItemIndex];
+    selectedItems.value = <int>[_lastSelectedItemIndex];
   }
 
   @override
@@ -97,9 +93,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
             if (!isSmallWidth(constraints))
               MyListItemHeader<T>(
-                columns: columns,
-                sortByColumn: sortByColumn,
-                sortAscending: sortAscending,
+                columns: _fieldToDisplay,
+                sortByColumn: _sortByFieldIndex,
+                sortAscending: _sortAscending,
                 onTap: changeListSortOrder,
                 onLongPress: onCustomizeColumn,
               ),
@@ -110,7 +106,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               child: MyTableView<T>(
                 list: list,
                 selectedItems: selectedItems,
-                fields: columns,
+                fields: _fieldToDisplay,
                 asColumnView: useColumns,
                 onTap: onRowTap,
                 // onDoubleTap: (final BuildContext context, final int index) {
@@ -181,9 +177,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   void onSort() {
-    if (columns.definitions.isNotEmpty) {
-      if (isBetween(sortByColumn, -1, columns.definitions.length)) {
-        final Field<T, dynamic> fieldDefinition = columns.definitions[sortByColumn];
+    if (_fieldToDisplay.definitions.isNotEmpty) {
+      if (isBetween(_sortByFieldIndex, -1, _fieldToDisplay.definitions.length)) {
+        final Field<T, dynamic> fieldDefinition = _fieldToDisplay.definitions[_sortByFieldIndex];
         if (fieldDefinition.sort == null) {
           list.sort((final T a, final T b) {
             switch (fieldDefinition.type) {
@@ -192,33 +188,33 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 return sortByValue(
                   fieldDefinition.valueFromInstance(a) as num,
                   fieldDefinition.valueFromInstance(b) as num,
-                  sortAscending,
+                  _sortAscending,
                 );
               case FieldType.amount:
               case FieldType.amountShorthand:
                 return sortByValue(
                   fieldDefinition.valueFromInstance(a) as double,
                   fieldDefinition.valueFromInstance(b) as double,
-                  sortAscending,
+                  _sortAscending,
                 );
               case FieldType.date:
                 return sortByDate(
                   fieldDefinition.valueFromInstance(a) as DateTime,
                   fieldDefinition.valueFromInstance(b) as DateTime,
-                  sortAscending,
+                  _sortAscending,
                 );
               case FieldType.text:
               default:
                 return sortByString(
                   fieldDefinition.valueFromInstance(a).toString(),
                   fieldDefinition.valueFromInstance(b).toString(),
-                  sortAscending,
+                  _sortAscending,
                 );
             }
           });
         } else {
           list.sort((final T a, final T b) {
-            return fieldDefinition.sort!(a, b, sortAscending);
+            return fieldDefinition.sort!(a, b, _sortAscending);
           });
         }
       }
@@ -233,7 +229,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     _deadlineTimer?.cancel();
     _deadlineTimer = Timer(Duration(milliseconds: 500), () {
       setState(() {
-        filterText = text.toLowerCase();
+        _filterText = text.toLowerCase();
         list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();
       });
       _deadlineTimer = null;
@@ -241,11 +237,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   bool isMatchingFilterText(final T instance) {
-    if (filterText.isEmpty) {
+    if (_filterText.isEmpty) {
       return true;
     }
 
-    return getFieldsForTable().columnValueContainString(instance, filterText);
+    return getFieldsForTable().columnValueContainString(instance, _filterText);
   }
 
   void updateBottomContent(final int tab) {
@@ -354,11 +350,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   void changeListSortOrder(final int columnNumber) {
     setState(() {
-      if (columnNumber == sortByColumn) {
+      if (columnNumber == _sortByFieldIndex) {
         // toggle order
-        sortAscending = !sortAscending;
+        _sortAscending = !_sortAscending;
       } else {
-        sortByColumn = columnNumber;
+        _sortByFieldIndex = columnNumber;
       }
 
       // Persist users choice
@@ -370,8 +366,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void saveLastUserActionOnThisView() {
     // Persist users choice
     Settings().views[getClassNameSingular()] = <String, dynamic>{
-      prefSortBy: sortByColumn,
-      prefSortAscending: sortAscending,
+      prefSortBy: _sortByFieldIndex,
+      prefSortAscending: _sortAscending,
       prefSelectedListItemIndex: selectedItems.value.firstOrNull,
     };
 
@@ -379,8 +375,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   SortIndicator getSortIndicated(final int columnNumber) {
-    if (columnNumber == sortByColumn) {
-      return sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
+    if (columnNumber == _sortByFieldIndex) {
+      return _sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
     }
     return SortIndicator.none;
   }

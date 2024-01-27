@@ -32,8 +32,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   void initState() {
     super.initState();
 
-    super.sortAscending = false;
-
     pivots.add(ThreePartLabel(
         text1: 'Incomes',
         small: true,

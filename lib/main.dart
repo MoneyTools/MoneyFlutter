@@ -321,7 +321,10 @@ class _MyMoneyState extends State<MyMoney> {
     );
   }
 
-  Widget myScaffold({required final Widget body, final Widget? bottomNavigationBar}) {
+  Widget myScaffold({
+    required final Widget body,
+    final Widget? bottomNavigationBar,
+  }) {
     return Scaffold(
       appBar: MyAppBar(
         onFileOpen: handleFileOpen,
