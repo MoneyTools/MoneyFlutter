@@ -103,10 +103,6 @@ class _TableTransactionsState extends State<TableTransactions> {
 
 typedef FilterFunction = bool Function(Transaction);
 
-bool defaultFilter(final Transaction element) {
-  return true; // filter nothing
-}
-
 List<Transaction> getFilteredTransactions(final FilterFunction filter) {
   final List<Transaction> list =
       Data().transactions.getList().where((final Transaction transaction) => filter(transaction)).toList();

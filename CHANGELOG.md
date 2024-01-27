@@ -1,3 +1,7 @@
+## [1.2.00] 2024-01-27
+
+- Text filter on all table views
+
 ## [1.1.05] 2024-01-26
 
 - All the fields for Transaction

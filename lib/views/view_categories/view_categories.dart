@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/views/view_header.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
@@ -86,13 +84,8 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   }
 
   @override
-  Widget getTitle() {
-    return ViewHeader(
-      title: getClassNamePlural(),
-      count: numValueOrDefault(list.length),
-      description: getDescription(),
-      child: renderToggles(),
-    );
+  Widget getTitle([final Widget? child]) {
+    return super.getTitle(renderToggles());
   }
 
   @override
@@ -101,7 +94,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
     return Data()
         .categories
         .getList()
-        .where((final Category x) => filterType == null || x.type.value == filterType)
+        .where((final Category x) => (filterType == null || x.type.value == filterType) && isMatchingFilterText(x))
         .toList();
   }
 

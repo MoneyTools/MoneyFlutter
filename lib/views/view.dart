@@ -6,7 +6,6 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/widgets/table_view/list_item_header.dart';
-import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/widgets.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
@@ -15,11 +14,8 @@ import 'package:money/widgets/details_panel.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
 class ViewWidget<T> extends StatefulWidget {
-  final FilterFunction filter;
-
   const ViewWidget({
     super.key,
-    this.filter = defaultFilter,
   });
 
   @override
@@ -212,11 +208,13 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  Widget getTitle() {
+  Widget getTitle([final Widget? child]) {
     return ViewHeader(
       title: getClassNamePlural(),
       count: numValueOrDefault(list.length),
       description: getDescription(),
+      onFilterChanged: onFilterTextChanged,
+      child: child,
     );
   }
 
@@ -227,8 +225,25 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void onFilterTextChanged(final String text) {
     setState(() {
       filterText = text;
-      list = getList();
+      list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();
     });
+  }
+
+  bool isMatchingFilterText(final T instance) {
+    if (filterText.isEmpty) {
+      return true;
+    }
+
+    final List<String> fieldInstances = getFieldsForTable().getListOfFieldValueAsString(instance);
+    // debugLog(fieldInstances.join('|'));
+
+    for (final String fieldInstance in fieldInstances) {
+      if (fieldInstance.toString().toLowerCase().contains(filterText.toLowerCase())) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   Widget getViewExpandAndPadding(final Widget child) {

@@ -7,10 +7,7 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/table_view/table_splits.dart';
 import 'package:money/widgets/three_part_label.dart';
-
-import 'package:money/views/view_header.dart';
 import 'package:money/widgets/chart.dart';
-
 import 'package:money/views/view.dart';
 
 class ViewTransactions extends ViewWidget<Transaction> {
@@ -18,7 +15,6 @@ class ViewTransactions extends ViewWidget<Transaction> {
 
   const ViewTransactions({
     super.key,
-    super.filter,
     this.startingBalance = 0.00,
   });
 
@@ -70,19 +66,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  Widget getTitle() {
-    return ViewHeader(
-      title: getClassNamePlural(),
-      count: numValueOrDefault(list.length),
-      description: getDescription(),
-      onFilterChanged: (final String text) {
-        onFilterTextChanged(text);
-      },
-      child: renderToggles(),
-    );
-  }
-
-  @override
   void onDelete(final BuildContext context, final int index) {
     final List<String> itemToDelete = getFieldsForTable().getListOfFieldValueAsString(list[index]);
 
@@ -107,7 +90,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         .transactions
         .getList()
         .where((final Transaction transaction) =>
-            isMatchingIncomeExpense(transaction) && widget.filter(transaction) && isMatchingFilterText(transaction))
+            isMatchingIncomeExpense(transaction) && isMatchingFilterText(transaction))
         .toList();
 
     if (!balanceDone) {
@@ -138,23 +121,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     if (_selectedPivot[0]) {
       return transaction.amount.value > 0;
     }
-    return false;
-  }
-
-  bool isMatchingFilterText(final Transaction transaction) {
-    if (filterText.isEmpty) {
-      return true;
-    }
-
-    final List<String> fieldInstances = getFieldsForTable().getListOfFieldValueAsString(transaction);
-    // debugLog(fieldInstances.join('|'));
-
-    for (final String fieldInstance in fieldInstances) {
-      if (fieldInstance.toString().toLowerCase().contains(filterText.toLowerCase())) {
-        return true;
-      }
-    }
-
     return false;
   }
 

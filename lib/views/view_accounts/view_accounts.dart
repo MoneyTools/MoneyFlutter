@@ -6,7 +6,6 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/three_part_label.dart';
-import 'package:money/views/view_header.dart';
 import 'package:money/widgets/table_view/table_transactions.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
@@ -69,21 +68,20 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  Widget getTitle() {
-    return ViewHeader(
-      title: getClassNamePlural(),
-      count: numValueOrDefault(list.length),
-      description: getDescription(),
-      child: renderToggles(),
-    );
+  Widget getTitle([final Widget? child]) {
+    return super.getTitle(renderToggles());
   }
 
   @override
   List<Account> getList() {
-    return Data().accounts.activeAccount(
+    return Data()
+        .accounts
+        .activeAccount(
           getSelectedAccountType(),
           isActive: Settings().includeClosedAccounts ? null : true,
-        );
+        )
+        .where((final Account instance) => isMatchingFilterText(instance))
+        .toList();
   }
 
   @override
