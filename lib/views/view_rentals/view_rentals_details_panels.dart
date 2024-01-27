@@ -60,7 +60,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   }
 
   bool isMatchingCategories(final num categoryIdToMatch, final RentBuilding rental) {
-    Data().categories.getTreeIds(rental.categoryForIncome);
+    Data().categories.getTreeIds(rental.categoryForIncome.value);
 
     return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||
         rental.categoryForManagementTreeIds.contains(categoryIdToMatch) ||

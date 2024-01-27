@@ -6,9 +6,9 @@ class RentUnits extends MoneyObjects<RentUnit> {
   String getNameFromId(final int id) {
     final RentUnit? found = get(id);
     if (found == null) {
-      return id.toString();
+      return '';
     }
-    return found.name;
+    return found.name.value;
   }
 
   @override

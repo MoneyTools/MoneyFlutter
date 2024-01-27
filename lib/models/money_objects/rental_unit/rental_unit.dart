@@ -14,44 +14,66 @@ class RentUnit extends MoneyObject<RentUnit> {
   @override
   int get uniqueId => id.value;
 
-  // 0
-  Field<RentUnit, int> id = Field<RentUnit, int>(
+  /// Id
+  /// 0|Id|INT|0||1
+  FieldInt<RentUnit> id = FieldInt<RentUnit>(
     importance: 0,
     serializeName: 'Id',
-    defaultValue: -1,
     useAsColumn: false,
     valueForSerialization: (final RentUnit instance) => instance.id.value,
   );
 
-  // 1
-  String name;
+  /// Building Id
+  /// 1|Building|INT|1||0
+  FieldInt<RentUnit> building = FieldInt<RentUnit>(
+    importance: 1,
+    name: 'Building',
+    serializeName: 'Building',
+    useAsColumn: false,
+    valueForSerialization: (final RentUnit instance) => instance.building.value,
+  );
 
-  // 2
-  int building;
 
-  // 3
-  String renter = '';
+  /// 2
+  /// 2|Name|nvarchar(255)|1||0
+  FieldString<RentUnit> name = FieldString<RentUnit>(
+    importance: 2,
+    name: 'Name',
+    serializeName: 'Name',
+    valueForSerialization: (final RentUnit instance) => instance.name.value,
+  );
 
-  // 4
-  String note = '';
+  /// 3
+  /// 3|Renter|nvarchar(255)|0||0
+  FieldString<RentUnit> renter = FieldString<RentUnit>(
+    importance: 3,
+    name: 'Renter',
+    serializeName: 'Renter',
+    valueForSerialization: (final RentUnit instance) => instance.renter.value,
+  );
+
+  /// 4
+  /// 4|Note|nvarchar(255)|0||0
+  FieldString<RentUnit> note = FieldString<RentUnit>(
+    importance: 4,
+    name: 'Note',
+    serializeName: 'Note',
+    valueForSerialization: (final RentUnit instance) => instance.note.value,
+  );
+
 
   // not persisted field
   int count = 0;
   double balance = 0.00;
 
-  RentUnit({
-    required this.name,
-    required this.building,
-    required this.renter,
-    required this.note,
-  });
+  RentUnit();
 
   factory RentUnit.fromSqlite(final MyJson row) {
-    return RentUnit(
-      name: row.getString('Name'),
-      building: row.getInt('Building', -1),
-      renter: row.getString('Renter'),
-      note: row.getString('Note'),
-    )..id.value = row.getInt('Id');
+    return RentUnit()
+      ..id.value = row.getInt('Id')
+      ..name.value = row.getString('Name')
+      ..building.value = row.getInt('Building', -1)
+      ..renter.value = row.getString('Renter')
+      ..note.value = row.getString('Note');
   }
 }

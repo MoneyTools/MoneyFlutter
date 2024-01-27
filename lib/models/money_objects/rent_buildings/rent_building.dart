@@ -10,6 +10,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
   @override
   int get uniqueId => id.value;
 
+  /// ID
   // 0    Id                      INT            0                    1
   FieldId<RentBuilding> id = FieldId<RentBuilding>(
     importance: 0,
@@ -17,6 +18,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     valueForSerialization: (final RentBuilding instance) => instance.id.value,
   );
 
+  /// Name
   // 1    Name                    nvarchar(255)  1                    0
   FieldString<RentBuilding> name = FieldString<RentBuilding>(
     importance: 1,
@@ -26,6 +28,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     valueForSerialization: (final RentBuilding instance) => instance.name.value,
   );
 
+  /// Address
   // 2    Address                 nvarchar(255)  0                    0
   FieldString<RentBuilding> address = FieldString<RentBuilding>(
     importance: 2,
@@ -35,21 +38,169 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     valueForSerialization: (final RentBuilding instance) => instance.address.value,
   );
 
+  /// PurchasedDate
   // 3    PurchasedDate           datetime       0                    0
+  FieldDate<RentBuilding> purchasedDate = FieldDate<RentBuilding>(
+    importance: 2,
+    name: 'Purchased Date',
+    serializeName: 'PurchasedDate',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.purchasedDate.value,
+    valueForSerialization: (final RentBuilding instance) => instance.purchasedDate.value,
+  );
+
+  /// PurchasedPrice
   // 4    PurchasedPrice          money          0                    0
-  // 5    LandValue               money          0                    0
+  FieldAmount<RentBuilding> purchasedPrice = FieldAmount<RentBuilding>(
+    importance: 2,
+    name: 'Purchased Price',
+    serializeName: 'PurchasedPrice',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.purchasedPrice.value,
+    valueForSerialization: (final RentBuilding instance) => instance.purchasedPrice.value,
+  );
+
+  /// LandValue
+  // 5    LandValue          money          0                    0
+  FieldAmount<RentBuilding> landValue = FieldAmount<RentBuilding>(
+    importance: 2,
+    name: 'LandValue',
+    serializeName: 'LandValue',
+    valueFromInstance: (final RentBuilding instance) => instance.landValue.value,
+    valueForSerialization: (final RentBuilding instance) => instance.landValue.value,
+  );
+
+  /// EstimatedValue
   // 6    EstimatedValue          money          0                    0
-  // 7    OwnershipName1          nvarchar(255)  0                    0
-  // 8    OwnershipName2          nvarchar(255)  0                    0
-  // 9    OwnershipPercentage1    money          0                    0
-  // 10   OwnershipPercentage2    money          0                    0
-  // 11   Note                    nvarchar(255)  0                    0
-  // 12   CategoryForTaxes        INT            0                    0
-  // 13   CategoryForIncome       INT            0                    0
-  // 14   CategoryForInterest     INT            0                    0
-  // 15   CategoryForRepairs      INT            0                    0
-  // 16   CategoryForMaintenance  INT            0                    0
-  // 17   CategoryForManagement   INT            0                    0
+  FieldAmount<RentBuilding> estimatedValue = FieldAmount<RentBuilding>(
+    importance: 2,
+    name: 'EstimatedValue',
+    serializeName: 'EstimatedValue',
+    valueFromInstance: (final RentBuilding instance) => instance.estimatedValue.value,
+    valueForSerialization: (final RentBuilding instance) => instance.estimatedValue.value,
+  );
+
+  /// OwnershipName1
+  // 7    OwnershipName1          money          0                    0
+  FieldString<RentBuilding> ownershipName1 = FieldString<RentBuilding>(
+    importance: 2,
+    name: 'OwnershipName1',
+    serializeName: 'OwnershipName1',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.ownershipName1.value,
+    valueForSerialization: (final RentBuilding instance) => instance.ownershipName1.value,
+  );
+
+  /// OwnershipName2
+  // 8    OwnershipName2          money          0                    0
+  FieldString<RentBuilding> ownershipName2 = FieldString<RentBuilding>(
+    importance: 2,
+    name: 'OwnershipName2',
+    serializeName: 'OwnershipName2',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.ownershipName2.value,
+    valueForSerialization: (final RentBuilding instance) => instance.ownershipName2.value,
+  );
+
+  /// OwnershipPercentage1
+  // 9    OwnershipPercentage1          money          0                    0
+  FieldDouble<RentBuilding> ownershipPercentage1 = FieldDouble<RentBuilding>(
+    importance: 2,
+    name: 'OwnershipPercentage1',
+    serializeName: 'OwnershipPercentage1',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.ownershipPercentage1.value,
+    valueForSerialization: (final RentBuilding instance) => instance.ownershipPercentage1.value,
+  );
+
+  /// OwnershipPercentage2
+  // 10    OwnershipPercentage2          money          0                    0
+  FieldDouble<RentBuilding> ownershipPercentage2 = FieldDouble<RentBuilding>(
+    importance: 2,
+    name: 'OwnershipPercentage2',
+    serializeName: 'OwnershipPercentage2',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.ownershipPercentage2.value,
+    valueForSerialization: (final RentBuilding instance) => instance.ownershipPercentage2.value,
+  );
+
+  /// Note
+  // 11    Note          money          0                    0
+  FieldString<RentBuilding> note = FieldString<RentBuilding>(
+    importance: 2,
+    name: 'Note',
+    serializeName: 'Note',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.note.value,
+    valueForSerialization: (final RentBuilding instance) => instance.note.value,
+  );
+
+  /// CategoryForTaxes
+  // 12    CategoryForTaxes          money          0                    0
+  FieldInt<RentBuilding> categoryForTaxes = FieldInt<RentBuilding>(
+    importance: 2,
+    name: 'CategoryForTaxes',
+    serializeName: 'CategoryForTaxes',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.categoryForTaxes.value,
+    valueForSerialization: (final RentBuilding instance) => instance.categoryForTaxes.value,
+  );
+
+  /// CategoryForIncome
+  // 13    CategoryForIncome          money          0                    0
+  FieldInt<RentBuilding> categoryForIncome = FieldInt<RentBuilding>(
+    importance: 2,
+    name: 'CategoryForIncome',
+    serializeName: 'CategoryForIncome',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.categoryForIncome.value,
+    valueForSerialization: (final RentBuilding instance) => instance.categoryForIncome.value,
+  );
+
+  /// CategoryForInterest
+  // 14    CategoryForInterest          money          0                    0
+  FieldInt<RentBuilding> categoryForInterest = FieldInt<RentBuilding>(
+    importance: 2,
+    name: 'CategoryForInterest',
+    serializeName: 'CategoryForInterest',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.categoryForInterest.value,
+    valueForSerialization: (final RentBuilding instance) => instance.categoryForInterest.value,
+  );
+
+  /// CategoryForRepairs
+  // 15    CategoryForRepairs          money          0                    0
+  FieldInt<RentBuilding> categoryForRepairs = FieldInt<RentBuilding>(
+    importance: 2,
+    name: 'CategoryForRepairs',
+    serializeName: 'CategoryForRepairs',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.categoryForRepairs.value,
+    valueForSerialization: (final RentBuilding instance) => instance.categoryForRepairs.value,
+  );
+
+  /// CategoryForMaintenance
+  // 16    CategoryForMaintenance          money          0                    0
+  FieldInt<RentBuilding> categoryForMaintenance = FieldInt<RentBuilding>(
+    importance: 2,
+    name: 'CategoryForMaintenance',
+    serializeName: 'CategoryForMaintenance',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.categoryForMaintenance.value,
+    valueForSerialization: (final RentBuilding instance) => instance.categoryForMaintenance.value,
+  );
+
+  /// CategoryForManagement
+  // 17    CategoryForManagement          money          0                    0
+  FieldInt<RentBuilding> categoryForManagement = FieldInt<RentBuilding>(
+    importance: 2,
+    name: 'CategoryForManagement',
+    serializeName: 'CategoryForManagement',
+    useAsColumn: false,
+    valueFromInstance: (final RentBuilding instance) => instance.categoryForManagement.value,
+    valueForSerialization: (final RentBuilding instance) => instance.categoryForManagement.value,
+  );
+
   int count = 0;
 
   /// Revenue
@@ -73,36 +224,15 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     valueFromInstance: (final RentBuilding instance) => instance.profit.value,
   );
 
-  DateTime purchasedDate = DateTime.now();
-  double purchasedPrice = 0.00;
-  double landValue = 0.00;
-  double estimatedValue = 0.00;
-
-  int categoryForIncome = -1;
   List<int> categoryForIncomeTreeIds = <int>[];
-
-  int categoryForTaxes = -1;
   List<int> categoryForTaxesTreeIds = <int>[];
-
-  int categoryForInterest = -1;
   List<int> categoryForInterestTreeIds = <int>[];
-
-  int categoryForRepairs = -1;
   List<int> categoryForRepairsTreeIds = <int>[];
-
-  int categoryForMaintenance = -1;
   List<int> categoryForMaintenanceTreeIds = <int>[];
-
-  int categoryForManagement = -1;
   List<int> categoryForManagementTreeIds = <int>[];
 
   List<int> listOfCategoryIdsExpenses = <int>[];
 
-  String ownershipName1 = '';
-  String ownershipName2 = '';
-  double ownershipPercentage1 = 0.0;
-  double ownershipPercentage2 = 0.0;
-  String note = '';
   List<RentUnit> units = <RentUnit>[];
 
   DateRange dateRange = DateRange();
@@ -143,29 +273,32 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     instance.id.value = row.getInt('Id');
     instance.name.value = row.getString('Name');
     instance.address.value = row.getString('Address');
+    instance.purchasedDate.value = row.getDate('PurchasedDate', DateTime.now());
+    instance.purchasedPrice.value = row.getDouble('PurchasedPrice');
+    instance.landValue.value = row.getDouble('LandValue');
+    instance.estimatedValue.value = row.getDouble('EstimatedValue');
+    instance.ownershipName1.value = row.getString('OwnershipName1');
+    instance.ownershipName2.value = row.getString('OwnershipName2');
+    instance.ownershipPercentage1.value = row.getDouble('ownershipPercentage1');
+    instance.ownershipPercentage2.value = row.getDouble('ownershipPercentage1');
 
-    instance.purchasedDate = row.getDate('PurchasedDate', DateTime.now());
-    instance.purchasedPrice = row.getDouble('PurchasedPrice');
-    instance.landValue = row.getDouble('LandValue');
-    instance.estimatedValue = row.getDouble('EstimatedValue');
+    instance.categoryForIncome.value = row.getInt('CategoryForIncome');
+    instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome.value);
 
-    instance.categoryForIncome = row.getInt('CategoryForIncome');
-    instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome);
+    instance.categoryForTaxes.value = row.getInt('CategoryForTaxes');
+    instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes.value);
 
-    instance.categoryForTaxes = row.getInt('CategoryForTaxes');
-    instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes);
+    instance.categoryForInterest.value = row.getInt('CategoryForInterest');
+    instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest.value);
 
-    instance.categoryForInterest = row.getInt('CategoryForInterest');
-    instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest);
+    instance.categoryForRepairs.value = row.getInt('CategoryForRepairs');
+    instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs.value);
 
-    instance.categoryForRepairs = row.getInt('CategoryForRepairs');
-    instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs);
+    instance.categoryForMaintenance.value = row.getInt('CategoryForMaintenance');
+    instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance.value);
 
-    instance.categoryForMaintenance = row.getInt('CategoryForMaintenance');
-    instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance);
-
-    instance.categoryForManagement = row.getInt('CategoryForManagement');
-    instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement);
+    instance.categoryForManagement.value = row.getInt('CategoryForManagement');
+    instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement.value);
 
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForMaintenanceTreeIds);
@@ -173,11 +306,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForRepairsTreeIds);
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForInterestTreeIds);
 
-    instance.ownershipName1 = row.getString('OwnershipName1');
-    instance.ownershipName2 = row.getString('OwnershipName2');
-    instance.ownershipPercentage1 = row.getDouble('ownershipPercentage1');
-    instance.ownershipPercentage2 = row.getDouble('ownershipPercentage1');
-    instance.note = row.getString('Note');
+    instance.note.value = row.getString('Note');
 
     return instance;
   }
