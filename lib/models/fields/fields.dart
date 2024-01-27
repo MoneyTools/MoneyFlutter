@@ -46,9 +46,10 @@ class Fields<T> {
   List<String> getListOfFieldValueAsString(final T objectInstance, [final bool includeHiddenFields = false]) {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
-      final Field<dynamic, dynamic> fieldDefinition = definitions[fieldIndex];
+      final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
       if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
-        strings.add(fieldDefinition.getString(fieldDefinition.valueFromInstance(objectInstance)));
+        final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
+        strings.add(fieldDefinition.getString(rawValue));
       }
     }
     return strings;
@@ -94,7 +95,7 @@ class Fields<T> {
 
   String getCsvRowValues(final T item) {
     final List<dynamic> listOfValues = <dynamic>[];
-    for (final Field<dynamic, dynamic> field in definitions) {
+    for (final Field<T, dynamic> field in definitions) {
       listOfValues.add('"${field.valueForSerialization(item)}"');
     }
     return listOfValues.join(',');

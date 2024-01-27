@@ -223,7 +223,7 @@ List<Field<C, dynamic>> getFieldsForClass<C>() {
     }
   }
 
-  list.sort((final Field<dynamic, dynamic> a, final Field<dynamic, dynamic> b) {
+  list.sort((final Field<C, dynamic> a, final Field<C, dynamic> b) {
     int result = 0;
 
     if (a.importance == -1 && b.importance >= 0) {
