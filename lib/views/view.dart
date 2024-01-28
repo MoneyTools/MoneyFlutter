@@ -257,7 +257,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       case 1:
         return getPanelForChart(selectedItems);
       case 2:
-        return getPanelForTransactions(selectedItems);
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: getPanelForTransactions(selectedItems),
+        );
       default:
         return const Text('- empty -');
     }
