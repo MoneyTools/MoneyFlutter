@@ -19,7 +19,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     clear();
 
     for (final MyJson row in rows) {
-      addEntry(RentBuilding.fromSqlite(row));
+      addEntry(RentBuilding.fromJson(row));
     }
   }
 

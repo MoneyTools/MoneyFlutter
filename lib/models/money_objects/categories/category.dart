@@ -206,7 +206,7 @@ class Category extends MoneyObject<Category> {
     };
   }
 
-  factory Category.fromSqlite(final MyJson row) {
+  factory Category.fromJson(final MyJson row) {
     return Category(
       id: row.getInt('Id'),
       parentId: row.getInt('ParentId'),

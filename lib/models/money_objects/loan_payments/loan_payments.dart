@@ -10,7 +10,7 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      addEntry(LoanPayment.fromSqlite(row));
+      addEntry(LoanPayment.fromJson(row));
     }
   }
 

@@ -46,7 +46,7 @@ class AccountAlias extends MoneyObject<AccountAlias> {
   int get uniqueId => id.value;
 
   /// Constructor from a SQLite row
-  factory AccountAlias.fromSqlite(final MyJson row) {
+  factory AccountAlias.fromJson(final MyJson row) {
     return AccountAlias()
       ..id.value = row.getInt('Id')
       ..pattern.value = row.getString('Pattern')

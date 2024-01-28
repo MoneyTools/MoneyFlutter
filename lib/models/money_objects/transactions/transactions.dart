@@ -38,7 +38,7 @@ class Transactions extends MoneyObjects<Transaction> {
 
       final Transaction t = Transaction()
         ..id.value = i
-        ..accountId.value = Random().nextInt(10)
+        ..accountId.value = Random().nextInt(5)
         ..dateTime.value = DateTime(2020, 02, i + 1)
         ..payeeId.value = Random().nextInt(10)
         ..categoryId.value = Random().nextInt(10)

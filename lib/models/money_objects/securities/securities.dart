@@ -11,7 +11,7 @@ class Securities extends MoneyObjects<Security> {
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      addEntry(Security.fromSqlite(row));
+      addEntry(Security.fromJson(row));
     }
   }
 

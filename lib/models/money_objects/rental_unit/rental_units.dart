@@ -14,7 +14,7 @@ class RentUnits extends MoneyObjects<RentUnit> {
   @override
   void loadFromJson(final List<MyJson> rows) {
     for (final MyJson row in rows) {
-      addEntry(RentUnit.fromSqlite(row));
+      addEntry(RentUnit.fromJson(row));
     }
   }
 }

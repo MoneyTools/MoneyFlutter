@@ -78,7 +78,7 @@ class Alias extends MoneyObject<Alias> {
   }
 
   /// Constructor from a SQLite row
-  factory Alias.fromSqlite(final MyJson row) {
+  factory Alias.fromJson(final MyJson row) {
     return Alias(
       id: row.getInt('Id'),
       pattern: row.getString('Pattern'),

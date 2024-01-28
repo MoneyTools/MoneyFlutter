@@ -12,7 +12,7 @@ class OnlineAccounts extends MoneyObjects<OnlineAccount> {
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      addEntry(OnlineAccount.fromSqlite(row));
+      addEntry(OnlineAccount.fromJson(row));
     }
   }
 

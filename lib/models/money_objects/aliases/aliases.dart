@@ -12,7 +12,7 @@ class Aliases extends MoneyObjects<Alias> {
 
   @override
   Alias instanceFromSqlite(final MyJson row) {
-    return Alias.fromSqlite(row);
+    return Alias.fromJson(row);
   }
 
   @override

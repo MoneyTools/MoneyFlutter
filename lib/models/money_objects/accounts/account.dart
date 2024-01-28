@@ -244,7 +244,7 @@ class Account extends MoneyObject<Account> {
   }
 
   /// Constructor from a SQLite row
-  factory Account.fromSqlite(final MyJson row) {
+  factory Account.fromJson(final MyJson row) {
     return Account()
       ..id.value = row.getInt('Id')
       ..accountId.value = row.getString('AccountId')

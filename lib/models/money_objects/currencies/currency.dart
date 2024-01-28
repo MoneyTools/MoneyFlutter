@@ -50,7 +50,7 @@ class Currency extends MoneyObject<Currency> {
   });
 
   /// Constructor from a SQLite row
-  factory Currency.fromSqlite(final MyJson row) {
+  factory Currency.fromJson(final MyJson row) {
     return Currency(
       // 1
       symbol: row.getString('Symbol'),

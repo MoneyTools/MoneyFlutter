@@ -267,7 +267,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
         );
   }
 
-  factory RentBuilding.fromSqlite(final MyJson row) {
+  factory RentBuilding.fromJson(final MyJson row) {
     final RentBuilding instance = RentBuilding();
 
     instance.id.value = row.getInt('Id');

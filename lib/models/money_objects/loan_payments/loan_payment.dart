@@ -94,7 +94,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
   }
 
   /// Constructor from a SQLite row
-  factory LoanPayment.fromSqlite(final MyJson row) {
+  factory LoanPayment.fromJson(final MyJson row) {
     return LoanPayment(
       // 1
       accountId: row.getInt('AccountId'),

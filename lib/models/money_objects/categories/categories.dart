@@ -12,7 +12,7 @@ class Categories extends MoneyObjects<Category> {
 
   @override
   Category instanceFromSqlite(final MyJson row) {
-    return Category.fromSqlite(row);
+    return Category.fromJson(row);
   }
 
   static int idOfSplitCategory = -1;

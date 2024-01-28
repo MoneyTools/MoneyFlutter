@@ -90,7 +90,7 @@ class OnlineAccount extends MoneyObject<OnlineAccount> {
   });
 
   /// Constructor from a SQLite row
-  factory OnlineAccount.fromSqlite(final MyJson row) {
+  factory OnlineAccount.fromJson(final MyJson row) {
     return OnlineAccount(
       // 1
       name: row.getString('Name'),

@@ -44,7 +44,7 @@ class StockSplit extends MoneyObject<StockSplit> {
   });
 
   /// Constructor from a SQLite row
-  factory StockSplit.fromSqlite(final MyJson row) {
+  factory StockSplit.fromJson(final MyJson row) {
     return StockSplit(
       // 0
       // id

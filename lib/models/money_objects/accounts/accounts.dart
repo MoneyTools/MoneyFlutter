@@ -3,7 +3,6 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:uuid/uuid.dart';
 
 class Accounts extends MoneyObjects<Account> {
   @override
@@ -13,45 +12,26 @@ class Accounts extends MoneyObjects<Account> {
 
   @override
   Account instanceFromSqlite(final MyJson row) {
-    return Account.fromSqlite(row);
+    return Account.fromJson(row);
   }
 
   @override
   void loadDemoData() {
     clear();
-    final List<String> names = <String>[
-      'BankOfAmerica',
-      'Revolut',
-      'FirstTech',
-      'Fidelity',
-      'Bank of Japan',
-      'Trust Canada',
-      'ABC Corp',
-      'Royal Bank',
-      'Unicorn',
-      'God-Inc'
+    final List<MyJson> demoAccounts = <MyJson>[
+      // ignore: always_specify_types
+      {'Id': 0, 'Name': 'BankOfAmerica', 'Type': AccountType.checking.index},
+      // ignore: always_specify_types
+      {'Id': 1, 'Name': 'Revolut UK', 'Type': AccountType.credit.index},
+      // ignore: always_specify_types
+      {'Id': 2, 'Name': 'Fidelity', 'Type': AccountType.investment.index},
+      // ignore: always_specify_types
+      {'Id': 3, 'Name': 'Bank of Japan', 'Type': AccountType.cash.index},
+      // ignore: always_specify_types
+      {'Id': 4, 'Name': 'Trust Canada', 'Type': AccountType.checking.index},
     ];
-    for (int i = 0; i < names.length; i++) {
-      addEntry(
-        Account()
-          ..id.value = i
-          ..accountId.value = i.toString()
-          ..name.value = names[i]
-          ..type.value = AccountType.checking
-          ..description.value = 'Some description'
-          ..currency.value = 'USD'
-          ..lastSync.value = DateTime.now()
-          ..syncGuid.value = const Uuid().v4().toString()
-          ..flags.value = 0
-          ..openingBalance.value = 0
-          ..ofxAccountId.value = ''
-          ..onlineAccount.value = -1
-          ..webSite.value = ''
-          ..reconcileWarning.value = 0
-          ..lastBalance.value = DateTime.now().subtract(const Duration(days: 20))
-          ..categoryIdForPrincipal.value = 0
-          ..categoryIdForInterest.value = 0,
-      );
+    for (final MyJson demoAccount in demoAccounts) {
+      addEntry(Account.fromJson(demoAccount));
     }
   }
 

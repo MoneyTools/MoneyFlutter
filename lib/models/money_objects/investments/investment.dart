@@ -142,7 +142,7 @@ class Investment extends MoneyObject<Investment> {
   }
 
   /// Constructor from a SQLite row
-  factory Investment.fromSqlite(final MyJson row) {
+  factory Investment.fromJson(final MyJson row) {
     return Investment(
       // 1
       id: row.getInt('Id'),

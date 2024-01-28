@@ -66,7 +66,7 @@ class RentUnit extends MoneyObject<RentUnit> {
 
   RentUnit();
 
-  factory RentUnit.fromSqlite(final MyJson row) {
+  factory RentUnit.fromJson(final MyJson row) {
     return RentUnit()
       ..id.value = row.getInt('Id')
       ..name.value = row.getString('Name')

@@ -1,5 +1,6 @@
 // Exports
 import 'package:flutter/material.dart';
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/fields/fields.dart';
 
 export 'dart:ui';
@@ -9,6 +10,10 @@ export 'package:money/models/fields/field.dart';
 class MoneyObject<C> {
   /// All object must have a unique identified
   int get uniqueId => -1;
+
+  MoneyObject<C> fromJson(final MyJson row) {
+    return MoneyObject<C>();
+  }
 
   ///
   /// Column 1 | Column 2 | Column 3

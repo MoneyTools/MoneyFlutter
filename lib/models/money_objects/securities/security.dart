@@ -64,7 +64,7 @@ class Security extends MoneyObject<Security> {
   });
 
   /// Constructor from a SQLite row
-  factory Security.fromSqlite(final MyJson row) {
+  factory Security.fromJson(final MyJson row) {
     return Security(
       // 1
       name: row.getString('Name'),

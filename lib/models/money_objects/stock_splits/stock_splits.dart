@@ -10,7 +10,7 @@ class StockSplits extends MoneyObjects<StockSplit> {
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      addEntry(StockSplit.fromSqlite(row));
+      addEntry(StockSplit.fromJson(row));
     }
   }
 
