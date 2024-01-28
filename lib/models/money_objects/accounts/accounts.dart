@@ -19,15 +19,25 @@ class Accounts extends MoneyObjects<Account> {
     clear();
     final List<MyJson> demoAccounts = <MyJson>[
       // ignore: always_specify_types
-      {'Id': 0, 'Name': 'BankOfAmerica', 'Type': AccountType.checking.index},
+      {'Id': 0, 'Name': 'U.S. Bank', 'Type': AccountType.savings.index},
       // ignore: always_specify_types
-      {'Id': 1, 'Name': 'Revolut UK', 'Type': AccountType.credit.index},
+      {'Id': 1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index},
       // ignore: always_specify_types
-      {'Id': 2, 'Name': 'Fidelity', 'Type': AccountType.investment.index},
+      {'Id': 2, 'Name': 'KeyBank', 'Type': AccountType.moneyMarket.index},
       // ignore: always_specify_types
-      {'Id': 3, 'Name': 'Bank of Japan', 'Type': AccountType.cash.index},
+      {'Id': 3, 'Name': 'Mattress', 'Type': AccountType.cash.index},
       // ignore: always_specify_types
-      {'Id': 4, 'Name': 'Trust Canada', 'Type': AccountType.checking.index},
+      {'Id': 4, 'Name': 'Revolut UK', 'Type': AccountType.credit.index},
+      // ignore: always_specify_types
+      {'Id': 5, 'Name': 'Fidelity', 'Type': AccountType.investment.index},
+      // ignore: always_specify_types
+      {'Id': 6, 'Name': 'Bank of Japan', 'Type': AccountType.retirement.index},
+      // ignore: always_specify_types
+      {'Id': 7, 'Name': 'James Bonds', 'Type': AccountType.asset.index},
+      // ignore: always_specify_types
+      {'Id': 8, 'Name': 'KickStarter', 'Type': AccountType.loan.index},
+      // ignore: always_specify_types
+      {'Id': 9, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index},
     ];
     for (final MyJson demoAccount in demoAccounts) {
       addEntry(Account.fromJson(demoAccount));

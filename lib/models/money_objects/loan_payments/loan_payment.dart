@@ -73,12 +73,14 @@ class LoanPayment extends MoneyObject<LoanPayment> {
   Account? accountInstance;
 
   LoanPayment({
+    required final int id,
     required final int accountId,
     required final DateTime date,
     required final double principal,
     required final double interest,
     required final String memo,
   }) {
+    this.id.value = id;
     this.accountId.value = accountId;
     accountInstance = Data().accounts.get(this.accountId.value);
     this.date.value = date;
@@ -95,6 +97,8 @@ class LoanPayment extends MoneyObject<LoanPayment> {
   /// Constructor from a SQLite row
   factory LoanPayment.fromJson(final MyJson row) {
     return LoanPayment(
+      // 0
+      id: row.getInt('Id'),
       // 1
       accountId: row.getInt('AccountId'),
       // 2
@@ -105,6 +109,6 @@ class LoanPayment extends MoneyObject<LoanPayment> {
       interest: row.getDouble('Interest'),
       // 3
       memo: row.getString('Memo'),
-    )..id.value = row.getInt('Id');
+    );
   }
 }
