@@ -158,6 +158,7 @@ class FieldDate<C> extends Field<C, DateTime> {
           defaultValue: DateTime.parse('1970-01-01'),
           align: TextAlign.center,
           type: FieldType.date,
+          columnWidth: ColumnWidth.small,
         );
 }
 
