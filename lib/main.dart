@@ -179,7 +179,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void loadData() {
-    data.init(
+    data.openDataSource(
         filePathToLoad: settings.pathToDatabase,
         callbackWhenLoaded: (final bool success) {
           _isLoading = false;
@@ -196,7 +196,7 @@ class _MyMoneyState extends State<MyMoney> {
     });
   }
 
-  void handleFileOpen() async {
+  void onFileOpen() async {
     FilePickerResult? pickerResult;
 
     try {
@@ -247,20 +247,20 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
-  void handleFileClose() async {
+  void onOpenDemoData() async {
+    settings.pathToDatabase = Constants.demoData;
+    settings.save();
+    loadData();
+  }
+
+  void onFileClose() async {
     settings.pathToDatabase = null;
     settings.save();
     data.close();
     settings.fireOnChanged();
   }
 
-  void handleUseDemoData() async {
-    settings.pathToDatabase = Constants.demoData;
-    settings.save();
-    loadData();
-  }
-
-  void handleImport() async {
+  void onImport() async {
     final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
     if (pickerResult != null) {
       switch (pickerResult.files.single.extension?.toLowerCase()) {
@@ -273,16 +273,14 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
-  void handleShowFileLocation() {
+  void onShowFileLocation() {
     Settings().pathToDatabaseFolder.then((final String? director) {
       openFolder(director!);
     });
   }
 
-  void handleOnSave() {
-    Settings().pathToDatabaseFolder.then((final String? director) {
-      data.save(director!);
-    });
+  void onSave() {
+    data.save();
   }
 
   Widget showLoading() {
@@ -331,11 +329,11 @@ class _MyMoneyState extends State<MyMoney> {
   }) {
     return Scaffold(
       appBar: MyAppBar(
-        onFileOpen: handleFileOpen,
-        onFileClose: handleFileClose,
-        onShowFileLocation: handleShowFileLocation,
-        onImport: handleImport,
-        onSave: handleOnSave,
+        onFileOpen: onFileOpen,
+        onFileClose: onFileClose,
+        onShowFileLocation: onShowFileLocation,
+        onImport: onImport,
+        onSave: onSave,
       ),
       body: body,
       bottomNavigationBar: bottomNavigationBar,
@@ -353,8 +351,8 @@ class _MyMoneyState extends State<MyMoney> {
       Wrap(
         spacing: 10,
         children: <Widget>[
-          OutlinedButton(onPressed: handleFileOpen, child: const Text('Open File ...')),
-          OutlinedButton(onPressed: handleUseDemoData, child: const Text('Use Demo Data'))
+          OutlinedButton(onPressed: onFileOpen, child: const Text('Open File ...')),
+          OutlinedButton(onPressed: onOpenDemoData, child: const Text('Use Demo Data'))
         ],
       ),
     ]));

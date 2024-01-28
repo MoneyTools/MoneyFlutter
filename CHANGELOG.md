@@ -1,3 +1,7 @@
+## [1.2.01] 2024-01-28
+
+- Refactor onOpen...onSave
+
 ## [1.2.00] 2024-01-27
 
 - Complete Rental fields

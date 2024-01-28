@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/database/database.dart';
 import 'package:money/models/money_objects/account_aliases/account_aliases.dart';
 import 'package:money/models/money_objects/aliases/aliases.dart';
@@ -20,6 +21,7 @@ import 'package:money/models/money_objects/transaction_extras/transaction_extras
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
+import 'package:path/path.dart' as p;
 
 class Data {
   /// singleton
@@ -105,10 +107,16 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
-  Future<void> init({
+  // Where was the data loaded from
+  String? fullPathToDataSource;
+  String? fullPathToNextDataSave;
+
+  Future<void> openDataSource({
     required final String? filePathToLoad,
     required final Function callbackWhenLoaded,
   }) async {
+    rememberWhereTheDataCameFrom(null);
+
     if (filePathToLoad == null) {
       return callbackWhenLoaded(false);
     }
@@ -118,6 +126,8 @@ class Data {
       for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
         moneyObjects.loadDemoData();
       }
+
+      rememberWhereTheDataCameFrom(Constants.demoData);
     } else {
       // Load from SQLite
       try {
@@ -178,8 +188,10 @@ class Data {
           // Close the database when done
           db.dispose();
         }
+        rememberWhereTheDataCameFrom(pathToDatabaseFile);
       } catch (e) {
         debugLog(e.toString());
+        rememberWhereTheDataCameFrom(null);
         callbackWhenLoaded(false);
         return;
       }
@@ -214,10 +226,35 @@ class Data {
     return null;
   }
 
-  void save(final String containerFolder) {
-    final TimeLapse timeLapse = TimeLapse();
+  void rememberWhereTheDataCameFrom(final String? dataSource) async {
+    if (dataSource == null) {
+      this.fullPathToDataSource = null;
+      this.fullPathToNextDataSave = null;
+      return;
+    }
 
-    final String folder = MyFileSystems.append(containerFolder, 'moneyCSV');
+    if (dataSource == Constants.demoData) {
+      this.fullPathToDataSource = Constants.demoData;
+      this.fullPathToNextDataSave = generateNextFolderToSaveTo(await getDocumentDirectory());
+      return;
+    }
+
+    this.fullPathToDataSource = dataSource;
+    final String folderOfLoadedDatabase = p.dirname(this.fullPathToDataSource!);
+    this.fullPathToNextDataSave = generateNextFolderToSaveTo(folderOfLoadedDatabase);
+  }
+
+  String generateNextFolderToSaveTo(final String startingFolder) {
+    return MyFileSystems.append(startingFolder, 'moneyCSV');
+  }
+
+  void save() {
+    if (fullPathToNextDataSave == null) {
+      throw Exception('No container folder give for saving');
+    }
+
+    final TimeLapse timeLapse = TimeLapse();
+    final String folder = fullPathToNextDataSave!;
 
     MyFileSystems.ensureFolderExist(folder).then((final _) {
       MyFileSystems.writeToFile(
