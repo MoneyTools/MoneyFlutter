@@ -1,5 +1,5 @@
+// Imports
 import 'dart:io';
-
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/database/database.dart';
 import 'package:money/models/money_objects/account_aliases/account_aliases.dart';
@@ -22,6 +22,9 @@ import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:path/path.dart' as p;
+
+// Exports
+export 'package:money/helpers/json_helper.dart';
 
 class Data {
   /// singleton
