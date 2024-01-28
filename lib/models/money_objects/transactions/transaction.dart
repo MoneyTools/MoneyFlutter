@@ -65,6 +65,11 @@ class Transaction extends MoneyObject<Transaction> {
     serializeName: 'Status',
     valueFromInstance: (final Transaction instance) => TransactionStatusToLetter(instance.status.value),
     valueForSerialization: (final Transaction instance) => instance.status.value.index,
+    sort: (final Transaction a, final Transaction b, final bool ascending) => sortByString(
+      TransactionStatusToLetter(a.status.value),
+      TransactionStatusToLetter(b.status.value),
+      ascending,
+    ),
   );
 
   /// Payee Id
@@ -125,7 +130,7 @@ class Transaction extends MoneyObject<Transaction> {
 
   /// Number
   /// 8|Number|nchar(10)|0||0
-  FieldInt<Transaction> number = FieldInt<Transaction>(
+  FieldString<Transaction> number = FieldString<Transaction>(
     importance: 10,
     name: 'Number',
     serializeName: 'Number',
@@ -252,8 +257,9 @@ class Transaction extends MoneyObject<Transaction> {
   );
 
   Account? accountInstance;
-  late final String dateTimeAsText;
   Payee? payeeInstance;
+
+  String get dateTimeAsText => getDateAsText(dateTime.value);
 
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
@@ -269,18 +275,44 @@ class Transaction extends MoneyObject<Transaction> {
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();
+    // 0
     t.id.value = json.getInt('Id'); // 0
-    t.accountId.value = json.getInt('Account'); // 1
-    t.accountInstance = Data().accounts.get(t.accountId.value); // 2
-    t.dateTime.value = json.getDate('Date'); // 3
-    t.dateTimeAsText = getDateAsText(t.dateTime.value); // 5
-    t.originalPayee.value = json.getString('OriginalPayee'); // 6
-    t.categoryId.value = json.getInt('Category');
+    // 1
+    t.accountId.value = json.getInt('Account');
+    t.accountInstance = Data().accounts.get(t.accountId.value); // 1
+    // 2
+    t.dateTime.value = json.getDate('Date'); // 2
+    // 3
+    t.status.value = TransactionStatus.values[json.getInt('Status')]; // 3
+    // 4
     t.payeeId.value = json.getInt('Payee');
     t.payeeInstance = Data().payees.get(t.payeeId.value);
-    t.amount.value = json.getDouble('Amount');
-    t.status.value = TransactionStatus.values[json.getInt('Status')];
+    // 5
+    t.originalPayee.value = json.getString('OriginalPayee');
+    // 6
+    t.categoryId.value = json.getInt('Category');
+    // 7
     t.memo.value = json.getString('Memo');
+    // 8
+    t.number.value = json.getString('Number');
+    // 9
+    t.reconciledDate.value = json.getDate('ReconciledDate');
+    // 10
+    t.budgetBalanceDate.value = json.getDate('BudgetBalanceDate');
+    // 11
+    t.transfer.value = json.getInt('Transfer');
+    // 12
+    t.fitid.value = json.getString('FITID');
+    // 13
+    t.flags.value = json.getInt('Flags');
+    // 14
+    t.amount.value = json.getDouble('Amount');
+    // 15
+    t.salesTax.value = json.getDouble('SalesTax');
+    // 16
+    t.transferSplit.value = json.getInt('TransferSplit');
+    // 17
+    t.mergeDate.value = json.getDate('MergeDate');
 
     // not serialized
     t.balance.value = runningBalance;
