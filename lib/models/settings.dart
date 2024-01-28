@@ -1,4 +1,3 @@
-import 'package:money/helpers/string_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -7,21 +6,12 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'dart:convert';
 
-import 'package:path/path.dart' as p;
-
 class Settings {
   bool prefLoaded = false;
   int colorSelected = 0;
   bool isSmallDevice = true;
   int screenIndex = 0;
-  String? pathToDatabase;
-
-  Future<String?> get pathToDatabaseFolder async {
-    if (Settings().pathToDatabase! == Constants.demoData) {
-      return getDocumentDirectory();
-    }
-    return p.dirname(Settings().pathToDatabase!);
-  }
+  String? lastOpenedDataSource;
 
   bool isDetailsPanelExpanded = false;
   bool includeClosedAccounts = false;
@@ -83,7 +73,7 @@ class Settings {
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
     useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
 
-    pathToDatabase = preferences.getString(prefLastLoadedPathToDatabase);
+    lastOpenedDataSource = preferences.getString(prefLastLoadedPathToDatabase);
     rentals = preferences.getBool(prefRentals) == true;
     includeClosedAccounts = preferences.getBool(prefIncludeClosedAccounts) == true;
     isDetailsPanelExpanded = preferences.getBool(prefIsDetailsPanelExpanded) == true;
@@ -107,10 +97,10 @@ class Settings {
 
     saveMapToPrefs(preferences, prefViews, views);
 
-    if (pathToDatabase == null) {
+    if (lastOpenedDataSource == null) {
       await preferences.remove(prefLastLoadedPathToDatabase);
     } else {
-      await preferences.setString(prefLastLoadedPathToDatabase, pathToDatabase.toString());
+      await preferences.setString(prefLastLoadedPathToDatabase, lastOpenedDataSource.toString());
     }
   }
 

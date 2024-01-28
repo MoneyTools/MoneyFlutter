@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
@@ -32,14 +33,19 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget build(final BuildContext context) {
     return AppBar(
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-      title: widgetMainTitle(widget.onFileOpen, widget.onFileClose, widget.onShowFileLocation),
+      title: widgetMainTitle(
+        widget.onFileOpen,
+        widget.onFileClose,
+        widget.onShowFileLocation,
+        widget.onSave,
+      ),
       actions: <Widget>[
         IconButton(
           icon: const Icon(Icons.save),
           onPressed: () async {
             widget.onSave();
           },
-          tooltip: 'Save',
+          tooltip: 'Save to\n${Data().fullPathToNextDataSave ?? "..."}',
         ),
         IconButton(
           icon: const Icon(Icons.cloud_download),
@@ -146,9 +152,10 @@ class _MyAppBarState extends State<MyAppBar> {
   }
 
   Widget widgetMainTitle(
-    final void Function() handleFileOpen,
-    final void Function() handleFileClose,
-    final void Function() handleShowFileLocation,
+    final void Function() onFileOpen,
+    final void Function() onFileClose,
+    final void Function() onShowFileLocation,
+    final void Function() onSave,
   ) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
       const Text('MyMoney', textAlign: TextAlign.left),
@@ -157,20 +164,26 @@ class _MyAppBarState extends State<MyAppBar> {
             textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
         itemBuilder: (final BuildContext context) {
           final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
-          list.add(const PopupMenuItem<int>(value: 1, child: Text('Close')));
           list.add(const PopupMenuItem<int>(value: 2, child: Text('Open')));
-          list.add(const PopupMenuItem<int>(value: 3, child: Text('File location')));
+          if (Data().fullPathToNextDataSave != null) {
+            list.add(const PopupMenuItem<int>(value: 3, child: Text('File location')));
+            list.add(const PopupMenuItem<int>(value: 4, child: Text('Save')));
+            list.add(const PopupMenuItem<int>(value: 1, child: Text('Close')));
+          }
           return list;
         },
         onSelected: (final int index) {
           if (index == 1) {
-            handleFileClose();
+            onFileClose();
           }
           if (index == 2) {
-            handleFileOpen();
+            onFileOpen();
           }
           if (index == 3) {
-            handleShowFileLocation();
+            onShowFileLocation();
+          }
+          if (index == 4) {
+            onSave();
           }
         },
       ),
@@ -178,10 +191,6 @@ class _MyAppBarState extends State<MyAppBar> {
   }
 
   String getTitle() {
-    if (Settings().pathToDatabase == null) {
-      return 'No file loaded';
-    } else {
-      return Settings().pathToDatabase.toString();
-    }
+    return Data().fullPathToDataSource ?? 'No file loaded';
   }
 }

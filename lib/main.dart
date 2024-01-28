@@ -172,15 +172,15 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   bool shouldShowOpenInstructions() {
-    if (settings.prefLoaded && settings.pathToDatabase == null) {
+    if (settings.prefLoaded && data.fullPathToDataSource == null) {
       return true;
     }
     return false;
   }
 
   void loadData() {
-    data.init(
-        filePathToLoad: settings.pathToDatabase,
+    data.openDataSource(
+        filePathToLoad: settings.lastOpenedDataSource,
         callbackWhenLoaded: (final bool success) {
           _isLoading = false;
           setState(() {
@@ -196,7 +196,7 @@ class _MyMoneyState extends State<MyMoney> {
     });
   }
 
-  void handleFileOpen() async {
+  void onFileOpen() async {
     FilePickerResult? pickerResult;
 
     try {
@@ -225,7 +225,7 @@ class _MyMoneyState extends State<MyMoney> {
       try {
         if (pickerResult.files.single.extension == 'mmdb') {
           if (kIsWeb) {
-            settings.pathToDatabase = pickerResult.files.single.path;
+            settings.lastOpenedDataSource = pickerResult.files.single.path;
 
             final Uint8List? file = pickerResult.files.single.bytes;
             if (file != null) {
@@ -234,9 +234,9 @@ class _MyMoneyState extends State<MyMoney> {
               // debugLog("--------$s");
             }
           } else {
-            settings.pathToDatabase = pickerResult.files.single.path;
+            settings.lastOpenedDataSource = pickerResult.files.single.path;
           }
-          if (settings.pathToDatabase != null) {
+          if (settings.lastOpenedDataSource != null) {
             settings.save();
             loadData();
           }
@@ -247,20 +247,20 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
-  void handleFileClose() async {
-    settings.pathToDatabase = null;
+  void onOpenDemoData() async {
+    settings.lastOpenedDataSource = Constants.demoData;
+    settings.save();
+    loadData();
+  }
+
+  void onFileClose() async {
+    settings.lastOpenedDataSource = null;
     settings.save();
     data.close();
     settings.fireOnChanged();
   }
 
-  void handleUseDemoData() async {
-    settings.pathToDatabase = Constants.demoData;
-    settings.save();
-    loadData();
-  }
-
-  void handleImport() async {
+  void onImport() async {
     final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
     if (pickerResult != null) {
       switch (pickerResult.files.single.extension?.toLowerCase()) {
@@ -273,16 +273,12 @@ class _MyMoneyState extends State<MyMoney> {
     }
   }
 
-  void handleShowFileLocation() {
-    Settings().pathToDatabaseFolder.then((final String? director) {
-      openFolder(director!);
-    });
+  void onShowFileLocation() {
+    openFolder(data.fullPathToNextDataSave!);
   }
 
-  void handleOnSave() {
-    Settings().pathToDatabaseFolder.then((final String? director) {
-      data.save(director!);
-    });
+  void onSave() {
+    data.save();
   }
 
   Widget showLoading() {
@@ -331,11 +327,11 @@ class _MyMoneyState extends State<MyMoney> {
   }) {
     return Scaffold(
       appBar: MyAppBar(
-        onFileOpen: handleFileOpen,
-        onFileClose: handleFileClose,
-        onShowFileLocation: handleShowFileLocation,
-        onImport: handleImport,
-        onSave: handleOnSave,
+        onFileOpen: onFileOpen,
+        onFileClose: onFileClose,
+        onShowFileLocation: onShowFileLocation,
+        onImport: onImport,
+        onSave: onSave,
       ),
       body: body,
       bottomNavigationBar: bottomNavigationBar,
@@ -353,8 +349,8 @@ class _MyMoneyState extends State<MyMoney> {
       Wrap(
         spacing: 10,
         children: <Widget>[
-          OutlinedButton(onPressed: handleFileOpen, child: const Text('Open File ...')),
-          OutlinedButton(onPressed: handleUseDemoData, child: const Text('Use Demo Data'))
+          OutlinedButton(onPressed: onFileOpen, child: const Text('Open File ...')),
+          OutlinedButton(onPressed: onOpenDemoData, child: const Text('Use Demo Data'))
         ],
       ),
     ]));

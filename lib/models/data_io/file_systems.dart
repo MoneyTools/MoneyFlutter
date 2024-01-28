@@ -1,8 +1,6 @@
 // Function to open a folder in the FileExplorer/Finder
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
-
-import 'package:money/models/settings.dart';
 import 'package:path/path.dart' as p;
 
 Future<void> openFolder(final String folderPath) async {
@@ -55,14 +53,6 @@ class MyFileSystems {
     }
 
     await file.writeAsString(data, flush: true);
-  }
-
-  static String getSourcePath() {
-    return p.dirname(Settings().pathToDatabase!);
-  }
-
-  static String getFilePath(final String filename) {
-    return append(MyFileSystems.getSourcePath(), filename);
   }
 
   static String append(final String folderPath, final String toAppend) {
