@@ -16,9 +16,10 @@ class Constants {
   static const Color colorExpense = Color(0xaa813e3e);
   static const Color colorNet = Color(0xaa5c8aab);
 
-  static const int commandTextZoom = 3000;
-  static const int commandIncludeClosedAccount = 4000;
-  static const int commandIncludeRentals = 5000;
+  static const int commandTextZoom = 1000;
+  static const int commandCurrencies = 1100;
+  static const int commandIncludeClosedAccount = 1200;
+  static const int commandIncludeRentals = 1300;
 }
 
 const List<Color> colorOptions = <Color>[

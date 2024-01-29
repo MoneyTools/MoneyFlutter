@@ -16,42 +16,80 @@ class Currency extends MoneyObject<Currency> {
   int get uniqueId => id.value;
 
   // 0
-  Field<Currency, int> id = Field<Currency, int>(
+  FieldId<Currency> id = FieldId<Currency>(
     importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
     valueForSerialization: (final Currency instance) => instance.id.value,
   );
 
-  // 1
-  final String symbol;
+  /// 1
+  /// 1    Symbol       nchar(20)     1                 0
+  FieldString<Currency> symbol = FieldString<Currency>(
+    importance: 1,
+    name: 'Symbol',
+    serializeName: 'Symbol',
+    valueFromInstance: (final Currency instance) => instance.symbol.value,
+    valueForSerialization: (final Currency instance) => instance.symbol.value,
+  );
 
-  // 2
-  final String name;
+  /// 2
+  /// 2    name       nchar(20)     1                 0
+  FieldString<Currency> name = FieldString<Currency>(
+    importance: 2,
+    name: 'Name',
+    serializeName: 'Name',
+    valueFromInstance: (final Currency instance) => instance.name.value,
+    valueForSerialization: (final Currency instance) => instance.name.value,
+  );
 
-  // 3
-  final double ratio;
+  /// 3
+  /// 3    Ratio        money         0                 0
+  FieldDouble<Currency> ratio = FieldDouble<Currency>(
+    importance: 3,
+    name: 'Ratio',
+    serializeName: 'Ratio',
+    valueFromInstance: (final Currency instance) => instance.ratio.value,
+    valueForSerialization: (final Currency instance) => instance.ratio.value,
+  );
 
   // 4
-  final double lastRatio;
+  FieldDouble<Currency> lastRatio = FieldDouble<Currency>(
+    importance: 4,
+    name: 'LastRatio',
+    serializeName: 'LastRatio',
+    valueFromInstance: (final Currency instance) => instance.lastRatio.value,
+    valueForSerialization: (final Currency instance) => instance.lastRatio.value,
+  );
 
-  // 5
-  Field<Currency, String> cultureCode = Field<Currency, String>(
+  /// 5
+  /// 5    CultureCode  nvarchar(80)  0                 0
+  FieldString<Currency> cultureCode = FieldString<Currency>(
+    name: 'Culture Code',
     serializeName: 'CultureCode',
-    defaultValue: '',
+    valueFromInstance: (final Currency instance) => instance.cultureCode.value,
+    valueForSerialization: (final Currency instance) => instance.cultureCode.value,
   );
 
   Currency({
-    required this.symbol,
-    required this.name,
-    required this.ratio,
-    this.lastRatio = 0,
-  });
+    required final int id, // 0
+    required final String symbol, // 1
+    required final String name, // 2
+    required final double ratio, // 3
+    required final String cultureCode, // 4
+    required final double lastRatio, // 5
+  }) {
+    this.id.value = id;
+    this.name.value = name;
+    this.symbol.value = symbol;
+    this.ratio.value = ratio;
+    this.cultureCode.value = cultureCode;
+    this.lastRatio.value = lastRatio;
+  }
 
   /// Constructor from a SQLite row
   factory Currency.fromJson(final MyJson row) {
     return Currency(
+      // 0
+      id: row.getInt('Id'),
       // 1
       symbol: row.getString('Symbol'),
       // 2
@@ -61,8 +99,7 @@ class Currency extends MoneyObject<Currency> {
       // 4
       lastRatio: row.getDouble('LastRatio'),
       // 5
-    )
-      ..id.value = row.getInt('Id')
-      ..cultureCode.value = row.getString('CultureCode');
+      cultureCode: row.getString('CultureCode'),
+    );
   }
 }

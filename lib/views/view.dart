@@ -5,6 +5,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/widgets/dialog.dart';
 import 'package:money/widgets/table_view/list_item_header.dart';
 import 'package:money/widgets/widgets.dart';
 import 'package:money/helpers/misc_helpers.dart';
@@ -472,28 +473,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         }
     }
 
-    showDialog(
-        context: context,
-        builder: (final BuildContext context) {
-          return Material(
-              child: AlertDialog(
-            title: const Text('Filter'),
-            content: SizedBox(width: 400, height: 400, child: content),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: const Text('Discard'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: const Text('Apply'),
-              )
-            ],
-          ));
-        });
+    myShowDialog(
+      context: context,
+      title: 'Column Filter',
+      child: content,
+      isEditable: false,
+    );
   }
 }

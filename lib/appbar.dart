@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/data_io/data.dart';
+import 'package:money/views/view_currencies.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
@@ -89,6 +90,16 @@ class _MyAppBarState extends State<MyAppBar> {
             });
             actionList.add(
               PopupMenuItem<int>(
+                value: Constants.commandCurrencies,
+                child: ThreePartLabel(
+                  text1: 'Currencies',
+                  icon: Icon(Icons.currency_exchange, color: Colors.grey),
+                  small: true,
+                ),
+              ),
+            );
+            actionList.add(
+              PopupMenuItem<int>(
                 value: Constants.commandIncludeClosedAccount,
                 child: ThreePartLabel(
                   icon: Icon(
@@ -140,6 +151,8 @@ class _MyAppBarState extends State<MyAppBar> {
     final int value,
   ) {
     switch (value) {
+      case Constants.commandCurrencies:
+        showCurrencies(context);
       case Constants.commandIncludeClosedAccount:
         Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
       case Constants.commandIncludeRentals:

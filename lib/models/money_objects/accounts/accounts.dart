@@ -19,25 +19,25 @@ class Accounts extends MoneyObjects<Account> {
     clear();
     final List<MyJson> demoAccounts = <MyJson>[
       // ignore: always_specify_types
-      {'Id': 0, 'Name': 'U.S. Bank', 'Type': AccountType.savings.index},
+      {'Id': 0, 'Name': 'U.S. Bank', 'Type': AccountType.savings.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index},
+      {'Id': 1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 2, 'Name': 'KeyBank', 'Type': AccountType.moneyMarket.index},
+      {'Id': 2, 'Name': 'KeyBank', 'Type': AccountType.moneyMarket.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 3, 'Name': 'Mattress', 'Type': AccountType.cash.index},
+      {'Id': 3, 'Name': 'Mattress', 'Type': AccountType.cash.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 4, 'Name': 'Revolut UK', 'Type': AccountType.credit.index},
+      {'Id': 4, 'Name': 'Revolut UK', 'Type': AccountType.credit.index, 'Currency': 'GBP'},
       // ignore: always_specify_types
-      {'Id': 5, 'Name': 'Fidelity', 'Type': AccountType.investment.index},
+      {'Id': 5, 'Name': 'Fidelity', 'Type': AccountType.investment.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 6, 'Name': 'Bank of Japan', 'Type': AccountType.retirement.index},
+      {'Id': 6, 'Name': 'Bank of Japan', 'Type': AccountType.retirement.index, 'Currency': 'JPY'},
       // ignore: always_specify_types
-      {'Id': 7, 'Name': 'James Bonds', 'Type': AccountType.asset.index},
+      {'Id': 7, 'Name': 'James Bonds', 'Type': AccountType.asset.index, 'Currency': 'GBP'},
       // ignore: always_specify_types
-      {'Id': 8, 'Name': 'KickStarter', 'Type': AccountType.loan.index},
+      {'Id': 8, 'Name': 'KickStarter', 'Type': AccountType.loan.index, 'Currency': 'CDN'},
       // ignore: always_specify_types
-      {'Id': 9, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index},
+      {'Id': 9, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index, 'Currency': 'USD'},
     ];
     for (final MyJson demoAccount in demoAccounts) {
       addEntry(Account.fromJson(demoAccount));
