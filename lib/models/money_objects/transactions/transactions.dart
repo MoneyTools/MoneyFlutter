@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -42,6 +41,24 @@ class Transactions extends MoneyObjects<Transaction> {
     }
   }
 
+  void transactionForDemoData(final int transactionId, final Account account) {
+    final double amount = getRandomAmount();
+
+    final MyJson demoJson = <String, dynamic>{
+      'Id': transactionId,
+      'Account': account.id.value,
+      'DateTime': DateTime(2020, 02, transactionId + 1),
+      'Payee': Random().nextInt(10),
+      'Category': Random().nextInt(10),
+      'Amount': amount,
+    };
+
+    final Transaction t = Transaction.fromJSon(demoJson, runningBalance);
+    runningBalance += amount;
+
+    getList().add(t);
+  }
+
   int getQuantityOfTransactionBasedOnAccountType(final AccountType type) {
     switch (type) {
       case AccountType.savings:
@@ -69,21 +86,6 @@ class Transactions extends MoneyObjects<Transaction> {
       default:
         return 500;
     }
-  }
-
-  void transactionForDemoData(final int transactionId, final Account account) {
-    final double amount = getRandomAmount();
-    runningBalance += amount;
-
-    final Transaction t = Transaction()
-      ..id.value = transactionId
-      ..accountId.value = account.id.value
-      ..dateTime.value = DateTime(2020, 02, transactionId + 1)
-      ..payeeId.value = Random().nextInt(10)
-      ..categoryId.value = Random().nextInt(10)
-      ..amount.value = amount;
-
-    getList().add(t);
   }
 
   double getRandomAmount() {

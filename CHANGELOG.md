@@ -1,3 +1,7 @@
+## [1.2.02] 2024-01-29
+
+- Load and Save Currencies
+
 ## [1.2.01] 2024-01-28
 
 - Better Demo Data

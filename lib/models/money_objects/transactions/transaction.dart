@@ -274,43 +274,43 @@ class Transaction extends MoneyObject<Transaction> {
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();
-    // 0
-    t.id.value = json.getInt('Id'); // 0
-    // 1
+    // 0 ID
+    t.id.value = json.getInt('Id');
+    // 1 Account ID
     t.accountId.value = json.getInt('Account');
-    t.accountInstance = Data().accounts.get(t.accountId.value); // 1
-    // 2
-    t.dateTime.value = json.getDate('Date'); // 2
-    // 3
-    t.status.value = TransactionStatus.values[json.getInt('Status')]; // 3
-    // 4
+    t.accountInstance = Data().accounts.get(t.accountId.value);
+    // 2 Date Time
+    t.dateTime.value = json.getDate('Date');
+    // 3 Status
+    t.status.value = TransactionStatus.values[json.getInt('Status')];
+    // 4 Payee ID
     t.payeeId.value = json.getInt('Payee');
     t.payeeInstance = Data().payees.get(t.payeeId.value);
-    // 5
+    // 5 Original Payee
     t.originalPayee.value = json.getString('OriginalPayee');
-    // 6
+    // 6 Category Id
     t.categoryId.value = json.getInt('Category');
-    // 7
+    // 7 Memo
     t.memo.value = json.getString('Memo');
-    // 8
+    // 8 Number
     t.number.value = json.getString('Number');
-    // 9
+    // 9 Reconciled Date
     t.reconciledDate.value = json.getDate('ReconciledDate');
-    // 10
+    // 10 BudgetBalanceDate
     t.budgetBalanceDate.value = json.getDate('BudgetBalanceDate');
-    // 11
+    // 11 Transfer
     t.transfer.value = json.getInt('Transfer');
-    // 12
+    // 12 FITID
     t.fitid.value = json.getString('FITID');
-    // 13
+    // 13 Flags
     t.flags.value = json.getInt('Flags');
-    // 14
+    // 14 Amount
     t.amount.value = json.getDouble('Amount');
-    // 15
+    // 15 Sales Tax
     t.salesTax.value = json.getDouble('SalesTax');
-    // 16
+    // 16 Transfer Split
     t.transferSplit.value = json.getInt('TransferSplit');
-    // 17
+    // 17 Merge Date
     t.mergeDate.value = json.getDate('MergeDate');
 
     // not serialized
