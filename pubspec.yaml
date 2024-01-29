@@ -60,7 +60,7 @@ dev_dependencies:
   flutter_launcher_icons: ^0.13.1
   integration_test:
     sdk: flutter
-  pedantic: ^1.11.1 # STRONG LINT
+  flutter_lints: ^3.0.1
 
 
 # https://pub.dev/packages/flutter_launcher_icons

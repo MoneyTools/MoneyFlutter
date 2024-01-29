@@ -7,7 +7,8 @@ class ZoomIncreaseDecrease extends StatefulWidget {
   final VoidCallback onDecrease;
   final VoidCallback onIncrease;
 
-  ZoomIncreaseDecrease({
+  const ZoomIncreaseDecrease({
+    super.key,
     required this.title,
     required this.onDecrease,
     required this.onIncrease,
@@ -34,7 +35,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
         Text(widget.title),
         IconButton(
           tooltip: 'Cmd/Ctrl -',
-          icon: Icon(Icons.text_decrease),
+          icon: const Icon(Icons.text_decrease),
           onPressed: () {
             setState(() {
               widget.onDecrease();
@@ -55,7 +56,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
         ),
         IconButton(
           tooltip: 'Cmd/Ctrl +',
-          icon: Icon(Icons.text_increase),
+          icon: const Icon(Icons.text_increase),
           onPressed: () {
             setState(() {
               widget.onIncrease();

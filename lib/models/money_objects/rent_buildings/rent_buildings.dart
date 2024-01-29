@@ -44,7 +44,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
       rental.profit.value = rental.revenue.value + rental.expense.value;
 
       for (final RentUnit unit in allUnits) {
-        if (unit.building == rental.id.value) {
+        if (unit.building.value == rental.id.value) {
           rental.units.add(unit);
         }
       }

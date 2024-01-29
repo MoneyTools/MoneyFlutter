@@ -232,20 +232,20 @@ class Data {
 
   void rememberWhereTheDataCameFrom(final String? dataSource) async {
     if (dataSource == null) {
-      this.fullPathToDataSource = null;
-      this.fullPathToNextDataSave = null;
+      fullPathToDataSource = null;
+      fullPathToNextDataSave = null;
       return;
     }
 
     if (dataSource == Constants.demoData) {
-      this.fullPathToDataSource = Constants.demoData;
-      this.fullPathToNextDataSave = generateNextFolderToSaveTo(await getDocumentDirectory());
+      fullPathToDataSource = Constants.demoData;
+      fullPathToNextDataSave = generateNextFolderToSaveTo(await getDocumentDirectory());
       return;
     }
 
-    this.fullPathToDataSource = dataSource;
-    final String folderOfLoadedDatabase = p.dirname(this.fullPathToDataSource!);
-    this.fullPathToNextDataSave = generateNextFolderToSaveTo(folderOfLoadedDatabase);
+    fullPathToDataSource = dataSource;
+    final String folderOfLoadedDatabase = p.dirname(fullPathToDataSource!);
+    fullPathToNextDataSave = generateNextFolderToSaveTo(folderOfLoadedDatabase);
   }
 
   String generateNextFolderToSaveTo(final String startingFolder) {

@@ -89,7 +89,7 @@ class _MyAppBarState extends State<MyAppBar> {
               );
             });
             actionList.add(
-              PopupMenuItem<int>(
+              const PopupMenuItem<int>(
                 value: Constants.commandCurrencies,
                 child: ThreePartLabel(
                   text1: 'Currencies',

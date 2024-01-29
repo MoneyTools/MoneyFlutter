@@ -62,11 +62,11 @@ class Transaction extends MoneyObject<Transaction> {
     defaultValue: TransactionStatus.none,
     name: 'Status',
     serializeName: 'Status',
-    valueFromInstance: (final Transaction instance) => TransactionStatusToLetter(instance.status.value),
+    valueFromInstance: (final Transaction instance) => transactionStatusToLetter(instance.status.value),
     valueForSerialization: (final Transaction instance) => instance.status.value.index,
     sort: (final Transaction a, final Transaction b, final bool ascending) => sortByString(
-      TransactionStatusToLetter(a.status.value),
-      TransactionStatusToLetter(b.status.value),
+      transactionStatusToLetter(a.status.value),
+      transactionStatusToLetter(b.status.value),
       ascending,
     ),
   );
@@ -264,9 +264,9 @@ class Transaction extends MoneyObject<Transaction> {
     final TransactionStatus status = TransactionStatus.none,
   }) {
     this.status.value = status;
-    this.buildListWidgetForSmallScreen = () => MyListItemAsCard(
+    buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
-          leftBottomAsString: '${Data().categories.getNameFromId(this.categoryId.value)}\n${memo.value}',
+          leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
           rightTopAsString: getCurrencyText(amount.value),
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );

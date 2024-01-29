@@ -69,7 +69,7 @@ Widget widgetHeaderButton(
   return Expanded(
     flex: flex,
     child: Tooltip(
-      message: (text + '\n' + getSortingTooltipText(sortIndicator)).trim(),
+      message: ('$text\n${getSortingTooltipText(sortIndicator)}').trim(),
       child: TextButton.icon(
         onPressed: onClick,
         onLongPress: onLongPress,
@@ -94,7 +94,7 @@ Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
       return const Icon(Icons.arrow_downward, size: 20.0);
     case SortIndicator.none:
     default:
-      return SizedBox(
+      return const SizedBox(
         width: 20,
       );
   }

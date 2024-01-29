@@ -25,8 +25,8 @@ Widget buildCurrenciesPanel(final BuildContext context) {
           border: Border.all(color: Theme.of(context).colorScheme.outline),
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
-        margin: EdgeInsets.all(4),
-        padding: EdgeInsets.all(4),
+        margin: const EdgeInsets.all(4),
+        padding: const EdgeInsets.all(4),
         child: Column(
           children: <Widget>[
             Row(

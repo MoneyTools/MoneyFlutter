@@ -6,7 +6,7 @@ enum TransactionStatus {
   voided,
 }
 
-String TransactionStatusToLetter(final TransactionStatus status) {
+String transactionStatusToLetter(final TransactionStatus status) {
   switch (status) {
     case TransactionStatus.none:
       return 'N';

@@ -176,7 +176,7 @@ class Category extends MoneyObject<Category> {
     this.frequency.value = frequency;
     this.taxRefNum.value = taxRefNum;
 
-    this.buildListWidgetForSmallScreen = () {
+    buildListWidgetForSmallScreen = () {
       String top = '';
       String bottom = '';
 
@@ -195,7 +195,7 @@ class Category extends MoneyObject<Category> {
         rightBottomAsWidget: Row(
           children: <Widget>[
             Text(getTypeAsText()),
-            SizedBox(
+            const SizedBox(
               width: 8,
             ),
             MyCircle(colorFill: getColorFromString(this.color.value), size: 12),

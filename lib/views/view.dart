@@ -228,7 +228,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   void onFilterTextChanged(final String text) {
     _deadlineTimer?.cancel();
-    _deadlineTimer = Timer(Duration(milliseconds: 500), () {
+    _deadlineTimer = Timer(const Duration(milliseconds: 500), () {
       setState(() {
         _filterText = text.toLowerCase();
         list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();

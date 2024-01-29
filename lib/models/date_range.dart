@@ -38,7 +38,7 @@ class DateRange {
   }
 
   String toStringYears() {
-    return yearToString(min) + ' - ' + yearToString(max) + ' (' + durationInYears().toString() + ')';
+    return '${yearToString(min)} - ${yearToString(max)} (${durationInYears()})';
   }
 
   String dateToString(final DateTime? dateTime) {
