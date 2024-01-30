@@ -219,14 +219,21 @@ class Account extends MoneyObject<Account> {
 
   /// Balance
   Field<Account, double> balance = Field<Account, double>(
-    importance: 99,
-    type: FieldType.amount,
-    align: TextAlign.right,
+    type: FieldType.widget,
+    importance: 5,
     name: 'Balance',
-    useAsDetailPanels: false,
+    useAsColumn: false,
     defaultValue: 0,
-    valueFromInstance: (final Account instance) => instance.balance.value,
-    valueForSerialization: (final Account instance) => instance.balance.value,
+    valueFromInstance: (final Account instance) => Currency.buildCurrencyWidget(instance.currency.value),
+    valueForSerialization: (final Account instance) => getCurrencyText(instance.balance.value),
+  );
+
+  /// Balance Normalized use in the List view
+  FieldAmount<Account> balanceNormalized = FieldAmount<Account>(
+    importance: 99,
+    name: 'Balance(USD)',
+    useAsDetailPanels: false,
+    valueFromInstance: (final Account instance) => instance.balanceNormalized.value,
   );
 
   /// Constructor
@@ -268,6 +275,21 @@ class Account extends MoneyObject<Account> {
       ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest');
   }
 
+// cache the currency ratio
+  double? ratio;
+
+  double getCurrencyRatio() {
+    if (ratio == null) {
+      Currency? currencyInstance = Data().currencies.getLocaleFromSymbol(currency.value);
+      if (currencyInstance == null) {
+        ratio = 1;
+      } else {
+        ratio = currencyInstance.ratio.value;
+      }
+    }
+    return ratio!;
+  }
+
   static String getName(final Account? instance) {
     return instance == null ? '' : instance.name.value;
   }
@@ -286,7 +308,7 @@ class Account extends MoneyObject<Account> {
 
   bool matchType(final List<AccountType> types) {
     if (types.isEmpty) {
-      // All accounts except these
+// All accounts except these
       return type.value != AccountType.notUsed_7 && type.value != AccountType.categoryFund;
     }
     return types.contains(type.value);

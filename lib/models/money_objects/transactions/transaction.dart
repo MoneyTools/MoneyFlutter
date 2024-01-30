@@ -318,4 +318,12 @@ class Transaction extends MoneyObject<Transaction> {
 
     return t;
   }
+
+  double getNormalizedAmount() {
+    // Convert the value to USD
+    if (accountInstance?.getCurrencyRatio() != 0) {
+      return amount.value * accountInstance!.getCurrencyRatio();
+    }
+    return amount.value;
+  }
 }
