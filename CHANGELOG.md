@@ -50,7 +50,7 @@
 
 ## [1.0.21] 2024-01-17
 
-- Refactor reduce code to deal with al tables
+- Refactor reduce code to deal with all tables
 - All 16 tables now have Load & Save implementations, not all fields are implemented
 
 ## [1.0.20] 2024-01-16
@@ -59,7 +59,7 @@
 
 ## [1.0.19] 2024-01-15
 
-- Detail Panel Split transaction
+- Detail Panel, Split transaction
 
 ## [1.0.18] 2024-01-14
 

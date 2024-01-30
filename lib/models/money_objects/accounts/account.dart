@@ -108,6 +108,8 @@ class Account extends MoneyObject<Account> {
     useAsDetailPanels: true,
     valueFromInstance: (final Account instance) => Currency.buildCurrencyWidget(instance.currency.value),
     valueForSerialization: (final Account instance) => instance.currency.value,
+    sort: (final Account a, final Account b, final bool ascending) =>
+        sortByString(a.currency.value, b.currency.value, ascending),
   );
 
   /// 8
