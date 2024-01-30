@@ -49,6 +49,7 @@ class Accounts extends MoneyObjects<Account> {
     for (final Account account in getList()) {
       account.count.value = 0;
       account.balance.value = account.openingBalance.value;
+      account.balanceNormalized.value = account.openingBalance.value * account.getCurrencyRatio();
     }
 
     for (final Transaction t in Data().transactions.getList()) {
@@ -56,6 +57,7 @@ class Accounts extends MoneyObjects<Account> {
       if (item != null) {
         item.count.value++;
         item.balance.value += t.amount.value;
+        item.balanceNormalized.value += t.getNormalizedAmount();
       }
     }
   }
