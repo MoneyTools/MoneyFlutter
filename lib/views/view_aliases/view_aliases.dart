@@ -4,6 +4,7 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view.dart';
+import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
 class ViewAliases extends ViewWidget<Alias> {
@@ -57,6 +58,6 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
         ),
       );
     }
-    return const Text('No transactions');
+    return CenterMessage.noTransaction();
   }
 }

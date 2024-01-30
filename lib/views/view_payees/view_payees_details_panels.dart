@@ -40,6 +40,6 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
         ),
       );
     }
-    return const Text('No transactions');
+    return CenterMessage.noTransaction();
   }
 }

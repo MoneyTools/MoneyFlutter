@@ -123,16 +123,30 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   }
 
   void setSelectedItem(
-    final int newPosition, [
+    final int index, [
     final bool isDoubleTap = false,
   ]) {
-    if (newPosition.isBetween(-1, widget.list.length)) {
-      setState(() {
-        widget.selectedItems.value.clear();
-        widget.selectedItems.value.add(newPosition);
-      });
+    if (index.isBetween(-1, widget.list.length)) {
+      if (widget.selectedItems.value.contains(index)) {
+        // unselected
+        setState(() {
+          widget.selectedItems.value.clear();
+        });
+      } else {
+        // select
+        setState(() {
+          widget.selectedItems.value.clear();
+          widget.selectedItems.value.add(index);
+        });
+      }
 
-      scrollToIndex(newPosition);
+      int newPosition = -1;
+
+      if (widget.selectedItems.value.isNotEmpty) {
+        newPosition = index;
+        scrollToIndex(newPosition);
+      }
+
       if (isDoubleTap) {
         widget.onDoubleTap?.call(context, newPosition);
       } else {

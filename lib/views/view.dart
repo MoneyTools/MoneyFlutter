@@ -4,6 +4,7 @@ import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/dialog.dart';
 import 'package:money/widgets/list_view/list_item_header.dart';
 import 'package:money/widgets/widgets.dart';
@@ -291,7 +292,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           });
     } else {
       // This will cause a UI update and the bottom details will get rendered if its expanded
-      selectedItems.value = <int>[index];
+      if (index == -1) {
+        selectedItems.value = [];
+      } else {
+        selectedItems.value = <int>[index];
+      }
 
       // call this to persist the last selected item index
       saveLastUserActionOnThisView();
@@ -339,7 +344,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         );
       }
     }
-    return const Text('No item selected');
+    return const CenterMessage(message: 'No item selected.');
   }
 
   Widget getPanelForChart(final List<int> indices) {

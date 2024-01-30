@@ -4,6 +4,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/widgets/center_message.dart';
 
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';

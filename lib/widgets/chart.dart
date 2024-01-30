@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/widgets/center_message.dart';
 
 class PairXY {
   num yValue = 0.0;
@@ -27,7 +28,7 @@ class Chart extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     if (list.isEmpty) {
-      return Text('No chart to display ${list.length}');
+      return const CenterMessage(message: 'No chart to display');
     }
     final List<BarChartGroupData> barCharts = <BarChartGroupData>[];
 

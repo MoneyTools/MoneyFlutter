@@ -39,7 +39,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
         getList: () => list,
       );
     }
-    return const Text('No transactions');
+    return CenterMessage.noTransaction();
   }
 
   bool filterByRentalCategories(final Transaction t, final RentBuilding rental) {

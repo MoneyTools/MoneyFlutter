@@ -6,6 +6,7 @@ import 'package:money/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/widgets/center_message.dart';
 
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';

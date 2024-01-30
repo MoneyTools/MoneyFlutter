@@ -42,6 +42,6 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         getList: () => listOfTransactionForThisAccount,
       );
     }
-    return const Text('No account transactions');
+    return const CenterMessage(message: 'No item selected.');
   }
 }

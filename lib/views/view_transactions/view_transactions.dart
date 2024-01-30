@@ -4,6 +4,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transaction_splits.dart';
 import 'package:money/widgets/three_part_label.dart';
@@ -195,6 +196,6 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         getList: () => l,
       );
     }
-    return const Text('No related transactions');
+    return const CenterMessage(message: 'No related transactions');
   }
 }

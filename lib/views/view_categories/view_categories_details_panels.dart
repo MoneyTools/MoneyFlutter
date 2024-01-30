@@ -49,6 +49,6 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
         ),
       );
     }
-    return const Text('No transactions');
+    return CenterMessage.noTransaction();
   }
 }

@@ -36,6 +36,6 @@ extension ViewLoansDetailsPanels on ViewLoansState {
         getList: () => list,
       );
     }
-    return const Text('No transactions');
+    return CenterMessage.noTransaction();
   }
 }
