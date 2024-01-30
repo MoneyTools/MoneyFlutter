@@ -1,5 +1,6 @@
 ## [1.2.03] 2024-01-30
 
+- Demo Data for Aliases
 - Add Flags to Currencies & Accounts
 - fix the iOS build, min iOS version 13
 
