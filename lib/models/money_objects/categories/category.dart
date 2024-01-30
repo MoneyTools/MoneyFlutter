@@ -1,9 +1,9 @@
 // Imports
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
@@ -191,7 +191,7 @@ class Category extends MoneyObject<Category> {
       return MyListItemAsCard(
         leftTopAsString: top,
         leftBottomAsString: bottom,
-        rightTopAsString: getCurrencyText(runningBalance.value),
+        rightTopAsString: Currency.getCurrencyText(runningBalance.value),
         rightBottomAsWidget: Row(
           children: <Widget>[
             Text(getTypeAsText()),

@@ -1,5 +1,5 @@
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -262,7 +262,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: address.value,
-          rightTopAsString: getCurrencyText(profit.value),
+          rightTopAsString: Currency.getCurrencyText(profit.value),
         );
   }
 

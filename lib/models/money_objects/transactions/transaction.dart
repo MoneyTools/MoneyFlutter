@@ -2,6 +2,7 @@
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
@@ -267,7 +268,7 @@ class Transaction extends MoneyObject<Transaction> {
     buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
-          rightTopAsString: getCurrencyText(amount.value),
+          rightTopAsString: Currency.getCurrencyText(amount.value),
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
   }

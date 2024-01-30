@@ -7,12 +7,6 @@ String getIntAsText(final int value) {
   return NumberFormat.decimalPattern().format(value);
 }
 
-String getCurrencyText(final double amount, [final int decimalDigits = 2]) {
-  final NumberFormat formatCurrency = NumberFormat.simpleCurrency(decimalDigits: decimalDigits);
-
-  return formatCurrency.format(amount);
-}
-
 String getNumberText(final num value) {
   return NumberFormat.compact().format(value);
 }

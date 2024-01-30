@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -35,22 +35,23 @@ class ViewAccountsState extends ViewWidgetState<Account> {
         text1: 'Banks',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings]))));
+        text2: Currency.getCurrencyText(
+            getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings]))));
     pivots.add(ThreePartLabel(
         text1: 'Cards',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.credit]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.credit]))));
     pivots.add(ThreePartLabel(
         text1: 'Assets',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.asset]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.asset]))));
     pivots.add(ThreePartLabel(
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[]))));
   }
 
   @override

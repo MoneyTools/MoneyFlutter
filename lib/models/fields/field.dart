@@ -2,6 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 
 class Field<C, T> {
   late T value;
@@ -53,7 +54,7 @@ class Field<C, T> {
         case FieldType.text:
           valueFromInstance = (final C objectInstance) => value.toString();
         case FieldType.amount:
-          valueFromInstance = (final C c) => getCurrencyText(value as double);
+          valueFromInstance = (final C c) => Currency.getCurrencyText(value as double);
         case FieldType.date:
           valueFromInstance = (final C c) => getDateAsText(value as DateTime);
         default:
@@ -83,7 +84,7 @@ class Field<C, T> {
       case FieldType.numericShorthand:
         return getNumberAsShorthandText(value as num);
       case FieldType.amount:
-        return getCurrencyText(value as double);
+        return Currency.getCurrencyText(value as double);
       case FieldType.amountShorthand:
         return getNumberAsShorthandText(value as double);
       case FieldType.text:
@@ -270,7 +271,7 @@ Widget buildFieldWidgetForCurrency({
     child: Padding(
       padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
       child: Text(
-        shorthand ? getNumberAsShorthandText(value as num) : getCurrencyText(value as double),
+        shorthand ? getNumberAsShorthandText(value as num) : Currency.getCurrencyText(value as double),
         textAlign: align,
       ),
     ),

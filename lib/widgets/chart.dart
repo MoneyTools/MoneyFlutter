@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/center_message.dart';
 
 class PairXY {
@@ -97,7 +97,7 @@ class Chart extends StatelessWidget {
               final int rodIndex,
             ) {
               return BarTooltipItem(
-                '${list[group.x].xText}\n${getCurrencyText(rod.toY)}',
+                '${list[group.x].xText}\n${Currency.getCurrencyText(rod.toY)}',
                 TextStyle(color: Theme.of(context).colorScheme.primary),
                 textAlign: TextAlign.start,
               );
@@ -110,7 +110,7 @@ class Chart extends StatelessWidget {
 
   Widget _buildLegendLeft(final double value, final TitleMeta meta) {
     final Widget widget = Text(
-      getCurrencyText(value, 0),
+      Currency.getCurrencyText(value, decimalDigits: 0),
       textAlign: TextAlign.end,
       softWrap: false,
       style: const TextStyle(fontSize: 10),

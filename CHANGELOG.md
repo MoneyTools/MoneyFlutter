@@ -1,5 +1,6 @@
 ## [1.2.03] 2024-01-30
 
+- Render Amount in any ISO4217 currency
 - Normalize balance amount to currency USD
 - Demo Data for Aliases
 - Add Flags to Currencies & Accounts

@@ -1,6 +1,6 @@
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
@@ -89,8 +89,8 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
     buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Account.getName(accountInstance),
-          rightTopAsString: getCurrencyText(principal),
-          rightBottomAsString: getCurrencyText(interest),
+          rightTopAsString: Currency.getCurrencyText(principal),
+          rightBottomAsString: Currency.getCurrencyText(interest),
         );
   }
 

@@ -1,6 +1,5 @@
 // Imports
 import 'package:flutter/material.dart';
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -157,6 +156,7 @@ class Account extends MoneyObject<Account> {
   FieldString<Account> syncGuid = FieldString<Account>(
     serializeName: 'SyncGuid',
     useAsColumn: false,
+    useAsDetailPanels: false,
     valueForSerialization: (final Account instance) => instance.syncGuid.value,
   );
 
@@ -186,6 +186,7 @@ class Account extends MoneyObject<Account> {
     serializeName: 'CategoryIdForPrincipal',
     defaultValue: 0,
     useAsColumn: false,
+    useAsDetailPanels: false,
     valueFromInstance: (final Account instance) => instance.categoryIdForPrincipal.value,
     valueForSerialization: (final Account instance) => instance.categoryIdForPrincipal.value,
   );
@@ -197,6 +198,7 @@ class Account extends MoneyObject<Account> {
     serializeName: 'CategoryIdForInterest',
     defaultValue: 0,
     useAsColumn: false,
+    useAsDetailPanels: false,
     valueFromInstance: (final Account instance) => instance.categoryIdForInterest.value,
     valueForSerialization: (final Account instance) => instance.categoryIdForInterest.value,
   );
@@ -225,7 +227,10 @@ class Account extends MoneyObject<Account> {
     useAsColumn: false,
     defaultValue: 0,
     valueFromInstance: (final Account instance) => Currency.buildCurrencyWidget(instance.currency.value),
-    valueForSerialization: (final Account instance) => getCurrencyText(instance.balance.value),
+    valueForSerialization: (final Account instance) => Currency.getCurrencyText(
+      instance.balance.value,
+      iso4217code: instance.currency.value,
+    ),
   );
 
   /// Balance Normalized use in the List view
@@ -249,7 +254,7 @@ class Account extends MoneyObject<Account> {
             getTypeAsText(type.value),
             textAlign: TextAlign.left,
           ),
-          rightTopAsWidget: Text(getCurrencyText(balance.value)),
+          rightTopAsWidget: Text(Currency.getCurrencyText(balance.value)),
         );
   }
 

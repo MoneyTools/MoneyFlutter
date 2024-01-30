@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/three_part_label.dart';
@@ -31,32 +31,32 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         text1: 'None',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
     pivots.add(ThreePartLabel(
         text1: 'Expense',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense]))));
     pivots.add(ThreePartLabel(
         text1: 'Income',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
     pivots.add(ThreePartLabel(
         text1: 'Saving',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
     pivots.add(ThreePartLabel(
         text1: 'Investment',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
     pivots.add(ThreePartLabel(
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[]))));
   }
 
   double getTotalBalanceOfAccounts(final List<CategoryType> types) {

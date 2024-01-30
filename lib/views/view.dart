@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/widgets/widgets.dart';
 import 'package:money/views/view_header.dart';
@@ -441,8 +441,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         {
           final List<double> minMax = getMinMaxValues(fieldDefinition);
           content = Column(children: <Widget>[
-            Text(getCurrencyText(minMax[0])),
-            Text(getCurrencyText(minMax[1])),
+            Text(Currency.getCurrencyText(minMax[0])),
+            Text(Currency.getCurrencyText(minMax[1])),
           ]);
           break;
         }

@@ -1,4 +1,5 @@
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
@@ -52,7 +53,7 @@ class Payee extends MoneyObject<Payee> {
   Payee() {
     buildListWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
-          rightTopAsString: getCurrencyText(balance.value),
+          rightTopAsString: Currency.getCurrencyText(balance.value),
           rightBottomAsString: getNumberAsShorthandText(count.value),
         );
   }
