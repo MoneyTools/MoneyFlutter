@@ -87,3 +87,12 @@ Future<String> getDocumentDirectory() async {
   final Directory directory = await getApplicationDocumentsDirectory();
   return directory.path;
 }
+
+/// return a ISO 3166-1 Alpha2  US | CA | ES
+String getCountryFromLocale(final String locale) {
+  if (locale.isEmpty) {
+    return 'US'; // default to US
+  }
+  final tokens = locale.replaceAll('-', '_').split('_');
+  return tokens.last;
+}

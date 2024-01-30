@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/field.dart';
-import 'package:money/widgets/circle.dart';
+import 'package:money/widgets/details_panel/details_panel_form_color.dart';
+import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
 export 'package:money/models/fields/field.dart';
 
 class Fields<T> {
@@ -90,9 +91,18 @@ class Fields<T> {
     } else {
       if (fieldDefinition.type == FieldType.widget) {
         final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
-        return MyFormFieldForColor(
-          color: getColorFromString(valueAsString),
-        );
+        if (fieldDefinition.name == 'Color') {
+          return MyFormFieldForColor(
+            title: fieldDefinition.name,
+            color: getColorFromString(valueAsString),
+          );
+        } else {
+          return MyFormFieldForWidget(
+            title: fieldDefinition.name,
+            valueAsText: valueAsString,
+            child: fieldDefinition.valueFromInstance(objectInstance),
+          );
+        }
       }
 
       return TextFormField(
@@ -112,61 +122,5 @@ class Fields<T> {
       listOfValues.add('"${field.valueForSerialization(item)}"');
     }
     return listOfValues.join(',');
-  }
-}
-
-///
-class MyFormFieldForColor extends StatefulWidget {
-  final Color color;
-
-  const MyFormFieldForColor({super.key, required this.color});
-
-  @override
-  MyFormFieldForColorState createState() => MyFormFieldForColorState();
-}
-
-class MyFormFieldForColorState extends State<MyFormFieldForColor> {
-  TextEditingController colorController = TextEditingController();
-  late Color selectedColor;
-
-  @override
-  void initState() {
-    super.initState();
-    selectedColor = widget.color;
-    colorController.value = TextEditingValue(text: colorToHexString(selectedColor).toUpperCase());
-  }
-
-  @override
-  Widget build(final BuildContext context) {
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: TextFormField(
-            controller: colorController,
-            decoration: const InputDecoration(labelText: 'Color (e.g., #RRGGBB)'),
-            onChanged: (final String value) {
-              setState(() {
-                selectedColor = getColorFromString(value);
-              });
-            },
-          ),
-        ),
-        MyCircle(
-          colorFill: selectedColor,
-          colorBorder: Colors.grey,
-          size: 30,
-        )
-      ],
-    );
-  }
-
-  Color? parseColor(final String value) {
-    try {
-      // Parse color from hex string
-      return Color(int.parse(value.replaceAll('#', '0x')));
-    } catch (e) {
-      // Return null for invalid colors
-      return null;
-    }
   }
 }

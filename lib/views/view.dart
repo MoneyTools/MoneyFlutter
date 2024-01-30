@@ -10,7 +10,7 @@ import 'package:money/widgets/table_view/list_item_header.dart';
 import 'package:money/widgets/widgets.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/views/view_header.dart';
-import 'package:money/widgets/details_panel.dart';
+import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/table_view/table_view.dart';
 
 class ViewWidget<T> extends StatefulWidget {

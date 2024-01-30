@@ -24,13 +24,25 @@ class Currencies extends MoneyObjects<Currency> {
       // ignore: always_specify_types
       {'Id': 2, 'Name': 'Euro', 'Symbol': 'EUR', "CultureCode": "en-ES", "Ratio": 1.15, "LastRatio": 1.11},
       // ignore: always_specify_types
-      {'Id': 3, 'Name': 'UK', 'Symbol': 'GBP', "CultureCode": "en-UK", "Ratio": 1.25, "LastRatio": 1.21},
+      {'Id': 3, 'Name': 'UK', 'Symbol': 'GBP', "CultureCode": "en-GB", "Ratio": 1.25, "LastRatio": 1.21},
       // ignore: always_specify_types
-      {'Id': 4, 'Name': 'Japan', 'Symbol': 'JPY', "CultureCode": "en-UK", "Ratio": 1 / 147.72, "LastRatio": 0},
+      {'Id': 4, 'Name': 'Japan', 'Symbol': 'JPY', "CultureCode": "en-JP", "Ratio": 1 / 147.72, "LastRatio": 0},
     ];
     for (final MyJson demoCurrency in demoCurrencies) {
       addEntry(Currency.fromJson(demoCurrency));
     }
+  }
+
+  Currency? getLocaleFromSymbol(final String symbolToMatch) {
+    return getList().firstWhereOrNull((currency) => currency.symbol.value == symbolToMatch);
+  }
+
+  String fromSymbolToCountryAlpha2(final String symbol) {
+    Currency? currency = getLocaleFromSymbol(symbol);
+    if (currency == null) {
+      return 'US';
+    }
+    return currency.cultureCode.value;
   }
 
   @override
