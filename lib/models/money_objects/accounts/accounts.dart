@@ -35,7 +35,7 @@ class Accounts extends MoneyObjects<Account> {
       // ignore: always_specify_types
       {'Id': 7, 'Name': 'James Bonds', 'Type': AccountType.asset.index, 'Currency': 'GBP'},
       // ignore: always_specify_types
-      {'Id': 8, 'Name': 'KickStarter', 'Type': AccountType.loan.index, 'Currency': 'CDN'},
+      {'Id': 8, 'Name': 'KickStarter', 'Type': AccountType.loan.index, 'Currency': 'CAD'},
       // ignore: always_specify_types
       {'Id': 9, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index, 'Currency': 'USD'},
     ];

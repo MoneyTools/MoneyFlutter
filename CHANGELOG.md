@@ -1,5 +1,6 @@
 ## [1.2.03] 2024-01-30
 
+- Add Flags to Currencies & Accounts
 - fix the iOS build, min iOS version 13
 
 ## [1.2.02] 2024-01-29
