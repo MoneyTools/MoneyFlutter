@@ -6,9 +6,11 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/list_view/list_item.dart';
 
 // Exports
-export 'package:money/widgets/list_view/list_item.dart';
 export 'package:money/models/fields/fields.dart';
 export 'package:money/models/money_objects/money_object.dart';
+export 'package:money/widgets/list_view/list_item.dart';
+export 'package:money/widgets/list_view/list_item_card.dart';
+export 'package:money/widgets/list_view/list_item_header.dart';
 
 class MyTableView<T> extends StatefulWidget {
   final Fields<T> fields;

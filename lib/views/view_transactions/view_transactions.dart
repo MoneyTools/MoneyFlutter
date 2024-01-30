@@ -4,12 +4,9 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/widgets/center_message.dart';
-import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transaction_splits.dart';
-import 'package:money/widgets/three_part_label.dart';
-import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
+import 'package:money/widgets/widgets.dart';
 
 class ViewTransactions extends ViewWidget<Transaction> {
   final double startingBalance;
