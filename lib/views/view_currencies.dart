@@ -33,7 +33,7 @@ Widget buildCurrenciesPanel(final BuildContext context) {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(currency.name.value),
-                Text(currency.symbol.value),
+                Currency.buildCurrencyWidget(currency.symbol.value),
               ],
             ),
             Row(

@@ -1,4 +1,6 @@
-import 'package:money/helpers/json_helper.dart';
+import 'package:flutter/widgets.dart';
+import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
 /*
@@ -100,6 +102,19 @@ class Currency extends MoneyObject<Currency> {
       lastRatio: row.getDouble('LastRatio'),
       // 5
       cultureCode: row.getString('CultureCode'),
+    );
+  }
+
+  static Widget buildCurrencyWidget(final threeLetterCurrencySymbol) {
+    String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
+    String flagName = getCountryFromLocale(locale).toLowerCase();
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Image.asset('assets/flags/$flagName.png', height: 10),
+        const SizedBox(width: 4),
+        Text(threeLetterCurrencySymbol),
+      ],
     );
   }
 }
