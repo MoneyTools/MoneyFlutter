@@ -23,7 +23,7 @@ extension ViewLoansDetailsPanels on ViewLoansState {
       final List<Transaction> list = getFilteredTransactions(
           (final Transaction transaction) => transaction.accountId.value == loan.accountId.value);
 
-      return TableTransactions(
+      return ListViewTransactions(
         key: Key(loan.id.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,

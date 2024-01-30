@@ -5,7 +5,7 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
-import 'package:money/widgets/table_view/list_item_card.dart';
+import 'package:money/widgets/list_view/list_item_card.dart';
 
 // Exports
 export 'package:money/models/money_objects/transactions/transaction_types.dart';

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/data_io/data.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
-import 'package:money/widgets/table_view/list_item_header.dart';
-import 'package:money/widgets/table_view/table_view.dart';
+import 'package:money/widgets/list_view/list_item_header.dart';
+import 'package:money/widgets/list_view/list_view.dart';
 
-class TableTransactions extends StatefulWidget {
+class ListViewTransactions extends StatefulWidget {
   final List<String> columnsToInclude;
   final List<Transaction> Function() getList;
   final int defaultSortingField;
 
-  const TableTransactions({
+  const ListViewTransactions({
     super.key,
     required this.columnsToInclude,
     required this.getList,
@@ -19,10 +18,10 @@ class TableTransactions extends StatefulWidget {
   });
 
   @override
-  State<TableTransactions> createState() => _TableTransactionsState();
+  State<ListViewTransactions> createState() => _ListViewTransactionsState();
 }
 
-class _TableTransactionsState extends State<TableTransactions> {
+class _ListViewTransactionsState extends State<ListViewTransactions> {
   late int sortBy = widget.defaultSortingField;
   bool sortAscending = true;
   late final Fields<Transaction> columns;

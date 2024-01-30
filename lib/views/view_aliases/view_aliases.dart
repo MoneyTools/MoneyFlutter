@@ -4,7 +4,7 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view.dart';
-import 'package:money/widgets/table_view/table_transactions.dart';
+import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
 class ViewAliases extends ViewWidget<Alias> {
   const ViewAliases({super.key});
@@ -43,7 +43,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   Widget getPanelForTransactions(final List<int> indices) {
     final Alias? alias = getFirstElement<Alias>(indices, list);
     if (alias != null && alias.id.value > -1) {
-      return TableTransactions(
+      return ListViewTransactions(
         key: Key(alias.id.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,

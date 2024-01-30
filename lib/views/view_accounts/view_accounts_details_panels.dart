@@ -30,7 +30,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
       final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
 
-      return TableTransactions(
+      return ListViewTransactions(
         key: Key(account.id.value.toString()),
         columnsToInclude: const <String>[
           columnIdDate,

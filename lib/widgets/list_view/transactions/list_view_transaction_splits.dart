@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/splits/split.dart';
-import 'package:money/widgets/table_view/list_item_header.dart';
-import 'package:money/widgets/table_view/table_view.dart';
+import 'package:money/widgets/list_view/list_item_header.dart';
+import 'package:money/widgets/list_view/list_view.dart';
 
 // Export
 export 'package:money/models/money_objects/splits/splits.dart';
 
-class TableSplits extends StatefulWidget {
+class ListViewTransactionSplits extends StatefulWidget {
   final List<Split> Function() getList;
   final int defaultSortingField;
 
-  const TableSplits({
+  const ListViewTransactionSplits({
     super.key,
     required this.getList,
     this.defaultSortingField = 0,
   });
 
   @override
-  State<TableSplits> createState() => _TableSplitsState();
+  State<ListViewTransactionSplits> createState() => _ListViewTransactionSplitsState();
 }
 
-class _TableSplitsState extends State<TableSplits> {
+class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   final Fields<Split> _tableFields = Fields<Split>(definitions: <Field<Split, dynamic>>[]);
   late final List<Split> rows;
   late int _sortBy = widget.defaultSortingField;

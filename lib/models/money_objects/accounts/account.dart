@@ -4,7 +4,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/widgets/table_view/list_item_card.dart';
+import 'package:money/widgets/list_view/list_item_card.dart';
 
 // Exports
 export 'package:money/models/money_objects/accounts/account_types.dart';

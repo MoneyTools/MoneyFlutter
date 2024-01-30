@@ -6,7 +6,7 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/circle.dart';
-import 'package:money/widgets/table_view/list_item_card.dart';
+import 'package:money/widgets/list_view/list_item_card.dart';
 
 // Exports
 export 'package:money/models/money_objects/categories/category_types.dart';

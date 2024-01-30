@@ -1,8 +1,14 @@
+// Imports
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/widgets/table_view/list_item.dart';
+import 'package:money/widgets/list_view/list_item.dart';
+
+// Exports
+export 'package:money/widgets/list_view/list_item.dart';
+export 'package:money/models/fields/fields.dart';
+export 'package:money/models/money_objects/money_object.dart';
 
 class MyTableView<T> extends StatefulWidget {
   final Fields<T> fields;

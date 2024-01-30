@@ -3,15 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/widgets/dialog.dart';
-import 'package:money/widgets/table_view/list_item_header.dart';
+import 'package:money/widgets/list_view/list_item_header.dart';
 import 'package:money/widgets/widgets.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
-import 'package:money/widgets/table_view/table_view.dart';
+import 'package:money/widgets/list_view/list_view.dart';
 
 class ViewWidget<T> extends StatefulWidget {
   const ViewWidget({

@@ -2,7 +2,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/widgets/table_view/list_item_card.dart';
+import 'package:money/widgets/list_view/list_item_card.dart';
 
 class LoanPayment extends MoneyObject<LoanPayment> {
   @override

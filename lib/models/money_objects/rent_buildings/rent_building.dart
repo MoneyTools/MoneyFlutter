@@ -3,7 +3,7 @@ import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/widgets/table_view/list_item_card.dart';
+import 'package:money/widgets/list_view/list_item_card.dart';
 
 class RentBuilding extends MoneyObject<RentBuilding> {
   @override

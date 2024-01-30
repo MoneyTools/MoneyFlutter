@@ -1,8 +1,11 @@
+// Imports
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/field.dart';
 import 'package:money/widgets/details_panel/details_panel_form_color.dart';
 import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
+
+// Exports
 export 'package:money/models/fields/field.dart';
 
 class Fields<T> {

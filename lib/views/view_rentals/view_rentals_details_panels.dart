@@ -26,7 +26,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
         ),
       );
 
-      return TableTransactions(
+      return ListViewTransactions(
         key: Key(rental.id.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,

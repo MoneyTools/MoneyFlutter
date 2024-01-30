@@ -35,7 +35,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final Category? category = getFirstElement<Category>(indices, list);
     if (category != null && category.id.value > -1) {
-      return TableTransactions(
+      return ListViewTransactions(
         key: Key(category.id.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,
