@@ -202,15 +202,15 @@ class Categories extends MoneyObjects<Category> {
   @override
   void loadDemoData() {
     clear();
-    addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income));
-    addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment));
-    addEntry(Category(id: 2, name: 'Interests', description: '', type: CategoryType.income));
-    addEntry(Category(id: 3, name: 'Rental', description: '', type: CategoryType.income));
-    addEntry(Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none));
-    addEntry(Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense));
-    addEntry(Category(id: 6, name: 'Saving', description: '', type: CategoryType.income));
-    addEntry(Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense));
-    addEntry(Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense));
+    addEntry(Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income, color: '#FFAAFFBB'));
+    addEntry(Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment, color: '#FFA1A2A3'));
+    addEntry(Category(id: 2, name: 'Interests', description: '', type: CategoryType.income, color: '#FFFF2233'));
+    addEntry(Category(id: 3, name: 'Rental', description: '', type: CategoryType.income, color: '#FF11FF33'));
+    addEntry(Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none, color: '#FF1122FF'));
+    addEntry(Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense, color: '#FFBB2233'));
+    addEntry(Category(id: 6, name: 'Saving', description: '', type: CategoryType.income, color: '#FFBB2233'));
+    addEntry(Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense, color: '#FF11DD33'));
+    addEntry(Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense, color: '#FF1122DD'));
     addEntry(Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
   }
 
