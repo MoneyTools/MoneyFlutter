@@ -1,3 +1,7 @@
+## [1.2.04] 2024-01-31
+
+- Improve the Delete confirmation Dialog
+
 ## [1.2.03] 2024-01-30
 
 - Render Amount in any ISO4217 currency

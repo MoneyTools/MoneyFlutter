@@ -59,6 +59,28 @@ class Fields<T> {
     return strings;
   }
 
+  /// List of rows [ FieldName | ....  | InstanceValue]
+  List<Widget> getListOfFieldNameAndValuePairAsWidget(final T objectInstance,
+      [final bool includeHiddenFields = false]) {
+    final List<Widget> strings = <Widget>[];
+    for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
+      final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
+      if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
+        final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
+        strings.add(
+          Row(
+            children: [
+              Text(fieldDefinition.name),
+              const Spacer(),
+              Text(fieldDefinition.getString(rawValue)),
+            ],
+          ),
+        );
+      }
+    }
+    return strings;
+  }
+
   bool columnValueContainString(final T objectInstance, final String lowerCaseTextToFind) {
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
       final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];

@@ -63,14 +63,16 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   void onDelete(final BuildContext context, final int index) {
-    final List<String> itemToDelete = getFieldsForTable().getListOfFieldValueAsString(list[index]);
-
     showDialog(
       context: context,
       builder: (final BuildContext context) {
         return DeleteConfirmationDialog(
-          title: 'Delete Item',
-          message: 'Are you sure you want to delete this item?\n\n${itemToDelete.join('\n')}',
+          icon: const Icon(Icons.delete),
+          title: 'Delete Transaction',
+          question: 'Are you sure you want to delete this transaction?',
+          content: Column(
+            children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
+          ),
           onConfirm: () {
             // Delete the item
             // ...

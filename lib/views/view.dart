@@ -304,10 +304,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getPanelForDetails(final List<int> indices) {
+  Widget getPanelForDetails(final List<int> indexOfItems) {
     final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
-    if (indices.isNotEmpty) {
-      final int index = indices.first;
+    if (indexOfItems.isNotEmpty) {
+      final int index = indexOfItems.first;
       if (isBetweenOrEqual(index, 0, list.length - 1)) {
         return Row(
           crossAxisAlignment: CrossAxisAlignment.start,
