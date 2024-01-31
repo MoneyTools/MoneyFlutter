@@ -1,5 +1,6 @@
 ## [1.2.04] 2024-01-31
 
+- Badge counter show number of changes
 - Improve the Delete confirmation Dialog
 
 ## [1.2.03] 2024-01-30

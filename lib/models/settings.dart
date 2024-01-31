@@ -50,6 +50,13 @@ class Settings {
 
   double textScale = 1.0;
 
+  int numberOfChanges = 0;
+
+  void increaseNumberOfChanges(final int increaseBy) {
+    numberOfChanges += increaseBy;
+    fireOnChanged();
+  }
+
   //--------------------------------------------------------
   Map<String, MyJson> views = <String, MyJson>{};
 

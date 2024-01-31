@@ -21,6 +21,7 @@ import 'package:money/models/money_objects/transaction_extras/transaction_extras
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
+import 'package:money/models/settings.dart';
 import 'package:path/path.dart' as p;
 
 // Exports
@@ -109,6 +110,11 @@ class Data {
   Transactions transactions = Transactions();
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
+
+  void notifyTransactionChange(ChangeType change, dynamic objectChanged) {
+    // let the app know that something has changed
+    Settings().increaseNumberOfChanges(1);
+  }
 
   // Where was the data loaded from
   String? fullPathToDataSource;

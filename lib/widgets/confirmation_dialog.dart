@@ -42,7 +42,10 @@ class DeleteConfirmationDialog extends StatelessWidget {
           child: const Text('Cancel'),
         ),
         ElevatedButton(
-          onPressed: onConfirm,
+          onPressed: () {
+            onConfirm();
+            Navigator.of(context).pop();
+          },
           child: const Text('Delete'),
         ),
       ],

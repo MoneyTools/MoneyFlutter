@@ -75,7 +75,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
           ),
           onConfirm: () {
             // Delete the item
-            // ...
+            Data().transactions.deleteItem(list[index]);
           },
         );
       },

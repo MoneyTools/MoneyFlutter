@@ -42,13 +42,6 @@ class _MyAppBarState extends State<MyAppBar> {
       ),
       actions: <Widget>[
         IconButton(
-          icon: const Icon(Icons.save),
-          onPressed: () async {
-            widget.onSave();
-          },
-          tooltip: 'Save to\n${Data().fullPathToNextDataSave ?? "..."}',
-        ),
-        IconButton(
           icon: const Icon(Icons.cloud_download),
           onPressed: () async {
             widget.onImport();
@@ -170,37 +163,80 @@ class _MyAppBarState extends State<MyAppBar> {
     final void Function() onShowFileLocation,
     final void Function() onSave,
   ) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-      const Text('MyMoney', textAlign: TextAlign.left),
-      PopupMenuButton<int>(
-        child: Text(getTitle(),
+    return PopupMenuButton<int>(
+      child: buildPopupHeader(),
+      itemBuilder: (final BuildContext context) {
+        final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
+        // Open
+        list.add(
+          const PopupMenuItem<int>(
+            value: 2,
+            child: Text('Open'),
+          ),
+        );
+
+        // File Location
+        list.add(
+          const PopupMenuItem<int>(
+            value: 3,
+            child: Text('File location'),
+          ),
+        );
+
+        // Save
+        list.add(
+          PopupMenuItem<int>(
+            value: 4,
+            child: Badge.count(
+              isLabelVisible: Settings().numberOfChanges > 0,
+              count: Settings().numberOfChanges,
+              alignment: Alignment.centerRight,
+              offset: const Offset(20, 0),
+              child: const Text('Save'),
+            ),
+          ),
+        );
+
+        // Close
+        list.add(
+          const PopupMenuItem<int>(
+            value: 1,
+            child: Text('Close'),
+          ),
+        );
+        return list;
+      },
+      onSelected: (final int index) {
+        if (index == 1) {
+          onFileClose();
+        }
+        if (index == 2) {
+          onFileOpen();
+        }
+        if (index == 3) {
+          onShowFileLocation();
+        }
+        if (index == 4) {
+          onSave();
+        }
+      },
+    );
+  }
+
+  Widget buildPopupHeader() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Badge.count(
+          isLabelVisible: Settings().numberOfChanges > 0,
+          count: Settings().numberOfChanges,
+          offset: const Offset(16, 0),
+          child: const Text('MyMoney', textAlign: TextAlign.left),
+        ),
+        Text(getTitle(),
             textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
-        itemBuilder: (final BuildContext context) {
-          final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
-          list.add(const PopupMenuItem<int>(value: 2, child: Text('Open')));
-          if (Data().fullPathToNextDataSave != null) {
-            list.add(const PopupMenuItem<int>(value: 3, child: Text('File location')));
-            list.add(const PopupMenuItem<int>(value: 4, child: Text('Save')));
-            list.add(const PopupMenuItem<int>(value: 1, child: Text('Close')));
-          }
-          return list;
-        },
-        onSelected: (final int index) {
-          if (index == 1) {
-            onFileClose();
-          }
-          if (index == 2) {
-            onFileOpen();
-          }
-          if (index == 3) {
-            onShowFileLocation();
-          }
-          if (index == 4) {
-            onSave();
-          }
-        },
-      ),
-    ]);
+      ],
+    );
   }
 
   String getTitle() {

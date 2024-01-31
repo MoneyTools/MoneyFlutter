@@ -7,9 +7,16 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 class Transactions extends MoneyObjects<Transaction> {
   double runningBalance = 0.00;
 
-  void add(final Transaction transaction) {
-    transaction.id.value = getList().length;
-    getList().add(transaction);
+  // void add(final Transaction transaction) {
+  //   transaction.id.value = getList().length;
+  //   getList().add(transaction);
+  // }
+
+  /// Remove/tag a Transaction instance from the list in memory
+  bool deleteItem(final Transaction transaction) {
+    transaction.change = ChangeType.deleted;
+    Data().notifyTransactionChange(ChangeType.deleted, transaction);
+    return false;
   }
 
   @override
