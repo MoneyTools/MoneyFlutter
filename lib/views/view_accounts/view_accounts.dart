@@ -75,7 +75,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  List<Account> getList() {
+  List<Account> getList([bool includeDeleted = false]) {
     return Data()
         .accounts
         .activeAccount(

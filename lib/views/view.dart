@@ -169,7 +169,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return 'Default list of items';
   }
 
-  List<T> getList() {
+  List<T> getList([bool includeDeleted = false]) {
     return <T>[];
   }
 

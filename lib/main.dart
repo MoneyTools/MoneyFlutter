@@ -302,7 +302,7 @@ class _MyMoneyState extends State<MyMoney> {
       case 5:
         return const ViewAliases();
       case 6:
-        return const ViewTransactions();
+        return ViewTransactions(key: Key('key_view_transaction_version_${Data().version}'));
       case 7:
         return const ViewRentals();
       case 0:

@@ -36,8 +36,8 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
-  List<Payee> getList() {
-    return Data().payees.getList();
+  List<Payee> getList([bool includeDeleted = false]) {
+    return Data().payees.getList(includeDeleted);
   }
 
   @override

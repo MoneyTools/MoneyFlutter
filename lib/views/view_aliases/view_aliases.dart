@@ -31,8 +31,8 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   }
 
   @override
-  List<Alias> getList() {
-    return Data().aliases.getList();
+  List<Alias> getList([bool includeDeleted = false]) {
+    return Data().aliases.getList(includeDeleted);
   }
 
   @override

@@ -15,8 +15,12 @@ class MoneyObjects<T> {
   /// Constructor
   MoneyObjects();
 
-  List<T> getList() {
-    return _list;
+  List<T> getList([bool includeDeleted = false]) {
+    if (includeDeleted) {
+      // No filtering needed
+      return _list;
+    }
+    return _list.where((final T item) => (item as MoneyObject<T>).change != ChangeType.deleted).toList();
   }
 
   List<T> getListSortedById() {

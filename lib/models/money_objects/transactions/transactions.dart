@@ -7,11 +7,6 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 class Transactions extends MoneyObjects<Transaction> {
   double runningBalance = 0.00;
 
-  // void add(final Transaction transaction) {
-  //   transaction.id.value = getList().length;
-  //   getList().add(transaction);
-  // }
-
   /// Remove/tag a Transaction instance from the list in memory
   bool deleteItem(final Transaction transaction) {
     transaction.change = ChangeType.deleted;
@@ -28,7 +23,7 @@ class Transactions extends MoneyObjects<Transaction> {
     for (final MyJson row in rows) {
       final Transaction t = Transaction.fromJSon(row, runningBalance);
       runningBalance += t.getNormalizedAmount();
-      getList().add(t);
+      addEntry(t);
     }
     return getList();
   }
@@ -63,7 +58,7 @@ class Transactions extends MoneyObjects<Transaction> {
     final Transaction t = Transaction.fromJSon(demoJson, runningBalance);
     runningBalance += amount;
 
-    getList().add(t);
+    addEntry(t);
   }
 
   int getQuantityOfTransactionBasedOnAccountType(final AccountType type) {

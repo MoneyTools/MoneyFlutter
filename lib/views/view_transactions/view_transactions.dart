@@ -75,7 +75,9 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
           ),
           onConfirm: () {
             // Delete the item
-            Data().transactions.deleteItem(list[index]);
+            setState(() {
+              Data().transactions.deleteItem(list[index]);
+            });
           },
         );
       },
@@ -83,10 +85,10 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  List<Transaction> getList() {
+  List<Transaction> getList([bool includeDeleted = false]) {
     final List<Transaction> list = Data()
         .transactions
-        .getList()
+        .getList(includeDeleted)
         .where((final Transaction transaction) =>
             isMatchingIncomeExpense(transaction) && isMatchingFilterText(transaction))
         .toList();

@@ -28,6 +28,8 @@ import 'package:path/path.dart' as p;
 export 'package:money/helpers/json_helper.dart';
 
 class Data {
+  int version = 1;
+
   /// singleton
   static final Data _instance = Data._internal();
 
@@ -113,6 +115,7 @@ class Data {
 
   void notifyTransactionChange(ChangeType change, dynamic objectChanged) {
     // let the app know that something has changed
+    version++;
     Settings().increaseNumberOfChanges(1);
   }
 
