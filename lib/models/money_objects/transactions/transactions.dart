@@ -54,7 +54,7 @@ class Transactions extends MoneyObjects<Transaction> {
     final MyJson demoJson = <String, dynamic>{
       'Id': transactionId,
       'Account': account.id.value,
-      'DateTime': DateTime(2020, 02, transactionId + 1),
+      'Date': DateTime(2020, 02, transactionId + 1),
       'Payee': Random().nextInt(10),
       'Category': Random().nextInt(10),
       'Amount': amount,
