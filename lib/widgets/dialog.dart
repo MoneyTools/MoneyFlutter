@@ -4,7 +4,7 @@ void myShowDialog({
   required final BuildContext context,
   required final String title,
   required final Widget child,
-  required final bool isEditable,
+  final bool isEditable = false,
 }) {
   showDialog(
       context: context,

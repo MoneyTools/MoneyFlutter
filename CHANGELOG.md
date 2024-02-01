@@ -1,3 +1,7 @@
+## [1.2.05] 2024-02-01
+
+- Improve Import QFX
+
 ## [1.2.04] 2024-01-31
 
 - Badge counter show number of changes

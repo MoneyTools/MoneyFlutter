@@ -19,7 +19,13 @@ class Accounts extends MoneyObjects<Account> {
     clear();
     final List<MyJson> demoAccounts = <MyJson>[
       // ignore: always_specify_types
-      {'Id': 0, 'Name': 'U.S. Bank', 'Type': AccountType.savings.index, 'Currency': 'USD'},
+      {
+        'Id': 0,
+        'AccountId': 'BankAccountIdForTesting',
+        'Name': 'U.S. Bank',
+        'Type': AccountType.savings.index,
+        'Currency': 'USD'
+      },
       // ignore: always_specify_types
       {'Id': 1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index, 'Currency': 'USD'},
       // ignore: always_specify_types

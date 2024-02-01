@@ -22,6 +22,7 @@ import 'package:money/views/view_accounts/view_accounts.dart';
 import 'package:money/views/view_categories/view_categories.dart';
 import 'package:money/views/view_payees/view_payees.dart';
 import 'package:money/views/view_transactions/view_transactions.dart';
+import 'package:money/widgets/snack_bar.dart';
 
 void main() {
   runApp(const MyMoney());
@@ -60,6 +61,9 @@ class _MyMoneyState extends State<MyMoney> {
     Settings().isSmallDevice = MediaQuery.of(context).size.width < 800;
 
     return MaterialApp(
+        scaffoldMessengerKey: SnackBarService.scaffoldKey,
+
+        /// Assign Key Here
         debugShowCheckedModeBanner: false,
         title: 'MyMoney',
         theme: settings.getThemeData(),

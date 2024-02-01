@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/widgets/snack_bar.dart';
 
 void importQFX(
   final String filePath,
@@ -22,33 +22,36 @@ void importQFX(
     getAccountTypeFromText(bankInfo.accountType),
   );
 
-  if (account != null) {
-    final List<QFXTransaction> list = getTransactionFromOFX(ofx);
+  if (account == null) {
+    SnackBarService.showSnackBar(
+        autoDismiss: false,
+        message: 'QFX Import - No matching "${bankInfo.accountType}" accounts with ID "${bankInfo.accountId}"');
+    return;
+  }
 
-    for (final QFXTransaction item in list) {
-      debugLog(item.toString());
+  final List<QFXTransaction> list = getTransactionFromOFX(ofx);
 
-      // find by fuzzy match
-      Payee? payee = Data().aliases.findByMatch(item.name);
+  for (final QFXTransaction item in list) {
+    // find by fuzzy match
+    Payee? payee = Data().aliases.findByMatch(item.name);
 
-      // ignore: prefer_conditional_assignment
-      if (payee == null) {
-        // if null find match or add
-        payee = Data().payees.findOrAddPayee(item.name);
-      }
-
-      final Transaction t = Transaction()
-        ..id.value = -1
-        ..accountId.value = account.id.value
-        ..dateTime.value = item.date
-        ..payeeId.value = payee.id.value
-        ..categoryId.value = getCategoryFromOfxType(item)
-        ..amount.value = item.amount
-        ..fitid.value = item.fitid
-        ..memo.value = item.memo;
-
-      Data().transactions.addEntry(t);
+    // ignore: prefer_conditional_assignment
+    if (payee == null) {
+      // if null find match or add
+      payee = Data().payees.findOrAddPayee(item.name);
     }
+
+    final Transaction t = Transaction()
+      ..id.value = -1
+      ..accountId.value = account.id.value
+      ..dateTime.value = item.date
+      ..payeeId.value = payee.id.value
+      ..categoryId.value = getCategoryFromOfxType(item)
+      ..amount.value = item.amount
+      ..fitid.value = item.fitid
+      ..memo.value = item.memo;
+
+    Data().transactions.addEntry(t, isNewEntry: true);
   }
 }
 
@@ -58,26 +61,20 @@ class OfxBankInfo {
   String accountType = '';
 
   static OfxBankInfo fromOfx(final String ofx) {
+    // start with this
+    // <BANKACCTFROM><BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS</BANKACCTFROM>
     final String bankInfoText = getStringContentBetweenTwoTokens(
       ofx,
       '<BANKACCTFROM>',
       '</BANKACCTFROM>',
     );
 
-    final List<String> bankInfoLines = LineSplitter.split(bankInfoText).toList();
+    // Now we should have just this
+    // <BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS
     final OfxBankInfo bankInfo = OfxBankInfo();
-
-    for (final String line in bankInfoLines) {
-      if (line.startsWith('<BANKID>')) {
-        bankInfo.id = getTokenValue(line);
-      }
-      if (line.startsWith('<ACCTID>')) {
-        bankInfo.accountId = getTokenValue(line);
-      }
-      if (line.startsWith('<ACCTTYPE>')) {
-        bankInfo.accountType = getTokenValue(line);
-      }
-    }
+    bankInfo.id = findAndGetValueOf(bankInfoText, '<BANKID>', bankInfo.id);
+    bankInfo.accountId = findAndGetValueOf(bankInfoText, '<ACCTID>', bankInfo.accountId);
+    bankInfo.accountType = findAndGetValueOf(bankInfoText, '<ACCTTYPE>', bankInfo.accountType);
     return bankInfo;
   }
 }
@@ -132,7 +129,7 @@ List<QFXTransaction> getTransactionFromOFX(final String ofx) {
       '</BANKTRANLIST>',
     );
 
-    // debugLog(bankTransactionLit);
+// debugLog(bankTransactionLit);
 
     final List<String> lines = LineSplitter.split(bankTransactionLit).toList();
     final List<QFXTransaction> qfxTransactions = parseQFXTransactions(lines);
@@ -162,47 +159,49 @@ class QFXTransaction {
 
 List<QFXTransaction> parseQFXTransactions(final List<String> lines) {
   final List<QFXTransaction> transactions = <QFXTransaction>[];
-  QFXTransaction? currentTransaction;
 
   for (String line in lines) {
     line = getNormalizedValue(line);
 
-    if (line.startsWith('<STMTTRN>')) {
-      currentTransaction = QFXTransaction(type: '', date: DateTime.now(), amount: 0.0, name: '', fitid: '');
-    } else if (line.startsWith('</STMTTRN>')) {
-      if (currentTransaction != null) {
-        transactions.add(currentTransaction);
-      }
-    } else {
-      if (currentTransaction != null) {
-        if (line.startsWith('<TRNTYPE>')) {
-          currentTransaction.type = getTokenValue(line);
-        } else if (line.startsWith('<DTPOSTED>')) {
-          final String dateString = getTokenValue(line);
-          currentTransaction.date = DateTime.parse(dateString.substring(0, 8));
-        } else if (line.startsWith('<TRNAMT>')) {
-          final String amountString = getTokenValue(line);
-          currentTransaction.amount = double.parse(amountString);
-        } else if (line.startsWith('<NAME>')) {
-          currentTransaction.name = getTokenValue(line);
-        } else if (line.startsWith('<FITID>')) {
-          currentTransaction.fitid = getTokenValue(line);
-        } else if (line.startsWith('<MEMO>')) {
-          currentTransaction.memo = getTokenValue(line);
-        }
-      }
+    final String rawTransactionText = getStringContentBetweenTwoTokens(
+      line,
+      '<STMTTRN>',
+      '</STMTTRN>',
+    );
+
+    if (rawTransactionText.isNotEmpty) {
+      final QFXTransaction currentTransaction = QFXTransaction(
+        type: findAndGetValueOf(rawTransactionText, '<TRNTYPE>', ''),
+        date: DateTime.parse(findAndGetValueOf(rawTransactionText, '<DTPOSTED>', '').substring(0, 8)),
+        amount: double.parse(findAndGetValueOf(rawTransactionText, '<TRNAMT>', '0.00')),
+        name: findAndGetValueOf(rawTransactionText, '<NAME>', ''),
+        fitid: findAndGetValueOf(rawTransactionText, '<FITID>', ''),
+        memo: findAndGetValueOf(rawTransactionText, '<MEMO>', ''),
+      );
+      transactions.add(currentTransaction);
     }
   }
 
   return transactions;
 }
 
-String getTokenValue(final String line) {
-  String lineContent = line.substring(line.indexOf('>') + 1);
+String findAndGetValueOf(final String line, final String tokenTextToFind, final String valueIfNotFound) {
+  int position = line.indexOf(tokenTextToFind);
+  if (position != -1) {
+    String tokenStartingLine = line.substring(position);
+    return getValuePortion(tokenStartingLine);
+  }
+  return valueIfNotFound;
+}
 
-  int end = lineContent.lastIndexOf('<');
+String getValuePortion(final String line) {
+  int startIndexOfValue = line.indexOf('>') + 1;
+  String lineContent = line.substring(startIndexOfValue);
+
+// Find the end of the value
+  int end = lineContent.indexOf('<');
   if (end == -1) {
-    end = lineContent.lastIndexOf('\n');
+    end = lineContent.indexOf('\n');
   }
   if (end != -1) {
     lineContent = lineContent.substring(0, end);

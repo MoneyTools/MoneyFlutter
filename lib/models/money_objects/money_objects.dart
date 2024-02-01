@@ -1,4 +1,4 @@
-import 'package:money/helpers/json_helper.dart';
+import 'package:money/models/data_io/data.dart';
 import 'package:money/models/data_io/database/database.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
@@ -42,9 +42,15 @@ class MoneyObjects<T> {
     return _list.length;
   }
 
-  void addEntry(final T entry) {
+  void addEntry(final T entry, {bool isNewEntry = false}) {
     _list.add(entry);
     _map[(entry as MoneyObject<T>).uniqueId] = entry;
+
+    // keep track
+    if (isNewEntry) {
+      entry.change = ChangeType.inserted;
+      Data().notifyTransactionChange(ChangeType.inserted, entry);
+    }
   }
 
   T? get(final num id) {
