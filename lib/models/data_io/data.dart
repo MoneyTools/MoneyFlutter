@@ -116,7 +116,15 @@ class Data {
   void notifyTransactionChange(ChangeType change, dynamic objectChanged) {
     // let the app know that something has changed
     version++;
-    Settings().increaseNumberOfChanges(1);
+
+    switch (change) {
+      case ChangeType.inserted:
+        Settings().trackChanges.increaseNumberOfChanges(increaseAdded: 1);
+      case ChangeType.deleted:
+        Settings().trackChanges.increaseNumberOfChanges(increaseDeleted: 1);
+      default:
+        break;
+    }
   }
 
   // Where was the data loaded from

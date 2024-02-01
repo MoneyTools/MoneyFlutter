@@ -6,6 +6,8 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'dart:convert';
 
+import 'data_io/track_changes.dart';
+
 class Settings {
   bool prefLoaded = false;
   int colorSelected = 0;
@@ -50,12 +52,8 @@ class Settings {
 
   double textScale = 1.0;
 
-  int numberOfChanges = 0;
-
-  void increaseNumberOfChanges(final int increaseBy) {
-    numberOfChanges += increaseBy;
-    fireOnChanged();
-  }
+  // Tracking changes
+  final TrackChanges trackChanges = TrackChanges();
 
   //--------------------------------------------------------
   Map<String, MyJson> views = <String, MyJson>{};

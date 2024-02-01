@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/data_io/data.dart';
 import 'package:money/views/view_currencies.dart';
+import 'package:money/widgets/change_summary.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
@@ -184,18 +185,20 @@ class _MyAppBarState extends State<MyAppBar> {
         );
 
         // Save
-        list.add(
-          PopupMenuItem<int>(
+        list.add(PopupMenuItem<int>(
             value: 4,
-            child: Badge.count(
-              isLabelVisible: Settings().numberOfChanges > 0,
-              count: Settings().numberOfChanges,
-              alignment: Alignment.centerRight,
-              offset: const Offset(20, 0),
-              child: const Text('Save'),
-            ),
-          ),
-        );
+            child: Row(
+              children: [
+                const Text('Save'),
+                const SizedBox(
+                  width: 8,
+                ),
+                ChangeSummaryBadge(
+                  itemsAdded: Settings().trackChanges.numberOfChangesAdded,
+                  itemsDeleted: Settings().trackChanges.numberOfChangesDeleted,
+                )
+              ],
+            )));
 
         // Close
         list.add(
@@ -227,12 +230,14 @@ class _MyAppBarState extends State<MyAppBar> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Badge.count(
-          isLabelVisible: Settings().numberOfChanges > 0,
-          count: Settings().numberOfChanges,
-          offset: const Offset(16, 0),
-          child: const Text('MyMoney', textAlign: TextAlign.left),
-        ),
+        Row(children: [
+          const Text('MyMoney', textAlign: TextAlign.left),
+          const SizedBox(width: 8),
+          ChangeSummaryBadge(
+            itemsAdded: Settings().trackChanges.numberOfChangesAdded,
+            itemsDeleted: Settings().trackChanges.numberOfChangesDeleted,
+          )
+        ]),
         Text(getTitle(),
             textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
       ],

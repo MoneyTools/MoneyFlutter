@@ -121,17 +121,20 @@ int getCategoryFromOfxType(final QFXTransaction ofxTransaction) {
   return categoryId;
 }
 
-List<QFXTransaction> getTransactionFromOFX(final String ofx) {
-  if (ofx.isNotEmpty) {
-    final String bankTransactionLit = getStringContentBetweenTwoTokens(
+List<QFXTransaction> getTransactionFromOFX(final String rawOfx) {
+  if (rawOfx.isNotEmpty) {
+    // Remove all LN/CR
+    String ofx = getNormalizedValue(rawOfx);
+
+    String bankTransactionLit = getStringContentBetweenTwoTokens(
       ofx,
       '<BANKTRANLIST>',
       '</BANKTRANLIST>',
     );
 
-// debugLog(bankTransactionLit);
-
+    bankTransactionLit = bankTransactionLit.replaceAll('</STMTTRN>', '</STMTTRN>\n');
     final List<String> lines = LineSplitter.split(bankTransactionLit).toList();
+
     final List<QFXTransaction> qfxTransactions = parseQFXTransactions(lines);
     return qfxTransactions;
   }

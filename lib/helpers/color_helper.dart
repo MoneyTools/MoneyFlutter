@@ -47,3 +47,36 @@ TextStyle adjustOpacityOfTextStyle(final TextStyle textStyle, [final double opac
     color: textStyle.color!.withOpacity(opacity),
   );
 }
+
+Color addTintOfRed(Color originalColor, int tintStrength) {
+  int red = originalColor.red + tintStrength;
+  int green = originalColor.green;
+  int blue = originalColor.blue;
+
+  // Ensure red value stays within the valid range (0 to 255)
+  red = red.clamp(0, 255);
+
+  return Color.fromARGB(originalColor.alpha, red, green, blue);
+}
+
+Color addTintOfGreen(Color originalColor, int tintStrength) {
+  int red = originalColor.red;
+  int green = originalColor.green + tintStrength;
+  int blue = originalColor.blue;
+
+  // Ensure red value stays within the valid range (0 to 255)
+  green = green.clamp(0, 255);
+
+  return Color.fromARGB(originalColor.alpha, red, green, blue);
+}
+
+Color addTintOfBlue(Color originalColor, int tintStrength) {
+  int red = originalColor.red;
+  int green = originalColor.green;
+  int blue = originalColor.blue + tintStrength;
+
+  // Ensure red value stays within the valid range (0 to 255)
+  blue = blue.clamp(0, 255);
+
+  return Color.fromARGB(originalColor.alpha, red, green, blue);
+}

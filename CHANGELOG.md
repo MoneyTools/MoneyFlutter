@@ -1,6 +1,7 @@
 ## [1.2.05] 2024-02-01
 
-- Improve Import QFX
+- Improved Badge for Changes, now showing +Added -Deleted
+- Improved Import QFX
 
 ## [1.2.04] 2024-01-31
 
