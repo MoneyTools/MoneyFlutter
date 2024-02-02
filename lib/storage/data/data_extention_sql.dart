@@ -74,7 +74,6 @@ extension DataFromSql on Data {
         final MyDatabase db = MyDatabase(pathToDatabaseFile);
 
         accounts.saveSql(db);
-
         // this.UpdateOnlineAccounts(money.OnlineAccounts);
         // this.UpdateAccounts(money.Accounts);
         // this.UpdatePayees(money.Payees);
@@ -88,6 +87,7 @@ extension DataFromSql on Data {
         // this.UpdateBuildings(money.Buildings);
         // this.UpdateLoanPayments(money.LoanPayments);
         // this.UpdateTransactionExtras(money.TransactionExtras);
+        db.dispose();
       }
     } catch (e) {
       debugLog(e.toString());

@@ -2,39 +2,18 @@ part of 'transactions.dart';
 
 extension TransactionsSql on Transactions {
   bool _saveSql(final MyDatabase db) {
-    for (final Transaction item in getList()) {
+    for (final Transaction item in getList(true)) {
       switch (item.change) {
         case ChangeType.none:
           break;
         case ChangeType.inserted:
           db.insert('Transactions', item.getPersistableJSon());
-        // sb.Append("INSERT INTO Transactions ([Id],[Number],[Account],[Date],[Amount],[Status],[Memo],[Payee],[Category],[Transfer],[TransferSplit],[FITID],[SalesTax],[Flags],[ReconciledDate],[BudgetBalanceDate],[MergeDate],[OriginalPayee]) VALUES (");
-        // sb.Append(string.Format("{0}", t.Id.ToString()));
-        // sb.Append(string.Format(",'{0}'", DBString(t.Number)));
-        // sb.Append(string.Format(",{0}", t.Account.Id));
-        // sb.Append(string.Format(",{0}", DBDateTime(t.Date)));
-        // sb.Append(string.Format(",{0}", DBDecimal(t.Amount)));
-        // sb.Append(string.Format(",{0}", ((int)t.Status).ToString()));
-        // sb.Append(string.Format(",'{0}'", DBString(t.Memo)));
-        // sb.Append(string.Format(",{0}", t.Payee != null ? t.Payee.Id.ToString() : "-1"));
-        // sb.Append(string.Format(",{0}", t.Category != null ? t.Category.Id.ToString() : "-1"));
-        // sb.Append(string.Format(",{0}", t.Transfer != null && t.Transfer.Transaction != null ? t.Transfer.Transaction.Id.ToString() : "-1"));
-        // sb.Append(string.Format(",{0}", t.Transfer != null && t.Transfer.Split != null ? t.Transfer.Split.Id.ToString() : "-1"));
-        // sb.Append(string.Format(",'{0}'", DBString(t.FITID)));
-        // sb.Append(string.Format(",{0}", DBDecimal(t.SalesTax)));
-        // sb.Append(string.Format(",{0}", (int)t.Flags));
-        // sb.Append(string.Format(",{0}", DBNullableDateTime(t.ReconciledDate)));
-        // sb.Append(string.Format(",{0}", DBNullableDateTime(t.BudgetBalanceDate)));
-        // sb.Append(string.Format(",{0}", DBNullableDateTime(t.MergeDate)));
-        // sb.Append(string.Format(",'{0}'", DBString(t.OriginalPayee)));
-        // sb.AppendLine(");");
 
         case ChangeType.deleted:
-        /*
-            sb.AppendLine("-- deleting account: " + a.Name);
-            sb.AppendLine(string.Format("DELETE FROM Accounts WHERE Id={0};", a.Id.ToString()));
-           */
+          db.delete('Transactions', item.uniqueId);
+
         case ChangeType.changed:
+          db.update('Transactions', item.uniqueId, item.getPersistableJSon());
         /*
               sb.AppendLine("-- updating account: " + a.Name);
               sb += "UPDATE Accounts SET ");

@@ -102,3 +102,11 @@ extension MyJsonExtensions on MyJson {
     }
   }
 }
+
+String encodeValueWrapStringTypes(dynamic value) {
+  if (value is String) {
+    return "'$value'";
+  } else {
+    return value.toString();
+  }
+}

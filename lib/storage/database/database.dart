@@ -1,5 +1,5 @@
-import 'package:money/storage/database/data_others.dart'
-    if (dart.library.html) 'package:money/models/data_io/data_web.dart';
+import 'package:money/storage/database/database_sql.dart'
+    if (dart.library.html) 'package:money/models/data_io/database_web.dart';
 
 class MyDatabase extends MyDatabaseImplementation {
   MyDatabase(super.fileToOpen);

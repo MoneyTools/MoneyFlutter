@@ -1,6 +1,6 @@
 ## [1.2.06] 2024-02-02
 
-- Save to "Inserts" to SQL
+- Implement SQL "Inserts|Update|Delete"
 
 ## [1.2.05] 2024-02-01
 
