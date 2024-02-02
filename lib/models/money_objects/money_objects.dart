@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/database/database.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -71,8 +72,27 @@ class MoneyObjects<T> {
     clear();
   }
 
-  bool saveSql(final MyDatabase db) {
-    return false;
+  bool saveSql(final MyDatabase db, final String tableName) {
+    final List<T> list = getList(true);
+
+    for (final (item as MoneyObject<T>) in list) {
+      switch (item.change) {
+        case ChangeType.none:
+          break;
+        case ChangeType.inserted:
+          db.insert(tableName, item.getPersistableJSon());
+
+        case ChangeType.deleted:
+          db.delete(tableName, item.uniqueId);
+
+        case ChangeType.changed:
+          db.update(tableName, item.uniqueId, item.getPersistableJSon());
+
+        default:
+          debugPrint('Unhandled change ${item.change}');
+      }
+    }
+    return true;
   }
 
   /// Must be override by derived class

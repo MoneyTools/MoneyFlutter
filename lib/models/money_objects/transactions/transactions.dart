@@ -1,7 +1,5 @@
 import 'dart:math';
-import 'package:flutter/foundation.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/storage/database/database.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -9,8 +7,6 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 part 'transactions_csv.dart';
 
 part 'transactions_demo.dart';
-
-part 'transactions_sql.dart';
 
 class Transactions extends MoneyObjects<Transaction> {
   double runningBalance = 0.00;
@@ -25,11 +21,6 @@ class Transactions extends MoneyObjects<Transaction> {
   @override
   void loadDemoData() {
     _loadDemoData();
-  }
-
-  @override
-  bool saveSql(final MyDatabase db) {
-    return _saveSql(db);
   }
 
   @override

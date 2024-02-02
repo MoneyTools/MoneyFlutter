@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/storage/database/database.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -67,71 +65,6 @@ class Accounts extends MoneyObjects<Account> {
 
   List<Account> getOpenAccounts() {
     return getList().where((final Account item) => activeBankAccount(item)).toList();
-  }
-
-  @override
-  bool saveSql(final MyDatabase db) {
-    for (final Account a in getList()) {
-      switch (a.change) {
-        case ChangeType.none:
-          break;
-        case ChangeType.inserted:
-          /*
-            sb += "INSERT INTO Accounts (Id,AccountId,OfxAccountId,Name,Type,Description,OnlineAccount,OpeningBalance,LastSync,LastBalance,SyncGuid,Flags,Currency,WebSite,ReconcileWarning,CategoryIdForPrincipal,CategoryIdForInterest) VALUES (");
-            sb += string.Format("{0}", a.Id.ToString()));
-            sb += string.Format(",'{0}'", DBString(a.AccountId)));
-            sb += string.Format(",'{0}'", DBString(a.OfxAccountId)));
-            sb += string.Format(",'{0}'", DBString(a.Name)));
-            sb += string.Format(",{0}", ((int)a.Type).ToString()));
-            sb += string.Format(",'{0}'", DBString(a.Description)));
-            sb += string.Format(",{0}", a.OnlineAccount != null ? a.OnlineAccount.Id.ToString() : "-1"));
-            sb += string.Format(",{0}", a.OpeningBalance.ToString()));
-            sb += string.Format(",{0}", DBDateTime(a.LastSync)));
-            sb += string.Format(",{0}", DBDateTime(a.LastBalance)));
-            sb += string.Format(",{0}", DBGuid(a.SyncGuid)));
-            sb += string.Format(",{0}", ((int)a.Flags).ToString()));
-            sb += string.Format(",'{0}'", DBString(a.Currency)));
-            sb += string.Format(",'{0}'", DBString(a.WebSite)));
-            sb += string.Format(",{0}", a.ReconcileWarning));
-            sb += string.Format(",'{0}'", a.CategoryForPrincipal == null ? "-1" : a.CategoryForPrincipal.Id.ToString()));
-            sb += string.Format(",'{0}'", a.CategoryForInterest == null ? "-1" : a.CategoryForInterest.Id.ToString()));
-            sb.AppendLine(");");
-           */
-          db.insert('Accounts', {'name': 'John Doe', 'age': 30});
-
-        case ChangeType.deleted:
-        /*
-            sb.AppendLine("-- deleting account: " + a.Name);
-            sb.AppendLine(string.Format("DELETE FROM Accounts WHERE Id={0};", a.Id.ToString()));
-           */
-        case ChangeType.changed:
-        /*
-              sb.AppendLine("-- updating account: " + a.Name);
-              sb += "UPDATE Accounts SET ");
-              sb += string.Format("AccountId='{0}'", DBString(a.AccountId)));
-              sb += string.Format(",OfxAccountId='{0}'", DBString(a.OfxAccountId)));
-              sb += string.Format(",Name='{0}'", DBString(a.Name)));
-              sb += string.Format(",Type={0}", ((int)a.Type).ToString()));
-              sb += string.Format(",Description='{0}'", DBString(a.Description)));
-              sb += string.Format(",OnlineAccount={0}", a.OnlineAccount != null ? a.OnlineAccount.Id.ToString() : "-1"));
-              sb += string.Format(",OpeningBalance={0}", a.OpeningBalance.ToString()));
-              sb += string.Format(",LastSync={0}", DBDateTime(a.LastSync)));
-              sb += string.Format(",LastBalance={0}", DBDateTime(a.LastBalance)));
-              sb += string.Format(",SyncGuid={0}", DBGuid(a.SyncGuid)));
-              sb += string.Format(",Flags={0}", ((int)a.Flags).ToString()));
-              sb += string.Format(",Currency='{0}'", DBString(a.Currency)));
-              sb += string.Format(",WebSite='{0}'", DBString(a.WebSite)));
-              sb += string.Format(",ReconcileWarning={0}", a.ReconcileWarning));
-              sb += string.Format(",CategoryIdForPrincipal='{0}'", a.CategoryForPrincipal == null ? "-1" : a.CategoryForPrincipal.Id.ToString()));
-              sb += string.Format(",CategoryIdForInterest='{0}'", a.CategoryForInterest == null ? "-1" : a.CategoryForInterest.Id.ToString()));
-
-              sb.AppendLine(string.Format(" WHERE Id={0};", a.Id));
-           */
-        default:
-          debugPrint('Unhandled change ${a.change}');
-      }
-    }
-    return false;
   }
 
   bool activeBankAccount(final Account element) {
