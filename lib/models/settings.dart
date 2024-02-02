@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/storage/data/data_changes.dart';
+import 'package:money/storage/data/data_mutations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:money/helpers/misc_helpers.dart';
@@ -52,7 +52,7 @@ class Settings {
   double textScale = 1.0;
 
   // Tracking changes
-  final DataChanges trackChanges = DataChanges();
+  final DataMutations trackMutations = DataMutations();
 
   //--------------------------------------------------------
   Map<String, MyJson> views = <String, MyJson>{};

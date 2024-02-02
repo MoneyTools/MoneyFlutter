@@ -63,7 +63,7 @@ extension DataFromSql on Data {
       rememberWhereTheDataCameFrom(null);
       callbackWhenLoaded(false);
     }
-
+    callbackWhenLoaded(true);
     return true;
   }
 }

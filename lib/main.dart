@@ -289,11 +289,7 @@ class _MyMoneyState extends State<MyMoney> {
     data.saveToSql(
         filePathToLoad: settings.lastOpenedDataSource,
         callbackWhenLoaded: (final bool success) {
-          // _isLoading = false;
-          // setState(() {
-          //   _isLoading;
-          //   data;
-          // });
+          data.assessMutationsCountOfAllModels();
         });
   }
 

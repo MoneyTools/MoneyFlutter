@@ -27,11 +27,11 @@ import 'package:path/path.dart' as p;
 // Exports
 export 'package:money/helpers/json_helper.dart';
 
-part 'data_extention_csv.dart';
+part 'data_extension_csv.dart';
 
-part 'data_extention_demo.dart';
+part 'data_extension_demo.dart';
 
-part 'data_extention_sql.dart';
+part 'data_extension_sql.dart';
 
 class Data {
   int version = 1;
@@ -119,18 +119,30 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
-  void notifyTransactionChange(ChangeType change, dynamic objectChanged) {
+  void notifyTransactionChange(MutationType change, dynamic objectChanged) {
     // let the app know that something has changed
     version++;
 
     switch (change) {
-      case ChangeType.inserted:
-        Settings().trackChanges.increaseNumberOfChanges(increaseAdded: 1);
-      case ChangeType.deleted:
-        Settings().trackChanges.increaseNumberOfChanges(increaseDeleted: 1);
+      case MutationType.inserted:
+        Settings().trackMutations.increaseNumber(increaseAdded: 1);
+      case MutationType.changed:
+        Settings().trackMutations.increaseNumber(increaseDeleted: 1);
+      case MutationType.deleted:
+        Settings().trackMutations.increaseNumber(increaseDeleted: 1);
       default:
         break;
     }
+  }
+
+  void assessMutationsCountOfAllModels() {
+    Settings().trackMutations.reset();
+
+    for (final element in _listOfTables) {
+      element.assessMutationsCounts();
+    }
+
+    Settings().fireOnChanged();
   }
 
   // Where was the data loaded from

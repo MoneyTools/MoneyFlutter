@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/database/database.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -21,7 +22,7 @@ class MoneyObjects<T> {
       // No filtering needed
       return _list;
     }
-    return _list.where((final T item) => (item as MoneyObject<T>).change != ChangeType.deleted).toList();
+    return _list.where((final T item) => (item as MoneyObject<T>).mutation != MutationType.deleted).toList();
   }
 
   List<T> getListSortedById() {
@@ -49,8 +50,8 @@ class MoneyObjects<T> {
 
     // keep track
     if (isNewEntry) {
-      entry.change = ChangeType.inserted;
-      Data().notifyTransactionChange(ChangeType.inserted, entry);
+      entry.mutation = MutationType.inserted;
+      Data().notifyTransactionChange(MutationType.inserted, entry);
     }
   }
 
@@ -72,25 +73,42 @@ class MoneyObjects<T> {
     clear();
   }
 
+  void assessMutationsCounts() {
+    final List<T> list = getList(true);
+    for (final (item as MoneyObject<T>) in list) {
+      switch (item.mutation) {
+        case MutationType.inserted:
+          Settings().trackMutations.added++;
+        case MutationType.changed:
+          Settings().trackMutations.changed++;
+        case MutationType.deleted:
+          Settings().trackMutations.deleted++;
+        default:
+          break;
+      }
+    }
+  }
+
   bool saveSql(final MyDatabase db, final String tableName) {
     final List<T> list = getList(true);
 
     for (final (item as MoneyObject<T>) in list) {
-      switch (item.change) {
-        case ChangeType.none:
+      switch (item.mutation) {
+        case MutationType.none:
           break;
-        case ChangeType.inserted:
+        case MutationType.inserted:
           db.insert(tableName, item.getPersistableJSon());
 
-        case ChangeType.deleted:
+        case MutationType.deleted:
           db.delete(tableName, item.uniqueId);
 
-        case ChangeType.changed:
+        case MutationType.changed:
           db.update(tableName, item.uniqueId, item.getPersistableJSon());
 
         default:
-          debugPrint('Unhandled change ${item.change}');
+          debugPrint('Unhandled change ${item.mutation}');
       }
+      item.mutation = MutationType.none;
     }
     return true;
   }

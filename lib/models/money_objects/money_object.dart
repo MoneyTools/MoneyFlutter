@@ -14,7 +14,7 @@ class MoneyObject<C> {
   /// State of any and all object instances
   /// to indicated any alteration to the data set of the users
   /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
-  ChangeType change = ChangeType.none;
+  MutationType mutation = MutationType.none;
 
   MoneyObject<C> fromJson(final MyJson row) {
     return MoneyObject<C>();
@@ -47,7 +47,7 @@ class MoneyObject<C> {
   }
 }
 
-enum ChangeType {
+enum MutationType {
   none,
   changed,
   inserted,

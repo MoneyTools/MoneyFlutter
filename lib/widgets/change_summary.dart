@@ -36,15 +36,14 @@ class ChangeSummaryBadge extends StatelessWidget {
   Widget getChangeLabel(final BuildContext context) {
     List<Widget> widgets = [];
     TextStyle textStyle = Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
-    if (Settings().trackChanges.numberOfChangesAdded > 0) {
+    if (Settings().trackMutations.added > 0) {
       widgets.add(
-        buildCounter('+', Settings().trackChanges.numberOfChangesAdded, textStyle.copyWith(color: Colors.green)),
+        buildCounter('+', Settings().trackMutations.added, textStyle.copyWith(color: Colors.green)),
       );
     }
 
-    if (Settings().trackChanges.numberOfChangesDeleted > 0) {
-      widgets.add(
-          buildCounter('-', Settings().trackChanges.numberOfChangesDeleted, textStyle.copyWith(color: Colors.red)));
+    if (Settings().trackMutations.deleted > 0) {
+      widgets.add(buildCounter('-', Settings().trackMutations.deleted, textStyle.copyWith(color: Colors.red)));
     }
 
     return Row(
@@ -64,6 +63,6 @@ class ChangeSummaryBadge extends StatelessWidget {
   }
 
   String getTooltipText() {
-    return 'Items:\nAdded: ${Settings().trackChanges.numberOfChangesAdded}\nDeleted: ${Settings().trackChanges.numberOfChangesDeleted}';
+    return 'Items:\nAdded: ${Settings().trackMutations.added}\nDeleted: ${Settings().trackMutations.deleted}';
   }
 }

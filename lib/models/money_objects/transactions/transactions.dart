@@ -13,8 +13,8 @@ class Transactions extends MoneyObjects<Transaction> {
 
   /// Remove/tag a Transaction instance from the list in memory
   bool deleteItem(final Transaction transaction) {
-    transaction.change = ChangeType.deleted;
-    Data().notifyTransactionChange(ChangeType.deleted, transaction);
+    transaction.mutation = MutationType.deleted;
+    Data().notifyTransactionChange(MutationType.deleted, transaction);
     return false;
   }
 

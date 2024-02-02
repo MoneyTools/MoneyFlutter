@@ -198,8 +198,8 @@ class _MyAppBarState extends State<MyAppBar> {
                   width: 8,
                 ),
                 ChangeSummaryBadge(
-                  itemsAdded: Settings().trackChanges.numberOfChangesAdded,
-                  itemsDeleted: Settings().trackChanges.numberOfChangesDeleted,
+                  itemsAdded: Settings().trackMutations.added,
+                  itemsDeleted: Settings().trackMutations.deleted,
                 )
               ],
             )));
@@ -214,8 +214,8 @@ class _MyAppBarState extends State<MyAppBar> {
                   width: 8,
                 ),
                 ChangeSummaryBadge(
-                  itemsAdded: Settings().trackChanges.numberOfChangesAdded,
-                  itemsDeleted: Settings().trackChanges.numberOfChangesDeleted,
+                  itemsAdded: Settings().trackMutations.added,
+                  itemsDeleted: Settings().trackMutations.deleted,
                 )
               ],
             )));
@@ -260,8 +260,8 @@ class _MyAppBarState extends State<MyAppBar> {
           const Text('MyMoney', textAlign: TextAlign.left),
           const SizedBox(width: 8),
           ChangeSummaryBadge(
-            itemsAdded: Settings().trackChanges.numberOfChangesAdded,
-            itemsDeleted: Settings().trackChanges.numberOfChangesDeleted,
+            itemsAdded: Settings().trackMutations.added,
+            itemsDeleted: Settings().trackMutations.deleted,
           )
         ]),
         Text(getTitle(),
