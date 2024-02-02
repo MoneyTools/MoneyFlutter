@@ -183,7 +183,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void loadData() {
-    data.openDataSource(
+    data.loadFromSql(
         filePathToLoad: settings.lastOpenedDataSource,
         callbackWhenLoaded: (final bool success) {
           _isLoading = false;
@@ -281,8 +281,20 @@ class _MyMoneyState extends State<MyMoney> {
     openFolder(data.fullPathToNextDataSave!);
   }
 
-  void onSave() {
-    data.save();
+  void onSaveToCav() {
+    data.saveToCsv();
+  }
+
+  void onSaveToSql() {
+    data.saveToSql(
+        filePathToLoad: settings.lastOpenedDataSource,
+        callbackWhenLoaded: (final bool success) {
+          // _isLoading = false;
+          // setState(() {
+          //   _isLoading;
+          //   data;
+          // });
+        });
   }
 
   Widget showLoading() {
@@ -335,7 +347,8 @@ class _MyMoneyState extends State<MyMoney> {
         onFileClose: onFileClose,
         onShowFileLocation: onShowFileLocation,
         onImport: onImport,
-        onSave: onSave,
+        onSaveCsv: onSaveToCav,
+        onSaveSql: onSaveToSql,
       ),
       body: body,
       bottomNavigationBar: bottomNavigationBar,

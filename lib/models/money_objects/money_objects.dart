@@ -24,13 +24,13 @@ class MoneyObjects<T> {
   }
 
   List<T> getListSortedById() {
-    _list.sort((final T a, final T b) {
-      return sortByValue(
-        (a as MoneyObject<T>).uniqueId,
-        (b as MoneyObject<T>).uniqueId,
-        true,
-      );
-    });
+    // _list.sort((final T a, final T b) {
+    //   return sortByValue(
+    //     (a as MoneyObject<T>).uniqueId,
+    //     (b as MoneyObject<T>).uniqueId,
+    //     true,
+    //   );
+    // });
     return _list;
   }
 
@@ -81,6 +81,10 @@ class MoneyObjects<T> {
     clear();
   }
 
+  bool saveSql(final MyDatabase db) {
+    return false;
+  }
+
   /// Must be override by derived class
   T? instanceFromSqlite(final MyJson row) {
     return null;
@@ -109,6 +113,10 @@ class MoneyObjects<T> {
   String getCsvFromList(final List<T> sortedList) {
     final StringBuffer csv = StringBuffer();
 
+    // Add the UTF-8 BOM for Excel
+    // This does not affect clients like Google sheets
+    csv.write('\uFEFF');
+
     final List<Object> declarations = getFieldsForClass<T>();
 
     // CSV Header
@@ -120,14 +128,13 @@ class MoneyObjects<T> {
 
       for (final dynamic field in declarations) {
         if (field.serializeName != '') {
-          listValues.add('"${field.valueForSerialization(item)}"');
+          final dynamic value = field.valueForSerialization(item);
+          listValues.add('"$value"');
         }
       }
       csv.writeln(listValues.join(','));
     }
 
-    // Add the UTF-8 BOM for Excel
-    // This does not affect clients like Google sheets
-    return '\uFEFF$csv';
+    return csv.toString();
   }
 }

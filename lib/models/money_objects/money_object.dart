@@ -33,6 +33,18 @@ class MoneyObject<C> {
   /// SubTitle    |
   ///
   Widget Function()? buildListWidgetForSmallScreen = () => const Text('Small screen content goes here');
+
+  MyJson getPersistableJSon() {
+    final MyJson json = {};
+
+    final List<Field<C, dynamic>> declarations = getFieldsForClass<C>();
+    for (final Field<C, dynamic> field in declarations) {
+      if (field.serializeName != '' && field.serializeName != 'Id') {
+        json[field.serializeName] = field.valueForSerialization(this as C);
+      }
+    }
+    return json;
+  }
 }
 
 enum ChangeType {

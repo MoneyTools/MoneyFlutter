@@ -20,6 +20,12 @@ class Constants {
   static const int commandCurrencies = 1100;
   static const int commandIncludeClosedAccount = 1200;
   static const int commandIncludeRentals = 1300;
+
+  static const int commandFileOpen = 2000;
+  static const int commandFileLocation = 2001;
+  static const int commandFileSaveCsv = 2002;
+  static const int commandFileSaveSql = 2003;
+  static const int commandFileClose = 2004;
 }
 
 const List<Color> colorOptions = <Color>[

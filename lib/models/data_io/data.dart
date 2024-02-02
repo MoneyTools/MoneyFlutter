@@ -27,6 +27,9 @@ import 'package:path/path.dart' as p;
 // Exports
 export 'package:money/helpers/json_helper.dart';
 
+part 'data_sql.dart';
+part 'data_csv.dart';
+
 class Data {
   int version = 1;
 
@@ -131,109 +134,6 @@ class Data {
   String? fullPathToDataSource;
   String? fullPathToNextDataSave;
 
-  Future<void> openDataSource({
-    required final String? filePathToLoad,
-    required final Function callbackWhenLoaded,
-  }) async {
-    rememberWhereTheDataCameFrom(null);
-
-    if (filePathToLoad == null) {
-      return callbackWhenLoaded(false);
-    }
-
-    if (filePathToLoad == Constants.demoData) {
-      // Generate a data set to demo the application
-      for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-        moneyObjects.loadDemoData();
-      }
-
-      rememberWhereTheDataCameFrom(Constants.demoData);
-    } else {
-      // Load from SQLite
-      try {
-        final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
-
-        if (pathToDatabaseFile != null) {
-          // Open or create the database
-          final MyDatabase db = MyDatabase(pathToDatabaseFile);
-
-          // Account_Aliases
-          accountAliases.loadFromSql(db);
-
-          // Accounts
-          accounts.loadFromSql(db);
-
-          // Aliases
-          aliases.loadFromSql(db);
-
-          // Categories
-          categories.loadFromSql(db);
-
-          // Currencies
-          currencies.loadFromSql(db, 'SELECT * FROM Currencies');
-
-          // Investments
-          investments.loadFromSql(db, 'SELECT * FROM Investments');
-
-          // Loan Payments
-          loanPayments.loadFromSql(db, 'SELECT * FROM LoanPayments');
-
-          // Online Accounts
-          onlineAccounts.loadFromSql(db, 'SELECT * FROM OnlineAccounts');
-
-          // Payees
-          payees.loadFromSql(db, 'SELECT * FROM Payees');
-
-          // Rent Buildings
-          rentBuildings.loadFromSql(db, 'SELECT * FROM RentBuildings');
-
-          // Rent Units
-          rentUnits.loadFromSql(db, 'SELECT * FROM RentUnits');
-
-          // Securities
-          securities.loadFromSql(db, 'SELECT * FROM Securities');
-
-          // Splits
-          splits.loadFromSql(db, 'SELECT * FROM Splits');
-
-          // Stock Splits
-          stockSplits.loadFromSql(db, 'SELECT * FROM StockSplits');
-
-          // Transactions
-          transactions.loadFromSql(db, 'SELECT * FROM Transactions');
-
-          // Transaction Extras{
-          transactionExtras.loadFromSql(db, 'SELECT * FROM TransactionExtras');
-
-          // Close the database when done
-          db.dispose();
-        }
-        rememberWhereTheDataCameFrom(pathToDatabaseFile);
-      } catch (e) {
-        debugLog(e.toString());
-        rememberWhereTheDataCameFrom(null);
-        callbackWhenLoaded(false);
-        return;
-      }
-    }
-
-    // All individual table were loaded, now let the cross reference money object create linked to other tables
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.onAllDataLoaded();
-    }
-
-    // Notify that loading is completed
-    callbackWhenLoaded(true);
-  }
-
-  /// Close all tables
-  void close() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.clear();
-    }
-    rememberWhereTheDataCameFrom(null);
-  }
-
   Future<String?> validateDataBasePathIsValidAndExist(final String? filePath) async {
     try {
       if (filePath != null) {
@@ -269,100 +169,11 @@ class Data {
     return MyFileSystems.append(startingFolder, 'moneyCSV');
   }
 
-  void save() {
-    if (fullPathToNextDataSave == null) {
-      throw Exception('No container folder give for saving');
+  /// Close data source
+  void close() {
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.clear();
     }
-
-    final TimeLapse timeLapse = TimeLapse();
-    final String folder = fullPathToNextDataSave!;
-
-    MyFileSystems.ensureFolderExist(folder).then((final _) {
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'account_aliases.csv'),
-        accountAliases.toCSV(),
-      );
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'accounts.csv'),
-        accounts.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'aliases.csv'),
-        Data().aliases.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'categories.csv'),
-        Data().categories.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'currencies.csv'),
-        currencies.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'investments.csv'),
-        Data().investments.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'loan_payments.csv'),
-        Data().loanPayments.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'online_accounts.csv'),
-        Data().onlineAccounts.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'payees.csv'),
-        Data().payees.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'securities.csv'),
-        Data().securities.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'splits.csv'),
-        Data().splits.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'stock_splits.csv'),
-        Data().stockSplits.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'rent_units.csv'),
-        Data().rentUnits.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'rent_buildings.csv'),
-        Data().rentBuildings.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'rent_units.csv'),
-        Data().rentUnits.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'transaction_extras.csv'),
-        Data().transactionExtras.toCSV(),
-      );
-
-      MyFileSystems.writeToFile(
-        MyFileSystems.append(folder, 'transactions.csv'),
-        Data().transactions.toCSV(),
-      );
-
-      timeLapse.endAndPrint();
-    });
+    rememberWhereTheDataCameFrom(null);
   }
 }
