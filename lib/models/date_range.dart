@@ -4,16 +4,18 @@ class DateRange {
 
   DateRange({this.min, this.max});
 
-  void inflate(final DateTime dateTime) {
-    min ??= dateTime;
-    max ??= dateTime;
+  void inflate(final DateTime? dateTime) {
+    if (dateTime != null) {
+      min ??= dateTime;
+      max ??= dateTime;
 
-    if (dateTime.compareTo(min!) == -1) {
-      min = dateTime;
-    }
+      if (dateTime.compareTo(min!) == -1) {
+        min = dateTime;
+      }
 
-    if (dateTime.compareTo(max!) == 1) {
-      max = dateTime;
+      if (dateTime.compareTo(max!) == 1) {
+        max = dateTime;
+      }
     }
   }
 
@@ -61,7 +63,10 @@ class DateRange {
     return min!.isBefore(date) && max!.isAfter(date);
   }
 
-  bool isBetweenEqual(final DateTime date) {
+  bool isBetweenEqual(final DateTime? date) {
+    if (date == null) {
+      return false;
+    }
     if (min == date || max == date) {
       return true;
     }

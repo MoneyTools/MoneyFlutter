@@ -106,7 +106,7 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
       Data().transactions.getList().where((final Transaction transaction) => filter(transaction)).toList();
 
   list.sort(
-    (final Transaction a, final Transaction b) => a.dateTime.value.compareTo(b.dateTime.value),
+    (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
   );
 
   double runningBalance = 0.0;

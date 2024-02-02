@@ -85,18 +85,20 @@ extension MyJsonExtensions on MyJson {
   /// '1999-12-25T00:00:00.000'
   /// or
   /// '1999-12-25'
-  DateTime getDate(
+  DateTime? getDate(
     final String key, [
     final DateTime? defaultIfNotFound,
   ]) {
     final dynamic value = this[key];
+
     if (value == null) {
-      return defaultIfNotFound ?? DateTime.parse('1970-01-01');
+      return defaultIfNotFound;
     }
+
     try {
       return DateTime.parse(value.toString());
     } catch (_) {
-      return defaultIfNotFound ?? DateTime.parse('1970-01-01');
+      return defaultIfNotFound;
     }
   }
 }

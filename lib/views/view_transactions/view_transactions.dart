@@ -94,7 +94,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         .toList();
 
     if (!balanceDone) {
-      list.sort((final Transaction a, final Transaction b) => a.dateTime.value.compareTo(b.dateTime.value));
+      list.sort((final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value));
 
       double runningBalance = 0.0;
 
@@ -159,9 +159,9 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
       transaction;
 
       if (timePeriod.isBetweenEqual(transaction.dateTime.value)) {
-        final DateTime date = transaction.dateTime.value;
         final num value = transaction.amount.value;
 
+        final DateTime date = transaction.dateTime.value!;
         // Format the date as year-month string (e.g., '2023-11')
         final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
 

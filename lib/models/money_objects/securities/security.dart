@@ -50,7 +50,7 @@ class Security extends MoneyObject<Security> {
   final int taxable;
 
   // 8
-  final DateTime priceDate;
+  final DateTime? priceDate;
 
   Security({
     required this.name,

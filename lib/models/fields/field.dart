@@ -145,7 +145,7 @@ class FieldAmount<C> extends Field<C, double> {
         );
 }
 
-class FieldDate<C> extends Field<C, DateTime> {
+class FieldDate<C> extends Field<C, DateTime?> {
   FieldDate({
     super.importance,
     super.name,
@@ -156,7 +156,7 @@ class FieldDate<C> extends Field<C, DateTime> {
     super.useAsDetailPanels,
     super.sort,
   }) : super(
-          defaultValue: DateTime.parse('1970-01-01'),
+          defaultValue: null,
           align: TextAlign.center,
           type: FieldType.date,
           columnWidth: ColumnWidth.small,

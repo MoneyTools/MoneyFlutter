@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/helpers/misc_helpers.dart';
 
 void main() {
   final MyJson myMap = <String, dynamic>{
@@ -32,7 +33,7 @@ void main() {
       expect(myMap.getInt('age'), 25);
       expect(myMap.getBool('isStudent'), false);
       expect(myMap.getBool('isHuman'), true);
-      expect(myMap.getDate('birthday').toIso8601String(), '1999-12-25T00:00:00.000');
+      expect(dateAsIso8601OrDefault(myMap.getDate('birthday')), '1999-12-25T00:00:00.000');
     });
   });
 }

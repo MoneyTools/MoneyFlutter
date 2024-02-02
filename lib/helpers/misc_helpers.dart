@@ -11,6 +11,13 @@ String stringValueOrDefault(final String? value, {final String defaultValueIfNul
   return value;
 }
 
+String dateAsIso8601OrDefault(final DateTime? value, {final String defaultValueIfNull = ''}) {
+  if (value == null) {
+    return defaultValueIfNull;
+  }
+  return value.toIso8601String();
+}
+
 num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
   if (value == null) {
     return defaultValueIfNull;
@@ -70,10 +77,26 @@ int sortByValue(final num a, final num b, final bool ascending) {
   }
 }
 
-int sortByDate(final DateTime a, final DateTime b, final bool ascending) {
+int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = true]) {
+  if (a == null && b == null) {
+    return 0;
+  }
+
   if (ascending) {
+    if (a == null) {
+      return -1;
+    }
+    if (b == null) {
+      return 1;
+    }
     return a.compareTo(b);
   } else {
+    if (a == null) {
+      return 1;
+    }
+    if (b == null) {
+      return -1;
+    }
     return b.compareTo(a);
   }
 }

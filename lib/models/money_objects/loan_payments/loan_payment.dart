@@ -27,14 +27,12 @@ class LoanPayment extends MoneyObject<LoanPayment> {
 
   /// Date
   /// 2|Date|datetime|1||0
-  Field<LoanPayment, DateTime> date = Field<LoanPayment, DateTime>(
+  FieldDate<LoanPayment> date = FieldDate<LoanPayment>(
     importance: 2,
-    type: FieldType.date,
     serializeName: 'Date',
     useAsColumn: false,
-    defaultValue: DateTime.parse('1970-01-01'),
-    valueFromInstance: (final LoanPayment instance) => instance.date.value.toIso8601String(),
-    valueForSerialization: (final LoanPayment instance) => instance.date.value.toIso8601String(),
+    valueFromInstance: (final LoanPayment instance) => dateAsIso8601OrDefault(instance.date.value),
+    valueForSerialization: (final LoanPayment instance) => dateAsIso8601OrDefault(instance.date.value),
   );
 
   /// 3
@@ -75,7 +73,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
   LoanPayment({
     required final int id,
     required final int accountId,
-    required final DateTime date,
+    required final DateTime? date,
     required final double principal,
     required final double interest,
     required final String memo,

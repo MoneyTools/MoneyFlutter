@@ -143,14 +143,12 @@ class Account extends MoneyObject<Account> {
 
   /// lastSync
   /// 11|LastSync|datetime|0||0
-  Field<Account, DateTime> lastSync = Field<Account, DateTime>(
+  FieldDate<Account> lastSync = FieldDate<Account>(
     importance: 90,
-    type: FieldType.date,
     serializeName: 'Date',
     useAsColumn: false,
-    defaultValue: DateTime.parse('1970-01-01'),
-    valueFromInstance: (final Account instance) => instance.lastSync.value.toIso8601String(),
-    valueForSerialization: (final Account instance) => instance.lastSync.value.toIso8601String(),
+    valueFromInstance: (final Account instance) => dateAsIso8601OrDefault(instance.lastSync.value),
+    valueForSerialization: (final Account instance) => dateAsIso8601OrDefault(instance.lastSync.value),
   );
 
   /// SyncGuid
@@ -172,13 +170,12 @@ class Account extends MoneyObject<Account> {
 
   /// Last Balance date
   /// 14|LastBalance|datetime|0||0
-  Field<Account, DateTime> lastBalance = Field<Account, DateTime>(
+  FieldDate<Account> lastBalance = FieldDate<Account>(
     importance: 98,
     serializeName: 'LastBalance',
-    defaultValue: DateTime.parse('1970-01-01'),
     useAsColumn: false,
-    valueFromInstance: (final Account instance) => instance.lastBalance.value,
-    valueForSerialization: (final Account instance) => instance.lastBalance.value,
+    valueFromInstance: (final Account instance) => dateAsIso8601OrDefault(instance.lastBalance.value),
+    valueForSerialization: (final Account instance) => dateAsIso8601OrDefault(instance.lastBalance.value),
   );
 
   /// categoryIdForPrincipal

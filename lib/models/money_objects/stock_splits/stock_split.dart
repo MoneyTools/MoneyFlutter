@@ -25,7 +25,7 @@ class StockSplit extends MoneyObject<StockSplit> {
   );
 
   // 1
-  final DateTime date;
+  final DateTime? date;
 
   // 2
   final int security;

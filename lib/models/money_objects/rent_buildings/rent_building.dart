@@ -44,8 +44,8 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     name: 'Purchased Date',
     serializeName: 'PurchasedDate',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.purchasedDate.value,
-    valueForSerialization: (final RentBuilding instance) => instance.purchasedDate.value,
+    valueFromInstance: (final RentBuilding instance) => dateAsIso8601OrDefault(instance.purchasedDate.value),
+    valueForSerialization: (final RentBuilding instance) => dateAsIso8601OrDefault(instance.purchasedDate.value),
   );
 
   /// PurchasedPrice

@@ -45,7 +45,7 @@ class Transaction extends MoneyObject<Transaction> {
     name: 'Date',
     serializeName: 'Date',
     valueFromInstance: (final Transaction instance) => instance.dateTimeAsText,
-    valueForSerialization: (final Transaction instance) => instance.dateTime.value.toIso8601String(),
+    valueForSerialization: (final Transaction instance) => dateAsIso8601OrDefault(instance.dateTime.value),
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
         sortByDate(a.dateTime.value, b.dateTime.value, ascending),
   );
@@ -143,8 +143,8 @@ class Transaction extends MoneyObject<Transaction> {
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
-    valueFromInstance: (final Transaction instance) => instance.reconciledDate.value,
-    valueForSerialization: (final Transaction instance) => instance.reconciledDate.value.toIso8601String(),
+    valueFromInstance: (final Transaction instance) => dateAsIso8601OrDefault(instance.reconciledDate.value),
+    valueForSerialization: (final Transaction instance) => dateAsIso8601OrDefault(instance.reconciledDate.value),
   );
 
   /// Budget Balance Date
@@ -154,8 +154,8 @@ class Transaction extends MoneyObject<Transaction> {
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
-    valueFromInstance: (final Transaction instance) => instance.budgetBalanceDate.value,
-    valueForSerialization: (final Transaction instance) => instance.budgetBalanceDate.value.toIso8601String(),
+    valueFromInstance: (final Transaction instance) => dateAsIso8601OrDefault(instance.budgetBalanceDate.value),
+    valueForSerialization: (final Transaction instance) => dateAsIso8601OrDefault(instance.budgetBalanceDate.value),
   );
 
   /// Transfer
@@ -234,8 +234,8 @@ class Transaction extends MoneyObject<Transaction> {
     name: 'Merge Date',
     serializeName: 'MergeDate',
     useAsColumn: false,
-    valueFromInstance: (final Transaction instance) => instance.mergeDate.value,
-    valueForSerialization: (final Transaction instance) => instance.mergeDate.value.toIso8601String(),
+    valueFromInstance: (final Transaction instance) => dateAsIso8601OrDefault(instance.mergeDate.value),
+    valueForSerialization: (final Transaction instance) => dateAsIso8601OrDefault(instance.mergeDate.value),
   );
 
   //------------------------------------------------------------------------

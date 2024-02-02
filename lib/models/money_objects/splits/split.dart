@@ -52,7 +52,7 @@ class Split extends MoneyObject<Split> {
   int flags;
 
   // 8
-  DateTime budgetBalanceDate;
+  DateTime? budgetBalanceDate;
 
   // Not serialized
   Category? categoryInstance;
