@@ -12,7 +12,24 @@ class MyDatabaseImplementation {
     return _db.select(query);
   }
 
+  void insert(final String tableName, final MyJson data) {
+    _db.execute(buildInsertCommand(tableName, data));
+  }
+
   void dispose() {
     _db.dispose();
+  }
+
+  String buildInsertCommand(String tableName, MyJson data) {
+    final columnNames = data.keys.join(', ');
+    final columnValues = data.values.map((value) {
+      if (value is String) {
+        return "'$value'";
+      } else {
+        return value.toString();
+      }
+    }).join(', ');
+
+    return 'INSERT INTO $tableName ($columnNames) VALUES ($columnValues)';
   }
 }

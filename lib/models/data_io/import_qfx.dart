@@ -42,7 +42,7 @@ void importQFX(
     }
 
     final Transaction t = Transaction()
-      ..id.value = -1
+      ..id.value = Data().transactions.getNextTransactionId()
       ..accountId.value = account.id.value
       ..dateTime.value = item.date
       ..payeeId.value = payee.id.value

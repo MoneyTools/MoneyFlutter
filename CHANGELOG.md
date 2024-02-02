@@ -1,3 +1,7 @@
+## [1.2.06] 2024-02-02
+
+- Save to "Inserts" to SQL
+
 ## [1.2.05] 2024-02-01
 
 - Improved Badge for Changes, now showing +Added -Deleted

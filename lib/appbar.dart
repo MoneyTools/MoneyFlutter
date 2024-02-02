@@ -12,7 +12,8 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final void Function() onFileClose;
   final void Function() onShowFileLocation;
   final void Function() onImport;
-  final void Function() onSave;
+  final void Function() onSaveCsv;
+  final void Function() onSaveSql;
 
   const MyAppBar({
     super.key,
@@ -20,7 +21,8 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
     required this.onFileClose,
     required this.onShowFileLocation,
     required this.onImport,
-    required this.onSave,
+    required this.onSaveCsv,
+    required this.onSaveSql,
   });
 
   @override
@@ -39,7 +41,8 @@ class _MyAppBarState extends State<MyAppBar> {
         widget.onFileOpen,
         widget.onFileClose,
         widget.onShowFileLocation,
-        widget.onSave,
+        widget.onSaveCsv,
+        widget.onSaveSql,
       ),
       actions: <Widget>[
         IconButton(
@@ -162,7 +165,8 @@ class _MyAppBarState extends State<MyAppBar> {
     final void Function() onFileOpen,
     final void Function() onFileClose,
     final void Function() onShowFileLocation,
-    final void Function() onSave,
+    final void Function() onSaveCsv,
+    final void Function() onSaveSql,
   ) {
     return PopupMenuButton<int>(
       child: buildPopupHeader(),
@@ -171,7 +175,7 @@ class _MyAppBarState extends State<MyAppBar> {
         // Open
         list.add(
           const PopupMenuItem<int>(
-            value: 2,
+            value: Constants.commandFileOpen,
             child: Text('Open'),
           ),
         );
@@ -179,17 +183,33 @@ class _MyAppBarState extends State<MyAppBar> {
         // File Location
         list.add(
           const PopupMenuItem<int>(
-            value: 3,
+            value: Constants.commandFileLocation,
             child: Text('File location'),
           ),
         );
 
-        // Save
+        // Save CSV
         list.add(PopupMenuItem<int>(
-            value: 4,
+            value: Constants.commandFileSaveCsv,
             child: Row(
               children: [
-                const Text('Save'),
+                const Text('Save CSV'),
+                const SizedBox(
+                  width: 8,
+                ),
+                ChangeSummaryBadge(
+                  itemsAdded: Settings().trackChanges.numberOfChangesAdded,
+                  itemsDeleted: Settings().trackChanges.numberOfChangesDeleted,
+                )
+              ],
+            )));
+
+        // Save SQL
+        list.add(PopupMenuItem<int>(
+            value: Constants.commandFileSaveSql,
+            child: Row(
+              children: [
+                const Text('Save SQL'),
                 const SizedBox(
                   width: 8,
                 ),
@@ -203,24 +223,30 @@ class _MyAppBarState extends State<MyAppBar> {
         // Close
         list.add(
           const PopupMenuItem<int>(
-            value: 1,
+            value: Constants.commandFileClose,
             child: Text('Close'),
           ),
         );
         return list;
       },
       onSelected: (final int index) {
-        if (index == 1) {
-          onFileClose();
-        }
-        if (index == 2) {
-          onFileOpen();
-        }
-        if (index == 3) {
-          onShowFileLocation();
-        }
-        if (index == 4) {
-          onSave();
+        switch (index) {
+          case Constants.commandFileClose:
+            onFileClose();
+
+          case Constants.commandFileOpen:
+            onFileOpen();
+
+          case Constants.commandFileLocation:
+            onShowFileLocation();
+
+          case Constants.commandFileSaveCsv:
+            onSaveCsv();
+
+          case Constants.commandFileSaveSql:
+            onSaveSql();
+          default:
+            debugPrint(' unhandled $index');
         }
       },
     );

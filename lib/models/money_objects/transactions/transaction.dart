@@ -19,11 +19,8 @@ class Transaction extends MoneyObject<Transaction> {
 
   /// ID
   /// SQLite  0|Id|bigint|0||1
-  FieldInt<Transaction> id = FieldInt<Transaction>(
+  FieldId<Transaction> id = FieldId<Transaction>(
     importance: 0,
-    serializeName: 'Id',
-    useAsColumn: false,
-    useAsDetailPanels: false,
     valueForSerialization: (final Transaction instance) => instance.id.value,
   );
 
@@ -147,7 +144,7 @@ class Transaction extends MoneyObject<Transaction> {
     serializeName: 'ReconciledDate',
     useAsColumn: false,
     valueFromInstance: (final Transaction instance) => instance.reconciledDate.value,
-    valueForSerialization: (final Transaction instance) => instance.reconciledDate.value,
+    valueForSerialization: (final Transaction instance) => instance.reconciledDate.value.toIso8601String(),
   );
 
   /// Budget Balance Date
@@ -158,7 +155,7 @@ class Transaction extends MoneyObject<Transaction> {
     serializeName: 'ReconciledDate',
     useAsColumn: false,
     valueFromInstance: (final Transaction instance) => instance.budgetBalanceDate.value,
-    valueForSerialization: (final Transaction instance) => instance.budgetBalanceDate.value,
+    valueForSerialization: (final Transaction instance) => instance.budgetBalanceDate.value.toIso8601String(),
   );
 
   /// Transfer
@@ -235,10 +232,10 @@ class Transaction extends MoneyObject<Transaction> {
   FieldDate<Transaction> mergeDate = FieldDate<Transaction>(
     importance: 10,
     name: 'Merge Date',
-    serializeName: 'Merge Date',
+    serializeName: 'MergeDate',
     useAsColumn: false,
     valueFromInstance: (final Transaction instance) => instance.mergeDate.value,
-    valueForSerialization: (final Transaction instance) => instance.mergeDate.value,
+    valueForSerialization: (final Transaction instance) => instance.mergeDate.value.toIso8601String(),
   );
 
   //------------------------------------------------------------------------
