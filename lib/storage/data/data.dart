@@ -1,10 +1,10 @@
 // Imports
 import 'dart:io';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/data_io/database/database.dart';
+import 'package:money/storage/database/database.dart';
 import 'package:money/models/money_objects/account_aliases/account_aliases.dart';
 import 'package:money/models/money_objects/aliases/aliases.dart';
-import 'package:money/models/data_io/file_systems.dart';
+import 'package:money/helpers/file_systems.dart';
 import 'package:money/models/money_objects/currencies/currencies.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
@@ -27,11 +27,11 @@ import 'package:path/path.dart' as p;
 // Exports
 export 'package:money/helpers/json_helper.dart';
 
-part 'data_csv.dart';
+part 'data_extention_csv.dart';
 
-part 'data_demo.dart';
+part 'data_extention_demo.dart';
 
-part 'data_sql.dart';
+part 'data_extention_sql.dart';
 
 class Data {
   int version = 1;
@@ -191,6 +191,7 @@ class Data {
         // Load from SQLite
         await loadFromSql(filePathToLoad);
       } else {
+        // Load from a folder that contains CSV files
         await loadFromCsv(filePathToLoad);
       }
     } catch (e) {

@@ -1,5 +1,5 @@
-import 'package:money/models/data_io/data.dart';
-import 'package:money/models/data_io/database/database.dart';
+import 'package:money/storage/data/data.dart';
+import 'package:money/storage/database/database.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
 // exports

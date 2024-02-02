@@ -1,7 +1,7 @@
 import 'package:money/models/settings.dart';
 
 /// Tracking changes of data
-class TrackChanges {
+class DataChanges {
   int numberOfChangesAdded = 0;
   int numberOfChangesDeleted = 0;
 

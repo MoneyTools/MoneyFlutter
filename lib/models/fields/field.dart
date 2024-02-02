@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/data_io/data.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 
 class Field<C, T> {

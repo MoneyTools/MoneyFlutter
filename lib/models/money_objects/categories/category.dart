@@ -1,7 +1,7 @@
 // Imports
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/data_io/data.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';

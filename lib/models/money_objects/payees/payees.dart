@@ -1,4 +1,4 @@
-import 'package:money/models/data_io/data.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';

@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
-import 'package:money/models/data_io/data.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/snack_bar.dart';
@@ -35,17 +35,11 @@ void importQFX(
     // find by fuzzy match
     Payee? payee = Data().aliases.findByMatch(item.name);
 
-    // ignore: prefer_conditional_assignment
-    if (payee == null) {
-      // if null find match or add
-      payee = Data().payees.findOrAddPayee(item.name);
-    }
-
     final Transaction t = Transaction()
       ..id.value = Data().transactions.getNextTransactionId()
       ..accountId.value = account.id.value
       ..dateTime.value = item.date
-      ..payeeId.value = payee.id.value
+      ..payeeId.value = payee == null ? -1 : payee.id.value
       ..categoryId.value = getCategoryFromOfxType(item)
       ..amount.value = item.amount
       ..fitid.value = item.fitid
