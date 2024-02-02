@@ -27,8 +27,11 @@ import 'package:path/path.dart' as p;
 // Exports
 export 'package:money/helpers/json_helper.dart';
 
-part 'data_sql.dart';
 part 'data_csv.dart';
+
+part 'data_demo.dart';
+
+part 'data_sql.dart';
 
 class Data {
   int version = 1;
@@ -167,6 +170,43 @@ class Data {
 
   String generateNextFolderToSaveTo(final String startingFolder) {
     return MyFileSystems.append(startingFolder, 'moneyCSV');
+  }
+
+  /// Automated detection of what type of storage to load the data from
+  Future<void> loadFromPath({
+    required final String? filePathToLoad,
+    required final Function callbackWhenLoaded,
+  }) async {
+    rememberWhereTheDataCameFrom(null);
+
+    if (filePathToLoad == null) {
+      return callbackWhenLoaded(false);
+    }
+
+    try {
+      if (filePathToLoad == Constants.demoData) {
+        // Generate a data set to demo the application
+        loadFromDemoData();
+      } else if (filePathToLoad.toLowerCase().endsWith('.mymoney.mmdb')) {
+        // Load from SQLite
+        await loadFromSql(filePathToLoad);
+      } else {
+        await loadFromCsv(filePathToLoad);
+      }
+    } catch (e) {
+      debugLog(e.toString());
+      rememberWhereTheDataCameFrom(null);
+      callbackWhenLoaded(false);
+      return;
+    }
+
+    // All individual table were loaded, now let the cross reference money object create linked to other tables
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.onAllDataLoaded();
+    }
+
+    // Notify that loading is completed
+    callbackWhenLoaded(true);
   }
 
   /// Close data source

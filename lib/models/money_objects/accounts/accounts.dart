@@ -7,11 +7,6 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Accounts extends MoneyObjects<Account> {
   @override
-  String sqlQuery() {
-    return 'SELECT * FROM Accounts';
-  }
-
-  @override
   Account instanceFromSqlite(final MyJson row) {
     return Account.fromJson(row);
   }

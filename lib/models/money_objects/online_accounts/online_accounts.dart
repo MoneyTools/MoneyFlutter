@@ -4,11 +4,6 @@ import 'package:money/models/money_objects/online_accounts/online_account.dart';
 
 class OnlineAccounts extends MoneyObjects<OnlineAccount> {
   @override
-  String sqlQuery() {
-    return 'SELECT * FROM AccountAliases';
-  }
-
-  @override
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {

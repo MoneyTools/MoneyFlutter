@@ -8,11 +8,6 @@ export 'package:money/models/money_objects/currencies/currency.dart';
 
 class Currencies extends MoneyObjects<Currency> {
   @override
-  String sqlQuery() {
-    return 'SELECT * FROM Currencies';
-  }
-
-  @override
   Currency instanceFromSqlite(final MyJson row) {
     return Currency.fromJson(row);
   }

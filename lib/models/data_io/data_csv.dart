@@ -1,6 +1,11 @@
 part of 'data.dart';
 
 extension DataFromCsv on Data {
+  Future<void> loadFromCsv(String filePathToLoad) async {
+    // TODO
+    throw ('To Be Implemented');
+  }
+
   void saveToCsv() {
     if (fullPathToNextDataSave == null) {
       throw Exception('No container folder give for saving');

@@ -24,13 +24,13 @@ class MoneyObjects<T> {
   }
 
   List<T> getListSortedById() {
-    // _list.sort((final T a, final T b) {
-    //   return sortByValue(
-    //     (a as MoneyObject<T>).uniqueId,
-    //     (b as MoneyObject<T>).uniqueId,
-    //     true,
-    //   );
-    // });
+    _list.sort((final T a, final T b) {
+      return sortByValue(
+        (a as MoneyObject<T>).uniqueId,
+        (b as MoneyObject<T>).uniqueId,
+        true,
+      );
+    });
     return _list;
   }
 
@@ -55,16 +55,6 @@ class MoneyObjects<T> {
 
   T? get(final num id) {
     return _map[id];
-  }
-
-  /// Must be override by derived class
-  String sqlQuery() {
-    return 'SELECT * FROM ?';
-  }
-
-  void loadFromSql(final MyDatabase db, [final String? query]) {
-    final List<MyJson> result = db.select(query ?? sqlQuery());
-    loadFromJson(result);
   }
 
   void loadFromJson(final List<MyJson> rows) {

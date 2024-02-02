@@ -183,7 +183,7 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   void loadData() {
-    data.loadFromSql(
+    data.loadFromPath(
         filePathToLoad: settings.lastOpenedDataSource,
         callbackWhenLoaded: (final bool success) {
           _isLoading = false;

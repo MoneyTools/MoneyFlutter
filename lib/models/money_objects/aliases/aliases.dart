@@ -5,11 +5,6 @@ import 'package:money/models/money_objects/payees/payee.dart';
 
 class Aliases extends MoneyObjects<Alias> {
   @override
-  String sqlQuery() {
-    return 'SELECT * FROM Aliases';
-  }
-
-  @override
   Alias instanceFromSqlite(final MyJson row) {
     return Alias.fromJson(row);
   }

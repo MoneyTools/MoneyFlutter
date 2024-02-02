@@ -5,11 +5,6 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Categories extends MoneyObjects<Category> {
   @override
-  String sqlQuery() {
-    return 'SELECT * FROM Categories';
-  }
-
-  @override
   Category instanceFromSqlite(final MyJson row) {
     return Category.fromJson(row);
   }
