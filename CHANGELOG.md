@@ -1,3 +1,7 @@
+## [1.2.07] 2024-02-03
+
+- fix web version
+
 ## [1.2.06] 2024-02-02
 
 - Implement SQL "Inserts|Update|Delete"

@@ -7,8 +7,17 @@ class MyDatabaseImplementation {
   }
 
   List<MyJson> select(final String query) {
-    return <MyJson>[];
+    return [];
   }
+
+  /// SQL Insert
+  void insert(final String tableName, final MyJson data) {}
+
+  /// SQL Delete
+  void delete(final String tableName, final int id) {}
+
+  /// SQL Update
+  void update(final String tableName, final int id, final MyJson jsonMap) {}
 
   void dispose() {}
 }
