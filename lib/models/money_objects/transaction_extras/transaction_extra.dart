@@ -15,12 +15,8 @@ class TransactionExtra extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   // 0
-  Field<TransactionExtra, int> id = Field<TransactionExtra, int>(
-    importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
-    valueForSerialization: (final TransactionExtra instance) => instance.id.value,
+  FieldId<TransactionExtra> id = FieldId<TransactionExtra>(
+    valueForSerialization: (final TransactionExtra instance) => instance.uniqueId,
   );
 
   // 1

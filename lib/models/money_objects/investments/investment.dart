@@ -10,8 +10,7 @@ class Investment extends MoneyObject {
   /// Id
   //// 0    Id              bigint  0                    1
   FieldId<Investment> id = FieldId<Investment>(
-    importance: 0,
-    valueForSerialization: (final Investment instance) => instance.id.value,
+    valueForSerialization: (final Investment instance) => instance.uniqueId,
   );
 
   /// 1    Security        INT     1                    0

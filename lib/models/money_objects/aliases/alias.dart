@@ -18,8 +18,7 @@ class Alias extends MoneyObject {
   /// ID
   /// 0    Id       INT            0                 1
   FieldId<Alias> id = FieldId<Alias>(
-    importance: 0,
-    valueForSerialization: (final Alias instance) => instance.id.value,
+    valueForSerialization: (final Alias instance) => instance.uniqueId,
   );
 
   /// Pattern

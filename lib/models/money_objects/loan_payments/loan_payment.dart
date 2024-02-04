@@ -13,8 +13,7 @@ class LoanPayment extends MoneyObject {
   /// ID
   /// 0|Id|INT|1||0
   FieldId<LoanPayment> id = FieldId<LoanPayment>(
-    importance: 0,
-    valueForSerialization: (final LoanPayment instance) => instance.id.value,
+    valueForSerialization: (final LoanPayment instance) => instance.uniqueId,
   );
 
   /// 1|AccountId|INT|1||0

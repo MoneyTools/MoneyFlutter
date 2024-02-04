@@ -32,12 +32,8 @@ class OnlineAccount extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   // 0
-  Field<OnlineAccount, int> id = Field<OnlineAccount, int>(
-    importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
-    valueForSerialization: (final OnlineAccount instance) => instance.id.value,
+  FieldId<OnlineAccount> id = FieldId<OnlineAccount>(
+    valueForSerialization: (final OnlineAccount instance) => instance.uniqueId,
   );
 
   // 1

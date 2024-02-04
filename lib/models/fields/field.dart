@@ -194,7 +194,7 @@ class DeclareNoSerialized<C, T> extends Field<C, T> {
 
 class FieldId<C> extends Field<C, int> {
   FieldId({
-    super.importance,
+    super.importance = 0,
     super.valueFromInstance,
     super.valueForSerialization,
   }) : super(

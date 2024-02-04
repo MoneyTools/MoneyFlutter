@@ -18,13 +18,8 @@ class Account extends MoneyObject {
 
   // Id
   // 0|Id|INT|0||1
-  Field<Account, int> id = Field<Account, int>(
-    importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
-    useAsDetailPanels: false,
-    valueForSerialization: (final Account instance) => instance.id.value,
+  FieldId<Account> id = FieldId<Account>(
+    valueForSerialization: (final Account instance) => instance.uniqueId,
   );
 
   // Account ID

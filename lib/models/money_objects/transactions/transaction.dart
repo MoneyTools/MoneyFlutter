@@ -23,9 +23,7 @@ class Transaction extends MoneyObject {
   /// ID
   /// SQLite  0|Id|bigint|0||1
   FieldId<Transaction> id = FieldId<Transaction>(
-    importance: 0,
-    valueFromInstance: (final Transaction instance) => instance.id.value,
-    valueForSerialization: (final Transaction instance) => instance.id.value,
+    valueForSerialization: (final Transaction instance) => instance.uniqueId,
   );
 
   /// Account Id

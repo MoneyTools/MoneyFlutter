@@ -22,12 +22,8 @@ class Security extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   // 0
-  Field<Security, int> id = Field<Security, int>(
-    importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
-    valueForSerialization: (final Security instance) => instance.id.value,
+  FieldId<Security> id = FieldId<Security>(
+    valueForSerialization: (final Security instance) => instance.uniqueId,
   );
 
   // 1

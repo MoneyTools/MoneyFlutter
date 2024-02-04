@@ -19,13 +19,8 @@ class Category extends MoneyObject {
 
   /// Id
   /// 0|Id|INT|0||1
-  Field<Category, int> id = Field<Category, int>(
-    importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
-    useAsDetailPanels: false,
-    valueForSerialization: (final Category instance) => instance.id.value,
+  FieldId<Category> id = FieldId<Category>(
+    valueForSerialization: (final Category instance) => instance.uniqueId,
   );
 
   /// 1|ParentId|INT|0||0

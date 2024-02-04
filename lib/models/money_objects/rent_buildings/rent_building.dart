@@ -14,9 +14,7 @@ class RentBuilding extends MoneyObject {
   /// ID
   // 0    Id                      INT            0                    1
   FieldId<RentBuilding> id = FieldId<RentBuilding>(
-    importance: 0,
-    valueFromInstance: (final RentBuilding instance) => instance.id.value,
-    valueForSerialization: (final RentBuilding instance) => instance.id.value,
+    valueForSerialization: (final RentBuilding instance) => instance.uniqueId,
   );
 
   /// Name

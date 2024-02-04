@@ -22,8 +22,7 @@ class Currency extends MoneyObject {
 
   // 0
   FieldId<Currency> id = FieldId<Currency>(
-    importance: 0,
-    valueForSerialization: (final Currency instance) => instance.id.value,
+    valueForSerialization: (final Currency instance) => instance.uniqueId,
   );
 
   /// 1

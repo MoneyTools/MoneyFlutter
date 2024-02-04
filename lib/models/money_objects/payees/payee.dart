@@ -16,12 +16,8 @@ class Payee extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   // 0
-  Field<Payee, int> id = Field<Payee, int>(
-    importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
-    valueForSerialization: (final Payee instance) => instance.id.value,
+  FieldId<Payee> id = FieldId<Payee>(
+    valueForSerialization: (final Payee instance) => instance.uniqueId,
   );
 
   // 1

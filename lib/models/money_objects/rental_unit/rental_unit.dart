@@ -18,11 +18,8 @@ class RentUnit extends MoneyObject {
 
   /// Id
   /// 0|Id|INT|0||1
-  FieldInt<RentUnit> id = FieldInt<RentUnit>(
-    importance: 0,
-    serializeName: 'Id',
-    useAsColumn: false,
-    valueForSerialization: (final RentUnit instance) => instance.id.value,
+  FieldId<RentUnit> id = FieldId<RentUnit>(
+    valueForSerialization: (final RentUnit instance) => instance.uniqueId,
   );
 
   /// Building Id
