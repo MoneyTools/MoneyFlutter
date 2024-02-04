@@ -1,10 +1,11 @@
+// Imports
 import 'package:flutter/foundation.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/database/database.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
-// exports
+// Exports
 export 'package:money/models/money_objects/money_object.dart';
 export 'package:money/models/fields/fields.dart';
 export 'package:collection/collection.dart';
@@ -35,7 +36,7 @@ class MoneyObjects<T> {
 
   /// Recast list as type <T>
   Iterable<T> iterableList([bool includeDeleted = false]) {
-    return _list.whereType<T>();
+    return _iterableListOfMoneyObject(includeDeleted).whereType<T>();
   }
 
   List<MoneyObject> getListSortedById() {
