@@ -25,7 +25,7 @@ import 'package:money/models/money_objects/money_objects.dart';
   20   UserKeyExpireDate  datetime        0                    0
  */
 
-class OnlineAccount extends MoneyObject<OnlineAccount> {
+class OnlineAccount extends MoneyObject {
   @override
   int get uniqueId => id.value;
 

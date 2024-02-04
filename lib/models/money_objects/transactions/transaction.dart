@@ -13,7 +13,7 @@ export 'package:money/models/money_objects/transactions/transaction_types.dart';
 
 /// Main source of information for this App
 /// All transactions are loaded in this class [Transaction] and [Split]
-class Transaction extends MoneyObject<Transaction> {
+class Transaction extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
@@ -262,7 +262,7 @@ class Transaction extends MoneyObject<Transaction> {
     final TransactionStatus status = TransactionStatus.none,
   }) {
     this.status.value = status;
-    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
           rightTopAsString: Currency.getCurrencyText(amount.value),

@@ -33,7 +33,7 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category? getByName(final String name) {
-    return getList().firstWhereOrNull((final Category category) => category.name.value == name);
+    return iterableList().firstWhereOrNull((final Category category) => category.name.value == name);
   }
 
   Category getTopAncestor(final Category category) {
@@ -68,7 +68,7 @@ class Categories extends MoneyObjects<Category> {
 
   List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
-    for (final Category item in getList()) {
+    for (final Category item in iterableList()) {
       if (item.parentId.value == parentId) {
         list.add(item);
       }
@@ -211,12 +211,12 @@ class Categories extends MoneyObjects<Category> {
 
   @override
   void onAllDataLoaded() {
-    for (final Category category in getList()) {
+    for (final Category category in iterableList()) {
       category.count.value = 0;
       category.runningBalance.value = 0;
     }
 
-    for (final Transaction t in Data().transactions.getList()) {
+    for (final Transaction t in Data().transactions.iterableList()) {
       final Category? item = get(t.categoryId.value);
       if (item != null) {
         item.count.value++;

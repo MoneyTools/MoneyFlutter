@@ -10,7 +10,7 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 export 'package:money/models/money_objects/accounts/account_types.dart';
 
 /// Accounts like Banks
-class Account extends MoneyObject<Account> {
+class Account extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
@@ -244,7 +244,7 @@ class Account extends MoneyObject<Account> {
   Account() {
     // buildListWidgetForLargeScreen = (final Fields<Account> fields, Account instance) => fields.getRowOfColumns(instance);
 
-    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsWidget: Text(
             name.value,
             textAlign: TextAlign.left,

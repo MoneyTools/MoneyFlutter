@@ -8,7 +8,7 @@ import 'package:money/models/money_objects/money_object.dart';
   3    TaxDate      datetime  0                    0
  */
 
-class TransactionExtra extends MoneyObject<TransactionExtra> {
+class TransactionExtra extends MoneyObject {
   @override
   int get uniqueId => id.value;
 

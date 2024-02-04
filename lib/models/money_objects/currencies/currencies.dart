@@ -33,7 +33,7 @@ class Currencies extends MoneyObjects<Currency> {
   }
 
   Currency? getLocaleFromSymbol(final String symbolToMatch) {
-    return getList().firstWhereOrNull((currency) => currency.symbol.value == symbolToMatch);
+    return iterableList().firstWhereOrNull((currency) => currency.symbol.value == symbolToMatch);
   }
 
   String fromSymbolToCountryAlpha2(final String symbol) {

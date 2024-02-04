@@ -48,7 +48,7 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
 
   @override
   List<RentBuilding> getList([bool includeDeleted = false]) {
-    return Data().rentBuildings.getList(includeDeleted);
+    return Data().rentBuildings.iterableList(includeDeleted).toList();
   }
 
   @override

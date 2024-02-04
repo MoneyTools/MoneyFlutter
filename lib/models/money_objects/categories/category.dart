@@ -11,7 +11,7 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 // Exports
 export 'package:money/models/money_objects/categories/category_types.dart';
 
-class Category extends MoneyObject<Category> {
+class Category extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
@@ -176,7 +176,7 @@ class Category extends MoneyObject<Category> {
     this.frequency.value = frequency;
     this.taxRefNum.value = taxRefNum;
 
-    buildListWidgetForSmallScreen = () {
+    buildFieldsAsWidgetForSmallScreen = () {
       String top = '';
       String bottom = '';
 

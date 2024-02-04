@@ -58,7 +58,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         itemCount: widget.list.length,
         itemExtent: rowHeight,
         itemBuilder: (final BuildContext context, final int index) {
-          final MoneyObject<T> itemInstance = (widget.list[index] as MoneyObject<T>);
+          final MoneyObject itemInstance = (widget.list[index] as MoneyObject);
           return MyListItem(
             onListViewKeyEvent: onListViewKeyEvent,
             onTap: () {
@@ -68,8 +68,8 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
             autoFocus: index == widget.selectedItems.value.firstOrNull,
             isSelected: widget.selectedItems.value.contains(index),
             child: widget.asColumnView
-                ? itemInstance.buildListWidgetForLargeScreen!(widget.fields, itemInstance as T)
-                : itemInstance.buildListWidgetForSmallScreen!(),
+                ? itemInstance.buildFieldsAsWidgetForLargeScreen!(widget.fields, itemInstance as T)
+                : itemInstance.buildFieldsAsWidgetForSmallScreen!(),
           );
         });
   }

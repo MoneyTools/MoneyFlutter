@@ -43,7 +43,7 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
   }
 
   void transformData() {
-    for (Transaction element in Data().transactions.getList()) {
+    for (Transaction element in Data().transactions.iterableList()) {
       final Category? category = Data().categories.get(element.categoryId.value);
       if (category != null) {
         switch (category.type.value) {

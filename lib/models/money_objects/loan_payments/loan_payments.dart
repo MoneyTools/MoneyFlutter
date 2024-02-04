@@ -18,11 +18,13 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
   @override
   void loadDemoData() {
     clear();
-    final Account? accountForLoan =
-        Data().accounts.getList().firstWhereOrNull((final Account element) => element.type.value == AccountType.loan);
+    final Account? accountForLoan = Data()
+        .accounts
+        .iterableList()
+        .firstWhereOrNull((final Account element) => element.type.value == AccountType.loan);
     if (accountForLoan != null) {
       for (int i = 0; i < 12 * 20; i++) {
-        getList().add(LoanPayment(
+        addEntry(LoanPayment(
           id: i,
           accountId: accountForLoan.id.value,
           date: DateTime.now(),

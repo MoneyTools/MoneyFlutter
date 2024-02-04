@@ -11,30 +11,11 @@ export 'package:collection/collection.dart';
 
 /// Collection of MoneyObject as both List and Map
 class MoneyObjects<T> {
-  final List<T> _list = <T>[];
-  final Map<num, T> _map = <num, T>{};
-
   /// Constructor
   MoneyObjects();
 
-  List<T> getList([bool includeDeleted = false]) {
-    if (includeDeleted) {
-      // No filtering needed
-      return _list;
-    }
-    return _list.where((final T item) => (item as MoneyObject<T>).mutation != MutationType.deleted).toList();
-  }
-
-  List<T> getListSortedById() {
-    _list.sort((final T a, final T b) {
-      return sortByValue(
-        (a as MoneyObject<T>).uniqueId,
-        (b as MoneyObject<T>).uniqueId,
-        true,
-      );
-    });
-    return _list;
-  }
+  final List<MoneyObject> _list = <MoneyObject>[];
+  final Map<num, MoneyObject> _map = <num, MoneyObject>{};
 
   void clear() {
     _list.clear();
@@ -44,11 +25,35 @@ class MoneyObjects<T> {
     return _list.length;
   }
 
-  void addEntry(final T entry, {bool isNewEntry = false}) {
-    _list.add(entry);
-    _map[(entry as MoneyObject<T>).uniqueId] = entry;
+  Iterable<MoneyObject> _iterableListOfMoneyObject([bool includeDeleted = false]) {
+    if (includeDeleted) {
+      // No filtering needed
+      return _list;
+    }
+    return _list.where((final item) => item.mutation != MutationType.deleted);
+  }
 
-    // keep track
+  /// Recast list as type <T>
+  Iterable<T> iterableList([bool includeDeleted = false]) {
+    return _list.whereType<T>();
+  }
+
+  List<MoneyObject> getListSortedById() {
+    _list.sort((final MoneyObject a, final MoneyObject b) {
+      return sortByValue(
+        (a).uniqueId,
+        (b).uniqueId,
+        true,
+      );
+    });
+    return _list;
+  }
+
+  void addEntry(final MoneyObject entry, {bool isNewEntry = false}) {
+    _list.add(entry);
+    _map[(entry).uniqueId] = entry;
+
+    // keep track of new items, they will need to be persisted later
     if (isNewEntry) {
       entry.mutation = MutationType.inserted;
       Data().notifyTransactionChange(MutationType.inserted, entry);
@@ -56,13 +61,13 @@ class MoneyObjects<T> {
   }
 
   T? get(final num id) {
-    return _map[id];
+    return _map[id] as T?;
   }
 
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      final T? newInstance = instanceFromSqlite(row);
+      final MoneyObject? newInstance = instanceFromSqlite(row);
       if (newInstance != null) {
         addEntry(newInstance);
       }
@@ -74,8 +79,7 @@ class MoneyObjects<T> {
   }
 
   void assessMutationsCounts() {
-    final List<T> list = getList(true);
-    for (final (item as MoneyObject<T>) in list) {
+    for (final item in _iterableListOfMoneyObject(true)) {
       switch (item.mutation) {
         case MutationType.inserted:
           Settings().trackMutations.added++;
@@ -90,9 +94,7 @@ class MoneyObjects<T> {
   }
 
   bool saveSql(final MyDatabase db, final String tableName) {
-    final List<T> list = getList(true);
-
-    for (final (item as MoneyObject<T>) in list) {
+    for (final item in _iterableListOfMoneyObject(true)) {
       switch (item.mutation) {
         case MutationType.none:
           break;
@@ -114,7 +116,7 @@ class MoneyObjects<T> {
   }
 
   /// Must be override by derived class
-  T? instanceFromSqlite(final MyJson row) {
+  MoneyObject? instanceFromSqlite(final MyJson row) {
     return null;
   }
 
@@ -138,7 +140,7 @@ class MoneyObjects<T> {
     return headerList.join(',');
   }
 
-  String getCsvFromList(final List<T> sortedList) {
+  String getCsvFromList(final List<MoneyObject> sortedList) {
     final StringBuffer csv = StringBuffer();
 
     // Add the UTF-8 BOM for Excel
@@ -151,7 +153,7 @@ class MoneyObjects<T> {
     csv.writeln(getCsvHeader(declarations));
 
     // CSV Rows values
-    for (final T item in sortedList) {
+    for (final MoneyObject item in sortedList) {
       final List<String> listValues = <String>[];
 
       for (final dynamic field in declarations) {
@@ -164,5 +166,12 @@ class MoneyObjects<T> {
     }
 
     return csv.toString();
+  }
+
+  /// Remove/tag a Transaction instance from the list in memory
+  bool deleteItem(final MoneyObject itemToDelete) {
+    itemToDelete.mutation = MutationType.deleted;
+    Data().notifyTransactionChange(MutationType.deleted, itemToDelete);
+    return true;
   }
 }

@@ -7,7 +7,7 @@ export 'dart:ui';
 export 'package:money/helpers/misc_helpers.dart';
 export 'package:money/models/fields/field.dart';
 
-class MoneyObject<C> {
+abstract class MoneyObject {
   /// All object must have a unique identified
   int get uniqueId => -1;
 
@@ -16,14 +16,14 @@ class MoneyObject<C> {
   /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
   MutationType mutation = MutationType.none;
 
-  MoneyObject<C> fromJson(final MyJson row) {
-    return MoneyObject<C>();
-  }
+  // factory MoneyObject.fromJson(final MyJson row) {
+  //   return MoneyObject();
+  // }
 
   ///
   /// Column 1 | Column 2 | Column 3
   ///
-  Widget Function(Fields<C>, C)? buildListWidgetForLargeScreen = (final Fields<C> fields, final C instance) {
+  Widget Function(Fields, dynamic)? buildFieldsAsWidgetForLargeScreen = (final Fields fields, final dynamic instance) {
     return fields.getRowOfColumns(instance);
   };
 
@@ -32,15 +32,16 @@ class MoneyObject<C> {
   /// ------------+ Right
   /// SubTitle    |
   ///
-  Widget Function()? buildListWidgetForSmallScreen = () => const Text('Small screen content goes here');
+  Widget Function()? buildFieldsAsWidgetForSmallScreen = () => const Text('Small screen content goes here');
 
+  /// Serialize object instance to a JSon format
   MyJson getPersistableJSon() {
     final MyJson json = {};
 
-    final List<Field<C, dynamic>> declarations = getFieldsForClass<C>();
-    for (final Field<C, dynamic> field in declarations) {
+    final List<Field<Object, dynamic>> declarations = getFieldsForClass<Object>();
+    for (final Field<Object, dynamic> field in declarations) {
       if (field.serializeName != '' && field.serializeName != 'Id') {
-        json[field.serializeName] = field.valueForSerialization(this as C);
+        json[field.serializeName] = field.valueForSerialization(this);
       }
     }
     return json;

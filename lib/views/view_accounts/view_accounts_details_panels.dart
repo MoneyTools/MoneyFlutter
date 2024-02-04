@@ -5,7 +5,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   Widget _getSubViewContentForChart(final List<int> indices) {
     final List<PairXY> list = <PairXY>[];
 
-    for (final MoneyObject<Account> item in getList()) {
+    for (final MoneyObject item in getList()) {
       final Account account = item as Account;
       if (account.isActive()) {
         list.add(PairXY(account.name.value, account.balance.value));

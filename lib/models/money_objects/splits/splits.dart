@@ -7,14 +7,14 @@ export 'package:money/models/money_objects/splits/split.dart';
 
 class Splits extends MoneyObjects<Split> {
   List<Split> getListFromTransactionId(final num transactionId) {
-    return getList().where((final Split item) => item.transactionId == transactionId).toList();
+    return iterableList().where((final Split item) => item.transactionId == transactionId).toList();
   }
 
   @override
   List<Split> loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      getList().add(
+      addEntry(
         Split(
           // 0
           transactionId: row.getInt('Transaction'),
@@ -37,7 +37,7 @@ class Splits extends MoneyObjects<Split> {
         )..id.value = row.getInt('Id'),
       );
     }
-    return getList();
+    return iterableList().toList();
   }
 
   @override

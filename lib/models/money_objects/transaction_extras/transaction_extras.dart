@@ -9,8 +9,8 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
   double runningBalance = 0.00;
 
   void add(final TransactionExtra transaction) {
-    transaction.id.value = getList().length;
-    getList().add(transaction);
+    transaction.id.value = iterableList().length;
+    addEntry(transaction);
   }
 
   @override
@@ -30,8 +30,8 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
         taxDate: row.getInt('TaxDate'),
       )..id.value = row.getInt('Id');
 
-      getList().add(t);
+      addEntry(t);
     }
-    return getList();
+    return iterableList().toList();
   }
 }

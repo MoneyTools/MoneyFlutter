@@ -9,7 +9,7 @@ import 'package:money/widgets/list_view/list_item_card.dart';
   0|Id|INT|0||1
   1|Name|nvarchar(255)|1||0
  */
-class Payee extends MoneyObject<Payee> {
+class Payee extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
@@ -51,7 +51,7 @@ class Payee extends MoneyObject<Payee> {
   );
 
   Payee() {
-    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           rightTopAsString: Currency.getCurrencyText(balance.value),
           rightBottomAsString: getNumberAsShorthandText(count.value),

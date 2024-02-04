@@ -8,6 +8,7 @@ import 'package:money/widgets/center_message.dart';
 
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
+import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
 part 'view_payees_details_panels.dart';
@@ -37,7 +38,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
 
   @override
   List<Payee> getList([bool includeDeleted = false]) {
-    return Data().payees.getList(includeDeleted);
+    return Data().payees.iterableList(includeDeleted).toList();
   }
 
   @override

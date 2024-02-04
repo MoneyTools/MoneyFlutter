@@ -9,7 +9,7 @@ import 'package:money/models/money_objects/money_objects.dart';
   3    AccountId  nchar(20)      1                    0
 
  */
-class AccountAlias extends MoneyObject<AccountAlias> {
+class AccountAlias extends MoneyObject {
   // 0
   Field<AccountAlias, int> id = Field<AccountAlias, int>(
     importance: 0,
@@ -46,6 +46,7 @@ class AccountAlias extends MoneyObject<AccountAlias> {
   int get uniqueId => id.value;
 
   /// Constructor from a SQLite row
+  @override
   factory AccountAlias.fromJson(final MyJson row) {
     return AccountAlias()
       ..id.value = row.getInt('Id')

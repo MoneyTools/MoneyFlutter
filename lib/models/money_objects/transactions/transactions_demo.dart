@@ -7,7 +7,7 @@ extension TransactionsDemoData on Transactions {
     runningBalance = 0;
 
     int transactionId = 0;
-    for (final Account account in Data().accounts.getList()) {
+    for (final Account account in Data().accounts.iterableList()) {
       for (int i = 0; i < getQuantityOfTransactionBasedOnAccountType(account.type.value); i++) {
         transactionForDemoData(transactionId, account);
         transactionId++;

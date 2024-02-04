@@ -4,7 +4,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
-class LoanPayment extends MoneyObject<LoanPayment> {
+class LoanPayment extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
@@ -85,7 +85,7 @@ class LoanPayment extends MoneyObject<LoanPayment> {
     this.principal.value = principal;
     this.interest.value = interest;
 
-    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Account.getName(accountInstance),
           rightTopAsString: Currency.getCurrencyText(principal),
           rightBottomAsString: Currency.getCurrencyText(interest),

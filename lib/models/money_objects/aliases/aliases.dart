@@ -11,7 +11,7 @@ class Aliases extends MoneyObjects<Alias> {
 
   @override
   void onAllDataLoaded() {
-    for (final Alias item in getList()) {
+    for (final Alias item in iterableList()) {
       item.payeeInstance = Data().payees.get(item.payeeId.value);
     }
   }
@@ -32,7 +32,7 @@ class Aliases extends MoneyObjects<Alias> {
   }
 
   Payee? findByMatch(final String text) {
-    final Alias? aliasFound = getList().firstWhereOrNull((final Alias item) => item.isMatch(text));
+    final Alias? aliasFound = iterableList().firstWhereOrNull((final Alias item) => item.isMatch(text));
     if (aliasFound == null) {
       return null;
     }

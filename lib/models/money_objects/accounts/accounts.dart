@@ -47,13 +47,13 @@ class Accounts extends MoneyObjects<Account> {
 
   @override
   void onAllDataLoaded() {
-    for (final Account account in getList()) {
+    for (final Account account in iterableList()) {
       account.count.value = 0;
       account.balance.value = account.openingBalance.value;
       account.balanceNormalized.value = account.openingBalance.value * account.getCurrencyRatio();
     }
 
-    for (final Transaction t in Data().transactions.getList()) {
+    for (final Transaction t in Data().transactions.iterableList()) {
       final Account? item = get(t.accountId.value);
       if (item != null) {
         item.count.value++;
@@ -64,7 +64,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   List<Account> getOpenAccounts() {
-    return getList().where((final Account item) => activeBankAccount(item)).toList();
+    return iterableList().where((final Account item) => activeBankAccount(item)).toList();
   }
 
   bool activeBankAccount(final Account element) {
@@ -75,7 +75,7 @@ class Accounts extends MoneyObjects<Account> {
     final List<AccountType> types, {
     final bool? isActive = true,
   }) {
-    return getList().where((final Account item) {
+    return iterableList().where((final Account item) {
       if (!item.matchType(types)) {
         return false;
       }
@@ -98,7 +98,7 @@ class Accounts extends MoneyObjects<Account> {
     final String accountId,
     final AccountType accountType,
   ) {
-    return getList().firstWhereOrNull((final Account item) {
+    return iterableList().firstWhereOrNull((final Account item) {
       return item.accountId.value == accountId && item.type.value == accountType;
     });
   }

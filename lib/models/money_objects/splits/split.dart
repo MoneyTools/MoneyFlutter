@@ -17,7 +17,7 @@ import 'package:money/models/money_objects/payees/payee.dart';
   8|BudgetBalanceDate|datetime|0||0
  */
 
-class Split extends MoneyObject<Split> {
+class Split extends MoneyObject {
   @override
   int get uniqueId => id.value;
 

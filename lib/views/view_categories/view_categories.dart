@@ -94,7 +94,7 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
     final CategoryType? filterType = getSelectedCategoryType();
     return Data()
         .categories
-        .getList(includeDeleted)
+        .iterableList(includeDeleted)
         .where((final Category x) => (filterType == null || x.type.value == filterType) && isMatchingFilterText(x))
         .toList();
   }

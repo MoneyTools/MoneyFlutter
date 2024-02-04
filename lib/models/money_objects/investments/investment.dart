@@ -1,7 +1,7 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
-class Investment extends MoneyObject<Investment> {
+class Investment extends MoneyObject {
   @override
   int get uniqueId => id.value;
 

@@ -11,7 +11,7 @@ import 'package:money/models/money_objects/money_objects.dart';
   4    Denominator  money     1                    0
  */
 
-class StockSplit extends MoneyObject<StockSplit> {
+class StockSplit extends MoneyObject {
   @override
   int get uniqueId => id.value;
 

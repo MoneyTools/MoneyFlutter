@@ -35,15 +35,15 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         small: true,
         isVertical: true,
         text2: getIntAsText(
-            Data().transactions.getList().where((final Transaction element) => element.amount.value > 0).length)));
+            Data().transactions.iterableList().where((final Transaction element) => element.amount.value > 0).length)));
     pivots.add(ThreePartLabel(
         text1: 'Expenses',
         small: true,
         isVertical: true,
         text2: getIntAsText(
-            Data().transactions.getList().where((final Transaction element) => element.amount.value < 0).length)));
+            Data().transactions.iterableList().where((final Transaction element) => element.amount.value < 0).length)));
     pivots.add(ThreePartLabel(
-        text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.getList().length)));
+        text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.iterableList().length)));
   }
 
   @override
@@ -88,7 +88,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   List<Transaction> getList([bool includeDeleted = false]) {
     final List<Transaction> list = Data()
         .transactions
-        .getList(includeDeleted)
+        .iterableList(includeDeleted)
         .where((final Transaction transaction) =>
             isMatchingIncomeExpense(transaction) && isMatchingFilterText(transaction))
         .toList();
@@ -191,7 +191,7 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
         transaction.id.value > -1 &&
         transaction.categoryId.value == Data().categories.splitCategoryId()) {
       final List<Split> l =
-          Data().splits.getList().where((final Split s) => s.transactionId == transaction.id.value).toList();
+          Data().splits.iterableList().where((final Split s) => s.transactionId == transaction.id.value).toList();
       return ListViewTransactionSplits(
         key: Key('split_transactions ${transaction.id}'),
         getList: () => l,

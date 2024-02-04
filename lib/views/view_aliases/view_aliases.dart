@@ -32,7 +32,7 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   List<Alias> getList([bool includeDeleted = false]) {
-    return Data().aliases.getList(includeDeleted);
+    return Data().aliases.iterableList(includeDeleted).toList();
   }
 
   @override

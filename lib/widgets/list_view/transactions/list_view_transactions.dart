@@ -103,7 +103,7 @@ typedef FilterFunction = bool Function(Transaction);
 
 List<Transaction> getFilteredTransactions(final FilterFunction filter) {
   final List<Transaction> list =
-      Data().transactions.getList().where((final Transaction transaction) => filter(transaction)).toList();
+      Data().transactions.iterableList().where((final Transaction transaction) => filter(transaction)).toList();
 
   list.sort(
     (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),

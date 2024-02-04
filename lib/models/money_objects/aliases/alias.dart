@@ -9,7 +9,7 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 // Export
 export 'package:money/models/money_objects/aliases/alias_types.dart';
 
-class Alias extends MoneyObject<Alias> {
+class Alias extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
@@ -70,7 +70,7 @@ class Alias extends MoneyObject<Alias> {
     this.pattern.value = pattern;
     this.flags.value = flags;
     this.payeeId.value = payeeId;
-    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: this.pattern.value,
           rightBottomAsString: getAliasTypeAsString(type),

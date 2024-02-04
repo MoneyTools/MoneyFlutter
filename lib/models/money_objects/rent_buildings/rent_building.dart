@@ -5,7 +5,7 @@ import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
-class RentBuilding extends MoneyObject<RentBuilding> {
+class RentBuilding extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
@@ -259,7 +259,7 @@ class RentBuilding extends MoneyObject<RentBuilding> {
     17|CategoryForManagement|INT|0||0
    */
   RentBuilding() {
-    buildListWidgetForSmallScreen = () => MyListItemAsCard(
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: address.value,
           rightTopAsString: Currency.getCurrencyText(profit.value),

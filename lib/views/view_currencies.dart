@@ -17,7 +17,7 @@ void showCurrencies(final BuildContext context) {
 Widget buildCurrenciesPanel(final BuildContext context) {
   final List<Widget> widgets = <Widget>[];
 
-  for (final Currency currency in Data().currencies.getList()) {
+  for (final Currency currency in Data().currencies.iterableList()) {
     widgets.add(
       Container(
         decoration: BoxDecoration(

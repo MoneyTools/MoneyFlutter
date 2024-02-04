@@ -11,13 +11,6 @@ part 'transactions_demo.dart';
 class Transactions extends MoneyObjects<Transaction> {
   double runningBalance = 0.00;
 
-  /// Remove/tag a Transaction instance from the list in memory
-  bool deleteItem(final Transaction transaction) {
-    transaction.mutation = MutationType.deleted;
-    Data().notifyTransactionChange(MutationType.deleted, transaction);
-    return false;
-  }
-
   @override
   void loadDemoData() {
     _loadDemoData();
@@ -41,12 +34,12 @@ class Transactions extends MoneyObjects<Transaction> {
       runningBalance += t.getNormalizedAmount();
       addEntry(t);
     }
-    return getList();
+    return iterableList().toList();
   }
 
   int getNextTransactionId() {
     int maxIdFound = -1;
-    for (final item in getList(true)) {
+    for (final item in iterableList(true)) {
       maxIdFound = max(maxIdFound, item.id.value);
     }
     return maxIdFound + 1;

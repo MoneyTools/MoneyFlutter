@@ -418,10 +418,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     String min = '';
     String max = '';
 
-    final List<T> list = getList();
-
-    for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]) as String;
+    for (final item in getList()) {
+      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(item) as String;
       if (min.isEmpty || min.compareTo(fieldValue) == 1) {
         min = fieldValue;
       }

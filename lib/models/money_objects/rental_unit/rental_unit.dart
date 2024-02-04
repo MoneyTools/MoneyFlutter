@@ -10,7 +10,7 @@ import 'package:money/models/money_objects/money_object.dart';
   3|Renter|nvarchar(255)|0||0
   4|Note|nvarchar(255)|0||0
  */
-class RentUnit extends MoneyObject<RentUnit> {
+class RentUnit extends MoneyObject {
   @override
   int get uniqueId => id.value;
 

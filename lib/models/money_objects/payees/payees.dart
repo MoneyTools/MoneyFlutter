@@ -13,7 +13,7 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   Payee? getByName(final String name) {
-    return getList().firstWhereOrNull((final Payee payee) => payee.name.value == name);
+    return iterableList().firstWhereOrNull((final Payee payee) => payee.name.value == name);
   }
 
   /// Attempts to find payee wih the given name
@@ -24,7 +24,7 @@ class Payees extends MoneyObjects<Payee> {
 
     // if not found add new payee
     payee ??= Payee()
-      ..id.value = getList().length
+      ..id.value = iterableList().length
       ..name.value = name;
     return payee;
   }
@@ -68,12 +68,12 @@ class Payees extends MoneyObjects<Payee> {
 
   @override
   void onAllDataLoaded() {
-    for (final Payee payee in getList()) {
+    for (final Payee payee in iterableList()) {
       payee.count.value = 0;
       payee.balance.value = 0;
     }
 
-    for (Transaction t in Data().transactions.getList()) {
+    for (Transaction t in Data().transactions.iterableList()) {
       final Payee? item = get(t.payeeId.value);
       if (item != null) {
         item.count.value++;

@@ -14,7 +14,7 @@ import 'package:money/models/money_objects/money_objects.dart';
   4    LastRatio    money         0                 0 
   5    CultureCode  nvarchar(80)  0                 0 
  */
-class Currency extends MoneyObject<Currency> {
+class Currency extends MoneyObject {
   @override
   int get uniqueId => id.value;
 

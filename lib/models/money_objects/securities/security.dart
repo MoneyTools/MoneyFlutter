@@ -15,7 +15,7 @@ import 'package:money/models/money_objects/money_objects.dart';
   8    PriceDate     datetime      0                    0
  */
 
-class Security extends MoneyObject<Security> {
+class Security extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
