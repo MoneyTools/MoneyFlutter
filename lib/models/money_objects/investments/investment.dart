@@ -4,6 +4,8 @@ import 'package:money/models/money_objects/money_objects.dart';
 class Investment extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   /// Id
   //// 0    Id              bigint  0                    1

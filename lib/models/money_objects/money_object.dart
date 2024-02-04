@@ -11,6 +11,8 @@ abstract class MoneyObject {
   /// All object must have a unique identified
   int get uniqueId => -1;
 
+  set uniqueId(int value) {}
+
   /// State of any and all object instances
   /// to indicated any alteration to the data set of the users
   /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
@@ -35,13 +37,13 @@ abstract class MoneyObject {
   Widget Function()? buildFieldsAsWidgetForSmallScreen = () => const Text('Small screen content goes here');
 
   /// Serialize object instance to a JSon format
-  MyJson getPersistableJSon() {
+  MyJson getPersistableJSon<T>() {
     final MyJson json = {};
 
-    final List<Field<Object, dynamic>> declarations = getFieldsForClass<Object>();
-    for (final Field<Object, dynamic> field in declarations) {
-      if (field.serializeName != '' && field.serializeName != 'Id') {
-        json[field.serializeName] = field.valueForSerialization(this);
+    final List<Field<T, dynamic>> declarations = getFieldsForClass<T>();
+    for (final Field<T, dynamic> field in declarations) {
+      if (field.serializeName != '') {
+        json[field.serializeName] = field.valueForSerialization(this as T);
       }
     }
     return json;

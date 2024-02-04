@@ -91,7 +91,7 @@ extension MyJsonExtensions on MyJson {
   ]) {
     final dynamic value = this[key];
 
-    if (value == null) {
+    if (value == null || value.toString().isEmpty) {
       return defaultIfNotFound;
     }
 

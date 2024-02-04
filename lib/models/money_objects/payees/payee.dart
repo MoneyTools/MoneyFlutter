@@ -12,6 +12,8 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 class Payee extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   // 0
   Field<Payee, int> id = Field<Payee, int>(
