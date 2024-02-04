@@ -102,6 +102,7 @@ class _MyMoneyState extends State<MyMoney> {
                   ),
                 ],
                 child: Container(
+                  key: Key('key_data_version_${Data().version}'),
                   color: Theme.of(context).colorScheme.primaryContainer,
                   child: buildContent(context, constraints),
                 ),
@@ -314,7 +315,7 @@ class _MyMoneyState extends State<MyMoney> {
       case 5:
         return const ViewAliases();
       case 6:
-        return ViewTransactions(key: Key('key_view_transaction_version_${Data().version}'));
+        return const ViewTransactions();
       case 7:
         return const ViewRentals();
       case 0:

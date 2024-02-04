@@ -50,4 +50,27 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   Widget getPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
   }
+
+  @override
+  void onDelete(final BuildContext context, final int index) {
+    showDialog(
+      context: context,
+      builder: (final BuildContext context) {
+        return DeleteConfirmationDialog(
+          icon: const Icon(Icons.delete),
+          title: 'Delete Payee',
+          question: 'Are you sure you want to delete this payee?',
+          content: Column(
+            children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
+          ),
+          onConfirm: () {
+            // Delete the item
+            setState(() {
+              Data().payees.deleteItem(list[index]);
+            });
+          },
+        );
+      },
+    );
+  }
 }

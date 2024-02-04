@@ -35,7 +35,7 @@ class MoneyObjects<T> {
 
   /// Recast list as type <T>
   Iterable<T> iterableList([bool includeDeleted = false]) {
-    return _list.whereType<T>();
+    return _iterableListOfMoneyObject(includeDeleted).whereType<T>();
   }
 
   List<MoneyObject> getListSortedById() {
