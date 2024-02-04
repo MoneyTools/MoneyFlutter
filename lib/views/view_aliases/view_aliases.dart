@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -59,5 +59,12 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
       );
     }
     return CenterMessage.noTransaction();
+  }
+
+  @override
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
+    setState(() {
+      Data().aliases.deleteItem(instance);
+    });
   }
 }

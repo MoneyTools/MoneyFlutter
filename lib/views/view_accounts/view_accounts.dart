@@ -95,4 +95,11 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   Widget getPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
   }
+
+  @override
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
+    setState(() {
+      Data().accounts.deleteItem(instance);
+    });
+  }
 }

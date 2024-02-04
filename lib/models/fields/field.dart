@@ -199,7 +199,7 @@ class FieldId<C> extends Field<C, int> {
     super.valueForSerialization,
   }) : super(
           serializeName: 'Id',
-          useAsColumn: true,
+          useAsColumn: false,
           useAsDetailPanels: false,
           defaultValue: -1,
         );

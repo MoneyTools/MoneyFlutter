@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -62,26 +62,10 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
   }
 
   @override
-  void onDelete(final BuildContext context, final int index) {
-    showDialog(
-      context: context,
-      builder: (final BuildContext context) {
-        return DeleteConfirmationDialog(
-          icon: const Icon(Icons.delete),
-          title: 'Delete Transaction',
-          question: 'Are you sure you want to delete this transaction?',
-          content: Column(
-            children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
-          ),
-          onConfirm: () {
-            // Delete the item
-            setState(() {
-              Data().transactions.deleteItem(list[index]);
-            });
-          },
-        );
-      },
-    );
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
+    setState(() {
+      Data().transactions.deleteItem(instance);
+    });
   }
 
   @override

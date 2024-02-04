@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -153,5 +153,12 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   @override
   Widget getPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
+  }
+
+  @override
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
+    setState(() {
+      Data().categories.deleteItem(instance);
+    });
   }
 }

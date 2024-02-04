@@ -4,6 +4,7 @@ import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/widgets.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
@@ -218,8 +219,27 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  void onDelete(final BuildContext context, final int index) {
-    // the derived class is responsible for implementing the delete operation
+  void onDeleteRequestedByUser(final BuildContext context, final int index) {
+    showDialog(
+      context: context,
+      builder: (final BuildContext context) {
+        return DeleteConfirmationDialog(
+          icon: const Icon(Icons.delete),
+          title: 'Delete ${getClassNameSingular()}',
+          question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
+          content: Column(
+            children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
+          ),
+          onConfirm: () {
+            onDeleteConfirmedByUser(list[index]);
+          },
+        );
+      },
+    );
+  }
+
+  void onDeleteConfirmedByUser(final T instance) {
+    // Derived view need to make the actual delete operation
   }
 
   void onFilterTextChanged(final String text) {
@@ -331,7 +351,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               children: <Widget>[
                 IconButton(
                     onPressed: () {
-                      onDelete(context, index);
+                      onDeleteRequestedByUser(context, index);
                     },
                     icon: const Icon(Icons.delete),
                     tooltip: 'Delete'),

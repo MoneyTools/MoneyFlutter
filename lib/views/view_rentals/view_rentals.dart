@@ -60,4 +60,11 @@ class ViewRentalsState extends ViewWidgetState<RentBuilding> {
   Widget getPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
   }
+
+  @override
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
+    setState(() {
+      Data().rentBuildings.deleteItem(instance);
+    });
+  }
 }

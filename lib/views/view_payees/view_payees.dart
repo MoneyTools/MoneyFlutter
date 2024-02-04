@@ -8,7 +8,6 @@ import 'package:money/widgets/center_message.dart';
 
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
-import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
 part 'view_payees_details_panels.dart';
@@ -52,25 +51,9 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
-  void onDelete(final BuildContext context, final int index) {
-    showDialog(
-      context: context,
-      builder: (final BuildContext context) {
-        return DeleteConfirmationDialog(
-          icon: const Icon(Icons.delete),
-          title: 'Delete Payee',
-          question: 'Are you sure you want to delete this payee?',
-          content: Column(
-            children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
-          ),
-          onConfirm: () {
-            // Delete the item
-            setState(() {
-              Data().payees.deleteItem(list[index]);
-            });
-          },
-        );
-      },
-    );
+  void onDeleteConfirmedByUser(final Payee instance) {
+    setState(() {
+      Data().payees.deleteItem(instance);
+    });
   }
 }

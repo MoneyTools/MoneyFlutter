@@ -47,4 +47,11 @@ class ViewLoansState extends ViewWidgetState<LoanPayment> {
   Widget getPanelForTransactions(final List<int> indices) {
     return _getSubViewContentForTransactions(indices);
   }
+
+  @override
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
+    setState(() {
+      Data().loanPayments.deleteItem(instance);
+    });
+  }
 }
