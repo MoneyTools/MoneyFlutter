@@ -11,6 +11,8 @@ import 'package:money/models/money_objects/money_object.dart';
 class TransactionExtra extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   // 0
   Field<TransactionExtra, int> id = Field<TransactionExtra, int>(

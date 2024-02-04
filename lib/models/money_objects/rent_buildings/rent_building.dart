@@ -8,6 +8,8 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 class RentBuilding extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   /// ID
   // 0    Id                      INT            0                    1

@@ -1,3 +1,8 @@
+## [1.2.08] 2024-02-04
+
+- Ensure Model ID are unique and not -1
+- Implement Delete Payee
+
 ## [1.2.07] 2024-02-03
 
 - fix web version

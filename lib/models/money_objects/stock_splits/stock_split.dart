@@ -14,6 +14,8 @@ import 'package:money/models/money_objects/money_objects.dart';
 class StockSplit extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   // 0
   Field<StockSplit, int> id = Field<StockSplit, int>(

@@ -13,6 +13,8 @@ import 'package:money/models/money_objects/money_object.dart';
 class RentUnit extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   /// Id
   /// 0|Id|INT|0||1

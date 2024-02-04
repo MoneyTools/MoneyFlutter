@@ -12,6 +12,8 @@ export 'package:money/models/money_objects/aliases/alias_types.dart';
 class Alias extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   /// ID
   /// 0    Id       INT            0                 1
@@ -97,7 +99,7 @@ class Alias extends MoneyObject {
       regex ??= RegExp(pattern.value);
       final Match? matched = regex?.firstMatch(text);
       if (matched != null) {
-        debugLog('First email found: ${matched.group(0)}');
+        //debugLog('First email found: ${matched.group(0)}');
         return true;
       }
     } else {

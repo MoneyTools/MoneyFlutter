@@ -55,6 +55,10 @@ class MoneyObjects<T> {
 
     // keep track of new items, they will need to be persisted later
     if (isNewEntry) {
+      if (entry.uniqueId == -1) {
+        entry.uniqueId = length + 1;
+      }
+
       entry.mutation = MutationType.inserted;
       Data().notifyTransactionChange(MutationType.inserted, entry);
     }
@@ -99,13 +103,13 @@ class MoneyObjects<T> {
         case MutationType.none:
           break;
         case MutationType.inserted:
-          db.insert(tableName, item.getPersistableJSon());
+          db.insert(tableName, item.getPersistableJSon<T>());
 
         case MutationType.deleted:
           db.delete(tableName, item.uniqueId);
 
         case MutationType.changed:
-          db.update(tableName, item.uniqueId, item.getPersistableJSon());
+          db.update(tableName, item.uniqueId, item.getPersistableJSon<T>());
 
         default:
           debugPrint('Unhandled change ${item.mutation}');

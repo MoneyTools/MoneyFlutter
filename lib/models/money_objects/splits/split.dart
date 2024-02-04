@@ -20,6 +20,8 @@ import 'package:money/models/money_objects/payees/payee.dart';
 class Split extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   // 0
   int transactionId;

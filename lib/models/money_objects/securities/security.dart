@@ -18,6 +18,8 @@ import 'package:money/models/money_objects/money_objects.dart';
 class Security extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   // 0
   Field<Security, int> id = Field<Security, int>(

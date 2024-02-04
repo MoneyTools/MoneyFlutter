@@ -14,6 +14,8 @@ export 'package:money/models/money_objects/categories/category_types.dart';
 class Category extends MoneyObject {
   @override
   int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
 
   /// Id
   /// 0|Id|INT|0||1

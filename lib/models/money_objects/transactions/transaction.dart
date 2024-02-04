@@ -17,10 +17,14 @@ class Transaction extends MoneyObject {
   @override
   int get uniqueId => id.value;
 
+  @override
+  set uniqueId(value) => id.value = value;
+
   /// ID
   /// SQLite  0|Id|bigint|0||1
   FieldId<Transaction> id = FieldId<Transaction>(
     importance: 0,
+    valueFromInstance: (final Transaction instance) => instance.id.value,
     valueForSerialization: (final Transaction instance) => instance.id.value,
   );
 
@@ -319,9 +323,9 @@ class Transaction extends MoneyObject {
 
   double getNormalizedAmount() {
     // Convert the value to USD
-    if (accountInstance?.getCurrencyRatio() != 0) {
-      return amount.value * accountInstance!.getCurrencyRatio();
+    if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
+      return amount.value;
     }
-    return amount.value;
+    return amount.value * accountInstance!.getCurrencyRatio();
   }
 }
