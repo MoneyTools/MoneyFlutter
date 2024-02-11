@@ -1,3 +1,7 @@
+## [1.2.14] 2024-02-11
+
+- Improve List view for mobile
+
 ## [1.2.08] 2024-02-04
 
 - Ensure Model ID are unique and not -1

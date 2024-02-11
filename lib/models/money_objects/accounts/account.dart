@@ -13,6 +13,7 @@ export 'package:money/models/money_objects/accounts/account_types.dart';
 class Account extends MoneyObject {
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
 
@@ -241,17 +242,31 @@ class Account extends MoneyObject {
   Account() {
     // buildListWidgetForLargeScreen = (final Fields<Account> fields, Account instance) => fields.getRowOfColumns(instance);
 
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsWidget: Text(
-            name.value,
-            textAlign: TextAlign.left,
+    buildFieldsAsWidgetForSmallScreen = () {
+      Widget? originalCurrencyAndValue;
+
+      if (currency.value == 'USD') {
+        originalCurrencyAndValue = Currency.buildCurrencyWidget(currency.value);
+      } else {
+        double ratioCurrency = getCurrencyRatio();
+        originalCurrencyAndValue = Tooltip(
+          message: ratioCurrency.toString(),
+          child: Row(
+            children: [
+              Text(Currency.getCurrencyText(balance.value / ratioCurrency, iso4217code: currency.value)),
+              const SizedBox(width: 4),
+              Currency.buildCurrencyWidget(currency.value),
+            ],
           ),
-          leftBottomAsWidget: Text(
-            getTypeAsText(type.value),
-            textAlign: TextAlign.left,
-          ),
-          rightTopAsWidget: Text(Currency.getCurrencyText(balance.value)),
         );
+      }
+
+      return MyListItemAsCard(
+          leftTopAsString: name.value,
+          leftBottomAsString: getTypeAsText(type.value),
+          rightTopAsString: Currency.getCurrencyText(balance.value),
+          rightBottomAsWidget: originalCurrencyAndValue);
+    };
   }
 
   /// Constructor from a SQLite row
@@ -280,15 +295,7 @@ class Account extends MoneyObject {
   double? ratio;
 
   double getCurrencyRatio() {
-    if (ratio == null) {
-      Currency? currencyInstance = Data().currencies.getLocaleFromSymbol(currency.value);
-      if (currencyInstance == null) {
-        ratio = 1;
-      } else {
-        ratio = currencyInstance.ratio.value;
-      }
-    }
-    return ratio!;
+    return Data().currencies.getRatioFromSymbol(currency.value);
   }
 
   static String getName(final Account? instance) {

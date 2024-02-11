@@ -12,6 +12,7 @@ export 'package:money/models/money_objects/aliases/alias_types.dart';
 class Alias extends MoneyObject {
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
 
@@ -74,7 +75,7 @@ class Alias extends MoneyObject {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: this.pattern.value,
-          rightBottomAsString: getAliasTypeAsString(type),
+          rightBottomAsString: '${getAliasTypeAsString(type)}\n',
         );
   }
 

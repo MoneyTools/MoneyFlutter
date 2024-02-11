@@ -12,6 +12,8 @@ class MyListItemAsCard extends StatelessWidget {
   final Widget? rightTopAsWidget;
   final Widget? rightBottomAsWidget;
 
+  final bool bottomBorder;
+
   /// Constructor
   const MyListItemAsCard({
     super.key,
@@ -41,6 +43,8 @@ class MyListItemAsCard extends StatelessWidget {
     //       Bottom
     //            Widget
     this.rightBottomAsWidget,
+    //
+    this.bottomBorder = true,
   });
 
   @override
@@ -49,6 +53,7 @@ class MyListItemAsCard extends StatelessWidget {
       children: <Widget>[
         Expanded(
           child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               either(
@@ -67,7 +72,7 @@ class MyListItemAsCard extends StatelessWidget {
           ),
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: <Widget>[
             either(

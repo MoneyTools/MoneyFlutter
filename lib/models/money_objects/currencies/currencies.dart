@@ -32,16 +32,24 @@ class Currencies extends MoneyObjects<Currency> {
     }
   }
 
-  Currency? getLocaleFromSymbol(final String symbolToMatch) {
+  Currency? getCurrencyFromSymbol(final String symbolToMatch) {
     return iterableList().firstWhereOrNull((currency) => currency.symbol.value == symbolToMatch);
   }
 
   String fromSymbolToCountryAlpha2(final String symbol) {
-    Currency? currency = getLocaleFromSymbol(symbol);
+    Currency? currency = getCurrencyFromSymbol(symbol);
     if (currency == null) {
       return 'US';
     }
     return currency.cultureCode.value;
+  }
+
+  double getRatioFromSymbol(final String symbol) {
+    Currency? currency = getCurrencyFromSymbol(symbol);
+    if (currency == null) {
+      return 1;
+    }
+    return currency.ratio.value;
   }
 
   @override

@@ -49,7 +49,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
   @override
   Widget build(final BuildContext context) {
     final TextScaler textScaler = MediaQuery.textScalerOf(context);
-    rowHeight = textScaler.scale(widget.asColumnView ? 30 : 80);
+    rowHeight = textScaler.scale(widget.asColumnView ? 30 : 85);
 
     return ListView.builder(
         primary: false,
@@ -59,6 +59,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         itemExtent: rowHeight,
         itemBuilder: (final BuildContext context, final int index) {
           final MoneyObject itemInstance = (widget.list[index] as MoneyObject);
+          final isLastItemOfTheList = (index == widget.list.length - 1);
           return MyListItem(
             onListViewKeyEvent: onListViewKeyEvent,
             onTap: () {
@@ -69,7 +70,18 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
             isSelected: widget.selectedItems.value.contains(index),
             child: widget.asColumnView
                 ? itemInstance.buildFieldsAsWidgetForLargeScreen!(widget.fields, itemInstance as T)
-                : itemInstance.buildFieldsAsWidgetForSmallScreen!(),
+                : Container(
+                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                          width: 1,
+                          color: isLastItemOfTheList ? Colors.transparent : Theme.of(context).dividerColor,
+                        ),
+                      ),
+                    ),
+                    child: itemInstance.buildFieldsAsWidgetForSmallScreen!(),
+                  ),
           );
         });
   }
