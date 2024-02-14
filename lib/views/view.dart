@@ -285,28 +285,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   void onRowTap(final BuildContext context, final int index) {
     if (isMobile()) {
-      showDialog(
-          context: context,
-          builder: (final BuildContext context) {
-            return AlertDialog(
-              title: getDetailPanelHeader(context, index, list[index]),
-              content: getPanelForDetails(<int>[index]),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(false);
-                  },
-                  child: const Text('Discard'),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: const Text('Apply'),
-                )
-              ],
-            );
-          });
+      myShowDialog(
+        context: context,
+        title: 'getDetailPanelHeader(context, index, list[index]),',
+        child: getPanelForDetails(<int>[index]),
+      );
     } else {
       // This will cause a UI update and the bottom details will get rendered if its expanded
       if (index == -1) {

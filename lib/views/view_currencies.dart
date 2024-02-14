@@ -4,12 +4,10 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/dialog.dart';
 
 void showCurrencies(final BuildContext context) {
-  final Widget content = buildCurrenciesPanel(context);
-
   myShowDialog(
     context: context,
     title: 'Currencies',
-    child: content,
+    child: buildCurrenciesPanel(context),
     isEditable: false,
   );
 }

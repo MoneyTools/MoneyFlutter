@@ -56,6 +56,15 @@ bool isSmallWidth(
   return false;
 }
 
+bool isSmallDevice(final BuildContext context) {
+  // Get the screen size
+  final screenSize = MediaQuery.of(context).size;
+
+  // Determine if the screen width is smaller than a certain threshold
+  final isSmallScreen = screenSize.width < 400; // Adjust the threshold as needed
+  return isSmallScreen;
+}
+
 double roundDouble(final double value, final int places) {
   final num mod = pow(10.0, places);
   return ((value * mod).round().toDouble() / mod);

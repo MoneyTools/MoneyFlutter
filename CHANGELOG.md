@@ -1,3 +1,7 @@
+## [1.2.15] 2024-02-14
+
+- Improve Dialog full screen on small devices
+
 ## [1.2.14] 2024-02-11
 
 - Improve List view for mobile

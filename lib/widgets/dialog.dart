@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/widgets/dialog_full_screen.dart';
 
 void myShowDialog({
   required final BuildContext context,
@@ -6,16 +8,33 @@ void myShowDialog({
   required final Widget child,
   final bool isEditable = false,
 }) {
-  showDialog(
-      context: context,
-      builder: (final BuildContext context) {
-        return Material(
-          child: AlertDialog(
-              title: Text(title),
-              content: SizedBox(width: 400, height: 400, child: child),
-              actions: actionButtons(context, isEditable)),
-        );
-      });
+  if (isSmallDevice(context)) {
+    Navigator.of(context).push(
+      MaterialPageRoute<Null>(
+        builder: (BuildContext context) {
+          return FullScreenDialog(
+            title: title,
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: child,
+            ),
+          );
+        },
+        fullscreenDialog: true,
+      ),
+    );
+  } else {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (final BuildContext context) {
+          return AlertDialog(
+            title: Text(title),
+            content: child,
+            actions: actionButtons(context, isEditable),
+          );
+        });
+  }
 }
 
 List<Widget> actionButtons(
