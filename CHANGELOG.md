@@ -1,3 +1,7 @@
+## [1.2.16] 2024-02-14
+
+- Adjusted - Improve Dialog full screen on small devices (Widget smaller than 600 pixels)
+
 ## [1.2.15] 2024-02-14
 
 - Improve Dialog full screen on small devices

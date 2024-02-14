@@ -512,7 +512,7 @@ uuid</title>
   </g>
   <g id='Labels_flutter_markdown'>
     <text class="nodeName" x="1950" y="225" font-size="120%">flutter_markdown</text>
-    <text class="nodeName" x="1950" y="245" font-size="80%">0.6.18+3</text>
+    <text class="nodeName" x="1950" y="245" font-size="80%">0.6.19</text>
   </g>
   <g id='Labels_intl'>
     <text class="nodeName" x="2250" y="225" font-size="120%">intl</text>
@@ -520,7 +520,7 @@ uuid</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.2.08</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.2.16</text>
   </g>
   <g id='Labels_collection'>
     <text class="nodeName" x="450" y="375" font-size="120%">collection</text>
@@ -536,7 +536,7 @@ uuid</title>
   </g>
   <g id='Labels_fl_chart'>
     <text class="nodeName" x="2850" y="225" font-size="120%">fl_chart</text>
-    <text class="nodeName" x="2850" y="245" font-size="80%">0.66.1</text>
+    <text class="nodeName" x="2850" y="245" font-size="80%">0.66.2</text>
   </g>
   <g id='Labels_path_provider'>
     <text class="nodeName" x="1050" y="225" font-size="120%">path_provider</text>
@@ -548,7 +548,7 @@ uuid</title>
   </g>
   <g id='Labels_sqlite3'>
     <text class="nodeName" x="1350" y="225" font-size="120%">sqlite3</text>
-    <text class="nodeName" x="1350" y="245" font-size="80%">2.3.0</text>
+    <text class="nodeName" x="1350" y="245" font-size="80%">2.4.0</text>
   </g>
   <g id='Labels_url_launcher'>
     <text class="nodeName" x="150" y="225" font-size="120%">url_launcher</text>

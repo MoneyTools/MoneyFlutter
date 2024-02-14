@@ -61,7 +61,7 @@ bool isSmallDevice(final BuildContext context) {
   final screenSize = MediaQuery.of(context).size;
 
   // Determine if the screen width is smaller than a certain threshold
-  final isSmallScreen = screenSize.width < 400; // Adjust the threshold as needed
+  final isSmallScreen = screenSize.width < 600;
   return isSmallScreen;
 }
 
