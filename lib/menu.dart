@@ -75,6 +75,7 @@ class _MenuVerticalState extends State<MenuVertical> {
 
   @override
   Widget build(final BuildContext context) {
+    bool isVeryLargeDevice = MediaQuery.of(context).size.width > 1000;
     final List<NavigationRailDestination> destinations = getNavRailDestination(widget.settings);
     return SingleChildScrollView(
       child: IntrinsicHeight(
@@ -83,6 +84,7 @@ class _MenuVerticalState extends State<MenuVertical> {
           destinations: destinations,
           selectedIndex: _selectedIndex,
           useIndicator: widget.useIndicator,
+          labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
           indicatorColor: Theme.of(context).colorScheme.onSecondary,
           backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           onDestinationSelected: (final int index) {
