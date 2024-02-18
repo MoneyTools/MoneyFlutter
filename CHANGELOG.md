@@ -1,3 +1,8 @@
+## [1.2.17] 2024-02-18
+
+- Adaptive menus - show label on left side menu when the screen is larger than 1000 pixels
+- Flutter 3.19.0 Dart 3.3.0
+
 ## [1.2.16] 2024-02-14
 
 - Adjusted - Improve Dialog full screen on small devices (Widget smaller than 600 pixels)
