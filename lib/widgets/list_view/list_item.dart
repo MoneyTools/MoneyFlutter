@@ -3,7 +3,7 @@ import 'package:money/helpers/color_helper.dart';
 
 /// A Row for a Table view
 class MyListItem extends StatefulWidget {
-  final KeyEventResult Function(FocusNode, RawKeyEvent) onListViewKeyEvent;
+  final KeyEventResult Function(FocusNode, KeyEvent) onListViewKeyEvent;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDoubleTap;
   final bool isSelected;
@@ -51,7 +51,7 @@ class MyListItemState extends State<MyListItem> {
           // debugLog('focus lost $value index $currentIndex');
           if (value) {}
         },
-        onKey: widget.onListViewKeyEvent,
+        onKeyEvent: widget.onListViewKeyEvent,
         child: GestureDetector(
           onTap: () {
             setState(() {

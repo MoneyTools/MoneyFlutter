@@ -1,3 +1,8 @@
+## [1.3.0] 2024-02-19
+
+- Update most packages
+- Fix deprecated keyboard API
+
 ## [1.2.17] 2024-02-18
 
 - Adaptive menus - show label on left side menu when the screen is larger than 1000 pixels

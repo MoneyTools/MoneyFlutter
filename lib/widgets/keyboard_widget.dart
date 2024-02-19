@@ -94,6 +94,11 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
 
   static const TextStyle defaultTextStyle = TextStyle(color: defaultTextColor, fontSize: 12);
 
+  bool isKeyPressedAlt = false;
+  bool isKeyPressedCtrl = false;
+  bool isKeyPressedMeta = false;
+  bool isKeyPressedShift = false;
+
   @override
   void initState() {
     super.initState();
@@ -130,7 +135,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     );
   }
 
-  //returns text surrounded with a rounded-rect
+  // returns text surrounded with a rounded-rect
   Widget _getBubble(final String text, final Color color, final Color color2, final TextStyle textStyle,
       {final bool invert = false}) {
     // bool isDark = background.computeLuminance() < .5;
@@ -144,7 +149,7 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     );
   }
 
-  //returns the modifier key as text or a symbol (where possible)
+  // returns the modifier key as text or a symbol (where possible)
   String _getModifiers(final KeyAction rep) {
     final StringBuffer buffer = StringBuffer();
     if (rep.isMetaPressed) {
@@ -183,9 +188,9 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
     }
   }
 
-  KeyAction? _findMatch(final RawKeyEvent event) {
+  KeyAction? _findMatch(final KeyEvent event) {
     for (KeyAction rep in widget.bindings) {
-      if (rep.matchesEvent(event)) {
+      if (rep.matchesEvent(event, isKeyPressedMeta)) {
         return rep;
       }
     }
@@ -512,8 +517,23 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
       focusNode: _focusNode,
       autofocus: false,
       //widget.hasFocus,
-      onKey: (final FocusNode node, final RawKeyEvent event) {
-        if (event.runtimeType == RawKeyDownEvent && node.hasPrimaryFocus) {
+      onKeyEvent: (final FocusNode node, final KeyEvent event) {
+        if (event.logicalKey == LogicalKeyboardKey.altLeft || event.logicalKey == LogicalKeyboardKey.altLeft) {
+          isKeyPressedAlt = event is KeyDownEvent;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.controlLeft || event.logicalKey == LogicalKeyboardKey.controlRight) {
+          isKeyPressedCtrl = event is KeyDownEvent;
+        }
+
+        if (event.logicalKey == LogicalKeyboardKey.metaLeft || event.logicalKey == LogicalKeyboardKey.metaRight) {
+          isKeyPressedMeta = event is KeyDownEvent;
+        }
+        if (event.logicalKey == LogicalKeyboardKey.shiftLeft || event.logicalKey == LogicalKeyboardKey.shiftRight) {
+          isKeyPressedShift = event is KeyDownEvent;
+        }
+
+        if (event.runtimeType == KeyDownEvent && node.hasPrimaryFocus) {
           final LogicalKeyboardKey key = event.logicalKey;
 
           if (key == widget.showDismissKey) {
@@ -526,11 +546,11 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
             return KeyEventResult.handled;
           } else {
             final KeyAction? rep = _findMatch(event);
-            if (rep != null) {
+            if (rep == null) {
+              return KeyEventResult.ignored;
+            } else {
               rep.callback();
               return KeyEventResult.handled;
-            } else {
-              return KeyEventResult.ignored;
             }
           }
         }
@@ -580,27 +600,43 @@ class KeyAction {
   ///[description] and [callback] method. Includes optional bool values (defaulting
   ///to false) for key modifiers for meta [isMetaPressed], shift [isShiftPressed],
   ///alt [isAltPressed]
-  KeyAction(final LogicalKeyboardKey keyStroke, this.description, this.callback,
-      {this.categoryHeader = '',
-      final bool isControlPressed = false,
-      final bool isMetaPressed = false,
-      final bool isShiftPressed = false,
-      final bool isAltPressed = false})
-      : keyActivator = SingleActivator(keyStroke,
-            control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
+  KeyAction(
+    final LogicalKeyboardKey keyStroke,
+    this.description,
+    this.callback, {
+    this.categoryHeader = '',
+    final bool isControlPressed = false,
+    final bool isMetaPressed = false,
+    final bool isShiftPressed = false,
+    final bool isAltPressed = false,
+  }) : keyActivator = SingleActivator(
+          keyStroke,
+          control: isControlPressed,
+          shift: isShiftPressed,
+          alt: isAltPressed,
+          meta: isMetaPressed,
+        );
 
   ///Creates a key action from the first letter of any string [string] with,
   ///[description] and [callback] method. Includes optional bool values (defaulting
   ///to false) for key modifiers for meta [isMetaPressed], shift [isShiftPressed],
   ///alt [isAltPressed]
-  KeyAction.fromString(final String string, this.description, this.callback,
-      {this.categoryHeader = '',
-      final bool isControlPressed = false,
-      final bool isMetaPressed = false,
-      final bool isShiftPressed = false,
-      final bool isAltPressed = false})
-      : keyActivator = SingleActivator(LogicalKeyboardKey(string.toLowerCase().codeUnitAt(0)),
-            control: isControlPressed, shift: isShiftPressed, alt: isAltPressed, meta: isMetaPressed);
+  KeyAction.fromString(
+    final String string,
+    this.description,
+    this.callback, {
+    this.categoryHeader = '',
+    final bool isControlPressed = false,
+    final bool isMetaPressed = false,
+    final bool isShiftPressed = false,
+    final bool isAltPressed = false,
+  }) : keyActivator = SingleActivator(
+          LogicalKeyboardKey(string.toLowerCase().codeUnitAt(0)),
+          control: isControlPressed,
+          shift: isShiftPressed,
+          alt: isAltPressed,
+          meta: isMetaPressed,
+        );
 
   bool get isControlPressed => keyActivator.control;
 
@@ -655,11 +691,12 @@ class KeyAction {
     return label;
   }
 
-  bool matchesEvent(final RawKeyEvent event) {
-    return event.logicalKey == keyActivator.trigger &&
-        isControlPressed == event.isControlPressed &&
-        isMetaPressed == event.isMetaPressed &&
-        isShiftPressed == event.isShiftPressed &&
-        isAltPressed == event.isAltPressed;
+  bool matchesEvent(final KeyEvent event, bool isKeyPressedMeta) {
+    if (event.logicalKey == keyActivator.trigger) {
+      if (isMetaPressed && isKeyPressedMeta) {
+        return true;
+      }
+    }
+    return false;
   }
 }

@@ -86,42 +86,40 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         });
   }
 
-  KeyEventResult onListViewKeyEvent(final FocusNode node, final RawKeyEvent event) {
-    if (event is RawKeyDownEvent) {
-      if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+  KeyEventResult onListViewKeyEvent(final FocusNode node, final KeyEvent event) {
+    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+      setState(() {
+        selectedItemOffset(-1);
+      });
+      return KeyEventResult.handled;
+    } else {
+      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
         setState(() {
-          selectedItemOffset(-1);
+          selectedItemOffset(1);
+        });
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.home) {
+        setState(() {
+          setSelectedItem(0);
+        });
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.end) {
+        setState(() {
+          setSelectedItem(widget.list.length - 1);
+        });
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.pageUp) {
+        setState(() {
+          selectedItemOffset(-numberOfItemOnViewPort());
+        });
+        return KeyEventResult.handled;
+      } else if (event.logicalKey == LogicalKeyboardKey.pageDown) {
+        setState(() {
+          selectedItemOffset(numberOfItemOnViewPort());
         });
         return KeyEventResult.handled;
       } else {
-        if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-          setState(() {
-            selectedItemOffset(1);
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.home) {
-          setState(() {
-            setSelectedItem(0);
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.end) {
-          setState(() {
-            setSelectedItem(widget.list.length - 1);
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.pageUp) {
-          setState(() {
-            selectedItemOffset(-numberOfItemOnViewPort());
-          });
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.pageDown) {
-          setState(() {
-            selectedItemOffset(numberOfItemOnViewPort());
-          });
-          return KeyEventResult.handled;
-        } else {
-          debugLog(event.logicalKey.toString());
-        }
+        debugLog(event.logicalKey.toString());
       }
     }
     return KeyEventResult.ignored;
