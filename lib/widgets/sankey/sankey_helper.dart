@@ -1,4 +1,3 @@
-import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
@@ -28,18 +27,21 @@ class Block {
   TextAlign alignHorizontal = TextAlign.start;
   TextAlign alignVertical = TextAlign.start;
 
-  Block(this.name, this.rect, this.color, this.textColor, this.alignHorizontal, this.alignVertical) {
-    //
-  }
+  /// Constructor
+  Block(this.name, this.rect, this.color, this.textColor, this.alignHorizontal, this.alignVertical);
 
   static const double minBlockHeight = 20.0;
   static const double blockWidth = 50.0;
 
   void draw(final Canvas canvas) {
     if (!rect.hasNaN) {
+      // Rectangle
       final ui.Paint paint = Paint();
       paint.color = color;
+      paint.style = PaintingStyle.fill;
       canvas.drawRect(rect, paint);
+
+      // Title
       drawTextInRect(canvas, name, rect, color: textColor, textAlign: alignHorizontal);
     }
   }
@@ -55,16 +57,17 @@ void renderSourcesToTargetAsPercentage(final ui.Canvas canvas, final List<Block>
     final double targetSectionHeight = (target.rect.height * ratioSourceBlockHeightToSumHeight);
 
     final double blockSideToStartFrom =
-        target.rect.center.dx > block.rect.center.dx ? block.rect.right : block.rect.left;
+        target.rect.center.dx > block.rect.center.dx ? block.rect.right - 1 : block.rect.left + 1;
     final double targetSideToStartFrom =
-        target.rect.center.dx > block.rect.center.dx ? target.rect.left : target.rect.right;
+        target.rect.center.dx > block.rect.center.dx ? target.rect.left + 1 : target.rect.right - 1;
 
     drawChanel(
-        canvas,
-        ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
-        ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget,
-            rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
-        color: block.color);
+      canvas: canvas,
+      start: ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
+      end: ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget,
+          rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
+      color: block.color,
+    );
 
     rollingVerticalPositionDrawnOnTheTarget += targetSectionHeight;
     block.draw(canvas);
@@ -86,34 +89,15 @@ double getHeightNeededToRender(final List<SanKeyEntry> list) {
   return verticalPosition;
 }
 
-// ignore: unused-code
-List<num> getMinMaxValues(final List<double> list) {
-  if (list.isEmpty) {
-    return <num>[0, 0];
-  }
-  if (list.length == 1) {
-    return <num>[list[0], list[0]];
-  }
-
-  double valueMin = 0.0;
-  double valueMax = 0.0;
-  if (list[0] < list[1]) {
-    valueMin = list[0];
-    valueMax = list[1];
-  } else {
-    valueMin = list[1];
-    valueMax = list[0];
-
-    for (double value in list) {
-      valueMin = min(valueMin, value);
-      valueMax = max(valueMax, value);
-    }
-  }
-  return <num>[valueMin, valueMax];
-}
-
-void drawText(final Canvas context, final String name, final double x, final double y,
-    {final Color color = Colors.black, final double fontSize = 12.0, final double angleRotationInRadians = 0.0}) {
+void drawText(
+  final Canvas context,
+  final String name,
+  final double x,
+  final double y, {
+  final Color color = Colors.black,
+  final double fontSize = 12.0,
+  final double angleRotationInRadians = 0.0,
+}) {
   context.save();
   context.translate(x, y);
   context.rotate(angleRotationInRadians);
@@ -140,11 +124,15 @@ void drawText(final Canvas context, final String name, final double x, final dou
   context.restore();
 }
 
-void drawTextInRect(final Canvas context, final String name, final Rect rect,
-    {final TextAlign textAlign = TextAlign.left,
-    final Color color = Colors.black,
-    final double fontSize = 12.0,
-    final double angleRotationInRadians = 0.0}) {
+void drawTextInRect(
+  final Canvas context,
+  final String name,
+  final Rect rect, {
+  final TextAlign textAlign = TextAlign.left,
+  final Color color = Colors.black,
+  final double fontSize = 12.0,
+  final double angleRotationInRadians = 0.0,
+}) {
   context.save();
   context.translate(rect.left, rect.top);
   context.rotate(angleRotationInRadians);
@@ -171,11 +159,15 @@ void drawTextInRect(final Canvas context, final String name, final Rect rect,
   context.restore();
 }
 
-void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint b,
-    {final Color color = const Color(0xFF56687A)}) {
+void drawChanel({
+  required final ui.Canvas canvas,
+  required final ChannelPoint start,
+  required final ChannelPoint end,
+  final Color color = const Color(0xFF56687A),
+}) {
   // We render left to right, so lets see what channel goes on the left and the one that goes on the right
-  final ChannelPoint channelPointLeft = (a.x < b.x) ? a : b;
-  final ChannelPoint channelPointEnd = (a.x < b.x) ? b : a;
+  final ChannelPoint channelPointLeft = (start.x < end.x) ? start : end;
+  final ChannelPoint channelPointEnd = (start.x < end.x) ? end : start;
 
   final ui.Size size = Size((channelPointEnd.x - channelPointLeft.x).abs(), 100.0);
   final double halfWidth = size.width / 2;
@@ -215,14 +207,15 @@ void drawChanel(final ui.Canvas canvas, final ChannelPoint a, final ChannelPoint
 
   final ui.Paint paint = Paint();
   paint.color = color;
+  paint.style = PaintingStyle.fill;
   canvas.drawPath(path, paint);
 
   // OUTLINE
-  final ui.Paint paintStroke = Paint();
-  paintStroke.style = PaintingStyle.stroke;
-  paintStroke.strokeWidth = 0.5;
-  paintStroke.color = Colors.black.withOpacity(0.3);
-  canvas.drawPath(path, paintStroke);
+  // final ui.Paint paintStroke = Paint();
+  // paintStroke.style = PaintingStyle.stroke;
+  // paintStroke.strokeWidth = 0;
+  // paintStroke.color = color;
+  // canvas.drawPath(path, paintStroke);
 }
 
 double sumHeight(final List<Block> list) {

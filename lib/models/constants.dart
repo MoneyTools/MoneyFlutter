@@ -12,10 +12,6 @@ class Constants {
   static const double gapBetweenChannels = 14.0;
   static const double minBlockHeight = 3.0;
 
-  static const Color colorIncome = Color(0xaa4b6735);
-  static const Color colorExpense = Color(0xaa813e3e);
-  static const Color colorNet = Color(0xaa5c8aab);
-
   static const int commandTextZoom = 1000;
   static const int commandCurrencies = 1100;
   static const int commandIncludeClosedAccount = 1200;

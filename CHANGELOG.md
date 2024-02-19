@@ -1,5 +1,6 @@
 ## [1.3.0] 2024-02-19
 
+- Improve Sankey layout
 - Update most packages
 - Fix deprecated keyboard API
 

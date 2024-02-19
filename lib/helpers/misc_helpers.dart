@@ -203,3 +203,28 @@ bool isBetween(final num value, final num min, final num max) {
 bool isBetweenOrEqual(final num value, final num min, final num max) {
   return value >= min && value <= max;
 }
+
+List<num> getMinMaxValues(final List<double> list) {
+  if (list.isEmpty) {
+    return <num>[0, 0];
+  }
+  if (list.length == 1) {
+    return <num>[list[0], list[0]];
+  }
+
+  double valueMin = 0.0;
+  double valueMax = 0.0;
+  if (list[0] < list[1]) {
+    valueMin = list[0];
+    valueMax = list[1];
+  } else {
+    valueMin = list[1];
+    valueMax = list[0];
+
+    for (double value in list) {
+      valueMin = min(valueMin, value);
+      valueMax = max(valueMax, value);
+    }
+  }
+  return <num>[valueMin, valueMax];
+}

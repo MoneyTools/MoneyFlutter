@@ -1,15 +1,16 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view_header.dart';
+import 'package:money/widgets/sankey/sankey_colors.dart';
 import 'package:money/widgets/scroll_both_ways.dart';
-import 'package:money/widgets/widget_sankey/sankey_helper.dart';
-import 'package:money/widgets/widget_sankey/widget_sankey_chart.dart';
+import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/views/view.dart';
 
 class ViewCashFlow extends ViewWidget<SanKeyEntry> {
@@ -113,19 +114,32 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
             count: totalIncomes + totalExpenses,
             description: 'See where assets are allocated.',
           ),
-          Expanded(child: ScrollBothWay(child: getView(context))),
+          Expanded(child: getView()),
         ],
       ),
     );
   }
 
-  Widget getView(final BuildContext context) {
-    return SizedBox(
-      height: 600, // let the child determine the height
-      width: Constants.sanKeyColumnWidth * 5, // let the child determine the width
-      child: CustomPaint(
-        painter: SankeyPaint(sanKeyListOfIncomes, sanKeyListOfExpenses, context),
-      ),
-    );
+  Widget getView() {
+    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+      double w = max(constraints.maxWidth, Constants.sanKeyColumnWidth * 5);
+
+      return ScrollBothWay(
+        width: w,
+        child: Center(
+          child: SizedBox(
+            height: 600, // let the child determine the height
+            width: w, // let the child determine the width
+            child: CustomPaint(
+              painter: SankeyPainter(
+                listOfIncomes: sanKeyListOfIncomes,
+                listOfExpenses: sanKeyListOfExpenses,
+                colors: SankeyColors(darkTheme: Settings().useDarkMode),
+              ),
+            ),
+          ),
+        ),
+      );
+    });
   }
 }
