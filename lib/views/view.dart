@@ -48,7 +48,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   /// Derived class will override to customize the fields to display in the details panel
   Fields<T> getFieldsForDetailsPanel() {
-    final List<Field<T, dynamic>> fields = getFieldsForClass<T>().where((final Field<T, dynamic> item) => item.useAsDetailPanels).toList();
+    final List<Field<T, dynamic>> fields =
+        getFieldsForClass<T>().where((final Field<T, dynamic> item) => item.useAsDetailPanels).toList();
     return Fields<T>(definitions: fields);
   }
 

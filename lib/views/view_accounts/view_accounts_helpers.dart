@@ -13,17 +13,39 @@ extension ViewAccountsHelpers on ViewAccountsState {
 
   List<AccountType> getSelectedAccountType() {
     if (_selectedPivot[0]) {
-      return <AccountType>[AccountType.checking, AccountType.savings];
+      return getSelectedAccountTypesByIndex(0);
     }
 
     if (_selectedPivot[1]) {
-      return <AccountType>[AccountType.credit];
+      return getSelectedAccountTypesByIndex(1);
     }
 
     if (_selectedPivot[2]) {
-      return <AccountType>[AccountType.asset];
+      return getSelectedAccountTypesByIndex(2);
     }
-    return <AccountType>[]; // all
+
+    if (_selectedPivot[3]) {
+      return getSelectedAccountTypesByIndex(3);
+    }
+    return getSelectedAccountTypesByIndex(-1);
+  }
+
+  List<AccountType> getSelectedAccountTypesByIndex(final index) {
+    switch (index) {
+      case 0:
+        return <AccountType>[AccountType.checking, AccountType.savings];
+
+      case 1:
+        return <AccountType>[AccountType.investment, AccountType.retirement];
+
+      case 2:
+        return <AccountType>[AccountType.credit, AccountType.creditLine];
+
+      case 3:
+        return <AccountType>[AccountType.asset, AccountType.cash, AccountType.loan];
+      default: // all
+        return <AccountType>[];
+    }
   }
 
   Widget renderToggles() {

@@ -25,33 +25,52 @@ class ViewAccounts extends ViewWidget<Account> {
 
 class ViewAccountsState extends ViewWidgetState<Account> {
   final List<Widget> pivots = <Widget>[];
-  final List<bool> _selectedPivot = <bool>[false, false, false, true];
+  final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
 
   @override
   void initState() {
     super.initState();
 
-    pivots.add(ThreePartLabel(
+    pivots.add(
+      ThreePartLabel(
         text1: 'Banks',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(
-            getTotalBalanceOfAccounts(<AccountType>[AccountType.checking, AccountType.savings]))));
-    pivots.add(ThreePartLabel(
-        text1: 'Cards',
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0))),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
+        text1: 'Investments',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.credit]))));
-    pivots.add(ThreePartLabel(
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1))),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
+        text1: 'Credit',
+        small: true,
+        isVertical: true,
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2))),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
         text1: 'Assets',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[AccountType.asset]))));
-    pivots.add(ThreePartLabel(
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3))),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<AccountType>[]))));
+        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1))),
+      ),
+    );
   }
 
   @override
