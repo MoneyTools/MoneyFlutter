@@ -48,8 +48,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   /// Derived class will override to customize the fields to display in the details panel
   Fields<T> getFieldsForDetailsPanel() {
-    final List<Field<T, dynamic>> fields =
-        getFieldsForClass<T>().where((final Field<T, dynamic> item) => item.useAsDetailPanels).toList();
+    final List<Field<T, dynamic>> fields = getFieldsForClass<T>().where((final Field<T, dynamic> item) => item.useAsDetailPanels).toList();
     return Fields<T>(definitions: fields);
   }
 
@@ -441,35 +440,68 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       case FieldType.amount:
         {
           final List<double> minMax = getMinMaxValues(fieldDefinition);
-          content = Column(children: <Widget>[
-            Text(Currency.getCurrencyText(minMax[0])),
-            Text(Currency.getCurrencyText(minMax[1])),
-          ]);
+          content = SizedBox(
+            height: 200,
+            width: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(Currency.getCurrencyText(minMax[0])),
+                Text(Currency.getCurrencyText(minMax[1])),
+              ],
+            ),
+          );
           break;
         }
 
       case FieldType.date:
         {
           final List<String> minMax = getMinMaxDates(fieldDefinition);
-          content = Column(children: <Widget>[
-            Text(minMax[0]),
-            Text(minMax[1]),
-          ]);
+          content = SizedBox(
+            height: 200,
+            width: 200,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                Text(minMax[0]),
+                Text(minMax[1]),
+              ],
+            ),
+          );
           break;
         }
       case FieldType.text:
       default:
         {
           listOfUniqueInstances = getUniqueInstances(fieldDefinition);
-          content = ListView.builder(
-              itemCount: listOfUniqueInstances.length,
-              itemBuilder: (final BuildContext context, final int index) {
-                return CheckboxListTile(
-                  title: Text(listOfUniqueInstances[index].toString()),
-                  value: true,
-                  onChanged: (final bool? isChecked) {},
-                );
-              });
+
+          content = Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {},
+                child: const Text('Select All'),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: const Text('UnSelect All'),
+              ),
+              SizedBox(
+                height: 400,
+                width: 300,
+                child: ListView.builder(
+                  itemCount: listOfUniqueInstances.length,
+                  itemBuilder: (final BuildContext context, final int index) {
+                    return CheckboxListTile(
+                      title: Text(listOfUniqueInstances[index].toString()),
+                      value: true,
+                      onChanged: (final bool? isChecked) {},
+                    );
+                  },
+                ),
+              ),
+            ],
+          );
           break;
         }
     }
