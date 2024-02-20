@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/file_systems.dart';
+import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
 import 'package:money/models/settings.dart';
@@ -273,6 +274,8 @@ class _MyMoneyState extends State<MyMoney> {
           importQIF(pickerResult.files.single.path.toString());
         case 'qfx':
           importQFX(pickerResult.files.single.path.toString(), data);
+        case 'pdf':
+          importPDF(pickerResult.files.single.path.toString(), data);
       }
       settings.fireOnChanged();
     }
