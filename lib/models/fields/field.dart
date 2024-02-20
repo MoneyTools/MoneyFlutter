@@ -104,6 +104,7 @@ class FieldInt<C> extends Field<C, int> {
     super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,
+    super.columnWidth,
   }) : super(
           defaultValue: 0,
           align: TextAlign.right,

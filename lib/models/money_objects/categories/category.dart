@@ -14,6 +14,7 @@ export 'package:money/models/money_objects/categories/category_types.dart';
 class Category extends MoneyObject {
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
 
@@ -127,13 +128,11 @@ class Category extends MoneyObject {
   // These properties are not persisted
 
   /// Count
-  Field<Category, int> count = Field<Category, int>(
+  FieldInt<Category> count = FieldInt<Category>(
     importance: 98,
-    type: FieldType.numeric,
-    align: TextAlign.right,
-    name: 'Count',
+    name: 'Transactions',
+    columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
-    defaultValue: 0,
     valueFromInstance: (final Category instance) => instance.count.value,
     valueForSerialization: (final Category instance) => instance.count.value,
   );

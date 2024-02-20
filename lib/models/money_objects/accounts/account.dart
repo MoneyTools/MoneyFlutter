@@ -204,14 +204,11 @@ class Account extends MoneyObject {
   // Properties that are not persisted
 
   /// Count
-  Field<Account, int> count = Field<Account, int>(
+  FieldInt<Account> count = FieldInt<Account>(
     importance: 98,
-    type: FieldType.numeric,
-    align: TextAlign.right,
-    name: 'Count',
+    name: 'Transactions',
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
-    defaultValue: 0,
     valueFromInstance: (final Account instance) => instance.count.value,
     valueForSerialization: (final Account instance) => instance.count.value,
   );

@@ -12,6 +12,7 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 class Payee extends MoneyObject {
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
 
@@ -30,11 +31,9 @@ class Payee extends MoneyObject {
     valueForSerialization: (final Payee instance) => instance.name.value,
   );
 
-  Field<Payee, int> count = DeclareNoSerialized<Payee, int>(
-    type: FieldType.numeric,
-    name: 'Count',
-    defaultValue: 0,
-    align: TextAlign.right,
+  FieldInt<Payee> count = FieldInt<Payee>(
+    name: 'Transactions',
+    columnWidth: ColumnWidth.small,
     valueFromInstance: (final Payee instance) => instance.count.value,
     valueForSerialization: (final Payee instance) => instance.count.value,
   );
