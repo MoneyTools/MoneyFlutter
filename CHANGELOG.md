@@ -1,5 +1,6 @@
 ## [1.3.1] 2024-02-21
 
+- Remember Details panel last tab selection
 - Improve the delete dialog
 - Add Mouse Hover color to list view items
 - Delete Transaction from Details Panel

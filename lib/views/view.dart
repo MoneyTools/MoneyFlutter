@@ -35,7 +35,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   // detail panel
   Object? subViewSelectedItem;
-  int selectedBottomTabId = 0;
+  int _selectedBottomTabId = 0;
 
   // header
   String _filterText = '';
@@ -63,6 +63,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       _sortByFieldIndex = viewSetting.getInt(prefSortBy, 0);
       _sortAscending = viewSetting.getBool(prefSortAscending, true);
       _lastSelectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
+      _selectedBottomTabId = viewSetting.getInt(prefSelectedDetailsPanelTab, 0);
     }
 
     list = getList();
@@ -128,7 +129,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                     Settings().save();
                   });
                 },
-                selectedTabId: selectedBottomTabId,
+                selectedTabId: _selectedBottomTabId,
                 selectedItems: selectedItems,
                 onTabActivated: updateBottomContent,
                 getDetailPanelContent: getDetailPanelContent,
@@ -268,7 +269,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   void updateBottomContent(final int tab) {
     setState(() {
-      selectedBottomTabId = tab;
+      _selectedBottomTabId = tab;
+      saveLastUserActionOnThisView();
     });
   }
 
@@ -360,6 +362,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       prefSortBy: _sortByFieldIndex,
       prefSortAscending: _sortAscending,
       prefSelectedListItemIndex: selectedItems.value.firstOrNull,
+      prefSelectedDetailsPanelTab: _selectedBottomTabId,
     };
 
     Settings().save();

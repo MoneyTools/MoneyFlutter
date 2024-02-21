@@ -55,3 +55,4 @@ const String prefViews = 'views';
 const String prefSortBy = 'sortBy';
 const String prefSortAscending = 'sortAscending';
 const String prefSelectedListItemIndex = 'selectedItemIndex';
+const String prefSelectedDetailsPanelTab = 'selectedDetailsPanelTab';
