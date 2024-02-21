@@ -133,6 +133,7 @@ class Data {
       default:
         break;
     }
+    recalculateBalances();
   }
 
   void assessMutationsCountOfAllModels() {
@@ -214,12 +215,17 @@ class Data {
     }
 
     // All individual table were loaded, now let the cross reference money object create linked to other tables
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.onAllDataLoaded();
-    }
+    recalculateBalances();
 
     // Notify that loading is completed
     callbackWhenLoaded(true);
+  }
+
+  /// When Changes are done we can force a reevaluation of the balances
+  void recalculateBalances() {
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.onAllDataLoaded();
+    }
   }
 
   /// Close data source
