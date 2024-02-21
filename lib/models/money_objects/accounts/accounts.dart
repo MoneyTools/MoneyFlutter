@@ -58,7 +58,7 @@ class Accounts extends MoneyObjects<Account> {
       if (item != null) {
         item.count.value++;
         item.balance.value += t.amount.value;
-        item.balanceNormalized.value += t.getNormalizedAmount();
+        item.balanceNormalized.value += t.getNormalizedAmount(t.amount.value);
       }
     }
   }

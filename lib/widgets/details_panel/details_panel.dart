@@ -8,6 +8,7 @@ class DetailsPanel extends StatelessWidget {
   final int selectedTabId;
   final Function onTabActivated;
   final Widget Function(int, List<int>) getDetailPanelContent;
+  final String currency;
   final Function? onActionAdd;
   final Function? onActionDelete;
 
@@ -20,6 +21,7 @@ class DetailsPanel extends StatelessWidget {
     required this.onExpanded,
     required this.onTabActivated,
     required this.getDetailPanelContent,
+    required this.currency,
     required this.onActionAdd,
     required this.onActionDelete,
   });
@@ -46,6 +48,7 @@ class DetailsPanel extends StatelessWidget {
                     onExpanded: onExpanded,
                     selectedTabId: selectedTabId,
                     onTabActivated: onTabActivated,
+                    currency: currency,
                     onActionAdd: onActionAdd,
                     onActionDelete: selectedTabId == 0 && list.isNotEmpty ? onActionDelete : null,
                   ),

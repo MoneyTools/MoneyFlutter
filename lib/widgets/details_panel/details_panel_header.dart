@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 
 class DetailsPanelHeader extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
+
+  final String currency;
 
   final Function? onActionAdd;
   final Function? onActionDelete;
@@ -17,6 +20,7 @@ class DetailsPanelHeader extends StatelessWidget {
     required this.onExpanded,
     required this.selectedTabId,
     required this.onTabActivated,
+    required this.currency,
     this.onActionAdd,
     this.onActionDelete,
   });
@@ -99,6 +103,8 @@ class DetailsPanelHeader extends StatelessWidget {
       children: [
         const Spacer(),
         if (onActionAdd != null) buttonActionAdd,
+        const Spacer(),
+        Currency.buildCurrencyWidget(currency),
         const Spacer(),
         _buildExpando(),
       ],

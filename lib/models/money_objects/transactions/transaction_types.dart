@@ -56,4 +56,6 @@ const String columnIdCategory = 'Category';
 const String columnIdStatus = 'Status';
 const String columnIdMemo = 'Memo';
 const String columnIdAmount = 'Amount';
+const String columnIdAmountNormalized = 'Amount(USD)';
 const String columnIdBalance = 'Balance';
+const String columnIdBalanceNormalized = 'Balance(USD)';

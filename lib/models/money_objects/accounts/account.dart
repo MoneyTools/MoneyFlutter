@@ -214,17 +214,12 @@ class Account extends MoneyObject {
   );
 
   /// Balance
-  Field<Account, double> balance = Field<Account, double>(
-    type: FieldType.widget,
+  FieldDouble<Account> balance = FieldDouble<Account>(
     importance: 5,
     name: 'Balance',
     useAsColumn: false,
-    defaultValue: 0,
-    valueFromInstance: (final Account instance) => Currency.buildCurrencyWidget(instance.currency.value),
-    valueForSerialization: (final Account instance) => Currency.getCurrencyText(
-      instance.balance.value,
-      iso4217code: instance.currency.value,
-    ),
+    useAsDetailPanels: false,
+    valueFromInstance: (final Account instance) => instance.currency.value,
   );
 
   /// Balance Normalized use in the List view

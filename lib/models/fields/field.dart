@@ -9,6 +9,7 @@ class Field<C, T> {
   String name;
   String serializeName;
   FieldType type;
+  String currency; // used for FieldType.amount
   ColumnWidth columnWidth;
   TextAlign align;
   bool useAsColumn;
@@ -26,6 +27,7 @@ class Field<C, T> {
 
   Field({
     this.type = FieldType.text,
+    this.currency = 'USD',
     this.align = TextAlign.left,
     this.columnWidth = ColumnWidth.normal,
     this.name = '',
@@ -54,7 +56,7 @@ class Field<C, T> {
         case FieldType.text:
           valueFromInstance = (final C objectInstance) => value.toString();
         case FieldType.amount:
-          valueFromInstance = (final C c) => Currency.getCurrencyText(value as double);
+          valueFromInstance = (final C c) => Currency.getCurrencyText(value as double, iso4217code: currency);
         case FieldType.date:
           valueFromInstance = (final C c) => getDateAsText(value as DateTime);
         default:
@@ -141,6 +143,7 @@ class FieldAmount<C> extends Field<C, double> {
     super.sort,
   }) : super(
           defaultValue: 0.00,
+          currency: 'USD',
           align: TextAlign.right,
           type: FieldType.amount,
         );
@@ -173,9 +176,9 @@ class FieldString<C> extends Field<C, String> {
     super.valueForSerialization,
     super.useAsColumn = true,
     super.useAsDetailPanels = true,
+    super.align = TextAlign.left,
   }) : super(
             defaultValue: '',
-            align: TextAlign.left,
             type: FieldType.text,
             sort: (final C a, final C b, final bool ascending) {
               return sortByString(valueFromInstance(a), valueFromInstance(b), ascending);
@@ -263,6 +266,7 @@ Widget buildFieldWidgetForText({
 
 Widget buildFieldWidgetForCurrency({
   final dynamic value = 0,
+  final String currency = 'USD',
   final bool shorthand = false,
   final TextAlign align = TextAlign.right,
 }) {
@@ -272,7 +276,9 @@ Widget buildFieldWidgetForCurrency({
     child: Padding(
       padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
       child: Text(
-        shorthand ? getNumberAsShorthandText(value as num) : Currency.getCurrencyText(value as double),
+        shorthand
+            ? getNumberAsShorthandText(value as num)
+            : Currency.getCurrencyText(value as double, iso4217code: currency),
         textAlign: align,
       ),
     ),

@@ -88,6 +88,16 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     return 'Your main assets.';
   }
 
+  // default currency for this view
+  @override
+  String getCurrency() {
+    final int? selectedAccountIndex = selectedItems.value.firstOrNull;
+    if (selectedAccountIndex == null) {
+      return 'USD'; // default to USD
+    }
+    return list[selectedAccountIndex].currency.value;
+  }
+
   @override
   Widget buildHeader([final Widget? child]) {
     return super.buildHeader(renderToggles());

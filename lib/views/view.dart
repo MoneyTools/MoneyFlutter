@@ -133,6 +133,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 selectedItems: selectedItems,
                 onTabActivated: updateBottomContent,
                 getDetailPanelContent: getDetailPanelContent,
+                currency: getCurrency(),
                 onActionAdd: () {},
                 onActionDelete: () {
                   onDeleteRequestedByUser(context, selectedItems.value.first);
@@ -173,6 +174,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   String getDescription() {
     return 'Default list of items';
+  }
+
+  String getCurrency() {
+    // default currency for this view
+    return 'USD';
   }
 
   List<T> getList([bool includeDeleted = false]) {

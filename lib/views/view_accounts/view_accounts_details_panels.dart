@@ -37,8 +37,8 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           columnIdPayee,
           columnIdCategory,
           columnIdStatus,
-          columnIdAmount,
-          columnIdBalance,
+          columnIdAmountNormalized,
+          columnIdBalanceNormalized,
         ],
         getList: () => listOfTransactionForThisAccount,
       );

@@ -199,6 +199,7 @@ class Transaction extends MoneyObject {
     importance: 98,
     name: 'Amount',
     serializeName: 'Amount',
+    useAsColumn: false,
     valueFromInstance: (final Transaction instance) => instance.amount.value,
     valueForSerialization: (final Transaction instance) => instance.amount.value,
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
@@ -244,15 +245,53 @@ class Transaction extends MoneyObject {
   // Not serialized
   // derived property used for display
 
-  /// Balance
-  FieldAmount<Transaction> balance = FieldAmount<Transaction>(
+  /// Amount as Text
+  FieldString<Transaction> amountAsTextNative = FieldString<Transaction>(
+    importance: 98,
+    name: 'Amount*',
+    useAsColumn: false,
+    valueFromInstance: (final Transaction instance) =>
+        Currency.getCurrencyText(instance.amount.value, iso4217code: instance.amount.currency),
+  );
+
+  /// Amount Normalized to USD
+  FieldString<Transaction> amountAsTextNormalized = FieldString<Transaction>(
+    importance: 98,
+    name: 'Amount(USD)',
+    valueFromInstance: (final Transaction instance) =>
+        Currency.getCurrencyText(instance.getNormalizedAmount(instance.amount.value), iso4217code: 'USD'),
+    align: TextAlign.right,
+  );
+
+  /// Balance native
+  FieldDouble<Transaction> balance = FieldDouble<Transaction>(
     importance: 99,
     name: 'Balance',
-    useAsColumn: true,
+    useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.balance.value,
-    sort: (final Transaction a, final Transaction b, final bool ascending) =>
-        sortByValue(a.balance.value, b.balance.value, ascending),
+  );
+
+  /// Balance native
+  FieldString<Transaction> balanceAsTextNative = FieldString<Transaction>(
+    importance: 99,
+    name: 'Balance*',
+    useAsColumn: false,
+    useAsDetailPanels: false,
+    valueFromInstance: (final Transaction instance) => Currency.getCurrencyText(
+        instance.getNormalizedAmount(instance.balance.value),
+        iso4217code: instance.amount.currency),
+  );
+
+  /// Balance Normalized to USD
+  FieldString<Transaction> balanceAsTextNormalized = FieldString<Transaction>(
+    importance: 99,
+    name: 'Balance(USD)',
+    useAsColumn: true,
+    useAsDetailPanels: false,
+    align: TextAlign.right,
+    valueFromInstance: (final Transaction instance) =>
+        Currency.getCurrencyText(instance.getNormalizedAmount(instance.balance.value), iso4217code: 'USD'),
   );
 
   Account? accountInstance;
@@ -306,6 +345,7 @@ class Transaction extends MoneyObject {
     t.flags.value = json.getInt('Flags');
     // 14 Amount
     t.amount.value = json.getDouble('Amount');
+    t.amount.currency = getDefaultCurrency(t.accountInstance);
     // 15 Sales Tax
     t.salesTax.value = json.getDouble('SalesTax');
     // 16 Transfer Split
@@ -319,11 +359,19 @@ class Transaction extends MoneyObject {
     return t;
   }
 
-  double getNormalizedAmount() {
+  static String getDefaultCurrency(final Account? accountInstance) {
+    // Convert the value to USD
+    if (accountInstance == null || accountInstance.getCurrencyRatio() == 0) {
+      return 'USD';
+    }
+    return accountInstance.currency.value;
+  }
+
+  double getNormalizedAmount(double nativeValue) {
     // Convert the value to USD
     if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
-      return amount.value;
+      return nativeValue;
     }
-    return amount.value * accountInstance!.getCurrencyRatio();
+    return nativeValue * accountInstance!.getCurrencyRatio();
   }
 }
