@@ -1,3 +1,7 @@
+## [1.3.1] 2024-02-21
+
+- Delete Transaction from Details Panel
+
 ## [1.3.0] 2024-02-19
 
 - Improve Sankey layout

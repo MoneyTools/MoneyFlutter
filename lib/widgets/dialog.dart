@@ -7,6 +7,7 @@ void myShowDialog({
   required final String title,
   required final Widget child,
   final bool isEditable = false,
+  final Function? onActionDelete,
 }) {
   if (isSmallDevice(context)) {
     Navigator.of(context).push(
@@ -31,7 +32,7 @@ void myShowDialog({
           return AlertDialog(
             title: Text(title),
             content: child,
-            actions: actionButtons(context, isEditable),
+            actions: actionButtons(context, isEditable, onActionDelete),
           );
         });
   }
@@ -40,9 +41,19 @@ void myShowDialog({
 List<Widget> actionButtons(
   final BuildContext context,
   final bool isEditable,
+  final Function? onActionDelete,
 ) {
   if (isEditable) {
     return <Widget>[
+      if (onActionDelete != null)
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop(false);
+            onActionDelete.call();
+          },
+          child: const Text('Delete'),
+        ),
+      const Spacer(),
       TextButton(
         onPressed: () {
           Navigator.of(context).pop(false);

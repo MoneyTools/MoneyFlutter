@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/widgets/confirmation_dialog.dart';
+import 'package:money/widgets/dialog.dart';
 
 import 'package:money/widgets/list_view/list_view.dart';
 
@@ -59,6 +61,12 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
             fields: columns,
             list: widget.getList(),
             selectedItems: ValueNotifier<List<int>>(<int>[]),
+            onTap: (final BuildContext context2, final int index) {
+              if (isBetweenOrEqual(index, 0, widget.getList().length - 1)) {
+                final Transaction instance = widget.getList()[index];
+                showTransactionAndActions(context, instance);
+              }
+            },
           ),
         ),
       ],
@@ -115,4 +123,47 @@ List<Transaction> getFilteredTransactions(final FilterFunction filter) {
     transaction.balance.value = runningBalance;
   }
   return list;
+}
+
+void showTransactionAndActions(final BuildContext context, final Transaction instance) {
+  final List<Field<Transaction, dynamic>> fields = getFieldsForClass<Transaction>()
+      .where((final Field<Transaction, dynamic> item) => item.useAsDetailPanels)
+      .toList();
+
+  final Fields<Transaction> detailPanelFields = Fields<Transaction>(definitions: fields);
+
+  Widget dialogContent = SingleChildScrollView(
+    key: Key(instance.uniqueId.toString()),
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        children: detailPanelFields.getCellsForDetailsPanel(instance),
+      ),
+    ),
+  );
+
+  myShowDialog(
+      context: context,
+      title: 'Transaction',
+      child: Column(
+        children: [Expanded(child: dialogContent)],
+      ),
+      isEditable: true,
+      onActionDelete: () {
+        showDialog(
+          context: context,
+          builder: (final BuildContext context) {
+            return DeleteConfirmationDialog(
+              title: 'Delete',
+              question: 'Are you sure you want to delete this?',
+              content: Column(
+                children: detailPanelFields.getListOfFieldNameAndValuePairAsWidget(instance),
+              ),
+              onConfirm: () {
+                Data().transactions.deleteItem(instance);
+              },
+            );
+          },
+        );
+      });
 }

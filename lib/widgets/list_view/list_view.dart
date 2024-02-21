@@ -16,8 +16,9 @@ class MyTableView<T> extends StatefulWidget {
   final Fields<T> fields;
   final List<T> list;
   final ValueNotifier<List<int>> selectedItems;
-  final Function? onTap;
-  final Function? onDoubleTap;
+  final Function(BuildContext, int)? onTap;
+  final Function(BuildContext, int)? onDoubleTap;
+  final Function(BuildContext, int)? onLongPress;
   final bool asColumnView;
 
   const MyTableView({
@@ -28,6 +29,7 @@ class MyTableView<T> extends StatefulWidget {
     this.asColumnView = true,
     this.onTap,
     this.onDoubleTap,
+    this.onLongPress,
   });
 
   @override
@@ -66,6 +68,9 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
             onTap: () {
               setSelectedItem(index);
               FocusScope.of(context).requestFocus();
+            },
+            onLongPress: () {
+              widget.onLongPress?.call(context, index);
             },
             autoFocus: index == widget.selectedItems.value.firstOrNull,
             isSelected: isSelected,

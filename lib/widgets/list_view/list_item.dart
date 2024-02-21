@@ -6,6 +6,7 @@ class MyListItem extends StatefulWidget {
   final KeyEventResult Function(FocusNode, KeyEvent) onListViewKeyEvent;
   final GestureTapCallback? onTap;
   final GestureTapCallback? onDoubleTap;
+  final GestureTapCallback? onLongPress;
   final bool isSelected;
   final bool autoFocus;
   final bool asColumnView;
@@ -19,6 +20,7 @@ class MyListItem extends StatefulWidget {
     this.asColumnView = true,
     this.onTap,
     this.onDoubleTap,
+    this.onLongPress,
     required this.child,
   });
 
@@ -60,6 +62,7 @@ class MyListItemState extends State<MyListItem> {
             widget.onTap?.call();
           },
           onDoubleTap: widget.onDoubleTap,
+          onLongPress: widget.onLongPress,
           child: Container(
             color: backgroundColor,
             child: widget.child,

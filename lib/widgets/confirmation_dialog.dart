@@ -7,12 +7,10 @@ class DeleteConfirmationDialog extends StatelessWidget {
     required this.title,
     required this.question,
     required this.onConfirm,
-    this.icon,
     this.message, // Optional
     this.content, // optional
   });
 
-  final Icon? icon;
   final String title;
   final String question;
   final String? message;
@@ -24,7 +22,7 @@ class DeleteConfirmationDialog extends StatelessWidget {
     Widget subContent = content == null ? Text(message ?? '') : content!;
 
     return AlertDialog(
-      icon: icon,
+      icon: const Icon(Icons.delete),
       title: Text(title),
       content: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -228,7 +228,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       context: context,
       builder: (final BuildContext context) {
         return DeleteConfirmationDialog(
-          icon: const Icon(Icons.delete),
           title: 'Delete ${getClassNameSingular()}',
           question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
           content: Column(
