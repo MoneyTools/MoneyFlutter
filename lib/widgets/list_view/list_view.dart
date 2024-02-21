@@ -60,6 +60,7 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
         itemBuilder: (final BuildContext context, final int index) {
           final MoneyObject itemInstance = (widget.list[index] as MoneyObject);
           final isLastItemOfTheList = (index == widget.list.length - 1);
+          final isSelected = widget.selectedItems.value.contains(index);
           return MyListItem(
             onListViewKeyEvent: onListViewKeyEvent,
             onTap: () {
@@ -67,23 +68,27 @@ class MyTableViewState<T> extends State<MyTableView<T>> {
               FocusScope.of(context).requestFocus();
             },
             autoFocus: index == widget.selectedItems.value.firstOrNull,
-            isSelected: widget.selectedItems.value.contains(index),
-            child: widget.asColumnView
-                ? itemInstance.buildFieldsAsWidgetForLargeScreen!(widget.fields, itemInstance as T)
-                : Container(
-                    padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          width: 1,
-                          color: isLastItemOfTheList ? Colors.transparent : Theme.of(context).dividerColor,
-                        ),
-                      ),
-                    ),
-                    child: itemInstance.buildFieldsAsWidgetForSmallScreen!(),
-                  ),
+            isSelected: isSelected,
+            child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
           );
         });
+  }
+
+  Widget buildListItemContent(final bool isSelected, final MoneyObject itemInstance, final bool isLastItemOfTheList) {
+    return widget.asColumnView
+        ? itemInstance.buildFieldsAsWidgetForLargeScreen!(widget.fields, itemInstance as T)
+        : Container(
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  width: 1,
+                  color: isLastItemOfTheList ? Colors.transparent : Theme.of(context).dividerColor,
+                ),
+              ),
+            ),
+            child: itemInstance.buildFieldsAsWidgetForSmallScreen!(),
+          );
   }
 
   KeyEventResult onListViewKeyEvent(final FocusNode node, final KeyEvent event) {

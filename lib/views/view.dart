@@ -132,6 +132,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 selectedItems: selectedItems,
                 onTabActivated: updateBottomContent,
                 getDetailPanelContent: getDetailPanelContent,
+                onActionAdd: () {},
+                onActionDelete: () {
+                  onDeleteRequestedByUser(context, selectedItems.value.first);
+                },
               ),
             ),
           ],
@@ -312,35 +316,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     if (indexOfItems.isNotEmpty) {
       final int index = indexOfItems.first;
       if (isBetweenOrEqual(index, 0, list.length - 1)) {
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Expanded(
-              child: SingleChildScrollView(
-                key: Key(index.toString()),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Column(
-                    children: detailPanelFields.getCellsForDetailsPanel(list[index]),
-                  ),
-                ),
-              ),
+        return SingleChildScrollView(
+          key: Key(index.toString()),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: Column(
+              children: detailPanelFields.getCellsForDetailsPanel(list[index]),
             ),
-
-            //
-            // Right side Action Panel
-            //
-            Column(
-              children: <Widget>[
-                IconButton(
-                    onPressed: () {
-                      onDeleteRequestedByUser(context, index);
-                    },
-                    icon: const Icon(Icons.delete),
-                    tooltip: 'Delete'),
-              ],
-            ),
-          ],
+          ),
         );
       }
     }
