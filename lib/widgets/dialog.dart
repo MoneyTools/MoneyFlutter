@@ -53,7 +53,6 @@ List<Widget> actionButtons(
           },
           child: const Text('Delete'),
         ),
-      const Spacer(),
       TextButton(
         onPressed: () {
           Navigator.of(context).pop(false);

@@ -143,17 +143,16 @@ void showTransactionAndActions(final BuildContext context, final Transaction ins
   );
 
   myShowDialog(
-      context: context,
-      title: 'Transaction',
-      child: Column(
-        children: [Expanded(child: dialogContent)],
-      ),
-      isEditable: true,
-      onActionDelete: () {
-        showDialog(
-          context: context,
-          builder: (final BuildContext context) {
-            return DeleteConfirmationDialog(
+    context: context,
+    title: 'Transaction',
+    child: dialogContent,
+    isEditable: true,
+    onActionDelete: () {
+      showDialog(
+        context: context,
+        builder: (final BuildContext context) {
+          return Center(
+            child: DeleteConfirmationDialog(
               title: 'Delete',
               question: 'Are you sure you want to delete this?',
               content: Column(
@@ -162,8 +161,10 @@ void showTransactionAndActions(final BuildContext context, final Transaction ins
               onConfirm: () {
                 Data().transactions.deleteItem(instance);
               },
-            );
-          },
-        );
-      });
+            ),
+          );
+        },
+      );
+    },
+  );
 }

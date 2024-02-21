@@ -62,23 +62,29 @@ class Fields<T> {
   /// List of rows [ FieldName | ....  | InstanceValue]
   List<Widget> getListOfFieldNameAndValuePairAsWidget(final T objectInstance,
       [final bool includeHiddenFields = false]) {
-    final List<Widget> strings = <Widget>[];
+    final List<Widget> listOfWidgets = <Widget>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
       final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
       if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
         final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
-        strings.add(
+        listOfWidgets.add(
           Row(
             children: [
               Text(fieldDefinition.name),
               const Spacer(),
-              Text(fieldDefinition.getString(rawValue)),
+              Text(
+                fieldDefinition.getString(rawValue),
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ],
           ),
         );
+        listOfWidgets.add(
+          const Divider(),
+        );
       }
     }
-    return strings;
+    return listOfWidgets;
   }
 
   bool columnValueContainString(final T objectInstance, final String lowerCaseTextToFind) {

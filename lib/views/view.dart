@@ -227,15 +227,17 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     showDialog(
       context: context,
       builder: (final BuildContext context) {
-        return DeleteConfirmationDialog(
-          title: 'Delete ${getClassNameSingular()}',
-          question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
-          content: Column(
-            children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
+        return Center(
+          child: DeleteConfirmationDialog(
+            title: 'Delete ${getClassNameSingular()}',
+            question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
+            content: Column(
+              children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
+            ),
+            onConfirm: () {
+              onDeleteConfirmedByUser(list[index]);
+            },
           ),
-          onConfirm: () {
-            onDeleteConfirmedByUser(list[index]);
-          },
         );
       },
     );
