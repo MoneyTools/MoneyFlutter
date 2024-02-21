@@ -130,7 +130,9 @@ void debugLog(final String message) {
 T? getFirstElement<T>(final List<int> indices, final List<dynamic> list) {
   if (indices.isNotEmpty) {
     final int index = indices.first;
-    return list[index] as T?;
+    if (isBetweenOrEqual(index, 0, list.length - 1)) {
+      return list[index] as T?;
+    }
   }
   return null;
 }

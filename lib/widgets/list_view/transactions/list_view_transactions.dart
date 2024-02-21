@@ -153,15 +153,17 @@ void showTransactionAndActions(final BuildContext context, final Transaction ins
         showDialog(
           context: context,
           builder: (final BuildContext context) {
-            return DeleteConfirmationDialog(
-              title: 'Delete',
-              question: 'Are you sure you want to delete this?',
-              content: Column(
-                children: detailPanelFields.getListOfFieldNameAndValuePairAsWidget(instance),
+            return Center(
+              child: DeleteConfirmationDialog(
+                title: 'Delete',
+                question: 'Are you sure you want to delete this?',
+                content: Column(
+                  children: detailPanelFields.getListOfFieldNameAndValuePairAsWidget(instance),
+                ),
+                onConfirm: () {
+                  Data().transactions.deleteItem(instance);
+                },
               ),
-              onConfirm: () {
-                Data().transactions.deleteItem(instance);
-              },
             );
           },
         );

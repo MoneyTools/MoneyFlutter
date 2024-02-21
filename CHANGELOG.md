@@ -1,5 +1,6 @@
 ## [1.3.1] 2024-02-21
 
+- Improve the delete dialog
 - Add Mouse Hover color to list view items
 - Delete Transaction from Details Panel
 
