@@ -1,5 +1,6 @@
 ## [1.3.1] 2024-02-21
 
+- Add Mouse Hover color to list view items
 - Delete Transaction from Details Panel
 
 ## [1.3.0] 2024-02-19

@@ -30,6 +30,7 @@ class MyListItem extends StatefulWidget {
 
 class MyListItemState extends State<MyListItem> {
   bool isSelected = false;
+  bool _hovering = false;
 
   @override
   void initState() {
@@ -45,15 +46,22 @@ class MyListItemState extends State<MyListItem> {
 
   @override
   Widget build(final BuildContext context) {
-    final Color backgroundColor = isSelected ? getColorTheme(context).inversePrimary : Colors.transparent;
+    final Color backgroundColor = _hovering
+        ? getColorTheme(context).inversePrimary.withOpacity(0.5)
+        : isSelected
+            ? getColorTheme(context).inversePrimary
+            : Colors.transparent;
 
     return Focus(
-        autofocus: widget.autoFocus,
-        onFocusChange: (final bool value) {
-          // debugLog('focus lost $value index $currentIndex');
-          if (value) {}
-        },
-        onKeyEvent: widget.onListViewKeyEvent,
+      autofocus: widget.autoFocus,
+      onFocusChange: (final bool value) {
+        // debugLog('focus lost $value index $currentIndex');
+        if (value) {}
+      },
+      onKeyEvent: widget.onListViewKeyEvent,
+      child: MouseRegion(
+        onHover: (event) => setState(() => _hovering = true),
+        onExit: (event) => setState(() => _hovering = false),
         child: GestureDetector(
           onTap: () {
             setState(() {
@@ -67,6 +75,8 @@ class MyListItemState extends State<MyListItem> {
             color: backgroundColor,
             child: widget.child,
           ),
-        ));
+        ),
+      ),
+    );
   }
 }
