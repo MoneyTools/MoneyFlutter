@@ -57,7 +57,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         ),
         // Table list of rows
         Expanded(
-          child: MyTableView<Transaction>(
+          child: MyListView<Transaction>(
             fields: columns,
             list: widget.getList(),
             selectedItems: ValueNotifier<List<int>>(<int>[]),

@@ -101,7 +101,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             // Table rows
             Expanded(
               flex: 1,
-              child: MyTableView<T>(
+              child: MyListView<T>(
                 list: list,
                 selectedItems: selectedItems,
                 fields: _fieldToDisplay,

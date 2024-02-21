@@ -12,7 +12,7 @@ export 'package:money/widgets/list_view/list_item.dart';
 export 'package:money/widgets/list_view/list_item_card.dart';
 export 'package:money/widgets/list_view/list_item_header.dart';
 
-class MyTableView<T> extends StatefulWidget {
+class MyListView<T> extends StatefulWidget {
   final Fields<T> fields;
   final List<T> list;
   final ValueNotifier<List<int>> selectedItems;
@@ -21,7 +21,7 @@ class MyTableView<T> extends StatefulWidget {
   final Function(BuildContext, int)? onLongPress;
   final bool asColumnView;
 
-  const MyTableView({
+  const MyListView({
     super.key,
     required this.fields,
     required this.list,
@@ -33,10 +33,10 @@ class MyTableView<T> extends StatefulWidget {
   });
 
   @override
-  State<MyTableView<T>> createState() => MyTableViewState<T>();
+  State<MyListView<T>> createState() => MyListViewState<T>();
 }
 
-class MyTableViewState<T> extends State<MyTableView<T>> {
+class MyListViewState<T> extends State<MyListView<T>> {
   final ScrollController scrollController = ScrollController();
   double rowHeight = 30;
 
