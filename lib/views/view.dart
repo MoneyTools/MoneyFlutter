@@ -141,7 +141,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 },
 
                 // Actions
-                onActionAdd: () {},
                 onActionDelete: () {
                   onDeleteRequestedByUser(context, selectedItems.value.first);
                 },

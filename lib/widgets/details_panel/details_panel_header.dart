@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/widgets/gaps.dart';
 
 class DetailsPanelHeader extends StatelessWidget {
   final bool isExpanded;
@@ -15,7 +16,6 @@ class DetailsPanelHeader extends StatelessWidget {
   final Function currentSelectionChanged;
 
   // Actions
-  final Function? onActionAdd;
   final Function? onActionDelete;
 
   /// Constructor
@@ -34,7 +34,6 @@ class DetailsPanelHeader extends StatelessWidget {
     required this.currentSelectionChanged,
 
     // Actions
-    this.onActionAdd,
     this.onActionDelete,
   });
 
@@ -45,53 +44,44 @@ class DetailsPanelHeader extends StatelessWidget {
         final BuildContext context,
         final BoxConstraints constraints,
       ) {
-        return Row(
-          children: <Widget>[
-            Expanded(child: _buildLeftSide()),
-            _buildViewSelections(constraints),
-            Expanded(child: _buildRightSide()),
-          ],
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              _buildExpando(),
+              gapMedium(),
+              _buildViewSelections(constraints),
+              const Spacer(),
+              _buildDeleteButton(),
+              gapMedium(),
+              _buildCurrencySelections(constraints),
+            ],
+          ),
         );
       },
     );
   }
 
-  Widget _buildLeftSide() {
-    final Widget buttonActionDelete = IconButton(
-      onPressed: () {
-        onActionDelete?.call();
-      },
-      icon: const Icon(Icons.delete),
-      tooltip: 'Delete selected item',
-    );
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        _buildExpando(),
-        const Spacer(),
-        if (onActionDelete != null) buttonActionDelete,
-        const Spacer(),
-      ],
-    );
-  }
-
   Widget _buildViewSelections(final BoxConstraints constraints) {
+    final bool smallDevice = constraints.maxWidth < 700;
+
     return SegmentedButton<int>(
       style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
-            value: 0,
-            label: constraints.maxWidth < 600 ? null : const Text('Details'),
-            icon: const Icon(Icons.info_outline)),
+          value: 0,
+          label: smallDevice ? null : const Text('Details'),
+          icon: const Icon(Icons.info_outline),
+        ),
         ButtonSegment<int>(
           value: 1,
-          label: constraints.maxWidth < 600 ? null : const Text('Chart'),
+          label: smallDevice ? null : const Text('Chart'),
           icon: const Icon(Icons.bar_chart),
         ),
         ButtonSegment<int>(
           value: 2,
-          label: constraints.maxWidth < 600 ? null : const Text('Transactions'),
+          label: smallDevice ? null : const Text('Transactions'),
           icon: const Icon(Icons.calendar_view_day),
         ),
       ],
@@ -105,29 +95,9 @@ class DetailsPanelHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildRightSide() {
-    final Widget buttonActionAdd = IconButton(
-      onPressed: () {
-        onActionAdd?.call();
-      },
-      icon: const Icon(Icons.add),
-      tooltip: 'Add new entry',
-    );
+  Widget _buildCurrencySelections(final BoxConstraints constraints) {
+    final bool smallDevice = constraints.maxWidth < 500;
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        const Spacer(),
-        if (onActionAdd != null) buttonActionAdd,
-        const Spacer(),
-        _buildCurrencySelections(),
-        const Spacer(),
-        _buildExpando(),
-      ],
-    );
-  }
-
-  Widget _buildCurrencySelections() {
     // this feature is only valid for SubView [Chart|Transaction]
     if (currencyChoices.isEmpty) {
       return const SizedBox();
@@ -142,17 +112,31 @@ class DetailsPanelHeader extends StatelessWidget {
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
-          label: Currency.buildCurrencyWidget(currencyChoices[0]),
+          label: smallDevice ? Text(currencyChoices[0]) : Currency.buildCurrencyWidget(currencyChoices[0]),
         ),
         ButtonSegment<int>(
           value: 1,
-          label: Currency.buildCurrencyWidget(currencyChoices[1]),
+          label: smallDevice ? Text(currencyChoices[1]) : Currency.buildCurrencyWidget(currencyChoices[1]),
         ),
       ],
       selected: <int>{currencySelected},
       onSelectionChanged: (final Set<int> newSelection) {
         currentSelectionChanged(newSelection.first);
       },
+    );
+  }
+
+  Widget _buildDeleteButton() {
+    if (onActionDelete == null) {
+      return const SizedBox();
+    }
+
+    return IconButton(
+      onPressed: () {
+        onActionDelete?.call();
+      },
+      icon: const Icon(Icons.delete),
+      tooltip: 'Delete selected item',
     );
   }
 

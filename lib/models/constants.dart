@@ -6,7 +6,7 @@ class Constants {
 
   // NavigationRail shows if the screen width is greater or equal to
   // screenWidthThreshold; otherwise, NavigationBar is used for navigation.
-  static const double narrowScreenWidthThreshold = 450;
+  static const double narrowScreenWidthThreshold = 600;
 
   static const double targetHeight = 200.0;
   static const double sanKeyColumnWidth = 200.0;
