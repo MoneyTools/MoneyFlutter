@@ -44,19 +44,23 @@ class DetailsPanelHeader extends StatelessWidget {
         final BuildContext context,
         final BoxConstraints constraints,
       ) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              _buildExpando(),
-              gapMedium(),
-              _buildViewSelections(constraints),
-              const Spacer(),
-              _buildDeleteButton(),
-              gapMedium(),
-              _buildCurrencySelections(constraints),
-            ],
+        return InkWell(
+          onTap: () {
+            onExpanded(!isExpanded);
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                _buildViewSelections(constraints),
+                const Spacer(),
+                _buildDeleteButton(),
+                gapMedium(),
+                _buildCurrencySelections(constraints),
+                _buildExpando(),
+              ],
+            ),
           ),
         );
       },
