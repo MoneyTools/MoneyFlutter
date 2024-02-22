@@ -185,7 +185,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   String getCurrency() {
     // default currency for this view
-    return 'USD';
+    return Constants.defaultCurrency;
   }
 
   List<T> getList([bool includeDeleted = false]) {

@@ -1,5 +1,6 @@
 // Imports
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -250,6 +251,7 @@ class Transaction extends MoneyObject {
     importance: 98,
     name: 'Amount',
     align: TextAlign.right,
+    useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) =>
         Currency.getCurrencyText(instance.amount.value, iso4217code: instance.amount.currency),
@@ -260,8 +262,9 @@ class Transaction extends MoneyObject {
     importance: 98,
     name: 'Amount(USD)',
     align: TextAlign.right,
-    valueFromInstance: (final Transaction instance) =>
-        Currency.getCurrencyText(instance.getNormalizedAmount(instance.amount.value), iso4217code: 'USD'),
+    valueFromInstance: (final Transaction instance) => Currency.getCurrencyText(
+        instance.getNormalizedAmount(instance.amount.value),
+        iso4217code: Constants.defaultCurrency),
   );
 
   /// Balance native
@@ -278,10 +281,10 @@ class Transaction extends MoneyObject {
     importance: 99,
     name: 'Balance',
     align: TextAlign.right,
+    useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final Transaction instance) => Currency.getCurrencyText(
-        instance.getNormalizedAmount(instance.balance.value),
-        iso4217code: instance.amount.currency),
+    valueFromInstance: (final Transaction instance) =>
+        Currency.getCurrencyText(instance.balance.value, iso4217code: instance.amount.currency),
   );
 
   /// Balance Normalized to USD
@@ -290,8 +293,9 @@ class Transaction extends MoneyObject {
     name: 'Balance(USD)',
     align: TextAlign.right,
     useAsDetailPanels: false,
-    valueFromInstance: (final Transaction instance) =>
-        Currency.getCurrencyText(instance.getNormalizedAmount(instance.balance.value), iso4217code: 'USD'),
+    valueFromInstance: (final Transaction instance) => Currency.getCurrencyText(
+        instance.getNormalizedAmount(instance.balance.value),
+        iso4217code: Constants.defaultCurrency),
   );
 
   Account? accountInstance;
@@ -362,7 +366,7 @@ class Transaction extends MoneyObject {
   static String getDefaultCurrency(final Account? accountInstance) {
     // Convert the value to USD
     if (accountInstance == null || accountInstance.getCurrencyRatio() == 0) {
-      return 'USD';
+      return Constants.defaultCurrency;
     }
     return accountInstance.currency.value;
   }

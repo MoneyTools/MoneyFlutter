@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
@@ -17,6 +18,7 @@ import 'package:money/models/money_objects/money_objects.dart';
 class Currency extends MoneyObject {
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
 
@@ -303,7 +305,7 @@ class Currency extends MoneyObject {
   /// Return a formatted string from the given amount using the supplied ISO4217 code
   static String getCurrencyText(
     double amount, {
-    String iso4217code = 'USD',
+    String iso4217code = Constants.defaultCurrency,
     int? decimalDigits,
   }) {
     String? localeToUse = Currency.getLocaleFromCurrencyIso4217(iso4217code);

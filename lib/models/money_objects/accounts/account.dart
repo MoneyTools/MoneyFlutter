@@ -1,5 +1,6 @@
 // Imports
 import 'package:flutter/material.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -235,7 +236,7 @@ class Account extends MoneyObject {
     buildFieldsAsWidgetForSmallScreen = () {
       Widget? originalCurrencyAndValue;
 
-      if (currency.value == 'USD') {
+      if (currency.value == Constants.defaultCurrency) {
         originalCurrencyAndValue = Currency.buildCurrencyWidget(currency.value);
       } else {
         double ratioCurrency = getCurrencyRatio();

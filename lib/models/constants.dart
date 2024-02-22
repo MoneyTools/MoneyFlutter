@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Constants {
   static const String demoData = '<Demo Data>';
+  static const String defaultCurrency = 'USD';
 
   // NavigationRail shows if the screen width is greater or equal to
   // screenWidthThreshold; otherwise, NavigationBar is used for navigation.

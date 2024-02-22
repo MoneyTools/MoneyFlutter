@@ -20,19 +20,17 @@ class Fields<T> {
 
     for (int columnIndex = 0; columnIndex < definitions.length; columnIndex++) {
       final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
-      if (fieldDefinition.useAsColumn) {
-        final dynamic value = fieldDefinition.valueFromInstance(objectInstance);
-        cells.add(
-          Expanded(
-            flex: fieldDefinition.columnWidth.index,
-            child: buildWidgetFromTypeAndValue(
-              value,
-              fieldDefinition.type,
-              fieldDefinition.align,
-            ),
+      final dynamic value = fieldDefinition.valueFromInstance(objectInstance);
+      cells.add(
+        Expanded(
+          flex: fieldDefinition.columnWidth.index,
+          child: buildWidgetFromTypeAndValue(
+            value,
+            fieldDefinition.type,
+            fieldDefinition.align,
           ),
-        );
-      }
+        ),
+      );
     }
 
     return Row(children: cells);

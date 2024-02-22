@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 
@@ -27,7 +28,7 @@ class Field<C, T> {
 
   Field({
     this.type = FieldType.text,
-    this.currency = 'USD',
+    this.currency = Constants.defaultCurrency,
     this.align = TextAlign.left,
     this.columnWidth = ColumnWidth.normal,
     this.name = '',
@@ -143,7 +144,7 @@ class FieldAmount<C> extends Field<C, double> {
     super.sort,
   }) : super(
           defaultValue: 0.00,
-          currency: 'USD',
+          currency: Constants.defaultCurrency,
           align: TextAlign.right,
           type: FieldType.amount,
         );
@@ -266,7 +267,7 @@ Widget buildFieldWidgetForText({
 
 Widget buildFieldWidgetForCurrency({
   final dynamic value = 0,
-  final String currency = 'USD',
+  final String currency = Constants.defaultCurrency,
   final bool shorthand = false,
   final TextAlign align = TextAlign.right,
 }) {

@@ -19,7 +19,7 @@ class Accounts extends MoneyObjects<Account> {
         'AccountId': 'BankAccountIdForTesting',
         'Name': 'U.S. Bank',
         'Type': AccountType.savings.index,
-        'Currency': 'USD'
+        'Currency': 'USD',
       },
       // ignore: always_specify_types
       {'Id': 1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index, 'Currency': 'USD'},

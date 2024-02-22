@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -88,9 +89,6 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     return 'Your main assets.';
   }
 
-  // String getCurrency() {
-  // }
-
   // default currency for this view
   @override
   List<String> getCurrencyChoices(final int subViewId, final List<int> selectedItems) {
@@ -99,12 +97,12 @@ class ViewAccountsState extends ViewWidgetState<Account> {
       case 2: // Transactions
         final int? selectedAccountIndex = selectedItems.firstOrNull;
         if (selectedAccountIndex != null) {
-          if (list[selectedAccountIndex].currency.value != 'USD') {
+          if (list[selectedAccountIndex].currency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based
-            return [list[selectedAccountIndex].currency.value, 'USD'];
+            return [list[selectedAccountIndex].currency.value, Constants.defaultCurrency];
           }
         }
-        return ['USD'];
+        return [Constants.defaultCurrency];
     }
     return [];
   }
