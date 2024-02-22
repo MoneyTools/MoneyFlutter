@@ -248,8 +248,9 @@ class Transaction extends MoneyObject {
   /// Amount as Text
   FieldString<Transaction> amountAsTextNative = FieldString<Transaction>(
     importance: 98,
-    name: 'Amount*',
-    useAsColumn: false,
+    name: 'Amount',
+    align: TextAlign.right,
+    useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) =>
         Currency.getCurrencyText(instance.amount.value, iso4217code: instance.amount.currency),
   );
@@ -258,9 +259,9 @@ class Transaction extends MoneyObject {
   FieldString<Transaction> amountAsTextNormalized = FieldString<Transaction>(
     importance: 98,
     name: 'Amount(USD)',
+    align: TextAlign.right,
     valueFromInstance: (final Transaction instance) =>
         Currency.getCurrencyText(instance.getNormalizedAmount(instance.amount.value), iso4217code: 'USD'),
-    align: TextAlign.right,
   );
 
   /// Balance native
@@ -275,8 +276,8 @@ class Transaction extends MoneyObject {
   /// Balance native
   FieldString<Transaction> balanceAsTextNative = FieldString<Transaction>(
     importance: 99,
-    name: 'Balance*',
-    useAsColumn: false,
+    name: 'Balance',
+    align: TextAlign.right,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => Currency.getCurrencyText(
         instance.getNormalizedAmount(instance.balance.value),
@@ -287,9 +288,8 @@ class Transaction extends MoneyObject {
   FieldString<Transaction> balanceAsTextNormalized = FieldString<Transaction>(
     importance: 99,
     name: 'Balance(USD)',
-    useAsColumn: true,
-    useAsDetailPanels: false,
     align: TextAlign.right,
+    useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) =>
         Currency.getCurrencyText(instance.getNormalizedAmount(instance.balance.value), iso4217code: 'USD'),
   );

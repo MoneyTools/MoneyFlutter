@@ -23,22 +23,25 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   }
 
   // Details Panel for Transactions
-  Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final Account? account = getFirstElement<Account>(indices, list);
+  Widget _getSubViewContentForTransactions({
+    required final List<int> selectedItems,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Account? account = getFirstElement<Account>(selectedItems, list);
     if (account != null && account.id.value > -1) {
       bool filter(final Transaction transaction) => filterByAccountId(transaction, account.id.value);
 
       final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
 
       return ListViewTransactions(
-        key: Key(account.id.value.toString()),
-        columnsToInclude: const <String>[
+        key: Key('${account.id.value}_currency_$showAsNativeCurrency'),
+        columnsToInclude: <String>[
           columnIdDate,
           columnIdPayee,
           columnIdCategory,
           columnIdStatus,
-          columnIdAmountNormalized,
-          columnIdBalanceNormalized,
+          showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
+          showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
         ],
         getList: () => listOfTransactionForThisAccount,
       );

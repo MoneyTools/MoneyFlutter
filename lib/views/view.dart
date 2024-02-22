@@ -36,6 +36,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   // detail panel
   Object? subViewSelectedItem;
   int _selectedBottomTabId = 0;
+  int _selectedCurrency = 0;
 
   // header
   String _filterText = '';
@@ -43,7 +44,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<T> getFieldsForTable() {
-    return Fields<T>(definitions: getFieldsForClass<T>());
+    return Fields<T>(definitions: getFieldsForClass<T>().where((element) => element.useAsColumn).toList());
   }
 
   /// Derived class will override to customize the fields to display in the details panel
@@ -108,12 +109,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 fields: _fieldToDisplay,
                 asColumnView: useColumns,
                 onTap: onRowTap,
-                // onDoubleTap: (final BuildContext context, final int index) {
-                //   if (widget.preference.showBottom) {
-                //     setState(() {
-                //       isDetailsPanelExpanded = true;
-                //     });
-                //   }
               ),
             ),
 
@@ -129,11 +124,23 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                     Settings().save();
                   });
                 },
-                selectedTabId: _selectedBottomTabId,
                 selectedItems: selectedItems,
-                onTabActivated: updateBottomContent,
-                getDetailPanelContent: getDetailPanelContent,
-                currency: getCurrency(),
+
+                // SubView
+                subPanelSelected: _selectedBottomTabId,
+                subPanelSelectionChanged: updateBottomContent,
+                subPanelContent: getDetailPanelContent,
+
+                // Currency
+                getCurrencyChoices: getCurrencyChoices,
+                currencySelected: _selectedCurrency,
+                currencySelectionChanged: (final int selected) {
+                  setState(() {
+                    _selectedCurrency = selected;
+                  });
+                },
+
+                // Actions
                 onActionAdd: () {},
                 onActionDelete: () {
                   onDeleteRequestedByUser(context, selectedItems.value.first);
@@ -289,10 +296,21 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       case 2:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: getPanelForTransactions(selectedItems),
+          child: getPanelForTransactions(selectedItems: selectedItems, showAsNativeCurrency: _selectedCurrency == 0),
         );
       default:
         return const Text('- empty -');
+    }
+  }
+
+  /// Override in your view
+  List<String> getCurrencyChoices(final int subViewId, final List<int> selectedItems) {
+    switch (subViewId) {
+      case 0:
+      case 1:
+      case 2:
+      default:
+        return [];
     }
   }
 
@@ -343,8 +361,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return const Text('No chart to display');
   }
 
-  Widget getPanelForTransactions(final List<int> indices) {
-    return const Text('the transactions');
+  Widget getPanelForTransactions({
+    required final List<int> selectedItems,
+    required final bool showAsNativeCurrency,
+  }) {
+    return const Text('No transactions');
   }
 
   void changeListSortOrder(final int columnNumber) {

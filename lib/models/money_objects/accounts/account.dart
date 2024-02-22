@@ -232,8 +232,6 @@ class Account extends MoneyObject {
 
   /// Constructor
   Account() {
-    // buildListWidgetForLargeScreen = (final Fields<Account> fields, Account instance) => fields.getRowOfColumns(instance);
-
     buildFieldsAsWidgetForSmallScreen = () {
       Widget? originalCurrencyAndValue;
 

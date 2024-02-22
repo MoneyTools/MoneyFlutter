@@ -88,14 +88,25 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     return 'Your main assets.';
   }
 
+  // String getCurrency() {
+  // }
+
   // default currency for this view
   @override
-  String getCurrency() {
-    final int? selectedAccountIndex = selectedItems.value.firstOrNull;
-    if (selectedAccountIndex == null) {
-      return 'USD'; // default to USD
+  List<String> getCurrencyChoices(final int subViewId, final List<int> selectedItems) {
+    switch (subViewId) {
+      case 1: // Chart
+      case 2: // Transactions
+        final int? selectedAccountIndex = selectedItems.firstOrNull;
+        if (selectedAccountIndex != null) {
+          if (list[selectedAccountIndex].currency.value != 'USD') {
+            // only offer currency toggle if the account is not USD based
+            return [list[selectedAccountIndex].currency.value, 'USD'];
+          }
+        }
+        return ['USD'];
     }
-    return list[selectedAccountIndex].currency.value;
+    return [];
   }
 
   @override
@@ -121,8 +132,14 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  Widget getPanelForTransactions(final List<int> indices) {
-    return _getSubViewContentForTransactions(indices);
+  Widget getPanelForTransactions({
+    required final List<int> selectedItems,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(
+      selectedItems: selectedItems,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
   }
 
   @override

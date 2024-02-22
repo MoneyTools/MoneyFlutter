@@ -5,22 +5,35 @@ class DetailsPanelHeader extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
 
-  final String currency;
+  // SubView
+  final int subViewSelected;
+  final Function subViewSelectionChanged;
 
+  // Currency
+  final List<String> currencyChoices;
+  final int currencySelected;
+  final Function currentSelectionChanged;
+
+  // Actions
   final Function? onActionAdd;
   final Function? onActionDelete;
-
-  final int selectedTabId;
-  final Function onTabActivated;
 
   /// Constructor
   const DetailsPanelHeader({
     super.key,
     required this.isExpanded,
     required this.onExpanded,
-    required this.selectedTabId,
-    required this.onTabActivated,
-    required this.currency,
+
+    // SubView
+    required this.subViewSelected,
+    required this.subViewSelectionChanged,
+
+    // Currency
+    required this.currencyChoices,
+    required this.currencySelected,
+    required this.currentSelectionChanged,
+
+    // Actions
     this.onActionAdd,
     this.onActionDelete,
   });
@@ -35,33 +48,7 @@ class DetailsPanelHeader extends StatelessWidget {
         return Row(
           children: <Widget>[
             Expanded(child: _buildLeftSide()),
-            // List of tab buttons
-            SegmentedButton<int>(
-                style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-                segments: <ButtonSegment<int>>[
-                  ButtonSegment<int>(
-                      value: 0,
-                      label: constraints.maxWidth < 600 ? null : const Text('Details'),
-                      icon: const Icon(Icons.info_outline)),
-                  ButtonSegment<int>(
-                    value: 1,
-                    label: constraints.maxWidth < 600 ? null : const Text('Chart'),
-                    icon: const Icon(Icons.bar_chart),
-                  ),
-                  ButtonSegment<int>(
-                    value: 2,
-                    label: constraints.maxWidth < 600 ? null : const Text('Transactions'),
-                    icon: const Icon(Icons.calendar_view_day),
-                  ),
-                ],
-                selected: <int>{selectedTabId},
-                onSelectionChanged: (final Set<int> newSelection) {
-                  if (!isExpanded) {
-                    onExpanded(true);
-                  }
-                  onTabActivated(newSelection.first);
-                }),
-
+            _buildViewSelections(constraints),
             Expanded(child: _buildRightSide()),
           ],
         );
@@ -89,6 +76,35 @@ class DetailsPanelHeader extends StatelessWidget {
     );
   }
 
+  Widget _buildViewSelections(final BoxConstraints constraints) {
+    return SegmentedButton<int>(
+      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      segments: <ButtonSegment<int>>[
+        ButtonSegment<int>(
+            value: 0,
+            label: constraints.maxWidth < 600 ? null : const Text('Details'),
+            icon: const Icon(Icons.info_outline)),
+        ButtonSegment<int>(
+          value: 1,
+          label: constraints.maxWidth < 600 ? null : const Text('Chart'),
+          icon: const Icon(Icons.bar_chart),
+        ),
+        ButtonSegment<int>(
+          value: 2,
+          label: constraints.maxWidth < 600 ? null : const Text('Transactions'),
+          icon: const Icon(Icons.calendar_view_day),
+        ),
+      ],
+      selected: <int>{subViewSelected},
+      onSelectionChanged: (final Set<int> newSelection) {
+        if (!isExpanded) {
+          onExpanded(true);
+        }
+        subViewSelectionChanged(newSelection.first);
+      },
+    );
+  }
+
   Widget _buildRightSide() {
     final Widget buttonActionAdd = IconButton(
       onPressed: () {
@@ -104,10 +120,39 @@ class DetailsPanelHeader extends StatelessWidget {
         const Spacer(),
         if (onActionAdd != null) buttonActionAdd,
         const Spacer(),
-        Currency.buildCurrencyWidget(currency),
+        _buildCurrencySelections(),
         const Spacer(),
         _buildExpando(),
       ],
+    );
+  }
+
+  Widget _buildCurrencySelections() {
+    // this feature is only valid for SubView [Chart|Transaction]
+    if (currencyChoices.isEmpty) {
+      return const SizedBox();
+    }
+
+    if (currencyChoices.length == 1) {
+      return Currency.buildCurrencyWidget(currencyChoices[0]);
+    }
+
+    return SegmentedButton<int>(
+      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      segments: <ButtonSegment<int>>[
+        ButtonSegment<int>(
+          value: 0,
+          label: Currency.buildCurrencyWidget(currencyChoices[0]),
+        ),
+        ButtonSegment<int>(
+          value: 1,
+          label: Currency.buildCurrencyWidget(currencyChoices[1]),
+        ),
+      ],
+      selected: <int>{currencySelected},
+      onSelectionChanged: (final Set<int> newSelection) {
+        currentSelectionChanged(newSelection.first);
+      },
     );
   }
 

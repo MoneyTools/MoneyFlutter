@@ -151,8 +151,11 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   }
 
   @override
-  Widget getPanelForTransactions(final List<int> indices) {
-    return _getSubViewContentForTransactions(indices);
+  Widget getPanelForTransactions({
+    required final List<int> selectedItems,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(selectedItems);
   }
 
   @override

@@ -5,23 +5,39 @@ class DetailsPanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
-  final int selectedTabId;
-  final Function onTabActivated;
-  final Widget Function(int, List<int>) getDetailPanelContent;
-  final String currency;
+
+  // SubView
+  final int subPanelSelected;
+  final Function subPanelSelectionChanged;
+  final Widget Function(int, List<int>) subPanelContent;
+
+  // Currency selection
+  final int currencySelected;
+  final List<String> Function(int, List<int>) getCurrencyChoices;
+  final Function(int) currencySelectionChanged;
+
+  // Actions
   final Function? onActionAdd;
   final Function? onActionDelete;
 
   /// Constructor
   const DetailsPanel({
     super.key,
-    required this.selectedItems,
-    required this.selectedTabId,
     required this.isExpanded,
     required this.onExpanded,
-    required this.onTabActivated,
-    required this.getDetailPanelContent,
-    required this.currency,
+    required this.selectedItems,
+
+    // sub-views
+    required this.subPanelSelected,
+    required this.subPanelSelectionChanged,
+    required this.subPanelContent,
+
+    // Currency
+    required this.getCurrencyChoices,
+    required this.currencySelected,
+    required this.currencySelectionChanged,
+
+    // Actions
     required this.onActionAdd,
     required this.onActionDelete,
   });
@@ -46,13 +62,21 @@ class DetailsPanel extends StatelessWidget {
                   DetailsPanelHeader(
                     isExpanded: isExpanded,
                     onExpanded: onExpanded,
-                    selectedTabId: selectedTabId,
-                    onTabActivated: onTabActivated,
-                    currency: currency,
+
+                    // SubPanel
+                    subViewSelected: subPanelSelected,
+                    subViewSelectionChanged: subPanelSelectionChanged,
+
+                    // Currency
+                    currencyChoices: getCurrencyChoices(subPanelSelected, list),
+                    currencySelected: currencySelected,
+                    currentSelectionChanged: currencySelectionChanged,
+
+                    // Actions
                     onActionAdd: onActionAdd,
-                    onActionDelete: selectedTabId == 0 && list.isNotEmpty ? onActionDelete : null,
+                    onActionDelete: subPanelSelected == 0 && list.isNotEmpty ? onActionDelete : null,
                   ),
-                  if (isExpanded) Expanded(child: getDetailPanelContent(selectedTabId, list)),
+                  if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, list)),
                 ],
               );
             }));

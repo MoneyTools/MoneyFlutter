@@ -24,26 +24,24 @@ class MyListItemHeader<T> extends StatelessWidget {
     final List<Widget> headers = <Widget>[];
     for (int i = 0; i < columns.definitions.length; i++) {
       final Field<T, dynamic> columnDefinition = columns.definitions[i];
-      if (columnDefinition.useAsColumn) {
-        headers.add(
-          widgetHeaderButton(
-            context,
-            columnDefinition.name,
-            TextAlign.center,
-            // columns.definitions[i].align,
-            columnDefinition.columnWidth.index,
-            getSortIndicated(i),
-            // Press
-            () {
-              onTap(i);
-            },
-            // Long Press
-            () {
-              onLongPress?.call(columnDefinition);
-            },
-          ),
-        );
-      }
+      headers.add(
+        widgetHeaderButton(
+          context,
+          columnDefinition.name,
+          TextAlign.center,
+          // columns.definitions[i].align,
+          columnDefinition.columnWidth.index,
+          getSortIndicated(i),
+          // Press
+          () {
+            onTap(i);
+          },
+          // Long Press
+          () {
+            onLongPress?.call(columnDefinition);
+          },
+        ),
+      );
     }
     return Row(children: headers);
   }

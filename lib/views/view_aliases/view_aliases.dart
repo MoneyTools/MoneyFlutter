@@ -41,8 +41,11 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
   }
 
   @override
-  Widget getPanelForTransactions(final List<int> indices) {
-    final Alias? alias = getFirstElement<Alias>(indices, list);
+  Widget getPanelForTransactions({
+    required final List<int> selectedItems,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Alias? alias = getFirstElement<Alias>(selectedItems, list);
     if (alias != null && alias.id.value > -1) {
       return ListViewTransactions(
         key: Key(alias.id.toString()),

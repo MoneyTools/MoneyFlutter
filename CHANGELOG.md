@@ -1,3 +1,7 @@
+## [1.3.2] 2024-02-22
+
+- Currency toggle in Details panel
+
 ## [1.3.1] 2024-02-21
 
 - Remember Details panel last tab selection
