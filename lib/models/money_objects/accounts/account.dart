@@ -111,7 +111,7 @@ class Account extends MoneyObject {
         sortByString(a.currency.value, b.currency.value, ascending),
   );
 
-  /// 8
+  /// OnlineAccount
   /// 8|OnlineAccount|INT|0||0
   FieldInt<Account> onlineAccount = FieldInt<Account>(
     name: 'OnlineAccount',
@@ -132,19 +132,20 @@ class Account extends MoneyObject {
     valueForSerialization: (final Account instance) => instance.webSite.value,
   );
 
-  /// 10
+  /// ReconcileWarning
   /// 10|ReconcileWarning|INT|0||0
   FieldInt<Account> reconcileWarning = FieldInt<Account>(
     serializeName: 'ReconcileWarning',
     useAsColumn: false,
+    useAsDetailPanels: false,
     valueForSerialization: (final Account instance) => instance.reconcileWarning.value,
   );
 
-  /// lastSync
+  /// LastSync Date & Time
   /// 11|LastSync|datetime|0||0
   FieldDate<Account> lastSync = FieldDate<Account>(
     importance: 90,
-    serializeName: 'Date',
+    serializeName: 'LastSync',
     useAsColumn: false,
     valueFromInstance: (final Account instance) => dateAsIso8601OrDefault(instance.lastSync.value),
     valueForSerialization: (final Account instance) => dateAsIso8601OrDefault(instance.lastSync.value),
@@ -164,6 +165,8 @@ class Account extends MoneyObject {
   FieldInt<Account> flags = FieldInt<Account>(
     serializeName: 'Flags',
     useAsColumn: false,
+    useAsDetailPanels: false,
+    valueFromInstance: (final Account instance) => instance.flags.value,
     valueForSerialization: (final Account instance) => instance.flags.value,
   );
 
@@ -231,6 +234,23 @@ class Account extends MoneyObject {
     valueFromInstance: (final Account instance) => instance.balanceNormalized.value,
   );
 
+  Field<Account, bool> isAccountOpen = Field<Account, bool>(
+    name: 'Account is open',
+    defaultValue: false,
+    useAsColumn: false,
+    useAsDetailPanels: true,
+    type: FieldType.toggle,
+    valueFromInstance: (final Account instance) => !instance.isClosed(),
+    setValue: (final Account instance, dynamic value) {
+      if (value) {
+        instance.flags.value &= ~AccountFlags.closed.index; // Remove the bit at the specified position
+      } else {
+        instance.flags.value |= AccountFlags.closed.index; // Set the bit at the specified position
+      }
+      Data().notifyTransactionChange(MutationType.changed, instance);
+    },
+  );
+
   /// Constructor
   Account() {
     buildFieldsAsWidgetForSmallScreen = () {
@@ -270,7 +290,7 @@ class Account extends MoneyObject {
       ..description.value = row.getString('Description')
       ..type.value = AccountType.values[row.getInt('Type')]
       ..openingBalance.value = row.getDouble('OpeningBalance')
-      ..currency.value = row.getString('Currency')
+      ..currency.value = row.getString('Currency', Constants.defaultCurrency)
       ..onlineAccount.value = row.getInt('OnlineAccount')
       ..webSite.value = row.getString('WebSite')
       ..reconcileWarning.value = row.getInt('ReconcileWarning')
@@ -301,7 +321,7 @@ class Account extends MoneyObject {
     return isBitOn(flags.value, AccountFlags.closed.index);
   }
 
-  bool isActive() {
+  bool isOpen() {
     return !isClosed();
   }
 
@@ -318,6 +338,6 @@ class Account extends MoneyObject {
   }
 
   bool isActiveBankAccount() {
-    return isBankAccount() && isActive();
+    return isBankAccount() && isOpen();
   }
 }

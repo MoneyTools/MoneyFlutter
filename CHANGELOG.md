@@ -1,3 +1,8 @@
+## [1.3.3] 2024-02-24
+
+- Mutation of MoneyObject
+- Ability to change Account is Open or Closed
+
 ## [1.3.2] 2024-02-22
 
 - Currency toggle in Details panel

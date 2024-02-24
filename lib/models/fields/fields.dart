@@ -4,6 +4,7 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/field.dart';
 import 'package:money/widgets/details_panel/details_panel_form_color.dart';
 import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
+import 'package:money/widgets/form_field_switch.dart';
 
 // Exports
 export 'package:money/models/fields/field.dart';
@@ -118,30 +119,46 @@ class Fields<T> {
         ),
       );
     } else {
-      if (fieldDefinition.type == FieldType.widget) {
-        final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
-        if (fieldDefinition.name == 'Color') {
-          return MyFormFieldForColor(
+      switch (fieldDefinition.type) {
+        case FieldType.toggle:
+          return SwitchFormField(
             title: fieldDefinition.name,
-            color: getColorFromString(valueAsString),
+            initialValue: fieldDefinition.valueFromInstance(objectInstance),
+            validator: (bool? value) {
+              /// Todo
+              return null;
+            },
+            onSaved: (value) {
+              /// Todo
+              fieldDefinition.setValue?.call(objectInstance, value);
+            },
           );
-        } else {
-          return MyFormFieldForWidget(
-            title: fieldDefinition.name,
-            valueAsText: valueAsString,
-            child: fieldDefinition.valueFromInstance(objectInstance),
-          );
-        }
-      }
 
-      return TextFormField(
-        readOnly: fieldDefinition.readOnly,
-        initialValue: fieldDefinition.getString(fieldValue),
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: fieldDefinition.name,
-        ),
-      );
+        case FieldType.widget:
+          final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
+          if (fieldDefinition.name == 'Color') {
+            return MyFormFieldForColor(
+              title: fieldDefinition.name,
+              color: getColorFromString(valueAsString),
+            );
+          } else {
+            return MyFormFieldForWidget(
+              title: fieldDefinition.name,
+              valueAsText: valueAsString,
+              child: fieldDefinition.valueFromInstance(objectInstance),
+            );
+          }
+
+        default:
+          return TextFormField(
+            readOnly: fieldDefinition.readOnly,
+            initialValue: fieldDefinition.getString(fieldValue),
+            decoration: InputDecoration(
+              border: const UnderlineInputBorder(),
+              labelText: fieldDefinition.name,
+            ),
+          );
+      }
     }
   }
 

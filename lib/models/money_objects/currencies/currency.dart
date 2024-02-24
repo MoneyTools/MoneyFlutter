@@ -109,7 +109,10 @@ class Currency extends MoneyObject {
     );
   }
 
-  static Widget buildCurrencyWidget(final threeLetterCurrencySymbol) {
+  static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
+    if (threeLetterCurrencySymbol.isEmpty) {
+      threeLetterCurrencySymbol = Constants.defaultCurrency;
+    }
     String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
     String flagName = getCountryFromLocale(locale).toLowerCase();
     return Row(

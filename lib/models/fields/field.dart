@@ -19,6 +19,7 @@ class Field<C, T> {
   bool isMultiLine = false;
   int importance;
   dynamic Function(C) valueFromInstance;
+  dynamic Function(C, dynamic)? setValue;
   dynamic Function(C) valueForSerialization;
   int Function(C, C, bool)? sort;
 
@@ -36,6 +37,7 @@ class Field<C, T> {
     required final T defaultValue,
     this.importance = -1,
     this.valueFromInstance = defaultCallbackValue,
+    this.setValue,
     this.valueForSerialization = defaultCallbackValue,
     this.useAsColumn = true,
     this.useAsDetailPanels = true,
@@ -323,6 +325,7 @@ enum FieldType {
   amount,
   amountShorthand,
   date,
+  toggle, // On/Off
   widget,
 }
 

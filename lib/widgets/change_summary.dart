@@ -4,18 +4,20 @@ import 'package:money/models/settings.dart';
 ///
 class ChangeSummaryBadge extends StatelessWidget {
   final int itemsAdded;
+  final int itemsChanged;
   final int itemsDeleted;
 
   /// Constructor
   const ChangeSummaryBadge({
     super.key,
     required this.itemsAdded,
+    required this.itemsChanged,
     required this.itemsDeleted,
   });
 
   @override
   Widget build(final BuildContext context) {
-    if (itemsAdded == 0 && itemsDeleted == 0) {
+    if (itemsAdded == 0 && itemsChanged == 0 && itemsDeleted == 0) {
       // not change to report
       return const SizedBox();
     }
@@ -42,6 +44,10 @@ class ChangeSummaryBadge extends StatelessWidget {
       );
     }
 
+    if (Settings().trackMutations.changed > 0) {
+      widgets.add(buildCounter('=', Settings().trackMutations.changed, textStyle.copyWith(color: Colors.orange)));
+    }
+
     if (Settings().trackMutations.deleted > 0) {
       widgets.add(buildCounter('-', Settings().trackMutations.deleted, textStyle.copyWith(color: Colors.red)));
     }
@@ -63,6 +69,6 @@ class ChangeSummaryBadge extends StatelessWidget {
   }
 
   String getTooltipText() {
-    return 'Items:\nAdded: ${Settings().trackMutations.added}\nDeleted: ${Settings().trackMutations.deleted}';
+    return 'Items:\nAdded: ${Settings().trackMutations.added}\nChanged: ${Settings().trackMutations.changed}\nDeleted: ${Settings().trackMutations.deleted}';
   }
 }
