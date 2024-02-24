@@ -82,7 +82,7 @@ class Accounts extends MoneyObjects<Account> {
       if (isActive == null) {
         return true;
       }
-      return item.isActive() == isActive;
+      return item.isOpen() == isActive;
     }).toList();
   }
 

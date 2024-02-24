@@ -119,16 +119,19 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
-  void notifyTransactionChange(MutationType change, dynamic objectChanged) {
+  void notifyTransactionChange(MutationType change, MoneyObject instance) {
     // let the app know that something has changed
     version++;
 
     switch (change) {
       case MutationType.inserted:
+        instance.mutation = MutationType.inserted;
         Settings().trackMutations.increaseNumber(increaseAdded: 1);
       case MutationType.changed:
-        Settings().trackMutations.increaseNumber(increaseDeleted: 1);
+        instance.mutation = MutationType.changed;
+        Settings().trackMutations.increaseNumber(increaseChanged: 1);
       case MutationType.deleted:
+        instance.mutation = MutationType.deleted;
         Settings().trackMutations.increaseNumber(increaseDeleted: 1);
       default:
         break;

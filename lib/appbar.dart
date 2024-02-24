@@ -199,6 +199,7 @@ class _MyAppBarState extends State<MyAppBar> {
                 ),
                 ChangeSummaryBadge(
                   itemsAdded: Settings().trackMutations.added,
+                  itemsChanged: Settings().trackMutations.changed,
                   itemsDeleted: Settings().trackMutations.deleted,
                 )
               ],
@@ -215,6 +216,7 @@ class _MyAppBarState extends State<MyAppBar> {
                 ),
                 ChangeSummaryBadge(
                   itemsAdded: Settings().trackMutations.added,
+                  itemsChanged: Settings().trackMutations.changed,
                   itemsDeleted: Settings().trackMutations.deleted,
                 )
               ],
@@ -261,6 +263,7 @@ class _MyAppBarState extends State<MyAppBar> {
           const SizedBox(width: 8),
           ChangeSummaryBadge(
             itemsAdded: Settings().trackMutations.added,
+            itemsChanged: Settings().trackMutations.changed,
             itemsDeleted: Settings().trackMutations.deleted,
           )
         ]),

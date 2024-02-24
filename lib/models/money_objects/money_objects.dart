@@ -59,8 +59,6 @@ class MoneyObjects<T> {
       if (entry.uniqueId == -1) {
         entry.uniqueId = length + 1;
       }
-
-      entry.mutation = MutationType.inserted;
       Data().notifyTransactionChange(MutationType.inserted, entry);
     }
   }
@@ -106,11 +104,11 @@ class MoneyObjects<T> {
         case MutationType.inserted:
           db.insert(tableName, item.getPersistableJSon<T>());
 
-        case MutationType.deleted:
-          db.delete(tableName, item.uniqueId);
-
         case MutationType.changed:
           db.update(tableName, item.uniqueId, item.getPersistableJSon<T>());
+
+        case MutationType.deleted:
+          db.delete(tableName, item.uniqueId);
 
         default:
           debugPrint('Unhandled change ${item.mutation}');
@@ -164,7 +162,8 @@ class MoneyObjects<T> {
       for (final dynamic field in declarations) {
         if (field.serializeName != '') {
           final dynamic value = field.valueForSerialization(item);
-          listValues.add('"$value"');
+          final String valueAsString = '"$value"';
+          listValues.add(valueAsString);
         }
       }
       csv.writeln(listValues.join(','));
@@ -173,9 +172,13 @@ class MoneyObjects<T> {
     return csv.toString();
   }
 
+  bool mutationUpdateItem(final MoneyObject item) {
+    Data().notifyTransactionChange(MutationType.changed, item);
+    return true;
+  }
+
   /// Remove/tag a Transaction instance from the list in memory
   bool deleteItem(final MoneyObject itemToDelete) {
-    itemToDelete.mutation = MutationType.deleted;
     Data().notifyTransactionChange(MutationType.deleted, itemToDelete);
     return true;
   }

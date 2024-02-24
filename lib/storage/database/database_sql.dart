@@ -30,7 +30,7 @@ class MyDatabaseImplementation {
         jsonMap.keys.map((key) => '$key = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
 
     String fieldNamesAndValues = setStatements.join(', ');
-    _db.execute('UPDATE $tableName SET $fieldNamesAndValues} WHERE Id=$id;');
+    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE Id=$id;');
   }
 
   void dispose() {
