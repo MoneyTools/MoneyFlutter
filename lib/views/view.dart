@@ -5,6 +5,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/widgets/details_panel/details_panel_fields.dart';
 import 'package:money/widgets/widgets.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
@@ -346,7 +347,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           key: Key(index.toString()),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
+            child: DetailsPanelFields(
               children: detailPanelFields.getCellsForDetailsPanel(list[index]),
             ),
           ),

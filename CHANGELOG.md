@@ -1,3 +1,7 @@
+## [1.3.4] 2024-02-25
+
+- Layout Multi columns details panel
+
 ## [1.3.3] 2024-02-24
 
 - Mutation of MoneyObject

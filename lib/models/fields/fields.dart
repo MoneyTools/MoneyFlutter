@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/field.dart';
-import 'package:money/widgets/details_panel/details_panel_form_color.dart';
+import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
 import 'package:money/widgets/form_field_switch.dart';
 
@@ -136,27 +136,32 @@ class Fields<T> {
 
         case FieldType.widget:
           final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
-          if (fieldDefinition.name == 'Color') {
-            return MyFormFieldForColor(
-              title: fieldDefinition.name,
-              color: getColorFromString(valueAsString),
-            );
-          } else {
-            return MyFormFieldForWidget(
-              title: fieldDefinition.name,
-              valueAsText: valueAsString,
-              child: fieldDefinition.valueFromInstance(objectInstance),
-            );
-          }
+          return MyFormFieldForWidget(
+            title: fieldDefinition.name,
+            valueAsText: valueAsString,
+            child: fieldDefinition.name == 'Color'
+                ? MyCircle(
+                    colorFill: getColorFromString(valueAsString),
+                    colorBorder: Colors.grey,
+                    size: 30,
+                  )
+                : fieldDefinition.valueFromInstance(objectInstance),
+          );
 
         default:
-          return TextFormField(
-            readOnly: fieldDefinition.readOnly,
-            initialValue: fieldDefinition.getString(fieldValue),
-            decoration: InputDecoration(
-              border: const UnderlineInputBorder(),
-              labelText: fieldDefinition.name,
-            ),
+          return Row(
+            children: <Widget>[
+              Expanded(
+                child: TextFormField(
+                  readOnly: fieldDefinition.readOnly,
+                  initialValue: fieldDefinition.getString(fieldValue),
+                  decoration: InputDecoration(
+                    labelText: fieldDefinition.name,
+                    border: const UnderlineInputBorder(),
+                  ),
+                ),
+              ),
+            ],
           );
       }
     }

@@ -10,6 +10,7 @@ class SwitchFormField extends FormField<bool> {
           key: UniqueKey(),
           builder: (FormFieldState<bool> state) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title),
