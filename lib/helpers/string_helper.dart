@@ -95,3 +95,9 @@ String getCountryFromLocale(final String locale) {
   final tokens = locale.replaceAll('-', '_').split('_');
   return tokens.last;
 }
+
+String doubleToCurrency(final double value) {
+  NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: '\$');
+  // Format the double value as currency text
+  return currencyFormatter.format(value);
+}

@@ -88,10 +88,15 @@ class Transaction extends MoneyObject {
 
   /// Payee Name
   FieldString<Transaction> payeeName = FieldString<Transaction>(
-    importance: 4,
-    name: 'Payee',
-    valueFromInstance: (final Transaction instance) => Payee.getName(instance.payeeInstance),
-  );
+      importance: 4,
+      name: 'Payee',
+      valueFromInstance: (final Transaction instance) {
+        if (instance.payeeInstance == null) {
+          // show the memo
+          return instance.memo.value;
+        }
+        return Payee.getName(instance.payeeInstance);
+      });
 
   /// OriginalPayee
   /// before auto-aliasing, helps with future merging.

@@ -24,28 +24,24 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
   // Details Panel for Transactions
   Widget _getSubViewContentForTransactions({
-    required final List<int> selectedItems,
+    required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    final Account? account = getFirstElement<Account>(selectedItems, list);
-    if (account != null && account.id.value > -1) {
-      bool filter(final Transaction transaction) => filterByAccountId(transaction, account.id.value);
+    bool filter(final Transaction transaction) => filterByAccountId(transaction, account.id.value);
 
-      final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
+    final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
 
-      return ListViewTransactions(
-        key: Key('${account.id.value}_currency_$showAsNativeCurrency'),
-        columnsToInclude: <String>[
-          columnIdDate,
-          columnIdPayee,
-          columnIdCategory,
-          columnIdStatus,
-          showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
-          showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
-        ],
-        getList: () => listOfTransactionForThisAccount,
-      );
-    }
-    return const CenterMessage(message: 'No item selected.');
+    return ListViewTransactions(
+      key: Key('${account.id.value}_currency_$showAsNativeCurrency'),
+      columnsToInclude: <String>[
+        columnIdDate,
+        columnIdPayee,
+        columnIdCategory,
+        columnIdStatus,
+        showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
+        showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
+      ],
+      getList: () => listOfTransactionForThisAccount,
+    );
   }
 }

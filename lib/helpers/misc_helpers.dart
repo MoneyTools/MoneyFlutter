@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:flutter/foundation.dart';
@@ -229,4 +230,34 @@ List<num> getMinMaxValues(final List<double> list) {
     }
   }
   return <num>[valueMin, valueMax];
+}
+
+/// Try parsing the date string with each format
+DateTime? attemptToGetDateFromText(final String text) {
+  // Define a list of date formats to try
+  List<String> dateFormats = [
+    'yyyy-MM-dd', // ISO8601
+    'MM/dd/yyyy', // USA
+    'dd/MM/yyyy', // Europe
+    // Add more formats as needed...
+  ];
+
+  DateTime? parsedDate;
+  for (String format in dateFormats) {
+    parsedDate = DateFormat(format).tryParse(text);
+    if (parsedDate != null) {
+      break; // Stop parsing if a valid date is found
+    }
+  }
+  return parsedDate;
+}
+
+/// Remove non-numeric characters from the currency text
+double? attemptToGetDoubleFromText(final String text) {
+  String numericString = text.replaceAll(RegExp(r'[^0-9.]'), '');
+  double? value = double.tryParse(numericString);
+  if (value != null && text.startsWith('-')) {
+    value = -value;
+  }
+  return value;
 }
