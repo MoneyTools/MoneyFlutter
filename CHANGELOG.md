@@ -1,5 +1,7 @@
 ## [1.3.5] 2024-03-01
 
+- Fix CSV Transaction.Amount
+- Flutter 3.19.2
 - Import Account transactions via the Clipboard Date,Description,Amount
 
 ## [1.3.4] 2024-02-25

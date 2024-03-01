@@ -254,7 +254,7 @@ class Transaction extends MoneyObject {
   /// Amount as Text
   FieldString<Transaction> amountAsTextNative = FieldString<Transaction>(
     importance: 98,
-    name: 'Amount',
+    name: 'Amount*',
     align: TextAlign.right,
     useAsColumn: false,
     useAsDetailPanels: false,
@@ -352,9 +352,11 @@ class Transaction extends MoneyObject {
     t.fitid.value = json.getString('FITID');
     // 13 Flags
     t.flags.value = json.getInt('Flags');
+
     // 14 Amount
     t.amount.value = json.getDouble('Amount');
     t.amount.currency = getDefaultCurrency(t.accountInstance);
+
     // 15 Sales Tax
     t.salesTax.value = json.getDouble('SalesTax');
     // 16 Transfer Split
