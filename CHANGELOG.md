@@ -1,5 +1,6 @@
 ## [1.3.5] 2024-03-01
 
+- Improvement - Select Account when doing a Clipboard Import
 - Fix CSV Transaction.Amount
 - Flutter 3.19.2
 - Import Account transactions via the Clipboard Date,Description,Amount
