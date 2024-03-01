@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/dialog_full_screen.dart';
 
 void myShowDialog({
   required final BuildContext context,
   required final String title,
   required final Widget child,
-  final bool isEditable = false,
-  final Function? onActionDelete,
+  required final List<Widget> actionButtons,
+  final bool includeCloseButton = true,
 }) {
   if (isSmallDevice(context)) {
+    // Full screen also comes with a Close (X) button
     Navigator.of(context).push(
       MaterialPageRoute<Null>(
         builder: (BuildContext context) {
@@ -25,6 +27,15 @@ void myShowDialog({
       ),
     );
   } else {
+    // in modal always offer a close button
+    if (includeCloseButton) {
+      actionButtons.add(DialogActionButton(
+          text: 'Close',
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          }));
+    }
+
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -32,13 +43,13 @@ void myShowDialog({
           return AlertDialog(
             title: Text(title),
             content: child,
-            actions: actionButtons(context, isEditable, onActionDelete),
+            actions: actionButtons,
           );
         });
   }
 }
 
-List<Widget> actionButtons(
+List<Widget> buildActionButtons(
   final BuildContext context,
   final bool isEditable,
   final Function? onActionDelete,
@@ -59,22 +70,22 @@ List<Widget> actionButtons(
         },
         child: const Text('Discard'),
       ),
-      TextButton(
+      DialogActionButton(
+        text: 'Apply',
         onPressed: () {
           Navigator.of(context).pop(true);
         },
-        child: const Text('Apply'),
       ),
     ];
   }
 
   // Just the close button
   return <Widget>[
-    TextButton(
+    DialogActionButton(
+      text: 'Done',
       onPressed: () {
         Navigator.of(context).pop(true);
       },
-      child: const Text('Done'),
     ),
   ];
 }

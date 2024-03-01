@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,6 +57,11 @@ class Settings {
 
   //--------------------------------------------------------
   Map<String, MyJson> views = <String, MyJson>{};
+
+  MyJson? getLastViewSettings(final String viewOfModel) {
+    final MyJson? viewSetting = views[viewOfModel];
+    return viewSetting;
+  }
 
   Function? onChanged;
 
@@ -151,4 +157,6 @@ class Settings {
   ) {
     prefs.setString(key, json.encode(mapOfJson));
   }
+
+  Account? lastAccountOnScreen;
 }

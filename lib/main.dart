@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/file_systems.dart';
+import 'package:money/storage/import/import_clipboard.dart';
 import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
@@ -98,6 +99,25 @@ class _MyMoneyState extends State<MyMoney> {
                     'Normal text suze',
                     () {
                       Settings().setFontScaleTo(1);
+                    },
+                    isMetaPressed: true,
+                  ),
+                  KeyAction(
+                    LogicalKeyboardKey('v'.codeUnitAt(0)),
+                    'Paste',
+                    () async {
+                      Clipboard.getData('text/plain').then((final ClipboardData? value) {
+                        if (value != null) {
+                          if (settings.screenIndex == Constants.viewAccounts &&
+                              Settings().lastAccountOnScreen != null) {
+                            importTransactionFromClipboard(
+                              context,
+                              value.text,
+                              Settings().lastAccountOnScreen!,
+                            );
+                          }
+                        }
+                      });
                     },
                     isMetaPressed: true,
                   ),
@@ -307,20 +327,27 @@ class _MyMoneyState extends State<MyMoney> {
     }
 
     switch (screenIndex) {
-      case 1:
+      case Constants.viewAccounts:
         return const ViewAccounts();
-      case 2:
+
+      case Constants.viewLoans:
         return const ViewLoans();
-      case 3:
+
+      case Constants.viewCategories:
         return const ViewCategories();
-      case 4:
+
+      case Constants.viewPayees:
         return const ViewPayees();
-      case 5:
+
+      case Constants.viewAliases:
         return const ViewAliases();
-      case 6:
+
+      case Constants.viewTransactions:
         return const ViewTransactions();
-      case 7:
+
+      case Constants.viewRentals:
         return const ViewRentals();
+
       case 0:
       default:
         return const ViewCashFlow();

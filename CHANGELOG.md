@@ -1,3 +1,7 @@
+## [1.3.5] 2024-03-01
+
+- Import Account transactions via the Clipboard Date,Description,Amount
+
 ## [1.3.4] 2024-02-25
 
 - Layout Multi columns details panel

@@ -23,6 +23,14 @@ class Constants {
   static const int commandFileSaveCsv = 2002;
   static const int commandFileSaveSql = 2003;
   static const int commandFileClose = 2004;
+
+  static const int viewAccounts = 1;
+  static const int viewLoans = 2;
+  static const int viewCategories = 3;
+  static const int viewPayees = 4;
+  static const int viewAliases = 5;
+  static const int viewTransactions = 6;
+  static const int viewRentals = 7;
 }
 
 const List<Color> colorOptions = <Color>[

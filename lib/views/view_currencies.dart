@@ -7,8 +7,8 @@ void showCurrencies(final BuildContext context) {
   myShowDialog(
     context: context,
     title: 'Currencies',
+    actionButtons: [],
     child: buildCurrenciesPanel(context),
-    isEditable: false,
   );
 }
 

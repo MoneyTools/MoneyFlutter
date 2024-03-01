@@ -3,6 +3,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/dialog.dart';
+import 'package:money/widgets/dialog_button.dart';
 
 import 'package:money/widgets/list_view/list_view.dart';
 
@@ -146,25 +147,29 @@ void showTransactionAndActions(final BuildContext context, final Transaction ins
     context: context,
     title: 'Transaction',
     child: dialogContent,
-    isEditable: true,
-    onActionDelete: () {
-      showDialog(
-        context: context,
-        builder: (final BuildContext context) {
-          return Center(
-            child: DeleteConfirmationDialog(
-              title: 'Delete',
-              question: 'Are you sure you want to delete this?',
-              content: Column(
-                children: detailPanelFields.getListOfFieldNameAndValuePairAsWidget(instance),
-              ),
-              onConfirm: () {
-                Data().transactions.deleteItem(instance);
-              },
-            ),
+    actionButtons: [
+      DialogActionButton(
+        text: 'Delete',
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (final BuildContext context) {
+              return Center(
+                child: DeleteConfirmationDialog(
+                  title: 'Delete',
+                  question: 'Are you sure you want to delete this?',
+                  content: Column(
+                    children: detailPanelFields.getListOfFieldNameAndValuePairAsWidget(instance),
+                  ),
+                  onConfirm: () {
+                    Data().transactions.deleteItem(instance);
+                  },
+                ),
+              );
+            },
           );
         },
-      );
-    },
+      ),
+    ],
   );
 }

@@ -49,11 +49,10 @@ class Account extends MoneyObject {
 
   // Name
   // 3|Name|nvarchar(80)|1||0
-  Field<Account, String> name = Field<Account, String>(
+  FieldString<Account> name = FieldString<Account>(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
-    defaultValue: '',
     valueFromInstance: (final Account instance) => instance.name.value,
     valueForSerialization: (final Account instance) => instance.name.value,
   );

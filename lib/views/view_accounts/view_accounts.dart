@@ -134,10 +134,16 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     required final List<int> selectedItems,
     required final bool showAsNativeCurrency,
   }) {
-    return _getSubViewContentForTransactions(
-      selectedItems: selectedItems,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
+    final Account? account = getFirstElement<Account>(selectedItems, list);
+    if (account != null && account.id.value > -1) {
+      Settings().lastAccountOnScreen = account;
+
+      return _getSubViewContentForTransactions(
+        account: account,
+        showAsNativeCurrency: showAsNativeCurrency,
+      );
+    }
+    return const CenterMessage(message: 'No item selected.');
   }
 
   @override

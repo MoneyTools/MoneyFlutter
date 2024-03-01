@@ -319,6 +319,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       myShowDialog(
         context: context,
         title: 'getDetailPanelHeader(context, index, list[index]),',
+        actionButtons: [],
         child: getPanelForDetails(<int>[index]),
       );
     } else {
@@ -525,7 +526,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       context: context,
       title: 'Column Filter',
       child: content,
-      isEditable: false,
+      actionButtons: [],
     );
   }
 }
