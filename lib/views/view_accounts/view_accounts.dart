@@ -125,6 +125,15 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
+  void onItemSelected(final BuildContext context, final int index) {
+    final Account? account = getFirstElement<Account>(<int>[index], list);
+    if (account != null && account.id.value > -1) {
+      Settings().mostRecentlySelectedAccount = account;
+    }
+    super.onItemSelected(context, index);
+  }
+
+  @override
   Widget getPanelForChart(final List<int> indices) {
     return _getSubViewContentForChart(indices);
   }
@@ -134,12 +143,9 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     required final List<int> selectedItems,
     required final bool showAsNativeCurrency,
   }) {
-    final Account? account = getFirstElement<Account>(selectedItems, list);
-    if (account != null && account.id.value > -1) {
-      Settings().lastAccountOnScreen = account;
-
+    if (Settings().mostRecentlySelectedAccount != null) {
       return _getSubViewContentForTransactions(
-        account: account,
+        account: Settings().mostRecentlySelectedAccount!,
         showAsNativeCurrency: showAsNativeCurrency,
       );
     }

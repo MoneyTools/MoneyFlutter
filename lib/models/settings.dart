@@ -158,5 +158,5 @@ class Settings {
     prefs.setString(key, json.encode(mapOfJson));
   }
 
-  Account? lastAccountOnScreen;
+  Account? mostRecentlySelectedAccount;
 }

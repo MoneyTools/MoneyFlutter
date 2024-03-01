@@ -109,7 +109,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 selectedItems: selectedItems,
                 fields: _fieldToDisplay,
                 asColumnView: useColumns,
-                onTap: onRowTap,
+                onTap: onItemSelected,
               ),
             ),
 
@@ -314,7 +314,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  void onRowTap(final BuildContext context, final int index) {
+  void onItemSelected(final BuildContext context, final int index) {
     if (isMobile()) {
       myShowDialog(
         context: context,

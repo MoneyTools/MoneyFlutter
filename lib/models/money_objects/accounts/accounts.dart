@@ -64,7 +64,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   List<Account> getOpenAccounts() {
-    return iterableList().where((final Account item) => activeBankAccount(item)).toList();
+    return iterableList().where((final Account account) => account.isOpen()).toList();
   }
 
   bool activeBankAccount(final Account element) {

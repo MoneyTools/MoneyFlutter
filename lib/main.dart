@@ -108,12 +108,11 @@ class _MyMoneyState extends State<MyMoney> {
                     () async {
                       Clipboard.getData('text/plain').then((final ClipboardData? value) {
                         if (value != null) {
-                          if (settings.screenIndex == Constants.viewAccounts &&
-                              Settings().lastAccountOnScreen != null) {
-                            importTransactionFromClipboard(
+                          if (Settings().mostRecentlySelectedAccount != null) {
+                            importTransactionFromClipboardText(
                               context,
-                              value.text,
-                              Settings().lastAccountOnScreen!,
+                              value.text ?? '',
+                              Settings().mostRecentlySelectedAccount!,
                             );
                           }
                         }

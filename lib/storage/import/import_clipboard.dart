@@ -7,98 +7,92 @@ import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/import/import_clipboard_panel.dart';
 import 'package:money/widgets/dialog_button.dart';
-import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/semantic_text.dart';
 import 'package:money/widgets/widgets.dart';
 
-void importTransactionFromClipboard(
-    final BuildContext context, final String? rawDataFromClipboard, final Account account) {
-  if (rawDataFromClipboard != null) {
-    if (Settings().lastAccountOnScreen != null) {
-      List<String> lines = rawDataFromClipboard.trim().split(RegExp(r'\r?\n|\r'));
+void importTransactionFromClipboardText(
+  final BuildContext context,
+  String rawDataFromClipboard,
+  Account account,
+) {
+  rawDataFromClipboard = rawDataFromClipboard.trim();
+  List<String> lines = rawDataFromClipboard.trim().split(RegExp(r'\r?\n|\r'));
 
-      String errorMessage = '';
+  String errorMessage = '';
 
-      List<List<ValueQuality>> values = [];
-      List<Widget> rows = [];
+  List<List<ValueQuality>> values = [];
+  List<Widget> rows = [];
 
-      if (lines.isEmpty) {
-        errorMessage = 'Empty content';
+  if (lines.isEmpty) {
+    errorMessage = 'Empty content';
+  } else {
+    for (var line in lines) {
+      List<String> threeValues = line.split('\t');
+
+      if (threeValues.length == 3) {
+        List<ValueQuality> triples = [];
+        triples.add(ValueQuality(threeValues[0]));
+        triples.add(ValueQuality(threeValues[1]));
+        triples.add(ValueQuality(threeValues[2]));
+        values.add(triples);
+
+        rows.add(
+          Row(children: [
+            SizedBox(width: 100, child: triples[0].valueAsDateWidget(context)), // Date
+            SizedBox(width: 300, child: triples[1].valueAsTextWidget(context)), // Description
+            SizedBox(width: 100, child: triples[2].valueAsAmountWidget(context)), // Amount
+          ]),
+        );
       } else {
-        for (var line in lines) {
-          List<String> threeValues = line.split('\t');
-
-          if (threeValues.length == 3) {
-            List<ValueQuality> triples = [];
-            triples.add(ValueQuality(threeValues[0]));
-            triples.add(ValueQuality(threeValues[1]));
-            triples.add(ValueQuality(threeValues[2]));
-            values.add(triples);
-
-            rows.add(
-              Row(children: [
-                SizedBox(width: 100, child: triples[0].valueAsDateWidget(context)), // Date
-                SizedBox(width: 300, child: triples[1].valueAsTextWidget(context)), // Description
-                SizedBox(width: 100, child: triples[2].valueAsAmountWidget(context)), // Amount
-              ]),
-            );
-          } else {
-            errorMessage =
-                'The data in your clipboard does not appear to match the expected format of [Date] [Description] [Amount]';
-            break;
-          }
-        }
+        errorMessage =
+            'The data in your clipboard does not appear to match the expected format of [Date] [Description] [Amount]';
+        break;
       }
-
-      Widget result =
-          rows.isEmpty ? buildWarning(context, '$errorMessage\n\n"$rawDataFromClipboard"') : Column(children: rows);
-
-      myShowDialog(
-        context: context,
-        title: 'Import transactions',
-        includeCloseButton: false,
-        // We use a Cancel button
-        child: Column(
-          children: [
-            buildTitle(context, 'Account "${Settings().lastAccountOnScreen!.name.value}"'),
-            gapLarge(),
-            const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text('Date'), Text('Description'), Text('Amount')],
-            ),
-            gapMedium(),
-            const Divider(),
-            gapMedium(),
-            result
-          ],
-        ),
-        actionButtons: [
-          if (rows.isNotEmpty)
-            DialogActionButton(
-                text: 'Import',
-                onPressed: () {
-                  // Import
-                  for (final triple in values) {
-                    addTransactionFromDateDescriptionAmount(
-                      account,
-                      triple[0].asDate(),
-                      triple[1].asString(),
-                      triple[2].asAmount(),
-                    );
-                  }
-                  Settings().fireOnChanged();
-                  Navigator.of(context).pop(false);
-                }),
-          DialogActionButton(
-              text: 'Cancel',
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              }),
-        ],
-      );
     }
   }
+
+  Widget widgetToPresentToUser =
+      rows.isEmpty ? buildWarning(context, '$errorMessage\n\n"$rawDataFromClipboard"') : Column(children: rows);
+
+  myShowDialog(
+    context: context,
+    title: 'Import transactions',
+    includeCloseButton: false,
+    // We use a Cancel button
+    child: ImportClipboardPanel(
+      rawInputText: rawDataFromClipboard,
+      account: account,
+      onAccountChanged: (Account accountSelected) {
+        account = accountSelected;
+      },
+      child: widgetToPresentToUser,
+    ),
+    actionButtons: [
+      if (rows.isNotEmpty)
+        DialogActionButton(
+            text: 'Import',
+            onPressed: () {
+              // Import
+              for (final triple in values) {
+                addTransactionFromDateDescriptionAmount(
+                  account,
+                  triple[0].asDate(),
+                  triple[1].asString(),
+                  triple[2].asAmount(),
+                );
+              }
+              Settings().fireOnChanged();
+              Navigator.of(context).pop(false);
+            }),
+      DialogActionButton(
+          text: 'Cancel',
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          }),
+    ],
+  );
 }
 
 void addTransactionFromDateDescriptionAmount(
