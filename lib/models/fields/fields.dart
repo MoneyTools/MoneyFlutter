@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/field.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
 import 'package:money/widgets/form_field_switch.dart';
@@ -86,17 +87,74 @@ class Fields<T> {
     return listOfWidgets;
   }
 
-  bool columnValueContainString(final T objectInstance, final String lowerCaseTextToFind) {
+  bool applyFilters(
+    final T objectInstance,
+    final String lowerCaseTextToFind,
+    final List<FieldFilter> filterByFieldsValue,
+  ) {
+    bool atLeastOneFieldMatchText = false;
+
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
+      // Field Definition
       final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
+
+      // Only Field that are being displayed
       if (fieldDefinition.useAsColumn == true) {
+        // Value of this field
         final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
-        if (fieldDefinition.getString(rawValue).toLowerCase().contains(lowerCaseTextToFind)) {
-          return true;
+
+        // field specific filters
+        if (!isMatchingFieldValues(
+          fieldDefinition,
+          rawValue,
+          filterByFieldsValue,
+        )) {
+          return false;
+        }
+
+        // check to see if at least one field contains the free style filter text
+        if (atLeastOneFieldMatchText == false) {
+          if (lowerCaseTextToFind.isEmpty ||
+              fieldDefinition.getString(rawValue).toLowerCase().contains(lowerCaseTextToFind)) {
+            if (filterByFieldsValue.isEmpty) {
+              // we can stop, we have one match and there's not field specific filters
+              return true;
+            }
+            atLeastOneFieldMatchText = true;
+          }
         }
       }
     }
-    return false;
+
+    if (lowerCaseTextToFind.isEmpty) {
+      // this instance is valid
+      return true;
+    }
+    return atLeastOneFieldMatchText;
+  }
+
+  bool isMatchingFieldValues(
+    final Field<T, dynamic> fieldDefinition,
+    dynamic rawValue,
+    List<FieldFilter> filterByFieldsValue,
+  ) {
+    for (final filter in filterByFieldsValue) {
+      if (!isMatchingFieldValue(fieldDefinition, rawValue, filter)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool isMatchingFieldValue(
+    final Field<T, dynamic> fieldDefinition,
+    dynamic rawValue,
+    FieldFilter filter,
+  ) {
+    if (fieldDefinition.name == filter.fieldName) {
+      return rawValue.toString().toLowerCase() == filter.filterTextInLowerCase;
+    }
+    return true;
   }
 
   Widget getBestWidgetForFieldDefinition(final int columnIndex, final T objectInstance) {

@@ -2,7 +2,11 @@
 
 ## [version 1.3.6] 2024-03-03
 
-### Update
+### Added
+
+- Column Filter for Text type
+
+### Improved
 
 - Import from clipboard
 - Select Account when doing a Clipboard Import
@@ -10,15 +14,15 @@
 
 ## [version 1.3.5] 2024-03-01
 
-### Fix
+### Fixed
 
 - Fix CSV Transaction.Amount
 
-### Add
+### Added
 
 - Import Account transactions via the Clipboard Date,Description,Amount
 
-### Update
+### Updated
 
 - Flutter 3.19.2
 

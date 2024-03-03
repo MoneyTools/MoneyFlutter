@@ -5,11 +5,15 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/widgets/dialog_button.dart';
+import 'package:money/widgets/list_view/column_filter_panel.dart';
 import 'package:money/widgets/details_panel/details_panel_fields.dart';
 import 'package:money/widgets/widgets.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/list_view/list_view.dart';
+
+import '../models/fields/field_filter.dart';
 
 class ViewWidget<T> extends StatefulWidget {
   const ViewWidget({
@@ -29,7 +33,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   List<T> list = <T>[];
   ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
   Fields<T> _fieldToDisplay = Fields<T>(definitions: <Field<T, dynamic>>[]);
-  List<String> listOfUniqueInstances = <String>[];
+  List<String> listOfUniqueString = <String>[];
+  List<ValueSelection> listOfValueSelected = [];
   int _lastSelectedItemIndex = 0;
   int _sortByFieldIndex = 0;
   bool _sortAscending = true;
@@ -40,7 +45,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   int _selectedCurrency = 0;
 
   // header
-  String _filterText = '';
+  String _filterByText = '';
+  final List<FieldFilter> _filterByFieldsValue = [];
   Timer? _deadlineTimer;
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
@@ -265,19 +271,25 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     _deadlineTimer?.cancel();
     _deadlineTimer = Timer(const Duration(milliseconds: 500), () {
       setState(() {
-        _filterText = text.toLowerCase();
-        list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();
+        _filterByText = text.toLowerCase();
+        updateList();
       });
       _deadlineTimer = null;
     });
   }
 
   bool isMatchingFilterText(final T instance) {
-    if (_filterText.isEmpty) {
+    if (_filterByText.isEmpty && _filterByFieldsValue.isEmpty) {
+      // nothing to filter by
       return true;
     }
 
-    return getFieldsForTable().columnValueContainString(instance, _filterText);
+    // apply filtering
+    return getFieldsForTable().applyFilters(
+      instance,
+      _filterByText,
+      _filterByFieldsValue,
+    );
   }
 
   void updateBottomContent(final int tab) {
@@ -301,6 +313,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       default:
         return const Text('- empty -');
     }
+  }
+
+  /// refresh the [this.list] by apply the filters
+  void updateList() {
+    list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();
   }
 
   /// Override in your view
@@ -471,7 +488,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               ],
             ),
           );
-          break;
         }
 
       case FieldType.date:
@@ -488,49 +504,44 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               ],
             ),
           );
-          break;
         }
       case FieldType.text:
       default:
         {
-          listOfUniqueInstances = getUniqueInstances(fieldDefinition);
-
-          content = Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: const Text('Select All'),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: const Text('UnSelect All'),
-              ),
-              SizedBox(
-                height: 400,
-                width: 300,
-                child: ListView.builder(
-                  itemCount: listOfUniqueInstances.length,
-                  itemBuilder: (final BuildContext context, final int index) {
-                    return CheckboxListTile(
-                      title: Text(listOfUniqueInstances[index].toString()),
-                      value: true,
-                      onChanged: (final bool? isChecked) {},
-                    );
-                  },
-                ),
-              ),
-            ],
-          );
-          break;
+          listOfUniqueString = getUniqueInstances(fieldDefinition);
+          listOfValueSelected.clear();
+          for (final item in listOfUniqueString) {
+            listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
+          }
+          content = ColumnFilterPanel(listOfUniqueInstances: listOfValueSelected);
         }
     }
 
     myShowDialog(
       context: context,
-      title: 'Column Filter',
+      title: 'Column Filter (${fieldDefinition.name})',
       child: content,
-      actionButtons: [],
+      actionButtons: [
+        DialogActionButton(
+          text: 'Apply',
+          onPressed: () {
+            Navigator.of(context).pop(false);
+            setState(() {
+              _filterByFieldsValue.clear();
+              for (final value in listOfValueSelected) {
+                if (value.isSelected) {
+                  FieldFilter fieldFilter = FieldFilter(
+                    fieldName: fieldDefinition.name,
+                    filterTextInLowerCase: value.name,
+                  );
+                  _filterByFieldsValue.add(fieldFilter);
+                }
+              }
+              updateList();
+            });
+          },
+        )
+      ],
     );
   }
 }
