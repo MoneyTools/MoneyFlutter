@@ -42,6 +42,7 @@ void myShowDialog({
         builder: (final BuildContext context) {
           return AlertDialog(
             title: Text(title),
+            scrollable: true,
             content: child,
             actions: actionButtons,
           );

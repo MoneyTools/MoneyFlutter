@@ -78,7 +78,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     } else {
       _lastSelectedItemIndex = 0;
     }
-    selectedItems.value = <int>[_lastSelectedItemIndex];
+    setSelectedItem(_lastSelectedItemIndex);
   }
 
   @override
@@ -314,6 +314,18 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
+  void setSelectedItem(final int index) {
+    // This will cause a UI update and the bottom details will get rendered if its expanded
+    if (index == -1) {
+      selectedItems.value = [];
+    } else {
+      selectedItems.value = <int>[index];
+    }
+
+    // call this to persist the last selected item index
+    saveLastUserActionOnThisView();
+  }
+
   void onItemSelected(final BuildContext context, final int index) {
     if (isMobile()) {
       myShowDialog(
@@ -323,15 +335,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         child: getPanelForDetails(<int>[index]),
       );
     } else {
-      // This will cause a UI update and the bottom details will get rendered if its expanded
-      if (index == -1) {
-        selectedItems.value = [];
-      } else {
-        selectedItems.value = <int>[index];
-      }
-
-      // call this to persist the last selected item index
-      saveLastUserActionOnThisView();
+      setSelectedItem(index);
     }
   }
 

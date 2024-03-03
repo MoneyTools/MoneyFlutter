@@ -125,12 +125,12 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  void onItemSelected(final BuildContext context, final int index) {
+  void setSelectedItem(final int index) {
     final Account? account = getFirstElement<Account>(<int>[index], list);
     if (account != null && account.id.value > -1) {
       Settings().mostRecentlySelectedAccount = account;
     }
-    super.onItemSelected(context, index);
+    super.setSelectedItem(index);
   }
 
   @override

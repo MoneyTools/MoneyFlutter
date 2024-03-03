@@ -53,14 +53,15 @@ void importTransactionFromClipboardText(
     }
   }
 
-  Widget widgetToPresentToUser =
-      rows.isEmpty ? buildWarning(context, '$errorMessage\n\n"$rawDataFromClipboard"') : Column(children: rows);
+  Widget widgetToPresentToUser = rows.isEmpty
+      ? buildWarning(context, '$errorMessage\n\n"$rawDataFromClipboard"')
+      : Column(mainAxisAlignment: MainAxisAlignment.start, children: rows);
 
   myShowDialog(
     context: context,
     title: 'Import transactions',
-    includeCloseButton: false,
     // We use a Cancel button
+    includeCloseButton: false,
     child: ImportClipboardPanel(
       rawInputText: rawDataFromClipboard,
       account: account,

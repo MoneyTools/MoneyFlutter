@@ -35,24 +35,28 @@ class ImportClipboardPanelState extends State<ImportClipboardPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        buildAccountSelection(account, (final Account? accountSelected) {
-          setState(() {
-            account = accountSelected!;
-            widget.onAccountChanged(account);
-          });
-        }),
-        gapLarge(),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text('Date'), Text('Description'), Text('Amount')],
-        ),
-        gapMedium(),
-        const Divider(),
-        gapMedium(),
-        widget.child,
-      ],
+    return Center(
+      child: Column(
+        children: [
+          buildAccountSelection(account, (final Account? accountSelected) {
+            setState(() {
+              account = accountSelected!;
+              widget.onAccountChanged(account);
+            });
+          }),
+          gapLarge(),
+          const Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [Text('Date'), Text('Description'), Text('Amount')],
+          ),
+          gapMedium(),
+          const Divider(),
+          gapMedium(),
+          widget.child,
+          gapMedium(),
+          const Divider(),
+        ],
+      ),
     );
   }
 }
