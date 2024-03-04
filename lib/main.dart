@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/file_systems.dart';
-import 'package:money/storage/import/import_clipboard.dart';
 import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_aliases/view_aliases.dart';
 import 'package:money/views/view_cashflow/view_cashflow.dart';
 import 'package:money/views/view_loans/view_loans.dart';
@@ -103,13 +103,25 @@ class _MyMoneyState extends State<MyMoney> {
                     isMetaPressed: true,
                   ),
                   KeyAction(
+                    LogicalKeyboardKey('t'.codeUnitAt(0)),
+                    'Add transactions',
+                    () {
+                      importTransactionFromText(
+                        context,
+                        '',
+                        Settings().mostRecentlySelectedAccount!,
+                      );
+                    },
+                    isMetaPressed: true,
+                  ),
+                  KeyAction(
                     LogicalKeyboardKey('v'.codeUnitAt(0)),
                     'Paste',
                     () async {
                       Clipboard.getData('text/plain').then((final ClipboardData? value) {
                         if (value != null) {
                           if (Settings().mostRecentlySelectedAccount != null) {
-                            importTransactionFromClipboardText(
+                            importTransactionFromText(
                               context,
                               value.text ?? '',
                               Settings().mostRecentlySelectedAccount!,

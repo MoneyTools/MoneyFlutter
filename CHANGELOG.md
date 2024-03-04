@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.3.7] 2024-03-04
+
+### Added
+
+- Import transactions using free style Itext
+
 ## [version 1.3.6] 2024-03-03
 
 ### Added
