@@ -19,8 +19,17 @@ class Field<C, T> {
   bool readOnly = true;
   bool isMultiLine = false;
   int importance;
+
+  /// Get the value of the instance
   dynamic Function(C) valueFromInstance;
+
+  /// Customize/override the edit widget
+  Widget Function(C, Function onEdited)? getEditWidget;
+
+  /// override the value edited
   dynamic Function(C, dynamic)? setValue;
+
+  /// Get the value for storing the instance
   dynamic Function(C) valueForSerialization;
   int Function(C, C, bool)? sort;
 
@@ -38,6 +47,7 @@ class Field<C, T> {
     required final T defaultValue,
     this.importance = -1,
     this.valueFromInstance = defaultCallbackValue,
+    this.getEditWidget,
     this.setValue,
     this.valueForSerialization = defaultCallbackValue,
     this.useAsColumn = true,

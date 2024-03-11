@@ -4,6 +4,7 @@
 
 ### Added
 
+- Enable editing the Category of a transaction
 - Add filter-text-box to Table Column Filter dialog
 - Import via batch text Date-Description-Amount
 

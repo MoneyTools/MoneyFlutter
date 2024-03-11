@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/misc_helpers.dart';
 
 ///
 class FullScreenDialog extends StatefulWidget {
@@ -31,7 +32,8 @@ class MyFullDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: EdgeInsets.zero,
+      insetPadding:
+          isSmallDevice(context) ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
       // Set elevation to 0 to remove default shadow
       elevation: 0.0,
       child: Padding(

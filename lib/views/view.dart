@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -368,10 +367,18 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       if (isBetweenOrEqual(index, 0, list.length - 1)) {
         return SingleChildScrollView(
           key: Key(index.toString()),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: DetailsPanelFields(
-              children: detailPanelFields.getCellsForDetailsPanel(list[index]),
+          child: DetailsPanelFields(
+            children: detailPanelFields.getCellsForDetailsPanel(
+              list[index],
+              () {
+                setState(() {
+                  /// update panel
+                  Data().notifyTransactionChange(
+                    MutationType.changed,
+                    list[index] as MoneyObject,
+                  );
+                });
+              },
             ),
           ),
         );

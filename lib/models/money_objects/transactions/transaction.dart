@@ -2,12 +2,14 @@
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
+import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 // Exports
@@ -62,6 +64,7 @@ class Transaction extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.small,
     defaultValue: TransactionStatus.none,
+    useAsDetailPanels: false,
     name: 'Status',
     serializeName: 'Status',
     valueFromInstance: (final Transaction instance) => transactionStatusToLetter(instance.status.value),
@@ -114,14 +117,25 @@ class Transaction extends MoneyObject {
   /// Category Id
   /// SQLite 6|Category|INT|0||0
   Field<Transaction, int> categoryId = Field<Transaction, int>(
-    importance: 10,
-    type: FieldType.text,
-    name: 'Category',
-    serializeName: 'Category',
-    defaultValue: -1,
-    valueFromInstance: (final Transaction instance) => Data().categories.getNameFromId(instance.categoryId.value),
-    valueForSerialization: (final Transaction instance) => instance.categoryId.value,
-  );
+      importance: 10,
+      type: FieldType.text,
+      name: 'Category',
+      serializeName: 'Category',
+      defaultValue: -1,
+      valueFromInstance: (final Transaction instance) => Data().categories.getNameFromId(instance.categoryId.value),
+      valueForSerialization: (final Transaction instance) => instance.categoryId.value,
+      getEditWidget: (final Transaction instance, Function onEdited) {
+        return pickerCategory(
+          Data().categories.get(instance.categoryId.value),
+          (Category? newCategory) {
+            if (newCategory != null) {
+              instance.categoryId.value = newCategory.uniqueId;
+              // notify container
+              onEdited();
+            }
+          },
+        );
+      });
 
   /// Memo
   /// 7|Memo|nvarchar(255)|0||0
@@ -174,6 +188,7 @@ class Transaction extends MoneyObject {
     name: 'Transfer',
     serializeName: 'Transfer',
     useAsColumn: false,
+    useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.transfer.value,
     valueForSerialization: (final Transaction instance) => instance.transfer.value,
   );
@@ -196,6 +211,7 @@ class Transaction extends MoneyObject {
     name: 'Flags',
     serializeName: 'Flags',
     useAsColumn: false,
+    useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.flags.value,
     valueForSerialization: (final Transaction instance) => instance.flags.value,
   );
@@ -233,6 +249,7 @@ class Transaction extends MoneyObject {
     name: 'TransferSplit',
     serializeName: 'TransferSplit',
     useAsColumn: false,
+    useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.transferSplit.value,
     valueForSerialization: (final Transaction instance) => instance.transferSplit.value,
   );
@@ -243,6 +260,7 @@ class Transaction extends MoneyObject {
     importance: 10,
     name: 'Merge Date',
     serializeName: 'MergeDate',
+    useAsDetailPanels: false,
     useAsColumn: false,
     valueFromInstance: (final Transaction instance) => dateAsIso8601OrDefault(instance.mergeDate.value),
     valueForSerialization: (final Transaction instance) => dateAsIso8601OrDefault(instance.mergeDate.value),

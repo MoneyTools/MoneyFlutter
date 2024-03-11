@@ -38,10 +38,10 @@ class Fields<T> {
     return Row(children: cells);
   }
 
-  List<Widget> getCellsForDetailsPanel(final T objectInstance) {
+  List<Widget> getCellsForDetailsPanel(final T objectInstance, Function onEdited) {
     final List<Widget> cells = <Widget>[];
     for (int i = 0; i < definitions.length; i++) {
-      final Widget widget = getBestWidgetForFieldDefinition(i, objectInstance);
+      final Widget widget = getBestWidgetForFieldDefinition(i, objectInstance, onEdited);
       cells.add(widget);
     }
     return cells;
@@ -157,71 +157,87 @@ class Fields<T> {
     return true;
   }
 
-  Widget getBestWidgetForFieldDefinition(final int columnIndex, final T objectInstance) {
+  Widget getBestWidgetForFieldDefinition(final int columnIndex, final T objectInstance, final Function? onEdited) {
     final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
 
     final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
+    if (fieldDefinition.getEditWidget == null) {
+      if (fieldDefinition.isMultiLine) {
+        return TextFormField(
+          readOnly: fieldDefinition.readOnly,
+          initialValue: fieldValue.toString(),
+          keyboardType: TextInputType.multiline,
+          minLines: 1,
+          //Normal textInputField will be displayed
+          maxLines: 5,
+          // when user presses enter it will adapt to
+          decoration: InputDecoration(
+            border: const UnderlineInputBorder(),
+            labelText: fieldDefinition.name,
+          ),
+        );
+      } else {
+        switch (fieldDefinition.type) {
+          case FieldType.toggle:
+            return SwitchFormField(
+              title: fieldDefinition.name,
+              initialValue: fieldDefinition.valueFromInstance(objectInstance),
+              validator: (bool? value) {
+                /// Todo
+                return null;
+              },
+              onSaved: (value) {
+                /// Todo
+                fieldDefinition.setValue?.call(objectInstance, value);
+              },
+            );
 
-    if (fieldDefinition.isMultiLine) {
-      return TextFormField(
-        readOnly: fieldDefinition.readOnly,
-        initialValue: fieldValue.toString(),
-        keyboardType: TextInputType.multiline,
-        minLines: 1,
-        //Normal textInputField will be displayed
-        maxLines: 5,
-        // when user presses enter it will adapt to
-        decoration: InputDecoration(
-          border: const UnderlineInputBorder(),
-          labelText: fieldDefinition.name,
+          case FieldType.widget:
+            final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
+            return MyFormFieldForWidget(
+              title: fieldDefinition.name,
+              valueAsText: valueAsString,
+              child: fieldDefinition.name == 'Color'
+                  ? MyCircle(
+                      colorFill: getColorFromString(valueAsString),
+                      colorBorder: Colors.grey,
+                      size: 30,
+                    )
+                  : fieldDefinition.valueFromInstance(objectInstance),
+            );
+
+          // all others will be a normal text input
+          default:
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: <Widget>[
+                  Expanded(
+                    child: TextFormField(
+                      readOnly: fieldDefinition.readOnly,
+                      initialValue: fieldDefinition.getString(fieldValue),
+                      decoration: InputDecoration(
+                        labelText: fieldDefinition.name,
+                        border: const OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+        }
+      }
+    } else {
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: InputDecorator(
+          decoration: InputDecoration(
+            border: const OutlineInputBorder(),
+            labelText: fieldDefinition.name,
+          ),
+          child: fieldDefinition.getEditWidget!(objectInstance, onEdited!),
         ),
       );
-    } else {
-      switch (fieldDefinition.type) {
-        case FieldType.toggle:
-          return SwitchFormField(
-            title: fieldDefinition.name,
-            initialValue: fieldDefinition.valueFromInstance(objectInstance),
-            validator: (bool? value) {
-              /// Todo
-              return null;
-            },
-            onSaved: (value) {
-              /// Todo
-              fieldDefinition.setValue?.call(objectInstance, value);
-            },
-          );
-
-        case FieldType.widget:
-          final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
-          return MyFormFieldForWidget(
-            title: fieldDefinition.name,
-            valueAsText: valueAsString,
-            child: fieldDefinition.name == 'Color'
-                ? MyCircle(
-                    colorFill: getColorFromString(valueAsString),
-                    colorBorder: Colors.grey,
-                    size: 30,
-                  )
-                : fieldDefinition.valueFromInstance(objectInstance),
-          );
-
-        default:
-          return Row(
-            children: <Widget>[
-              Expanded(
-                child: TextFormField(
-                  readOnly: fieldDefinition.readOnly,
-                  initialValue: fieldDefinition.getString(fieldValue),
-                  decoration: InputDecoration(
-                    labelText: fieldDefinition.name,
-                    border: const UnderlineInputBorder(),
-                  ),
-                ),
-              ),
-            ],
-          );
-      }
     }
   }
 

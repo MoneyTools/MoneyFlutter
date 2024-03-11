@@ -119,7 +119,10 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
-  void notifyTransactionChange(MutationType change, MoneyObject instance) {
+  void notifyTransactionChange(
+    MutationType change,
+    MoneyObject instance,
+  ) {
     // let the app know that something has changed
     version++;
 

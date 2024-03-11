@@ -19,13 +19,10 @@ class DetailsPanelFields extends StatelessWidget {
 
   /// For small device list a phone simply use a single list of fields
   Widget singleColumn() {
-    List<Widget> sizedWidgets = children
-        .map((widget) => SizedBox(
-              height: fieldHeight,
-              child: widget,
-            ))
-        .toList();
-    return Column(children: sizedWidgets);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
+    );
   }
 
   // optimize for larger screen into multiple columns

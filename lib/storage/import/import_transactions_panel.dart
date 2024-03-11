@@ -5,7 +5,7 @@ import 'package:money/models/settings.dart';
 import 'package:money/models/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
-import 'package:money/views/view_accounts/account_selection.dart';
+import 'package:money/views/view_accounts/picker_account.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/import_transactions_list.dart';
 import 'package:money/widgets/message_box.dart';
@@ -58,7 +58,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               children: [
                 const Text('Import transaction to account'),
                 gapMedium(),
-                buildAccountSelection(
+                pickerAccount(
                   account,
                   (final Account? accountSelected) {
                     setState(
