@@ -2,7 +2,6 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:path_provider/path_provider.dart';
 
 String getIntAsText(final int value) {
@@ -18,10 +17,6 @@ String getNumberAsShorthandText(final num value, {final int decimalDigits = 0, f
     decimalDigits: decimalDigits,
     symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
   ).format(value);
-}
-
-String getDateAsText(final DateTime? date) {
-  return dateAsIso8601OrDefault(date).split('T').first;
 }
 
 int stringCompareIgnoreCasing1(final String textA, final String textB) {
