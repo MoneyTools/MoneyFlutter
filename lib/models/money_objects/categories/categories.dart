@@ -1,3 +1,4 @@
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -10,6 +11,12 @@ class Categories extends MoneyObjects<Category> {
   }
 
   static int idOfSplitCategory = -1;
+
+  List<Category> getListSorted() {
+    final list = Data().categories.iterableList().toList();
+    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
+    return list;
+  }
 
   String getNameFromId(final int id) {
     if (id == -1) {
