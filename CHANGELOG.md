@@ -4,6 +4,7 @@
 
 ### Added
 
+- Add filter-text-box to Table Column Filter dialog
 - Import via batch text Date-Description-Amount
 
 ## [version 1.3.7] 2024-03-04

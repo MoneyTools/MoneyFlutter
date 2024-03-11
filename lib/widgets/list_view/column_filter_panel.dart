@@ -15,18 +15,33 @@ class ColumnFilterPanel extends StatefulWidget {
 
 class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
   late List<ValueSelection> list;
+  String filterText = '';
 
   @override
   void initState() {
     super.initState();
-    list = widget.listOfUniqueInstances;
   }
 
   @override
   Widget build(BuildContext context) {
+    // Apply filter
+    list = widget.listOfUniqueInstances
+        .where((element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()))
+        .toList();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        TextField(
+          onChanged: (value) {
+            setState(() {
+              filterText = value;
+            });
+          },
+          decoration: const InputDecoration(
+            labelText: 'filter',
+          ),
+        ),
         TextButton(
           onPressed: () {
             setState(() {
