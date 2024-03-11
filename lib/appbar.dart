@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/import/import_transactions_panel.dart';
 import 'package:money/views/view_currencies.dart';
 import 'package:money/widgets/change_summary.dart';
 import 'package:money/widgets/three_part_label.dart';
@@ -87,6 +88,16 @@ class _MyAppBarState extends State<MyAppBar> {
             });
             actionList.add(
               const PopupMenuItem<int>(
+                value: Constants.commandAddTransactions,
+                child: ThreePartLabel(
+                  text1: 'Add transactions',
+                  icon: Icon(Icons.add_card, color: Colors.grey),
+                  small: true,
+                ),
+              ),
+            );
+            actionList.add(
+              const PopupMenuItem<int>(
                 value: Constants.commandCurrencies,
                 child: ThreePartLabel(
                   text1: 'Currencies',
@@ -148,6 +159,8 @@ class _MyAppBarState extends State<MyAppBar> {
     final int value,
   ) {
     switch (value) {
+      case Constants.commandAddTransactions:
+        showImportTransactions(context);
       case Constants.commandCurrencies:
         showCurrencies(context);
       case Constants.commandIncludeClosedAccount:

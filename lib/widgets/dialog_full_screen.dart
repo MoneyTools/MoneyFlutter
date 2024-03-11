@@ -22,3 +22,22 @@ class FullScreenDialogState extends State<FullScreenDialog> {
     );
   }
 }
+
+class MyFullDialog extends StatelessWidget {
+  final Widget child;
+
+  const MyFullDialog({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      insetPadding: EdgeInsets.zero,
+      // Set elevation to 0 to remove default shadow
+      elevation: 0.0,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: child,
+      ),
+    );
+  }
+}

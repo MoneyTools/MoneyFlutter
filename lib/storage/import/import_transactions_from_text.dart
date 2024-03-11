@@ -7,63 +7,73 @@ import 'package:money/models/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_panel.dart';
 import 'package:money/widgets/dialog_button.dart';
+import 'package:money/widgets/dialog_full_screen.dart';
 import 'package:money/widgets/message_box.dart';
-
-import 'package:money/widgets/widgets.dart';
 
 void importTransactionFromText(
   final BuildContext context,
   final String startingInputText,
   Account account,
 ) {
-  ValueParser parser = ValueParser();
+  ValuesParser parser = ValuesParser();
 
-  myShowDialog(
-    context: context,
-    title: 'Add transactions',
-    // We use a Cancel button
-    includeCloseButton: false,
-
-    child: ImportTransactionsPanel(
-        account: account,
-        inputText: startingInputText,
-        onAccountChanged: (Account accountSelected) {
-          account = accountSelected;
-        },
-        onTransactionsFound: (final ValueParser newParser) {
-          parser.lines = newParser.lines;
-        }),
-    actionButtons: [
-      DialogActionButton(
-          text: 'Import',
-          onPressed: () {
-            if (parser.isEmpty) {
-              messageBox(context, 'Nothing to import');
-            } else {
-              if (parser.containsErrors()) {
-                messageBox(context, 'Contains errors');
-              } else {
-                // Import
-                for (final triple in parser.lines) {
-                  addTransactionFromDateDescriptionAmount(
-                    account,
-                    triple.values[0].asDate(),
-                    triple.values[1].asString(),
-                    triple.values[2].asAmount(),
-                  );
-                }
-                Settings().fireOnChanged();
-                Navigator.of(context).pop(false);
-              }
-            }
-          }),
-      DialogActionButton(
-          text: 'Cancel',
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          }),
-    ],
-  );
+  showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // Full screen form
+        return MyFullDialog(
+          child: Column(
+            children: [
+              Expanded(
+                child: ImportTransactionsPanel(
+                  account: account,
+                  inputText: startingInputText,
+                  onAccountChanged: (Account accountSelected) {
+                    account = accountSelected;
+                    Settings().mostRecentlySelectedAccount = accountSelected;
+                  },
+                  onTransactionsFound: (final ValuesParser newParser) {
+                    parser.lines = newParser.lines;
+                  },
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  DialogActionButton(
+                      text: 'Import',
+                      onPressed: () {
+                        if (parser.isEmpty) {
+                          messageBox(context, 'Nothing to import');
+                        } else {
+                          if (parser.containsErrors()) {
+                            messageBox(context, 'Contains errors');
+                          } else {
+                            // Import
+                            for (final triple in parser.lines) {
+                              addTransactionFromDateDescriptionAmount(
+                                account,
+                                triple.date.asDate(),
+                                triple.description.asString(),
+                                triple.amount.asAmount(),
+                              );
+                            }
+                            Settings().fireOnChanged();
+                            Navigator.of(context).pop(false);
+                          }
+                        }
+                      }),
+                  DialogActionButton(
+                      text: 'Cancel',
+                      onPressed: () {
+                        Navigator.of(context).pop(false);
+                      }),
+                ],
+              ),
+            ],
+          ),
+        );
+      });
 }
 
 void addTransactionFromDateDescriptionAmount(

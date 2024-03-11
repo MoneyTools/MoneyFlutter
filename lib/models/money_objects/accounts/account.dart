@@ -326,14 +326,18 @@ class Account extends MoneyObject {
 
   bool matchType(final List<AccountType> types) {
     if (types.isEmpty) {
-// All accounts except these
-      return type.value != AccountType.notUsed_7 && type.value != AccountType.categoryFund;
+      // All accounts except the fake ones
+      return !isFakeAccount();
     }
     return types.contains(type.value);
   }
 
   bool isBankAccount() {
     return type.value == AccountType.savings || type.value == AccountType.checking || type.value == AccountType.cash;
+  }
+
+  bool isFakeAccount() {
+    return type.value == AccountType.notUsed_7 || type.value == AccountType.categoryFund;
   }
 
   bool isActiveBankAccount() {

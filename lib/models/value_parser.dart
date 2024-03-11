@@ -5,11 +5,10 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/widgets/semantic_text.dart';
 
-class ValueParser {
+class ValuesParser {
   List<ValuesQuality> _values = [];
   String errorMessage = '';
   List<Widget> rows = [];
-  Widget widgetToPresentToUser = const SizedBox();
 
   bool get isEmpty {
     return _values.isEmpty;
@@ -47,78 +46,101 @@ class ValueParser {
 
     inputString = inputString.trim();
     List<String> lines = inputString.trim().split(RegExp(r'\r?\n|\r'));
+    if (lines.isNotEmpty) {
+      for (var line in lines) {
+        if (line.isNotEmpty) {
+          add(attemptToExtractTriples(line));
+        }
+      }
+    }
+  }
 
+  Widget buildPresentation(context) {
     List<Widget> rows = [];
 
     if (lines.isNotEmpty) {
       for (var line in lines) {
-        if (line.isNotEmpty) {
-          ValuesQuality triples = ValuesQuality();
-
-          if (attemptToExtractTriples(line, triples)) {
-            add(triples);
-
-            rows.add(
-              Row(children: [
-                SizedBox(width: 100, child: triples.values[0].valueAsDateWidget(context)),
-                // Date
-                SizedBox(width: 300, child: triples.values[1].valueAsTextWidget(context)),
-                // Description
-                SizedBox(width: 100, child: triples.values[2].valueAsAmountWidget(context)),
-                // Amount
-              ]),
-            );
-          }
-        }
+        rows.add(
+          Row(children: [
+            SizedBox(width: 100, child: line.date.valueAsDateWidget(context)),
+            // Date
+            SizedBox(width: 300, child: line.description.valueAsTextWidget(context)),
+            // Description
+            SizedBox(width: 100, child: line.amount.valueAsAmountWidget(context)),
+            // Amount
+          ]),
+        );
       }
     }
 
-    widgetToPresentToUser = rows.isEmpty
+    return rows.isEmpty
         ? buildWarning(context, 'Not input text')
         : Column(mainAxisAlignment: MainAxisAlignment.start, children: rows);
   }
 
-  bool attemptToExtractTriples(
+  ValuesQuality attemptToExtractTriples(
     String line,
-    ValuesQuality triples,
   ) {
     line.trim();
     List<String> threeValues = line.split(RegExp(r'\t|\s|;|,|\|')).where((token) => token.trim().isNotEmpty).toList();
+
+    // Happy path
+    // Date Description Amount
     if (threeValues.length >= 3) {
       String date = threeValues.first;
-      triples.add(ValueQuality(date));
-
       String description = threeValues.sublist(1, threeValues.length - 1).join(' ');
-      triples.add(ValueQuality(description));
-
       String amount = threeValues.last;
-      triples.add(ValueQuality(amount));
-
-      return true;
+      return ValuesQuality(
+          date: ValueQuality(date), description: ValueQuality(description), amount: ValueQuality(amount));
     }
-    return false;
+
+    // Date Description
+    if (threeValues.length == 2) {
+      String date = threeValues.first;
+      String description = threeValues.last;
+
+      return ValuesQuality(
+          date: ValueQuality(date), description: ValueQuality(description), amount: const ValueQuality(''));
+    }
+
+    // Date
+    if (threeValues.length == 1) {
+      String date = threeValues.first;
+
+      return ValuesQuality(
+          date: ValueQuality(date), description: const ValueQuality(''), amount: const ValueQuality(''));
+    }
+
+    return ValuesQuality.empty();
   }
 }
 
 class ValuesQuality {
-  List<ValueQuality> values = [];
+  final ValueQuality date;
+  final ValueQuality description;
+  final ValueQuality amount;
 
   bool containsErrors() {
-    return null != values.firstWhereOrNull((element) => element.warningMessage.isNotEmpty);
+    return date.hasError || description.hasError || amount.hasError;
   }
 
-  void add(ValueQuality value) {
-    values.add(value);
+  ValuesQuality({required this.date, required this.description, required this.amount});
+
+  factory ValuesQuality.empty() {
+    return ValuesQuality(
+        date: const ValueQuality(''), description: const ValueQuality(''), amount: const ValueQuality(''));
   }
 }
 
 class ValueQuality {
-  double? valueAsDouble;
   final String valueAsString;
+  final String warningMessage = '';
 
-  String warningMessage = '';
+  const ValueQuality(this.valueAsString);
 
-  ValueQuality(this.valueAsString);
+  bool get hasError {
+    return warningMessage.isNotEmpty;
+  }
 
   DateTime asDate() {
     return attemptToGetDateFromText(valueAsString) ?? DateTime.now();
@@ -133,6 +155,10 @@ class ValueQuality {
   }
 
   Widget valueAsDateWidget(final BuildContext context) {
+    if (valueAsString.isEmpty) {
+      return buildWarning(context, '< no date >');
+    }
+
     final parsedDate = attemptToGetDateFromText(valueAsString);
     if (parsedDate == null) {
       return buildWarning(context, valueAsString);
@@ -143,10 +169,17 @@ class ValueQuality {
   }
 
   Widget valueAsTextWidget(final BuildContext context) {
+    if (valueAsString.isEmpty) {
+      return buildWarning(context, '< no description >');
+    }
     return SelectableText(valueAsString);
   }
 
   Widget valueAsAmountWidget(final BuildContext context) {
+    if (valueAsString.isEmpty) {
+      return buildWarning(context, '< no amount >');
+    }
+
     double? amount = attemptToGetDoubleFromText(valueAsString);
     if (amount == null) {
       return buildWarning(context, valueAsString);
