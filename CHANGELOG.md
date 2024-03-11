@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.3.8] 2024-03-11
+
+### Added
+
+- Import via batch text Date-Description-Amount
+
 ## [version 1.3.7] 2024-03-04
 
 ### Added

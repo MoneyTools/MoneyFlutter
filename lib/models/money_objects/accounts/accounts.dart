@@ -67,8 +67,12 @@ class Accounts extends MoneyObjects<Account> {
     return iterableList().where((final Account account) => account.isOpen()).toList();
   }
 
-  bool activeBankAccount(final Account element) {
-    return element.isActiveBankAccount();
+  List<Account> getOpenRealAccounts() {
+    return iterableList().where((final Account account) => !account.isFakeAccount() && account.isOpen()).toList();
+  }
+
+  bool activeBankAccount(final Account account) {
+    return account.isActiveBankAccount();
   }
 
   List<Account> activeAccount(
