@@ -172,8 +172,8 @@ class Fields<T> {
           maxLines: 5,
           // when user presses enter it will adapt to
           decoration: InputDecoration(
-            border: const UnderlineInputBorder(),
             labelText: fieldDefinition.name,
+            border: const OutlineInputBorder(),
           ),
         );
       } else {
@@ -232,8 +232,8 @@ class Fields<T> {
         padding: const EdgeInsets.all(8.0),
         child: InputDecorator(
           decoration: InputDecoration(
-            border: const OutlineInputBorder(),
             labelText: fieldDefinition.name,
+            border: const OutlineInputBorder(),
           ),
           child: fieldDefinition.getEditWidget!(objectInstance, onEdited!),
         ),

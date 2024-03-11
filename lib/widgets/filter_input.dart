@@ -14,8 +14,11 @@ class FilterInput extends StatelessWidget {
   Widget build(final BuildContext context) {
     return TextFormField(
       decoration: InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        isDense: true,
         prefixIcon: const Icon(Icons.search),
         labelText: hintText,
+        border: const OutlineInputBorder(),
       ),
       onChanged: onChanged,
     );

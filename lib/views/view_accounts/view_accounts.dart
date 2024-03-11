@@ -97,7 +97,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
       case 1: // Chart
       case 2: // Transactions
         final int? selectedAccountIndex = selectedItems.firstOrNull;
-        if (selectedAccountIndex != null) {
+        if (selectedAccountIndex != null && selectedAccountIndex < list.length) {
           if (list[selectedAccountIndex].currency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based
             return [list[selectedAccountIndex].currency.value, Constants.defaultCurrency];

@@ -34,7 +34,10 @@ class MyFormFieldForWidgetState extends State<MyFormFieldForWidget> {
         Expanded(
           child: TextFormField(
             controller: controller,
-            decoration: InputDecoration(labelText: widget.title),
+            decoration: InputDecoration(
+              labelText: widget.title,
+              border: const OutlineInputBorder(),
+            ),
             onChanged: (final String value) {
               setState(() {
                 // todo
