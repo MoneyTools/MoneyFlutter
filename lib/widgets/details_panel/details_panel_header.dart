@@ -72,6 +72,7 @@ class DetailsPanelHeader extends StatelessWidget {
 
     return SegmentedButton<int>(
       style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      showSelectedIcon: false,
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
@@ -113,6 +114,7 @@ class DetailsPanelHeader extends StatelessWidget {
 
     return SegmentedButton<int>(
       style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      showSelectedIcon: !smallDevice,
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
