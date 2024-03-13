@@ -4,6 +4,7 @@
 
 ### Added
 
+- Add new Transaction from Accounts Detail Panel
 - ComboEditBox
 
 ### Update

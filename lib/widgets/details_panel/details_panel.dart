@@ -1,22 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:money/widgets/details_panel/details_panel_header.dart';
 
+enum SubViews {
+  details,
+  chart,
+  transactions,
+}
+
 class DetailsPanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
 
-  // SubView
-  final int subPanelSelected;
-  final Function subPanelSelectionChanged;
-  final Widget Function(int, List<int>) subPanelContent;
+  // SubViews [Details] [Chart] [Transactions]
+  final SubViews subPanelSelected;
+  final Function(SubViews) subPanelSelectionChanged;
+  final Widget Function(SubViews, List<int>) subPanelContent;
 
   // Currency selection
   final int currencySelected;
-  final List<String> Function(int, List<int>) getCurrencyChoices;
+  final List<String> Function(SubViews, List<int>) getCurrencyChoices;
   final Function(int) currencySelectionChanged;
 
   // Actions
+  final Function? onActionAdd;
   final Function? onActionDelete;
 
   /// Constructor
@@ -37,6 +44,7 @@ class DetailsPanel extends StatelessWidget {
     required this.currencySelectionChanged,
 
     // Actions
+    required this.onActionAdd,
     required this.onActionDelete,
   });
 
@@ -71,7 +79,8 @@ class DetailsPanel extends StatelessWidget {
                 currentSelectionChanged: currencySelectionChanged,
 
                 // Actions
-                onActionDelete: subPanelSelected == 0 && list.isNotEmpty ? onActionDelete : null,
+                onActionAdd: subPanelSelected == SubViews.transactions ? onActionAdd : null,
+                onActionDelete: subPanelSelected == SubViews.details && list.isNotEmpty ? onActionDelete : null,
               ),
               if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, list)),
             ],

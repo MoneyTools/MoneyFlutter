@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/gaps.dart';
 
 class DetailsPanelHeader extends StatelessWidget {
@@ -7,8 +8,8 @@ class DetailsPanelHeader extends StatelessWidget {
   final Function onExpanded;
 
   // SubView
-  final int subViewSelected;
-  final Function subViewSelectionChanged;
+  final SubViews subViewSelected;
+  final Function(SubViews) subViewSelectionChanged;
 
   // Currency
   final List<String> currencyChoices;
@@ -16,6 +17,7 @@ class DetailsPanelHeader extends StatelessWidget {
   final Function currentSelectionChanged;
 
   // Actions
+  final Function? onActionAdd;
   final Function? onActionDelete;
 
   /// Constructor
@@ -34,6 +36,7 @@ class DetailsPanelHeader extends StatelessWidget {
     required this.currentSelectionChanged,
 
     // Actions
+    this.onActionAdd,
     this.onActionDelete,
   });
 
@@ -54,6 +57,8 @@ class DetailsPanelHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 _buildViewSelections(constraints),
+                const Spacer(),
+                _buildAddButton(),
                 const Spacer(),
                 _buildDeleteButton(),
                 gapMedium(),
@@ -90,12 +95,12 @@ class DetailsPanelHeader extends StatelessWidget {
           icon: const Icon(Icons.calendar_view_day),
         ),
       ],
-      selected: <int>{subViewSelected},
+      selected: <int>{subViewSelected.index},
       onSelectionChanged: (final Set<int> newSelection) {
         if (!isExpanded) {
           onExpanded(true);
         }
-        subViewSelectionChanged(newSelection.first);
+        subViewSelectionChanged(SubViews.values[newSelection.first]);
       },
     );
   }
@@ -129,6 +134,20 @@ class DetailsPanelHeader extends StatelessWidget {
       onSelectionChanged: (final Set<int> newSelection) {
         currentSelectionChanged(newSelection.first);
       },
+    );
+  }
+
+  Widget _buildAddButton() {
+    if (onActionAdd == null) {
+      return const SizedBox();
+    }
+
+    return IconButton(
+      onPressed: () {
+        onActionAdd?.call();
+      },
+      icon: const Icon(Icons.add),
+      tooltip: 'Add a new transaction',
     );
   }
 
