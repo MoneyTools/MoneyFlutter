@@ -1,5 +1,12 @@
 # Change Log
 
+## [version 1.3.9] 2024-03-13
+
+### Update
+
+- Improve mobile support when editing text field
+- Only display the segment selection '✓' symbol on larger screen
+
 ## [version 1.3.8] 2024-03-11
 
 ### Added

@@ -10,7 +10,7 @@ import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/storage/import/import_transactions_panel.dart';
+import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_aliases/view_aliases.dart';
 import 'package:money/views/view_cashflow/view_cashflow.dart';
 import 'package:money/views/view_loans/view_loans.dart';

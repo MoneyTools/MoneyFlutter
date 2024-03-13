@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/date_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/models/value_parser.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/import_transactions_list.dart';
-import 'package:money/widgets/message_box.dart';
 
 /// use for free style text to transaction import
 class ImportTransactionsPanel extends StatefulWidget {
@@ -128,25 +123,5 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   void removeFocus() {
     _focusNode.unfocus();
-  }
-}
-
-void showImportTransactions(
-  final BuildContext context, [
-  String? initialText,
-]) {
-  initialText ??= '${dateToString(DateTime.now())} memo 1.00';
-
-  Account? account = Settings().mostRecentlySelectedAccount;
-  account ??= Data().accounts.firstItem();
-
-  if (account == null) {
-    messageBox(context, 'No account to import transaction to.');
-  } else {
-    importTransactionFromText(
-      context,
-      initialText,
-      account,
-    );
   }
 }

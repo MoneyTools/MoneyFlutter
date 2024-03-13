@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/storage/import/import_transactions_panel.dart';
+import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_currencies.dart';
 import 'package:money/widgets/change_summary.dart';
 import 'package:money/widgets/three_part_label.dart';

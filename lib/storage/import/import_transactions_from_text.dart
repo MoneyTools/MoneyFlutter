@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/date_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -10,70 +11,78 @@ import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/dialog_full_screen.dart';
 import 'package:money/widgets/message_box.dart';
 
-void importTransactionFromText(
-  final BuildContext context,
-  final String startingInputText,
-  Account account,
-) {
-  ValuesParser parser = ValuesParser();
+void showImportTransactions(
+  final BuildContext context, [
+  String? initialText,
+]) {
+  initialText ??= '${dateToString(DateTime.now())} memo 1.00';
 
-  showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // Full screen form
-        return MyFullDialog(
-          child: Column(
-            children: [
-              Expanded(
-                child: ImportTransactionsPanel(
-                  account: account,
-                  inputText: startingInputText,
-                  onAccountChanged: (Account accountSelected) {
-                    account = accountSelected;
-                    Settings().mostRecentlySelectedAccount = accountSelected;
-                  },
-                  onTransactionsFound: (final ValuesParser newParser) {
-                    parser.lines = newParser.lines;
-                  },
+  Account? account = Settings().mostRecentlySelectedAccount;
+  account ??= Data().accounts.firstItem();
+
+  if (account == null) {
+    messageBox(context, 'No account to import transaction to.');
+  } else {
+    ValuesParser parser = ValuesParser();
+
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          // Full screen form
+          return MyFullDialog(
+            child: Column(
+              children: [
+                Expanded(
+                  child: ImportTransactionsPanel(
+                    account: account!,
+                    inputText: initialText!,
+                    onAccountChanged: (Account accountSelected) {
+                      account = accountSelected;
+                      Settings().mostRecentlySelectedAccount = accountSelected;
+                    },
+                    onTransactionsFound: (final ValuesParser newParser) {
+                      parser.lines = newParser.lines;
+                    },
+                  ),
                 ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  DialogActionButton(
-                      text: 'Import',
-                      onPressed: () {
-                        if (parser.isEmpty) {
-                          messageBox(context, 'Nothing to import');
-                        } else {
-                          if (parser.containsErrors()) {
-                            messageBox(context, 'Contains errors');
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    DialogActionButton(
+                        text: 'Import',
+                        onPressed: () {
+                          if (parser.isEmpty) {
+                            messageBox(context, 'Nothing to import');
                           } else {
-                            // Import
-                            for (final triple in parser.lines) {
-                              addTransactionFromDateDescriptionAmount(
-                                account,
-                                triple.date.asDate(),
-                                triple.description.asString(),
-                                triple.amount.asAmount(),
-                              );
+                            if (parser.containsErrors()) {
+                              messageBox(context, 'Contains errors');
+                            } else {
+                              // Import
+                              for (final triple in parser.lines) {
+                                addTransactionFromDateDescriptionAmount(
+                                  account!,
+                                  triple.date.asDate(),
+                                  triple.description.asString(),
+                                  triple.amount.asAmount(),
+                                );
+                              }
+                              Settings().fireOnChanged();
+                              Navigator.of(context).pop(false);
                             }
-                            Settings().fireOnChanged();
-                            Navigator.of(context).pop(false);
                           }
-                        }
-                      }),
-                  DialogActionButton(
-                      text: 'Cancel',
-                      onPressed: () {
-                        Navigator.of(context).pop(false);
-                      }),
-                ],
-              ),
-            ],
-          ),
-        );
-      });
+                        }),
+                    DialogActionButton(
+                        text: 'Cancel',
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        }),
+                  ],
+                ),
+              ],
+            ),
+          );
+        });
+  }
 }
 
 void addTransactionFromDateDescriptionAmount(
