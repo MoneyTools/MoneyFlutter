@@ -72,67 +72,20 @@ class _MyMoneyState extends State<MyMoney> {
         theme: settings.getThemeData(),
         home: LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
           final MediaQueryData data = MediaQuery.of(context);
-          return MediaQuery(
+          return Container(
+            key: Key('key_data_version_${Data().version}'),
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: MediaQuery(
               data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
-              child: KeyboardWidget(
-                columnCount: 1,
-                bindings: <KeyAction>[
-                  KeyAction(
-                    LogicalKeyboardKey.equal,
-                    'Increase text size',
-                    () {
-                      setState(() {
-                        Settings().fontScaleIncrease();
-                      });
-                    },
-                    isMetaPressed: true,
-                  ),
-                  KeyAction(
-                    LogicalKeyboardKey.minus,
-                    'Decrease text size',
-                    () {
-                      Settings().fontScaleDecrease();
-                    },
-                    isMetaPressed: true,
-                  ),
-                  KeyAction(
-                    LogicalKeyboardKey('0'.codeUnitAt(0)),
-                    'Normal text size',
-                    () {
-                      Settings().setFontScaleTo(1);
-                    },
-                    isMetaPressed: true,
-                  ),
-                  KeyAction(
-                    LogicalKeyboardKey('t'.codeUnitAt(0)),
-                    'Add transactions',
-                    () => showImportTransactions(context, '${dateToString(DateTime.now())} memo 1.00'),
-                    isMetaPressed: true,
-                  ),
-                  KeyAction(
-                    LogicalKeyboardKey('v'.codeUnitAt(0)),
-                    'Paste',
-                    () async {
-                      Clipboard.getData('text/plain').then((final ClipboardData? value) {
-                        if (value != null) {
-                          if (Settings().mostRecentlySelectedAccount != null) {
-                            showImportTransactions(
-                              context,
-                              value.text ?? '',
-                            );
-                          }
-                        }
-                      });
-                    },
-                    isMetaPressed: true,
-                  ),
-                ],
-                child: Container(
-                  key: Key('key_data_version_${Data().version}'),
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  child: buildContent(context, constraints),
-                ),
-              ));
+              child: isPlatformMobile()
+                  ? buildContent(context, constraints)
+                  : KeyboardWidget(
+                      columnCount: 1,
+                      bindings: getKeyboardBindings(context),
+                      child: buildContent(context, constraints),
+                    ),
+            ),
+          );
         }));
   }
 
@@ -407,5 +360,59 @@ class _MyMoneyState extends State<MyMoney> {
 
   void onSettingsChanged(final Settings settings) {
     settings.fireOnChanged();
+  }
+
+  List<KeyAction> getKeyboardBindings(final BuildContext context) {
+    return <KeyAction>[
+      KeyAction(
+        LogicalKeyboardKey.equal,
+        'Increase text size',
+        () {
+          setState(() {
+            Settings().fontScaleIncrease();
+          });
+        },
+        isMetaPressed: true,
+      ),
+      KeyAction(
+        LogicalKeyboardKey.minus,
+        'Decrease text size',
+        () {
+          Settings().fontScaleDecrease();
+        },
+        isMetaPressed: true,
+      ),
+      KeyAction(
+        LogicalKeyboardKey('0'.codeUnitAt(0)),
+        'Normal text size',
+        () {
+          Settings().setFontScaleTo(1);
+        },
+        isMetaPressed: true,
+      ),
+      KeyAction(
+        LogicalKeyboardKey('t'.codeUnitAt(0)),
+        'Add transactions',
+        () => showImportTransactions(context, '${dateToString(DateTime.now())} memo 1.00'),
+        isMetaPressed: true,
+      ),
+      KeyAction(
+        LogicalKeyboardKey('v'.codeUnitAt(0)),
+        'Paste',
+        () async {
+          Clipboard.getData('text/plain').then((final ClipboardData? value) {
+            if (value != null) {
+              if (Settings().mostRecentlySelectedAccount != null) {
+                showImportTransactions(
+                  context,
+                  value.text ?? '',
+                );
+              }
+            }
+          });
+        },
+        isMetaPressed: true,
+      ),
+    ];
   }
 }

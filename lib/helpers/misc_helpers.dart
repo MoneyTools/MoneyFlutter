@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:money/models/constants.dart';
@@ -154,4 +155,8 @@ double? attemptToGetDoubleFromText(final String text) {
     value = -value;
   }
   return value;
+}
+
+bool isPlatformMobile() {
+  return Platform.isAndroid || Platform.isIOS;
 }
