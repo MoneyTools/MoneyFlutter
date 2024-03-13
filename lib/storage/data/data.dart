@@ -131,8 +131,11 @@ class Data {
         instance.mutation = MutationType.inserted;
         Settings().trackMutations.increaseNumber(increaseAdded: 1);
       case MutationType.changed:
-        instance.mutation = MutationType.changed;
-        Settings().trackMutations.increaseNumber(increaseChanged: 1);
+        // this if is to ensure that we only count editing once and discard if this was edited on a new inserted items
+        if (instance.mutation == MutationType.none) {
+          instance.mutation = MutationType.changed;
+          Settings().trackMutations.increaseNumber(increaseChanged: 1);
+        }
       case MutationType.deleted:
         instance.mutation = MutationType.deleted;
         Settings().trackMutations.increaseNumber(increaseDeleted: 1);

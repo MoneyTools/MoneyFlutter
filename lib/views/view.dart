@@ -41,13 +41,14 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   // detail panel
   Object? subViewSelectedItem;
-  int _selectedBottomTabId = 0;
+  SubViews _selectedBottomTabId = SubViews.details;
   int _selectedCurrency = 0;
 
   // header
   String _filterByText = '';
   final List<FieldFilter> _filterByFieldsValue = [];
   Timer? _deadlineTimer;
+  Function? onAddTransaction;
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<T> getFieldsForTable() {
@@ -71,7 +72,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       _sortByFieldIndex = viewSetting.getInt(prefSortBy, 0);
       _sortAscending = viewSetting.getBool(prefSortAscending, true);
       _lastSelectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
-      _selectedBottomTabId = viewSetting.getInt(prefSelectedDetailsPanelTab, 0);
+      final int subViewIndex = viewSetting.getInt(prefSelectedDetailsPanelTab, SubViews.details.index);
+      _selectedBottomTabId = SubViews.values[subViewIndex];
     }
 
     list = getList();
@@ -148,6 +150,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 },
 
                 // Actions
+                onActionAdd: onAddTransaction,
                 onActionDelete: () {
                   onDeleteRequestedByUser(context, selectedItems.value.first);
                 },
@@ -291,20 +294,20 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     );
   }
 
-  void updateBottomContent(final int tab) {
+  void updateBottomContent(final SubViews tab) {
     setState(() {
       _selectedBottomTabId = tab;
       saveLastUserActionOnThisView();
     });
   }
 
-  Widget getDetailPanelContent(final int subViewId, final List<int> selectedItems) {
+  Widget getDetailPanelContent(final SubViews subViewId, final List<int> selectedItems) {
     switch (subViewId) {
-      case 0:
+      case SubViews.details:
         return getPanelForDetails(selectedItems);
-      case 1:
+      case SubViews.chart:
         return getPanelForChart(selectedItems);
-      case 2:
+      case SubViews.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: getPanelForTransactions(selectedItems: selectedItems, showAsNativeCurrency: _selectedCurrency == 0),
@@ -320,11 +323,11 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   /// Override in your view
-  List<String> getCurrencyChoices(final int subViewId, final List<int> selectedItems) {
+  List<String> getCurrencyChoices(final SubViews subViewId, final List<int> selectedItems) {
     switch (subViewId) {
-      case 0:
-      case 1:
-      case 2:
+      case SubViews.details:
+      case SubViews.chart:
+      case SubViews.transactions:
       default:
         return [];
     }
@@ -418,7 +421,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       prefSortBy: _sortByFieldIndex,
       prefSortAscending: _sortAscending,
       prefSelectedListItemIndex: selectedItems.value.firstOrNull,
-      prefSelectedDetailsPanelTab: _selectedBottomTabId,
+      prefSelectedDetailsPanelTab: _selectedBottomTabId.index,
     };
 
     Settings().save();

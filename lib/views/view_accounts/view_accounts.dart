@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/money_objects/accounts/accounts.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -8,6 +9,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/center_message.dart';
+import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 import 'package:money/widgets/chart.dart';
@@ -32,6 +34,17 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   @override
   void initState() {
     super.initState();
+
+    onAddTransaction = () {
+      setState(() {
+        final Transaction t = Transaction();
+        t.id.value = Data().transactions.getNextTransactionId();
+        t.accountId.value = getLastUsedOrFirstAccount().uniqueId;
+        t.dateTime.value = DateTime.now();
+
+        Data().transactions.addEntry(t, isNewEntry: true);
+      });
+    };
 
     pivots.add(
       ThreePartLabel(
@@ -92,10 +105,10 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
   // default currency for this view
   @override
-  List<String> getCurrencyChoices(final int subViewId, final List<int> selectedItems) {
+  List<String> getCurrencyChoices(final SubViews subViewId, final List<int> selectedItems) {
     switch (subViewId) {
-      case 1: // Chart
-      case 2: // Transactions
+      case SubViews.chart: // Chart
+      case SubViews.transactions: // Transactions
         final int? selectedAccountIndex = selectedItems.firstOrNull;
         if (selectedAccountIndex != null && selectedAccountIndex < list.length) {
           if (list[selectedAccountIndex].currency.value != Constants.defaultCurrency) {
@@ -104,8 +117,9 @@ class ViewAccountsState extends ViewWidgetState<Account> {
           }
         }
         return [Constants.defaultCurrency];
+      default:
+        return [];
     }
-    return [];
   }
 
   @override

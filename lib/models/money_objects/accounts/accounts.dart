@@ -1,3 +1,4 @@
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -113,4 +114,10 @@ class Accounts extends MoneyObjects<Account> {
       getListSortedById(),
     );
   }
+}
+
+Account getLastUsedOrFirstAccount() {
+  Account? account = Settings().mostRecentlySelectedAccount;
+  account ??= Data().accounts.firstItem();
+  return account!;
 }
