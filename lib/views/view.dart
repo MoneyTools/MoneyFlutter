@@ -162,7 +162,6 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   Widget buildViewContent(final Widget child) {
     return Container(
       color: Theme.of(context).colorScheme.background,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: child,
     );
   }

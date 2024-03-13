@@ -24,45 +24,37 @@ class ViewHeader extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(
-        top: 8,
-        bottom: 8,
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.surfaceVariant,
         border: Border.all(color: Theme.of(context).colorScheme.outline),
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        // borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
-      child: LayoutBuilder(
-        builder: (final BuildContext context, final BoxConstraints constraints) {
-          if (Settings().isSmallDevice) {
-            return _buildSmall(context);
-          } else {
-            return _buildLarge(context);
-          }
-        },
-      ),
+      child: Settings().isSmallDevice ? _buildSmall(context) : _buildLarge(context),
     );
   }
 
   Widget _buildLarge(final BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-        child: Column(
-          children: <Widget>[
-            Row(children: <Widget>[
+    return Row(
+      children: [
+        Expanded(
+          child: Wrap(
+            spacing: 10.0, // Adjust spacing between child elements
+            runSpacing: 10.0,
+            alignment: WrapAlignment.spaceBetween,
+            children: <Widget>[
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ThreePartLabel(text1: title, text2: getIntAsText(count.toInt())),
-                  Text(description,
-                      style: getTextTheme(context)
-                          .bodySmall!
-                          .copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant)),
+                  IntrinsicWidth(child: ThreePartLabel(text1: title, text2: getIntAsText(count.toInt()))),
+                  IntrinsicWidth(
+                      child: Text(description,
+                          style: getTextTheme(context)
+                              .bodySmall!
+                              .copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant))),
                 ],
               ),
-              const Spacer(),
+              if (child != null) child!,
               if (onFilterChanged != null)
                 SizedBox(
                   width: 200,
@@ -72,10 +64,11 @@ class ViewHeader extends StatelessWidget {
                         onFilterChanged!(text);
                       }),
                 ),
-            ]),
-            if (child != null) child!,
-          ],
-        ));
+            ],
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _buildSmall(final BuildContext context) {
