@@ -9,12 +9,18 @@ class ListViewTransactions extends StatefulWidget {
   final List<String> columnsToInclude;
   final List<Transaction> Function() getList;
   final int defaultSortingField;
+  final bool sortAscending;
+  final int selectedItemIndex;
+  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? sortOrderChanged;
 
   const ListViewTransactions({
     super.key,
     required this.columnsToInclude,
     required this.getList,
     this.defaultSortingField = 0,
+    this.sortAscending = true,
+    this.sortOrderChanged,
+    this.selectedItemIndex = 0,
   });
 
   @override
@@ -22,9 +28,10 @@ class ListViewTransactions extends StatefulWidget {
 }
 
 class _ListViewTransactionsState extends State<ListViewTransactions> {
-  late int sortBy = widget.defaultSortingField;
-  bool sortAscending = true;
   late final Fields<Transaction> columns;
+  late int sortBy = widget.defaultSortingField;
+  late bool sortAscending = widget.sortAscending;
+  late int selectedItemIndex = widget.selectedItemIndex;
 
   @override
   void initState() {
@@ -51,6 +58,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
                 sortBy = index;
               }
               onSort();
+              widget.sortOrderChanged?.call(sortBy, sortAscending, selectedItemIndex);
             });
           },
         ),
@@ -62,8 +70,10 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
             selectedItems: ValueNotifier<List<int>>(<int>[]),
             onTap: (final BuildContext context2, final int index) {
               if (isBetweenOrEqual(index, 0, widget.getList().length - 1)) {
+                selectedItemIndex = index;
                 final Transaction instance = widget.getList()[index];
                 showTransactionAndActions(context, instance);
+                widget.sortOrderChanged?.call(sortBy, sortAscending, selectedItemIndex);
               }
             },
           ),

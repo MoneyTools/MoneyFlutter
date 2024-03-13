@@ -8,6 +8,7 @@
 
 ### Update
 
+- Remember selection and sorting of details panel for Account view
 - Improve View Header, use less space
 - Improve mobile support when editing text field
 - Only display the segment selection '✓' symbol on larger screen

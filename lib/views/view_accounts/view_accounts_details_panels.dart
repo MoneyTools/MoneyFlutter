@@ -31,17 +31,37 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
     final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
 
+    int sortField = 0;
+    bool sortAscending = true;
+    int selectedItemIndex = 0;
+
+    final MyJson? viewSetting = Settings().views['accountDetailsTransactions'];
+    if (viewSetting != null) {
+      sortField = viewSetting.getInt(prefSortBy, 0);
+      sortAscending = viewSetting.getBool(prefSortAscending, true);
+      selectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
+    }
+
     return ListViewTransactions(
-      key: Key('${account.id.value}_currency_$showAsNativeCurrency'),
-      columnsToInclude: <String>[
-        columnIdDate,
-        columnIdPayee,
-        columnIdCategory,
-        columnIdStatus,
-        showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
-        showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
-      ],
-      getList: () => listOfTransactionForThisAccount,
-    );
+        key: Key('${account.id.value}_currency_$showAsNativeCurrency'),
+        columnsToInclude: <String>[
+          columnIdDate,
+          columnIdPayee,
+          columnIdCategory,
+          columnIdStatus,
+          showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
+          showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
+        ],
+        getList: () => listOfTransactionForThisAccount,
+        defaultSortingField: sortField,
+        sortAscending: sortAscending,
+        selectedItemIndex: selectedItemIndex,
+        sortOrderChanged: (int sortByFieldIndex, bool sortAscending, int selectedItemIndex) {
+          Settings().views['accountDetailsTransactions'] = <String, dynamic>{
+            prefSortBy: sortByFieldIndex,
+            prefSortAscending: sortAscending,
+            prefSelectedListItemIndex: selectedItemIndex,
+          };
+        });
   }
 }
