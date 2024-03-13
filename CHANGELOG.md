@@ -2,6 +2,10 @@
 
 ## [version 1.3.9] 2024-03-13
 
+### Added
+
+- ComboEditBox
+
 ### Update
 
 - Improve View Header, use less space
