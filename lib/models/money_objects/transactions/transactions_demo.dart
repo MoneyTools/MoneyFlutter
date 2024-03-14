@@ -16,14 +16,18 @@ extension TransactionsDemoData on Transactions {
   }
 
   void transactionForDemoData(final int transactionId, final Account account) {
-    final double amount = getRandomAmount();
+    final categoryId = Random().nextInt(10);
+
+    // generate an amount
+    // Expenses should be a negative value;
+    final double amount = getRandomAmount() * (Data().categories.isCategoryAnExpense(categoryId) ? -1 : 1);
 
     final MyJson demoJson = <String, dynamic>{
       'Id': transactionId,
       'Account': account.id.value,
       'Date': DateTime(2020, 02, transactionId + 1),
       'Payee': Random().nextInt(10),
-      'Category': Random().nextInt(10),
+      'Category': categoryId,
       'Amount': amount,
     };
 
