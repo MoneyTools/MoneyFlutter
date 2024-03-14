@@ -1,5 +1,12 @@
 # Change Log
 
+## [version 1.4.0] 2024-03-14
+
+### Update
+
+- SanKey Net Lost now displays on the left side of Expenses
+- SanKey width is flush to the view port
+
 ## [version 1.3.9] 2024-03-13
 
 ### Added

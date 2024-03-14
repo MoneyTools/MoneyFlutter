@@ -70,27 +70,12 @@ class SankeyPainter extends CustomPainter {
     lastHeight = max(Block.minBlockHeight, lastHeight);
     final Block targetExpenses = Block(
       'Expenses -${getNumberAsShorthandText(totalExpense)}',
-      ui.Rect.fromLTWH(horizontalCenter + (columnWidth * 0.1), topOfCenters - (gap / 2), columnWidth, lastHeight),
+      ui.Rect.fromLTWH(horizontalCenter + columnWidth * 0.1, topOfCenters, columnWidth, lastHeight),
       colors.colorExpense,
       colors.textColor,
       TextAlign.center,
       TextAlign.center,
     );
-
-    // Box for "Net Profit"
-    final double netAmount = totalIncome - totalExpense;
-    lastHeight = ratioIncomeToExpense * netAmount;
-    lastHeight = max(Block.minBlockHeight, lastHeight);
-    final Block targetNet = Block(
-      'Net: ${getNumberAsShorthandText(netAmount)}',
-      ui.Rect.fromLTWH(
-          horizontalCenter + (columnWidth * 0.1), targetExpenses.rect.bottom + (gap), columnWidth, lastHeight),
-      colors.colorNet,
-      colors.textColor,
-      TextAlign.center,
-      TextAlign.center,
-    );
-    targetNet.draw(canvas);
 
     // Left Side - "Source of Incomes"
     double stackVerticalPosition = 0.0;
@@ -118,13 +103,105 @@ class SankeyPainter extends CustomPainter {
     );
 
     // Render from "Revenues" remaining profit to "Net" box
+    // Box for "Net Profit/Lost"
+    final double netAmount = totalIncome - totalExpense;
+    renderNetProfitOrLost(
+      netAmount,
+      lastHeight,
+      ratioIncomeToExpense,
+      horizontalCenter,
+      targetRevenues,
+      targetExpenses,
+      canvas,
+      heightProfitFromIncomeSection,
+    );
+  }
+
+  // Box for "Net Profit/Lost"
+  // The box may show on both side
+  // The right when depicting a "Net Profit"
+  // or
+  // The left when depicting a "Net Lost"
+  void renderNetProfitOrLost(
+    double netAmount,
+    double lastHeight,
+    double ratioIncomeToExpense,
+    double horizontalCenter,
+    Block targetRevenues,
+    Block targetExpenses,
+    ui.Canvas canvas,
+    double heightProfitFromIncomeSection,
+  ) {
+    Block targetNet = buildSegmentForNetProfitLost(
+      netAmount,
+      lastHeight,
+      ratioIncomeToExpense,
+      horizontalCenter,
+      targetRevenues,
+      targetExpenses,
+    );
+    targetNet.draw(canvas);
+
+    late ChannelPoint netStart;
+    late ChannelPoint netEnd;
+    if (netAmount < 0) {
+      netStart = ChannelPoint(targetNet.rect.right - 1, targetNet.rect.top, targetNet.rect.bottom);
+      netEnd = ChannelPoint(targetRevenues.rect.right, targetRevenues.rect.bottom, targetExpenses.rect.bottom);
+    } else {
+      netStart = ChannelPoint(targetRevenues.rect.right, targetRevenues.rect.bottom - heightProfitFromIncomeSection,
+          targetRevenues.rect.bottom);
+      netEnd = ChannelPoint(targetNet.rect.left + 1, targetNet.rect.top, targetNet.rect.bottom);
+    }
+
     drawChanel(
       canvas: canvas,
-      start: ChannelPoint(targetRevenues.rect.right, targetRevenues.rect.bottom - heightProfitFromIncomeSection,
-          targetRevenues.rect.bottom),
-      end: ChannelPoint(targetNet.rect.left + 1, targetNet.rect.top, targetNet.rect.bottom),
+      start: netStart,
+      end: netEnd,
       color: colors.colorNet,
     );
+  }
+
+  // Box for "Net Profit/Lost"
+  // The box may show on both side
+  // The right when depicting a "Net Profit"
+  // or
+  // The left when depicting a "Net Lost"
+  Block buildSegmentForNetProfitLost(
+    double netAmount,
+    double lastHeight,
+    double ratioIncomeToExpense,
+    double horizontalCenter,
+    Block targetRevenues,
+    Block targetExpenses,
+  ) {
+    lastHeight = ratioIncomeToExpense * netAmount.abs();
+    lastHeight = max(Block.minBlockHeight, lastHeight);
+
+    String text = 'Net ';
+    late Rect rect;
+    if (netAmount < 0) {
+      // Net Lost
+      text += 'Lost ';
+      rect = ui.Rect.fromLTWH(
+          horizontalCenter - (columnWidth + gap), targetRevenues.rect.bottom + (gap), columnWidth, lastHeight);
+    } else {
+      // Net Profit
+      text += 'Profit ';
+      rect = ui.Rect.fromLTWH(
+          horizontalCenter + (columnWidth * 0.1), targetExpenses.rect.bottom + (gap), columnWidth, lastHeight);
+    }
+    text += getNumberAsShorthandText(netAmount);
+
+    final Block targetNet = Block(
+      text,
+      rect,
+      colors.colorNet,
+      colors.textColor,
+      TextAlign.center,
+      TextAlign.center,
+    );
+
+    return targetNet;
   }
 
   double renderSourcesToTarget(
