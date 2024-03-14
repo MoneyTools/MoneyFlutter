@@ -13,13 +13,14 @@ import 'package:money/widgets/sankey/sankey_helper.dart';
 export 'package:money/widgets/sankey/sankey_helper.dart';
 
 class SankeyPainter extends CustomPainter {
-  List<SanKeyEntry> listOfIncomes;
-  List<SanKeyEntry> listOfExpenses;
+  final List<SanKeyEntry> listOfIncomes;
+  final List<SanKeyEntry> listOfExpenses;
+  final bool compactView;
   double gap = Constants.gapBetweenChannels;
   double topOfCenters = Constants.gapBetweenChannels * 2;
-  double columnWidth = Constants.sanKeyColumnWidth;
-  double connectorWidth = Constants.sanKeyColumnWidth / 2;
-  double incomeHeight = Constants.targetHeight;
+  double columnWidth = 0;
+
+  // double incomeHeight = Constants.targetHeight;
   SankeyColors colors;
 
   /// Constructor
@@ -27,6 +28,7 @@ class SankeyPainter extends CustomPainter {
     required this.listOfIncomes,
     required this.listOfExpenses,
     required this.colors,
+    required this.compactView,
   });
 
   @override
@@ -37,7 +39,7 @@ class SankeyPainter extends CustomPainter {
 
   @override
   void paint(final Canvas canvas, final Size size) {
-    columnWidth = Constants.sanKeyColumnWidth;
+    columnWidth = size.width / 5;
 
     final double maxWidth = size.width;
     final double horizontalCenter = maxWidth / 2;
@@ -48,15 +50,15 @@ class SankeyPainter extends CustomPainter {
     final double totalExpense =
         listOfExpenses.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value).abs();
 
-    final double h = max(incomeHeight, size.height);
+    final double bestHeightForIncomeBlock = compactView ? 200 : 300;
 
-    final double ratioIncomeToExpense = h / (totalIncome + totalExpense);
+    final double ratioIncomeToExpense = bestHeightForIncomeBlock / (totalIncome + totalExpense);
 
     // Box for "Revenue"
     double lastHeight = ratioIncomeToExpense * totalIncome;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     final Block targetRevenues = Block(
-      'Revenue  ${getNumberAsShorthandText(totalIncome)}',
+      'Revenue\n${getNumberAsShorthandText(totalIncome)}',
       ui.Rect.fromLTWH(horizontalCenter - (columnWidth), verticalStackOfTargets, columnWidth, lastHeight),
       colors.colorIncome,
       colors.textColor,
@@ -69,7 +71,7 @@ class SankeyPainter extends CustomPainter {
     lastHeight = ratioIncomeToExpense * totalExpense;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     final Block targetExpenses = Block(
-      'Expenses -${getNumberAsShorthandText(totalExpense)}',
+      'Expenses\n-${getNumberAsShorthandText(totalExpense)}',
       ui.Rect.fromLTWH(horizontalCenter + columnWidth * 0.1, topOfCenters, columnWidth, lastHeight),
       colors.colorExpense,
       colors.textColor,
@@ -181,12 +183,12 @@ class SankeyPainter extends CustomPainter {
     late Rect rect;
     if (netAmount < 0) {
       // Net Lost
-      text += 'Lost ';
+      text += 'Lost\n';
       rect = ui.Rect.fromLTWH(
           horizontalCenter - (columnWidth + gap), targetRevenues.rect.bottom + (gap), columnWidth, lastHeight);
     } else {
       // Net Profit
-      text += 'Profit ';
+      text += 'Profit\n';
       rect = ui.Rect.fromLTWH(
           horizontalCenter + (columnWidth * 0.1), targetExpenses.rect.bottom + (gap), columnWidth, lastHeight);
     }
@@ -227,8 +229,15 @@ class SankeyPainter extends CustomPainter {
       final double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
       final double boxTop = top + verticalPosition;
       final ui.Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
-      final Block source = Block('${element.name}: ${getNumberAsShorthandText(element.value)}', rect, color, textColor,
-          TextAlign.center, TextAlign.center);
+      String text = compactView ? shortenLongText(element.name) : element.name;
+      final Block source = Block(
+        '$text: ${getNumberAsShorthandText(element.value)}',
+        rect,
+        color,
+        textColor,
+        TextAlign.center,
+        TextAlign.center,
+      );
       source.textColor = textColor;
       blocks.add(source);
 

@@ -96,3 +96,21 @@ String doubleToCurrency(final double value) {
   // Format the double value as currency text
   return currencyFormatter.format(value);
 }
+
+String getInitials(String fullName) {
+  return fullName.split(' ').map((word) => word[0].toUpperCase()).join('');
+}
+
+String shortenLongText(String fullName, [int maxLength = 5]) {
+  assert(maxLength >= 0);
+  if (fullName.length <= maxLength) {
+    // No need to shorten
+    return fullName;
+  }
+
+  final words = fullName.split(' ');
+  if (words.length >= 2) {
+    return words.map((word) => word[0].toUpperCase()).join('.');
+  }
+  return fullName.substring(0, maxLength);
+}

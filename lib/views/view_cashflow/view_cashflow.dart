@@ -1,15 +1,14 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
-import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/sankey/sankey_colors.dart';
-import 'package:money/widgets/scroll_both_ways.dart';
 import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/views/view.dart';
 
@@ -88,7 +87,7 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
     // Clean up the Expenses, drop 0.00
     mapOfExpenses.removeWhere((final Category k, final double v) => v == 0.00);
 
-    // Sort Descending, in the case of expenses that means the largest negative number to the least negative number
+    // Sort Ascending, in the case of expenses that means the largest negative number to the least negative number
     mapOfExpenses = Map<Category, double>.fromEntries(mapOfExpenses.entries.toList()
       ..sort(
           (final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e1.value - e2.value).toInt()));
@@ -122,23 +121,18 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
 
   Widget getView() {
     return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      double w = max(constraints.maxWidth, Constants.sanKeyColumnWidth * 5);
-
-      return ScrollBothWay(
-        // width: w,
-        child: Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: SizedBox(
-              height: 600, // let the child determine the height
-              width: w, // let the child determine the width
-              child: CustomPaint(
-                painter: SankeyPainter(
-                  listOfIncomes: sanKeyListOfIncomes,
-                  listOfExpenses: sanKeyListOfExpenses,
-                  colors: SankeyColors(darkTheme: Settings().useDarkMode),
-                ),
-              ),
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: constraints.maxWidth,
+          height: max(constraints.maxHeight, 1000),
+          padding: const EdgeInsets.all(8),
+          child: CustomPaint(
+            painter: SankeyPainter(
+              listOfIncomes: sanKeyListOfIncomes,
+              listOfExpenses: sanKeyListOfExpenses,
+              compactView: isSmallDevice(context),
+              colors: SankeyColors(darkTheme: Settings().useDarkMode),
             ),
           ),
         ),

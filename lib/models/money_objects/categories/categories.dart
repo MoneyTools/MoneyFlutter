@@ -43,6 +43,14 @@ class Categories extends MoneyObjects<Category> {
     return iterableList().firstWhereOrNull((final Category category) => category.name.value == name);
   }
 
+  bool isCategoryAnExpense(final int categoryId) {
+    final Category? category = get(categoryId);
+    if (category == null) {
+      return false;
+    }
+    return category.type.value == CategoryType.expense;
+  }
+
   Category getTopAncestor(final Category category) {
     if (category.parentId.value == -1) {
       return category; // this is the top
