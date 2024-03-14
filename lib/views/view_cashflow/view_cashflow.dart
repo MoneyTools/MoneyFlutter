@@ -125,16 +125,19 @@ class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
       double w = max(constraints.maxWidth, Constants.sanKeyColumnWidth * 5);
 
       return ScrollBothWay(
-        width: w,
+        // width: w,
         child: Center(
-          child: SizedBox(
-            height: 600, // let the child determine the height
-            width: w, // let the child determine the width
-            child: CustomPaint(
-              painter: SankeyPainter(
-                listOfIncomes: sanKeyListOfIncomes,
-                listOfExpenses: sanKeyListOfExpenses,
-                colors: SankeyColors(darkTheme: Settings().useDarkMode),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: SizedBox(
+              height: 600, // let the child determine the height
+              width: w, // let the child determine the width
+              child: CustomPaint(
+                painter: SankeyPainter(
+                  listOfIncomes: sanKeyListOfIncomes,
+                  listOfExpenses: sanKeyListOfExpenses,
+                  colors: SankeyColors(darkTheme: Settings().useDarkMode),
+                ),
               ),
             ),
           ),

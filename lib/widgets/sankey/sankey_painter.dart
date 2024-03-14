@@ -39,7 +39,7 @@ class SankeyPainter extends CustomPainter {
   void paint(final Canvas canvas, final Size size) {
     columnWidth = Constants.sanKeyColumnWidth;
 
-    final double maxWidth = size.width - 30;
+    final double maxWidth = size.width;
     final double horizontalCenter = maxWidth / 2;
 
     double verticalStackOfTargets = topOfCenters;
