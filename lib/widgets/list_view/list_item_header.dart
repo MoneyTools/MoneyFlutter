@@ -28,7 +28,7 @@ class MyListItemHeader<T> extends StatelessWidget {
         widgetHeaderButton(
           context,
           columnDefinition.name,
-          TextAlign.center,
+          columnDefinition.align,
           // columns.definitions[i].align,
           columnDefinition.columnWidth.index,
           getSortIndicated(i),
@@ -63,28 +63,44 @@ Widget widgetHeaderButton(
   final VoidCallback? onClick,
   final VoidCallback? onLongPress,
 ) {
-  final Widget icon = buildSortIconNameWidget(sortIndicator);
+  final Widget? icon = buildSortIconNameWidget(sortIndicator);
+
   return Expanded(
     flex: flex,
     child: Tooltip(
       message: ('$text\n${getSortingTooltipText(sortIndicator)}').trim(),
-      child: TextButton.icon(
+      child: TextButton(
+        style: ButtonStyle(
+          shape: MaterialStateProperty.all<OutlinedBorder>(
+            const RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero, // Remove rounded corners
+            ),
+          ),
+          padding: MaterialStateProperty.all(EdgeInsets.zero),
+        ),
         onPressed: onClick,
         onLongPress: onLongPress,
         clipBehavior: Clip.hardEdge,
-        label: Text(
-          text,
-          softWrap: false,
-          overflow: TextOverflow.fade,
-          style: getTextTheme(context).labelSmall!.copyWith(color: Theme.of(context).colorScheme.secondary),
+        child: Row(
+          children: [
+            if (textAlign == TextAlign.right || textAlign == TextAlign.center) const Spacer(),
+            Text(
+              text,
+              softWrap: false,
+              textAlign: textAlign,
+              overflow: TextOverflow.fade,
+              style: getTextTheme(context).labelSmall!.copyWith(color: Theme.of(context).colorScheme.secondary),
+            ),
+            if (icon != null) icon,
+            if (textAlign == TextAlign.left || textAlign == TextAlign.center) const Spacer(),
+          ],
         ),
-        icon: icon,
       ),
     ),
   );
 }
 
-Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
+Widget? buildSortIconNameWidget(final SortIndicator sortIndicator) {
   switch (sortIndicator) {
     case SortIndicator.sortAscending:
       return const Icon(Icons.arrow_upward, size: 20.0);
@@ -92,9 +108,7 @@ Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
       return const Icon(Icons.arrow_downward, size: 20.0);
     case SortIndicator.none:
     default:
-      return const SizedBox(
-        width: 20,
-      );
+      return null;
   }
 }
 

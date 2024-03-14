@@ -8,6 +8,7 @@
 
 ### Update
 
+- Column Header are now aligned with content [L | C | R]
 - SanKey more usable on small devices (phones)
 - SanKey Net Lost now displays on the left side of Expenses
 - SanKey width is flush to the view port
