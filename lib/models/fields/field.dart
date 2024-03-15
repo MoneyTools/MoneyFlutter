@@ -152,6 +152,7 @@ class FieldAmount<C> extends Field<C, double> {
     super.serializeName,
     super.valueFromInstance,
     super.valueForSerialization,
+    super.setValue,
     super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,
@@ -173,6 +174,7 @@ class FieldDate<C> extends Field<C, DateTime?> {
     super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,
+    super.getEditWidget,
   }) : super(
           defaultValue: null,
           align: TextAlign.center,

@@ -214,12 +214,18 @@ class Fields<T> {
                 children: <Widget>[
                   Expanded(
                     child: TextFormField(
-                      readOnly: fieldDefinition.readOnly,
                       initialValue: fieldDefinition.getString(fieldValue),
                       decoration: InputDecoration(
                         labelText: fieldDefinition.name,
                         border: const OutlineInputBorder(),
                       ),
+
+                      // allow mutation of the value
+                      readOnly: fieldDefinition.setValue == null,
+                      onChanged: (String newValue) {
+                        fieldDefinition.setValue!(objectInstance, newValue);
+                        onEdited?.call();
+                      },
                     ),
                   ),
                 ],
