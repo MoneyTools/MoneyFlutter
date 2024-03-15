@@ -35,7 +35,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     bool sortAscending = true;
     int selectedItemIndex = 0;
 
-    final MyJson? viewSetting = Settings().views['accountDetailsTransactions'];
+    final MyJson? viewSetting = Settings().views[perfDomainAccounts];
     if (viewSetting != null) {
       sortField = viewSetting.getInt(prefSortBy, 0);
       sortAscending = viewSetting.getBool(prefSortAscending, true);
@@ -56,8 +56,14 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         defaultSortingField: sortField,
         sortAscending: sortAscending,
         selectedItemIndex: selectedItemIndex,
-        sortOrderChanged: (int sortByFieldIndex, bool sortAscending, int selectedItemIndex) {
-          Settings().views['accountDetailsTransactions'] = <String, dynamic>{
+        onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, int selectedItemIndex) {
+          // keep track of user choice
+          sortField = sortByFieldIndex;
+          sortAscending = sortAscending;
+          selectedItemIndex = selectedItemIndex;
+
+          // Save user choices
+          Settings().views[perfDomainAccounts] = <String, dynamic>{
             prefSortBy: sortByFieldIndex,
             prefSortAscending: sortAscending,
             prefSelectedListItemIndex: selectedItemIndex,

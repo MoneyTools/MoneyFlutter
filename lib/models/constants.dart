@@ -54,6 +54,8 @@ const List<String> colorText = <String>[
   'Pink',
 ];
 
+const String perfDomainAccounts = 'accountDetailsTransactions';
+
 const String prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
 const String prefColor = 'themeColor';
 const String prefDarkMode = 'themeDarkMode';
