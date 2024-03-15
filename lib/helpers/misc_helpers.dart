@@ -39,6 +39,13 @@ bool boolValueOrDefault(final bool? value, {final bool defaultValueIfNull = fals
   return value;
 }
 
+DateTime dateValueOrDefault(final DateTime? value, {final DateTime? defaultValueIfNull}) {
+  if (value == null) {
+    return defaultValueIfNull ?? DateTime.now();
+  }
+  return value;
+}
+
 bool isSmallWidth(
   final BoxConstraints constraints, {
   final num minWidth = Constants.narrowScreenWidthThreshold,
