@@ -13,7 +13,7 @@ class Categories extends MoneyObjects<Category> {
   static int idOfSplitCategory = -1;
 
   List<Category> getListSorted() {
-    final list = Data().categories.iterableList().toList();
+    final list = iterableList().toList();
     list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
     return list;
   }
@@ -99,7 +99,7 @@ class Categories extends MoneyObjects<Category> {
 
     if (category == null) {
       category = Category(
-        id: Data().categories.length,
+        id: length,
         name: name,
         type: type,
       );

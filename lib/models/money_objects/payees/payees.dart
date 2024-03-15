@@ -1,9 +1,16 @@
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Payees extends MoneyObjects<Payee> {
+  List<Payee> getListSorted() {
+    final list = iterableList().toList();
+    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
+    return list;
+  }
+
   String getNameFromId(final int id) {
     final Payee? payee = get(id);
     if (payee == null) {

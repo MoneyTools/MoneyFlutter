@@ -10,6 +10,7 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/views/view_categories/picker_category.dart';
+import 'package:money/views/view_payees/picker_payee.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 // Exports
@@ -92,15 +93,29 @@ class Transaction extends MoneyObject {
 
   /// Payee Name
   FieldString<Transaction> payeeName = FieldString<Transaction>(
-      importance: 4,
-      name: 'Payee',
-      valueFromInstance: (final Transaction instance) {
-        if (instance.payeeInstance == null) {
-          // show the memo
-          return instance.memo.value;
-        }
-        return Payee.getName(instance.payeeInstance);
-      });
+    importance: 4,
+    name: 'Payee',
+    valueFromInstance: (final Transaction instance) {
+      if (instance.payeeInstance == null) {
+        // show the memo
+        return instance.memo.value;
+      }
+      return Payee.getName(instance.payeeInstance);
+    },
+    getEditWidget: (final Transaction instance, Function onEdited) {
+      return pickerForPayee(
+        itemSelected: Data().payees.get(instance.payeeId.value),
+        onSelected: (Payee? selectedPayee) {
+          if (selectedPayee != null) {
+            instance.payeeId.value = selectedPayee.uniqueId;
+            instance.payeeInstance = Data().payees.get(instance.payeeId.value);
+            // notify container
+            onEdited();
+          }
+        },
+      );
+    },
+  );
 
   /// OriginalPayee
   /// before auto-aliasing, helps with future merging.
@@ -126,8 +141,8 @@ class Transaction extends MoneyObject {
       valueForSerialization: (final Transaction instance) => instance.categoryId.value,
       getEditWidget: (final Transaction instance, Function onEdited) {
         return pickerCategory(
-          Data().categories.get(instance.categoryId.value),
-          (Category? newCategory) {
+          itemSelected: Data().categories.get(instance.categoryId.value),
+          onSelected: (Category? newCategory) {
             if (newCategory != null) {
               instance.categoryId.value = newCategory.uniqueId;
               // notify container
@@ -338,6 +353,26 @@ class Transaction extends MoneyObject {
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
   }
+
+  // // Copy constructor
+  // Transaction clone() {
+  //   return Transaction()
+  //       ..id.value = id.value
+  //       ..accountId.value = accountId.value
+  //       ..accountInstance = accountInstance
+  //       ..dateTime = dateTime
+  //       ..status = status
+  //       ..payeeId = payeeId
+  //       ..payeeInstance = payeeInstance
+  //       ..originalPayee = originalPayee
+  //       ..categoryId = categoryId
+  //       ..memo = memo
+  //       ..number = number
+  //       ..reconciledDate = reconciledDate
+  //       ..budgetBalanceDate = budgetBalanceDate
+  //       ..transfer = transfer
+  //   ;
+  // }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();

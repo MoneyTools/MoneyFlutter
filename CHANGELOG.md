@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.4.1] 2024-03-15
+
+### Updated
+
+- TextEditWithPicker now has a filter
+
 ## [version 1.4.0] 2024-03-14
 
 ### Fixed

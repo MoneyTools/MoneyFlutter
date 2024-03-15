@@ -191,6 +191,7 @@ class FieldString<C> extends Field<C, String> {
     super.useAsColumn = true,
     super.useAsDetailPanels = true,
     super.align = TextAlign.left,
+    super.getEditWidget,
   }) : super(
             defaultValue: '',
             type: FieldType.text,

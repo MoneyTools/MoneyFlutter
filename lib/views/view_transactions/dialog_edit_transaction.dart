@@ -54,6 +54,21 @@ void showTransactionAndActions(
                     },
                   ),
                   DialogActionButton(
+                    text: 'Duplicate',
+                    onPressed: () {
+                      final Transaction t = Transaction()
+                        ..id.value = Data().transactions.getNextTransactionId()
+                        ..accountId.value = instance.accountId.value
+                        ..dateTime.value = instance.dateTime.value
+                        ..payeeId.value = instance.payeeId.value
+                        ..categoryId.value = instance.categoryId.value
+                        ..amount.value = instance.amount.value
+                        ..memo.value = instance.memo.value;
+                      Data().transactions.addEntry(t, isNewEntry: true);
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                  DialogActionButton(
                       text: 'Close',
                       onPressed: () {
                         Navigator.of(context).pop(true);
