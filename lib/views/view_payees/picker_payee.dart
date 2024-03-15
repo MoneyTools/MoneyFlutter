@@ -3,7 +3,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/widgets/picker_edit_box.dart';
 
-Widget pickerForPayee({
+Widget pickerPayee({
   required final Payee? itemSelected,
   required final Function(Payee?) onSelected,
 }) {

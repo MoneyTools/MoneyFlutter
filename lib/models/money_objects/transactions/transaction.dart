@@ -12,6 +12,7 @@ import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/views/view_payees/picker_payee.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/widgets/picker_edit_box_date.dart';
 
 // Exports
 export 'package:money/models/money_objects/transactions/transaction_types.dart';
@@ -55,6 +56,17 @@ class Transaction extends MoneyObject {
     valueForSerialization: (final Transaction instance) => dateAsIso8601OrDefault(instance.dateTime.value),
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
         sortByDate(a.dateTime.value, b.dateTime.value, ascending),
+    getEditWidget: (final Transaction instance, Function onEdited) {
+      return PickerEditBoxDate(
+        initialValue: instance.dateTimeAsText,
+        onChanged: (String? newDateSelected) {
+          if (newDateSelected != null) {
+            instance.dateTime.value = attemptToGetDateFromText(newDateSelected);
+            onEdited();
+          }
+        },
+      );
+    },
   );
 
   /// Status N | E | C | R
@@ -103,7 +115,7 @@ class Transaction extends MoneyObject {
       return Payee.getName(instance.payeeInstance);
     },
     getEditWidget: (final Transaction instance, Function onEdited) {
-      return pickerForPayee(
+      return pickerPayee(
         itemSelected: Data().payees.get(instance.payeeId.value),
         onSelected: (Payee? selectedPayee) {
           if (selectedPayee != null) {
@@ -240,6 +252,9 @@ class Transaction extends MoneyObject {
     useAsColumn: false,
     valueFromInstance: (final Transaction instance) => instance.amount.value,
     valueForSerialization: (final Transaction instance) => instance.amount.value,
+    setValue: (final Transaction instance, dynamic newValue) {
+      instance.amount.value = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
+    },
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
         sortByValue(a.amount.value, b.amount.value, ascending),
   );
