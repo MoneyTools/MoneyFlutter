@@ -61,7 +61,9 @@ void showTransactionAndActions(
                         ..accountId.value = instance.accountId.value
                         ..dateTime.value = instance.dateTime.value
                         ..payeeId.value = instance.payeeId.value
+                        ..payeeInstance = instance.payeeInstance
                         ..categoryId.value = instance.categoryId.value
+                        ..transfer = instance.transfer
                         ..amount.value = instance.amount.value
                         ..memo.value = instance.memo.value;
                       Data().transactions.addEntry(t, isNewEntry: true);
