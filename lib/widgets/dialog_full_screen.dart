@@ -36,9 +36,12 @@ class MyFullDialog extends StatelessWidget {
           isSmallDevice(context) ? EdgeInsets.zero : const EdgeInsets.symmetric(horizontal: 40.0, vertical: 24.0),
       // Set elevation to 0 to remove default shadow
       elevation: 0.0,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: child,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: child,
+        ),
       ),
     );
   }
