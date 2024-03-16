@@ -13,10 +13,12 @@ export 'package:money/models/fields/field.dart';
 class Fields<T> {
   final List<Field<T, dynamic>> definitions;
 
+  /// Constructor
   Fields({required this.definitions}) {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
+  /// Used in table view
   Widget getRowOfColumns(final T objectInstance) {
     final List<Widget> cells = <Widget>[];
 
@@ -38,7 +40,7 @@ class Fields<T> {
     return Row(children: cells);
   }
 
-  List<Widget> getCellsForDetailsPanel(final T objectInstance, Function onEdited) {
+  List<Widget> getCellsForDetailsPanel(final T objectInstance, Function? onEdited) {
     final List<Widget> cells = <Widget>[];
     for (int i = 0; i < definitions.length; i++) {
       final Widget widget = getBestWidgetForFieldDefinition(i, objectInstance, onEdited);
@@ -157,31 +159,59 @@ class Fields<T> {
     return true;
   }
 
-  Widget getBestWidgetForFieldDefinition(final int columnIndex, final T objectInstance, final Function? onEdited) {
-    final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
+  Widget getBestWidgetForFieldDefinition(
+    final int columnIndex,
+    final T objectInstance,
+    final Function? onEdited,
+  ) {
+    final isReadOnly = onEdited == null;
 
+    final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
     final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
-    if (fieldDefinition.getEditWidget == null) {
+
+    if (!isReadOnly && fieldDefinition.getEditWidget != null) {
+      // Editing more and the MoneyObject has a custom edit widget
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: InputDecorator(
+          decoration: InputDecoration(
+            labelText: fieldDefinition.name,
+            border: const OutlineInputBorder(),
+          ),
+          child: fieldDefinition.getEditWidget!(objectInstance, onEdited),
+        ),
+      );
+    } else {
+      final decoration = getFormFieldDecoration(
+        fieldName: fieldDefinition.name,
+        isReadOnly: isReadOnly,
+      );
+
       if (fieldDefinition.isMultiLine) {
         return TextFormField(
-          readOnly: fieldDefinition.readOnly,
+          readOnly: isReadOnly,
           initialValue: fieldValue.toString(),
           keyboardType: TextInputType.multiline,
           minLines: 1,
           //Normal textInputField will be displayed
           maxLines: 5,
           // when user presses enter it will adapt to
-          decoration: InputDecoration(
-            labelText: fieldDefinition.name,
-            border: const OutlineInputBorder(),
-          ),
+          decoration: decoration,
         );
       } else {
         switch (fieldDefinition.type) {
           case FieldType.toggle:
+            if (isReadOnly) {
+              return MyFormFieldForWidget(
+                title: fieldDefinition.name,
+                valueAsText: fieldDefinition.valueFromInstance(objectInstance).toString(),
+                isReadOnly: true,
+              );
+            }
             return SwitchFormField(
               title: fieldDefinition.name,
               initialValue: fieldDefinition.valueFromInstance(objectInstance),
+              isReadOnly: isReadOnly,
               validator: (bool? value) {
                 /// Todo
                 return null;
@@ -197,6 +227,7 @@ class Fields<T> {
             return MyFormFieldForWidget(
               title: fieldDefinition.name,
               valueAsText: valueAsString,
+              isReadOnly: isReadOnly,
               child: fieldDefinition.name == 'Color'
                   ? MyCircle(
                       colorFill: getColorFromString(valueAsString),
@@ -208,20 +239,20 @@ class Fields<T> {
 
           // all others will be a normal text input
           default:
+            String value = fieldDefinition.getString(fieldValue);
+            if (value.isEmpty && isReadOnly) {
+              value = '. . . ';
+            }
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
                 children: <Widget>[
                   Expanded(
                     child: TextFormField(
-                      initialValue: fieldDefinition.getString(fieldValue),
-                      decoration: InputDecoration(
-                        labelText: fieldDefinition.name,
-                        border: const OutlineInputBorder(),
-                      ),
-
+                      initialValue: value,
+                      decoration: decoration,
                       // allow mutation of the value
-                      readOnly: fieldDefinition.setValue == null,
+                      readOnly: isReadOnly || fieldDefinition.setValue == null,
                       onChanged: (String newValue) {
                         fieldDefinition.setValue!(objectInstance, newValue);
                         onEdited?.call();
@@ -233,17 +264,6 @@ class Fields<T> {
             );
         }
       }
-    } else {
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: fieldDefinition.name,
-            border: const OutlineInputBorder(),
-          ),
-          child: fieldDefinition.getEditWidget!(objectInstance, onEdited!),
-        ),
-      );
     }
   }
 

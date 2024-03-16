@@ -3,11 +3,12 @@ import 'package:money/helpers/misc_helpers.dart';
 
 class AdaptiveColumns extends StatelessWidget {
   final List<Widget> children;
-  final double fieldHeight = 80;
+  final double fieldHeight;
 
   /// Constructor
   const AdaptiveColumns({
     super.key,
+    this.fieldHeight = 80,
     required this.children,
   });
 
@@ -59,10 +60,10 @@ class AdaptiveColumns extends StatelessWidget {
               return Wrap(
                 alignment: WrapAlignment.start,
                 crossAxisAlignment: WrapCrossAlignment.start,
-                spacing: 32.0,
                 // Horizontal spacing between the children
-                runSpacing: 24.0,
+                spacing: 10,
                 // Vertical spacing between the children
+                runSpacing: 10,
                 children: sizedWidgets,
               );
             },

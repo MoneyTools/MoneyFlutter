@@ -305,7 +305,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   Widget getDetailPanelContent(final SubViews subViewId, final List<int> selectedItems) {
     switch (subViewId) {
       case SubViews.details:
-        return getPanelForDetails(selectedItems);
+        return getPanelForDetails(indexOfItems: selectedItems, isReadOnly: false);
       case SubViews.chart:
         return getPanelForChart(selectedItems);
       case SubViews.transactions:
@@ -352,7 +352,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         context: context,
         title: 'getDetailPanelHeader(context, index, list[index]),',
         actionButtons: [],
-        child: getPanelForDetails(<int>[index]),
+        child: getPanelForDetails(indexOfItems: <int>[index], isReadOnly: true),
       );
     } else {
       setSelectedItem(index);
@@ -363,7 +363,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getPanelForDetails(final List<int> indexOfItems) {
+  Widget getPanelForDetails({required final List<int> indexOfItems, required final bool isReadOnly}) {
     final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
     if (indexOfItems.isNotEmpty) {
       final int index = indexOfItems.first;
@@ -371,17 +371,20 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         return SingleChildScrollView(
           key: Key(index.toString()),
           child: AdaptiveColumns(
+            fieldHeight: isReadOnly ? 70 : 80,
             children: detailPanelFields.getCellsForDetailsPanel(
               list[index],
-              () {
-                setState(() {
-                  /// update panel
-                  Data().notifyTransactionChange(
-                    MutationType.changed,
-                    list[index] as MoneyObject,
-                  );
-                });
-              },
+              isReadOnly
+                  ? null
+                  : () {
+                      setState(() {
+                        /// update panel
+                        Data().notifyTransactionChange(
+                          MutationType.changed,
+                          list[index] as MoneyObject,
+                        );
+                      });
+                    },
             ),
           ),
         );

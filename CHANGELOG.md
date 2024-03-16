@@ -4,8 +4,9 @@
 
 ### Updated
 
+- Fields support for Editable vs ReadOnly
 - List View
-    - optional Unselect row
+    - Optional Un-Selectable row
     - Refresh when data is mutated
     - Prioritize Selection color before Hover color
 
@@ -23,10 +24,11 @@
 
 ### Update
 
-- Column Header are now aligned with content [L | C | R]
-- SanKey more usable on small devices (phones)
-- SanKey Net Lost now displays on the left side of Expenses
-- SanKey width is flush to the view port
+- Column Header are now aligned with content [ L | C | R ]
+- SanKey
+    - More usable on small devices (phones)
+    - Net Lost now displays on the left side of Expenses
+    - Width is flush to the view port
 
 ## [version 1.3.9] 2024-03-13
 

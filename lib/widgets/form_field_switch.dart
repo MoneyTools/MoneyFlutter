@@ -1,9 +1,17 @@
 import 'package:flutter/material.dart';
 
+getFormFieldDecoration({required final fieldName, required final bool isReadOnly}) {
+  return InputDecoration(
+    labelText: fieldName,
+    border: isReadOnly ? InputBorder.none : const OutlineInputBorder(),
+  );
+}
+
 class SwitchFormField extends FormField<bool> {
   SwitchFormField({
     required String title,
     required bool super.initialValue,
+    required bool isReadOnly,
     required super.validator,
     required super.onSaved,
   }) : super(
