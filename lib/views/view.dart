@@ -118,6 +118,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 fields: _fieldToDisplay,
                 asColumnView: useColumns,
                 onTap: onItemSelected,
+                unSelectable: true,
               ),
             ),
 

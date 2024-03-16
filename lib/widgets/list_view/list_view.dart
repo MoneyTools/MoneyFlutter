@@ -15,10 +15,11 @@ export 'package:money/widgets/list_view/list_item_header.dart';
 class MyListView<T> extends StatefulWidget {
   final Fields<T> fields;
   final List<T> list;
-  final ValueNotifier<List<int>> selectedItems;
   final Function(BuildContext, int)? onTap;
   final Function(BuildContext, int)? onDoubleTap;
   final Function(BuildContext, int)? onLongPress;
+  final ValueNotifier<List<int>> selectedItems;
+  final bool unSelectable;
   final bool asColumnView;
 
   const MyListView({
@@ -26,6 +27,7 @@ class MyListView<T> extends StatefulWidget {
     required this.fields,
     required this.list,
     required this.selectedItems,
+    required this.unSelectable, //true = re-selecting the same select item will unselect it
     this.asColumnView = true,
     this.onTap,
     this.onDoubleTap,
@@ -150,10 +152,12 @@ class MyListViewState<T> extends State<MyListView<T>> {
   ]) {
     if (index.isBetween(-1, widget.list.length)) {
       if (widget.selectedItems.value.contains(index)) {
-        // unselected
-        setState(() {
-          widget.selectedItems.value.clear();
-        });
+        if (widget.unSelectable) {
+          // unselected
+          setState(() {
+            widget.selectedItems.value.clear();
+          });
+        }
       } else {
         // select
         setState(() {

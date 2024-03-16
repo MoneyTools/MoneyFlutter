@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/fields/fields.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
@@ -7,10 +8,11 @@ import 'package:money/widgets/details_panel/details_panel_fields2.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/dialog_full_screen.dart';
 
-void showTransactionAndActions(
-  final BuildContext context,
-  final Transaction instance,
-) {
+void showTransactionAndActions({
+  required final BuildContext context,
+  required final Transaction instance,
+  required final Function(MutationType typeOfMutation, Transaction instanceOfItemMutated) onDataMutated,
+}) {
   final List<Field<Transaction, dynamic>> fields = getFieldsForClass<Transaction>()
       .where((final Field<Transaction, dynamic> item) => item.useAsDetailPanels)
       .toList();
@@ -46,6 +48,8 @@ void showTransactionAndActions(
                               ),
                               onConfirm: () {
                                 Data().transactions.deleteItem(instance);
+                                Navigator.of(context).pop(true);
+                                onDataMutated(MutationType.deleted, instance);
                               },
                             ),
                           );
@@ -68,11 +72,13 @@ void showTransactionAndActions(
                         ..memo.value = instance.memo.value;
                       Data().transactions.addEntry(t, isNewEntry: true);
                       Navigator.of(context).pop(true);
+                      onDataMutated(MutationType.inserted, t);
                     },
                   ),
                   DialogActionButton(
-                      text: 'Close',
+                      text: 'Apply',
                       onPressed: () {
+                        onDataMutated(MutationType.changed, instance);
                         Navigator.of(context).pop(true);
                       }),
                 ],

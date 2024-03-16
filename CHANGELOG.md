@@ -4,7 +4,10 @@
 
 ### Updated
 
-- List view prioritize Selection color before Hover color
+- List View
+    - optional Unselect row
+    - Refresh when data is mutated
+    - Prioritize Selection color before Hover color
 
 ## [version 1.4.1] 2024-03-15
 

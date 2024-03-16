@@ -68,11 +68,19 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
             fields: columns,
             list: widget.getList(),
             selectedItems: ValueNotifier<List<int>>(<int>[selectedItemIndex]),
+            unSelectable: false,
             onTap: (final BuildContext context2, final int index) {
               if (isBetweenOrEqual(index, 0, widget.getList().length - 1)) {
                 selectedItemIndex = index;
                 final Transaction instance = widget.getList()[index];
-                showTransactionAndActions(context, instance);
+                showTransactionAndActions(
+                    context: context,
+                    instance: instance,
+                    onDataMutated: (MutationType type, Transaction instance) {
+                      setState(() {
+                        // refresh the list
+                      });
+                    });
                 widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
               }
             },
