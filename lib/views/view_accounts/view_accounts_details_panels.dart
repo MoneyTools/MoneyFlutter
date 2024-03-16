@@ -31,13 +31,13 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
     final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
 
-    int sortField = 0;
+    int sortFieldIndex = 0;
     bool sortAscending = true;
     int selectedItemIndex = 0;
 
     final MyJson? viewSetting = Settings().views[perfDomainAccounts];
     if (viewSetting != null) {
-      sortField = viewSetting.getInt(prefSortBy, 0);
+      sortFieldIndex = viewSetting.getInt(prefSortBy, 0);
       sortAscending = viewSetting.getBool(prefSortAscending, true);
       selectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
     }
@@ -53,12 +53,12 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
         ],
         getList: () => listOfTransactionForThisAccount,
-        defaultSortingField: sortField,
+        sortFieldIndex: sortFieldIndex,
         sortAscending: sortAscending,
         selectedItemIndex: selectedItemIndex,
         onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, int selectedItemIndex) {
           // keep track of user choice
-          sortField = sortByFieldIndex;
+          sortFieldIndex = sortByFieldIndex;
           sortAscending = sortAscending;
           selectedItemIndex = selectedItemIndex;
 

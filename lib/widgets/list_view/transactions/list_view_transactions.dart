@@ -8,7 +8,7 @@ import 'package:money/widgets/list_view/list_view.dart';
 class ListViewTransactions extends StatefulWidget {
   final List<String> columnsToInclude;
   final List<Transaction> Function() getList;
-  final int defaultSortingField;
+  final int sortFieldIndex;
   final bool sortAscending;
   final int selectedItemIndex;
   final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
@@ -17,7 +17,7 @@ class ListViewTransactions extends StatefulWidget {
     super.key,
     required this.columnsToInclude,
     required this.getList,
-    this.defaultSortingField = 0,
+    this.sortFieldIndex = 0,
     this.sortAscending = true,
     this.onUserChoiceChanged,
     this.selectedItemIndex = 0,
@@ -29,7 +29,7 @@ class ListViewTransactions extends StatefulWidget {
 
 class _ListViewTransactionsState extends State<ListViewTransactions> {
   late final Fields<Transaction> columns;
-  late int sortBy = widget.defaultSortingField;
+  late int sortBy = widget.sortFieldIndex;
   late bool sortAscending = widget.sortAscending;
   late int selectedItemIndex = widget.selectedItemIndex;
 
