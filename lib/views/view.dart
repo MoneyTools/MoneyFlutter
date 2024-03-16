@@ -7,7 +7,7 @@ import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
-import 'package:money/widgets/details_panel/details_panel_fields.dart';
+import 'package:money/widgets/adaptive_columns.dart';
 import 'package:money/widgets/widgets.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
@@ -370,7 +370,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       if (isBetweenOrEqual(index, 0, list.length - 1)) {
         return SingleChildScrollView(
           key: Key(index.toString()),
-          child: DetailsPanelFields(
+          child: AdaptiveColumns(
             children: detailPanelFields.getCellsForDetailsPanel(
               list[index],
               () {

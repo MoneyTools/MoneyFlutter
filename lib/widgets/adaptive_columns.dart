@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 
-class DetailsPanelFields extends StatelessWidget {
+class AdaptiveColumns extends StatelessWidget {
   final List<Widget> children;
   final double fieldHeight = 80;
 
   /// Constructor
-  const DetailsPanelFields({super.key, required this.children});
+  const AdaptiveColumns({
+    super.key,
+    required this.children,
+  });
 
   @override
   Widget build(final BuildContext context) {
