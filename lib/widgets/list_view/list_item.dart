@@ -46,10 +46,10 @@ class MyListItemState extends State<MyListItem> {
 
   @override
   Widget build(final BuildContext context) {
-    final Color backgroundColor = _hovering
-        ? getColorTheme(context).inversePrimary.withOpacity(0.5)
-        : isSelected
-            ? getColorTheme(context).inversePrimary
+    final Color backgroundColor = isSelected
+        ? getColorTheme(context).inversePrimary
+        : _hovering
+            ? getColorTheme(context).inversePrimary.withOpacity(0.5)
             : Colors.transparent;
 
     return Focus(

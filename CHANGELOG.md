@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.4.2] 2024-03-16
+
+### Updated
+
+- List view prioritize Selection color before Hover color
+
 ## [version 1.4.1] 2024-03-15
 
 ### Updated
