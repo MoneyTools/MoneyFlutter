@@ -38,11 +38,14 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   void initState() {
     super.initState();
     columns = getFieldsForTable();
-    onSort();
   }
 
   @override
   Widget build(final BuildContext context) {
+    // get the list sorted
+    final List<Transaction> transactions = widget.getList();
+    sortList(transactions);
+
     return Column(
       children: <Widget>[
         // Table Header
@@ -58,7 +61,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
               } else {
                 sortBy = index;
               }
-              onSort();
               widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
             });
           },
@@ -67,23 +69,14 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         Expanded(
           child: MyListView<Transaction>(
             fields: columns,
-            list: widget.getList(),
+            list: transactions,
             selectedItems: ValueNotifier<List<int>>(<int>[selectedItemIndex]),
             unSelectable: false,
             onTap: (final BuildContext context2, final int index) {
-              if (isBetweenOrEqual(index, 0, widget.getList().length - 1)) {
+              if (isBetweenOrEqual(index, 0, transactions.length - 1)) {
                 showTransactionAndActions(
                   context: context2,
-                  transaction: widget.getList()[index],
-                  onDataMutated: (MutationType type, Transaction instance) {
-                    if (context.mounted) {
-                      setState(
-                        () {
-                          // refresh the list
-                        },
-                      );
-                    }
-                  },
+                  transaction: transactions[index],
                 ).then((value) {
                   selectedItemIndex = index;
                   widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
@@ -96,11 +89,11 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
     );
   }
 
-  void onSort() {
+  void sortList(List<Transaction> transactions) {
     if (columns.definitions.isNotEmpty) {
       final Field<Transaction, dynamic> fieldDefinition = columns.definitions[sortBy];
       if (fieldDefinition.sort != null) {
-        widget.getList().sort(
+        transactions.sort(
           (final Transaction a, final Transaction b) {
             return fieldDefinition.sort!(a, b, sortAscending);
           },
@@ -130,11 +123,12 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   }
 }
 
-typedef FilterFunction = bool Function(Transaction);
+List<Transaction> getTransactions({bool Function(Transaction)? filter}) {
+  // default to 'accept all'
+  filter ??= (Transaction transaction) => true;
 
-List<Transaction> getFilteredTransactions(final FilterFunction filter) {
   final List<Transaction> list =
-      Data().transactions.iterableList().where((final Transaction transaction) => filter(transaction)).toList();
+      Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
 
   list.sort(
     (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),

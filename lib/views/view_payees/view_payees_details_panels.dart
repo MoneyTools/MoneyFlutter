@@ -35,8 +35,8 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
           columnIdMemo,
           columnIdAmount,
         ],
-        getList: () => getFilteredTransactions(
-          (final Transaction transaction) => transaction.payeeId.value == payee.id.value,
+        getList: () => getTransactions(
+          filter: (final Transaction transaction) => transaction.payee.value == payee.id.value,
         ),
       );
     }

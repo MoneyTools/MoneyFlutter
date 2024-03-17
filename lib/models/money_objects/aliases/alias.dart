@@ -2,7 +2,6 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/aliases/alias_types.dart';
-import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 

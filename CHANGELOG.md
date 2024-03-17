@@ -4,6 +4,7 @@
 
 ### Updated
 
+- MVP use case: Duplicate & Edit (Date, Payee, Amount) of a transaction
 - Mutate Dialog for Transaction : Starts from a ReadOnly view user can then decide
   to [Delete|Duplicate|Edit]
 

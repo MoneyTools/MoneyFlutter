@@ -19,8 +19,8 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final RentBuilding? rental = getFirstElement<RentBuilding>(indices, list);
     if (rental != null) {
-      final List<Transaction> list = getFilteredTransactions(
-        (final Transaction transaction) => filterByRentalCategories(
+      final List<Transaction> list = getTransactions(
+        filter: (final Transaction transaction) => filterByRentalCategories(
           transaction,
           rental,
         ),

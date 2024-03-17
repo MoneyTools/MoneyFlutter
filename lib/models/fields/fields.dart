@@ -40,15 +40,6 @@ class Fields<T> {
     return Row(children: cells);
   }
 
-  List<Widget> getCellsForDetailsPanel(final T objectInstance, Function? onEdited) {
-    final List<Widget> cells = <Widget>[];
-    for (int i = 0; i < definitions.length; i++) {
-      final Widget widget = getBestWidgetForFieldDefinition(i, objectInstance, onEdited);
-      cells.add(widget);
-    }
-    return cells;
-  }
-
   List<String> getListOfFieldValueAsString(final T objectInstance, [final bool includeHiddenFields = false]) {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
@@ -61,32 +52,15 @@ class Fields<T> {
     return strings;
   }
 
-  /// List of rows [ FieldName | ....  | InstanceValue]
-  List<Widget> getListOfFieldNameAndValuePairAsWidget(final T objectInstance,
-      [final bool includeHiddenFields = false]) {
-    final List<Widget> listOfWidgets = <Widget>[];
-    for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
-      final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
-      if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
-        final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
-        listOfWidgets.add(
-          Row(
-            children: [
-              Text(fieldDefinition.name),
-              const Spacer(),
-              Text(
-                fieldDefinition.getString(rawValue),
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        );
-        listOfWidgets.add(
-          const Divider(),
-        );
+  List<Widget> getFieldsAsWidgets(final T objectInstance, Function? onEdited, bool compact) {
+    final List<Widget> widgets = <Widget>[];
+    for (int i = 0; i < definitions.length; i++) {
+      if (definitions[i].useAsDetailPanels) {
+        final Widget widget = getBestWidgetForFieldDefinition(i, objectInstance, onEdited, compact);
+        widgets.add(widget);
       }
     }
-    return listOfWidgets;
+    return widgets;
   }
 
   bool applyFilters(
@@ -160,14 +134,34 @@ class Fields<T> {
   }
 
   Widget getBestWidgetForFieldDefinition(
-    final int columnIndex,
+    final int fieldIndex,
     final T objectInstance,
     final Function? onEdited,
+    final bool compact,
   ) {
     final isReadOnly = onEdited == null;
 
-    final Field<T, dynamic> fieldDefinition = definitions[columnIndex];
+    final Field<T, dynamic> fieldDefinition = definitions[fieldIndex];
     final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
+
+    if (compact) {
+      // simple [Name  Value]
+      return Container(
+        decoration: BoxDecoration(
+          border: fieldIndex != 0 ? const Border(top: BorderSide()) : null,
+        ),
+        child: Row(
+          children: [
+            Text(fieldDefinition.name),
+            const Spacer(),
+            Text(
+              fieldDefinition.getString(fieldValue),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      );
+    }
 
     if (!isReadOnly && fieldDefinition.getEditWidget != null) {
       // Editing more and the MoneyObject has a custom edit widget

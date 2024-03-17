@@ -27,10 +27,6 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    bool filter(final Transaction transaction) => filterByAccountId(transaction, account.id.value);
-
-    final List<Transaction> listOfTransactionForThisAccount = getFilteredTransactions(filter);
-
     int sortFieldIndex = 0;
     bool sortAscending = true;
     int selectedItemIndex = 0;
@@ -43,7 +39,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     }
 
     return ListViewTransactions(
-        key: Key('${account.id.value}_currency_$showAsNativeCurrency'),
+        key: Key('${account.id.value}_currency_${showAsNativeCurrency}_version${Data().version}'),
         columnsToInclude: <String>[
           columnIdDate,
           columnIdPayee,
@@ -52,7 +48,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
           showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
         ],
-        getList: () => listOfTransactionForThisAccount,
+        getList: () {
+          return getTransactions(filter: (Transaction transaction) {
+            return filterByAccountId(transaction, account.id.value);
+          });
+        },
         sortFieldIndex: sortFieldIndex,
         sortAscending: sortAscending,
         selectedItemIndex: selectedItemIndex,

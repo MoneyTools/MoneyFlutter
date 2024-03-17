@@ -36,6 +36,23 @@ abstract class MoneyObject {
   ///
   Widget Function()? buildFieldsAsWidgetForSmallScreen = () => const Text('Small screen content goes here');
 
+  ///
+  /// Name: Bob
+  /// Date: 2020-12-31
+  // List<Widget> Function(Function? onEdit, bool compact)? buildFieldsAsWidgetForDetailsPanel =
+  //     (Function? onEdit, bool compact) {
+  //   return [];
+  // };
+
+  List<Widget> buildWidgets<T>({
+    Function? onEdit,
+    bool compact = false,
+  }) {
+    final Fields<T> fields =
+        Fields<T>(definitions: getFieldsForClass<T>().where((element) => element.useAsDetailPanels).toList());
+    return fields.getFieldsAsWidgets(this as T, onEdit, compact);
+  }
+
   /// Serialize object instance to a JSon format
   MyJson getPersistableJSon<T>() {
     final MyJson json = {};

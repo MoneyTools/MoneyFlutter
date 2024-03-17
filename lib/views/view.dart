@@ -250,15 +250,16 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     showDialog(
       context: context,
       builder: (final BuildContext context) {
+        final MoneyObject myMoneyObjectInstance = list[index] as MoneyObject;
         return Center(
           child: DeleteConfirmationDialog(
             title: 'Delete ${getClassNameSingular()}',
             question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
             content: Column(
-              children: getFieldsForTable().getListOfFieldNameAndValuePairAsWidget(list[index]),
+              children: myMoneyObjectInstance.buildWidgets<T>(onEdit: null, compact: true),
             ),
             onConfirm: () {
-              onDeleteConfirmedByUser(list[index]);
+              onDeleteConfirmedByUser(myMoneyObjectInstance);
             },
           ),
         );
@@ -266,7 +267,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     );
   }
 
-  void onDeleteConfirmedByUser(final T instance) {
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
     // Derived view need to make the actual delete operation
   }
 
@@ -372,7 +373,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
           key: Key(index.toString()),
           child: AdaptiveColumns(
             fieldHeight: isReadOnly ? 70 : 80,
-            children: detailPanelFields.getCellsForDetailsPanel(
+            children: detailPanelFields.getFieldsAsWidgets(
               list[index],
               isReadOnly
                   ? null
@@ -385,6 +386,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                         );
                       });
                     },
+              false,
             ),
           ),
         );

@@ -44,8 +44,8 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
           columnIdMemo,
           columnIdAmount,
         ],
-        getList: () => getFilteredTransactions(
-          (final Transaction transaction) => transaction.categoryId.value == category.id.value,
+        getList: () => getTransactions(
+          filter: (final Transaction transaction) => transaction.categoryId.value == category.id.value,
         ),
       );
     }

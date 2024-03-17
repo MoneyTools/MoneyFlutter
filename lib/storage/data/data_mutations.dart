@@ -1,5 +1,3 @@
-import 'package:money/models/settings.dart';
-
 /// Tracking changes of data
 class DataMutations {
   int added = 0;
@@ -23,7 +21,6 @@ class DataMutations {
     added += increaseAdded;
     changed += increaseChanged;
     deleted += increaseDeleted;
-    Settings().fireOnChanged();
   }
 
   void reset() {

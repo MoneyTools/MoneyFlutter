@@ -6,7 +6,6 @@ import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/views/view_categories/picker_category.dart';
@@ -89,24 +88,14 @@ class Transaction extends MoneyObject {
     ),
   );
 
-  /// Payee Id
-  /// Payee Id
+  /// Payee Id (displayed as Text name of the Payee)
   /// SQLite 4|Payee|INT|0||0
-  FieldInt<Transaction> payeeId = FieldInt<Transaction>(
-    importance: 4,
-    serializeName: 'Payee',
-    useAsColumn: false,
-    useAsDetailPanels: false,
-    valueFromInstance: (final Transaction instance) => instance.payeeId.value,
-    valueForSerialization: (final Transaction instance) => instance.payeeId.value,
-    sort: (final Transaction a, final Transaction b, final bool ascending) =>
-        sortByString(Payee.getName(a.payeeInstance), Payee.getName(b.payeeInstance), ascending),
-  );
-
-  /// Payee Name
-  FieldString<Transaction> payeeName = FieldString<Transaction>(
+  Field<Transaction, int> payee = Field<Transaction, int>(
     importance: 4,
     name: 'Payee',
+    serializeName: 'Payee',
+    defaultValue: 0,
+    type: FieldType.text,
     valueFromInstance: (final Transaction instance) {
       if (instance.payeeInstance == null) {
         // show the memo
@@ -114,13 +103,16 @@ class Transaction extends MoneyObject {
       }
       return Payee.getName(instance.payeeInstance);
     },
+    valueForSerialization: (final Transaction instance) => instance.payee.value,
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByString(Payee.getName(a.payeeInstance), Payee.getName(b.payeeInstance), ascending),
     getEditWidget: (final Transaction instance, Function onEdited) {
       return pickerPayee(
-        itemSelected: Data().payees.get(instance.payeeId.value),
+        itemSelected: Data().payees.get(instance.payee.value),
         onSelected: (Payee? selectedPayee) {
           if (selectedPayee != null) {
-            instance.payeeId.value = selectedPayee.uniqueId;
-            instance.payeeInstance = Data().payees.get(instance.payeeId.value);
+            instance.payee.value = selectedPayee.uniqueId;
+            instance.payeeInstance = selectedPayee;
             // notify container
             onEdited();
           }
@@ -367,6 +359,12 @@ class Transaction extends MoneyObject {
           rightTopAsString: Currency.getCurrencyText(amount.value),
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
+
+    // buildFieldsAsWidgetForDetailsPanel = (Function? onEdit, bool compact) {
+    //   final Fields<MoneyObject> fields = Fields<Transaction>(
+    //       definitions: getFieldsForClass<Transaction>().where((element) => element.useAsDetailPanels).toList());
+    //   return fields.getFieldsAsWidgets(this, onEdit, compact);
+    // };
   }
 
   // // Copy constructor
@@ -401,8 +399,8 @@ class Transaction extends MoneyObject {
     // 3 Status
     t.status.value = TransactionStatus.values[json.getInt('Status')];
     // 4 Payee ID
-    t.payeeId.value = json.getInt('Payee');
-    t.payeeInstance = Data().payees.get(t.payeeId.value);
+    t.payee.value = json.getInt('Payee');
+    t.payeeInstance = Data().payees.get(t.payee.value);
     // 5 Original Payee
     t.originalPayee.value = json.getString('OriginalPayee');
     // 6 Category Id

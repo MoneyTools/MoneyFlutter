@@ -3,6 +3,8 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
+export 'package:money/models/money_objects/money_object.dart';
+
 /*
   SQLite table definition
 

@@ -57,8 +57,8 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
           columnIdMemo,
           columnIdAmount,
         ],
-        getList: () => getFilteredTransactions(
-          (final Transaction transaction) => transaction.payeeId.value == alias.payeeId.value,
+        getList: () => getTransactions(
+          filter: (final Transaction transaction) => transaction.payee.value == alias.payeeId.value,
         ),
       );
     }

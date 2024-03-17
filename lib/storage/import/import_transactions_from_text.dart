@@ -97,7 +97,7 @@ void addTransactionFromDateDescriptionAmount(
   t.id.value = Data().transactions.getNextTransactionId();
   t.accountId.value = account.id.value;
   t.dateTime.value = date;
-  t.payeeId.value = payee == null ? -1 : payee.id.value;
+  t.payee.value = payee == null ? -1 : payee.id.value;
   t.memo.value = description;
   t.amount.value = amount;
 

@@ -54,7 +54,7 @@ class ViewPayeesState extends ViewWidgetState<Payee> {
   }
 
   @override
-  void onDeleteConfirmedByUser(final Payee instance) {
+  void onDeleteConfirmedByUser(final MoneyObject instance) {
     setState(() {
       Data().payees.deleteItem(instance);
     });

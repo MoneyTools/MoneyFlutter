@@ -1,5 +1,4 @@
 import 'package:money/storage/data/data.dart';
-import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
@@ -20,6 +19,7 @@ import 'package:money/models/money_objects/payees/payee.dart';
 class Split extends MoneyObject {
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
 

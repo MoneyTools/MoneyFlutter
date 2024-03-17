@@ -81,7 +81,7 @@ class Payees extends MoneyObjects<Payee> {
     }
 
     for (Transaction t in Data().transactions.iterableList()) {
-      final Payee? item = get(t.payeeId.value);
+      final Payee? item = get(t.payee.value);
       if (item != null) {
         item.count.value++;
         item.balance.value += t.amount.value;

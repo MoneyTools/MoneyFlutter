@@ -119,6 +119,7 @@ class FieldInt<C> extends Field<C, int> {
     super.valueForSerialization,
     super.useAsColumn,
     super.useAsDetailPanels,
+    super.getEditWidget,
     super.sort,
     super.columnWidth,
   }) : super(
@@ -194,6 +195,7 @@ class FieldString<C> extends Field<C, String> {
     super.useAsDetailPanels = true,
     super.align = TextAlign.left,
     super.getEditWidget,
+    super.setValue,
   }) : super(
             defaultValue: '',
             type: FieldType.text,
@@ -224,6 +226,17 @@ class FieldId<C> extends Field<C, int> {
           useAsDetailPanels: false,
           defaultValue: -1,
         );
+}
+
+List<Field<dynamic, dynamic>> getFieldsForTypeName(final String typeName) {
+  final List<Field<dynamic, dynamic>> list = [];
+
+  for (final MapEntry<String, Field<dynamic, dynamic>> entry in Data().mapClassToFields.entries) {
+    if (entry.key.startsWith('$typeName.')) {
+      list.add(entry.value);
+    }
+  }
+  return list;
 }
 
 List<Field<C, dynamic>> getFieldsForClass<C>() {

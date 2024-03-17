@@ -143,6 +143,7 @@ class Data {
         break;
     }
     recalculateBalances();
+    Settings().fireOnChanged();
   }
 
   void assessMutationsCountOfAllModels() {

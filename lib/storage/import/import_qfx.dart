@@ -39,7 +39,7 @@ void importQFX(
       ..id.value = Data().transactions.getNextTransactionId()
       ..accountId.value = account.id.value
       ..dateTime.value = item.date
-      ..payeeId.value = payee == null ? -1 : payee.id.value
+      ..payee.value = payee == null ? -1 : payee.id.value
       ..categoryId.value = getCategoryFromOfxType(item)
       ..amount.value = item.amount
       ..fitid.value = item.fitid

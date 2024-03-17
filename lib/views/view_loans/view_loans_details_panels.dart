@@ -20,8 +20,8 @@ extension ViewLoansDetailsPanels on ViewLoansState {
     final LoanPayment? loan = getFirstElement<LoanPayment>(indices, list);
 
     if (loan != null) {
-      final List<Transaction> list = getFilteredTransactions(
-          (final Transaction transaction) => transaction.accountId.value == loan.accountId.value);
+      final List<Transaction> list = getTransactions(
+          filter: (final Transaction transaction) => transaction.accountId.value == loan.accountId.value);
 
       return ListViewTransactions(
         key: Key(loan.id.toString()),

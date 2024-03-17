@@ -1,41 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
-import 'package:money/widgets/details_panel/details_panel_fields.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/dialog_full_screen.dart';
 
 Future<dynamic> showTransactionAndActions({
   required final BuildContext context,
   required final Transaction transaction,
-  // passing null to this call weill make it ReadOnly
-  required final Function(
-    MutationType typeOfMutation,
-    Transaction instanceOfItemMutated,
-  ) onDataMutated,
 }) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DialogMutateTransaction(transaction: transaction, onDataMutated: onDataMutated);
+        return DialogMutateTransaction(transaction: transaction);
       });
 }
 
 /// Dialog content
 class DialogMutateTransaction extends StatefulWidget {
   final Transaction transaction;
-  final Function(
-    MutationType typeOfMutation,
-    Transaction instanceOfItemMutated,
-  ) onDataMutated;
 
   const DialogMutateTransaction({
     super.key,
     required this.transaction,
-    required this.onDataMutated,
   });
 
   @override
@@ -44,34 +32,42 @@ class DialogMutateTransaction extends StatefulWidget {
 
 class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   bool isInEditingMode = false;
+  bool editsWereMade = false;
+  late Transaction _transaction;
+
+  @override
+  void initState() {
+    super.initState();
+    _transaction = widget.transaction;
+  }
 
   @override
   Widget build(final BuildContext context) {
-    final List<Field<Transaction, dynamic>> fields = getFieldsForClass<Transaction>()
-        .where((final Field<Transaction, dynamic> item) => item.useAsDetailPanels)
-        .toList();
-
-    final Fields<Transaction> detailPanelFields = Fields<Transaction>(definitions: fields);
-
     return AutoSizeDialog(
       child: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: DetailsPanelFields<Transaction>(
-                instance: widget.transaction,
-                detailPanelFields: detailPanelFields,
-                isReadOnly: !isInEditingMode,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: _transaction.buildWidgets<Transaction>(
+                  onEdit: isInEditingMode
+                      ? () {
+                          setState(() {
+                            editsWereMade = true;
+                          });
+                        }
+                      : null,
+                ),
               ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: getActionButtons(
-              context,
-              widget.transaction,
-              detailPanelFields,
-              isInEditingMode ? widget.onDataMutated : null,
+              context: context,
+              transaction: _transaction,
+              editMode: isInEditingMode,
             ),
           ),
         ],
@@ -79,17 +75,11 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
     );
   }
 
-  List<Widget> getActionButtons(
-    BuildContext context,
-    Transaction instance,
-    Fields<Transaction> detailPanelFields,
-    Function(
-      MutationType typeOfMutation,
-      Transaction instanceOfItemMutated,
-    )? onDataMutated,
-  ) {
-    bool editMode = onDataMutated != null;
-
+  List<Widget> getActionButtons({
+    required BuildContext context,
+    required Transaction transaction,
+    required bool editMode,
+  }) {
     if (editMode) {
       return [
         // DialogActionButton(
@@ -98,10 +88,10 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         //       Navigator.of(context).pop(false);
         //     }),
         DialogActionButton(
-            text: 'Apply',
+            text: editsWereMade ? 'Apply' : 'Close',
             onPressed: () {
-              onDataMutated(MutationType.changed, instance);
-              Navigator.of(context).pop(false);
+              Data().notifyTransactionChange(MutationType.changed, transaction);
+              Navigator.of(context).pop(true);
             })
       ];
     }
@@ -120,12 +110,11 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
                   title: 'Delete',
                   question: 'Are you sure you want to delete this?',
                   content: Column(
-                    children: detailPanelFields.getListOfFieldNameAndValuePairAsWidget(instance),
+                    children: transaction.buildWidgets<Transaction>(onEdit: null, compact: true),
                   ),
                   onConfirm: () {
-                    Data().transactions.deleteItem(instance);
+                    Data().transactions.deleteItem(transaction);
                     Navigator.of(context).pop(false);
-                    onDataMutated?.call(MutationType.deleted, instance);
                   },
                 ),
               );
@@ -137,19 +126,22 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       DialogActionButton(
         text: 'Duplicate',
         onPressed: () {
-          final Transaction t = Transaction()
+          _transaction = Transaction()
             ..id.value = Data().transactions.getNextTransactionId()
-            ..accountId.value = instance.accountId.value
-            ..dateTime.value = instance.dateTime.value
-            ..payeeId.value = instance.payeeId.value
-            ..payeeInstance = instance.payeeInstance
-            ..categoryId.value = instance.categoryId.value
-            ..transfer = instance.transfer
-            ..amount.value = instance.amount.value
-            ..memo.value = instance.memo.value;
-          Data().transactions.addEntry(t, isNewEntry: true);
-          Navigator.of(context).pop(false);
-          onDataMutated?.call(MutationType.inserted, t);
+            ..accountId.value = transaction.accountId.value
+            ..dateTime.value = transaction.dateTime.value
+            ..payee.value = transaction.payee.value
+            ..payeeInstance = transaction.payeeInstance
+            ..categoryId.value = transaction.categoryId.value
+            ..transfer = transaction.transfer
+            ..amount.value = transaction.amount.value
+            ..memo.value = transaction.memo.value;
+
+          setState(() {
+            // append to the list of transactions
+            Data().transactions.addEntry(_transaction, isNewEntry: true);
+            isInEditingMode = true;
+          });
         },
       ),
       // Edit
