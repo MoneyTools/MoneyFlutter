@@ -1,8 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/views/view_transactions/dialog_edit_transaction.dart';
+import 'package:money/views/view_transactions/dialog_mutate_transaction.dart';
 import 'package:money/widgets/list_view/list_view.dart';
 
 class ListViewTransactions extends StatefulWidget {
@@ -71,17 +72,22 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
             unSelectable: false,
             onTap: (final BuildContext context2, final int index) {
               if (isBetweenOrEqual(index, 0, widget.getList().length - 1)) {
-                selectedItemIndex = index;
-                final Transaction instance = widget.getList()[index];
                 showTransactionAndActions(
-                    context: context,
-                    instance: instance,
-                    onDataMutated: (MutationType type, Transaction instance) {
-                      setState(() {
-                        // refresh the list
-                      });
-                    });
-                widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
+                  context: context2,
+                  transaction: widget.getList()[index],
+                  onDataMutated: (MutationType type, Transaction instance) {
+                    if (context.mounted) {
+                      setState(
+                        () {
+                          // refresh the list
+                        },
+                      );
+                    }
+                  },
+                ).then((value) {
+                  selectedItemIndex = index;
+                  widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
+                });
               }
             },
           ),

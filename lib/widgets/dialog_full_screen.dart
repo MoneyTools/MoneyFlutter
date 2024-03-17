@@ -24,10 +24,10 @@ class FullScreenDialogState extends State<FullScreenDialog> {
   }
 }
 
-class MyFullDialog extends StatelessWidget {
+class AutoSizeDialog extends StatelessWidget {
   final Widget child;
 
-  const MyFullDialog({super.key, required this.child});
+  const AutoSizeDialog({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
