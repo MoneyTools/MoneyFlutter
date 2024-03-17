@@ -56,6 +56,7 @@ class DetailsPanelHeader extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                _buildExpando(),
                 _buildViewSelections(constraints),
                 const Spacer(),
                 _buildAddButton(),
@@ -63,7 +64,6 @@ class DetailsPanelHeader extends StatelessWidget {
                 _buildDeleteButton(),
                 gapMedium(),
                 _buildCurrencySelections(constraints),
-                _buildExpando(),
               ],
             ),
           ),
@@ -77,7 +77,7 @@ class DetailsPanelHeader extends StatelessWidget {
 
     return SegmentedButton<int>(
       style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-      showSelectedIcon: false,
+      showSelectedIcon: constraints.maxWidth > 1000,
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
