@@ -29,7 +29,7 @@ void showImportTransactions(
         context: context,
         builder: (BuildContext context) {
           // Full screen form
-          return MyFullDialog(
+          return AutoSizeDialog(
             child: Column(
               children: [
                 Expanded(

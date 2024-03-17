@@ -1,5 +1,12 @@
 # Change Log
 
+## [version 1.4.3] 2024-03-17
+
+### Updated
+
+- Mutate Dialog for Transaction : Starts from a ReadOnly view user can then decide
+  to [Delete|Duplicate|Edit]
+
 ## [version 1.4.2] 2024-03-16
 
 ### Updated
