@@ -8,6 +8,7 @@
 
 ## Updated
 
+- Improve layout for Large and small screen
 - Only show the ADD (+) on the details panel if the Transactions tab is selected and expanded
 
 ## Added

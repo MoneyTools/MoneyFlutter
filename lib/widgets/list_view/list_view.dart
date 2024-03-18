@@ -41,6 +41,7 @@ class MyListView<T> extends StatefulWidget {
 class MyListViewState<T> extends State<MyListView<T>> {
   final ScrollController scrollController = ScrollController();
   double rowHeight = 30;
+  double padding = 0;
 
   @override
   void initState() {
@@ -53,30 +54,40 @@ class MyListViewState<T> extends State<MyListView<T>> {
   @override
   Widget build(final BuildContext context) {
     final TextScaler textScaler = MediaQuery.textScalerOf(context);
-    rowHeight = textScaler.scale(widget.asColumnView ? 30 : 85);
+
+    if (widget.asColumnView) {
+      rowHeight = 30;
+      padding = 8.0;
+    } else {
+      rowHeight = 85;
+      padding = 0;
+    }
 
     return ListView.builder(
         primary: false,
         scrollDirection: Axis.vertical,
         controller: scrollController,
         itemCount: widget.list.length,
-        itemExtent: rowHeight,
+        itemExtent: textScaler.scale(rowHeight),
         itemBuilder: (final BuildContext context, final int index) {
           final MoneyObject itemInstance = (widget.list[index] as MoneyObject);
           final isLastItemOfTheList = (index == widget.list.length - 1);
           final isSelected = widget.selectedItems.value.contains(index);
-          return MyListItem(
-            onListViewKeyEvent: onListViewKeyEvent,
-            onTap: () {
-              setSelectedItem(index);
-              FocusScope.of(context).requestFocus();
-            },
-            onLongPress: () {
-              widget.onLongPress?.call(context, index);
-            },
-            autoFocus: index == widget.selectedItems.value.firstOrNull,
-            isSelected: isSelected,
-            child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding),
+            child: MyListItem(
+              onListViewKeyEvent: onListViewKeyEvent,
+              onTap: () {
+                setSelectedItem(index);
+                FocusScope.of(context).requestFocus();
+              },
+              onLongPress: () {
+                widget.onLongPress?.call(context, index);
+              },
+              autoFocus: index == widget.selectedItems.value.firstOrNull,
+              isSelected: isSelected,
+              child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
+            ),
           );
         });
   }
@@ -85,7 +96,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
     return widget.asColumnView
         ? itemInstance.buildFieldsAsWidgetForLargeScreen!(widget.fields, itemInstance as T)
         : Container(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 8),
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
               border: Border(
                 bottom: BorderSide(

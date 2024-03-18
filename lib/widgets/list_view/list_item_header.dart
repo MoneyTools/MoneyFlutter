@@ -43,7 +43,10 @@ class MyListItemHeader<T> extends StatelessWidget {
         ),
       );
     }
-    return Row(children: headers);
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Row(children: headers),
+    );
   }
 
   SortIndicator getSortIndicated(final int columnNumber) {

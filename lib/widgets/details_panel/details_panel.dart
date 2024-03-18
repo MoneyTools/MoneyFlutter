@@ -51,6 +51,7 @@ class DetailsPanel extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surfaceVariant,
           border: Border(
