@@ -86,6 +86,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
               },
               autoFocus: index == widget.selectedItems.value.firstOrNull,
               isSelected: isSelected,
+              adornmentColor: itemInstance.getMutationColor(),
               child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
             ),
           );

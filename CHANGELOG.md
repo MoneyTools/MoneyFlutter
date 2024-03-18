@@ -13,6 +13,7 @@
 
 ## Added
 
+- Display Green, Orange, Red adornments to list items
 - Script for dependency graph using Lakos and to graphviz
 
 ## [version 1.4.3] 2024-03-17

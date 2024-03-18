@@ -18,6 +18,19 @@ abstract class MoneyObject {
   /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
   MutationType mutation = MutationType.none;
 
+  Color getMutationColor() {
+    switch (mutation) {
+      case MutationType.inserted:
+        return Colors.green;
+      case MutationType.changed:
+        return Colors.orange;
+      case MutationType.deleted:
+        return Colors.red;
+      default:
+        return Colors.transparent;
+    }
+  }
+
   // factory MoneyObject.fromJson(final MyJson row) {
   //   return MoneyObject();
   // }
@@ -64,6 +77,10 @@ abstract class MoneyObject {
       }
     }
     return json;
+  }
+
+  String toJsonString<T>() {
+    return getPersistableJSon<T>().toString();
   }
 }
 

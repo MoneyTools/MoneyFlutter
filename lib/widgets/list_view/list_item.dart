@@ -10,6 +10,7 @@ class MyListItem extends StatefulWidget {
   final bool isSelected;
   final bool autoFocus;
   final Widget child;
+  final Color adornmentColor;
 
   const MyListItem({
     super.key,
@@ -19,6 +20,7 @@ class MyListItem extends StatefulWidget {
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
+    this.adornmentColor = Colors.transparent,
     required this.child,
   });
 
@@ -70,7 +72,10 @@ class MyListItemState extends State<MyListItem> {
           onDoubleTap: widget.onDoubleTap,
           onLongPress: widget.onLongPress,
           child: Container(
-            color: backgroundColor,
+            decoration: BoxDecoration(
+              color: backgroundColor,
+              border: Border(left: BorderSide(width: 2, color: widget.adornmentColor)),
+            ),
             child: widget.child,
           ),
         ),
