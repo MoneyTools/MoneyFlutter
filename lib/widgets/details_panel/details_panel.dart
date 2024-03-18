@@ -23,7 +23,7 @@ class DetailsPanel extends StatelessWidget {
   final Function(int) currencySelectionChanged;
 
   // Actions
-  final Function? onActionAdd;
+  final Function? onActionAddTransaction;
   final Function? onActionDelete;
 
   /// Constructor
@@ -44,7 +44,7 @@ class DetailsPanel extends StatelessWidget {
     required this.currencySelectionChanged,
 
     // Actions
-    required this.onActionAdd,
+    required this.onActionAddTransaction,
     required this.onActionDelete,
   });
 
@@ -79,7 +79,8 @@ class DetailsPanel extends StatelessWidget {
                 currentSelectionChanged: currencySelectionChanged,
 
                 // Actions
-                onActionAdd: subPanelSelected == SubViews.transactions ? onActionAdd : null,
+                onActionAddTransaction:
+                    (subPanelSelected == SubViews.transactions) && isExpanded ? onActionAddTransaction : null,
                 onActionDelete: subPanelSelected == SubViews.details && list.isNotEmpty ? onActionDelete : null,
               ),
               if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, list)),

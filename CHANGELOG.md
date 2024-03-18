@@ -1,5 +1,15 @@
 # Change Log
 
+## [version 1.4.4] 2024-03-18
+
+## Updated
+
+- Only show the ADD (+) on the details panel if the Transactions tab is selected and expanded
+
+## Added
+
+- Script for dependency graph using Lakos and to graphviz
+
 ## [version 1.4.3] 2024-03-17
 
 ### Updated

@@ -17,7 +17,7 @@ class DetailsPanelHeader extends StatelessWidget {
   final Function currentSelectionChanged;
 
   // Actions
-  final Function? onActionAdd;
+  final Function? onActionAddTransaction;
   final Function? onActionDelete;
 
   /// Constructor
@@ -36,7 +36,7 @@ class DetailsPanelHeader extends StatelessWidget {
     required this.currentSelectionChanged,
 
     // Actions
-    this.onActionAdd,
+    this.onActionAddTransaction,
     this.onActionDelete,
   });
 
@@ -138,13 +138,13 @@ class DetailsPanelHeader extends StatelessWidget {
   }
 
   Widget _buildAddButton() {
-    if (onActionAdd == null) {
+    if (onActionAddTransaction == null) {
       return const SizedBox();
     }
 
     return IconButton(
       onPressed: () {
-        onActionAdd?.call();
+        onActionAddTransaction?.call();
       },
       icon: const Icon(Icons.add),
       tooltip: 'Add a new transaction',
