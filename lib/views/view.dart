@@ -351,7 +351,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     if (isMobile()) {
       myShowDialog(
         context: context,
-        title: 'getDetailPanelHeader(context, index, list[index]),',
+        title: '${getClassNameSingular()} #${index + 1}',
         actionButtons: [],
         child: getPanelForDetails(indexOfItems: <int>[index], isReadOnly: true),
       );

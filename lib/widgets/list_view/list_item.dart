@@ -9,7 +9,6 @@ class MyListItem extends StatefulWidget {
   final GestureTapCallback? onLongPress;
   final bool isSelected;
   final bool autoFocus;
-  final bool asColumnView;
   final Widget child;
 
   const MyListItem({
@@ -17,7 +16,6 @@ class MyListItem extends StatefulWidget {
     required this.onListViewKeyEvent,
     required this.isSelected,
     this.autoFocus = false,
-    this.asColumnView = true,
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
