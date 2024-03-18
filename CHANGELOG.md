@@ -2,6 +2,10 @@
 
 ## [version 1.4.4] 2024-03-18
 
+## Fixed
+
+- Transaction Amount List and Dialog
+
 ## Updated
 
 - Only show the ADD (+) on the details panel if the Transactions tab is selected and expanded

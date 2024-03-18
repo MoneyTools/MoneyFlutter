@@ -265,7 +265,7 @@ class Account extends MoneyObject {
           message: ratioCurrency.toString(),
           child: Row(
             children: [
-              Text(Currency.getCurrencyText(balance.value / ratioCurrency, iso4217code: currency.value)),
+              Text(Currency.getAmountAsStringUsingCurrency(balance.value / ratioCurrency, iso4217code: currency.value)),
               const SizedBox(width: 4),
               Currency.buildCurrencyWidget(currency.value),
             ],
@@ -276,7 +276,7 @@ class Account extends MoneyObject {
       return MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: getTypeAsText(type.value),
-          rightTopAsString: Currency.getCurrencyText(balance.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),
           rightBottomAsWidget: originalCurrencyAndValue);
     };
   }

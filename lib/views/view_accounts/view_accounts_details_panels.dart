@@ -38,16 +38,18 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       selectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
     }
 
+    final columnsToDisplay = <String>[
+      columnIdDate,
+      columnIdPayee,
+      columnIdCategory,
+      columnIdStatus,
+      showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
+      showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
+    ];
+
     return ListViewTransactions(
         key: Key('${account.id.value}_currency_${showAsNativeCurrency}_version${Data().version}'),
-        columnsToInclude: <String>[
-          columnIdDate,
-          columnIdPayee,
-          columnIdCategory,
-          columnIdStatus,
-          showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
-          showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
-        ],
+        columnsToInclude: columnsToDisplay,
         getList: () {
           return getTransactions(filter: (Transaction transaction) {
             return filterByAccountId(transaction, account.id.value);

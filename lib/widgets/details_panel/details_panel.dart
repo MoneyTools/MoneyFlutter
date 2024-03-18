@@ -61,7 +61,7 @@ class DetailsPanel extends StatelessWidget {
           borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
       child: ValueListenableBuilder<List<int>>(
         valueListenable: selectedItems,
-        builder: (final BuildContext context, final List<int> list, final _) {
+        builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -74,16 +74,17 @@ class DetailsPanel extends StatelessWidget {
                 subViewSelectionChanged: subPanelSelectionChanged,
 
                 // Currency
-                currencyChoices: getCurrencyChoices(subPanelSelected, list),
+                currencyChoices: getCurrencyChoices(subPanelSelected, listOfSelectedItemIndex),
                 currencySelected: currencySelected,
                 currentSelectionChanged: currencySelectionChanged,
 
                 // Actions
                 onActionAddTransaction:
                     (subPanelSelected == SubViews.transactions) && isExpanded ? onActionAddTransaction : null,
-                onActionDelete: subPanelSelected == SubViews.details && list.isNotEmpty ? onActionDelete : null,
+                onActionDelete:
+                    subPanelSelected == SubViews.details && listOfSelectedItemIndex.isNotEmpty ? onActionDelete : null,
               ),
-              if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, list)),
+              if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, listOfSelectedItemIndex)),
             ],
           );
         },

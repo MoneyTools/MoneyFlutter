@@ -52,7 +52,7 @@ class Payee extends MoneyObject {
   Payee() {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
-          rightTopAsString: Currency.getCurrencyText(balance.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),
           rightBottomAsString: getNumberAsShorthandText(count.value),
         );
   }

@@ -16,7 +16,7 @@ class Amount extends StatelessWidget {
   Widget build(final BuildContext context) {
     return Row(
       children: [
-        Text(Currency.getCurrencyText(value)),
+        Text(Currency.getAmountAsStringUsingCurrency(value)),
         const SizedBox(width: 10),
         Currency.buildCurrencyWidget(iso4217),
       ],

@@ -264,7 +264,7 @@ class RentBuilding extends MoneyObject {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: address.value,
-          rightTopAsString: Currency.getCurrencyText(profit.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(profit.value),
         );
   }
 

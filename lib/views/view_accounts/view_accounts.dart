@@ -51,7 +51,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
         text1: 'Banks',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0))),
+        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0))),
       ),
     );
     pivots.add(
@@ -59,7 +59,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
         text1: 'Investments',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1))),
+        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1))),
       ),
     );
     pivots.add(
@@ -67,7 +67,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
         text1: 'Credit',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2))),
+        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2))),
       ),
     );
     pivots.add(
@@ -75,7 +75,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
         text1: 'Assets',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3))),
+        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3))),
       ),
     );
     pivots.add(
@@ -83,7 +83,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1))),
+        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1))),
       ),
     );
   }
@@ -158,13 +158,15 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     required final List<int> selectedItems,
     required final bool showAsNativeCurrency,
   }) {
-    if (Settings().mostRecentlySelectedAccount != null) {
+    final Account? account = getFirstSelectedItemFromSelectionList<Account>(selectedItems, list);
+    if (account == null) {
+      return const CenterMessage(message: 'No account selected.');
+    } else {
       return _getSubViewContentForTransactions(
-        account: Settings().mostRecentlySelectedAccount!,
+        account: account,
         showAsNativeCurrency: showAsNativeCurrency,
       );
     }
-    return const CenterMessage(message: 'No item selected.');
   }
 
   @override

@@ -238,11 +238,11 @@ class Transaction extends MoneyObject {
   /// Amount
   /// 14|Amount|money|1||0
   FieldAmount<Transaction> amount = FieldAmount<Transaction>(
-    importance: 98,
-    name: 'Amount',
+    importance: 97,
+    name: columnIdAmount,
     serializeName: 'Amount',
-    useAsColumn: false,
-    valueFromInstance: (final Transaction instance) => instance.amount.value,
+    valueFromInstance: (final Transaction instance) =>
+        Currency.getAmountAsStringUsingCurrency(instance.amount.value, iso4217code: instance.amount.currency),
     valueForSerialization: (final Transaction instance) => instance.amount.value,
     setValue: (final Transaction instance, dynamic newValue) {
       instance.amount.value = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
@@ -254,7 +254,7 @@ class Transaction extends MoneyObject {
   /// Sales Tax
   /// 15|SalesTax|money|0||0
   FieldAmount<Transaction> salesTax = FieldAmount<Transaction>(
-    importance: 98,
+    importance: 95,
     name: 'Sales Tax',
     serializeName: 'SalesTax',
     useAsColumn: false,
@@ -292,23 +292,13 @@ class Transaction extends MoneyObject {
   // Not serialized
   // derived property used for display
 
-  /// Amount as Text
-  FieldString<Transaction> amountAsTextNative = FieldString<Transaction>(
-    importance: 98,
-    name: 'Amount*',
-    align: TextAlign.right,
-    useAsColumn: false,
-    useAsDetailPanels: false,
-    valueFromInstance: (final Transaction instance) =>
-        Currency.getCurrencyText(instance.amount.value, iso4217code: instance.amount.currency),
-  );
-
   /// Amount Normalized to USD
   FieldString<Transaction> amountAsTextNormalized = FieldString<Transaction>(
     importance: 98,
-    name: 'Amount(USD)',
+    name: columnIdAmountNormalized,
     align: TextAlign.right,
-    valueFromInstance: (final Transaction instance) => Currency.getCurrencyText(
+    useAsDetailPanels: false,
+    valueFromInstance: (final Transaction instance) => Currency.getAmountAsStringUsingCurrency(
         instance.getNormalizedAmount(instance.amount.value),
         iso4217code: Constants.defaultCurrency),
   );
@@ -330,7 +320,7 @@ class Transaction extends MoneyObject {
     useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) =>
-        Currency.getCurrencyText(instance.balance.value, iso4217code: instance.amount.currency),
+        Currency.getAmountAsStringUsingCurrency(instance.balance.value, iso4217code: instance.amount.currency),
   );
 
   /// Balance Normalized to USD
@@ -339,7 +329,7 @@ class Transaction extends MoneyObject {
     name: 'Balance(USD)',
     align: TextAlign.right,
     useAsDetailPanels: false,
-    valueFromInstance: (final Transaction instance) => Currency.getCurrencyText(
+    valueFromInstance: (final Transaction instance) => Currency.getAmountAsStringUsingCurrency(
         instance.getNormalizedAmount(instance.balance.value),
         iso4217code: Constants.defaultCurrency),
   );
@@ -356,7 +346,7 @@ class Transaction extends MoneyObject {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Payee.getName(payeeInstance),
           leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
-          rightTopAsString: Currency.getCurrencyText(amount.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(amount.value),
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
 

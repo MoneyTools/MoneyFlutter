@@ -90,8 +90,8 @@ class LoanPayment extends MoneyObject {
 
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Account.getName(accountInstance),
-          rightTopAsString: Currency.getCurrencyText(principal),
-          rightBottomAsString: Currency.getCurrencyText(interest),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(principal),
+          rightBottomAsString: Currency.getAmountAsStringUsingCurrency(interest),
         );
   }
 

@@ -306,11 +306,15 @@ class Currency extends MoneyObject {
   }
 
   /// Return a formatted string from the given amount using the supplied ISO4217 code
-  static String getCurrencyText(
-    double amount, {
+  static String getAmountAsStringUsingCurrency(
+    dynamic amount, {
     String iso4217code = Constants.defaultCurrency,
     int? decimalDigits,
   }) {
+    if (amount is String) {
+      return amount; // its already a string
+    }
+
     String? localeToUse = Currency.getLocaleFromCurrencyIso4217(iso4217code);
     if (localeToUse == null || localeToUse.isEmpty) {
       // this means

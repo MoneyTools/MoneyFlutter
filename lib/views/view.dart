@@ -360,6 +360,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
+  T? getFirstSelectedItem() {
+    return getFirstSelectedItemFromSelectionList<T>(selectedItems.value, list);
+  }
+
   Widget getDetailPanelHeader(final BuildContext context, final num index, final T item) {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
@@ -499,8 +503,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                Text(Currency.getCurrencyText(minMax[0])),
-                Text(Currency.getCurrencyText(minMax[1])),
+                Text(Currency.getAmountAsStringUsingCurrency(minMax[0])),
+                Text(Currency.getAmountAsStringUsingCurrency(minMax[1])),
               ],
             ),
           );

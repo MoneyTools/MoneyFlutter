@@ -27,7 +27,6 @@ digraph "" {
   "/lib/models/money_objects/transactions/transactions.dart" [label="transactions"];
   "/lib/models/money_objects/transactions/transactions_csv.dart" [label="transactions_csv" shape=octagon];
   "/lib/models/money_objects/transactions/transactions_demo.dart" [label="transactions_demo" shape=octagon];
-  "/lib/models/money_objects/transactions/transaction_fields.dart" [label="transaction_fields" shape=octagon];
   "/lib/models/money_objects/transactions/transaction_types.dart" [label="transaction_types"];
   "/lib/models/money_objects/transactions/transaction.dart" [label="transaction"];
   "/lib/models/money_objects/accounts/accounts.dart" [label="accounts"];
@@ -204,7 +203,6 @@ digraph "" {
             "/lib/models/money_objects/transactions/transactions.dart";
             "/lib/models/money_objects/transactions/transactions_csv.dart";
             "/lib/models/money_objects/transactions/transactions_demo.dart";
-            "/lib/models/money_objects/transactions/transaction_fields.dart";
             "/lib/models/money_objects/transactions/transaction_types.dart";
             "/lib/models/money_objects/transactions/transaction.dart";
           }
@@ -825,5 +823,5 @@ digraph "" {
   "/lib/appbar.dart" -> "/lib/models/constants.dart";
   "/lib/appbar.dart" -> "/lib/models/settings.dart";
   "/lib/appbar.dart" -> "/lib/widgets/zoom.dart";
-  "metrics" [label=" isAcyclic: false \l numNodes: 131  \l numEdges: 438  \l avgDegree: 3.34 \l numOrphans: 12 \l ccd: 5217 \l acd: 39.82 \l nccd: 6.53 \l totalSloc: 11082 \l avgSloc: 84.6 \l"];
+  "metrics" [label=" isAcyclic: false \l numNodes: 130  \l numEdges: 438  \l avgDegree: 3.37 \l numOrphans: 11 \l ccd: 5216 \l acd: 40.12 \l nccd: 6.59 \l totalSloc: 11096 \l avgSloc: 85.35 \l"];
 }

@@ -188,7 +188,7 @@ class Category extends MoneyObject {
       return MyListItemAsCard(
         leftTopAsString: top,
         leftBottomAsString: bottom,
-        rightTopAsString: Currency.getCurrencyText(runningBalance.value),
+        rightTopAsString: Currency.getAmountAsStringUsingCurrency(runningBalance.value),
         rightBottomAsWidget: Row(
           children: <Widget>[
             Text(getTypeAsText()),

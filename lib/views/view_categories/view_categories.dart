@@ -32,32 +32,36 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
         text1: 'None',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
+        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
     pivots.add(ThreePartLabel(
         text1: 'Expense',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense]))));
+        text2:
+            Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense]))));
     pivots.add(ThreePartLabel(
         text1: 'Income',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
+        text2:
+            Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
     pivots.add(ThreePartLabel(
         text1: 'Saving',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
+        text2:
+            Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
     pivots.add(ThreePartLabel(
         text1: 'Investment',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
+        text2: Currency.getAmountAsStringUsingCurrency(
+            getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
     pivots.add(ThreePartLabel(
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: Currency.getCurrencyText(getTotalBalanceOfAccounts(<CategoryType>[]))));
+        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[]))));
   }
 
   double getTotalBalanceOfAccounts(final List<CategoryType> types) {

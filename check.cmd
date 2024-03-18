@@ -8,3 +8,5 @@ dart format . -l 120
 
 echo --- Analyze
 flutter analyze
+
+flutter test

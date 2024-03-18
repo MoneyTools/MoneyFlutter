@@ -78,3 +78,11 @@ int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = tru
     return b.compareTo(a);
   }
 }
+
+T? getFirstSelectedItemFromSelectionList<T>(List<int> listOfSelectedItem, List<T> listOfItems) {
+  if (listOfSelectedItem.isEmpty) {
+    return null;
+  }
+  final int indexOfFirsSelectedAccount = listOfSelectedItem.first;
+  return listOfItems[indexOfFirsSelectedAccount];
+}

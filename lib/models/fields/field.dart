@@ -70,7 +70,8 @@ class Field<C, T> {
         case FieldType.text:
           valueFromInstance = (final C objectInstance) => value.toString();
         case FieldType.amount:
-          valueFromInstance = (final C c) => Currency.getCurrencyText(value as double, iso4217code: currency);
+          valueFromInstance =
+              (final C c) => Currency.getAmountAsStringUsingCurrency(value as double, iso4217code: currency);
         case FieldType.date:
           valueFromInstance = (final C c) => getDateAsText(value as DateTime);
         default:
@@ -100,7 +101,7 @@ class Field<C, T> {
       case FieldType.numericShorthand:
         return getNumberAsShorthandText(value as num);
       case FieldType.amount:
-        return Currency.getCurrencyText(value as double);
+        return Currency.getAmountAsStringUsingCurrency(value);
       case FieldType.amountShorthand:
         return getNumberAsShorthandText(value as double);
       case FieldType.text:
@@ -308,7 +309,7 @@ Widget buildFieldWidgetForCurrency({
       child: Text(
         shorthand
             ? getNumberAsShorthandText(value as num)
-            : Currency.getCurrencyText(value as double, iso4217code: currency),
+            : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
         textAlign: align,
       ),
     ),

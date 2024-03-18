@@ -97,7 +97,7 @@ class Chart extends StatelessWidget {
               final int rodIndex,
             ) {
               return BarTooltipItem(
-                '${list[group.x].xText}\n${Currency.getCurrencyText(rod.toY)}',
+                '${list[group.x].xText}\n${Currency.getAmountAsStringUsingCurrency(rod.toY)}',
                 TextStyle(color: Theme.of(context).colorScheme.primary),
                 textAlign: TextAlign.start,
               );
@@ -110,7 +110,7 @@ class Chart extends StatelessWidget {
 
   Widget _buildLegendLeft(final double value, final TitleMeta meta) {
     final Widget widget = Text(
-      Currency.getCurrencyText(value, decimalDigits: 0),
+      Currency.getAmountAsStringUsingCurrency(value, decimalDigits: 0),
       textAlign: TextAlign.end,
       softWrap: false,
       style: const TextStyle(fontSize: 10),
