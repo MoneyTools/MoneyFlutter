@@ -97,24 +97,18 @@ class Transaction extends MoneyObject {
     defaultValue: 0,
     type: FieldType.text,
     valueFromInstance: (final Transaction instance) {
-      if (instance.payeeInstance == null) {
-        // show the memo
-        return instance.memo.value;
-      }
-      return Payee.getName(instance.payeeInstance);
+      return instance.payeeName;
     },
     valueForSerialization: (final Transaction instance) => instance.payee.value,
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
-        sortByString(Payee.getName(a.payeeInstance), Payee.getName(b.payeeInstance), ascending),
+        sortByString(a.payeeName, b.payeeName, ascending),
     getEditWidget: (final Transaction instance, Function onEdited) {
       return pickerPayee(
         itemSelected: Data().payees.get(instance.payee.value),
         onSelected: (Payee? selectedPayee) {
           if (selectedPayee != null) {
             instance.payee.value = selectedPayee.uniqueId;
-            instance.payeeInstance = selectedPayee;
-            // notify container
-            onEdited();
+            onEdited(); // notify container
           }
         },
       );
@@ -335,26 +329,21 @@ class Transaction extends MoneyObject {
   );
 
   Account? accountInstance;
-  Payee? payeeInstance;
 
   String get dateTimeAsText => getDateAsText(dateTime.value);
+
+  String get payeeName => Data().payees.getNameFromId(payee.value);
 
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
   }) {
     this.status.value = status;
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: Payee.getName(payeeInstance),
+          leftTopAsString: payeeName,
           leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
           rightTopAsString: Currency.getAmountAsStringUsingCurrency(amount.value),
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
-
-    // buildFieldsAsWidgetForDetailsPanel = (Function? onEdit, bool compact) {
-    //   final Fields<MoneyObject> fields = Fields<Transaction>(
-    //       definitions: getFieldsForClass<Transaction>().where((element) => element.useAsDetailPanels).toList());
-    //   return fields.getFieldsAsWidgets(this, onEdit, compact);
-    // };
   }
 
   // // Copy constructor
@@ -390,7 +379,6 @@ class Transaction extends MoneyObject {
     t.status.value = TransactionStatus.values[json.getInt('Status')];
     // 4 Payee ID
     t.payee.value = json.getInt('Payee');
-    t.payeeInstance = Data().payees.get(t.payee.value);
     // 5 Original Payee
     t.originalPayee.value = json.getString('OriginalPayee');
     // 6 Category Id

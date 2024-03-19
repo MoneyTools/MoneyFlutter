@@ -1,15 +1,15 @@
 // Imports
 import 'package:flutter/foundation.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/database/database.dart';
-import 'package:money/models/money_objects/money_object.dart';
 
 // Exports
-export 'package:money/models/money_objects/money_object.dart';
-export 'package:money/models/fields/fields.dart';
 export 'package:collection/collection.dart';
+export 'package:money/models/fields/fields.dart';
+export 'package:money/models/money_objects/money_object.dart';
 
 /// Collection of MoneyObject as both List and Map
 class MoneyObjects<T> {

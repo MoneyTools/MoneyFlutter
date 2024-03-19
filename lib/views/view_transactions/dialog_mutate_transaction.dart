@@ -131,7 +131,6 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             ..accountId.value = transaction.accountId.value
             ..dateTime.value = transaction.dateTime.value
             ..payee.value = transaction.payee.value
-            ..payeeInstance = transaction.payeeInstance
             ..categoryId.value = transaction.categoryId.value
             ..transfer = transaction.transfer
             ..amount.value = transaction.amount.value

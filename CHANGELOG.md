@@ -12,6 +12,7 @@
 
 ## Refactor
 
+- Transaction Payee
 - [notifyTransactionChange()| MoneyObject.addEntry()] use named parameters
 
 ## [version 1.4.4] 2024-03-18
