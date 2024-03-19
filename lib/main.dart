@@ -1,30 +1,31 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money/appbar.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/file_systems.dart';
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/menu.dart';
+import 'package:money/models/constants.dart';
+import 'package:money/models/settings.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
+import 'package:money/views/view_accounts/view_accounts.dart';
 import 'package:money/views/view_aliases/view_aliases.dart';
 import 'package:money/views/view_cashflow/view_cashflow.dart';
-import 'package:money/views/view_loans/view_loans.dart';
-import 'package:money/views/view_rentals/view_rentals.dart';
-import 'package:money/widgets/keyboard_widget.dart';
-import 'package:money/appbar.dart';
-import 'package:money/models/constants.dart';
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/menu.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/views/view_accounts/view_accounts.dart';
 import 'package:money/views/view_categories/view_categories.dart';
+import 'package:money/views/view_loans/view_loans.dart';
 import 'package:money/views/view_payees/view_payees.dart';
+import 'package:money/views/view_rentals/view_rentals.dart';
 import 'package:money/views/view_transactions/view_transactions.dart';
+import 'package:money/widgets/keyboard_widget.dart';
 import 'package:money/widgets/snack_bar.dart';
 
 void main() {
@@ -54,7 +55,6 @@ class _MyMoneyState extends State<MyMoney> {
       // force refresh the app UI
       setState(() {
         settings = Settings();
-        // _isLoading = true;
       });
     };
   }
@@ -64,93 +64,99 @@ class _MyMoneyState extends State<MyMoney> {
     Settings().isSmallDevice = MediaQuery.of(context).size.width < 800;
 
     return MaterialApp(
-        scaffoldMessengerKey: SnackBarService.scaffoldKey,
+      scaffoldMessengerKey: SnackBarService.scaffoldKey,
 
-        /// Assign Key Here
-        debugShowCheckedModeBanner: false,
-        title: 'MyMoney',
-        theme: settings.getThemeData(),
-        home: LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+      /// Assign Key Here
+      debugShowCheckedModeBanner: false,
+      title: 'MyMoney by VTeam',
+      theme: settings.getThemeData(),
+      home: LayoutBuilder(
+        builder: (final BuildContext context, final BoxConstraints constraints) {
           final MediaQueryData data = MediaQuery.of(context);
           return Container(
             key: Key('key_data_version_${Data().version}'),
             color: Theme.of(context).colorScheme.primaryContainer,
             child: MediaQuery(
               data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
-              child: isPlatformMobile()
-                  ? buildContent(context, constraints)
-                  : KeyboardWidget(
-                      columnCount: 1,
-                      bindings: getKeyboardBindings(context),
-                      child: buildContent(context, constraints),
-                    ),
+              child: myScaffold(
+                showAppBar: !shouldShowOpenInstructions(),
+                body: Container(
+                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  child: isPlatformMobile()
+                      // Mobile has no keyboard support
+                      ? buildContent(context, constraints)
+                      // Keyboard support for Desktop and Web
+                      : KeyboardWidget(
+                          columnCount: 1,
+                          bindings: getKeyboardBindings(context),
+                          child: buildContent(context, constraints),
+                        ),
+                ),
+              ),
             ),
           );
-        }));
+        },
+      ),
+    );
   }
 
   Widget buildContent(final BuildContext context, final BoxConstraints constraints) {
+    // Welcome screen
     if (shouldShowOpenInstructions()) {
       return welcomePanel(context);
     }
+
+    // Loading ...
     if (_isLoading) {
       return const Center(child: CircularProgressIndicator());
-    } else {
-      if (Settings().isSmallDevice) {
-        return buildContentForSmallSurface(context);
-      } else {
-        return buildContentForLargeSurface(context);
-      }
     }
+
+    // small screens
+    if (Settings().isSmallDevice) {
+      return buildContentForSmallSurface(context);
+    }
+
+    // Large screens
+    return buildContentForLargeSurface(context);
   }
 
   Widget buildContentForSmallSurface(final BuildContext context) {
-    return myScaffold(
-      body: SafeArea(
-        child: Container(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: getWidgetForMainContent(context, settings.screenIndex),
-              ),
-              MenuHorizontal(
-                settings: settings,
-                onSelectItem: handleScreenChanged,
-                selectedIndex: settings.screenIndex,
-              ),
-            ],
+    return SafeArea(
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: getWidgetForMainContent(context, settings.screenIndex),
           ),
-        ),
+          MenuHorizontal(
+            settings: settings,
+            onSelectItem: handleScreenChanged,
+            selectedIndex: settings.screenIndex,
+          ),
+        ],
       ),
     );
   }
 
   Widget buildContentForLargeSurface(final BuildContext context) {
-    return myScaffold(
-      body: SafeArea(
-        bottom: false,
-        top: false,
-        child: Container(
-          color: Theme.of(context).colorScheme.secondaryContainer,
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              MenuVertical(
-                settings: settings,
-                onSelectItem: handleScreenChanged,
-                selectedIndex: settings.screenIndex,
-                useIndicator: true,
-              ),
-              Expanded(
-                child: Container(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
-                  child: getWidgetForMainContent(context, settings.screenIndex),
-                ),
-              )
-            ],
+    return SafeArea(
+      bottom: false,
+      top: false,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          MenuVertical(
+            settings: settings,
+            onSelectItem: handleScreenChanged,
+            selectedIndex: settings.screenIndex,
+            useIndicator: true,
           ),
-        ),
+          Expanded(
+            child: Container(
+              color: Theme.of(context).colorScheme.secondaryContainer,
+              child: getWidgetForMainContent(context, settings.screenIndex),
+            ),
+          )
+        ],
       ),
     );
   }
@@ -162,16 +168,12 @@ class _MyMoneyState extends State<MyMoney> {
     return false;
   }
 
-  void loadData() {
-    data.loadFromPath(
-        filePathToLoad: settings.lastOpenedDataSource,
-        callbackWhenLoaded: (final bool success) {
-          _isLoading = false;
-          setState(() {
-            _isLoading;
-            data;
-          });
-        });
+  void loadData() async {
+    data.loadFromPath(filePathToLoad: settings.lastOpenedDataSource).then((final bool success) {
+      setState(() {
+        _isLoading = false;
+      });
+    });
   }
 
   void handleScreenChanged(final int selectedScreen) {
@@ -313,28 +315,29 @@ class _MyMoneyState extends State<MyMoney> {
   }
 
   Widget welcomePanel(final BuildContext context) {
-    return myScaffold(
-      body: Row(
-        children: <Widget>[
-          renderWelcomeAndOpen(context),
-        ],
-      ),
+    return Row(
+      children: <Widget>[
+        renderWelcomeAndOpen(context),
+      ],
     );
   }
 
   Widget myScaffold({
     required final Widget body,
+    final bool showAppBar = true,
     final Widget? bottomNavigationBar,
   }) {
     return Scaffold(
-      appBar: MyAppBar(
-        onFileOpen: onFileOpen,
-        onFileClose: onFileClose,
-        onShowFileLocation: onShowFileLocation,
-        onImport: onImport,
-        onSaveCsv: onSaveToCav,
-        onSaveSql: onSaveToSql,
-      ),
+      appBar: showAppBar
+          ? MyAppBar(
+              onFileOpen: onFileOpen,
+              onFileClose: onFileClose,
+              onShowFileLocation: onShowFileLocation,
+              onImport: onImport,
+              onSaveCsv: onSaveToCav,
+              onSaveSql: onSaveToSql,
+            )
+          : null,
       body: body,
       bottomNavigationBar: bottomNavigationBar,
     );

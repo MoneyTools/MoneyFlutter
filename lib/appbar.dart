@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:money/app_caption.dart';
+import 'package:money/models/constants.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_currencies.dart';
 import 'package:money/widgets/change_summary.dart';
 import 'package:money/widgets/three_part_label.dart';
-import 'package:money/models/constants.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/widgets/zoom.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
@@ -182,7 +183,9 @@ class _MyAppBarState extends State<MyAppBar> {
     final void Function() onSaveSql,
   ) {
     return PopupMenuButton<int>(
-      child: buildPopupHeader(),
+      child: AppCaption(
+        subCaption: Data().fullPathToDataSource ?? 'No file loaded',
+      ),
       itemBuilder: (final BuildContext context) {
         final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
         // Open
@@ -265,28 +268,5 @@ class _MyAppBarState extends State<MyAppBar> {
         }
       },
     );
-  }
-
-  Widget buildPopupHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Row(children: [
-          const Text('MyMoney', textAlign: TextAlign.left),
-          const SizedBox(width: 8),
-          ChangeSummaryBadge(
-            itemsAdded: Settings().trackMutations.added,
-            itemsChanged: Settings().trackMutations.changed,
-            itemsDeleted: Settings().trackMutations.deleted,
-          )
-        ]),
-        Text(getTitle(),
-            textAlign: TextAlign.left, overflow: TextOverflow.ellipsis, style: const TextStyle(fontSize: 10)),
-      ],
-    );
-  }
-
-  String getTitle() {
-    return Data().fullPathToDataSource ?? 'No file loaded';
   }
 }

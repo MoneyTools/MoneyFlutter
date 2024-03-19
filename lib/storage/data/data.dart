@@ -201,14 +201,11 @@ class Data {
   }
 
   /// Automated detection of what type of storage to load the data from
-  Future<void> loadFromPath({
-    required final String? filePathToLoad,
-    required final Function callbackWhenLoaded,
-  }) async {
+  Future<bool> loadFromPath({required final String? filePathToLoad}) async {
     rememberWhereTheDataCameFrom(null);
 
     if (filePathToLoad == null) {
-      return callbackWhenLoaded(false);
+      return false;
     }
 
     try {
@@ -225,15 +222,14 @@ class Data {
     } catch (e) {
       debugLog(e.toString());
       rememberWhereTheDataCameFrom(null);
-      callbackWhenLoaded(false);
-      return;
+      return false;
     }
 
     // All individual table were loaded, now let the cross reference money object create linked to other tables
     recalculateBalances();
 
     // Notify that loading is completed
-    callbackWhenLoaded(true);
+    return true;
   }
 
   /// When Changes are done we can force a reevaluation of the balances

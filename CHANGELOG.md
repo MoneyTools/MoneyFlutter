@@ -16,6 +16,7 @@
 
 ## Refactor
 
+- Loading screen, app bar header
 - Transaction Payee
 - [notifyTransactionChange()| MoneyObject.addEntry()] use named parameters
 

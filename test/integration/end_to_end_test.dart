@@ -10,10 +10,12 @@ void main() {
   group('end-to-end test', () {
     testWidgets('Landing page', (final WidgetTester tester) async {
       SharedPreferences.setMockInitialValues(<String, Object>{});
+
       app.main();
+
       await tester.pumpAndSettle();
 
-      expect(find.text('MyMoney'), findsOneWidget);
+      expect(find.text('Welcome to MyMoney'), findsOneWidget);
     });
   });
 }
