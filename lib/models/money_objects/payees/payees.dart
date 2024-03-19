@@ -1,8 +1,8 @@
 import 'package:money/helpers/list_helper.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
 
 class Payees extends MoneyObjects<Payee> {
   List<Payee> getListSorted() {
@@ -23,16 +23,29 @@ class Payees extends MoneyObjects<Payee> {
     return iterableList().firstWhereOrNull((final Payee payee) => payee.name.value == name);
   }
 
+  /// if not found returns -1
+  int getPayeeIdFromName(final String name) {
+    final Payee? payee = getByName(name);
+    if (payee == null) {
+      return -1;
+    }
+    return payee.uniqueId;
+  }
+
   /// Attempts to find payee wih the given name
   /// if not found create a new payee and return that instance
-  Payee findOrAddPayee(final String name) {
+  Payee findOrAddPayee(final String name, {bool fireNotification = true}) {
     // find or add account of given name
     Payee? payee = getByName(name);
 
     // if not found add new payee
-    payee ??= Payee()
-      ..id.value = iterableList().length
-      ..name.value = name;
+    if (payee == null) {
+      payee = Payee()
+        ..id.value = iterableList().length
+        ..name.value = name
+        ..mutation = MutationType.inserted;
+      Data().payees.addEntry(moneyObject: payee, isNewEntry: true, fireNotification: fireNotification);
+    }
     return payee;
   }
 

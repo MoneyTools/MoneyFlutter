@@ -38,4 +38,22 @@ class Aliases extends MoneyObjects<Alias> {
     }
     return aliasFound.payeeInstance;
   }
+
+  /// If no match found return -1
+  int getPayeeIdFromTextMatching(final String text) {
+    final Payee? payeeFound = findByMatch(text);
+    if (payeeFound == null) {
+      return -1;
+    }
+    return payeeFound.uniqueId;
+  }
+
+  /// Attempt to find a Payee match by text, if failed adds a new Payee
+  int getPayeeIdFromTextMatchingOrAdd(final String text, {bool fireNotification = true}) {
+    int id = getPayeeIdFromTextMatching(text);
+    if (id == -1) {
+      id = Data().payees.findOrAddPayee(text, fireNotification: fireNotification).uniqueId;
+    }
+    return id;
+  }
 }

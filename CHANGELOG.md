@@ -6,6 +6,10 @@
 
 - Fix Web version
 
+## Added
+
+- Payee helper getPayeeIdFromTextMatchingOrAdd()
+
 ## Refactor
 
 - [notifyTransactionChange()| MoneyObject.addEntry()] use named parameters
