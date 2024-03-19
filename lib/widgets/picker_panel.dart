@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/widgets/picker_letter.dart';
 
 showPopupSelection({
   required final BuildContext context,
@@ -38,47 +39,89 @@ class PickerPanel extends StatefulWidget {
 }
 
 class _PickerPanelState extends State<PickerPanel> {
-  String _filterText = '';
+  String _filterContains = '';
+  String _filterStartWidth = '';
   List<String> list = [];
+  List<String> uniqueLetters = [];
 
   @override
   void initState() {
     super.initState();
     applyFilter();
+
+    for (final option in widget.options) {
+      String singleLetter = ' ';
+
+      if (option.isNotEmpty) {
+        singleLetter = option[0].toUpperCase();
+        if (!uniqueLetters.contains(singleLetter)) {
+          uniqueLetters.add(singleLetter);
+        }
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
       children: [
-        TextFormField(
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.zero,
-            isDense: true,
-            prefixIcon: Icon(Icons.search),
-            labelText: 'Filter',
-            border: OutlineInputBorder(),
-          ),
-          onChanged: (final String value) {
-            setState(() {
-              _filterText = value;
-              applyFilter();
-            });
-          },
-        ),
         Expanded(
-          child: ListView.builder(
-            itemCount: list.length,
-            itemBuilder: (context, index) {
-              String label = list[index];
-              return TextButton(
-                onPressed: () {
-                  widget.onSelected(label);
-                  Navigator.of(context).pop();
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFormField(
+                decoration: const InputDecoration(
+                  contentPadding: EdgeInsets.zero,
+                  isDense: true,
+                  prefixIcon: Icon(Icons.search),
+                  labelText: 'Filter',
+                  border: OutlineInputBorder(),
+                ),
+                onChanged: (final String value) {
+                  setState(() {
+                    _filterContains = value;
+                    applyFilter();
+                  });
                 },
-                child: Text(label),
-              );
-            },
+              ),
+              Expanded(
+                child: ListView.builder(
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    String label = list[index];
+                    return TextButton(
+                      onPressed: () {
+                        widget.onSelected(label);
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        label,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                PickerLetters(
+                  options: uniqueLetters,
+                  selected: _filterStartWidth,
+                  onSelected: (String selected) {
+                    setState(() {
+                      _filterStartWidth = selected;
+                      applyFilterStartsWidth();
+                    });
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -86,6 +129,14 @@ class _PickerPanelState extends State<PickerPanel> {
   }
 
   void applyFilter() {
-    list = widget.options.where((option) => option.toLowerCase().contains(_filterText.toLowerCase())).toList();
+    _filterStartWidth = '';
+    list = widget.options.where((option) => option.toLowerCase().contains(_filterContains.toLowerCase())).toList();
+  }
+
+  void applyFilterStartsWidth() {
+    if (_filterStartWidth.isNotEmpty) {
+      _filterContains = '';
+      list = widget.options.where((option) => option.toUpperCase().startsWith(_filterStartWidth)).toList();
+    }
   }
 }
