@@ -165,5 +165,5 @@ double? attemptToGetDoubleFromText(final String text) {
 }
 
 bool isPlatformMobile() {
-  return Platform.isAndroid || Platform.isIOS;
+  return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 }

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.4.5] 2024-03-19
+
+## Fixed
+
+- Fix Web version
+
 ## [version 1.4.4] 2024-03-18
 
 ## Fixed
