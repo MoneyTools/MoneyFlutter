@@ -4,6 +4,7 @@
 
 ## Fixed
 
+- Fix for Table header filter
 - Fix Web version
 
 ## Added

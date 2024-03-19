@@ -1,17 +1,18 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/view_header.dart';
+import 'package:money/widgets/adaptive_columns.dart';
+import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
-import 'package:money/widgets/adaptive_columns.dart';
-import 'package:money/widgets/widgets.dart';
-import 'package:money/views/view_header.dart';
-import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/list_view/list_view.dart';
+import 'package:money/widgets/widgets.dart';
 
 import '../models/fields/field_filter.dart';
 
@@ -461,7 +462,12 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     double max = 0.0;
     final List<T> list = getList();
     for (int i = 0; i < list.length; i++) {
-      final double fieldValue = fieldDefinition.valueFromInstance(list[i]) as double;
+      dynamic fieldValue = fieldDefinition.valueFromInstance(list[i]);
+
+      if (fieldDefinition.type == FieldType.amount && fieldValue is String) {
+        fieldValue = attemptToGetDoubleFromText(fieldValue) ?? 0;
+      }
+
       if (min > fieldValue) {
         min = fieldValue;
       }

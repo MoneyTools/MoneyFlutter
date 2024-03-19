@@ -53,12 +53,15 @@ Future<bool> importQFX(
         ..id.value = Data().transactions.getNextTransactionId()
         ..accountId.value = account.id.value
         ..dateTime.value = item.date
-        ..categoryId.value = getCategoryFromOfxType(item)
+        ..number.value = item.number
         ..amount.value = item.amount
         ..fitid.value = item.fitid
         ..memo.value = item.memo
         ..originalPayee.value = item.name
         ..payee.value = payeeIdMatchingPayeeText;
+
+      // TODO if investment transaction
+      // ..categoryId.value = getInvestmentCategoryFromOfxType(item)
 
       Data().transactions.addEntry(
             moneyObject: t,
@@ -94,7 +97,7 @@ class OfxBankInfo {
   }
 }
 
-int getCategoryFromOfxType(final QFXTransaction ofxTransaction) {
+int getInvestmentCategoryFromOfxType(final QFXTransaction ofxTransaction) {
   int categoryId = -1;
   switch (ofxTransaction.type) {
     case 'CREDIT':
@@ -164,6 +167,7 @@ class QFXTransaction {
   late String name;
   late String fitid;
   late String memo;
+  late String number;
 
   QFXTransaction({
     required this.type,
@@ -172,6 +176,7 @@ class QFXTransaction {
     required this.name,
     required this.fitid,
     this.memo = '',
+    this.number = '',
   });
 }
 
@@ -195,6 +200,7 @@ List<QFXTransaction> parseQFXTransactions(final List<String> lines) {
         name: findAndGetValueOf(rawTransactionText, '<NAME>', ''),
         fitid: findAndGetValueOf(rawTransactionText, '<FITID>', ''),
         memo: findAndGetValueOf(rawTransactionText, '<MEMO>', ''),
+        number: findAndGetValueOf(rawTransactionText, '<CHECKNUM>', ''),
       );
       transactions.add(currentTransaction);
     }
