@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
+
+import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/snack_bar.dart';
 
-void importQFX(
+Future<bool> importQFX(
   final String filePath,
   final Data data,
-) {
+) async {
   final File file = File(filePath);
 
   final String text = file.readAsStringSync();
@@ -26,27 +27,47 @@ void importQFX(
     SnackBarService.showSnackBar(
         autoDismiss: false,
         message: 'QFX Import - No matching "${bankInfo.accountType}" accounts with ID "${bankInfo.accountId}"');
-    return;
+    return false;
   }
 
   final List<QFXTransaction> list = getTransactionFromOFX(ofx);
 
+  // attempt to find or add new transactions
   for (final QFXTransaction item in list) {
-    // find by fuzzy match
-    Payee? payee = Data().aliases.findByMatch(item.name);
+    // when there's no 'name' then fallback to 'memo'
+    final payeeText = item.name.isEmpty ? item.memo : item.name;
 
-    final Transaction t = Transaction()
-      ..id.value = Data().transactions.getNextTransactionId()
-      ..accountId.value = account.id.value
-      ..dateTime.value = item.date
-      ..payee.value = payee == null ? -1 : payee.id.value
-      ..categoryId.value = getCategoryFromOfxType(item)
-      ..amount.value = item.amount
-      ..fitid.value = item.fitid
-      ..memo.value = item.memo;
+    // skip if it already exist
+    final Transaction? transactionFound = Data().transactions.findExistingTransaction(
+          dateTime: item.date,
+          payeeAsText: payeeText,
+          memo: item.memo,
+          amount: item.amount,
+        );
 
-    Data().transactions.addEntry(moneyObject: t, isNewEntry: true);
+    if (transactionFound == null) {
+      final payeeIdMatchingPayeeText =
+          Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
+
+      final Transaction t = Transaction(status: TransactionStatus.electronic)
+        ..id.value = Data().transactions.getNextTransactionId()
+        ..accountId.value = account.id.value
+        ..dateTime.value = item.date
+        ..categoryId.value = getCategoryFromOfxType(item)
+        ..amount.value = item.amount
+        ..fitid.value = item.fitid
+        ..memo.value = item.memo
+        ..originalPayee.value = item.name
+        ..payee.value = payeeIdMatchingPayeeText;
+
+      Data().transactions.addEntry(
+            moneyObject: t,
+            isNewEntry: true,
+            fireNotification: false, // this is a batch operation, let the caller handle broadcasting the import
+          );
+    }
   }
+  return true;
 }
 
 class OfxBankInfo {
@@ -169,7 +190,7 @@ List<QFXTransaction> parseQFXTransactions(final List<String> lines) {
     if (rawTransactionText.isNotEmpty) {
       final QFXTransaction currentTransaction = QFXTransaction(
         type: findAndGetValueOf(rawTransactionText, '<TRNTYPE>', ''),
-        date: DateTime.parse(findAndGetValueOf(rawTransactionText, '<DTPOSTED>', '').substring(0, 8)),
+        date: parseQfxDataFormat(findAndGetValueOf(rawTransactionText, '<DTPOSTED>', '')) ?? DateTime.now(),
         amount: double.parse(findAndGetValueOf(rawTransactionText, '<TRNAMT>', '0.00')),
         name: findAndGetValueOf(rawTransactionText, '<NAME>', ''),
         fitid: findAndGetValueOf(rawTransactionText, '<FITID>', ''),

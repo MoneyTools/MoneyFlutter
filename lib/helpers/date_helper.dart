@@ -34,3 +34,35 @@ DateTime? attemptToGetDateFromText(final String text) {
   }
   return parsedDate;
 }
+
+/// Input will look like this "20240103120000.000[-5:EST]"
+///                            01234567890123456789012345
+///                            0........10--------20_____
+DateTime? parseQfxDataFormat(final String qfxDate) {
+  // Extract date components
+  try {
+    // Extract date and time components
+    final int year = int.parse(qfxDate.substring(0, 4));
+    final int month = int.parse(qfxDate.substring(4, 6));
+    final int day = int.parse(qfxDate.substring(6, 8));
+    final int hour = int.parse(qfxDate.substring(8, 10));
+    final int minute = int.parse(qfxDate.substring(10, 12));
+    final int second = int.parse(qfxDate.substring(12, 14));
+
+    // Create DateTime object
+    DateTime dateTime = DateTime(year, month, day, hour, minute, second);
+
+    // Import UTC based
+    // dateTime = dateTime.toUtc();
+
+    // // Extract time zone offset and abbreviation
+    // final tokens = qfxDate.substring(19).split(':');
+    // final int timeZoneOffset = int.parse(tokens[0]);
+    //
+    // // Adjust DateTime object with time zone offset
+    // dateTime = dateTime.add(Duration(hours: timeZoneOffset));
+    return dateTime;
+  } catch (e) {
+    return null;
+  }
+}

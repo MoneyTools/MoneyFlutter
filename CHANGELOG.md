@@ -10,6 +10,10 @@
 
 - Payee helper getPayeeIdFromTextMatchingOrAdd()
 
+## Updated
+
+- ImportQFX: skip duplicates
+
 ## Refactor
 
 - Transaction Payee
