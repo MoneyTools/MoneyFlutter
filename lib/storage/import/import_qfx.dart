@@ -45,7 +45,7 @@ void importQFX(
       ..fitid.value = item.fitid
       ..memo.value = item.memo;
 
-    Data().transactions.addEntry(t, isNewEntry: true);
+    Data().transactions.addEntry(moneyObject: t, isNewEntry: true);
   }
 }
 

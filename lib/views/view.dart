@@ -385,8 +385,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                       setState(() {
                         /// update panel
                         Data().notifyTransactionChange(
-                          MutationType.changed,
-                          list[index] as MoneyObject,
+                          mutation: MutationType.changed,
+                          moneyObject: list[index] as MoneyObject,
                         );
                       });
                     },

@@ -28,7 +28,7 @@ class Currencies extends MoneyObjects<Currency> {
       {'Id': 4, 'Name': 'Japan', 'Symbol': 'JPY', "CultureCode": "en-JP", "Ratio": 1 / 147.72, "LastRatio": 0},
     ];
     for (final MyJson demoCurrency in demoCurrencies) {
-      addEntry(Currency.fromJson(demoCurrency));
+      addEntry(moneyObject: Currency.fromJson(demoCurrency));
     }
   }
 

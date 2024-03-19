@@ -101,5 +101,5 @@ void addTransactionFromDateDescriptionAmount(
   t.memo.value = description;
   t.amount.value = amount;
 
-  Data().transactions.addEntry(t, isNewEntry: true);
+  Data().transactions.addEntry(moneyObject: t, isNewEntry: true);
 }

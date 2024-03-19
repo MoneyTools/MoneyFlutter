@@ -44,9 +44,10 @@ class Payees extends MoneyObjects<Payee> {
     for (final MyJson row in rows) {
       final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
-      addEntry(Payee()
-        ..id.value = id
-        ..name.value = name);
+      addEntry(
+          moneyObject: Payee()
+            ..id.value = id
+            ..name.value = name);
     }
   }
 
@@ -67,9 +68,10 @@ class Payees extends MoneyObjects<Payee> {
       'Barbara'
     ];
     for (int i = 0; i < names.length; i++) {
-      addEntry(Payee()
-        ..id.value = i
-        ..name.value = names[i]);
+      addEntry(
+          moneyObject: Payee()
+            ..id.value = i
+            ..name.value = names[i]);
     }
   }
 

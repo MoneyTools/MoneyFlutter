@@ -42,7 +42,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
         t.accountId.value = getLastUsedOrFirstAccount().uniqueId;
         t.dateTime.value = DateTime.now();
 
-        Data().transactions.addEntry(t, isNewEntry: true);
+        Data().transactions.addEntry(moneyObject: t, isNewEntry: true);
       });
     };
 

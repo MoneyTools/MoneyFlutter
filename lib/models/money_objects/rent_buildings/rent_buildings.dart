@@ -18,7 +18,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     clear();
 
     for (final MyJson row in rows) {
-      addEntry(RentBuilding.fromJson(row));
+      addEntry(moneyObject: RentBuilding.fromJson(row));
     }
   }
 
@@ -30,7 +30,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     instance.id.value = 0;
     instance.name.value = 'AirBnB';
     instance.address.value = 'One Washington DC';
-    addEntry(instance);
+    addEntry(moneyObject: instance);
   }
 
   @override

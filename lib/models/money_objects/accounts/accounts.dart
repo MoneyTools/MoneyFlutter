@@ -42,7 +42,7 @@ class Accounts extends MoneyObjects<Account> {
       {'Id': 9, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index, 'Currency': 'USD'},
     ];
     for (final MyJson demoAccount in demoAccounts) {
-      addEntry(Account.fromJson(demoAccount));
+      addEntry(moneyObject: Account.fromJson(demoAccount));
     }
   }
 

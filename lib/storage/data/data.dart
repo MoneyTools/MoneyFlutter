@@ -119,31 +119,35 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
-  void notifyTransactionChange(
-    MutationType change,
-    MoneyObject instance,
-  ) {
+  void notifyTransactionChange({
+    required MutationType mutation,
+    required MoneyObject moneyObject,
+    bool fireNotification = true,
+  }) {
     // let the app know that something has changed
     version++;
 
-    switch (change) {
+    switch (mutation) {
       case MutationType.inserted:
-        instance.mutation = MutationType.inserted;
+        moneyObject.mutation = MutationType.inserted;
         Settings().trackMutations.increaseNumber(increaseAdded: 1);
       case MutationType.changed:
         // this if is to ensure that we only count editing once and discard if this was edited on a new inserted items
-        if (instance.mutation == MutationType.none) {
-          instance.mutation = MutationType.changed;
+        if (moneyObject.mutation == MutationType.none) {
+          moneyObject.mutation = MutationType.changed;
           Settings().trackMutations.increaseNumber(increaseChanged: 1);
         }
       case MutationType.deleted:
-        instance.mutation = MutationType.deleted;
+        moneyObject.mutation = MutationType.deleted;
         Settings().trackMutations.increaseNumber(increaseDeleted: 1);
       default:
         break;
     }
-    recalculateBalances();
-    Settings().fireOnChanged();
+
+    if (fireNotification) {
+      recalculateBalances();
+      Settings().fireOnChanged();
+    }
   }
 
   void assessMutationsCountOfAllModels() {

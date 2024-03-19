@@ -90,7 +90,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         DialogActionButton(
             text: editsWereMade ? 'Apply' : 'Close',
             onPressed: () {
-              Data().notifyTransactionChange(MutationType.changed, transaction);
+              Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
               Navigator.of(context).pop(true);
             })
       ];
@@ -139,7 +139,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
 
           setState(() {
             // append to the list of transactions
-            Data().transactions.addEntry(_transaction, isNewEntry: true);
+            Data().transactions.addEntry(moneyObject: _transaction, isNewEntry: true);
             isInEditingMode = true;
           });
         },

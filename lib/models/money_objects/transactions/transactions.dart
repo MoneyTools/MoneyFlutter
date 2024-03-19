@@ -32,7 +32,7 @@ class Transactions extends MoneyObjects<Transaction> {
     for (final MyJson row in rows) {
       final Transaction t = Transaction.fromJSon(row, runningBalance);
       runningBalance += t.balance.value;
-      addEntry(t);
+      addEntry(moneyObject: t);
     }
     return iterableList().toList();
   }

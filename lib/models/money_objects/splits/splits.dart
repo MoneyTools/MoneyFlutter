@@ -15,7 +15,7 @@ class Splits extends MoneyObjects<Split> {
     clear();
     for (final MyJson row in rows) {
       addEntry(
-        Split(
+        moneyObject: Split(
           // 0
           transactionId: row.getInt('Transaction'),
           // 1

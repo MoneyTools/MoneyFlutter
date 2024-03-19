@@ -11,7 +11,7 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      addEntry(LoanPayment.fromJson(row));
+      addEntry(moneyObject: LoanPayment.fromJson(row));
     }
   }
 
@@ -24,7 +24,8 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
         .firstWhereOrNull((final Account element) => element.type.value == AccountType.loan);
     if (accountForLoan != null) {
       for (int i = 0; i < 12 * 20; i++) {
-        addEntry(LoanPayment(
+        addEntry(
+            moneyObject: LoanPayment(
           id: i,
           accountId: accountForLoan.id.value,
           date: DateTime.now(),

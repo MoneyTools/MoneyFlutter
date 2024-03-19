@@ -248,7 +248,7 @@ class Account extends MoneyObject {
       } else {
         instance.flags.value |= AccountFlags.closed.index; // Set the bit at the specified position
       }
-      Data().notifyTransactionChange(MutationType.changed, instance);
+      Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: instance);
     },
   );
 

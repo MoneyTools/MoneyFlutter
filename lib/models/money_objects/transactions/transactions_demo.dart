@@ -34,7 +34,7 @@ extension TransactionsDemoData on Transactions {
     final Transaction t = Transaction.fromJSon(demoJson, runningBalance);
     runningBalance += amount;
 
-    addEntry(t);
+    addEntry(moneyObject: t);
   }
 
   int getQuantityOfTransactionBasedOnAccountType(final AccountType type) {

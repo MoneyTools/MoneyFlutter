@@ -10,7 +10,7 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
 
   void add(final TransactionExtra transaction) {
     transaction.id.value = iterableList().length;
-    addEntry(transaction);
+    addEntry(moneyObject: transaction);
   }
 
   @override
@@ -30,7 +30,7 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
         taxDate: row.getInt('TaxDate'),
       )..id.value = row.getInt('Id');
 
-      addEntry(t);
+      addEntry(moneyObject: t);
     }
     return iterableList().toList();
   }

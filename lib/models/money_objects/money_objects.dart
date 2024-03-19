@@ -59,16 +59,17 @@ class MoneyObjects<T> {
     return _list;
   }
 
-  void addEntry(final MoneyObject entry, {bool isNewEntry = false}) {
-    _list.add(entry);
-    _map[(entry).uniqueId] = entry;
+  void addEntry({required final MoneyObject moneyObject, bool isNewEntry = false, bool fireNotification = true}) {
+    _list.add(moneyObject);
+    _map[(moneyObject).uniqueId] = moneyObject;
 
     // keep track of new items, they will need to be persisted later
     if (isNewEntry) {
-      if (entry.uniqueId == -1) {
-        entry.uniqueId = length + 1;
+      if (moneyObject.uniqueId == -1) {
+        moneyObject.uniqueId = length + 1;
       }
-      Data().notifyTransactionChange(MutationType.inserted, entry);
+      Data().notifyTransactionChange(
+          mutation: MutationType.inserted, moneyObject: moneyObject, fireNotification: fireNotification);
     }
   }
 
@@ -81,7 +82,7 @@ class MoneyObjects<T> {
     for (final MyJson row in rows) {
       final MoneyObject? newInstance = instanceFromSqlite(row);
       if (newInstance != null) {
-        addEntry(newInstance);
+        addEntry(moneyObject: newInstance);
       }
     }
   }
@@ -182,13 +183,13 @@ class MoneyObjects<T> {
   }
 
   bool mutationUpdateItem(final MoneyObject item) {
-    Data().notifyTransactionChange(MutationType.changed, item);
+    Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: item);
     return true;
   }
 
   /// Remove/tag a Transaction instance from the list in memory
   bool deleteItem(final MoneyObject itemToDelete) {
-    Data().notifyTransactionChange(MutationType.deleted, itemToDelete);
+    Data().notifyTransactionChange(mutation: MutationType.deleted, moneyObject: itemToDelete);
     return true;
   }
 }
