@@ -18,10 +18,15 @@ Future<bool> importQFX(
   final String ofx = getStringDelimitedStartEndTokens(text, '<OFX>', '</OFX>');
 
   final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofx);
-  final Account? account = data.accounts.findByIdAndType(
-    bankInfo.accountId,
-    getAccountTypeFromText(bankInfo.accountType),
-  );
+
+  final accountType = getAccountTypeFromText(bankInfo.accountType);
+
+  Account? account = data.accounts.findByIdAndType(bankInfo.accountId, accountType);
+
+  if (account == null && accountType == AccountType.savings) {
+    // Alternatively to use the checking account for a match
+    account = data.accounts.findByIdAndType(bankInfo.accountId, AccountType.checking);
+  }
 
   if (account == null) {
     SnackBarService.showSnackBar(
@@ -81,18 +86,18 @@ class OfxBankInfo {
   static OfxBankInfo fromOfx(final String ofx) {
     // start with this
     // <BANKACCTFROM><BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS</BANKACCTFROM>
-    final String bankInfoText = getStringContentBetweenTwoTokens(
-      ofx,
-      '<BANKACCTFROM>',
-      '</BANKACCTFROM>',
-    );
+    // final String bankInfoText = getStringContentBetweenTwoTokens(
+    //   ofx,
+    //   '<BANKACCTFROM>',
+    //   '</BANKACCTFROM>',
+    // );
 
     // Now we should have just this
     // <BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS
     final OfxBankInfo bankInfo = OfxBankInfo();
-    bankInfo.id = findAndGetValueOf(bankInfoText, '<BANKID>', bankInfo.id);
-    bankInfo.accountId = findAndGetValueOf(bankInfoText, '<ACCTID>', bankInfo.accountId);
-    bankInfo.accountType = findAndGetValueOf(bankInfoText, '<ACCTTYPE>', bankInfo.accountType);
+    bankInfo.id = findAndGetValueOf(ofx, '<BANKID>', bankInfo.id);
+    bankInfo.accountId = findAndGetValueOf(ofx, '<ACCTID>', bankInfo.accountId);
+    bankInfo.accountType = findAndGetValueOf(ofx, '<ACCTTYPE>', bankInfo.accountType);
     return bankInfo;
   }
 }

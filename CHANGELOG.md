@@ -2,6 +2,10 @@
 
 ## [version 1.4.6] 2024-03-20
 
+### Updated
+
+- Improve ImportQFX
+
 ### Refactor
 
 - Rename class MyMoney to MainApp
