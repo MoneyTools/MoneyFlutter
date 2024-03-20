@@ -29,17 +29,17 @@ import 'package:money/widgets/keyboard_widget.dart';
 import 'package:money/widgets/snack_bar.dart';
 
 void main() {
-  runApp(const MyMoney());
+  runApp(const MainApp());
 }
 
-class MyMoney extends StatefulWidget {
-  const MyMoney({super.key});
+class MainApp extends StatefulWidget {
+  const MainApp({super.key});
 
   @override
-  State<MyMoney> createState() => _MyMoneyState();
+  State<MainApp> createState() => _MainAppState();
 }
 
-class _MyMoneyState extends State<MyMoney> {
+class _MainAppState extends State<MainApp> {
   Settings settings = Settings();
   bool _isLoading = true;
   final Data data = Data();

@@ -4,6 +4,7 @@
 
 ### Refactor
 
+- Rename class MyMoney to MainApp
 - Theme.of(context).colorScheme to getColorTheme(context)
 
 ## [version 1.4.5] 2024-03-19
