@@ -34,6 +34,8 @@ AccountType getAccountTypeFromText(final String text) {
     case 'credit':
     case 'creditcard': // as seen in OFX <ACCTTYPE>
       return AccountType.credit;
+    case 'creditline':
+      return AccountType.creditLine;
     case 'investment':
       return AccountType.investment;
     case 'retirement':
@@ -44,8 +46,6 @@ AccountType getAccountTypeFromText(final String text) {
       return AccountType.categoryFund;
     case 'loan':
       return AccountType.loan;
-    case 'creditLine':
-      return AccountType.creditLine;
     default:
       return AccountType.notUsed_7;
   }
@@ -81,4 +81,19 @@ String getTypeAsText(final AccountType type) {
   }
 
   return 'other $type';
+}
+
+List<String> getAccountTypeAsText() {
+  return [
+    getTypeAsText(AccountType.checking),
+    getTypeAsText(AccountType.savings),
+    getTypeAsText(AccountType.retirement),
+    getTypeAsText(AccountType.cash),
+    getTypeAsText(AccountType.credit),
+    getTypeAsText(AccountType.creditLine),
+    getTypeAsText(AccountType.investment),
+    getTypeAsText(AccountType.moneyMarket),
+    getTypeAsText(AccountType.asset),
+    getTypeAsText(AccountType.loan),
+  ];
 }

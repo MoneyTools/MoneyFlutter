@@ -154,6 +154,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
                 // Actions
                 onActionAddTransaction: onAddTransaction,
+                onActionEdit: () {
+                  // Switch to edit mode
+                },
                 onActionDelete: () {
                   onDeleteRequestedByUser(context, selectedItems.value.first);
                 },

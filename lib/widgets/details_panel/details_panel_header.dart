@@ -18,6 +18,7 @@ class DetailsPanelHeader extends StatelessWidget {
 
   // Actions
   final Function? onActionAddTransaction;
+  final Function? onActionEdit;
   final Function? onActionDelete;
 
   /// Constructor
@@ -37,6 +38,7 @@ class DetailsPanelHeader extends StatelessWidget {
 
     // Actions
     this.onActionAddTransaction,
+    this.onActionEdit,
     this.onActionDelete,
   });
 

@@ -25,6 +25,7 @@ class DetailsPanel extends StatelessWidget {
 
   // Actions
   final Function? onActionAddTransaction;
+  final Function? onActionEdit;
   final Function? onActionDelete;
 
   /// Constructor
@@ -46,6 +47,7 @@ class DetailsPanel extends StatelessWidget {
 
     // Actions
     required this.onActionAddTransaction,
+    required this.onActionEdit,
     required this.onActionDelete,
   });
 
@@ -83,6 +85,8 @@ class DetailsPanel extends StatelessWidget {
                 // Actions
                 onActionAddTransaction:
                     (subPanelSelected == SubViews.transactions) && isExpanded ? onActionAddTransaction : null,
+                onActionEdit:
+                    subPanelSelected == SubViews.details && listOfSelectedItemIndex.isNotEmpty ? onActionEdit : null,
                 onActionDelete:
                     subPanelSelected == SubViews.details && listOfSelectedItemIndex.isNotEmpty ? onActionDelete : null,
               ),

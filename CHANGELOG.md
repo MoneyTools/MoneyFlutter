@@ -2,6 +2,10 @@
 
 ## [version 1.4.6] 2024-03-20
 
+### Added
+
+- PickerForAccountType
+
 ### Updated
 
 - Improve ImportQFX

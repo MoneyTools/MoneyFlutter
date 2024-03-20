@@ -3,10 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account_types.dart';
+import 'package:money/models/money_objects/accounts/picker_account_type.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 // Exports
@@ -73,16 +74,24 @@ class Account extends MoneyObject {
   // Type of account
   // 5|Type|INT|1||0
   Field<Account, AccountType> type = Field<Account, AccountType>(
-    importance: 2,
-    type: FieldType.text,
-    align: TextAlign.center,
-    columnWidth: ColumnWidth.small,
-    name: 'Type',
-    serializeName: 'Type',
-    defaultValue: AccountType.checking,
-    valueFromInstance: (final Account instance) => getTypeAsText(instance.type.value),
-    valueForSerialization: (final Account instance) => instance.type.value.index,
-  );
+      importance: 2,
+      type: FieldType.text,
+      align: TextAlign.center,
+      columnWidth: ColumnWidth.small,
+      name: 'Type',
+      serializeName: 'Type',
+      defaultValue: AccountType.checking,
+      valueFromInstance: (final Account instance) => getTypeAsText(instance.type.value),
+      valueForSerialization: (final Account instance) => instance.type.value.index,
+      getEditWidget: (final Account instance, Function onEdited) {
+        return pickerAccountType(
+          itemSelected: instance.type.value,
+          onSelected: (AccountType newSelection) {
+            instance.type.value = newSelection;
+            onEdited(); // notify container
+          },
+        );
+      });
 
   // 6 Open Balance
   // 6|OpeningBalance|money|0||0
