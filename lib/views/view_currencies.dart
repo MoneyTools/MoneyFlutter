@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/dialog.dart';
@@ -19,8 +20,8 @@ Widget buildCurrenciesPanel(final BuildContext context) {
     widgets.add(
       Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
-          border: Border.all(color: Theme.of(context).colorScheme.outline),
+          color: getColorTheme(context).surfaceVariant,
+          border: Border.all(color: getColorTheme(context).outline),
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
         margin: const EdgeInsets.all(4),

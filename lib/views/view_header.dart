@@ -26,8 +26,8 @@ class ViewHeader extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceVariant,
-        border: Border.all(color: Theme.of(context).colorScheme.outline),
+        color: getColorTheme(context).surfaceVariant,
+        border: Border.all(color: getColorTheme(context).outline),
         // borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
       child: Settings().isSmallDevice ? _buildSmall(context) : _buildLarge(context),
@@ -51,7 +51,7 @@ class ViewHeader extends StatelessWidget {
                       child: Text(description,
                           style: getTextTheme(context)
                               .bodySmall!
-                              .copyWith(color: Theme.of(context).colorScheme.onSurfaceVariant))),
+                              .copyWith(color: getColorTheme(context).onSurfaceVariant))),
                 ],
               ),
               if (child != null) child!,

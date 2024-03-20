@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 
 import 'package:money/models/settings.dart';
 
@@ -39,8 +40,8 @@ class _MenuHorizontalState extends State<MenuHorizontal> {
       },
       destinations: getAppBarDestinations(widget.settings),
       height: 52,
-      indicatorColor: Theme.of(context).colorScheme.onSecondary,
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      indicatorColor: getColorTheme(context).onSecondary,
+      backgroundColor: getColorTheme(context).secondaryContainer,
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
     );
   }
@@ -85,8 +86,8 @@ class _MenuVerticalState extends State<MenuVertical> {
           selectedIndex: _selectedIndex,
           useIndicator: widget.useIndicator,
           labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
-          indicatorColor: Theme.of(context).colorScheme.onSecondary,
-          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          indicatorColor: getColorTheme(context).onSecondary,
+          backgroundColor: getColorTheme(context).secondaryContainer,
           onDestinationSelected: (final int index) {
             setState(() {
               _selectedIndex = index;

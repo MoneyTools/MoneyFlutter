@@ -75,13 +75,13 @@ class _MyMoneyState extends State<MyMoney> {
           final MediaQueryData data = MediaQuery.of(context);
           return Container(
             key: Key('key_data_version_${Data().version}'),
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: getColorTheme(context).primaryContainer,
             child: MediaQuery(
               data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
               child: myScaffold(
                 showAppBar: !shouldShowOpenInstructions(),
                 body: Container(
-                  color: Theme.of(context).colorScheme.secondaryContainer,
+                  color: getColorTheme(context).secondaryContainer,
                   child: isPlatformMobile()
                       // Mobile has no keyboard support
                       ? buildContent(context, constraints)
@@ -152,7 +152,7 @@ class _MyMoneyState extends State<MyMoney> {
           ),
           Expanded(
             child: Container(
-              color: Theme.of(context).colorScheme.secondaryContainer,
+              color: getColorTheme(context).secondaryContainer,
               child: getWidgetForMainContent(context, settings.screenIndex),
             ),
           )

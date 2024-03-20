@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -166,7 +167,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   Widget buildViewContent(final Widget child) {
     return Container(
-      color: Theme.of(context).colorScheme.background,
+      color: getColorTheme(context).background,
       child: child,
     );
   }

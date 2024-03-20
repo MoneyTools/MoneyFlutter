@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/settings.dart';
 
 ///
@@ -27,8 +28,8 @@ class ChangeSummaryBadge extends StatelessWidget {
       child: IntrinsicWidth(
         child: Container(
           padding: const EdgeInsets.all(2),
-          decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.inverseSurface, borderRadius: BorderRadius.circular(50)),
+          decoration:
+              BoxDecoration(color: getColorTheme(context).inverseSurface, borderRadius: BorderRadius.circular(50)),
           child: getChangeLabel(context),
         ),
       ),

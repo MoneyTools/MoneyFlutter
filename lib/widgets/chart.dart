@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/center_message.dart';
@@ -88,7 +89,7 @@ class Chart extends StatelessWidget {
         barTouchData: BarTouchData(
           enabled: true,
           touchTooltipData: BarTouchTooltipData(
-            tooltipBgColor: Theme.of(context).colorScheme.secondaryContainer,
+            tooltipBgColor: getColorTheme(context).secondaryContainer,
             tooltipRoundedRadius: 8,
             getTooltipItem: (
               final BarChartGroupData group,
@@ -98,7 +99,7 @@ class Chart extends StatelessWidget {
             ) {
               return BarTooltipItem(
                 '${list[group.x].xText}\n${Currency.getAmountAsStringUsingCurrency(rod.toY)}',
-                TextStyle(color: Theme.of(context).colorScheme.primary),
+                TextStyle(color: getColorTheme(context).primary),
                 textAlign: TextAlign.start,
               );
             },

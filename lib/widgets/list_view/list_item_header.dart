@@ -92,7 +92,7 @@ Widget widgetHeaderButton(
               softWrap: false,
               textAlign: textAlign,
               overflow: TextOverflow.fade,
-              style: getTextTheme(context).labelSmall!.copyWith(color: Theme.of(context).colorScheme.secondary),
+              style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
             ),
             if (icon != null) icon,
             if (textAlign == TextAlign.left || textAlign == TextAlign.center) const Spacer(),

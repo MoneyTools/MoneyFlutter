@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.4.6] 2024-03-20
+
+### Refactor
+
+- Theme.of(context).colorScheme to getColorTheme(context)
+
 ## [version 1.4.5] 2024-03-19
 
 ## Fixed

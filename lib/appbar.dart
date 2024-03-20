@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app_caption.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
@@ -38,7 +39,7 @@ class _MyAppBarState extends State<MyAppBar> {
   @override
   Widget build(final BuildContext context) {
     return AppBar(
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      backgroundColor: getColorTheme(context).secondaryContainer,
       title: widgetMainTitle(
         widget.onFileOpen,
         widget.onFileClose,
@@ -75,7 +76,7 @@ class _MyAppBarState extends State<MyAppBar> {
                 child: Container(
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   decoration: BoxDecoration(
-                    color: isSelected ? Theme.of(context).colorScheme.secondaryContainer : null,
+                    color: isSelected ? getColorTheme(context).secondaryContainer : null,
                     borderRadius: const BorderRadius.all(Radius.circular(4)),
                   ),
                   child: ThreePartLabel(

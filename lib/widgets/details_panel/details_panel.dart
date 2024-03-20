@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/widgets/details_panel/details_panel_header.dart';
 
 enum SubViews {
@@ -53,11 +54,11 @@ class DetailsPanel extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.surfaceVariant,
+          color: getColorTheme(context).surfaceVariant,
           border: Border(
-            left: BorderSide(color: Theme.of(context).colorScheme.outline),
-            top: BorderSide(color: Theme.of(context).colorScheme.outline),
-            right: BorderSide(color: Theme.of(context).colorScheme.outline),
+            left: BorderSide(color: getColorTheme(context).outline),
+            top: BorderSide(color: getColorTheme(context).outline),
+            right: BorderSide(color: getColorTheme(context).outline),
           ),
           borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
       child: ValueListenableBuilder<List<int>>(
