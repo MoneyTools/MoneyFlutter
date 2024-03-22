@@ -114,3 +114,14 @@ String shortenLongText(String fullName, [int maxLength = 5]) {
   }
   return fullName.substring(0, maxLength);
 }
+
+List<String> getLinesFromTextBlob(final String inputString) {
+  return inputString.trim().split(RegExp(r'\r?\n|\r'));
+}
+
+List<String> getColumnInCsvLine(final String csvLine) {
+  List<String> items = csvLine.split(RegExp(r',|;(?=(?:[^"]*"[^"]*")*[^"]*$)'));
+  // remove quotes around elements
+  items = items.map((item) => item.replaceAll('"', '')).toList();
+  return items;
+}

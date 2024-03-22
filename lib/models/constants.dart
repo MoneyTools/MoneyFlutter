@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class Constants {
   static const String demoData = '<Demo Data>';
+  static const String newDataFile = '<New file>';
   static const String defaultCurrency = 'USD';
 
   // NavigationRail shows if the screen width is greater or equal to
@@ -19,11 +20,12 @@ class Constants {
   static const int commandIncludeRentals = 1300;
   static const int commandAddTransactions = 1400;
 
-  static const int commandFileOpen = 2000;
-  static const int commandFileLocation = 2001;
-  static const int commandFileSaveCsv = 2002;
-  static const int commandFileSaveSql = 2003;
-  static const int commandFileClose = 2004;
+  static const int commandFileNew = 2000;
+  static const int commandFileOpen = 2001;
+  static const int commandFileLocation = 2002;
+  static const int commandFileSaveCsv = 2003;
+  static const int commandFileSaveSql = 2004;
+  static const int commandFileClose = 2005;
 
   static const int viewAccounts = 1;
   static const int viewLoans = 2;

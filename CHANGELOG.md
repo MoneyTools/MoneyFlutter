@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.4.7] 2024-03-22
+
+### Added
+- Load from CSV [mymoney.mmcsv] file
+- Close and create a new file
+
 ## [version 1.4.6] 2024-03-20
 
 ### Added

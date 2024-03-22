@@ -58,4 +58,13 @@ class MyFileSystems {
   static String append(final String folderPath, final String toAppend) {
     return '$folderPath${p.separator}$toAppend';
   }
+
+  static String getFolderFromFilePath(final filePath) {
+    return p.dirname(filePath);
+  }
+
+  static Future<void> writeFileContentIntoFolder(final String folder, final String fileName, final String content) {
+    final String fullPathToFile = MyFileSystems.append(folder, fileName);
+    return MyFileSystems.writeToFile(fullPathToFile, content);
+  }
 }

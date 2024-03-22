@@ -11,6 +11,7 @@ import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
+  final void Function() onFileNew;
   final void Function() onFileOpen;
   final void Function() onFileClose;
   final void Function() onShowFileLocation;
@@ -20,6 +21,7 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
 
   const MyAppBar({
     super.key,
+    required this.onFileNew,
     required this.onFileOpen,
     required this.onFileClose,
     required this.onShowFileLocation,
@@ -41,6 +43,7 @@ class _MyAppBarState extends State<MyAppBar> {
     return AppBar(
       backgroundColor: getColorTheme(context).secondaryContainer,
       title: widgetMainTitle(
+        widget.onFileNew,
         widget.onFileOpen,
         widget.onFileClose,
         widget.onShowFileLocation,
@@ -177,6 +180,7 @@ class _MyAppBarState extends State<MyAppBar> {
   }
 
   Widget widgetMainTitle(
+    final void Function() onFileNew,
     final void Function() onFileOpen,
     final void Function() onFileClose,
     final void Function() onShowFileLocation,
@@ -189,6 +193,13 @@ class _MyAppBarState extends State<MyAppBar> {
       ),
       itemBuilder: (final BuildContext context) {
         final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
+        // New
+        list.add(
+          const PopupMenuItem<int>(
+            value: Constants.commandFileNew,
+            child: Text('New'),
+          ),
+        );
         // Open
         list.add(
           const PopupMenuItem<int>(
@@ -250,8 +261,8 @@ class _MyAppBarState extends State<MyAppBar> {
       },
       onSelected: (final int index) {
         switch (index) {
-          case Constants.commandFileClose:
-            onFileClose();
+          case Constants.commandFileNew:
+            onFileNew();
 
           case Constants.commandFileOpen:
             onFileOpen();
@@ -264,6 +275,8 @@ class _MyAppBarState extends State<MyAppBar> {
 
           case Constants.commandFileSaveSql:
             onSaveSql();
+          case Constants.commandFileClose:
+            onFileClose();
           default:
             debugPrint(' unhandled $index');
         }

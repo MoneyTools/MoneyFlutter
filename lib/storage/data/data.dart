@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:money/helpers/file_systems.dart';
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/account_aliases/account_aliases.dart';
@@ -23,6 +24,7 @@ import 'package:money/models/money_objects/transaction_extras/transaction_extras
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/database/database.dart';
+import 'package:money/widgets/snack_bar.dart';
 import 'package:path/path.dart' as p;
 
 // Exports
@@ -35,7 +37,7 @@ part 'data_extension_demo.dart';
 part 'data_extension_sql.dart';
 
 class Data {
-  int version = 1;
+  int version = 0;
 
   /// singleton
   static final Data _instance = Data._internal();
@@ -119,6 +121,17 @@ class Data {
   Transactions transactions = Transactions();
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
+
+  void clear() {
+    version = -1;
+    Settings().trackMutations.reset();
+
+    for (final element in _listOfTables) {
+      element.clear();
+    }
+    fullPathToDataSource = Constants.newDataFile;
+    Settings().fireOnChanged();
+  }
 
   void notifyTransactionChange({
     required MutationType mutation,
@@ -209,7 +222,10 @@ class Data {
     }
 
     try {
-      if (filePathToLoad == Constants.demoData) {
+      if (filePathToLoad == Constants.newDataFile) {
+        Data().clear();
+        rememberWhereTheDataCameFrom(Constants.newDataFile);
+      } else if (filePathToLoad == Constants.demoData) {
         // Generate a data set to demo the application
         loadFromDemoData();
       } else if (filePathToLoad.toLowerCase().endsWith('.mymoney.mmdb')) {
@@ -222,6 +238,7 @@ class Data {
     } catch (e) {
       debugLog(e.toString());
       rememberWhereTheDataCameFrom(null);
+      SnackBarService.showSnackBar(autoDismiss: false, message: e.toString());
       return false;
     }
 

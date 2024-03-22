@@ -46,7 +46,7 @@ class ValuesParser {
     _values.clear();
 
     inputString = inputString.trim();
-    List<String> lines = inputString.trim().split(RegExp(r'\r?\n|\r'));
+    List<String> lines = getLinesFromTextBlob(inputString);
     if (lines.isNotEmpty) {
       for (var line in lines) {
         if (line.isNotEmpty) {

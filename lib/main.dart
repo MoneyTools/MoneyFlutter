@@ -180,6 +180,13 @@ class _MainAppState extends State<MainApp> {
     });
   }
 
+  void onFileNew() async {
+    Data().clear();
+    settings.lastOpenedDataSource = Constants.newDataFile;
+    settings.save();
+    loadData();
+  }
+
   void onFileOpen() async {
     FilePickerResult? pickerResult;
 
@@ -193,6 +200,7 @@ class _MainAppState extends State<MainApp> {
           type: FileType.custom,
           allowedExtensions: <String>[
             'mmdb',
+            'mmcsv',
             'sdf',
             'qfx',
             'ofx',
@@ -207,7 +215,9 @@ class _MainAppState extends State<MainApp> {
 
     if (pickerResult != null) {
       try {
-        if (pickerResult.files.single.extension == 'mmdb') {
+        final String? fileExtension = pickerResult.files.single.extension;
+
+        if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
           if (kIsWeb) {
             settings.lastOpenedDataSource = pickerResult.files.single.path;
 
@@ -308,7 +318,9 @@ class _MainAppState extends State<MainApp> {
 
       case 0:
       default:
-        return const ViewCashFlow();
+        return ViewCashFlow(
+          key: Key('cashflow_${Data().fullPathToDataSource}'),
+        );
     }
   }
 
@@ -328,6 +340,7 @@ class _MainAppState extends State<MainApp> {
     return Scaffold(
       appBar: showAppBar
           ? MyAppBar(
+              onFileNew: onFileNew,
               onFileOpen: onFileOpen,
               onFileClose: onFileClose,
               onShowFileLocation: onShowFileLocation,
@@ -352,6 +365,7 @@ class _MainAppState extends State<MainApp> {
       Wrap(
         spacing: 10,
         children: <Widget>[
+          OutlinedButton(onPressed: onFileNew, child: const Text('New File ...')),
           OutlinedButton(onPressed: onFileOpen, child: const Text('Open File ...')),
           OutlinedButton(onPressed: onOpenDemoData, child: const Text('Use Demo Data'))
         ],
