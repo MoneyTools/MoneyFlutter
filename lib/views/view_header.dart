@@ -30,7 +30,7 @@ class ViewHeader extends StatelessWidget {
         border: Border.all(color: getColorTheme(context).outline),
         // borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
-      child: Settings().isSmallDevice ? _buildSmall(context) : _buildLarge(context),
+      child: Settings().isSmallScreen ? _buildSmall(context) : _buildLarge(context),
     );
   }
 

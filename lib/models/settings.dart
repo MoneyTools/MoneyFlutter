@@ -1,17 +1,17 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
+import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/constants.dart';
-import 'dart:convert';
-
 class Settings {
   bool prefLoaded = false;
   int colorSelected = 0;
-  bool isSmallDevice = true;
+  bool isSmallScreen = true;
   int screenIndex = 0;
   String? lastOpenedDataSource;
 
@@ -77,7 +77,7 @@ class Settings {
     onChanged?.call();
   }
 
-  void load({final Function? onLoaded}) async {
+  Future<void> load() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     colorSelected = intValueOrDefault(preferences.getInt(prefColor));
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
@@ -91,9 +91,6 @@ class Settings {
     views = loadMapFromPrefs(preferences, prefViews);
 
     prefLoaded = true;
-    if (onLoaded != null) {
-      onLoaded();
-    }
   }
 
   void save() async {

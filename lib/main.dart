@@ -46,38 +46,36 @@ class _MainAppState extends State<MainApp> {
 
   @override
   void initState() {
-    super.initState();
-    settings.load(onLoaded: () {
+    settings.load().then((void _) {
       loadData();
     });
 
     settings.onChanged = () {
       // force refresh the app UI
       setState(() {
-        settings = Settings();
+        // settings = Settings();
       });
     };
+    super.initState();
   }
 
   @override
   Widget build(final BuildContext context) {
-    Settings().isSmallDevice = MediaQuery.of(context).size.width < 800;
+    Settings().isSmallScreen = MediaQuery.of(context).size.width < 800;
 
     return MaterialApp(
-      scaffoldMessengerKey: SnackBarService.scaffoldKey,
-
       /// Assign Key Here
+      scaffoldMessengerKey: SnackBarService.scaffoldKey,
       debugShowCheckedModeBanner: false,
       title: 'MyMoney by VTeam',
       theme: settings.getThemeData(),
       home: LayoutBuilder(
         builder: (final BuildContext context, final BoxConstraints constraints) {
-          final MediaQueryData data = MediaQuery.of(context);
           return Container(
             key: Key('key_data_version_${Data().version}'),
-            color: getColorTheme(context).primaryContainer,
+            color: getColorTheme(context).background,
             child: MediaQuery(
-              data: data.copyWith(textScaler: TextScaler.linear(settings.textScale)),
+              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
               child: myScaffold(
                 showAppBar: !shouldShowOpenInstructions(),
                 body: Container(
@@ -112,7 +110,7 @@ class _MainAppState extends State<MainApp> {
     }
 
     // small screens
-    if (Settings().isSmallDevice) {
+    if (Settings().isSmallScreen) {
       return buildContentForSmallSurface(context);
     }
 
