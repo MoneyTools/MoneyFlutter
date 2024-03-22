@@ -164,7 +164,7 @@ class Fields<T> {
     }
 
     if (!isReadOnly && fieldDefinition.getEditWidget != null) {
-      // Editing more and the MoneyObject has a custom edit widget
+      // Editing mode and the MoneyObject has a custom edit widget
       return Padding(
         padding: const EdgeInsets.all(8.0),
         child: InputDecorator(
@@ -247,9 +247,15 @@ class Fields<T> {
                       decoration: decoration,
                       // allow mutation of the value
                       readOnly: isReadOnly || fieldDefinition.setValue == null,
+                      onFieldSubmitted: (String value) {
+                        onEdited?.call();
+                      },
+                      onEditingComplete: () {
+                        onEdited?.call();
+                      },
                       onChanged: (String newValue) {
                         fieldDefinition.setValue!(objectInstance, newValue);
-                        onEdited?.call();
+                        // onEdited?.call();
                       },
                     ),
                   ),

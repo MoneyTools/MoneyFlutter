@@ -2,7 +2,12 @@
 
 ## [version 1.4.7] 2024-03-22
 
+### Updated
+
+- Editing of Account [accountId, ofxAccountID, description]
+
 ### Added
+
 - Load from CSV [mymoney.mmcsv] file
 - Close and create a new file
 

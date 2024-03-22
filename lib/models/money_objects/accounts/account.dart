@@ -29,25 +29,25 @@ class Account extends MoneyObject {
 
   // Account ID
   // 1|AccountId|nchar(20)|0||0
-  Field<Account, String> accountId = Field<Account, String>(
+  FieldString<Account> accountId = FieldString<Account>(
     importance: 90,
     name: 'AccountId',
     serializeName: 'AccountId',
-    defaultValue: '',
     useAsColumn: false,
     valueForSerialization: (final Account instance) => instance.accountId.value,
+    setValue: (final Account instance, dynamic value) => instance.accountId.value = value as String,
   );
 
   // OFX Account Id
   // 2|OfxAccountId|nvarchar(50)|0||0
-  Field<Account, String> ofxAccountId = Field<Account, String>(
+  FieldString<Account> ofxAccountId = FieldString<Account>(
     importance: 1,
     name: 'OfxAccountId',
     serializeName: 'OfxAccountId',
-    defaultValue: '',
     useAsColumn: false,
     valueFromInstance: (final Account instance) => instance.ofxAccountId.value,
     valueForSerialization: (final Account instance) => instance.ofxAccountId.value,
+    setValue: (final Account instance, dynamic value) => instance.ofxAccountId.value = value as String,
   );
 
   // Name
@@ -58,15 +58,16 @@ class Account extends MoneyObject {
     serializeName: 'Name',
     valueFromInstance: (final Account instance) => instance.name.value,
     valueForSerialization: (final Account instance) => instance.name.value,
+    setValue: (final Account instance, dynamic value) => instance.name.value = value as String,
   );
 
   // Description
   // 4|Description|nvarchar(255)|0||0
-  Field<Account, String> description = Field<Account, String>(
+  FieldString<Account> description = FieldString<Account>(
     importance: 3,
     name: 'Description',
     serializeName: 'Description',
-    defaultValue: '',
+    setValue: (final Account instance, dynamic value) => instance.description.value = value as String,
     valueFromInstance: (final Account instance) => instance.description.value,
     valueForSerialization: (final Account instance) => instance.description.value,
   );

@@ -16,7 +16,6 @@ class Field<C, T> {
   TextAlign align;
   bool useAsColumn;
   bool useAsDetailPanels;
-  bool readOnly = true;
   bool isMultiLine = false;
   int importance;
 
