@@ -66,7 +66,6 @@ void showImportTransactions(
                                   triple.amount.asAmount(),
                                 );
                               }
-                              Settings().fireOnChanged();
                               Navigator.of(context).pop(false);
                             }
                           }

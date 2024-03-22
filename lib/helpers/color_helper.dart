@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/settings.dart';
 
 /// return the inverted color
 Color invertColor(final Color color) {
@@ -79,4 +80,30 @@ Color addTintOfBlue(Color originalColor, int tintStrength) {
   blue = blue.clamp(0, 255);
 
   return Color.fromARGB(originalColor.alpha, red, green, blue);
+}
+
+Widget colorBoxes(BuildContext context) {
+  return Row(
+    children: [
+      TextButton(
+          onPressed: () {
+            Settings().useDarkMode = !Settings().useDarkMode;
+          },
+          child: Text(Settings().useDarkMode ? 'Dark' : 'Light')),
+      colorBox(getColorTheme(context).background, getColorTheme(context).onBackground),
+      colorBox(getColorTheme(context).primaryContainer, getColorTheme(context).onPrimaryContainer),
+      colorBox(getColorTheme(context).secondaryContainer, getColorTheme(context).onSecondaryContainer),
+      colorBox(getColorTheme(context).tertiaryContainer, getColorTheme(context).onTertiaryContainer),
+    ],
+  );
+}
+
+Widget colorBox(Color color, Color colorText) {
+  return Container(
+    color: color,
+    width: 80,
+    height: 80,
+    margin: const EdgeInsets.all(10),
+    child: Text(color.toString(), style: TextStyle(color: colorText)),
+  );
 }

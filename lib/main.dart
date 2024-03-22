@@ -25,83 +25,81 @@ import 'package:money/views/view_loans/view_loans.dart';
 import 'package:money/views/view_payees/view_payees.dart';
 import 'package:money/views/view_rentals/view_rentals.dart';
 import 'package:money/views/view_transactions/view_transactions.dart';
+import 'package:money/views/view_welcome.dart';
 import 'package:money/widgets/keyboard_widget.dart';
 import 'package:money/widgets/snack_bar.dart';
+import 'package:money/widgets/working.dart';
+import 'package:provider/provider.dart';
+
+final Settings settings = Settings();
+final Data data = Data();
 
 void main() {
   runApp(const MainApp());
 }
 
-class MainApp extends StatefulWidget {
+class MainApp extends StatelessWidget {
   const MainApp({super.key});
 
   @override
-  State<MainApp> createState() => _MainAppState();
+  Widget build(BuildContext context) {
+    settings.loadSettings();
+    return ChangeNotifierProvider.value(
+      value: settings,
+      child: const MainView(),
+    );
+  }
 }
 
-class _MainAppState extends State<MainApp> {
-  Settings settings = Settings();
-  bool _isLoading = true;
-  final Data data = Data();
-
-  @override
-  void initState() {
-    settings.load().then((void _) {
-      loadData();
-    });
-
-    settings.onChanged = () {
-      // force refresh the app UI
-      setState(() {
-        // settings = Settings();
-      });
-    };
-    super.initState();
-  }
+class MainView extends StatelessWidget {
+  const MainView({super.key});
 
   @override
   Widget build(final BuildContext context) {
-    Settings().isSmallScreen = MediaQuery.of(context).size.width < 800;
+    final settings = Provider.of<Settings>(context);
+    settings.isSmallScreen = MediaQuery.of(context).size.width < 800;
 
+    if (!settings.isPreferenceLoaded) {
+      return const WorkingIndicator();
+    }
     return MaterialApp(
       /// Assign Key Here
       scaffoldMessengerKey: SnackBarService.scaffoldKey,
       debugShowCheckedModeBanner: false,
       title: 'MyMoney by VTeam',
       theme: settings.getThemeData(),
-      home: Container(
-          key: Key('key_data_version_${Data().version}'),
-          color: getColorTheme(context).background,
-          child: MediaQuery(
-            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
-            child: myScaffold(
-              showAppBar: !shouldShowOpenInstructions(),
-              body: Container(
-                color: getColorTheme(context).secondaryContainer,
-                child: isPlatformMobile()
-                    // Mobile has no keyboard support
-                    ? buildContent(context)
-                    // Keyboard support for Desktop and Web
-                    : KeyboardWidget(
-                        columnCount: 1,
-                        bindings: getKeyboardBindings(context),
-                        child: buildContent(context),
-                      ),
-              ),
-            ),
-          )),
+      home: MediaQuery(
+        key: Key('key_100_${settings.useDarkMode}'),
+        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
+        child: myScaffold(
+          showAppBar: !shouldShowOpenInstructions(),
+          body: isPlatformMobile()
+              // Mobile has no keyboard support
+              ? buildContent(context)
+              // Keyboard support for Desktop and Web
+              : KeyboardWidget(
+                  columnCount: 1,
+                  bindings: getKeyboardBindings(context),
+                  child: buildContent(context),
+                ),
+        ),
+      ),
     );
   }
 
   Widget buildContent(final BuildContext context) {
-    // Welcome screen
-    if (shouldShowOpenInstructions()) {
-      return welcomePanel(context);
+    // Loading ...
+    if (!settings.isPreferenceLoaded) {
+      return const Center(child: CircularProgressIndicator());
     }
 
-    // Loading ...
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
+    // Welcome screen
+    if (shouldShowOpenInstructions()) {
+      return WelcomeScreen(
+        onFileNew: onFileNew,
+        onFileOpen: onFileOpen,
+        onOpenDemoData: onOpenDemoData,
+      );
     }
 
     // small screens
@@ -118,12 +116,12 @@ class _MainAppState extends State<MainApp> {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: getWidgetForMainContent(context, settings.screenIndex),
+            child: getWidgetForMainContent(context, settings.selectedScreen),
           ),
           MenuHorizontal(
             settings: settings,
             onSelectItem: handleScreenChanged,
-            selectedIndex: settings.screenIndex,
+            selectedIndex: settings.selectedScreen,
           ),
         ],
       ),
@@ -135,18 +133,18 @@ class _MainAppState extends State<MainApp> {
       bottom: false,
       top: false,
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MenuVertical(
             settings: settings,
             onSelectItem: handleScreenChanged,
-            selectedIndex: settings.screenIndex,
+            selectedIndex: settings.selectedScreen,
             useIndicator: true,
           ),
           Expanded(
             child: Container(
               color: getColorTheme(context).secondaryContainer,
-              child: getWidgetForMainContent(context, settings.screenIndex),
+              child: getWidgetForMainContent(context, settings.selectedScreen),
             ),
           )
         ],
@@ -155,7 +153,7 @@ class _MainAppState extends State<MainApp> {
   }
 
   bool shouldShowOpenInstructions() {
-    if (settings.prefLoaded && data.fullPathToDataSource == null) {
+    if (settings.isPreferenceLoaded && data.fullPathToDataSource == null) {
       return true;
     }
     return false;
@@ -163,16 +161,12 @@ class _MainAppState extends State<MainApp> {
 
   void loadData() async {
     data.loadFromPath(filePathToLoad: settings.lastOpenedDataSource).then((final bool success) {
-      setState(() {
-        _isLoading = false;
-      });
+      settings.isDataFileLoaded = true;
     });
   }
 
   void handleScreenChanged(final int selectedScreen) {
-    setState(() {
-      settings.screenIndex = selectedScreen;
-    });
+    settings.selectedScreen = selectedScreen;
   }
 
   void onFileNew() async {
@@ -246,7 +240,6 @@ class _MainAppState extends State<MainApp> {
     settings.lastOpenedDataSource = null;
     settings.save();
     data.close();
-    settings.fireOnChanged();
   }
 
   void onImport() async {
@@ -260,7 +253,6 @@ class _MainAppState extends State<MainApp> {
         case 'pdf':
           importPDF(pickerResult.files.single.path.toString(), data);
       }
-      settings.fireOnChanged();
     }
   }
 
@@ -285,7 +277,7 @@ class _MainAppState extends State<MainApp> {
   }
 
   Widget getWidgetForMainContent(final BuildContext context, final int screenIndex) {
-    if (_isLoading) {
+    if (!settings.isDataFileLoaded) {
       return showLoading();
     }
 
@@ -319,14 +311,6 @@ class _MainAppState extends State<MainApp> {
     }
   }
 
-  Widget welcomePanel(final BuildContext context) {
-    return Row(
-      children: <Widget>[
-        renderWelcomeAndOpen(context),
-      ],
-    );
-  }
-
   Widget myScaffold({
     required final Widget body,
     final bool showAppBar = true,
@@ -349,38 +333,13 @@ class _MainAppState extends State<MainApp> {
     );
   }
 
-  Widget renderWelcomeAndOpen(final BuildContext context) {
-    final TextTheme textTheme = getTextTheme(context);
-    return Expanded(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
-      Text('Welcome to MyMoney', textAlign: TextAlign.left, style: textTheme.headlineSmall),
-      const SizedBox(height: 40),
-      Text('No data loaded', textAlign: TextAlign.left, style: textTheme.bodySmall),
-      const SizedBox(height: 40),
-      Wrap(
-        spacing: 10,
-        children: <Widget>[
-          OutlinedButton(onPressed: onFileNew, child: const Text('New File ...')),
-          OutlinedButton(onPressed: onFileOpen, child: const Text('Open File ...')),
-          OutlinedButton(onPressed: onOpenDemoData, child: const Text('Use Demo Data'))
-        ],
-      ),
-    ]));
-  }
-
-  void onSettingsChanged(final Settings settings) {
-    settings.fireOnChanged();
-  }
-
   List<KeyAction> getKeyboardBindings(final BuildContext context) {
     return <KeyAction>[
       KeyAction(
         LogicalKeyboardKey.equal,
         'Increase text size',
         () {
-          setState(() {
-            Settings().fontScaleIncrease();
-          });
+          Settings().fontScaleIncrease();
         },
         isMetaPressed: true,
       ),

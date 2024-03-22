@@ -78,22 +78,25 @@ class _MenuVerticalState extends State<MenuVertical> {
   Widget build(final BuildContext context) {
     bool isVeryLargeDevice = MediaQuery.of(context).size.width > 1000;
     final List<NavigationRailDestination> destinations = getNavRailDestination(widget.settings);
-    return SingleChildScrollView(
-      child: IntrinsicHeight(
-        child: NavigationRail(
-          minWidth: 50,
-          destinations: destinations,
-          selectedIndex: _selectedIndex,
-          useIndicator: widget.useIndicator,
-          labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
-          indicatorColor: getColorTheme(context).onSecondary,
-          backgroundColor: getColorTheme(context).secondaryContainer,
-          onDestinationSelected: (final int index) {
-            setState(() {
-              _selectedIndex = index;
-            });
-            widget.onSelectItem(index);
-          },
+    return Container(
+      color: getColorTheme(context).secondaryContainer,
+      child: SingleChildScrollView(
+        child: IntrinsicHeight(
+          child: NavigationRail(
+            minWidth: 50,
+            destinations: destinations,
+            selectedIndex: _selectedIndex,
+            useIndicator: widget.useIndicator,
+            labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
+            indicatorColor: getColorTheme(context).onSecondary,
+            backgroundColor: getColorTheme(context).secondaryContainer,
+            onDestinationSelected: (final int index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+              widget.onSelectItem(index);
+            },
+          ),
         ),
       ),
     );

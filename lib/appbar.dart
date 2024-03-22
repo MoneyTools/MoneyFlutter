@@ -63,7 +63,6 @@ class _MyAppBarState extends State<MyAppBar> {
           onPressed: () {
             Settings().useDarkMode = !Settings().useDarkMode;
             Settings().save();
-            Settings().fireOnChanged();
           },
           tooltip: 'Toggle brightness',
         ),
@@ -176,7 +175,6 @@ class _MyAppBarState extends State<MyAppBar> {
         Settings().colorSelected = value;
     }
     Settings().save();
-    Settings().fireOnChanged();
   }
 
   Widget widgetMainTitle(

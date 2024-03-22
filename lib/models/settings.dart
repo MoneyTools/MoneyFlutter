@@ -8,17 +8,73 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Settings {
-  bool prefLoaded = false;
-  int colorSelected = 0;
+class Settings extends ChangeNotifier {
+  /// State for Preferences
+  bool _isPreferenceLoaded = false;
+
+  bool get isPreferenceLoaded => _isPreferenceLoaded;
+
+  set isPreferenceLoaded(bool value) {
+    _isPreferenceLoaded = value;
+    notifyListeners();
+  }
+
+  /// Dark/Light theme
+  bool _useDarkMode = false;
+
+  bool get useDarkMode => _useDarkMode;
+
+  set useDarkMode(bool value) {
+    _useDarkMode = value;
+    notifyListeners();
+  }
+
+  /// Color theme
+  int _colorSelected = 0;
+
+  int get colorSelected => _colorSelected;
+
+  set colorSelected(int value) {
+    _colorSelected = value;
+    notifyListeners();
+  }
+
   bool isSmallScreen = true;
-  int screenIndex = 0;
-  String? lastOpenedDataSource;
+
+  /// What screen is selected
+  int _selectedScreen = 0;
+
+  int get selectedScreen => _selectedScreen;
+
+  set selectedScreen(int value) {
+    _selectedScreen = value;
+    notifyListeners();
+  }
+
+  /// Data file state
+  bool _isDataFileLoaded = false;
+
+  bool get isDataFileLoaded => _isDataFileLoaded;
+
+  set isDataFileLoaded(bool value) {
+    _isDataFileLoaded = value;
+    notifyListeners();
+  }
+
+  /// File path to the loaded data
+  String? _lastOpenedDataSource;
+
+  String? get lastOpenedDataSource => _lastOpenedDataSource;
+
+  set lastOpenedDataSource(String? value) {
+    _lastOpenedDataSource = value;
+    notifyListeners();
+  }
+
+  bool rentals = false;
+  bool includeClosedAccounts = false;
 
   bool isDetailsPanelExpanded = false;
-  bool includeClosedAccounts = false;
-  bool rentals = false;
-  bool useDarkMode = false;
 
   //--------------------------------------------------------
   // Font scaling
@@ -44,7 +100,7 @@ class Settings {
     if (isBetweenOrEqual(cleanValue, 40, 400)) {
       textScale = cleanValue / 100.0;
       save();
-      fireOnChanged();
+      notifyListeners();
       return true;
     }
     return false;
@@ -63,8 +119,6 @@ class Settings {
     return viewSetting;
   }
 
-  Function? onChanged;
-
   static final Settings _singleton = Settings._internal();
 
   factory Settings() {
@@ -73,11 +127,7 @@ class Settings {
 
   Settings._internal();
 
-  void fireOnChanged() {
-    onChanged?.call();
-  }
-
-  Future<void> load() async {
+  Future<bool> loadSettings() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     colorSelected = intValueOrDefault(preferences.getInt(prefColor));
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
@@ -89,8 +139,10 @@ class Settings {
     isDetailsPanelExpanded = preferences.getBool(prefIsDetailsPanelExpanded) == true;
 
     views = loadMapFromPrefs(preferences, prefViews);
+    await Future.delayed(const Duration(seconds: 2)); // Simulate a delay of 2 seconds
 
-    prefLoaded = true;
+    isPreferenceLoaded = true;
+    return true;
   }
 
   void save() async {

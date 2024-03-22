@@ -130,7 +130,6 @@ class Data {
       element.clear();
     }
     fullPathToDataSource = Constants.newDataFile;
-    Settings().fireOnChanged();
   }
 
   void notifyTransactionChange({
@@ -160,7 +159,6 @@ class Data {
 
     if (fireNotification) {
       recalculateBalances();
-      Settings().fireOnChanged();
     }
   }
 
@@ -170,8 +168,6 @@ class Data {
     for (final element in _listOfTables) {
       element.assessMutationsCounts();
     }
-
-    Settings().fireOnChanged();
   }
 
   // Where was the data loaded from
