@@ -69,7 +69,7 @@ class MainView extends StatelessWidget {
       title: 'MyMoney by VTeam',
       theme: settings.getThemeData(),
       home: MediaQuery(
-        key: Key('key_100_${settings.useDarkMode}'),
+        key: Key(settings.getUniqueSate()),
         data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
         child: myScaffold(
           showAppBar: !shouldShowOpenInstructions(),

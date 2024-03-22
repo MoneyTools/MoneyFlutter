@@ -18,9 +18,7 @@ import 'package:money/widgets/widgets.dart';
 import '../models/fields/field_filter.dart';
 
 class ViewWidget<T> extends StatefulWidget {
-  const ViewWidget({
-    super.key,
-  });
+  const ViewWidget({super.key});
 
   @override
   State<ViewWidget<T>> createState() => ViewWidgetState<T>();
@@ -40,6 +38,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   int _lastSelectedItemIndex = 0;
   int _sortByFieldIndex = 0;
   bool _sortAscending = true;
+  VoidCallback? onAddNewEntry;
 
   // detail panel
   Object? subViewSelectedItem;
@@ -180,6 +179,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       title: getClassNamePlural(),
       count: numValueOrDefault(list.length),
       description: getDescription(),
+      onAddNewEntry: onAddNewEntry,
       onFilterChanged: onFilterTextChanged,
       child: child,
     );

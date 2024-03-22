@@ -11,6 +11,7 @@ class ViewHeader extends StatelessWidget {
   final String description;
   final Widget? child;
   final void Function(String)? onFilterChanged;
+  final VoidCallback? onAddNewEntry;
 
   const ViewHeader({
     super.key,
@@ -18,6 +19,7 @@ class ViewHeader extends StatelessWidget {
     required this.count,
     required this.description,
     this.onFilterChanged,
+    this.onAddNewEntry,
     this.child,
   });
 
@@ -46,7 +48,14 @@ class ViewHeader extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  IntrinsicWidth(child: ThreePartLabel(text1: title, text2: getIntAsText(count.toInt()))),
+                  IntrinsicWidth(
+                      child: Row(
+                    children: [
+                      ThreePartLabel(text1: title, text2: getIntAsText(count.toInt())),
+                      if (onAddNewEntry != null)
+                        IconButton(icon: const Icon(Icons.add_circle_outline), onPressed: onAddNewEntry)
+                    ],
+                  )),
                   IntrinsicWidth(
                       child: Text(description,
                           style: getTextTheme(context)

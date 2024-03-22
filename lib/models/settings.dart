@@ -1,14 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
+  String getUniqueSate() {
+    return '$colorSelected $useDarkMode ${Data().version}';
+  }
+
   /// State for Preferences
   bool _isPreferenceLoaded = false;
 
@@ -74,7 +78,14 @@ class Settings extends ChangeNotifier {
   bool rentals = false;
   bool includeClosedAccounts = false;
 
-  bool isDetailsPanelExpanded = false;
+  bool _isDetailsPanelExpanded = false;
+
+  bool get isDetailsPanelExpanded => _isDetailsPanelExpanded;
+
+  set isDetailsPanelExpanded(bool value) {
+    _isDetailsPanelExpanded = value;
+    notifyListeners();
+  }
 
   //--------------------------------------------------------
   // Font scaling

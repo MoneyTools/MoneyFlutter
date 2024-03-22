@@ -35,6 +35,16 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   void initState() {
     super.initState();
 
+    onAddNewEntry = () {
+      // add a new Account
+      final account = Account();
+      account.id.value = Data().accounts.length;
+      account.name.value = 'Account ${account.id.value}';
+
+      Data().accounts.addEntry(moneyObject: account, isNewEntry: true);
+      Settings().isDetailsPanelExpanded = true;
+    };
+
     onAddTransaction = () {
       setState(() {
         final Transaction t = Transaction();

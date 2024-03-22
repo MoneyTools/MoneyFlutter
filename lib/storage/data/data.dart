@@ -194,8 +194,8 @@ class Data {
       return;
     }
 
-    if (dataSource == Constants.demoData) {
-      fullPathToDataSource = Constants.demoData;
+    if (dataSource == Constants.demoData || dataSource == Constants.newDataFile) {
+      fullPathToDataSource = dataSource;
       fullPathToNextDataSave = generateNextFolderToSaveTo(await getDocumentDirectory());
       return;
     }

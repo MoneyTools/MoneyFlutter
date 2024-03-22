@@ -9,6 +9,7 @@
 
 ### Added
 
+- User can now Add new Accounts
 - Use package [provider] for state management
 - Load from CSV [mymoney.mmcsv] file
 - Close and create a new file
