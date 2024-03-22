@@ -4,6 +4,7 @@
 
 ### Updated
 
+- Remove unused layoutBuild(constraint)
 - Editing of Account [accountId, ofxAccountID, description]
 
 ### Added

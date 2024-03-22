@@ -69,36 +69,31 @@ class _MainAppState extends State<MainApp> {
       debugShowCheckedModeBanner: false,
       title: 'MyMoney by VTeam',
       theme: settings.getThemeData(),
-      home: LayoutBuilder(
-        builder: (final BuildContext context, final BoxConstraints constraints) {
-          return Container(
-            key: Key('key_data_version_${Data().version}'),
-            color: getColorTheme(context).background,
-            child: MediaQuery(
-              data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
-              child: myScaffold(
-                showAppBar: !shouldShowOpenInstructions(),
-                body: Container(
-                  color: getColorTheme(context).secondaryContainer,
-                  child: isPlatformMobile()
-                      // Mobile has no keyboard support
-                      ? buildContent(context, constraints)
-                      // Keyboard support for Desktop and Web
-                      : KeyboardWidget(
-                          columnCount: 1,
-                          bindings: getKeyboardBindings(context),
-                          child: buildContent(context, constraints),
-                        ),
-                ),
+      home: Container(
+          key: Key('key_data_version_${Data().version}'),
+          color: getColorTheme(context).background,
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
+            child: myScaffold(
+              showAppBar: !shouldShowOpenInstructions(),
+              body: Container(
+                color: getColorTheme(context).secondaryContainer,
+                child: isPlatformMobile()
+                    // Mobile has no keyboard support
+                    ? buildContent(context)
+                    // Keyboard support for Desktop and Web
+                    : KeyboardWidget(
+                        columnCount: 1,
+                        bindings: getKeyboardBindings(context),
+                        child: buildContent(context),
+                      ),
               ),
             ),
-          );
-        },
-      ),
+          )),
     );
   }
 
-  Widget buildContent(final BuildContext context, final BoxConstraints constraints) {
+  Widget buildContent(final BuildContext context) {
     // Welcome screen
     if (shouldShowOpenInstructions()) {
       return welcomePanel(context);
