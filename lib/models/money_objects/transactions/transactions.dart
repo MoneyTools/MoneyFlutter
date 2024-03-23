@@ -1,4 +1,6 @@
 import 'dart:math';
+import 'package:money/models/money_objects/splits/split.dart';
+import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -37,6 +39,33 @@ class Transactions extends MoneyObjects<Transaction> {
       appendMoneyObject(t);
     }
     return iterableList().toList();
+  }
+
+  @override
+  void onAllDataLoaded() {
+    // Now that everything is loaded, lets resolve the Transfers
+    for (final Transaction t in iterableList().where((element) => element.transfer.value != -1)) {
+      final int transferId = t.transfer.value!;
+      final Transaction? u = get(transferId);
+      if (u == null) {
+        debugLog('Transaction.transferID of ${t.uniqueId} missing related transaction id $transferId');
+      } else {
+        if (t.transferSplit.value == -1) {
+          t.transferInstance = Transfer(id: transferId, owner: t, transaction: u);
+        } else {
+          final Split? s = Data().splits.get(t.transferSplit.value);
+          if (s == null) {
+            debugLog('Transaction contains a split marked as a transfer, but other side of transfer was not found');
+          } else {
+            if (t.transferInstance == null) {
+              t.transferInstance = Transfer(id: transferId, owner: t, transaction: u, split: s);
+            } else {
+              debugLog('Already have a transfer for this split');
+            }
+          }
+        }
+      }
+    }
   }
 
   int getNextTransactionId() {

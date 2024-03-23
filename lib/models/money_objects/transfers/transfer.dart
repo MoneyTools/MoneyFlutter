@@ -4,16 +4,16 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 class Transfer {
   final num id;
   final Transaction owner; // the source of the transfer.
-  final Split ownerSplit; // the source split, if it is a transfer in a split.
-  final Transaction transaction; // the related transaction
-  final Split split; // the related split, if it is a transfer in a split.
+  final Split? ownerSplit; // the source split, if it is a transfer in a split.
+  final Transaction? transaction; // the related transaction
+  final Split? split; // the related split, if it is a transfer in a split.
 
   Transfer({
     required this.id,
     required this.owner,
-    required this.ownerSplit,
-    required this.transaction,
-    required this.split,
+    this.transaction,
+    this.ownerSplit,
+    this.split,
   }) {
     //
   }

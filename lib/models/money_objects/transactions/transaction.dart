@@ -3,6 +3,9 @@ import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/money_objects/investments/investment.dart';
+import 'package:money/models/money_objects/investments/investments.dart';
+import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -97,7 +100,7 @@ class Transaction extends MoneyObject {
     defaultValue: 0,
     type: FieldType.text,
     valueFromInstance: (final Transaction instance) {
-      return instance.payeeName;
+      return instance.getPayeeOrTransferCaption();
     },
     valueForSerialization: (final Transaction instance) => instance.payee.value,
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
@@ -196,10 +199,11 @@ class Transaction extends MoneyObject {
 
   /// Transfer
   /// 11|Transfer|bigint|0||0
-  FieldInt<Transaction> transfer = FieldInt<Transaction>(
+  Field<Transaction, int?> transfer = Field<Transaction, int?>(
     importance: 10,
     name: 'Transfer',
     serializeName: 'Transfer',
+    defaultValue: null,
     useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.transfer.value,
@@ -329,10 +333,43 @@ class Transaction extends MoneyObject {
   );
 
   Account? accountInstance;
+  Transfer? transferInstance;
+  Investment? investmentInstance;
 
   String get dateTimeAsText => getDateAsText(dateTime.value);
 
   String get payeeName => Data().payees.getNameFromId(payee.value);
+
+  String getPayeeOrTransferCaption() {
+    Transfer? transfer = transferInstance;
+    Investment? investment = investmentInstance;
+    double amount = this.amount.value;
+
+    bool isFrom = false;
+    if (transfer != null) {
+      if (investment != null) {
+        if (investment.investmentType.value == InvestmentType.add.index) {
+          isFrom = true;
+        }
+      } else if (amount > 0) {
+        isFrom = true;
+      }
+      return getTransferCaption(transfer.transaction!.accountInstance!, isFrom);
+    }
+
+    return Data().payees.getNameFromId(payee.value);
+  }
+
+  String getTransferCaption(final Account account, final bool isFrom) {
+    String caption = 'Transfer';
+    if (account.isClosed()) {
+      caption = isFrom ? 'Transfer from closed account:' : 'Transfer to closed account:';
+    } else {
+      caption = isFrom ? 'Transfer from:' : 'Transfer to:';
+    }
+    caption += account.name.value;
+    return caption;
+  }
 
   Transaction({
     final TransactionStatus status = TransactionStatus.none,

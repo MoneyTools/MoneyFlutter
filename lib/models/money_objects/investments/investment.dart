@@ -1,6 +1,15 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 
+enum InvestmentType {
+  add,
+  remove,
+  buy,
+  sell,
+  non,
+  dividend,
+}
+
 class Investment extends MoneyObject {
   @override
   int get uniqueId => id.value;

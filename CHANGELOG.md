@@ -6,6 +6,9 @@
 
 - Save to new SQL file
 
+### Update
+
+- Display Transfer or Payee Name
 
 ## [version 1.4.7] 2024-03-22
 
