@@ -6,7 +6,5 @@ extension DataFromDemo on Data {
     for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
       moneyObjects.loadDemoData();
     }
-
-    rememberWhereTheDataCameFrom(Constants.demoData);
   }
 }

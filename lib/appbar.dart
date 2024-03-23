@@ -3,7 +3,6 @@ import 'package:money/app_caption.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_currencies.dart';
 import 'package:money/widgets/change_summary.dart';
@@ -187,7 +186,7 @@ class _MyAppBarState extends State<MyAppBar> {
   ) {
     return PopupMenuButton<int>(
       child: AppCaption(
-        subCaption: Data().fullPathToDataSource ?? 'No file loaded',
+        subCaption: Settings().fileManager.fullPathToLastOpenedFile,
       ),
       itemBuilder: (final BuildContext context) {
         final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];

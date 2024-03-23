@@ -23,6 +23,10 @@ class MoneyObjects<T> {
     _list.clear();
   }
 
+  bool get isEmpty {
+    return _list.isEmpty;
+  }
+
   int get length {
     return _list.length;
   }
@@ -92,6 +96,7 @@ class MoneyObjects<T> {
   }
 
   void assessMutationsCounts() {
+    Settings().trackMutations.reset();
     for (final item in _iterableListOfMoneyObject(true)) {
       switch (item.mutation) {
         case MutationType.inserted:

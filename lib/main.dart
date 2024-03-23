@@ -13,6 +13,7 @@ import 'package:money/menu.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/file_manager.dart';
 import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
@@ -88,11 +89,6 @@ class MainView extends StatelessWidget {
   }
 
   Widget buildContent(final BuildContext context) {
-    // Loading ...
-    if (!settings.isPreferenceLoaded) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     // Welcome screen
     if (shouldShowOpenInstructions()) {
       return WelcomeScreen(
@@ -100,6 +96,12 @@ class MainView extends StatelessWidget {
         onFileOpen: onFileOpen,
         onOpenDemoData: onOpenDemoData,
       );
+    }
+
+    if (settings.fileManager.shouldLoadLastDataFile()) {
+      // loading a file
+      loadData();
+      return const WorkingIndicator();
     }
 
     // small screens
@@ -116,12 +118,12 @@ class MainView extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Expanded(
-            child: getWidgetForMainContent(context, settings.selectedScreen),
+            child: getWidgetForMainContent(context, settings.selectedView),
           ),
           MenuHorizontal(
             settings: settings,
-            onSelectItem: handleScreenChanged,
-            selectedIndex: settings.selectedScreen,
+            onSelected: handleScreenChanged,
+            selectedView: settings.selectedView,
           ),
         ],
       ),
@@ -138,13 +140,13 @@ class MainView extends StatelessWidget {
           MenuVertical(
             settings: settings,
             onSelectItem: handleScreenChanged,
-            selectedIndex: settings.selectedScreen,
+            selectedView: settings.selectedView,
             useIndicator: true,
           ),
           Expanded(
             child: Container(
               color: getColorTheme(context).secondaryContainer,
-              child: getWidgetForMainContent(context, settings.selectedScreen),
+              child: getWidgetForMainContent(context, settings.selectedView),
             ),
           )
         ],
@@ -153,27 +155,37 @@ class MainView extends StatelessWidget {
   }
 
   bool shouldShowOpenInstructions() {
-    if (settings.isPreferenceLoaded && data.fullPathToDataSource == null) {
+    if (settings.isPreferenceLoaded &&
+        Data().accounts.isEmpty &&
+        settings.fileManager.fullPathToLastOpenedFile.isEmpty) {
       return true;
     }
     return false;
   }
 
   void loadData() async {
-    data.loadFromPath(filePathToLoad: settings.lastOpenedDataSource).then((final bool success) {
-      settings.isDataFileLoaded = true;
+    settings.fileManager.state = DataFileState.loading;
+    data.loadFromPath(filePathToLoad: settings.fileManager.fullPathToLastOpenedFile).then((final bool success) {
+      settings.fileManager.state = DataFileState.loaded;
+      settings.rebuild();
     });
   }
 
-  void handleScreenChanged(final int selectedScreen) {
-    settings.selectedScreen = selectedScreen;
+  void handleScreenChanged(final ViewId selectedView) {
+    settings.selectedView = selectedView;
   }
 
   void onFileNew() async {
-    Data().clear();
-    settings.lastOpenedDataSource = Constants.newDataFile;
+    data.close();
+    Settings().rebuild();
+
+    settings.fileManager.fileName = Constants.newDataFile;
     settings.save();
-    loadData();
+
+    Data().accounts.addNewAccount('New Bank Account');
+    settings.selectedView = ViewId.viewAccounts;
+    settings.fileManager.state = DataFileState.loaded;
+    Settings().rebuild();
   }
 
   void onFileOpen() async {
@@ -208,7 +220,7 @@ class MainView extends StatelessWidget {
 
         if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
           if (kIsWeb) {
-            settings.lastOpenedDataSource = pickerResult.files.single.path;
+            settings.fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
 
             final Uint8List? file = pickerResult.files.single.bytes;
             if (file != null) {
@@ -217,9 +229,9 @@ class MainView extends StatelessWidget {
               // debugLog("--------$s");
             }
           } else {
-            settings.lastOpenedDataSource = pickerResult.files.single.path;
+            settings.fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
           }
-          if (settings.lastOpenedDataSource != null) {
+          if (settings.fileManager.fullPathToLastOpenedFile.isNotEmpty) {
             settings.save();
             loadData();
           }
@@ -231,15 +243,17 @@ class MainView extends StatelessWidget {
   }
 
   void onOpenDemoData() async {
-    settings.lastOpenedDataSource = Constants.demoData;
+    settings.fileManager.fullPathToLastOpenedFile = '';
     settings.save();
-    loadData();
+    Data().loadFromDemoData();
+    Settings().rebuild();
   }
 
   void onFileClose() async {
-    settings.lastOpenedDataSource = null;
+    settings.fileManager.fullPathToLastOpenedFile = '';
     settings.save();
     data.close();
+    Settings().rebuild();
   }
 
   void onImport() async {
@@ -256,58 +270,53 @@ class MainView extends StatelessWidget {
     }
   }
 
-  void onShowFileLocation() {
-    openFolder(data.fullPathToNextDataSave!);
+  void onShowFileLocation() async {
+    String path = await settings.fileManager.generateNextFolderToSaveTo();
+    openFolder(path);
   }
 
-  void onSaveToCav() {
-    data.saveToCsv();
+  void onSaveToCav() async {
+    final String fullPathTofileName = await data.saveToCsv();
+    settings.fileManager.rememberWhereTheDataCameFrom(fullPathTofileName);
+    data.assessMutationsCountOfAllModels();
   }
 
   void onSaveToSql() {
     data.saveToSql(
-        filePathToLoad: settings.lastOpenedDataSource,
+        filePathToLoad: settings.fileManager.fullPathToLastOpenedFile,
         callbackWhenLoaded: (final bool success) {
           data.assessMutationsCountOfAllModels();
         });
+
+    settings.fileManager.rememberWhereTheDataCameFrom(settings.fileManager.fullPathToLastOpenedFile);
   }
 
-  Widget showLoading() {
-    return const Center(child: CircularProgressIndicator());
-  }
-
-  Widget getWidgetForMainContent(final BuildContext context, final int screenIndex) {
-    if (!settings.isDataFileLoaded) {
-      return showLoading();
-    }
-
+  Widget getWidgetForMainContent(final BuildContext context, final ViewId screenIndex) {
     switch (screenIndex) {
-      case Constants.viewAccounts:
+      case ViewId.viewAccounts:
         return const ViewAccounts();
 
-      case Constants.viewLoans:
+      case ViewId.viewLoans:
         return const ViewLoans();
 
-      case Constants.viewCategories:
+      case ViewId.viewCategories:
         return const ViewCategories();
 
-      case Constants.viewPayees:
+      case ViewId.viewPayees:
         return const ViewPayees();
 
-      case Constants.viewAliases:
+      case ViewId.viewAliases:
         return const ViewAliases();
 
-      case Constants.viewTransactions:
+      case ViewId.viewTransactions:
         return const ViewTransactions();
 
-      case Constants.viewRentals:
+      case ViewId.viewRentals:
         return const ViewRentals();
 
-      case 0:
+      case ViewId.viewCashFlow:
       default:
-        return ViewCashFlow(
-          key: Key('cashflow_${Data().fullPathToDataSource}'),
-        );
+        return const ViewCashFlow();
     }
   }
 

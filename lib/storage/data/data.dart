@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/account_aliases/account_aliases.dart';
 import 'package:money/models/money_objects/accounts/accounts.dart';
 import 'package:money/models/money_objects/aliases/aliases.dart';
@@ -25,7 +24,6 @@ import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/database/database.dart';
 import 'package:money/widgets/snack_bar.dart';
-import 'package:path/path.dart' as p;
 
 // Exports
 export 'package:money/helpers/json_helper.dart';
@@ -129,7 +127,6 @@ class Data {
     for (final element in _listOfTables) {
       element.clear();
     }
-    fullPathToDataSource = Constants.newDataFile;
   }
 
   void notifyTransactionChange({
@@ -168,11 +165,8 @@ class Data {
     for (final element in _listOfTables) {
       element.assessMutationsCounts();
     }
+    Settings().rebuild();
   }
-
-  // Where was the data loaded from
-  String? fullPathToDataSource;
-  String? fullPathToNextDataSave;
 
   Future<String?> validateDataBasePathIsValidAndExist(final String? filePath) async {
     try {
@@ -187,54 +181,25 @@ class Data {
     return null;
   }
 
-  void rememberWhereTheDataCameFrom(final String? dataSource) async {
-    if (dataSource == null) {
-      fullPathToDataSource = null;
-      fullPathToNextDataSave = null;
-      return;
-    }
-
-    if (dataSource == Constants.demoData || dataSource == Constants.newDataFile) {
-      fullPathToDataSource = dataSource;
-      fullPathToNextDataSave = generateNextFolderToSaveTo(await getDocumentDirectory());
-      return;
-    }
-
-    fullPathToDataSource = dataSource;
-    final String folderOfLoadedDatabase = p.dirname(fullPathToDataSource!);
-    fullPathToNextDataSave = generateNextFolderToSaveTo(folderOfLoadedDatabase);
-  }
-
-  String generateNextFolderToSaveTo(final String startingFolder) {
-    return MyFileSystems.append(startingFolder, 'moneyCSV');
-  }
-
   /// Automated detection of what type of storage to load the data from
-  Future<bool> loadFromPath({required final String? filePathToLoad}) async {
-    rememberWhereTheDataCameFrom(null);
-
-    if (filePathToLoad == null) {
-      return false;
-    }
-
+  Future<bool> loadFromPath({required final String filePathToLoad}) async {
     try {
-      if (filePathToLoad == Constants.newDataFile) {
-        Data().clear();
-        rememberWhereTheDataCameFrom(Constants.newDataFile);
-      } else if (filePathToLoad == Constants.demoData) {
-        // Generate a data set to demo the application
-        loadFromDemoData();
-      } else if (filePathToLoad.toLowerCase().endsWith('.mymoney.mmdb')) {
+      // Sqlite
+      if (filePathToLoad.toLowerCase().endsWith('.mymoney.mmdb')) {
         // Load from SQLite
         await loadFromSql(filePathToLoad);
+        Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
       } else {
+        // CSV
         // Load from a folder that contains CSV files
         await loadFromCsv(filePathToLoad);
+        Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
       }
     } catch (e) {
       debugLog(e.toString());
-      rememberWhereTheDataCameFrom(null);
       SnackBarService.showSnackBar(autoDismiss: false, message: e.toString());
+      // clear any previous file
+      Settings().fileManager.rememberWhereTheDataCameFrom('');
       return false;
     }
 
@@ -257,6 +222,9 @@ class Data {
     for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
       moneyObjects.clear();
     }
-    rememberWhereTheDataCameFrom(null);
+    version = -1;
+
+    Settings().trackMutations.reset();
+    Settings().fileManager.rememberWhereTheDataCameFrom('');
   }
 }

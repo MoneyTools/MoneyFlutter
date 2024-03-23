@@ -64,6 +64,16 @@ class Accounts extends MoneyObjects<Account> {
     }
   }
 
+  Account addNewAccount(final String accountName) {
+    // add a new Account
+    final account = Account();
+    account.id.value = Data().accounts.length + 1;
+    account.name.value = '$accountName ${account.id.value}';
+
+    Data().accounts.addEntry(moneyObject: account, isNewEntry: true);
+    return account;
+  }
+
   List<Account> getOpenAccounts() {
     return iterableList().where((final Account account) => account.isOpen()).toList();
   }

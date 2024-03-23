@@ -6,11 +6,16 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
+import 'package:money/storage/file_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends ChangeNotifier {
   String getUniqueSate() {
     return '$colorSelected $useDarkMode ${Data().version}';
+  }
+
+  void rebuild() {
+    notifyListeners();
   }
 
   /// State for Preferences
@@ -46,34 +51,16 @@ class Settings extends ChangeNotifier {
   bool isSmallScreen = true;
 
   /// What screen is selected
-  int _selectedScreen = 0;
+  ViewId _selectedScreen = ViewId.viewCashFlow;
 
-  int get selectedScreen => _selectedScreen;
+  ViewId get selectedView => _selectedScreen;
 
-  set selectedScreen(int value) {
+  set selectedView(ViewId value) {
     _selectedScreen = value;
     notifyListeners();
   }
 
-  /// Data file state
-  bool _isDataFileLoaded = false;
-
-  bool get isDataFileLoaded => _isDataFileLoaded;
-
-  set isDataFileLoaded(bool value) {
-    _isDataFileLoaded = value;
-    notifyListeners();
-  }
-
-  /// File path to the loaded data
-  String? _lastOpenedDataSource;
-
-  String? get lastOpenedDataSource => _lastOpenedDataSource;
-
-  set lastOpenedDataSource(String? value) {
-    _lastOpenedDataSource = value;
-    notifyListeners();
-  }
+  FileManager fileManager = FileManager();
 
   bool rentals = false;
   bool includeClosedAccounts = false;
@@ -144,13 +131,12 @@ class Settings extends ChangeNotifier {
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
     useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
 
-    lastOpenedDataSource = preferences.getString(prefLastLoadedPathToDatabase);
     rentals = preferences.getBool(prefRentals) == true;
     includeClosedAccounts = preferences.getBool(prefIncludeClosedAccounts) == true;
     isDetailsPanelExpanded = preferences.getBool(prefIsDetailsPanelExpanded) == true;
+    fileManager.fullPathToLastOpenedFile = preferences.getString(prefLastLoadedPathToDatabase) ?? '';
 
     views = loadMapFromPrefs(preferences, prefViews);
-    await Future.delayed(const Duration(seconds: 2)); // Simulate a delay of 2 seconds
 
     isPreferenceLoaded = true;
     return true;
@@ -167,10 +153,10 @@ class Settings extends ChangeNotifier {
 
     saveMapToPrefs(preferences, prefViews, views);
 
-    if (lastOpenedDataSource == null) {
+    if (fileManager.fullPathToLastOpenedFile.isEmpty) {
       await preferences.remove(prefLastLoadedPathToDatabase);
     } else {
-      await preferences.setString(prefLastLoadedPathToDatabase, lastOpenedDataSource.toString());
+      await preferences.setString(prefLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile);
     }
   }
 

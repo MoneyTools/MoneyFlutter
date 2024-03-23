@@ -10,8 +10,8 @@ extension DataFromCsv on Data {
     if (pathToDatabaseFile != null) {
       final subFolder = MyFileSystems.append(MyFileSystems.getFolderFromFilePath(pathToDatabaseFile), subFolderName);
       await loadCsvFiles(subFolder);
+      Settings().fileManager.rememberWhereTheDataCameFrom(pathToDatabaseFile);
     }
-    rememberWhereTheDataCameFrom(pathToDatabaseFile);
   }
 
   Future<void> loadCsvFiles(String folder) async {
@@ -51,20 +51,22 @@ extension DataFromCsv on Data {
     return rows;
   }
 
-  void saveToCsv() {
-    if (fullPathToNextDataSave == null) {
+  Future<String> saveToCsv() async {
+    String destinationFolder = await Settings().fileManager.generateNextFolderToSaveTo();
+    if (destinationFolder.isEmpty) {
       throw Exception('No container folder give for saving');
     }
 
-    final String folder = MyFileSystems.getFolderFromFilePath(fullPathToNextDataSave!);
+    final String mainFilename = MyFileSystems.append(destinationFolder, mainFileName);
 
-    MyFileSystems.ensureFolderExist(folder).then((final _) {
-      MyFileSystems.writeToFile(MyFileSystems.append(folder, mainFileName), DateTime.now().toString());
-      final subFolder = MyFileSystems.append(folder, subFolderName);
+    MyFileSystems.ensureFolderExist(destinationFolder).then((final _) {
+      MyFileSystems.writeToFile(mainFilename, DateTime.now().toString());
+      final subFolder = MyFileSystems.append(destinationFolder, subFolderName);
       MyFileSystems.ensureFolderExist(subFolder).then((final _) {
         writeEachFiles(subFolder);
       });
     });
+    return mainFilename;
   }
 
   void writeEachFiles(String folder) {

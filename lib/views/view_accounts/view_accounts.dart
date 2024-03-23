@@ -37,11 +37,8 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
     onAddNewEntry = () {
       // add a new Account
-      final account = Account();
-      account.id.value = Data().accounts.length;
-      account.name.value = 'Account ${account.id.value}';
-
-      Data().accounts.addEntry(moneyObject: account, isNewEntry: true);
+      Data().accounts.addNewAccount('New Bank Account');
+      Settings().selectedView = ViewId.viewAccounts;
       Settings().isDetailsPanelExpanded = true;
     };
 

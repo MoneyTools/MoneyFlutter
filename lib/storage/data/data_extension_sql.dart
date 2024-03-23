@@ -29,7 +29,6 @@ extension DataFromSql on Data {
       // Close the database when done
       db.dispose();
     }
-    rememberWhereTheDataCameFrom(pathToDatabaseFile);
   }
 
   Future<bool> saveToSql({
@@ -60,7 +59,6 @@ extension DataFromSql on Data {
       }
     } catch (e) {
       debugLog(e.toString());
-      rememberWhereTheDataCameFrom(null);
       callbackWhenLoaded(false);
     }
     callbackWhenLoaded(true);

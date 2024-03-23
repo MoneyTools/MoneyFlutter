@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/constants.dart';
 
 import 'package:money/models/settings.dart';
 
 class MenuHorizontal extends StatefulWidget {
-  final void Function(int) onSelectItem;
-  final int selectedIndex;
+  final void Function(ViewId) onSelected;
+  final ViewId selectedView;
   final Settings settings;
 
   const MenuHorizontal({
     super.key,
     required this.settings,
-    required this.onSelectItem,
-    required this.selectedIndex,
+    required this.onSelected,
+    required this.selectedView,
   });
 
   @override
@@ -20,23 +21,24 @@ class MenuHorizontal extends StatefulWidget {
 }
 
 class _MenuHorizontalState extends State<MenuHorizontal> {
-  int _selectedIndex = 0;
+  ViewId _selectedView = ViewId.viewCashFlow;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.selectedIndex;
+    _selectedView = widget.selectedView;
   }
 
   @override
   Widget build(final BuildContext context) {
     return NavigationBar(
-      selectedIndex: _selectedIndex,
+      selectedIndex: _selectedView.index,
       onDestinationSelected: (final int index) {
+        final view = ViewId.values[index];
         setState(() {
-          _selectedIndex = index;
+          _selectedView = view;
         });
-        widget.onSelectItem(index);
+        widget.onSelected(view);
       },
       destinations: getAppBarDestinations(widget.settings),
       height: 52,
@@ -48,8 +50,8 @@ class _MenuHorizontalState extends State<MenuHorizontal> {
 }
 
 class MenuVertical extends StatefulWidget {
-  final void Function(int) onSelectItem;
-  final int selectedIndex;
+  final void Function(ViewId) onSelectItem;
+  final ViewId selectedView;
   final bool useIndicator;
   final Settings settings;
 
@@ -57,7 +59,7 @@ class MenuVertical extends StatefulWidget {
     super.key,
     required this.settings,
     required this.onSelectItem,
-    required this.selectedIndex,
+    required this.selectedView,
     this.useIndicator = false,
   });
 
@@ -66,12 +68,12 @@ class MenuVertical extends StatefulWidget {
 }
 
 class _MenuVerticalState extends State<MenuVertical> {
-  int _selectedIndex = 0;
+  ViewId _selectedView = ViewId.viewCashFlow;
 
   @override
   void initState() {
     super.initState();
-    _selectedIndex = widget.selectedIndex;
+    _selectedView = widget.selectedView;
   }
 
   @override
@@ -85,16 +87,17 @@ class _MenuVerticalState extends State<MenuVertical> {
           child: NavigationRail(
             minWidth: 50,
             destinations: destinations,
-            selectedIndex: _selectedIndex,
+            selectedIndex: _selectedView.index,
             useIndicator: widget.useIndicator,
             labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
             indicatorColor: getColorTheme(context).onSecondary,
             backgroundColor: getColorTheme(context).secondaryContainer,
             onDestinationSelected: (final int index) {
+              final view = ViewId.values[index];
               setState(() {
-                _selectedIndex = index;
+                _selectedView = view;
               });
-              widget.onSelectItem(index);
+              widget.onSelectItem(view);
             },
           ),
         ),
