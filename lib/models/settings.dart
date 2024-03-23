@@ -97,7 +97,7 @@ class Settings extends ChangeNotifier {
     final int cleanValue = (newScale * 100).round();
     if (isBetweenOrEqual(cleanValue, 40, 400)) {
       textScale = cleanValue / 100.0;
-      save();
+      store();
       notifyListeners();
       return true;
     }
@@ -125,7 +125,7 @@ class Settings extends ChangeNotifier {
 
   Settings._internal();
 
-  Future<bool> loadSettings() async {
+  Future<bool> retrieve() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     colorSelected = intValueOrDefault(preferences.getInt(prefColor));
     textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
@@ -142,7 +142,7 @@ class Settings extends ChangeNotifier {
     return true;
   }
 
-  void save() async {
+  void store() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setDouble(prefTextScale, textScale);
     await preferences.setInt(prefColor, colorSelected);
@@ -151,7 +151,7 @@ class Settings extends ChangeNotifier {
     await preferences.setBool(prefIncludeClosedAccounts, includeClosedAccounts);
     await preferences.setBool(prefRentals, rentals);
 
-    saveMapToPrefs(preferences, prefViews, views);
+    storeMapToPrefs(preferences, prefViews, views);
 
     if (fileManager.fullPathToLastOpenedFile.isEmpty) {
       await preferences.remove(prefLastLoadedPathToDatabase);
@@ -196,7 +196,7 @@ class Settings extends ChangeNotifier {
     return <String, MyJson>{};
   }
 
-  void saveMapToPrefs(
+  void storeMapToPrefs(
     final SharedPreferences prefs,
     final String key,
     final Map<String, MyJson> mapOfJson,

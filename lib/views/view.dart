@@ -132,7 +132,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 onExpanded: (final bool isExpanded) {
                   setState(() {
                     Settings().isDetailsPanelExpanded = isExpanded;
-                    Settings().save();
+                    Settings().store();
                   });
                 },
                 selectedItems: selectedItems,
@@ -439,7 +439,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       prefSelectedDetailsPanelTab: _selectedBottomTabId.index,
     };
 
-    Settings().save();
+    Settings().store();
   }
 
   SortIndicator getSortIndicated(final int columnNumber) {

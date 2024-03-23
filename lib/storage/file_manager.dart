@@ -16,7 +16,7 @@ class FileManager {
 
   void rememberWhereTheDataCameFrom(final String dataSource) async {
     fullPathToLastOpenedFile = dataSource;
-    Settings().save();
+    Settings().store();
   }
 
   Future<String> generateNextFolderToSaveTo() async {
