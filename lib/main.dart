@@ -275,7 +275,7 @@ class MainView extends StatelessWidget {
     openFolder(path);
   }
 
-  void onSaveToCav() async {
+  void onSaveToCSV() async {
     final String fullPathTofileName = await data.saveToCsv();
     settings.fileManager.rememberWhereTheDataCameFrom(fullPathTofileName);
     data.assessMutationsCountOfAllModels();
@@ -333,7 +333,7 @@ class MainView extends StatelessWidget {
               onFileClose: onFileClose,
               onShowFileLocation: onShowFileLocation,
               onImport: onImport,
-              onSaveCsv: onSaveToCav,
+              onSaveCsv: onSaveToCSV,
               onSaveSql: onSaveToSql,
             )
           : null,
