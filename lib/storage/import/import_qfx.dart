@@ -55,7 +55,7 @@ Future<bool> importQFX(
           Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
 
       final Transaction t = Transaction(status: TransactionStatus.electronic)
-        ..id.value = Data().transactions.getNextTransactionId()
+        ..id.value = -1
         ..accountId.value = account.id.value
         ..dateTime.value = item.date
         ..number.value = item.number
@@ -68,11 +68,7 @@ Future<bool> importQFX(
       // TODO if investment transaction
       // ..categoryId.value = getInvestmentCategoryFromOfxType(item)
 
-      Data().transactions.addEntry(
-            moneyObject: t,
-            isNewEntry: true,
-            fireNotification: false, // this is a batch operation, let the caller handle broadcasting the import
-          );
+      Data().transactions.appendNewMoneyObject(t);
     }
   }
   return true;

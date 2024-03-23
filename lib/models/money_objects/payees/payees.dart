@@ -44,7 +44,7 @@ class Payees extends MoneyObjects<Payee> {
         ..id.value = iterableList().length
         ..name.value = name
         ..mutation = MutationType.inserted;
-      Data().payees.addEntry(moneyObject: payee, isNewEntry: true, fireNotification: fireNotification);
+      Data().payees.appendNewMoneyObject(payee);
     }
     return payee;
   }
@@ -57,10 +57,11 @@ class Payees extends MoneyObjects<Payee> {
     for (final MyJson row in rows) {
       final int id = int.parse(row['Id'].toString());
       final String name = row['Name'].toString();
-      addEntry(
-          moneyObject: Payee()
-            ..id.value = id
-            ..name.value = name);
+      appendMoneyObject(
+        Payee()
+          ..id.value = id
+          ..name.value = name,
+      );
     }
   }
 
@@ -81,10 +82,11 @@ class Payees extends MoneyObjects<Payee> {
       'Barbara'
     ];
     for (int i = 0; i < names.length; i++) {
-      addEntry(
-          moneyObject: Payee()
-            ..id.value = i
-            ..name.value = names[i]);
+      appendNewMoneyObject(
+        Payee()
+          ..id.value = -1
+          ..name.value = names[i],
+      );
     }
   }
 

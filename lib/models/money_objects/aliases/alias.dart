@@ -38,8 +38,8 @@ class Alias extends MoneyObject {
     type: FieldType.text,
     align: TextAlign.center,
     importance: 3,
-    name: 'Flag',
-    serializeName: 'Flag',
+    name: 'Flags',
+    serializeName: 'Flags',
     defaultValue: 0,
     valueFromInstance: (final Alias instance) => getAliasTypeAsString(instance.type),
     valueForSerialization: (final Alias instance) => instance.flags.value,
@@ -54,7 +54,7 @@ class Alias extends MoneyObject {
     serializeName: 'Payee',
     defaultValue: 0,
     valueFromInstance: (final Alias instance) => Payee.getName(instance.payeeInstance),
-    valueForSerialization: (final Alias instance) => instance.payeeId,
+    valueForSerialization: (final Alias instance) => instance.payeeId.value,
   );
 
   // Not persisted

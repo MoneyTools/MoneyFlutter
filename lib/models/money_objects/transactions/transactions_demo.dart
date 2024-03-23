@@ -6,16 +6,16 @@ extension TransactionsDemoData on Transactions {
 
     runningBalance = 0;
 
-    int transactionId = 0;
+    int day = 0;
     for (final Account account in Data().accounts.iterableList()) {
       for (int i = 0; i < getQuantityOfTransactionBasedOnAccountType(account.type.value); i++) {
-        transactionForDemoData(transactionId, account);
-        transactionId++;
+        transactionForDemoData(day, account);
+        day++;
       }
     }
   }
 
-  void transactionForDemoData(final int transactionId, final Account account) {
+  void transactionForDemoData(final int day, final Account account) {
     final categoryId = Random().nextInt(10);
 
     // generate an amount
@@ -23,9 +23,9 @@ extension TransactionsDemoData on Transactions {
     final double amount = getRandomAmount() * (Data().categories.isCategoryAnExpense(categoryId) ? -1 : 1);
 
     final MyJson demoJson = <String, dynamic>{
-      'Id': transactionId,
+      'Id': -1,
       'Account': account.id.value,
-      'Date': DateTime(2020, 02, transactionId + 1),
+      'Date': DateTime(2020, 02, day + 1),
       'Payee': Random().nextInt(10),
       'Category': categoryId,
       'Amount': amount,
@@ -34,7 +34,7 @@ extension TransactionsDemoData on Transactions {
     final Transaction t = Transaction.fromJSon(demoJson, runningBalance);
     runningBalance += amount;
 
-    addEntry(moneyObject: t);
+    appendNewMoneyObject(t);
   }
 
   int getQuantityOfTransactionBasedOnAccountType(final AccountType type) {

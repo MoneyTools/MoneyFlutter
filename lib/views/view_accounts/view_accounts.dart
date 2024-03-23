@@ -45,11 +45,11 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     onAddTransaction = () {
       setState(() {
         final Transaction t = Transaction();
-        t.id.value = Data().transactions.getNextTransactionId();
+        t.id.value = -1;
         t.accountId.value = getLastUsedOrFirstAccount().uniqueId;
         t.dateTime.value = DateTime.now();
 
-        Data().transactions.addEntry(moneyObject: t, isNewEntry: true);
+        Data().transactions.appendNewMoneyObject(t);
       });
     };
 

@@ -63,18 +63,26 @@ class MoneyObjects<T> {
     return _list;
   }
 
-  void addEntry({required final MoneyObject moneyObject, bool isNewEntry = false, bool fireNotification = true}) {
+  void appendMoneyObject(final MoneyObject moneyObject) {
+    assert(moneyObject.uniqueId != -1);
+
     _list.add(moneyObject);
     _map[(moneyObject).uniqueId] = moneyObject;
+  }
 
-    // keep track of new items, they will need to be persisted later
-    if (isNewEntry) {
-      if (moneyObject.uniqueId == -1) {
-        moneyObject.uniqueId = length + 1;
-      }
-      Data().notifyTransactionChange(
-          mutation: MutationType.inserted, moneyObject: moneyObject, fireNotification: fireNotification);
-    }
+  void appendNewMoneyObject(final MoneyObject moneyObject) {
+    assert(moneyObject.uniqueId == -1);
+
+    // assign the next available unique ID
+    moneyObject.uniqueId = _list.length;
+
+    appendMoneyObject(moneyObject);
+
+    Data().notifyTransactionChange(
+      mutation: MutationType.inserted,
+      moneyObject: moneyObject,
+      fireNotification: true,
+    );
   }
 
   T? get(final num id) {
@@ -86,7 +94,7 @@ class MoneyObjects<T> {
     for (final MyJson row in rows) {
       final MoneyObject? newInstance = instanceFromSqlite(row);
       if (newInstance != null) {
-        addEntry(moneyObject: newInstance);
+        appendMoneyObject(newInstance);
       }
     }
   }

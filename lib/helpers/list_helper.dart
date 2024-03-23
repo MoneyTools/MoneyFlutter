@@ -80,9 +80,15 @@ int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = tru
 }
 
 T? getFirstSelectedItemFromSelectionList<T>(List<int> listOfSelectedItem, List<T> listOfItems) {
-  if (listOfSelectedItem.isEmpty) {
-    return null;
+  if (listOfSelectedItem.isNotEmpty) {
+    final int indexOfFirsSelectedAccount = listOfSelectedItem.first;
+    if (isIndexInRange(listOfItems, indexOfFirsSelectedAccount)) {
+      return listOfItems[indexOfFirsSelectedAccount];
+    }
   }
-  final int indexOfFirsSelectedAccount = listOfSelectedItem.first;
-  return listOfItems[indexOfFirsSelectedAccount];
+  return null;
+}
+
+bool isIndexInRange(List array, int index) {
+  return index >= 0 && index < array.length;
 }

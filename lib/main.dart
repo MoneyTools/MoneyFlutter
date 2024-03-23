@@ -281,7 +281,12 @@ class MainView extends StatelessWidget {
     data.assessMutationsCountOfAllModels();
   }
 
-  void onSaveToSql() {
+  void onSaveToSql() async {
+    if (settings.fileManager.fullPathToLastOpenedFile.isEmpty) {
+      // this happens if the user started with a new file and click save to SQL
+      settings.fileManager.fullPathToLastOpenedFile = await settings.fileManager.defaultFolderToSaveTo('mymoney.mmdb');
+    }
+
     data.saveToSql(
         filePathToLoad: settings.fileManager.fullPathToLastOpenedFile,
         callbackWhenLoaded: (final bool success) {

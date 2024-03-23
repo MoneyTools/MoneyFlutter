@@ -138,7 +138,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
 
           setState(() {
             // append to the list of transactions
-            Data().transactions.addEntry(moneyObject: _transaction, isNewEntry: true);
+            Data().transactions.appendNewMoneyObject(_transaction);
             isInEditingMode = true;
           });
         },

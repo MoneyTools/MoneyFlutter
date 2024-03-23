@@ -1,3 +1,4 @@
+import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/settings.dart';
 import 'package:path/path.dart' as p;
@@ -26,6 +27,10 @@ class FileManager {
       }
     }
     return await getDocumentDirectory();
+  }
+
+  Future<String> defaultFolderToSaveTo(final String defaultFileName) async {
+    return MyFileSystems.append(await getDocumentDirectory(), defaultFileName);
   }
 
   bool shouldLoadLastDataFile() {

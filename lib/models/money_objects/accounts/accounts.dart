@@ -16,33 +16,33 @@ class Accounts extends MoneyObjects<Account> {
     final List<MyJson> demoAccounts = <MyJson>[
       // ignore: always_specify_types
       {
-        'Id': 0,
+        'Id': -1,
         'AccountId': 'BankAccountIdForTesting',
         'Name': 'U.S. Bank',
         'Type': AccountType.savings.index,
         'Currency': 'USD',
       },
       // ignore: always_specify_types
-      {'Id': 1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index, 'Currency': 'USD'},
+      {'Id': -1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 2, 'Name': 'KeyBank', 'Type': AccountType.moneyMarket.index, 'Currency': 'USD'},
+      {'Id': -1, 'Name': 'KeyBank', 'Type': AccountType.moneyMarket.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 3, 'Name': 'Mattress', 'Type': AccountType.cash.index, 'Currency': 'USD'},
+      {'Id': -1, 'Name': 'Mattress', 'Type': AccountType.cash.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 4, 'Name': 'Revolut UK', 'Type': AccountType.credit.index, 'Currency': 'GBP'},
+      {'Id': -1, 'Name': 'Revolut UK', 'Type': AccountType.credit.index, 'Currency': 'GBP'},
       // ignore: always_specify_types
-      {'Id': 5, 'Name': 'Fidelity', 'Type': AccountType.investment.index, 'Currency': 'USD'},
+      {'Id': -1, 'Name': 'Fidelity', 'Type': AccountType.investment.index, 'Currency': 'USD'},
       // ignore: always_specify_types
-      {'Id': 6, 'Name': 'Bank of Japan', 'Type': AccountType.retirement.index, 'Currency': 'JPY'},
+      {'Id': -1, 'Name': 'Bank of Japan', 'Type': AccountType.retirement.index, 'Currency': 'JPY'},
       // ignore: always_specify_types
-      {'Id': 7, 'Name': 'James Bonds', 'Type': AccountType.asset.index, 'Currency': 'GBP'},
+      {'Id': -1, 'Name': 'James Bonds', 'Type': AccountType.asset.index, 'Currency': 'GBP'},
       // ignore: always_specify_types
-      {'Id': 8, 'Name': 'KickStarter', 'Type': AccountType.loan.index, 'Currency': 'CAD'},
+      {'Id': -1, 'Name': 'KickStarter', 'Type': AccountType.loan.index, 'Currency': 'CAD'},
       // ignore: always_specify_types
-      {'Id': 9, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index, 'Currency': 'USD'},
+      {'Id': -1, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index, 'Currency': 'USD'},
     ];
     for (final MyJson demoAccount in demoAccounts) {
-      addEntry(moneyObject: Account.fromJson(demoAccount));
+      appendNewMoneyObject(Account.fromJson(demoAccount));
     }
   }
 
@@ -67,10 +67,9 @@ class Accounts extends MoneyObjects<Account> {
   Account addNewAccount(final String accountName) {
     // add a new Account
     final account = Account();
-    account.id.value = Data().accounts.length + 1;
     account.name.value = '$accountName ${account.id.value}';
 
-    Data().accounts.addEntry(moneyObject: account, isNewEntry: true);
+    Data().accounts.appendNewMoneyObject(account);
     return account;
   }
 

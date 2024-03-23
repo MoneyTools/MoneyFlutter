@@ -1,7 +1,7 @@
 part of 'data.dart';
 
 extension DataFromSql on Data {
-  Future<void> loadFromSql(String filePathToLoad) async {
+  Future<bool> loadFromSql(String filePathToLoad) async {
     // Load from SQLite
     final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
 
@@ -28,35 +28,33 @@ extension DataFromSql on Data {
 
       // Close the database when done
       db.dispose();
+      return true;
     }
+    return false;
   }
 
   Future<bool> saveToSql({
-    required final String? filePathToLoad,
+    required final String filePathToLoad,
     required final Function callbackWhenLoaded,
   }) async {
     try {
-      final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
+      final MyDatabase db = MyDatabase(filePathToLoad);
 
-      if (pathToDatabaseFile != null) {
-        final MyDatabase db = MyDatabase(pathToDatabaseFile);
+      onlineAccounts.saveSql(db, 'OnlineAccounts');
+      accounts.saveSql(db, 'Accounts');
+      payees.saveSql(db, 'Payees');
+      aliases.saveSql(db, 'Aliases');
+      accountAliases.saveSql(db, 'AccountAliases');
+      categories.saveSql(db, 'Categories');
+      currencies.saveSql(db, 'Currencies');
+      transactions.saveSql(db, 'Transactions');
+      securities.saveSql(db, 'Securities');
+      stockSplits.saveSql(db, 'StockSplits');
+      rentBuildings.saveSql(db, 'Buildings');
+      loanPayments.saveSql(db, 'LoanPayments');
+      transactionExtras.saveSql(db, 'TransactionExtras');
 
-        onlineAccounts.saveSql(db, 'OnlineAccounts');
-        accounts.saveSql(db, 'Accounts');
-        payees.saveSql(db, 'Payees');
-        aliases.saveSql(db, 'Aliases');
-        accountAliases.saveSql(db, 'AccountAliases');
-        categories.saveSql(db, 'Categories');
-        currencies.saveSql(db, 'Currencies');
-        transactions.saveSql(db, 'Transactions');
-        securities.saveSql(db, 'Securities');
-        stockSplits.saveSql(db, 'StockSplits');
-        rentBuildings.saveSql(db, 'Buildings');
-        loanPayments.saveSql(db, 'LoanPayments');
-        transactionExtras.saveSql(db, 'TransactionExtras');
-
-        db.dispose();
-      }
+      db.dispose();
     } catch (e) {
       debugLog(e.toString());
       callbackWhenLoaded(false);

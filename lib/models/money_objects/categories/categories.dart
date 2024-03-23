@@ -99,12 +99,12 @@ class Categories extends MoneyObjects<Category> {
 
     if (category == null) {
       category = Category(
-        id: length,
+        id: -1,
         name: name,
         type: type,
       );
 
-      addEntry(moneyObject: category);
+      appendNewMoneyObject(category);
     }
     // TODO
     // else if (result.IsDeleted) {
@@ -212,29 +212,25 @@ class Categories extends MoneyObjects<Category> {
   @override
   void loadDemoData() {
     clear();
-    addEntry(
-        moneyObject:
-            Category(id: 0, name: 'Paychecks', description: '', type: CategoryType.income, color: '#FFAAFFBB'));
-    addEntry(
-        moneyObject:
-            Category(id: 1, name: 'Investment', description: '', type: CategoryType.investment, color: '#FFA1A2A3'));
-    addEntry(
-        moneyObject:
-            Category(id: 2, name: 'Interests', description: '', type: CategoryType.income, color: '#FFFF2233'));
-    addEntry(
-        moneyObject: Category(id: 3, name: 'Rental', description: '', type: CategoryType.income, color: '#FF11FF33'));
-    addEntry(
-        moneyObject: Category(id: 4, name: 'Lottery', description: '', type: CategoryType.none, color: '#FF1122FF'));
-    addEntry(
-        moneyObject:
-            Category(id: 5, name: 'Mortgage', description: '', type: CategoryType.expense, color: '#FFBB2233'));
-    addEntry(
-        moneyObject: Category(id: 6, name: 'Saving', description: '', type: CategoryType.income, color: '#FFBB2233'));
-    addEntry(
-        moneyObject: Category(id: 7, name: 'Bills', description: '', type: CategoryType.expense, color: '#FF11DD33'));
-    addEntry(
-        moneyObject: Category(id: 8, name: 'Taxes', description: '', type: CategoryType.expense, color: '#FF1122DD'));
-    addEntry(moneyObject: Category(id: 9, name: 'School', description: '', type: CategoryType.expense));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Paychecks', description: '', type: CategoryType.income, color: '#FFAAFFBB'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Investment', description: '', type: CategoryType.investment, color: '#FFA1A2A3'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Interests', description: '', type: CategoryType.income, color: '#FFFF2233'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Rental', description: '', type: CategoryType.income, color: '#FF11FF33'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Lottery', description: '', type: CategoryType.none, color: '#FF1122FF'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Mortgage', description: '', type: CategoryType.expense, color: '#FFBB2233'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Saving', description: '', type: CategoryType.income, color: '#FFBB2233'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Bills', description: '', type: CategoryType.expense, color: '#FF11DD33'));
+    appendNewMoneyObject(
+        Category(id: -1, name: 'Taxes', description: '', type: CategoryType.expense, color: '#FF1122DD'));
+    appendNewMoneyObject(Category(id: -1, name: 'School', description: '', type: CategoryType.expense));
   }
 
   @override

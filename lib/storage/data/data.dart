@@ -185,10 +185,13 @@ class Data {
   Future<bool> loadFromPath({required final String filePathToLoad}) async {
     try {
       // Sqlite
-      if (filePathToLoad.toLowerCase().endsWith('.mymoney.mmdb')) {
+      if (filePathToLoad.toLowerCase().endsWith('.mmdb')) {
         // Load from SQLite
-        await loadFromSql(filePathToLoad);
-        Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
+        if (await loadFromSql(filePathToLoad)) {
+          Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
+        } else {
+          Settings().fileManager.rememberWhereTheDataCameFrom('');
+        }
       } else {
         // CSV
         // Load from a folder that contains CSV files

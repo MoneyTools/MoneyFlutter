@@ -1,5 +1,12 @@
 # Change Log
 
+## [version 1.4.8] 2024-03-23
+
+### Added
+
+- Save to new SQL file
+
+
 ## [version 1.4.7] 2024-03-22
 
 ### Updated
