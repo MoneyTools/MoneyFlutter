@@ -302,3 +302,14 @@ dart format . -l 222
 ## Layer Dependency Diagram
 
 ![layers.svg](layers.svg)
+
+## Graph Call
+
+install
+
+```dart pub global activate lakos```
+
+```brew install graphviz```
+
+run
+```./graph.sh```

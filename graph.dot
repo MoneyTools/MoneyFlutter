@@ -31,6 +31,7 @@ digraph "" {
   "/lib/models/money_objects/transactions/transaction.dart" [label="transaction"];
   "/lib/models/money_objects/accounts/accounts.dart" [label="accounts"];
   "/lib/models/money_objects/accounts/account.dart" [label="account"];
+  "/lib/models/money_objects/accounts/picker_account_type.dart" [label="picker_account_type"];
   "/lib/models/money_objects/accounts/account_types.dart" [label="account_types"];
   "/lib/models/money_objects/aliases/alias.dart" [label="alias"];
   "/lib/models/money_objects/aliases/alias_types.dart" [label="alias_types"];
@@ -51,6 +52,7 @@ digraph "" {
   "/lib/models/value_parser.dart" [label="value_parser"];
   "/lib/models/constants.dart" [label="constants"];
   "/lib/models/settings.dart" [label="settings"];
+  "/lib/storage/file_manager.dart" [label="file_manager"];
   "/lib/storage/database/database.dart" [label="database"];
   "/lib/storage/database/database_web.dart" [label="database_web"];
   "/lib/storage/database/database_sql.dart" [label="database_sql"];
@@ -65,6 +67,7 @@ digraph "" {
   "/lib/storage/data/data_mutations.dart" [label="data_mutations"];
   "/lib/storage/data/data_extension_sql.dart" [label="data_extension_sql" shape=octagon];
   "/lib/main.dart" [label="main"];
+  "/lib/app_caption.dart" [label="app_caption"];
   "/lib/views/view_loans/view_loans_details_panels.dart" [label="view_loans_details_panels" shape=octagon];
   "/lib/views/view_loans/view_loans.dart" [label="view_loans"];
   "/lib/views/view_accounts/picker_account.dart" [label="picker_account"];
@@ -74,9 +77,13 @@ digraph "" {
   "/lib/views/view_aliases/view_aliases.dart" [label="view_aliases"];
   "/lib/views/view_transactions/dialog_mutate_transaction.dart" [label="dialog_mutate_transaction"];
   "/lib/views/view_transactions/view_transactions.dart" [label="view_transactions"];
+  "/lib/views/view_welcome.dart" [label="view_welcome"];
   "/lib/views/view_payees/view_payees_details_panels.dart" [label="view_payees_details_panels" shape=octagon];
   "/lib/views/view_payees/view_payees.dart" [label="view_payees"];
+  "/lib/views/view_payees/picker_payee_or_transfer.dart" [label="picker_payee_or_transfer"];
   "/lib/views/view_payees/picker_payee.dart" [label="picker_payee"];
+  "/lib/views/view_pending_changes/view_pending_changes.dart" [label="view_pending_changes"];
+  "/lib/views/view_pending_changes/bage_pending_changes.dart" [label="bage_pending_changes"];
   "/lib/views/view_header.dart" [label="view_header"];
   "/lib/views/view.dart" [label="view"];
   "/lib/views/view_categories/view_categories.dart" [label="view_categories"];
@@ -104,6 +111,7 @@ digraph "" {
   "/lib/widgets/sankey/sankey_helper.dart" [label="sankey_helper"];
   "/lib/widgets/sankey/sankey_colors.dart" [label="sankey_colors"];
   "/lib/widgets/picker_edit_box_date.dart" [label="picker_edit_box_date"];
+  "/lib/widgets/working.dart" [label="working"];
   "/lib/widgets/center_message.dart" [label="center_message"];
   "/lib/widgets/snack_bar.dart" [label="snack_bar"];
   "/lib/widgets/dialog.dart" [label="dialog"];
@@ -113,6 +121,7 @@ digraph "" {
   "/lib/widgets/semantic_text.dart" [label="semantic_text"];
   "/lib/widgets/amount.dart" [label="amount"];
   "/lib/widgets/dialog_button.dart" [label="dialog_button"];
+  "/lib/widgets/picker_letter.dart" [label="picker_letter"];
   "/lib/widgets/picker_edit_box.dart" [label="picker_edit_box"];
   "/lib/widgets/chart.dart" [label="chart"];
   "/lib/widgets/circle.dart" [label="circle"];
@@ -130,14 +139,14 @@ digraph "" {
   "/lib/widgets/list_view/transactions/list_view_transaction_splits.dart" [label="list_view_transaction_splits"];
   "/lib/widgets/dialog_full_screen.dart" [label="dialog_full_screen"];
   "/lib/widgets/confirmation_dialog.dart" [label="confirmation_dialog"];
-  "/lib/widgets/change_summary.dart" [label="change_summary"];
   "/lib/appbar.dart" [label="appbar"];
   subgraph "cluster~" {
-    label="MoneyFlutter";
+    label="money_flutter";
     subgraph "cluster~/lib" {
       label="lib";
       "/lib/menu.dart";
       "/lib/main.dart";
+      "/lib/app_caption.dart";
       "/lib/appbar.dart";
       subgraph "cluster~/lib/models" {
         label="models";
@@ -210,6 +219,7 @@ digraph "" {
             label="accounts";
             "/lib/models/money_objects/accounts/accounts.dart";
             "/lib/models/money_objects/accounts/account.dart";
+            "/lib/models/money_objects/accounts/picker_account_type.dart";
             "/lib/models/money_objects/accounts/account_types.dart";
           }
           subgraph "cluster~/lib/models/money_objects/aliases" {
@@ -249,6 +259,7 @@ digraph "" {
       }
       subgraph "cluster~/lib/storage" {
         label="storage";
+        "/lib/storage/file_manager.dart";
         subgraph "cluster~/lib/storage/database" {
           label="database";
           "/lib/storage/database/database.dart";
@@ -274,6 +285,7 @@ digraph "" {
       }
       subgraph "cluster~/lib/views" {
         label="views";
+        "/lib/views/view_welcome.dart";
         "/lib/views/view_header.dart";
         "/lib/views/view.dart";
         "/lib/views/view_currencies.dart";
@@ -302,7 +314,13 @@ digraph "" {
           label="view_payees";
           "/lib/views/view_payees/view_payees_details_panels.dart";
           "/lib/views/view_payees/view_payees.dart";
+          "/lib/views/view_payees/picker_payee_or_transfer.dart";
           "/lib/views/view_payees/picker_payee.dart";
+        }
+        subgraph "cluster~/lib/views/view_pending_changes" {
+          label="view_pending_changes";
+          "/lib/views/view_pending_changes/view_pending_changes.dart";
+          "/lib/views/view_pending_changes/bage_pending_changes.dart";
         }
         subgraph "cluster~/lib/views/view_categories" {
           label="view_categories";
@@ -336,6 +354,7 @@ digraph "" {
         "/lib/widgets/adaptive_columns.dart";
         "/lib/widgets/widgets.dart";
         "/lib/widgets/picker_edit_box_date.dart";
+        "/lib/widgets/working.dart";
         "/lib/widgets/center_message.dart";
         "/lib/widgets/snack_bar.dart";
         "/lib/widgets/dialog.dart";
@@ -345,6 +364,7 @@ digraph "" {
         "/lib/widgets/semantic_text.dart";
         "/lib/widgets/amount.dart";
         "/lib/widgets/dialog_button.dart";
+        "/lib/widgets/picker_letter.dart";
         "/lib/widgets/picker_edit_box.dart";
         "/lib/widgets/chart.dart";
         "/lib/widgets/circle.dart";
@@ -355,7 +375,6 @@ digraph "" {
         "/lib/widgets/picker_panel.dart";
         "/lib/widgets/dialog_full_screen.dart";
         "/lib/widgets/confirmation_dialog.dart";
-        "/lib/widgets/change_summary.dart";
         subgraph "cluster~/lib/widgets/details_panel" {
           label="details_panel";
           "/lib/widgets/details_panel/details_panel.dart";
@@ -385,6 +404,8 @@ digraph "" {
       }
     }
   }
+  "/lib/menu.dart" -> "/lib/helpers/color_helper.dart";
+  "/lib/menu.dart" -> "/lib/models/constants.dart";
   "/lib/menu.dart" -> "/lib/models/settings.dart";
   "/lib/models/money_objects/securities/securities.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/models/money_objects/securities/securities.dart" -> "/lib/models/money_objects/money_objects.dart";
@@ -406,10 +427,10 @@ digraph "" {
   "/lib/models/money_objects/online_accounts/online_account.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/models/money_objects/online_accounts/online_account.dart" -> "/lib/models/money_objects/money_objects.dart";
   "/lib/models/money_objects/payees/payees.dart" -> "/lib/helpers/list_helper.dart";
-  "/lib/models/money_objects/payees/payees.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/payees/payees.dart" -> "/lib/models/money_objects/money_objects.dart";
   "/lib/models/money_objects/payees/payees.dart" -> "/lib/models/money_objects/payees/payee.dart";
   "/lib/models/money_objects/payees/payees.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
+  "/lib/models/money_objects/payees/payees.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/payees/payee.dart" -> "/lib/helpers/string_helper.dart";
   "/lib/models/money_objects/payees/payee.dart" -> "/lib/models/money_objects/currencies/currency.dart";
   "/lib/models/money_objects/payees/payee.dart" -> "/lib/models/money_objects/money_object.dart";
@@ -443,6 +464,7 @@ digraph "" {
   "/lib/models/money_objects/rent_buildings/rent_buildings.dart" -> "/lib/models/money_objects/rent_buildings/rent_building.dart";
   "/lib/models/money_objects/rent_buildings/rent_buildings.dart" -> "/lib/models/money_objects/rental_unit/rental_unit.dart";
   "/lib/models/money_objects/rent_buildings/rent_buildings.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
+  "/lib/models/money_objects/transfers/transfer.dart" -> "/lib/models/money_objects/accounts/account.dart";
   "/lib/models/money_objects/transfers/transfer.dart" -> "/lib/models/money_objects/splits/splits.dart";
   "/lib/models/money_objects/transfers/transfer.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
   "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/helpers/date_helper.dart";
@@ -457,30 +479,38 @@ digraph "" {
   "/lib/models/money_objects/loan_payments/loan_payments.dart" -> "/lib/models/money_objects/money_objects.dart";
   "/lib/models/money_objects/loan_payments/loan_payments.dart" -> "/lib/models/money_objects/loan_payments/loan_payment.dart" [style=dashed];
   "/lib/models/money_objects/money_objects.dart" -> "/lib/helpers/list_helper.dart";
+  "/lib/models/money_objects/money_objects.dart" -> "/lib/models/money_objects/money_object.dart";
   "/lib/models/money_objects/money_objects.dart" -> "/lib/models/settings.dart";
   "/lib/models/money_objects/money_objects.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/money_objects.dart" -> "/lib/storage/database/database.dart";
-  "/lib/models/money_objects/money_objects.dart" -> "/lib/models/money_objects/money_object.dart";
-  "/lib/models/money_objects/money_objects.dart" -> "/lib/models/money_objects/money_object.dart" [style=dashed];
   "/lib/models/money_objects/money_objects.dart" -> "/lib/models/fields/fields.dart" [style=dashed];
-  "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/storage/data/data.dart";
+  "/lib/models/money_objects/money_objects.dart" -> "/lib/models/money_objects/money_object.dart" [style=dashed];
   "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/models/money_objects/accounts/account.dart";
   "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/models/money_objects/money_objects.dart";
+  "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/models/money_objects/splits/split.dart";
   "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
+  "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/models/money_objects/transfers/transfer.dart";
+  "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/storage/data/data.dart";
+  "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/models/money_objects/transactions/transaction.dart" [style=dashed];
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/helpers/date_helper.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/constants.dart";
-  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/categories/category.dart";
-  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/accounts/account.dart";
+  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/categories/category.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/currencies/currency.dart";
+  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/investments/investment.dart";
+  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/investments/investments.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/payees/payee.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/transactions/transaction_types.dart";
+  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/transfers/transfer.dart";
+  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/views/view_categories/picker_category.dart";
-  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/views/view_payees/picker_payee.dart";
+  "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/views/view_payees/picker_payee_or_transfer.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/widgets/list_view/list_item_card.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/widgets/picker_edit_box_date.dart";
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/transactions/transaction_types.dart" [style=dashed];
+  "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/helpers/list_helper.dart";
+  "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/helpers/string_helper.dart";
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/settings.dart";
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/money_objects/accounts/account.dart";
@@ -489,12 +519,15 @@ digraph "" {
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/helpers/date_helper.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/models/constants.dart";
-  "/lib/models/money_objects/accounts/account.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/models/money_objects/accounts/account_types.dart";
+  "/lib/models/money_objects/accounts/account.dart" -> "/lib/models/money_objects/accounts/picker_account_type.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/models/money_objects/currencies/currency.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/models/money_objects/money_object.dart";
+  "/lib/models/money_objects/accounts/account.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/widgets/list_view/list_item_card.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/models/money_objects/accounts/account_types.dart" [style=dashed];
+  "/lib/models/money_objects/accounts/picker_account_type.dart" -> "/lib/models/money_objects/accounts/account.dart";
+  "/lib/models/money_objects/accounts/picker_account_type.dart" -> "/lib/widgets/picker_edit_box.dart";
   "/lib/models/money_objects/aliases/alias.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/models/money_objects/aliases/alias.dart" -> "/lib/helpers/string_helper.dart";
   "/lib/models/money_objects/aliases/alias.dart" -> "/lib/models/money_objects/aliases/alias_types.dart";
@@ -558,11 +591,15 @@ digraph "" {
   "/lib/models/value_parser.dart" -> "/lib/helpers/misc_helpers.dart";
   "/lib/models/value_parser.dart" -> "/lib/helpers/string_helper.dart";
   "/lib/models/value_parser.dart" -> "/lib/widgets/semantic_text.dart";
-  "/lib/models/settings.dart" -> "/lib/helpers/json_helper.dart";
-  "/lib/models/settings.dart" -> "/lib/models/money_objects/accounts/account.dart";
-  "/lib/models/settings.dart" -> "/lib/storage/data/data_mutations.dart";
   "/lib/models/settings.dart" -> "/lib/helpers/misc_helpers.dart";
   "/lib/models/settings.dart" -> "/lib/models/constants.dart";
+  "/lib/models/settings.dart" -> "/lib/models/money_objects/accounts/account.dart";
+  "/lib/models/settings.dart" -> "/lib/storage/data/data.dart";
+  "/lib/models/settings.dart" -> "/lib/storage/data/data_mutations.dart";
+  "/lib/models/settings.dart" -> "/lib/storage/file_manager.dart";
+  "/lib/storage/file_manager.dart" -> "/lib/helpers/file_systems.dart";
+  "/lib/storage/file_manager.dart" -> "/lib/helpers/string_helper.dart";
+  "/lib/storage/file_manager.dart" -> "/lib/models/settings.dart";
   "/lib/storage/database/database_web.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/storage/database/database_sql.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/storage/import/import_transactions_from_text.dart" -> "/lib/helpers/date_helper.dart";
@@ -586,58 +623,64 @@ digraph "" {
   "/lib/storage/import/import_qif.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/storage/import/import_qif.dart" -> "/lib/helpers/misc_helpers.dart";
   "/lib/storage/import/import_qif.dart" -> "/lib/helpers/string_helper.dart";
+  "/lib/storage/import/import_qfx.dart" -> "/lib/helpers/date_helper.dart";
   "/lib/storage/import/import_qfx.dart" -> "/lib/helpers/string_helper.dart";
   "/lib/storage/import/import_qfx.dart" -> "/lib/models/money_objects/accounts/account.dart";
-  "/lib/storage/import/import_qfx.dart" -> "/lib/storage/data/data.dart";
-  "/lib/storage/import/import_qfx.dart" -> "/lib/models/money_objects/payees/payee.dart";
   "/lib/storage/import/import_qfx.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
+  "/lib/storage/import/import_qfx.dart" -> "/lib/storage/data/data.dart";
   "/lib/storage/import/import_qfx.dart" -> "/lib/widgets/snack_bar.dart";
-  "/lib/storage/data/data.dart" -> "/lib/helpers/string_helper.dart";
-  "/lib/storage/data/data.dart" -> "/lib/storage/database/database.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/account_aliases/account_aliases.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/aliases/aliases.dart";
   "/lib/storage/data/data.dart" -> "/lib/helpers/file_systems.dart";
+  "/lib/storage/data/data.dart" -> "/lib/helpers/json_helper.dart";
+  "/lib/storage/data/data.dart" -> "/lib/helpers/string_helper.dart";
+  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/account_aliases/account_aliases.dart";
+  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/accounts/accounts.dart";
+  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/aliases/aliases.dart";
+  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/categories/categories.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/currencies/currencies.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/investments/investments.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/loan_payments/loan_payments.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/money_objects.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/online_accounts/online_accounts.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/rental_unit/rental_units.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/rent_buildings/rent_buildings.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/accounts/accounts.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/categories/categories.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/payees/payees.dart";
+  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/rent_buildings/rent_buildings.dart";
+  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/rental_unit/rental_units.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/securities/securities.dart";
+  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/splits/splits.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/stock_splits/stock_splits.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/transaction_extras/transaction_extras.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/money_objects/transactions/transactions.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/constants.dart";
-  "/lib/storage/data/data.dart" -> "/lib/models/money_objects/splits/splits.dart";
   "/lib/storage/data/data.dart" -> "/lib/models/settings.dart";
+  "/lib/storage/data/data.dart" -> "/lib/storage/database/database.dart";
+  "/lib/storage/data/data.dart" -> "/lib/widgets/snack_bar.dart";
   "/lib/storage/data/data.dart" -> "/lib/helpers/json_helper.dart" [style=dashed];
+  "/lib/main.dart" -> "/lib/appbar.dart";
   "/lib/main.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/main.dart" -> "/lib/helpers/date_helper.dart";
   "/lib/main.dart" -> "/lib/helpers/file_systems.dart";
+  "/lib/main.dart" -> "/lib/helpers/misc_helpers.dart";
+  "/lib/main.dart" -> "/lib/menu.dart";
+  "/lib/main.dart" -> "/lib/models/constants.dart";
+  "/lib/main.dart" -> "/lib/models/settings.dart";
+  "/lib/main.dart" -> "/lib/storage/data/data.dart";
+  "/lib/main.dart" -> "/lib/storage/file_manager.dart";
   "/lib/main.dart" -> "/lib/storage/import/import_pdf.dart";
   "/lib/main.dart" -> "/lib/storage/import/import_qfx.dart";
   "/lib/main.dart" -> "/lib/storage/import/import_qif.dart";
-  "/lib/main.dart" -> "/lib/models/settings.dart";
   "/lib/main.dart" -> "/lib/storage/import/import_transactions_from_text.dart";
+  "/lib/main.dart" -> "/lib/views/view_accounts/view_accounts.dart";
   "/lib/main.dart" -> "/lib/views/view_aliases/view_aliases.dart";
   "/lib/main.dart" -> "/lib/views/view_cashflow/view_cashflow.dart";
-  "/lib/main.dart" -> "/lib/views/view_loans/view_loans.dart";
-  "/lib/main.dart" -> "/lib/views/view_rentals/view_rentals.dart";
-  "/lib/main.dart" -> "/lib/widgets/keyboard_widget.dart";
-  "/lib/main.dart" -> "/lib/appbar.dart";
-  "/lib/main.dart" -> "/lib/models/constants.dart";
-  "/lib/main.dart" -> "/lib/helpers/misc_helpers.dart";
-  "/lib/main.dart" -> "/lib/menu.dart";
-  "/lib/main.dart" -> "/lib/storage/data/data.dart";
-  "/lib/main.dart" -> "/lib/views/view_accounts/view_accounts.dart";
   "/lib/main.dart" -> "/lib/views/view_categories/view_categories.dart";
+  "/lib/main.dart" -> "/lib/views/view_loans/view_loans.dart";
   "/lib/main.dart" -> "/lib/views/view_payees/view_payees.dart";
+  "/lib/main.dart" -> "/lib/views/view_rentals/view_rentals.dart";
   "/lib/main.dart" -> "/lib/views/view_transactions/view_transactions.dart";
+  "/lib/main.dart" -> "/lib/views/view_welcome.dart";
+  "/lib/main.dart" -> "/lib/widgets/keyboard_widget.dart";
   "/lib/main.dart" -> "/lib/widgets/snack_bar.dart";
+  "/lib/main.dart" -> "/lib/widgets/working.dart";
+  "/lib/app_caption.dart" -> "/lib/models/settings.dart";
+  "/lib/app_caption.dart" -> "/lib/views/view_pending_changes/bage_pending_changes.dart";
   "/lib/views/view_loans/view_loans.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/views/view_loans/view_loans.dart" -> "/lib/storage/data/data.dart";
   "/lib/views/view_loans/view_loans.dart" -> "/lib/models/money_objects/loan_payments/loan_payments.dart";
@@ -649,6 +692,7 @@ digraph "" {
   "/lib/views/view_loans/view_loans.dart" -> "/lib/widgets/list_view/transactions/list_view_transactions.dart";
   "/lib/views/view_accounts/picker_account.dart" -> "/lib/models/money_objects/accounts/account.dart";
   "/lib/views/view_accounts/picker_account.dart" -> "/lib/storage/data/data.dart";
+  "/lib/views/view_accounts/picker_account.dart" -> "/lib/widgets/picker_edit_box.dart";
   "/lib/views/view_accounts/view_accounts.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/views/view_accounts/view_accounts.dart" -> "/lib/models/constants.dart";
   "/lib/views/view_accounts/view_accounts.dart" -> "/lib/models/money_objects/accounts/accounts.dart";
@@ -687,6 +731,8 @@ digraph "" {
   "/lib/views/view_transactions/view_transactions.dart" -> "/lib/widgets/list_view/transactions/list_view_transaction_splits.dart";
   "/lib/views/view_transactions/view_transactions.dart" -> "/lib/views/view.dart";
   "/lib/views/view_transactions/view_transactions.dart" -> "/lib/widgets/widgets.dart";
+  "/lib/views/view_welcome.dart" -> "/lib/helpers/color_helper.dart";
+  "/lib/views/view_welcome.dart" -> "/lib/widgets/gaps.dart";
   "/lib/views/view_payees/view_payees.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/views/view_payees/view_payees.dart" -> "/lib/storage/data/data.dart";
   "/lib/views/view_payees/view_payees.dart" -> "/lib/models/money_objects/payees/payee.dart";
@@ -695,26 +741,37 @@ digraph "" {
   "/lib/views/view_payees/view_payees.dart" -> "/lib/widgets/chart.dart";
   "/lib/views/view_payees/view_payees.dart" -> "/lib/views/view.dart";
   "/lib/views/view_payees/view_payees.dart" -> "/lib/widgets/list_view/transactions/list_view_transactions.dart";
+  "/lib/views/view_payees/picker_payee_or_transfer.dart" -> "/lib/models/money_objects/accounts/account.dart";
+  "/lib/views/view_payees/picker_payee_or_transfer.dart" -> "/lib/models/money_objects/payees/payee.dart";
+  "/lib/views/view_payees/picker_payee_or_transfer.dart" -> "/lib/views/view_accounts/picker_account.dart";
+  "/lib/views/view_payees/picker_payee_or_transfer.dart" -> "/lib/views/view_payees/picker_payee.dart";
+  "/lib/views/view_payees/picker_payee_or_transfer.dart" -> "/lib/widgets/gaps.dart";
   "/lib/views/view_payees/picker_payee.dart" -> "/lib/storage/data/data.dart";
   "/lib/views/view_payees/picker_payee.dart" -> "/lib/models/money_objects/payees/payee.dart";
   "/lib/views/view_payees/picker_payee.dart" -> "/lib/widgets/picker_edit_box.dart";
+  "/lib/views/view_pending_changes/view_pending_changes.dart" -> "/lib/models/money_objects/money_object.dart";
+  "/lib/views/view_pending_changes/view_pending_changes.dart" -> "/lib/storage/data/data.dart";
+  "/lib/views/view_pending_changes/view_pending_changes.dart" -> "/lib/widgets/dialog.dart";
+  "/lib/views/view_pending_changes/bage_pending_changes.dart" -> "/lib/models/settings.dart";
+  "/lib/views/view_pending_changes/bage_pending_changes.dart" -> "/lib/views/view_pending_changes/view_pending_changes.dart";
   "/lib/views/view_header.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/views/view_header.dart" -> "/lib/helpers/string_helper.dart";
   "/lib/views/view_header.dart" -> "/lib/models/settings.dart";
   "/lib/views/view_header.dart" -> "/lib/widgets/filter_input.dart";
   "/lib/views/view_header.dart" -> "/lib/widgets/three_part_label.dart";
+  "/lib/views/view.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/views/view.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/views/view.dart" -> "/lib/models/constants.dart";
   "/lib/views/view.dart" -> "/lib/models/money_objects/currencies/currency.dart";
   "/lib/views/view.dart" -> "/lib/models/settings.dart";
   "/lib/views/view.dart" -> "/lib/storage/data/data.dart";
+  "/lib/views/view.dart" -> "/lib/views/view_header.dart";
+  "/lib/views/view.dart" -> "/lib/widgets/adaptive_columns.dart";
+  "/lib/views/view.dart" -> "/lib/widgets/details_panel/details_panel.dart";
   "/lib/views/view.dart" -> "/lib/widgets/dialog_button.dart";
   "/lib/views/view.dart" -> "/lib/widgets/list_view/column_filter_panel.dart";
-  "/lib/views/view.dart" -> "/lib/widgets/adaptive_columns.dart";
-  "/lib/views/view.dart" -> "/lib/widgets/widgets.dart";
-  "/lib/views/view.dart" -> "/lib/views/view_header.dart";
-  "/lib/views/view.dart" -> "/lib/widgets/details_panel/details_panel.dart";
   "/lib/views/view.dart" -> "/lib/widgets/list_view/list_view.dart";
+  "/lib/views/view.dart" -> "/lib/widgets/widgets.dart";
   "/lib/views/view.dart" -> "/lib/models/fields/field_filter.dart";
   "/lib/views/view_categories/view_categories.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/views/view_categories/view_categories.dart" -> "/lib/models/money_objects/money_object.dart";
@@ -730,6 +787,7 @@ digraph "" {
   "/lib/views/view_categories/picker_category.dart" -> "/lib/storage/data/data.dart";
   "/lib/views/view_categories/picker_category.dart" -> "/lib/models/money_objects/categories/category.dart";
   "/lib/views/view_categories/picker_category.dart" -> "/lib/widgets/picker_edit_box.dart";
+  "/lib/views/view_currencies.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/views/view_currencies.dart" -> "/lib/storage/data/data.dart";
   "/lib/views/view_currencies.dart" -> "/lib/models/money_objects/currencies/currency.dart";
   "/lib/views/view_currencies.dart" -> "/lib/widgets/dialog.dart";
@@ -754,9 +812,12 @@ digraph "" {
   "/lib/views/view_rentals/view_rentals.dart" -> "/lib/widgets/chart.dart";
   "/lib/views/view_rentals/view_rentals.dart" -> "/lib/views/view.dart";
   "/lib/views/view_rentals/view_rentals.dart" -> "/lib/widgets/list_view/transactions/list_view_transactions.dart";
+  "/lib/helpers/json_helper.dart" -> "/lib/helpers/misc_helpers.dart";
   "/lib/helpers/list_helper.dart" -> "/lib/helpers/misc_helpers.dart";
   "/lib/helpers/list_helper.dart" -> "/lib/helpers/string_helper.dart";
+  "/lib/helpers/color_helper.dart" -> "/lib/models/settings.dart";
   "/lib/helpers/misc_helpers.dart" -> "/lib/models/constants.dart";
+  "/lib/widgets/details_panel/details_panel.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/widgets/details_panel/details_panel.dart" -> "/lib/widgets/details_panel/details_panel_header.dart";
   "/lib/widgets/details_panel/details_panel_header.dart" -> "/lib/models/money_objects/currencies/currency.dart";
   "/lib/widgets/details_panel/details_panel_header.dart" -> "/lib/widgets/details_panel/details_panel.dart";
@@ -788,11 +849,14 @@ digraph "" {
   "/lib/widgets/import_transactions_list.dart" -> "/lib/widgets/semantic_text.dart";
   "/lib/widgets/semantic_text.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/widgets/amount.dart" -> "/lib/models/money_objects/currencies/currency.dart";
+  "/lib/widgets/picker_edit_box.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/widgets/picker_edit_box.dart" -> "/lib/widgets/picker_panel.dart";
+  "/lib/widgets/chart.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/widgets/chart.dart" -> "/lib/helpers/misc_helpers.dart";
   "/lib/widgets/chart.dart" -> "/lib/models/money_objects/currencies/currency.dart";
   "/lib/widgets/chart.dart" -> "/lib/widgets/center_message.dart";
   "/lib/widgets/three_part_label.dart" -> "/lib/helpers/color_helper.dart";
+  "/lib/widgets/picker_panel.dart" -> "/lib/widgets/picker_letter.dart";
   "/lib/widgets/list_view/list_view.dart" -> "/lib/models/fields/fields.dart";
   "/lib/widgets/list_view/list_view.dart" -> "/lib/models/money_objects/money_object.dart";
   "/lib/widgets/list_view/list_view.dart" -> "/lib/widgets/list_view/list_item.dart";
@@ -814,14 +878,14 @@ digraph "" {
   "/lib/widgets/list_view/transactions/list_view_transaction_splits.dart" -> "/lib/widgets/list_view/list_view.dart";
   "/lib/widgets/list_view/transactions/list_view_transaction_splits.dart" -> "/lib/models/money_objects/splits/splits.dart" [style=dashed];
   "/lib/widgets/dialog_full_screen.dart" -> "/lib/helpers/misc_helpers.dart";
-  "/lib/widgets/change_summary.dart" -> "/lib/models/settings.dart";
-  "/lib/appbar.dart" -> "/lib/storage/data/data.dart";
-  "/lib/appbar.dart" -> "/lib/storage/import/import_transactions_from_text.dart";
-  "/lib/appbar.dart" -> "/lib/views/view_currencies.dart";
-  "/lib/appbar.dart" -> "/lib/widgets/change_summary.dart";
-  "/lib/appbar.dart" -> "/lib/widgets/three_part_label.dart";
+  "/lib/appbar.dart" -> "/lib/app_caption.dart";
+  "/lib/appbar.dart" -> "/lib/helpers/color_helper.dart";
   "/lib/appbar.dart" -> "/lib/models/constants.dart";
   "/lib/appbar.dart" -> "/lib/models/settings.dart";
+  "/lib/appbar.dart" -> "/lib/storage/import/import_transactions_from_text.dart";
+  "/lib/appbar.dart" -> "/lib/views/view_currencies.dart";
+  "/lib/appbar.dart" -> "/lib/views/view_pending_changes/bage_pending_changes.dart";
+  "/lib/appbar.dart" -> "/lib/widgets/three_part_label.dart";
   "/lib/appbar.dart" -> "/lib/widgets/zoom.dart";
-  "metrics" [label=" isAcyclic: false \l numNodes: 130  \l numEdges: 438  \l avgDegree: 3.37 \l numOrphans: 11 \l ccd: 5216 \l acd: 40.12 \l nccd: 6.59 \l totalSloc: 11096 \l avgSloc: 85.35 \l"];
+  "metrics" [label=" isAcyclic: false \l numNodes: 138  \l numEdges: 483  \l avgDegree: 3.5 \l numOrphans: 11 \l ccd: 6824 \l acd: 49.45 \l nccd: 8.01 \l totalSloc: 12275 \l avgSloc: 88.95 \l"];
 }
