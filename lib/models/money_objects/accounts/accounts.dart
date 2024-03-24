@@ -1,3 +1,5 @@
+import 'package:money/helpers/list_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
@@ -117,11 +119,23 @@ class Accounts extends MoneyObjects<Account> {
     });
   }
 
+  Account? getByName(final String name) {
+    return iterableList().firstWhereOrNull((final Account item) {
+      return stringCompareIgnoreCasing2(item.name.value, name) == 0;
+    });
+  }
+
   @override
   String toCSV() {
     return super.getCsvFromList(
       getListSortedById(),
     );
+  }
+
+  List<Account> getListSorted() {
+    final list = iterableList().toList();
+    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
+    return list;
   }
 }
 
