@@ -11,6 +11,7 @@ Widget pickerCategory({
   String selectedName = itemSelected == null ? '' : itemSelected.name.value;
 
   return PickerEditBox(
+    title: 'Category',
     options: options,
     initialValue: selectedName,
     onChanged: (String newSelection) {

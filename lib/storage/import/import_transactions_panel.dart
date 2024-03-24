@@ -54,8 +54,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
                 const Text('Import transaction to account'),
                 gapMedium(),
                 pickerAccount(
-                  account,
-                  (final Account? accountSelected) {
+                  selected: account,
+                  onSelected: (final Account? accountSelected) {
                     setState(
                       () {
                         account = accountSelected!;

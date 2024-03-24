@@ -3,6 +3,7 @@ import 'package:money/widgets/picker_letter.dart';
 
 showPopupSelection({
   required final BuildContext context,
+  required final title,
   required final List<String> options,
   required final Function(String text) onSelected,
 }) {
@@ -10,6 +11,7 @@ showPopupSelection({
     context: context,
     builder: (final BuildContext context) {
       return AlertDialog(
+        title: Text(title),
         content: SizedBox(
           width: 400,
           height: 500,

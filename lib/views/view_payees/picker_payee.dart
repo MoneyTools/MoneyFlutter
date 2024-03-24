@@ -11,6 +11,7 @@ Widget pickerPayee({
   String selectedName = itemSelected == null ? '' : itemSelected.name.value;
 
   return PickerEditBox(
+    title: 'Payee',
     options: options,
     initialValue: selectedName,
     onChanged: (String newSelection) {
