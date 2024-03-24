@@ -4,11 +4,13 @@ import 'package:money/widgets/picker_panel.dart';
 class PickerEditBox extends StatefulWidget {
   const PickerEditBox({
     super.key,
+    required this.title,
     required this.options,
     this.initialValue,
     required this.onChanged,
   });
 
+  final String title;
   final List<String> options;
   final String? initialValue;
   final Function(String) onChanged;
@@ -49,6 +51,7 @@ class PickerEditBoxState extends State<PickerEditBox> {
         IconButton(
           onPressed: () {
             showPopupSelection(
+                title: widget.title,
                 context: context,
                 options: widget.options,
                 onSelected: (final String text) {
