@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/widgets/change_summary.dart';
+import 'package:money/views/view_pending_changes/bage_pending_changes.dart';
 
 class AppCaption extends StatelessWidget {
   final String subCaption;
@@ -15,7 +15,7 @@ class AppCaption extends StatelessWidget {
         Row(children: [
           const Text('MyMoney', textAlign: TextAlign.left),
           const SizedBox(width: 8),
-          ChangeSummaryBadge(
+          BadgePendingChanges(
             itemsAdded: Settings().trackMutations.added,
             itemsChanged: Settings().trackMutations.changed,
             itemsDeleted: Settings().trackMutations.deleted,

@@ -6,6 +6,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 export 'package:money/models/money_objects/investments/investment.dart';
 
 class Investments extends MoneyObjects<Investment> {
+  Investments() {
+    collectionName = 'Investments';
+  }
+
   @override
   void loadFromJson(final List<MyJson> rows) {
     clear();

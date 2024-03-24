@@ -5,6 +5,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Categories extends MoneyObjects<Category> {
+  Categories() {
+    collectionName = 'Categories';
+  }
+
   @override
   Category instanceFromSqlite(final MyJson row) {
     return Category.fromJson(row);

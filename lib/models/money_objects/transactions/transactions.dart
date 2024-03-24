@@ -1,10 +1,11 @@
 import 'dart:math';
-import 'package:money/models/money_objects/splits/split.dart';
-import 'package:money/models/money_objects/transfers/transfer.dart';
-import 'package:money/storage/data/data.dart';
+
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/models/money_objects/transfers/transfer.dart';
+import 'package:money/storage/data/data.dart';
 
 export 'package:money/models/money_objects/transactions/transaction.dart';
 
@@ -13,6 +14,10 @@ part 'transactions_csv.dart';
 part 'transactions_demo.dart';
 
 class Transactions extends MoneyObjects<Transaction> {
+  Transactions() {
+    collectionName = 'Transactions';
+  }
+
   double runningBalance = 0.00;
 
   @override
@@ -43,6 +48,10 @@ class Transactions extends MoneyObjects<Transaction> {
 
   @override
   void onAllDataLoaded() {
+    for (final Transaction t in iterableList()) {
+      t.postDeserializeFixup(false);
+    }
+
     // Now that everything is loaded, lets resolve the Transfers
     for (final Transaction t in iterableList().where((element) => element.transfer.value != -1)) {
       final int transferId = t.transfer.value!;

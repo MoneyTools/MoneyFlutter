@@ -7,6 +7,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 export 'package:money/models/money_objects/loan_payments/loan_payment.dart';
 
 class LoanPayments extends MoneyObjects<LoanPayment> {
+  LoanPayments() {
+    collectionName = 'LoanPayments';
+  }
+
   @override
   void loadFromJson(final List<MyJson> rows) {
     clear();

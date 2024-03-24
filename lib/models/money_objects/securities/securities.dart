@@ -7,6 +7,10 @@ import 'package:money/models/money_objects/securities/security.dart';
 export 'package:money/models/money_objects/securities/security.dart';
 
 class Securities extends MoneyObjects<Security> {
+  Securities() {
+    collectionName = 'Securities';
+  }
+
   @override
   void loadFromJson(final List<MyJson> rows) {
     clear();

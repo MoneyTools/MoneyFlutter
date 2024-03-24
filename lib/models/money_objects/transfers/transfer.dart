@@ -1,3 +1,4 @@
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
@@ -14,8 +15,19 @@ class Transfer {
     this.transaction,
     this.ownerSplit,
     this.split,
-  }) {
-    //
+  });
+
+  Account? getAccount() {
+    return transaction?.accountInstance;
+  }
+
+  String getAccountName() {
+    if (transaction != null) {
+      if (transaction!.accountInstance != null) {
+        return transaction!.accountInstance!.name.value;
+      }
+    }
+    return '<account not found>';
   }
 
 // NOTE: we do not support a transfer from one split to another split, this is a pretty unlikely scenario,

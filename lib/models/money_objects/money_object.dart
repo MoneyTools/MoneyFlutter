@@ -94,3 +94,9 @@ enum MutationType {
   childChanged,
   transientChanged,
 }
+
+class MutationGroup {
+  String title = '';
+  List<String> fieldNames = [];
+  List<List<String>> listOfValues = [];
+}

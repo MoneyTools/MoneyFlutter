@@ -6,6 +6,10 @@ import 'package:money/models/money_objects/splits/split.dart';
 export 'package:money/models/money_objects/splits/split.dart';
 
 class Splits extends MoneyObjects<Split> {
+  Splits() {
+    collectionName = 'Splits';
+  }
+
   List<Split> getListFromTransactionId(final num transactionId) {
     return iterableList().where((final Split item) => item.transactionId == transactionId).toList();
   }

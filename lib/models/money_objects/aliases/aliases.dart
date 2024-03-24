@@ -4,6 +4,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 class Aliases extends MoneyObjects<Alias> {
+  Aliases() {
+    collectionName = 'Aliases';
+  }
+
   @override
   Alias instanceFromSqlite(final MyJson row) {
     return Alias.fromJson(row);

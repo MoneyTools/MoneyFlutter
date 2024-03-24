@@ -5,6 +5,10 @@ import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class RentBuildings extends MoneyObjects<RentBuilding> {
+  RentBuildings() {
+    collectionName = 'Rental Buildings';
+  }
+
   String getNameFromId(final int id) {
     final RentBuilding? found = get(id);
     if (found == null) {

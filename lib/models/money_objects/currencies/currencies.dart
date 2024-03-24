@@ -7,6 +7,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 export 'package:money/models/money_objects/currencies/currency.dart';
 
 class Currencies extends MoneyObjects<Currency> {
+  Currencies() {
+    collectionName = 'Currencies';
+  }
+
   @override
   Currency instanceFromSqlite(final MyJson row) {
     return Currency.fromJson(row);
