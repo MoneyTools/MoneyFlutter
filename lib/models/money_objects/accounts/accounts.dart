@@ -85,9 +85,19 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   Account addNewAccount(final String accountName) {
+    // find next available name
+    String nextAvailableName = accountName;
+    int next = 1;
+    while ((getByName(nextAvailableName) != null)) {
+      // already taken
+      nextAvailableName = '$accountName $next';
+      // the the next one
+      next++;
+    }
+
     // add a new Account
     final account = Account();
-    account.name.value = '$accountName ${account.id.value}';
+    account.name.value = nextAvailableName;
 
     Data().accounts.appendNewMoneyObject(account);
     return account;
