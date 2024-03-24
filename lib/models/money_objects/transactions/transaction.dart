@@ -2,15 +2,15 @@
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
-import 'package:money/models/money_objects/transfers/transfer.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/models/money_objects/accounts/account.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
+import 'package:money/models/money_objects/transfers/transfer.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/views/view_payees/picker_payee.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
@@ -332,11 +332,69 @@ class Transaction extends MoneyObject {
         iso4217code: Constants.defaultCurrency),
   );
 
+  String get dateTimeAsText => getDateAsText(dateTime.value);
+
   Account? accountInstance;
   Transfer? transferInstance;
   Investment? investmentInstance;
 
-  String get dateTimeAsText => getDateAsText(dateTime.value);
+  String? _transferName;
+
+  String get transferName {
+    if (transferInstance == null) {
+      return _transferName ?? '';
+    } else {
+      return transferInstance!.getAccountName();
+    }
+  }
+
+  set transferName(final String? accountName) {
+    _transferName = accountName;
+  }
+
+  String get payeeOrTransferCaption {
+    return getPayeeOrTransferCaption();
+  }
+
+  String? _pendingTransferAccountName;
+
+  set payeeOrTransferCaption(final String value) {
+    //   if (this.payeeOrTransferCaption() != value) {
+    //     if (value.isEmpty) {
+    //       this.payee.value = -1;
+    //     } else if (IsTransferCaption(value)) {
+    //       if (money != null) {
+    //         string accountName = ExtractTransferAccountName(value);
+    //         Account a = money.Accounts.FindAccount(accountName);
+    //         if (a != null) {
+    //           money.Transfer(this, a);
+    //           money.Rebalance(a);
+    //         }
+    //       }
+    //     } else {
+    //       // find MyMoney container
+    //       if (money != null) {
+    //         this.Payee = money.Payees.FindPayee(value, true);
+    //       }
+    //     }
+    //   }
+  }
+
+  String get transferTo {
+    if (_pendingTransferAccountName != null) {
+      return _pendingTransferAccountName!;
+    }
+
+    if (transferInstance != null) {
+      return transferInstance!.getAccountName();
+    }
+    return transferName;
+  }
+
+  set transferTo(final String accountName) {
+    _pendingTransferAccountName = accountName;
+    transferName = null;
+  }
 
   String get payeeName => Data().payees.getNameFromId(payee.value);
 
@@ -383,77 +441,167 @@ class Transaction extends MoneyObject {
         );
   }
 
-  // // Copy constructor
-  // Transaction clone() {
-  //   return Transaction()
-  //       ..id.value = id.value
-  //       ..accountId.value = accountId.value
-  //       ..accountInstance = accountInstance
-  //       ..dateTime = dateTime
-  //       ..status = status
-  //       ..payeeId = payeeId
-  //       ..payeeInstance = payeeInstance
-  //       ..originalPayee = originalPayee
-  //       ..categoryId = categoryId
-  //       ..memo = memo
-  //       ..number = number
-  //       ..reconciledDate = reconciledDate
-  //       ..budgetBalanceDate = budgetBalanceDate
-  //       ..transfer = transfer
-  //   ;
-  // }
+// // Copy constructor
+// Transaction clone() {
+//   return Transaction()
+//       ..id.value = id.value
+//       ..accountId.value = accountId.value
+//       ..accountInstance = accountInstance
+//       ..dateTime = dateTime
+//       ..status = status
+//       ..payeeId = payeeId
+//       ..payeeInstance = payeeInstance
+//       ..originalPayee = originalPayee
+//       ..categoryId = categoryId
+//       ..memo = memo
+//       ..number = number
+//       ..reconciledDate = reconciledDate
+//       ..budgetBalanceDate = budgetBalanceDate
+//       ..transfer = transfer
+//   ;
+// }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();
-    // 0 ID
+// 0 ID
     t.id.value = json.getInt('Id');
-    // 1 Account ID
+// 1 Account ID
     t.accountId.value = json.getInt('Account');
     t.accountInstance = Data().accounts.get(t.accountId.value);
-    // 2 Date Time
+// 2 Date Time
     t.dateTime.value = json.getDate('Date');
-    // 3 Status
+// 3 Status
     t.status.value = TransactionStatus.values[json.getInt('Status')];
-    // 4 Payee ID
+// 4 Payee ID
     t.payee.value = json.getInt('Payee');
-    // 5 Original Payee
+// 5 Original Payee
     t.originalPayee.value = json.getString('OriginalPayee');
-    // 6 Category Id
+// 6 Category Id
     t.categoryId.value = json.getInt('Category');
-    // 7 Memo
+// 7 Memo
     t.memo.value = json.getString('Memo');
-    // 8 Number
+// 8 Number
     t.number.value = json.getString('Number');
-    // 9 Reconciled Date
+// 9 Reconciled Date
     t.reconciledDate.value = json.getDate('ReconciledDate');
-    // 10 BudgetBalanceDate
+// 10 BudgetBalanceDate
     t.budgetBalanceDate.value = json.getDate('BudgetBalanceDate');
-    // 11 Transfer
+// 11 Transfer
     t.transfer.value = json.getInt('Transfer');
-    // 12 FITID
+// 12 FITID
     t.fitid.value = json.getString('FITID');
-    // 13 Flags
+// 13 Flags
     t.flags.value = json.getInt('Flags');
 
-    // 14 Amount
+// 14 Amount
     t.amount.value = json.getDouble('Amount');
     t.amount.currency = getDefaultCurrency(t.accountInstance);
 
-    // 15 Sales Tax
+// 15 Sales Tax
     t.salesTax.value = json.getDouble('SalesTax');
-    // 16 Transfer Split
+// 16 Transfer Split
     t.transferSplit.value = json.getInt('TransferSplit');
-    // 17 Merge Date
+// 17 Merge Date
     t.mergeDate.value = json.getDate('MergeDate');
 
-    // not serialized
+// not serialized
     t.balance.value = runningBalance;
 
     return t;
   }
 
+  /// <summary>
+  /// Find all the objects referenced by this Transaction and wire them back up
+  /// </summary>
+  /// <param name="money">The owner</param>
+  /// <param name="parent">The container</param>
+  /// <param name="from">The account this transaction belongs to</param>
+  /// <param name="duplicateTransfers">How to handle transfers.  In a cut/paste situation you want
+  /// to create new transfer transactions (true), but in a XmlStore.Load situation we do not (false)</param>
+  postDeserializeFixup(bool duplicateTransfers) {
+    // if (this.CategoryName != null)
+    // {
+    //   this.Category = money.Categories.GetOrCreateCategory(this.CategoryName, CategoryType.None);
+    //   this.CategoryName = null;
+    // }
+    // if (from != null)
+    // {
+    //   this.Account = from;
+    // }
+    // else if (this.AccountName != null)
+    // {
+    //   this.Account = money.Accounts.FindAccount(this.AccountName);
+    // }
+    // this.AccountName = null;
+    // if (this.PayeeName != null)
+    // {
+    //   this.Payee = money.Payees.FindPayee(this.PayeeName, true);
+    //   this.PayeeName = null;
+    // }
+    //
+    // // do not copy budgetting information outside of balancing the budget.
+    // // (Note: setting IsBudgetted to false will screw up the budget balance).
+    // this.flags &= ~TransactionFlags.Budgeted;
+    //
+    // if (duplicateTransfers)
+    // {
+    //   if (this.TransferName != null)
+    //   {
+    //     Account to = money.Accounts.FindAccount(this.TransferName);
+    //     if (to == null)
+    //     {
+    //       to = money.Accounts.AddAccount(this.TransferName);
+    //     }
+    //     if (to != from)
+    //     {
+    //       money.Transfer(this, to);
+    //       this.TransferName = null;
+    //     }
+    //   }
+    // }
+    // else if (this.TransferId != -1 && this.Transfer == null)
+    // {
+    //   Transaction other = money.Transactions.FindTransactionById(this.transferId);
+    //   if (this.TransferSplit != -1)
+    //   {
+    //     // then the other side of this is a split.
+    //     Split s = other.NonNullSplits.FindSplit(this.TransferSplit);
+    //     if (s != null)
+    //     {
+    //       s.Transaction = other;
+    //       this.Transfer = new Transfer(0, this, other, s);
+    //       s.Transfer = new Transfer(0, other, s, this);
+    //     }
+    //   }
+    //   else if (other != null)
+    //   {
+    //     this.Transfer = new Transfer(0, this, other);
+    //     other.Transfer = new Transfer(0, other, this);
+    //   }
+    // }
+    //
+    // if (this.Investment != null)
+    // {
+    //   this.Investment.Parent = parent;
+    //   this.Investment.Transaction = this;
+    //   if (this.Investment.SecurityName != null)
+    //   {
+    //     this.Investment.Security = money.Securities.FindSecurity(this.Investment.SecurityName, true);
+    //   }
+    // }
+    // if (this.IsSplit)
+    // {
+    //   this.Splits.Transaction = this;
+    //   this.Splits.Parent = this;
+    //   foreach (Split s in this.Splits.Items)
+    //   {
+    //     s.PostDeserializeFixup(money, this, duplicateTransfers);
+    //   }
+    // }
+  }
+
   static String getDefaultCurrency(final Account? accountInstance) {
-    // Convert the value to USD
+// Convert the value to USD
     if (accountInstance == null || accountInstance.getCurrencyRatio() == 0) {
       return Constants.defaultCurrency;
     }
@@ -461,7 +609,7 @@ class Transaction extends MoneyObject {
   }
 
   double getNormalizedAmount(double nativeValue) {
-    // Convert the value to USD
+// Convert the value to USD
     if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
       return nativeValue;
     }
