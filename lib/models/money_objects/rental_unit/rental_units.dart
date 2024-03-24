@@ -3,6 +3,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 
 class RentUnits extends MoneyObjects<RentUnit> {
+  RentUnits() {
+    collectionName = 'Rental Units';
+  }
+
   String getNameFromId(final int id) {
     final RentUnit? found = get(id);
     if (found == null) {

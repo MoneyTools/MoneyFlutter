@@ -5,6 +5,10 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 
 class Payees extends MoneyObjects<Payee> {
+  Payees() {
+    collectionName = 'Payees';
+  }
+
   List<Payee> getListSorted() {
     final list = iterableList().toList();
     list.sort((a, b) => sortByString(a.name.value, b.name.value, true));

@@ -16,6 +16,8 @@ class MoneyObjects<T> {
   /// Constructor
   MoneyObjects();
 
+  String collectionName = '';
+
   final List<MoneyObject> _list = <MoneyObject>[];
   final Map<num, MoneyObject> _map = <num, MoneyObject>{};
 
@@ -119,6 +121,10 @@ class MoneyObjects<T> {
     }
   }
 
+  List<MoneyObject> getMutatedObjects(MutationType typeOfMutation) {
+    return _list.where((element) => element.mutation == typeOfMutation).toList();
+  }
+
   bool saveSql(final MyDatabase db, final String tableName) {
     for (final item in _iterableListOfMoneyObject(true)) {
       switch (item.mutation) {
@@ -166,7 +172,18 @@ class MoneyObjects<T> {
     return headerList.join(',');
   }
 
-  String getCsvFromList(final List<MoneyObject> sortedList) {
+  List<String> getSerializableFieldNames(final List<Object> declarations) {
+    final List<String> fieldNames = <String>[];
+
+    for (final dynamic field in declarations) {
+      if (field.serializeName != '') {
+        fieldNames.add(field.serializeName);
+      }
+    }
+    return fieldNames;
+  }
+
+  String getCsvFromList(final List<MoneyObject> moneyObjects, [final String valueSeparator = ',']) {
     final StringBuffer csv = StringBuffer();
 
     // Add the UTF-8 BOM for Excel
@@ -179,20 +196,53 @@ class MoneyObjects<T> {
     csv.writeln(getCsvHeader(declarations));
 
     // CSV Rows values
-    for (final MoneyObject item in sortedList) {
-      final List<String> listValues = <String>[];
-
-      for (final dynamic field in declarations) {
-        if (field.serializeName != '') {
-          final dynamic value = field.valueForSerialization(item);
-          final String valueAsString = '"$value"';
-          listValues.add(valueAsString);
-        }
-      }
-      csv.writeln(listValues.join(','));
+    for (final MoneyObject item in moneyObjects) {
+      csv.writeln(toStringAsSeparatedValues(declarations, item, valueSeparator));
     }
 
     return csv.toString();
+  }
+
+  List<String> getFieldNames() {
+    final List<Object> declarations = getFieldsForClass<T>();
+    return getSerializableFieldNames(declarations);
+  }
+
+  List<List<String>> getListOfValueList(List<MoneyObject> moneyObjects) {
+    final List<Object> declarations = getFieldsForClass<T>();
+
+    List<List<String>> list = [];
+    for (final MoneyObject item in moneyObjects) {
+      list.add(getListOfValueAsStrings(declarations, item));
+    }
+    return list;
+  }
+
+  String toStringAsSeparatedValues(
+    List<Object> declarations,
+    MoneyObject item, [
+    final String valueSeparator = ',',
+  ]) {
+    final List<String> listValues = <String>[];
+    for (final dynamic field in declarations) {
+      if (field.serializeName != '') {
+        final dynamic value = field.valueForSerialization(item);
+        final String valueAsString = '"$value"';
+        listValues.add(valueAsString);
+      }
+    }
+    return listValues.join(valueSeparator);
+  }
+
+  List<String> getListOfValueAsStrings(List<Object> declarations, MoneyObject item) {
+    final List<String> listValues = <String>[];
+    for (final dynamic field in declarations) {
+      if (field.serializeName != '') {
+        final dynamic value = field.valueForSerialization(item);
+        listValues.add(value.toString());
+      }
+    }
+    return listValues;
   }
 
   bool mutationUpdateItem(final MoneyObject item) {

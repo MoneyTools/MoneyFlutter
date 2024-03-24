@@ -1,5 +1,13 @@
 # Change Log
 
+## [version 1.4.9] 2024-03-24
+
+### Added
+
+- Dialog showing list of pending changes [Added|Modified|Deleted]
+
+# Change Log
+
 ## [version 1.4.8] 2024-03-23
 
 ### Added

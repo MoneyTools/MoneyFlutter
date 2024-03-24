@@ -6,6 +6,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 export 'package:money/models/money_objects/stock_splits/stock_split.dart';
 
 class StockSplits extends MoneyObjects<StockSplit> {
+  StockSplits() {
+    collectionName = 'Stock Splits';
+  }
+
   @override
   void loadFromJson(final List<MyJson> rows) {
     clear();

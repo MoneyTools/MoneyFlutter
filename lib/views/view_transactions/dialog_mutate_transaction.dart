@@ -127,7 +127,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         text: 'Duplicate',
         onPressed: () {
           _transaction = Transaction()
-            ..id.value = Data().transactions.getNextTransactionId()
+            ..id.value = -1
             ..accountId.value = transaction.accountId.value
             ..dateTime.value = transaction.dateTime.value
             ..payee.value = transaction.payee.value

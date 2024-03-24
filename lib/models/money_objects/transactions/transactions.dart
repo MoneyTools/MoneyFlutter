@@ -14,6 +14,10 @@ part 'transactions_csv.dart';
 part 'transactions_demo.dart';
 
 class Transactions extends MoneyObjects<Transaction> {
+  Transactions() {
+    collectionName = 'Transactions';
+  }
+
   double runningBalance = 0.00;
 
   @override

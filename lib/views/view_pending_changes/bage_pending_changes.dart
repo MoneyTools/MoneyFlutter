@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/views/view_pending_changes/view_pending_changes.dart';
 
 ///
-class ChangeSummaryBadge extends StatelessWidget {
+class BadgePendingChanges extends StatelessWidget {
   final int itemsAdded;
   final int itemsChanged;
   final int itemsDeleted;
 
   /// Constructor
-  const ChangeSummaryBadge({
+  const BadgePendingChanges({
     super.key,
     required this.itemsAdded,
     required this.itemsChanged,
@@ -26,11 +26,18 @@ class ChangeSummaryBadge extends StatelessWidget {
     return Tooltip(
       message: getTooltipText(),
       child: IntrinsicWidth(
-        child: Container(
-          padding: const EdgeInsets.all(2),
-          decoration:
-              BoxDecoration(color: getColorTheme(context).inverseSurface, borderRadius: BorderRadius.circular(50)),
-          child: getChangeLabel(context),
+        child: SizedBox(
+          height: 20,
+          child: TextButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.withAlpha(0x22)),
+              // You can add more styling properties here as needed
+            ),
+            onPressed: () {
+              PendingChanges.show(context);
+            },
+            child: getChangeLabel(context),
+          ),
         ),
       ),
     );
@@ -70,6 +77,6 @@ class ChangeSummaryBadge extends StatelessWidget {
   }
 
   String getTooltipText() {
-    return 'Items:\nAdded: ${Settings().trackMutations.added}\nChanged: ${Settings().trackMutations.changed}\nDeleted: ${Settings().trackMutations.deleted}';
+    return 'Added: ${Settings().trackMutations.added}\nModified: ${Settings().trackMutations.changed}\nDeleted: ${Settings().trackMutations.deleted}';
   }
 }

@@ -168,6 +168,30 @@ class Data {
     Settings().rebuild();
   }
 
+  List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {
+    List<MoneyObject> mutated = [];
+    for (final MoneyObjects listOfInstance in _listOfTables) {
+      mutated.addAll(listOfInstance.getMutatedObjects(typeOfMutation));
+    }
+    return mutated;
+  }
+
+  List<MutationGroup> getMutationGroups(MutationType typeOfMutation) {
+    List<MutationGroup> allMutationGroups = [];
+
+    for (final MoneyObjects moneyObjects in _listOfTables) {
+      final mutatedInstance = moneyObjects.getMutatedObjects(typeOfMutation);
+      if (mutatedInstance.isNotEmpty) {
+        MutationGroup mutationGroup = MutationGroup();
+        mutationGroup.title = moneyObjects.collectionName;
+        mutationGroup.fieldNames = moneyObjects.getFieldNames();
+        mutationGroup.listOfValues = moneyObjects.getListOfValueList(mutatedInstance);
+        allMutationGroups.add(mutationGroup);
+      }
+    }
+    return allMutationGroups;
+  }
+
   Future<String?> validateDataBasePathIsValidAndExist(final String? filePath) async {
     try {
       if (filePath != null) {

@@ -6,6 +6,10 @@ import 'package:money/models/money_objects/transaction_extras/transaction_extra.
 export 'package:money/models/money_objects/transaction_extras/transaction_extra.dart';
 
 class TransactionExtras extends MoneyObjects<TransactionExtra> {
+  TransactionExtras() {
+    collectionName = 'Transaction Extras';
+  }
+
   void add(final TransactionExtra transaction) {
     transaction.id.value = iterableList().length;
     appendMoneyObject(transaction);
