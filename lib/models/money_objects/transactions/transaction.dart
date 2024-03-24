@@ -1,4 +1,5 @@
 // Imports
+import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
@@ -12,7 +13,7 @@ import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_categories/picker_category.dart';
-import 'package:money/views/view_payees/picker_payee.dart';
+import 'package:money/views/view_payees/picker_payee_or_transfer.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 import 'package:money/widgets/picker_edit_box_date.dart';
 
@@ -106,14 +107,28 @@ class Transaction extends MoneyObject {
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
         sortByString(a.payeeName, b.payeeName, ascending),
     getEditWidget: (final Transaction instance, Function onEdited) {
-      return pickerPayee(
-        itemSelected: Data().payees.get(instance.payee.value),
-        onSelected: (Payee? selectedPayee) {
-          if (selectedPayee != null) {
-            instance.payee.value = selectedPayee.uniqueId;
-            onEdited(); // notify container
-          }
-        },
+      return SizedBox(
+        width: 300,
+        height: 70,
+        child: PickPayeeOrTransfer(
+          choice: instance.transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
+          payee: Data().payees.get(instance.payee.value),
+          account: instance.transferInstance?.getAccount(),
+          onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
+            switch (choice) {
+              case TransactionFlavor.payee:
+                if (selectedPayee != null) {
+                  instance.payee.value = selectedPayee.uniqueId;
+                  instance.transfer.value = -1;
+                  instance.transferInstance = null;
+                  onEdited(); // notify container
+                }
+              case TransactionFlavor.transfer:
+                instance.transfer.value = Data().categories.transfer.uniqueId;
+                instance.transferInstance = null;
+            }
+          },
+        ),
       );
     },
   );
@@ -440,26 +455,6 @@ class Transaction extends MoneyObject {
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
   }
-
-// // Copy constructor
-// Transaction clone() {
-//   return Transaction()
-//       ..id.value = id.value
-//       ..accountId.value = accountId.value
-//       ..accountInstance = accountInstance
-//       ..dateTime = dateTime
-//       ..status = status
-//       ..payeeId = payeeId
-//       ..payeeInstance = payeeInstance
-//       ..originalPayee = originalPayee
-//       ..categoryId = categoryId
-//       ..memo = memo
-//       ..number = number
-//       ..reconciledDate = reconciledDate
-//       ..budgetBalanceDate = budgetBalanceDate
-//       ..transfer = transfer
-//   ;
-// }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();

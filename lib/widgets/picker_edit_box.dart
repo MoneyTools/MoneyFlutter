@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/widgets/picker_panel.dart';
 
 class PickerEditBox extends StatefulWidget {
@@ -30,40 +31,47 @@ class PickerEditBoxState extends State<PickerEditBox> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: TextField(
-            controller: _textController,
-            decoration: const InputDecoration(
-              isCollapsed: true,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-            ),
-            onChanged: (final String value) {
-              setState(() {
-                widget.onChanged(value);
-              });
-            },
-          ),
-        ),
-        IconButton(
-          onPressed: () {
-            showPopupSelection(
-                title: widget.title,
-                context: context,
-                options: widget.options,
-                onSelected: (final String text) {
-                  setState(() {
-                    _textController.text = text;
-                    widget.onChanged(text);
-                  });
+    return Container(
+      decoration: BoxDecoration(
+        color: getColorTheme(context).tertiaryContainer,
+        border: Border(bottom: BorderSide(color: getColorTheme(context).outline)),
+        // borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _textController,
+              decoration: const InputDecoration(
+                isCollapsed: true,
+                contentPadding: EdgeInsets.zero,
+                border: InputBorder.none,
+              ),
+              onChanged: (final String value) {
+                setState(() {
+                  widget.onChanged(value);
                 });
-          },
-          icon: const Icon(Icons.arrow_drop_down),
-        )
-      ],
+              },
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              showPopupSelection(
+                  title: widget.title,
+                  context: context,
+                  options: widget.options,
+                  onSelected: (final String text) {
+                    setState(() {
+                      _textController.text = text;
+                      widget.onChanged(text);
+                    });
+                  });
+            },
+            icon: const Icon(Icons.arrow_drop_down),
+          )
+        ],
+      ),
     );
   }
 }

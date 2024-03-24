@@ -1,3 +1,4 @@
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
@@ -15,6 +16,10 @@ class Transfer {
     this.ownerSplit,
     this.split,
   });
+
+  Account? getAccount() {
+    return transaction?.accountInstance;
+  }
 
   String getAccountName() {
     if (transaction != null) {
