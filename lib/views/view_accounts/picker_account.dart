@@ -30,7 +30,6 @@ import 'package:money/widgets/picker_edit_box.dart';
 //   );
 // }
 
-
 Widget pickerAccount({
   required final Account? selected,
   required final Function(Account?) onSelected,
