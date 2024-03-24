@@ -1,4 +1,5 @@
 // Imports
+import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
@@ -12,7 +13,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/views/view_categories/picker_category.dart';
-import 'package:money/views/view_payees/picker_payee.dart';
+import 'package:money/views/view_payees/picker_payee_or_transfer.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 import 'package:money/widgets/picker_edit_box_date.dart';
 
@@ -106,14 +107,28 @@ class Transaction extends MoneyObject {
     sort: (final Transaction a, final Transaction b, final bool ascending) =>
         sortByString(a.payeeName, b.payeeName, ascending),
     getEditWidget: (final Transaction instance, Function onEdited) {
-      return pickerPayee(
-        itemSelected: Data().payees.get(instance.payee.value),
-        onSelected: (Payee? selectedPayee) {
-          if (selectedPayee != null) {
-            instance.payee.value = selectedPayee.uniqueId;
-            onEdited(); // notify container
-          }
-        },
+      return SizedBox(
+        width: 300,
+        height: 70,
+        child: PickPayeeOrTransfer(
+          choice: instance.transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
+          payee: Data().payees.get(instance.payee.value),
+          account: instance.transferInstance?.getAccount(),
+          onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
+            switch (choice) {
+              case TransactionFlavor.payee:
+                if (selectedPayee != null) {
+                  instance.payee.value = selectedPayee.uniqueId;
+                  instance.transfer.value = -1;
+                  instance.transferInstance = null;
+                  onEdited(); // notify container
+                }
+              case TransactionFlavor.transfer:
+                instance.transfer.value = Data().categories.transfer.uniqueId;
+                instance.transferInstance = null;
+            }
+          },
+        ),
       );
     },
   );
@@ -332,11 +347,69 @@ class Transaction extends MoneyObject {
         iso4217code: Constants.defaultCurrency),
   );
 
+  String get dateTimeAsText => getDateAsText(dateTime.value);
+
   Account? accountInstance;
   Transfer? transferInstance;
   Investment? investmentInstance;
 
-  String get dateTimeAsText => getDateAsText(dateTime.value);
+  String? _transferName;
+
+  String get transferName {
+    if (transferInstance == null) {
+      return _transferName ?? '';
+    } else {
+      return transferInstance!.getAccountName();
+    }
+  }
+
+  set transferName(final String? accountName) {
+    _transferName = accountName;
+  }
+
+  String get payeeOrTransferCaption {
+    return getPayeeOrTransferCaption();
+  }
+
+  String? _pendingTransferAccountName;
+
+  set payeeOrTransferCaption(final String value) {
+    //   if (this.payeeOrTransferCaption() != value) {
+    //     if (value.isEmpty) {
+    //       this.payee.value = -1;
+    //     } else if (IsTransferCaption(value)) {
+    //       if (money != null) {
+    //         string accountName = ExtractTransferAccountName(value);
+    //         Account a = money.Accounts.FindAccount(accountName);
+    //         if (a != null) {
+    //           money.Transfer(this, a);
+    //           money.Rebalance(a);
+    //         }
+    //       }
+    //     } else {
+    //       // find MyMoney container
+    //       if (money != null) {
+    //         this.Payee = money.Payees.FindPayee(value, true);
+    //       }
+    //     }
+    //   }
+  }
+
+  String get transferTo {
+    if (_pendingTransferAccountName != null) {
+      return _pendingTransferAccountName!;
+    }
+
+    if (transferInstance != null) {
+      return transferInstance!.getAccountName();
+    }
+    return transferName;
+  }
+
+  set transferTo(final String accountName) {
+    _pendingTransferAccountName = accountName;
+    transferName = null;
+  }
 
   String get payeeName => Data().payees.getNameFromId(payee.value);
 
@@ -382,26 +455,6 @@ class Transaction extends MoneyObject {
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
   }
-
-  // // Copy constructor
-  // Transaction clone() {
-  //   return Transaction()
-  //       ..id.value = id.value
-  //       ..accountId.value = accountId.value
-  //       ..accountInstance = accountInstance
-  //       ..dateTime = dateTime
-  //       ..status = status
-  //       ..payeeId = payeeId
-  //       ..payeeInstance = payeeInstance
-  //       ..originalPayee = originalPayee
-  //       ..categoryId = categoryId
-  //       ..memo = memo
-  //       ..number = number
-  //       ..reconciledDate = reconciledDate
-  //       ..budgetBalanceDate = budgetBalanceDate
-  //       ..transfer = transfer
-  //   ;
-  // }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();
@@ -450,6 +503,96 @@ class Transaction extends MoneyObject {
     t.balance.value = runningBalance;
 
     return t;
+  }
+
+  /// <summary>
+  /// Find all the objects referenced by this Transaction and wire them back up
+  /// </summary>
+  /// <param name="money">The owner</param>
+  /// <param name="parent">The container</param>
+  /// <param name="from">The account this transaction belongs to</param>
+  /// <param name="duplicateTransfers">How to handle transfers.  In a cut/paste situation you want
+  /// to create new transfer transactions (true), but in a XmlStore.Load situation we do not (false)</param>
+  postDeserializeFixup(bool duplicateTransfers) {
+    // if (this.CategoryName != null)
+    // {
+    //   this.Category = money.Categories.GetOrCreateCategory(this.CategoryName, CategoryType.None);
+    //   this.CategoryName = null;
+    // }
+    // if (from != null)
+    // {
+    //   this.Account = from;
+    // }
+    // else if (this.AccountName != null)
+    // {
+    //   this.Account = money.Accounts.FindAccount(this.AccountName);
+    // }
+    // this.AccountName = null;
+    // if (this.PayeeName != null)
+    // {
+    //   this.Payee = money.Payees.FindPayee(this.PayeeName, true);
+    //   this.PayeeName = null;
+    // }
+    //
+    // // do not copy budgetting information outside of balancing the budget.
+    // // (Note: setting IsBudgetted to false will screw up the budget balance).
+    // this.flags &= ~TransactionFlags.Budgeted;
+    //
+    // if (duplicateTransfers)
+    // {
+    //   if (this.TransferName != null)
+    //   {
+    //     Account to = money.Accounts.FindAccount(this.TransferName);
+    //     if (to == null)
+    //     {
+    //       to = money.Accounts.AddAccount(this.TransferName);
+    //     }
+    //     if (to != from)
+    //     {
+    //       money.Transfer(this, to);
+    //       this.TransferName = null;
+    //     }
+    //   }
+    // }
+    // else if (this.TransferId != -1 && this.Transfer == null)
+    // {
+    //   Transaction other = money.Transactions.FindTransactionById(this.transferId);
+    //   if (this.TransferSplit != -1)
+    //   {
+    //     // then the other side of this is a split.
+    //     Split s = other.NonNullSplits.FindSplit(this.TransferSplit);
+    //     if (s != null)
+    //     {
+    //       s.Transaction = other;
+    //       this.Transfer = new Transfer(0, this, other, s);
+    //       s.Transfer = new Transfer(0, other, s, this);
+    //     }
+    //   }
+    //   else if (other != null)
+    //   {
+    //     this.Transfer = new Transfer(0, this, other);
+    //     other.Transfer = new Transfer(0, other, this);
+    //   }
+    // }
+    //
+    // if (this.Investment != null)
+    // {
+    //   this.Investment.Parent = parent;
+    //   this.Investment.Transaction = this;
+    //   if (this.Investment.SecurityName != null)
+    //   {
+    //     this.Investment.Security = money.Securities.FindSecurity(this.Investment.SecurityName, true);
+    //   }
+    // }
+    // if (this.IsSplit)
+    // {
+    //   this.Splits.Transaction = this;
+    //   this.Splits.Parent = this;
+    //   foreach (Split s in this.Splits.Items)
+    //   {
+    //     s.PostDeserializeFixup(money, this, duplicateTransfers);
+    //   }
+    // }
   }
 
   static String getDefaultCurrency(final Account? accountInstance) {

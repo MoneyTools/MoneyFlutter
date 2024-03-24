@@ -54,6 +54,20 @@ class Accounts extends MoneyObjects<Account> {
       account.count.value = 0;
       account.balance.value = account.openingBalance.value;
       account.balanceNormalized.value = account.openingBalance.value * account.getCurrencyRatio();
+      // TODO when we deal with downloading online
+      // account.onlineAccountInstance = Data().onlineAccounts.get(this.onlineAccountId);
+
+      // TODO as seen in MyMoney.net
+      // if (!string.IsNullOrEmpty(this.categoryForPrincipalName))
+      // {
+      //   this.CategoryForPrincipal = myMoney.Categories.GetOrCreateCategory(this.categoryForPrincipalName, CategoryType.Expense);
+      //   this.categoryForPrincipalName = null;
+      // }
+      // if (!string.IsNullOrEmpty(this.categoryForInterestName))
+      // {
+      //   this.categoryForInterest = myMoney.Categories.GetOrCreateCategory(this.categoryForInterestName, CategoryType.Expense);
+      //   this.categoryForInterestName = null;
+      // }
     }
 
     for (final Transaction t in Data().transactions.iterableList()) {
