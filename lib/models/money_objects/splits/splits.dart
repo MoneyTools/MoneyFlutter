@@ -21,24 +21,24 @@ class Splits extends MoneyObjects<Split> {
       appendMoneyObject(
         Split(
           // 0
-          transactionId: row.getInt('Transaction'),
+          transactionId: row.getInt('Transaction', -1),
           // 1
           // id
           // 2
-          categoryId: row.getInt('Category'),
+          categoryId: row.getInt('Category', -1),
           // 3
-          payeeId: row.getInt('Payee'),
+          payeeId: row.getInt('Payee', -1),
           // 4
           amount: row.getDouble('Amount'),
           // 5
-          transferId: row.getInt('Transfer'),
+          transferId: row.getInt('Transfer', -1),
           // 6
           memo: row.getString('Memo'),
           // 7
           flags: row.getInt('Flags'),
           // 8
           budgetBalanceDate: row.getDate('BudgetBalanceDate'),
-        )..id.value = row.getInt('Id'),
+        )..id.value = row.getInt('Id', -1),
       );
     }
     return iterableList().toList();

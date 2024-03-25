@@ -51,9 +51,9 @@ class AccountAlias extends MoneyObject {
   @override
   factory AccountAlias.fromJson(final MyJson row) {
     return AccountAlias()
-      ..id.value = row.getInt('Id')
+      ..id.value = row.getInt('Id', -1)
       ..pattern.value = row.getString('Pattern')
-      ..flags.value = row.getInt('Flag')
+      ..flags.value = row.getInt('Flag', 0)
       ..accountId.value = row.getString('AccountId');
   }
 }

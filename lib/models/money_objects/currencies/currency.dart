@@ -95,7 +95,7 @@ class Currency extends MoneyObject {
   factory Currency.fromJson(final MyJson row) {
     return Currency(
       // 0
-      id: row.getInt('Id'),
+      id: row.getInt('Id', -1),
       // 1
       symbol: row.getString('Symbol'),
       // 2

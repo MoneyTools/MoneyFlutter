@@ -204,8 +204,8 @@ class Category extends MoneyObject {
 
   factory Category.fromJson(final MyJson row) {
     return Category(
-      id: row.getInt('Id'),
-      parentId: row.getInt('ParentId'),
+      id: row.getInt('Id', -1),
+      parentId: row.getInt('ParentId', -1),
       name: row.getString('Name'),
       description: row.getString('Description'),
       color: row.getString('Color').trim(),

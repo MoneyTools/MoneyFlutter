@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.5.0] 2024-03-25
+
+### Fixed
+
+= When loading via json.getInt() we now default to -1 for entity ID, since Zero is a valid ID
+
 ## [version 1.4.9] 2024-03-24
 
 ### Added

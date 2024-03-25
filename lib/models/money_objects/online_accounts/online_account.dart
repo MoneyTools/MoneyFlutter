@@ -114,6 +114,6 @@ class OnlineAccount extends MoneyObject {
       bankId: row.getString('BankId'),
       // 12
       branchId: row.getString('BranchId'),
-    )..id.value = row.getInt('Id');
+    )..id.value = row.getInt('Id', -1);
   }
 }

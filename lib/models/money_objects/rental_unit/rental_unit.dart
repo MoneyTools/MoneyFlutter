@@ -67,7 +67,7 @@ class RentUnit extends MoneyObject {
 
   factory RentUnit.fromJson(final MyJson row) {
     return RentUnit()
-      ..id.value = row.getInt('Id')
+      ..id.value = row.getInt('Id', -1)
       ..name.value = row.getString('Name')
       ..building.value = row.getInt('Building', -1)
       ..renter.value = row.getString('Renter')

@@ -54,6 +54,6 @@ class StockSplit extends MoneyObject {
       numerator: row.getInt('Numerator'),
       // 4
       denominator: row.getInt('Denominator'),
-    )..id.value = row.getInt('Id');
+    )..id.value = row.getInt('Id', -1);
   }
 }

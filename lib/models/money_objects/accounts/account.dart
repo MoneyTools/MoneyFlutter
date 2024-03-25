@@ -309,8 +309,8 @@ class Account extends MoneyObject {
       ..syncGuid.value = row.getString('SyncGuid')
       ..flags.value = row.getInt('Flags')
       ..lastBalance.value = row.getDate('LastBalance')
-      ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal')
-      ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest');
+      ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal', -1)
+      ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest', -1);
   }
 
 // cache the currency ratio

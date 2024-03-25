@@ -459,20 +459,20 @@ class Transaction extends MoneyObject {
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();
 // 0 ID
-    t.id.value = json.getInt('Id');
+    t.id.value = json.getInt('Id', -1);
 // 1 Account ID
-    t.accountId.value = json.getInt('Account');
+    t.accountId.value = json.getInt('Account', -1);
     t.accountInstance = Data().accounts.get(t.accountId.value);
 // 2 Date Time
     t.dateTime.value = json.getDate('Date');
 // 3 Status
     t.status.value = TransactionStatus.values[json.getInt('Status')];
 // 4 Payee ID
-    t.payee.value = json.getInt('Payee');
+    t.payee.value = json.getInt('Payee', -1);
 // 5 Original Payee
     t.originalPayee.value = json.getString('OriginalPayee');
 // 6 Category Id
-    t.categoryId.value = json.getInt('Category');
+    t.categoryId.value = json.getInt('Category', -1);
 // 7 Memo
     t.memo.value = json.getString('Memo');
 // 8 Number
@@ -482,7 +482,7 @@ class Transaction extends MoneyObject {
 // 10 BudgetBalanceDate
     t.budgetBalanceDate.value = json.getDate('BudgetBalanceDate');
 // 11 Transfer
-    t.transfer.value = json.getInt('Transfer');
+    t.transfer.value = json.getInt('Transfer', -1);
 // 12 FITID
     t.fitid.value = json.getString('FITID');
 // 13 Flags
@@ -495,7 +495,7 @@ class Transaction extends MoneyObject {
 // 15 Sales Tax
     t.salesTax.value = json.getDouble('SalesTax');
 // 16 Transfer Split
-    t.transferSplit.value = json.getInt('TransferSplit');
+    t.transferSplit.value = json.getInt('TransferSplit', -1);
 // 17 Merge Date
     t.mergeDate.value = json.getDate('MergeDate');
 

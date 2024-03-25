@@ -81,10 +81,10 @@ class Alias extends MoneyObject {
   /// Constructor from a SQLite row
   factory Alias.fromJson(final MyJson row) {
     return Alias(
-      id: row.getInt('Id'),
+      id: row.getInt('Id', -1),
       pattern: row.getString('Pattern'),
       flags: row.getInt('Flags'),
-      payeeId: row.getInt('Payee'),
+      payeeId: row.getInt('Payee', -1),
     );
   }
 

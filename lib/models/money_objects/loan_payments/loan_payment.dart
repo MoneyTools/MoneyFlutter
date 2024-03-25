@@ -99,9 +99,9 @@ class LoanPayment extends MoneyObject {
   factory LoanPayment.fromJson(final MyJson row) {
     return LoanPayment(
       // 0
-      id: row.getInt('Id'),
+      id: row.getInt('Id', -1),
       // 1
-      accountId: row.getInt('AccountId'),
+      accountId: row.getInt('AccountId', -1),
       // 2
       date: row.getDate('Date'),
       // 3

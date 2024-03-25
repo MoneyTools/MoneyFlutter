@@ -123,7 +123,7 @@ class FieldInt<C> extends Field<C, int> {
     super.sort,
     super.columnWidth,
   }) : super(
-          defaultValue: 0,
+          defaultValue: -1,
           align: TextAlign.right,
           type: FieldType.numeric,
         );

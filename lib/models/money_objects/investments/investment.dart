@@ -155,7 +155,7 @@ class Investment extends MoneyObject {
   factory Investment.fromJson(final MyJson row) {
     return Investment(
       // 1
-      id: row.getInt('Id'),
+      id: row.getInt('Id', -1),
       // 1
       security: row.getInt('Security'),
       // 2

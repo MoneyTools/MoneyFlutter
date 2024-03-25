@@ -80,6 +80,6 @@ class Security extends MoneyObject {
       taxable: row.getInt('Taxable'),
       // 8
       priceDate: row.getDate('PriceDate'),
-    )..id.value = row.getInt('Id');
+    )..id.value = row.getInt('Id', -1);
   }
 }

@@ -271,7 +271,7 @@ class RentBuilding extends MoneyObject {
   factory RentBuilding.fromJson(final MyJson row) {
     final RentBuilding instance = RentBuilding();
 
-    instance.id.value = row.getInt('Id');
+    instance.id.value = row.getInt('Id', -1);
     instance.name.value = row.getString('Name');
     instance.address.value = row.getString('Address');
     instance.purchasedDate.value = row.getDate('PurchasedDate', DateTime.now());
@@ -283,22 +283,22 @@ class RentBuilding extends MoneyObject {
     instance.ownershipPercentage1.value = row.getDouble('ownershipPercentage1');
     instance.ownershipPercentage2.value = row.getDouble('ownershipPercentage1');
 
-    instance.categoryForIncome.value = row.getInt('CategoryForIncome');
+    instance.categoryForIncome.value = row.getInt('CategoryForIncome', -1);
     instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome.value);
 
-    instance.categoryForTaxes.value = row.getInt('CategoryForTaxes');
+    instance.categoryForTaxes.value = row.getInt('CategoryForTaxes', -1);
     instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes.value);
 
-    instance.categoryForInterest.value = row.getInt('CategoryForInterest');
+    instance.categoryForInterest.value = row.getInt('CategoryForInterest', -1);
     instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest.value);
 
-    instance.categoryForRepairs.value = row.getInt('CategoryForRepairs');
+    instance.categoryForRepairs.value = row.getInt('CategoryForRepairs', -1);
     instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs.value);
 
-    instance.categoryForMaintenance.value = row.getInt('CategoryForMaintenance');
+    instance.categoryForMaintenance.value = row.getInt('CategoryForMaintenance', -1);
     instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance.value);
 
-    instance.categoryForManagement.value = row.getInt('CategoryForManagement');
+    instance.categoryForManagement.value = row.getInt('CategoryForManagement', -1);
     instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement.value);
 
     instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);

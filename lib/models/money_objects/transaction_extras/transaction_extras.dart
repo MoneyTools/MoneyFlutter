@@ -22,9 +22,9 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
     for (final MyJson row in rows) {
       final TransactionExtra t = TransactionExtra(
         // id
-        id: row.getInt('Id'),
-        // Account Id
-        transaction: row.getInt('Transaction'),
+        id: row.getInt('Id', -1),
+        // Transaction Id
+        transaction: row.getInt('Transaction', -1),
         // Tax Year
         taxYear: row.getInt('TaxYear'),
         // Tax Date
