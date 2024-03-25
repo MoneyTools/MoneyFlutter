@@ -181,12 +181,11 @@ class Data {
     List<MutationGroup> allMutationGroups = [];
 
     for (final MoneyObjects moneyObjects in _listOfTables) {
-      final mutatedInstance = moneyObjects.getMutatedObjects(typeOfMutation);
-      if (mutatedInstance.isNotEmpty) {
+      final mutatedInstances = moneyObjects.getMutatedObjects(typeOfMutation);
+      if (mutatedInstances.isNotEmpty) {
         MutationGroup mutationGroup = MutationGroup();
         mutationGroup.title = moneyObjects.collectionName;
-        mutationGroup.fieldNames = moneyObjects.getFieldNames();
-        mutationGroup.listOfValues = moneyObjects.getListOfValueList(mutatedInstance);
+        mutationGroup.whatWasMutated = moneyObjects.whatWasMutated(mutatedInstances);
         allMutationGroups.add(mutationGroup);
       }
     }

@@ -22,6 +22,11 @@ class Currency extends MoneyObject {
   @override
   set uniqueId(value) => id.value = value;
 
+  @override
+  String getRepresentation() {
+    return name.value;
+  }
+
   // 0
   FieldId<Currency> id = FieldId<Currency>(
     valueForSerialization: (final Currency instance) => instance.uniqueId,

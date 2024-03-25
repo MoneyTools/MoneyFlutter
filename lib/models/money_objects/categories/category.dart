@@ -19,6 +19,11 @@ class Category extends MoneyObject {
   @override
   set uniqueId(value) => id.value = value;
 
+  @override
+  String getRepresentation() {
+    return name.value;
+  }
+
   /// Id
   /// 0|Id|INT|0||1
   FieldId<Category> id = FieldId<Category>(

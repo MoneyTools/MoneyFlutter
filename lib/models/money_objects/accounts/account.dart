@@ -24,6 +24,11 @@ class Account extends MoneyObject {
   @override
   set uniqueId(value) => id.value = value;
 
+  @override
+  String getRepresentation() {
+    return name.value;
+  }
+
   // Id
   // 0|Id|INT|0||1
   FieldId<Account> id = FieldId<Account>(
@@ -256,11 +261,7 @@ class Account extends MoneyObject {
     type: FieldType.toggle,
     valueFromInstance: (final Account instance) => !instance.isClosed(),
     setValue: (final Account instance, dynamic value) {
-      if (value) {
-        instance.flags.value &= ~AccountFlags.closed.index; // Remove the bit at the specified position
-      } else {
-        instance.flags.value |= AccountFlags.closed.index; // Set the bit at the specified position
-      }
+      instance.isOpen = value as bool;
       Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: instance);
     },
   );
@@ -335,8 +336,16 @@ class Account extends MoneyObject {
     return isBitOn(flags.value, AccountFlags.closed.index);
   }
 
-  bool isOpen() {
+  bool get isOpen {
     return !isClosed();
+  }
+
+  set isOpen(bool value) {
+    if (value) {
+      flags.value &= ~AccountFlags.closed.index; // Remove the bit at the specified position
+    } else {
+      flags.value |= AccountFlags.closed.index; // Set the bit at the specified position
+    }
   }
 
   bool matchType(final List<AccountType> types) {
@@ -356,6 +365,6 @@ class Account extends MoneyObject {
   }
 
   bool isActiveBankAccount() {
-    return isBankAccount() && isOpen();
+    return isBankAccount() && isOpen;
   }
 }

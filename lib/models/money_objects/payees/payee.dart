@@ -18,6 +18,12 @@ class Payee extends MoneyObject {
   @override
   set uniqueId(value) => id.value = value;
 
+  @override
+  String getRepresentation() {
+    // TODO
+    return name.value;
+  }
+
   // 0
   FieldId<Payee> id = FieldId<Payee>(
     valueForSerialization: (final Payee instance) => instance.uniqueId,

@@ -96,52 +96,29 @@ class Mutations {
     List<Widget> widgets = [];
     count = 0;
     for (final MutationGroup mutationGroup in Data().getMutationGroups(typeOfMutation)) {
-      count += mutationGroup.listOfValues.length;
+      count += mutationGroup.whatWasMutated.length;
 
       widgets.add(ListTile(title: Text(mutationGroup.title)));
 
-      List<List<String>> gridValues = [];
-
-      // first the header
-      gridValues.add(mutationGroup.fieldNames);
-      gridValues.addAll(mutationGroup.listOfValues);
-
       widgets.add(
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: SizedBox(
-                  width: 3000,
-                  // height: 300,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: buildGrid(mutationGroup.fieldNames.length, gridValues),
-                  ))),
-        ),
+        SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: SizedBox(
+                width: 3000,
+                // height: 300,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: mutationGroup.whatWasMutated,
+                  ),
+                ))),
       );
     }
 
     if (widgets.isEmpty) {
-      return const Center(child: Text('-- none --'));
+      return const Center(child: Text('- none -'));
     }
 
     return Column(children: widgets);
   }
-}
-
-Widget buildGrid(int count, List<List<String>> rowsOfValues) {
-  final List<Widget> rows = [];
-
-  for (var row in rowsOfValues) {
-    final List<Widget> columns = [];
-    for (var column in row) {
-      columns.add(Expanded(child: Text(column)));
-    }
-    rows.add(Row(children: columns));
-  }
-
-  return Column(
-    children: rows,
-  );
 }

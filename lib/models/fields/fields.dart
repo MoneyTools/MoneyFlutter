@@ -1,8 +1,8 @@
 // Imports
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/fields/field.dart';
 import 'package:money/models/fields/field_filter.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
 import 'package:money/widgets/form_field_switch.dart';
@@ -162,7 +162,6 @@ class Fields<T> {
         ),
       );
     }
-
     if (!isReadOnly && fieldDefinition.getEditWidget != null) {
       // Editing mode and the MoneyObject has a custom edit widget
       return Padding(

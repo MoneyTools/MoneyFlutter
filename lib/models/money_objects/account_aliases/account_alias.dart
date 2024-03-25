@@ -10,6 +10,11 @@ import 'package:money/models/money_objects/money_objects.dart';
 
  */
 class AccountAlias extends MoneyObject {
+  @override
+  String getRepresentation() {
+    return '${pattern.value} ${accountId.value}';
+  }
+
   // 0
   Field<AccountAlias, int> id = Field<AccountAlias, int>(
     importance: 0,
@@ -44,6 +49,7 @@ class AccountAlias extends MoneyObject {
 
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
 

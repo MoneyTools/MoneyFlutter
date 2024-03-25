@@ -1,12 +1,13 @@
+import 'dart:math';
+
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/settings.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'dart:math';
+import 'package:money/models/settings.dart';
+import 'package:money/storage/data/data.dart';
 
 class Accounts extends MoneyObjects<Account> {
   Accounts() {
@@ -117,17 +118,18 @@ class Accounts extends MoneyObjects<Account> {
     // add a new Account
     final account = Account();
     account.name.value = nextAvailableName;
+    account.isOpen = true;
 
     Data().accounts.appendNewMoneyObject(account);
     return account;
   }
 
   List<Account> getOpenAccounts() {
-    return iterableList().where((final Account account) => account.isOpen()).toList();
+    return iterableList().where((final Account account) => account.isOpen).toList();
   }
 
   List<Account> getOpenRealAccounts() {
-    return iterableList().where((final Account account) => !account.isFakeAccount() && account.isOpen()).toList();
+    return iterableList().where((final Account account) => !account.isFakeAccount() && account.isOpen).toList();
   }
 
   bool activeBankAccount(final Account account) {
@@ -145,7 +147,7 @@ class Accounts extends MoneyObjects<Account> {
       if (isActive == null) {
         return true;
       }
-      return item.isOpen() == isActive;
+      return item.isOpen == isActive;
     }).toList();
   }
 

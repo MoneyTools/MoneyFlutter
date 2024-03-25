@@ -13,8 +13,15 @@ enum InvestmentType {
 class Investment extends MoneyObject {
   @override
   int get uniqueId => id.value;
+
   @override
   set uniqueId(value) => id.value = value;
+
+  @override
+  String getRepresentation() {
+    // TODO
+    return security.value.toString();
+  }
 
   /// Id
   //// 0    Id              bigint  0                    1

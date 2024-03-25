@@ -1,5 +1,8 @@
 // Imports
+import 'dart:math';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
@@ -72,11 +75,19 @@ class MoneyObjects<T> {
     _map[(moneyObject).uniqueId] = moneyObject;
   }
 
+  int getNextId() {
+    int nextId = -1;
+    for (var moneyObject in _list) {
+      nextId = max(nextId, moneyObject.uniqueId);
+    }
+    return nextId + 1;
+  }
+
   void appendNewMoneyObject(final MoneyObject moneyObject) {
     assert(moneyObject.uniqueId == -1);
 
     // assign the next available unique ID
-    moneyObject.uniqueId = _list.length;
+    moneyObject.uniqueId = getNextId();
 
     appendMoneyObject(moneyObject);
 
@@ -243,6 +254,20 @@ class MoneyObjects<T> {
       }
     }
     return listValues;
+  }
+
+  List<Widget> whatWasMutated(List<MoneyObject> objects) {
+    List<Widget> widgets = [];
+    for (final moneyObject in objects) {
+      widgets.add(
+        ListTile(
+          leading: kDebugMode ? Text(moneyObject.uniqueId.toString()) : null,
+          title: Text(moneyObject.getRepresentation()),
+          subtitle: Text(moneyObject.getMutatedChangeAsSingleString<T>()),
+        ),
+      );
+    }
+    return widgets;
   }
 
   bool mutationUpdateItem(final MoneyObject item) {

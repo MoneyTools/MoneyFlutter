@@ -5,6 +5,7 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 
 export 'dart:ui';
+
 export 'package:money/helpers/misc_helpers.dart';
 export 'package:money/models/fields/field.dart';
 
@@ -13,6 +14,16 @@ abstract class MoneyObject {
   int get uniqueId => -1;
 
   set uniqueId(int value) {}
+
+  /// Return the best way to identify this instance, e.g. Name
+  String getRepresentation() {
+    return 'Id: $uniqueId'; // By default the ID is the best unique way
+  }
+
+  String getMutatedChangeAsSingleString<T>() {
+    final myJson = getMutatedDiff<T>();
+    return myJson.toString();
+  }
 
   /// State of any and all object instances
   /// to indicated any alteration to the data set of the users
@@ -85,8 +96,25 @@ abstract class MoneyObject {
     return getPersistableJSon<T>().toString();
   }
 
+  bool isMutated<T>() {
+    return getMutatedDiff<T>().keys.isNotEmpty;
+  }
+
+  MyJson getMutatedDiff<T>() {
+    MyJson afterEditing = getPersistableJSon<T>();
+
+    if (valueBeforeEdit != null) {
+      return myJsonDiff(valueBeforeEdit!, afterEditing);
+    }
+    return afterEditing;
+  }
+
   void stashValueBeforeEditing<T>() {
-    valueBeforeEdit = getPersistableJSon<T>();
+    if (valueBeforeEdit == null) {
+      valueBeforeEdit = getPersistableJSon<T>();
+    } else {
+      // already stashed
+    }
   }
 }
 
@@ -103,6 +131,5 @@ enum MutationType {
 
 class MutationGroup {
   String title = '';
-  List<String> fieldNames = [];
-  List<List<String>> listOfValues = [];
+  List<Widget> whatWasMutated = [];
 }

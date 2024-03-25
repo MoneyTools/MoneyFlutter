@@ -29,6 +29,12 @@ class Transaction extends MoneyObject {
   @override
   set uniqueId(value) => id.value = value;
 
+  @override
+  String getRepresentation() {
+    // TODO
+    return accountInstance!.name.value;
+  }
+
   /// ID
   /// SQLite  0|Id|bigint|0||1
   FieldId<Transaction> id = FieldId<Transaction>(

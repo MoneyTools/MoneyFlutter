@@ -1,8 +1,8 @@
 import 'package:money/helpers/date_helper.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 class LoanPayment extends MoneyObject {
@@ -11,6 +11,12 @@ class LoanPayment extends MoneyObject {
 
   @override
   set uniqueId(value) => id.value = value;
+
+  @override
+  String getRepresentation() {
+    // TODO better
+    return 'Loan $uniqueId';
+  }
 
   /// ID
   /// 0|Id|INT|1||0

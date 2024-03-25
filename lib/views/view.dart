@@ -378,12 +378,16 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     if (indexOfItems.isNotEmpty) {
       final int index = indexOfItems.first;
       if (isBetweenOrEqual(index, 0, list.length - 1)) {
+        final MoneyObject moneyObject = list[index] as MoneyObject;
+        if (!isReadOnly) {
+          moneyObject.stashValueBeforeEditing<T>();
+        }
         return SingleChildScrollView(
           key: Key(index.toString()),
           child: AdaptiveColumns(
             fieldHeight: isReadOnly ? 70 : 80,
             children: detailPanelFields.getFieldsAsWidgets(
-              list[index],
+              moneyObject as T,
               isReadOnly
                   ? null
                   : () {

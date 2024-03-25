@@ -15,6 +15,11 @@ class Alias extends MoneyObject {
   @override
   set uniqueId(value) => id.value = value;
 
+  @override
+  String getRepresentation() {
+    return pattern.value;
+  }
+
   /// ID
   /// 0    Id       INT            0                 1
   FieldId<Alias> id = FieldId<Alias>(

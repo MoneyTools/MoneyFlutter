@@ -26,7 +26,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     } else {
       for (final MoneyObject item in getList()) {
         final Account account = item as Account;
-        if (account.isOpen()) {
+        if (account.isOpen) {
           listOfPairXY.add(PairXY(account.name.value, account.balance.value));
         }
       }
