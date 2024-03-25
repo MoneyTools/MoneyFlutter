@@ -130,3 +130,18 @@ MyJson myJsonFromKeyValuePairs(List<String> keys, List<String> values) {
   }
   return object;
 }
+
+/// Diff between to JSon object
+MyJson myJsonDiff(MyJson a, MyJson b) {
+  MyJson diff = MyJson();
+  a.forEach((key, valueOfA) {
+    final valueOfB = b[key];
+    if (valueOfA != valueOfB) {
+      diff[key] = {
+        'before': valueOfA,
+        'after': valueOfB,
+      };
+    }
+  });
+  return diff;
+}

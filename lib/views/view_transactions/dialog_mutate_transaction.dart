@@ -82,15 +82,23 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   }) {
     if (editMode) {
       return [
-        // DialogActionButton(
-        //     text: 'Discard',
-        //     onPressed: () {
-        //       Navigator.of(context).pop(false);
-        //     }),
+        // if (editsWereMade)
+        //   DialogActionButton(
+        //       text: 'Discard',
+        //       onPressed: () {
+        //         Navigator.of(context).pop(false);
+        //       }),
         DialogActionButton(
             text: editsWereMade ? 'Apply' : 'Close',
             onPressed: () {
-              Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
+              if (_transaction.valueBeforeEdit != null) {
+                MyJson afterEditing = _transaction.getPersistableJSon<Transaction>();
+                MyJson diff = myJsonDiff(_transaction.valueBeforeEdit!, afterEditing);
+                if (diff.keys.isNotEmpty) {
+                  // Changes were made
+                  Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
+                }
+              }
               Navigator.of(context).pop(true);
             })
       ];
@@ -147,6 +155,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       DialogActionButton(
         text: 'Edit',
         onPressed: () {
+          transaction.stashValueBeforeEditing<Transaction>();
           setState(() {
             isInEditingMode = true;
           });

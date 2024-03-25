@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/fields/fields.dart';
+import 'package:money/storage/data/data.dart';
 
 export 'dart:ui';
 export 'package:money/helpers/misc_helpers.dart';
@@ -17,6 +18,7 @@ abstract class MoneyObject {
   /// to indicated any alteration to the data set of the users
   /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
   MutationType mutation = MutationType.none;
+  MyJson? valueBeforeEdit;
 
   Color getMutationColor() {
     switch (mutation) {
@@ -81,6 +83,10 @@ abstract class MoneyObject {
 
   String toJsonString<T>() {
     return getPersistableJSon<T>().toString();
+  }
+
+  void stashValueBeforeEditing<T>() {
+    valueBeforeEdit = getPersistableJSon<T>();
   }
 }
 
