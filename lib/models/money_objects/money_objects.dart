@@ -8,6 +8,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/database/database.dart';
+import 'package:money/widgets/diff.dart';
 
 // Exports
 export 'package:collection/collection.dart';
@@ -259,11 +260,43 @@ class MoneyObjects<T> {
   List<Widget> whatWasMutated(List<MoneyObject> objects) {
     List<Widget> widgets = [];
     for (final moneyObject in objects) {
+      final MyJson jsonDelta = moneyObject.getMutatedDiff<T>();
+
+      List<Widget> diffWidgets = [];
+
+      jsonDelta.forEach((key, value) {
+        switch (moneyObject.mutation) {
+          case MutationType.inserted:
+            diffWidgets.add(Text(key));
+          case MutationType.deleted:
+            diffWidgets.add(Text(moneyObject.getRepresentation()));
+          case MutationType.changed:
+          default:
+            diffWidgets.add(Text(key));
+            diffWidgets.add(diffTextOldValue(value['before'].toString()));
+            diffWidgets.add(diffTextNewValue(value['after'].toString()));
+        }
+      });
+
       widgets.add(
-        ListTile(
-          leading: kDebugMode ? Text(moneyObject.uniqueId.toString()) : null,
-          title: Text(moneyObject.getRepresentation()),
-          subtitle: Text(moneyObject.getMutatedChangeAsSingleString<T>()),
+        Container(
+          margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.grey.withOpacity(0.5), // Border color
+              width: 1.0, // Border width
+            ),
+            borderRadius: BorderRadius.circular(8.0), // Optional: border radius
+          ),
+          child: ListTile(
+            dense: true,
+            title: Text(moneyObject.getRepresentation()),
+            subtitle: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: diffWidgets,
+            ),
+            trailing: kDebugMode ? Text(moneyObject.uniqueId.toString()) : null,
+          ),
         ),
       );
     }

@@ -438,7 +438,6 @@ class Transaction extends MoneyObject {
       return getTransferCaption(transfer.transaction!.accountInstance!, isFrom);
     }
     final String displayName = Data().payees.getNameFromId(payee.value);
-    debugLog(displayName);
     return displayName;
   }
 
