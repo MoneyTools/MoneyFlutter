@@ -2,6 +2,10 @@
 
 ## [version 1.5.0] 2024-03-25
 
+### Added
+
+- Account chart of Max Balances per years
+
 ### Fixed
 
 = When loading via json.getInt() we now default to -1 for entity ID, since Zero is a valid ID

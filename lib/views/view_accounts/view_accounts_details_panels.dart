@@ -2,24 +2,44 @@ part of 'view_accounts.dart';
 
 extension ViewAccountsDetailsPanels on ViewAccountsState {
   /// Details panels Chart panel for Accounts
-  Widget _getSubViewContentForChart(final List<int> indices) {
-    final List<PairXY> list = <PairXY>[];
+  Widget _getSubViewContentForChart(final List<int> selectedAccounts) {
+    final List<PairXY> listOfPairXY = <PairXY>[];
 
-    for (final MoneyObject item in getList()) {
-      final Account account = item as Account;
-      if (account.isOpen()) {
-        list.add(PairXY(account.name.value, account.balance.value));
+    if (selectedAccounts.length == 1) {
+      final Account? account = getFirstSelectedItemFromSelectionList<Account>(selectedAccounts, list);
+      if (account == null) {
+        // this should not happen
+        return const Text('Error account is null');
       }
+
+      account.maxBalancePerYears.forEach((key, value) {
+        listOfPairXY.add(PairXY(key.toString(), value));
+      });
+      listOfPairXY.sort((a, b) => compareAsciiLowerCase(b.xText, a.xText));
+
+      return Chart(
+        key: Key(selectedAccounts.toString()),
+        list: listOfPairXY.take(10).toList(),
+        variableNameHorizontal: 'Year',
+        variableNameVertical: 'FBar',
+      );
+    } else {
+      for (final MoneyObject item in getList()) {
+        final Account account = item as Account;
+        if (account.isOpen()) {
+          listOfPairXY.add(PairXY(account.name.value, account.balance.value));
+        }
+      }
+
+      listOfPairXY.sort((final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt());
+
+      return Chart(
+        key: Key(selectedAccounts.toString()),
+        list: listOfPairXY.take(10).toList(),
+        variableNameHorizontal: 'Account',
+        variableNameVertical: 'Balance',
+      );
     }
-
-    list.sort((final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt());
-
-    return Chart(
-      key: Key(indices.toString()),
-      list: list.take(10).toList(),
-      variableNameHorizontal: 'Account',
-      variableNameVertical: 'Balance',
-    );
   }
 
   // Details Panel for Transactions

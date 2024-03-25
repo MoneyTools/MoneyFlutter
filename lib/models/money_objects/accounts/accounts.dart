@@ -1,10 +1,12 @@
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'dart:math';
 
 class Accounts extends MoneyObjects<Account> {
   Accounts() {
@@ -54,10 +56,14 @@ class Accounts extends MoneyObjects<Account> {
 
   @override
   void onAllDataLoaded() {
+    // reset balances
     for (final Account account in iterableList()) {
       account.count.value = 0;
       account.balance.value = account.openingBalance.value;
       account.balanceNormalized.value = account.openingBalance.value * account.getCurrencyRatio();
+      account.minBalancePerYears.clear();
+      account.maxBalancePerYears.clear();
+
       // TODO when we deal with downloading online
       // account.onlineAccountInstance = Data().onlineAccounts.get(this.onlineAccountId);
 
@@ -74,12 +80,25 @@ class Accounts extends MoneyObjects<Account> {
       // }
     }
 
+    // Cumulate
     for (final Transaction t in Data().transactions.iterableList()) {
-      final Account? item = get(t.accountId.value);
-      if (item != null) {
-        item.count.value++;
-        item.balance.value += t.amount.value;
-        item.balanceNormalized.value += t.getNormalizedAmount(t.amount.value);
+      final Account? account = get(t.accountId.value);
+      if (account != null) {
+        account.count.value++;
+        account.balance.value += t.amount.value;
+        account.balanceNormalized.value += t.getNormalizedAmount(t.amount.value);
+
+        final int yearOfTheTransaction = t.dateTime.value!.year;
+
+        // Min Balance of the year
+        final double currentMinBalanceValue =
+            account.minBalancePerYears[yearOfTheTransaction] ?? IntValues.maxSigned(32).toDouble();
+        account.minBalancePerYears[yearOfTheTransaction] = min(currentMinBalanceValue, account.balance.value);
+
+        // Max Balance of the year
+        final double currentMaxBalanceValue =
+            account.maxBalancePerYears[yearOfTheTransaction] ?? IntValues.minSigned(32).toDouble();
+        account.maxBalancePerYears[yearOfTheTransaction] = max(currentMaxBalanceValue, account.balance.value);
       }
     }
   }

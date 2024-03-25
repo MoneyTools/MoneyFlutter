@@ -15,6 +15,9 @@ export 'package:money/models/money_objects/accounts/account_types.dart';
 
 /// Accounts like Banks
 class Account extends MoneyObject {
+  Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
+  Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
+
   @override
   int get uniqueId => id.value;
 

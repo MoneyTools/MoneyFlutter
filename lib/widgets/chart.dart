@@ -8,8 +8,8 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/center_message.dart';
 
 class PairXY {
-  num yValue = 0.0;
   String xText = '';
+  num yValue = 0.0;
 
   PairXY(this.xText, this.yValue);
 }

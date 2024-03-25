@@ -73,3 +73,26 @@ const String prefSortBy = 'sortBy';
 const String prefSortAscending = 'sortAscending';
 const String prefSelectedListItemIndex = 'selectedItemIndex';
 const String prefSelectedDetailsPanelTab = 'selectedDetailsPanelTab';
+
+class IntValues {
+  // ...
+  static int maxUnsigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (1 << bitCount) - 1;
+  }
+
+  static int minSigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (-1 << (bitCount - 1)) - 1;
+  }
+
+  static int maxSigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (1 << (bitCount - 1)) - 1;
+  }
+
+  static int minUnsigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (-1 << (bitCount - 1));
+  }
+}
