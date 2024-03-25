@@ -156,6 +156,7 @@ class Data {
 
     if (fireNotification) {
       recalculateBalances();
+      Settings().rebuild();
     }
   }
 

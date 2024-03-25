@@ -32,7 +32,7 @@ class DialogMutateTransaction extends StatefulWidget {
 
 class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   bool isInEditingMode = false;
-  bool editsWereMade = false;
+  bool dataWasModified = false;
   late Transaction _transaction;
 
   @override
@@ -54,7 +54,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
                   onEdit: isInEditingMode
                       ? () {
                           setState(() {
-                            editsWereMade = true;
+                            dataWasModified = isDataModified();
                           });
                         }
                       : null,
@@ -68,6 +68,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
               context: context,
               transaction: _transaction,
               editMode: isInEditingMode,
+              dataWasModified: dataWasModified,
             ),
           ),
         ],
@@ -79,26 +80,21 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
     required BuildContext context,
     required Transaction transaction,
     required bool editMode,
+    required bool dataWasModified,
   }) {
     if (editMode) {
       return [
-        // if (editsWereMade)
+        // if (dataWasModified)
         //   DialogActionButton(
         //       text: 'Discard',
         //       onPressed: () {
         //         Navigator.of(context).pop(false);
         //       }),
         DialogActionButton(
-            text: editsWereMade ? 'Apply' : 'Close',
+            text: dataWasModified ? 'Apply' : 'Close',
             onPressed: () {
-              if (_transaction.valueBeforeEdit != null) {
-                MyJson afterEditing = _transaction.getPersistableJSon<Transaction>();
-                MyJson diff = myJsonDiff(_transaction.valueBeforeEdit!, afterEditing);
-                if (diff.keys.isNotEmpty) {
-                  // Changes were made
-                  Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
-                }
-              }
+              // Changes were made
+              Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
               Navigator.of(context).pop(true);
             })
       ];
@@ -168,5 +164,16 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             Navigator.of(context).pop(false);
           }),
     ];
+  }
+
+  bool isDataModified() {
+    if (_transaction.valueBeforeEdit != null) {
+      MyJson afterEditing = _transaction.getPersistableJSon<Transaction>();
+      MyJson diff = myJsonDiff(_transaction.valueBeforeEdit!, afterEditing);
+      if (diff.keys.isNotEmpty) {
+        return true;
+      }
+    }
+    return false;
   }
 }

@@ -98,7 +98,7 @@ class Transaction extends MoneyObject {
     importance: 4,
     name: 'Payee',
     serializeName: 'Payee',
-    defaultValue: 0,
+    defaultValue: -1,
     type: FieldType.text,
     valueFromInstance: (final Transaction instance) {
       return instance.getPayeeOrTransferCaption();
@@ -121,12 +121,14 @@ class Transaction extends MoneyObject {
                   instance.payee.value = selectedPayee.uniqueId;
                   instance.transfer.value = -1;
                   instance.transferInstance = null;
-                  onEdited(); // notify container
                 }
               case TransactionFlavor.transfer:
+                instance.payee.value = -1;
                 instance.transfer.value = Data().categories.transfer.uniqueId;
+                instance.transferTo = Account.getName(account);
                 instance.transferInstance = null;
             }
+            onEdited(); // notify container
           },
         ),
       );
@@ -429,8 +431,9 @@ class Transaction extends MoneyObject {
       }
       return getTransferCaption(transfer.transaction!.accountInstance!, isFrom);
     }
-
-    return Data().payees.getNameFromId(payee.value);
+    final String displayName = Data().payees.getNameFromId(payee.value);
+    debugLog(displayName);
+    return displayName;
   }
 
   String getTransferCaption(final Account account, final bool isFrom) {
