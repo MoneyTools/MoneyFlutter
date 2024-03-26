@@ -264,12 +264,17 @@ class MoneyObjects<T> {
 
       List<Widget> diffWidgets = [];
       jsonDelta.forEach((key, value) {
-        Widget instanceName = Text(key);
+        // Field Name
+        Widget instanceName = Padding(
+          padding: const EdgeInsets.only(left: 8),
+          child: Text(key),
+        );
         switch (moneyObject.mutation) {
           case MutationType.inserted:
             diffWidgets.add(instanceName);
             diffWidgets.add(diffTextNewValue(value['after'].toString()));
           case MutationType.deleted:
+            diffWidgets.add(instanceName);
             diffWidgets.add(diffTextOldValue(value.toString()));
           case MutationType.changed:
           default:

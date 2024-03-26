@@ -132,14 +132,15 @@ MyJson myJsonFromKeyValuePairs(List<String> keys, List<String> values) {
 }
 
 /// Diff between to JSon object
-MyJson myJsonDiff(MyJson a, MyJson b) {
+MyJson myJsonDiff({required MyJson before, required MyJson after}) {
   MyJson diff = MyJson();
-  a.forEach((key, valueOfA) {
-    final valueOfB = b[key];
-    if (valueOfA != valueOfB) {
+
+  after.forEach((key, valueAfter) {
+    dynamic valueBefore = before[key];
+    if (valueBefore != valueAfter) {
       diff[key] = {
-        'before': valueOfA,
-        'after': valueOfB,
+        'before': valueBefore,
+        'after': valueAfter,
       };
     }
   });

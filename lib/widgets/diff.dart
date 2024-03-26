@@ -31,6 +31,7 @@ Widget diffText(
       visualDensity: VisualDensity.compact,
       label: Text(text),
       backgroundColor: backgroundColor,
+      side: const BorderSide(color: Colors.transparent, width: 0.0),
       labelStyle: TextStyle(
         fontSize: 10,
         color: textColor,

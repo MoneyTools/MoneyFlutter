@@ -102,11 +102,7 @@ abstract class MoneyObject {
 
   MyJson getMutatedDiff<T>() {
     MyJson afterEditing = getPersistableJSon<T>();
-
-    if (valueBeforeEdit != null) {
-      return myJsonDiff(valueBeforeEdit!, afterEditing);
-    }
-    return afterEditing;
+    return myJsonDiff(before: valueBeforeEdit ?? {}, after: afterEditing);
   }
 
   void stashValueBeforeEditing<T>() {
