@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 
 class PickerLetters extends StatefulWidget {
   final List<String> options;
@@ -26,7 +27,7 @@ class _PickerLettersState extends State<PickerLetters> {
     for (final String option in widget.options) {
       final letter = option.isEmpty ? ' ' : option[0];
       final bool isSelected = widget.selected == letter;
-      final theme = Theme.of(context);
+      final theme = getColorTheme(context);
       buttons.add(
         TextButton(
           onPressed: () {
@@ -40,12 +41,12 @@ class _PickerLettersState extends State<PickerLetters> {
           style: TextButton.styleFrom(
             padding: EdgeInsets.zero,
             // Remove padding
-            minimumSize: const Size(30, 20),
-            maximumSize: const Size(30, 20),
-            foregroundColor: isSelected ? theme.primaryColor : theme.dividerColor,
-            backgroundColor: isSelected ? theme.dividerColor : theme.primaryColor,
+            minimumSize: const Size(30, 22),
+            maximumSize: const Size(30, 22),
+            foregroundColor: isSelected ? theme.onPrimary : theme.onBackground,
+            backgroundColor: isSelected ? theme.primary : theme.background,
           ),
-          child: Text(letter, style: const TextStyle(fontSize: 8)),
+          child: Text(letter, style: const TextStyle(fontSize: 10)),
         ),
       );
     }

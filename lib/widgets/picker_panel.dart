@@ -108,21 +108,24 @@ class _PickerPanelState extends State<PickerPanel> {
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                PickerLetters(
-                  options: uniqueLetters,
-                  selected: _filterStartWidth,
-                  onSelected: (String selected) {
-                    setState(() {
-                      _filterStartWidth = selected;
-                      applyFilterStartsWidth();
-                    });
-                  },
-                ),
-              ],
+          child: ScrollConfiguration(
+            behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  PickerLetters(
+                    options: uniqueLetters,
+                    selected: _filterStartWidth,
+                    onSelected: (String selected) {
+                      setState(() {
+                        _filterStartWidth = selected;
+                        applyFilterStartsWidth();
+                      });
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),
