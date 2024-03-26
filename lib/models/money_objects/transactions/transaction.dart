@@ -435,7 +435,7 @@ class Transaction extends MoneyObject {
       } else if (amount > 0) {
         isFrom = true;
       }
-      return getTransferCaption(transfer.transaction!.accountInstance!, isFrom);
+      return getTransferCaption(transfer.related!.accountInstance!, isFrom);
     }
     final String displayName = Data().payees.getNameFromId(payee.value);
     return displayName;

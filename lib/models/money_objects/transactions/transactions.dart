@@ -53,21 +53,23 @@ class Transactions extends MoneyObjects<Transaction> {
     }
 
     // Now that everything is loaded, lets resolve the Transfers
-    for (final Transaction t in iterableList().where((element) => element.transfer.value != -1)) {
-      final int transferId = t.transfer.value!;
-      final Transaction? u = get(transferId);
-      if (u == null) {
-        debugLog('Transaction.transferID of ${t.uniqueId} missing related transaction id $transferId');
+    for (final Transaction transactionSource in iterableList().where((element) => element.transfer.value != -1)) {
+      final int transferId = transactionSource.transfer.value!;
+      final Transaction? transactionRelated = get(transferId);
+      if (transactionRelated == null) {
+        debugLog('Transaction.transferID of ${transactionSource.uniqueId} missing related transaction id $transferId');
       } else {
-        if (t.transferSplit.value == -1) {
-          t.transferInstance = Transfer(id: transferId, owner: t, transaction: u);
+        if (transactionSource.transferSplit.value == -1) {
+          // Normal direct transfer
+          transactionSource.transferInstance = Transfer(id: transferId, source: transactionSource, related: transactionRelated);
         } else {
-          final Split? s = Data().splits.get(t.transferSplit.value);
+          // Split transfer
+          final Split? s = Data().splits.get(transactionSource.transferSplit.value);
           if (s == null) {
             debugLog('Transaction contains a split marked as a transfer, but other side of transfer was not found');
           } else {
-            if (t.transferInstance == null) {
-              t.transferInstance = Transfer(id: transferId, owner: t, transaction: u, split: s);
+            if (transactionSource.transferInstance == null) {
+              transactionSource.transferInstance = Transfer(id: transferId, source: transactionSource, related: transactionRelated, relatedSplit: s);
             } else {
               debugLog('Already have a transfer for this split');
             }

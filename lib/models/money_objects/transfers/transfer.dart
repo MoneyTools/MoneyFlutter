@@ -4,27 +4,27 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Transfer {
   final num id;
-  final Transaction owner; // the source of the transfer.
-  final Split? ownerSplit; // the source split, if it is a transfer in a split.
-  final Transaction? transaction; // the related transaction
-  final Split? split; // the related split, if it is a transfer in a split.
+  final Transaction source; // the source of the transfer.
+  final Transaction? related; // the related transaction
+  final Split? sourceSplit; // the source split, if it is a transfer in a split.
+  final Split? relatedSplit; // the related split, if it is a transfer in a split.
 
   Transfer({
     required this.id,
-    required this.owner,
-    this.transaction,
-    this.ownerSplit,
-    this.split,
+    required this.source,
+    this.related,
+    this.sourceSplit,
+    this.relatedSplit,
   });
 
   Account? getAccount() {
-    return transaction?.accountInstance;
+    return related?.accountInstance;
   }
 
   String getAccountName() {
-    if (transaction != null) {
-      if (transaction!.accountInstance != null) {
-        return transaction!.accountInstance!.name.value;
+    if (related != null) {
+      if (related!.accountInstance != null) {
+        return related!.accountInstance!.name.value;
       }
     }
     return '<account not found>';
