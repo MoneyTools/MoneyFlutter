@@ -44,6 +44,9 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   Widget build(final BuildContext context) {
     // get the list sorted
     final List<Transaction> transactions = widget.getList();
+    if (transactions.isEmpty) {
+      return const Center(child: Text('- No transactions -'));
+    }
     sortList(transactions);
 
     return Column(
