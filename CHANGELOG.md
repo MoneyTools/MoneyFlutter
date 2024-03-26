@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.5.1] 2024-03-26
+
+### Updated
+
+- Improve the Delete confirmation dialog
+
 ## [version 1.5.0] 2024-03-25
 
 ### Added

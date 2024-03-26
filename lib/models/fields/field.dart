@@ -3,8 +3,8 @@ import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/storage/data/data.dart';
 
 class Field<C, T> {
   late T value;
@@ -103,9 +103,22 @@ class Field<C, T> {
         return Currency.getAmountAsStringUsingCurrency(value);
       case FieldType.amountShorthand:
         return getNumberAsShorthandText(value as double);
+      case FieldType.widget:
+        return value;
       case FieldType.text:
       default:
         return value.toString();
+    }
+  }
+
+  Widget getAsCompactWidget(final dynamic value) {
+    if (type == FieldType.widget) {
+      return value;
+    } else {
+      return Text(
+        getString(value),
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      );
     }
   }
 }

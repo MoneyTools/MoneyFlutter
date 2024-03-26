@@ -148,16 +148,13 @@ class Fields<T> {
       // simple [Name  Value]
       return Container(
         decoration: BoxDecoration(
-          border: fieldIndex != 0 ? const Border(top: BorderSide()) : null,
+          border: fieldIndex != 0 ? Border(top: BorderSide(color: Colors.grey.withAlpha(0xaa))) : null,
         ),
         child: Row(
           children: [
             Text(fieldDefinition.name),
             const Spacer(),
-            Text(
-              fieldDefinition.getString(fieldValue),
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            fieldDefinition.getAsCompactWidget(fieldValue),
           ],
         ),
       );

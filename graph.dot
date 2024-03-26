@@ -126,6 +126,7 @@ digraph "" {
   "/lib/widgets/chart.dart" [label="chart"];
   "/lib/widgets/circle.dart" [label="circle"];
   "/lib/widgets/keyboard_widget.dart" [label="keyboard_widget"];
+  "/lib/widgets/diff.dart" [label="diff"];
   "/lib/widgets/filter_input.dart" [label="filter_input"];
   "/lib/widgets/three_part_label.dart" [label="three_part_label"];
   "/lib/widgets/form_field_switch.dart" [label="form_field_switch"];
@@ -141,7 +142,7 @@ digraph "" {
   "/lib/widgets/confirmation_dialog.dart" [label="confirmation_dialog"];
   "/lib/appbar.dart" [label="appbar"];
   subgraph "cluster~" {
-    label="money_flutter";
+    label="MoneyFlutter";
     subgraph "cluster~/lib" {
       label="lib";
       "/lib/menu.dart";
@@ -369,6 +370,7 @@ digraph "" {
         "/lib/widgets/chart.dart";
         "/lib/widgets/circle.dart";
         "/lib/widgets/keyboard_widget.dart";
+        "/lib/widgets/diff.dart";
         "/lib/widgets/filter_input.dart";
         "/lib/widgets/three_part_label.dart";
         "/lib/widgets/form_field_switch.dart";
@@ -468,10 +470,10 @@ digraph "" {
   "/lib/models/money_objects/transfers/transfer.dart" -> "/lib/models/money_objects/splits/splits.dart";
   "/lib/models/money_objects/transfers/transfer.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
   "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/helpers/date_helper.dart";
-  "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/models/money_objects/accounts/account.dart";
   "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/models/money_objects/currencies/currency.dart";
   "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/models/money_objects/money_objects.dart";
+  "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/loan_payments/loan_payment.dart" -> "/lib/widgets/list_view/list_item_card.dart";
   "/lib/models/money_objects/loan_payments/loan_payments.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/loan_payments/loan_payments.dart" -> "/lib/models/money_objects/accounts/account.dart";
@@ -483,6 +485,7 @@ digraph "" {
   "/lib/models/money_objects/money_objects.dart" -> "/lib/models/settings.dart";
   "/lib/models/money_objects/money_objects.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/money_objects.dart" -> "/lib/storage/database/database.dart";
+  "/lib/models/money_objects/money_objects.dart" -> "/lib/widgets/diff.dart";
   "/lib/models/money_objects/money_objects.dart" -> "/lib/models/fields/fields.dart" [style=dashed];
   "/lib/models/money_objects/money_objects.dart" -> "/lib/models/money_objects/money_object.dart" [style=dashed];
   "/lib/models/money_objects/transactions/transactions.dart" -> "/lib/models/money_objects/accounts/account.dart";
@@ -511,11 +514,12 @@ digraph "" {
   "/lib/models/money_objects/transactions/transaction.dart" -> "/lib/models/money_objects/transactions/transaction_types.dart" [style=dashed];
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/helpers/string_helper.dart";
-  "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/settings.dart";
-  "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/storage/data/data.dart";
+  "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/constants.dart";
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/money_objects/accounts/account.dart";
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/money_objects/money_objects.dart";
   "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
+  "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/models/settings.dart";
+  "/lib/models/money_objects/accounts/accounts.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/helpers/date_helper.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/models/money_objects/accounts/account.dart" -> "/lib/models/constants.dart";
@@ -554,6 +558,7 @@ digraph "" {
   "/lib/models/money_objects/categories/categories.dart" -> "/lib/models/money_objects/transactions/transaction.dart";
   "/lib/models/money_objects/money_object.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/models/money_objects/money_object.dart" -> "/lib/models/fields/fields.dart";
+  "/lib/models/money_objects/money_object.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/money_objects/money_object.dart" -> "/lib/helpers/misc_helpers.dart" [style=dashed];
   "/lib/models/money_objects/money_object.dart" -> "/lib/models/fields/field.dart" [style=dashed];
   "/lib/models/money_objects/rental_unit/rental_units.dart" -> "/lib/helpers/json_helper.dart";
@@ -575,8 +580,8 @@ digraph "" {
   "/lib/models/money_objects/investments/investment.dart" -> "/lib/helpers/json_helper.dart";
   "/lib/models/money_objects/investments/investment.dart" -> "/lib/models/money_objects/money_objects.dart";
   "/lib/models/fields/fields.dart" -> "/lib/helpers/color_helper.dart";
-  "/lib/models/fields/fields.dart" -> "/lib/models/fields/field.dart";
   "/lib/models/fields/fields.dart" -> "/lib/models/fields/field_filter.dart";
+  "/lib/models/fields/fields.dart" -> "/lib/models/money_objects/money_object.dart";
   "/lib/models/fields/fields.dart" -> "/lib/widgets/circle.dart";
   "/lib/models/fields/fields.dart" -> "/lib/widgets/details_panel/details_panel_form_widget.dart";
   "/lib/models/fields/fields.dart" -> "/lib/widgets/form_field_switch.dart";
@@ -585,8 +590,8 @@ digraph "" {
   "/lib/models/fields/field.dart" -> "/lib/helpers/list_helper.dart";
   "/lib/models/fields/field.dart" -> "/lib/helpers/string_helper.dart";
   "/lib/models/fields/field.dart" -> "/lib/models/constants.dart";
-  "/lib/models/fields/field.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/fields/field.dart" -> "/lib/models/money_objects/currencies/currency.dart";
+  "/lib/models/fields/field.dart" -> "/lib/storage/data/data.dart";
   "/lib/models/value_parser.dart" -> "/lib/helpers/date_helper.dart";
   "/lib/models/value_parser.dart" -> "/lib/helpers/misc_helpers.dart";
   "/lib/models/value_parser.dart" -> "/lib/helpers/string_helper.dart";
@@ -887,5 +892,5 @@ digraph "" {
   "/lib/appbar.dart" -> "/lib/views/view_pending_changes/bage_pending_changes.dart";
   "/lib/appbar.dart" -> "/lib/widgets/three_part_label.dart";
   "/lib/appbar.dart" -> "/lib/widgets/zoom.dart";
-  "metrics" [label=" isAcyclic: false \l numNodes: 138  \l numEdges: 483  \l avgDegree: 3.5 \l numOrphans: 11 \l ccd: 6824 \l acd: 49.45 \l nccd: 8.01 \l totalSloc: 12275 \l avgSloc: 88.95 \l"];
+  "metrics" [label=" isAcyclic: false \l numNodes: 139  \l numEdges: 486  \l avgDegree: 3.5 \l numOrphans: 11 \l ccd: 6912 \l acd: 49.73 \l nccd: 8.05 \l totalSloc: 12507 \l avgSloc: 89.98 \l"];
 }
