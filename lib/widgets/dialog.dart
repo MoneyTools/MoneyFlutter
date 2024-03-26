@@ -8,7 +8,7 @@ void myShowDialog({
   required final String title,
   required final Widget child,
   required final List<Widget> actionButtons,
-  final bool includeCloseButton = true,
+  final bool includeDoneButton = true,
 }) {
   if (isSmallDevice(context)) {
     // Full screen also comes with a Close (X) button
@@ -28,9 +28,9 @@ void myShowDialog({
     );
   } else {
     // in modal always offer a close button
-    if (includeCloseButton) {
+    if (includeDoneButton) {
       actionButtons.add(DialogActionButton(
-          text: 'Close',
+          text: 'Done',
           onPressed: () {
             Navigator.of(context).pop(false);
           }));

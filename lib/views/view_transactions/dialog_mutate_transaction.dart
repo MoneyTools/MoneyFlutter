@@ -91,7 +91,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         //         Navigator.of(context).pop(false);
         //       }),
         DialogActionButton(
-            text: dataWasModified ? 'Apply' : 'Close',
+            text: dataWasModified ? 'Apply' : 'Done',
             onPressed: () {
               // Changes were made
               if (dataWasModified) {
@@ -161,7 +161,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       ),
       // Close
       DialogActionButton(
-          text: 'Close',
+          text: 'Done',
           onPressed: () {
             Navigator.of(context).pop(false);
           }),
@@ -169,13 +169,8 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   }
 
   bool isDataModified() {
-    if (_transaction.valueBeforeEdit != null) {
-      MyJson afterEditing = _transaction.getPersistableJSon<Transaction>();
-      MyJson diff = myJsonDiff(_transaction.valueBeforeEdit!, afterEditing);
-      if (diff.keys.isNotEmpty) {
-        return true;
-      }
-    }
-    return false;
+    MyJson afterEditing = _transaction.getPersistableJSon<Transaction>();
+    MyJson diff = myJsonDiff(before: _transaction.valueBeforeEdit ?? {}, after: afterEditing);
+    return diff.keys.isNotEmpty;
   }
 }
