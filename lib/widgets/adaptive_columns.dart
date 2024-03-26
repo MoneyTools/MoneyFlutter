@@ -3,12 +3,12 @@ import 'package:money/helpers/misc_helpers.dart';
 
 class AdaptiveColumns extends StatelessWidget {
   final List<Widget> children;
-  final double fieldHeight;
+  final int columnWidth;
 
   /// Constructor
   const AdaptiveColumns({
     super.key,
-    this.fieldHeight = 80,
+    required this.columnWidth,
     required this.children,
   });
 
@@ -33,23 +33,18 @@ class AdaptiveColumns extends StatelessWidget {
   Widget multiColumns() {
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        // from 2 to 4 column
-        // fall back to single column
-        double? optimalColumnWidth;
-        if (constraints.maxWidth > 1000) {
-          // this will generate a 3 columns layout
-          optimalColumnWidth = constraints.maxWidth / 4;
-        } else {
-          if (constraints.maxWidth > 700) {
-            // this will generate a 2 columns layout
-            optimalColumnWidth = constraints.maxWidth / 3;
-          }
-        }
+        // how many columnsWidth  can fit in the give container
+        int quantity = (constraints.maxWidth / columnWidth).floor();
+
+        // if theres only 1 column then just use the entire width
+        double? optimalColumnWidth = quantity <= 1 ? null : constraints.maxWidth / quantity;
+
+        debugLog('${constraints.maxWidth} QC:$quantity cw:$optimalColumnWidth');
 
         List<Widget> sizedWidgets = children
-            .map((widget) => SizedBox(
+            .map((widget) => Container(
+                  padding: const EdgeInsets.all(4),
                   width: optimalColumnWidth,
-                  height: fieldHeight,
                   child: widget,
                 ))
             .toList();
@@ -60,10 +55,10 @@ class AdaptiveColumns extends StatelessWidget {
               return Wrap(
                 alignment: WrapAlignment.start,
                 crossAxisAlignment: WrapCrossAlignment.start,
-                // Horizontal spacing between the children
-                spacing: 10,
-                // Vertical spacing between the children
-                runSpacing: 10,
+                // // Horizontal spacing between the children
+                // spacing: 10,
+                // // Vertical spacing between the children
+                // runSpacing: 10,
                 children: sizedWidgets,
               );
             },

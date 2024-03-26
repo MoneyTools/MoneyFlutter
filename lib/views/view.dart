@@ -397,11 +397,18 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 },
           false,
         );
-        widgetToDisplay.add(Text('ID:${moneyObject.uniqueId}'));
+        widgetToDisplay.add(
+          Center(
+            child: SelectableText(
+              'ID:${moneyObject.uniqueId}',
+              style: const TextStyle(fontSize: 9),
+            ),
+          ),
+        );
         return SingleChildScrollView(
           key: Key(index.toString()),
           child: AdaptiveColumns(
-            fieldHeight: isReadOnly ? 70 : 80,
+            columnWidth: 300,
             children: widgetToDisplay,
           ),
         );
