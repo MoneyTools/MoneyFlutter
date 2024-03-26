@@ -43,7 +43,12 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        buildChoice(),
+        Row(
+          children: [
+            SizedBox(width: 300, child: buildChoice()),
+            const Spacer(),
+          ],
+        ),
         Expanded(
           child: buildIInput(),
         ),
@@ -54,7 +59,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
   Widget buildIInput() {
     if (_choice == TransactionFlavor.payee) {
       return presentInput(
-        'Payee',
+        'Name',
         pickerPayee(
             itemSelected: widget.payee,
             onSelected: (Payee? payee) {
@@ -88,26 +93,24 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
   }
 
   Widget buildChoice() {
-    return Center(
-      child: SegmentedButton<TransactionFlavor>(
-        style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-        segments: const <ButtonSegment<TransactionFlavor>>[
-          ButtonSegment<TransactionFlavor>(
-            value: TransactionFlavor.payee,
-            label: Text('Payee'),
-          ),
-          ButtonSegment<TransactionFlavor>(
-            value: TransactionFlavor.transfer,
-            label: Text('Transfer'),
-          ),
-        ],
-        selected: <TransactionFlavor>{_choice},
-        onSelectionChanged: (final Set<TransactionFlavor> newSelection) {
-          setState(() {
-            _choice = newSelection.first;
-          });
-        },
-      ),
+    return SegmentedButton<TransactionFlavor>(
+      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      segments: const <ButtonSegment<TransactionFlavor>>[
+        ButtonSegment<TransactionFlavor>(
+          value: TransactionFlavor.payee,
+          label: Text('Payee'),
+        ),
+        ButtonSegment<TransactionFlavor>(
+          value: TransactionFlavor.transfer,
+          label: Text('Transfer'),
+        ),
+      ],
+      selected: <TransactionFlavor>{_choice},
+      onSelectionChanged: (final Set<TransactionFlavor> newSelection) {
+        setState(() {
+          _choice = newSelection.first;
+        });
+      },
     );
   }
 }

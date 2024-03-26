@@ -297,12 +297,12 @@ Widget buildFieldWidgetForText({
   final String text = '',
   final TextAlign align = TextAlign.left,
 }) {
-  return FittedBox(
-    fit: BoxFit.scaleDown,
-    alignment: textAlignToAlignment(align),
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-      child: Text(text, textAlign: align),
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+    child: Text(
+      text, textAlign: align,
+      overflow: TextOverflow.ellipsis, // Clip with ellipsis
+      maxLines: 1, // Restrict to single line,
     ),
   );
 }

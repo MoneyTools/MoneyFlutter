@@ -102,7 +102,7 @@ class Transaction extends MoneyObject {
   /// SQLite 4|Payee|INT|0||0
   Field<Transaction, int> payee = Field<Transaction, int>(
     importance: 4,
-    name: 'Payee',
+    name: 'Payee/Transfer',
     serializeName: 'Payee',
     defaultValue: -1,
     type: FieldType.text,
@@ -442,11 +442,12 @@ class Transaction extends MoneyObject {
   }
 
   String getTransferCaption(final Account account, final bool isFrom) {
-    String caption = 'Transfer';
+    String arrowDirection = isFrom ? ' ← ' : ' → ';
+
+    String caption = 'Transfer$arrowDirection';
+
     if (account.isClosed()) {
-      caption = isFrom ? 'Transfer from closed account:' : 'Transfer to closed account:';
-    } else {
-      caption = isFrom ? 'Transfer from:' : 'Transfer to:';
+      caption += 'Closed-Account: ';
     }
     caption += account.name.value;
     return caption;
