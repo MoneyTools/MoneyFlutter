@@ -263,16 +263,17 @@ class MoneyObjects<T> {
       final MyJson jsonDelta = moneyObject.getMutatedDiff<T>();
 
       List<Widget> diffWidgets = [];
-
       jsonDelta.forEach((key, value) {
+        Widget instanceName = Text(key);
         switch (moneyObject.mutation) {
           case MutationType.inserted:
-            diffWidgets.add(Text(key));
+            diffWidgets.add(instanceName);
+            diffWidgets.add(diffTextNewValue(value['after'].toString()));
           case MutationType.deleted:
-            diffWidgets.add(Text(moneyObject.getRepresentation()));
+            diffWidgets.add(diffTextOldValue(value.toString()));
           case MutationType.changed:
           default:
-            diffWidgets.add(Text(key));
+            diffWidgets.add(instanceName);
             diffWidgets.add(diffTextOldValue(value['before'].toString()));
             diffWidgets.add(diffTextNewValue(value['after'].toString()));
         }
@@ -290,7 +291,7 @@ class MoneyObjects<T> {
           ),
           child: ListTile(
             dense: true,
-            title: Text(moneyObject.getRepresentation()),
+            title: Text('"${moneyObject.getRepresentation()}"'),
             subtitle: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: diffWidgets,

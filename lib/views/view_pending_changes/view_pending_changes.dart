@@ -74,7 +74,7 @@ class Mutations {
 
   Mutations({
     required this.typeOfMutation,
-    required this.title,
+    required this.title, // [Added | Modified | Deleted]
     required this.titleColor,
     required this.isExpanded,
   }) {
@@ -98,7 +98,7 @@ class Mutations {
     for (final MutationGroup mutationGroup in Data().getMutationGroups(typeOfMutation)) {
       count += mutationGroup.whatWasMutated.length;
 
-      widgets.add(ListTile(title: Text(mutationGroup.title)));
+      widgets.add(ListTile(title: Text('"${mutationGroup.title}"')));
 
       widgets.add(
         SingleChildScrollView(
