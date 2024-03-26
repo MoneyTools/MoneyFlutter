@@ -382,25 +382,27 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
         if (!isReadOnly) {
           moneyObject.stashValueBeforeEditing<T>();
         }
+        List<Widget> widgetToDisplay = detailPanelFields.getFieldsAsWidgets(
+          moneyObject as T,
+          isReadOnly
+              ? null
+              : () {
+                  setState(() {
+                    /// update panel
+                    Data().notifyTransactionChange(
+                      mutation: MutationType.changed,
+                      moneyObject: moneyObject,
+                    );
+                  });
+                },
+          false,
+        );
+        widgetToDisplay.add(Text('ID:${moneyObject.uniqueId}'));
         return SingleChildScrollView(
           key: Key(index.toString()),
           child: AdaptiveColumns(
             fieldHeight: isReadOnly ? 70 : 80,
-            children: detailPanelFields.getFieldsAsWidgets(
-              moneyObject as T,
-              isReadOnly
-                  ? null
-                  : () {
-                      setState(() {
-                        /// update panel
-                        Data().notifyTransactionChange(
-                          mutation: MutationType.changed,
-                          moneyObject: list[index] as MoneyObject,
-                        );
-                      });
-                    },
-              false,
-            ),
+            children: widgetToDisplay,
           ),
         );
       }

@@ -94,7 +94,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             text: dataWasModified ? 'Apply' : 'Close',
             onPressed: () {
               // Changes were made
-              if(dataWasModified) {
+              if (dataWasModified) {
                 Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
               }
               Navigator.of(context).pop(true);
