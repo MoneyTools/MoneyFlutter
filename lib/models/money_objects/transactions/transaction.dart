@@ -31,8 +31,7 @@ class Transaction extends MoneyObject {
 
   @override
   String getRepresentation() {
-    // TODO
-    return accountInstance!.name.value;
+    return getAccountName();
   }
 
   /// ID
@@ -119,7 +118,7 @@ class Transaction extends MoneyObject {
         child: PickPayeeOrTransfer(
           choice: instance.transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.payee.value),
-          account: instance.transferInstance?.getAccount(),
+          account: instance.transferInstance?.getAccountDestination(),
           onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
             switch (choice) {
               case TransactionFlavor.payee:
@@ -129,10 +128,11 @@ class Transaction extends MoneyObject {
                   instance.transferInstance = null;
                 }
               case TransactionFlavor.transfer:
-                instance.payee.value = -1;
-                instance.transfer.value = Data().categories.transfer.uniqueId;
-                instance.transferTo = Account.getName(account);
-                instance.transferInstance = null;
+                if (account != null) {
+                  instance.payee.value = -1;
+                  // instance.transfer.value = Data().categories.transfer.uniqueId;
+                  Data().transferTo(instance, account);
+                }
             }
             onEdited(); // notify container
           },
@@ -222,12 +222,12 @@ class Transaction extends MoneyObject {
 
   /// Transfer
   /// 11|Transfer|bigint|0||0
-  Field<Transaction, int?> transfer = Field<Transaction, int?>(
+  Field<Transaction, int> transfer = Field<Transaction, int>(
     importance: 10,
     name: 'Transfer',
     serializeName: 'Transfer',
-    defaultValue: null,
-    useAsColumn: false,
+    defaultValue: -1,
+    useAsColumn: true,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.transfer.value,
     valueForSerialization: (final Transaction instance) => instance.transfer.value,
@@ -358,7 +358,24 @@ class Transaction extends MoneyObject {
   String get dateTimeAsText => getDateAsText(dateTime.value);
 
   Account? accountInstance;
+
+  Account? getAccount() {
+    if (accountInstance != null) {
+      return accountInstance;
+    }
+    return Data().accounts.get(accountId.value);
+  }
+
+  String getAccountName() {
+    if (getAccount() != null) {
+      return getAccount()!.name.value;
+    }
+    return "???";
+  }
+
+  /// Used for establishing relation between two transactions
   Transfer? transferInstance;
+
   Investment? investmentInstance;
 
   String? _transferName;
@@ -367,7 +384,7 @@ class Transaction extends MoneyObject {
     if (transferInstance == null) {
       return _transferName ?? '';
     } else {
-      return transferInstance!.getAccountName();
+      return transferInstance!.getAccountDestinationName();
     }
   }
 
@@ -375,11 +392,20 @@ class Transaction extends MoneyObject {
     _transferName = accountName;
   }
 
+  Account? getRelatedAccount() {
+    if (transferInstance != null) {
+      if (transferInstance!.related != null) {
+        return transferInstance!.related!.getAccount();
+      }
+    }
+    return null;
+  }
+
   String get payeeOrTransferCaption {
     return getPayeeOrTransferCaption();
   }
 
-  String? _pendingTransferAccountName;
+  // String? _pendingTransferAccountName;
 
   set payeeOrTransferCaption(final String value) {
     //   if (this.payeeOrTransferCaption() != value) {
@@ -403,31 +429,30 @@ class Transaction extends MoneyObject {
     //   }
   }
 
-  String get transferTo {
-    if (_pendingTransferAccountName != null) {
-      return _pendingTransferAccountName!;
-    }
-
-    if (transferInstance != null) {
-      return transferInstance!.getAccountName();
-    }
-    return transferName;
-  }
-
-  set transferTo(final String accountName) {
-    _pendingTransferAccountName = accountName;
-    transferName = null;
-  }
+  // String get transferTo {
+  //   if (_pendingTransferAccountName != null) {
+  //     return _pendingTransferAccountName!;
+  //   }
+  //
+  //   if (transferInstance != null) {
+  //     return transferInstance!.getAccountName();
+  //   }
+  //   return transferName;
+  // }
+  //
+  // set transferTo(final String accountName) {
+  //   _pendingTransferAccountName = accountName;
+  //   transferName = null;
+  // }
 
   String get payeeName => Data().payees.getNameFromId(payee.value);
 
   String getPayeeOrTransferCaption() {
-    Transfer? transfer = transferInstance;
     Investment? investment = investmentInstance;
     double amount = this.amount.value;
 
     bool isFrom = false;
-    if (transfer != null) {
+    if (transferInstance != null) {
       if (investment != null) {
         if (investment.investmentType.value == InvestmentType.add.index) {
           isFrom = true;
@@ -435,17 +460,25 @@ class Transaction extends MoneyObject {
       } else if (amount > 0) {
         isFrom = true;
       }
-      return getTransferCaption(transfer.related!.accountInstance!, isFrom);
+      if (transferInstance!.related != null) {
+        return getTransferCaption(
+          transferInstance!.getAccountDestination(),
+          isFrom,
+        );
+      }
+      return '';
     }
     final String displayName = Data().payees.getNameFromId(payee.value);
     return displayName;
   }
 
-  String getTransferCaption(final Account account, final bool isFrom) {
+  String getTransferCaption(final Account? account, final bool isFrom) {
     String arrowDirection = isFrom ? ' ← ' : ' → ';
 
     String caption = 'Transfer$arrowDirection';
-
+    if (account == null) {
+      return '???';
+    }
     if (account.isClosed()) {
       caption += 'Closed-Account: ';
     }

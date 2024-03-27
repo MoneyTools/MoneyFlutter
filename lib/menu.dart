@@ -149,6 +149,12 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
       tooltip: 'Transactions',
       icon: Icon(Icons.receipt_long),
       selectedIcon: Icon(Icons.receipt_long),
+    ),
+    const NavigationDestination(
+      label: 'Transfers',
+      tooltip: 'View transfers between accounts',
+      icon: Icon(Icons.swap_horiz),
+      selectedIcon: Icon(Icons.swap_horiz),
     )
   ];
   if (settings.rentals) {

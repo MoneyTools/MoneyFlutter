@@ -45,7 +45,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
       children: [
         Row(
           children: [
-            SizedBox(width: 300, child: buildChoice()),
+            SizedBox(width: 250, child: buildChoice()),
             const Spacer(),
           ],
         ),

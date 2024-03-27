@@ -40,6 +40,7 @@ class Field<C, T> {
     this.type = FieldType.text,
     this.currency = Constants.defaultCurrency,
     this.align = TextAlign.left,
+    this.isMultiLine = false,
     this.columnWidth = ColumnWidth.normal,
     this.name = '',
     this.serializeName = '',
@@ -207,6 +208,7 @@ class FieldString<C> extends Field<C, String> {
     super.useAsColumn = true,
     super.useAsDetailPanels = true,
     super.align = TextAlign.left,
+    super.isMultiLine = false,
     super.getEditWidget,
     super.setValue,
   }) : super(
