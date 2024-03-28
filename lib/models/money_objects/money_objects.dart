@@ -84,7 +84,7 @@ class MoneyObjects<T> {
     return nextId + 1;
   }
 
-  void appendNewMoneyObject(final MoneyObject moneyObject) {
+  MoneyObject appendNewMoneyObject(final MoneyObject moneyObject, [bool fireNotification = true]) {
     assert(moneyObject.uniqueId == -1);
 
     // assign the next available unique ID
@@ -95,8 +95,9 @@ class MoneyObjects<T> {
     Data().notifyTransactionChange(
       mutation: MutationType.inserted,
       moneyObject: moneyObject,
-      fireNotification: true,
+      fireNotification: fireNotification,
     );
+    return moneyObject;
   }
 
   T? get(final num id) {
@@ -296,7 +297,7 @@ class MoneyObjects<T> {
           ),
           child: ListTile(
             dense: true,
-            title: Text('"${moneyObject.getRepresentation()}"'),
+            title: Text('"${moneyObject.getRepresentation()}" (${moneyObject.uniqueId})'),
             subtitle: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: diffWidgets,

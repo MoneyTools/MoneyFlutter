@@ -74,8 +74,9 @@ abstract class MoneyObject {
     Function? onEdit,
     bool compact = false,
   }) {
-    final Fields<T> fields =
-        Fields<T>(definitions: getFieldsForClass<T>().where((element) => element.useAsDetailPanels).toList());
+    final Fields<T> fields = Fields<T>(
+      definitions: getFieldsForClass<T>().where((element) => element.useAsDetailPanels).toList(),
+    );
     return fields.getFieldsAsWidgets(this as T, onEdit, compact);
   }
 

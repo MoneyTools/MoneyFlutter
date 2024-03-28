@@ -6,6 +6,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
 import 'package:money/widgets/form_field_switch.dart';
+import 'package:money/widgets/gaps.dart';
 
 // Exports
 export 'package:money/models/fields/field.dart';
@@ -151,9 +152,10 @@ class Fields<T> {
           border: fieldIndex != 0 ? Border(top: BorderSide(color: Colors.grey.withAlpha(0xaa))) : null,
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(fieldDefinition.name),
-            const Spacer(),
+            gapMedium(),
             fieldDefinition.getAsCompactWidget(fieldValue),
           ],
         ),

@@ -9,6 +9,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
+import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
@@ -31,8 +32,7 @@ class Transaction extends MoneyObject {
 
   @override
   String getRepresentation() {
-    // TODO
-    return accountInstance!.name.value;
+    return getAccountName();
   }
 
   /// ID
@@ -119,7 +119,7 @@ class Transaction extends MoneyObject {
         child: PickPayeeOrTransfer(
           choice: instance.transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.payee.value),
-          account: instance.transferInstance?.getAccount(),
+          account: instance.transferInstance?.getReceiverAccount(),
           onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
             switch (choice) {
               case TransactionFlavor.payee:
@@ -129,10 +129,10 @@ class Transaction extends MoneyObject {
                   instance.transferInstance = null;
                 }
               case TransactionFlavor.transfer:
-                instance.payee.value = -1;
-                instance.transfer.value = Data().categories.transfer.uniqueId;
-                instance.transferTo = Account.getName(account);
-                instance.transferInstance = null;
+                if (account != null) {
+                  instance.payee.value = -1;
+                  Data().transferTo(instance, account);
+                }
             }
             onEdited(); // notify container
           },
@@ -222,12 +222,12 @@ class Transaction extends MoneyObject {
 
   /// Transfer
   /// 11|Transfer|bigint|0||0
-  Field<Transaction, int?> transfer = Field<Transaction, int?>(
+  Field<Transaction, int> transfer = Field<Transaction, int>(
     importance: 10,
     name: 'Transfer',
     serializeName: 'Transfer',
-    defaultValue: null,
-    useAsColumn: false,
+    defaultValue: -1,
+    useAsColumn: true,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.transfer.value,
     valueForSerialization: (final Transaction instance) => instance.transfer.value,
@@ -358,7 +358,24 @@ class Transaction extends MoneyObject {
   String get dateTimeAsText => getDateAsText(dateTime.value);
 
   Account? accountInstance;
+
+  Account? getAccount() {
+    if (accountInstance != null) {
+      return accountInstance;
+    }
+    return Data().accounts.get(accountId.value);
+  }
+
+  String getAccountName() {
+    if (getAccount() != null) {
+      return getAccount()!.name.value;
+    }
+    return "???";
+  }
+
+  /// Used for establishing relation between two transactions
   Transfer? transferInstance;
+
   Investment? investmentInstance;
 
   String? _transferName;
@@ -367,7 +384,7 @@ class Transaction extends MoneyObject {
     if (transferInstance == null) {
       return _transferName ?? '';
     } else {
-      return transferInstance!.getAccountName();
+      return transferInstance!.getReceiverAccountName();
     }
   }
 
@@ -375,11 +392,20 @@ class Transaction extends MoneyObject {
     _transferName = accountName;
   }
 
+  Account? getRelatedAccount() {
+    if (transferInstance != null) {
+      if (transferInstance!.related != null) {
+        return transferInstance!.related!.getAccount();
+      }
+    }
+    return null;
+  }
+
   String get payeeOrTransferCaption {
     return getPayeeOrTransferCaption();
   }
 
-  String? _pendingTransferAccountName;
+  // String? _pendingTransferAccountName;
 
   set payeeOrTransferCaption(final String value) {
     //   if (this.payeeOrTransferCaption() != value) {
@@ -403,31 +429,30 @@ class Transaction extends MoneyObject {
     //   }
   }
 
-  String get transferTo {
-    if (_pendingTransferAccountName != null) {
-      return _pendingTransferAccountName!;
-    }
-
-    if (transferInstance != null) {
-      return transferInstance!.getAccountName();
-    }
-    return transferName;
-  }
-
-  set transferTo(final String accountName) {
-    _pendingTransferAccountName = accountName;
-    transferName = null;
-  }
+  // String get transferTo {
+  //   if (_pendingTransferAccountName != null) {
+  //     return _pendingTransferAccountName!;
+  //   }
+  //
+  //   if (transferInstance != null) {
+  //     return transferInstance!.getAccountName();
+  //   }
+  //   return transferName;
+  // }
+  //
+  // set transferTo(final String accountName) {
+  //   _pendingTransferAccountName = accountName;
+  //   transferName = null;
+  // }
 
   String get payeeName => Data().payees.getNameFromId(payee.value);
 
   String getPayeeOrTransferCaption() {
-    Transfer? transfer = transferInstance;
     Investment? investment = investmentInstance;
     double amount = this.amount.value;
 
     bool isFrom = false;
-    if (transfer != null) {
+    if (transferInstance != null) {
       if (investment != null) {
         if (investment.investmentType.value == InvestmentType.add.index) {
           isFrom = true;
@@ -435,17 +460,25 @@ class Transaction extends MoneyObject {
       } else if (amount > 0) {
         isFrom = true;
       }
-      return getTransferCaption(transfer.related!.accountInstance!, isFrom);
+      if (transferInstance!.related != null) {
+        return getTransferCaption(
+          transferInstance!.getReceiverAccount(),
+          isFrom,
+        );
+      }
+      return '';
     }
     final String displayName = Data().payees.getNameFromId(payee.value);
     return displayName;
   }
 
-  String getTransferCaption(final Account account, final bool isFrom) {
+  String getTransferCaption(final Account? account, final bool isFrom) {
     String arrowDirection = isFrom ? ' ← ' : ' → ';
 
     String caption = 'Transfer$arrowDirection';
-
+    if (account == null) {
+      return '???';
+    }
     if (account.isClosed()) {
       caption += 'Closed-Account: ';
     }
@@ -613,10 +646,65 @@ class Transaction extends MoneyObject {
   }
 
   double getNormalizedAmount(double nativeValue) {
-// Convert the value to USD
+    // Convert the value to USD
     if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
       return nativeValue;
     }
     return nativeValue * accountInstance!.getCurrencyRatio();
+  }
+
+  void checkTransfers(List<Transaction> dangling, List<Account> deletedAccounts) {
+    //   bool added = false;
+    //   if (this.to != null && this.Transfer == null) {
+    //     if (IsDeletedAccount(this.to, money, deletedAccounts)) {
+    //       this.Category =
+    //           this.Amount < 0 ? Data().categories.TransferToDeletedAccount : money.Categories.TransferFromDeletedAccount;
+    //       this.to = null;
+    //     } else {
+    //       added = true;
+    //       dangling.Add(this);
+    //     }
+    //   }
+    //
+    //   if (this.Transfer != null) {
+    //     Transaction other = this.transfer.Transaction;
+    //     if (other.IsSplit) {
+    //       int count = 0;
+    //       Split splitXfer = null;
+    //
+    //       for (Split s in other.splits.GetSplits()) {
+    //         if (s.transfer != null) {
+    //           if (splitXfer == null) {
+    //             splitXfer = s;
+    //           }
+    //           if (s.transfer.Transaction == this) {
+    //             count++;
+    //           }
+    //         }
+    //       }
+    //
+    //       if (count == 0) {
+    //         if (other.transfer != null && other.transfer.transaction == this) {
+    //           // Ok, well it could be that the transfer is the whole transaction, but then
+    //           // one side was itemized. For example, you transfer 500 from one account to
+    //           // another, then on the deposit side you want to record what that was for
+    //           // by itemizing the $500 in a split.  If this is the case then it is not dangling.
+    //         } else if (!this.AutoFixDandlingTransfer(splitXfer)) {
+    //           added = true;
+    //           dangling.add(this);
+    //         }
+    //       }
+    //     } else if ((other.transfer == null || other.transfer.Transaction != this) &&
+    //         !this.AutoFixDandlingTransfer(null)) {
+    //       added = true;
+    //       dangling.add(this);
+    //     }
+    //   }
+    //
+    //   if (this.splits != null) {
+    //     if (this.splits.CheckTransfers(money, dangling, deletedaccounts) && !added) {
+    //       dangling.add(this); // only add transaction once.
+    //     }
+    //   }
   }
 }

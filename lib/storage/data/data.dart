@@ -5,6 +5,7 @@ import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/account_aliases/account_aliases.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/accounts/accounts.dart';
 import 'package:money/models/money_objects/aliases/aliases.dart';
 import 'package:money/models/money_objects/categories/categories.dart';
@@ -21,6 +22,7 @@ import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/stock_splits/stock_splits.dart';
 import 'package:money/models/money_objects/transaction_extras/transaction_extras.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
+import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/database/database.dart';
 import 'package:money/widgets/snack_bar.dart';
@@ -235,6 +237,113 @@ class Data {
 
     // Notify that loading is completed
     return true;
+  }
+
+  void removeTransfer(Transaction t) {
+    if (t.transfer.value != -1) {
+      t.transfer.value = -1;
+      t.transferInstance = null;
+    }
+  }
+
+  bool transferTo(Transaction transactionSource, Account destinationAccount) {
+    if (transactionSource.accountId.value == destinationAccount.uniqueId) {
+      debugLog("Cannot transfer to same account");
+      return false;
+    }
+
+    removeTransfer(transactionSource);
+
+    Transaction? relatedTransaction = Data().transactions.findExistingTransactionForAccount(
+          accountId: destinationAccount.uniqueId,
+          dateTime: transactionSource.dateTime.value!,
+          amount: -transactionSource.amount.value,
+        );
+
+    // ignore: prefer_conditional_assignment
+    if (relatedTransaction == null) {
+      relatedTransaction = Transaction()
+        ..accountId.value = destinationAccount.uniqueId
+        ..amount.value = -transactionSource.amount.value
+        ..categoryId.value = transactionSource.categoryId.value
+        ..dateTime.value = transactionSource.dateTime.value
+        ..fitid.value = transactionSource.fitid.value
+        ..number.value = transactionSource.number.value
+        ..memo.value = transactionSource.memo.value;
+      //u.Status = t.Status; no !!!
+
+      // Investment i = t.Investment;
+      // if (i != null) {
+      //   Investment j = u.GetOrCreateInvestment();
+      //   j.Units = i.Units;
+      //   j.UnitPrice = i.UnitPrice;
+      //   j.Security = i.Security;
+      //   switch (i.Type) {
+      //     case InvestmentType.Add:
+      //       j.Type = InvestmentType.Remove;
+      //       break;
+      //     case InvestmentType.Remove:
+      //       j.Type = InvestmentType.Add;
+      //       break;
+      //     case InvestmentType.None: // assume it's a remove
+      //       i.Type = InvestmentType.Remove;
+      //       j.Type = InvestmentType.Add;
+      //       break;
+      //     case InvestmentType.Buy:
+      //     case InvestmentType.Sell:
+      //       throw new MoneyException("Transfer must be of type 'Add' or 'Remove'.");
+      //   }
+      //   u.Investment = j;
+      // }
+    }
+
+    // must have a valid transaction id before we assign the transfers.
+    relatedTransaction.transfer.value = transactionSource.id.value;
+    relatedTransaction.transferInstance =
+        Transfer(id: 0, source: relatedTransaction, related: transactionSource, isOrphan: false);
+
+    transactionSource.transfer.value = transactionSource.id.value;
+    transactionSource.transferInstance =
+        Transfer(id: 0, source: transactionSource, related: relatedTransaction, isOrphan: false);
+    // this needs to happen after the above
+    final MoneyObject updateObjectId = transactions.appendNewMoneyObject(relatedTransaction);
+    relatedTransaction.id.value = updateObjectId.uniqueId;
+    return true;
+  }
+
+  void transferSplitTo(Split s, Account to) {
+    // Transaction t = s.Transaction;
+    // if (t.Account == to) {
+    //   throw new MoneyException("Cannot transfer to same account");
+    // }
+    //
+    // if (t.Transfer != null && t.Transfer.Split != null) {
+    //   throw new MoneyException("This transaction is already the target of a split transfer.\n" +
+    //       "MyMoney doesn't support splits being on both sides of a transfer\n" +
+    //       "So if you really want to add a transfer to ths Splits in this transaction\n" +
+    //       "then please remove the split transfer that is pointing to this transaction"
+    //   );
+    // }
+    //
+    // // try the remove transfer first, because it will throw if the other side is reconciled.
+    // this.RemoveTransfer(t.Transfer);
+    // t.Transfer = null;
+    // this.RemoveTransfer(s.Transfer);
+    // s.Transfer = null;
+    //
+    // Transaction u = this.Transactions.NewTransaction(to);
+    // u.Date = t.Date;
+    // u.FITID = t.FITID;
+    // u.Investment = t.Investment;
+    // u.Number = t.Number;
+    // u.Memo = s.Memo;
+    // u.Category = s.Category;
+    // //u.Status = t.Status; // no !!!
+    // u.Amount = this.Currencies.GetTransferAmount(-s.Amount, t.Account.Currency, to.Currency);
+    // u.Transfer = new Transfer(0, u, t, s);
+    // s.Transfer = new Transfer(0, t, s, u);
+    // this.Transactions.AddTransaction(u);
+    // this.Rebalance(to);
   }
 
   /// When Changes are done we can force a reevaluation of the balances
