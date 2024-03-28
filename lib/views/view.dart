@@ -31,7 +31,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   // list management
   List<T> list = <T>[];
-  ValueNotifier<List<int>> selectedItems = ValueNotifier<List<int>>(<int>[]);
+  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>(<int>[]);
   Fields<T> _fieldToDisplay = Fields<T>(definitions: <Field<T, dynamic>>[]);
   List<String> listOfUniqueString = <String>[];
   List<ValueSelection> listOfValueSelected = [];
@@ -115,7 +115,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               flex: 1,
               child: MyListView<T>(
                 list: list,
-                selectedItems: selectedItems,
+                selectedItems: _selectedItemsByUniqueId,
                 fields: _fieldToDisplay,
                 asColumnView: useColumns,
                 onTap: onItemSelected,
@@ -135,7 +135,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                     Settings().store();
                   });
                 },
-                selectedItems: selectedItems,
+                selectedItems: _selectedItemsByUniqueId,
 
                 // SubView
                 subPanelSelected: _selectedBottomTabId,
@@ -157,7 +157,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                   // Switch to edit mode
                 },
                 onActionDelete: () {
-                  onDeleteRequestedByUser(context, selectedItems.value.first);
+                  onDeleteRequestedByUser(context, _selectedItemsByUniqueId.value.first);
                 },
               ),
             ),
@@ -206,6 +206,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <T>[];
   }
 
+  void clearSelection() {
+    //_selectedItemsByUniqueId.value.clear();
+  }
   void onSort() {
     if (_fieldToDisplay.definitions.isNotEmpty) {
       if (isBetween(_sortByFieldIndex, -1, _fieldToDisplay.definitions.length)) {
@@ -343,9 +346,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void setSelectedItem(final int index) {
     // This will cause a UI update and the bottom details will get rendered if its expanded
     if (index == -1) {
-      selectedItems.value = [];
+      _selectedItemsByUniqueId.value = [];
     } else {
-      selectedItems.value = <int>[index];
+      _selectedItemsByUniqueId.value = <int>[index];
     }
 
     // call this to persist the last selected item index
@@ -366,7 +369,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   }
 
   T? getFirstSelectedItem() {
-    return getFirstSelectedItemFromSelectionList<T>(selectedItems.value, list);
+    return getFirstSelectedItemFromSelectionList<T>(_selectedItemsByUniqueId.value, list);
   }
 
   Widget getDetailPanelHeader(final BuildContext context, final num index, final T item) {
@@ -448,7 +451,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     Settings().views[getClassNameSingular()] = <String, dynamic>{
       prefSortBy: _sortByFieldIndex,
       prefSortAscending: _sortAscending,
-      prefSelectedListItemIndex: selectedItems.value.firstOrNull,
+      prefSelectedListItemIndex: _selectedItemsByUniqueId.value.firstOrNull,
       prefSelectedDetailsPanelTab: _selectedBottomTabId.index,
     };
 
