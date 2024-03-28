@@ -20,6 +20,8 @@ part 'view_accounts_details_panels.dart';
 
 part 'view_accounts_helpers.dart';
 
+final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
+
 /// Main view for all Accounts
 class ViewAccounts extends ViewWidget<Account> {
   const ViewAccounts({super.key});
@@ -30,7 +32,6 @@ class ViewAccounts extends ViewWidget<Account> {
 
 class ViewAccountsState extends ViewWidgetState<Account> {
   final List<Widget> pivots = <Widget>[];
-  final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
 
   @override
   void initState() {

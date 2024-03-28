@@ -160,6 +160,16 @@ class Settings extends ChangeNotifier {
     }
   }
 
+  void stash(final String key, final String value) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    preferences.setString(key, value);
+  }
+
+  Future<String> unStash(final String key, final String value) async {
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getString(key) ?? '';
+  }
+
   ThemeData getThemeData() {
     // Validate color range
     if (colorSelected > colorOptions.length) {
@@ -205,4 +215,23 @@ class Settings extends ChangeNotifier {
   }
 
   Account? mostRecentlySelectedAccount;
+}
+
+Future<void> saveBoolArray(final String key, List<bool> boolArray) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  List<String> boolStrings = boolArray.map((boolValue) => boolValue.toString()).toList();
+  String encodedArray = json.encode(boolStrings);
+  await prefs.setString(key, encodedArray);
+}
+
+Future<List<bool>> getBoolArray(final String key) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? encodedArray = prefs.getString(key);
+  if (encodedArray != null) {
+    List<String> boolStrings = json.decode(encodedArray).cast<String>();
+    List<bool> boolArray = boolStrings.map((boolString) => boolString == 'true').toList();
+    return boolArray;
+  } else {
+    return []; // Default value if array is not found
+  }
 }
