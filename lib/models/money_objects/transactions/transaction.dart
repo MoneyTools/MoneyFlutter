@@ -84,7 +84,7 @@ class Transaction extends MoneyObject {
     importance: 20,
     type: FieldType.text,
     align: TextAlign.center,
-    columnWidth: ColumnWidth.small,
+    columnWidth: ColumnWidth.tiny,
     defaultValue: TransactionStatus.none,
     useAsDetailPanels: false,
     name: 'Status',
@@ -106,6 +106,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Payee',
     defaultValue: -1,
     type: FieldType.text,
+    columnWidth: ColumnWidth.largest,
     valueFromInstance: (final Transaction instance) {
       return instance.getPayeeOrTransferCaption();
     },
@@ -158,6 +159,7 @@ class Transaction extends MoneyObject {
   Field<Transaction, int> categoryId = Field<Transaction, int>(
       importance: 10,
       type: FieldType.text,
+      columnWidth: ColumnWidth.large,
       name: 'Category',
       serializeName: 'Category',
       defaultValue: -1,
@@ -227,7 +229,7 @@ class Transaction extends MoneyObject {
     name: 'Transfer',
     serializeName: 'Transfer',
     defaultValue: -1,
-    useAsColumn: true,
+    useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => instance.transfer.value,
     valueForSerialization: (final Transaction instance) => instance.transfer.value,
@@ -318,10 +320,13 @@ class Transaction extends MoneyObject {
     importance: 98,
     name: columnIdAmountNormalized,
     align: TextAlign.right,
+    columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => Currency.getAmountAsStringUsingCurrency(
         instance.getNormalizedAmount(instance.amount.value),
         iso4217code: Constants.defaultCurrency),
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByValue(a.amount.value, b.amount.value, ascending),
   );
 
   /// Balance native
@@ -338,6 +343,7 @@ class Transaction extends MoneyObject {
     importance: 99,
     name: 'Balance',
     align: TextAlign.right,
+    columnWidth: ColumnWidth.small,
     useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) =>
@@ -349,10 +355,13 @@ class Transaction extends MoneyObject {
     importance: 99,
     name: 'Balance(USD)',
     align: TextAlign.right,
+    columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
     valueFromInstance: (final Transaction instance) => Currency.getAmountAsStringUsingCurrency(
         instance.getNormalizedAmount(instance.balance.value),
         iso4217code: Constants.defaultCurrency),
+    sort: (final Transaction a, final Transaction b, final bool ascending) =>
+        sortByValue(a.balance.value, b.balance.value, ascending),
   );
 
   String get dateTimeAsText => getDateAsText(dateTime.value);

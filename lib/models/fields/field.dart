@@ -174,7 +174,7 @@ class FieldAmount<C> extends Field<C, double> {
     super.valueForSerialization,
     super.setValue,
     super.useAsColumn,
-    super.columnWidth,
+    super.columnWidth = ColumnWidth.small,
     super.useAsDetailPanels,
     super.sort,
   }) : super(
