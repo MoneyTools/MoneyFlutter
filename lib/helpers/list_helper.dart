@@ -49,9 +49,9 @@ int sortByString(final dynamic a, final dynamic b, final bool ascending) {
 
 int sortByValue(final num a, final num b, final bool ascending) {
   if (ascending) {
-    return (a - b).toInt();
+    return a.compareTo(b);
   } else {
-    return (b - a).toInt();
+    return b.compareTo(a);
   }
 }
 
