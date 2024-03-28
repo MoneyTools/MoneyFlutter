@@ -246,56 +246,68 @@ class Data {
     }
   }
 
-  bool transferTo(Transaction transactionSource, Account destination) {
-    if (transactionSource.accountId.value == destination.uniqueId) {
+  bool transferTo(Transaction transactionSource, Account destinationAccount) {
+    if (transactionSource.accountId.value == destinationAccount.uniqueId) {
       debugLog("Cannot transfer to same account");
       return false;
     }
 
     removeTransfer(transactionSource);
 
-    Transaction relatedTransaction = Transaction()
-      ..accountId.value = destination.uniqueId
-      ..amount.value = -transactionSource.amount.value
-      ..categoryId.value = transactionSource.categoryId.value
-      ..dateTime.value = transactionSource.dateTime.value
-      ..fitid.value = transactionSource.fitid.value
-      ..number.value = transactionSource.number.value
-      ..memo.value = transactionSource.memo.value;
-    //u.Status = t.Status; no !!!
+    Transaction? relatedTransaction = Data().transactions.findExistingTransactionForAccount(
+          accountId: destinationAccount.uniqueId,
+          dateTime: transactionSource.dateTime.value!,
+          amount: -transactionSource.amount.value,
+        );
 
-    // Investment i = t.Investment;
-    // if (i != null) {
-    //   Investment j = u.GetOrCreateInvestment();
-    //   j.Units = i.Units;
-    //   j.UnitPrice = i.UnitPrice;
-    //   j.Security = i.Security;
-    //   switch (i.Type) {
-    //     case InvestmentType.Add:
-    //       j.Type = InvestmentType.Remove;
-    //       break;
-    //     case InvestmentType.Remove:
-    //       j.Type = InvestmentType.Add;
-    //       break;
-    //     case InvestmentType.None: // assume it's a remove
-    //       i.Type = InvestmentType.Remove;
-    //       j.Type = InvestmentType.Add;
-    //       break;
-    //     case InvestmentType.Buy:
-    //     case InvestmentType.Sell:
-    //       throw new MoneyException("Transfer must be of type 'Add' or 'Remove'.");
-    //   }
-    //   u.Investment = j;
-    // }
+    // ignore: prefer_conditional_assignment
+    if (relatedTransaction == null) {
+      relatedTransaction = Transaction()
+        ..accountId.value = destinationAccount.uniqueId
+        ..amount.value = -transactionSource.amount.value
+        ..categoryId.value = transactionSource.categoryId.value
+        ..dateTime.value = transactionSource.dateTime.value
+        ..fitid.value = transactionSource.fitid.value
+        ..number.value = transactionSource.number.value
+        ..memo.value = transactionSource.memo.value;
+      //u.Status = t.Status; no !!!
+
+      // Investment i = t.Investment;
+      // if (i != null) {
+      //   Investment j = u.GetOrCreateInvestment();
+      //   j.Units = i.Units;
+      //   j.UnitPrice = i.UnitPrice;
+      //   j.Security = i.Security;
+      //   switch (i.Type) {
+      //     case InvestmentType.Add:
+      //       j.Type = InvestmentType.Remove;
+      //       break;
+      //     case InvestmentType.Remove:
+      //       j.Type = InvestmentType.Add;
+      //       break;
+      //     case InvestmentType.None: // assume it's a remove
+      //       i.Type = InvestmentType.Remove;
+      //       j.Type = InvestmentType.Add;
+      //       break;
+      //     case InvestmentType.Buy:
+      //     case InvestmentType.Sell:
+      //       throw new MoneyException("Transfer must be of type 'Add' or 'Remove'.");
+      //   }
+      //   u.Investment = j;
+      // }
+    }
+
     // must have a valid transaction id before we assign the transfers.
     relatedTransaction.transfer.value = transactionSource.id.value;
-    relatedTransaction.transferInstance = Transfer(id: 0, source: relatedTransaction, related: transactionSource);
+    relatedTransaction.transferInstance =
+        Transfer(id: 0, source: relatedTransaction, related: transactionSource, isOrphan: false);
 
     transactionSource.transfer.value = transactionSource.id.value;
-    transactionSource.transferInstance = Transfer(id: 0, source: transactionSource, related: relatedTransaction);
+    transactionSource.transferInstance =
+        Transfer(id: 0, source: transactionSource, related: relatedTransaction, isOrphan: false);
     // this needs to happen after the above
     final MoneyObject updateObjectId = transactions.appendNewMoneyObject(relatedTransaction);
-    transactionSource.id.value = updateObjectId.uniqueId;
+    relatedTransaction.id.value = updateObjectId.uniqueId;
     return true;
   }
 

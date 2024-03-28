@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.6.0] 2024-03-28
+
+### Added
+
+- Transfers View
+
 ## [version 1.5.1] 2024-03-26
 
 ### Updated

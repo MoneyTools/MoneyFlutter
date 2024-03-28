@@ -103,13 +103,13 @@ class Transactions extends MoneyObjects<Transaction> {
           if (transactionSource.transferInstance == null) {
             // cache the transfer
             transactionSource.transferInstance =
-                Transfer(id: 0, source: transactionSource, related: transactionRelated);
+                Transfer(id: 0, source: transactionSource, related: transactionRelated, isOrphan: false);
           }
           // ignore: prefer_conditional_assignment
           if (transactionRelated.transferInstance == null) {
             // cache the transfer
             transactionRelated.transferInstance =
-                Transfer(id: 0, source: transactionRelated, related: transactionSource);
+                Transfer(id: 0, source: transactionRelated, related: transactionSource, isOrphan: false);
           }
           continue;
         }
@@ -134,6 +134,24 @@ class Transactions extends MoneyObjects<Transaction> {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
     return iterableList(true).firstWhereOrNull((transaction) {
       if (transaction.amount.value == amount) {
+        if (transaction.dateTime.value?.year == dateTime.year &&
+            transaction.dateTime.value?.month == dateTime.month &&
+            transaction.dateTime.value?.day == dateTime.day) {
+          return true;
+        }
+      }
+      return false;
+    });
+  }
+
+  Transaction? findExistingTransactionForAccount({
+    required final int accountId,
+    required final DateTime dateTime,
+    required final double amount,
+  }) {
+    // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
+    return iterableList(true).firstWhereOrNull((transaction) {
+      if (transaction.accountId.value == accountId && transaction.amount.value == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&
             transaction.dateTime.value?.month == dateTime.month &&
             transaction.dateTime.value?.day == dateTime.day) {

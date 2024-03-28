@@ -9,6 +9,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
+import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
@@ -118,7 +119,7 @@ class Transaction extends MoneyObject {
         child: PickPayeeOrTransfer(
           choice: instance.transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.payee.value),
-          account: instance.transferInstance?.getAccountDestination(),
+          account: instance.transferInstance?.getReceiverAccount(),
           onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
             switch (choice) {
               case TransactionFlavor.payee:
@@ -130,7 +131,6 @@ class Transaction extends MoneyObject {
               case TransactionFlavor.transfer:
                 if (account != null) {
                   instance.payee.value = -1;
-                  // instance.transfer.value = Data().categories.transfer.uniqueId;
                   Data().transferTo(instance, account);
                 }
             }
@@ -384,7 +384,7 @@ class Transaction extends MoneyObject {
     if (transferInstance == null) {
       return _transferName ?? '';
     } else {
-      return transferInstance!.getAccountDestinationName();
+      return transferInstance!.getReceiverAccountName();
     }
   }
 
@@ -462,7 +462,7 @@ class Transaction extends MoneyObject {
       }
       if (transferInstance!.related != null) {
         return getTransferCaption(
-          transferInstance!.getAccountDestination(),
+          transferInstance!.getReceiverAccount(),
           isFrom,
         );
       }
@@ -646,10 +646,65 @@ class Transaction extends MoneyObject {
   }
 
   double getNormalizedAmount(double nativeValue) {
-// Convert the value to USD
+    // Convert the value to USD
     if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
       return nativeValue;
     }
     return nativeValue * accountInstance!.getCurrencyRatio();
+  }
+
+  void checkTransfers(List<Transaction> dangling, List<Account> deletedAccounts) {
+    //   bool added = false;
+    //   if (this.to != null && this.Transfer == null) {
+    //     if (IsDeletedAccount(this.to, money, deletedAccounts)) {
+    //       this.Category =
+    //           this.Amount < 0 ? Data().categories.TransferToDeletedAccount : money.Categories.TransferFromDeletedAccount;
+    //       this.to = null;
+    //     } else {
+    //       added = true;
+    //       dangling.Add(this);
+    //     }
+    //   }
+    //
+    //   if (this.Transfer != null) {
+    //     Transaction other = this.transfer.Transaction;
+    //     if (other.IsSplit) {
+    //       int count = 0;
+    //       Split splitXfer = null;
+    //
+    //       for (Split s in other.splits.GetSplits()) {
+    //         if (s.transfer != null) {
+    //           if (splitXfer == null) {
+    //             splitXfer = s;
+    //           }
+    //           if (s.transfer.Transaction == this) {
+    //             count++;
+    //           }
+    //         }
+    //       }
+    //
+    //       if (count == 0) {
+    //         if (other.transfer != null && other.transfer.transaction == this) {
+    //           // Ok, well it could be that the transfer is the whole transaction, but then
+    //           // one side was itemized. For example, you transfer 500 from one account to
+    //           // another, then on the deposit side you want to record what that was for
+    //           // by itemizing the $500 in a split.  If this is the case then it is not dangling.
+    //         } else if (!this.AutoFixDandlingTransfer(splitXfer)) {
+    //           added = true;
+    //           dangling.add(this);
+    //         }
+    //       }
+    //     } else if ((other.transfer == null || other.transfer.Transaction != this) &&
+    //         !this.AutoFixDandlingTransfer(null)) {
+    //       added = true;
+    //       dangling.add(this);
+    //     }
+    //   }
+    //
+    //   if (this.splits != null) {
+    //     if (this.splits.CheckTransfers(money, dangling, deletedaccounts) && !added) {
+    //       dangling.add(this); // only add transaction once.
+    //     }
+    //   }
   }
 }

@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
@@ -112,13 +112,18 @@ class Field<C, T> {
     }
   }
 
-  Widget getAsCompactWidget(final dynamic value) {
+  Widget getAsCompactWidget(final dynamic value, [double width = 300]) {
     if (type == FieldType.widget) {
       return value;
     } else {
-      return Text(
-        getString(value),
-        style: const TextStyle(fontWeight: FontWeight.bold),
+      return SizedBox(
+        width: width,
+        child: SelectableText(
+          getString(value),
+          maxLines: 1,
+          // overflow: TextOverflow.ellipsis,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
       );
     }
   }
@@ -169,6 +174,7 @@ class FieldAmount<C> extends Field<C, double> {
     super.valueForSerialization,
     super.setValue,
     super.useAsColumn,
+    super.columnWidth,
     super.useAsDetailPanels,
     super.sort,
   }) : super(
@@ -206,17 +212,23 @@ class FieldString<C> extends Field<C, String> {
     super.valueFromInstance,
     super.valueForSerialization,
     super.useAsColumn = true,
+    super.columnWidth,
     super.useAsDetailPanels = true,
     super.align = TextAlign.left,
     super.isMultiLine = false,
     super.getEditWidget,
     super.setValue,
+    super.sort,
   }) : super(
-            defaultValue: '',
-            type: FieldType.text,
-            sort: (final C a, final C b, final bool ascending) {
-              return sortByString(valueFromInstance(a), valueFromInstance(b), ascending);
-            });
+          defaultValue: '',
+          type: FieldType.text,
+        ) {
+    if (sort == null) {
+      super.sort = (final C a, final C b, final bool ascending) {
+        return sortByString(valueFromInstance(a), valueFromInstance(b), ascending);
+      };
+    }
+  }
 }
 
 class DeclareNoSerialized<C, T> extends Field<C, T> {
@@ -397,6 +409,7 @@ dynamic defaultCallbackValue(final dynamic instance) => '';
 
 enum ColumnWidth {
   hide, // 0
+  nano, // 1
   tiny, // 1
   small, // 2
   normal, // 3
