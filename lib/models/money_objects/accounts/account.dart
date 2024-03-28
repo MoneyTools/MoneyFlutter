@@ -64,6 +64,7 @@ class Account extends MoneyObject {
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
+    columnWidth: ColumnWidth.large,
     valueFromInstance: (final Account instance) => instance.name.value,
     valueForSerialization: (final Account instance) => instance.name.value,
     setValue: (final Account instance, dynamic value) => instance.name.value = value as String,
@@ -121,7 +122,7 @@ class Account extends MoneyObject {
     name: 'Currency',
     serializeName: 'Currency',
     align: TextAlign.center,
-    columnWidth: ColumnWidth.small,
+    columnWidth: ColumnWidth.tiny,
     defaultValue: '',
     useAsDetailPanels: true,
     valueFromInstance: (final Account instance) => Currency.buildCurrencyWidget(instance.currency.value),
@@ -226,11 +227,11 @@ class Account extends MoneyObject {
   // ------------------------------------------------
   // Properties that are not persisted
 
-  /// Count
+  /// Transaction Count
   FieldInt<Account> count = FieldInt<Account>(
     importance: 98,
     name: 'Transactions',
-    columnWidth: ColumnWidth.small,
+    columnWidth: ColumnWidth.tiny,
     useAsDetailPanels: false,
     valueFromInstance: (final Account instance) => instance.count.value,
     valueForSerialization: (final Account instance) => instance.count.value,
