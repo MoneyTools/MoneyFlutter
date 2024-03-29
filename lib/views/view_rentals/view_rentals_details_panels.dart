@@ -17,7 +17,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
 
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final RentBuilding? rental = getFirstElement<RentBuilding>(indices, list);
+    final RentBuilding? rental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
     if (rental != null) {
       final List<Transaction> list = getTransactions(
         filter: (final Transaction transaction) => filterByRentalCategories(
@@ -27,7 +27,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
       );
 
       return ListViewTransactions(
-        key: Key(rental.id.toString()),
+        key: Key(rental.uniqueId.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,
           columnIdDate,

@@ -24,10 +24,10 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
 
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final Payee? payee = getFirstElement<Payee>(indices, list);
+    final Payee? payee = getMoneyObjectFromFirstSelectedId<Payee>(indices, list);
     if (payee != null && payee.id.value > -1) {
       return ListViewTransactions(
-        key: Key(payee.id.toString()),
+        key: Key(payee.uniqueId.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,
           columnIdDate,

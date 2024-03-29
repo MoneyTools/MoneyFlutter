@@ -79,7 +79,6 @@ class Categories extends MoneyObjects<Category> {
       list.add(categoryId);
       final List<Category> descendants = getCategoriesWithThisParent(categoryId);
       for (final Category c in descendants) {
-        // debugLog(c.id.toString()+"="+c.name);
         getTreeIdsRecursive(c.id.value, list);
       }
     }

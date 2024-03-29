@@ -1,7 +1,8 @@
 import 'dart:math';
 
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:collection/collection.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/money_objects/money_object.dart';
 
 List<num> getMinMaxValues(final List<double> list) {
   if (list.isEmpty) {
@@ -29,12 +30,10 @@ List<num> getMinMaxValues(final List<double> list) {
 }
 
 /// Return the first element of type T in a list given a list of possible index;
-T? getFirstElement<T>(final List<int> indices, final List<dynamic> list) {
-  if (indices.isNotEmpty) {
-    final int index = indices.first;
-    if (isBetweenOrEqual(index, 0, list.length - 1)) {
-      return list[index] as T?;
-    }
+T? getMoneyObjectFromFirstSelectedId<T>(final List<int> selectedIds, final List<dynamic> listOfItems) {
+  if (selectedIds.isNotEmpty) {
+    final int id = selectedIds.first;
+    return listOfItems.firstWhereOrNull((element) => (element as MoneyObject).uniqueId == id);
   }
   return null;
 }
@@ -77,16 +76,6 @@ int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = tru
     }
     return b.compareTo(a);
   }
-}
-
-T? getFirstSelectedItemFromSelectionList<T>(List<int> listOfSelectedItem, List<T> listOfItems) {
-  if (listOfSelectedItem.isNotEmpty) {
-    final int indexOfFirsSelectedAccount = listOfSelectedItem.first;
-    if (isIndexInRange(listOfItems, indexOfFirsSelectedAccount)) {
-      return listOfItems[indexOfFirsSelectedAccount];
-    }
-  }
-  return null;
 }
 
 bool isIndexInRange(List array, int index) {

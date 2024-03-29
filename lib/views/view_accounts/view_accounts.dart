@@ -118,13 +118,14 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     switch (subViewId) {
       case SubViews.chart: // Chart
       case SubViews.transactions: // Transactions
-        final int? selectedAccountIndex = selectedItems.firstOrNull;
-        if (selectedAccountIndex != null && selectedAccountIndex < list.length) {
-          if (list[selectedAccountIndex].currency.value != Constants.defaultCurrency) {
+        final Account? account = getFirstSelectedItemFromSelectedList(selectedItems);
+        if (account != null) {
+          if (account.currency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based
-            return [list[selectedAccountIndex].currency.value, Constants.defaultCurrency];
+            return [account.currency.value, Constants.defaultCurrency];
           }
         }
+
         return [Constants.defaultCurrency];
       default:
         return [];
@@ -149,12 +150,12 @@ class ViewAccountsState extends ViewWidgetState<Account> {
   }
 
   @override
-  void setSelectedItem(final int index) {
-    final Account? account = getFirstElement<Account>(<int>[index], list);
+  void setSelectedItem(final int uniqueId) {
+    final Account? account = getMoneyObjectFromFirstSelectedId<Account>(<int>[uniqueId], list);
     if (account != null && account.id.value > -1) {
       Settings().mostRecentlySelectedAccount = account;
     }
-    super.setSelectedItem(index);
+    super.setSelectedItem(uniqueId);
   }
 
   @override
@@ -164,10 +165,10 @@ class ViewAccountsState extends ViewWidgetState<Account> {
 
   @override
   Widget getPanelForTransactions({
-    required final List<int> selectedItems,
+    required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Account? account = getFirstSelectedItemFromSelectionList<Account>(selectedItems, list);
+    final Account? account = getMoneyObjectFromFirstSelectedId<Account>(selectedIds, list);
     if (account == null) {
       return const CenterMessage(message: 'No account selected.');
     } else {

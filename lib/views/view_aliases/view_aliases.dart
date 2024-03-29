@@ -43,13 +43,13 @@ class ViewAliasesState extends ViewWidgetState<Alias> {
 
   @override
   Widget getPanelForTransactions({
-    required final List<int> selectedItems,
+    required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Alias? alias = getFirstElement<Alias>(selectedItems, list);
+    final Alias? alias = getMoneyObjectFromFirstSelectedId<Alias>(selectedIds, list);
     if (alias != null && alias.id.value > -1) {
       return ListViewTransactions(
-        key: Key(alias.id.toString()),
+        key: Key(alias.uniqueId.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,
           columnIdDate,

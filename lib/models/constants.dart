@@ -72,7 +72,7 @@ const String prefTextScale = 'textScale';
 const String prefViews = 'views';
 const String prefSortBy = 'sortBy';
 const String prefSortAscending = 'sortAscending';
-const String prefSelectedListItemIndex = 'selectedItemIndex';
+const String prefSelectedListItemId = 'selectedItemId';
 const String prefSelectedDetailsPanelTab = 'selectedDetailsPanelTab';
 
 class IntValues {

@@ -17,14 +17,11 @@ extension ViewLoansDetailsPanels on ViewLoansState {
 
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final LoanPayment? loan = getFirstElement<LoanPayment>(indices, list);
+    final LoanPayment? loan = getMoneyObjectFromFirstSelectedId<LoanPayment>(indices, list);
 
     if (loan != null) {
-      final List<Transaction> list = getTransactions(
-          filter: (final Transaction transaction) => transaction.accountId.value == loan.accountId.value);
-
       return ListViewTransactions(
-        key: Key(loan.id.toString()),
+        key: Key(loan.uniqueId.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,
           columnIdDate,
@@ -33,7 +30,8 @@ extension ViewLoansDetailsPanels on ViewLoansState {
           columnIdMemo,
           columnIdAmount,
         ],
-        getList: () => list,
+        getList: () => getTransactions(
+            filter: (final Transaction transaction) => transaction.accountId.value == loan.accountId.value),
       );
     }
     return CenterMessage.noTransaction();

@@ -2,7 +2,7 @@ part of 'view_categories.dart';
 
 extension ViewCategoriesDetailsPanels on ViewCategoriesState {
   /// Details panels Chart panel for Categories
-  Widget _getSubViewContentForChart(final List<int> indices) {
+  Widget _getSubViewContentForChart(final List<int> selectedIds) {
     final Map<String, num> map = <String, num>{};
 
     for (final Category item in getList()) {
@@ -24,7 +24,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
     });
 
     return Chart(
-      key: Key(indices.toString()),
+      key: Key(selectedIds.toString()),
       list: list.take(8).toList(),
       variableNameHorizontal: 'Category',
       variableNameVertical: 'Balance',
@@ -32,11 +32,11 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
   }
 
   // Details Panel for Transactions Categories
-  Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final Category? category = getFirstElement<Category>(indices, list);
-    if (category != null && category.id.value > -1) {
+  Widget _getSubViewContentForTransactions(final List<int> selectedIds) {
+    final Category? category = getMoneyObjectFromFirstSelectedId<Category>(selectedIds, list);
+    if (category != null) {
       return ListViewTransactions(
-        key: Key(category.id.toString()),
+        key: Key(category.uniqueId.toString()),
         columnsToInclude: const <String>[
           columnIdAccount,
           columnIdDate,
@@ -45,7 +45,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
           columnIdAmount,
         ],
         getList: () => getTransactions(
-          filter: (final Transaction transaction) => transaction.categoryId.value == category.id.value,
+          filter: (final Transaction transaction) => transaction.categoryId.value == category.uniqueId,
         ),
       );
     }

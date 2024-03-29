@@ -1,6 +1,7 @@
 // Imports
 import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
@@ -320,4 +321,11 @@ class MoneyObjects<T> {
     Data().notifyTransactionChange(mutation: MutationType.deleted, moneyObject: itemToDelete);
     return true;
   }
+}
+
+MoneyObject? findObjectById(final int? uniqueId, final List<MoneyObject> listToSearch) {
+  if (uniqueId == null) {
+    return null;
+  }
+  return listToSearch.firstWhereOrNull((element) => (element).uniqueId == uniqueId);
 }

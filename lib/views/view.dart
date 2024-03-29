@@ -5,6 +5,7 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_header.dart';
@@ -35,7 +36,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   Fields<T> _fieldToDisplay = Fields<T>(definitions: <Field<T, dynamic>>[]);
   List<String> listOfUniqueString = <String>[];
   List<ValueSelection> listOfValueSelected = [];
-  int _lastSelectedItemIndex = 0;
+  int _lastSelectedItemId = -1;
   int _sortByFieldIndex = 0;
   bool _sortAscending = true;
   VoidCallback? onAddNewEntry;
@@ -72,7 +73,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     if (viewSetting != null) {
       _sortByFieldIndex = viewSetting.getInt(prefSortBy, 0);
       _sortAscending = viewSetting.getBool(prefSortAscending, true);
-      _lastSelectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
+      _lastSelectedItemId = viewSetting.getInt(prefSelectedListItemId, -1);
       final int subViewIndex = viewSetting.getInt(prefSelectedDetailsPanelTab, SubViews.details.index);
       _selectedBottomTabId = SubViews.values[subViewIndex];
     }
@@ -82,12 +83,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     onSort();
 
     /// restore selection of items
-    if (_lastSelectedItemIndex >= 0 && _lastSelectedItemIndex < list.length) {
-      // index is valid
-    } else {
-      _lastSelectedItemIndex = 0;
-    }
-    setSelectedItem(_lastSelectedItemIndex);
+    setSelectedItem(_lastSelectedItemId);
   }
 
   @override
@@ -114,8 +110,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             Expanded(
               flex: 1,
               child: MyListView<T>(
+                key: Key('MyListView_selected_id_${getUniqueIdOfFirstSelectedItem()}'),
                 list: list,
-                selectedItems: _selectedItemsByUniqueId,
+                selectedItemIds: _selectedItemsByUniqueId,
                 fields: _fieldToDisplay,
                 asColumnView: useColumns,
                 onTap: onItemSelected,
@@ -157,7 +154,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                   // Switch to edit mode
                 },
                 onActionDelete: () {
-                  onDeleteRequestedByUser(context, _selectedItemsByUniqueId.value.first);
+                  onDeleteRequestedByUser(context, getFirstSelectedItem() as MoneyObject);
                 },
               ),
             ),
@@ -209,6 +206,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void clearSelection() {
     //_selectedItemsByUniqueId.value.clear();
   }
+
   void onSort() {
     if (_fieldToDisplay.definitions.isNotEmpty) {
       if (isBetween(_sortByFieldIndex, -1, _fieldToDisplay.definitions.length)) {
@@ -254,25 +252,26 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  void onDeleteRequestedByUser(final BuildContext context, final int index) {
-    showDialog(
-      context: context,
-      builder: (final BuildContext context) {
-        final MoneyObject myMoneyObjectInstance = list[index] as MoneyObject;
-        return Center(
-          child: DeleteConfirmationDialog(
-            title: 'Delete ${getClassNameSingular()}',
-            question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
-            content: Column(
-              children: myMoneyObjectInstance.buildWidgets<T>(onEdit: null, compact: true),
+  void onDeleteRequestedByUser(final BuildContext context, final MoneyObject? myMoneyObjectInstance) {
+    if (myMoneyObjectInstance != null) {
+      showDialog(
+        context: context,
+        builder: (final BuildContext context) {
+          return Center(
+            child: DeleteConfirmationDialog(
+              title: 'Delete ${getClassNameSingular()}',
+              question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
+              content: Column(
+                children: myMoneyObjectInstance.buildWidgets<T>(onEdit: null, compact: true),
+              ),
+              onConfirm: () {
+                onDeleteConfirmedByUser(myMoneyObjectInstance);
+              },
             ),
-            onConfirm: () {
-              onDeleteConfirmedByUser(myMoneyObjectInstance);
-            },
-          ),
-        );
-      },
-    );
+          );
+        },
+      );
+    }
   }
 
   void onDeleteConfirmedByUser(final MoneyObject instance) {
@@ -311,16 +310,16 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     });
   }
 
-  Widget getDetailPanelContent(final SubViews subViewId, final List<int> selectedItems) {
+  Widget getDetailPanelContent(final SubViews subViewId, final List<int> selectedIds) {
     switch (subViewId) {
       case SubViews.details:
-        return getPanelForDetails(indexOfItems: selectedItems, isReadOnly: false);
+        return getPanelForDetails(selectedIds: selectedIds, isReadOnly: false);
       case SubViews.chart:
-        return getPanelForChart(selectedItems);
+        return getPanelForChart(selectedIds);
       case SubViews.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: getPanelForTransactions(selectedItems: selectedItems, showAsNativeCurrency: _selectedCurrency == 0),
+          child: getPanelForTransactions(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0),
         );
       default:
         return const Text('- empty -');
@@ -343,92 +342,100 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  void setSelectedItem(final int index) {
+  void setSelectedItem(final int uniqueId) {
     // This will cause a UI update and the bottom details will get rendered if its expanded
-    if (index == -1) {
+    if (uniqueId == -1) {
       _selectedItemsByUniqueId.value = [];
     } else {
-      _selectedItemsByUniqueId.value = <int>[index];
+      _selectedItemsByUniqueId.value = <int>[uniqueId];
     }
 
     // call this to persist the last selected item index
     saveLastUserActionOnThisView();
   }
 
-  void onItemSelected(final BuildContext context, final int index) {
+  void onItemSelected(final BuildContext context, final int uniqueId) {
     if (isMobile()) {
       myShowDialog(
         context: context,
-        title: '${getClassNameSingular()} #${index + 1}',
+        title: '${getClassNameSingular()} #${uniqueId + 1}',
         actionButtons: [],
-        child: getPanelForDetails(indexOfItems: <int>[index], isReadOnly: true),
+        child: getPanelForDetails(selectedIds: <int>[uniqueId], isReadOnly: true),
       );
     } else {
-      setSelectedItem(index);
+      setSelectedItem(uniqueId);
     }
   }
 
   T? getFirstSelectedItem() {
-    return getFirstSelectedItemFromSelectionList<T>(_selectedItemsByUniqueId.value, list);
+    return getFirstSelectedItemFromSelectedList(_selectedItemsByUniqueId.value);
+  }
+
+  T? getFirstSelectedItemFromSelectedList(final List<int> selectedList) {
+    return getMoneyObjectFromFirstSelectedId<T>(selectedList, list);
+  }
+
+  int? getUniqueIdOfFirstSelectedItem() {
+    return _selectedItemsByUniqueId.value.firstOrNull;
   }
 
   Widget getDetailPanelHeader(final BuildContext context, final num index, final T item) {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getPanelForDetails({required final List<int> indexOfItems, required final bool isReadOnly}) {
-    final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
-    if (indexOfItems.isNotEmpty) {
-      final int index = indexOfItems.first;
-      if (isBetweenOrEqual(index, 0, list.length - 1)) {
-        final MoneyObject moneyObject = list[index] as MoneyObject;
-        if (!isReadOnly) {
-          moneyObject.stashValueBeforeEditing<T>();
-        }
-        List<Widget> widgetToDisplay = detailPanelFields.getFieldsAsWidgets(
-          moneyObject as T,
-          isReadOnly
-              ? null
-              : () {
-                  setState(() {
-                    /// update panel
-                    Data().notifyTransactionChange(
-                      mutation: MutationType.changed,
-                      moneyObject: moneyObject,
-                    );
-                  });
-                },
-          false,
-        );
-        widgetToDisplay.add(
-          Center(
-            child: SelectableText(
-              'ID:${moneyObject.uniqueId}',
-              style: const TextStyle(fontSize: 9),
-            ),
-          ),
-        );
-        return SingleChildScrollView(
-          key: Key(index.toString()),
-          child: AdaptiveColumns(
-            columnWidth: 300,
-            children: widgetToDisplay,
-          ),
-        );
-      }
+  Widget getPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+    final MoneyObject? moneyObject = findObjectById(selectedIds.firstOrNull, list as List<MoneyObject>);
+
+    if (moneyObject == null) {
+      return const CenterMessage(message: 'No item selected.');
     }
-    return const CenterMessage(message: 'No item selected.');
+
+    final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
+
+    if (!isReadOnly) {
+      moneyObject.stashValueBeforeEditing<T>();
+    }
+    List<Widget> widgetToDisplay = detailPanelFields.getFieldsAsWidgets(
+      moneyObject as T,
+      isReadOnly
+          ? null
+          : () {
+              setState(() {
+                /// update panel
+                Data().notifyTransactionChange(
+                  mutation: MutationType.changed,
+                  moneyObject: moneyObject,
+                );
+              });
+            },
+      false,
+    );
+    widgetToDisplay.add(
+      Center(
+        child: SelectableText(
+          'ID:${moneyObject.uniqueId}',
+          style: const TextStyle(fontSize: 9),
+        ),
+      ),
+    );
+    return SingleChildScrollView(
+      key: Key(moneyObject.uniqueId.toString()),
+      child: AdaptiveColumns(
+        columnWidth: 300,
+        children: widgetToDisplay,
+      ),
+    );
   }
 
   Widget getPanelForChart(final List<int> indices) {
-    return const Text('No chart to display');
+    return const Center(child: Text('No chart to display'));
   }
 
   Widget getPanelForTransactions({
-    required final List<int> selectedItems,
+    required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    return const Text('No transactions');
+    return const Center(child: Text('No transactions'));
   }
 
   void changeListSortOrder(final int columnNumber) {
@@ -451,7 +458,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     Settings().views[getClassNameSingular()] = <String, dynamic>{
       prefSortBy: _sortByFieldIndex,
       prefSortAscending: _sortAscending,
-      prefSelectedListItemIndex: _selectedItemsByUniqueId.value.firstOrNull,
+      prefSelectedListItemId: getUniqueIdOfFirstSelectedItem(),
       prefSelectedDetailsPanelTab: _selectedBottomTabId.index,
     };
 
