@@ -239,32 +239,22 @@ class Data {
     return true;
   }
 
-  void removeTransfer(Transaction t) {
-    if (t.transfer.value != -1) {
-      t.transfer.value = -1;
-      t.transferInstance = null;
-    }
-  }
-
-  bool transferTo(Transaction transactionSource, Account destinationAccount) {
+  Transaction? getOrCreateRelatedTransaction(Transaction transactionSource, Account destinationAccount) {
     if (transactionSource.accountId.value == destinationAccount.uniqueId) {
       debugLog("Cannot transfer to same account");
-      return false;
+      return null;
     }
-
-    removeTransfer(transactionSource);
 
     Transaction? relatedTransaction = Data().transactions.findExistingTransactionForAccount(
           accountId: destinationAccount.uniqueId,
           dateTime: transactionSource.dateTime.value!,
           amount: -transactionSource.amount.value,
         );
-
     // ignore: prefer_conditional_assignment
     if (relatedTransaction == null) {
       relatedTransaction = Transaction()
         ..accountId.value = destinationAccount.uniqueId
-        ..amount.value = -transactionSource.amount.value
+        ..amount.value = (transactionSource.amount.value * -1) // flip the sign
         ..categoryId.value = transactionSource.categoryId.value
         ..dateTime.value = transactionSource.dateTime.value
         ..fitid.value = transactionSource.fitid.value
@@ -295,16 +285,46 @@ class Data {
       //   }
       //   u.Investment = j;
       // }
-      relatedTransaction.transfer.value = transactionSource.id.value;
-      relatedTransaction.transferInstance =
-          Transfer(id: 0, source: relatedTransaction, related: transactionSource, isOrphan: false);
-      transactions.appendNewMoneyObject(relatedTransaction);
     }
+    return relatedTransaction;
+  }
 
-    // link the related transaction to the Sender
-    transactionSource.transfer.value = transactionSource.id.value;
-    transactionSource.transferInstance =
-        Transfer(id: 0, source: transactionSource, related: relatedTransaction, isOrphan: false);
+  bool makeTransferLinkage(Transaction transactionSource, Account destinationAccount) {
+    Transaction? relatedTransaction = getOrCreateRelatedTransaction(transactionSource, destinationAccount);
+
+    if (relatedTransaction != null) {
+      final Transfer transfer;
+
+      if (transactionSource.amount.value < 0) {
+        // transfer TO
+        transfer = Transfer(id: 0, source: transactionSource, related: relatedTransaction, isOrphan: false);
+      } else {
+        // transfer FROM
+        transfer = Transfer(id: 0, source: relatedTransaction, related: transactionSource, isOrphan: false);
+      }
+
+      // Keep track changes done
+      relatedTransaction.stashValueBeforeEditing<Transaction>();
+      relatedTransaction.payee.value = -1;
+      relatedTransaction.transfer.value = transactionSource.id.value;
+      relatedTransaction.transferInstance = transfer;
+
+      if (relatedTransaction.uniqueId == -1) {
+        // This is a new related transaction Append and get a new UniqueID
+        transactions.appendNewMoneyObject(relatedTransaction);
+      } else {
+        Data().notifyTransactionChange(
+          mutation: MutationType.changed,
+          moneyObject: relatedTransaction,
+        );
+      }
+
+      // this needs to happen last since the ID for a new Relation Transaction will be establish in the above
+      // transactions.appendNewMoneyObject(relatedTransaction)
+      transactionSource.payee.value = -1;
+      transactionSource.transfer.value = relatedTransaction.id.value;
+      transactionSource.transferInstance = transfer;
+    }
 
     return true;
   }

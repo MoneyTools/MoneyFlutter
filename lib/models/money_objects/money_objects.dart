@@ -298,7 +298,7 @@ class MoneyObjects<T> {
           ),
           child: ListTile(
             dense: true,
-            title: Text('"${moneyObject.getRepresentation()}" (${moneyObject.uniqueId})'),
+            title: Text('"${moneyObject.getRepresentation()}"'),
             subtitle: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: diffWidgets,

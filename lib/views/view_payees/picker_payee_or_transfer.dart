@@ -14,6 +14,7 @@ class PickPayeeOrTransfer extends StatefulWidget {
   final TransactionFlavor choice;
   final Payee? payee;
   final Account? account;
+  final double amount;
   final Function(TransactionFlavor choice, Payee? payee, Account? account) onSelected;
 
   const PickPayeeOrTransfer({
@@ -21,6 +22,7 @@ class PickPayeeOrTransfer extends StatefulWidget {
     required this.choice,
     required this.payee,
     required this.account,
+    required this.amount,
     required this.onSelected,
   });
 
@@ -68,7 +70,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
       );
     } else {
       return presentInput(
-        'Account',
+        widget.amount > 0 ? 'From Account' : 'To Account',
         pickerAccount(
           selected: widget.account,
           onSelected: (Account? account) {
@@ -83,7 +85,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(width: 60, child: Text(caption)),
+        SizedBox(width: 100, child: Text(caption)),
         gapMedium(),
         Expanded(
           child: widget,

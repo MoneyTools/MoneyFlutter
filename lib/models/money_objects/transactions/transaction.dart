@@ -121,6 +121,7 @@ class Transaction extends MoneyObject {
           choice: instance.transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.payee.value),
           account: instance.transferInstance?.getReceiverAccount(),
+          amount: instance.amount.value,
           onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
             switch (choice) {
               case TransactionFlavor.payee:
@@ -132,7 +133,7 @@ class Transaction extends MoneyObject {
               case TransactionFlavor.transfer:
                 if (account != null) {
                   instance.payee.value = -1;
-                  Data().transferTo(instance, account);
+                  Data().makeTransferLinkage(instance, account);
                 }
             }
             onEdited(); // notify container
