@@ -15,11 +15,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       account.maxBalancePerYears.forEach((key, value) {
         listOfPairXY.add(PairXY(key.toString(), value));
       });
-      listOfPairXY.sort((a, b) => compareAsciiLowerCase(b.xText, a.xText));
+      listOfPairXY.sort((a, b) => compareAsciiLowerCase(a.xText, b.xText));
 
       return Chart(
         key: Key(selectedIds.toString()),
-        list: listOfPairXY.take(10).toList(),
+        list: listOfPairXY.take(100).toList(),
         variableNameHorizontal: 'Year',
         variableNameVertical: 'FBar',
       );

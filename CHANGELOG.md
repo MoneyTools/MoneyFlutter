@@ -6,6 +6,10 @@
 
 - List selection is now using Unique Id instead of Index
 
+### Fixed
+
+- Chart reverse order
+
 ## [version 1.6.0] 2024-03-28
 
 ### Added

@@ -82,7 +82,8 @@ class Accounts extends MoneyObjects<Account> {
     }
 
     // Cumulate
-    for (final Transaction t in Data().transactions.iterableList()) {
+    for (final Transaction t
+        in Data().transactions.iterableList().sorted((a, b) => sortByDate(a.dateTime.value, b.dateTime.value))) {
       final Account? account = get(t.accountId.value);
       if (account != null) {
         account.count.value++;
