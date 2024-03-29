@@ -2,11 +2,11 @@ part of 'view_accounts.dart';
 
 extension ViewAccountsDetailsPanels on ViewAccountsState {
   /// Details panels Chart panel for Accounts
-  Widget _getSubViewContentForChart(final List<int> selectedAccounts) {
+  Widget _getSubViewContentForChart(final List<int> selectedIds) {
     final List<PairXY> listOfPairXY = <PairXY>[];
 
-    if (selectedAccounts.length == 1) {
-      final Account? account = getFirstSelectedItemFromSelectionList<Account>(selectedAccounts, list);
+    if (selectedIds.length == 1) {
+      final Account? account = getFirstSelectedItemFromSelectedList(selectedIds);
       if (account == null) {
         // this should not happen
         return const Text('Error account is null');
@@ -18,7 +18,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       listOfPairXY.sort((a, b) => compareAsciiLowerCase(b.xText, a.xText));
 
       return Chart(
-        key: Key(selectedAccounts.toString()),
+        key: Key(selectedIds.toString()),
         list: listOfPairXY.take(10).toList(),
         variableNameHorizontal: 'Year',
         variableNameVertical: 'FBar',
@@ -34,7 +34,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       listOfPairXY.sort((final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt());
 
       return Chart(
-        key: Key(selectedAccounts.toString()),
+        key: Key(selectedIds.toString()),
         list: listOfPairXY.take(10).toList(),
         variableNameHorizontal: 'Account',
         variableNameVertical: 'Balance',
@@ -55,7 +55,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     if (viewSetting != null) {
       sortFieldIndex = viewSetting.getInt(prefSortBy, 0);
       sortAscending = viewSetting.getBool(prefSortAscending, true);
-      selectedItemIndex = viewSetting.getInt(prefSelectedListItemIndex, 0);
+      selectedItemIndex = viewSetting.getInt(prefSelectedListItemId, -1);
     }
 
     final columnsToDisplay = <String>[
@@ -78,17 +78,17 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         sortFieldIndex: sortFieldIndex,
         sortAscending: sortAscending,
         selectedItemIndex: selectedItemIndex,
-        onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, int selectedItemIndex) {
+        onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, int selectedId) {
           // keep track of user choice
           sortFieldIndex = sortByFieldIndex;
           sortAscending = sortAscending;
-          selectedItemIndex = selectedItemIndex;
+          selectedId = selectedId;
 
           // Save user choices
           Settings().views[perfDomainAccounts] = <String, dynamic>{
             prefSortBy: sortByFieldIndex,
             prefSortAscending: sortAscending,
-            prefSelectedListItemIndex: selectedItemIndex,
+            prefSelectedListItemId: selectedId,
           };
         });
   }

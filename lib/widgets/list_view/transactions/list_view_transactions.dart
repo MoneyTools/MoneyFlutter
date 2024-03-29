@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view_transactions/dialog_mutate_transaction.dart';
@@ -45,7 +46,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
     // get the list sorted
     final List<Transaction> transactions = widget.getList();
     if (transactions.isEmpty) {
-      return const Center(child: Text('- No transactions -'));
+      return const Center(child: Text('No transactions'));
     }
     sortList(transactions);
 
@@ -71,22 +72,20 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         // Table list of rows
         Expanded(
           child: MyListView<Transaction>(
-            fields: columns,
-            list: transactions,
-            selectedItems: ValueNotifier<List<int>>(<int>[selectedItemIndex]),
-            unSelectable: false,
-            onTap: (final BuildContext context2, final int index) {
-              if (isBetweenOrEqual(index, 0, transactions.length - 1)) {
+              fields: columns,
+              list: transactions,
+              selectedItemIds: ValueNotifier<List<int>>(<int>[selectedItemIndex]),
+              unSelectable: false,
+              onTap: (final BuildContext context2, final int uniqueId) {
+                final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
                 showTransactionAndActions(
                   context: context2,
-                  transaction: transactions[index],
+                  transaction: instance,
                 ).then((value) {
-                  selectedItemIndex = index;
+                  selectedItemIndex = uniqueId;
                   widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
                 });
-              }
-            },
-          ),
+              }),
         ),
       ],
     );

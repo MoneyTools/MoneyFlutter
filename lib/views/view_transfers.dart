@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
@@ -75,11 +76,11 @@ class ViewTransfersState extends ViewWidgetState<Transfer> {
   }
 
   @override
-  Widget getPanelForDetails({required final List<int> indexOfItems, required final bool isReadOnly}) {
-    if (indexOfItems.isNotEmpty) {
-      final int index = indexOfItems.first;
-      if (isBetweenOrEqual(index, 0, list.length - 1)) {
-        final Transfer transfer = list[index];
+  Widget getPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+    if (selectedIds.isNotEmpty) {
+      final int id = selectedIds.first;
+      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id);
+      if (transfer != null) {
         return SingleChildScrollView(
           child: Center(
             child: Wrap(

@@ -295,19 +295,17 @@ class Data {
       //   }
       //   u.Investment = j;
       // }
+      relatedTransaction.transfer.value = transactionSource.id.value;
+      relatedTransaction.transferInstance =
+          Transfer(id: 0, source: relatedTransaction, related: transactionSource, isOrphan: false);
+      transactions.appendNewMoneyObject(relatedTransaction);
     }
 
-    // must have a valid transaction id before we assign the transfers.
-    relatedTransaction.transfer.value = transactionSource.id.value;
-    relatedTransaction.transferInstance =
-        Transfer(id: 0, source: relatedTransaction, related: transactionSource, isOrphan: false);
-
+    // link the related transaction to the Sender
     transactionSource.transfer.value = transactionSource.id.value;
     transactionSource.transferInstance =
         Transfer(id: 0, source: transactionSource, related: relatedTransaction, isOrphan: false);
-    // this needs to happen after the above
-    final MoneyObject updateObjectId = transactions.appendNewMoneyObject(relatedTransaction);
-    relatedTransaction.id.value = updateObjectId.uniqueId;
+
     return true;
   }
 

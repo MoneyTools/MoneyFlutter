@@ -1,4 +1,5 @@
 // Imports
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/models/fields/fields.dart';
@@ -18,7 +19,7 @@ class MyListView<T> extends StatefulWidget {
   final Function(BuildContext, int)? onTap;
   final Function(BuildContext, int)? onDoubleTap;
   final Function(BuildContext, int)? onLongPress;
-  final ValueNotifier<List<int>> selectedItems;
+  final ValueNotifier<List<int>> selectedItemIds;
   final bool unSelectable;
   final bool asColumnView;
 
@@ -26,7 +27,7 @@ class MyListView<T> extends StatefulWidget {
     super.key,
     required this.fields,
     required this.list,
-    required this.selectedItems,
+    required this.selectedItemIds,
     required this.unSelectable, //true = re-selecting the same select item will unselect it
     this.asColumnView = true,
     this.onTap,
@@ -46,9 +47,13 @@ class MyListViewState<T> extends State<MyListView<T>> {
   @override
   void initState() {
     super.initState();
-    if (widget.selectedItems.value.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((final _) => scrollToIndex(widget.selectedItems.value.first));
+    if (widget.selectedItemIds.value.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((final _) => scrollToId(widget.selectedItemIds.value.first));
     }
+  }
+
+  int getListIndexFromUniqueId(final int uniqueId) {
+    return widget.list.indexWhere((element) => (element as MoneyObject).uniqueId == uniqueId);
   }
 
   @override
@@ -70,21 +75,21 @@ class MyListViewState<T> extends State<MyListView<T>> {
         itemCount: widget.list.length,
         itemExtent: textScaler.scale(rowHeight),
         itemBuilder: (final BuildContext context, final int index) {
-          final MoneyObject itemInstance = (widget.list[index] as MoneyObject);
+          final MoneyObject itemInstance = getMoneyObjectFromIndex(index);
           final isLastItemOfTheList = (index == widget.list.length - 1);
-          final isSelected = widget.selectedItems.value.contains(index);
+          final isSelected = widget.selectedItemIds.value.contains(itemInstance.uniqueId);
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: padding),
             child: MyListItem(
               onListViewKeyEvent: onListViewKeyEvent,
               onTap: () {
-                setSelectedItem(index);
+                setSelectedItem(itemInstance.uniqueId);
                 FocusScope.of(context).requestFocus();
               },
               onLongPress: () {
-                widget.onLongPress?.call(context, index);
+                widget.onLongPress?.call(context, itemInstance.uniqueId);
               },
-              autoFocus: index == widget.selectedItems.value.firstOrNull,
+              autoFocus: index == widget.selectedItemIds.value.firstOrNull,
               isSelected: isSelected,
               adornmentColor: itemInstance.getMutationColor(),
               child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
@@ -151,56 +156,69 @@ class MyListViewState<T> extends State<MyListView<T>> {
 
   void selectedItemOffset(final int delta) {
     int newPosition = 0;
-    if (widget.selectedItems.value.isNotEmpty) {
-      newPosition = widget.selectedItems.value[0] + delta;
+    if (widget.selectedItemIds.value.isNotEmpty) {
+      newPosition = widget.selectedItemIds.value[0] + delta;
     }
 
     setSelectedItem(newPosition);
   }
 
   void setSelectedItem(
-    final int index, [
+    final int uniqueId, [
     final bool isDoubleTap = false,
   ]) {
-    if (index.isBetween(-1, widget.list.length)) {
-      if (widget.selectedItems.value.contains(index)) {
-        if (widget.unSelectable) {
-          // unselected
-          setState(() {
-            widget.selectedItems.value.clear();
-          });
-        }
-      } else {
-        // select
+    if (widget.selectedItemIds.value.contains(uniqueId)) {
+      if (widget.unSelectable) {
+        // unselected
         setState(() {
-          widget.selectedItems.value.clear();
-          widget.selectedItems.value.add(index);
+          widget.selectedItemIds.value.clear();
         });
       }
+    } else {
+      // select
+      setState(() {
+        widget.selectedItemIds.value.clear();
+        widget.selectedItemIds.value.add(uniqueId);
+      });
+    }
 
-      int newPosition = -1;
+    int newPosition = -1;
 
-      if (widget.selectedItems.value.isNotEmpty) {
-        newPosition = index;
-        scrollToIndex(newPosition);
-      }
+    if (widget.selectedItemIds.value.isNotEmpty) {
+      newPosition = uniqueId;
+      scrollToId(newPosition);
+    }
 
-      if (isDoubleTap) {
-        widget.onDoubleTap?.call(context, newPosition);
-      } else {
-        widget.onTap?.call(context, newPosition);
-      }
+    if (isDoubleTap) {
+      widget.onDoubleTap?.call(context, newPosition);
+    } else {
+      widget.onTap?.call(context, newPosition);
     }
   }
 
+  MoneyObject getMoneyObjectFromIndex(int index) {
+    return widget.list[index] as MoneyObject;
+  }
+
+  int getUniqueIdFromIndex(int index) {
+    return getMoneyObjectFromIndex(index).uniqueId;
+  }
+
+  void scrollToId(final int uniqueId) {
+    final int index = getListIndexFromUniqueId(uniqueId);
+    scrollToIndex(index);
+  }
+
   void scrollToIndex(final int index) {
-    final List<int> minMax = scrollListenerWithItemCount();
+    if (index != -1) {
+      final List<int> minMax = scrollListenerWithItemCount();
 
-    // debugLog("${minMax[0]} > $index < ${minMax[1]}");
+      // debugLog("${minMax[0]} > $index < ${minMax[1]}");
 
-    if (!index.isBetween(minMax[0], minMax[1])) {
-      final double desiredNewPosition = rowHeight * index;
-      scrollController.jumpTo(desiredNewPosition);
+      if (!index.isBetween(minMax[0], minMax[1])) {
+        final double desiredNewPosition = rowHeight * index;
+        scrollController.jumpTo(desiredNewPosition);
+      }
     }
   }
 

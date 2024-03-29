@@ -171,10 +171,10 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
 
   @override
   Widget getPanelForTransactions({
-    required final List<int> selectedItems,
+    required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Transaction? transaction = getFirstElement<Transaction>(selectedItems, list);
+    final Transaction? transaction = getMoneyObjectFromFirstSelectedId<Transaction>(selectedIds, list);
     if (transaction != null &&
         transaction.id.value > -1 &&
         transaction.categoryId.value == Data().categories.splitCategoryId()) {
