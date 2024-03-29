@@ -22,13 +22,15 @@ DateTime? attemptToGetDateFromText(final String text) {
     'yyyy-MM-dd', // ISO8601
     'MM/dd/yyyy', // USA
     'dd/MM/yyyy', // Europe
+    'dd/MM/yy', // Europe
+    'dd-MM-yy', // Europe
     // Add more formats as needed...
   ];
 
   DateTime? parsedDate;
   for (String format in dateFormats) {
     parsedDate = DateFormat(format).tryParse(text);
-    if (parsedDate != null) {
+    if (parsedDate != null && parsedDate.year > 1990) {
       break; // Stop parsing if a valid date is found
     }
   }
