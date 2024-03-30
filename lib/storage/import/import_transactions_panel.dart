@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/value_parser.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
+import 'package:money/widgets/columns_input.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/import_transactions_list.dart';
 
@@ -26,92 +29,102 @@ class ImportTransactionsPanel extends StatefulWidget {
 
 class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late Account account;
-  final _controller = TextEditingController();
+  late String textToParse;
   final _focusNode = FocusNode();
+
   List<ValuesQuality> values = [];
 
   @override
   void initState() {
-    super.initState();
     account = widget.account;
-    _controller.text = widget.inputText;
+    textToParse = widget.inputText;
+    convertAndNotify(context, textToParse);
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    convertAndNotify(context);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          _buildHeaderAndAccountPicker(),
 
-    return LayoutBuilder(
-      builder: (
-        final BuildContext context,
-        final BoxConstraints constraints,
-      ) {
-        return Column(
-          children: [
-            Wrap(
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                const Text('Import transaction to account'),
-                gapMedium(),
-                pickerAccount(
-                  selected: account,
-                  onSelected: (final Account? accountSelected) {
-                    setState(
-                      () {
-                        account = accountSelected!;
-                        widget.onAccountChanged(account);
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-            gapLarge(),
-            // Text Input
-            Center(
-              child: SizedBox(
-                width: 600,
-                height: 100,
-                child: TextField(
-                  focusNode: _focusNode,
-                  autofocus: true,
-                  maxLines: null,
-                  // Set maxLines to null for multiline TextField
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    labelText: 'Date; Description; Amount',
-                    border: OutlineInputBorder(),
-                  ),
-                  onChanged: (text) {
-                    setState(() {
-                      convertAndNotify(context);
-                    });
-                  },
-                ),
+          gapLarge(),
+
+          Expanded(
+            flex: 1,
+            child: SizedBox(
+              width: 400,
+              height: 400,
+              child: ColumnInput(
+                inputText: textToParse,
+                onChange: (String newTextInput) {
+                  setState(() {
+                    convertAndNotify(context, newTextInput);
+                    textToParse = newTextInput;
+                  });
+                },
               ),
             ),
+          ),
 
-            // Results
-            Expanded(
-              child: Center(
-                child: SizedBox(
-                  height: 400,
-                  width: 600,
-                  child: ImportTransactionsList(values: values),
-                ),
-              ),
+          gapLarge(),
+
+          // Results
+          Expanded(
+            flex: 2,
+            child: ImportTransactionsList(values: values),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Total: ${doubleToCurrency(sumOfValues())}',
+              textAlign: TextAlign.right,
             ),
-          ],
-        );
-      },
+          )
+        ],
+      ),
     );
   }
 
-  void convertAndNotify(BuildContext context) {
+  Widget _buildHeaderAndAccountPicker() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Text('Import transaction to account', style: getTextTheme(context).bodyMedium),
+        gapLarge(),
+        Expanded(
+          child: pickerAccount(
+            selected: account,
+            onSelected: (final Account? accountSelected) {
+              setState(
+                () {
+                  account = accountSelected!;
+                  widget.onAccountChanged(account);
+                },
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  double sumOfValues() {
+    double sum = 0;
+    for (final ValuesQuality value in values) {
+      sum += value.amount.asAmount();
+    }
+    return sum;
+  }
+
+  void convertAndNotify(BuildContext context, String inputText) {
     ValuesParser parser = ValuesParser();
     parser.convertInputTextToTransactionList(
       context,
-      _controller.text,
+      inputText,
     );
     values = parser.lines;
     widget.onTransactionsFound(parser);

@@ -155,7 +155,8 @@ bool isBetweenOrEqual(final num value, final num min, final num max) {
 }
 
 /// Remove non-numeric characters from the currency text
-double? attemptToGetDoubleFromText(final String text) {
+double? attemptToGetDoubleFromText(String text) {
+  text = text.trim();
   double? firstSimpleCase = double.tryParse(text);
   if (firstSimpleCase != null) {
     return firstSimpleCase;
@@ -179,7 +180,14 @@ double? attemptToGetDoubleFromText(final String text) {
   }
 
   // Parse the cleaned text into a double
-  return double.tryParse(cleanedText);
+  double? amount = double.tryParse(cleanedText);
+  if (amount == null) {
+    return null;
+  }
+  if (text.startsWith('-')) {
+    return -amount;
+  }
+  return amount;
 }
 
 bool isPlatformMobile() {

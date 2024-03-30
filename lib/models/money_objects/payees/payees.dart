@@ -45,9 +45,8 @@ class Payees extends MoneyObjects<Payee> {
     // if not found add new payee
     if (payee == null) {
       payee = Payee()
-        ..id.value = iterableList().length
-        ..name.value = name
-        ..mutation = MutationType.inserted;
+        ..id.value = -1
+        ..name.value = name;
       Data().payees.appendNewMoneyObject(payee);
     }
     return payee;

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.6.2] 2024-03-30
+
+### Updated
+
+- Reach MVP for the Text Import feature
+
 ## [version 1.6.1] 2024-03-29
 
 ### Updated

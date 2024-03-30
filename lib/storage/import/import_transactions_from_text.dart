@@ -90,10 +90,10 @@ void addTransactionFromDateDescriptionAmount(
   final String description,
   final double amount,
 ) {
-  Payee? payee = Data().aliases.findByMatch(description);
+  Payee? payee = Data().aliases.findOrCreateNewPayee(description);
 
   final Transaction t = Transaction();
-  t.id.value = Data().transactions.getNextTransactionId();
+  t.id.value = -1;
   t.accountId.value = account.id.value;
   t.dateTime.value = date;
   t.payee.value = payee == null ? -1 : payee.id.value;

@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/helpers/date_helper.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/widgets/semantic_text.dart';
@@ -27,6 +30,55 @@ class ValuesParser {
   List<ValuesQuality> get lines {
     //
     return _values;
+  }
+
+  List<String> getListOfDatesString() {
+    final List<String> list = [];
+    for (final value in _values) {
+      list.add(value.date.valueAsString);
+    }
+    return list;
+  }
+
+  List<String> getListOfDescriptionString() {
+    final List<String> list = [];
+    for (final value in _values) {
+      list.add(value.description.valueAsString);
+    }
+    return list;
+  }
+
+  List<String> getListOfAmountString() {
+    final List<String> list = [];
+    for (final value in _values) {
+      list.add(value.amount.valueAsString);
+    }
+    return list;
+  }
+
+  static String assembleIntoSinceTextBuffer(
+    final String multiStringDates,
+    final String multiStringDescriptions,
+    final String multiStringAmounts,
+  ) {
+    int maxLines = 0;
+    List<String> dates = multiStringDates.split('\n');
+    maxLines = max(maxLines, dates.length);
+    List<String> descriptions = multiStringDescriptions.split('\n');
+    maxLines = max(maxLines, descriptions.length);
+    List<String> amounts = multiStringAmounts.split('\n');
+    maxLines = max(maxLines, amounts.length);
+
+    // Make them all the same length
+    dates = padList(dates, maxLines, '');
+    descriptions = padList(descriptions, maxLines, '');
+    amounts = padList(amounts, maxLines, '');
+
+    String singleText = '';
+    for (int line = 0; line < maxLines; line++) {
+      singleText += '${dates[line]}; ${descriptions[line]}; ${amounts[line]}\n';
+    }
+    return singleText;
   }
 
   set lines(List<ValuesQuality> value) {
@@ -82,37 +134,51 @@ class ValuesParser {
   ValuesQuality attemptToExtractTriples(
     String line,
   ) {
+    String date = '';
+    String description = '';
+    String amount = '';
+
     line.trim();
-    List<String> threeValues = line.split(RegExp(r'\t|\s|;|,|\|')).where((token) => token.trim().isNotEmpty).toList();
+    List<String> threeValues = line.split(RegExp(r'\t|\s|;|\|')).where((token) => token.trim().isNotEmpty).toList();
 
     // Happy path
     // Date Description Amount
-    if (threeValues.length >= 3) {
-      String date = threeValues.first;
-      String description = threeValues.sublist(1, threeValues.length - 1).join(' ');
-      String amount = threeValues.last;
-      return ValuesQuality(
-          date: ValueQuality(date), description: ValueQuality(description), amount: ValueQuality(amount));
+    switch (threeValues.length) {
+      case 2:
+        DateTime? possibleDate = attemptToGetDateFromText(threeValues.first);
+        if (possibleDate == null) {
+          description = threeValues.first;
+        } else {
+          date = threeValues.first;
+        }
+
+        double? possibleAmount = attemptToGetDoubleFromText(threeValues.last);
+        if (possibleAmount == null) {
+          description = threeValues.last;
+        } else {
+          amount = threeValues.last;
+        }
+      case 1:
+        double? possibleAmount = attemptToGetDoubleFromText(threeValues.first);
+        if (possibleAmount == null) {
+          date = threeValues.first;
+        } else {
+          amount = possibleAmount.toString();
+        }
+      case 0:
+        return ValuesQuality.empty();
+      case 3:
+      default:
+        date = threeValues.first;
+        description = threeValues.sublist(1, threeValues.length - 1).join(' ');
+        amount = threeValues.last;
     }
 
-    // Date Description
-    if (threeValues.length == 2) {
-      String date = threeValues.first;
-      String description = threeValues.last;
-
-      return ValuesQuality(
-          date: ValueQuality(date), description: ValueQuality(description), amount: const ValueQuality(''));
-    }
-
-    // Date
-    if (threeValues.length == 1) {
-      String date = threeValues.first;
-
-      return ValuesQuality(
-          date: ValueQuality(date), description: const ValueQuality(''), amount: const ValueQuality(''));
-    }
-
-    return ValuesQuality.empty();
+    return ValuesQuality(
+      date: ValueQuality(date),
+      description: ValueQuality(description),
+      amount: ValueQuality(amount),
+    );
   }
 }
 
@@ -188,6 +254,7 @@ class ValueQuality {
     return SelectableText(
       doubleToCurrency(amount),
       textAlign: TextAlign.right,
+      style: TextStyle(color: amount > 0 ? Colors.green : Colors.red),
     );
   }
 }
