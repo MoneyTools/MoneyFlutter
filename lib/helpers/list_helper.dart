@@ -81,3 +81,14 @@ int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = tru
 bool isIndexInRange(List array, int index) {
   return index >= 0 && index < array.length;
 }
+
+List<String> padList(List<String> list, int length, String padding) {
+  if (list.length >= length) {
+    return list;
+  }
+  List<String> paddedList = List<String>.from(list);
+  for (int i = list.length; i < length; i++) {
+    paddedList.add(padding);
+  }
+  return paddedList;
+}
