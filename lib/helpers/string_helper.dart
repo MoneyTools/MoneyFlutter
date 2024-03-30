@@ -125,3 +125,16 @@ List<String> getColumnInCsvLine(final String csvLine) {
   items = items.map((item) => item.replaceAll('"', '')).toList();
   return items;
 }
+
+String removeEmptyLines(String text) {
+  // Split the text into lines
+  List<String> lines = text.split('\n');
+
+  // Filter out the empty lines
+  List<String> nonEmptyLines = lines.where((line) => line.trim().isNotEmpty).toList();
+
+  // Join the non-empty lines back together
+  String result = nonEmptyLines.join('\n');
+
+  return result;
+}
