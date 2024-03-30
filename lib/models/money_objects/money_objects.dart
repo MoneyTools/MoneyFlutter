@@ -265,6 +265,7 @@ class MoneyObjects<T> {
       final MyJson jsonDelta = moneyObject.getMutatedDiff<T>();
 
       List<Widget> diffWidgets = [];
+
       jsonDelta.forEach((key, value) {
         // Field Name
         Widget instanceName = Padding(

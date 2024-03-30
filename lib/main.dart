@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/appbar.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/menu.dart';
@@ -380,7 +379,7 @@ class MainView extends StatelessWidget {
       KeyAction(
         LogicalKeyboardKey('t'.codeUnitAt(0)),
         'Add transactions',
-        () => showImportTransactions(context, '${dateToString(DateTime.now())} memo 1.00'),
+        () => showImportTransactions(context, ''),
         isMetaPressed: true,
       ),
       KeyAction(

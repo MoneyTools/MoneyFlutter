@@ -2,13 +2,13 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/money_objects/accounts/accounts.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/three_part_label.dart';
@@ -45,14 +45,7 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     };
 
     onAddTransaction = () {
-      setState(() {
-        final Transaction t = Transaction();
-        t.id.value = -1;
-        t.accountId.value = getLastUsedOrFirstAccount().uniqueId;
-        t.dateTime.value = DateTime.now();
-
-        Data().transactions.appendNewMoneyObject(t);
-      });
+      showImportTransactions(context);
     };
 
     pivots.add(

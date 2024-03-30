@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/date_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -15,7 +14,7 @@ void showImportTransactions(
   final BuildContext context, [
   String? initialText,
 ]) {
-  initialText ??= '${dateToString(DateTime.now())} memo 1.00';
+  initialText ??= '';
 
   Account? account = Settings().mostRecentlySelectedAccount;
   account ??= Data().accounts.firstItem();
