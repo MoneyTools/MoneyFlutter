@@ -117,4 +117,54 @@ void main() {
       );
     });
   });
+
+  group('extractAmount', () {
+    test('Extract amount from string simple case', () {
+      expect(attemptToGetDoubleFromText('123'), equals(123));
+    });
+
+    test('Extract amount from string simple case', () {
+      expect(attemptToGetDoubleFromText('123.45'), equals(123.45));
+    });
+
+    test('Extract amount from string simple case longer', () {
+      expect(attemptToGetDoubleFromText('123456'), equals(123456));
+    });
+
+    test('Extract amount from string simple case longer with decimal', () {
+      expect(attemptToGetDoubleFromText('123456.78'), equals(123456.78));
+    });
+
+    test('Extract amount from string with dollars', () {
+      expect(attemptToGetDoubleFromText('Price: \$10,000.99'), equals(10000.99));
+    });
+
+    test('Extract amount from string with pounds', () {
+      expect(attemptToGetDoubleFromText('Total: £1,234.56'), equals(1234.56));
+    });
+
+    test('Extract amount from string with yen', () {
+      expect(attemptToGetDoubleFromText('Amount: ¥9,876.54'), equals(9876.54));
+    });
+
+    test('Extract amount from string with no amount', () {
+      expect(attemptToGetDoubleFromText('No amount in this string'), isNull);
+    });
+
+    test('Extract amount from string with invalid format', () {
+      expect(attemptToGetDoubleFromText('Invalid amount: \$1,2,3,4,5,6.78'), 123456.78);
+    });
+  });
+
+  test('Extract amount from currency text', () {
+    expect(attemptToGetDoubleFromText('\$1,234.56'), equals(1234.56));
+    expect(attemptToGetDoubleFromText('€1.234,56'), equals(1234.56));
+    expect(attemptToGetDoubleFromText('¥10,000.75'), equals(10000.75));
+
+    // Additional test cases
+    expect(attemptToGetDoubleFromText('\$123'), equals(123.0)); // No decimals
+    expect(attemptToGetDoubleFromText('\$0.99'), equals(0.99)); // Less than 1 dollar
+    expect(attemptToGetDoubleFromText('\$0'), equals(0.0)); // Zero amount
+    expect(attemptToGetDoubleFromText('Invalid string'), isNull); // Invalid input
+  });
 }

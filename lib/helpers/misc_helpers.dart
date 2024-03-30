@@ -156,12 +156,30 @@ bool isBetweenOrEqual(final num value, final num min, final num max) {
 
 /// Remove non-numeric characters from the currency text
 double? attemptToGetDoubleFromText(final String text) {
-  String numericString = text.replaceAll(RegExp(r'[^0-9.]'), '');
-  double? value = double.tryParse(numericString);
-  if (value != null && text.startsWith('-')) {
-    value = -value;
+  double? firstSimpleCase = double.tryParse(text);
+  if (firstSimpleCase != null) {
+    return firstSimpleCase;
   }
-  return value;
+
+  // Remove non-numeric characters except for periods and commas
+  String cleanedText = text.replaceAll(RegExp(r'[^\d.,]'), '');
+
+  // Replace commas with periods for consistent parsing
+  cleanedText = cleanedText.replaceAll(',', '.');
+
+  // Remove any leading/trailing periods
+  cleanedText = cleanedText.replaceAll(RegExp(r'^\.+|\.+$'), '');
+
+  // If there are multiple periods, keep only the last one
+  int lastIndex = cleanedText.lastIndexOf('.');
+  if (lastIndex != -1) {
+    String beforeDecimal = cleanedText.substring(0, lastIndex);
+    beforeDecimal = beforeDecimal.replaceAll('.', '');
+    cleanedText = beforeDecimal + cleanedText.substring(lastIndex);
+  }
+
+  // Parse the cleaned text into a double
+  return double.tryParse(cleanedText);
 }
 
 bool isPlatformMobile() {
