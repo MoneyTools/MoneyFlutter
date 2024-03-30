@@ -24,6 +24,9 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   Payee? getByName(final String name) {
+    if (name.isEmpty) {
+      return null;
+    }
     return iterableList().firstWhereOrNull((final Payee payee) => payee.name.value == name);
   }
 
