@@ -1,7 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -10,7 +9,7 @@ import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view.dart';
-import 'package:money/widgets/box.dart';
+import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/center_message.dart';
 
 class ViewTransfers extends ViewWidget<Transfer> {
@@ -88,8 +87,12 @@ class ViewTransfersState extends ViewWidgetState<Transfer> {
               runSpacing: 30,
               spacing: 30,
               children: [
-                IntrinsicWidth(child: getParticipantTransaction('Sender', transfer.getSenderTransaction())),
-                IntrinsicWidth(child: getParticipantTransaction('Receiver', transfer.getReceiverTransaction())),
+                IntrinsicWidth(
+                  child: TransactionCard(title: 'Sender', transaction: transfer.getSenderTransaction()),
+                ),
+                IntrinsicWidth(
+                  child: TransactionCard(title: 'Receiver', transaction: transfer.getReceiverTransaction()),
+                ),
               ],
             ),
           ),
@@ -97,33 +100,6 @@ class ViewTransfersState extends ViewWidgetState<Transfer> {
       }
     }
     return const CenterMessage(message: 'No item selected.');
-  }
-
-  Widget getParticipantTransaction(final String title, final Transaction? transaction) {
-    List<Widget> widgets = [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10.0),
-        child: Text(
-          title,
-          style: getTextTheme(context).headlineSmall,
-        ),
-      )
-    ];
-    if (transaction == null) {
-      widgets.add(const Text('- not found -'));
-    } else {
-      widgets.addAll(
-        transaction.buildWidgets<Transaction>(onEdit: null, compact: true),
-      );
-    }
-
-    return Box(
-      color: getColorTheme(context).background,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widgets,
-      ),
-    );
   }
 
   void keepThisTransfer({

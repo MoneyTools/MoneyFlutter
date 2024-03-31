@@ -9,7 +9,7 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_header.dart';
-import 'package:money/widgets/adaptive_columns.dart';
+import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
@@ -390,40 +390,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
       return const CenterMessage(message: 'No item selected.');
     }
 
-    final Fields<T> detailPanelFields = getFieldsForDetailsPanel();
-
-    if (!isReadOnly) {
-      moneyObject.stashValueBeforeEditing<T>();
-    }
-    List<Widget> widgetToDisplay = detailPanelFields.getFieldsAsWidgets(
-      moneyObject as T,
-      isReadOnly
-          ? null
-          : () {
-              setState(() {
-                /// update panel
-                Data().notifyTransactionChange(
-                  mutation: MutationType.changed,
-                  moneyObject: moneyObject,
-                );
-              });
-            },
-      false,
-    );
-    widgetToDisplay.add(
-      Center(
-        child: SelectableText(
-          'ID:${moneyObject.uniqueId}',
-          style: const TextStyle(fontSize: 9),
-        ),
-      ),
-    );
     return SingleChildScrollView(
-      key: Key(moneyObject.uniqueId.toString()),
-      child: AdaptiveColumns(
-        columnWidth: 300,
-        children: widgetToDisplay,
-      ),
+      key: Key('detail_panel_${moneyObject.uniqueId}'),
+      child: MoneyObjectCard<T>(title: '', moneyObject: moneyObject),
     );
   }
 
