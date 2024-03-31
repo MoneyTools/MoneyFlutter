@@ -96,7 +96,7 @@
     <rect x="304" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_file_picker'>
-    <rect x="304" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="4" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_path'>
     <rect x="4" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -132,7 +132,7 @@
     <rect x="1204" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_url_launcher'>
-    <rect x="4" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="304" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_uuid'>
     <rect x="1804" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -143,7 +143,7 @@
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M580 245 C 590 300,10 300, 20 355" fill="none" stroke="#377E22">
+    <path class="line" d="M280 245 C 290 300,10 300, 20 355" fill="none" stroke="#377E22">
       <title>file_picker
 ⬇
 path</title>
@@ -178,7 +178,7 @@ dart_pdf_reader</title>
 ⬇
 dotted_border</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,310 150, 320 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,10 150, 20 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 file_picker</title>
@@ -223,7 +223,7 @@ shared_preferences</title>
 ⬇
 sqlite3</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,10 150, 20 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,310 150, 320 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 url_launcher</title>
@@ -297,20 +297,21 @@ collection</title>
   </g>
   <g id='Counters_file_picker'>
     <g>
-      <circle cx="580" cy="245" r="10" fill="green"/>
-      <text x="580" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">6</text>
+      <circle cx="280" cy="245" r="10" fill="green"/>
+      <text x="280" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">7</text>
       <title>file_picker
 ⬇
 1 /direct/path
-2 /transitive/ffi
-3 /transitive/flutter_plugin_android_lifecycle
-4 /transitive/flutter_web_plugins
-5 /transitive/plugin_platform_interface
-6 /transitive/win32</title>
+2 /transitive/cross_file
+3 /transitive/ffi
+4 /transitive/flutter_plugin_android_lifecycle
+5 /transitive/flutter_web_plugins
+6 /transitive/plugin_platform_interface
+7 /transitive/win32</title>
     </g>
     <g>
-      <circle cx="320" cy="205" r="10" fill="blue"/>
-      <text x="320" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="20" cy="205" r="10" fill="blue"/>
+      <text x="20" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 file_picker</title>
@@ -531,8 +532,8 @@ sqlite3</title>
   </g>
   <g id='Counters_url_launcher'>
     <g>
-      <circle cx="280" cy="245" r="10" fill="green"/>
-      <text x="280" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">7</text>
+      <circle cx="580" cy="245" r="10" fill="green"/>
+      <text x="580" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">7</text>
       <title>url_launcher
 ⬇
 1 /transitive/url_launcher_android
@@ -544,8 +545,8 @@ sqlite3</title>
 7 /transitive/url_launcher_windows</title>
     </g>
     <g>
-      <circle cx="20" cy="205" r="10" fill="blue"/>
-      <text x="20" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="320" cy="205" r="10" fill="blue"/>
+      <text x="320" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 url_launcher</title>
@@ -579,8 +580,8 @@ uuid</title>
     <text class="nodeName" x="450" y="395" font-size="80%">1.18.0</text>
   </g>
   <g id='Labels_file_picker'>
-    <text class="nodeName" x="450" y="225" font-size="120%">file_picker</text>
-    <text class="nodeName" x="450" y="245" font-size="80%">6.2.1</text>
+    <text class="nodeName" x="150" y="225" font-size="120%">file_picker</text>
+    <text class="nodeName" x="150" y="245" font-size="80%">8.0.0</text>
   </g>
   <g id='Labels_path'>
     <text class="nodeName" x="150" y="375" font-size="120%">path</text>
@@ -596,7 +597,7 @@ uuid</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.6.2</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.6.3</text>
   </g>
   <g id='Labels_csv'>
     <text class="nodeName" x="750" y="375" font-size="120%">csv</text>
@@ -608,7 +609,7 @@ uuid</title>
   </g>
   <g id='Labels_fl_chart'>
     <text class="nodeName" x="3450" y="225" font-size="120%">fl_chart</text>
-    <text class="nodeName" x="3450" y="245" font-size="80%">0.66.2</text>
+    <text class="nodeName" x="3450" y="245" font-size="80%">0.67.0</text>
   </g>
   <g id='Labels_path_provider'>
     <text class="nodeName" x="1050" y="225" font-size="120%">path_provider</text>
@@ -627,8 +628,8 @@ uuid</title>
     <text class="nodeName" x="1350" y="245" font-size="80%">2.4.0</text>
   </g>
   <g id='Labels_url_launcher'>
-    <text class="nodeName" x="150" y="225" font-size="120%">url_launcher</text>
-    <text class="nodeName" x="150" y="245" font-size="80%">6.2.5</text>
+    <text class="nodeName" x="450" y="225" font-size="120%">url_launcher</text>
+    <text class="nodeName" x="450" y="245" font-size="80%">6.2.5</text>
   </g>
   <g id='Labels_uuid'>
     <text class="nodeName" x="1950" y="225" font-size="120%">uuid</text>

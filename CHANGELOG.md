@@ -1,5 +1,10 @@
 # Change Log
 
+## [version 1.6.3] 2024-03-31
+
+- Update package [file_picker: 8.0.0]
+- Update package [fl_chart: ^0.67.0]
+
 ## [version 1.6.2] 2024-03-30
 
 ### Updated
