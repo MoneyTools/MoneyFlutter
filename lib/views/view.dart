@@ -11,6 +11,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
+import 'package:money/widgets/details_panel/dialog_mutate_money_object.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
 import 'package:money/widgets/list_view/list_view.dart';
@@ -151,7 +152,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
                 // Actions
                 onActionAddTransaction: onAddTransaction,
                 onActionEdit: () {
-                  // Switch to edit mode
+                  showDialogAndActionsForMoneyObject(
+                      context: context, moneyObject: getFirstSelectedItem() as MoneyObject);
                 },
                 onActionDelete: () {
                   onDeleteRequestedByUser(context, getFirstSelectedItem() as MoneyObject);

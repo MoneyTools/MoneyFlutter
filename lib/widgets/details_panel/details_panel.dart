@@ -86,9 +86,10 @@ class DetailsPanel extends StatelessWidget {
                 onActionAddTransaction:
                     (subPanelSelected == SubViews.transactions) && isExpanded ? onActionAddTransaction : null,
                 onActionEdit:
-                    subPanelSelected == SubViews.details && listOfSelectedItemIndex.isNotEmpty ? onActionEdit : null,
-                onActionDelete:
-                    subPanelSelected == SubViews.details && listOfSelectedItemIndex.isNotEmpty ? onActionDelete : null,
+                    (subPanelSelected == SubViews.details) && listOfSelectedItemIndex.isNotEmpty ? onActionEdit : null,
+                onActionDelete: (subPanelSelected == SubViews.details) && listOfSelectedItemIndex.isNotEmpty
+                    ? onActionDelete
+                    : null,
               ),
               if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, listOfSelectedItemIndex)),
             ],

@@ -2780,37 +2780,37 @@
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11484.37,-663.31C11475.3,-659.4 11465.3,-655.81 11455.66,-653.8 11442.68,-651.09 7647.02,-655.18 7637.66,-645.8 7593.63,-601.68 7614.86,-520.56 7630.72,-477.54"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="7633.95,-478.9 7634.29,-468.31 7627.42,-476.38 7633.95,-478.9"/>
 </g>
-<!-- /lib/views/view_transactions/dialog_mutate_transaction.dart -->
+<!-- /lib/views/view_transactions/dialog_mutate_money_object.dart -->
 <g id="node74" class="node">
 <title>/lib/views/view_transactions/dialog_mutate_transaction.dart</title>
 <path fill="Lavender" stroke="black" stroke-width="1.3" d="M12371.41,-699.7C12371.41,-699.7 12203.91,-699.7 12203.91,-699.7 12197.91,-699.7 12191.91,-693.7 12191.91,-687.7 12191.91,-687.7 12191.91,-675.7 12191.91,-675.7 12191.91,-669.7 12197.91,-663.7 12203.91,-663.7 12203.91,-663.7 12371.41,-663.7 12371.41,-663.7 12377.41,-663.7 12383.41,-669.7 12383.41,-675.7 12383.41,-675.7 12383.41,-687.7 12383.41,-687.7 12383.41,-693.7 12377.41,-699.7 12371.41,-699.7"/>
 <text text-anchor="middle" x="12287.66" y="-676.45" font-family="Arial" font-size="15.00">dialog_mutate_transaction</text>
 </g>
-<!-- /lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/models/money_objects/transactions/transaction.dart -->
+<!-- /lib/views/view_transactions/dialog_mutate_money_object.dart&#45;&gt;/lib/models/money_objects/transactions/transaction.dart -->
 <g id="edge317" class="edge">
 <title>/lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/models/money_objects/transactions/transaction.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M12230.11,-663.21C12214.83,-659.32 12198.24,-655.77 12182.66,-653.8 12157.1,-650.56 4786.77,-654.88 4762.66,-645.8 4749.46,-640.83 4737.32,-631.28 4727.67,-621.85"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="4730.35,-619.58 4720.91,-614.78 4725.29,-624.42 4730.35,-619.58"/>
 </g>
-<!-- /lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/models/money_objects/money_object.dart -->
+<!-- /lib/views/view_transactions/dialog_mutate_money_object.dart&#45;&gt;/lib/models/money_objects/money_object.dart -->
 <g id="edge316" class="edge">
 <title>/lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/models/money_objects/money_object.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M12230.11,-663.21C12214.83,-659.32 12198.24,-655.77 12182.66,-653.8 12141.58,-648.59 6259.63,-659.78 6220.66,-645.8 6168.7,-627.17 6176.28,-586.54 6124.66,-567 6101.78,-558.34 5923.79,-574.23 5904.66,-559 5852.44,-517.44 5918.57,-454.67 5865.66,-414 5848.02,-400.45 2679.36,-421.74 2663.66,-406 2615,-357.23 2616.85,-301.55 2663.66,-251 2708.01,-203.09 3152.99,-196.03 3324.1,-195.1"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="3323.99,-198.6 3333.97,-195.05 3323.96,-191.6 3323.99,-198.6"/>
 </g>
-<!-- /lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/storage/data/data.dart -->
+<!-- /lib/views/view_transactions/dialog_mutate_money_object.dart&#45;&gt;/lib/storage/data/data.dart -->
 <g id="edge318" class="edge">
 <title>/lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/storage/data/data.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M12230.11,-663.2C12214.83,-659.32 12198.24,-655.77 12182.66,-653.8 12164.9,-651.55 1892.58,-653.95 1876.66,-645.8 1867.09,-640.9 1859.48,-632.14 1853.77,-623.32"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1856.93,-621.79 1848.91,-614.86 1850.86,-625.27 1856.93,-621.79"/>
 </g>
-<!-- /lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/widgets/dialog_button.dart -->
+<!-- /lib/views/view_transactions/dialog_mutate_money_object.dart&#45;&gt;/lib/widgets/dialog_button.dart -->
 <g id="edge320" class="edge">
 <title>/lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/widgets/dialog_button.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M12346.88,-663.26C12362.59,-659.37 12379.65,-655.81 12395.66,-653.8 12414.73,-651.4 13762.56,-654.58 13779.66,-645.8 13905.27,-581.3 13933.32,-418.72 13822.66,-331 13773.08,-291.7 9330.78,-307.24 9267.66,-303 9245.58,-301.52 9221.55,-298.76 9200.11,-295.9"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="9200.83,-292.47 9190.45,-294.57 9199.88,-299.4 9200.83,-292.47"/>
 </g>
-<!-- /lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/widgets/dialog_full_screen.dart -->
+<!-- /lib/views/view_transactions/dialog_mutate_money_object.dart&#45;&gt;/lib/widgets/dialog_full_screen.dart -->
 <g id="edge321" class="edge">
 <title>/lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/widgets/dialog_full_screen.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M12230.11,-663.21C12214.83,-659.32 12198.24,-655.77 12182.66,-653.8 12096.1,-642.83 5986.67,-660.42 5900.66,-645.8 5795.79,-627.97 5779.51,-584.91 5674.66,-567 5636.2,-560.43 2901.93,-573.35 2865.66,-559 2772.96,-522.32 2741.39,-497.42 2701.66,-406 2688.37,-375.43 2678.14,-354.63 2701.66,-331 2731.12,-301.4 8673.97,-305.57 8715.66,-303 8736.3,-301.73 8758.53,-299.5 8779.17,-297.07"/>
@@ -2822,7 +2822,7 @@
 <path fill="Lavender" stroke="black" stroke-width="1.3" d="M9050.16,-375C9050.16,-375 8929.16,-375 8929.16,-375 8923.16,-375 8917.16,-369 8917.16,-363 8917.16,-363 8917.16,-351 8917.16,-351 8917.16,-345 8923.16,-339 8929.16,-339 8929.16,-339 9050.16,-339 9050.16,-339 9056.16,-339 9062.16,-345 9062.16,-351 9062.16,-351 9062.16,-363 9062.16,-363 9062.16,-369 9056.16,-375 9050.16,-375"/>
 <text text-anchor="middle" x="8989.66" y="-351.75" font-family="Arial" font-size="15.00">confirmation_dialog</text>
 </g>
-<!-- /lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/widgets/confirmation_dialog.dart -->
+<!-- /lib/views/view_transactions/dialog_mutate_money_object.dart&#45;&gt;/lib/widgets/confirmation_dialog.dart -->
 <g id="edge319" class="edge">
 <title>/lib/views/view_transactions/dialog_mutate_transaction.dart&#45;&gt;/lib/widgets/confirmation_dialog.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M12346.88,-663.26C12362.59,-659.38 12379.65,-655.81 12395.66,-653.8 12412.83,-651.64 13629.25,-657.86 13641.66,-645.8 13665.69,-622.43 13674.39,-443.79 13644.66,-414 13633.44,-402.76 9086.98,-410.17 9071.66,-406 9053.98,-401.19 9036.21,-391.52 9021.75,-382.11"/>
@@ -3872,7 +3872,7 @@
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M7634.76,-466.43C7621.96,-492.25 7593.99,-539.72 7553.66,-559 7518.09,-576 1914.06,-554.54 1876.66,-567 1874.13,-567.84 1871.64,-568.94 1869.21,-570.2"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1867.38,-567.22 1860.81,-575.54 1871.13,-573.13 1867.38,-567.22"/>
 </g>
-<!-- /lib/widgets/list_view/transactions/list_view_transactions.dart&#45;&gt;/lib/views/view_transactions/dialog_mutate_transaction.dart -->
+<!-- /lib/widgets/list_view/transactions/list_view_transactions.dart&#45;&gt;/lib/views/view_transactions/dialog_mutate_money_object.dart -->
 <g id="edge472" class="edge">
 <title>/lib/widgets/list_view/transactions/list_view_transactions.dart&#45;&gt;/lib/views/view_transactions/dialog_mutate_transaction.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M7650.28,-466.33C7662.42,-491.58 7688.69,-537.79 7726.66,-559 7894.73,-652.9 8396.38,-635.93 8588.66,-645.8 8688.36,-650.92 12083.62,-641.2 12182.66,-653.8 12194.47,-655.3 12206.86,-657.7 12218.81,-660.47"/>

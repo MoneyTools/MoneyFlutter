@@ -63,6 +63,8 @@ class DetailsPanelHeader extends StatelessWidget {
                 const Spacer(),
                 _buildAddButton(),
                 const Spacer(),
+                _buildEditButton(),
+                const Spacer(),
                 _buildDeleteButton(),
                 gapMedium(),
                 _buildCurrencySelections(constraints),
@@ -150,6 +152,20 @@ class DetailsPanelHeader extends StatelessWidget {
       },
       icon: const Icon(Icons.add),
       tooltip: 'Add a new transaction',
+    );
+  }
+
+  Widget _buildEditButton() {
+    if (onActionEdit == null) {
+      return const SizedBox();
+    }
+
+    return IconButton(
+      onPressed: () {
+        onActionEdit?.call();
+      },
+      icon: const Icon(Icons.edit),
+      tooltip: 'Edit selected item',
     );
   }
 

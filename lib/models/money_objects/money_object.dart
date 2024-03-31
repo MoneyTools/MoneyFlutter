@@ -77,6 +77,9 @@ abstract class MoneyObject {
     final Fields<T> fields = Fields<T>(
       definitions: getFieldsForClass<T>().where((element) => element.useAsDetailPanels).toList(),
     );
+    if (fields.definitions.isEmpty) {
+      return [Text('No fields found for $T')];
+    }
     return fields.getFieldsAsWidgets(this as T, onEdit, compact);
   }
 
