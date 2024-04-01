@@ -103,6 +103,11 @@ class Accounts extends MoneyObjects<Account> {
         account.maxBalancePerYears[yearOfTheTransaction] = max(currentMaxBalanceValue, account.balance.value);
       }
     }
+
+    final accountsInvestments = Data().accounts.iterableList().where((account) => account.type== AccountType.moneyMarket || account.type == AccountType.investment).toList();
+    for(final account in accountsInvestments){
+      
+    }
   }
 
   Account addNewAccount(final String accountName) {
