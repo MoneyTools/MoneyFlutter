@@ -25,107 +25,107 @@ class Investment extends MoneyObject {
 
   /// Id
   //// 0    Id              bigint  0                    1
-  FieldId<Investment> id = FieldId<Investment>(
-    valueForSerialization: (final Investment instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).uniqueId,
   );
 
   /// 1    Security        INT     1                    0
-  FieldInt<Investment> security = FieldInt<Investment>(
+  FieldInt security = FieldInt(
     importance: 1,
     name: 'Security',
     serializeName: 'Security',
-    valueFromInstance: (final Investment instance) => instance.security.value,
-    valueForSerialization: (final Investment instance) => instance.security.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).security.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).security.value,
   );
 
   /// 2    UnitPrice       money   1                    0
-  FieldAmount<Investment> unitPrice = FieldAmount<Investment>(
+  FieldAmount unitPrice = FieldAmount(
     importance: 3,
     name: 'UnitPrice',
     serializeName: 'UnitPrice',
-    valueFromInstance: (final Investment instance) => instance.unitPrice.value,
-    valueForSerialization: (final Investment instance) => instance.unitPrice.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
   );
 
   /// 3    Units           money   0                    0
-  FieldAmount<Investment> units = FieldAmount<Investment>(
+  FieldAmount units = FieldAmount(
     importance: 2,
     name: 'Units',
     serializeName: 'Units',
-    valueFromInstance: (final Investment instance) => instance.units.value,
-    valueForSerialization: (final Investment instance) => instance.units.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).units.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).units.value,
   );
 
   /// 4    Commission      money   0                    0
-  FieldAmount<Investment> commission = FieldAmount<Investment>(
+  FieldAmount commission = FieldAmount(
     name: 'Commission',
     serializeName: 'Commission',
-    valueFromInstance: (final Investment instance) => instance.commission.value,
-    valueForSerialization: (final Investment instance) => instance.commission.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).commission.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value,
   );
 
   /// 5    MarkUpDown      money   0                    0
-  FieldAmount<Investment> markUpDown = FieldAmount<Investment>(
+  FieldAmount markUpDown = FieldAmount(
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
-    valueFromInstance: (final Investment instance) => instance.markUpDown.value,
-    valueForSerialization: (final Investment instance) => instance.markUpDown.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
   );
 
   /// 6    Taxes           money   0                    0
-  FieldAmount<Investment> taxes = FieldAmount<Investment>(
+  FieldAmount taxes = FieldAmount(
     name: 'Taxes',
     serializeName: 'Taxes',
-    valueFromInstance: (final Investment instance) => instance.taxes.value,
-    valueForSerialization: (final Investment instance) => instance.taxes.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxes.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value,
   );
 
   /// 7    Fees            money   0                    0
-  FieldAmount<Investment> fees = FieldAmount<Investment>(
+  FieldAmount fees = FieldAmount(
     name: 'Fees',
     serializeName: 'Fees',
-    valueFromInstance: (final Investment instance) => instance.fees.value,
-    valueForSerialization: (final Investment instance) => instance.fees.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).fees.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value,
   );
 
   /// 8    Load            money   0                    0
-  FieldAmount<Investment> load = FieldAmount<Investment>(
+  FieldAmount load = FieldAmount(
     name: 'Load',
     serializeName: 'Load',
-    valueFromInstance: (final Investment instance) => instance.load.value,
-    valueForSerialization: (final Investment instance) => instance.load.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).load.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value,
   );
 
   /// 9    InvestmentType  INT     1                    0
-  FieldInt<Investment> investmentType = FieldInt<Investment>(
+  FieldInt investmentType = FieldInt(
     name: 'InvestmentType',
     serializeName: 'InvestmentType',
-    valueFromInstance: (final Investment instance) => instance.investmentType.value,
-    valueForSerialization: (final Investment instance) => instance.investmentType.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).investmentType.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
   );
 
   /// 10   TradeType       INT     0                    0
-  FieldInt<Investment> tradeType = FieldInt<Investment>(
+  FieldInt tradeType = FieldInt(
     name: 'TradeType',
     serializeName: 'TradeType',
-    valueFromInstance: (final Investment instance) => instance.tradeType.value,
-    valueForSerialization: (final Investment instance) => instance.tradeType.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).tradeType.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).tradeType.value,
   );
 
   /// 11   TaxExempt       bit     0                    0
-  FieldInt<Investment> taxExempt = FieldInt<Investment>(
+  FieldInt taxExempt = FieldInt(
     name: 'TaxExempt',
     serializeName: 'TaxExempt',
-    valueFromInstance: (final Investment instance) => instance.taxExempt.value,
-    valueForSerialization: (final Investment instance) => instance.taxExempt.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
   );
 
   /// 12   Withholding     money   0                    0
-  FieldAmount<Investment> withholding = FieldAmount<Investment>(
+  FieldAmount withholding = FieldAmount(
     name: 'Withholding',
     serializeName: 'Withholding',
-    valueFromInstance: (final Investment instance) => instance.withholding.value,
-    valueForSerialization: (final Investment instance) => instance.withholding.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).withholding.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value,
   );
 
   Investment({

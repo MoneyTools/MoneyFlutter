@@ -37,12 +37,12 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
     if (category != null) {
       return ListViewTransactions(
         key: Key(category.uniqueId.toString()),
-        columnsToInclude: const <String>[
-          columnIdAccount,
-          columnIdDate,
-          columnIdPayee,
-          columnIdMemo,
-          columnIdAmount,
+        columnsToInclude: <Field>[
+          Transaction.fields.getFieldByName(columnIdAccount),
+          Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdPayee),
+          Transaction.fields.getFieldByName(columnIdMemo),
+          Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
           filter: (final Transaction transaction) => transaction.categoryId.value == category.uniqueId,

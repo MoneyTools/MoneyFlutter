@@ -1,11 +1,16 @@
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Transfer extends MoneyObject {
+  static Fields<Transfer>? _fields;
+
+  static get fields => _fields ??= Fields<Transfer>(definitions: []);
+
   @override
   int get uniqueId => source.uniqueId;
 
@@ -21,38 +26,39 @@ class Transfer extends MoneyObject {
   //
   // SENDER
   //
-  FieldDate<Transfer> senderTransactionDate = FieldDate<Transfer>(
+  FieldDate senderTransactionDate = FieldDate(
     importance: 1,
     name: 'Sent on',
-    valueFromInstance: (final Transfer instance) => getDateAsText(instance.geSenderTransactionDate()),
-    sort: (final Transfer a, final Transfer b, final bool ascending) =>
-        sortByDate(a.geSenderTransactionDate(), b.geSenderTransactionDate(), ascending),
+    valueFromInstance: (final MoneyObject instance) => getDateAsText((instance as Transfer).geSenderTransactionDate()),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByDate((a as Transfer).geSenderTransactionDate(), (b as Transfer).geSenderTransactionDate(), ascending),
   );
 
   /// Account
-  Field<Transfer, int> senderAccountId = Field<Transfer, int>(
+  Field<int> senderAccountId = Field<int>(
     importance: 2,
     type: FieldType.text,
     name: 'Sender',
     defaultValue: -1,
-    valueFromInstance: (final Transfer instance) => instance.getSenderAccountName(),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getSenderAccountName(),
   );
 
   /// Status
-  FieldString<Transfer> senderTransactionStatus = FieldString<Transfer>(
+  FieldString senderTransactionStatus = FieldString(
     importance: 3,
     name: 'SS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
-    valueFromInstance: (final Transfer instance) => instance.source.status.valueFromInstance(instance.source),
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as Transfer).source.status.valueFromInstance(instance.source),
   );
 
   /// memo
-  FieldString<Transfer> senderTransactionMemo = FieldString<Transfer>(
+  FieldString senderTransactionMemo = FieldString(
     importance: 4,
     name: 'Sender memo',
     columnWidth: ColumnWidth.largest,
-    valueFromInstance: (final Transfer instance) => instance.getMemoSource(),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getMemoSource(),
   );
 
   //
@@ -60,36 +66,37 @@ class Transfer extends MoneyObject {
   //
 
   // Date received
-  FieldDate<Transfer> receiverTransactionDate = FieldDate<Transfer>(
+  FieldDate receiverTransactionDate = FieldDate(
     importance: 10,
     name: 'Date Received',
-    valueFromInstance: (final Transfer instance) => instance.evaluatedReceivedDate(),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).evaluatedReceivedDate(),
   );
 
   /// Account
-  Field<Transfer, int> receiverAccountId = Field<Transfer, int>(
+  Field<int> receiverAccountId = Field<int>(
     importance: 11,
     type: FieldType.text,
     name: 'Recipient account',
     defaultValue: -1,
-    valueFromInstance: (final Transfer instance) => instance.getReceiverAccountName(),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getReceiverAccountName(),
   );
 
   /// Status
-  FieldString<Transfer> accountStatusDestination = FieldString<Transfer>(
+  FieldString accountStatusDestination = FieldString(
     importance: 12,
     name: 'RS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
-    valueFromInstance: (final Transfer instance) => instance.source.status.valueFromInstance(instance.source),
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as Transfer).source.status.valueFromInstance(instance.source),
   );
 
   /// memo
-  FieldString<Transfer> memoDestination = FieldString<Transfer>(
+  FieldString memoDestination = FieldString(
     importance: 97,
     name: 'Recipient memo',
     columnWidth: ColumnWidth.largest,
-    valueFromInstance: (final Transfer instance) => instance.getMemoDestination(),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getMemoDestination(),
   );
 
   ///
@@ -97,18 +104,18 @@ class Transfer extends MoneyObject {
   ///
 
   /// Troubleshoot
-  FieldString<Transfer> troubleshoot = FieldString<Transfer>(
+  FieldString troubleshoot = FieldString(
     importance: 98,
     name: 'Troubleshoot',
-    valueFromInstance: (final Transfer instance) => instance.getTroubleshoot(),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getTroubleshoot(),
   );
 
   /// Transfer amount
-  FieldAmount<Transfer> transactionAmount = FieldAmount<Transfer>(
+  FieldAmount transactionAmount = FieldAmount(
     importance: 99,
     name: 'Amount',
     columnWidth: ColumnWidth.small,
-    valueFromInstance: (final Transfer instance) => instance.source.amount.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).source.amount.value,
   );
 
   Transfer({
@@ -118,7 +125,25 @@ class Transfer extends MoneyObject {
     this.sourceSplit,
     this.relatedSplit,
     required this.isOrphan,
-  });
+  }) {
+    if (Transfer.fields.isEmpty) {
+      Transfer.fields.setDefinitions([
+        senderTransactionDate,
+        senderAccountId,
+        senderTransactionStatus,
+        senderTransactionMemo,
+        receiverTransactionDate,
+        receiverAccountId,
+        accountStatusDestination,
+        memoDestination,
+        troubleshoot,
+        transactionAmount,
+      ]);
+    }
+
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+  }
 
   //---------------------------------------------
   // Transactions
@@ -177,6 +202,7 @@ class Transfer extends MoneyObject {
   DateTime getReceivedDateOrToday() {
     return getReceiverTransactionDate() ?? DateTime.now();
   }
+
   //---------------------------------------------
 
   //---------------------------------------------

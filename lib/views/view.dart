@@ -19,22 +19,18 @@ import 'package:money/widgets/widgets.dart';
 
 import '../models/fields/field_filter.dart';
 
-class ViewWidget<T> extends StatefulWidget {
+class ViewWidget extends StatefulWidget {
   const ViewWidget({super.key});
 
   @override
-  State<ViewWidget<T>> createState() => ViewWidgetState<T>();
+  State<ViewWidget> createState() => ViewWidgetState();
 }
 
-class ViewWidgetState<T> extends State<ViewWidget<T>> {
-  ViewWidgetState() {
-    assert(T != dynamic, 'Type T cannot be dynamic');
-  }
-
+class ViewWidgetState extends State<ViewWidget> {
   // list management
-  List<T> list = <T>[];
+  List<MoneyObject> list = <MoneyObject>[];
   final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>(<int>[]);
-  Fields<T> _fieldToDisplay = Fields<T>(definitions: <Field<T, dynamic>>[]);
+  Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>(definitions: <Field<dynamic>>[]);
   List<String> listOfUniqueString = <String>[];
   List<ValueSelection> listOfValueSelected = [];
   int _lastSelectedItemId = -1;
@@ -54,21 +50,17 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   Function? onAddTransaction;
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
-  Fields<T> getFieldsForTable() {
-    return Fields<T>(definitions: getFieldsForClass<T>().where((element) => element.useAsColumn).toList());
-  }
-
-  /// Derived class will override to customize the fields to display in the details panel
-  Fields<T> getFieldsForDetailsPanel() {
-    final List<Field<T, dynamic>> fields =
-        getFieldsForClass<T>().where((final Field<T, dynamic> item) => item.useAsDetailPanels).toList();
-    return Fields<T>(definitions: fields);
+  Fields<MoneyObject> getFieldsForTable() {
+    return Fields<MoneyObject>(definitions: []);
   }
 
   @override
   void initState() {
     super.initState();
-    _fieldToDisplay = getFieldsForTable();
+
+    var all = getFieldsForTable();
+    _fieldToDisplay =
+        Fields<MoneyObject>(definitions: all.definitions.where((element) => element.useAsColumn).toList());
 
     final MyJson? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
@@ -99,8 +91,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             buildHeader(),
 
             if (!isSmallWidth(constraints))
-              MyListItemHeader<T>(
-                columns: _fieldToDisplay,
+              MyListItemHeader<MoneyObject>(
+                columns: _fieldToDisplay.definitions,
                 sortByColumn: _sortByFieldIndex,
                 sortAscending: _sortAscending,
                 onTap: changeListSortOrder,
@@ -110,7 +102,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             // Table rows
             Expanded(
               flex: 1,
-              child: MyListView<T>(
+              child: MyListView<MoneyObject>(
                 key: Key('MyListView_selected_id_${getUniqueIdOfFirstSelectedItem()}'),
                 list: list,
                 selectedItemIds: _selectedItemsByUniqueId,
@@ -201,8 +193,8 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return Constants.defaultCurrency;
   }
 
-  List<T> getList([bool includeDeleted = false]) {
-    return <T>[];
+  List<MoneyObject> getList([bool includeDeleted = false]) {
+    return <MoneyObject>[];
   }
 
   void clearSelection() {
@@ -212,9 +204,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
   void onSort() {
     if (_fieldToDisplay.definitions.isNotEmpty) {
       if (isBetween(_sortByFieldIndex, -1, _fieldToDisplay.definitions.length)) {
-        final Field<T, dynamic> fieldDefinition = _fieldToDisplay.definitions[_sortByFieldIndex];
+        final Field<dynamic> fieldDefinition = _fieldToDisplay.definitions[_sortByFieldIndex];
         if (fieldDefinition.sort == null) {
-          list.sort((final T a, final T b) {
+          list.sort((final MoneyObject a, final MoneyObject b) {
             switch (fieldDefinition.type) {
               case FieldType.numeric:
               case FieldType.numericShorthand:
@@ -246,7 +238,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
             }
           });
         } else {
-          list.sort((final T a, final T b) {
+          list.sort((final MoneyObject a, final MoneyObject b) {
             return fieldDefinition.sort!(a, b, _sortAscending);
           });
         }
@@ -264,7 +256,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
               title: 'Delete ${getClassNameSingular()}',
               question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
               content: Column(
-                children: myMoneyObjectInstance.buildWidgets<T>(onEdit: null, compact: true),
+                children: myMoneyObjectInstance.buildWidgets(onEdit: null, compact: true),
               ),
               onConfirm: () {
                 onDeleteConfirmedByUser(myMoneyObjectInstance);
@@ -291,7 +283,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     });
   }
 
-  bool isMatchingFilterText(final T instance) {
+  bool isMatchingFilterText(final MoneyObject instance) {
     if (_filterByText.isEmpty && _filterByFieldsValue.isEmpty) {
       // nothing to filter by
       return true;
@@ -330,7 +322,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
   /// refresh the [this.list] by apply the filters
   void updateList() {
-    list = getList().where((final T instance) => isMatchingFilterText(instance)).toList();
+    list = getList().where((final MoneyObject instance) => isMatchingFilterText(instance)).toList();
   }
 
   /// Override in your view
@@ -369,24 +361,24 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     }
   }
 
-  T? getFirstSelectedItem() {
+  MoneyObject? getFirstSelectedItem() {
     return getFirstSelectedItemFromSelectedList(_selectedItemsByUniqueId.value);
   }
 
-  T? getFirstSelectedItemFromSelectedList(final List<int> selectedList) {
-    return getMoneyObjectFromFirstSelectedId<T>(selectedList, list);
+  MoneyObject? getFirstSelectedItemFromSelectedList(final List<int> selectedList) {
+    return getMoneyObjectFromFirstSelectedId<MoneyObject>(selectedList, list);
   }
 
   int? getUniqueIdOfFirstSelectedItem() {
     return _selectedItemsByUniqueId.value.firstOrNull;
   }
 
-  Widget getDetailPanelHeader(final BuildContext context, final num index, final T item) {
+  Widget getDetailPanelHeader(final BuildContext context, final num index, final MoneyObject item) {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
   Widget getPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
-    final MoneyObject? moneyObject = findObjectById(selectedIds.firstOrNull, list as List<MoneyObject>);
+    final MoneyObject? moneyObject = findObjectById(selectedIds.firstOrNull, list);
 
     if (moneyObject == null) {
       return const CenterMessage(message: 'No item selected.');
@@ -394,7 +386,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
 
     return SingleChildScrollView(
       key: Key('detail_panel_${moneyObject.uniqueId}'),
-      child: MoneyObjectCard<T>(title: '', moneyObject: moneyObject),
+      child: MoneyObjectCard(title: '', moneyObject: moneyObject),
     );
   }
 
@@ -443,9 +435,9 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return SortIndicator.none;
   }
 
-  List<String> getUniqueInstances(final Field<T, dynamic> columnToCustomerFilterOn) {
+  List<String> getUniqueInstances(final Field<dynamic> columnToCustomerFilterOn) {
     final Set<String> set = <String>{}; // This is a Set()
-    final List<T> list = getList();
+    final List<MoneyObject> list = getList();
     for (int i = 0; i < list.length; i++) {
       final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]).toString();
       set.add(fieldValue);
@@ -455,10 +447,10 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return uniqueValues;
   }
 
-  List<double> getMinMaxValues(final Field<T, dynamic> fieldDefinition) {
+  List<double> getMinMaxValues(final Field<dynamic> fieldDefinition) {
     double min = 0.0;
     double max = 0.0;
-    final List<T> list = getList();
+    final List<MoneyObject> list = getList();
     for (int i = 0; i < list.length; i++) {
       dynamic fieldValue = fieldDefinition.valueFromInstance(list[i]);
 
@@ -477,7 +469,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <double>[min, max];
   }
 
-  List<String> getMinMaxDates(final Field<T, dynamic> columnToCustomerFilterOn) {
+  List<String> getMinMaxDates(final Field<dynamic> columnToCustomerFilterOn) {
     String min = '';
     String max = '';
 
@@ -494,7 +486,7 @@ class ViewWidgetState<T> extends State<ViewWidget<T>> {
     return <String>[min, max];
   }
 
-  void onCustomizeColumn(final Field<T, dynamic> fieldDefinition) {
+  void onCustomizeColumn(final Field<dynamic> fieldDefinition) {
     Widget content;
 
     switch (fieldDefinition.type) {

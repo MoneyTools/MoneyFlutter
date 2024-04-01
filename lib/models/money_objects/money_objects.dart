@@ -145,10 +145,10 @@ class MoneyObjects<T> {
         case MutationType.none:
           break;
         case MutationType.inserted:
-          db.insert(tableName, item.getPersistableJSon<T>());
+          db.insert(tableName, item.getPersistableJSon());
 
         case MutationType.changed:
-          db.update(tableName, item.uniqueId, item.getPersistableJSon<T>());
+          db.update(tableName, item.uniqueId, item.getPersistableJSon());
 
         case MutationType.deleted:
           db.delete(tableName, item.uniqueId);
@@ -175,10 +175,10 @@ class MoneyObjects<T> {
     return getCsvFromList(getListSortedById());
   }
 
-  String getCsvHeader(final List<Object> declarations) {
+  String getCsvHeader(final FieldDefinitions declarations) {
     final List<String> headerList = <String>[];
 
-    for (final dynamic field in declarations) {
+    for (final Field<dynamic> field in declarations) {
       if (field.serializeName != '') {
         headerList.add('"${field.serializeName}"');
       }
@@ -204,30 +204,28 @@ class MoneyObjects<T> {
     // This does not affect clients like Google sheets
     csv.write('\uFEFF');
 
-    final List<Object> declarations = getFieldsForClass<T>();
+    if (moneyObjects.isNotEmpty) {
+      final FieldDefinitions declarations = moneyObjects.first.fieldDefinitions;
 
-    // CSV Header
-    csv.writeln(getCsvHeader(declarations));
+      // CSV Header
+      csv.writeln(getCsvHeader(declarations));
 
-    // CSV Rows values
-    for (final MoneyObject item in moneyObjects) {
-      csv.writeln(toStringAsSeparatedValues(declarations, item, valueSeparator));
+      // CSV Rows values
+      for (final MoneyObject item in moneyObjects) {
+        csv.writeln(toStringAsSeparatedValues(declarations, item, valueSeparator));
+      }
     }
 
     return csv.toString();
   }
 
-  List<String> getFieldNames() {
-    final List<Object> declarations = getFieldsForClass<T>();
-    return getSerializableFieldNames(declarations);
-  }
-
   List<List<String>> getListOfValueList(List<MoneyObject> moneyObjects) {
-    final List<Object> declarations = getFieldsForClass<T>();
-
     List<List<String>> list = [];
-    for (final MoneyObject item in moneyObjects) {
-      list.add(getListOfValueAsStrings(declarations, item));
+    if (moneyObjects.isNotEmpty) {
+      final FieldDefinitions declarations = moneyObjects.first.fieldDefinitions;
+      for (final MoneyObject item in moneyObjects) {
+        list.add(getListOfValueAsStrings(declarations, item));
+      }
     }
     return list;
   }

@@ -28,12 +28,13 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
     if (payee != null && payee.id.value > -1) {
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
-        columnsToInclude: const <String>[
-          columnIdAccount,
-          columnIdDate,
-          columnIdCategory,
-          columnIdMemo,
-          columnIdAmount,
+        columnsToInclude: <Field>[
+          Transaction.fields.getFieldByName(columnIdAccount),
+          Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdCategory),
+          Transaction.fields.getFieldByName(columnIdMemo),
+          Transaction.fields.getFieldByName(columnIdMemo),
+          Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
           filter: (final Transaction transaction) => transaction.payee.value == payee.id.value,

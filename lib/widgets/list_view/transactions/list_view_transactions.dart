@@ -8,7 +8,7 @@ import 'package:money/views/view_transactions/dialog_mutate_transaction.dart';
 import 'package:money/widgets/list_view/list_view.dart';
 
 class ListViewTransactions extends StatefulWidget {
-  final List<String> columnsToInclude;
+  final List<Field> columnsToInclude;
   final List<Transaction> Function() getList;
   final int sortFieldIndex;
   final bool sortAscending;
@@ -30,7 +30,6 @@ class ListViewTransactions extends StatefulWidget {
 }
 
 class _ListViewTransactionsState extends State<ListViewTransactions> {
-  late final Fields<Transaction> columns;
   late int sortBy = widget.sortFieldIndex;
   late bool sortAscending = widget.sortAscending;
   late int selectedItemIndex = widget.selectedItemIndex;
@@ -38,7 +37,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   @override
   void initState() {
     super.initState();
-    columns = getFieldsForTable();
   }
 
   @override
@@ -54,7 +52,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       children: <Widget>[
         // Table Header
         MyListItemHeader<Transaction>(
-          columns: columns,
+          columns: widget.columnsToInclude,
           sortByColumn: sortBy,
           sortAscending: sortAscending,
           onTap: (final int index) {
@@ -72,7 +70,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         // Table list of rows
         Expanded(
           child: MyListView<Transaction>(
-              fields: columns,
+              fields: Fields<Transaction>(definitions: widget.columnsToInclude),
               list: transactions,
               selectedItemIds: ValueNotifier<List<int>>(<int>[selectedItemIndex]),
               unSelectable: false,
@@ -92,8 +90,8 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   }
 
   void sortList(List<Transaction> transactions) {
-    if (columns.definitions.isNotEmpty) {
-      final Field<Transaction, dynamic> fieldDefinition = columns.definitions[sortBy];
+    if (widget.columnsToInclude.isNotEmpty) {
+      final Field<dynamic> fieldDefinition = widget.columnsToInclude[sortBy];
       if (fieldDefinition.sort != null) {
         transactions.sort(
           (final Transaction a, final Transaction b) {
@@ -109,19 +107,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       return sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
     }
     return SortIndicator.none;
-  }
-
-  Fields<Transaction> getFieldsForTable() {
-    final List<Field<Transaction, dynamic>> listOfFields = <Field<Transaction, dynamic>>[];
-
-    for (String columnId in widget.columnsToInclude) {
-      final Field<Transaction, dynamic>? declared = getFieldByNameForClass<Transaction>(columnId);
-      if (declared != null) {
-        listOfFields.add(declared);
-      }
-    }
-
-    return Fields<Transaction>(definitions: listOfFields);
   }
 }
 

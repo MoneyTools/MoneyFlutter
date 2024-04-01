@@ -10,42 +10,53 @@ import 'package:money/models/money_objects/money_objects.dart';
 
  */
 class AccountAlias extends MoneyObject {
+  static Fields<AccountAlias>? fields;
+
   @override
   String getRepresentation() {
     return '${pattern.value} ${accountId.value}';
   }
 
   // 0
-  Field<AccountAlias, int> id = Field<AccountAlias, int>(
+  Field<int> id = Field<int>(
     importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
     useAsColumn: false,
-    valueForSerialization: (final AccountAlias instance) => instance.uniqueId,
+    valueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
   );
 
   // 1
-  Field<AccountAlias, String> pattern = Field<AccountAlias, String>(
+  Field<String> pattern = Field<String>(
     importance: 1,
     serializeName: 'Pattern',
     defaultValue: '',
   );
 
   // 2
-  Field<AccountAlias, int> flags = Field<AccountAlias, int>(
+  Field<int> flags = Field<int>(
     importance: 2,
     serializeName: 'Flags',
     defaultValue: 0,
   );
 
   // 3
-  Field<AccountAlias, String> accountId = Field<AccountAlias, String>(
+  Field<String> accountId = Field<String>(
     importance: 3,
     serializeName: 'AccountId',
     defaultValue: '',
   );
 
-  AccountAlias();
+  AccountAlias() {
+    fields ??= Fields<AccountAlias>(definitions: [
+      id,
+      pattern,
+      flags,
+      accountId,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+  }
 
   @override
   int get uniqueId => id.value;

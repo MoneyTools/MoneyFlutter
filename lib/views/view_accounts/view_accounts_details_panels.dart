@@ -6,7 +6,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     final List<PairXY> listOfPairXY = <PairXY>[];
 
     if (selectedIds.length == 1) {
-      final Account? account = getFirstSelectedItemFromSelectedList(selectedIds);
+      final Account? account = getFirstSelectedItemFromSelectedList(selectedIds) as Account?;
       if (account == null) {
         // this should not happen
         return const Text('Error account is null');
@@ -58,13 +58,13 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       selectedItemIndex = viewSetting.getInt(prefSelectedListItemId, -1);
     }
 
-    final columnsToDisplay = <String>[
-      columnIdDate,
-      columnIdPayee,
-      columnIdCategory,
-      columnIdStatus,
-      showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
-      showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
+    final FieldDefinitions columnsToDisplay = <Field>[
+      Transaction.fields.getFieldByName(columnIdDate),
+      Transaction.fields.getFieldByName(columnIdPayee),
+      Transaction.fields.getFieldByName(columnIdCategory),
+      Transaction.fields.getFieldByName(columnIdStatus),
+      Transaction.fields.getFieldByName(showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized),
+      Transaction.fields.getFieldByName(showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized),
     ];
 
     return ListViewTransactions(

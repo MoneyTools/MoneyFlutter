@@ -4,11 +4,11 @@ import 'package:money/models/fields/fields.dart';
 
 /// A Row for a Table view
 class MyListItemHeader<T> extends StatelessWidget {
-  final Fields<T> columns;
+  final FieldDefinitions columns;
   final int sortByColumn;
   final bool sortAscending;
   final Function onTap;
-  final Function(Field<T, dynamic>)? onLongPress;
+  final Function(Field<dynamic>)? onLongPress;
 
   const MyListItemHeader({
     super.key,
@@ -22,8 +22,8 @@ class MyListItemHeader<T> extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final List<Widget> headers = <Widget>[];
-    for (int i = 0; i < columns.definitions.length; i++) {
-      final Field<T, dynamic> columnDefinition = columns.definitions[i];
+    for (int i = 0; i < columns.length; i++) {
+      final Field<dynamic> columnDefinition = columns[i];
       headers.add(
         widgetHeaderButton(
           context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -11,14 +12,14 @@ import 'package:money/widgets/list_view/transactions/list_view_transactions.dart
 
 part 'view_loans_details_panels.dart';
 
-class ViewLoans extends ViewWidget<LoanPayment> {
+class ViewLoans extends ViewWidget {
   const ViewLoans({super.key});
 
   @override
-  State<ViewWidget<LoanPayment>> createState() => ViewLoansState();
+  State<ViewWidget> createState() => ViewLoansState();
 }
 
-class ViewLoansState extends ViewWidgetState<LoanPayment> {
+class ViewLoansState extends ViewWidgetState {
   @override
   String getClassNameSingular() {
     return 'Loan';
@@ -50,6 +51,11 @@ class ViewLoansState extends ViewWidgetState<LoanPayment> {
     required final bool showAsNativeCurrency,
   }) {
     return _getSubViewContentForTransactions(selectedIds);
+  }
+
+  @override
+  Fields<LoanPayment> getFieldsForTable() {
+    return LoanPayment.fields!;
   }
 
   @override

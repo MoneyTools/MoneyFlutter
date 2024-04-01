@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
@@ -12,16 +13,16 @@ import 'package:money/views/view.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/center_message.dart';
 
-class ViewTransfers extends ViewWidget<Transfer> {
+class ViewTransfers extends ViewWidget {
   const ViewTransfers({
     super.key,
   });
 
   @override
-  State<ViewWidget<Transfer>> createState() => ViewTransfersState();
+  State<ViewWidget> createState() => ViewTransfersState();
 }
 
-class ViewTransfersState extends ViewWidgetState<Transfer> {
+class ViewTransfersState extends ViewWidgetState {
   List<Transfer> listOfTransfers = [];
   Map<int, Transfer> loadedTransfers = {};
 
@@ -38,6 +39,11 @@ class ViewTransfersState extends ViewWidgetState<Transfer> {
   @override
   String getDescription() {
     return 'Transfers between accounts.';
+  }
+
+  @override
+  Fields<Transfer> getFieldsForTable() {
+    return Transfer.fields;
   }
 
   @override
@@ -78,7 +84,7 @@ class ViewTransfersState extends ViewWidgetState<Transfer> {
   Widget getPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
     if (selectedIds.isNotEmpty) {
       final int id = selectedIds.first;
-      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id);
+      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
       if (transfer != null) {
         return SingleChildScrollView(
           child: Center(

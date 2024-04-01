@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/date_range.dart';
@@ -9,7 +10,7 @@ import 'package:money/widgets/list_view/transactions/list_view_transaction_split
 import 'package:money/views/view.dart';
 import 'package:money/widgets/widgets.dart';
 
-class ViewTransactions extends ViewWidget<Transaction> {
+class ViewTransactions extends ViewWidget {
   final double startingBalance;
 
   const ViewTransactions({
@@ -18,10 +19,10 @@ class ViewTransactions extends ViewWidget<Transaction> {
   });
 
   @override
-  State<ViewWidget<Transaction>> createState() => ViewTransactionsState();
+  State<ViewWidget> createState() => ViewTransactionsState();
 }
 
-class ViewTransactionsState extends ViewWidgetState<Transaction> {
+class ViewTransactionsState extends ViewWidgetState {
   final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, true];
@@ -67,6 +68,11 @@ class ViewTransactionsState extends ViewWidgetState<Transaction> {
     setState(() {
       Data().transactions.deleteItem(instance);
     });
+  }
+
+  @override
+  Fields<Transaction> getFieldsForTable() {
+    return Transaction.fields;
   }
 
   @override

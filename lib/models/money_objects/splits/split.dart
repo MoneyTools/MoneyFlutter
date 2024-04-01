@@ -27,8 +27,8 @@ class Split extends MoneyObject {
   int transactionId;
 
   // 1
-  FieldId<Split> id = FieldId<Split>(
-    valueForSerialization: (final Split instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as Split).uniqueId,
   );
 
   // 2

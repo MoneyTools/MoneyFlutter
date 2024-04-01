@@ -4,7 +4,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/widgets/box.dart';
 
-class MoneyObjectCard<T> extends StatelessWidget {
+class MoneyObjectCard extends StatelessWidget {
   final String title;
   final MoneyObject? moneyObject;
 
@@ -33,7 +33,7 @@ class MoneyObjectCard<T> extends StatelessWidget {
       widgets.add(const Text('- not found -'));
     } else {
       widgets.addAll(
-        moneyObject!.buildWidgets<T>(onEdit: null, compact: true),
+        moneyObject!.buildWidgets(onEdit: null, compact: true),
       );
     }
 
@@ -59,7 +59,7 @@ class TransactionCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MoneyObjectCard<Transaction>(
+    return MoneyObjectCard(
       title: title,
       moneyObject: transaction,
     );

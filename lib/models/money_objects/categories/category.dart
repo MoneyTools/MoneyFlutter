@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -13,6 +14,8 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 export 'package:money/models/money_objects/categories/category_types.dart';
 
 class Category extends MoneyObject {
+  static Fields<Category>? fields;
+
   @override
   int get uniqueId => id.value;
 
@@ -26,133 +29,133 @@ class Category extends MoneyObject {
 
   /// Id
   /// 0|Id|INT|0||1
-  FieldId<Category> id = FieldId<Category>(
-    valueForSerialization: (final Category instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).uniqueId,
   );
 
   /// 1|ParentId|INT|0||0
-  FieldInt<Category> parentId = FieldInt<Category>(
+  FieldInt parentId = FieldInt(
     importance: 1,
     serializeName: 'ParentId',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final Category instance) => instance.parentId.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
   );
 
   /// Name
   /// 2|Name|nvarchar(80)|1||0
-  Field<Category, String> name = Field<Category, String>(
+  Field<String> name = Field<String>(
     importance: 2,
     type: FieldType.text,
     name: 'Name',
     serializeName: 'Name',
     defaultValue: '',
-    valueFromInstance: (final Category instance) => instance.name.value,
-    valueForSerialization: (final Category instance) => instance.name.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).name.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
   );
 
   /// Description
   /// 3|Description|nvarchar(255)|0||0
-  Field<Category, String> description = Field<Category, String>(
+  Field<String> description = Field<String>(
     importance: 3,
     type: FieldType.text,
     name: 'Description',
     serializeName: 'Description',
     defaultValue: '',
-    valueFromInstance: (final Category instance) => instance.description.value,
-    valueForSerialization: (final Category instance) => instance.description.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).description.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).description.value,
   );
 
   /// Type
   /// 4|Type|INT|1||0
-  Field<Category, CategoryType> type = Field<Category, CategoryType>(
+  Field<CategoryType> type = Field<CategoryType>(
     importance: 4,
     type: FieldType.text,
     align: TextAlign.center,
     serializeName: 'Type',
     defaultValue: CategoryType.none,
-    valueFromInstance: (final Category instance) => instance.getTypeAsText(),
-    valueForSerialization: (final Category instance) => instance.type.value.index,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).type.value.index,
   );
 
   /// Color
   /// 5|Color|nchar(10)|0||0
-  Field<Category, String> color = Field<Category, String>(
+  Field<String> color = Field<String>(
     importance: 5,
     serializeName: 'Color',
     type: FieldType.widget,
     columnWidth: ColumnWidth.small,
     defaultValue: '',
-    valueFromInstance: (final Category instance) => MyCircle(
-      colorFill: getColorFromString(instance.color.value),
+    valueFromInstance: (final MoneyObject instance) => MyCircle(
+      colorFill: getColorFromString((instance as Category).color.value),
       size: 12,
     ),
-    valueForSerialization: (final Category instance) => instance.color.value,
-    sort: (final Category a, final Category b, final bool ascending) =>
-        sortByString(a.color.value, b.color.value, ascending),
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).color.value,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByString((a as Category).color.value, (b as Category).color.value, ascending),
   );
 
   /// Budget
   /// 6|Budget|money|0||0
-  FieldAmount<Category> budget = FieldAmount<Category>(
+  FieldAmount budget = FieldAmount(
     importance: 99,
     name: 'Budget',
     useAsColumn: false,
-    valueFromInstance: (final Category instance) => instance.budget.value,
-    valueForSerialization: (final Category instance) => instance.budget.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).budget.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value,
   );
 
   /// Budget Balance
   /// 7|Balance|money|0||0
-  FieldAmount<Category> budgetBalance = FieldAmount<Category>(
+  FieldAmount budgetBalance = FieldAmount(
     importance: 80,
     name: 'BudgetBalance',
     useAsColumn: false,
-    valueFromInstance: (final Category instance) => instance.budgetBalance.value,
-    valueForSerialization: (final Category instance) => instance.budgetBalance.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
   );
 
   /// 8|Frequency|INT|0||0
-  FieldInt<Category> frequency = FieldInt<Category>(
+  FieldInt frequency = FieldInt(
     importance: 80,
     serializeName: 'Frequency',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final Category instance) => instance.frequency.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
   );
 
   /// 9|TaxRefNum|INT|0||0
-  FieldInt<Category> taxRefNum = FieldInt<Category>(
+  FieldInt taxRefNum = FieldInt(
     importance: 80,
     serializeName: 'TaxRefNum',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final Category instance) => instance.taxRefNum.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).taxRefNum.value,
   );
 
   //-----------------------------------
   // These properties are not persisted
 
   /// Count
-  FieldInt<Category> count = FieldInt<Category>(
+  FieldInt count = FieldInt(
     importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
-    valueFromInstance: (final Category instance) => instance.count.value,
-    valueForSerialization: (final Category instance) => instance.count.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).count.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).count.value,
   );
 
   /// Running Balance
-  Field<Category, double> runningBalance = Field<Category, double>(
+  Field<double> runningBalance = Field<double>(
     importance: 99,
     type: FieldType.amount,
     align: TextAlign.right,
     name: 'Balance',
     useAsDetailPanels: false,
     defaultValue: 0,
-    valueFromInstance: (final Category instance) => instance.runningBalance.value,
-    valueForSerialization: (final Category instance) => instance.runningBalance.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).runningBalance.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Category).runningBalance.value,
   );
 
   Category({
@@ -167,6 +170,25 @@ class Category extends MoneyObject {
     final int frequency = 0,
     final int taxRefNum = 0,
   }) {
+    fields ??= Fields<Category>(definitions: [
+      this.id,
+      this.parentId,
+      this.name,
+      this.description,
+      this.color,
+      this.type,
+      this.budget,
+      this.budgetBalance,
+      this.frequency,
+      this.taxRefNum,
+      // ignore: unnecessary_this
+      this.count,
+      // ignore: unnecessary_this
+      this.runningBalance,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
     this.id.value = id;
     this.parentId.value = parentId;
     this.name.value = name;
@@ -223,7 +245,7 @@ class Category extends MoneyObject {
   }
 
   static String getName(final Category? instance) {
-    return instance == null ? '' : instance.name.value;
+    return instance == null ? '' : (instance).name.value;
   }
 
   static CategoryType getTypeFromInt(final int index) {

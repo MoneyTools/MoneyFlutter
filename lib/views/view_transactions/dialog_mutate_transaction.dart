@@ -50,7 +50,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _transaction.buildWidgets<Transaction>(
+                children: _transaction.buildWidgets(
                   onEdit: isInEditingMode
                       ? () {
                           setState(() {
@@ -116,7 +116,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
                   title: 'Delete',
                   question: 'Are you sure you want to delete this?',
                   content: Column(
-                    children: transaction.buildWidgets<Transaction>(onEdit: null, compact: true),
+                    children: transaction.buildWidgets(onEdit: null, compact: true),
                   ),
                   onConfirm: () {
                     Data().transactions.deleteItem(transaction);
@@ -169,7 +169,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   }
 
   bool isDataModified() {
-    MyJson afterEditing = _transaction.getPersistableJSon<Transaction>();
+    MyJson afterEditing = _transaction.getPersistableJSon();
     MyJson diff = myJsonDiff(before: _transaction.valueBeforeEdit ?? {}, after: afterEditing);
     return diff.keys.isNotEmpty;
   }

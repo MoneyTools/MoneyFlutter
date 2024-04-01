@@ -20,7 +20,7 @@ class ListViewTransactionSplits extends StatefulWidget {
 }
 
 class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
-  final Fields<Split> _tableFields = Fields<Split>(definitions: <Field<Split, dynamic>>[]);
+  final Fields<Split> _tableFields = Fields<Split>(definitions: []);
   late final List<Split> rows;
   late int _sortBy = widget.defaultSortingField;
   bool _sortAscending = true;
@@ -38,7 +38,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
       children: <Widget>[
         // Table Header
         MyListItemHeader<Split>(
-          columns: _tableFields,
+          columns: _tableFields.definitions,
           sortByColumn: _sortBy,
           sortAscending: _sortAscending,
           onTap: (final int index) {

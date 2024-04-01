@@ -1,4 +1,7 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:money/helpers/date_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
@@ -7,6 +10,8 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 class RentBuilding extends MoneyObject {
+  static Fields<RentBuilding>? fields;
+
   @override
   int get uniqueId => id.value;
 
@@ -15,214 +20,216 @@ class RentBuilding extends MoneyObject {
 
   /// ID
   // 0    Id                      INT            0                    1
-  FieldId<RentBuilding> id = FieldId<RentBuilding>(
-    valueForSerialization: (final RentBuilding instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).uniqueId,
   );
 
   /// Name
   // 1    Name                    nvarchar(255)  1                    0
-  FieldString<RentBuilding> name = FieldString<RentBuilding>(
+  FieldString name = FieldString(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
-    valueFromInstance: (final RentBuilding instance) => instance.name.value,
-    valueForSerialization: (final RentBuilding instance) => instance.name.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).name.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).name.value,
   );
 
   /// Address
   // 2    Address                 nvarchar(255)  0                    0
-  FieldString<RentBuilding> address = FieldString<RentBuilding>(
+  FieldString address = FieldString(
     importance: 2,
     name: 'Address',
     serializeName: 'Address',
-    valueFromInstance: (final RentBuilding instance) => instance.address.value,
-    valueForSerialization: (final RentBuilding instance) => instance.address.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).address.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).address.value,
   );
 
   /// PurchasedDate
   // 3    PurchasedDate           datetime       0                    0
-  FieldDate<RentBuilding> purchasedDate = FieldDate<RentBuilding>(
+  FieldDate purchasedDate = FieldDate(
     importance: 2,
     name: 'Purchased Date',
     serializeName: 'PurchasedDate',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => dateAsIso8601OrDefault(instance.purchasedDate.value),
-    valueForSerialization: (final RentBuilding instance) => dateAsIso8601OrDefault(instance.purchasedDate.value),
+    valueFromInstance: (final MoneyObject instance) =>
+        dateAsIso8601OrDefault((instance as RentBuilding).purchasedDate.value),
+    valueForSerialization: (final MoneyObject instance) =>
+        dateAsIso8601OrDefault((instance as RentBuilding).purchasedDate.value),
   );
 
   /// PurchasedPrice
   // 4    PurchasedPrice          money          0                    0
-  FieldAmount<RentBuilding> purchasedPrice = FieldAmount<RentBuilding>(
+  FieldAmount purchasedPrice = FieldAmount(
     importance: 2,
     name: 'Purchased Price',
     serializeName: 'PurchasedPrice',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.purchasedPrice.value,
-    valueForSerialization: (final RentBuilding instance) => instance.purchasedPrice.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
   );
 
   /// LandValue
   // 5    LandValue          money          0                    0
-  FieldAmount<RentBuilding> landValue = FieldAmount<RentBuilding>(
+  FieldAmount landValue = FieldAmount(
     importance: 2,
     name: 'LandValue',
     serializeName: 'LandValue',
-    valueFromInstance: (final RentBuilding instance) => instance.landValue.value,
-    valueForSerialization: (final RentBuilding instance) => instance.landValue.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
   );
 
   /// EstimatedValue
   // 6    EstimatedValue          money          0                    0
-  FieldAmount<RentBuilding> estimatedValue = FieldAmount<RentBuilding>(
+  FieldAmount estimatedValue = FieldAmount(
     importance: 2,
     name: 'EstimatedValue',
     serializeName: 'EstimatedValue',
-    valueFromInstance: (final RentBuilding instance) => instance.estimatedValue.value,
-    valueForSerialization: (final RentBuilding instance) => instance.estimatedValue.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
   );
 
   /// OwnershipName1
   // 7    OwnershipName1          money          0                    0
-  FieldString<RentBuilding> ownershipName1 = FieldString<RentBuilding>(
+  FieldString ownershipName1 = FieldString(
     importance: 2,
     name: 'OwnershipName1',
     serializeName: 'OwnershipName1',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.ownershipName1.value,
-    valueForSerialization: (final RentBuilding instance) => instance.ownershipName1.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
   );
 
   /// OwnershipName2
   // 8    OwnershipName2          money          0                    0
-  FieldString<RentBuilding> ownershipName2 = FieldString<RentBuilding>(
+  FieldString ownershipName2 = FieldString(
     importance: 2,
     name: 'OwnershipName2',
     serializeName: 'OwnershipName2',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.ownershipName2.value,
-    valueForSerialization: (final RentBuilding instance) => instance.ownershipName2.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
   );
 
   /// OwnershipPercentage1
   // 9    OwnershipPercentage1          money          0                    0
-  FieldDouble<RentBuilding> ownershipPercentage1 = FieldDouble<RentBuilding>(
+  FieldDouble ownershipPercentage1 = FieldDouble(
     importance: 2,
     name: 'OwnershipPercentage1',
     serializeName: 'OwnershipPercentage1',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.ownershipPercentage1.value,
-    valueForSerialization: (final RentBuilding instance) => instance.ownershipPercentage1.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
   );
 
   /// OwnershipPercentage2
   // 10    OwnershipPercentage2          money          0                    0
-  FieldDouble<RentBuilding> ownershipPercentage2 = FieldDouble<RentBuilding>(
+  FieldDouble ownershipPercentage2 = FieldDouble(
     importance: 2,
     name: 'OwnershipPercentage2',
     serializeName: 'OwnershipPercentage2',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.ownershipPercentage2.value,
-    valueForSerialization: (final RentBuilding instance) => instance.ownershipPercentage2.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
   );
 
   /// Note
   // 11    Note          money          0                    0
-  FieldString<RentBuilding> note = FieldString<RentBuilding>(
+  FieldString note = FieldString(
     importance: 2,
     name: 'Note',
     serializeName: 'Note',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.note.value,
-    valueForSerialization: (final RentBuilding instance) => instance.note.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).note.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).note.value,
   );
 
   /// CategoryForTaxes
   // 12    CategoryForTaxes          money          0                    0
-  FieldInt<RentBuilding> categoryForTaxes = FieldInt<RentBuilding>(
+  FieldInt categoryForTaxes = FieldInt(
     importance: 2,
     name: 'CategoryForTaxes',
     serializeName: 'CategoryForTaxes',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.categoryForTaxes.value,
-    valueForSerialization: (final RentBuilding instance) => instance.categoryForTaxes.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForTaxes.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForTaxes.value,
   );
 
   /// CategoryForIncome
   // 13    CategoryForIncome          money          0                    0
-  FieldInt<RentBuilding> categoryForIncome = FieldInt<RentBuilding>(
+  FieldInt categoryForIncome = FieldInt(
     importance: 2,
     name: 'CategoryForIncome',
     serializeName: 'CategoryForIncome',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.categoryForIncome.value,
-    valueForSerialization: (final RentBuilding instance) => instance.categoryForIncome.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForIncome.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForIncome.value,
   );
 
   /// CategoryForInterest
   // 14    CategoryForInterest          money          0                    0
-  FieldInt<RentBuilding> categoryForInterest = FieldInt<RentBuilding>(
+  FieldInt categoryForInterest = FieldInt(
     importance: 2,
     name: 'CategoryForInterest',
     serializeName: 'CategoryForInterest',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.categoryForInterest.value,
-    valueForSerialization: (final RentBuilding instance) => instance.categoryForInterest.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForInterest.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForInterest.value,
   );
 
   /// CategoryForRepairs
   // 15    CategoryForRepairs          money          0                    0
-  FieldInt<RentBuilding> categoryForRepairs = FieldInt<RentBuilding>(
+  FieldInt categoryForRepairs = FieldInt(
     importance: 2,
     name: 'CategoryForRepairs',
     serializeName: 'CategoryForRepairs',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.categoryForRepairs.value,
-    valueForSerialization: (final RentBuilding instance) => instance.categoryForRepairs.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForRepairs.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForRepairs.value,
   );
 
   /// CategoryForMaintenance
   // 16    CategoryForMaintenance          money          0                    0
-  FieldInt<RentBuilding> categoryForMaintenance = FieldInt<RentBuilding>(
+  FieldInt categoryForMaintenance = FieldInt(
     importance: 2,
     name: 'CategoryForMaintenance',
     serializeName: 'CategoryForMaintenance',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.categoryForMaintenance.value,
-    valueForSerialization: (final RentBuilding instance) => instance.categoryForMaintenance.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForMaintenance.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForMaintenance.value,
   );
 
   /// CategoryForManagement
   // 17    CategoryForManagement          money          0                    0
-  FieldInt<RentBuilding> categoryForManagement = FieldInt<RentBuilding>(
+  FieldInt categoryForManagement = FieldInt(
     importance: 2,
     name: 'CategoryForManagement',
     serializeName: 'CategoryForManagement',
     useAsColumn: false,
-    valueFromInstance: (final RentBuilding instance) => instance.categoryForManagement.value,
-    valueForSerialization: (final RentBuilding instance) => instance.categoryForManagement.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForManagement.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForManagement.value,
   );
 
   int count = 0;
 
   /// Revenue
-  FieldAmount<RentBuilding> revenue = FieldAmount<RentBuilding>(
+  FieldAmount revenue = FieldAmount(
     importance: 20,
     name: 'Revenue',
-    valueFromInstance: (final RentBuilding instance) => instance.revenue.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).revenue.value,
   );
 
   /// Expenses
-  FieldAmount<RentBuilding> expense = FieldAmount<RentBuilding>(
+  FieldAmount expense = FieldAmount(
     importance: 21,
     name: 'Expenses',
-    valueFromInstance: (final RentBuilding instance) => instance.expense.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).expense.value,
   );
 
   /// Profit
-  FieldAmount<RentBuilding> profit = FieldAmount<RentBuilding>(
+  FieldAmount profit = FieldAmount(
     importance: 22,
     name: 'Profit',
-    valueFromInstance: (final RentBuilding instance) => instance.profit.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).profit.value,
   );
 
   List<int> categoryForIncomeTreeIds = <int>[];
@@ -261,6 +268,28 @@ class RentBuilding extends MoneyObject {
     17|CategoryForManagement|INT|0||0
    */
   RentBuilding() {
+    fields ??= Fields<RentBuilding>(definitions: [
+      this.id,
+      this.name,
+      this.address,
+      this.purchasedDate,
+      this.purchasedPrice,
+      this.landValue,
+      this.estimatedValue,
+      this.ownershipName1,
+      this.ownershipName2,
+      this.ownershipPercentage1,
+      this.ownershipPercentage2,
+      this.categoryForTaxes,
+      this.categoryForIncome,
+      this.categoryForInterest,
+      this.categoryForRepairs,
+      this.categoryForMaintenance,
+      this.categoryForManagement,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: address.value,

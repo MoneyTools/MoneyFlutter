@@ -18,8 +18,8 @@ class StockSplit extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   // 0
-  FieldId<StockSplit> id = FieldId<StockSplit>(
-    valueForSerialization: (final StockSplit instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   // 1

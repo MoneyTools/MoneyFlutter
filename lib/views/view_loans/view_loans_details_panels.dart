@@ -22,13 +22,13 @@ extension ViewLoansDetailsPanels on ViewLoansState {
     if (loan != null) {
       return ListViewTransactions(
         key: Key(loan.uniqueId.toString()),
-        columnsToInclude: const <String>[
-          columnIdAccount,
-          columnIdDate,
-          columnIdPayee,
-          columnIdCategory,
-          columnIdMemo,
-          columnIdAmount,
+        columnsToInclude: <Field>[
+          Transaction.fields.getFieldByName(columnIdAccount),
+          Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdPayee),
+          Transaction.fields.getFieldByName(columnIdCategory),
+          Transaction.fields.getFieldByName(columnIdMemo),
+          Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
             filter: (final Transaction transaction) => transaction.accountId.value == loan.accountId.value),

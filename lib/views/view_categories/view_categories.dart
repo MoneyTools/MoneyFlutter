@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
@@ -13,14 +14,14 @@ import 'package:money/widgets/list_view/transactions/list_view_transactions.dart
 
 part 'view_categories_details_panels.dart';
 
-class ViewCategories extends ViewWidget<Category> {
+class ViewCategories extends ViewWidget {
   const ViewCategories({super.key});
 
   @override
-  State<ViewWidget<Category>> createState() => ViewCategoriesState();
+  State<ViewWidget> createState() => ViewCategoriesState();
 }
 
-class ViewCategoriesState extends ViewWidgetState<Category> {
+class ViewCategoriesState extends ViewWidgetState {
   final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
 
@@ -92,6 +93,11 @@ class ViewCategoriesState extends ViewWidgetState<Category> {
   @override
   Widget buildHeader([final Widget? child]) {
     return super.buildHeader(renderToggles());
+  }
+
+  @override
+  Fields<Category> getFieldsForTable() {
+    return Category.fields!;
   }
 
   @override

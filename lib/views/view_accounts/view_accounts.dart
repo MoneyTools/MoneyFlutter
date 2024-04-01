@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -23,14 +24,14 @@ part 'view_accounts_helpers.dart';
 final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
 
 /// Main view for all Accounts
-class ViewAccounts extends ViewWidget<Account> {
+class ViewAccounts extends ViewWidget {
   const ViewAccounts({super.key});
 
   @override
-  State<ViewWidget<Account>> createState() => ViewAccountsState();
+  State<ViewWidget> createState() => ViewAccountsState();
 }
 
-class ViewAccountsState extends ViewWidgetState<Account> {
+class ViewAccountsState extends ViewWidgetState {
   final List<Widget> pivots = <Widget>[];
 
   @override
@@ -105,13 +106,18 @@ class ViewAccountsState extends ViewWidgetState<Account> {
     return 'Your main assets.';
   }
 
+  @override
+  Fields<Account> getFieldsForTable() {
+    return Account.fields!;
+  }
+
   // default currency for this view
   @override
   List<String> getCurrencyChoices(final SubViews subViewId, final List<int> selectedItems) {
     switch (subViewId) {
       case SubViews.chart: // Chart
       case SubViews.transactions: // Transactions
-        final Account? account = getFirstSelectedItemFromSelectedList(selectedItems);
+        final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
         if (account != null) {
           if (account.currency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based

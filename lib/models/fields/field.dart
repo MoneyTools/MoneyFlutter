@@ -4,9 +4,11 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/storage/data/data.dart';
+import 'package:money/models/money_objects/money_object.dart';
 
-class Field<C, T> {
+typedef FieldDefinitions = List<Field<dynamic>>;
+
+class Field<T> {
   late T value;
   String name;
   String serializeName;
@@ -20,17 +22,17 @@ class Field<C, T> {
   int importance;
 
   /// Get the value of the instance
-  dynamic Function(C) valueFromInstance;
+  dynamic Function(MoneyObject) valueFromInstance;
 
   /// Customize/override the edit widget
-  Widget Function(C, Function onEdited)? getEditWidget;
+  Widget Function(MoneyObject, Function onEdited)? getEditWidget;
 
   /// override the value edited
-  dynamic Function(C, dynamic)? setValue;
+  dynamic Function(MoneyObject, dynamic)? setValue;
 
   /// Get the value for storing the instance
-  dynamic Function(C) valueForSerialization;
-  int Function(C, C, bool)? sort;
+  dynamic Function(MoneyObject) valueForSerialization;
+  int Function(MoneyObject, MoneyObject, bool)? sort;
 
   // void operator = (final T newValue) {
   //   _value = newValue;
@@ -54,9 +56,6 @@ class Field<C, T> {
     this.useAsDetailPanels = true,
     this.sort,
   }) {
-    final String key = '$C.${getBestFieldDescribingName()}';
-    Data().mapClassToFields[key] = this;
-
     value = defaultValue;
     if (name.isEmpty) {
       name = serializeName;
@@ -65,15 +64,15 @@ class Field<C, T> {
     if (valueFromInstance == defaultCallbackValue) {
       switch (this.type) {
         case FieldType.numeric:
-          valueFromInstance = (final C c) => value as num;
+          valueFromInstance = (final MoneyObject c) => value as num;
           valueForSerialization = valueFromInstance;
         case FieldType.text:
-          valueFromInstance = (final C objectInstance) => value.toString();
+          valueFromInstance = (final MoneyObject objectInstance) => value.toString();
         case FieldType.amount:
           valueFromInstance =
-              (final C c) => Currency.getAmountAsStringUsingCurrency(value as double, iso4217code: currency);
+              (final MoneyObject c) => Currency.getAmountAsStringUsingCurrency(value as double, iso4217code: currency);
         case FieldType.date:
-          valueFromInstance = (final C c) => getDateAsText(value as DateTime);
+          valueFromInstance = (final MoneyObject c) => getDateAsText(value as DateTime);
         default:
           //
           debugPrint('No match');
@@ -129,7 +128,7 @@ class Field<C, T> {
   }
 }
 
-class FieldInt<C> extends Field<C, int> {
+class FieldInt extends Field<int> {
   FieldInt({
     super.importance,
     super.name,
@@ -148,7 +147,7 @@ class FieldInt<C> extends Field<C, int> {
         );
 }
 
-class FieldDouble<C> extends Field<C, double> {
+class FieldDouble extends Field<double> {
   FieldDouble({
     super.importance,
     super.name,
@@ -165,7 +164,7 @@ class FieldDouble<C> extends Field<C, double> {
         );
 }
 
-class FieldAmount<C> extends Field<C, double> {
+class FieldAmount extends Field<double> {
   FieldAmount({
     super.importance,
     super.name,
@@ -185,7 +184,7 @@ class FieldAmount<C> extends Field<C, double> {
         );
 }
 
-class FieldDate<C> extends Field<C, DateTime?> {
+class FieldDate extends Field<DateTime?> {
   FieldDate({
     super.importance,
     super.name,
@@ -204,7 +203,7 @@ class FieldDate<C> extends Field<C, DateTime?> {
         );
 }
 
-class FieldString<C> extends Field<C, String> {
+class FieldString extends Field<String> {
   FieldString({
     super.importance,
     super.name,
@@ -224,14 +223,14 @@ class FieldString<C> extends Field<C, String> {
           type: FieldType.text,
         ) {
     if (sort == null) {
-      super.sort = (final C a, final C b, final bool ascending) {
+      super.sort = (final MoneyObject a, final MoneyObject b, final bool ascending) {
         return sortByString(valueFromInstance(a), valueFromInstance(b), ascending);
       };
     }
   }
 }
 
-class DeclareNoSerialized<C, T> extends Field<C, T> {
+class DeclareNoSerialized<T> extends Field<T> {
   DeclareNoSerialized({
     required super.defaultValue,
     super.type,
@@ -242,7 +241,7 @@ class DeclareNoSerialized<C, T> extends Field<C, T> {
   }) : super(serializeName: '');
 }
 
-class FieldId<C> extends Field<C, int> {
+class FieldId extends Field<int> {
   FieldId({
     super.importance = 0,
     super.valueFromInstance,
@@ -253,58 +252,6 @@ class FieldId<C> extends Field<C, int> {
           useAsDetailPanels: false,
           defaultValue: -1,
         );
-}
-
-List<Field<dynamic, dynamic>> getFieldsForTypeName(final String typeName) {
-  final List<Field<dynamic, dynamic>> list = [];
-
-  for (final MapEntry<String, Field<dynamic, dynamic>> entry in Data().mapClassToFields.entries) {
-    if (entry.key.startsWith('$typeName.')) {
-      list.add(entry.value);
-    }
-  }
-  return list;
-}
-
-List<Field<C, dynamic>> getFieldsForClass<C>() {
-  final List<Field<C, dynamic>> list = <Field<C, dynamic>>[];
-
-  for (final MapEntry<String, Field<dynamic, dynamic>> entry in Data().mapClassToFields.entries) {
-    if (entry.key.startsWith('$C.')) {
-      list.add(entry.value as Field<C, dynamic>);
-    }
-  }
-
-  list.sort((final Field<C, dynamic> a, final Field<C, dynamic> b) {
-    int result = 0;
-
-    if (a.importance == -1 && b.importance >= 0) {
-      return 1;
-    }
-
-    if (b.importance == -1 && a.importance >= 0) {
-      return -1;
-    }
-
-    result = a.importance.compareTo(b.importance);
-
-    if (result == 0) {
-      // secondary sorting order is based on [serializeName]
-      return a.serializeName.compareTo(b.serializeName);
-    }
-    return result;
-  });
-
-  return list;
-}
-
-Field<C, dynamic>? getFieldByNameForClass<C>(final String fieldName) {
-  for (final MapEntry<Object, Object> entry in Data().mapClassToFields.entries) {
-    if (entry.key == '$C.$fieldName') {
-      return entry.value as Field<C, dynamic>;
-    }
-  }
-  return null;
 }
 
 Widget buildFieldWidgetForText({

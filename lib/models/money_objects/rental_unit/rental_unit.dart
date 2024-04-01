@@ -18,45 +18,45 @@ class RentUnit extends MoneyObject {
 
   /// Id
   /// 0|Id|INT|0||1
-  FieldId<RentUnit> id = FieldId<RentUnit>(
-    valueForSerialization: (final RentUnit instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   /// Building Id
   /// 1|Building|INT|1||0
-  FieldInt<RentUnit> building = FieldInt<RentUnit>(
+  FieldInt building = FieldInt(
     importance: 1,
     name: 'Building',
     serializeName: 'Building',
     useAsColumn: false,
-    valueForSerialization: (final RentUnit instance) => instance.building.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).building.value,
   );
 
   /// 2
   /// 2|Name|nvarchar(255)|1||0
-  FieldString<RentUnit> name = FieldString<RentUnit>(
+  FieldString name = FieldString(
     importance: 2,
     name: 'Name',
     serializeName: 'Name',
-    valueForSerialization: (final RentUnit instance) => instance.name.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).name.value,
   );
 
   /// 3
   /// 3|Renter|nvarchar(255)|0||0
-  FieldString<RentUnit> renter = FieldString<RentUnit>(
+  FieldString renter = FieldString(
     importance: 3,
     name: 'Renter',
     serializeName: 'Renter',
-    valueForSerialization: (final RentUnit instance) => instance.renter.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).renter.value,
   );
 
   /// 4
   /// 4|Note|nvarchar(255)|0||0
-  FieldString<RentUnit> note = FieldString<RentUnit>(
+  FieldString note = FieldString(
     importance: 4,
     name: 'Note',
     serializeName: 'Note',
-    valueForSerialization: (final RentUnit instance) => instance.note.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).note.value,
   );
 
   // not persisted field

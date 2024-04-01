@@ -1,5 +1,9 @@
 # Change Log
 
+## [version 1.7.0] 2024-03-01
+
+- Major refactor, simplify by reducing Template Field<C,T> to Field<T>
+
 ## [version 1.6.3] 2024-03-31
 
 ### Changed

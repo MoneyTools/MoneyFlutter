@@ -47,7 +47,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _moneyObject.buildWidgets<MoneyObject>(onEdit: () {
+                children: _moneyObject.buildWidgets(onEdit: () {
                   setState(() {
                     dataWasModified = isDataModified();
                   });
@@ -89,7 +89,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
   }
 
   bool isDataModified() {
-    MyJson afterEditing = _moneyObject.getPersistableJSon<MoneyObject>();
+    MyJson afterEditing = _moneyObject.getPersistableJSon();
     MyJson diff = myJsonDiff(before: _moneyObject.valueBeforeEdit ?? {}, after: afterEditing);
     return diff.keys.isNotEmpty;
   }

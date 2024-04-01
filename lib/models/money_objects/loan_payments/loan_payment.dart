@@ -6,6 +6,8 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 class LoanPayment extends MoneyObject {
+  static Fields<LoanPayment>? fields;
+
   @override
   int get uniqueId => id.value;
 
@@ -20,60 +22,60 @@ class LoanPayment extends MoneyObject {
 
   /// ID
   /// 0|Id|INT|1||0
-  FieldId<LoanPayment> id = FieldId<LoanPayment>(
-    valueForSerialization: (final LoanPayment instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).uniqueId,
   );
 
   /// 1|AccountId|INT|1||0
-  Field<LoanPayment, int> accountId = Field<LoanPayment, int>(
+  Field<int> accountId = Field<int>(
     importance: 1,
     name: 'Account',
     serializeName: 'AccountId',
     defaultValue: -1,
-    valueFromInstance: (final LoanPayment instance) => Account.getName(instance.accountInstance),
-    valueForSerialization: (final LoanPayment instance) => instance.accountId.value,
+    valueFromInstance: (final MoneyObject instance) => Account.getName((instance as LoanPayment).accountInstance),
+    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).accountId.value,
   );
 
   /// Date
   /// 2|Date|datetime|1||0
-  FieldDate<LoanPayment> date = FieldDate<LoanPayment>(
+  FieldDate date = FieldDate(
     importance: 2,
     serializeName: 'Date',
     useAsColumn: false,
-    valueFromInstance: (final LoanPayment instance) => dateAsIso8601OrDefault(instance.date.value),
-    valueForSerialization: (final LoanPayment instance) => dateAsIso8601OrDefault(instance.date.value),
+    valueFromInstance: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as LoanPayment).date.value),
+    valueForSerialization: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as LoanPayment).date.value),
   );
 
   /// 3
   /// 3|Principal|money|0||0
-  FieldAmount<LoanPayment> principal = FieldAmount<LoanPayment>(
+  FieldAmount principal = FieldAmount(
     importance: 3,
     name: 'Principal',
     serializeName: 'Principal',
-    valueFromInstance: (final LoanPayment instance) => instance.principal.value,
-    valueForSerialization: (final LoanPayment instance) => instance.principal.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
   );
 
   /// Interest
   /// 4|Interest|money|0||0
-  FieldAmount<LoanPayment> interest = FieldAmount<LoanPayment>(
+  FieldAmount interest = FieldAmount(
     importance: 4,
     name: 'Interest',
     serializeName: 'Interest',
-    valueFromInstance: (final LoanPayment instance) => instance.interest.value,
-    valueForSerialization: (final LoanPayment instance) => instance.interest.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
   );
 
   // 5
   // 5|Memo|nvarchar(255)|0||0
-  Field<LoanPayment, String> memo = Field<LoanPayment, String>(
+  Field<String> memo = Field<String>(
     importance: 99,
     type: FieldType.text,
     name: 'Memo',
     serializeName: 'Memo',
     defaultValue: '',
-    valueFromInstance: (final LoanPayment instance) => instance.memo.value,
-    valueForSerialization: (final LoanPayment instance) => instance.memo.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
   );
 
   // Not persisted
@@ -87,6 +89,17 @@ class LoanPayment extends MoneyObject {
     required final double interest,
     required final String memo,
   }) {
+    fields ??= Fields<LoanPayment>(definitions: [
+      this.id,
+      this.accountId,
+      this.date,
+      this.principal,
+      this.interest,
+      this.memo,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
     this.id.value = id;
     this.accountId.value = accountId;
     accountInstance = Data().accounts.get(this.accountId.value);

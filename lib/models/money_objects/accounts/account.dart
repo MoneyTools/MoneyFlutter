@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/accounts/picker_account_type.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -15,6 +16,8 @@ export 'package:money/models/money_objects/accounts/account_types.dart';
 
 /// Accounts like Banks
 class Account extends MoneyObject {
+  static Fields<Account>? fields;
+
   Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
   Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
 
@@ -31,59 +34,59 @@ class Account extends MoneyObject {
 
   // Id
   // 0|Id|INT|0||1
-  FieldId<Account> id = FieldId<Account>(
-    valueForSerialization: (final Account instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).uniqueId,
   );
 
   // Account ID
   // 1|AccountId|nchar(20)|0||0
-  FieldString<Account> accountId = FieldString<Account>(
+  FieldString accountId = FieldString(
     importance: 90,
     name: 'AccountId',
     serializeName: 'AccountId',
     useAsColumn: false,
-    valueForSerialization: (final Account instance) => instance.accountId.value,
-    setValue: (final Account instance, dynamic value) => instance.accountId.value = value as String,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).accountId.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).accountId.value = value as String,
   );
 
   // OFX Account Id
   // 2|OfxAccountId|nvarchar(50)|0||0
-  FieldString<Account> ofxAccountId = FieldString<Account>(
+  FieldString ofxAccountId = FieldString(
     importance: 1,
     name: 'OfxAccountId',
     serializeName: 'OfxAccountId',
     useAsColumn: false,
-    valueFromInstance: (final Account instance) => instance.ofxAccountId.value,
-    valueForSerialization: (final Account instance) => instance.ofxAccountId.value,
-    setValue: (final Account instance, dynamic value) => instance.ofxAccountId.value = value as String,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).ofxAccountId.value = value as String,
   );
 
   // Name
   // 3|Name|nvarchar(80)|1||0
-  FieldString<Account> name = FieldString<Account>(
+  FieldString name = FieldString(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
     columnWidth: ColumnWidth.large,
-    valueFromInstance: (final Account instance) => instance.name.value,
-    valueForSerialization: (final Account instance) => instance.name.value,
-    setValue: (final Account instance, dynamic value) => instance.name.value = value as String,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).name.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).name.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).name.value = value as String,
   );
 
   // Description
   // 4|Description|nvarchar(255)|0||0
-  FieldString<Account> description = FieldString<Account>(
+  FieldString description = FieldString(
     importance: 3,
     name: 'Description',
     serializeName: 'Description',
-    setValue: (final Account instance, dynamic value) => instance.description.value = value as String,
-    valueFromInstance: (final Account instance) => instance.description.value,
-    valueForSerialization: (final Account instance) => instance.description.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).description.value = value as String,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).description.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).description.value,
   );
 
   // Type of account
   // 5|Type|INT|1||0
-  Field<Account, AccountType> type = Field<Account, AccountType>(
+  Field<AccountType> type = Field<AccountType>(
       importance: 2,
       type: FieldType.text,
       align: TextAlign.center,
@@ -91,13 +94,13 @@ class Account extends MoneyObject {
       name: 'Type',
       serializeName: 'Type',
       defaultValue: AccountType.checking,
-      valueFromInstance: (final Account instance) => getTypeAsText(instance.type.value),
-      valueForSerialization: (final Account instance) => instance.type.value.index,
-      getEditWidget: (final Account instance, Function onEdited) {
+      valueFromInstance: (final MoneyObject instance) => getTypeAsText((instance as Account).type.value),
+      valueForSerialization: (final MoneyObject instance) => (instance as Account).type.value.index,
+      getEditWidget: (final MoneyObject instance, Function onEdited) {
         return pickerAccountType(
-          itemSelected: instance.type.value,
+          itemSelected: (instance as Account).type.value,
           onSelected: (AccountType newSelection) {
-            instance.type.value = newSelection;
+            (instance).type.value = newSelection;
             onEdited(); // notify container
           },
         );
@@ -105,18 +108,18 @@ class Account extends MoneyObject {
 
   // 6 Open Balance
   // 6|OpeningBalance|money|0||0
-  Field<Account, double> openingBalance = Field<Account, double>(
+  Field<double> openingBalance = Field<double>(
     name: 'Opening Balance',
     serializeName: 'OpeningBalance',
     defaultValue: 0,
     useAsColumn: false,
-    valueFromInstance: (final Account instance) => instance.openingBalance.value,
-    valueForSerialization: (final Account instance) => instance.openingBalance.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).openingBalance.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).openingBalance.value,
   );
 
   /// Currency
   /// 7|Currency|nchar(3)|0||0
-  Field<Account, String> currency = Field<Account, String>(
+  Field<String> currency = Field<String>(
     type: FieldType.widget,
     importance: 4,
     name: 'Currency',
@@ -125,150 +128,177 @@ class Account extends MoneyObject {
     columnWidth: ColumnWidth.tiny,
     defaultValue: '',
     useAsDetailPanels: true,
-    valueFromInstance: (final Account instance) => Currency.buildCurrencyWidget(instance.currency.value),
-    valueForSerialization: (final Account instance) => instance.currency.value,
-    sort: (final Account a, final Account b, final bool ascending) =>
-        sortByString(a.currency.value, b.currency.value, ascending),
+    valueFromInstance: (final MoneyObject instance) =>
+        Currency.buildCurrencyWidget((instance as Account).currency.value),
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).currency.value,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByString((a as Account).currency.value, (b as Account).currency.value, ascending),
   );
 
   /// OnlineAccount
   /// 8|OnlineAccount|INT|0||0
-  FieldInt<Account> onlineAccount = FieldInt<Account>(
+  FieldInt onlineAccount = FieldInt(
     name: 'OnlineAccount',
     serializeName: 'OnlineAccount',
     useAsColumn: false,
-    valueForSerialization: (final Account instance) => instance.onlineAccount.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).onlineAccount.value,
   );
 
   /// WebSite
   /// 9|WebSite|nvarchar(512)|0||0
-  Field<Account, String> webSite = Field<Account, String>(
+  Field<String> webSite = Field<String>(
     importance: 4,
     name: 'WebSite',
     serializeName: 'WebSite',
     defaultValue: '',
     useAsColumn: false,
-    valueFromInstance: (final Account instance) => instance.webSite.value,
-    valueForSerialization: (final Account instance) => instance.webSite.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).webSite.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).webSite.value,
   );
 
   /// ReconcileWarning
   /// 10|ReconcileWarning|INT|0||0
-  FieldInt<Account> reconcileWarning = FieldInt<Account>(
+  FieldInt reconcileWarning = FieldInt(
     serializeName: 'ReconcileWarning',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final Account instance) => instance.reconcileWarning.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).reconcileWarning.value,
   );
 
   /// LastSync Date & Time
   /// 11|LastSync|datetime|0||0
-  FieldDate<Account> lastSync = FieldDate<Account>(
+  FieldDate lastSync = FieldDate(
     importance: 90,
     serializeName: 'LastSync',
     useAsColumn: false,
-    valueFromInstance: (final Account instance) => dateAsIso8601OrDefault(instance.lastSync.value),
-    valueForSerialization: (final Account instance) => dateAsIso8601OrDefault(instance.lastSync.value),
+    valueFromInstance: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as Account).lastSync.value),
+    valueForSerialization: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as Account).lastSync.value),
   );
 
   /// SyncGuid
   /// 12|SyncGuid|uniqueidentifier|0||0
-  FieldString<Account> syncGuid = FieldString<Account>(
+  FieldString syncGuid = FieldString(
     serializeName: 'SyncGuid',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final Account instance) => instance.syncGuid.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).syncGuid.value,
   );
 
   /// Flags
   /// 13|Flags|INT|0||0
-  FieldInt<Account> flags = FieldInt<Account>(
+  FieldInt flags = FieldInt(
     serializeName: 'Flags',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final Account instance) => instance.flags.value,
-    valueForSerialization: (final Account instance) => instance.flags.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).flags.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).flags.value,
   );
 
   /// Last Balance date
   /// 14|LastBalance|datetime|0||0
-  FieldDate<Account> lastBalance = FieldDate<Account>(
+  FieldDate lastBalance = FieldDate(
     importance: 98,
     serializeName: 'LastBalance',
     useAsColumn: false,
-    valueFromInstance: (final Account instance) => dateAsIso8601OrDefault(instance.lastBalance.value),
-    valueForSerialization: (final Account instance) => dateAsIso8601OrDefault(instance.lastBalance.value),
+    valueFromInstance: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as Account).lastBalance.value),
+    valueForSerialization: (final MoneyObject instance) =>
+        dateAsIso8601OrDefault((instance as Account).lastBalance.value),
   );
 
   /// categoryIdForPrincipal
   /// 15 | CategoryIdForPrincipal|INT|0||0
-  Field<Account, int> categoryIdForPrincipal = Field<Account, int>(
+  Field<int> categoryIdForPrincipal = Field<int>(
     importance: 98,
     serializeName: 'CategoryIdForPrincipal',
     defaultValue: 0,
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final Account instance) => instance.categoryIdForPrincipal.value,
-    valueForSerialization: (final Account instance) => instance.categoryIdForPrincipal.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).categoryIdForPrincipal.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForPrincipal.value,
   );
 
   /// categoryIdForInterest
   /// 16|CategoryIdForInterest|INT|0||0
-  Field<Account, int> categoryIdForInterest = Field<Account, int>(
+  Field<int> categoryIdForInterest = Field<int>(
     importance: -1,
     serializeName: 'CategoryIdForInterest',
     defaultValue: 0,
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final Account instance) => instance.categoryIdForInterest.value,
-    valueForSerialization: (final Account instance) => instance.categoryIdForInterest.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).categoryIdForInterest.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForInterest.value,
   );
 
   // ------------------------------------------------
   // Properties that are not persisted
 
   /// Transaction Count
-  FieldInt<Account> count = FieldInt<Account>(
+  FieldInt count = FieldInt(
     importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.tiny,
     useAsDetailPanels: false,
-    valueFromInstance: (final Account instance) => instance.count.value,
-    valueForSerialization: (final Account instance) => instance.count.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).count.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).count.value,
   );
 
   /// Balance
-  FieldDouble<Account> balance = FieldDouble<Account>(
+  FieldDouble balance = FieldDouble(
     importance: 5,
     name: 'Balance',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final Account instance) => instance.currency.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).currency.value,
   );
 
   /// Balance Normalized use in the List view
-  FieldAmount<Account> balanceNormalized = FieldAmount<Account>(
+  FieldAmount balanceNormalized = FieldAmount(
     importance: 99,
     name: 'Balance(USD)',
     useAsDetailPanels: false,
-    valueFromInstance: (final Account instance) => instance.balanceNormalized.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).balanceNormalized.value,
   );
 
-  Field<Account, bool> isAccountOpen = Field<Account, bool>(
+  Field<bool> isAccountOpen = Field<bool>(
     name: 'Account is open',
     defaultValue: false,
     useAsColumn: false,
     useAsDetailPanels: true,
     type: FieldType.toggle,
-    valueFromInstance: (final Account instance) => !instance.isClosed(),
-    setValue: (final Account instance, dynamic value) {
-      instance.isOpen = value as bool;
+    valueFromInstance: (final MoneyObject instance) => !(instance as Account).isClosed(),
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Account).isOpen = value as bool;
       Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: instance);
     },
   );
 
   /// Constructor
   Account() {
+    fields ??= Fields<Account>(definitions: [
+      id,
+      accountId,
+      name,
+      description,
+      type,
+      openingBalance,
+      currency,
+      onlineAccount,
+      webSite,
+      reconcileWarning,
+      lastSync,
+      syncGuid,
+      flags,
+      lastBalance,
+      categoryIdForPrincipal,
+      categoryIdForInterest,
+      count,
+      balance,
+      balanceNormalized,
+      isAccountOpen
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
     buildFieldsAsWidgetForSmallScreen = () {
       Widget? originalCurrencyAndValue;
 
@@ -326,7 +356,7 @@ class Account extends MoneyObject {
   }
 
   static String getName(final Account? instance) {
-    return instance == null ? '' : instance.name.value;
+    return instance == null ? '' : (instance).name.value;
   }
 
   bool isBitOn(final int value, final int bitIndex) {

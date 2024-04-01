@@ -1,6 +1,7 @@
 // Imports
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/aliases/alias_types.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
@@ -9,6 +10,8 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 export 'package:money/models/money_objects/aliases/alias_types.dart';
 
 class Alias extends MoneyObject {
+  static Fields<Alias>? fields;
+
   @override
   int get uniqueId => id.value;
 
@@ -22,44 +25,44 @@ class Alias extends MoneyObject {
 
   /// ID
   /// 0    Id       INT            0                 1
-  FieldId<Alias> id = FieldId<Alias>(
-    valueForSerialization: (final Alias instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as Alias).uniqueId,
   );
 
   /// Pattern
   /// 1    Pattern  nvarchar(255)  1                 0
-  Field<Alias, String> pattern = Field<Alias, String>(
+  Field<String> pattern = Field<String>(
     type: FieldType.text,
     importance: 2,
     name: 'Pattern',
     serializeName: 'Pattern',
     defaultValue: '',
-    valueFromInstance: (final Alias instance) => instance.pattern.value,
-    valueForSerialization: (final Alias instance) => instance.pattern.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Alias).pattern.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Alias).pattern.value,
   );
 
   /// 2    Flags    INT            1                 0
-  Field<Alias, int> flags = Field<Alias, int>(
+  Field<int> flags = Field<int>(
     type: FieldType.text,
     align: TextAlign.center,
     importance: 3,
     name: 'Flags',
     serializeName: 'Flags',
     defaultValue: 0,
-    valueFromInstance: (final Alias instance) => getAliasTypeAsString(instance.type),
-    valueForSerialization: (final Alias instance) => instance.flags.value,
+    valueFromInstance: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
+    valueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
   );
 
   /// Payee
   /// 3 Payee INT 1 0
-  Field<Alias, int> payeeId = Field<Alias, int>(
+  Field<int> payeeId = Field<int>(
     type: FieldType.text,
     importance: 1,
     name: 'Payee',
     serializeName: 'Payee',
     defaultValue: 0,
-    valueFromInstance: (final Alias instance) => Payee.getName(instance.payeeInstance),
-    valueForSerialization: (final Alias instance) => instance.payeeId.value,
+    valueFromInstance: (final MoneyObject instance) => Payee.getName((instance as Alias).payeeInstance),
+    valueForSerialization: (final MoneyObject instance) => (instance as Alias).payeeId.value,
   );
 
   // Not persisted
@@ -72,6 +75,15 @@ class Alias extends MoneyObject {
     required final int flags,
     required final int payeeId,
   }) {
+    fields ??= Fields<Alias>(definitions: [
+      this.id,
+      this.pattern,
+      this.flags,
+      this.payeeId,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
     this.id.value = id;
     this.pattern.value = pattern;
     this.flags.value = flags;

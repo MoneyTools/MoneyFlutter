@@ -49,9 +49,9 @@ enum TransactionFlags {
   hasStatement,
 }
 
-const String columnIdAccount = 'Accounts';
+const String columnIdAccount = 'Account';
 const String columnIdDate = 'Date';
-const String columnIdPayee = 'Payee';
+const String columnIdPayee = 'Payee/Transfer';
 const String columnIdCategory = 'Category';
 const String columnIdStatus = 'Status';
 const String columnIdMemo = 'Memo';

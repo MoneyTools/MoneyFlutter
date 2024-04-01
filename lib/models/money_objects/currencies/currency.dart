@@ -28,56 +28,56 @@ class Currency extends MoneyObject {
   }
 
   // 0
-  FieldId<Currency> id = FieldId<Currency>(
-    valueForSerialization: (final Currency instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   /// 1
   /// 1    Symbol       nchar(20)     1                 0
-  FieldString<Currency> symbol = FieldString<Currency>(
+  FieldString symbol = FieldString(
     importance: 1,
     name: 'Symbol',
     serializeName: 'Symbol',
-    valueFromInstance: (final Currency instance) => instance.symbol.value,
-    valueForSerialization: (final Currency instance) => instance.symbol.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Currency).symbol.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Currency).symbol.value,
   );
 
   /// 2
   /// 2    name       nchar(20)     1                 0
-  FieldString<Currency> name = FieldString<Currency>(
+  FieldString name = FieldString(
     importance: 2,
     name: 'Name',
     serializeName: 'Name',
-    valueFromInstance: (final Currency instance) => instance.name.value,
-    valueForSerialization: (final Currency instance) => instance.name.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Currency).name.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Currency).name.value,
   );
 
   /// 3
   /// 3    Ratio        money         0                 0
-  FieldDouble<Currency> ratio = FieldDouble<Currency>(
+  FieldDouble ratio = FieldDouble(
     importance: 3,
     name: 'Ratio',
     serializeName: 'Ratio',
-    valueFromInstance: (final Currency instance) => instance.ratio.value,
-    valueForSerialization: (final Currency instance) => instance.ratio.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Currency).ratio.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Currency).ratio.value,
   );
 
   // 4
-  FieldDouble<Currency> lastRatio = FieldDouble<Currency>(
+  FieldDouble lastRatio = FieldDouble(
     importance: 4,
     name: 'LastRatio',
     serializeName: 'LastRatio',
-    valueFromInstance: (final Currency instance) => instance.lastRatio.value,
-    valueForSerialization: (final Currency instance) => instance.lastRatio.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
   );
 
   /// 5
   /// 5    CultureCode  nvarchar(80)  0                 0
-  FieldString<Currency> cultureCode = FieldString<Currency>(
+  FieldString cultureCode = FieldString(
     name: 'Culture Code',
     serializeName: 'CultureCode',
-    valueFromInstance: (final Currency instance) => instance.cultureCode.value,
-    valueForSerialization: (final Currency instance) => instance.cultureCode.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
   );
 
   Currency({

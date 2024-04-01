@@ -12,14 +12,14 @@ import 'package:money/widgets/sankey/sankey_colors.dart';
 import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/views/view.dart';
 
-class ViewCashFlow extends ViewWidget<SanKeyEntry> {
+class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});
 
   @override
-  State<ViewWidget<SanKeyEntry>> createState() => ViewCashFlowState();
+  State<ViewWidget> createState() => ViewCashFlowState();
 }
 
-class ViewCashFlowState extends ViewWidgetState<SanKeyEntry> {
+class ViewCashFlowState extends ViewWidgetState {
   List<Account> accountsOpened = Data().accounts.getOpenAccounts();
   double totalIncomes = 0.00;
   double totalExpenses = 0.00;

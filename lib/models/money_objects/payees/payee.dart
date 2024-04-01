@@ -1,4 +1,5 @@
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
@@ -12,6 +13,8 @@ export 'package:money/models/money_objects/money_object.dart';
   1|Name|nvarchar(255)|1||0
  */
 class Payee extends MoneyObject {
+  static Fields<Payee>? fields;
+
   @override
   int get uniqueId => id.value;
 
@@ -25,37 +28,46 @@ class Payee extends MoneyObject {
   }
 
   // 0
-  FieldId<Payee> id = FieldId<Payee>(
-    valueForSerialization: (final Payee instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as Payee).uniqueId,
   );
 
   // 1
-  Field<Payee, String> name = Field<Payee, String>(
+  Field<String> name = Field<String>(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
     defaultValue: '',
-    valueFromInstance: (final Payee instance) => instance.name.value,
-    valueForSerialization: (final Payee instance) => instance.name.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Payee).name.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Payee).name.value,
   );
 
-  FieldInt<Payee> count = FieldInt<Payee>(
+  FieldInt count = FieldInt(
     name: 'Transactions',
     columnWidth: ColumnWidth.small,
-    valueFromInstance: (final Payee instance) => instance.count.value,
-    valueForSerialization: (final Payee instance) => instance.count.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Payee).count.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Payee).count.value,
   );
 
-  Field<Payee, double> balance = DeclareNoSerialized<Payee, double>(
+  Field<double> balance = DeclareNoSerialized<double>(
     type: FieldType.amount,
     name: 'Balance',
     defaultValue: 0,
     align: TextAlign.right,
-    valueFromInstance: (final Payee instance) => instance.balance.value,
-    valueForSerialization: (final Payee instance) => instance.balance.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Payee).balance.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Payee).balance.value,
   );
 
   Payee() {
+    fields ??= Fields<Payee>(definitions: [
+      id,
+      name,
+      count,
+      balance,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),

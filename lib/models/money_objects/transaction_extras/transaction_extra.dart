@@ -17,26 +17,26 @@ class TransactionExtra extends MoneyObject {
 
   /// ID
   /// SQLite  0|Id|bigint|0||1
-  FieldId<TransactionExtra> id = FieldId<TransactionExtra>(
-    valueForSerialization: (final TransactionExtra instance) => instance.uniqueId,
+  FieldId id = FieldId(
+    valueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).uniqueId,
   );
 
   // 1
-  FieldInt<TransactionExtra> transaction = FieldInt<TransactionExtra>(
+  FieldInt transaction = FieldInt(
     serializeName: 'Transaction',
-    valueForSerialization: (final TransactionExtra instance) => instance.transaction.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).transaction.value,
   );
 
   // 2
-  FieldInt<TransactionExtra> taxYear = FieldInt<TransactionExtra>(
+  FieldInt taxYear = FieldInt(
     serializeName: 'TaxYear',
-    valueForSerialization: (final TransactionExtra instance) => instance.taxYear.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxYear.value,
   );
 
   // 4
-  FieldDate<TransactionExtra> taxDate = FieldDate<TransactionExtra>(
+  FieldDate taxDate = FieldDate(
     serializeName: 'TaxDate',
-    valueForSerialization: (final TransactionExtra instance) => instance.taxDate.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxDate.value,
   );
 
   /// Constructor

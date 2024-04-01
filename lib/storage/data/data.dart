@@ -69,9 +69,6 @@ class Data {
     return _instance;
   }
 
-  /// All Field definitions
-  Map<String, Field<dynamic, dynamic>> mapClassToFields = <String, Field<dynamic, dynamic>>{};
-
   /// 1 Account Aliases
   AccountAliases accountAliases = AccountAliases();
 
