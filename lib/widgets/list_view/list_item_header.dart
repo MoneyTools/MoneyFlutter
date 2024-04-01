@@ -65,7 +65,7 @@ Widget widgetHeaderButton(
   final VoidCallback? onClick,
   final VoidCallback? onLongPress,
 ) {
-  final Widget? icon = buildSortIconNameWidget(sortIndicator);
+  final Widget? orderIndicator = buildSortIconNameWidget(sortIndicator);
 
   return Expanded(
     flex: flex,
@@ -82,24 +82,75 @@ Widget widgetHeaderButton(
         ),
         onPressed: onClick,
         onLongPress: onLongPress,
-        clipBehavior: Clip.hardEdge,
-        child: Row(
-          children: [
-            if (textAlign == TextAlign.right || textAlign == TextAlign.center) const Spacer(),
-            Text(
-              text,
-              softWrap: false,
-              textAlign: textAlign,
-              overflow: TextOverflow.fade,
-              style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
-            ),
-            if (icon != null) icon,
-            if (textAlign == TextAlign.left || textAlign == TextAlign.center) const Spacer(),
-          ],
-        ),
+        // clipBehavior: Clip.hardEdge,
+        child: _buildTextAndSortOrder(context, textAlign, text, orderIndicator),
       ),
     ),
   );
+}
+
+Widget _buildTextAndSortOrder(
+  BuildContext context,
+  TextAlign align,
+  final String text,
+  final Widget? orderIndicator,
+) {
+  switch (align) {
+    case TextAlign.center:
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Spacer(),
+          Expanded(
+            flex: 9, // we use 9 to ensure that the Text takes precedent over the Spacer()
+            child: Text(
+              text,
+              softWrap: false,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.clip,
+              style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+            ),
+          ),
+          if (orderIndicator != null) orderIndicator,
+          const Spacer(),
+        ],
+      );
+
+    case TextAlign.right:
+    case TextAlign.end:
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Expanded(
+            child: Text(
+              text,
+              softWrap: false,
+              textAlign: TextAlign.right,
+              overflow: TextOverflow.clip,
+              style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+            ),
+          ),
+          if (orderIndicator != null) orderIndicator,
+        ],
+      );
+
+    case TextAlign.left:
+    case TextAlign.start:
+    default:
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(
+            text,
+            softWrap: false,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.clip,
+            style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+          ),
+          if (orderIndicator != null) orderIndicator,
+        ],
+      );
+  }
 }
 
 Widget? buildSortIconNameWidget(final SortIndicator sortIndicator) {

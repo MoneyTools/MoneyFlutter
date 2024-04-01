@@ -47,6 +47,7 @@ class Category extends MoneyObject {
   Field<String> name = Field<String>(
     importance: 2,
     type: FieldType.text,
+    columnWidth: ColumnWidth.largest,
     name: 'Name',
     serializeName: 'Name',
     defaultValue: '',
@@ -59,6 +60,7 @@ class Category extends MoneyObject {
   Field<String> description = Field<String>(
     importance: 3,
     type: FieldType.text,
+    columnWidth: ColumnWidth.large,
     name: 'Description',
     serializeName: 'Description',
     defaultValue: '',
@@ -84,7 +86,8 @@ class Category extends MoneyObject {
     importance: 5,
     serializeName: 'Color',
     type: FieldType.widget,
-    columnWidth: ColumnWidth.small,
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.tiny,
     defaultValue: '',
     valueFromInstance: (final MoneyObject instance) => MyCircle(
       colorFill: getColorFromString((instance as Category).color.value),
@@ -140,7 +143,7 @@ class Category extends MoneyObject {
   FieldInt count = FieldInt(
     importance: 98,
     name: 'Transactions',
-    columnWidth: ColumnWidth.small,
+    columnWidth: ColumnWidth.tiny,
     useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Category).count.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Category).count.value,
