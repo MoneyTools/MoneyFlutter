@@ -2,7 +2,10 @@ part of 'view_payees.dart';
 
 extension ViewPayeesDetailsPanels on ViewPayeesState {
   /// Details panels Chart panel for Payees
-  Widget _getSubViewContentForChart(final List<int> indices) {
+  Widget _getSubViewContentForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     final List<PairXY> list = <PairXY>[];
     for (final Payee item in getList()) {
       if (item.name.value != 'Transfer') {
@@ -15,7 +18,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
     });
 
     return Chart(
-      key: Key(indices.toString()),
+      key: Key(selectedIds.toString()),
       list: list.take(10).toList(),
       variableNameHorizontal: 'Payee',
       variableNameVertical: 'Transactions',

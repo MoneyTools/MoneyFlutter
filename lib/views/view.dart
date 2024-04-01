@@ -309,7 +309,7 @@ class ViewWidgetState extends State<ViewWidget> {
       case SubViews.details:
         return getPanelForDetails(selectedIds: selectedIds, isReadOnly: false);
       case SubViews.chart:
-        return getPanelForChart(selectedIds);
+        return getPanelForChart(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0);
       case SubViews.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -390,7 +390,10 @@ class ViewWidgetState extends State<ViewWidget> {
     );
   }
 
-  Widget getPanelForChart(final List<int> indices) {
+  Widget getPanelForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     return const Center(child: Text('No chart to display'));
   }
 

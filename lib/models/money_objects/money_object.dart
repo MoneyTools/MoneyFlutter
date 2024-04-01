@@ -22,6 +22,10 @@ abstract class MoneyObject {
 
   late FieldDefinitions fieldDefinitions = [];
 
+  FieldDefinitions getFieldDefinitionsForPanel() {
+    return fieldDefinitions.where((element) => element.useAsDetailPanels).toList();
+  }
+
   /// Return the best way to identify this instance, e.g. Name
   String getRepresentation() {
     return 'Id: $uniqueId'; // By default the ID is the best unique way
@@ -72,11 +76,6 @@ abstract class MoneyObject {
   ///
   /// Name: Bob
   /// Date: 2020-12-31
-  // List<Widget> Function(Function? onEdit, bool compact)? buildFieldsAsWidgetForDetailsPanel =
-  //     (Function? onEdit, bool compact) {
-  //   return [];
-  // };
-
   List<Widget> buildWidgets({
     Function? onEdit,
     bool compact = false,
@@ -85,11 +84,17 @@ abstract class MoneyObject {
       return [Text('No fields found for $this')];
     }
     final List<Widget> widgets = <Widget>[];
-    for (final fieldDefinition in fieldDefinitions) {
-      if (fieldDefinition.useAsDetailPanels) {
-        final Widget widget = getBestWidgetForFieldDefinition(this, fieldDefinition, onEdit, compact);
-        widgets.add(widget);
-      }
+    final definitions = getFieldDefinitionsForPanel();
+    for (final fieldDefinition in definitions) {
+      final Widget widget = getBestWidgetForFieldDefinition(
+        this,
+        fieldDefinition,
+        onEdit,
+        compact,
+        isFirstItem: fieldDefinition == definitions.first,
+        isLastItem: fieldDefinition == definitions.last,
+      );
+      widgets.add(widget);
     }
     return widgets;
   }
@@ -98,8 +103,10 @@ abstract class MoneyObject {
     final MoneyObject objectInstance,
     final Field<dynamic> fieldDefinition,
     final Function? onEdited,
-    final bool compact,
-  ) {
+    final bool compact, {
+    bool isFirstItem = false,
+    bool isLastItem = false,
+  }) {
     final isReadOnly = onEdited == null;
     final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
 
@@ -107,7 +114,7 @@ abstract class MoneyObject {
       // simple [Name  Value]
       return Container(
         decoration: BoxDecoration(
-          border: Border(top: BorderSide(color: Colors.grey.withAlpha(0xaa))),
+          border: (isFirstItem == true) ? null : Border(top: BorderSide(color: Colors.grey.withAlpha(0x66))),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

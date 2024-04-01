@@ -157,8 +157,11 @@ class ViewCategoriesState extends ViewWidgetState {
   }
 
   @override
-  Widget getPanelForChart(final List<int> indices) {
-    return _getSubViewContentForChart(indices);
+  Widget getPanelForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(selectedIds: selectedIds, showAsNativeCurrency: showAsNativeCurrency);
   }
 
   @override

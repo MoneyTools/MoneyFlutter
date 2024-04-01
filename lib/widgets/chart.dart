@@ -2,10 +2,13 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/center_message.dart';
+import 'package:clipboard/clipboard.dart';
 
 class PairXY {
   String xText = '';
@@ -18,12 +21,14 @@ class Chart extends StatelessWidget {
   final List<PairXY> list;
   final String variableNameHorizontal;
   final String variableNameVertical;
+  final String currency;
 
   const Chart({
     super.key,
     required this.list,
     this.variableNameVertical = 'Y',
     this.variableNameHorizontal = 'X',
+    this.currency = Constants.defaultCurrency,
   });
 
   @override
@@ -43,7 +48,10 @@ class Chart extends StatelessWidget {
       final BarChartGroupData bar = BarChartGroupData(
         x: i,
         barRods: <BarChartRodData>[
-          BarChartRodData(toY: entry.yValue.toDouble(), color: entry.yValue < 0 ? Colors.red : Colors.green),
+          BarChartRodData(
+            toY: entry.yValue.toDouble(),
+            color: entry.yValue < 0 ? Colors.red : Colors.green,
+          ),
         ],
       );
 
@@ -98,16 +106,36 @@ class Chart extends StatelessWidget {
               final int rodIndex,
             ) {
               return BarTooltipItem(
-                '${list[group.x].xText}\n${Currency.getAmountAsStringUsingCurrency(rod.toY)}',
+                getTooltipText(group, rod),
                 TextStyle(color: getColorTheme(context).primary),
                 textAlign: TextAlign.start,
               );
             },
           ),
+          touchCallback: (final FlTouchEvent event, final BarTouchResponse? barTouchResponse) {
+            if (event is FlLongPressStart) {
+              if (barTouchResponse != null) {
+                if (barTouchResponse.spot != null) {
+                  HapticFeedback.lightImpact();
+
+                  /*data[barTouchResponse.spot.touchedBarGroupIndex].toString()*/
+                  FlutterClipboard.copy(
+                          getTooltipText(barTouchResponse.spot!.touchedBarGroup, barTouchResponse.spot!.touchedRodData))
+                      .then((_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            content: Text('Copied to clipboard'),
+                            duration: Duration(seconds: 1),
+                          )));
+                }
+              }
+            }
+          },
         ),
       ),
     );
   }
+
+  String getTooltipText(BarChartGroupData group, BarChartRodData rod) =>
+      '${list[group.x].xText}\n${Currency.getAmountAsStringUsingCurrency(rod.toY, iso4217code: currency)}';
 
   Widget _buildLegendLeft(final double value, final TitleMeta meta) {
     final Widget widget = Text(

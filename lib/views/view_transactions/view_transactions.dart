@@ -140,7 +140,10 @@ class ViewTransactionsState extends ViewWidgetState {
   }
 
   @override
-  Widget getPanelForChart(final List<int> indices) {
+  Widget getPanelForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     final Map<String, num> tallyPerMonths = <String, num>{};
 
     final DateRange timePeriod =
