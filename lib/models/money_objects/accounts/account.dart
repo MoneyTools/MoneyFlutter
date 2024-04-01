@@ -42,9 +42,10 @@ class Account extends MoneyObject {
   // 1|AccountId|nchar(20)|0||0
   FieldString accountId = FieldString(
     importance: 90,
-    name: 'AccountId',
+    name: 'Account ID',
     serializeName: 'AccountId',
-    useAsColumn: false,
+    useAsColumn: true,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).accountId.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Account).accountId.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).accountId.value = value as String,
   );
