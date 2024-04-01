@@ -348,7 +348,7 @@ class Transaction extends MoneyObject {
   /// Balance native
   FieldDouble balance = FieldDouble(
     importance: 99,
-    name: 'Balance',
+    name: 'Balance_',
     useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Transaction).balance.value,
@@ -357,7 +357,7 @@ class Transaction extends MoneyObject {
   /// Balance native
   FieldString balanceAsTextNative = FieldString(
     importance: 99,
-    name: 'Balance',
+    name: columnIdBalance,
     align: TextAlign.right,
     columnWidth: ColumnWidth.small,
     useAsColumn: false,
