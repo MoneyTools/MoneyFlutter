@@ -3,6 +3,7 @@
 ## [version 1.7.0] 2024-03-01
 
 - Major refactor, simplify by reducing Template Field<C,T> to Field<T>
+- Long Press on Chart Bars will copy the tooltip text to the clipboard
 
 ## [version 1.6.3] 2024-03-31
 

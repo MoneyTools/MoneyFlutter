@@ -2,7 +2,10 @@ part of 'view_rentals.dart';
 
 extension ViewRentalsDetailsPanels on ViewRentalsState {
   /// Details panels Chart panel for Payees
-  Widget _getSubViewContentForChart(final List<int> indices) {
+  Widget _getSubViewContentForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     final List<PairXY> list = <PairXY>[];
     for (final RentBuilding entry in getList()) {
       list.add(PairXY(entry.name.value, entry.profit.value));

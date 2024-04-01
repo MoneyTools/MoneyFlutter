@@ -2,32 +2,39 @@ part of 'view_accounts.dart';
 
 extension ViewAccountsDetailsPanels on ViewAccountsState {
   /// Details panels Chart panel for Accounts
-  Widget _getSubViewContentForChart(final List<int> selectedIds) {
+  Widget _getSubViewContentForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     final List<PairXY> listOfPairXY = <PairXY>[];
 
     if (selectedIds.length == 1) {
       final Account? account = getFirstSelectedItemFromSelectedList(selectedIds) as Account?;
       if (account == null) {
         // this should not happen
-        return const Text('Error account is null');
+        return const Text('No account selected');
       }
 
       account.maxBalancePerYears.forEach((key, value) {
-        listOfPairXY.add(PairXY(key.toString(), value));
+        double valueCurrencyChoice = showAsNativeCurrency ? value : value * account.getCurrencyRatio();
+
+        listOfPairXY.add(PairXY(key.toString(), valueCurrencyChoice));
       });
       listOfPairXY.sort((a, b) => compareAsciiLowerCase(a.xText, b.xText));
 
       return Chart(
-        key: Key(selectedIds.toString()),
+        key: Key('$selectedIds $showAsNativeCurrency'),
         list: listOfPairXY.take(100).toList(),
         variableNameHorizontal: 'Year',
         variableNameVertical: 'FBar',
+        currency: showAsNativeCurrency ? account.currency.value : Constants.defaultCurrency,
       );
     } else {
       for (final MoneyObject item in getList()) {
         final Account account = item as Account;
         if (account.isOpen) {
-          listOfPairXY.add(PairXY(account.name.value, account.balance.value));
+          listOfPairXY.add(PairXY(
+              account.name.value, showAsNativeCurrency ? account.balance.value : account.balanceNormalized.value));
         }
       }
 

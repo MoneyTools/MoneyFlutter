@@ -2,7 +2,10 @@ part of 'view_loans.dart';
 
 extension ViewLoansDetailsPanels on ViewLoansState {
   /// Details panels Chart panel for Payees
-  Widget _getSubViewContentForChart(final List<int> indices) {
+  Widget _getSubViewContentForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     final List<PairXY> list = <PairXY>[];
     // for (final Loan entry in getList()) {
     //   list.add(PairXY(entry.name, entry.profit));

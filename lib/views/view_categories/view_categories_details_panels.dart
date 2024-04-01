@@ -2,7 +2,10 @@ part of 'view_categories.dart';
 
 extension ViewCategoriesDetailsPanels on ViewCategoriesState {
   /// Details panels Chart panel for Categories
-  Widget _getSubViewContentForChart(final List<int> selectedIds) {
+  Widget _getSubViewContentForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     final Map<String, num> map = <String, num>{};
 
     for (final Category item in getList()) {
