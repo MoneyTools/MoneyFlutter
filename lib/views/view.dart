@@ -193,7 +193,7 @@ class ViewWidgetState extends State<ViewWidget> {
     return Constants.defaultCurrency;
   }
 
-  List<MoneyObject> getList([bool includeDeleted = false]) {
+  List<MoneyObject> getList({bool includeDeleted = false, bool applyFilter = true}) {
     return <MoneyObject>[];
   }
 
@@ -275,15 +275,15 @@ class ViewWidgetState extends State<ViewWidget> {
   void onFilterTextChanged(final String text) {
     _deadlineTimer?.cancel();
     _deadlineTimer = Timer(const Duration(milliseconds: 500), () {
+      _deadlineTimer = null;
       setState(() {
         _filterByText = text.toLowerCase();
-        updateList();
+        list = getList();
       });
-      _deadlineTimer = null;
     });
   }
 
-  bool isMatchingFilterText(final MoneyObject instance) {
+  bool isMatchingFilters(final MoneyObject instance) {
     if (_filterByText.isEmpty && _filterByFieldsValue.isEmpty) {
       // nothing to filter by
       return true;
@@ -318,11 +318,6 @@ class ViewWidgetState extends State<ViewWidget> {
       default:
         return const Text('- empty -');
     }
-  }
-
-  /// refresh the [this.list] by apply the filters
-  void updateList() {
-    list = getList().where((final MoneyObject instance) => isMatchingFilterText(instance)).toList();
   }
 
   /// Override in your view
@@ -440,7 +435,7 @@ class ViewWidgetState extends State<ViewWidget> {
 
   List<String> getUniqueInstances(final Field<dynamic> columnToCustomerFilterOn) {
     final Set<String> set = <String>{}; // This is a Set()
-    final List<MoneyObject> list = getList();
+    final List<MoneyObject> list = getList(applyFilter: false);
     for (int i = 0; i < list.length; i++) {
       final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]).toString();
       set.add(fieldValue);
@@ -453,7 +448,7 @@ class ViewWidgetState extends State<ViewWidget> {
   List<double> getMinMaxValues(final Field<dynamic> fieldDefinition) {
     double min = 0.0;
     double max = 0.0;
-    final List<MoneyObject> list = getList();
+    final List<MoneyObject> list = getList(applyFilter: false);
     for (int i = 0; i < list.length; i++) {
       dynamic fieldValue = fieldDefinition.valueFromInstance(list[i]);
 
@@ -476,7 +471,7 @@ class ViewWidgetState extends State<ViewWidget> {
     String min = '';
     String max = '';
 
-    for (final item in getList()) {
+    for (final item in getList(applyFilter: false)) {
       final String fieldValue = columnToCustomerFilterOn.valueFromInstance(item) as String;
       if (min.isEmpty || min.compareTo(fieldValue) == 1) {
         min = fieldValue;
@@ -556,7 +551,11 @@ class ViewWidgetState extends State<ViewWidget> {
                   _filterByFieldsValue.add(fieldFilter);
                 }
               }
-              updateList();
+              if (_filterByFieldsValue.length == listOfValueSelected.length) {
+                // all unique values are selected so clear the column filter;
+                _filterByFieldsValue.clear();
+              }
+              list = getList();
             });
           },
         )

@@ -37,8 +37,12 @@ class ViewPayeesState extends ViewWidgetState {
   }
 
   @override
-  List<Payee> getList([bool includeDeleted = false]) {
-    return Data().payees.iterableList(includeDeleted).toList();
+  List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    return Data()
+        .payees
+        .iterableList(includeDeleted)
+        .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
+        .toList();
   }
 
   @override

@@ -30,6 +30,10 @@ class Fields<T> {
     return definitions.firstWhere((field) => field.name == name);
   }
 
+  Iterable<Field> get fieldDefinitionsForColumns {
+    return definitions.where((element) => element.useAsColumn == true);
+  }
+
   /// Used in table view
   Widget getRowOfColumns(final MoneyObject objectInstance) {
     final List<Widget> cells = <Widget>[];
@@ -93,69 +97,40 @@ class Fields<T> {
     final String lowerCaseTextToFind,
     final List<FieldFilter> filterByFieldsValue,
   ) {
-    bool atLeastOneFieldMatchText = false;
+    bool wasFoundFreeStyleTextSearch = false;
+    bool wasFoundColumnFilters = false;
 
-    for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
-      // Field Definition
-      final Field<dynamic> fieldDefinition = definitions[fieldIndex];
+    for (final fieldDefinition in fieldDefinitionsForColumns) {
+      // Value of this field
+      final String fieldValue = fieldDefinition.valueFromInstance(objectInstance).toString().toLowerCase();
 
-      // Only Field that are being displayed
-      if (fieldDefinition.useAsColumn == true) {
-        // Value of this field
-        final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
-
-        // field specific filters
-        if (!isMatchingFieldValues(
-          fieldDefinition,
-          rawValue,
-          filterByFieldsValue,
-        )) {
-          return false;
-        }
-
-        // check to see if at least one field contains the free style filter text
-        if (atLeastOneFieldMatchText == false) {
-          if (lowerCaseTextToFind.isEmpty ||
-              fieldDefinition.getString(rawValue).toLowerCase().contains(lowerCaseTextToFind)) {
-            if (filterByFieldsValue.isEmpty) {
-              // we can stop, we have one match and there's not field specific filters
-              return true;
+      if (filterByFieldsValue.isNotEmpty) {
+        for (final FieldFilter filter in filterByFieldsValue) {
+          if (fieldDefinition.name == filter.fieldName) {
+            if (fieldValue == filter.filterTextInLowerCase) {
+              // we have a specific field match
+              if (lowerCaseTextToFind.isEmpty) {
+                // speed up by short circuiting here
+                return true;
+              }
+              wasFoundColumnFilters = true;
             }
-            atLeastOneFieldMatchText = true;
           }
         }
       }
-    }
 
-    if (lowerCaseTextToFind.isEmpty) {
-      // this instance is valid
-      return true;
-    }
-    return atLeastOneFieldMatchText;
-  }
-
-  bool isMatchingFieldValues(
-    final Field<dynamic> fieldDefinition,
-    dynamic rawValue,
-    List<FieldFilter> filterByFieldsValue,
-  ) {
-    for (final filter in filterByFieldsValue) {
-      if (!isMatchingFieldValue(fieldDefinition, rawValue, filter)) {
-        return false;
+      // check to see if at least one field contains the free style filter text
+      if (lowerCaseTextToFind.isNotEmpty && fieldValue.contains(lowerCaseTextToFind)) {
+        if (filterByFieldsValue.isEmpty) {
+          // speed up by short circuiting here
+          return true;
+        }
+        wasFoundFreeStyleTextSearch = true;
       }
     }
-    return true;
-  }
 
-  bool isMatchingFieldValue(
-    final Field<dynamic> fieldDefinition,
-    dynamic rawValue,
-    FieldFilter filter,
-  ) {
-    if (fieldDefinition.name == filter.fieldName) {
-      return rawValue.toString().toLowerCase() == filter.filterTextInLowerCase;
-    }
-    return true;
+    // both filter mode are requested, thus we need both to have been matched
+    return wasFoundFreeStyleTextSearch && wasFoundColumnFilters;
   }
 
   String getCsvRowValues(final MoneyObject item) {

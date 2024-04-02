@@ -101,12 +101,14 @@ class ViewCategoriesState extends ViewWidgetState {
   }
 
   @override
-  List<Category> getList([bool includeDeleted = false]) {
+  List<Category> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final CategoryType? filterType = getSelectedCategoryType();
     return Data()
         .categories
         .iterableList(includeDeleted)
-        .where((final Category x) => (filterType == null || x.type.value == filterType) && isMatchingFilterText(x))
+        .where((final Category instance) =>
+            (filterType == null || instance.type.value == filterType) &&
+            (applyFilter == false || isMatchingFilters(instance)))
         .toList();
   }
 

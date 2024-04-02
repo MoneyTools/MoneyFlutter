@@ -38,8 +38,12 @@ class ViewAliasesState extends ViewWidgetState {
   }
 
   @override
-  List<Alias> getList([bool includeDeleted = false]) {
-    return Data().aliases.iterableList(includeDeleted).toList();
+  List<Alias> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    return Data()
+        .aliases
+        .iterableList(includeDeleted)
+        .where((instance) => applyFilter == false || isMatchingFilters(instance))
+        .toList();
   }
 
   @override

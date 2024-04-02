@@ -47,7 +47,7 @@ class ViewTransfersState extends ViewWidgetState {
   }
 
   @override
-  List<Transfer> getList([bool includeDeleted = false]) {
+  List<Transfer> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final List<Transaction> listOfTransactions = Data()
         .transactions
         .iterableList(includeDeleted)

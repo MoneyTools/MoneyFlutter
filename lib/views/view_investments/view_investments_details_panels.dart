@@ -1,6 +1,6 @@
 part of 'view_investments.dart';
 
-extension ViewRentalsDetailsPanels on ViewInvestmentsState {
+extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
   /// Details panels Chart panel for Payees
   Widget _getSubViewContentForChart({
     required final List<int> selectedIds,
@@ -13,24 +13,21 @@ extension ViewRentalsDetailsPanels on ViewInvestmentsState {
 
     return Chart(
       list: list,
-      variableNameHorizontal: 'Rental',
-      variableNameVertical: 'Profit',
+      variableNameHorizontal: 'Stock',
+      variableNameVertical: 'value',
     );
   }
 
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final RentBuilding? rental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
-    if (rental != null) {
+    final Investment? instance = getMoneyObjectFromFirstSelectedId<Investment>(indices, list);
+    if (instance != null) {
       final List<Transaction> list = getTransactions(
-        filter: (final Transaction transaction) => filterByRentalCategories(
-          transaction,
-          rental,
-        ),
+        filter: (final Transaction transaction) => transaction.uniqueId == instance.uniqueId,
       );
 
       return ListViewTransactions(
-        key: Key(rental.uniqueId.toString()),
+        key: Key(instance.uniqueId.toString()),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdDate),
@@ -43,33 +40,5 @@ extension ViewRentalsDetailsPanels on ViewInvestmentsState {
       );
     }
     return CenterMessage.noTransaction();
-  }
-
-  bool filterByRentalCategories(final Transaction t, final RentBuilding rental) {
-    final num categoryIdToMatch = t.categoryId.value;
-
-    if (categoryIdToMatch == Data().categories.splitCategoryId()) {
-      final List<Split> splits = Data().splits.getListFromTransactionId(t.id.value);
-
-      for (final Split split in splits) {
-        if (isMatchingCategories(split.categoryId, rental)) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    return isMatchingCategories(categoryIdToMatch, rental);
-  }
-
-  bool isMatchingCategories(final num categoryIdToMatch, final RentBuilding rental) {
-    Data().categories.getTreeIds(rental.categoryForIncome.value);
-
-    return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForManagementTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForRepairsTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForMaintenanceTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForTaxesTreeIds.contains(categoryIdToMatch) ||
-        rental.categoryForInterestTreeIds.contains(categoryIdToMatch);
   }
 }

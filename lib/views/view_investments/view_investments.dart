@@ -4,10 +4,6 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_object.dart';
-
-import 'package:money/models/money_objects/rent_buildings/rent_building.dart';
-import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
-import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/center_message.dart';
 
@@ -40,18 +36,13 @@ class ViewInvestmentsState extends ViewWidgetState {
     return 'Track your stock portfolio.';
   }
 
-  String getUnitsAsString(final List<RentUnit> listOfUnits) {
-    final List<String> listAsText = <String>[];
-    for (RentUnit unit in listOfUnits) {
-      listAsText.add('${unit.name}:${unit.renter}');
-    }
-
-    return listAsText.join('\n');
-  }
-
   @override
-  List<Investment> getList([bool includeDeleted = false]) {
-    return Data().investments.iterableList(includeDeleted).toList();
+  List<Investment> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    return Data()
+        .investments
+        .iterableList(includeDeleted)
+        .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
+        .toList();
   }
 
   @override

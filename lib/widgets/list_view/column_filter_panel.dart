@@ -52,7 +52,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
               }
             });
           },
-          child: Text('${areAllItemSelected() ? 'Unselect all' : 'Select all'} ${getIntAsText(list.length)}'),
+          child: Text('${areAllItemSelected() ? 'Unselect all' : 'Select all'} ${getItemCounts()}'),
         ),
         SizedBox(
           height: 400,
@@ -72,8 +72,22 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
             },
           ),
         ),
+        const Divider(),
+        Center(child: Text('${getIntAsText(getSelectedCount())} selected')),
       ],
     );
+  }
+
+  int getSelectedCount() {
+    return widget.listOfUniqueInstances.where((item) => item.isSelected).length;
+  }
+
+  String getItemCounts() {
+    if (list.length == widget.listOfUniqueInstances.length) {
+      return getIntAsText(list.length);
+    } else {
+      return '${getIntAsText(list.length)}/${getIntAsText(widget.listOfUniqueInstances.length)}';
+    }
   }
 
   /// true if all items are selected

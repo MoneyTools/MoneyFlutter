@@ -137,15 +137,17 @@ class ViewAccountsState extends ViewWidgetState {
   }
 
   @override
-  List<Account> getList([bool includeDeleted = false]) {
-    return Data()
-        .accounts
-        .activeAccount(
+  List<Account> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    final list = Data().accounts.activeAccount(
           getSelectedAccountType(),
           isActive: Settings().includeClosedAccounts ? null : true,
-        )
-        .where((final Account instance) => isMatchingFilterText(instance))
-        .toList();
+        );
+
+    if (applyFilter) {
+      return list.where((final Account instance) => isMatchingFilters(instance)).toList();
+    } else {
+      return list.toList();
+    }
   }
 
   @override

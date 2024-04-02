@@ -36,7 +36,7 @@ class ViewLoansState extends ViewWidgetState {
   }
 
   @override
-  List<LoanPayment> getList([bool includeDeleted = false]) {
+  List<LoanPayment> getList({bool includeDeleted = false, bool applyFilter = true}) {
     return Data().loanPayments.iterableList(includeDeleted).toList();
   }
 
