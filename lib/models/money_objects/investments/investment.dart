@@ -1,16 +1,14 @@
-import 'package:money/helpers/json_helper.dart';
-import 'package:money/models/money_objects/money_objects.dart';
+// ignore_for_file: unnecessary_this
 
-enum InvestmentType {
-  add,
-  remove,
-  buy,
-  sell,
-  non,
-  dividend,
-}
+import 'package:money/helpers/date_helper.dart';
+import 'package:money/models/money_objects/investments/investment_types.dart';
+import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
 
 class Investment extends MoneyObject {
+  static Fields<Investment>? fields;
+
   @override
   int get uniqueId => id.value;
 
@@ -34,6 +32,7 @@ class Investment extends MoneyObject {
     importance: 1,
     name: 'Security',
     serializeName: 'Security',
+    useAsColumn: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).security.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).security.value,
   );
@@ -98,9 +97,12 @@ class Investment extends MoneyObject {
 
   /// 9    InvestmentType  INT     1                    0
   FieldInt investmentType = FieldInt(
-    name: 'InvestmentType',
+    name: 'Action',
     serializeName: 'InvestmentType',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).investmentType.value,
+    align: TextAlign.center,
+    type: FieldType.text,
+    valueFromInstance: (final MoneyObject instance) =>
+        getInvestmentTypeTextFromValue((instance as Investment).investmentType.value),
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
   );
 
@@ -108,15 +110,20 @@ class Investment extends MoneyObject {
   FieldInt tradeType = FieldInt(
     name: 'TradeType',
     serializeName: 'TradeType',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).tradeType.value,
+    type: FieldType.text,
+    useAsColumn: false,
+    valueFromInstance: (final MoneyObject instance) =>
+        InvestmentTradeType.values[(instance as Investment).tradeType.value].name.toUpperCase(),
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).tradeType.value,
   );
 
   /// 11   TaxExempt       bit     0                    0
   FieldInt taxExempt = FieldInt(
-    name: 'TaxExempt',
+    name: 'Taxable',
     serializeName: 'TaxExempt',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
+    type: FieldType.text,
+    columnWidth: ColumnWidth.tiny,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxExempt.value == 1 ? 'No' : 'Yes',
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
   );
 
@@ -127,6 +134,59 @@ class Investment extends MoneyObject {
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).withholding.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value,
   );
+
+  /// --------------------------------------------
+  /// Not Persisted
+  ///
+
+  /// The actual transaction date.
+  Transaction? transactionInstance;
+
+  DateTime get date => this.transactionInstance!.dateTime.value!;
+
+  double get originalCostBasis {
+    // looking for the original un-split cost basis at the date of this transaction.
+    double proceeds = this.unitPrice.value * this.units.value;
+
+    if (this.transactionInstance!.amount.value != 0) {
+      // We may have paid more for the stock than "price" in a buy transaction because of brokerage fees and
+      // this can be included in the cost basis.  We may have also received less than "price" in a sale
+      // transaction, and that can also reduce our capital gain, so we use the transaction amount if we
+      // have one.
+      return this.transactionInstance!.amount.value.abs();
+    }
+
+    // But if the sale proceeds were not recorded for some reason, then we fall back on the proceeds.
+    return proceeds;
+  }
+
+  FieldString securitySymbol = FieldString(
+    name: 'Symbol',
+    useAsColumn: true,
+    columnWidth: ColumnWidth.small,
+    valueFromInstance: (final MoneyObject instance) =>
+        Data().securities.getSymbolFromId((instance as Investment).security.value),
+  );
+
+  FieldDate transactionDate = FieldDate(
+    name: 'Date',
+    useAsColumn: true,
+    columnWidth: ColumnWidth.normal,
+    valueFromInstance: (final MoneyObject instance) => getDateAsText((instance as Investment).date),
+  );
+
+  FieldString transactionAccountName = FieldString(
+      name: 'Account',
+      useAsColumn: true,
+      columnWidth: ColumnWidth.largest,
+      valueFromInstance: (final MoneyObject instance) {
+        final investment = instance as Investment;
+        final Transaction? transaction = Data().transactions.get(investment.uniqueId);
+        if (transaction != null) {
+          return Data().accounts.getNameFromId(transaction.accountId.value);
+        }
+        return '?not found?';
+      });
 
   Investment({
     required final int id, // 1
@@ -143,6 +203,27 @@ class Investment extends MoneyObject {
     required final int taxExempt, // 11
     required final double withholding, // 12
   }) {
+    fields ??= Fields<Investment>(definitions: [
+      this.id,
+      this.transactionDate,
+      this.transactionAccountName,
+      this.security,
+      this.securitySymbol,
+      this.unitPrice,
+      this.units,
+      this.commission,
+      this.markUpDown,
+      this.taxes,
+      this.fees,
+      this.load,
+      this.investmentType,
+      this.tradeType,
+      this.taxExempt,
+      this.withholding,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
     this.id.value = id;
     this.security.value = security;
     this.unitPrice.value = unitPrice;

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.7.1] 2024-03-02
+
+### Added
+
+- Work in progress = Investment transactions
+
 ## [version 1.7.0] 2024-03-01
 
 - Major refactor, simplify by reducing Template Field<C,T> to Field<T>

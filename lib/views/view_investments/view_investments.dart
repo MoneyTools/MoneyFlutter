@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
+import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
@@ -14,16 +15,16 @@ import 'package:money/widgets/chart.dart';
 import 'package:money/views/view.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
-part 'view_rentals_details_panels.dart';
+part 'view_investments_details_panels.dart';
 
 class ViewInvestments extends ViewWidget {
   const ViewInvestments({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewRentalsState();
+  State<ViewWidget> createState() => ViewInvestmentsState();
 }
 
-class ViewRentalsState extends ViewWidgetState {
+class ViewInvestmentsState extends ViewWidgetState {
   @override
   String getClassNamePlural() {
     return 'Investment';
@@ -49,8 +50,8 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  List<RentBuilding> getList([bool includeDeleted = false]) {
-    return Data().rentBuildings.iterableList(includeDeleted).toList();
+  List<Investment> getList([bool includeDeleted = false]) {
+    return Data().investments.iterableList(includeDeleted).toList();
   }
 
   @override
@@ -70,14 +71,14 @@ class ViewRentalsState extends ViewWidgetState {
   }
 
   @override
-  Fields<RentBuilding> getFieldsForTable() {
-    return RentBuilding.fields!;
+  Fields<Investment> getFieldsForTable() {
+    return Investment.fields!;
   }
 
   @override
   void onDeleteConfirmedByUser(final MoneyObject instance) {
     setState(() {
-      Data().rentBuildings.deleteItem(instance);
+      Data().investments.deleteItem(instance);
     });
   }
 }

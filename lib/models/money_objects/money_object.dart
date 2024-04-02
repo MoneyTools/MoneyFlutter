@@ -55,7 +55,13 @@ abstract class MoneyObject {
     }
   }
 
-  // factory MoneyObject.fromJson(final MyJson row) {
+  bool get isInserted => mutation == MutationType.inserted;
+
+  bool get isDeleted => mutation == MutationType.deleted;
+
+  bool get isChanged => mutation == MutationType.changed;
+
+// factory MoneyObject.fromJson(final MyJson row) {
   //   return MoneyObject();
   // }
 

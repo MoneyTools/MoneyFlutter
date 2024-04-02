@@ -92,3 +92,30 @@ List<String> padList(List<String> list, int length, String padding) {
   }
   return paddedList;
 }
+
+class SortedSet<T> {
+  final List<T> _elements = [];
+  final int Function(T a, T b) compare; // Custom comparator function
+
+  SortedSet(this.compare);
+
+  void add(T element) {
+    int insertionIndex = _findInsertionIndex(element);
+    _elements.insert(insertionIndex, element);
+  }
+
+  int _findInsertionIndex(T element) {
+    int low = 0;
+    int high = _elements.length;
+    while (low < high) {
+      final mid = (low + high) ~/ 2;
+      final comparison = compare(element, _elements[mid]);
+      if (comparison < 0) {
+        high = mid;
+      } else {
+        low = mid + 1;
+      }
+    }
+    return low;
+  }
+}

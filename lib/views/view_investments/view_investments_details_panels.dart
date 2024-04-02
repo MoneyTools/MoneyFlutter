@@ -1,14 +1,14 @@
-part of 'view_rentals.dart';
+part of 'view_investments.dart';
 
-extension ViewRentalsDetailsPanels on ViewRentalsState {
+extension ViewRentalsDetailsPanels on ViewInvestmentsState {
   /// Details panels Chart panel for Payees
   Widget _getSubViewContentForChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
     final List<PairXY> list = <PairXY>[];
-    for (final RentBuilding entry in getList()) {
-      list.add(PairXY(entry.name.value, entry.profit.value));
+    for (final Investment entry in getList()) {
+      list.add(PairXY(entry.security.value.toString(), entry.originalCostBasis));
     }
 
     return Chart(
