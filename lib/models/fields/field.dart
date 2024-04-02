@@ -98,11 +98,11 @@ class Field<T> {
       case FieldType.numeric:
         return value.toString();
       case FieldType.numericShorthand:
-        return getNumberAsShorthandText(value as num);
+        return getAmountAsShorthandText(value as num);
       case FieldType.amount:
         return Currency.getAmountAsStringUsingCurrency(value);
       case FieldType.amountShorthand:
-        return getNumberAsShorthandText(value as double);
+        return getAmountAsShorthandText(value as double);
       case FieldType.widget:
         return value;
       case FieldType.text:
@@ -281,7 +281,7 @@ Widget buildFieldWidgetForCurrency({
       padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
       child: Text(
         shorthand
-            ? getNumberAsShorthandText(value as num)
+            ? getAmountAsShorthandText(value as num)
             : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
         textAlign: align,
       ),
@@ -300,7 +300,7 @@ Widget buildFieldWidgetForNumber({
     child: Padding(
       padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
       child: Text(
-        shorthand ? getNumberAsShorthandText(value) : getNumberText(value),
+        shorthand ? getAmountAsShorthandText(value) : getNumberShorthandText(value),
         textAlign: align,
       ),
     ),

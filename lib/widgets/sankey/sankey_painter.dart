@@ -58,7 +58,7 @@ class SankeyPainter extends CustomPainter {
     double lastHeight = ratioIncomeToExpense * totalIncome;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     final Block targetRevenues = Block(
-      'Revenue\n${getNumberAsShorthandText(totalIncome)}',
+      'Revenue\n${getAmountAsShorthandText(totalIncome)}',
       ui.Rect.fromLTWH(horizontalCenter - (columnWidth), verticalStackOfTargets, columnWidth, lastHeight),
       colors.colorIncome,
       colors.textColor,
@@ -71,7 +71,7 @@ class SankeyPainter extends CustomPainter {
     lastHeight = ratioIncomeToExpense * totalExpense;
     lastHeight = max(Block.minBlockHeight, lastHeight);
     final Block targetExpenses = Block(
-      'Expenses\n-${getNumberAsShorthandText(totalExpense)}',
+      'Expenses\n-${getAmountAsShorthandText(totalExpense)}',
       ui.Rect.fromLTWH(horizontalCenter + columnWidth * 0.1, topOfCenters, columnWidth, lastHeight),
       colors.colorExpense,
       colors.textColor,
@@ -192,7 +192,7 @@ class SankeyPainter extends CustomPainter {
       rect = ui.Rect.fromLTWH(
           horizontalCenter + (columnWidth * 0.1), targetExpenses.rect.bottom + (gap), columnWidth, lastHeight);
     }
-    text += getNumberAsShorthandText(netAmount);
+    text += getAmountAsShorthandText(netAmount);
 
     final Block targetNet = Block(
       text,
@@ -231,7 +231,7 @@ class SankeyPainter extends CustomPainter {
       final ui.Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
       String text = compactView ? shortenLongText(element.name) : element.name;
       final Block source = Block(
-        '$text: ${getNumberAsShorthandText(element.value)}',
+        '$text: ${getAmountAsShorthandText(element.value)}',
         rect,
         color,
         textColor,

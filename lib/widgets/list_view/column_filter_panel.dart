@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:money/helpers/string_helper.dart';
 
 class ColumnFilterPanel extends StatefulWidget {
   final List<ValueSelection> listOfUniqueInstances;
@@ -51,7 +52,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
               }
             });
           },
-          child: Text(areAllItemSelected() ? 'Unselect all' : 'Select all'),
+          child: Text('${areAllItemSelected() ? 'Unselect all' : 'Select all'} ${getIntAsText(list.length)}'),
         ),
         SizedBox(
           height: 400,

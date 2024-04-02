@@ -71,7 +71,7 @@ class Payee extends MoneyObject {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),
-          rightBottomAsString: getNumberAsShorthandText(count.value),
+          rightBottomAsString: getAmountAsShorthandText(count.value),
         );
   }
 

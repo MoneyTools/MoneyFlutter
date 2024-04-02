@@ -8,11 +8,11 @@ String getIntAsText(final int value) {
   return NumberFormat.decimalPattern().format(value);
 }
 
-String getNumberText(final num value) {
+String getNumberShorthandText(final num value) {
   return NumberFormat.compact().format(value);
 }
 
-String getNumberAsShorthandText(final num value, {final int decimalDigits = 0, final String symbol = ''}) {
+String getAmountAsShorthandText(final num value, {final int decimalDigits = 0, final String symbol = ''}) {
   return NumberFormat.compactCurrency(
     decimalDigits: decimalDigits,
     symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
