@@ -15,7 +15,7 @@ class Securities extends MoneyObjects<Security> {
     if (security == null) {
       return '?$security?';
     }
-    return security.symbol;
+    return security.symbol.value;
   }
 
   @override

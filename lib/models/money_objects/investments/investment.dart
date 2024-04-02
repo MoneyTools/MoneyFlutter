@@ -1,6 +1,5 @@
 // ignore_for_file: unnecessary_this
 
-import 'package:money/helpers/date_helper.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -8,6 +7,12 @@ import 'package:money/storage/data/data.dart';
 
 class Investment extends MoneyObject {
   static Fields<Investment>? fields;
+  static getFields() {
+    if (fields == null) {
+      Investment.fromJson({});
+    }
+    return fields;
+  }
 
   @override
   int get uniqueId => id.value;
@@ -17,7 +22,6 @@ class Investment extends MoneyObject {
 
   @override
   String getRepresentation() {
-    // TODO
     return security.value.toString();
   }
 
@@ -172,7 +176,7 @@ class Investment extends MoneyObject {
     name: 'Date',
     useAsColumn: true,
     columnWidth: ColumnWidth.normal,
-    valueFromInstance: (final MoneyObject instance) => getDateAsText((instance as Investment).date),
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).date,
   );
 
   FieldString transactionAccountName = FieldString(

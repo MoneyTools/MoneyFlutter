@@ -98,9 +98,9 @@ extension MyJsonExtensions on MyJson {
   /// or
   /// '1999-12-25'
   DateTime? getDate(
-    final String key, [
+    final String key, {
     final DateTime? defaultIfNotFound,
-  ]) {
+  }) {
     final dynamic value = this[key];
 
     if (value == null || value.toString().isEmpty) {

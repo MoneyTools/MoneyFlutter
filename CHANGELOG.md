@@ -4,6 +4,7 @@
 
 ### Added
 
+- Stock view
 - Work in progress = Investment transactions
 
 ## [version 1.7.0] 2024-03-01

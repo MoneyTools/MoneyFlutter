@@ -158,9 +158,15 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
     ),
     const NavigationDestination(
       label: 'Investments',
-      tooltip: 'Stocks tracking',
+      tooltip: 'Investment transactions',
       icon: Icon(Icons.stacked_line_chart),
       selectedIcon: Icon(Icons.stacked_line_chart),
+    ),
+    const NavigationDestination(
+      label: 'Stocks',
+      tooltip: 'Stocks tracking',
+      icon: Icon(Icons.candlestick_chart_outlined),
+      selectedIcon: Icon(Icons.candlestick_chart_outlined),
     )
   ];
   if (settings.rentals) {

@@ -63,7 +63,7 @@ class ViewInvestmentsState extends ViewWidgetState {
 
   @override
   Fields<Investment> getFieldsForTable() {
-    return Investment.fields!;
+    return Investment.getFields();
   }
 
   @override

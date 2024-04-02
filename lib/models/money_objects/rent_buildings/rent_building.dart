@@ -303,7 +303,7 @@ class RentBuilding extends MoneyObject {
     instance.id.value = row.getInt('Id', -1);
     instance.name.value = row.getString('Name');
     instance.address.value = row.getString('Address');
-    instance.purchasedDate.value = row.getDate('PurchasedDate', DateTime.now());
+    instance.purchasedDate.value = row.getDate('PurchasedDate', defaultIfNotFound: DateTime.now());
     instance.purchasedPrice.value = row.getDouble('PurchasedPrice');
     instance.landValue.value = row.getDouble('LandValue');
     instance.estimatedValue.value = row.getDouble('EstimatedValue');

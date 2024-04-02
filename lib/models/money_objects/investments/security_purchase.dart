@@ -42,13 +42,13 @@ class SecurityPurchase {
   /// Get market value of remaining units.
   /// </summary>
   double? get latestMarketValue {
-    return this.futuresFactor * this.unitsRemaining * this.security!.price;
+    return this.futuresFactor * this.unitsRemaining * this.security!.price.value;
   }
 
   double get futuresFactor {
     double factor = 1;
     // futures prices are always listed by the instance.  But wen you buy 1 contract, you always get 100 futures in that contract
-    if (security!.securityType == SecurityType.futures.index) {
+    if (security!.securityType.value == SecurityType.futures.index) {
       factor = 100;
     }
     return factor;

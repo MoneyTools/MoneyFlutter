@@ -38,6 +38,7 @@ enum ViewId {
   viewTransactions,
   viewTransfers,
   viewInvestments,
+  viewStocks,
   viewRentals,
 }
 

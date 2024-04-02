@@ -72,13 +72,15 @@ class Field<T> {
           valueFromInstance =
               (final MoneyObject c) => Currency.getAmountAsStringUsingCurrency(value as double, iso4217code: currency);
         case FieldType.date:
-          valueFromInstance = (final MoneyObject c) => getDateAsText(value as DateTime);
+          valueFromInstance = (final MoneyObject c) => dateToString(value as DateTime);
         default:
           //
           debugPrint('No match');
       }
     }
     if (valueForSerialization == defaultCallbackValue) {
+      // if there's no override function
+      // apply the same data value to serial
       valueForSerialization = valueFromInstance;
     }
   }
@@ -346,6 +348,8 @@ Widget buildWidgetFromTypeAndValue(
       return buildFieldWidgetForCurrency(value: value, shorthand: true, align: align);
     case FieldType.widget:
       return Center(child: value as Widget);
+    case FieldType.date:
+      return buildFieldWidgetForText(text: value is DateTime ? dateToString(value) : value.toString(), align: align);
     case FieldType.text:
     default:
       return buildFieldWidgetForText(text: value.toString(), align: align);

@@ -25,6 +25,7 @@ import 'package:money/views/view_investments/view_investments.dart';
 import 'package:money/views/view_loans/view_loans.dart';
 import 'package:money/views/view_payees/view_payees.dart';
 import 'package:money/views/view_rentals/view_rentals.dart';
+import 'package:money/views/view_stocks.dart';
 import 'package:money/views/view_transactions/view_transactions.dart';
 import 'package:money/views/view_transfers.dart';
 import 'package:money/views/view_welcome.dart';
@@ -322,6 +323,9 @@ class MainView extends StatelessWidget {
 
       case ViewId.viewInvestments:
         return const ViewInvestments();
+
+      case ViewId.viewStocks:
+        return const ViewStocks();
 
       case ViewId.viewRentals:
         return const ViewRentals();

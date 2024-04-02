@@ -38,8 +38,7 @@ class Fields<T> {
   Widget getRowOfColumns(final MoneyObject objectInstance) {
     final List<Widget> cells = <Widget>[];
 
-    for (int columnIndex = 0; columnIndex < definitions.length; columnIndex++) {
-      final Field<dynamic> fieldDefinition = definitions[columnIndex];
+    for (final Field fieldDefinition in definitions) {
       final dynamic value = fieldDefinition.valueFromInstance(objectInstance);
       cells.add(
         Expanded(

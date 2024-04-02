@@ -107,7 +107,7 @@ class CostBasisCalculator {
           group = SecurityGroup();
           group.date = this.toDate;
           group.security = s;
-          group.type = SecurityType.values[s.securityType];
+          group.type = SecurityType.values[s.securityType.value];
           group.purchases = [];
           holdingsBySecurity[s] = group;
         }
@@ -224,7 +224,7 @@ class CostBasisCalculator {
         }
       }
 
-      if (s.securityType == SecurityType.equity.index) {
+      if (s.securityType.value == SecurityType.equity.index) {
         // companies don't want to deal with fractional stocks, they usually distribute a "cash in lieu"
         // transaction in this case to compensate you for the rounding error.
         double floor = total.floor().toDouble();

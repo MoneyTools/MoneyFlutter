@@ -12,6 +12,13 @@ export 'package:money/models/money_objects/aliases/alias_types.dart';
 class Alias extends MoneyObject {
   static Fields<Alias>? fields;
 
+  static getFields() {
+    if (fields == null) {
+      Alias.fromJson({});
+    }
+    return fields;
+  }
+
   @override
   int get uniqueId => id.value;
 
