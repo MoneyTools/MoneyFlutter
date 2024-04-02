@@ -96,7 +96,7 @@ class Field<T> {
   String getString(final dynamic value) {
     switch (type) {
       case FieldType.numeric:
-        return (value as num).toString();
+        return value.toString();
       case FieldType.numericShorthand:
         return getNumberAsShorthandText(value as num);
       case FieldType.amount:
@@ -140,10 +140,10 @@ class FieldInt extends Field<int> {
     super.getEditWidget,
     super.sort,
     super.columnWidth,
+    super.align = TextAlign.right,
+    super.type = FieldType.numeric,
   }) : super(
           defaultValue: -1,
-          align: TextAlign.right,
-          type: FieldType.numeric,
         );
 }
 
@@ -194,12 +194,12 @@ class FieldDate extends Field<DateTime?> {
     super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,
+    super.columnWidth = ColumnWidth.small,
     super.getEditWidget,
   }) : super(
           defaultValue: null,
           align: TextAlign.center,
           type: FieldType.date,
-          columnWidth: ColumnWidth.small,
         );
 }
 

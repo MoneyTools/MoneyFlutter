@@ -155,6 +155,12 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
       tooltip: 'View transfers between accounts',
       icon: Icon(Icons.swap_horiz),
       selectedIcon: Icon(Icons.swap_horiz),
+    ),
+    const NavigationDestination(
+      label: 'Investments',
+      tooltip: 'Stocks tracking',
+      icon: Icon(Icons.stacked_line_chart),
+      selectedIcon: Icon(Icons.stacked_line_chart),
     )
   ];
   if (settings.rentals) {

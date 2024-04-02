@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -160,5 +161,13 @@ class Transactions extends MoneyObjects<Transaction> {
       }
       return false;
     });
+  }
+
+  List<Transaction> getAllTransactionsByDate() {
+    final List<Transaction> theListOfAllTransactionIncludingHiddenOne = iterableList().toList(growable: false);
+    theListOfAllTransactionIncludingHiddenOne.sort(
+      (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value, true),
+    );
+    return theListOfAllTransactionIncludingHiddenOne;
   }
 }

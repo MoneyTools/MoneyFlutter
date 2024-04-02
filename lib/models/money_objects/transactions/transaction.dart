@@ -1,4 +1,6 @@
 // Imports
+// ignore_for_file: unnecessary_this
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
@@ -9,6 +11,7 @@ import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
+import 'package:money/models/money_objects/investments/investment_types.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
@@ -26,6 +29,7 @@ export 'package:money/models/money_objects/transactions/transaction_types.dart';
 /// All transactions are loaded in this class [Transaction] and [Split]
 class Transaction extends MoneyObject {
   static Fields<Transaction>? _fields;
+
   static get fields => _fields ??= Fields<Transaction>(definitions: []);
 
   @override
@@ -707,6 +711,16 @@ class Transaction extends MoneyObject {
       return nativeValue;
     }
     return nativeValue * accountInstance!.getCurrencyRatio();
+  }
+
+  Investment? getOrCreateInvestment() {
+    if (this.investmentInstance == null) {
+      this.investmentInstance = Data().investments.get(this.uniqueId);
+      if (this.investmentInstance != null) {
+        this.investmentInstance!.transactionInstance = this;
+      }
+    }
+    return this.investmentInstance;
   }
 
   void checkTransfers(List dangling, List<Account> deletedAccounts) {

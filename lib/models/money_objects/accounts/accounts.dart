@@ -3,6 +3,8 @@ import 'dart:math';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/money_objects/investments/cost_basis.dart';
+import 'package:money/models/money_objects/investments/security_purchase.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -86,6 +88,10 @@ class Accounts extends MoneyObjects<Account> {
         in Data().transactions.iterableList().sorted((a, b) => sortByDate(a.dateTime.value, b.dateTime.value))) {
       final Account? account = get(t.accountId.value);
       if (account != null) {
+        if (account.type.value == AccountType.moneyMarket || account.type.value == AccountType.investment) {
+          t.getOrCreateInvestment();
+        }
+
         account.count.value++;
         account.balance.value += t.amount.value;
         account.balanceNormalized.value += t.getNormalizedAmount(t.amount.value);
@@ -101,6 +107,20 @@ class Accounts extends MoneyObjects<Account> {
         final double currentMaxBalanceValue =
             account.maxBalancePerYears[yearOfTheTransaction] ?? IntValues.minSigned(32).toDouble();
         account.maxBalancePerYears[yearOfTheTransaction] = max(currentMaxBalanceValue, account.balance.value);
+      }
+    }
+
+    final investmentAccounts = Data()
+        .accounts
+        .iterableList()
+        .where(
+            (account) => account.type.value == AccountType.moneyMarket || account.type.value == AccountType.investment)
+        .toList();
+
+    CostBasisCalculator calculator = CostBasisCalculator(DateTime.now());
+    for (final account in investmentAccounts) {
+      for (SecurityPurchase sp in calculator.getHolding(account).getHoldings()) {
+        account.balance.value += sp.latestMarketValue!;
       }
     }
   }

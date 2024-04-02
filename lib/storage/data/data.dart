@@ -11,6 +11,7 @@ import 'package:money/models/money_objects/aliases/aliases.dart';
 import 'package:money/models/money_objects/categories/categories.dart';
 import 'package:money/models/money_objects/currencies/currencies.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
+import 'package:money/models/money_objects/investments/investment_types.dart';
 import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/online_accounts/online_accounts.dart';
@@ -258,31 +259,31 @@ class Data {
         ..number.value = transactionSource.number.value
         ..memo.value = transactionSource.memo.value;
       //u.Status = t.Status; no !!!
-
-      // Investment i = t.Investment;
-      // if (i != null) {
-      //   Investment j = u.GetOrCreateInvestment();
-      //   j.Units = i.Units;
-      //   j.UnitPrice = i.UnitPrice;
-      //   j.Security = i.Security;
-      //   switch (i.Type) {
-      //     case InvestmentType.Add:
-      //       j.Type = InvestmentType.Remove;
-      //       break;
-      //     case InvestmentType.Remove:
-      //       j.Type = InvestmentType.Add;
-      //       break;
-      //     case InvestmentType.None: // assume it's a remove
-      //       i.Type = InvestmentType.Remove;
-      //       j.Type = InvestmentType.Add;
-      //       break;
-      //     case InvestmentType.Buy:
-      //     case InvestmentType.Sell:
-      //       throw new MoneyException("Transfer must be of type 'Add' or 'Remove'.");
-      //   }
-      //   u.Investment = j;
-      // }
     }
+    // Investment? i = relatedTransaction.investmentInstance;
+    // if (i != null) {
+    //   Investment j = transactionSource.getOrCreateInvestment();
+    //   j.units = i.units;
+    //   j.unitPrice = i.unitPrice;
+    //   j.security = i.security;
+    //   //   switch (i.Type) {
+    //   //     case InvestmentType.Add:
+    //   //       j.Type = InvestmentType.Remove;
+    //   //       break;
+    //   //     case InvestmentType.Remove:
+    //   //       j.Type = InvestmentType.Add;
+    //   //       break;
+    //   //     case InvestmentType.None: // assume it's a remove
+    //   //       i.Type = InvestmentType.Remove;
+    //   //       j.Type = InvestmentType.Add;
+    //   //       break;
+    //   //     case InvestmentType.Buy:
+    //   //     case InvestmentType.Sell:
+    //   //       throw new MoneyException("Transfer must be of type 'Add' or 'Remove'.");
+    //   //   }
+    //   //   u.Investment = j;
+    // }
+
     return relatedTransaction;
   }
 
@@ -377,5 +378,33 @@ class Data {
 
     Settings().trackMutations.reset();
     Settings().fileManager.rememberWhereTheDataCameFrom('');
+  }
+
+  /// <summary>
+  /// Get a list of all Investment transactions grouped by security
+  /// </summary>
+  /// <param name="filter">The account filter or null if you want them all</param>
+  /// <param name="toDate">Get all transactions up to but not including this date</param>
+  /// <returns></returns>
+  Map<Security, List<Investment>> getTransactionsGroupedBySecurity(Function(Account)? filter, DateTime toDate) {
+    Map<Security, List<Investment>> transactionsBySecurity = {};
+    //     SecurityComparer());
+    //
+    // Sort all add, remove, buy, sell transactions by date and by security.
+    for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
+      if (t.dateTime.value!.millisecond < toDate.millisecond &&
+          (filter == null || filter(t.accountInstance!)) &&
+          t.investmentInstance != null &&
+          t.investmentInstance!.investmentType.value != InvestmentType.none.index) {
+        Investment i = t.investmentInstance!;
+        Security? s = Data().securities.get(i.security.value);
+        if (s != null) {
+          List<Investment> list = transactionsBySecurity[s] ?? [];
+          transactionsBySecurity[s] = list;
+          list.add(i);
+        }
+      }
+    }
+    return transactionsBySecurity;
   }
 }
