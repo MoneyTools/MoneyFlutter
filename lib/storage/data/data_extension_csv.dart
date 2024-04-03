@@ -38,7 +38,7 @@ extension DataFromCsv on Data {
     final String fullPathToFile = MyFileSystems.append(subFolder, filename);
 
     List<MyJson> rows = [];
-    String fileContent = await MyFileSystems().readFile(fullPathToFile);
+    String fileContent = await MyFileSystems.readFile(fullPathToFile);
     List<String> lines = getLinesFromTextBlob(fileContent);
     if (lines.length > 1) {
       final List<String> csvHeaderColumns = getColumnInCsvLine(lines[0]);

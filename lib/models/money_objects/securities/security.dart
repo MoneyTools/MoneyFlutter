@@ -75,6 +75,7 @@ class Security extends MoneyObject {
   FieldString cuspid = FieldString(
     name: 'CUSPID',
     serializeName: 'CUSPID',
+    useAsColumn: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Security).cuspid.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
   );
@@ -83,6 +84,7 @@ class Security extends MoneyObject {
   FieldInt securityType = FieldInt(
     name: 'Type',
     serializeName: 'Type',
+    columnWidth: ColumnWidth.tiny,
     valueFromInstance: (final MoneyObject instance) => (instance as Security).securityType.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
   );

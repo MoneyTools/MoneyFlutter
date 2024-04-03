@@ -4,6 +4,7 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/securities/security.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view.dart';
+import 'package:money/views/view_stocks/stock_chart.dart';
 
 class ViewStocks extends ViewWidget {
   const ViewStocks({
@@ -39,5 +40,23 @@ class ViewStocksState extends ViewWidgetState {
   List<Security> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final List<Security> list = Data().securities.iterableList(includeDeleted).toList();
     return list;
+  }
+
+  @override
+  Widget getPanelForChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Security? selected = getFirstSelectedItem() as Security?;
+    if (selected != null) {
+      final String symbol = selected.symbol.value;
+      if (symbol.isNotEmpty) {
+        return StockChartWidget(
+          key: Key('stock_symbol_$symbol'),
+          symbol: symbol,
+        );
+      }
+    }
+    return const Text('No selected stocks');
   }
 }

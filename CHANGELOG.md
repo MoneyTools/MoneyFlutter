@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.7.2] 2024-03-03
+
+### Added
+
+- Download stock history from [twelvedata.com]
+
 ## [version 1.7.1] 2024-03-02
 
 ### Added

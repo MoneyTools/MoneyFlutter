@@ -25,7 +25,7 @@ import 'package:money/views/view_investments/view_investments.dart';
 import 'package:money/views/view_loans/view_loans.dart';
 import 'package:money/views/view_payees/view_payees.dart';
 import 'package:money/views/view_rentals/view_rentals.dart';
-import 'package:money/views/view_stocks.dart';
+import 'package:money/views/view_stocks/view_stocks.dart';
 import 'package:money/views/view_transactions/view_transactions.dart';
 import 'package:money/views/view_transfers.dart';
 import 'package:money/views/view_welcome.dart';

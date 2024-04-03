@@ -74,6 +74,8 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  String apiKeyForStocks = '';
+
   //--------------------------------------------------------
   // Font scaling
 

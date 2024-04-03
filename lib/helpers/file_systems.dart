@@ -37,7 +37,7 @@ class MyFileSystems {
     return file;
   }
 
-  Future<String> readFile(
+  static Future<String> readFile(
     final String pathToFile,
   ) async {
     final File file = File(pathToFile);

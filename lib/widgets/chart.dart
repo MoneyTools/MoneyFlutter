@@ -68,11 +68,11 @@ class Chart extends StatelessWidget {
         titlesData: FlTitlesData(
           topTitles: const AxisTitles(), // hide
           rightTitles: const AxisTitles(), // hide
-          leftTitles: AxisTitles(
+          leftTitles: const AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
               reservedSize: 80,
-              getTitlesWidget: _buildLegendLeft,
+              getTitlesWidget: getWidgetChartAmount,
               //interval: (maxY+minY.abs())/6,
             ),
           ),
@@ -137,20 +137,6 @@ class Chart extends StatelessWidget {
   String getTooltipText(BarChartGroupData group, BarChartRodData rod) =>
       '${list[group.x].xText}\n${Currency.getAmountAsStringUsingCurrency(rod.toY, iso4217code: currency)}';
 
-  Widget _buildLegendLeft(final double value, final TitleMeta meta) {
-    final Widget widget = Text(
-      Currency.getAmountAsStringUsingCurrency(value, decimalDigits: 0),
-      textAlign: TextAlign.end,
-      softWrap: false,
-      style: const TextStyle(fontSize: 10),
-    );
-
-    return SideTitleWidget(
-      axisSide: meta.axisSide,
-      child: widget,
-    );
-  }
-
   Widget _buildLegendBottom(final double value, final TitleMeta meta) {
     return Container(
       padding: const EdgeInsets.only(top: 8),
@@ -162,28 +148,42 @@ class Chart extends StatelessWidget {
       ),
     );
   }
+}
 
-  Color getHorizontalLineColorBasedOnValue(final double value) {
-    if (value > 0) {
-      return Colors.green.withOpacity(0.2);
-    }
-    if (value < 0) {
-      return Colors.red.withOpacity(0.2);
-    }
-    // value == 0
-    return Colors.grey.withOpacity(0.8);
-  }
+Widget getWidgetChartAmount(final double value, final TitleMeta meta) {
+  final Widget widget = Text(
+    Currency.getAmountAsStringUsingCurrency(value, decimalDigits: 0),
+    textAlign: TextAlign.end,
+    softWrap: false,
+    style: const TextStyle(fontSize: 10),
+  );
 
-  FlBorderData getBorders(final double min, final double max) {
-    return FlBorderData(
-      show: true,
-      border: Border(
-          top: BorderSide(
-            color: getHorizontalLineColorBasedOnValue(max),
-          ),
-          bottom: BorderSide(
-            color: getHorizontalLineColorBasedOnValue(min),
-          )),
-    );
+  return SideTitleWidget(
+    axisSide: meta.axisSide,
+    child: widget,
+  );
+}
+
+FlBorderData getBorders(final double min, final double max) {
+  return FlBorderData(
+    show: true,
+    border: Border(
+        top: BorderSide(
+          color: getHorizontalLineColorBasedOnValue(max),
+        ),
+        bottom: BorderSide(
+          color: getHorizontalLineColorBasedOnValue(min),
+        )),
+  );
+}
+
+Color getHorizontalLineColorBasedOnValue(final double value) {
+  if (value > 0) {
+    return Colors.green.withOpacity(0.2);
   }
+  if (value < 0) {
+    return Colors.red.withOpacity(0.2);
+  }
+  // value == 0
+  return Colors.grey.withOpacity(0.8);
 }
