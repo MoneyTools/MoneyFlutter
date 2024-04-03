@@ -62,20 +62,20 @@ const List<String> colorText = <String>[
   'Pink',
 ];
 
-const String perfDomainAccounts = 'accountDetailsTransactions';
+const String settingKeyDomainAccounts = 'accountDetailsTransactions';
 
-const String prefLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
-const String prefColor = 'themeColor';
-const String prefDarkMode = 'themeDarkMode';
-const String prefIncludeClosedAccounts = 'includeClosedAccounts';
-const String prefIsDetailsPanelExpanded = 'isDetailsPanelExpanded';
-const String prefRentals = 'rentals';
-const String prefTextScale = 'textScale';
-const String prefViews = 'views';
-const String prefSortBy = 'sortBy';
-const String prefSortAscending = 'sortAscending';
-const String prefSelectedListItemId = 'selectedItemId';
-const String prefSelectedDetailsPanelTab = 'selectedDetailsPanelTab';
+const String settingKeyLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
+const String settingKeyTheme = 'themeColor';
+const String settingKeyDarkMode = 'themeDarkMode';
+const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
+const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';
+const String settingKeyRentalsSupport = 'rentals';
+const String settingKeyTextScale = 'textScale';
+const String settingKeyViewsMap = 'views';
+const String settingKeySortBy = 'sortBy';
+const String settingKeySortAscending = 'sortAscending';
+const String settingKeySelectedListItemId = 'selectedItemId';
+const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
 
 class IntValues {
   // ...

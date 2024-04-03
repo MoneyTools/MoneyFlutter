@@ -64,10 +64,10 @@ class ViewWidgetState extends State<ViewWidget> {
 
     final MyJson? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
-      _sortByFieldIndex = viewSetting.getInt(prefSortBy, 0);
-      _sortAscending = viewSetting.getBool(prefSortAscending, true);
-      _lastSelectedItemId = viewSetting.getInt(prefSelectedListItemId, -1);
-      final int subViewIndex = viewSetting.getInt(prefSelectedDetailsPanelTab, SubViews.details.index);
+      _sortByFieldIndex = viewSetting.getInt(settingKeySortBy, 0);
+      _sortAscending = viewSetting.getBool(settingKeySortAscending, true);
+      _lastSelectedItemId = viewSetting.getInt(settingKeySelectedListItemId, -1);
+      final int subViewIndex = viewSetting.getInt(settingKeySelectedDetailsPanelTab, SubViews.details.index);
       _selectedBottomTabId = SubViews.values[subViewIndex];
     }
 
@@ -417,10 +417,10 @@ class ViewWidgetState extends State<ViewWidget> {
   void saveLastUserActionOnThisView() {
     // Persist users choice
     Settings().views[getClassNameSingular()] = <String, dynamic>{
-      prefSortBy: _sortByFieldIndex,
-      prefSortAscending: _sortAscending,
-      prefSelectedListItemId: getUniqueIdOfFirstSelectedItem(),
-      prefSelectedDetailsPanelTab: _selectedBottomTabId.index,
+      settingKeySortBy: _sortByFieldIndex,
+      settingKeySortAscending: _sortAscending,
+      settingKeySelectedListItemId: getUniqueIdOfFirstSelectedItem(),
+      settingKeySelectedDetailsPanelTab: _selectedBottomTabId.index,
     };
 
     Settings().store();

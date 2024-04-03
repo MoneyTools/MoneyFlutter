@@ -129,16 +129,16 @@ class Settings extends ChangeNotifier {
 
   Future<bool> retrieve() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
-    colorSelected = intValueOrDefault(preferences.getInt(prefColor));
-    textScale = doubleValueOrDefault(preferences.getDouble(prefTextScale), defaultValueIfNull: 1.0);
-    useDarkMode = boolValueOrDefault(preferences.getBool(prefDarkMode), defaultValueIfNull: false);
+    colorSelected = intValueOrDefault(preferences.getInt(settingKeyTheme));
+    textScale = doubleValueOrDefault(preferences.getDouble(settingKeyTextScale), defaultValueIfNull: 1.0);
+    useDarkMode = boolValueOrDefault(preferences.getBool(settingKeyDarkMode), defaultValueIfNull: false);
 
-    rentals = preferences.getBool(prefRentals) == true;
-    includeClosedAccounts = preferences.getBool(prefIncludeClosedAccounts) == true;
-    isDetailsPanelExpanded = preferences.getBool(prefIsDetailsPanelExpanded) == true;
-    fileManager.fullPathToLastOpenedFile = preferences.getString(prefLastLoadedPathToDatabase) ?? '';
+    rentals = preferences.getBool(settingKeyRentalsSupport) == true;
+    includeClosedAccounts = preferences.getBool(settingKeyIncludeClosedAccounts) == true;
+    isDetailsPanelExpanded = preferences.getBool(settingKeyDetailsPanelExpanded) == true;
+    fileManager.fullPathToLastOpenedFile = preferences.getString(settingKeyLastLoadedPathToDatabase) ?? '';
 
-    views = loadMapFromPrefs(preferences, prefViews);
+    views = loadMapFromPrefs(preferences, settingKeyViewsMap);
 
     isPreferenceLoaded = true;
     return true;
@@ -146,19 +146,19 @@ class Settings extends ChangeNotifier {
 
   void store() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
-    await preferences.setDouble(prefTextScale, textScale);
-    await preferences.setInt(prefColor, colorSelected);
+    await preferences.setDouble(settingKeyTextScale, textScale);
+    await preferences.setInt(settingKeyTheme, colorSelected);
 
-    await preferences.setBool(prefDarkMode, useDarkMode);
-    await preferences.setBool(prefIncludeClosedAccounts, includeClosedAccounts);
-    await preferences.setBool(prefRentals, rentals);
+    await preferences.setBool(settingKeyDarkMode, useDarkMode);
+    await preferences.setBool(settingKeyIncludeClosedAccounts, includeClosedAccounts);
+    await preferences.setBool(settingKeyRentalsSupport, rentals);
 
-    storeMapToPrefs(preferences, prefViews, views);
+    storeMapToPrefs(preferences, settingKeyViewsMap, views);
 
     if (fileManager.fullPathToLastOpenedFile.isEmpty) {
-      await preferences.remove(prefLastLoadedPathToDatabase);
+      await preferences.remove(settingKeyLastLoadedPathToDatabase);
     } else {
-      await preferences.setString(prefLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile);
+      await preferences.setString(settingKeyLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile);
     }
   }
 

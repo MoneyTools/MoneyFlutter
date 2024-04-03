@@ -58,11 +58,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     bool sortAscending = true;
     int selectedItemIndex = 0;
 
-    final MyJson? viewSetting = Settings().views[perfDomainAccounts];
+    final MyJson? viewSetting = Settings().views[settingKeyDomainAccounts];
     if (viewSetting != null) {
-      sortFieldIndex = viewSetting.getInt(prefSortBy, 0);
-      sortAscending = viewSetting.getBool(prefSortAscending, true);
-      selectedItemIndex = viewSetting.getInt(prefSelectedListItemId, -1);
+      sortFieldIndex = viewSetting.getInt(settingKeySortBy, 0);
+      sortAscending = viewSetting.getBool(settingKeySortAscending, true);
+      selectedItemIndex = viewSetting.getInt(settingKeySelectedListItemId, -1);
     }
 
     final FieldDefinitions columnsToDisplay = <Field>[
@@ -92,10 +92,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           selectedId = selectedId;
 
           // Save user choices
-          Settings().views[perfDomainAccounts] = <String, dynamic>{
-            prefSortBy: sortByFieldIndex,
-            prefSortAscending: sortAscending,
-            prefSelectedListItemId: selectedId,
+          Settings().views[settingKeyDomainAccounts] = <String, dynamic>{
+            settingKeySortBy: sortByFieldIndex,
+            settingKeySortAscending: sortAscending,
+            settingKeySelectedListItemId: selectedId,
           };
         });
   }
