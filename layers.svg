@@ -620,7 +620,7 @@ uuid</title>
   </g>
   <g id='Labels_dart_pdf_reader'>
     <text class="nodeName" x="1650" y="225" font-size="120%">dart_pdf_reader</text>
-    <text class="nodeName" x="1650" y="245" font-size="80%">0.5.1</text>
+    <text class="nodeName" x="1650" y="245" font-size="80%">1.0.0</text>
   </g>
   <g id='Labels_collection'>
     <text class="nodeName" x="450" y="375" font-size="120%">collection</text>
@@ -628,7 +628,7 @@ uuid</title>
   </g>
   <g id='Labels_file_picker'>
     <text class="nodeName" x="150" y="225" font-size="120%">file_picker</text>
-    <text class="nodeName" x="150" y="245" font-size="80%">8.0.0</text>
+    <text class="nodeName" x="150" y="245" font-size="80%">8.0.0+1</text>
   </g>
   <g id='Labels_path'>
     <text class="nodeName" x="150" y="375" font-size="120%">path</text>
@@ -680,7 +680,7 @@ uuid</title>
   </g>
   <g id='Labels_sqlite3'>
     <text class="nodeName" x="1350" y="225" font-size="120%">sqlite3</text>
-    <text class="nodeName" x="1350" y="245" font-size="80%">2.4.0</text>
+    <text class="nodeName" x="1350" y="245" font-size="80%">2.4.2</text>
   </g>
   <g id='Labels_url_launcher'>
     <text class="nodeName" x="450" y="225" font-size="120%">url_launcher</text>
