@@ -277,8 +277,8 @@ class Account extends MoneyObject {
   Account() {
     fields ??= Fields<Account>(definitions: [
       id,
-      accountId,
       name,
+      accountId,
       description,
       type,
       openingBalance,
