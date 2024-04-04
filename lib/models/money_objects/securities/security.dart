@@ -114,7 +114,7 @@ class Security extends MoneyObject {
     required String cuspid,
     required int securityType,
     required int taxable,
-    required DateTime priceDate,
+    required DateTime? priceDate,
   }) {
     fields ??= Fields<Security>(definitions: [
       this.id,
@@ -159,7 +159,7 @@ class Security extends MoneyObject {
       // 7
       taxable: row.getInt('Taxable'),
       // 8
-      priceDate: row.getDate('PriceDate', defaultIfNotFound: DateTime.now())!,
+      priceDate: row.getDate('PriceDate'),
     );
   }
 }

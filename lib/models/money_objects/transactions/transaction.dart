@@ -70,11 +70,9 @@ class Transaction extends MoneyObject {
     importance: 2,
     name: 'Date',
     serializeName: 'Date',
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).dateTimeAsText,
+    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).dateTime.value,
     valueForSerialization: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).dateTime.value),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByDate((a as Transaction).dateTime.value, (b as Transaction).dateTime.value, ascending),
     getEditWidget: (final MoneyObject instance, Function onEdited) {
       return PickerEditBoxDate(
         initialValue: (instance as Transaction).dateTimeAsText,

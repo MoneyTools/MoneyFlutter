@@ -1,5 +1,4 @@
 import 'package:money/helpers/date_helper.dart';
-import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -29,9 +28,7 @@ class Transfer extends MoneyObject {
   FieldDate senderTransactionDate = FieldDate(
     importance: 1,
     name: 'Sent on',
-    valueFromInstance: (final MoneyObject instance) => getDateAsText((instance as Transfer).geSenderTransactionDate()),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByDate((a as Transfer).geSenderTransactionDate(), (b as Transfer).geSenderTransactionDate(), ascending),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).geSenderTransactionDate(),
   );
 
   /// Account
@@ -65,11 +62,11 @@ class Transfer extends MoneyObject {
   // RECEIVED
   //
 
-  // Date received
+  /// Date received
   FieldDate receiverTransactionDate = FieldDate(
     importance: 10,
     name: 'Date Received',
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).evaluatedReceivedDate(),
+    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getReceiverTransactionDate(),
   );
 
   /// Account
@@ -187,7 +184,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
 
   //---------------------------------------------
-  // Dates
+  /// Dates
   DateTime? geSenderTransactionDate() {
     return source.dateTime.value;
   }

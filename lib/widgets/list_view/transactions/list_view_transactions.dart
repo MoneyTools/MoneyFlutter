@@ -90,9 +90,18 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   }
 
   void sortList(List<Transaction> transactions) {
-    if (widget.columnsToInclude.isNotEmpty) {
+    if (isIndexInRange(widget.columnsToInclude, sortBy)) {
       final Field<dynamic> fieldDefinition = widget.columnsToInclude[sortBy];
-      if (fieldDefinition.sort != null) {
+      if (fieldDefinition.sort == null) {
+        // No sorting function found, fallback to String sorting
+        transactions.sort((final MoneyObject a, final MoneyObject b) {
+          return sortByString(
+            fieldDefinition.valueFromInstance(a).toString(),
+            fieldDefinition.valueFromInstance(b).toString(),
+            sortAscending,
+          );
+        });
+      } else {
         transactions.sort(
           (final Transaction a, final Transaction b) {
             return fieldDefinition.sort!(a, b, sortAscending);

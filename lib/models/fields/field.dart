@@ -83,6 +83,27 @@ class Field<T> {
       // apply the same data value to serial
       valueForSerialization = valueFromInstance;
     }
+
+    if (sort == null) {
+      // if no override on sorting fallback to type sorting
+      switch (type) {
+        case FieldType.numeric:
+        case FieldType.numericShorthand:
+          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+              sortByValue(valueFromInstance(a) as num, valueFromInstance(b) as num, ascending);
+        case FieldType.amount:
+        case FieldType.amountShorthand:
+          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+              sortByValue(valueFromInstance(a) as double, valueFromInstance(b) as double, ascending);
+        case FieldType.date:
+          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+              sortByDate(valueFromInstance(a), valueFromInstance(b), ascending);
+        case FieldType.text:
+        default:
+          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+              sortByString(valueFromInstance(a).toString(), valueFromInstance(b).toString(), ascending);
+      }
+    }
   }
 
   String getBestFieldDescribingName() {
@@ -349,6 +370,9 @@ Widget buildWidgetFromTypeAndValue(
     case FieldType.widget:
       return Center(child: value as Widget);
     case FieldType.date:
+      if (value == null) {
+        return buildFieldWidgetForText(text: '____-__-__', align: align);
+      }
       return buildFieldWidgetForText(text: value is DateTime ? dateToString(value) : value.toString(), align: align);
     case FieldType.text:
     default:

@@ -202,46 +202,21 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   void onSort() {
-    if (_fieldToDisplay.definitions.isNotEmpty) {
-      if (isBetween(_sortByFieldIndex, -1, _fieldToDisplay.definitions.length)) {
-        final Field<dynamic> fieldDefinition = _fieldToDisplay.definitions[_sortByFieldIndex];
-        if (fieldDefinition.sort == null) {
-          list.sort((final MoneyObject a, final MoneyObject b) {
-            switch (fieldDefinition.type) {
-              case FieldType.numeric:
-              case FieldType.numericShorthand:
-                return sortByValue(
-                  fieldDefinition.valueFromInstance(a) as num,
-                  fieldDefinition.valueFromInstance(b) as num,
-                  _sortAscending,
-                );
-              case FieldType.amount:
-              case FieldType.amountShorthand:
-                return sortByValue(
-                  fieldDefinition.valueFromInstance(a) as double,
-                  fieldDefinition.valueFromInstance(b) as double,
-                  _sortAscending,
-                );
-              case FieldType.date:
-                return sortByDate(
-                  fieldDefinition.valueFromInstance(a) as DateTime,
-                  fieldDefinition.valueFromInstance(b) as DateTime,
-                  _sortAscending,
-                );
-              case FieldType.text:
-              default:
-                return sortByString(
-                  fieldDefinition.valueFromInstance(a).toString(),
-                  fieldDefinition.valueFromInstance(b).toString(),
-                  _sortAscending,
-                );
-            }
-          });
-        } else {
-          list.sort((final MoneyObject a, final MoneyObject b) {
-            return fieldDefinition.sort!(a, b, _sortAscending);
-          });
-        }
+    if (isIndexInRange(_fieldToDisplay.definitions, _sortByFieldIndex)) {
+      final Field<dynamic> fieldDefinition = _fieldToDisplay.definitions[_sortByFieldIndex];
+      if (fieldDefinition.sort == null) {
+        // No sorting function found, fallback to String sorting
+        list.sort((final MoneyObject a, final MoneyObject b) {
+          return sortByString(
+            fieldDefinition.valueFromInstance(a).toString(),
+            fieldDefinition.valueFromInstance(b).toString(),
+            _sortAscending,
+          );
+        });
+      } else {
+        list.sort((final MoneyObject a, final MoneyObject b) {
+          return fieldDefinition.sort!(a, b, _sortAscending);
+        });
       }
     }
   }
