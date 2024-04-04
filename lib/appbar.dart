@@ -4,7 +4,7 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
-import 'package:money/views/view_currencies.dart';
+import 'package:money/views/view_settings.dart';
 import 'package:money/views/view_pending_changes/bage_pending_changes.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';
@@ -101,10 +101,10 @@ class _MyAppBarState extends State<MyAppBar> {
             );
             actionList.add(
               const PopupMenuItem<int>(
-                value: Constants.commandCurrencies,
+                value: Constants.commandSettings,
                 child: ThreePartLabel(
-                  text1: 'Currencies',
-                  icon: Icon(Icons.currency_exchange, color: Colors.grey),
+                  text1: 'Settings',
+                  icon: Icon(Icons.settings, color: Colors.grey),
                   small: true,
                 ),
               ),
@@ -164,8 +164,8 @@ class _MyAppBarState extends State<MyAppBar> {
     switch (value) {
       case Constants.commandAddTransactions:
         showImportTransactions(context);
-      case Constants.commandCurrencies:
-        showCurrencies(context);
+      case Constants.commandSettings:
+        showSettings(context);
       case Constants.commandIncludeClosedAccount:
         Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
       case Constants.commandIncludeRentals:

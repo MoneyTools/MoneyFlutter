@@ -15,7 +15,7 @@ class Constants {
   static const double minBlockHeight = 3.0;
 
   static const int commandTextZoom = 1000;
-  static const int commandCurrencies = 1100;
+  static const int commandSettings = 1100;
   static const int commandIncludeClosedAccount = 1200;
   static const int commandIncludeRentals = 1300;
   static const int commandAddTransactions = 1400;
@@ -76,6 +76,7 @@ const String settingKeySortBy = 'sortBy';
 const String settingKeySortAscending = 'sortAscending';
 const String settingKeySelectedListItemId = 'selectedItemId';
 const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
+const String settingKeyStockApiKey = 'stockServiceApiKey';
 
 class IntValues {
   // ...

@@ -18,37 +18,38 @@ class StockPrice {
 
 const flagAsInvalidSymbol = 'invalid-symbol';
 
-Future<StockLookup> getFromCacheOrBackend(String symbol, List<StockPrice> prices) async {
+Future<StockLookupStatus> getFromCacheOrBackend(String symbol, List<StockPrice> prices) async {
   symbol = symbol.toLowerCase();
 
   prices.clear();
-  StockLookup resultState = await loadFromCache(symbol, prices);
+  StockLookupStatus resultState = await loadFromCache(symbol, prices);
 
-  if (resultState == StockLookup.invalidSymbol) {
-    return resultState;
-  }
-
-  if (prices.isEmpty) {
-    bool symbolFound = await loadFromBackend(symbol, prices);
-    if (symbolFound) {
-      saveToCache(symbol, prices);
-      return StockLookup.validSymbol;
-    } else {
-      saveToCacheInvalidSymbol(symbol);
-      return StockLookup.invalidSymbol;
+  if (resultState == StockLookupStatus.foundInCache) {
+    return StockLookupStatus.foundInCache;
+  } else {
+    StockLookupStatus status = await loadFromBackend(symbol, prices);
+    switch (status) {
+      case StockLookupStatus.validSymbol:
+        saveToCache(symbol, prices);
+        return StockLookupStatus.validSymbol;
+      case StockLookupStatus.invalidSymbol:
+        saveToCacheInvalidSymbol(symbol);
+        return StockLookupStatus.invalidSymbol;
+      default:
+        return status;
     }
   }
-  return StockLookup.validSymbol;
 }
 
-enum StockLookup {
+enum StockLookupStatus {
   validSymbol,
   invalidSymbol,
   foundInCache,
   notFoundInCache,
+  invalidApiKey,
 }
 
-Future<StockLookup> loadFromCache(final String symbol, List<StockPrice> prices) async {
+Future<StockLookupStatus> loadFromCache(final String symbol, List<StockPrice> prices) async {
   final String mainFilenameStockSymbol = await fullPathToCacheStockFile(symbol);
 
   String? csvContent;
@@ -56,7 +57,7 @@ Future<StockLookup> loadFromCache(final String symbol, List<StockPrice> prices) 
     csvContent = await MyFileSystems.readFile(mainFilenameStockSymbol);
     if (csvContent == flagAsInvalidSymbol) {
       // give up now
-      return StockLookup.invalidSymbol;
+      return StockLookupStatus.invalidSymbol;
     }
   } catch (_) {
     //
@@ -76,17 +77,17 @@ Future<StockLookup> loadFromCache(final String symbol, List<StockPrice> prices) 
         }
       }
     }
-    return StockLookup.foundInCache;
+    return StockLookupStatus.foundInCache;
   }
-  return StockLookup.notFoundInCache;
+  return StockLookupStatus.notFoundInCache;
 }
 
-Future<bool> loadFromBackend(String symbol, List<StockPrice> prices) async {
+Future<StockLookupStatus> loadFromBackend(String symbol, List<StockPrice> prices) async {
   prices.clear();
 
   if (Settings().apiKeyForStocks.isEmpty) {
     // No API Key to make the backend request
-    return false;
+    return StockLookupStatus.invalidApiKey;
   }
 
   DateTime tenYearsInThePast = DateTime.now().subtract(const Duration(days: 365 * 10));
@@ -99,8 +100,14 @@ Future<bool> loadFromBackend(String symbol, List<StockPrice> prices) async {
   if (response.statusCode == 200) {
     try {
       final MyJson data = json.decode(response.body);
+      if (data['code'] == 401) {
+        //data['message'];
+        return StockLookupStatus.invalidApiKey;
+      }
+
       if (data['code'] == 404) {
-        return false;
+        // SYMBOL NOT FOUND
+        return StockLookupStatus.invalidSymbol;
       }
       final List<dynamic> values = data['values'];
 
@@ -128,7 +135,7 @@ Future<bool> loadFromBackend(String symbol, List<StockPrice> prices) async {
   } else {
     debugLog('Failed to fetch data: ${response.toString()}');
   }
-  return true;
+  return StockLookupStatus.validSymbol;
 }
 
 void saveToCache(final String symbol, List<StockPrice> prices) async {

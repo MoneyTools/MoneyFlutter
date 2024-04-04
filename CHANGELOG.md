@@ -1,5 +1,9 @@
 # Change Log
 
+## [version 1.7.3] 2024-03-04
+
+- Set API Key directly from the Stock Chart
+
 ## [version 1.7.2] 2024-03-03
 
 ### Added

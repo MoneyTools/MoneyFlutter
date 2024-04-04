@@ -135,6 +135,8 @@ class Settings extends ChangeNotifier {
 
     rentals = preferences.getBool(settingKeyRentalsSupport) == true;
     includeClosedAccounts = preferences.getBool(settingKeyIncludeClosedAccounts) == true;
+    apiKeyForStocks = preferences.getString(settingKeyStockApiKey) ?? '';
+
     isDetailsPanelExpanded = preferences.getBool(settingKeyDetailsPanelExpanded) == true;
     fileManager.fullPathToLastOpenedFile = preferences.getString(settingKeyLastLoadedPathToDatabase) ?? '';
 
@@ -152,6 +154,7 @@ class Settings extends ChangeNotifier {
     await preferences.setBool(settingKeyDarkMode, useDarkMode);
     await preferences.setBool(settingKeyIncludeClosedAccounts, includeClosedAccounts);
     await preferences.setBool(settingKeyRentalsSupport, rentals);
+    await preferences.setString(settingKeyStockApiKey, apiKeyForStocks);
 
     storeMapToPrefs(preferences, settingKeyViewsMap, views);
 

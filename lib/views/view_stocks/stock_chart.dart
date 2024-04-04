@@ -5,6 +5,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/get_stock_from_cache_or_backend.dart';
 import 'package:money/widgets/chart.dart';
+import 'package:money/widgets/dialog_single_text_input.dart';
 
 class StockChartWidget extends StatefulWidget {
   final String symbol;
@@ -18,6 +19,7 @@ class StockChartWidget extends StatefulWidget {
 class StockChartWidgetState extends State<StockChartWidget> {
   List<FlSpot> dataPoints = [];
   String errorMessage = '';
+  StockLookupStatus lastStatus = StockLookupStatus.notFoundInCache;
 
   @override
   void initState() {
@@ -29,14 +31,14 @@ class StockChartWidgetState extends State<StockChartWidget> {
     // Do we have the API Key to start
     if (Settings().apiKeyForStocks.isEmpty) {
       setState(() {
-        this.errorMessage = 'Please setup the API Key for accessing twelvedata.com.';
+        this.errorMessage = 'Please setup the API Key for accessing https://twelvedata.com.';
       });
       return;
     }
 
     List<StockPrice> dateAndPrices = [];
-    StockLookup status = await getFromCacheOrBackend(widget.symbol, dateAndPrices);
-    if (status == StockLookup.validSymbol) {
+    StockLookupStatus status = await getFromCacheOrBackend(widget.symbol, dateAndPrices);
+    if (status == StockLookupStatus.validSymbol || status == StockLookupStatus.foundInCache) {
       List<FlSpot> tmpDataPoints = [];
       for (final sp in dateAndPrices) {
         tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
@@ -47,7 +49,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
       });
     } else {
       setState(() {
-        this.errorMessage = status == StockLookup.invalidSymbol ? 'Invalid Symbol "${widget.symbol}"' : '';
+        this.lastStatus = status;
+        this.errorMessage = status == StockLookupStatus.invalidSymbol ? 'Invalid Symbol "${widget.symbol}"' : '';
         this.dataPoints = [];
       });
     }
@@ -55,6 +58,23 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (Settings().apiKeyForStocks.isEmpty || lastStatus == StockLookupStatus.invalidApiKey) {
+      return Center(
+        child: ElevatedButton(
+          onPressed: () {
+            showTextInputDialog(
+              context: context,
+              title: 'API Key',
+              initialValue: Settings().apiKeyForStocks,
+              onContinue: (final String text) {
+                Settings().apiKeyForStocks = text;
+              },
+            );
+          },
+          child: const Text('Set API Key'),
+        ),
+      );
+    }
     if (errorMessage.isNotEmpty) {
       return Center(
           child: Text(

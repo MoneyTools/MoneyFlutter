@@ -11,3 +11,7 @@ dart analyze
 flutter analyze
 
 flutter test
+
+./layers.sh
+
+./graph.sh
