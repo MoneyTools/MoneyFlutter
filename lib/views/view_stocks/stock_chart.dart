@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:intl/intl.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/get_stock_from_cache_or_backend.dart';
 import 'package:money/widgets/chart.dart';
@@ -92,7 +93,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
         lineBarsData: [
           LineChartBarData(
             spots: dataPoints,
-            isCurved: true,
+            isCurved: false,
             color: Colors.blue,
             barWidth: 1,
             belowBarData: BarAreaData(show: false),
@@ -119,7 +120,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
                 return const SizedBox();
               }
               final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-              return Text(date.month.toString()); // Format as HH:MM
+              return Text(formatDate(date),
+                  textAlign: TextAlign.center, style: const TextStyle(fontSize: 10)); // Format as HH:MM
             },
           )),
         ),
@@ -128,4 +130,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
       ),
     );
   }
+}
+
+String formatDate(DateTime date) {
+  return DateFormat('yyyy\nMMM').format(date);
 }

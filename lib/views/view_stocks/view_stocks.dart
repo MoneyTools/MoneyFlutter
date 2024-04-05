@@ -57,6 +57,6 @@ class ViewStocksState extends ViewWidgetState {
         );
       }
     }
-    return const Text('No selected stocks');
+    return const Center(child: Text('No stock selected'));
   }
 }

@@ -3,8 +3,13 @@
 ## [version 1.7.4] 2024-03-05
 
 ### Added
+
 - Show last modified date of opened file
 - Show currency column in Transaction view
+
+### Updated
+
+- Improve bottom legend for stock chart
 - Custom Filter of column by currency
 
 ## [version 1.7.3] 2024-03-04

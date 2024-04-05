@@ -144,6 +144,7 @@ class Chart extends StatelessWidget {
       child: Text(
         list[value.toInt()].xText,
         softWrap: true,
+        textAlign: TextAlign.center,
         style: const TextStyle(fontSize: 10),
       ),
     );
