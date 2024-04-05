@@ -68,3 +68,11 @@ DateTime? parseQfxDataFormat(final String qfxDate) {
     return null;
   }
 }
+
+String geDateAndTimeAsText(final DateTime? dateTime) {
+  String dateTimeAsText = '';
+  if (dateTime != null) {
+    dateTimeAsText += dateTime.toIso8601String().replaceAll('T', ' ');
+  }
+  return dateTimeAsText;
+}

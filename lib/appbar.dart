@@ -186,7 +186,9 @@ class _MyAppBarState extends State<MyAppBar> {
   ) {
     return PopupMenuButton<int>(
       child: AppCaption(
-        subCaption: Settings().fileManager.fullPathToLastOpenedFile,
+        child: LoadedDataFileAndTime(
+            filePath: Settings().fileManager.fullPathToLastOpenedFile,
+            lastModifiedDateTime: Settings().fileManager.dataFileLastUpdateDateTime),
       ),
       itemBuilder: (final BuildContext context) {
         final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];

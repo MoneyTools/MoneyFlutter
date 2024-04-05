@@ -1,3 +1,4 @@
+import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/settings.dart';
@@ -11,12 +12,20 @@ enum DataFileState {
 
 class FileManager {
   String fullPathToLastOpenedFile = '';
+  DateTime? dataFileLastUpdateDateTime;
   String fileName = '';
+
+  String getLastModifiedDateTime() {
+    return geDateAndTimeAsText(dataFileLastUpdateDateTime);
+  }
 
   DataFileState state = DataFileState.empty;
 
   void rememberWhereTheDataCameFrom(final String dataSource) async {
     fullPathToLastOpenedFile = dataSource;
+    if (dataSource.isEmpty) {
+      dataFileLastUpdateDateTime = null;
+    }
     Settings().store();
   }
 

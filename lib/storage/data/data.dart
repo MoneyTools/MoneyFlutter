@@ -205,14 +205,22 @@ class Data {
     return null;
   }
 
+  DateTime? getLastDateTimeModified(final String fullPathToFile) {
+    File file = File(fullPathToFile);
+    // Get the last modified date and time of the file
+    return file.lastModifiedSync();
+  }
+
   /// Automated detection of what type of storage to load the data from
   Future<bool> loadFromPath({required final String filePathToLoad}) async {
     try {
+      Settings().fileManager.dataFileLastUpdateDateTime = null;
       // Sqlite
       if (filePathToLoad.toLowerCase().endsWith('.mmdb')) {
         // Load from SQLite
         if (await loadFromSql(filePathToLoad)) {
           Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
+          Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
         } else {
           Settings().fileManager.rememberWhereTheDataCameFrom('');
         }
@@ -221,6 +229,7 @@ class Data {
         // Load from a folder that contains CSV files
         await loadFromCsv(filePathToLoad);
         Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
+        Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
       }
     } catch (e) {
       debugLog(e.toString());
