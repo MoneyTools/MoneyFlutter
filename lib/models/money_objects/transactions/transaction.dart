@@ -383,6 +383,8 @@ class Transaction extends MoneyObject {
         sortByValue((a as Transaction).balance.value, (b as Transaction).balance.value, ascending),
   );
 
+  ///------------------------------------------------------
+  /// Non persisted fields
   String get dateTimeAsText => getDateAsText(dateTime.value);
 
   Account? accountInstance;
@@ -400,6 +402,25 @@ class Transaction extends MoneyObject {
     }
     return "???";
   }
+
+  Field<String> currency = Field<String>(
+    type: FieldType.widget,
+    importance: 80,
+    name: 'Currency',
+    serializeName: 'Currency',
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.tiny,
+    defaultValue: '',
+    useAsDetailPanels: true,
+    valueFromInstance: (final MoneyObject instance) {
+      final account = (instance as Transaction).accountInstance!;
+      return account.currency.valueFromInstance(account);
+    },
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+        (a as Transaction).accountInstance!.getAccountCurrencyAsText(),
+        (b as Transaction).accountInstance!.getAccountCurrencyAsText(),
+        ascending),
+  );
 
   /// Used for establishing relation between two transactions
   Transfer? transferInstance;
@@ -457,22 +478,6 @@ class Transaction extends MoneyObject {
     //   }
   }
 
-  // String get transferTo {
-  //   if (_pendingTransferAccountName != null) {
-  //     return _pendingTransferAccountName!;
-  //   }
-  //
-  //   if (transferInstance != null) {
-  //     return transferInstance!.getAccountName();
-  //   }
-  //   return transferName;
-  // }
-  //
-  // set transferTo(final String accountName) {
-  //   _pendingTransferAccountName = accountName;
-  //   transferName = null;
-  // }
-
   String get payeeName => Data().payees.getNameFromId(payee.value);
 
   String getPayeeOrTransferCaption() {
@@ -520,8 +525,8 @@ class Transaction extends MoneyObject {
     if (Transaction.fields.isEmpty) {
       Transaction.fields.setDefinitions([
         id,
-        accountId,
         dateTime,
+        accountId,
         payee,
         originalPayee,
         categoryId,
@@ -533,6 +538,7 @@ class Transaction extends MoneyObject {
         this.status,
         fitid,
         flags,
+        currency,
         amount,
         salesTax,
         transferSplit,

@@ -4,6 +4,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/widgets/currency_label.dart';
 
 /*
   cid  name         type          notnull  default  pk
@@ -114,19 +115,19 @@ class Currency extends MoneyObject {
     );
   }
 
-  static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
+  static String getCurrencyAsText(final String threeLetterCurrencySymbol) {
     if (threeLetterCurrencySymbol.isEmpty) {
-      threeLetterCurrencySymbol = Constants.defaultCurrency;
+      return Constants.defaultCurrency;
     }
+    return threeLetterCurrencySymbol;
+  }
+
+  static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
     String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
-    String flagName = getCountryFromLocale(locale).toLowerCase();
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Image.asset('assets/flags/$flagName.png', height: 10),
-        const SizedBox(width: 4),
-        Text(threeLetterCurrencySymbol),
-      ],
+
+    return CurrencyLabel(
+      threeLetterCurrencySymbol: getCurrencyAsText(threeLetterCurrencySymbol),
+      flagId: getCountryFromLocale(locale).toLowerCase(),
     );
   }
 

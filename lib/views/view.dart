@@ -408,11 +408,12 @@ class ViewWidgetState extends State<ViewWidget> {
     return SortIndicator.none;
   }
 
+  /// Compile the list of single data value for a column/field definition
   List<String> getUniqueInstances(final Field<dynamic> columnToCustomerFilterOn) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
-    for (int i = 0; i < list.length; i++) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(list[i]).toString();
+    for (final moneyObject in list) {
+      String fieldValue = columnToCustomerFilterOn.valueFromInstance(moneyObject).toString();
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();

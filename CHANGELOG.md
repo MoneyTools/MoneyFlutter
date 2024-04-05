@@ -1,5 +1,12 @@
 # Change Log
 
+## [version 1.7.4] 2024-03-05
+
+### Added
+
+- Show currency column in Transaction view
+- Custom Filter of column by currency
+
 ## [version 1.7.3] 2024-03-04
 
 - Upgrade packages: [file_picker: 8.0.0+1], [sqlite3: 2.4.2], [dart_pdf_reader: ^1.0.0]

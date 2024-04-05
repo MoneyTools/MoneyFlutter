@@ -130,11 +130,15 @@ class Account extends MoneyObject {
     defaultValue: '',
     useAsDetailPanels: true,
     valueFromInstance: (final MoneyObject instance) =>
-        Currency.buildCurrencyWidget((instance as Account).currency.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as Account).currency.value,
+        Currency.buildCurrencyWidget((instance as Account).getAccountCurrencyAsText()),
+    valueForSerialization: (final MoneyObject instance) => (instance as Account).getAccountCurrencyAsText(),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByString((a as Account).currency.value, (b as Account).currency.value, ascending),
+        sortByString((a as Account).getAccountCurrencyAsText(), (b as Account).getAccountCurrencyAsText(), ascending),
   );
+
+  String getAccountCurrencyAsText() {
+    return Currency.getCurrencyAsText(currency.value);
+  }
 
   /// OnlineAccount
   /// 8|OnlineAccount|INT|0||0
