@@ -51,7 +51,7 @@ class Investment extends MoneyObject {
   );
 
   /// 3    Units           money   0                    0
-  FieldAmount units = FieldAmount(
+  FieldDouble units = FieldDouble(
     importance: 2,
     name: 'Units',
     serializeName: 'Units',
@@ -192,6 +192,11 @@ class Investment extends MoneyObject {
         return '?not found?';
       });
 
+  FieldAmount balance = FieldAmount(
+    name: 'Balance',
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).balance.value,
+  );
+
   Investment({
     required final int id, // 1
     required final int security, // 1
@@ -209,21 +214,22 @@ class Investment extends MoneyObject {
   }) {
     fields ??= Fields<Investment>(definitions: [
       this.id,
-      this.transactionDate,
       this.transactionAccountName,
+      this.transactionDate,
       this.security,
       this.securitySymbol,
-      this.unitPrice,
+      this.investmentType,
       this.units,
+      this.unitPrice,
       this.commission,
       this.markUpDown,
       this.taxes,
       this.fees,
       this.load,
-      this.investmentType,
       this.tradeType,
       this.taxExempt,
       this.withholding,
+      this.balance,
     ]);
     // Also stash the definition in the instance for fast retrieval later
     fieldDefinitions = fields!.definitions;

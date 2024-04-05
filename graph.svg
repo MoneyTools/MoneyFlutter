@@ -4776,8 +4776,8 @@
 <text text-anchor="start" x="15261.25" y="-834.45" font-family="Arial" font-size="15.00"> ccd: 8838 </text>
 <text text-anchor="start" x="15261.25" y="-816.45" font-family="Arial" font-size="15.00"> acd: 56.65 </text>
 <text text-anchor="start" x="15261.25" y="-798.45" font-family="Arial" font-size="15.00"> nccd: 8.93 </text>
-<text text-anchor="start" x="15261.25" y="-780.45" font-family="Arial" font-size="15.00"> totalSloc: 14820 </text>
-<text text-anchor="start" x="15261.25" y="-762.45" font-family="Arial" font-size="15.00"> avgSloc: 95.0 </text>
+<text text-anchor="start" x="15261.25" y="-780.45" font-family="Arial" font-size="15.00"> totalSloc: 14830 </text>
+<text text-anchor="start" x="15261.25" y="-762.45" font-family="Arial" font-size="15.00"> avgSloc: 95.06 </text>
 </g>
 </g>
 </svg>
