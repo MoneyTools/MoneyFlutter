@@ -221,7 +221,7 @@ class FieldDate extends Field<DateTime?> {
     super.getEditWidget,
   }) : super(
           defaultValue: null,
-          align: TextAlign.center,
+          align: TextAlign.left,
           type: FieldType.date,
         );
 }
