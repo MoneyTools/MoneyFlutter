@@ -63,7 +63,6 @@ class Accounts extends MoneyObjects<Account> {
     for (final Account account in iterableList()) {
       account.count.value = 0;
       account.balance.value = account.openingBalance.value;
-      account.balanceNormalized.value = account.openingBalance.value * account.getCurrencyRatio();
       account.minBalancePerYears.clear();
       account.maxBalancePerYears.clear();
 
@@ -94,7 +93,6 @@ class Accounts extends MoneyObjects<Account> {
 
         account.count.value++;
         account.balance.value += t.amount.value;
-        account.balanceNormalized.value += t.getNormalizedAmount(t.amount.value);
 
         final int yearOfTheTransaction = t.dateTime.value!.year;
 
@@ -113,15 +111,21 @@ class Accounts extends MoneyObjects<Account> {
     final investmentAccounts = Data()
         .accounts
         .iterableList()
-        .where(
-            (account) => account.type.value == AccountType.moneyMarket || account.type.value == AccountType.investment)
+        .where((account) =>
+            account.type.value == AccountType.moneyMarket ||
+            account.type.value == AccountType.investment ||
+            account.type.value == AccountType.retirement)
         .toList();
 
     CostBasisCalculator calculator = CostBasisCalculator(DateTime.now());
     for (final account in investmentAccounts) {
+      // debugLog('${account.name.value} BEFORE: ${account.balance.value}');
+
       for (SecurityPurchase sp in calculator.getHolding(account).getHoldings()) {
         account.balance.value += sp.latestMarketValue!;
       }
+
+      // debugLog('${account.name.value} AFTER: ${account.balance.value}');
     }
   }
 

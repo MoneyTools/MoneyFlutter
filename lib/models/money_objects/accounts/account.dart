@@ -122,11 +122,11 @@ class Account extends MoneyObject {
   /// 7|Currency|nchar(3)|0||0
   Field<String> currency = Field<String>(
     type: FieldType.widget,
-    importance: 4,
+    importance: 96,
     name: 'Currency',
     serializeName: 'Currency',
     align: TextAlign.center,
-    columnWidth: ColumnWidth.tiny,
+    columnWidth: ColumnWidth.nano,
     defaultValue: '',
     useAsDetailPanels: true,
     valueFromInstance: (final MoneyObject instance) =>
@@ -248,21 +248,23 @@ class Account extends MoneyObject {
   );
 
   /// Balance
-  FieldDouble balance = FieldDouble(
-    importance: 5,
+  FieldAmount balance = FieldAmount(
+    importance: 98,
     name: 'Balance',
-    useAsColumn: false,
+    useAsColumn: true,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Account).currency.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).balance.value,
   );
 
   /// Balance Normalized use in the List view
   FieldAmount balanceNormalized = FieldAmount(
-    importance: 99,
-    name: 'Balance(USD)',
-    useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Account).balanceNormalized.value,
-  );
+      importance: 99,
+      name: 'Balance(USD)',
+      useAsDetailPanels: false,
+      valueFromInstance: (final MoneyObject instance) {
+        final accountInstance = instance as Account;
+        return accountInstance.getCurrencyRatio() * accountInstance.balance.value;
+      });
 
   Field<bool> isAccountOpen = Field<bool>(
     name: 'Account is open',
@@ -286,7 +288,6 @@ class Account extends MoneyObject {
       description,
       type,
       openingBalance,
-      currency,
       onlineAccount,
       webSite,
       reconcileWarning,
@@ -298,6 +299,7 @@ class Account extends MoneyObject {
       categoryIdForInterest,
       count,
       balance,
+      currency,
       balanceNormalized,
       isAccountOpen
     ]);

@@ -14,5 +14,3 @@ lakos -o graph.dot --metrics --ignore=test/** .
 
 dot -Tsvg graph.dot -Grankdir=TB -Gcolor=lightgray -Ecolor="#aabbaa88" -o graph.svg
 #fdp -Tsvg graph.dot -Gcolor=lightgray -Ecolor="#aabbaa99" -o graph.svg
-
-open graph.svg

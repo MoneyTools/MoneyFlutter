@@ -11,7 +11,7 @@
 <g id="clust1" class="cluster">
 <title>cluster~</title>
 <path fill="none" stroke="lightgray" stroke-width="2.6" d="M21.53,-8C21.53,-8 16214.53,-8 16214.53,-8 16220.53,-8 16226.53,-14 16226.53,-20 16226.53,-20 16226.53,-916.7 16226.53,-916.7 16226.53,-922.7 16220.53,-928.7 16214.53,-928.7 16214.53,-928.7 21.53,-928.7 21.53,-928.7 15.53,-928.7 9.53,-922.7 9.53,-916.7 9.53,-916.7 9.53,-20 9.53,-20 9.53,-14 15.53,-8 21.53,-8"/>
-<text text-anchor="middle" x="8118.03" y="-912.35" font-family="Arial Black" font-size="13.00">money_flutter</text>
+<text text-anchor="middle" x="8118.03" y="-912.35" font-family="Arial Black" font-size="13.00">MoneyFlutter</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster~/lib</title>
@@ -1495,7 +1495,7 @@
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="14739.42,-411.01 14735.54,-401.15 14732.43,-411.28 14739.42,-411.01"/>
 </g>
 <!-- /lib/models/money_objects/categories/category.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart -->
-<g id="edge156" class="edge">
+<g id="edge155" class="edge">
 <title>/lib/models/money_objects/categories/category.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10706.6,-285.61C10740.44,-277.54 10791.98,-266.51 10837.53,-262 10870.08,-258.78 13162.85,-267.74 13192.53,-254 13202.4,-249.43 13210.77,-241.2 13217.33,-232.83"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="13220.13,-234.94 13223.04,-224.75 13214.41,-230.89 13220.13,-234.94"/>
@@ -1507,7 +1507,7 @@
 <text text-anchor="middle" x="10662.53" y="-199.75" font-family="Arial" font-size="15.00">category_types</text>
 </g>
 <!-- /lib/models/money_objects/categories/category.dart&#45;&gt;/lib/models/money_objects/categories/category_types.dart -->
-<g id="edge155" class="edge">
+<g id="edge154" class="edge">
 <title>/lib/models/money_objects/categories/category.dart&#45;&gt;/lib/models/money_objects/categories/category_types.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10662.72,-277.84C10660.45,-265.73 10658.84,-249.21 10658.44,-235.06"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="10661.94,-235.37 10658.42,-225.38 10654.94,-235.39 10661.94,-235.37"/>
@@ -1519,7 +1519,7 @@
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="10674.68,-234.7 10669.69,-225.36 10667.76,-235.77 10674.68,-234.7"/>
 </g>
 <!-- /lib/models/money_objects/categories/category.dart&#45;&gt;/lib/models/money_objects/money_object.dart -->
-<g id="edge157" class="edge">
+<g id="edge156" class="edge">
 <title>/lib/models/money_objects/categories/category.dart&#45;&gt;/lib/models/money_objects/money_object.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10688.69,-277.63C10695.3,-272.18 10702.96,-266.43 10710.53,-262 10718.8,-257.17 10725.17,-261.93 10730.53,-254 10749.22,-226.4 10751.68,-204.76 10730.53,-179 10703.78,-146.41 10589.5,-132.44 10514.88,-126.72"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="10515.46,-123.25 10505.23,-126.01 10514.95,-130.23 10515.46,-123.25"/>
@@ -1531,7 +1531,7 @@
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="10284.25,-205.77 10273.98,-208.35 10283.62,-212.74 10284.25,-205.77"/>
 </g>
 <!-- /lib/models/money_objects/categories/category.dart&#45;&gt;/lib/storage/data/data.dart -->
-<g id="edge154" class="edge">
+<g id="edge157" class="edge">
 <title>/lib/models/money_objects/categories/category.dart&#45;&gt;/lib/storage/data/data.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10706.59,-310.79C10740.21,-322.53 10791.43,-338.49 10837.53,-345 10864.05,-348.74 14668.13,-344.53 14693.53,-353 14696.06,-353.84 14698.55,-354.94 14700.97,-356.2"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="14699.06,-359.13 14709.38,-361.54 14702.81,-353.23 14699.06,-359.13"/>
@@ -4806,8 +4806,8 @@
 <text text-anchor="start" x="16242.78" y="-834.45" font-family="Arial" font-size="15.00"> ccd: 8942 </text>
 <text text-anchor="start" x="16242.78" y="-816.45" font-family="Arial" font-size="15.00"> acd: 56.96 </text>
 <text text-anchor="start" x="16242.78" y="-798.45" font-family="Arial" font-size="15.00"> nccd: 8.97 </text>
-<text text-anchor="start" x="16242.78" y="-780.45" font-family="Arial" font-size="15.00"> totalSloc: 14943 </text>
-<text text-anchor="start" x="16242.78" y="-762.45" font-family="Arial" font-size="15.00"> avgSloc: 95.18 </text>
+<text text-anchor="start" x="16242.78" y="-780.45" font-family="Arial" font-size="15.00"> totalSloc: 14940 </text>
+<text text-anchor="start" x="16242.78" y="-762.45" font-family="Arial" font-size="15.00"> avgSloc: 95.16 </text>
 </g>
 </g>
 </svg>

@@ -8,6 +8,6 @@ flutter analyze
 
 flutter test
 
-./layers.sh
+git@github.com:jpdup/glad.git --view layers --lines curve --align left -o layers.svg
 
 ./graph.sh
