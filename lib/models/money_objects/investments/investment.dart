@@ -7,6 +7,7 @@ import 'package:money/storage/data/data.dart';
 
 class Investment extends MoneyObject {
   static Fields<Investment>? fields;
+
   static getFields() {
     if (fields == null) {
       Investment.fromJson({});
@@ -192,10 +193,12 @@ class Investment extends MoneyObject {
         return '?not found?';
       });
 
-  FieldAmount balance = FieldAmount(
-    name: 'Balance',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).balance.value,
-  );
+  FieldAmount amount = FieldAmount(
+      name: 'Amount',
+      valueFromInstance: (final MoneyObject instance) {
+        final Investment investment = (instance as Investment);
+        return investment.units.value * investment.unitPrice.value;
+      });
 
   Investment({
     required final int id, // 1
@@ -229,7 +232,7 @@ class Investment extends MoneyObject {
       this.tradeType,
       this.taxExempt,
       this.withholding,
-      this.balance,
+      this.amount,
     ]);
     // Also stash the definition in the instance for fast retrieval later
     fieldDefinitions = fields!.definitions;
@@ -252,31 +255,31 @@ class Investment extends MoneyObject {
   /// Constructor from a SQLite row
   factory Investment.fromJson(final MyJson row) {
     return Investment(
-      // 1
+// 1
       id: row.getInt('Id', -1),
-      // 1
+// 1
       security: row.getInt('Security'),
-      // 2
+// 2
       unitPrice: row.getDouble('UnitPrice'),
-      // 3
+// 3
       units: row.getDouble('Units'),
-      // 4
+// 4
       commission: row.getDouble('Commission'),
-      // 5
+// 5
       markUpDown: row.getDouble('MarkUpDown'),
-      // 6
+// 6
       taxes: row.getDouble('Taxes'),
-      // 7
+// 7
       fees: row.getDouble('Fees'),
-      // 8
+// 8
       load: row.getDouble('Load'),
-      // 9
+// 9
       investmentType: row.getInt('InvestmentType'),
-      // 10
+// 10
       tradeType: row.getInt('TradeType'),
-      // 11
+// 11
       taxExempt: row.getInt('TaxExempt'),
-      // 12
+// 12
       withholding: row.getDouble('Withholding'),
     );
   }
