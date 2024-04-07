@@ -1,5 +1,4 @@
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/fields/field.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -50,9 +49,9 @@ class Payee extends MoneyObject {
     valueForSerialization: (final MoneyObject instance) => (instance as Payee).count.value,
   );
 
-  FieldAmount balance = FieldAmount(
-    name: 'Balance',
-    valueFromInstance: (final MoneyObject instance) => (instance as Payee).balance.value,
+  FieldAmount sum = FieldAmount(
+    name: 'Sum',
+    valueFromInstance: (final MoneyObject instance) => (instance as Payee).sum.value,
   );
 
   Payee() {
@@ -60,14 +59,14 @@ class Payee extends MoneyObject {
       id,
       name,
       count,
-      balance,
+      sum,
     ]);
     // Also stash the definition in the instance for fast retrieval later
     fieldDefinitions = fields!.definitions;
 
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(sum.value),
           rightBottomAsString: getAmountAsShorthandText(count.value),
         );
   }
