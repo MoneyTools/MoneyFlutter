@@ -11,6 +11,7 @@ typedef FieldDefinitions = List<Field<dynamic>>;
 class Field<T> {
   late T _value;
 
+  // ignore: unnecessary_getters_setters
   T get value {
     return _value;
   }
@@ -27,6 +28,7 @@ class Field<T> {
   TextAlign align;
   bool useAsColumn;
   bool useAsDetailPanels;
+  bool fixedFont = false;
   bool isMultiLine = false;
   int importance;
 
@@ -53,6 +55,7 @@ class Field<T> {
     this.align = TextAlign.left,
     this.isMultiLine = false,
     this.columnWidth = ColumnWidth.normal,
+    this.fixedFont = false,
     this.name = '',
     this.serializeName = '',
     required final T defaultValue,
@@ -230,7 +233,7 @@ class FieldDate extends Field<DateTime?> {
     super.getEditWidget,
   }) : super(
           defaultValue: null,
-          align: TextAlign.center,
+          align: TextAlign.left,
           type: FieldType.date,
         );
 }
@@ -246,6 +249,7 @@ class FieldString extends Field<String> {
     super.columnWidth,
     super.useAsDetailPanels = true,
     super.align = TextAlign.left,
+    super.fixedFont = false,
     super.isMultiLine = false,
     super.getEditWidget,
     super.setValue,
@@ -286,9 +290,26 @@ class FieldId extends Field<int> {
         );
 }
 
+Widget buildFieldWidgetForDate({
+  final DateTime? date,
+  final TextAlign align = TextAlign.left,
+}) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+    child: Text(
+      dateToString(date),
+      textAlign: align,
+      overflow: TextOverflow.ellipsis, // Clip with ellipsis
+      maxLines: 1, // Restrict to single line,
+      style: const TextStyle(fontFamily: 'RobotoMono'),
+    ),
+  );
+}
+
 Widget buildFieldWidgetForText({
   final String text = '',
   final TextAlign align = TextAlign.left,
+  final bool fixedFont = false,
 }) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
@@ -296,11 +317,12 @@ Widget buildFieldWidgetForText({
       text, textAlign: align,
       overflow: TextOverflow.ellipsis, // Clip with ellipsis
       maxLines: 1, // Restrict to single line,
+      style: TextStyle(fontFamily: fixedFont ? 'RobotoMono' : 'RobotoFlex'),
     ),
   );
 }
 
-Widget buildFieldWidgetForCurrency({
+Widget buildFieldWidgetForAmount({
   final dynamic value = 0,
   final String currency = Constants.defaultCurrency,
   final bool shorthand = false,
@@ -316,6 +338,7 @@ Widget buildFieldWidgetForCurrency({
             ? getAmountAsShorthandText(value as num)
             : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
         textAlign: align,
+        style: const TextStyle(fontFamily: 'RobotoMono'),
       ),
     ),
   );
@@ -334,6 +357,7 @@ Widget buildFieldWidgetForNumber({
       child: Text(
         shorthand ? getAmountAsShorthandText(value) : getNumberShorthandText(value),
         textAlign: align,
+        style: const TextStyle(fontFamily: 'RobotoMono'),
       ),
     ),
   );
@@ -366,6 +390,7 @@ Widget buildWidgetFromTypeAndValue(
   final dynamic value,
   final FieldType type,
   final TextAlign align,
+  final bool fixedFont,
 ) {
   switch (type) {
     case FieldType.numeric:
@@ -373,19 +398,19 @@ Widget buildWidgetFromTypeAndValue(
     case FieldType.numericShorthand:
       return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);
     case FieldType.amount:
-      return buildFieldWidgetForCurrency(value: value, shorthand: false, align: align);
+      return buildFieldWidgetForAmount(value: value, shorthand: false, align: align);
     case FieldType.amountShorthand:
-      return buildFieldWidgetForCurrency(value: value, shorthand: true, align: align);
+      return buildFieldWidgetForAmount(value: value, shorthand: true, align: align);
     case FieldType.widget:
       return Center(child: value as Widget);
     case FieldType.date:
-      if (value == null) {
-        return buildFieldWidgetForText(text: '____-__-__', align: align);
+      if (value is String) {
+        return buildFieldWidgetForText(text: value.toString(), align: align, fixedFont: true);
       }
-      return buildFieldWidgetForText(text: value is DateTime ? dateToString(value) : value.toString(), align: align);
+      return buildFieldWidgetForDate(date: value, align: align);
     case FieldType.text:
     default:
-      return buildFieldWidgetForText(text: value.toString(), align: align);
+      return buildFieldWidgetForText(text: value.toString(), align: align, fixedFont: fixedFont);
   }
 }
 

@@ -1,3 +1,5 @@
+import 'package:money/helpers/date_helper.dart';
+
 class DateRange {
   DateTime? min;
   DateTime? max;
@@ -41,22 +43,6 @@ class DateRange {
 
   String toStringYears() {
     return '${yearToString(min)} - ${yearToString(max)} (${durationInYears()})';
-  }
-
-  String dateToString(final DateTime? dateTime) {
-    if (dateTime == null) {
-      return '____-__-__';
-    }
-
-    return dateTime.toIso8601String();
-  }
-
-  String yearToString(final DateTime? dateTime) {
-    if (dateTime == null) {
-      return '____';
-    }
-
-    return dateTime.year.toString();
   }
 
   bool isBetween(final DateTime date) {

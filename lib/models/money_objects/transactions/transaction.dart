@@ -10,8 +10,8 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
-import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
+import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
@@ -340,6 +340,7 @@ class Transaction extends MoneyObject {
     align: TextAlign.right,
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
+    fixedFont: true,
     valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
         (instance as Transaction).getNormalizedAmount((instance).amount.value),
         iso4217code: Constants.defaultCurrency),
@@ -362,6 +363,7 @@ class Transaction extends MoneyObject {
     name: columnIdBalance,
     align: TextAlign.right,
     columnWidth: ColumnWidth.small,
+    fixedFont: true,
     useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
@@ -375,6 +377,7 @@ class Transaction extends MoneyObject {
     name: 'Balance(USD)',
     align: TextAlign.right,
     columnWidth: ColumnWidth.small,
+    fixedFont: true,
     useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
         (instance as Transaction).getNormalizedAmount((instance).balance.value),
@@ -385,7 +388,7 @@ class Transaction extends MoneyObject {
 
   ///------------------------------------------------------
   /// Non persisted fields
-  String get dateTimeAsText => getDateAsText(dateTime.value);
+  String get dateTimeAsText => dateToString(dateTime.value);
 
   Account? accountInstance;
 
@@ -543,7 +546,6 @@ class Transaction extends MoneyObject {
         salesTax,
         transferSplit,
         mergeDate,
-        balance,
         amountAsTextNormalized,
         balance,
         balanceAsTextNative,

@@ -47,6 +47,7 @@ class Fields<T> {
             value,
             fieldDefinition.type,
             fieldDefinition.align,
+            fieldDefinition.fixedFont,
           ),
         ),
       );

@@ -95,6 +95,17 @@ flutter:
   assets:
     - assets/flags/
 
+  fonts:
+    - family: RobotoFlex
+      fonts:
+        - asset: assets/fonts/RobotoFlex-Regular.ttf
+          weight: 700
+    - family: RobotoMono
+      fonts:
+        - asset: assets/fonts/RobotoMono.ttf
+        - asset: assets/fonts/RobotoMono-Italic.ttf
+          weight: 700
+
   # assets:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
