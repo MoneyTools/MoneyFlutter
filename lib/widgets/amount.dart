@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag

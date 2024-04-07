@@ -1,5 +1,4 @@
 import 'package:collection/collection.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/fields/fields.dart';
