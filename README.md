@@ -23,7 +23,6 @@ This app builds and run on all platforms
 
 #### 1 - AccountAliases
 
-
 ```bash
 sqlite3 mydata.MyMoney.mmdb .schema
 sqlite3 mydata.MyMoney.mmdb .dumb > backup.sql
@@ -291,16 +290,18 @@ cid  name               type           notnull  dflt_value  pk
 17   MergeDate          datetime       0                    0 
 ```
 
-
 ## Code Style
 
 Ensure your code is formatted correctly by running this CLI before committing changes
 
 macOS
+
 ```bash
 ./check.sh
 ```
+
 Windows
+
 ```batch
 ./check.cmd
 ```

@@ -1,10 +1,6 @@
 #!/bin/sh
 
-echo --- Fix
-dart fix --apply
-
-echo --- Formatting
-dart format . -l 120
+./format.sh
 
 echo --- Analyze
 dart analyze
