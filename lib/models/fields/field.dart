@@ -9,7 +9,16 @@ import 'package:money/models/money_objects/money_object.dart';
 typedef FieldDefinitions = List<Field<dynamic>>;
 
 class Field<T> {
-  late T value;
+  late T _value;
+
+  T get value {
+    return _value;
+  }
+
+  set value(T v) {
+    _value = v;
+  }
+
   String name;
   String serializeName;
   FieldType type;
