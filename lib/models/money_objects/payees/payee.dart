@@ -1,4 +1,5 @@
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/fields/field.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -49,13 +50,9 @@ class Payee extends MoneyObject {
     valueForSerialization: (final MoneyObject instance) => (instance as Payee).count.value,
   );
 
-  Field<double> balance = DeclareNoSerialized<double>(
-    type: FieldType.amount,
+  FieldAmount balance = FieldAmount(
     name: 'Balance',
-    defaultValue: 0,
-    align: TextAlign.right,
     valueFromInstance: (final MoneyObject instance) => (instance as Payee).balance.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Payee).balance.value,
   );
 
   Payee() {
