@@ -23,7 +23,15 @@ class Field<T> {
   String name;
   String serializeName;
   FieldType type;
-  String currency; // used for FieldType.amount
+
+  // String _currency;
+  //
+  // String get currency => _currency;
+  //
+  // set currency(String value) {
+  //   _currency = value;
+  // } // used for FieldType.amount
+
   ColumnWidth columnWidth;
   TextAlign align;
   bool useAsColumn;
@@ -51,7 +59,7 @@ class Field<T> {
 
   Field({
     this.type = FieldType.text,
-    this.currency = Constants.defaultCurrency,
+    String currency = Constants.defaultCurrency,
     this.align = TextAlign.left,
     this.isMultiLine = false,
     this.columnWidth = ColumnWidth.normal,
@@ -386,26 +394,30 @@ enum FieldType {
   widget,
 }
 
-Widget buildWidgetFromTypeAndValue(
-  final dynamic value,
-  final FieldType type,
-  final TextAlign align,
-  final bool fixedFont,
-) {
+Widget buildWidgetFromTypeAndValue({
+  required final dynamic value,
+  required final FieldType type,
+  required final TextAlign align,
+  required final bool fixedFont,
+  String currency = Constants.defaultCurrency,
+}) {
   switch (type) {
     case FieldType.numeric:
       return buildFieldWidgetForNumber(value: value as num, shorthand: false, align: align);
     case FieldType.numericShorthand:
       return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);
     case FieldType.amount:
-      return buildFieldWidgetForAmount(value: value, shorthand: false, align: align);
+      if (value is String) {
+        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+      }
+      return buildFieldWidgetForAmount(value: value, shorthand: false, align: align, currency: currency);
     case FieldType.amountShorthand:
       return buildFieldWidgetForAmount(value: value, shorthand: true, align: align);
     case FieldType.widget:
       return Center(child: value as Widget);
     case FieldType.date:
       if (value is String) {
-        return buildFieldWidgetForText(text: value.toString(), align: align, fixedFont: true);
+        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
       }
       return buildFieldWidgetForDate(date: value, align: align);
     case FieldType.text:

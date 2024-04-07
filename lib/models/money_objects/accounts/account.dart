@@ -248,12 +248,19 @@ class Account extends MoneyObject {
   );
 
   /// Balance
-  FieldAmount balance = FieldAmount(
+  double balance = 0.00;
+
+  /// Balance in Native currency
+  FieldString balanceNative = FieldString(
     importance: 98,
-    name: 'Balance',
-    useAsColumn: true,
-    useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Account).balance.value,
+    name: 'BalanceN',
+    align: TextAlign.right,
+    fixedFont: true,
+    valueFromInstance: (final MoneyObject instance) {
+      final accountInstance = instance as Account;
+      return Currency.getAmountAsStringUsingCurrency(accountInstance.balance,
+          iso4217code: accountInstance.currency.value);
+    },
   );
 
   /// Balance Normalized use in the List view
@@ -263,7 +270,7 @@ class Account extends MoneyObject {
       useAsDetailPanels: false,
       valueFromInstance: (final MoneyObject instance) {
         final accountInstance = instance as Account;
-        return accountInstance.getCurrencyRatio() * accountInstance.balance.value;
+        return accountInstance.getCurrencyRatio() * accountInstance.balance;
       });
 
   Field<bool> isAccountOpen = Field<bool>(
@@ -298,7 +305,7 @@ class Account extends MoneyObject {
       categoryIdForPrincipal,
       categoryIdForInterest,
       count,
-      balance,
+      balanceNative,
       currency,
       balanceNormalized,
       isAccountOpen
@@ -317,7 +324,7 @@ class Account extends MoneyObject {
           message: ratioCurrency.toString(),
           child: Row(
             children: [
-              Text(Currency.getAmountAsStringUsingCurrency(balance.value / ratioCurrency, iso4217code: currency.value)),
+              Text(Currency.getAmountAsStringUsingCurrency(balance / ratioCurrency, iso4217code: currency.value)),
               const SizedBox(width: 4),
               Currency.buildCurrencyWidget(currency.value),
             ],
@@ -328,7 +335,7 @@ class Account extends MoneyObject {
       return MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: getTypeAsText(type.value),
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
           rightBottomAsWidget: originalCurrencyAndValue);
     };
   }

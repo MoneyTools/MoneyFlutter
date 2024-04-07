@@ -1261,7 +1261,7 @@
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="7247.25,-411.84 7247.14,-401.25 7240.62,-409.6 7247.25,-411.84"/>
 </g>
 <!-- /lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart -->
-<g id="edge123" class="edge">
+<g id="edge121" class="edge">
 <title>/lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6818.86,-362.72C6820.02,-352.12 6821.52,-338.25 6822.85,-325.99"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="6826.29,-326.72 6823.89,-316.4 6819.34,-325.96 6826.29,-326.72"/>
@@ -1273,7 +1273,7 @@
 <text text-anchor="middle" x="6439" y="-630.45" font-family="Arial" font-size="15.00">cost_basis</text>
 </g>
 <!-- /lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/investments/cost_basis.dart -->
-<g id="edge121" class="edge">
+<g id="edge122" class="edge">
 <title>/lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/investments/cost_basis.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6810.59,-399.36C6801.09,-423.11 6781.19,-465.64 6752,-491.9 6731.34,-510.49 6575.24,-577.54 6491.59,-612.75"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="6490.45,-609.43 6482.59,-616.53 6493.16,-615.89 6490.45,-609.43"/>
@@ -1285,7 +1285,7 @@
 <text text-anchor="middle" x="6411" y="-290.75" font-family="Arial" font-size="15.00">security_purchase</text>
 </g>
 <!-- /lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/investments/security_purchase.dart -->
-<g id="edge122" class="edge">
+<g id="edge123" class="edge">
 <title>/lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/investments/security_purchase.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6778.93,-366.22C6763.35,-361.2 6745.01,-356.01 6728,-353 6665.75,-342 6648.38,-355.19 6586,-345 6548.45,-338.86 6507.39,-327.84 6474.48,-317.9"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="6475.67,-314.6 6465.08,-315.01 6473.61,-321.29 6475.67,-314.6"/>
@@ -4812,8 +4812,8 @@
 <text text-anchor="start" x="15185.25" y="-834.45" font-family="Arial" font-size="15.00"> ccd: 8943 </text>
 <text text-anchor="start" x="15185.25" y="-816.45" font-family="Arial" font-size="15.00"> acd: 56.96 </text>
 <text text-anchor="start" x="15185.25" y="-798.45" font-family="Arial" font-size="15.00"> nccd: 8.97 </text>
-<text text-anchor="start" x="15185.25" y="-780.45" font-family="Arial" font-size="15.00"> totalSloc: 14967 </text>
-<text text-anchor="start" x="15185.25" y="-762.45" font-family="Arial" font-size="15.00"> avgSloc: 95.33 </text>
+<text text-anchor="start" x="15185.25" y="-780.45" font-family="Arial" font-size="15.00"> totalSloc: 14988 </text>
+<text text-anchor="start" x="15185.25" y="-762.45" font-family="Arial" font-size="15.00"> avgSloc: 95.46 </text>
 </g>
 </g>
 </svg>

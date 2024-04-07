@@ -44,10 +44,11 @@ class Fields<T> {
         Expanded(
           flex: fieldDefinition.columnWidth.index,
           child: buildWidgetFromTypeAndValue(
-            value,
-            fieldDefinition.type,
-            fieldDefinition.align,
-            fieldDefinition.fixedFont,
+            value: value,
+            type: fieldDefinition.type,
+            align: fieldDefinition.align,
+            fixedFont: fieldDefinition.fixedFont,
+            // currency: fieldDefinition.currency,
           ),
         ),
       );

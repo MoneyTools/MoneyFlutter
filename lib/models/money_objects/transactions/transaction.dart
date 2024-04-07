@@ -279,9 +279,12 @@ class Transaction extends MoneyObject {
     importance: 97,
     name: columnIdAmount,
     serializeName: 'Amount',
-    valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
+    valueFromInstance: (final MoneyObject instance) {
+      return Currency.getAmountAsStringUsingCurrency(
         (instance as Transaction).amount.value,
-        iso4217code: (instance).amount.currency),
+        iso4217code: instance.getCurrency(),
+      );
+    },
     valueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value,
     setValue: (final MoneyObject instance, dynamic newValue) {
       (instance as Transaction).amount.value = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
@@ -367,8 +370,9 @@ class Transaction extends MoneyObject {
     useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
-        (instance as Transaction).balance.value,
-        iso4217code: (instance).amount.currency),
+      (instance as Transaction).balance.value,
+      iso4217code: instance.getCurrency(),
+    ),
   );
 
   /// Balance Normalized to USD
@@ -431,6 +435,14 @@ class Transaction extends MoneyObject {
   Investment? investmentInstance;
 
   String? _transferName;
+
+  String getCurrency() {
+    try {
+      return this.accountInstance!.currency.value;
+    } catch (error) {
+      return 'USD';
+    }
+  }
 
   String get transferName {
     if (transferInstance == null) {
@@ -542,10 +554,10 @@ class Transaction extends MoneyObject {
         fitid,
         flags,
         currency,
-        amount,
         salesTax,
         transferSplit,
         mergeDate,
+        amount,
         amountAsTextNormalized,
         balance,
         balanceAsTextNative,
@@ -598,8 +610,6 @@ class Transaction extends MoneyObject {
 
 // 14 Amount
     t.amount.value = json.getDouble('Amount');
-    t.amount.currency = getDefaultCurrency(t.accountInstance);
-
 // 15 Sales Tax
     t.salesTax.value = json.getDouble('SalesTax');
 // 16 Transfer Split
