@@ -1,6 +1,12 @@
 # Change Log
 
-## [version 1.7.4] 2024-03-05
+## [version 1.7.5] 2024-04-09
+
+### Updated
+
+- Rental view now shows Currency of the associated account linked by the Income Category
+
+## [version 1.7.4] 2024-04-05
 
 ### Added
 
@@ -12,26 +18,26 @@
 - Improve bottom legend for stock chart
 - Custom Filter of column by currency
 
-## [version 1.7.3] 2024-03-04
+## [version 1.7.3] 2024-04-04
 
 - Upgrade packages: [file_picker: 8.0.0+1], [sqlite3: 2.4.2], [dart_pdf_reader: ^1.0.0]
 - Better Sorting fallback
 - Set API Key directly from the Stock Chart
 
-## [version 1.7.2] 2024-03-03
+## [version 1.7.2] 2024-04-03
 
 ### Added
 
 - Download stock history from [twelvedata.com]
 
-## [version 1.7.1] 2024-03-02
+## [version 1.7.1] 2024-04-02
 
 ### Added
 
 - Stock view
 - Work in progress = Investment transactions
 
-## [version 1.7.0] 2024-03-01
+## [version 1.7.0] 2024-04-01
 
 - Major refactor, simplify by reducing Template Field<C,T> to Field<T>
 - Long Press on Chart Bars will copy the tooltip text to the clipboard

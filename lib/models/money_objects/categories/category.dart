@@ -1,12 +1,14 @@
 // Imports
+// ignore_for_file: unnecessary_this
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
@@ -144,21 +146,14 @@ class Category extends MoneyObject {
     importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.tiny,
-    useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Category).count.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).count.value,
   );
 
   /// Running Balance
-  Field<double> runningBalance = Field<double>(
+  FieldAmount sum = FieldAmount(
     importance: 99,
-    type: FieldType.amount,
-    align: TextAlign.right,
-    name: 'Balance',
-    useAsDetailPanels: false,
-    defaultValue: 0,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).runningBalance.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).runningBalance.value,
+    name: 'Sum',
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).sum.value,
   );
 
   Category({
@@ -184,10 +179,8 @@ class Category extends MoneyObject {
       this.budgetBalance,
       this.frequency,
       this.taxRefNum,
-      // ignore: unnecessary_this
       this.count,
-      // ignore: unnecessary_this
-      this.runningBalance,
+      this.sum,
     ]);
     // Also stash the definition in the instance for fast retrieval later
     fieldDefinitions = fields!.definitions;
@@ -218,7 +211,7 @@ class Category extends MoneyObject {
       return MyListItemAsCard(
         leftTopAsString: top,
         leftBottomAsString: bottom,
-        rightTopAsString: Currency.getAmountAsStringUsingCurrency(runningBalance.value),
+        rightTopAsString: Currency.getAmountAsStringUsingCurrency(sum.value),
         rightBottomAsWidget: Row(
           children: <Widget>[
             Text(getTypeAsText()),

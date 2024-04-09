@@ -78,7 +78,11 @@ Widget widgetHeaderButton(
               borderRadius: BorderRadius.zero, // Remove rounded corners
             ),
           ),
-          padding: MaterialStateProperty.all(EdgeInsets.zero),
+          padding: MaterialStateProperty.all(
+            const EdgeInsets.symmetric(
+              horizontal: 3.0, // Left and right padding
+            ),
+          ),
         ),
         onPressed: onClick,
         onLongPress: onLongPress,
@@ -97,24 +101,7 @@ Widget _buildTextAndSortOrder(
 ) {
   switch (align) {
     case TextAlign.center:
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Spacer(),
-          Expanded(
-            flex: 9, // we use 9 to ensure that the Text takes precedent over the Spacer()
-            child: Text(
-              text,
-              softWrap: false,
-              textAlign: TextAlign.center,
-              overflow: TextOverflow.clip,
-              style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
-            ),
-          ),
-          if (orderIndicator != null) orderIndicator,
-          const Spacer(),
-        ],
-      );
+      return HeaderContentCenter(text: text, trailingWidget: orderIndicator);
 
     case TextAlign.right:
     case TextAlign.end:
@@ -181,4 +168,27 @@ enum SortIndicator {
   none,
   sortAscending,
   sortDescending,
+}
+
+class HeaderContentCenter extends StatelessWidget {
+  final String text;
+  final Widget? trailingWidget;
+
+  const HeaderContentCenter({super.key, required this.text, required this.trailingWidget});
+
+  @override
+  Widget build(BuildContext context) {
+    final Widget textWidget = Text(
+      text,
+      softWrap: false,
+      textAlign: TextAlign.center,
+      overflow: TextOverflow.clip,
+      style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+    );
+
+    if (trailingWidget == null) {
+      return textWidget;
+    }
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [Flexible(child: textWidget), trailingWidget!]);
+  }
 }

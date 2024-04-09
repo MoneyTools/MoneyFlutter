@@ -1,11 +1,26 @@
 import 'package:intl/intl.dart';
 
-String dateToString(final DateTime date) {
+String dateToString(final DateTime? date) {
+  if (date == null) {
+    return '____-__-__';
+  }
   return DateFormat('yyyy-MM-dd').format(date);
 }
 
-String getDateAsText(final DateTime? date) {
-  return dateAsIso8601OrDefault(date).split('T').first;
+String dateTimeToString(final DateTime? dateTime) {
+  if (dateTime == null) {
+    return '____-__-__ __:__:__';
+  }
+
+  return dateTime.toIso8601String();
+}
+
+String yearToString(final DateTime? dateTime) {
+  if (dateTime == null) {
+    return '____';
+  }
+
+  return dateTime.year.toString();
 }
 
 String dateAsIso8601OrDefault(final DateTime? value, {final String defaultValueIfNull = ''}) {

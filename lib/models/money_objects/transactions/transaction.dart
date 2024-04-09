@@ -10,8 +10,8 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
-import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
+import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
@@ -279,9 +279,12 @@ class Transaction extends MoneyObject {
     importance: 97,
     name: columnIdAmount,
     serializeName: 'Amount',
-    valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
+    valueFromInstance: (final MoneyObject instance) {
+      return Currency.getAmountAsStringUsingCurrency(
         (instance as Transaction).amount.value,
-        iso4217code: (instance).amount.currency),
+        iso4217code: instance.getCurrency(),
+      );
+    },
     valueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value,
     setValue: (final MoneyObject instance, dynamic newValue) {
       (instance as Transaction).amount.value = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
@@ -340,6 +343,7 @@ class Transaction extends MoneyObject {
     align: TextAlign.right,
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
+    fixedFont: true,
     valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
         (instance as Transaction).getNormalizedAmount((instance).amount.value),
         iso4217code: Constants.defaultCurrency),
@@ -362,11 +366,13 @@ class Transaction extends MoneyObject {
     name: columnIdBalance,
     align: TextAlign.right,
     columnWidth: ColumnWidth.small,
+    fixedFont: true,
     useAsColumn: false,
     useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
-        (instance as Transaction).balance.value,
-        iso4217code: (instance).amount.currency),
+      (instance as Transaction).balance.value,
+      iso4217code: instance.getCurrency(),
+    ),
   );
 
   /// Balance Normalized to USD
@@ -375,6 +381,7 @@ class Transaction extends MoneyObject {
     name: 'Balance(USD)',
     align: TextAlign.right,
     columnWidth: ColumnWidth.small,
+    fixedFont: true,
     useAsDetailPanels: false,
     valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
         (instance as Transaction).getNormalizedAmount((instance).balance.value),
@@ -385,7 +392,7 @@ class Transaction extends MoneyObject {
 
   ///------------------------------------------------------
   /// Non persisted fields
-  String get dateTimeAsText => getDateAsText(dateTime.value);
+  String get dateTimeAsText => dateToString(dateTime.value);
 
   Account? accountInstance;
 
@@ -428,6 +435,14 @@ class Transaction extends MoneyObject {
   Investment? investmentInstance;
 
   String? _transferName;
+
+  String getCurrency() {
+    try {
+      return this.accountInstance!.currency.value;
+    } catch (error) {
+      return 'USD';
+    }
+  }
 
   String get transferName {
     if (transferInstance == null) {
@@ -539,11 +554,10 @@ class Transaction extends MoneyObject {
         fitid,
         flags,
         currency,
-        amount,
         salesTax,
         transferSplit,
         mergeDate,
-        balance,
+        amount,
         amountAsTextNormalized,
         balance,
         balanceAsTextNative,
@@ -596,8 +610,6 @@ class Transaction extends MoneyObject {
 
 // 14 Amount
     t.amount.value = json.getDouble('Amount');
-    t.amount.currency = getDefaultCurrency(t.accountInstance);
-
 // 15 Sales Tax
     t.salesTax.value = json.getDouble('SalesTax');
 // 16 Transfer Split

@@ -85,6 +85,7 @@ class Security extends MoneyObject {
     name: 'Type',
     serializeName: 'Type',
     columnWidth: ColumnWidth.tiny,
+    align: TextAlign.center,
     valueFromInstance: (final MoneyObject instance) => (instance as Security).securityType.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
   );

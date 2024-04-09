@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class CurrencyLabel extends StatelessWidget {
   final String threeLetterCurrencySymbol;

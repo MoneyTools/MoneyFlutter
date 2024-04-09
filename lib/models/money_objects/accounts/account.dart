@@ -122,11 +122,11 @@ class Account extends MoneyObject {
   /// 7|Currency|nchar(3)|0||0
   Field<String> currency = Field<String>(
     type: FieldType.widget,
-    importance: 4,
+    importance: 96,
     name: 'Currency',
     serializeName: 'Currency',
     align: TextAlign.center,
-    columnWidth: ColumnWidth.tiny,
+    columnWidth: ColumnWidth.nano,
     defaultValue: '',
     useAsDetailPanels: true,
     valueFromInstance: (final MoneyObject instance) =>
@@ -248,21 +248,30 @@ class Account extends MoneyObject {
   );
 
   /// Balance
-  FieldDouble balance = FieldDouble(
-    importance: 5,
-    name: 'Balance',
-    useAsColumn: false,
-    useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Account).currency.value,
+  double balance = 0.00;
+
+  /// Balance in Native currency
+  FieldString balanceNative = FieldString(
+    importance: 98,
+    name: 'BalanceN',
+    align: TextAlign.right,
+    fixedFont: true,
+    valueFromInstance: (final MoneyObject instance) {
+      final accountInstance = instance as Account;
+      return Currency.getAmountAsStringUsingCurrency(accountInstance.balance,
+          iso4217code: accountInstance.currency.value);
+    },
   );
 
   /// Balance Normalized use in the List view
   FieldAmount balanceNormalized = FieldAmount(
-    importance: 99,
-    name: 'Balance(USD)',
-    useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Account).balanceNormalized.value,
-  );
+      importance: 99,
+      name: 'Balance(USD)',
+      useAsDetailPanels: false,
+      valueFromInstance: (final MoneyObject instance) {
+        final accountInstance = instance as Account;
+        return accountInstance.getCurrencyRatio() * accountInstance.balance;
+      });
 
   Field<bool> isAccountOpen = Field<bool>(
     name: 'Account is open',
@@ -286,7 +295,6 @@ class Account extends MoneyObject {
       description,
       type,
       openingBalance,
-      currency,
       onlineAccount,
       webSite,
       reconcileWarning,
@@ -297,7 +305,8 @@ class Account extends MoneyObject {
       categoryIdForPrincipal,
       categoryIdForInterest,
       count,
-      balance,
+      balanceNative,
+      currency,
       balanceNormalized,
       isAccountOpen
     ]);
@@ -315,7 +324,7 @@ class Account extends MoneyObject {
           message: ratioCurrency.toString(),
           child: Row(
             children: [
-              Text(Currency.getAmountAsStringUsingCurrency(balance.value / ratioCurrency, iso4217code: currency.value)),
+              Text(Currency.getAmountAsStringUsingCurrency(balance / ratioCurrency, iso4217code: currency.value)),
               const SizedBox(width: 4),
               Currency.buildCurrencyWidget(currency.value),
             ],
@@ -326,7 +335,7 @@ class Account extends MoneyObject {
       return MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: getTypeAsText(type.value),
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
           rightBottomAsWidget: originalCurrencyAndValue);
     };
   }

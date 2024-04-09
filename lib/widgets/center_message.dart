@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 /// a basic text that is centered in the parent container
 class CenterMessage extends StatelessWidget {

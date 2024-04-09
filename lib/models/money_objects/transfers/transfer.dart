@@ -218,7 +218,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
 
   String evaluatedReceivedDate() {
-    return getDateAsText(getReceivedDateOrToday());
+    return dateToString(getReceivedDateOrToday());
   }
 
   int dateSpreadBetweenSendingAndReceiving() {

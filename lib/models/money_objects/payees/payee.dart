@@ -49,13 +49,9 @@ class Payee extends MoneyObject {
     valueForSerialization: (final MoneyObject instance) => (instance as Payee).count.value,
   );
 
-  Field<double> balance = DeclareNoSerialized<double>(
-    type: FieldType.amount,
-    name: 'Balance',
-    defaultValue: 0,
-    align: TextAlign.right,
-    valueFromInstance: (final MoneyObject instance) => (instance as Payee).balance.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Payee).balance.value,
+  FieldAmount sum = FieldAmount(
+    name: 'Sum',
+    valueFromInstance: (final MoneyObject instance) => (instance as Payee).sum.value,
   );
 
   Payee() {
@@ -63,14 +59,14 @@ class Payee extends MoneyObject {
       id,
       name,
       count,
-      balance,
+      sum,
     ]);
     // Also stash the definition in the instance for fast retrieval later
     fieldDefinitions = fields!.definitions;
 
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(sum.value),
           rightBottomAsString: getAmountAsShorthandText(count.value),
         );
   }

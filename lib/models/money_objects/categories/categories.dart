@@ -240,14 +240,14 @@ class Categories extends MoneyObjects<Category> {
   void onAllDataLoaded() {
     for (final Category category in iterableList()) {
       category.count.value = 0;
-      category.runningBalance.value = 0;
+      category.sum.value = 0;
     }
 
     for (final Transaction t in Data().transactions.iterableList()) {
       final Category? item = get(t.categoryId.value);
       if (item != null) {
         item.count.value++;
-        item.runningBalance.value += t.amount.value;
+        item.sum.value += t.amount.value;
       }
     }
   }
