@@ -82,6 +82,17 @@ Color addTintOfBlue(Color originalColor, int tintStrength) {
   return Color.fromARGB(originalColor.alpha, red, green, blue);
 }
 
+Color colorBasedOnValue(final double value) {
+  if (value > 0) {
+    return Colors.green;
+  }
+  if (value < 0) {
+    return Colors.red;
+  }
+  // value == 0
+  return Colors.grey;
+}
+
 Widget colorBoxes(BuildContext context) {
   return Row(
     children: [

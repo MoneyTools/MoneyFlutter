@@ -2,9 +2,13 @@
 
 ## [version 1.7.5] 2024-04-09
 
+### Added
+
+- Rental P&L cards
+
 ### Updated
 
-- Rental view now shows Currency of the associated account linked by the Income Category
+- Rental view shows Currency of the associated account linked by the Income Category
 
 ## [version 1.7.4] 2024-04-05
 

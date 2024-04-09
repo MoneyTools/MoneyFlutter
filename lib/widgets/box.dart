@@ -5,12 +5,14 @@ class Box extends StatelessWidget {
   final Color? color;
   final double? width;
   final double? height;
+  final double? margin;
 
   const Box({
     super.key,
     this.color,
     this.width,
     this.height,
+    this.margin,
     required this.child,
   });
 
@@ -19,10 +21,11 @@ class Box extends StatelessWidget {
     return Container(
       width: width,
       height: height,
+      margin: margin == null ? null : EdgeInsets.all(margin!),
       padding: const EdgeInsets.all(8),
-      constraints: const BoxConstraints(
-        minWidth: 500,
-        maxWidth: 500,
+      constraints: BoxConstraints(
+        minWidth: width ?? 500,
+        maxWidth: width ?? 500,
       ),
       decoration: BoxDecoration(
         color: color,

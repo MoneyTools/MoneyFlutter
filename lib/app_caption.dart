@@ -1,4 +1,3 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/models/settings.dart';
@@ -44,9 +43,7 @@ class LoadedDataFileAndTime extends StatelessWidget {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       reverse: true,
-      // controller: _scrollController,
       scrollDirection: Axis.horizontal,
-      dragStartBehavior: DragStartBehavior.down,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [

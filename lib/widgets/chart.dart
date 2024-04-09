@@ -8,7 +8,6 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/center_message.dart';
-import 'package:clipboard/clipboard.dart';
 
 class PairXY {
   String xText = '';
@@ -117,14 +116,8 @@ class Chart extends StatelessWidget {
               if (barTouchResponse != null) {
                 if (barTouchResponse.spot != null) {
                   HapticFeedback.lightImpact();
-
-                  /*data[barTouchResponse.spot.touchedBarGroupIndex].toString()*/
-                  FlutterClipboard.copy(
-                          getTooltipText(barTouchResponse.spot!.touchedBarGroup, barTouchResponse.spot!.touchedRodData))
-                      .then((_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                            content: Text('Copied to clipboard'),
-                            duration: Duration(seconds: 1),
-                          )));
+                  copyToClipboardAndInformUser(context,
+                      getTooltipText(barTouchResponse.spot!.touchedBarGroup, barTouchResponse.spot!.touchedRodData));
                 }
               }
             }
@@ -179,12 +172,5 @@ FlBorderData getBorders(final double min, final double max) {
 }
 
 Color getHorizontalLineColorBasedOnValue(final double value) {
-  if (value > 0) {
-    return Colors.green.withOpacity(0.2);
-  }
-  if (value < 0) {
-    return Colors.red.withOpacity(0.2);
-  }
-  // value == 0
-  return Colors.grey.withOpacity(0.8);
+  return colorBasedOnValue(value).withOpacity(0.3);
 }

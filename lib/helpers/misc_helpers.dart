@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:math';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/constants.dart';
 import 'package:flutter/foundation.dart';
@@ -192,4 +193,11 @@ double? attemptToGetDoubleFromText(String text) {
 
 bool isPlatformMobile() {
   return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+}
+
+void copyToClipboardAndInformUser(final BuildContext context, final textToCopy) {
+  FlutterClipboard.copy(textToCopy).then((_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Copied to clipboard'),
+        duration: Duration(seconds: 1),
+      )));
 }

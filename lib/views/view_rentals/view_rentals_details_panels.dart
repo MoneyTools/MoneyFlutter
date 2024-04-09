@@ -6,16 +6,51 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final List<PairXY> list = <PairXY>[];
-    for (final RentBuilding entry in getList()) {
-      list.add(PairXY(entry.name.value, entry.profit.value));
+    if (selectedIds.isEmpty) {
+      final List<PairXY> list = <PairXY>[];
+      for (final RentBuilding entry in getList()) {
+        list.add(PairXY(entry.name.value, entry.profit.value));
+      }
+      return Chart(
+        list: list,
+        variableNameHorizontal: 'Rental',
+        variableNameVertical: 'Profit',
+      );
     }
 
-    return Chart(
-      list: list,
-      variableNameHorizontal: 'Rental',
-      variableNameVertical: 'Profit',
-    );
+    RentBuilding? rental = getFirstSelectedItem() as RentBuilding?;
+    if (rental != null) {
+      // show PnL for the selected rental property, per year
+      List<Widget> pnlCards = [];
+
+      for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
+        final pnl = rental.pnlOverYears[year];
+        if (pnl == null) {
+          pnlCards.add(Text(year.toString()));
+        } else {
+          pnlCards.add(RentalPnLCard(pnl: pnl));
+        }
+      }
+      pnlCards.add(RentalPnLCard(
+        pnl: rental.lifeTimePnL,
+        customTitle: 'Life Time P&L',
+      ));
+
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        reverse: true,
+        child: Row(
+          children: pnlCards,
+        ),
+      );
+    }
+    return const Text('No Rental property selected');
+  }
+
+  void getPnLOverYears(RentBuilding rental) {
+    for (final transaction in Data().transactions.iterableList()) {
+      if (rental.categoryForIncomeTreeIds.contains(transaction.categoryId.value)) {}
+    }
   }
 
   // Details Panel for Transactions Payees
@@ -32,8 +67,8 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
       return ListViewTransactions(
         key: Key(rental.uniqueId.toString()),
         columnsToInclude: <Field>[
-          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdPayee),
           Transaction.fields.getFieldByName(columnIdCategory),
           Transaction.fields.getFieldByName(columnIdMemo),

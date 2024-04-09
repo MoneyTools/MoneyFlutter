@@ -8,6 +8,7 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/view_rentals/rental_pnl.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 import '../accounts/account.dart';
@@ -278,21 +279,61 @@ class RentBuilding extends MoneyObject {
   FieldAmount revenue = FieldAmount(
     importance: 20,
     name: 'Revenue',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).revenue.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.income,
   );
 
   /// Expenses
   FieldAmount expense = FieldAmount(
     importance: 21,
     name: 'Expenses',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).expense.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenses,
+  );
+
+  /// Expenses-Interest
+  FieldAmount lifeTimeExpenseInterest = FieldAmount(
+    importance: 21,
+    name: '  Expense-Interest',
+    useAsColumn: false,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseInterest,
+  );
+
+  /// Expenses-Maintenance
+  FieldAmount lifeTimeExpenseMaintenance = FieldAmount(
+    importance: 21,
+    name: '  Expense-Maintenance',
+    useAsColumn: false,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseMaintenance,
+  );
+
+  /// Expenses-Management
+  FieldAmount lifeTimeExpenseManagement = FieldAmount(
+    importance: 21,
+    name: '  Expense-Management',
+    useAsColumn: false,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseManagement,
+  );
+
+  /// Expenses-Repair
+  FieldAmount lifeTimeExpenseRepair = FieldAmount(
+    importance: 21,
+    name: '  Expense-Repair',
+    useAsColumn: false,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseRepairs,
+  );
+
+  /// Expenses-Taxes
+  FieldAmount lifeTimeExpenseTaxes = FieldAmount(
+    importance: 21,
+    name: '  Expense-Taxes',
+    useAsColumn: false,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseTaxes,
   );
 
   /// Profit
   FieldAmount profit = FieldAmount(
     importance: 22,
     name: 'Profit',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).profit.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.profit,
   );
 
   Account? account;
@@ -308,7 +349,88 @@ class RentBuilding extends MoneyObject {
 
   List<RentUnit> units = <RentUnit>[];
 
-  DateRange dateRange = DateRange();
+  DateRange dateRangeOfOperation = DateRange();
+
+  Map<int, RentalPnL> pnlOverYears = {};
+
+  cumulatePnL(Transaction t) {
+    int transactionCategoryId = t.categoryId.value;
+    if (this.isTransactionAssociatedWithThisRental(transactionCategoryId)) {
+      int year = t.dateTime.value!.year;
+
+      RentalPnL? pnl = pnlOverYears[year];
+      if (pnl == null) {
+        pnl = RentalPnL(date: t.dateTime.value!, currency: getCurrencyOfAssociatedAccount());
+
+        if (this.ownershipName1.value.isNotEmpty) {
+          String name = '${this.ownershipName1.value} (${ownershipPercentage1.value}%)';
+          pnl.distributions[name] = this.ownershipPercentage1.value;
+        }
+
+        if (this.ownershipName2.value.isNotEmpty) {
+          String name = '${this.ownershipName2.value} (${ownershipPercentage2.value}%)';
+          pnl.distributions[name] = this.ownershipPercentage2.value;
+        }
+
+        pnlOverYears[year] = pnl;
+      }
+
+      if (this.categoryForIncomeTreeIds.contains(transactionCategoryId)) {
+        transactionsForIncomes.value++;
+        pnl.income += t.amount.value;
+      }
+
+      if (this.categoryForInterestTreeIds.contains(transactionCategoryId)) {
+        transactionsForExpenses.value++;
+        pnl.expenseInterest += t.amount.value;
+      }
+      if (this.categoryForRepairsTreeIds.contains(transactionCategoryId)) {
+        transactionsForExpenses.value++;
+        pnl.expenseRepairs += t.amount.value;
+      }
+      if (this.categoryForMaintenanceTreeIds.contains(transactionCategoryId)) {
+        transactionsForExpenses.value++;
+        pnl.expenseMaintenance += t.amount.value;
+      }
+      if (this.categoryForManagementTreeIds.contains(transactionCategoryId)) {
+        transactionsForExpenses.value++;
+        pnl.expenseManagement += t.amount.value;
+      }
+      if (this.categoryForTaxesTreeIds.contains(transactionCategoryId)) {
+        transactionsForExpenses.value++;
+        pnl.expenseTaxes += t.amount.value;
+      }
+    }
+
+    lifeTimePnL = getLifeTimePnL();
+  }
+
+  late RentalPnL lifeTimePnL;
+
+  RentalPnL getLifeTimePnL() {
+    RentalPnL lifeTimePnL = RentalPnL(date: DateTime.now());
+    pnlOverYears.forEach((year, pnl) {
+      dateRangeOfOperation.inflate(pnl.date);
+      lifeTimePnL.income += pnl.income;
+      lifeTimePnL.expenseInterest += pnl.expenseInterest;
+      lifeTimePnL.expenseManagement += pnl.expenseManagement;
+      lifeTimePnL.expenseMaintenance += pnl.expenseMaintenance;
+      lifeTimePnL.expenseRepairs += pnl.expenseRepairs;
+      lifeTimePnL.expenseTaxes += pnl.expenseTaxes;
+      lifeTimePnL.currency = pnl.currency;
+      lifeTimePnL.distributions = pnl.distributions;
+    });
+    return lifeTimePnL;
+  }
+
+  bool isTransactionAssociatedWithThisRental(int transactionCategoryId) {
+    return this.categoryForIncomeTreeIds.contains(transactionCategoryId) ||
+        this.categoryForInterestTreeIds.contains(transactionCategoryId) ||
+        this.categoryForRepairsTreeIds.contains(transactionCategoryId) ||
+        this.categoryForMaintenanceTreeIds.contains(transactionCategoryId) ||
+        this.categoryForManagementTreeIds.contains(transactionCategoryId) ||
+        this.categoryForTaxesTreeIds.contains(transactionCategoryId);
+  }
 
   RentBuilding() {
     fields ??= Fields<RentBuilding>(definitions: [
@@ -321,19 +443,24 @@ class RentBuilding extends MoneyObject {
       this.landValue,
       this.estimatedValue,
       this.ownershipName1,
-      this.ownershipName2,
       this.ownershipPercentage1,
+      this.ownershipName2,
       this.ownershipPercentage2,
-      this.categoryForTaxes,
       this.categoryForIncome,
       this.categoryForInterest,
-      this.categoryForRepairs,
-      this.categoryForMaintenance,
       this.categoryForManagement,
+      this.categoryForMaintenance,
+      this.categoryForRepairs,
+      this.categoryForTaxes,
       this.transactionsForIncomes,
       this.revenue,
       this.transactionsForExpenses,
       this.expense,
+      this.lifeTimeExpenseInterest,
+      this.lifeTimeExpenseMaintenance,
+      this.lifeTimeExpenseManagement,
+      this.lifeTimeExpenseRepair,
+      this.lifeTimeExpenseTaxes,
       this.profit,
     ]);
     // Also stash the definition in the instance for fast retrieval later
@@ -359,8 +486,8 @@ class RentBuilding extends MoneyObject {
     instance.estimatedValue.value = row.getDouble('EstimatedValue');
     instance.ownershipName1.value = row.getString('OwnershipName1');
     instance.ownershipName2.value = row.getString('OwnershipName2');
-    instance.ownershipPercentage1.value = row.getDouble('ownershipPercentage1');
-    instance.ownershipPercentage2.value = row.getDouble('ownershipPercentage1');
+    instance.ownershipPercentage1.value = row.getDouble('OwnershipPercentage1');
+    instance.ownershipPercentage2.value = row.getDouble('OwnershipPercentage2');
 
     instance.categoryForIncome.value = row.getInt('CategoryForIncome', -1);
     instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome.value);
