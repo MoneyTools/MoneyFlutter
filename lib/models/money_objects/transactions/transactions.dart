@@ -18,6 +18,19 @@ class Transactions extends MoneyObjects<Transaction> {
     collectionName = 'Transactions';
   }
 
+  List<Transaction> getListFlattenSplits() {
+    List<Transaction> flattenList = [];
+    for (final t in iterableList()) {
+      // if(t.isSplit){
+      if (t.categoryId.value == Data().categories.splitCategoryId()) {
+        Data().splits.get(t.uniqueId);
+      } else {
+        flattenList.add(t);
+      }
+    }
+    return flattenList;
+  }
+
   double runningBalance = 0.00;
 
   @override
@@ -48,10 +61,6 @@ class Transactions extends MoneyObjects<Transaction> {
 
   @override
   void onAllDataLoaded() {
-    // for (final Transaction t in iterableList()) {
-    //   t.postDeserializeFixup(false);
-    // }
-
     // Now that everything is loaded, lets resolve the Transfers
     for (final Transaction transactionSource in iterableList()) {
       final int transferId = transactionSource.transfer.value;

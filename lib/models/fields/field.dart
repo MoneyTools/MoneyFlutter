@@ -92,7 +92,7 @@ class Field<T> {
           valueFromInstance =
               (final MoneyObject c) => Currency.getAmountAsStringUsingCurrency(value as double, iso4217code: currency);
         case FieldType.date:
-          valueFromInstance = (final MoneyObject c) => dateToString(value as DateTime);
+          valueFromInstance = (final MoneyObject c) => dateToString(value as DateTime?);
         default:
           //
           debugPrint('No match');
@@ -363,7 +363,9 @@ Widget buildFieldWidgetForNumber({
     child: Padding(
       padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
       child: Text(
-        shorthand ? getAmountAsShorthandText(value) : getNumberShorthandText(value),
+        shorthand
+            ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
+            : value.toString(),
         textAlign: align,
         style: const TextStyle(fontFamily: 'RobotoMono'),
       ),
@@ -403,6 +405,9 @@ Widget buildWidgetFromTypeAndValue({
 }) {
   switch (type) {
     case FieldType.numeric:
+      if (value is String) {
+        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+      }
       return buildFieldWidgetForNumber(value: value as num, shorthand: false, align: align);
     case FieldType.numericShorthand:
       return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);

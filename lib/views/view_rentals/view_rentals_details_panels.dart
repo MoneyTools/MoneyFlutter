@@ -87,7 +87,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
       final List<Split> splits = Data().splits.getListFromTransactionId(t.id.value);
 
       for (final Split split in splits) {
-        if (isMatchingCategories(split.categoryId, rental)) {
+        if (isMatchingCategories(split.categoryId.value, rental)) {
           return true;
         }
       }

@@ -1,5 +1,5 @@
+import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 
 /*
@@ -17,6 +17,8 @@ import 'package:money/models/money_objects/payees/payee.dart';
  */
 
 class Split extends MoneyObject {
+  static Fields<Split>? fields;
+
   @override
   int get uniqueId => id.value;
 
@@ -24,7 +26,11 @@ class Split extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   // 0
-  int transactionId;
+  FieldInt transactionId = FieldInt(
+    name: 'Transaction',
+    useAsColumn: false,
+    valueFromInstance: (final MoneyObject instance) => (instance as Split).transactionId.value,
+  );
 
   // 1
   FieldId id = FieldId(
@@ -32,53 +38,92 @@ class Split extends MoneyObject {
   );
 
   // 2
-  int categoryId;
+  FieldInt categoryId = FieldInt(
+    name: 'Category',
+    type: FieldType.text,
+    align: TextAlign.left,
+    valueFromInstance: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Split).categoryId.value),
+  );
 
   // 3
-  int payeeId;
+  FieldInt payeeId = FieldInt(
+    name: 'Payee',
+    type: FieldType.text,
+    align: TextAlign.left,
+    valueFromInstance: (final MoneyObject instance) => Data().payees.getNameFromId((instance as Split).payeeId.value),
+  );
 
   // 4
-  double amount;
+  FieldAmount amount = FieldAmount(
+    name: 'Amount',
+    valueFromInstance: (final MoneyObject instance) => (instance as Split).amount.value,
+  );
 
   // 5
-  int transferId;
+  FieldInt transferId = FieldInt(
+    name: 'Transfer',
+    useAsColumn: false,
+  );
 
   // 6
-  String memo;
+  FieldString memo = FieldString(
+    name: 'Memo',
+    valueFromInstance: (final MoneyObject instance) => (instance as Split).memo.value,
+  );
 
   // 7
-  int flags;
+  FieldInt flags = FieldInt(
+    name: 'Flags',
+    columnWidth: ColumnWidth.nano,
+    align: TextAlign.center,
+    valueFromInstance: (final MoneyObject instance) => (instance as Split).flags.value,
+  );
 
   // 8
-  DateTime? budgetBalanceDate;
-
-  // Not serialized
-  Category? categoryInstance;
-
-  Payee? payeeInstance;
+  FieldDate budgetBalanceDate = FieldDate(
+    name: 'Budgeted Date',
+    valueFromInstance: (final MoneyObject instance) => (instance as Split).budgetBalanceDate.value,
+  );
 
   /// Constructor
   Split({
-    // 0
-    required this.transactionId,
     // 1
-    // id
+    required int id,
+    // 0
+    required int transactionId,
     // 2
-    required this.categoryId,
+    required int categoryId,
     // 3
-    required this.payeeId,
+    required int payeeId,
     // 4
-    required this.amount,
+    required double amount,
     // 5
-    required this.transferId,
+    required int transferId,
     // 6
-    required this.memo,
+    required String memo,
     // 7
-    required this.flags,
+    required int flags,
     // 8
-    required this.budgetBalanceDate,
+    required DateTime? budgetBalanceDate,
   }) {
-    categoryInstance = Data().categories.get(categoryId);
-    payeeInstance = Data().payees.get(payeeId);
+    fields ??= Fields<Split>(definitions: [
+      this.payeeId,
+      this.categoryId,
+      this.memo,
+      this.amount,
+    ]);
+    // Also stash the definition in the instance for fast retrieval later
+    fieldDefinitions = fields!.definitions;
+
+    this.id.value = id;
+    this.transactionId.value = transactionId;
+    this.categoryId.value = categoryId;
+    this.payeeId.value = payeeId;
+    this.amount.value = amount;
+    this.transferId.value = transferId;
+    this.memo.value = memo;
+    this.flags.value = flags;
+    this.budgetBalanceDate.value = budgetBalanceDate;
   }
 }

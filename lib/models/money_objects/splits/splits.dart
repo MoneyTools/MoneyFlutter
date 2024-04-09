@@ -11,7 +11,7 @@ class Splits extends MoneyObjects<Split> {
   }
 
   List<Split> getListFromTransactionId(final num transactionId) {
-    return iterableList().where((final Split item) => item.transactionId == transactionId).toList();
+    return iterableList().where((final Split item) => item.transactionId.value == transactionId).toList();
   }
 
   @override
@@ -23,7 +23,7 @@ class Splits extends MoneyObjects<Split> {
           // 0
           transactionId: row.getInt('Transaction', -1),
           // 1
-          // id
+          id: row.getInt('Id', -1),
           // 2
           categoryId: row.getInt('Category', -1),
           // 3
@@ -38,7 +38,7 @@ class Splits extends MoneyObjects<Split> {
           flags: row.getInt('Flags'),
           // 8
           budgetBalanceDate: row.getDate('BudgetBalanceDate'),
-        )..id.value = row.getInt('Id', -1),
+        ),
       );
     }
     return iterableList().toList();

@@ -20,7 +20,6 @@ class ListViewTransactionSplits extends StatefulWidget {
 }
 
 class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
-  final Fields<Split> _tableFields = Fields<Split>(definitions: []);
   late final List<Split> rows;
   late int _sortBy = widget.defaultSortingField;
   bool _sortAscending = true;
@@ -28,17 +27,17 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   @override
   void initState() {
     super.initState();
-    rows = widget.getList();
-    onSort();
   }
 
   @override
   Widget build(final BuildContext context) {
+    rows = widget.getList();
+    onSort();
     return Column(
       children: <Widget>[
         // Table Header
         MyListItemHeader<Split>(
-          columns: _tableFields.definitions,
+          columns: Split.fields!.definitions,
           sortByColumn: _sortBy,
           sortAscending: _sortAscending,
           onTap: (final int index) {
@@ -56,7 +55,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         // Table list of rows
         Expanded(
           child: MyListView<Split>(
-            fields: _tableFields,
+            fields: Split.fields!,
             list: rows,
             selectedItemIds: ValueNotifier<List<int>>(<int>[]),
             unSelectable: false,

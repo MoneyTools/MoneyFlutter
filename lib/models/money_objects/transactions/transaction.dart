@@ -13,7 +13,7 @@ import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
-import 'package:money/models/money_objects/splits/split.dart';
+import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
@@ -534,6 +534,10 @@ class Transaction extends MoneyObject {
     return caption;
   }
 
+  Splits? splits;
+
+  bool get isSplit => splits != null && this.splits!.isEmpty == false;
+
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
   }) {
@@ -702,8 +706,9 @@ class Transaction extends MoneyObject {
     //     this.Investment.Security = money.Securities.FindSecurity(this.Investment.SecurityName, true);
     //   }
     // }
-    // if (this.IsSplit)
+    // if (this.categoryId == Data().categories.splitCategoryId())
     // {
+    //   Data().
     //   this.Splits.Transaction = this;
     //   this.Splits.Parent = this;
     //   foreach (Split s in this.Splits.Items)

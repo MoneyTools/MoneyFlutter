@@ -184,14 +184,20 @@ class ViewTransactionsState extends ViewWidgetState {
     required final bool showAsNativeCurrency,
   }) {
     final Transaction? transaction = getMoneyObjectFromFirstSelectedId<Transaction>(selectedIds, list);
-    if (transaction != null &&
-        transaction.id.value > -1 &&
-        transaction.categoryId.value == Data().categories.splitCategoryId()) {
-      final List<Split> l =
-          Data().splits.iterableList().where((final Split s) => s.transactionId == transaction.id.value).toList();
+    //
+    // If the category of this transaction is a Split then list the details of the Split
+    //
+    if (transaction != null && transaction.categoryId.value == Data().categories.splitCategoryId()) {
+      // this is Split get the split transactions
       return ListViewTransactionSplits(
-        key: Key('split_transactions ${transaction.id}'),
-        getList: () => l,
+        key: Key('split_transactions ${transaction.uniqueId}'),
+        getList: () {
+          return Data()
+              .splits
+              .iterableList()
+              .where((final Split s) => s.transactionId.value == transaction.id.value)
+              .toList();
+        },
       );
     }
     return const CenterMessage(message: 'No related transactions');
