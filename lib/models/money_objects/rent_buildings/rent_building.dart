@@ -1,14 +1,39 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:money/helpers/date_helper.dart';
-import 'package:money/models/fields/fields.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/date_range.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
+import '../accounts/account.dart';
+
+/*
+    SQLite table definition
+
+     0|Id|INT|0||1
+     1|Name|nvarchar(255)|1||0
+     2|Address|nvarchar(255)|0||0
+     3|PurchasedDate|datetime|0||0
+     4|PurchasedPrice|money|0||0
+     5|LandValue|money|0||0
+     6|EstimatedValue|money|0||0
+     7|OwnershipName1|nvarchar(255)|0||0
+     8|OwnershipName2|nvarchar(255)|0||0
+     9|OwnershipPercentage1|money|0||0
+    10|OwnershipPercentage2|money|0||0
+    11|Note|nvarchar(255)|0||0
+    12|CategoryForTaxes|INT|0||0
+    13|CategoryForIncome|INT|0||0
+    14|CategoryForInterest|INT|0||0
+    15|CategoryForRepairs|INT|0||0
+    16|CategoryForMaintenance|INT|0||0
+    17|CategoryForManagement|INT|0||0
+   */
 class RentBuilding extends MoneyObject {
   static Fields<RentBuilding>? fields;
 
@@ -58,7 +83,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// PurchasedPrice
-  // 4    PurchasedPrice          money          0                    0
+  // 4    PurchasedPrice          money
   FieldAmount purchasedPrice = FieldAmount(
     importance: 2,
     name: 'Purchased Price',
@@ -69,7 +94,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// LandValue
-  // 5    LandValue          money          0                    0
+  // 5    LandValue          money
   FieldAmount landValue = FieldAmount(
     importance: 2,
     name: 'LandValue',
@@ -79,7 +104,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// EstimatedValue
-  // 6    EstimatedValue          money          0                    0
+  // 6    EstimatedValue          money
   FieldAmount estimatedValue = FieldAmount(
     importance: 2,
     name: 'EstimatedValue',
@@ -89,7 +114,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// OwnershipName1
-  // 7    OwnershipName1          money          0                    0
+  // 7    OwnershipName1          money
   FieldString ownershipName1 = FieldString(
     importance: 2,
     name: 'OwnershipName1',
@@ -100,7 +125,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// OwnershipName2
-  // 8    OwnershipName2          money          0                    0
+  // 8    OwnershipName2          money
   FieldString ownershipName2 = FieldString(
     importance: 2,
     name: 'OwnershipName2',
@@ -111,7 +136,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// OwnershipPercentage1
-  // 9    OwnershipPercentage1          money          0                    0
+  // 9    OwnershipPercentage1          money
   FieldDouble ownershipPercentage1 = FieldDouble(
     importance: 2,
     name: 'OwnershipPercentage1',
@@ -122,7 +147,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// OwnershipPercentage2
-  // 10    OwnershipPercentage2          money          0                    0
+  // 10    OwnershipPercentage2          money
   FieldDouble ownershipPercentage2 = FieldDouble(
     importance: 2,
     name: 'OwnershipPercentage2',
@@ -133,7 +158,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// Note
-  // 11    Note          money          0                    0
+  // 11    Note          money
   FieldString note = FieldString(
     importance: 2,
     name: 'Note',
@@ -144,72 +169,110 @@ class RentBuilding extends MoneyObject {
   );
 
   /// CategoryForTaxes
-  // 12    CategoryForTaxes          money          0                    0
+  // 12    CategoryForTaxes          money
   FieldInt categoryForTaxes = FieldInt(
     importance: 2,
     name: 'CategoryForTaxes',
     serializeName: 'CategoryForTaxes',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForTaxes.value,
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as RentBuilding).getCategoryName(instance.categoryForTaxes.value),
     valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForTaxes.value,
   );
 
   /// CategoryForIncome
-  // 13    CategoryForIncome          money          0                    0
+  // 13    CategoryForIncome          money
   FieldInt categoryForIncome = FieldInt(
     importance: 2,
     name: 'CategoryForIncome',
     serializeName: 'CategoryForIncome',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForIncome.value,
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as RentBuilding).getCategoryName(instance.categoryForIncome.value),
     valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForIncome.value,
   );
 
   /// CategoryForInterest
-  // 14    CategoryForInterest          money          0                    0
+  // 14    CategoryForInterest          money
   FieldInt categoryForInterest = FieldInt(
     importance: 2,
     name: 'CategoryForInterest',
     serializeName: 'CategoryForInterest',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForInterest.value,
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as RentBuilding).getCategoryName(instance.categoryForInterest.value),
     valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForInterest.value,
   );
 
   /// CategoryForRepairs
-  // 15    CategoryForRepairs          money          0                    0
+  // 15    CategoryForRepairs          money
   FieldInt categoryForRepairs = FieldInt(
     importance: 2,
     name: 'CategoryForRepairs',
     serializeName: 'CategoryForRepairs',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForRepairs.value,
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as RentBuilding).getCategoryName(instance.categoryForRepairs.value),
     valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForRepairs.value,
   );
 
   /// CategoryForMaintenance
-  // 16    CategoryForMaintenance          money          0                    0
+  // 16    CategoryForMaintenance          money
   FieldInt categoryForMaintenance = FieldInt(
     importance: 2,
     name: 'CategoryForMaintenance',
     serializeName: 'CategoryForMaintenance',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForMaintenance.value,
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as RentBuilding).getCategoryName(instance.categoryForMaintenance.value),
     valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForMaintenance.value,
   );
 
   /// CategoryForManagement
-  // 17    CategoryForManagement          money          0                    0
+  // 17    CategoryForManagement          money
   FieldInt categoryForManagement = FieldInt(
     importance: 2,
     name: 'CategoryForManagement',
     serializeName: 'CategoryForManagement',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).categoryForManagement.value,
+    valueFromInstance: (final MoneyObject instance) =>
+        (instance as RentBuilding).getCategoryName(instance.categoryForManagement.value),
     valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForManagement.value,
   );
 
-  int count = 0;
+  String getCategoryName(final int id) {
+    return Data().categories.getNameFromId(id);
+  }
+
+  FieldInt transactionsForIncomes = FieldInt(
+    name: 'I#',
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).transactionsForIncomes.value,
+  );
+
+  FieldInt transactionsForExpenses = FieldInt(
+    name: 'E#',
+    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).transactionsForExpenses.value,
+  );
+
+  /// Currency
+  Field<String> currency = Field<String>(
+    importance: 5,
+    name: 'Currency',
+    type: FieldType.widget,
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.nano,
+    defaultValue: '',
+    valueFromInstance: (final MoneyObject instance) =>
+        Currency.buildCurrencyWidget((instance as RentBuilding).getCurrencyOfAssociatedAccount()),
+  );
+
+  String getCurrencyOfAssociatedAccount() {
+    if (this.account == null) {
+      return Constants.defaultCurrency;
+    } else {
+      return account!.currency.value;
+    }
+  }
 
   /// Revenue
   FieldAmount revenue = FieldAmount(
@@ -232,6 +295,8 @@ class RentBuilding extends MoneyObject {
     valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).profit.value,
   );
 
+  Account? account;
+
   List<int> categoryForIncomeTreeIds = <int>[];
   List<int> categoryForTaxesTreeIds = <int>[];
   List<int> categoryForInterestTreeIds = <int>[];
@@ -245,33 +310,12 @@ class RentBuilding extends MoneyObject {
 
   DateRange dateRange = DateRange();
 
-  /*
-    SQLite table definition
-
-     0|Id|INT|0||1
-     1|Name|nvarchar(255)|1||0
-     2|Address|nvarchar(255)|0||0
-     3|PurchasedDate|datetime|0||0
-     4|PurchasedPrice|money|0||0
-     5|LandValue|money|0||0
-     6|EstimatedValue|money|0||0
-     7|OwnershipName1|nvarchar(255)|0||0
-     8|OwnershipName2|nvarchar(255)|0||0
-     9|OwnershipPercentage1|money|0||0
-    10|OwnershipPercentage2|money|0||0
-    11|Note|nvarchar(255)|0||0
-    12|CategoryForTaxes|INT|0||0
-    13|CategoryForIncome|INT|0||0
-    14|CategoryForInterest|INT|0||0
-    15|CategoryForRepairs|INT|0||0
-    16|CategoryForMaintenance|INT|0||0
-    17|CategoryForManagement|INT|0||0
-   */
   RentBuilding() {
     fields ??= Fields<RentBuilding>(definitions: [
       this.id,
       this.name,
       this.address,
+      this.currency,
       this.purchasedDate,
       this.purchasedPrice,
       this.landValue,
@@ -286,6 +330,11 @@ class RentBuilding extends MoneyObject {
       this.categoryForRepairs,
       this.categoryForMaintenance,
       this.categoryForManagement,
+      this.transactionsForIncomes,
+      this.revenue,
+      this.transactionsForExpenses,
+      this.expense,
+      this.profit,
     ]);
     // Also stash the definition in the instance for fast retrieval later
     fieldDefinitions = fields!.definitions;
@@ -303,6 +352,7 @@ class RentBuilding extends MoneyObject {
     instance.id.value = row.getInt('Id', -1);
     instance.name.value = row.getString('Name');
     instance.address.value = row.getString('Address');
+    instance.currency.value = 'CAD';
     instance.purchasedDate.value = row.getDate('PurchasedDate', defaultIfNotFound: DateTime.now());
     instance.purchasedPrice.value = row.getDouble('PurchasedPrice');
     instance.landValue.value = row.getDouble('LandValue');
@@ -339,5 +389,15 @@ class RentBuilding extends MoneyObject {
     instance.note.value = row.getString('Note');
 
     return instance;
+  }
+
+  associateAccountToBuilding() {
+    final Transaction? firstTransactionForThisBuilding = Data()
+        .transactions
+        .iterableList(true)
+        .firstWhereOrNull((t) => this.categoryForIncomeTreeIds.contains(t.categoryId.value));
+    if (firstTransactionForThisBuilding != null) {
+      this.account = firstTransactionForThisBuilding.accountInstance;
+    }
   }
 }

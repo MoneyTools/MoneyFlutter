@@ -169,8 +169,7 @@ cid  name               type            notnull  dflt_value  pk
 cid  name  type           notnull  dflt_value  pk
 ---  ----  -------------  -------  ----------  --
 0    Id    INT            0                    1 
-1    Name  nvarchar(255)  1                    0 
-jp@JPMac14 ~ % 
+1    Name  nvarchar(255)  1                    0
 ```
 
 #### 10 - RentBuildings

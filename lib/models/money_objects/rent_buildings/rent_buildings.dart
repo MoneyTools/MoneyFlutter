@@ -39,7 +39,8 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
 
   @override
   void onAllDataLoaded() {
-    for (final RentBuilding rental in iterableList()) {
+    for (final RentBuilding rental in iterableList(true)) {
+      rental.associateAccountToBuilding();
       cumulateTransactions(rental);
 
       // expense is a negative number so we just do a Revenue + Expense
@@ -57,14 +58,14 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     for (Transaction t in Data().transactions.iterableList()) {
       if (rental.categoryForIncomeTreeIds.contains(t.categoryId.value)) {
         rental.dateRange.inflate(t.dateTime.value);
-        rental.count++;
+        rental.transactionsForIncomes.value++;
         rental.revenue.value += t.amount.value;
       } else {
-        // if (listOfCategoryIdsExpenses.contains(t.categoryId)) {
-        //   rental.dateRange.inflate(t.dateTime);
-        //   rental.count++;
-        //   rental.expense += t.amount;
-        // }
+        if (rental.listOfCategoryIdsExpenses.contains(t.categoryId.value)) {
+          rental.dateRange.inflate(t.dateTime.value);
+          rental.transactionsForExpenses.value++;
+          rental.expense.value += t.amount.value;
+        }
       }
     }
   }
