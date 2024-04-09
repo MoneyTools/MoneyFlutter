@@ -24,12 +24,9 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
       List<Widget> pnlCards = [];
 
       for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
-        final pnl = rental.pnlOverYears[year];
-        if (pnl == null) {
-          pnlCards.add(Text(year.toString()));
-        } else {
-          pnlCards.add(RentalPnLCard(pnl: pnl));
-        }
+        var pnl = rental.pnlOverYears[year];
+        pnl ??= RentalPnL(date: DateTime(year, 1, 1));
+        pnlCards.add(RentalPnLCard(pnl: pnl));
       }
       pnlCards.add(RentalPnLCard(
         pnl: rental.lifeTimePnL,
@@ -83,10 +80,8 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   bool filterByRentalCategories(final Transaction t, final RentBuilding rental) {
     final num categoryIdToMatch = t.categoryId.value;
 
-    if (categoryIdToMatch == Data().categories.splitCategoryId()) {
-      final List<Split> splits = Data().splits.getListFromTransactionId(t.id.value);
-
-      for (final Split split in splits) {
+    if (t.isSplit) {
+      for (final Split split in t.splits) {
         if (isMatchingCategories(split.categoryId.value, rental)) {
           return true;
         }

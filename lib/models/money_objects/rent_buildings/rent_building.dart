@@ -355,7 +355,8 @@ class RentBuilding extends MoneyObject {
 
   cumulatePnL(Transaction t) {
     int transactionCategoryId = t.categoryId.value;
-    if (this.isTransactionAssociatedWithThisRental(transactionCategoryId)) {
+
+    if (this.isTransactionOrSplitAssociatedWithThisRental(t)) {
       int year = t.dateTime.value!.year;
 
       RentalPnL? pnl = pnlOverYears[year];
@@ -375,34 +376,48 @@ class RentBuilding extends MoneyObject {
         pnlOverYears[year] = pnl;
       }
 
-      if (this.categoryForIncomeTreeIds.contains(transactionCategoryId)) {
-        transactionsForIncomes.value++;
-        pnl.income += t.amount.value;
+      if (t.dateTime.value!.year == 1999 && t.dateTime.value!.month == 2 && t.dateTime.value!.day == 12) {
+        debugLog('');
       }
 
-      if (this.categoryForInterestTreeIds.contains(transactionCategoryId)) {
-        transactionsForExpenses.value++;
-        pnl.expenseInterest += t.amount.value;
-      }
-      if (this.categoryForRepairsTreeIds.contains(transactionCategoryId)) {
-        transactionsForExpenses.value++;
-        pnl.expenseRepairs += t.amount.value;
-      }
-      if (this.categoryForMaintenanceTreeIds.contains(transactionCategoryId)) {
-        transactionsForExpenses.value++;
-        pnl.expenseMaintenance += t.amount.value;
-      }
-      if (this.categoryForManagementTreeIds.contains(transactionCategoryId)) {
-        transactionsForExpenses.value++;
-        pnl.expenseManagement += t.amount.value;
-      }
-      if (this.categoryForTaxesTreeIds.contains(transactionCategoryId)) {
-        transactionsForExpenses.value++;
-        pnl.expenseTaxes += t.amount.value;
+      if (t.isSplit) {
+        for (final split in t.splits) {
+          cumulatePnLValues(pnl, split.categoryId.value, split.amount.value);
+        }
+      } else {
+        cumulatePnLValues(pnl, transactionCategoryId, t.amount.value);
       }
     }
 
     lifeTimePnL = getLifeTimePnL();
+  }
+
+  void cumulatePnLValues(RentalPnL pnl, int categoryId, double amount) {
+    if (this.categoryForIncomeTreeIds.contains(categoryId)) {
+      transactionsForIncomes.value++;
+      pnl.income += amount;
+    }
+
+    if (this.categoryForInterestTreeIds.contains(categoryId)) {
+      transactionsForExpenses.value++;
+      pnl.expenseInterest += amount;
+    }
+    if (this.categoryForRepairsTreeIds.contains(categoryId)) {
+      transactionsForExpenses.value++;
+      pnl.expenseRepairs += amount;
+    }
+    if (this.categoryForMaintenanceTreeIds.contains(categoryId)) {
+      transactionsForExpenses.value++;
+      pnl.expenseMaintenance += amount;
+    }
+    if (this.categoryForManagementTreeIds.contains(categoryId)) {
+      transactionsForExpenses.value++;
+      pnl.expenseManagement += amount;
+    }
+    if (this.categoryForTaxesTreeIds.contains(categoryId)) {
+      transactionsForExpenses.value++;
+      pnl.expenseTaxes += amount;
+    }
   }
 
   late RentalPnL lifeTimePnL;
@@ -421,6 +436,20 @@ class RentBuilding extends MoneyObject {
       lifeTimePnL.distributions = pnl.distributions;
     });
     return lifeTimePnL;
+  }
+
+  bool isTransactionOrSplitAssociatedWithThisRental(Transaction t) {
+    final int transactionCategoryId = t.categoryId.value;
+    if (t.isSplit) {
+      for (final split in t.splits) {
+        if (isTransactionAssociatedWithThisRental(split.categoryId.value)) {
+          return true;
+        }
+      }
+      return false;
+    } else {
+      return isTransactionAssociatedWithThisRental(transactionCategoryId);
+    }
   }
 
   bool isTransactionAssociatedWithThisRental(int transactionCategoryId) {

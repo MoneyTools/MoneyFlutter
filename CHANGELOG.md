@@ -7,7 +7,8 @@
 - Rental P&L cards
 
 ### Updated
-- Show Split transactions on the Transaction View detail panel 
+
+- Show Split transactions on the Transaction View detail panel
 - Rental view shows Currency of the associated account linked by the Income Category
 
 ## [version 1.7.4] 2024-04-05

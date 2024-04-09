@@ -534,9 +534,9 @@ class Transaction extends MoneyObject {
     return caption;
   }
 
-  Splits? splits;
+  List<Split> splits = [];
 
-  bool get isSplit => splits != null && this.splits!.isEmpty == false;
+  bool get isSplit => this.splits.isNotEmpty;
 
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
@@ -706,10 +706,8 @@ class Transaction extends MoneyObject {
     //     this.Investment.Security = money.Securities.FindSecurity(this.Investment.SecurityName, true);
     //   }
     // }
-    // if (this.categoryId == Data().categories.splitCategoryId())
-    // {
-    //   Data().
-    //   this.Splits.Transaction = this;
+    // if (this.categoryId == Data().categories.splitCategoryId()) {
+    //   Data().this.Splits.Transaction = this;
     //   this.Splits.Parent = this;
     //   foreach (Split s in this.Splits.Items)
     //   {

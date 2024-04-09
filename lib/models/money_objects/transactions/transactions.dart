@@ -63,6 +63,8 @@ class Transactions extends MoneyObjects<Transaction> {
   void onAllDataLoaded() {
     // Now that everything is loaded, lets resolve the Transfers
     for (final Transaction transactionSource in iterableList()) {
+      transactionSource.splits = Data().splits.getListFromTransactionId(transactionSource.uniqueId);
+
       final int transferId = transactionSource.transfer.value;
       transactionSource.transferInstance = null;
 
