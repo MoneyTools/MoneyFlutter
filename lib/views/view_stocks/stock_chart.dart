@@ -44,16 +44,19 @@ class StockChartWidgetState extends State<StockChartWidget> {
       for (final sp in dateAndPrices) {
         tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
       }
-
-      setState(() {
-        this.dataPoints = tmpDataPoints;
-      });
+      if (mounted) {
+        setState(() {
+          this.dataPoints = tmpDataPoints;
+        });
+      }
     } else {
-      setState(() {
-        this.lastStatus = status;
-        this.errorMessage = status == StockLookupStatus.invalidSymbol ? 'Invalid Symbol "${widget.symbol}"' : '';
-        this.dataPoints = [];
-      });
+      if (mounted) {
+        setState(() {
+          this.lastStatus = status;
+          this.errorMessage = status == StockLookupStatus.invalidSymbol ? 'Invalid Symbol "${widget.symbol}"' : '';
+          this.dataPoints = [];
+        });
+      }
     }
   }
 

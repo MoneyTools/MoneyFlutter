@@ -8,6 +8,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/adaptable_list_view.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
@@ -74,89 +75,64 @@ class ViewWidgetState extends State<ViewWidget> {
 
     list = getList();
 
-    onSort();
-
     /// restore selection of items
     setSelectedItem(_lastSelectedItemId);
   }
 
   @override
   Widget build(final BuildContext context) {
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      final bool useColumns = !isSmallWidth(constraints);
+    return LayoutBuilder(
+      builder: (final BuildContext context, final BoxConstraints constraints) {
+        return buildViewContent(
+          AdaptableListView(
+            top: buildHeader(),
+            fieldDefinitions: _fieldToDisplay.definitions,
+            list: list,
+            selectedItemsByUniqueId: _selectedItemsByUniqueId,
+            sortByFieldIndex: _sortByFieldIndex,
+            sortAscending: _sortAscending,
+            onColumnHeaderTap: changeListSortOrder,
+            onColumnHeaderLongPress: onCustomizeColumn,
+            onItemTap: onItemSelected,
+            flexBottom: Settings().isDetailsPanelExpanded ? 1 : 0,
+            bottom: DetailsPanel(
+              isExpanded: Settings().isDetailsPanelExpanded,
+              onExpanded: (final bool isExpanded) {
+                setState(() {
+                  Settings().isDetailsPanelExpanded = isExpanded;
+                  Settings().store();
+                });
+              },
+              selectedItems: _selectedItemsByUniqueId,
 
-      return buildViewContent(
-        Column(
-          children: <Widget>[
-            // Optional upper Title area
-            buildHeader(),
+              // SubView
+              subPanelSelected: _selectedBottomTabId,
+              subPanelSelectionChanged: updateBottomContent,
+              subPanelContent: getDetailPanelContent,
 
-            if (!isSmallWidth(constraints))
-              MyListItemHeader<MoneyObject>(
-                columns: _fieldToDisplay.definitions,
-                sortByColumn: _sortByFieldIndex,
-                sortAscending: _sortAscending,
-                onTap: changeListSortOrder,
-                onLongPress: onCustomizeColumn,
-              ),
+              // Currency
+              getCurrencyChoices: getCurrencyChoices,
+              currencySelected: _selectedCurrency,
+              currencySelectionChanged: (final int selected) {
+                setState(() {
+                  _selectedCurrency = selected;
+                });
+              },
 
-            // Table rows
-            Expanded(
-              flex: 1,
-              child: MyListView<MoneyObject>(
-                key: Key('MyListView_selected_id_${getUniqueIdOfFirstSelectedItem()}'),
-                list: list,
-                selectedItemIds: _selectedItemsByUniqueId,
-                fields: _fieldToDisplay,
-                asColumnView: useColumns,
-                onTap: onItemSelected,
-                unSelectable: true,
-              ),
+              // Actions
+              onActionAddTransaction: onAddTransaction,
+              onActionEdit: () {
+                showDialogAndActionsForMoneyObject(
+                    context: context, moneyObject: getFirstSelectedItem() as MoneyObject);
+              },
+              onActionDelete: () {
+                onDeleteRequestedByUser(context, getFirstSelectedItem() as MoneyObject);
+              },
             ),
-
-            // Optional bottom details panel
-            Expanded(
-              flex: Settings().isDetailsPanelExpanded ? 1 : 0,
-              // this will split the vertical view when expanded
-              child: DetailsPanel(
-                isExpanded: Settings().isDetailsPanelExpanded,
-                onExpanded: (final bool isExpanded) {
-                  setState(() {
-                    Settings().isDetailsPanelExpanded = isExpanded;
-                    Settings().store();
-                  });
-                },
-                selectedItems: _selectedItemsByUniqueId,
-
-                // SubView
-                subPanelSelected: _selectedBottomTabId,
-                subPanelSelectionChanged: updateBottomContent,
-                subPanelContent: getDetailPanelContent,
-
-                // Currency
-                getCurrencyChoices: getCurrencyChoices,
-                currencySelected: _selectedCurrency,
-                currencySelectionChanged: (final int selected) {
-                  setState(() {
-                    _selectedCurrency = selected;
-                  });
-                },
-
-                // Actions
-                onActionAddTransaction: onAddTransaction,
-                onActionEdit: () {
-                  showDialogAndActionsForMoneyObject(
-                      context: context, moneyObject: getFirstSelectedItem() as MoneyObject);
-                },
-                onActionDelete: () {
-                  onDeleteRequestedByUser(context, getFirstSelectedItem() as MoneyObject);
-                },
-              ),
-            ),
-          ],
-        ),
-      );
-    });
+          ),
+        );
+      },
+    );
   }
 
   Widget buildViewContent(final Widget child) {
@@ -386,7 +362,6 @@ class ViewWidgetState extends State<ViewWidget> {
 
       // Persist users choice
       saveLastUserActionOnThisView();
-      onSort();
     });
   }
 

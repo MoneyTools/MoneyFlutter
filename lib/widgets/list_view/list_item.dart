@@ -65,7 +65,7 @@ class MyListItemState extends State<MyListItem> {
         child: GestureDetector(
           onTap: () {
             setState(() {
-              isSelected = true;
+              isSelected = !isSelected;
             });
             widget.onTap?.call();
           },

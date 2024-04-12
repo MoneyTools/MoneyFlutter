@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.7.6] 2024-04-12
+
+### Added
+
+- Investment transactions pert Stock (Security)
+
 ## [version 1.7.5] 2024-04-09
 
 ### Added

@@ -7,7 +7,7 @@ class MyListItemHeader<T> extends StatelessWidget {
   final FieldDefinitions columns;
   final int sortByColumn;
   final bool sortAscending;
-  final Function onTap;
+  final Function(int columnIndex) onTap;
   final Function(Field<dynamic>)? onLongPress;
 
   const MyListItemHeader({

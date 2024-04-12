@@ -8,13 +8,13 @@ import 'package:money/storage/data/data.dart';
 class Investment extends MoneyObject {
   static final Fields<Investment> _fields = Fields<Investment>();
 
-  static get fields {
+  static Fields<Investment> get fields {
     if (_fields.isEmpty) {
       final tmp = Investment.fromJson({});
       _fields.setDefinitions([
         tmp.id,
-        tmp.transactionAccountName,
         tmp.transactionDate,
+        tmp.transactionAccountName,
         tmp.security,
         tmp.securitySymbol,
         tmp.investmentType,
@@ -185,19 +185,20 @@ class Investment extends MoneyObject {
     return proceeds;
   }
 
+  FieldDate transactionDate = FieldDate(
+    name: 'Date',
+    importance: 0,
+    useAsColumn: true,
+    columnWidth: ColumnWidth.normal,
+    valueFromInstance: (final MoneyObject instance) => (instance as Investment).date,
+  );
+
   FieldString securitySymbol = FieldString(
     name: 'Symbol',
     useAsColumn: true,
     columnWidth: ColumnWidth.small,
     valueFromInstance: (final MoneyObject instance) =>
         Data().securities.getSymbolFromId((instance as Investment).security.value),
-  );
-
-  FieldDate transactionDate = FieldDate(
-    name: 'Date',
-    useAsColumn: true,
-    columnWidth: ColumnWidth.normal,
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).date,
   );
 
   FieldString transactionAccountName = FieldString(

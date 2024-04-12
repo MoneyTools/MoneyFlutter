@@ -20,7 +20,7 @@ class ListViewTransactionSplits extends StatefulWidget {
 }
 
 class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
-  late final List<Split> rows;
+  List<Split> rows = [];
   late int _sortBy = widget.defaultSortingField;
   bool _sortAscending = true;
 
