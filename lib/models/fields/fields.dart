@@ -8,10 +8,10 @@ import 'package:money/models/money_objects/money_objects.dart';
 export 'package:money/models/fields/field.dart';
 
 class Fields<T> {
-  FieldDefinitions definitions;
+  final FieldDefinitions definitions = [];
 
   /// Constructor
-  Fields({required this.definitions}) {
+  Fields() {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
@@ -19,10 +19,10 @@ class Fields<T> {
     return definitions.isEmpty;
   }
 
-  void setDefinitions(List<Object> list) {
+  void setDefinitions(List<Field<dynamic>> list) {
     definitions.clear();
     for (var object in list) {
-      definitions.add(object as Field<dynamic>);
+      definitions.add(object);
     }
   }
 

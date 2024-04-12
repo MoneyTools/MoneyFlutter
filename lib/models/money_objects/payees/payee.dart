@@ -1,3 +1,4 @@
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -13,7 +14,20 @@ export 'package:money/models/money_objects/money_object.dart';
   1|Name|nvarchar(255)|1||0
  */
 class Payee extends MoneyObject {
-  static Fields<Payee>? fields;
+  static final _fields = Fields<Payee>();
+
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Payee.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.name,
+        tmp.count,
+        tmp.sum,
+      ]);
+    }
+    return _fields;
+  }
 
   @override
   int get uniqueId => id.value;
@@ -55,21 +69,20 @@ class Payee extends MoneyObject {
   );
 
   Payee() {
-    fields ??= Fields<Payee>(definitions: [
-      id,
-      name,
-      count,
-      sum,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           rightTopAsString: Currency.getAmountAsStringUsingCurrency(sum.value),
           rightBottomAsString: getAmountAsShorthandText(count.value),
         );
   }
+
+  factory Payee.fromJson(final MyJson row) {
+    return Payee();
+  }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   static String getName(final Payee? payee) {
     return payee == null ? '' : payee.name.value;

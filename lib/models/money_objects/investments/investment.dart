@@ -6,13 +6,33 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 
 class Investment extends MoneyObject {
-  static Fields<Investment>? fields;
+  static final Fields<Investment> _fields = Fields<Investment>();
 
-  static getFields() {
-    if (fields == null) {
-      Investment.fromJson({});
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Investment.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.transactionAccountName,
+        tmp.transactionDate,
+        tmp.security,
+        tmp.securitySymbol,
+        tmp.investmentType,
+        tmp.units,
+        tmp.unitPrice,
+        tmp.commission,
+        tmp.markUpDown,
+        tmp.taxes,
+        tmp.fees,
+        tmp.load,
+        tmp.tradeType,
+        tmp.taxExempt,
+        tmp.withholding,
+        tmp.amount,
+      ]);
     }
-    return fields;
+
+    return _fields;
   }
 
   @override
@@ -215,28 +235,6 @@ class Investment extends MoneyObject {
     required final int taxExempt, // 11
     required final double withholding, // 12
   }) {
-    fields ??= Fields<Investment>(definitions: [
-      this.id,
-      this.transactionAccountName,
-      this.transactionDate,
-      this.security,
-      this.securitySymbol,
-      this.investmentType,
-      this.units,
-      this.unitPrice,
-      this.commission,
-      this.markUpDown,
-      this.taxes,
-      this.fees,
-      this.load,
-      this.tradeType,
-      this.taxExempt,
-      this.withholding,
-      this.amount,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     this.id.value = id;
     this.security.value = security;
     this.unitPrice.value = unitPrice;
@@ -251,6 +249,10 @@ class Investment extends MoneyObject {
     this.taxExempt.value = taxExempt;
     this.withholding.value = withholding;
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   /// Constructor from a SQLite row
   factory Investment.fromJson(final MyJson row) {

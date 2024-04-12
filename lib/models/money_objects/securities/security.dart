@@ -18,13 +18,22 @@ import 'package:money/models/money_objects/money_objects.dart';
  */
 
 class Security extends MoneyObject {
-  static Fields<Security>? fields;
+  static final _fields = Fields<Security>();
 
-  static getFields() {
-    if (fields == null) {
-      Security.fromJson({});
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Security.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.name,
+        tmp.symbol,
+        tmp.price,
+        tmp.cuspid,
+        tmp.securityType,
+        tmp.priceDate,
+      ]);
     }
-    return fields;
+    return _fields;
   }
 
   @override
@@ -117,18 +126,6 @@ class Security extends MoneyObject {
     required int taxable,
     required DateTime? priceDate,
   }) {
-    fields ??= Fields<Security>(definitions: [
-      this.id,
-      this.name,
-      this.symbol,
-      this.price,
-      this.cuspid,
-      this.securityType,
-      this.priceDate,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     this.id.value = id;
     this.name.value = name;
     this.symbol.value = symbol;
@@ -163,4 +160,8 @@ class Security extends MoneyObject {
       priceDate: row.getDate('PriceDate'),
     );
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 }

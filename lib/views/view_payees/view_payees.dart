@@ -73,6 +73,6 @@ class ViewPayeesState extends ViewWidgetState {
 
   @override
   Fields<Payee> getFieldsForTable() {
-    return Payee.fields!;
+    return Payee.fields;
   }
 }

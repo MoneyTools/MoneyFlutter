@@ -97,7 +97,7 @@ class ViewCategoriesState extends ViewWidgetState {
 
   @override
   Fields<Category> getFieldsForTable() {
-    return Category.fields!;
+    return Category.fields ?? Fields<Category>();
   }
 
   @override

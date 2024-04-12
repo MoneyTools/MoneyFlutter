@@ -6,7 +6,22 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
 class LoanPayment extends MoneyObject {
-  static Fields<LoanPayment>? fields;
+  static final Fields<LoanPayment> _fields = Fields<LoanPayment>();
+
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmpInstance = LoanPayment.fromJson({});
+      _fields.setDefinitions([
+        tmpInstance.id,
+        tmpInstance.accountId,
+        tmpInstance.date,
+        tmpInstance.principal,
+        tmpInstance.interest,
+        tmpInstance.memo,
+      ]);
+    }
+    return _fields;
+  }
 
   @override
   int get uniqueId => id.value;
@@ -89,17 +104,6 @@ class LoanPayment extends MoneyObject {
     required final double interest,
     required final String memo,
   }) {
-    fields ??= Fields<LoanPayment>(definitions: [
-      this.id,
-      this.accountId,
-      this.date,
-      this.principal,
-      this.interest,
-      this.memo,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     this.id.value = id;
     this.accountId.value = accountId;
     accountInstance = Data().accounts.get(this.accountId.value);
@@ -113,6 +117,10 @@ class LoanPayment extends MoneyObject {
           rightBottomAsString: Currency.getAmountAsStringUsingCurrency(interest),
         );
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   /// Constructor from a SQLite row
   factory LoanPayment.fromJson(final MyJson row) {

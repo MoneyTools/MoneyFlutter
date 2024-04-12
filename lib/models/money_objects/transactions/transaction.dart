@@ -28,9 +28,41 @@ export 'package:money/models/money_objects/transactions/transaction_types.dart';
 /// Main source of information for this App
 /// All transactions are loaded in this class [Transaction] and [Split]
 class Transaction extends MoneyObject {
-  static Fields<Transaction>? _fields;
+  static final Fields<Transaction> _fields = Fields<Transaction>();
 
-  static get fields => _fields ??= Fields<Transaction>(definitions: []);
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Transaction.fromJSon({}, 0);
+      _fields.setDefinitions(
+        [
+          tmp.id,
+          tmp.dateTime,
+          tmp.accountId,
+          tmp.payee,
+          tmp.originalPayee,
+          tmp.categoryId,
+          tmp.memo,
+          tmp.number,
+          tmp.reconciledDate,
+          tmp.budgetBalanceDate,
+          tmp.transfer,
+          tmp.status,
+          tmp.fitid,
+          tmp.flags,
+          tmp.currency,
+          tmp.salesTax,
+          tmp.transferSplit,
+          tmp.mergeDate,
+          tmp.amount,
+          tmp.amountAsTextNormalized,
+          tmp.balance,
+          tmp.balanceAsTextNative,
+          tmp.balanceAsTextNormalized,
+        ],
+      );
+    }
+    return _fields;
+  }
 
   @override
   int get uniqueId => id.value;
@@ -541,36 +573,6 @@ class Transaction extends MoneyObject {
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
   }) {
-    if (Transaction.fields.isEmpty) {
-      Transaction.fields.setDefinitions([
-        id,
-        dateTime,
-        accountId,
-        payee,
-        originalPayee,
-        categoryId,
-        memo,
-        number,
-        reconciledDate,
-        budgetBalanceDate,
-        transfer,
-        this.status,
-        fitid,
-        flags,
-        currency,
-        salesTax,
-        transferSplit,
-        mergeDate,
-        amount,
-        amountAsTextNormalized,
-        balance,
-        balanceAsTextNative,
-        balanceAsTextNormalized,
-      ]);
-    }
-
-    fieldDefinitions = Transaction.fields.definitions;
-
     this.status.value = status;
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: payeeName,
@@ -579,6 +581,10 @@ class Transaction extends MoneyObject {
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction();

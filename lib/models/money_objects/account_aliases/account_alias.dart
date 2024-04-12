@@ -10,7 +10,21 @@ import 'package:money/models/money_objects/money_objects.dart';
 
  */
 class AccountAlias extends MoneyObject {
-  static Fields<AccountAlias>? fields;
+  static final _fields = Fields<AccountAlias>();
+
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = AccountAlias.fromJson({});
+      _fields.setDefinitions(
+        [
+          tmp.id,
+          tmp.pattern,
+          tmp.flags,
+          tmp.accountId,
+        ],
+      );
+    }
+  }
 
   @override
   String getRepresentation() {
@@ -47,15 +61,9 @@ class AccountAlias extends MoneyObject {
     defaultValue: '',
   );
 
+  /// Constructor
   AccountAlias() {
-    fields ??= Fields<AccountAlias>(definitions: [
-      id,
-      pattern,
-      flags,
-      accountId,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
+    // body
   }
 
   @override

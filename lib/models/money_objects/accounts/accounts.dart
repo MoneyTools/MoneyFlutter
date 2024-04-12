@@ -54,7 +54,7 @@ class Accounts extends MoneyObjects<Account> {
       {'Id': -1, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index, 'Currency': 'USD'},
     ];
     for (final MyJson demoAccount in demoAccounts) {
-      appendNewMoneyObject(Account.fromJson(demoAccount));
+      appendNewMoneyObject(Account.fromJson(demoAccount), fireNotification: false);
     }
   }
 
@@ -84,8 +84,10 @@ class Accounts extends MoneyObjects<Account> {
     }
 
     // Cumulate
-    for (final Transaction t
-        in Data().transactions.iterableList().sorted((a, b) => sortByDate(a.dateTime.value, b.dateTime.value))) {
+    final transactionsSortedByDate =
+        Data().transactions.iterableList().sorted((a, b) => sortByDate(a.dateTime.value, b.dateTime.value));
+
+    for (final Transaction t in transactionsSortedByDate) {
       final Account? account = get(t.accountId.value);
       if (account != null) {
         if (account.type.value == AccountType.moneyMarket || account.type.value == AccountType.investment) {

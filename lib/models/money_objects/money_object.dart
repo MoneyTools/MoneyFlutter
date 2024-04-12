@@ -20,7 +20,7 @@ abstract class MoneyObject {
 
   set uniqueId(int value) {}
 
-  late FieldDefinitions fieldDefinitions = [];
+  FieldDefinitions get fieldDefinitions => [];
 
   FieldDefinitions getFieldDefinitionsForPanel() {
     return fieldDefinitions.where((element) => element.useAsDetailPanels).toList();

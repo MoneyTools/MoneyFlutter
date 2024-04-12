@@ -10,7 +10,20 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 export 'package:money/models/money_objects/aliases/alias_types.dart';
 
 class Alias extends MoneyObject {
-  static Fields<Alias>? fields;
+  static final _fields = Fields<Alias>();
+
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Alias.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.pattern,
+        tmp.flags,
+        tmp.payeeId,
+      ]);
+    }
+    return _fields;
+  }
 
   static getFields() {
     if (fields == null) {
@@ -82,15 +95,6 @@ class Alias extends MoneyObject {
     required final int flags,
     required final int payeeId,
   }) {
-    fields ??= Fields<Alias>(definitions: [
-      this.id,
-      this.pattern,
-      this.flags,
-      this.payeeId,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     this.id.value = id;
     this.pattern.value = pattern;
     this.flags.value = flags;
@@ -101,6 +105,10 @@ class Alias extends MoneyObject {
           rightBottomAsString: '${getAliasTypeAsString(type)}\n',
         );
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   /// Constructor from a SQLite row
   factory Alias.fromJson(final MyJson row) {

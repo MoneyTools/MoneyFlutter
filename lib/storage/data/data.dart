@@ -56,11 +56,11 @@ class Data {
       onlineAccounts, // 8
       payees, // 9
       securities, // 12
-      splits, // 13
       stockSplits, // 14
       transactionExtras, // 15
       transactions, // 16
       // must come after Transactions
+      splits, // 13
       rentBuildings, // 10
       rentUnits, // 11
     ];

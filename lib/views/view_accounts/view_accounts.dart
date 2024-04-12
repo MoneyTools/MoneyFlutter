@@ -109,7 +109,7 @@ class ViewAccountsState extends ViewWidgetState {
 
   @override
   Fields<Account> getFieldsForTable() {
-    return Account.fields!;
+    return Account.fields;
   }
 
   // default currency for this view

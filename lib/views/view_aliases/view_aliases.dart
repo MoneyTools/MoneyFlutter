@@ -34,7 +34,7 @@ class ViewAliasesState extends ViewWidgetState {
 
   @override
   Fields<Alias> getFieldsForTable() {
-    return Alias.fields!;
+    return Alias.getFields();
   }
 
   @override

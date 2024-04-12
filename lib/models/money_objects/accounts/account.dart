@@ -18,7 +18,36 @@ export 'package:money/models/money_objects/accounts/account_types.dart';
 
 /// Accounts like Banks
 class Account extends MoneyObject {
-  static Fields<Account>? fields;
+  static final Fields<Account> _fields = Fields<Account>();
+
+  static Fields<Account> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Account.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.name,
+        tmp.accountId,
+        tmp.description,
+        tmp.type,
+        tmp.openingBalance,
+        tmp.onlineAccount,
+        tmp.webSite,
+        tmp.reconcileWarning,
+        tmp.lastSync,
+        tmp.syncGuid,
+        tmp.flags,
+        tmp.lastBalance,
+        tmp.categoryIdForPrincipal,
+        tmp.categoryIdForInterest,
+        tmp.count,
+        tmp.balanceNative,
+        tmp.currency,
+        tmp.balanceNormalized,
+        tmp.isAccountOpen
+      ]);
+    }
+    return _fields;
+  }
 
   Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
   Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
@@ -290,31 +319,6 @@ class Account extends MoneyObject {
 
   /// Constructor
   Account() {
-    fields ??= Fields<Account>(definitions: [
-      id,
-      name,
-      accountId,
-      description,
-      type,
-      openingBalance,
-      onlineAccount,
-      webSite,
-      reconcileWarning,
-      lastSync,
-      syncGuid,
-      flags,
-      lastBalance,
-      categoryIdForPrincipal,
-      categoryIdForInterest,
-      count,
-      balanceNative,
-      currency,
-      balanceNormalized,
-      isAccountOpen
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     buildFieldsAsWidgetForSmallScreen = () {
       Widget? originalCurrencyAndValue;
 
@@ -341,6 +345,10 @@ class Account extends MoneyObject {
           rightBottomAsWidget: originalCurrencyAndValue);
     };
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   /// Constructor from a SQLite row
   factory Account.fromJson(final MyJson row) {

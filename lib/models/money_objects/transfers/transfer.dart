@@ -1,4 +1,5 @@
 import 'package:money/helpers/date_helper.dart';
+import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -6,9 +7,27 @@ import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 
 class Transfer extends MoneyObject {
-  static Fields<Transfer>? _fields;
+  static final _fields = Fields<Transfer>();
 
-  static get fields => _fields ??= Fields<Transfer>(definitions: []);
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Transfer.fromJson({});
+
+      _fields.setDefinitions([
+        tmp.senderTransactionDate,
+        tmp.senderAccountId,
+        tmp.senderTransactionStatus,
+        tmp.senderTransactionMemo,
+        tmp.receiverTransactionDate,
+        tmp.receiverAccountId,
+        tmp.accountStatusDestination,
+        tmp.memoDestination,
+        tmp.troubleshoot,
+        tmp.transactionAmount,
+      ]);
+    }
+    return _fields;
+  }
 
   @override
   int get uniqueId => source.uniqueId;
@@ -123,24 +142,16 @@ class Transfer extends MoneyObject {
     this.relatedSplit,
     required this.isOrphan,
   }) {
-    if (Transfer.fields.isEmpty) {
-      Transfer.fields.setDefinitions([
-        senderTransactionDate,
-        senderAccountId,
-        senderTransactionStatus,
-        senderTransactionMemo,
-        receiverTransactionDate,
-        receiverAccountId,
-        accountStatusDestination,
-        memoDestination,
-        troubleshoot,
-        transactionAmount,
-      ]);
-    }
-
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
+    // body of constructor
   }
+
+  factory Transfer.fromJson(final MyJson row) {
+    return Transfer(id: -1, source: Transaction(), isOrphan: true);
+  }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   //---------------------------------------------
   // Transactions

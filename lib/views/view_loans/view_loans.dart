@@ -58,7 +58,7 @@ class ViewLoansState extends ViewWidgetState {
 
   @override
   Fields<LoanPayment> getFieldsForTable() {
-    return LoanPayment.fields!;
+    return LoanPayment.fields;
   }
 
   @override

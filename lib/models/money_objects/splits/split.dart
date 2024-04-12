@@ -17,7 +17,20 @@ import 'package:money/models/money_objects/payees/payee.dart';
  */
 
 class Split extends MoneyObject {
-  static Fields<Split>? fields;
+  static final _fields = Fields<Split>();
+
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Split.fromJson({});
+      _fields.setDefinitions([
+        tmp.payeeId,
+        tmp.categoryId,
+        tmp.memo,
+        tmp.amount,
+      ]);
+    }
+    return _fields;
+  }
 
   @override
   int get uniqueId => id.value;
@@ -107,15 +120,6 @@ class Split extends MoneyObject {
     // 8
     required DateTime? budgetBalanceDate,
   }) {
-    fields ??= Fields<Split>(definitions: [
-      this.payeeId,
-      this.categoryId,
-      this.memo,
-      this.amount,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     this.id.value = id;
     this.transactionId.value = transactionId;
     this.categoryId.value = categoryId;
@@ -126,4 +130,30 @@ class Split extends MoneyObject {
     this.flags.value = flags;
     this.budgetBalanceDate.value = budgetBalanceDate;
   }
+
+  factory Split.fromJson(final MyJson row) {
+    return Split(
+      // 0
+      transactionId: row.getInt('Transaction', -1),
+      // 1
+      id: row.getInt('Id', -1),
+      // 2
+      categoryId: row.getInt('Category', -1),
+      // 3
+      payeeId: row.getInt('Payee', -1),
+      // 4
+      amount: row.getDouble('Amount'),
+      // 5
+      transferId: row.getInt('Transfer', -1),
+      // 6
+      memo: row.getString('Memo'),
+      // 7
+      flags: row.getInt('Flags'),
+      // 8
+      budgetBalanceDate: row.getDate('BudgetBalanceDate'),
+    );
+  }
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 }

@@ -85,7 +85,7 @@ class MoneyObjects<T> {
     return nextId + 1;
   }
 
-  MoneyObject appendNewMoneyObject(final MoneyObject moneyObject, [bool fireNotification = true]) {
+  MoneyObject appendNewMoneyObject(final MoneyObject moneyObject, {bool fireNotification = true}) {
     assert(moneyObject.uniqueId == -1);
 
     // assign the next available unique ID

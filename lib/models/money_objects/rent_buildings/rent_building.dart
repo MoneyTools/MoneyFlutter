@@ -36,7 +36,44 @@ import '../accounts/account.dart';
     17|CategoryForManagement|INT|0||0
    */
 class RentBuilding extends MoneyObject {
-  static Fields<RentBuilding>? fields;
+  static final _fields = Fields<RentBuilding>();
+
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = RentBuilding.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.name,
+        tmp.address,
+        tmp.currency,
+        tmp.purchasedDate,
+        tmp.purchasedPrice,
+        tmp.landValue,
+        tmp.estimatedValue,
+        tmp.ownershipName1,
+        tmp.ownershipPercentage1,
+        tmp.ownershipName2,
+        tmp.ownershipPercentage2,
+        tmp.categoryForIncome,
+        tmp.categoryForInterest,
+        tmp.categoryForManagement,
+        tmp.categoryForMaintenance,
+        tmp.categoryForRepairs,
+        tmp.categoryForTaxes,
+        tmp.transactionsForIncomes,
+        tmp.revenue,
+        tmp.transactionsForExpenses,
+        tmp.expense,
+        tmp.lifeTimeExpenseInterest,
+        tmp.lifeTimeExpenseMaintenance,
+        tmp.lifeTimeExpenseManagement,
+        tmp.lifeTimeExpenseRepair,
+        tmp.lifeTimeExpenseTaxes,
+        tmp.profit,
+      ]);
+    }
+    return _fields;
+  }
 
   @override
   int get uniqueId => id.value;
@@ -462,39 +499,6 @@ class RentBuilding extends MoneyObject {
   }
 
   RentBuilding() {
-    fields ??= Fields<RentBuilding>(definitions: [
-      this.id,
-      this.name,
-      this.address,
-      this.currency,
-      this.purchasedDate,
-      this.purchasedPrice,
-      this.landValue,
-      this.estimatedValue,
-      this.ownershipName1,
-      this.ownershipPercentage1,
-      this.ownershipName2,
-      this.ownershipPercentage2,
-      this.categoryForIncome,
-      this.categoryForInterest,
-      this.categoryForManagement,
-      this.categoryForMaintenance,
-      this.categoryForRepairs,
-      this.categoryForTaxes,
-      this.transactionsForIncomes,
-      this.revenue,
-      this.transactionsForExpenses,
-      this.expense,
-      this.lifeTimeExpenseInterest,
-      this.lifeTimeExpenseMaintenance,
-      this.lifeTimeExpenseManagement,
-      this.lifeTimeExpenseRepair,
-      this.lifeTimeExpenseTaxes,
-      this.profit,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: address.value,
@@ -546,6 +550,10 @@ class RentBuilding extends MoneyObject {
 
     return instance;
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   associateAccountToBuilding() {
     final Transaction? firstTransactionForThisBuilding = Data()

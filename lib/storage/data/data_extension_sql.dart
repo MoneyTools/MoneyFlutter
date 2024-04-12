@@ -21,10 +21,12 @@ extension DataFromSql on Data {
       rentBuildings.loadFromJson(db.select('SELECT * FROM RentBuildings'));
       rentUnits.loadFromJson(db.select('SELECT * FROM RentUnits'));
       securities.loadFromJson(db.select('SELECT * FROM Securities'));
-      splits.loadFromJson(db.select('SELECT * FROM Splits'));
-      stockSplits.loadFromJson(db.select('SELECT * FROM StockSplits'));
       transactions.loadFromJson(db.select('SELECT * FROM Transactions'));
       transactionExtras.loadFromJson(db.select('SELECT * FROM TransactionExtras'));
+
+      // Must come after Transactions are loaded
+      splits.loadFromJson(db.select('SELECT * FROM Splits'));
+      stockSplits.loadFromJson(db.select('SELECT * FROM StockSplits'));
 
       // Close the database when done
       db.dispose();

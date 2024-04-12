@@ -32,7 +32,7 @@ class ViewStocksState extends ViewWidgetState {
 
   @override
   Fields<Security> getFieldsForTable() {
-    return Security.getFields();
+    return Security.fields;
   }
 
   @override

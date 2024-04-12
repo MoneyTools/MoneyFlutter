@@ -1,6 +1,6 @@
-import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/splits/split.dart';
+import 'package:money/storage/data/data.dart';
 
 // Exports
 export 'package:money/models/money_objects/splits/split.dart';
@@ -10,8 +10,16 @@ class Splits extends MoneyObjects<Split> {
     collectionName = 'Splits';
   }
 
-  List<Split> getListFromTransactionId(final num transactionId) {
-    return iterableList().where((final Split item) => item.transactionId.value == transactionId).toList();
+  @override
+  void appendMoneyObject(final MoneyObject moneyObject) {
+    super.appendMoneyObject(moneyObject);
+
+    // Attach the split back to the their  container Transaction
+    final splitAdded = (moneyObject as Split);
+    final containerTransaction = Data().transactions.get(splitAdded.transactionId.value);
+    if (containerTransaction != null) {
+      containerTransaction.splits.add(moneyObject);
+    }
   }
 
   @override

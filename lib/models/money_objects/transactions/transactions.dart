@@ -47,7 +47,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   @override
-  List<Transaction> loadFromJson(final List<MyJson> rows) {
+  void loadFromJson(final List<MyJson> rows) {
     clear();
 
     runningBalance = 0.00;
@@ -57,15 +57,13 @@ class Transactions extends MoneyObjects<Transaction> {
       runningBalance += t.balance.value;
       appendMoneyObject(t);
     }
-    return iterableList().toList();
   }
 
   @override
   void onAllDataLoaded() {
     // Now that everything is loaded, lets resolve the Transfers
-    for (final Transaction transactionSource in iterableList()) {
-      transactionSource.splits = Data().splits.getListFromTransactionId(transactionSource.uniqueId);
 
+    for (final Transaction transactionSource in iterableList()) {
       final int transferId = transactionSource.transfer.value;
       transactionSource.transferInstance = null;
 

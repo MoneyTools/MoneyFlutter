@@ -16,7 +16,28 @@ import 'package:money/widgets/list_view/list_item_card.dart';
 export 'package:money/models/money_objects/categories/category_types.dart';
 
 class Category extends MoneyObject {
-  static Fields<Category>? fields;
+  static final _fields = Fields<Category>();
+
+  static get fields {
+    if (_fields.isEmpty) {
+      final tmp = Category.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.parentId,
+        tmp.name,
+        tmp.description,
+        tmp.color,
+        tmp.type,
+        tmp.budget,
+        tmp.budgetBalance,
+        tmp.frequency,
+        tmp.taxRefNum,
+        tmp.count,
+        tmp.sum,
+      ]);
+    }
+    return _fields;
+  }
 
   @override
   int get uniqueId => id.value;
@@ -168,23 +189,6 @@ class Category extends MoneyObject {
     final int frequency = 0,
     final int taxRefNum = 0,
   }) {
-    fields ??= Fields<Category>(definitions: [
-      this.id,
-      this.parentId,
-      this.name,
-      this.description,
-      this.color,
-      this.type,
-      this.budget,
-      this.budgetBalance,
-      this.frequency,
-      this.taxRefNum,
-      this.count,
-      this.sum,
-    ]);
-    // Also stash the definition in the instance for fast retrieval later
-    fieldDefinitions = fields!.definitions;
-
     this.id.value = id;
     this.parentId.value = parentId;
     this.name.value = name;
@@ -224,6 +228,10 @@ class Category extends MoneyObject {
       );
     };
   }
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   factory Category.fromJson(final MyJson row) {
     return Category(

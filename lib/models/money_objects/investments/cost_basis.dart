@@ -217,7 +217,7 @@ class CostBasisCalculator {
         total += purchase.unitsRemaining;
       }
 
-// yikes also have to split the pending sales...?
+      // yikes also have to split the pending sales...?
       for (SecuritySale pending in holding.getPendingSalesForSecurity(s)) {
         if (pending.dateSold!.millisecond < split.date!.millisecond) {
           pending.unitsSold = pending.unitsSold * split.numerator / split.denominator;

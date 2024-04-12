@@ -31,7 +31,7 @@ class ViewWidgetState extends State<ViewWidget> {
   // list management
   List<MoneyObject> list = <MoneyObject>[];
   final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>(<int>[]);
-  Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>(definitions: <Field<dynamic>>[]);
+  Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>();
   List<String> listOfUniqueString = <String>[];
   List<ValueSelection> listOfValueSelected = [];
   int _lastSelectedItemId = -1;
@@ -52,7 +52,7 @@ class ViewWidgetState extends State<ViewWidget> {
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<MoneyObject> getFieldsForTable() {
-    return Fields<MoneyObject>(definitions: []);
+    return Fields<MoneyObject>();
   }
 
   @override
@@ -60,8 +60,8 @@ class ViewWidgetState extends State<ViewWidget> {
     super.initState();
 
     var all = getFieldsForTable();
-    _fieldToDisplay =
-        Fields<MoneyObject>(definitions: all.definitions.where((element) => element.useAsColumn).toList());
+    _fieldToDisplay = Fields<MoneyObject>();
+    _fieldToDisplay.setDefinitions(all.definitions.where((element) => element.useAsColumn).toList());
 
     final MyJson? viewSetting = Settings().views[getClassNameSingular()];
     if (viewSetting != null) {
