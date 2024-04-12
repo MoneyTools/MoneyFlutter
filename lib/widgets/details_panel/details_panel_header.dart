@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/widgets/details_panel/details_panel.dart';
+import 'package:money/widgets/details_panel/sub_views_enum.dart';
 import 'package:money/widgets/gaps.dart';
 
 class DetailsPanelHeader extends StatelessWidget {
@@ -8,8 +8,8 @@ class DetailsPanelHeader extends StatelessWidget {
   final Function onExpanded;
 
   // SubView
-  final SubViews subViewSelected;
-  final Function(SubViews) subViewSelectionChanged;
+  final SubViewsEnum subViewSelected;
+  final Function(SubViewsEnum) subViewSelectionChanged;
 
   // Currency
   final List<String> currencyChoices;
@@ -104,7 +104,7 @@ class DetailsPanelHeader extends StatelessWidget {
         if (!isExpanded) {
           onExpanded(true);
         }
-        subViewSelectionChanged(SubViews.values[newSelection.first]);
+        subViewSelectionChanged(SubViewsEnum.values[newSelection.first]);
       },
     );
   }

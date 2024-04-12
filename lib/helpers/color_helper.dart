@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/settings.dart';
 
 /// return the inverted color
 Color invertColor(final Color color) {
@@ -91,22 +90,6 @@ Color colorBasedOnValue(final double value) {
   }
   // value == 0
   return Colors.grey;
-}
-
-Widget colorBoxes(BuildContext context) {
-  return Row(
-    children: [
-      TextButton(
-          onPressed: () {
-            Settings().useDarkMode = !Settings().useDarkMode;
-          },
-          child: Text(Settings().useDarkMode ? 'Dark' : 'Light')),
-      colorBox(getColorTheme(context).background, getColorTheme(context).onBackground),
-      colorBox(getColorTheme(context).primaryContainer, getColorTheme(context).onPrimaryContainer),
-      colorBox(getColorTheme(context).secondaryContainer, getColorTheme(context).onSecondaryContainer),
-      colorBox(getColorTheme(context).tertiaryContainer, getColorTheme(context).onTertiaryContainer),
-    ],
-  );
 }
 
 Widget colorBox(Color color, Color colorText) {

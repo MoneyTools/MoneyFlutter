@@ -10,7 +10,6 @@ import 'package:money/models/money_objects/splits/split.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view_rentals/rental_pnl.dart';
 import 'package:money/views/view_rentals/rental_pnl_card.dart';
-import 'package:money/widgets/box.dart';
 import 'package:money/widgets/center_message.dart';
 
 import 'package:money/widgets/chart.dart';

@@ -12,6 +12,7 @@ import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/details_panel/details_panel.dart';
 import 'package:money/widgets/details_panel/dialog_mutate_money_object.dart';
+import 'package:money/widgets/details_panel/sub_views_enum.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
 import 'package:money/widgets/list_view/list_view.dart';
@@ -40,7 +41,7 @@ class ViewWidgetState extends State<ViewWidget> {
 
   // detail panel
   Object? subViewSelectedItem;
-  SubViews _selectedBottomTabId = SubViews.details;
+  SubViewsEnum _selectedBottomTabId = SubViewsEnum.details;
   int _selectedCurrency = 0;
 
   // header
@@ -67,8 +68,8 @@ class ViewWidgetState extends State<ViewWidget> {
       _sortByFieldIndex = viewSetting.getInt(settingKeySortBy, 0);
       _sortAscending = viewSetting.getBool(settingKeySortAscending, true);
       _lastSelectedItemId = viewSetting.getInt(settingKeySelectedListItemId, -1);
-      final int subViewIndex = viewSetting.getInt(settingKeySelectedDetailsPanelTab, SubViews.details.index);
-      _selectedBottomTabId = SubViews.values[subViewIndex];
+      final int subViewIndex = viewSetting.getInt(settingKeySelectedDetailsPanelTab, SubViewsEnum.details.index);
+      _selectedBottomTabId = SubViewsEnum.values[subViewIndex];
     }
 
     list = getList();
@@ -272,20 +273,20 @@ class ViewWidgetState extends State<ViewWidget> {
     );
   }
 
-  void updateBottomContent(final SubViews tab) {
+  void updateBottomContent(final SubViewsEnum tab) {
     setState(() {
       _selectedBottomTabId = tab;
       saveLastUserActionOnThisView();
     });
   }
 
-  Widget getDetailPanelContent(final SubViews subViewId, final List<int> selectedIds) {
+  Widget getDetailPanelContent(final SubViewsEnum subViewId, final List<int> selectedIds) {
     switch (subViewId) {
-      case SubViews.details:
+      case SubViewsEnum.details:
         return getPanelForDetails(selectedIds: selectedIds, isReadOnly: false);
-      case SubViews.chart:
+      case SubViewsEnum.chart:
         return getPanelForChart(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0);
-      case SubViews.transactions:
+      case SubViewsEnum.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: getPanelForTransactions(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0),
@@ -296,11 +297,11 @@ class ViewWidgetState extends State<ViewWidget> {
   }
 
   /// Override in your view
-  List<String> getCurrencyChoices(final SubViews subViewId, final List<int> selectedItems) {
+  List<String> getCurrencyChoices(final SubViewsEnum subViewId, final List<int> selectedItems) {
     switch (subViewId) {
-      case SubViews.details:
-      case SubViews.chart:
-      case SubViews.transactions:
+      case SubViewsEnum.details:
+      case SubViewsEnum.chart:
+      case SubViewsEnum.transactions:
       default:
         return [];
     }

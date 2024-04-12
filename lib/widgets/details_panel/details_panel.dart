@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/widgets/details_panel/details_panel_header.dart';
-
-enum SubViews {
-  details,
-  chart,
-  transactions,
-}
+import 'package:money/widgets/details_panel/sub_views_enum.dart';
 
 class DetailsPanel extends StatelessWidget {
   final bool isExpanded;
@@ -14,13 +9,13 @@ class DetailsPanel extends StatelessWidget {
   final ValueNotifier<List<int>> selectedItems;
 
   // SubViews [Details] [Chart] [Transactions]
-  final SubViews subPanelSelected;
-  final Function(SubViews) subPanelSelectionChanged;
-  final Widget Function(SubViews, List<int>) subPanelContent;
+  final SubViewsEnum subPanelSelected;
+  final Function(SubViewsEnum) subPanelSelectionChanged;
+  final Widget Function(SubViewsEnum, List<int>) subPanelContent;
 
   // Currency selection
   final int currencySelected;
-  final List<String> Function(SubViews, List<int>) getCurrencyChoices;
+  final List<String> Function(SubViewsEnum, List<int>) getCurrencyChoices;
   final Function(int) currencySelectionChanged;
 
   // Actions
@@ -84,10 +79,11 @@ class DetailsPanel extends StatelessWidget {
 
                 // Actions
                 onActionAddTransaction:
-                    (subPanelSelected == SubViews.transactions) && isExpanded ? onActionAddTransaction : null,
-                onActionEdit:
-                    (subPanelSelected == SubViews.details) && listOfSelectedItemIndex.isNotEmpty ? onActionEdit : null,
-                onActionDelete: (subPanelSelected == SubViews.details) && listOfSelectedItemIndex.isNotEmpty
+                    (subPanelSelected == SubViewsEnum.transactions) && isExpanded ? onActionAddTransaction : null,
+                onActionEdit: (subPanelSelected == SubViewsEnum.details) && listOfSelectedItemIndex.isNotEmpty
+                    ? onActionEdit
+                    : null,
+                onActionDelete: (subPanelSelected == SubViewsEnum.details) && listOfSelectedItemIndex.isNotEmpty
                     ? onActionDelete
                     : null,
               ),

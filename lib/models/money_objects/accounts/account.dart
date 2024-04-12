@@ -11,6 +11,8 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 
+import 'account_types_enum.dart';
+
 // Exports
 export 'package:money/models/money_objects/accounts/account_types.dart';
 
