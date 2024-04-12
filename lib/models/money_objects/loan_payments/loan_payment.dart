@@ -15,9 +15,9 @@ class LoanPayment extends MoneyObject {
         tmpInstance.id,
         tmpInstance.accountId,
         tmpInstance.date,
+        tmpInstance.memo,
         tmpInstance.principal,
         tmpInstance.interest,
-        tmpInstance.memo,
       ]);
     }
     return _fields;
@@ -64,7 +64,7 @@ class LoanPayment extends MoneyObject {
   /// 3
   /// 3|Principal|money|0||0
   FieldAmount principal = FieldAmount(
-    importance: 3,
+    importance: 98,
     name: 'Principal',
     serializeName: 'Principal',
     valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
@@ -74,7 +74,7 @@ class LoanPayment extends MoneyObject {
   /// Interest
   /// 4|Interest|money|0||0
   FieldAmount interest = FieldAmount(
-    importance: 4,
+    importance: 99,
     name: 'Interest',
     serializeName: 'Interest',
     valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
@@ -84,7 +84,7 @@ class LoanPayment extends MoneyObject {
   // 5
   // 5|Memo|nvarchar(255)|0||0
   Field<String> memo = Field<String>(
-    importance: 99,
+    importance: 3,
     type: FieldType.text,
     name: 'Memo',
     serializeName: 'Memo',
