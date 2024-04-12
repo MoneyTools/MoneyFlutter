@@ -5052,8 +5052,8 @@
 <text text-anchor="start" x="17197.25" y="-956.45" font-family="Arial" font-size="15.00"> ccd: 8883 </text>
 <text text-anchor="start" x="17197.25" y="-938.45" font-family="Arial" font-size="15.00"> acd: 54.5 </text>
 <text text-anchor="start" x="17197.25" y="-920.45" font-family="Arial" font-size="15.00"> nccd: 8.51 </text>
-<text text-anchor="start" x="17197.25" y="-902.45" font-family="Arial" font-size="15.00"> totalSloc: 15681 </text>
-<text text-anchor="start" x="17197.25" y="-884.45" font-family="Arial" font-size="15.00"> avgSloc: 96.2 </text>
+<text text-anchor="start" x="17197.25" y="-902.45" font-family="Arial" font-size="15.00"> totalSloc: 15684 </text>
+<text text-anchor="start" x="17197.25" y="-884.45" font-family="Arial" font-size="15.00"> avgSloc: 96.22 </text>
 </g>
 </g>
 </svg>

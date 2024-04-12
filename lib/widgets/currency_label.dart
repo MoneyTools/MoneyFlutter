@@ -12,15 +12,18 @@ class CurrencyLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Semantics(
-      label: threeLetterCurrencySymbol,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/flags/$flagId.png', height: 10),
-          const SizedBox(width: 4),
-          Text(threeLetterCurrencySymbol),
-        ],
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Semantics(
+        label: threeLetterCurrencySymbol,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset('assets/flags/$flagId.png', height: 10),
+            const SizedBox(width: 4),
+            Text(threeLetterCurrencySymbol),
+          ],
+        ),
       ),
     );
   }
