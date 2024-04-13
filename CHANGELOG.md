@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.7.7] 2024-04-12
+
+### Added
+
+- Running balance on Investment-Stocks view
+
 ## [version 1.7.6] 2024-04-12
 
 ### Added

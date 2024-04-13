@@ -41,7 +41,7 @@ class Transactions extends MoneyObjects<Transaction> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

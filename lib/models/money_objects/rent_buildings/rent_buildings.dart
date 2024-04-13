@@ -59,7 +59,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

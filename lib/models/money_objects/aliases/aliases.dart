@@ -30,7 +30,7 @@ class Aliases extends MoneyObjects<Alias> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

@@ -114,7 +114,7 @@ class Payees extends MoneyObjects<Payee> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

@@ -1,5 +1,6 @@
 // ignore_for_file: unnecessary_this
 
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -29,6 +30,7 @@ class Investment extends MoneyObject {
         tmp.taxExempt,
         tmp.withholding,
         tmp.amount,
+        tmp.runningBalance,
       ]);
     }
 
@@ -65,7 +67,7 @@ class Investment extends MoneyObject {
   /// 2    UnitPrice       money   1                    0
   FieldAmount unitPrice = FieldAmount(
     importance: 3,
-    name: 'UnitPrice',
+    name: 'Price',
     serializeName: 'UnitPrice',
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
@@ -92,6 +94,7 @@ class Investment extends MoneyObject {
   FieldAmount markUpDown = FieldAmount(
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
+    useAsColumn: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
   );
@@ -100,6 +103,7 @@ class Investment extends MoneyObject {
   FieldAmount taxes = FieldAmount(
     name: 'Taxes',
     serializeName: 'Taxes',
+    useAsColumn: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxes.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value,
   );
@@ -125,6 +129,7 @@ class Investment extends MoneyObject {
     name: 'Action',
     serializeName: 'InvestmentType',
     align: TextAlign.center,
+    columnWidth: ColumnWidth.tiny,
     type: FieldType.text,
     valueFromInstance: (final MoneyObject instance) =>
         getInvestmentTypeTextFromValue((instance as Investment).investmentType.value),
@@ -146,8 +151,10 @@ class Investment extends MoneyObject {
   FieldInt taxExempt = FieldInt(
     name: 'Taxable',
     serializeName: 'TaxExempt',
+    columnWidth: ColumnWidth.nano,
+    align: TextAlign.center,
+    useAsColumn: false,
     type: FieldType.text,
-    columnWidth: ColumnWidth.tiny,
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxExempt.value == 1 ? 'No' : 'Yes',
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
   );
@@ -156,6 +163,7 @@ class Investment extends MoneyObject {
   FieldAmount withholding = FieldAmount(
     name: 'Withholding',
     serializeName: 'Withholding',
+    useAsColumn: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).withholding.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value,
   );
@@ -189,8 +197,10 @@ class Investment extends MoneyObject {
     name: 'Date',
     importance: 0,
     useAsColumn: true,
-    columnWidth: ColumnWidth.normal,
+    columnWidth: ColumnWidth.small,
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).date,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByDateAndInvestmentType(a as Investment, b as Investment, false, false),
   );
 
   FieldString securitySymbol = FieldString(
@@ -217,8 +227,34 @@ class Investment extends MoneyObject {
   FieldAmount amount = FieldAmount(
       name: 'Amount',
       valueFromInstance: (final MoneyObject instance) {
-        final Investment investment = (instance as Investment);
-        return investment.units.value * investment.unitPrice.value;
+        return (instance as Investment).finalAmount;
+      });
+
+  double get finalAmount {
+    switch (InvestmentType.values[this.investmentType.value]) {
+      // case InvestmentType.add:
+      case InvestmentType.buy:
+        // Commission adds to the cost
+        double amount = this.units.value * this.unitPrice.value;
+        amount += this.commission.value;
+        return -amount;
+
+      // case InvestmentType.remove:
+      case InvestmentType.sell:
+        // commission reduce the revenue
+        double amount = this.units.value * this.unitPrice.value;
+        amount -= this.commission.value;
+        return amount;
+      default:
+      //
+    }
+    return 0;
+  }
+
+  FieldAmount runningBalance = FieldAmount(
+      name: 'Balance',
+      valueFromInstance: (final MoneyObject instance) {
+        return (instance as Investment).runningBalance.value;
       });
 
   Investment({
@@ -285,5 +321,20 @@ class Investment extends MoneyObject {
 // 12
       withholding: row.getDouble('Withholding'),
     );
+  }
+
+  static int sortByDateAndInvestmentType(final Investment a, final Investment b, final bool ascending, bool ta) {
+    int result = sortByDate(a.date, b.date, ascending);
+
+    if (result == 0) {
+      // If on the same date sort so that "Buy" is before "Sell"
+      result = sortByValue(a.investmentType.value, b.investmentType.value, ascending);
+    }
+
+    if (result == 0) {
+      // If on the same date sort so that "Buy" is before "Sell"
+      result = sortByValue(a.finalAmount.abs(), b.finalAmount.abs(), !ascending);
+    }
+    return result;
   }
 }

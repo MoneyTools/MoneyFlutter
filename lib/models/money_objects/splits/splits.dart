@@ -54,7 +54,7 @@ class Splits extends MoneyObjects<Split> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

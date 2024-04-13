@@ -144,6 +144,7 @@ class CostBasisCalculator {
         // was split, do they get the split or not?  This assumes not.
         this.applySplits(s, splits, i.date);
         var holdings = this.getHolding(i.transactionInstance!.accountInstance!);
+
         if (i.investmentType.value == InvestmentType.add.index || i.investmentType.value == InvestmentType.buy.index) {
           // transfer "adds" will be handled on the "remove" side below so we get the right cost basis.
           if (i.transactionInstance!.transferInstance == null && i.units.value > 0) {
@@ -163,37 +164,35 @@ class CostBasisCalculator {
           } else {
             // track cost basis of securities transferred across accounts.
             // bugbug; could this ever be a split? Don't think so...
-//     Investment add = i.Transaction.Transfer.Transaction.Investment;
-//     Debug.Assert(add != null, "Other side of the Transfer needs to be an Investment transaction");
-//     if (add != null)
-//     {
-//     Debug.Assert(add.Type == InvestmentType.Add, "Other side of transfer should be an Add transaction");
-//
-// // now instead of doing a simple Add on the other side, we need to remember the cost basis of each purchase
-// // used to cover the remove
-//
-//     foreach (SecuritySale sale in holdings.Sell(i.Security, i.Date, i.Units, 0))
-//     {
-//     var targetHoldings = this.getHolding(add.Transaction.Account);
-//     if (sale.DateAcquired.HasValue)
-//     {
-// // now transfer the cost basis over to the target account.
-//     targetHoldings.Buy(s, sale.DateAcquired.Value, sale.UnitsSold, sale.costBasisPerUnit * sale.UnitsSold);
-//     foreach (SecuritySale pending in targetHoldings.processPendingSales(s))
-//     {
-//     this.sales.add(pending);
-//     }
-//     }
-//     else
-//     {
-// // this is the error case, but the error will be re-generated on the target account when needed.
-//     }
-//     }
-//     }
-//     }
-//
-//     this.ApplySplits(s, splits, this.toDate);
+            if (i.transactionInstance?.transferInstance != null) {
+              Investment? add = i.transactionInstance!.transferInstance!.getReceiverTransaction()?.investmentInstance;
+              assert(add != null, "Other side of the Transfer needs to be an Investment transaction");
+              if (add != null) {
+                assert(add.investmentType.value == InvestmentType.add.index,
+                    "Other side of transfer should be an Add transaction");
+
+                // now instead of doing a simple Add on the other side, we need to remember the cost basis of each purchase
+                // used to cover the remove
+                var securityInstance = Data().securities.get(i.security.value);
+                if (securityInstance != null) {
+                  for (SecuritySale sale in holdings.sell(securityInstance, i.date, i.units.value, 0)) {
+                    var targetHoldings = this.getHolding(add.transactionInstance!.accountInstance!);
+                    if (sale.dateAcquired != null) {
+                      // now transfer the cost basis over to the target account.
+                      targetHoldings.buy(s, sale.dateAcquired!, sale.unitsSold, sale.costBasisPerUnit * sale.unitsSold);
+                      for (SecuritySale pending in targetHoldings.processPendingSales(s)) {
+                        this.sales.add(pending);
+                      }
+                    } else {
+                      // this is the error case, but the error will be re-generated on the target account when needed.
+                    }
+                  }
+                }
+              }
+            }
           }
+
+          this.applySplits(s, splits, this.toDate);
         }
       }
     }
@@ -204,7 +203,7 @@ class CostBasisCalculator {
     while (next != null && next.date!.millisecond < dateTime.millisecond) {
       this.applySplit(s, next);
       splits.remove(next);
-      next = splits.first;
+      next = splits.firstOrNull;
     }
   }
 

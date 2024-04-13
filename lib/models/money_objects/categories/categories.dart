@@ -254,7 +254,7 @@ class Categories extends MoneyObjects<Category> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

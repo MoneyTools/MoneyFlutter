@@ -175,7 +175,7 @@ class MoneyObjects<T> {
     return getCsvFromList(getListSortedById());
   }
 
-  String getCsvHeader(final FieldDefinitions declarations) {
+  static String getCsvHeader(final FieldDefinitions declarations) {
     final List<String> headerList = <String>[];
 
     for (final Field<dynamic> field in declarations) {
@@ -197,7 +197,7 @@ class MoneyObjects<T> {
     return fieldNames;
   }
 
-  String getCsvFromList(final List<MoneyObject> moneyObjects, [final String valueSeparator = ',']) {
+  static String getCsvFromList(final List<MoneyObject> moneyObjects, [final String valueSeparator = ',']) {
     final StringBuffer csv = StringBuffer();
 
     // Add the UTF-8 BOM for Excel
@@ -230,7 +230,7 @@ class MoneyObjects<T> {
     return list;
   }
 
-  String toStringAsSeparatedValues(
+  static String toStringAsSeparatedValues(
     List<Object> declarations,
     MoneyObject item, [
     final String valueSeparator = ',',

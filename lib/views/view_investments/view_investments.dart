@@ -38,11 +38,13 @@ class ViewInvestmentsState extends ViewWidgetState {
 
   @override
   List<Investment> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data()
+    final list = Data()
         .investments
         .iterableList(includeDeleted)
         .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
         .toList();
+    Investments.calculateRunningBalance(list);
+    return list;
   }
 
   @override

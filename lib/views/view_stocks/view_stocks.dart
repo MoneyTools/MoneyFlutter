@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
-import 'package:money/models/money_objects/investments/investment.dart';
+import 'package:money/models/money_objects/investments/investments.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/securities/security.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptable_list_view.dart';
 import 'package:money/views/view.dart';
 import 'package:money/views/view_stocks/stock_chart.dart';
 import 'package:money/widgets/center_message.dart';
-import 'package:money/widgets/list_view/list_view.dart';
 
 class ViewStocks extends ViewWidget {
   const ViewStocks({
@@ -73,17 +73,24 @@ class ViewStocksState extends ViewWidgetState {
       return const CenterMessage(message: 'No security selected.');
     }
 
-    final list = Data().investments.iterableList().where((item) => item.security.value == security.uniqueId).toList();
+    final List<Investment> list =
+        Data().investments.iterableList().where((item) => item.security.value == security.uniqueId).toList();
     if (list.isEmpty) {
       return const CenterMessage(message: 'No transaction found.');
     }
 
-    // Sort by date
-    list.sort((a, b) => sortByDate(a.transactionDate.value, a.transactionDate.value, true));
-
+    Investments.calculateRunningBalance(list);
+    final exclude = ['Symbol', 'Load', 'Fees'];
+    final fieldsToDisplay = Investment.fields.definitions
+        .where((element) => element.useAsColumn && !exclude.contains(element.name))
+        .toList();
     return AdaptableListView(
-        fieldDefinitions: Investment.fields.definitions.where((element) => element.useAsColumn).toList(),
+        fieldDefinitions: fieldsToDisplay,
         list: list,
-        selectedItemsByUniqueId: ValueNotifier<List<int>>(<int>[]));
+        sortAscending: false,
+        selectedItemsByUniqueId: ValueNotifier<List<int>>(<int>[]),
+        onItemTap: (BuildContext __, int _) {
+          copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list));
+        });
   }
 }

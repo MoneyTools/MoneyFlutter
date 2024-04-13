@@ -200,7 +200,7 @@ class Accounts extends MoneyObjects<Account> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

@@ -26,9 +26,20 @@ class Investments extends MoneyObjects<Investment> {
     }
   }
 
+  static void calculateRunningBalance(List<Investment> investments) {
+    // first sort by date, TradeType, Amount
+    investments.sort((a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true));
+
+    double runningBalance = 0;
+    for (final investment in investments) {
+      runningBalance += investment.finalAmount;
+      investment.runningBalance.value = runningBalance;
+    }
+  }
+
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }

@@ -43,7 +43,7 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
 
   @override
   String toCSV() {
-    return super.getCsvFromList(
+    return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
   }
