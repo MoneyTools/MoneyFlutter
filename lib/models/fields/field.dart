@@ -246,7 +246,7 @@ class FieldDate extends Field<DateTime?> {
     super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,
-    super.columnWidth = ColumnWidth.small,
+    super.columnWidth = ColumnWidth.tiny,
     super.getEditWidget,
   }) : super(
           defaultValue: null,

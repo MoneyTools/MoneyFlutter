@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 
@@ -6,11 +7,13 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 class MoneyWidget extends StatelessWidget {
   /// Amount to display
   final MoneyModel amountModel;
+  final bool asTile;
 
   /// Constructor
   const MoneyWidget({
     super.key,
     required this.amountModel,
+    this.asTile = false,
   });
 
   @override
@@ -32,7 +35,11 @@ class MoneyWidget extends StatelessWidget {
     return Text(
       Currency.getAmountAsStringUsingCurrency(amountModel.amount, iso4217code: amountModel.iso4217),
       textAlign: TextAlign.right,
-      style: TextStyle(fontFamily: 'RobotoMono', color: _getTextColorToUse(context)),
+      style: TextStyle(
+        fontFamily: 'RobotoMono',
+        color: _getTextColorToUse(context),
+        fontSize: asTile ? getTextTheme(context).titleMedium!.fontSize : null,
+      ),
     );
   }
 

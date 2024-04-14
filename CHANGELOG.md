@@ -2,6 +2,10 @@
 
 ## [version 1.7.8] 2024-04-14
 
+### Updated
+
+- Stock view: new column for Profit per Security
+
 ### Added
 
 - Money_Widget (display negative value in Red, positive in Green)

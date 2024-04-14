@@ -37,6 +37,17 @@ class Investments extends MoneyObjects<Investment> {
     }
   }
 
+  static double getProfit(List<Investment> investments) {
+    // first sort by date, TradeType, Amount
+    investments.sort((a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true));
+
+    double runningBalance = 0;
+    for (final investment in investments) {
+      runningBalance += investment.finalAmount;
+    }
+    return runningBalance;
+  }
+
   static getInvestmentsFromSecurity(final int securityId) {
     return Data().investments.iterableList().where((item) => item.security.value == securityId).toList();
   }

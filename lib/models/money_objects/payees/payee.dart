@@ -1,9 +1,9 @@
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/widgets/money_widget.dart';
 
 export 'package:money/models/money_objects/money_object.dart';
 
@@ -71,7 +71,7 @@ class Payee extends MoneyObject {
   Payee() {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(sum.value),
+          rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
           rightBottomAsString: getAmountAsShorthandText(count.value),
         );
   }

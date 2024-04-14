@@ -31,6 +31,7 @@ class Security extends MoneyObject {
         tmp.cuspid,
         tmp.securityType,
         tmp.priceDate,
+        tmp.counts,
         tmp.balance,
       ]);
     }
@@ -118,9 +119,15 @@ class Security extends MoneyObject {
 
   // Not persisted fields
 
+  FieldInt counts = FieldInt(
+    name: 'counts',
+    columnWidth: ColumnWidth.nano,
+    valueFromInstance: (final MoneyObject instance) => (instance as Security).counts.value,
+  );
+
   FieldMoney balance = FieldMoney(
     name: 'Balance',
-    valueFromInstance: (final MoneyObject instance) => MoneyModel(amount: 12.34),
+    valueFromInstance: (final MoneyObject instance) => (instance as Security).balance.value,
   );
 
   Security({

@@ -10,6 +10,7 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_rentals/rental_pnl.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/widgets/money_widget.dart';
 
 import '../accounts/account.dart';
 
@@ -502,7 +503,7 @@ class RentBuilding extends MoneyObject {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: address.value,
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(profit.value),
+          rightTopAsWidget: MoneyWidget(amountModel: MoneyModel(amount: lifeTimePnL.profit), asTile: true),
         );
   }
 
@@ -512,7 +513,6 @@ class RentBuilding extends MoneyObject {
     instance.id.value = row.getInt('Id', -1);
     instance.name.value = row.getString('Name');
     instance.address.value = row.getString('Address');
-    instance.currency.value = 'CAD';
     instance.purchasedDate.value = row.getDate('PurchasedDate', defaultIfNotFound: DateTime.now());
     instance.purchasedPrice.value.amount = row.getDouble('PurchasedPrice');
     instance.landValue.value.amount = row.getDouble('LandValue');

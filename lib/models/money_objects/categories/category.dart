@@ -6,11 +6,11 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/widgets/money_widget.dart';
 
 // Exports
 export 'package:money/models/money_objects/categories/category_types.dart';
@@ -215,7 +215,7 @@ class Category extends MoneyObject {
       return MyListItemAsCard(
         leftTopAsString: top,
         leftBottomAsString: bottom,
-        rightTopAsString: Currency.getAmountAsStringUsingCurrency(sum.value),
+        rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
         rightBottomAsWidget: Row(
           children: <Widget>[
             Text(getTypeAsText()),

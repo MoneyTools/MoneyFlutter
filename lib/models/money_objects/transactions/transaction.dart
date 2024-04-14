@@ -8,7 +8,6 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
@@ -20,6 +19,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/views/view_payees/picker_payee_or_transfer.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/widgets/money_widget.dart';
 import 'package:money/widgets/picker_edit_box_date.dart';
 
 // Exports
@@ -562,7 +562,7 @@ class Transaction extends MoneyObject {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: payeeName,
           leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(amount.value),
+          rightTopAsWidget: MoneyWidget(amountModel: amount.value, asTile: true),
           rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
         );
   }
