@@ -5,6 +5,9 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/widgets/money_widget.dart';
+
+export 'package:money/models/money_model.dart';
 
 typedef FieldDefinitions = List<Field<dynamic>>;
 
@@ -23,15 +26,6 @@ class Field<T> {
   String name;
   String serializeName;
   FieldType type;
-
-  // String _currency;
-  //
-  // String get currency => _currency;
-  //
-  // set currency(String value) {
-  //   _currency = value;
-  // } // used for FieldType.amount
-
   ColumnWidth columnWidth;
   TextAlign align;
   bool useAsColumn;
@@ -59,7 +53,6 @@ class Field<T> {
 
   Field({
     this.type = FieldType.text,
-    String currency = Constants.defaultCurrency,
     this.align = TextAlign.left,
     this.isMultiLine = false,
     this.columnWidth = ColumnWidth.normal,
@@ -76,11 +69,18 @@ class Field<T> {
     this.useAsDetailPanels = true,
     this.sort,
   }) {
+    ///----------------------------------------------
+    /// default value for this field
     value = defaultValue;
+
+    ///----------------------------------------------
+    /// The name for this field
     if (name.isEmpty) {
       name = serializeName;
     }
 
+    ///----------------------------------------------
+    /// How to get the value of this field
     if (valueFromInstance == defaultCallbackValue) {
       switch (this.type) {
         case FieldType.numeric:
@@ -89,8 +89,7 @@ class Field<T> {
         case FieldType.text:
           valueFromInstance = (final MoneyObject objectInstance) => value.toString();
         case FieldType.amount:
-          valueFromInstance =
-              (final MoneyObject c) => Currency.getAmountAsStringUsingCurrency(value as double, iso4217code: currency);
+          valueFromInstance = (final MoneyObject c) => MoneyWidget(amountModel: value as MoneyModel);
         case FieldType.date:
           valueFromInstance = (final MoneyObject c) => dateToString(value as DateTime?);
         default:
@@ -98,12 +97,17 @@ class Field<T> {
           debugPrint('No match');
       }
     }
+
+    ///----------------------------------------------
+    /// How to serialize this field
     if (valueForSerialization == defaultCallbackValue) {
       // if there's no override function
       // apply the same data value to serial
       valueForSerialization = valueFromInstance;
     }
 
+    ///----------------------------------------------
+    /// How to Sort on this field
     if (sort == null) {
       // if no override on sorting fallback to type sorting
       switch (type) {
@@ -114,7 +118,7 @@ class Field<T> {
         case FieldType.amount:
         case FieldType.amountShorthand:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByValue(valueFromInstance(a) as double, valueFromInstance(b) as double, ascending);
+              sortByValue(valueFromInstance(a).amount, valueFromInstance(b).amount, ascending);
         case FieldType.date:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
               sortByDate(valueFromInstance(a), valueFromInstance(b), ascending);
@@ -143,7 +147,13 @@ class Field<T> {
       case FieldType.numericShorthand:
         return getAmountAsShorthandText(value as num);
       case FieldType.amount:
-        return Currency.getAmountAsStringUsingCurrency(value);
+        if (type is MoneyModel) {
+          return (value as MoneyModel).toString();
+        }
+        if (value is double) {
+          return Currency.getAmountAsStringUsingCurrency(value);
+        }
+        return value.toString();
       case FieldType.amountShorthand:
         return getAmountAsShorthandText(value as double);
       case FieldType.widget:
@@ -207,8 +217,8 @@ class FieldDouble extends Field<double> {
         );
 }
 
-class FieldAmount extends Field<double> {
-  FieldAmount({
+class FieldMoney extends Field<MoneyModel> {
+  FieldMoney({
     super.importance,
     super.name,
     super.serializeName,
@@ -220,8 +230,7 @@ class FieldAmount extends Field<double> {
     super.useAsDetailPanels,
     super.sort,
   }) : super(
-          defaultValue: 0.00,
-          currency: Constants.defaultCurrency,
+          defaultValue: MoneyModel(amount: 0.00, autoColor: true),
           align: TextAlign.right,
           type: FieldType.amount,
         );
@@ -414,6 +423,14 @@ Widget buildWidgetFromTypeAndValue({
     case FieldType.amount:
       if (value is String) {
         return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+      }
+      if (value is MoneyModel) {
+        return Row(
+          children: [
+            const Spacer(), // align right
+            MoneyWidget(amountModel: value),
+          ],
+        );
       }
       return buildFieldWidgetForAmount(value: value, shorthand: false, align: align, currency: currency);
     case FieldType.amountShorthand:

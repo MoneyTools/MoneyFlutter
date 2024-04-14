@@ -282,26 +282,24 @@ class Account extends MoneyObject {
   double balance = 0.00;
 
   /// Balance in Native currency
-  FieldString balanceNative = FieldString(
+  FieldMoney balanceNative = FieldMoney(
     importance: 98,
     name: 'BalanceN',
-    align: TextAlign.right,
-    fixedFont: true,
     valueFromInstance: (final MoneyObject instance) {
       final accountInstance = instance as Account;
-      return Currency.getAmountAsStringUsingCurrency(accountInstance.balance,
-          iso4217code: accountInstance.currency.value);
+      return MoneyModel(amount: accountInstance.balance, iso4217: accountInstance.getAccountCurrencyAsText());
     },
   );
 
   /// Balance Normalized use in the List view
-  FieldAmount balanceNormalized = FieldAmount(
+  FieldMoney balanceNormalized = FieldMoney(
       importance: 99,
       name: 'Balance(USD)',
       useAsDetailPanels: false,
       valueFromInstance: (final MoneyObject instance) {
         final accountInstance = instance as Account;
-        return accountInstance.getCurrencyRatio() * accountInstance.balance;
+        return MoneyModel(
+            amount: accountInstance.getCurrencyRatio() * accountInstance.balance, iso4217: Constants.defaultCurrency);
       });
 
   Field<bool> isAccountOpen = Field<bool>(

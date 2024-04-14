@@ -50,22 +50,22 @@ class ViewCashFlowState extends ViewWidgetState {
           case CategoryType.income:
           case CategoryType.saving:
           case CategoryType.investment:
-            totalIncomes += element.amount.value;
+            totalIncomes += element.amount.value.amount;
 
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfIncomes[topCategory];
             mapValue ??= 0;
-            mapOfIncomes[topCategory] = mapValue + element.amount.value;
+            mapOfIncomes[topCategory] = mapValue + element.amount.value.amount;
             break;
           case CategoryType.expense:
-            totalExpenses += element.amount.value;
+            totalExpenses += element.amount.value.amount;
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfExpenses[topCategory];
             mapValue ??= 0;
-            mapOfExpenses[topCategory] = mapValue + element.amount.value;
+            mapOfExpenses[topCategory] = mapValue + element.amount.value.amount;
             break;
           default:
-            totalNones += element.amount.value;
+            totalNones += element.amount.value.amount;
             break;
         }
       }

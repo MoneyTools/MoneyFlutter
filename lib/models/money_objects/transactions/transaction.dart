@@ -55,9 +55,8 @@ class Transaction extends MoneyObject {
           tmp.mergeDate,
           tmp.amount,
           tmp.amountAsTextNormalized,
-          tmp.balance,
-          tmp.balanceAsTextNative,
-          tmp.balanceAsTextNormalized,
+          tmp.balanceNative,
+          tmp.balanceNormalized,
         ],
       );
     }
@@ -162,7 +161,7 @@ class Transaction extends MoneyObject {
           choice: (instance as Transaction).transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.payee.value),
           account: instance.transferInstance?.getReceiverAccount(),
-          amount: instance.amount.value,
+          amount: instance.amount.value.amount,
           onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
             switch (choice) {
               case TransactionFlavor.payee:
@@ -307,27 +306,24 @@ class Transaction extends MoneyObject {
 
   /// Amount
   /// 14|Amount|money|1||0
-  FieldAmount amount = FieldAmount(
+  FieldMoney amount = FieldMoney(
     importance: 97,
     name: columnIdAmount,
     serializeName: 'Amount',
     valueFromInstance: (final MoneyObject instance) {
-      return Currency.getAmountAsStringUsingCurrency(
-        (instance as Transaction).amount.value,
-        iso4217code: instance.getCurrency(),
-      );
+      return (instance as Transaction).amount.value;
     },
     valueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value,
     setValue: (final MoneyObject instance, dynamic newValue) {
-      (instance as Transaction).amount.value = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
+      (instance as Transaction).amount.value.amount = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
     },
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).amount.value, (b as Transaction).amount.value, ascending),
+        sortByValue((a as Transaction).amount.value.amount, (b as Transaction).amount.value.amount, ascending),
   );
 
   /// Sales Tax
   /// 15|SalesTax|money|0||0
-  FieldAmount salesTax = FieldAmount(
+  FieldMoney salesTax = FieldMoney(
     importance: 95,
     name: 'Sales Tax',
     serializeName: 'SalesTax',
@@ -335,7 +331,7 @@ class Transaction extends MoneyObject {
     valueFromInstance: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).salesTax.value, (b as Transaction).salesTax.value, ascending),
+        sortByValue((a as Transaction).salesTax.value.amount, (b as Transaction).salesTax.value.amount, ascending),
   );
 
   /// Transfer Split
@@ -369,57 +365,46 @@ class Transaction extends MoneyObject {
   // derived property used for display
 
   /// Amount Normalized to USD
-  FieldString amountAsTextNormalized = FieldString(
+  FieldMoney amountAsTextNormalized = FieldMoney(
     importance: 98,
     name: columnIdAmountNormalized,
-    align: TextAlign.right,
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
-    fixedFont: true,
-    valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
-        (instance as Transaction).getNormalizedAmount((instance).amount.value),
-        iso4217code: Constants.defaultCurrency),
+    valueFromInstance: (final MoneyObject instance) => MoneyModel(
+        amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.amount),
+        iso4217: Constants.defaultCurrency),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).amount.value, (b as Transaction).amount.value, ascending),
+        sortByValue((a as Transaction).amount.value.amount, (b as Transaction).amount.value.amount, ascending),
   );
 
   /// Balance native
-  FieldDouble balance = FieldDouble(
-    importance: 99,
-    name: 'Balance_',
-    useAsColumn: false,
-    useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).balance.value,
-  );
+  double balance = 0;
 
   /// Balance native
-  FieldString balanceAsTextNative = FieldString(
+  FieldMoney balanceNative = FieldMoney(
     importance: 99,
     name: columnIdBalance,
-    align: TextAlign.right,
     columnWidth: ColumnWidth.small,
-    fixedFont: true,
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
-      (instance as Transaction).balance.value,
-      iso4217code: instance.getCurrency(),
+    valueFromInstance: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).balance,
+      iso4217: instance.getCurrency(),
     ),
   );
 
   /// Balance Normalized to USD
-  FieldString balanceAsTextNormalized = FieldString(
+  FieldMoney balanceNormalized = FieldMoney(
     importance: 99,
     name: 'Balance(USD)',
-    align: TextAlign.right,
     columnWidth: ColumnWidth.small,
-    fixedFont: true,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => Currency.getAmountAsStringUsingCurrency(
-        (instance as Transaction).getNormalizedAmount((instance).balance.value),
-        iso4217code: Constants.defaultCurrency),
+    valueFromInstance: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).getNormalizedAmount((instance).balance),
+      iso4217: Constants.defaultCurrency,
+    ),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).balance.value, (b as Transaction).balance.value, ascending),
+        sortByValue((a as Transaction).balance, (b as Transaction).balance, ascending),
   );
 
   ///------------------------------------------------------
@@ -529,7 +514,7 @@ class Transaction extends MoneyObject {
 
   String getPayeeOrTransferCaption() {
     Investment? investment = investmentInstance;
-    double amount = this.amount.value;
+    double amount = this.amount.value.amount;
 
     bool isFrom = false;
     if (transferInstance != null) {
@@ -619,16 +604,16 @@ class Transaction extends MoneyObject {
     t.flags.value = json.getInt('Flags');
 
 // 14 Amount
-    t.amount.value = json.getDouble('Amount');
+    t.amount.value.amount = json.getDouble('Amount');
 // 15 Sales Tax
-    t.salesTax.value = json.getDouble('SalesTax');
+    t.salesTax.value.amount = json.getDouble('SalesTax');
 // 16 Transfer Split
     t.transferSplit.value = json.getInt('TransferSplit', -1);
 // 17 Merge Date
     t.mergeDate.value = json.getDate('MergeDate');
 
 // not serialized
-    t.balance.value = runningBalance;
+    t.balance = runningBalance;
 
     return t;
   }

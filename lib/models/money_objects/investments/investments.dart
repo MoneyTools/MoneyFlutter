@@ -33,8 +33,12 @@ class Investments extends MoneyObjects<Investment> {
     double runningBalance = 0;
     for (final investment in investments) {
       runningBalance += investment.finalAmount;
-      investment.runningBalance.value = runningBalance;
+      investment.runningBalance.value.amount = runningBalance;
     }
+  }
+
+  static getInvestmentsFromSecurity(final int securityId) {
+    return Data().investments.iterableList().where((item) => item.security.value == securityId).toList();
   }
 
   @override

@@ -60,7 +60,7 @@ Future<bool> importQFX(
         ..accountId.value = account.id.value
         ..dateTime.value = item.date
         ..number.value = item.number
-        ..amount.value = item.amount
+        ..amount.value.amount = item.amount
         ..fitid.value = item.fitid
         ..memo.value = item.memo
         ..originalPayee.value = item.name

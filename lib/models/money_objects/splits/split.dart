@@ -68,7 +68,7 @@ class Split extends MoneyObject {
   );
 
   // 4
-  FieldAmount amount = FieldAmount(
+  FieldMoney amount = FieldMoney(
     name: 'Amount',
     valueFromInstance: (final MoneyObject instance) => (instance as Split).amount.value,
   );
@@ -124,7 +124,7 @@ class Split extends MoneyObject {
     this.transactionId.value = transactionId;
     this.categoryId.value = categoryId;
     this.payeeId.value = payeeId;
-    this.amount.value = amount;
+    this.amount.value.amount = amount;
     this.transferId.value = transferId;
     this.memo.value = memo;
     this.flags.value = flags;

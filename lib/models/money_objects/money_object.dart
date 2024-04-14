@@ -61,10 +61,6 @@ abstract class MoneyObject {
 
   bool get isChanged => mutation == MutationType.changed;
 
-// factory MoneyObject.fromJson(final MyJson row) {
-  //   return MoneyObject();
-  // }
-
   ///
   /// Column 1 | Column 2 | Column 3
   ///

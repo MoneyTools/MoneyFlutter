@@ -42,7 +42,7 @@ class SecurityPurchase {
   /// Get market value of remaining units.
   /// </summary>
   double? get latestMarketValue {
-    return this.futuresFactor * this.unitsRemaining * this.security!.price.value;
+    return this.futuresFactor * this.unitsRemaining * this.security!.price.value.amount;
   }
 
   double get futuresFactor {

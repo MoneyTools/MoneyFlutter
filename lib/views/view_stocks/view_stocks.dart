@@ -73,13 +73,9 @@ class ViewStocksState extends ViewWidgetState {
       return const CenterMessage(message: 'No security selected.');
     }
 
-    final List<Investment> list =
-        Data().investments.iterableList().where((item) => item.security.value == security.uniqueId).toList();
-    if (list.isEmpty) {
-      return const CenterMessage(message: 'No transaction found.');
-    }
-
+    final List<Investment> list = Investments.getInvestmentsFromSecurity(security.uniqueId);
     Investments.calculateRunningBalance(list);
+
     final exclude = ['Symbol', 'Load', 'Fees'];
     final fieldsToDisplay = Investment.fields.definitions
         .where((element) => element.useAsColumn && !exclude.contains(element.name))

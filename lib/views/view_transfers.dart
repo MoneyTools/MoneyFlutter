@@ -56,7 +56,7 @@ class ViewTransfersState extends ViewWidgetState {
     // Add the Senders
     for (final transaction in listOfTransactions) {
       final Transaction? transactionReceiver = Data().transactions.get(transaction.transfer.value);
-      if (transaction.amount.value <= 0) {
+      if (transaction.amount.value.amount <= 0) {
         // Display only the Sender/From Transaction you know that its the sender because the amount id negative (deducted)
         keepThisTransfer(transactionSender: transaction, transactionReceiver: transactionReceiver, isOrphan: false);
       }
@@ -65,7 +65,7 @@ class ViewTransfersState extends ViewWidgetState {
     // Add the Receivers only it they are not already part of the Senders
     for (final transaction in listOfTransactions) {
       final Transaction? transactionReceiver = Data().transactions.get(transaction.transfer.value);
-      if (transaction.amount.value > 0) {
+      if (transaction.amount.value.amount > 0) {
         // the amount is positive, so this is the receiver transaction
         if (transactionReceiver == null || loadedTransfers[transactionReceiver.uniqueId] == null) {
           if (transaction.transferSplit.value <= 0) {

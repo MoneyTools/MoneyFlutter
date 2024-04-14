@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/value_parser.dart';
+import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/semantic_text.dart';
 

@@ -122,7 +122,7 @@ class RentBuilding extends MoneyObject {
 
   /// PurchasedPrice
   // 4    PurchasedPrice          money
-  FieldAmount purchasedPrice = FieldAmount(
+  FieldMoney purchasedPrice = FieldMoney(
     importance: 2,
     name: 'Purchased Price',
     serializeName: 'PurchasedPrice',
@@ -133,7 +133,7 @@ class RentBuilding extends MoneyObject {
 
   /// LandValue
   // 5    LandValue          money
-  FieldAmount landValue = FieldAmount(
+  FieldMoney landValue = FieldMoney(
     importance: 2,
     name: 'LandValue',
     serializeName: 'LandValue',
@@ -143,7 +143,7 @@ class RentBuilding extends MoneyObject {
 
   /// EstimatedValue
   // 6    EstimatedValue          money
-  FieldAmount estimatedValue = FieldAmount(
+  FieldMoney estimatedValue = FieldMoney(
     importance: 2,
     name: 'EstimatedValue',
     serializeName: 'EstimatedValue',
@@ -313,21 +313,21 @@ class RentBuilding extends MoneyObject {
   }
 
   /// Revenue
-  FieldAmount revenue = FieldAmount(
+  FieldMoney revenue = FieldMoney(
     importance: 20,
     name: 'Revenue',
     valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.income,
   );
 
   /// Expenses
-  FieldAmount expense = FieldAmount(
+  FieldMoney expense = FieldMoney(
     importance: 21,
     name: 'Expenses',
     valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenses,
   );
 
   /// Expenses-Interest
-  FieldAmount lifeTimeExpenseInterest = FieldAmount(
+  FieldMoney lifeTimeExpenseInterest = FieldMoney(
     importance: 21,
     name: '  Expense-Interest',
     useAsColumn: false,
@@ -335,7 +335,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// Expenses-Maintenance
-  FieldAmount lifeTimeExpenseMaintenance = FieldAmount(
+  FieldMoney lifeTimeExpenseMaintenance = FieldMoney(
     importance: 21,
     name: '  Expense-Maintenance',
     useAsColumn: false,
@@ -343,7 +343,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// Expenses-Management
-  FieldAmount lifeTimeExpenseManagement = FieldAmount(
+  FieldMoney lifeTimeExpenseManagement = FieldMoney(
     importance: 21,
     name: '  Expense-Management',
     useAsColumn: false,
@@ -351,7 +351,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// Expenses-Repair
-  FieldAmount lifeTimeExpenseRepair = FieldAmount(
+  FieldMoney lifeTimeExpenseRepair = FieldMoney(
     importance: 21,
     name: '  Expense-Repair',
     useAsColumn: false,
@@ -359,7 +359,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// Expenses-Taxes
-  FieldAmount lifeTimeExpenseTaxes = FieldAmount(
+  FieldMoney lifeTimeExpenseTaxes = FieldMoney(
     importance: 21,
     name: '  Expense-Taxes',
     useAsColumn: false,
@@ -367,7 +367,7 @@ class RentBuilding extends MoneyObject {
   );
 
   /// Profit
-  FieldAmount profit = FieldAmount(
+  FieldMoney profit = FieldMoney(
     importance: 22,
     name: 'Profit',
     valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.profit,
@@ -419,10 +419,10 @@ class RentBuilding extends MoneyObject {
 
       if (t.isSplit) {
         for (final split in t.splits) {
-          cumulatePnLValues(pnl, split.categoryId.value, split.amount.value);
+          cumulatePnLValues(pnl, split.categoryId.value, split.amount.value.amount);
         }
       } else {
-        cumulatePnLValues(pnl, transactionCategoryId, t.amount.value);
+        cumulatePnLValues(pnl, transactionCategoryId, t.amount.value.amount);
       }
     }
 
@@ -514,9 +514,9 @@ class RentBuilding extends MoneyObject {
     instance.address.value = row.getString('Address');
     instance.currency.value = 'CAD';
     instance.purchasedDate.value = row.getDate('PurchasedDate', defaultIfNotFound: DateTime.now());
-    instance.purchasedPrice.value = row.getDouble('PurchasedPrice');
-    instance.landValue.value = row.getDouble('LandValue');
-    instance.estimatedValue.value = row.getDouble('EstimatedValue');
+    instance.purchasedPrice.value.amount = row.getDouble('PurchasedPrice');
+    instance.landValue.value.amount = row.getDouble('LandValue');
+    instance.estimatedValue.value.amount = row.getDouble('EstimatedValue');
     instance.ownershipName1.value = row.getString('OwnershipName1');
     instance.ownershipName2.value = row.getString('OwnershipName2');
     instance.ownershipPercentage1.value = row.getDouble('OwnershipPercentage1');

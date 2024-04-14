@@ -63,7 +63,7 @@ class Payee extends MoneyObject {
     valueForSerialization: (final MoneyObject instance) => (instance as Payee).count.value,
   );
 
-  FieldAmount sum = FieldAmount(
+  FieldMoney sum = FieldMoney(
     name: 'Sum',
     valueFromInstance: (final MoneyObject instance) => (instance as Payee).sum.value,
   );

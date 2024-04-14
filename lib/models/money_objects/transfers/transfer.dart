@@ -127,7 +127,7 @@ class Transfer extends MoneyObject {
   );
 
   /// Transfer amount
-  FieldAmount transactionAmount = FieldAmount(
+  FieldMoney transactionAmount = FieldMoney(
     importance: 99,
     name: 'Amount',
     columnWidth: ColumnWidth.small,
@@ -216,12 +216,12 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Amounts
   double geSenderTransactionAmount() {
-    return source.amount.value;
+    return source.amount.value.amount;
   }
 
   double geReceiverTransactionAmount() {
     if (related != null) {
-      return related!.amount.value;
+      return related!.amount.value.amount;
     }
     return 0.00;
   }

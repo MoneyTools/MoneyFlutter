@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/money_model.dart';
 import 'package:money/views/view_rentals/rental_pnl.dart';
-import 'package:money/widgets/amount.dart';
+import 'package:money/widgets/money_widget.dart';
 import 'package:money/widgets/box.dart';
 import 'package:money/widgets/gaps.dart';
 
@@ -72,11 +73,13 @@ class RentalPnLCard extends StatelessWidget {
       children: [
         Expanded(
             child: Text(caption, style: small ? getTextTheme(context).bodySmall : getTextTheme(context).bodyMedium)),
-        Amount(
-          amount,
-          pnl.currency,
-          showCurrency: false,
-          autoColor: true,
+        MoneyWidget(
+          amountModel: MoneyModel(
+            amount: amount,
+            iso4217: pnl.currency,
+            showCurrency: false,
+            autoColor: true,
+          ),
         ),
       ],
     );

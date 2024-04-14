@@ -36,14 +36,20 @@ class ViewTransactionsState extends ViewWidgetState {
         text1: 'Incomes',
         small: true,
         isVertical: true,
-        text2: getIntAsText(
-            Data().transactions.iterableList().where((final Transaction element) => element.amount.value > 0).length)));
+        text2: getIntAsText(Data()
+            .transactions
+            .iterableList()
+            .where((final Transaction element) => element.amount.value.amount > 0)
+            .length)));
     pivots.add(ThreePartLabel(
         text1: 'Expenses',
         small: true,
         isVertical: true,
-        text2: getIntAsText(
-            Data().transactions.iterableList().where((final Transaction element) => element.amount.value < 0).length)));
+        text2: getIntAsText(Data()
+            .transactions
+            .iterableList()
+            .where((final Transaction element) => element.amount.value.amount < 0)
+            .length)));
     pivots.add(ThreePartLabel(
         text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.iterableList().length)));
   }
@@ -90,8 +96,8 @@ class ViewTransactionsState extends ViewWidgetState {
       double runningBalance = 0.0;
 
       for (Transaction transaction in list) {
-        runningBalance += transaction.amount.value;
-        transaction.balance.value = runningBalance;
+        runningBalance += transaction.amount.value.amount;
+        transaction.balance = runningBalance;
       }
       balanceDone = true;
     }
@@ -105,12 +111,12 @@ class ViewTransactionsState extends ViewWidgetState {
 
     // Expenses
     if (_selectedPivot[1]) {
-      return transaction.amount.value < 0;
+      return transaction.amount.value.amount < 0;
     }
 
     // Incomes
     if (_selectedPivot[0]) {
-      return transaction.amount.value > 0;
+      return transaction.amount.value.amount > 0;
     }
     return false;
   }
@@ -153,7 +159,7 @@ class ViewTransactionsState extends ViewWidgetState {
       transaction;
 
       if (timePeriod.isBetweenEqual(transaction.dateTime.value)) {
-        final num value = transaction.amount.value;
+        final num value = transaction.amount.value.amount;
 
         final DateTime date = transaction.dateTime.value!;
         // Format the date as year-month string (e.g., '2023-11')

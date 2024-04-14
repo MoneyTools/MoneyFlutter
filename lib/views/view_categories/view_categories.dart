@@ -69,7 +69,7 @@ class ViewCategoriesState extends ViewWidgetState {
     double total = 0.0;
     getList().forEach((final Category category) {
       if (types.isEmpty || (category).type.value == types.first) {
-        total += category.sum.value;
+        total += category.sum.value.amount;
       }
     });
     return total;

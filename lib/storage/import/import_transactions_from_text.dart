@@ -3,7 +3,7 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/models/value_parser.dart';
+import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_panel.dart';
 import 'package:money/widgets/dialog_button.dart';
@@ -97,7 +97,7 @@ void addTransactionFromDateDescriptionAmount(
   t.dateTime.value = date;
   t.payee.value = payee == null ? -1 : payee.id.value;
   t.memo.value = description;
-  t.amount.value = amount;
+  t.amount.value.amount = amount;
 
   Data().transactions.appendNewMoneyObject(t);
 }

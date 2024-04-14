@@ -14,7 +14,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
         if (map[topCategory.name.value] == null) {
           map[topCategory.name.value] = 0;
         }
-        map[topCategory.name.value] = map[topCategory.name.value]! + item.sum.value;
+        map[topCategory.name.value] = map[topCategory.name.value]! + item.sum.value.amount;
       }
     }
     final List<PairXY> list = <PairXY>[];

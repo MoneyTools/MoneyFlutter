@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.7.8] 2024-04-14
+
+### Added
+
+- Money_Widget (display negative value in Red, positive in Green)
+
 ## [version 1.7.7] 2024-04-12
 
 ### Added

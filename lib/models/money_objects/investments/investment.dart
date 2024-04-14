@@ -1,8 +1,9 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
-import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 
@@ -65,7 +66,7 @@ class Investment extends MoneyObject {
   );
 
   /// 2    UnitPrice       money   1                    0
-  FieldAmount unitPrice = FieldAmount(
+  FieldMoney unitPrice = FieldMoney(
     importance: 3,
     name: 'Price',
     serializeName: 'UnitPrice',
@@ -83,7 +84,7 @@ class Investment extends MoneyObject {
   );
 
   /// 4    Commission      money   0                    0
-  FieldAmount commission = FieldAmount(
+  FieldMoney commission = FieldMoney(
     name: 'Commission',
     serializeName: 'Commission',
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).commission.value,
@@ -91,7 +92,7 @@ class Investment extends MoneyObject {
   );
 
   /// 5    MarkUpDown      money   0                    0
-  FieldAmount markUpDown = FieldAmount(
+  FieldMoney markUpDown = FieldMoney(
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
     useAsColumn: false,
@@ -100,7 +101,7 @@ class Investment extends MoneyObject {
   );
 
   /// 6    Taxes           money   0                    0
-  FieldAmount taxes = FieldAmount(
+  FieldMoney taxes = FieldMoney(
     name: 'Taxes',
     serializeName: 'Taxes',
     useAsColumn: false,
@@ -109,7 +110,7 @@ class Investment extends MoneyObject {
   );
 
   /// 7    Fees            money   0                    0
-  FieldAmount fees = FieldAmount(
+  FieldMoney fees = FieldMoney(
     name: 'Fees',
     serializeName: 'Fees',
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).fees.value,
@@ -117,7 +118,7 @@ class Investment extends MoneyObject {
   );
 
   /// 8    Load            money   0                    0
-  FieldAmount load = FieldAmount(
+  FieldMoney load = FieldMoney(
     name: 'Load',
     serializeName: 'Load',
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).load.value,
@@ -160,7 +161,7 @@ class Investment extends MoneyObject {
   );
 
   /// 12   Withholding     money   0                    0
-  FieldAmount withholding = FieldAmount(
+  FieldMoney withholding = FieldMoney(
     name: 'Withholding',
     serializeName: 'Withholding',
     useAsColumn: false,
@@ -179,14 +180,14 @@ class Investment extends MoneyObject {
 
   double get originalCostBasis {
     // looking for the original un-split cost basis at the date of this transaction.
-    double proceeds = this.unitPrice.value * this.units.value;
+    double proceeds = this.unitPrice.value.amount * this.units.value;
 
-    if (this.transactionInstance!.amount.value != 0) {
+    if (this.transactionInstance!.amount.value.amount != 0) {
       // We may have paid more for the stock than "price" in a buy transaction because of brokerage fees and
       // this can be included in the cost basis.  We may have also received less than "price" in a sale
       // transaction, and that can also reduce our capital gain, so we use the transaction amount if we
       // have one.
-      return this.transactionInstance!.amount.value.abs();
+      return this.transactionInstance!.amount.value.amount.abs();
     }
 
     // But if the sale proceeds were not recorded for some reason, then we fall back on the proceeds.
@@ -224,10 +225,10 @@ class Investment extends MoneyObject {
         return '?not found?';
       });
 
-  FieldAmount amount = FieldAmount(
+  FieldMoney amount = FieldMoney(
       name: 'Amount',
       valueFromInstance: (final MoneyObject instance) {
-        return (instance as Investment).finalAmount;
+        return MoneyModel(amount: (instance as Investment).finalAmount);
       });
 
   double get finalAmount {
@@ -235,15 +236,15 @@ class Investment extends MoneyObject {
       // case InvestmentType.add:
       case InvestmentType.buy:
         // Commission adds to the cost
-        double amount = this.units.value * this.unitPrice.value;
-        amount += this.commission.value;
+        double amount = this.units.value * this.unitPrice.value.amount;
+        amount += this.commission.value.amount;
         return -amount;
 
       // case InvestmentType.remove:
       case InvestmentType.sell:
         // commission reduce the revenue
-        double amount = this.units.value * this.unitPrice.value;
-        amount -= this.commission.value;
+        double amount = this.units.value * this.unitPrice.value.amount;
+        amount -= this.commission.value.amount;
         return amount;
       default:
       //
@@ -251,7 +252,7 @@ class Investment extends MoneyObject {
     return 0;
   }
 
-  FieldAmount runningBalance = FieldAmount(
+  FieldMoney runningBalance = FieldMoney(
       name: 'Balance',
       valueFromInstance: (final MoneyObject instance) {
         return (instance as Investment).runningBalance.value;
@@ -274,17 +275,17 @@ class Investment extends MoneyObject {
   }) {
     this.id.value = id;
     this.security.value = security;
-    this.unitPrice.value = unitPrice;
+    this.unitPrice.value.amount = unitPrice;
     this.units.value = units;
-    this.commission.value = commission;
-    this.markUpDown.value = markUpDown;
-    this.taxes.value = taxes;
-    this.fees.value = fees;
-    this.load.value = load;
+    this.commission.value.amount = commission;
+    this.markUpDown.value.amount = markUpDown;
+    this.taxes.value.amount = taxes;
+    this.fees.value.amount = fees;
+    this.load.value.amount = load;
     this.investmentType.value = investmentType;
     this.tradeType.value = tradeType;
     this.taxExempt.value = taxExempt;
-    this.withholding.value = withholding;
+    this.withholding.value.amount = withholding;
   }
 
   // Fields for this instance

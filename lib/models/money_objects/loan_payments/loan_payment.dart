@@ -63,7 +63,7 @@ class LoanPayment extends MoneyObject {
 
   /// 3
   /// 3|Principal|money|0||0
-  FieldAmount principal = FieldAmount(
+  FieldMoney principal = FieldMoney(
     importance: 98,
     name: 'Principal',
     serializeName: 'Principal',
@@ -73,7 +73,7 @@ class LoanPayment extends MoneyObject {
 
   /// Interest
   /// 4|Interest|money|0||0
-  FieldAmount interest = FieldAmount(
+  FieldMoney interest = FieldMoney(
     importance: 99,
     name: 'Interest',
     serializeName: 'Interest',
@@ -108,8 +108,8 @@ class LoanPayment extends MoneyObject {
     this.accountId.value = accountId;
     accountInstance = Data().accounts.get(this.accountId.value);
     this.date.value = date;
-    this.principal.value = principal;
-    this.interest.value = interest;
+    this.principal.value.amount = principal;
+    this.interest.value.amount = interest;
 
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Account.getName(accountInstance),

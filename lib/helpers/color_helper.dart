@@ -101,3 +101,19 @@ Widget colorBox(Color color, Color colorText) {
     child: Text(color.toString(), style: TextStyle(color: colorText)),
   );
 }
+
+Color addHintOfGreenToColor(Color color, [int hint = 50]) {
+  // Calculate the new green value
+  int newGreen = (color.green + hint).clamp(0, 255);
+
+  // Return the new color with added green
+  return Color.fromRGBO(color.red, newGreen, color.blue, color.opacity);
+}
+
+Color addHintOfRedToColor(Color color, [int hint = 50]) {
+  // Calculate the new red value
+  int newRed = (color.red + hint).clamp(0, 255);
+
+  // Return the new color with added red
+  return Color.fromRGBO(newRed, color.green, color.blue, color.opacity);
+}

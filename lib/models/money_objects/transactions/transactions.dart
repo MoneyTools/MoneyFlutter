@@ -54,7 +54,7 @@ class Transactions extends MoneyObjects<Transaction> {
 
     for (final MyJson row in rows) {
       final Transaction t = Transaction.fromJSon(row, runningBalance);
-      runningBalance += t.balance.value;
+      runningBalance += t.balance;
       appendMoneyObject(t);
     }
   }
@@ -144,7 +144,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
     return iterableList(true).firstWhereOrNull((transaction) {
-      if (transaction.amount.value == amount) {
+      if (transaction.amount.value.amount == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&
             transaction.dateTime.value?.month == dateTime.month &&
             transaction.dateTime.value?.day == dateTime.day) {
@@ -162,7 +162,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
     return iterableList(true).firstWhereOrNull((transaction) {
-      if (transaction.accountId.value == accountId && transaction.amount.value == amount) {
+      if (transaction.accountId.value == accountId && transaction.amount.value.amount == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&
             transaction.dateTime.value?.month == dateTime.month &&
             transaction.dateTime.value?.day == dateTime.day) {

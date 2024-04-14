@@ -123,7 +123,7 @@ class Category extends MoneyObject {
 
   /// Budget
   /// 6|Budget|money|0||0
-  FieldAmount budget = FieldAmount(
+  FieldMoney budget = FieldMoney(
     importance: 99,
     name: 'Budget',
     useAsColumn: false,
@@ -133,7 +133,7 @@ class Category extends MoneyObject {
 
   /// Budget Balance
   /// 7|Balance|money|0||0
-  FieldAmount budgetBalance = FieldAmount(
+  FieldMoney budgetBalance = FieldMoney(
     importance: 80,
     name: 'BudgetBalance',
     useAsColumn: false,
@@ -171,7 +171,7 @@ class Category extends MoneyObject {
   );
 
   /// Running Balance
-  FieldAmount sum = FieldAmount(
+  FieldMoney sum = FieldMoney(
     importance: 99,
     name: 'Sum',
     valueFromInstance: (final MoneyObject instance) => (instance as Category).sum.value,
@@ -195,8 +195,8 @@ class Category extends MoneyObject {
     this.description.value = description;
     this.color.value = color;
     this.type.value = type;
-    this.budget.value = budget;
-    this.budgetBalance.value = budgetBalance;
+    this.budget.value.amount = budget;
+    this.budgetBalance.value.amount = budgetBalance;
     this.frequency.value = frequency;
     this.taxRefNum.value = taxRefNum;
 

@@ -131,8 +131,8 @@ List<Transaction> getTransactions({bool Function(Transaction)? filter}) {
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {
-    runningBalance += transaction.amount.value;
-    transaction.balance.value = runningBalance;
+    runningBalance += transaction.amount.value.amount;
+    transaction.balance = runningBalance;
   }
   return list;
 }

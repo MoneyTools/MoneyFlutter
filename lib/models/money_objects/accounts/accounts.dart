@@ -95,7 +95,7 @@ class Accounts extends MoneyObjects<Account> {
         }
 
         account.count.value++;
-        account.balance += t.amount.value;
+        account.balance += t.amount.value.amount;
 
         final int yearOfTheTransaction = t.dateTime.value!.year;
 

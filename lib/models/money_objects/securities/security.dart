@@ -31,6 +31,7 @@ class Security extends MoneyObject {
         tmp.cuspid,
         tmp.securityType,
         tmp.priceDate,
+        tmp.balance,
       ]);
     }
     return _fields;
@@ -65,7 +66,7 @@ class Security extends MoneyObject {
   );
 
   // 3
-  FieldAmount price = FieldAmount(
+  FieldMoney price = FieldMoney(
     name: 'Price',
     serializeName: 'Price',
     valueFromInstance: (final MoneyObject instance) => (instance as Security).price.value,
@@ -73,7 +74,7 @@ class Security extends MoneyObject {
   );
 
   // 4
-  FieldAmount lastPrice = FieldAmount(
+  FieldMoney lastPrice = FieldMoney(
     name: 'Last Price',
     serializeName: 'LastPrice',
     valueFromInstance: (final MoneyObject instance) => (instance as Security).lastPrice.value,
@@ -115,6 +116,13 @@ class Security extends MoneyObject {
     valueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
   );
 
+  // Not persisted fields
+
+  FieldMoney balance = FieldMoney(
+    name: 'Balance',
+    valueFromInstance: (final MoneyObject instance) => MoneyModel(amount: 12.34),
+  );
+
   Security({
     required int id,
     required String name,
@@ -129,8 +137,8 @@ class Security extends MoneyObject {
     this.id.value = id;
     this.name.value = name;
     this.symbol.value = symbol;
-    this.price.value = price;
-    this.lastPrice.value = lastPrice;
+    this.price.value.amount = price;
+    this.lastPrice.value.amount = lastPrice;
     this.cuspid.value = cuspid;
     this.securityType.value = securityType;
     this.taxable.value = taxable;
