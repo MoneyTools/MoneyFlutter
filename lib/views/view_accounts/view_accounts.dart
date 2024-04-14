@@ -1,18 +1,16 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account_types_enum.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/widgets/center_message.dart';
-import 'package:money/widgets/details_panel/sub_views_enum.dart';
+import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 import 'package:money/widgets/chart.dart';
@@ -34,6 +32,11 @@ class ViewAccounts extends ViewForMoneyObjects {
 
 class ViewAccountsState extends ViewForMoneyObjectsState {
   final List<Widget> pivots = <Widget>[];
+  Account? lastSelectedAccount;
+
+  ViewAccountsState() {
+    onCopyInfoPanelTransactions = _onCopyInfoPanelTransactions;
+  }
 
   @override
   void initState() {
@@ -114,10 +117,10 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   // default currency for this view
   @override
-  List<String> getCurrencyChoices(final SubViewsEnum subViewId, final List<int> selectedItems) {
+  List<String> getCurrencyChoices(final InfoPanelSubViewEnum subViewId, final List<int> selectedItems) {
     switch (subViewId) {
-      case SubViewsEnum.chart: // Chart
-      case SubViewsEnum.transactions: // Transactions
+      case InfoPanelSubViewEnum.chart: // Chart
+      case InfoPanelSubViewEnum.transactions: // Transactions
         final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
         if (account != null) {
           if (account.currency.value != Constants.defaultCurrency) {
@@ -169,7 +172,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getPanelForTransactions({
+  Widget getInfoPanelSubViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -182,6 +185,11 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         showAsNativeCurrency: showAsNativeCurrency,
       );
     }
+  }
+
+  void _onCopyInfoPanelTransactions() {
+    final list = getTransactionForLastSelectedAccount();
+    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list));
   }
 
   @override

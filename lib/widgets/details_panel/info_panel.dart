@@ -1,30 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/widgets/details_panel/details_panel_header.dart';
-import 'package:money/widgets/details_panel/sub_views_enum.dart';
+import 'package:money/widgets/details_panel/info_panel_header.dart';
+import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 
-class DetailsPanel extends StatelessWidget {
+class InfoPanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
 
   // SubViews [Details] [Chart] [Transactions]
-  final SubViewsEnum subPanelSelected;
-  final Function(SubViewsEnum) subPanelSelectionChanged;
-  final Widget Function(SubViewsEnum, List<int>) subPanelContent;
+  final InfoPanelSubViewEnum subPanelSelected;
+  final Function(InfoPanelSubViewEnum) subPanelSelectionChanged;
+  final Widget Function(InfoPanelSubViewEnum, List<int>) subPanelContent;
 
   // Currency selection
   final int currencySelected;
-  final List<String> Function(SubViewsEnum, List<int>) getCurrencyChoices;
+  final List<String> Function(InfoPanelSubViewEnum, List<int>) getCurrencyChoices;
   final Function(int) currencySelectionChanged;
 
   // Actions
-  final Function? onActionAddTransaction;
-  final Function? onActionEdit;
-  final Function? onActionDelete;
+  final List<Widget> actionButtons;
 
   /// Constructor
-  const DetailsPanel({
+  const InfoPanel({
     super.key,
     required this.isExpanded,
     required this.onExpanded,
@@ -41,9 +39,7 @@ class DetailsPanel extends StatelessWidget {
     required this.currencySelectionChanged,
 
     // Actions
-    required this.onActionAddTransaction,
-    required this.onActionEdit,
-    required this.onActionDelete,
+    required this.actionButtons,
   });
 
   @override
@@ -64,7 +60,7 @@ class DetailsPanel extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              DetailsPanelHeader(
+              InfoPanelHeader(
                 isExpanded: isExpanded,
                 onExpanded: onExpanded,
 
@@ -78,14 +74,7 @@ class DetailsPanel extends StatelessWidget {
                 currentSelectionChanged: currencySelectionChanged,
 
                 // Actions
-                onActionAddTransaction:
-                    (subPanelSelected == SubViewsEnum.transactions) && isExpanded ? onActionAddTransaction : null,
-                onActionEdit: (subPanelSelected == SubViewsEnum.details) && listOfSelectedItemIndex.isNotEmpty
-                    ? onActionEdit
-                    : null,
-                onActionDelete: (subPanelSelected == SubViewsEnum.details) && listOfSelectedItemIndex.isNotEmpty
-                    ? onActionDelete
-                    : null,
+                actionButtons: actionButtons,
               ),
               if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, listOfSelectedItemIndex)),
             ],

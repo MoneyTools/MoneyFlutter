@@ -5,7 +5,7 @@ import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/circle.dart';
-import 'package:money/widgets/details_panel/details_panel_form_widget.dart';
+import 'package:money/widgets/form_field_widget.dart';
 import 'package:money/widgets/form_field_switch.dart';
 import 'package:money/widgets/gaps.dart';
 

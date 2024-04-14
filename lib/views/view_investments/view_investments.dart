@@ -56,7 +56,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getPanelForTransactions({
+  Widget getInfoPanelSubViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {

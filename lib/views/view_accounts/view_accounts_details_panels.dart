@@ -54,6 +54,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
+    lastSelectedAccount = account;
     int sortFieldIndex = 0;
     bool sortAscending = true;
     int selectedItemIndex = 0;
@@ -75,13 +76,9 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     ];
 
     return ListViewTransactions(
-        key: Key('${account.id.value}_currency_${showAsNativeCurrency}_version${Data().version}'),
+        key: Key('transaction_list_currency_${showAsNativeCurrency}_version${Data().version}'),
         columnsToInclude: columnsToDisplay,
-        getList: () {
-          return getTransactions(filter: (Transaction transaction) {
-            return filterByAccountId(transaction, account.id.value);
-          });
-        },
+        getList: getTransactionForLastSelectedAccount,
         sortFieldIndex: sortFieldIndex,
         sortAscending: sortAscending,
         selectedItemIndex: selectedItemIndex,
@@ -98,5 +95,15 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
             settingKeySelectedListItemId: selectedId,
           };
         });
+  }
+
+  List<Transaction> getTransactionForLastSelectedAccount() {
+    if (lastSelectedAccount == null) {
+      return [];
+    }
+
+    return getTransactions(filter: (Transaction transaction) {
+      return filterByAccountId(transaction, lastSelectedAccount!.uniqueId);
+    });
   }
 }

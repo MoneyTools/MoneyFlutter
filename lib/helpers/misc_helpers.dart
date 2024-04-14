@@ -195,9 +195,17 @@ bool isPlatformMobile() {
   return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 }
 
-void copyToClipboardAndInformUser(final BuildContext context, final textToCopy) {
-  FlutterClipboard.copy(textToCopy).then((_) => ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Copied to clipboard'),
-        duration: Duration(seconds: 1),
-      )));
+void copyToClipboardAndInformUser(final BuildContext context, final String textToCopy) {
+  FlutterClipboard.copy(textToCopy).then(
+    (_) => showSnackBar(context, 'Copied to clipboard'),
+  );
+}
+
+void showSnackBar(final BuildContext context, final String message) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text(message),
+      duration: const Duration(seconds: 1),
+    ),
+  );
 }

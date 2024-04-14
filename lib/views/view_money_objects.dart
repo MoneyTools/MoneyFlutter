@@ -11,9 +11,10 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptable_list_view.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
-import 'package:money/widgets/details_panel/details_panel.dart';
-import 'package:money/widgets/details_panel/dialog_mutate_money_object.dart';
-import 'package:money/widgets/details_panel/sub_views_enum.dart';
+import 'package:money/widgets/details_panel/info_panel.dart';
+import 'package:money/widgets/details_panel/info_panel_header.dart';
+import 'package:money/widgets/dialog_mutate_money_object.dart';
+import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
 import 'package:money/widgets/list_view/list_view.dart';
@@ -39,10 +40,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   int _sortByFieldIndex = 0;
   bool _sortAscending = true;
   VoidCallback? onAddNewEntry;
+  VoidCallback? onCopyInfoPanelTransactions;
 
   // detail panel
   Object? subViewSelectedItem;
-  SubViewsEnum _selectedBottomTabId = SubViewsEnum.details;
+  InfoPanelSubViewEnum _selectedBottomTabId = InfoPanelSubViewEnum.details;
   int _selectedCurrency = 0;
 
   // header
@@ -69,8 +71,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       _sortByFieldIndex = viewSetting.getInt(settingKeySortBy, 0);
       _sortAscending = viewSetting.getBool(settingKeySortAscending, true);
       _lastSelectedItemId = viewSetting.getInt(settingKeySelectedListItemId, -1);
-      final int subViewIndex = viewSetting.getInt(settingKeySelectedDetailsPanelTab, SubViewsEnum.details.index);
-      _selectedBottomTabId = SubViewsEnum.values[subViewIndex];
+      final int subViewIndex =
+          viewSetting.getInt(settingKeySelectedDetailsPanelTab, InfoPanelSubViewEnum.details.index);
+      _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
     }
 
     list = getList();
@@ -95,7 +98,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             onColumnHeaderLongPress: onCustomizeColumn,
             onItemTap: onItemSelected,
             flexBottom: Settings().isDetailsPanelExpanded ? 1 : 0,
-            bottom: DetailsPanel(
+            bottom: InfoPanel(
               isExpanded: Settings().isDetailsPanelExpanded,
               onExpanded: (final bool isExpanded) {
                 setState(() {
@@ -108,7 +111,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
               // SubView
               subPanelSelected: _selectedBottomTabId,
               subPanelSelectionChanged: updateBottomContent,
-              subPanelContent: getDetailPanelContent,
+              subPanelContent: getInfoPanelContent,
 
               // Currency
               getCurrencyChoices: getCurrencyChoices,
@@ -119,15 +122,35 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
                 });
               },
 
-              // Actions
-              onActionAddTransaction: onAddTransaction,
-              onActionEdit: () {
-                showDialogAndActionsForMoneyObject(
-                    context: context, moneyObject: getFirstSelectedItem() as MoneyObject);
-              },
-              onActionDelete: () {
-                onDeleteRequestedByUser(context, getFirstSelectedItem() as MoneyObject);
-              },
+              /// Actions
+              actionButtons: [
+                /// Add
+                if (onAddTransaction != null) InfoPanelHeader.buildAddButton(onAddTransaction!),
+                InfoPanelHeader.buildEditButton(
+                  () {
+                    showDialogAndActionsForMoneyObject(
+                      context: context,
+                      moneyObject: getFirstSelectedItem() as MoneyObject,
+                    );
+                  },
+                ),
+                const Spacer(),
+
+                /// Copy
+                if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions && onCopyInfoPanelTransactions != null)
+                  InfoPanelHeader.buildCopyButton(onCopyInfoPanelTransactions!),
+                const Spacer(),
+
+                /// Delete
+                InfoPanelHeader.buildDeleteButton(
+                  () {
+                    onDeleteRequestedByUser(
+                      context,
+                      getFirstSelectedItem() as MoneyObject,
+                    );
+                  },
+                ),
+              ],
             ),
           ),
         );
@@ -249,23 +272,29 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
-  void updateBottomContent(final SubViewsEnum tab) {
+  void updateBottomContent(final InfoPanelSubViewEnum tab) {
     setState(() {
       _selectedBottomTabId = tab;
       saveLastUserActionOnThisView();
     });
   }
 
-  Widget getDetailPanelContent(final SubViewsEnum subViewId, final List<int> selectedIds) {
+  Widget getInfoPanelContent(final InfoPanelSubViewEnum subViewId, final List<int> selectedIds) {
     switch (subViewId) {
-      case SubViewsEnum.details:
-        return getPanelForDetails(selectedIds: selectedIds, isReadOnly: false);
-      case SubViewsEnum.chart:
+      /// Details
+      case InfoPanelSubViewEnum.details:
+        return getInfoPanelForDetails(selectedIds: selectedIds, isReadOnly: false);
+
+      /// Chart
+      case InfoPanelSubViewEnum.chart:
         return getPanelForChart(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0);
-      case SubViewsEnum.transactions:
+
+      /// Transactions
+      case InfoPanelSubViewEnum.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: getPanelForTransactions(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0),
+          child:
+              getInfoPanelSubViewTransactions(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0),
         );
       default:
         return const Text('- empty -');
@@ -273,11 +302,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   /// Override in your view
-  List<String> getCurrencyChoices(final SubViewsEnum subViewId, final List<int> selectedItems) {
+  List<String> getCurrencyChoices(final InfoPanelSubViewEnum subViewId, final List<int> selectedItems) {
     switch (subViewId) {
-      case SubViewsEnum.details:
-      case SubViewsEnum.chart:
-      case SubViewsEnum.transactions:
+      case InfoPanelSubViewEnum.details:
+      case InfoPanelSubViewEnum.chart:
+      case InfoPanelSubViewEnum.transactions:
       default:
         return [];
     }
@@ -301,7 +330,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         context: context,
         title: '${getClassNameSingular()} #${uniqueId + 1}',
         actionButtons: [],
-        child: getPanelForDetails(selectedIds: <int>[uniqueId], isReadOnly: true),
+        child: getInfoPanelForDetails(selectedIds: <int>[uniqueId], isReadOnly: true),
       );
     } else {
       setSelectedItem(uniqueId);
@@ -320,11 +349,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return _selectedItemsByUniqueId.value.firstOrNull;
   }
 
-  Widget getDetailPanelHeader(final BuildContext context, final num index, final MoneyObject item) {
+  Widget getInfoPanelHeader(final BuildContext context, final num index, final MoneyObject item) {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+  Widget getInfoPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
     final MoneyObject? moneyObject = findObjectById(selectedIds.firstOrNull, list);
 
     if (moneyObject == null) {
@@ -333,7 +362,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     return SingleChildScrollView(
       key: Key('detail_panel_${moneyObject.uniqueId}'),
-      child: MoneyObjectCard(title: '', moneyObject: moneyObject),
+      child: MoneyObjectCard(
+        title: 'Details',
+        moneyObject: moneyObject,
+      ),
     );
   }
 
@@ -344,7 +376,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return const Center(child: Text('No chart to display'));
   }
 
-  Widget getPanelForTransactions({
+  Widget getInfoPanelSubViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {

@@ -50,31 +50,33 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     }
   }
 
-  // Details Panel for Transactions Payees
-  Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final RentBuilding? rental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
-    if (rental != null) {
-      final List<Transaction> list = getTransactions(
+  List<Transaction> getTransactionLastSelectedItem() {
+    if (lastSelectedRental != null) {
+      return getTransactions(
         filter: (final Transaction transaction) => filterByRentalCategories(
           transaction,
-          rental,
+          lastSelectedRental!,
         ),
       );
-
-      return ListViewTransactions(
-        key: Key(rental.uniqueId.toString()),
-        columnsToInclude: <Field>[
-          Transaction.fields.getFieldByName(columnIdDate),
-          Transaction.fields.getFieldByName(columnIdAccount),
-          Transaction.fields.getFieldByName(columnIdPayee),
-          Transaction.fields.getFieldByName(columnIdCategory),
-          Transaction.fields.getFieldByName(columnIdMemo),
-          Transaction.fields.getFieldByName(columnIdAmount),
-        ],
-        getList: () => list,
-      );
     }
-    return CenterMessage.noTransaction();
+    return [];
+  }
+
+  // Details Panel for Transactions Payees
+  Widget _getSubViewContentForTransactions(final List<int> indices) {
+    lastSelectedRental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
+
+    return ListViewTransactions(
+      columnsToInclude: <Field>[
+        Transaction.fields.getFieldByName(columnIdDate),
+        Transaction.fields.getFieldByName(columnIdAccount),
+        Transaction.fields.getFieldByName(columnIdPayee),
+        Transaction.fields.getFieldByName(columnIdCategory),
+        Transaction.fields.getFieldByName(columnIdMemo),
+        Transaction.fields.getFieldByName(columnIdAmount),
+      ],
+      getList: () => getTransactionLastSelectedItem(),
+    );
   }
 
   bool filterByRentalCategories(final Transaction t, final RentBuilding rental) {

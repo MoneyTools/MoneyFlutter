@@ -8,6 +8,7 @@
 
 ### Added
 
+- Copy Info-transactions to the clipboard on views [Account, Stock & Rental]
 - Money_Widget (display negative value in Red, positive in Green)
 
 ## [version 1.7.7] 2024-04-12

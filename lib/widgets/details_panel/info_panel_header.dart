@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/widgets/details_panel/sub_views_enum.dart';
+import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/gaps.dart';
 
-class DetailsPanelHeader extends StatelessWidget {
+class InfoPanelHeader extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
 
   // SubView
-  final SubViewsEnum subViewSelected;
-  final Function(SubViewsEnum) subViewSelectionChanged;
+  final InfoPanelSubViewEnum subViewSelected;
+  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
 
   // Currency
   final List<String> currencyChoices;
@@ -17,12 +17,10 @@ class DetailsPanelHeader extends StatelessWidget {
   final Function currentSelectionChanged;
 
   // Actions
-  final Function? onActionAddTransaction;
-  final Function? onActionEdit;
-  final Function? onActionDelete;
+  final List<Widget> actionButtons;
 
   /// Constructor
-  const DetailsPanelHeader({
+  const InfoPanelHeader({
     super.key,
     required this.isExpanded,
     required this.onExpanded,
@@ -37,9 +35,7 @@ class DetailsPanelHeader extends StatelessWidget {
     required this.currentSelectionChanged,
 
     // Actions
-    this.onActionAddTransaction,
-    this.onActionEdit,
-    this.onActionDelete,
+    required this.actionButtons,
   });
 
   @override
@@ -61,11 +57,8 @@ class DetailsPanelHeader extends StatelessWidget {
                 _buildExpando(),
                 _buildViewSelections(constraints),
                 const Spacer(),
-                _buildAddButton(),
+                ...actionButtons,
                 const Spacer(),
-                _buildEditButton(),
-                const Spacer(),
-                _buildDeleteButton(),
                 gapMedium(),
                 _buildCurrencySelections(constraints),
               ],
@@ -104,7 +97,7 @@ class DetailsPanelHeader extends StatelessWidget {
         if (!isExpanded) {
           onExpanded(true);
         }
-        subViewSelectionChanged(SubViewsEnum.values[newSelection.first]);
+        subViewSelectionChanged(InfoPanelSubViewEnum.values[newSelection.first]);
       },
     );
   }
@@ -141,48 +134,6 @@ class DetailsPanelHeader extends StatelessWidget {
     );
   }
 
-  Widget _buildAddButton() {
-    if (onActionAddTransaction == null) {
-      return const SizedBox();
-    }
-
-    return IconButton(
-      onPressed: () {
-        onActionAddTransaction?.call();
-      },
-      icon: const Icon(Icons.add),
-      tooltip: 'Add a new transaction',
-    );
-  }
-
-  Widget _buildEditButton() {
-    if (onActionEdit == null) {
-      return const SizedBox();
-    }
-
-    return IconButton(
-      onPressed: () {
-        onActionEdit?.call();
-      },
-      icon: const Icon(Icons.edit),
-      tooltip: 'Edit selected item',
-    );
-  }
-
-  Widget _buildDeleteButton() {
-    if (onActionDelete == null) {
-      return const SizedBox();
-    }
-
-    return IconButton(
-      onPressed: () {
-        onActionDelete?.call();
-      },
-      icon: const Icon(Icons.delete),
-      tooltip: 'Delete selected item',
-    );
-  }
-
   Widget _buildExpando() {
     return IconButton(
       onPressed: () {
@@ -190,6 +141,46 @@ class DetailsPanelHeader extends StatelessWidget {
       },
       icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less),
       tooltip: 'Expand/Collapse panel',
+    );
+  }
+
+  static Widget buildAddButton(final Function callback) {
+    return IconButton(
+      onPressed: () {
+        callback();
+      },
+      icon: const Icon(Icons.add),
+      tooltip: 'Add a new item',
+    );
+  }
+
+  static Widget buildEditButton(final Function callback) {
+    return IconButton(
+      onPressed: () {
+        callback.call();
+      },
+      icon: const Icon(Icons.edit),
+      tooltip: 'Edit selected item',
+    );
+  }
+
+  static Widget buildDeleteButton(final Function callback) {
+    return IconButton(
+      onPressed: () {
+        callback.call();
+      },
+      icon: const Icon(Icons.delete),
+      tooltip: 'Delete selected item',
+    );
+  }
+
+  static Widget buildCopyButton(final Function callback) {
+    return IconButton(
+      onPressed: () {
+        callback.call();
+      },
+      icon: const Icon(Icons.copy_all),
+      tooltip: 'Copy list to clipboard',
     );
   }
 }
