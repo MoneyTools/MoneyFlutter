@@ -8,20 +8,20 @@ import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/views/view.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/center_message.dart';
 
-class ViewTransfers extends ViewWidget {
+class ViewTransfers extends ViewForMoneyObjects {
   const ViewTransfers({
     super.key,
   });
 
   @override
-  State<ViewWidget> createState() => ViewTransfersState();
+  State<ViewForMoneyObjects> createState() => ViewTransfersState();
 }
 
-class ViewTransfersState extends ViewWidgetState {
+class ViewTransfersState extends ViewForMoneyObjectsState {
   List<Transfer> listOfTransfers = [];
   Map<int, Transfer> loadedTransfers = {};
 

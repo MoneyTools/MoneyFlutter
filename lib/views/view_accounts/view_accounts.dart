@@ -16,7 +16,7 @@ import 'package:money/widgets/details_panel/sub_views_enum.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/views/view.dart';
+import 'package:money/views/view_money_objects.dart';
 
 part 'view_accounts_details_panels.dart';
 
@@ -25,14 +25,14 @@ part 'view_accounts_helpers.dart';
 final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
 
 /// Main view for all Accounts
-class ViewAccounts extends ViewWidget {
+class ViewAccounts extends ViewForMoneyObjects {
   const ViewAccounts({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewAccountsState();
+  State<ViewForMoneyObjects> createState() => ViewAccountsState();
 }
 
-class ViewAccountsState extends ViewWidgetState {
+class ViewAccountsState extends ViewForMoneyObjectsState {
   final List<Widget> pivots = <Widget>[];
 
   @override

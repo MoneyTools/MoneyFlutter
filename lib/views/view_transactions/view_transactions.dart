@@ -7,10 +7,10 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transaction_splits.dart';
-import 'package:money/views/view.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/widgets.dart';
 
-class ViewTransactions extends ViewWidget {
+class ViewTransactions extends ViewForMoneyObjects {
   final double startingBalance;
 
   const ViewTransactions({
@@ -19,10 +19,10 @@ class ViewTransactions extends ViewWidget {
   });
 
   @override
-  State<ViewWidget> createState() => ViewTransactionsState();
+  State<ViewForMoneyObjects> createState() => ViewTransactionsState();
 }
 
-class ViewTransactionsState extends ViewWidgetState {
+class ViewTransactionsState extends ViewForMoneyObjectsState {
   final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, true];

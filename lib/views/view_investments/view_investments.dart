@@ -8,19 +8,19 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/center_message.dart';
 
 import 'package:money/widgets/chart.dart';
-import 'package:money/views/view.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
 part 'view_investments_details_panels.dart';
 
-class ViewInvestments extends ViewWidget {
+class ViewInvestments extends ViewForMoneyObjects {
   const ViewInvestments({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewInvestmentsState();
+  State<ViewForMoneyObjects> createState() => ViewInvestmentsState();
 }
 
-class ViewInvestmentsState extends ViewWidgetState {
+class ViewInvestmentsState extends ViewForMoneyObjectsState {
   @override
   String getClassNamePlural() {
     return 'Investment';

@@ -7,19 +7,19 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/views/view.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
 part 'view_loans_details_panels.dart';
 
-class ViewLoans extends ViewWidget {
+class ViewLoans extends ViewForMoneyObjects {
   const ViewLoans({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewLoansState();
+  State<ViewForMoneyObjects> createState() => ViewLoansState();
 }
 
-class ViewLoansState extends ViewWidgetState {
+class ViewLoansState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Loan';

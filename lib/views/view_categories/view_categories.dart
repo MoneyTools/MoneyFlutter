@@ -9,19 +9,19 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/views/view.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
 
 part 'view_categories_details_panels.dart';
 
-class ViewCategories extends ViewWidget {
+class ViewCategories extends ViewForMoneyObjects {
   const ViewCategories({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewCategoriesState();
+  State<ViewForMoneyObjects> createState() => ViewCategoriesState();
 }
 
-class ViewCategoriesState extends ViewWidgetState {
+class ViewCategoriesState extends ViewForMoneyObjectsState {
   final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
 

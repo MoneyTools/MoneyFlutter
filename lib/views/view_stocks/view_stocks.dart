@@ -5,20 +5,20 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/securities/security.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptable_list_view.dart';
-import 'package:money/views/view.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_stocks/stock_chart.dart';
 import 'package:money/widgets/center_message.dart';
 
-class ViewStocks extends ViewWidget {
+class ViewStocks extends ViewForMoneyObjects {
   const ViewStocks({
     super.key,
   });
 
   @override
-  State<ViewWidget> createState() => ViewStocksState();
+  State<ViewForMoneyObjects> createState() => ViewStocksState();
 }
 
-class ViewStocksState extends ViewWidgetState {
+class ViewStocksState extends ViewForMoneyObjectsState {
   @override
   String getClassNamePlural() {
     return 'Stocks';

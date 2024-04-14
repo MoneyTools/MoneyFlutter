@@ -7,10 +7,10 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/views/view.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/sankey/sankey_colors.dart';
 import 'package:money/widgets/sankey/sankey.dart';
-import 'package:money/views/view.dart';
 
 class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});
@@ -40,6 +40,43 @@ class ViewCashFlowState extends ViewWidgetState {
   void initState() {
     super.initState();
     transformData();
+  }
+
+  @override
+  Widget build(final BuildContext context) {
+    return buildViewContent(
+      Column(
+        children: <Widget>[
+          ViewHeader(
+            title: 'Cash Flow',
+            count: totalIncomes + totalExpenses,
+            description: 'See where assets are allocated.',
+          ),
+          Expanded(child: getView()),
+        ],
+      ),
+    );
+  }
+
+  Widget getView() {
+    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: Container(
+          width: constraints.maxWidth,
+          height: max(constraints.maxHeight, 1000),
+          padding: const EdgeInsets.all(8),
+          child: CustomPaint(
+            painter: SankeyPainter(
+              listOfIncomes: sanKeyListOfIncomes,
+              listOfExpenses: sanKeyListOfExpenses,
+              compactView: isSmallDevice(context),
+              colors: SankeyColors(darkTheme: Settings().useDarkMode),
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   void transformData() {
@@ -101,42 +138,5 @@ class ViewCashFlowState extends ViewWidgetState {
     final double heightNeededToRenderIncomes = getHeightNeededToRender(sanKeyListOfIncomes);
     final double heightNeededToRenderExpenses = getHeightNeededToRender(sanKeyListOfExpenses);
     totalHeight = max(heightNeededToRenderIncomes, heightNeededToRenderExpenses);
-  }
-
-  @override
-  Widget build(final BuildContext context) {
-    return buildViewContent(
-      Column(
-        children: <Widget>[
-          ViewHeader(
-            title: 'Cash Flow',
-            count: totalIncomes + totalExpenses,
-            description: 'See where assets are allocated.',
-          ),
-          Expanded(child: getView()),
-        ],
-      ),
-    );
-  }
-
-  Widget getView() {
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: constraints.maxWidth,
-          height: max(constraints.maxHeight, 1000),
-          padding: const EdgeInsets.all(8),
-          child: CustomPaint(
-            painter: SankeyPainter(
-              listOfIncomes: sanKeyListOfIncomes,
-              listOfExpenses: sanKeyListOfExpenses,
-              compactView: isSmallDevice(context),
-              colors: SankeyColors(darkTheme: Settings().useDarkMode),
-            ),
-          ),
-        ),
-      );
-    });
   }
 }
