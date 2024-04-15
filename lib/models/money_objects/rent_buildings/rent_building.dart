@@ -283,12 +283,12 @@ class RentBuilding extends MoneyObject {
     return Data().categories.getNameFromId(id);
   }
 
-  FieldInt transactionsForIncomes = FieldInt(
+  FieldQuantity transactionsForIncomes = FieldQuantity(
     name: 'I#',
     valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).transactionsForIncomes.value,
   );
 
-  FieldInt transactionsForExpenses = FieldInt(
+  FieldQuantity transactionsForExpenses = FieldQuantity(
     name: 'E#',
     valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).transactionsForExpenses.value,
   );
@@ -317,14 +317,16 @@ class RentBuilding extends MoneyObject {
   FieldMoney revenue = FieldMoney(
     importance: 20,
     name: 'Revenue',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.income,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.income),
   );
 
   /// Expenses
   FieldMoney expense = FieldMoney(
     importance: 21,
     name: 'Expenses',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenses,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenses),
   );
 
   /// Expenses-Interest
@@ -332,7 +334,8 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Interest',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseInterest,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseInterest),
   );
 
   /// Expenses-Maintenance
@@ -340,7 +343,8 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Maintenance',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseMaintenance,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseMaintenance),
   );
 
   /// Expenses-Management
@@ -348,7 +352,8 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Management',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseManagement,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseManagement),
   );
 
   /// Expenses-Repair
@@ -356,7 +361,8 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Repair',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseRepairs,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseRepairs),
   );
 
   /// Expenses-Taxes
@@ -364,14 +370,16 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Taxes',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.expenseTaxes,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseTaxes),
   );
 
   /// Profit
   FieldMoney profit = FieldMoney(
     importance: 22,
     name: 'Profit',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).lifeTimePnL.profit,
+    valueFromInstance: (final MoneyObject instance) =>
+        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.profit),
   );
 
   Account? account;

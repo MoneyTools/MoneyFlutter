@@ -138,3 +138,13 @@ String removeEmptyLines(String text) {
 
   return result;
 }
+
+String formatDoubleTrimZeros(double value) {
+  final formatter = NumberFormat('#,##0.##', 'en_US');
+  return formatter.format(value);
+}
+
+String formatDoubleTimeZeroFiveNine(double value) {
+  final formatter = NumberFormat('#,##0.#####', 'en_US');
+  return formatter.format(value);
+}

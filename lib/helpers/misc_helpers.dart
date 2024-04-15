@@ -209,3 +209,12 @@ void showSnackBar(final BuildContext context, final String message) {
     ),
   );
 }
+
+double trimToFiveDecimalPlaces(double value) {
+  // Multiply the value by 100,000 to move the decimal point 5 places to the right
+  double multipliedValue = value * 100000;
+  // Round the result to the nearest integer
+  double roundedValue = multipliedValue.roundToDouble();
+  // Divide the rounded value by 100,000 to move the decimal point back to its original position
+  return roundedValue / 100000;
+}

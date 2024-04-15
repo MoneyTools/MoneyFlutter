@@ -31,7 +31,8 @@ class Security extends MoneyObject {
         tmp.cuspid,
         tmp.securityType,
         tmp.priceDate,
-        tmp.counts,
+        tmp.numberOfTrades,
+        tmp.outstandingShares,
         tmp.balance,
       ]);
     }
@@ -119,10 +120,16 @@ class Security extends MoneyObject {
 
   // Not persisted fields
 
-  FieldInt counts = FieldInt(
-    name: 'counts',
+  FieldInt numberOfTrades = FieldInt(
+    name: 'Trades',
     columnWidth: ColumnWidth.nano,
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).counts.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Security).numberOfTrades.value,
+  );
+
+  FieldQuantity outstandingShares = FieldQuantity(
+    name: 'Shares',
+    defaultValue: 0,
+    valueFromInstance: (final MoneyObject instance) => (instance as Security).outstandingShares.value,
   );
 
   FieldMoney balance = FieldMoney(

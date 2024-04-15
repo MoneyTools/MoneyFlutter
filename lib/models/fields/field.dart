@@ -6,6 +6,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/widgets/money_widget.dart';
+import 'package:money/widgets/quantity_widget.dart';
 
 export 'package:money/models/money_model.dart';
 
@@ -84,6 +85,7 @@ class Field<T> {
     if (valueFromInstance == defaultCallbackValue) {
       switch (this.type) {
         case FieldType.numeric:
+        case FieldType.quantity:
           valueFromInstance = (final MoneyObject c) => value as num;
           valueForSerialization = valueFromInstance;
         case FieldType.text:
@@ -113,10 +115,11 @@ class Field<T> {
       switch (type) {
         case FieldType.numeric:
         case FieldType.numericShorthand:
+        case FieldType.quantity:
+        case FieldType.amountShorthand:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
               sortByValue(valueFromInstance(a) as num, valueFromInstance(b) as num, ascending);
         case FieldType.amount:
-        case FieldType.amountShorthand:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
               sortByValue(valueFromInstance(a).amount, valueFromInstance(b).amount, ascending);
         case FieldType.date:
@@ -146,6 +149,8 @@ class Field<T> {
         return value.toString();
       case FieldType.numericShorthand:
         return getAmountAsShorthandText(value as num);
+      case FieldType.quantity:
+        return formatDoubleTimeZeroFiveNine(value);
       case FieldType.amount:
         if (type is MoneyModel) {
           return (value as MoneyModel).toString();
@@ -193,11 +198,10 @@ class FieldInt extends Field<int> {
     super.getEditWidget,
     super.sort,
     super.columnWidth,
+    super.defaultValue = -1,
     super.align = TextAlign.right,
     super.type = FieldType.numeric,
-  }) : super(
-          defaultValue: -1,
-        );
+  });
 }
 
 class FieldDouble extends Field<double> {
@@ -208,12 +212,31 @@ class FieldDouble extends Field<double> {
     super.valueFromInstance,
     super.valueForSerialization,
     super.useAsColumn,
+    super.defaultValue = 0.00,
     super.useAsDetailPanels,
     super.sort,
   }) : super(
-          defaultValue: 0.00,
           align: TextAlign.right,
           type: FieldType.numeric,
+        );
+}
+
+class FieldQuantity extends Field<double> {
+  FieldQuantity({
+    super.importance,
+    super.name,
+    super.serializeName,
+    super.valueFromInstance,
+    super.valueForSerialization,
+    super.setValue,
+    super.useAsColumn,
+    super.columnWidth = ColumnWidth.small,
+    super.useAsDetailPanels,
+    super.defaultValue = 0,
+    super.sort,
+  }) : super(
+          align: TextAlign.right,
+          type: FieldType.quantity,
         );
 }
 
@@ -398,6 +421,7 @@ enum FieldType {
   text,
   numeric,
   numericShorthand,
+  quantity,
   amount,
   amountShorthand,
   date,
@@ -418,8 +442,18 @@ Widget buildWidgetFromTypeAndValue({
         return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
       }
       return buildFieldWidgetForNumber(value: value as num, shorthand: false, align: align);
+
     case FieldType.numericShorthand:
       return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);
+
+    case FieldType.quantity:
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          QuantifyWidget(quantity: value),
+        ],
+      );
+
     case FieldType.amount:
       if (value is String) {
         return buildFieldWidgetForText(text: value, align: align, fixedFont: true);

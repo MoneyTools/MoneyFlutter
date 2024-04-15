@@ -8,6 +8,7 @@
 
 ### Added
 
+- QuantifyWidget
 - Copy Info-transactions to the clipboard on views [Account, Stock & Rental]
 - Money_Widget (display negative value in Red, positive in Green)
 

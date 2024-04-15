@@ -163,7 +163,7 @@ class Category extends MoneyObject {
   // These properties are not persisted
 
   /// Count
-  FieldInt count = FieldInt(
+  FieldQuantity count = FieldQuantity(
     importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.tiny,

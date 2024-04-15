@@ -167,4 +167,10 @@ void main() {
     expect(attemptToGetDoubleFromText('\$0'), equals(0.0)); // Zero amount
     expect(attemptToGetDoubleFromText('Invalid string'), isNull); // Invalid input
   });
+
+  test('Extract amount from currency text', () {
+    expect(formatDoubleTimeZeroFiveNine(0.12345), equals('0.12345'));
+    expect(formatDoubleTimeZeroFiveNine(0.0000000123), equals('0'));
+    expect(formatDoubleTimeZeroFiveNine(0.0000123), equals('0.00001'));
+  });
 }

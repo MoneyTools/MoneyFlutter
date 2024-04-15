@@ -32,8 +32,10 @@ class Securities extends MoneyObjects<Security> {
   void onAllDataLoaded() {
     for (final Security security in iterableList()) {
       final List<Investment> list = Investments.getInvestmentsFromSecurity(security.uniqueId);
-      security.counts.value = list.length;
-      security.balance.value.amount = Investments.getProfit(list);
+      security.numberOfTrades.value = list.length;
+      final cumulative = Investments.getProfitAndShares(list);
+      security.outstandingShares.value = cumulative.quantity;
+      security.balance.value.amount = cumulative.amount;
     }
   }
 

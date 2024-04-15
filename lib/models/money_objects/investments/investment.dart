@@ -3,6 +3,7 @@
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
+import 'package:money/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
@@ -75,7 +76,7 @@ class Investment extends MoneyObject {
   );
 
   /// 3    Units           money   0                    0
-  FieldDouble units = FieldDouble(
+  FieldQuantity units = FieldQuantity(
     importance: 2,
     name: 'Units',
     serializeName: 'Units',
@@ -228,28 +229,30 @@ class Investment extends MoneyObject {
   FieldMoney amount = FieldMoney(
       name: 'Amount',
       valueFromInstance: (final MoneyObject instance) {
-        return MoneyModel(amount: (instance as Investment).finalAmount);
+        return MoneyModel(amount: (instance as Investment).finalAmount.amount);
       });
 
-  double get finalAmount {
+  StockCumulative get finalAmount {
+    StockCumulative cumulative = StockCumulative();
     switch (InvestmentType.values[this.investmentType.value]) {
       // case InvestmentType.add:
       case InvestmentType.buy:
         // Commission adds to the cost
-        double amount = this.units.value * this.unitPrice.value.amount;
-        amount += this.commission.value.amount;
-        return -amount;
+        cumulative.quantity += this.units.value;
+        cumulative.amount = this.units.value * this.unitPrice.value.amount;
+        cumulative.amount += this.commission.value.amount;
 
       // case InvestmentType.remove:
       case InvestmentType.sell:
         // commission reduce the revenue
-        double amount = this.units.value * this.unitPrice.value.amount;
-        amount -= this.commission.value.amount;
-        return amount;
+        cumulative.quantity -= this.units.value;
+        cumulative.amount = this.units.value * this.unitPrice.value.amount;
+        cumulative.amount -= this.commission.value.amount;
+
       default:
       //
     }
-    return 0;
+    return cumulative;
   }
 
   FieldMoney runningBalance = FieldMoney(
@@ -334,7 +337,7 @@ class Investment extends MoneyObject {
 
     if (result == 0) {
       // If on the same date sort so that "Buy" is before "Sell"
-      result = sortByValue(a.finalAmount.abs(), b.finalAmount.abs(), !ascending);
+      result = sortByValue(a.finalAmount.amount.abs(), b.finalAmount.amount.abs(), !ascending);
     }
     return result;
   }
