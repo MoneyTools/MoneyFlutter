@@ -119,3 +119,30 @@ class SortedSet<T> {
     return low;
   }
 }
+
+List<List<int>> resizeMatrix(List<List<int>> matrix, int newRowCount, int newColCount) {
+  // Calculate scaling factors for rows and columns
+  double rowScaleFactor = matrix.length / newRowCount;
+  double colScaleFactor = matrix[0].length / newColCount;
+
+  // Initialize the resized matrix
+  List<List<int>> resizedMatrix = List.generate(newRowCount, (_) => List<int>.filled(newColCount, 0));
+
+  // Fill in the resized matrix using the scaling factors
+  for (int newRow = 0; newRow < newRowCount; newRow++) {
+    for (int newCol = 0; newCol < newColCount; newCol++) {
+      // Calculate the corresponding indices in the original matrix
+      double originalRow = newRow * rowScaleFactor + (rowScaleFactor / 2);
+      double originalCol = newCol * colScaleFactor + (colScaleFactor / 2);
+
+      // Convert to integer indices
+      int originalRowIndex = originalRow.toInt().clamp(0, matrix.length - 1);
+      int originalColIndex = originalCol.toInt().clamp(0, matrix[0].length - 1);
+
+      // Copy the value from the original matrix to the resized matrix
+      resizedMatrix[newRow][newCol] = matrix[originalRowIndex][originalColIndex];
+    }
+  }
+
+  return resizedMatrix;
+}

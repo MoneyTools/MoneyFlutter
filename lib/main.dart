@@ -13,6 +13,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/file_manager.dart';
+import 'package:money/storage/import/import_ocr.dart';
 import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
@@ -208,6 +209,7 @@ class MainView extends StatelessWidget {
             'qfx',
             'ofx',
             'pdf',
+            'png',
             'json',
           ],
         );
@@ -268,6 +270,8 @@ class MainView extends StatelessWidget {
           importQFX(pickerResult.files.single.path.toString(), data);
         case 'pdf':
           importPDF(pickerResult.files.single.path.toString(), data);
+        case 'png':
+          importOCR(pickerResult.files.single.path.toString(), data);
       }
     }
   }

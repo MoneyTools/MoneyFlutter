@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 
@@ -25,7 +26,8 @@ void main() {
 
   group('String Comparison Perf:', () {
     test('Case-Insensitive A', () {
-      final Stopwatch stopwatch = Stopwatch()..start(); // Start the stopwatch
+      final Stopwatch stopwatch = Stopwatch()
+        ..start(); // Start the stopwatch
 
       for (int i = 0; i < 200000; i++) {
         expect(stringCompareIgnoreCasing1('world', 'WORLD'), 0);
@@ -42,7 +44,8 @@ void main() {
     });
 
     test('Case-Insensitive B', () {
-      final Stopwatch stopwatch = Stopwatch()..start(); // Start the stopwatch
+      final Stopwatch stopwatch = Stopwatch()
+        ..start(); // Start the stopwatch
 
       for (int i = 0; i < 200000; i++) {
         expect(stringCompareIgnoreCasing2('world', 'WORLD'), 0);
@@ -172,5 +175,35 @@ void main() {
     expect(formatDoubleTimeZeroFiveNine(0.12345), equals('0.12345'));
     expect(formatDoubleTimeZeroFiveNine(0.0000000123), equals('0'));
     expect(formatDoubleTimeZeroFiveNine(0.0000123), equals('0.00001'));
+  });
+
+  group('scaleAndPadMatrix', () {
+
+    test('Resize matrix with center alignment', () {
+      // Original matrix
+      List<List<int>> matrix = [
+        [0, 1, 0],
+        [1, 1, 1],
+        [0, 1, 0],
+      ];
+
+      // Expected resized matrix
+      List<List<int>> expectedResizedMatrix = [
+        [0, 0, 0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 0, 0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0],
+      ];
+
+      // Resize matrix
+      List<List<int>> resizedMatrix = resizeMatrix(matrix, 8, 8);
+
+      // Compare with expected result
+      expect(resizedMatrix, expectedResizedMatrix);
+    });
   });
 }
