@@ -26,18 +26,15 @@ class BadgePendingChanges extends StatelessWidget {
     return Tooltip(
       message: getTooltipText(),
       child: IntrinsicWidth(
-        child: SizedBox(
-          height: 20,
-          child: TextButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.withAlpha(0x22)),
-              // You can add more styling properties here as needed
-            ),
-            onPressed: () {
-              PendingChanges.show(context);
-            },
-            child: getChangeLabel(context),
+        child: TextButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.withAlpha(0x22)),
+            // You can add more styling properties here as needed
           ),
+          onPressed: () {
+            PendingChanges.show(context);
+          },
+          child: getChangeLabel(context),
         ),
       ),
     );

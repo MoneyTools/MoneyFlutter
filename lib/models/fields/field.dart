@@ -169,18 +169,16 @@ class Field<T> {
     }
   }
 
-  Widget getAsCompactWidget(final dynamic value, [double width = 300]) {
+  Widget getValueWidgetForDetailView(final dynamic value) {
     if (type == FieldType.widget) {
       return value;
     } else {
-      return SizedBox(
-        width: width,
-        child: SelectableText(
-          getString(value),
-          maxLines: 1,
-          // overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+      return SelectableText(
+        textAlign: TextAlign.right,
+        getString(value),
+        maxLines: 1,
+        // overflow: TextOverflow.ellipsis,
+        style: const TextStyle(fontWeight: FontWeight.bold),
       );
     }
   }

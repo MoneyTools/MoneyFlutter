@@ -7,7 +7,6 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/form_field_widget.dart';
 import 'package:money/widgets/form_field_switch.dart';
-import 'package:money/widgets/gaps.dart';
 
 export 'dart:ui';
 
@@ -96,7 +95,10 @@ abstract class MoneyObject {
         isFirstItem: fieldDefinition == definitions.first,
         isLastItem: fieldDefinition == definitions.last,
       );
-      widgets.add(widget);
+      widgets.add(Padding(
+        padding: compact ? const EdgeInsets.symmetric(horizontal: 8.0) : const EdgeInsets.all(8.0),
+        child: widget,
+      ));
     }
     return widgets;
   }
@@ -113,39 +115,25 @@ abstract class MoneyObject {
     final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
 
     if (compact) {
-      // simple [Name  Value]
-      return Container(
-        decoration: BoxDecoration(
-          border: (isFirstItem == true) ? null : Border(top: BorderSide(color: Colors.grey.withAlpha(0x66))),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(fieldDefinition.name),
-            gapMedium(),
-            fieldDefinition.getAsCompactWidget(fieldValue),
-          ],
-        ),
-      );
+      // simple [Name  Value] pair
+      return _buildNameValuePair(fieldDefinition, fieldValue);
     }
+
+    final decoration = getFormFieldDecoration(
+      fieldName: fieldDefinition.name,
+      isReadOnly: isReadOnly,
+    );
+
     if (!isReadOnly && fieldDefinition.getEditWidget != null) {
       // Editing mode and the MoneyObject has a custom edit widget
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: InputDecorator(
-          decoration: InputDecoration(
-            labelText: fieldDefinition.name,
-            border: const OutlineInputBorder(),
-          ),
-          child: fieldDefinition.getEditWidget!(objectInstance, onEdited),
+      return InputDecorator(
+        decoration: InputDecoration(
+          labelText: fieldDefinition.name,
+          border: const OutlineInputBorder(),
         ),
+        child: fieldDefinition.getEditWidget!(objectInstance, onEdited),
       );
     } else {
-      final decoration = getFormFieldDecoration(
-        fieldName: fieldDefinition.name,
-        isReadOnly: isReadOnly,
-      );
-
       if (fieldDefinition.isMultiLine) {
         return TextFormField(
           readOnly: isReadOnly,
@@ -202,34 +190,50 @@ abstract class MoneyObject {
             if (value.isEmpty && isReadOnly) {
               value = '. . . ';
             }
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextFormField(
-                      initialValue: value,
-                      decoration: decoration,
-                      // allow mutation of the value
-                      readOnly: isReadOnly || fieldDefinition.setValue == null,
-                      onFieldSubmitted: (String value) {
-                        onEdited?.call();
-                      },
-                      onEditingComplete: () {
-                        onEdited?.call();
-                      },
-                      onChanged: (String newValue) {
-                        fieldDefinition.setValue!(objectInstance, newValue);
-                        // onEdited?.call();
-                      },
-                    ),
+            return Row(
+              children: <Widget>[
+                Expanded(
+                  child: TextFormField(
+                    initialValue: value,
+                    decoration: decoration,
+                    // allow mutation of the value
+                    readOnly: isReadOnly || fieldDefinition.setValue == null,
+                    onFieldSubmitted: (String value) {
+                      onEdited?.call();
+                    },
+                    onEditingComplete: () {
+                      onEdited?.call();
+                    },
+                    onChanged: (String newValue) {
+                      fieldDefinition.setValue!(objectInstance, newValue);
+                      // onEdited?.call();
+                    },
                   ),
-                ],
-              ),
+                ),
+              ],
             );
         }
       }
     }
+  }
+
+  Widget _buildNameValuePair(
+    Field<dynamic> fieldDefinition,
+    fieldValue,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(fieldDefinition.name),
+            fieldDefinition.getValueWidgetForDetailView(fieldValue),
+          ],
+        ),
+        const Divider(),
+      ],
+    );
   }
 
   /// Serialize object instance to a JSon format

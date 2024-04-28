@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 getFormFieldDecoration({required final fieldName, required final bool isReadOnly}) {
   return InputDecoration(
     labelText: fieldName,
-    border: isReadOnly ? InputBorder.none : null,
+    // border: isReadOnly ? InputBorder.none : null,
+    border: const OutlineInputBorder(),
   );
 }
 

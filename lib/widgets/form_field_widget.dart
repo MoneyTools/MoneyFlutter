@@ -55,8 +55,15 @@ class MyFormFieldForWidgetState extends State<MyFormFieldForWidget> {
             },
           ),
         ),
-        if (widget.child != null) widget.child!,
+        _buildWidgetRepresentation(),
       ],
     );
+  }
+
+  Widget _buildWidgetRepresentation() {
+    if (widget.child == null) {
+      return const SizedBox();
+    }
+    return Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0), child: widget.child!);
   }
 }
