@@ -157,7 +157,7 @@ class Account extends MoneyObject {
     name: 'Currency',
     serializeName: 'Currency',
     align: TextAlign.center,
-    columnWidth: ColumnWidth.nano,
+    columnWidth: ColumnWidth.tiny,
     defaultValue: '',
     useAsDetailPanels: true,
     valueFromInstance: (final MoneyObject instance) =>

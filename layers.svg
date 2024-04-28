@@ -287,7 +287,7 @@ dart_pdf_reader</title>
   <g id='Counters_collection'>
     <g>
       <circle cx="320" cy="355" r="10" fill="blue"/>
-      <text x="320" y="355" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">20</text>
+      <text x="320" y="355" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">19</text>
       <title>1 /dev/flutter_test
 2 /dev/integration_test
 3 /direct/dart_pdf_reader
@@ -302,12 +302,11 @@ dart_pdf_reader</title>
 12 /transitive/http_parser
 13 /transitive/leak_tracker
 14 /transitive/material_color_utilities
-15 /transitive/pointycastle
-16 /transitive/source_span
-17 /transitive/test_api
-18 /transitive/typed_data
-19 /transitive/xml
-20 /transitive/yaml
+15 /transitive/source_span
+16 /transitive/test_api
+17 /transitive/typed_data
+18 /transitive/xml
+19 /transitive/yaml
 ⬇
 collection</title>
     </g>
@@ -620,7 +619,7 @@ uuid</title>
   </g>
   <g id='Labels_dart_pdf_reader'>
     <text class="nodeName" x="1650" y="225" font-size="120%">dart_pdf_reader</text>
-    <text class="nodeName" x="1650" y="245" font-size="80%">1.0.0</text>
+    <text class="nodeName" x="1650" y="245" font-size="80%">1.0.1</text>
   </g>
   <g id='Labels_collection'>
     <text class="nodeName" x="450" y="375" font-size="120%">collection</text>
@@ -636,7 +635,7 @@ uuid</title>
   </g>
   <g id='Labels_flutter_markdown'>
     <text class="nodeName" x="2550" y="225" font-size="120%">flutter_markdown</text>
-    <text class="nodeName" x="2550" y="245" font-size="80%">0.6.22+1</text>
+    <text class="nodeName" x="2550" y="245" font-size="80%">0.6.23</text>
   </g>
   <g id='Labels_intl'>
     <text class="nodeName" x="2850" y="225" font-size="120%">intl</text>
@@ -644,7 +643,7 @@ uuid</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.7.8</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.7.9</text>
   </g>
   <g id='Labels_clipboard'>
     <text class="nodeName" x="750" y="375" font-size="120%">clipboard</text>
