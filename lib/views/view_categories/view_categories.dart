@@ -105,7 +105,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     final CategoryType? filterType = getSelectedCategoryType();
     return Data()
         .categories
-        .iterableList(includeDeleted)
+        .iterableList(includeDeleted: includeDeleted)
         .where((final Category instance) =>
             (filterType == null || instance.type.value == filterType) &&
             (applyFilter == false || isMatchingFilters(instance)))

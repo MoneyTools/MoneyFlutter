@@ -566,7 +566,7 @@ class RentBuilding extends MoneyObject {
   associateAccountToBuilding() {
     final Transaction? firstTransactionForThisBuilding = Data()
         .transactions
-        .iterableList(true)
+        .iterableList(includeDeleted: true)
         .firstWhereOrNull((t) => this.categoryForIncomeTreeIds.contains(t.categoryId.value));
     if (firstTransactionForThisBuilding != null) {
       this.account = firstTransactionForThisBuilding.accountInstance;

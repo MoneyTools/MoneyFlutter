@@ -37,7 +37,7 @@ class ViewLoansState extends ViewForMoneyObjectsState {
 
   @override
   List<LoanPayment> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data().loanPayments.iterableList(includeDeleted).toList();
+    return Data().loanPayments.iterableList(includeDeleted: includeDeleted).toList();
   }
 
   @override

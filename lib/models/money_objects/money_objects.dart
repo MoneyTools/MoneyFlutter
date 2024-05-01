@@ -47,16 +47,16 @@ class MoneyObjects<T> {
   }
 
   /// Recast list as type <T>
-  Iterable<T> iterableList([bool includeDeleted = false]) {
+  Iterable<T> iterableList({bool includeDeleted = false}) {
     return _iterableListOfMoneyObject(includeDeleted).whereType<T>();
   }
 
   T? firstItem([bool includeDeleted = false]) {
-    final list = iterableList(includeDeleted).toList();
+    final list = iterableList(includeDeleted: includeDeleted).toList();
     if (list.isEmpty) {
       return null;
     }
-    return iterableList(includeDeleted).toList().first;
+    return iterableList(includeDeleted: includeDeleted).toList().first;
   }
 
   List<MoneyObject> getListSortedById() {

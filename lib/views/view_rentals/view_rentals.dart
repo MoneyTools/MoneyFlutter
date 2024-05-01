@@ -54,7 +54,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   @override
   List<RentBuilding> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data().rentBuildings.iterableList(includeDeleted).toList();
+    return Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
   }
 
   @override

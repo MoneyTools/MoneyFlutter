@@ -130,7 +130,7 @@ class Transactions extends MoneyObjects<Transaction> {
 
   int getNextTransactionId() {
     int maxIdFound = -1;
-    for (final item in iterableList(true)) {
+    for (final item in iterableList(includeDeleted: true)) {
       maxIdFound = max(maxIdFound, item.id.value);
     }
     return maxIdFound + 1;
@@ -143,7 +143,7 @@ class Transactions extends MoneyObjects<Transaction> {
     required final double amount,
   }) {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
-    return iterableList(true).firstWhereOrNull((transaction) {
+    return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
       if (transaction.amount.value.amount == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&
             transaction.dateTime.value?.month == dateTime.month &&
@@ -161,7 +161,7 @@ class Transactions extends MoneyObjects<Transaction> {
     required final double amount,
   }) {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
-    return iterableList(true).firstWhereOrNull((transaction) {
+    return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
       if (transaction.accountId.value == accountId && transaction.amount.value.amount == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&
             transaction.dateTime.value?.month == dateTime.month &&

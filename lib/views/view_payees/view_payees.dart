@@ -40,7 +40,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
     return Data()
         .payees
-        .iterableList(includeDeleted)
+        .iterableList(includeDeleted: includeDeleted)
         .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
         .toList();
   }

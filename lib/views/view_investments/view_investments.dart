@@ -40,7 +40,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   List<Investment> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final list = Data()
         .investments
-        .iterableList(includeDeleted)
+        .iterableList(includeDeleted: includeDeleted)
         .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
         .toList();
     Investments.calculateRunningBalance(list);

@@ -47,7 +47,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   @override
   List<Security> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    final List<Security> list = Data().securities.iterableList(includeDeleted).toList();
+    final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
     return list;
   }
 

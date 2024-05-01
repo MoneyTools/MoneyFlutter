@@ -39,7 +39,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
 
   @override
   void onAllDataLoaded() {
-    for (final RentBuilding rental in iterableList(true)) {
+    for (final RentBuilding rental in iterableList(includeDeleted: true)) {
       rental.associateAccountToBuilding();
       cumulateTransactions(rental);
 

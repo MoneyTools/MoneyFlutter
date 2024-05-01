@@ -49,7 +49,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   List<Transfer> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final List<Transaction> listOfTransactions = Data()
         .transactions
-        .iterableList(includeDeleted)
+        .iterableList(includeDeleted: includeDeleted)
         .where((final Transaction transaction) => transaction.transfer.value != -1)
         .toList();
 

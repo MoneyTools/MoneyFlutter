@@ -85,7 +85,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   List<Transaction> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final List<Transaction> list = Data()
         .transactions
-        .iterableList(includeDeleted)
+        .iterableList(includeDeleted: includeDeleted)
         .where((final Transaction transaction) =>
             isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)))
         .toList();

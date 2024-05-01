@@ -11,7 +11,7 @@
 <g id="clust1" class="cluster">
 <title>cluster~</title>
 <path fill="none" stroke="lightgray" stroke-width="2.6" d="M20,-8C20,-8 17332,-8 17332,-8 17338,-8 17344,-14 17344,-20 17344,-20 17344,-996.7 17344,-996.7 17344,-1002.7 17338,-1008.7 17332,-1008.7 17332,-1008.7 20,-1008.7 20,-1008.7 14,-1008.7 8,-1002.7 8,-996.7 8,-996.7 8,-20 8,-20 8,-14 14,-8 20,-8"/>
-<text text-anchor="middle" x="8676" y="-992.35" font-family="Arial Black" font-size="13.00">money_flutter</text>
+<text text-anchor="middle" x="8676" y="-992.35" font-family="Arial Black" font-size="13.00">MoneyFlutter</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster~/lib</title>

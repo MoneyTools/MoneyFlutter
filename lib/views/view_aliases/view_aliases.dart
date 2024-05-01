@@ -41,7 +41,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
   List<Alias> getList({bool includeDeleted = false, bool applyFilter = true}) {
     return Data()
         .aliases
-        .iterableList(includeDeleted)
+        .iterableList(includeDeleted: includeDeleted)
         .where((instance) => applyFilter == false || isMatchingFilters(instance))
         .toList();
   }
