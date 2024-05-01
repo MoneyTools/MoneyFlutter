@@ -6,16 +6,28 @@ extension TransactionsDemoData on Transactions {
 
     runningBalance = 0;
 
-    int day = 0;
     for (final Account account in Data().accounts.iterableList()) {
-      for (int i = 0; i < getQuantityOfTransactionBasedOnAccountType(account.type.value); i++) {
-        transactionForDemoData(day, account);
-        day++;
+      final numberOfDatesNeeded = getQuantityOfTransactionBasedOnAccountType(account.type.value);
+      final dates = generateRandomDates(numberOfDatesNeeded);
+      for (final date in dates) {
+        transactionForDemoData(date, account);
       }
     }
   }
 
-  void transactionForDemoData(final int day, final Account account) {
+  List<DateTime> generateRandomDates(int count) {
+    final now = DateTime.now();
+    final tenYearsAgo = now.subtract(const Duration(days: 365 * 10)); // Adjust for leap years if needed
+
+    final random = Random();
+    final dates = List<DateTime>.generate(count, (index) {
+      final randomDaysSinceTenYearsAgo = random.nextInt(365 * 10); // Random days within 10 years
+      return tenYearsAgo.add(Duration(days: randomDaysSinceTenYearsAgo));
+    });
+    return dates;
+  }
+
+  void transactionForDemoData(final DateTime date, final Account account) {
     final categoryId = Random().nextInt(10);
 
     // generate an amount
@@ -25,7 +37,7 @@ extension TransactionsDemoData on Transactions {
     final MyJson demoJson = <String, dynamic>{
       'Id': -1,
       'Account': account.id.value,
-      'Date': DateTime(2020, 02, day + 1),
+      'Date': date,
       'Payee': Random().nextInt(10),
       'Category': categoryId,
       'Amount': amount,

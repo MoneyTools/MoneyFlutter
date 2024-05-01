@@ -11,7 +11,7 @@
 <g id="clust1" class="cluster">
 <title>cluster~</title>
 <path fill="none" stroke="lightgray" stroke-width="2.6" d="M20,-8C20,-8 18538,-8 18538,-8 18544,-8 18550,-14 18550,-20 18550,-20 18550,-996.7 18550,-996.7 18550,-1002.7 18544,-1008.7 18538,-1008.7 18538,-1008.7 20,-1008.7 20,-1008.7 14,-1008.7 8,-1002.7 8,-996.7 8,-996.7 8,-20 8,-20 8,-14 14,-8 20,-8"/>
-<text text-anchor="middle" x="9279" y="-992.35" font-family="Arial Black" font-size="13.00">MoneyFlutter</text>
+<text text-anchor="middle" x="9279" y="-992.35" font-family="Arial Black" font-size="13.00">money_flutter</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster~/lib</title>
@@ -5297,8 +5297,8 @@
 <text text-anchor="start" x="18566.25" y="-914.45" font-family="Arial" font-size="15.00"> ccd: 9651 </text>
 <text text-anchor="start" x="18566.25" y="-896.45" font-family="Arial" font-size="15.00"> acd: 56.77 </text>
 <text text-anchor="start" x="18566.25" y="-878.45" font-family="Arial" font-size="15.00"> nccd: 8.79 </text>
-<text text-anchor="start" x="18566.25" y="-860.45" font-family="Arial" font-size="15.00"> totalSloc: 16346 </text>
-<text text-anchor="start" x="18566.25" y="-842.45" font-family="Arial" font-size="15.00"> avgSloc: 96.15 </text>
+<text text-anchor="start" x="18566.25" y="-860.45" font-family="Arial" font-size="15.00"> totalSloc: 16356 </text>
+<text text-anchor="start" x="18566.25" y="-842.45" font-family="Arial" font-size="15.00"> avgSloc: 96.21 </text>
 </g>
 </g>
 </svg>
