@@ -21,19 +21,32 @@ class DateRange {
     }
   }
 
-  num valueOrZeroIfNull(final num? value) {
+  num durationInYears() {
+    if (hasNullDates) {
+      return 0;
+    }
+
+    return (_valueOrZeroIfNull(max!.year) - _valueOrZeroIfNull(min!.year)) + 1;
+  }
+
+  num _valueOrZeroIfNull(final num? value) {
     if (value == null) {
       return 0;
     }
     return value;
   }
 
-  num durationInYears() {
-    if (min == null || max == null) {
-      return 0;
-    }
+  bool get hasNullDates {
+    return min == null || max == null;
+  }
 
-    return (valueOrZeroIfNull(max!.year) - valueOrZeroIfNull(min!.year)) + 1;
+  void ensureNoNullDates() {
+    min ??= max;
+    max ??= min;
+
+    if (min == null && max == null) {
+      min = max = DateTime.now();
+    }
   }
 
   @override

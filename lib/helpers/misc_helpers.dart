@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:clipboard/clipboard.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/constants.dart';
-import 'package:flutter/foundation.dart';
 
 String stringValueOrDefault(final String? value, {final String defaultValueIfNull = ''}) {
   if (value == null) {
@@ -217,4 +219,16 @@ double trimToFiveDecimalPlaces(double value) {
   double roundedValue = multipliedValue.roundToDouble();
   // Divide the rounded value by 100,000 to move the decimal point back to its original position
   return roundedValue / 100000;
+}
+
+class Debouncer {
+  final Duration duration;
+  Timer? _timer;
+
+  Debouncer([this.duration = const Duration(seconds: 1)]);
+
+  void run(VoidCallback callback) {
+    _timer?.cancel();
+    _timer = Timer(duration, callback);
+  }
 }

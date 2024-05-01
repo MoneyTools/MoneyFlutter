@@ -1,16 +1,16 @@
-import 'dart:math';
+// ignore_for_file: unnecessary_this
 
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/settings.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
-import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/views/view.dart';
+import 'package:money/views/view_cashflow/panel_recurring.dart';
+import 'package:money/views/view_cashflow/panel_sankey.dart';
 import 'package:money/views/view_header.dart';
-import 'package:money/widgets/sankey/sankey_colors.dart';
 import 'package:money/widgets/sankey/sankey.dart';
+import 'package:money/widgets/years_range_selector.dart';
 
 class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});
@@ -19,7 +19,17 @@ class ViewCashFlow extends ViewWidget {
   State<ViewWidget> createState() => ViewCashFlowState();
 }
 
+enum ViewAs {
+  sankey,
+  recurring,
+}
+
 class ViewCashFlowState extends ViewWidgetState {
+  ViewAs viewAs = ViewAs.sankey;
+
+  late int minYear;
+  late int maxYear;
+
   List<Account> accountsOpened = Data().accounts.getOpenAccounts();
   double totalIncomes = 0.00;
   double totalExpenses = 0.00;
@@ -34,12 +44,15 @@ class ViewCashFlowState extends ViewWidgetState {
   List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];
   List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
 
+  Debouncer debouncer = Debouncer();
+
   ViewCashFlowState();
 
   @override
   void initState() {
     super.initState();
-    transformData();
+    this.minYear = Data().transactions.dateRangeActiveAccount.min?.year ?? 2020;
+    this.maxYear = Data().transactions.dateRangeActiveAccount.max?.year ?? 2020;
   }
 
   @override
@@ -51,6 +64,7 @@ class ViewCashFlowState extends ViewWidgetState {
             title: 'Cash Flow',
             count: totalIncomes + totalExpenses,
             description: 'See where assets are allocated.',
+            child: getViewSelector(),
           ),
           Expanded(child: getView()),
         ],
@@ -59,84 +73,49 @@ class ViewCashFlowState extends ViewWidgetState {
   }
 
   Widget getView() {
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: constraints.maxWidth,
-          height: max(constraints.maxHeight, 1000),
-          padding: const EdgeInsets.all(8),
-          child: CustomPaint(
-            painter: SankeyPainter(
-              listOfIncomes: sanKeyListOfIncomes,
-              listOfExpenses: sanKeyListOfExpenses,
-              compactView: isSmallDevice(context),
-              colors: SankeyColors(darkTheme: Settings().useDarkMode),
-            ),
-          ),
-        ),
-      );
-    });
+    switch (viewAs) {
+      case ViewAs.sankey:
+        return PanelSanKey(minYear: this.minYear, maxYear: this.maxYear);
+      case ViewAs.recurring:
+        return PanelRecurrings(minYear: this.minYear, maxYear: this.maxYear);
+    }
   }
 
-  void transformData() {
-    for (Transaction element in Data().transactions.iterableList()) {
-      final Category? category = Data().categories.get(element.categoryId.value);
-      if (category != null) {
-        switch (category.type.value) {
-          case CategoryType.income:
-          case CategoryType.saving:
-          case CategoryType.investment:
-            totalIncomes += element.amount.value.amount;
-
-            final Category topCategory = Data().categories.getTopAncestor(category);
-            double? mapValue = mapOfIncomes[topCategory];
-            mapValue ??= 0;
-            mapOfIncomes[topCategory] = mapValue + element.amount.value.amount;
-            break;
-          case CategoryType.expense:
-            totalExpenses += element.amount.value.amount;
-            final Category topCategory = Data().categories.getTopAncestor(category);
-            double? mapValue = mapOfExpenses[topCategory];
-            mapValue ??= 0;
-            mapOfExpenses[topCategory] = mapValue + element.amount.value.amount;
-            break;
-          default:
-            totalNones += element.amount.value.amount;
-            break;
-        }
-      }
-    }
-
-    // Clean up the Incomes, drop 0.00
-    mapOfIncomes.removeWhere((final Category k, final double v) => v <= 0.00);
-    // Sort Descending
-    mapOfIncomes = Map<Category, double>.fromEntries(mapOfIncomes.entries.toList()
-      ..sort(
-          (final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e2.value - e1.value).toInt()));
-
-    mapOfIncomes.forEach((final Category key, final double value) {
-      sanKeyListOfIncomes.add(SanKeyEntry()
-        ..name = key.name.value
-        ..value = value);
-    });
-
-    // Clean up the Expenses, drop 0.00
-    mapOfExpenses.removeWhere((final Category k, final double v) => v == 0.00);
-
-    // Sort Ascending, in the case of expenses that means the largest negative number to the least negative number
-    mapOfExpenses = Map<Category, double>.fromEntries(mapOfExpenses.entries.toList()
-      ..sort(
-          (final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e1.value - e2.value).toInt()));
-
-    mapOfExpenses.forEach((final Category key, final double value) {
-      sanKeyListOfExpenses.add(SanKeyEntry()
-        ..name = key.name.value
-        ..value = value);
-    });
-
-    final double heightNeededToRenderIncomes = getHeightNeededToRender(sanKeyListOfIncomes);
-    final double heightNeededToRenderExpenses = getHeightNeededToRender(sanKeyListOfExpenses);
-    totalHeight = max(heightNeededToRenderIncomes, heightNeededToRenderExpenses);
+  Widget getViewSelector() {
+    return Column(
+      children: [
+        SegmentedButton<ViewAs>(
+          style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+          segments: const <ButtonSegment<ViewAs>>[
+            ButtonSegment<ViewAs>(
+              value: ViewAs.sankey,
+              label: Text('Sankey'),
+            ),
+            ButtonSegment<ViewAs>(
+              value: ViewAs.recurring,
+              label: Text('Recurring'),
+            ),
+          ],
+          selected: <ViewAs>{viewAs},
+          onSelectionChanged: (final Set<ViewAs> newSelection) {
+            setState(() {
+              viewAs = newSelection.first;
+            });
+          },
+        ),
+        YearRangeSlider(
+          minYear: Data().transactions.dateRangeActiveAccount.min!.year,
+          maxYear: Data().transactions.dateRangeActiveAccount.max!.year,
+          onChanged: (minYear, maxYear) {
+            debouncer.run(() {
+              setState(() {
+                this.minYear = minYear;
+                this.maxYear = maxYear;
+              });
+            });
+          },
+        ),
+      ],
+    );
   }
 }

@@ -7,6 +7,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/view_cashflow.dart';
 
 class DummyHostingApp extends StatefulWidget {
@@ -19,6 +20,7 @@ class DummyHostingApp extends StatefulWidget {
 class DummyHostingAppState extends State<DummyHostingApp> {
   @override
   Widget build(final BuildContext context) {
+    Data().recalculateBalances();
     return const MaterialApp(
       home: SizedBox(
         height: 600,
@@ -37,8 +39,6 @@ void main() {
   testWidgets('Cash Flow widget', (final WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const DummyHostingApp());
-
-    // Verify that our counter starts at 0.
-    expect(find.text('Cash Flow'), findsOneWidget);
+    expect(find.text('Cash Flow', skipOffstage: false), findsOneWidget);
   });
 }

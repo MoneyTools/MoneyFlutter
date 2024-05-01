@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.7.9] 2024-04-15
+
+### Added
+
+- Recurring Transactions
+
 ## [version 1.7.8] 2024-04-14
 
 ### Updated

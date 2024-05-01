@@ -1,8 +1,9 @@
 import 'dart:math';
 
 import 'package:money/helpers/list_helper.dart';
-import 'package:money/models/money_objects/accounts/account_types_enum.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
+import 'package:money/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/money_objects/transfers/transfer.dart';
@@ -31,6 +32,14 @@ class Transactions extends MoneyObjects<Transaction> {
     }
     return flattenList;
   }
+
+  Iterable<Transaction> transactionInYearRange(final int minYear, final int maxYear) {
+    return iterableList(includeDeleted: true)
+        .where((element) => isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear));
+  }
+
+  DateRange dateRangeIncludingClosedAccount = DateRange();
+  DateRange dateRangeActiveAccount = DateRange();
 
   double runningBalance = 0.00;
 
@@ -64,6 +73,11 @@ class Transactions extends MoneyObjects<Transaction> {
     // Now that everything is loaded, lets resolve the Transfers
 
     for (final Transaction transactionSource in iterableList()) {
+      dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value!);
+      if (transactionSource.accountInstance?.isOpen == true) {
+        dateRangeActiveAccount.inflate(transactionSource.dateTime.value!);
+      }
+
       final int transferId = transactionSource.transfer.value;
       transactionSource.transferInstance = null;
 
@@ -126,6 +140,10 @@ class Transactions extends MoneyObjects<Transaction> {
         }
       }
     }
+
+    // make sure that we have valid min max dates
+    dateRangeIncludingClosedAccount.ensureNoNullDates();
+    dateRangeActiveAccount.ensureNoNullDates();
   }
 
   int getNextTransactionId() {

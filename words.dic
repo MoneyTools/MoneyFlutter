@@ -9,6 +9,7 @@ cashflow
 categoryfund
 creditcard
 creditline
+debouncer
 directdebit
 directdep
 dtposted
@@ -25,6 +26,7 @@ mmdb
 moneymarket
 mymoney
 repeatpmt
+recurrings
 scaler
 securitytype
 srvchg
