@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
@@ -59,25 +60,27 @@ class ViewCashFlowState extends ViewWidgetState {
 
   @override
   Widget build(final BuildContext context) {
-    return buildViewContent(
-      Column(
-        children: <Widget>[
-          ViewHeader(
-            title: 'Cash Flow',
-            count: totalIncomes + totalExpenses,
-            description: 'See where assets are allocated.',
-            child: getViewSelector(),
-          ),
-          Expanded(child: getView()),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: <Widget>[
+        ViewHeader(
+          title: 'Cash Flow',
+          count: totalIncomes + totalExpenses,
+          description: 'See where assets are allocated.',
+          child: getViewSelector(),
+        ),
+        Expanded(
+          child: getView(),
+        ),
+      ],
     );
   }
 
   Widget getView() {
     switch (viewAs) {
       case ViewAs.sankey:
-        return PanelSanKey(minYear: this.minYear, maxYear: this.maxYear);
+        return Container(
+            color: getColorTheme(context).background, child: PanelSanKey(minYear: this.minYear, maxYear: this.maxYear));
       case ViewAs.recurring:
         return PanelRecurrings(
           minYear: this.minYear,

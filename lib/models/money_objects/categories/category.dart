@@ -11,6 +11,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/list_view/list_item_card.dart';
 import 'package:money/widgets/money_widget.dart';
+import 'package:money/widgets/rectangle.dart';
 
 // Exports
 export 'package:money/models/money_objects/categories/category_types.dart';
@@ -227,6 +228,14 @@ class Category extends MoneyObject {
         ),
       );
     };
+  }
+
+  Widget getColorWidget() {
+    return MyCircle(colorFill: getColorFromString(this.color.value), size: 12);
+  }
+
+  Widget getRectangleWidget() {
+    return MyRectangle(colorFill: getColorFromString(this.color.value), size: 12);
   }
 
   // Fields for this instance

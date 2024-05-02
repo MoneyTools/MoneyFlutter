@@ -2,11 +2,23 @@ import 'package:flutter/material.dart';
 
 /// return the inverted color
 Color invertColor(final Color color) {
-  final int r = 255 - color.red;
-  final int g = 255 - color.green;
-  final int b = 255 - color.blue;
+  // Calculate inverted color by subtracting each color channel from 255
+  int invertedRed = 255 - color.red;
+  int invertedGreen = 255 - color.green;
+  int invertedBlue = 255 - color.blue;
 
-  return Color.fromARGB((color.opacity * 255).round(), r, g, b);
+  // Return the inverted color
+  return Color.fromRGBO(invertedRed, invertedGreen, invertedBlue, 1.0);
+}
+
+Color contrastColor(Color color) {
+  // Calculate the luminance of the color
+  final luminance = (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+
+  // Determine whether to make the contrast color black or white based on the luminance
+  final contrastColor = luminance > 0.5 ? Colors.black : Colors.white;
+
+  return contrastColor;
 }
 
 ThemeData getTheme(final BuildContext context) {

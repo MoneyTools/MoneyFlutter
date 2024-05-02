@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'package:money/widgets/rectangle.dart';
 
 class MyCircle extends StatelessWidget {
   final Color colorFill;
@@ -17,19 +17,13 @@ class MyCircle extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return DottedBorder(
-      padding: EdgeInsets.zero,
-      dashPattern: colorFill == Colors.transparent ? const <double>[4.0, 2.0] : const <double>[100.0, 0.0],
-      color: colorBorder,
-      borderType: BorderType.Circle,
-      child: Container(
-        width: size,
-        height: size,
-        decoration: BoxDecoration(
-          color: colorFill,
-          shape: BoxShape.circle,
-        ),
-      ),
+    return MyRectangle(
+      key: key,
+      shape: BoxShape.circle,
+      colorFill: colorFill,
+      colorBorder: colorBorder,
+      size: size,
+      showBorder: showBorder,
     );
   }
 }
