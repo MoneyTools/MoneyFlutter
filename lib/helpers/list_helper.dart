@@ -119,3 +119,27 @@ class SortedSet<T> {
     return low;
   }
 }
+
+class KeyValue {
+  String key;
+  dynamic value;
+
+  KeyValue({required this.key, required this.value});
+}
+
+List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
+  // Calculate total amount
+  double totalAmount = keyValuePairs.fold(0, (prev, entry) => prev + entry.value);
+
+  // Convert each amount to a percentage and retain key association
+  List<KeyValue> percentages = keyValuePairs.map((entry) {
+    double percentage = (entry.value / totalAmount) * 100;
+    return KeyValue(key: entry.key, value: percentage.isNaN ? 0.0 : percentage); // Handle division by zero
+  }).toList();
+
+  return percentages;
+}
+
+List<KeyValue> convertToDoubleToInt(List<KeyValue> keyValuePairs) {
+  return keyValuePairs.map((entry) => KeyValue(key: entry.key, value: entry.value.toInt())).toList();
+}

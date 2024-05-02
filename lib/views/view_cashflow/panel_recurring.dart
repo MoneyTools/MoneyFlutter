@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/box.dart';
 import 'package:money/widgets/money_widget.dart';
+import 'package:money/widgets/top_bars.dart';
+
+class PayeeCumulate {
+  int payeeId = -1;
+  int numberOfInstances = 0;
+  List<Map<int, double>> amountByCategories = [];
+}
 
 class PanelRecurrings extends StatefulWidget {
   final int minYear;
@@ -17,42 +26,25 @@ class PanelRecurrings extends StatefulWidget {
 }
 
 class _PanelRecurringsState extends State<PanelRecurrings> {
-  List<RecurringPayment> recurringPayments = [];
+  List<RecurringPayment> recurringPaymentsIncome = [];
+  List<RecurringPayment> recurringPaymentsExpenses = [];
 
   @override
   Widget build(BuildContext context) {
     final transactions = Data().transactions.transactionInYearRange(widget.minYear, widget.maxYear);
 
-    recurringPayments = findMonthlyRecurringPayments(transactions.toList());
-
+    recurringPaymentsIncome = findMonthlyRecurringPayments(transactions.toList(), true);
     List<Widget> widgetsIncomes = [];
-    List<Widget> widgetsExpenses = [];
-
-    for (final payment in recurringPayments) {
-      final card = Box(
-        margin: 4,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SelectableText(
-              Data().payees.getNameFromId(payment.payeeId),
-              style: getTextTheme(context).titleMedium,
-            ),
-            Row(
-              children: [
-                SelectableText('${payment.frequency} occurrence with an average '),
-                MoneyWidget(amountModel: MoneyModel(amount: payment.averageAmount)),
-              ],
-            ),
-          ],
-        ),
-      );
-      if (payment.averageAmount <= 0) {
-        widgetsExpenses.add(card);
-      } else {
-        widgetsIncomes.add(card);
-      }
+    for (final RecurringPayment payment in recurringPaymentsIncome) {
+      widgetsIncomes.add(createCardOutOfPayments(context, payment, true));
     }
+
+    recurringPaymentsExpenses = findMonthlyRecurringPayments(transactions.toList(), false);
+    List<Widget> widgetsExpenses = [];
+    for (final RecurringPayment payment in recurringPaymentsExpenses) {
+      widgetsExpenses.add(createCardOutOfPayments(context, payment, false));
+    }
+
     return SingleChildScrollView(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -65,6 +57,44 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
         ],
       ),
     );
+  }
+
+  Widget createCardOutOfPayments(BuildContext context, RecurringPayment payment, bool asIncome) {
+    return Box(
+      margin: 4,
+      width: 350,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SelectableText(
+            Data().payees.getNameFromId(payment.payeeId),
+            style: getTextTheme(context).titleMedium,
+          ),
+          Column(
+            children: [
+              Row(
+                children: [
+                  SelectableText('${payment.frequency} occurrence with an average '),
+                  MoneyWidget(amountModel: MoneyModel(amount: payment.averageAmount * (asIncome ? 1 : -1))),
+                ],
+              ),
+              BarChartWidget(listAsAmount: getCategoriesOfPayee(payment), asIncome: asIncome),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  List<KeyValue> getCategoriesOfPayee(RecurringPayment payment) {
+    List<KeyValue> kvs = [];
+    for (int i = 0; i < payment.categoryIds.length; i++) {
+      kvs.add(KeyValue(
+        key: Data().categories.getNameFromId(payment.categoryIds[i]),
+        value: payment.categorySums[i],
+      ));
+    }
+    return kvs;
   }
 
   Widget header(final BuildContext context, final String title) {
@@ -82,35 +112,47 @@ class RecurringPayment {
   int payeeId;
   double averageAmount;
   int frequency;
+  List<int> categoryIds = [];
+  List<double> categorySums = [];
 
-  RecurringPayment(this.payeeId, this.averageAmount, this.frequency);
+  RecurringPayment(this.payeeId, this.averageAmount, this.frequency, this.categoryIds, this.categorySums);
 }
 
-List<RecurringPayment> findMonthlyRecurringPayments(List<Transaction> transactions) {
-  Map<int, List<double>> payeeIdToAmounts = {};
-  Map<int, List<int>> payeeIdToMonths = {};
+List<RecurringPayment> findMonthlyRecurringPayments(List<Transaction> transactions, bool forIncome) {
+  AccumulatorList<int, double> payeeIdToAmounts = AccumulatorList<int, double>();
+  AccumulatorList<int, int> payeeIdToMonths = AccumulatorList<int, int>();
+  AccumulatorList<int, int> payeeIdCategoryIds = AccumulatorList<int, int>();
 
   // Step 1: Group transactions by payeeId and record transaction months
   for (var transaction in transactions) {
-    if (!payeeIdToAmounts.containsKey(transaction.payee.value)) {
-      payeeIdToAmounts[transaction.payee.value] = [];
-      payeeIdToMonths[transaction.payee.value] = [];
+    if (forIncome && transaction.amount.value.amount > 0 ||
+        forIncome == false && transaction.amount.value.amount <= 0) {
+      payeeIdToAmounts.cumulate(transaction.payee.value, transaction.amount.value.amount.abs());
+      payeeIdToMonths.cumulate(transaction.payee.value, transaction.dateTime.value!.month);
+      payeeIdCategoryIds.cumulate(transaction.payee.value, transaction.categoryId.value);
     }
-    payeeIdToAmounts[transaction.payee.value]!.add(transaction.amount.value.amount);
-    payeeIdToMonths[transaction.payee.value]!.add(transaction.dateTime.value!.month);
   }
 
   // Step 2: Calculate average amount and frequency for each payeeId
   List<RecurringPayment> monthlyRecurringPayments = [];
-  payeeIdToAmounts.forEach((payeeId, amounts) {
-    List<int> months = payeeIdToMonths[payeeId]!;
+  payeeIdToAmounts.getKeys().forEach((payeeId) {
+    List<double> amounts = payeeIdToAmounts.getValues(payeeId);
+    List<int> months = payeeIdToMonths.getValues(payeeId);
     double totalAmount = amounts.reduce((a, b) => a + b);
     double averageAmount = totalAmount / amounts.length;
     int frequency = amounts.length;
 
     // Check if the frequency indicates monthly recurrence
     if (frequency > 2 && isMonthlyRecurrence(months)) {
-      monthlyRecurringPayments.add(RecurringPayment(payeeId, averageAmount, frequency));
+      monthlyRecurringPayments.add(
+        RecurringPayment(
+          payeeId,
+          averageAmount,
+          frequency,
+          payeeIdCategoryIds.getValues(payeeId),
+          payeeIdToAmounts.getValues(payeeId),
+        ),
+      );
     }
   });
 
