@@ -28,7 +28,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
 
     return Chart(
       key: Key(selectedIds.toString()),
-      list: list.take(8).toList(),
+      list: list.take(10).toList(),
       variableNameHorizontal: 'Category',
       variableNameVertical: 'Balance',
     );

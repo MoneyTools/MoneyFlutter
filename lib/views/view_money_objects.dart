@@ -363,7 +363,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return SingleChildScrollView(
       key: Key('detail_panel_${moneyObject.uniqueId}'),
       child: MoneyObjectCard(
-        title: 'Details',
+        title: getClassNameSingular(),
         moneyObject: moneyObject,
       ),
     );

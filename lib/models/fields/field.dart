@@ -171,7 +171,7 @@ class Field<T> {
 
   Widget getValueWidgetForDetailView(final dynamic value) {
     if (type == FieldType.widget) {
-      return value;
+      return Row(children: [const Spacer(), value]);
     } else {
       return SelectableText(
         textAlign: TextAlign.right,

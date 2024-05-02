@@ -21,9 +21,20 @@ class MoneyObjectCard extends StatelessWidget {
       widgets.add(
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10.0),
-          child: Text(
-            title,
-            style: getTextTheme(context).headlineSmall,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                title,
+                style: getTextTheme(context).headlineSmall,
+              ),
+              IconButton(
+                icon: const Icon(Icons.copy_all),
+                onPressed: () {
+                  copyToClipboardAndInformUser(context, moneyObject!.getPersistableJSon().toString());
+                },
+              ),
+            ],
           ),
         ),
       );
@@ -39,9 +50,12 @@ class MoneyObjectCard extends StatelessWidget {
 
     return Box(
       color: getColorTheme(context).primaryContainer,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widgets,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: widgets,
+        ),
       ),
     );
   }

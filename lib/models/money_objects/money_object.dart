@@ -219,20 +219,28 @@ abstract class MoneyObject {
 
   Widget _buildNameValuePair(
     Field<dynamic> fieldDefinition,
-    fieldValue,
+    final dynamic fieldValue,
   ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(fieldDefinition.name),
-            fieldDefinition.getValueWidgetForDetailView(fieldValue),
-          ],
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Colors.grey.withOpacity(0.5),
+          ),
         ),
-        const Divider(),
-      ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+            child: Text(fieldDefinition.name),
+          ),
+          Expanded(
+            child: fieldDefinition.getValueWidgetForDetailView(fieldValue),
+          ),
+        ],
+      ),
     );
   }
 
