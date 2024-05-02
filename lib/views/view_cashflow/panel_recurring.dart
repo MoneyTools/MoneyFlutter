@@ -15,11 +15,17 @@ class PayeeCumulate {
   List<Map<int, double>> amountByCategories = [];
 }
 
+enum ViewRecurringAs {
+  incomes,
+  expenses,
+}
+
 class PanelRecurrings extends StatefulWidget {
+  final ViewRecurringAs viewRecurringAs;
   final int minYear;
   final int maxYear;
 
-  const PanelRecurrings({super.key, required this.minYear, required this.maxYear});
+  const PanelRecurrings({super.key, required this.minYear, required this.maxYear, required this.viewRecurringAs});
 
   @override
   State<PanelRecurrings> createState() => _PanelRecurringsState();
@@ -33,36 +39,23 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   Widget build(BuildContext context) {
     final transactions = Data().transactions.transactionInYearRange(widget.minYear, widget.maxYear);
 
-    recurringPaymentsIncome = findMonthlyRecurringPayments(transactions.toList(), true);
+    recurringPaymentsIncome =
+        findMonthlyRecurringPayments(transactions.toList(), widget.viewRecurringAs == ViewRecurringAs.incomes);
     List<Widget> widgetsIncomes = [];
     for (final RecurringPayment payment in recurringPaymentsIncome) {
-      widgetsIncomes.add(createCardOutOfPayments(context, payment, true));
-    }
-
-    recurringPaymentsExpenses = findMonthlyRecurringPayments(transactions.toList(), false);
-    List<Widget> widgetsExpenses = [];
-    for (final RecurringPayment payment in recurringPaymentsExpenses) {
-      widgetsExpenses.add(createCardOutOfPayments(context, payment, false));
+      widgetsIncomes.add(createCardOutOfPayments(context, payment, widget.viewRecurringAs == ViewRecurringAs.incomes));
     }
 
     return SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          header(context, 'Incomes'),
-          Wrap(children: widgetsIncomes),
-          header(context, 'Expenses'),
-          Wrap(children: widgetsExpenses),
-        ],
-      ),
+      child: Wrap(children: widgetsIncomes),
     );
   }
 
   Widget createCardOutOfPayments(BuildContext context, RecurringPayment payment, bool asIncome) {
     return Box(
       margin: 4,
-      width: 350,
+      width: 400,
+      height: 200,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -70,17 +63,15 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
             Data().payees.getNameFromId(payment.payeeId),
             style: getTextTheme(context).titleMedium,
           ),
-          Column(
+          const Spacer(),
+          Row(
             children: [
-              Row(
-                children: [
-                  SelectableText('${payment.frequency} occurrence with an average '),
-                  MoneyWidget(amountModel: MoneyModel(amount: payment.averageAmount * (asIncome ? 1 : -1))),
-                ],
-              ),
-              BarChartWidget(listAsAmount: getCategoriesOfPayee(payment), asIncome: asIncome),
+              SelectableText('${payment.frequency} occurrence with an average '),
+              MoneyWidget(amountModel: MoneyModel(amount: payment.averageAmount * (asIncome ? 1 : -1))),
             ],
           ),
+          const Spacer(),
+          BarChartWidget(listAsAmount: getCategoriesOfPayee(payment), asIncome: asIncome),
         ],
       ),
     );

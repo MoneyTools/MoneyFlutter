@@ -9,6 +9,7 @@ import 'package:money/views/view.dart';
 import 'package:money/views/view_cashflow/panel_recurring.dart';
 import 'package:money/views/view_cashflow/panel_sankey.dart';
 import 'package:money/views/view_header.dart';
+import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/widgets/years_range_selector.dart';
 
@@ -26,6 +27,7 @@ enum ViewAs {
 
 class ViewCashFlowState extends ViewWidgetState {
   ViewAs viewAs = ViewAs.sankey;
+  ViewRecurringAs viewRecurringAs = ViewRecurringAs.expenses;
 
   late int minYear;
   late int maxYear;
@@ -77,31 +79,24 @@ class ViewCashFlowState extends ViewWidgetState {
       case ViewAs.sankey:
         return PanelSanKey(minYear: this.minYear, maxYear: this.maxYear);
       case ViewAs.recurring:
-        return PanelRecurrings(minYear: this.minYear, maxYear: this.maxYear);
+        return PanelRecurrings(
+          minYear: this.minYear,
+          maxYear: this.maxYear,
+          viewRecurringAs: viewRecurringAs,
+        );
     }
   }
 
   Widget getViewSelector() {
     return Column(
       children: [
-        SegmentedButton<ViewAs>(
-          style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-          segments: const <ButtonSegment<ViewAs>>[
-            ButtonSegment<ViewAs>(
-              value: ViewAs.sankey,
-              label: Text('Sankey'),
-            ),
-            ButtonSegment<ViewAs>(
-              value: ViewAs.recurring,
-              label: Text('Recurring'),
-            ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildSelectView(),
+            gapLarge(),
+            _buildIncomeVsExpense(),
           ],
-          selected: <ViewAs>{viewAs},
-          onSelectionChanged: (final Set<ViewAs> newSelection) {
-            setState(() {
-              viewAs = newSelection.first;
-            });
-          },
         ),
         YearRangeSlider(
           minYear: Data().transactions.dateRangeActiveAccount.min!.year,
@@ -116,6 +111,54 @@ class ViewCashFlowState extends ViewWidgetState {
           },
         ),
       ],
+    );
+  }
+
+  Widget _buildSelectView() {
+    return SegmentedButton<ViewAs>(
+      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      segments: const <ButtonSegment<ViewAs>>[
+        ButtonSegment<ViewAs>(
+          value: ViewAs.sankey,
+          label: Text('Sankey'),
+        ),
+        ButtonSegment<ViewAs>(
+          value: ViewAs.recurring,
+          label: Text('Recurring'),
+        ),
+      ],
+      selected: <ViewAs>{viewAs},
+      onSelectionChanged: (final Set<ViewAs> newSelection) {
+        setState(() {
+          viewAs = newSelection.first;
+        });
+      },
+    );
+  }
+
+  Widget _buildIncomeVsExpense() {
+    if (viewAs == ViewAs.sankey) {
+      return const SizedBox();
+    }
+
+    return SegmentedButton<ViewRecurringAs>(
+      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      segments: const <ButtonSegment<ViewRecurringAs>>[
+        ButtonSegment<ViewRecurringAs>(
+          value: ViewRecurringAs.incomes,
+          label: Text('Incomes'),
+        ),
+        ButtonSegment<ViewRecurringAs>(
+          value: ViewRecurringAs.expenses,
+          label: Text('Expenses'),
+        ),
+      ],
+      selected: <ViewRecurringAs>{viewRecurringAs},
+      onSelectionChanged: (final Set<ViewRecurringAs> newSelection) {
+        setState(() {
+          viewRecurringAs = newSelection.first;
+        });
+      },
     );
   }
 }
