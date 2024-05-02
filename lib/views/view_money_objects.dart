@@ -129,8 +129,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
                 InfoPanelHeader.buildEditButton(
                   () {
                     showDialogAndActionsForMoneyObject(
-                      context: context,
-                      moneyObject: getFirstSelectedItem() as MoneyObject,
+                      context,
+                      getFirstSelectedItem() as MoneyObject,
                     );
                   },
                 ),
@@ -365,6 +365,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       child: MoneyObjectCard(
         title: getClassNameSingular(),
         moneyObject: moneyObject,
+        onEdit: showDialogAndActionsForMoneyObject,
+        onDelete: onDeleteRequestedByUser,
       ),
     );
   }

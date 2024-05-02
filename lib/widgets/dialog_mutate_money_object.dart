@@ -4,10 +4,10 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/dialog_full_screen.dart';
 
-Future<dynamic> showDialogAndActionsForMoneyObject({
-  required final BuildContext context,
-  required final MoneyObject moneyObject,
-}) {
+showDialogAndActionsForMoneyObject(
+  final BuildContext context,
+  final MoneyObject moneyObject,
+) {
   return showDialog(
       context: context,
       builder: (BuildContext context) {

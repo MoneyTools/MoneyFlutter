@@ -7,11 +7,15 @@ import 'package:money/widgets/box.dart';
 class MoneyObjectCard extends StatelessWidget {
   final String title;
   final MoneyObject? moneyObject;
+  final Function? onEdit;
+  final Function? onDelete;
 
   const MoneyObjectCard({
     super.key,
     required this.title,
     this.moneyObject,
+    this.onEdit,
+    this.onDelete,
   });
 
   @override
@@ -28,12 +32,36 @@ class MoneyObjectCard extends StatelessWidget {
                 title,
                 style: getTextTheme(context).headlineSmall,
               ),
-              IconButton(
-                icon: const Icon(Icons.copy_all),
-                onPressed: () {
-                  copyToClipboardAndInformUser(context, moneyObject!.getPersistableJSon().toString());
-                },
-              ),
+              Row(
+                children: [
+                  if (onEdit != null)
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        onEdit?.call(
+                          context,
+                          moneyObject,
+                        );
+                      },
+                    ),
+                  if (onDelete != null)
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline),
+                      onPressed: () {
+                        onDelete?.call(
+                          context,
+                          moneyObject,
+                        );
+                      },
+                    ),
+                  IconButton(
+                    icon: const Icon(Icons.copy_all),
+                    onPressed: () {
+                      copyToClipboardAndInformUser(context, moneyObject!.getPersistableJSon().toString());
+                    },
+                  ),
+                ],
+              )
             ],
           ),
         ),

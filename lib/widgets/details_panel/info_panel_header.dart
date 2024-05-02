@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
@@ -57,8 +58,7 @@ class InfoPanelHeader extends StatelessWidget {
                 _buildExpando(),
                 _buildViewSelections(constraints),
                 const Spacer(),
-                ...actionButtons,
-                const Spacer(),
+                IntrinsicWidth(child: Row(children: actionButtons)),
                 gapMedium(),
                 _buildCurrencySelections(constraints),
               ],

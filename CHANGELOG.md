@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.0] 2024-05-02
+
+### Updated
+
+- Detail panel now offers Edit, Delete, Copy actions
+
 ## [version 1.7.9] 2024-04-15
 
 ### Added
