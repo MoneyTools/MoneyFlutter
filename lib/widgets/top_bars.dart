@@ -36,7 +36,9 @@ class BarChartWidget extends StatelessWidget {
       bars.add(_buildBar(barWidth, listAsAmount[top].key, listAsAmount[top].value, Colors.blue));
     }
 
-    bars.add(_buildBar(maxWidthOfBars * otherSumPercentages / 100, 'Others', otherSumValues, Colors.grey));
+    if (otherSumValues > 0) {
+      bars.add(_buildBar(maxWidthOfBars * otherSumPercentages / 100, 'Others', otherSumValues, Colors.grey));
+    }
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
