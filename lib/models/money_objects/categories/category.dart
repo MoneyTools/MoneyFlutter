@@ -113,10 +113,7 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     defaultValue: '',
-    valueFromInstance: (final MoneyObject instance) => MyCircle(
-      colorFill: getColorFromString((instance as Category).color.value),
-      size: 12,
-    ),
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).getColorWidget(),
     valueForSerialization: (final MoneyObject instance) => (instance as Category).color.value,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByString((a as Category).color.value, (b as Category).color.value, ascending),
@@ -223,15 +220,29 @@ class Category extends MoneyObject {
             const SizedBox(
               width: 8,
             ),
-            MyCircle(colorFill: getColorFromString(this.color.value), size: 12),
+            getColorWidget(),
           ],
         ),
       );
     };
   }
 
+  Color getColorOrAncestorsColor() {
+    if (this.color.value.isNotEmpty) {
+      return getColorFromString(this.color.value);
+    }
+    if (this.parentId.value != -1) {
+      final Category? parentCategory = Data().categories.get(this.parentId.value);
+      if (parentCategory != null) {
+        return parentCategory.getColorOrAncestorsColor();
+      }
+    }
+    // reach the top
+    return Colors.transparent;
+  }
+
   Widget getColorWidget() {
-    return MyCircle(colorFill: getColorFromString(this.color.value), size: 12);
+    return MyCircle(colorFill: getColorOrAncestorsColor(), size: 12);
   }
 
   Widget getRectangleWidget() {
