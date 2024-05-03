@@ -27,16 +27,16 @@ class DistributionBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double sum = segments.fold(0, (previousValue, element) => previousValue + element.amount);
+    double sum = segments.fold(0, (previousValue, element) => previousValue + element.amount.abs());
     if (sum > 0) {
       for (final segment in segments) {
-        segment.percentage = segment.amount / sum;
+        segment.percentage = segment.amount.abs() / sum;
       }
     }
     // Sort descending by percentage
     segments.sort((a, b) => b.percentage.compareTo(a.percentage));
 
-    initWidgets();
+    initWidgets(context);
 
     return Column(
       children: [
@@ -46,7 +46,7 @@ class DistributionBar extends StatelessWidget {
     );
   }
 
-  void initWidgets() {
+  void initWidgets(final BuildContext context) {
     for (final segment in segments) {
       Color backgroundColorOfSegment = segment.color;
       Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
@@ -59,7 +59,7 @@ class DistributionBar extends StatelessWidget {
       segmentWidgets.add(
         Expanded(
           // use the percentage to determine the relative width
-          flex: (segment.percentage * 100).toInt(),
+          flex: (segment.percentage * 100).toInt().abs(),
           child: Tooltip(
             message: segment.title,
             child: Container(
@@ -68,7 +68,7 @@ class DistributionBar extends StatelessWidget {
                 color: backgroundColorOfSegment,
                 border: Border(
                   right: BorderSide(
-                    color: Colors.black,
+                    color: Theme.of(context).scaffoldBackgroundColor,
                     // Width of border (last segment has no border)
                     width: segment == segments.last ? 0.0 : 2.0,
                   ),
@@ -143,7 +143,6 @@ class DistributionBar extends StatelessWidget {
             child: MoneyWidget(
           amountModel: MoneyModel(
             amount: value,
-            autoColor: false,
           ),
           asTile: false,
         )),

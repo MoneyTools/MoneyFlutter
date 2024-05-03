@@ -4,14 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
-import 'package:money/models/money_model.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/view_cashflow/recurring/recurring_card.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
-import 'package:money/widgets/box.dart';
 import 'package:money/widgets/distribution_bar.dart';
-import 'package:money/widgets/money_widget.dart';
 
 enum ViewRecurringAs {
   incomes,
@@ -42,9 +40,11 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     );
 
     // Sort descending
-    recurringPayments.sort((a, b) {
-      return b.averageAmount.compareTo(a.averageAmount);
-    });
+    if (widget.viewRecurringAs == ViewRecurringAs.incomes) {
+      recurringPayments.sort((a, b) => b.total.compareTo(a.total));
+    } else {
+      recurringPayments.sort((a, b) => a.total.compareTo(b.total));
+    }
 
     List<Widget> widgets = [];
 
@@ -84,7 +84,11 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   Widget _buildRecurringCard(BuildContext context, RecurringPayment payment, bool asIncome) {
     List<Pair<int, double>> list = payment.getListOfCategoryIdAndSum();
     // Sort descending
-    list.sort((a, b) => b.second.compareTo(a.second));
+    if (asIncome) {
+      list.sort((a, b) => b.second.compareTo(a.second));
+    } else {
+      list.sort((a, b) => a.second.compareTo(b.second));
+    }
 
     List<Distribution> listForDistributionBar = [];
 
@@ -107,35 +111,9 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
       }
     }
 
-    return Box(
-      color: getColorTheme(context).background,
-      width: 400,
-      height: 220,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SelectableText(
-                  Data().payees.getNameFromId(payment.payeeId),
-                  style: getTextTheme(context).titleMedium,
-                ),
-                Row(
-                  children: [
-                    SelectableText('${payment.frequency} occurrence with an average '),
-                    MoneyWidget(amountModel: MoneyModel(amount: payment.averageAmount * (asIncome ? 1 : -1))),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          Expanded(child: DistributionBar(segments: listForDistributionBar)),
-        ],
-      ),
+    return RecurringCard(
+      payment: payment,
+      listForDistributionBar: listForDistributionBar,
     );
   }
 
@@ -169,7 +147,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     for (var transaction in transactions) {
       if (forIncome && transaction.amount.value.amount > 0 ||
           forIncome == false && transaction.amount.value.amount <= 0) {
-        payeeIdToAmounts.cumulate(transaction.payee.value, transaction.amount.value.amount.abs());
+        payeeIdToAmounts.cumulate(transaction.payee.value, transaction.amount.value.amount);
         payeeIdToMonths.cumulate(transaction.payee.value, transaction.dateTime.value!.month);
         payeeIdCategoryIds.cumulate(transaction.payee.value, transaction.categoryId.value);
       }
@@ -177,11 +155,12 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
 
     // Step 2: Calculate average amount and frequency for each payeeId
     List<RecurringPayment> monthlyRecurringPayments = [];
+    final numberOfYears = (widget.maxYear - widget.minYear) + 1;
     payeeIdToAmounts.getKeys().forEach((payeeId) {
       List<double> amounts = payeeIdToAmounts.getValues(payeeId);
       List<int> months = payeeIdToMonths.getValues(payeeId);
+
       double totalAmount = amounts.reduce((a, b) => a + b);
-      double averageAmount = totalAmount / amounts.length;
       int frequency = amounts.length;
 
       // Check if the frequency indicates monthly recurrence
@@ -189,7 +168,8 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
         monthlyRecurringPayments.add(
           RecurringPayment(
             payeeId,
-            averageAmount,
+            numberOfYears,
+            totalAmount,
             frequency,
             payeeIdCategoryIds.getValues(payeeId),
             payeeIdToAmounts.getValues(payeeId),

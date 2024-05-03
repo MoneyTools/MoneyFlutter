@@ -4,12 +4,13 @@ import 'package:money/helpers/list_helper.dart';
 
 class RecurringPayment {
   int payeeId;
-  double averageAmount;
+  double total;
+  int numberOfYears;
   int frequency;
   List<int> categoryIds = [];
   List<double> categorySums = [];
 
-  RecurringPayment(this.payeeId, this.averageAmount, this.frequency, this.categoryIds, this.categorySums);
+  RecurringPayment(this.payeeId, this.numberOfYears, this.total, this.frequency, this.categoryIds, this.categorySums);
 
   List<Pair<int, double>> getListOfCategoryIdAndSum() {
     List<Pair<int, double>> list = [];
