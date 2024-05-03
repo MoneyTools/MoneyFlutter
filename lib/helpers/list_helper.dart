@@ -139,3 +139,22 @@ List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
 
   return percentages;
 }
+
+class Pair<T, U> {
+  final T first;
+  final U second;
+
+  const Pair(this.first, this.second);
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Pair<T, U> && other.first == first && other.second == second;
+  }
+
+  @override
+  int get hashCode => first.hashCode ^ second.hashCode;
+
+  @override
+  String toString() => '($first, $second)';
+}

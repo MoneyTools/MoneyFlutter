@@ -5,13 +5,13 @@ import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_model.dart';
+import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
 import 'package:money/widgets/box.dart';
 import 'package:money/widgets/distribution_bar.dart';
 import 'package:money/widgets/money_widget.dart';
-import 'package:money/widgets/top_bars.dart';
 
 enum ViewRecurringAs {
   incomes,
@@ -82,32 +82,29 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   }
 
   Widget _buildRecurringCard(BuildContext context, RecurringPayment payment, bool asIncome) {
-    final List<KeyValue> lkv = getCategoriesOfPayee(payment);
-    List<KeyValue> listAsPercentage = convertToPercentages(lkv);
-    listAsPercentage.sort((a, b) => b.value.compareTo(a.value));
+    List<Pair<int, double>> list = payment.getListOfCategoryIdAndSum();
+    // Sort descending
+    list.sort((a, b) => b.second.compareTo(a.second));
 
-    // Extract top 3 values and calculate total value of others
-    int topCategoryToShow = min(3, listAsPercentage.length);
-    listAsPercentage = listAsPercentage.take(topCategoryToShow).toList();
+    List<Distribution> listForDistributionBar = [];
 
-    List<Color> colors = [];
-    List<double> distributionInPercentages = [];
-    double percentageRemaining = 1;
-
-    for (final kvp in listAsPercentage) {
-      if (kvp.key == -1) {
-        colors.add(Colors.transparent);
+    // keep at most [n] number of items
+    int topCategoryToShow = min(4, list.length);
+    for (final categoryIdAndSum in list.take(topCategoryToShow)) {
+      final Category? category = Data().categories.get(categoryIdAndSum.first);
+      if (category == null) {
+        listForDistributionBar.add(Distribution(
+          title: '< no category >',
+          color: Colors.transparent,
+          amount: categoryIdAndSum.second,
+        ));
       } else {
-        colors.add(Data().categories.get(kvp.key)!.getColorOrAncestorsColor());
+        listForDistributionBar.add(Distribution(
+          title: category.name.value,
+          color: category.getColorOrAncestorsColor(),
+          amount: categoryIdAndSum.second,
+        ));
       }
-      double percentageForThisCategory = kvp.value / 100;
-      percentageRemaining -= percentageForThisCategory;
-      distributionInPercentages.add(percentageForThisCategory);
-    }
-
-    if (percentageRemaining > 0.5) {
-      colors.add(Colors.grey);
-      distributionInPercentages.add(percentageRemaining);
     }
 
     return Box(
@@ -136,33 +133,21 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
               ],
             ),
           ),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                DistributionBar(
-                  colors: colors,
-                  percentages: distributionInPercentages, // Percentages for segments
-                ),
-                BarChartWidget(listCategoryNameToAmount: getCategoriesOfPayee(payment), asIncome: asIncome),
-              ],
-            ),
-          ),
+          Expanded(child: DistributionBar(segments: listForDistributionBar)),
         ],
       ),
     );
   }
 
-  List<KeyValue> getCategoriesOfPayee(RecurringPayment payment) {
-    List<KeyValue> kvs = [];
+  List<Pair<int, double>> getCategoryIdAndSum(RecurringPayment payment) {
+    List<Pair<int, double>> list = [];
     for (int i = 0; i < payment.categoryIds.length; i++) {
-      kvs.add(KeyValue(
-        key: payment.categoryIds[i],
-        value: payment.categorySums[i],
+      list.add(Pair<int, double>(
+        payment.categoryIds[i],
+        payment.categorySums[i],
       ));
     }
-    return kvs;
+    return list;
   }
 
   Widget header(final BuildContext context, final String title) {

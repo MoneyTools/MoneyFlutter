@@ -1,32 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/money_model.dart';
+import 'package:money/widgets/circle.dart';
+import 'package:money/widgets/gaps.dart';
+import 'package:money/widgets/money_widget.dart';
+
+class Distribution {
+  final String title;
+  final Color color;
+  final double amount;
+  double percentage = 0;
+
+  Distribution({
+    required this.title,
+    required this.color,
+    required this.amount,
+  });
+}
 
 class DistributionBar extends StatelessWidget {
-  final List<Color> colors;
-  final List<double> percentages; // from 0.00 to 1.00
+  final List<Distribution> segments;
+  final List<Widget> segmentWidgets = [];
+  final List<Widget> detailRowWidgets = [];
 
-  const DistributionBar({super.key, required this.colors, required this.percentages});
+  DistributionBar({super.key, required this.segments});
 
   @override
   Widget build(BuildContext context) {
-    assert(colors.length == percentages.length, 'Colors and percentages must have the same length.');
+    double sum = segments.fold(0, (previousValue, element) => previousValue + element.amount);
+    if (sum > 0) {
+      for (final segment in segments) {
+        segment.percentage = segment.amount / sum;
+      }
+    }
+    // Sort descending by percentage
+    segments.sort((a, b) => b.percentage.compareTo(a.percentage));
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(3), // Radius for rounded ends
-      child: SizedBox(
-        height: 20,
-        child: Row(
-          children: _buildSegments(),
-        ),
-      ),
+    initWidgets();
+
+    return Column(
+      children: [
+        _buildHorizontalBar(),
+        Expanded(child: _buildRowOfDetails()),
+      ],
     );
   }
 
-  List<Widget> _buildSegments() {
-    List<Widget> segments = [];
-
-    for (int i = 0; i < colors.length; i++) {
-      Color backgroundColorOfSegment = colors[i];
+  void initWidgets() {
+    for (final segment in segments) {
+      Color backgroundColorOfSegment = segment.color;
       Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
 
       if (backgroundColorOfSegment.opacity == 0) {
@@ -34,37 +56,98 @@ class DistributionBar extends StatelessWidget {
         foregroundColorOfSegment = Colors.white;
       }
 
-      segments.add(
+      segmentWidgets.add(
         Expanded(
-          flex: (percentages[i] * 100).toInt(), // Percentage of total
-          child: Container(
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: backgroundColorOfSegment, // Color of segment
-              border: Border(
-                right: BorderSide(
-                  color: Colors.black, // Border color
-                  width: i < segments.length - 1 ? 3.0 : 0.0, // Width of border (last segment has no border)
+          // use the percentage to determine the relative width
+          flex: (segment.percentage * 100).toInt(),
+          child: Tooltip(
+            message: segment.title,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: backgroundColorOfSegment,
+                border: Border(
+                  right: BorderSide(
+                    color: Colors.black,
+                    // Width of border (last segment has no border)
+                    width: segment == segments.last ? 0.0 : 2.0,
+                  ),
                 ),
               ),
+              child: _builtSegmentOverlayText(segment.percentage, foregroundColorOfSegment),
             ),
-            child: _builtText(percentages[i], foregroundColorOfSegment),
           ),
         ),
       );
-    }
 
-    return segments;
+      detailRowWidgets.add(_buildDetailRow(
+        segment.title,
+        MyCircle(colorFill: segment.color, size: 16),
+        segment.amount,
+      ));
+    }
   }
 
-  Widget _builtText(final double percentage, final Color color) {
+  Widget _buildHorizontalBar() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(3), // Radius for rounded ends
+      child: SizedBox(
+        height: 20,
+        child: Row(
+          children: segmentWidgets,
+        ),
+      ),
+    );
+  }
+
+  Widget _builtSegmentOverlayText(final double percentage, final Color color) {
     int value = (percentage * 100).toInt();
     if (value <= 0) {
       return const SizedBox();
     }
     return Text(
       '$value%',
+      softWrap: false,
+      overflow: TextOverflow.clip,
       style: TextStyle(color: color, fontSize: 9),
+    );
+  }
+
+  Widget _buildRowOfDetails() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: detailRowWidgets,
+      ),
+    );
+  }
+
+  Widget _buildDetailRow(String label, Widget colorWidget, double value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        colorWidget,
+        gapSmall(),
+        Expanded(
+            flex: 2,
+            child: Text(
+              label,
+              style: const TextStyle(fontSize: 10),
+              textAlign: TextAlign.justify,
+              textWidthBasis: TextWidthBasis.longestLine,
+              softWrap: false,
+            )),
+        Expanded(
+            child: MoneyWidget(
+          amountModel: MoneyModel(
+            amount: value,
+            autoColor: false,
+          ),
+          asTile: false,
+        )),
+      ],
     );
   }
 }
