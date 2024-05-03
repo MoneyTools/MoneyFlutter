@@ -73,6 +73,7 @@ class PanelSanKey extends StatelessWidget {
             mapOfIncomes[topCategory] = mapValue + element.amount.value.amount;
             break;
           case CategoryType.expense:
+          case CategoryType.recurringExpense:
             totalExpenses += element.amount.value.amount;
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfExpenses[topCategory];

@@ -38,8 +38,8 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
         text1: 'Expense',
         small: true,
         isVertical: true,
-        text2:
-            Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense]))));
+        text2: Currency.getAmountAsStringUsingCurrency(
+            getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense, CategoryType.recurringExpense]))));
     pivots.add(ThreePartLabel(
         text1: 'Income',
         small: true,
@@ -102,35 +102,34 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   @override
   List<Category> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    final CategoryType? filterType = getSelectedCategoryType();
+    final List<CategoryType> filterType = getSelectedCategoryType();
     return Data()
         .categories
         .iterableList(includeDeleted: includeDeleted)
         .where((final Category instance) =>
-            (filterType == null || instance.type.value == filterType) &&
+            (filterType.isEmpty || filterType.contains(instance.type.value)) &&
             (applyFilter == false || isMatchingFilters(instance)))
         .toList();
   }
 
-  CategoryType? getSelectedCategoryType() {
+  List<CategoryType> getSelectedCategoryType() {
     if (_selectedPivot[0]) {
-      return CategoryType.none;
+      return [CategoryType.none];
     }
-
     if (_selectedPivot[1]) {
-      return CategoryType.expense;
+      return [CategoryType.expense, CategoryType.recurringExpense];
     }
     if (_selectedPivot[2]) {
-      return CategoryType.income;
+      return [CategoryType.income];
     }
     if (_selectedPivot[3]) {
-      return CategoryType.saving;
+      return [CategoryType.saving];
     }
     if (_selectedPivot[4]) {
-      return CategoryType.investment;
+      return [CategoryType.investment];
     }
 
-    return null; // all
+    return []; // all
   }
 
   Widget renderToggles() {

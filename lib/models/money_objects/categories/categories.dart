@@ -52,7 +52,7 @@ class Categories extends MoneyObjects<Category> {
     if (category == null) {
       return false;
     }
-    return category.type.value == CategoryType.expense;
+    return category.type.value == CategoryType.expense || category.type.value == CategoryType.recurringExpense;
   }
 
   Category getTopAncestor(final Category category) {

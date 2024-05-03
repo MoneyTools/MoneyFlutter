@@ -143,7 +143,7 @@ class Category extends MoneyObject {
   FieldInt frequency = FieldInt(
     importance: 80,
     serializeName: 'Frequency',
-    useAsColumn: false,
+    useAsColumn: true,
     useAsDetailPanels: false,
     valueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
   );
@@ -285,6 +285,8 @@ class Category extends MoneyObject {
         return 'Income';
       case CategoryType.expense:
         return 'Expense';
+      case CategoryType.recurringExpense:
+        return 'ExpenseRecurring';
       case CategoryType.saving:
         return 'Saving';
       case CategoryType.reserved:
@@ -294,8 +296,9 @@ class Category extends MoneyObject {
       case CategoryType.investment:
         return 'Investment';
       case CategoryType.none:
-      default:
         return 'None';
+      default:
+        return '<unknown>';
     }
   }
 }
