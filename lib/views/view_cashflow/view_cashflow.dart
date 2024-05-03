@@ -7,23 +7,23 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view.dart';
-import 'package:money/views/view_cashflow/panel_recurring.dart';
 import 'package:money/views/view_cashflow/panel_sankey.dart';
+import 'package:money/views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/widgets/years_range_selector.dart';
+
+enum ViewAs {
+  sankey,
+  recurring,
+}
 
 class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});
 
   @override
   State<ViewWidget> createState() => ViewCashFlowState();
-}
-
-enum ViewAs {
-  sankey,
-  recurring,
 }
 
 class ViewCashFlowState extends ViewWidgetState {

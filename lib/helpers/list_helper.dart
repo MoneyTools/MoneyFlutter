@@ -121,7 +121,7 @@ class SortedSet<T> {
 }
 
 class KeyValue {
-  String key;
+  dynamic key;
   dynamic value;
 
   KeyValue({required this.key, required this.value});
@@ -138,8 +138,4 @@ List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
   }).toList();
 
   return percentages;
-}
-
-List<KeyValue> convertToDoubleToInt(List<KeyValue> keyValuePairs) {
-  return keyValuePairs.map((entry) => KeyValue(key: entry.key, value: entry.value.toInt())).toList();
 }

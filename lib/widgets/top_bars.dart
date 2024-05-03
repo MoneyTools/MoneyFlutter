@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_model.dart';
@@ -8,32 +9,32 @@ import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/money_widget.dart';
 
 class BarChartWidget extends StatelessWidget {
-  final List<KeyValue> listAsAmount; // List of data with label and value
+  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
   final bool asIncome;
 
-  const BarChartWidget({super.key, required this.listAsAmount, required this.asIncome});
+  const BarChartWidget({super.key, required this.listCategoryNameToAmount, required this.asIncome});
 
   @override
   Widget build(BuildContext context) {
     // Sort the data by value in descending order
-    listAsAmount.sort((a, b) => b.value.compareTo(a.value));
+    listCategoryNameToAmount.sort((a, b) => b.value.compareTo(a.value));
 
     // Extract top 3 values and calculate total value of others
-    int topCategoryToShow = min(3, listAsAmount.length);
+    int topCategoryToShow = min(3, listCategoryNameToAmount.length);
 
     final double otherSumValues =
-        listAsAmount.skip(topCategoryToShow).fold(0.0, (double prev, KeyValue curr) => prev + curr.value);
+        listCategoryNameToAmount.skip(topCategoryToShow).fold(0.0, (double prev, KeyValue curr) => prev + curr.value);
 
     List<Widget> bars = [];
 
     for (int top = 0; top < topCategoryToShow; top++) {
-      final Category? category = Data().categories.getByName(listAsAmount[top].key);
+      final Category? category = Data().categories.get(listCategoryNameToAmount[top].key);
       if (category != null) {
         bars.add(
           _buildBar(
             category.name.value,
             category.getColorWidget(),
-            listAsAmount[top].value,
+            listCategoryNameToAmount[top].value,
           ),
         );
       }
@@ -43,8 +44,8 @@ class BarChartWidget extends StatelessWidget {
       bars.add(
         _buildBar(
           'Others',
-          MyCircle(
-            colorFill: Colors.grey.withOpacity(0.5),
+          const MyCircle(
+            colorFill: Colors.grey,
             size: 10,
           ),
           otherSumValues,

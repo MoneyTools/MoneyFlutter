@@ -13,11 +13,8 @@ class DistributionBar extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(3), // Radius for rounded ends
-      child: Container(
-        height: 20, // Adjust height as needed
-        decoration: const BoxDecoration(
-          color: Colors.black, // Background color
-        ),
+      child: SizedBox(
+        height: 20,
         child: Row(
           children: _buildSegments(),
         ),
@@ -31,8 +28,9 @@ class DistributionBar extends StatelessWidget {
     for (int i = 0; i < colors.length; i++) {
       Color backgroundColorOfSegment = colors[i];
       Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
+
       if (backgroundColorOfSegment.opacity == 0) {
-        backgroundColorOfSegment = Colors.grey.withOpacity(0.5);
+        backgroundColorOfSegment = Colors.grey;
         foregroundColorOfSegment = Colors.white;
       }
 
@@ -45,7 +43,7 @@ class DistributionBar extends StatelessWidget {
               color: backgroundColorOfSegment, // Color of segment
               border: Border(
                 right: BorderSide(
-                  color: Colors.grey, // Border color
+                  color: Colors.black, // Border color
                   width: i < segments.length - 1 ? 3.0 : 0.0, // Width of border (last segment has no border)
                 ),
               ),

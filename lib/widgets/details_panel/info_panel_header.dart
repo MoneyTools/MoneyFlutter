@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
