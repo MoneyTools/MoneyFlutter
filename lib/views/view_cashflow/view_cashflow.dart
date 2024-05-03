@@ -5,19 +5,16 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view.dart';
 import 'package:money/views/view_cashflow/panel_sankey.dart';
 import 'package:money/views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/widgets/gaps.dart';
+import 'package:money/widgets/pick_number.dart';
 import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/widgets/years_range_selector.dart';
-
-enum ViewAs {
-  sankey,
-  recurring,
-}
 
 class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});
@@ -27,7 +24,6 @@ class ViewCashFlow extends ViewWidget {
 }
 
 class ViewCashFlowState extends ViewWidgetState {
-  ViewAs viewAs = ViewAs.sankey;
   ViewRecurringAs viewRecurringAs = ViewRecurringAs.expenses;
 
   late int minYear;
@@ -77,11 +73,11 @@ class ViewCashFlowState extends ViewWidgetState {
   }
 
   Widget getView() {
-    switch (viewAs) {
-      case ViewAs.sankey:
+    switch (Settings().cashflowViewAs) {
+      case CashflowViewAs.sankey:
         return Container(
             color: getColorTheme(context).background, child: PanelSanKey(minYear: this.minYear, maxYear: this.maxYear));
-      case ViewAs.recurring:
+      case CashflowViewAs.recurring:
         return PanelRecurrings(
           minYear: this.minYear,
           maxYear: this.maxYear,
@@ -98,7 +94,7 @@ class ViewCashFlowState extends ViewWidgetState {
           children: [
             _buildSelectView(),
             gapLarge(),
-            _buildIncomeVsExpense(),
+            _buildRecurringSettings(),
           ],
         ),
         YearRangeSlider(
@@ -118,50 +114,64 @@ class ViewCashFlowState extends ViewWidgetState {
   }
 
   Widget _buildSelectView() {
-    return SegmentedButton<ViewAs>(
+    return SegmentedButton<CashflowViewAs>(
       style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-      segments: const <ButtonSegment<ViewAs>>[
-        ButtonSegment<ViewAs>(
-          value: ViewAs.sankey,
+      segments: const <ButtonSegment<CashflowViewAs>>[
+        ButtonSegment<CashflowViewAs>(
+          value: CashflowViewAs.sankey,
           label: Text('Sankey'),
         ),
-        ButtonSegment<ViewAs>(
-          value: ViewAs.recurring,
+        ButtonSegment<CashflowViewAs>(
+          value: CashflowViewAs.recurring,
           label: Text('Recurring'),
         ),
       ],
-      selected: <ViewAs>{viewAs},
-      onSelectionChanged: (final Set<ViewAs> newSelection) {
+      selected: <CashflowViewAs>{Settings().cashflowViewAs},
+      onSelectionChanged: (final Set<CashflowViewAs> newSelection) {
         setState(() {
-          viewAs = newSelection.first;
+          Settings().cashflowViewAs = newSelection.first;
+          Settings().store();
         });
       },
     );
   }
 
-  Widget _buildIncomeVsExpense() {
-    if (viewAs == ViewAs.sankey) {
+  Widget _buildRecurringSettings() {
+    if (Settings().cashflowViewAs == CashflowViewAs.sankey) {
       return const SizedBox();
     }
 
-    return SegmentedButton<ViewRecurringAs>(
-      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-      segments: const <ButtonSegment<ViewRecurringAs>>[
-        ButtonSegment<ViewRecurringAs>(
-          value: ViewRecurringAs.incomes,
-          label: Text('Incomes'),
+    return Row(
+      children: [
+        SegmentedButton<ViewRecurringAs>(
+          style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+          segments: const <ButtonSegment<ViewRecurringAs>>[
+            ButtonSegment<ViewRecurringAs>(
+              value: ViewRecurringAs.incomes,
+              label: Text('Incomes'),
+            ),
+            ButtonSegment<ViewRecurringAs>(
+              value: ViewRecurringAs.expenses,
+              label: Text('Expenses'),
+            ),
+          ],
+          selected: <ViewRecurringAs>{viewRecurringAs},
+          onSelectionChanged: (final Set<ViewRecurringAs> newSelection) {
+            setState(() {
+              viewRecurringAs = newSelection.first;
+            });
+          },
         ),
-        ButtonSegment<ViewRecurringAs>(
-          value: ViewRecurringAs.expenses,
-          label: Text('Expenses'),
+        gapMedium(),
+        NumberPicker(
+          title: 'Occurrence',
+          selectedNumber: Settings().cashflowRecurringOccurrences,
+          onChanged: (int value) {
+            Settings().cashflowRecurringOccurrences = value;
+            Settings().store();
+          },
         ),
       ],
-      selected: <ViewRecurringAs>{viewRecurringAs},
-      onSelectionChanged: (final Set<ViewRecurringAs> newSelection) {
-        setState(() {
-          viewRecurringAs = newSelection.first;
-        });
-      },
     );
   }
 }

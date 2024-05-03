@@ -9,6 +9,11 @@ import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum CashflowViewAs {
+  sankey,
+  recurring,
+}
+
 class Settings extends ChangeNotifier {
   String getUniqueSate() {
     return '$colorSelected $useDarkMode ${Data().version}';
@@ -74,6 +79,8 @@ class Settings extends ChangeNotifier {
     notifyListeners();
   }
 
+  CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
+  int cashflowRecurringOccurrences = 12;
   String apiKeyForStocks = '';
 
   //--------------------------------------------------------
@@ -134,6 +141,10 @@ class Settings extends ChangeNotifier {
     useDarkMode = boolValueOrDefault(preferences.getBool(settingKeyDarkMode), defaultValueIfNull: false);
 
     rentals = preferences.getBool(settingKeyRentalsSupport) == true;
+    cashflowViewAs = CashflowViewAs.values[
+        intValueOrDefault(preferences.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
+    cashflowRecurringOccurrences =
+        intValueOrDefault(preferences.getInt(settingKeyCashflowRecurringOccurrences), defaultValueIfNull: 12);
     includeClosedAccounts = preferences.getBool(settingKeyIncludeClosedAccounts) == true;
     apiKeyForStocks = preferences.getString(settingKeyStockApiKey) ?? '';
 
@@ -150,7 +161,8 @@ class Settings extends ChangeNotifier {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setDouble(settingKeyTextScale, textScale);
     await preferences.setInt(settingKeyTheme, colorSelected);
-
+    await preferences.setInt(settingKeyCashflowView, cashflowViewAs.index);
+    await preferences.setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
     await preferences.setBool(settingKeyDarkMode, useDarkMode);
     await preferences.setBool(settingKeyIncludeClosedAccounts, includeClosedAccounts);
     await preferences.setBool(settingKeyRentalsSupport, rentals);

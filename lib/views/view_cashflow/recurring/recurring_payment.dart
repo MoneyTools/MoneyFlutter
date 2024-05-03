@@ -7,19 +7,11 @@ class RecurringPayment {
   double total;
   int numberOfYears;
   int frequency;
-  List<int> categoryIds = [];
-  List<double> categorySums = [];
+  List<Pair<int, double>> categoryIdsAndSums = [];
 
-  RecurringPayment(this.payeeId, this.numberOfYears, this.total, this.frequency, this.categoryIds, this.categorySums);
+  RecurringPayment(this.payeeId, this.numberOfYears, this.total, this.frequency, this.categoryIdsAndSums);
 
   List<Pair<int, double>> getListOfCategoryIdAndSum() {
-    List<Pair<int, double>> list = [];
-    for (int i = 0; i < this.categoryIds.length; i++) {
-      list.add(Pair<int, double>(
-        this.categoryIds[i],
-        this.categorySums[i],
-      ));
-    }
-    return list;
+    return categoryIdsAndSums;
   }
 }

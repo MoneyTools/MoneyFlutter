@@ -77,6 +77,8 @@ const String settingKeySortAscending = 'sortAscending';
 const String settingKeySelectedListItemId = 'selectedItemId';
 const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
 const String settingKeyStockApiKey = 'stockServiceApiKey';
+const String settingKeyCashflowView = 'keyCashflowView';
+const String settingKeyCashflowRecurringOccurrences = 'keyCashflowOccurrences';
 
 class IntValues {
   // ...

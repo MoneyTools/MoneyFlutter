@@ -1,13 +1,13 @@
 class AccumulatorSum<T, V> {
-  final Map<T, V> _values = {};
+  final Map<T, V> values = {};
 
   void cumulate(T key, V value) {
-    if (_values.containsKey(key)) {
+    if (values.containsKey(key)) {
       // Use dynamic type for accumulated value as specific behavior depends on T
-      final V? existingValue = _values[key];
-      _values[key] = _accumulate(existingValue as V, value);
+      final V? existingValue = values[key];
+      values[key] = _accumulate(existingValue as V, value);
     } else {
-      _values[key] = value;
+      values[key] = value;
     }
   }
 
@@ -17,7 +17,7 @@ class AccumulatorSum<T, V> {
   }
 
   dynamic getValue(T key) {
-    return _values[key] ?? 0;
+    return values[key] ?? 0;
   }
 }
 

@@ -32,7 +32,8 @@ class MoneyWidget extends StatelessWidget {
   }
 
   Widget _amountAsText(final BuildContext context) {
-    return Text(
+    return SelectableText(
+      maxLines: 1,
       Currency.getAmountAsStringUsingCurrency(amountModel.amount, iso4217code: amountModel.iso4217),
       textAlign: TextAlign.right,
       style: TextStyle(

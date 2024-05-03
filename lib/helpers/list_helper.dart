@@ -158,3 +158,11 @@ class Pair<T, U> {
   @override
   String toString() => '($first, $second)';
 }
+
+List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
+  List<Pair<T, U>> list = [];
+  map.forEach((key, value) {
+    list.add(Pair(key, value));
+  });
+  return list;
+}
