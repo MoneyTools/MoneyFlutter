@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/money_model.dart';
+import 'package:money/widgets/box.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/money_widget.dart';
@@ -41,6 +42,7 @@ class DistributionBar extends StatelessWidget {
     return Column(
       children: [
         _buildHorizontalBar(),
+        gapSmall(),
         Expanded(child: _buildRowOfDetails()),
       ],
     );
@@ -114,8 +116,8 @@ class DistributionBar extends StatelessWidget {
   }
 
   Widget _buildRowOfDetails() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    return Box(
+      margin: 8,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: detailRowWidgets,

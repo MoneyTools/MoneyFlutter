@@ -30,7 +30,6 @@ class RecurringCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(13.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(

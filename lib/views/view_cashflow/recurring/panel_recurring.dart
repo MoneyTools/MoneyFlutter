@@ -10,6 +10,7 @@ import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_card.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
+import 'package:money/widgets/box.dart';
 import 'package:money/widgets/distribution_bar.dart';
 
 enum ViewRecurringAs {
@@ -33,36 +34,51 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> listOfCards = findAndCreateRecurringCards(context);
+    bool forIncomeTransaction = widget.viewRecurringAs == ViewRecurringAs.incomes;
+
+    initRecurringTransactions(forIncome: forIncomeTransaction);
 
     return Container(
       color: getColorTheme(context).background,
-      child: Center(
-        child: SizedBox(
-          width: 600,
-          child: ListView.builder(
-            padding: const EdgeInsets.all(21),
-            itemCount: listOfCards.length,
-            itemBuilder: (context, index) => listOfCards[index],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Box(margin: 8, child: Text('${recurringPayments.length} possible recurring transactions')),
+          Expanded(
+            child: SizedBox(
+              width: 600,
+              child: ListView.builder(
+                  padding: const EdgeInsets.all(21),
+                  itemCount: recurringPayments.length,
+                  itemBuilder: (context, index) {
+                    // build the Card UI
+                    final payment = recurringPayments[index];
+                    List<Distribution> listForDistributionBar = getTopDistributions(
+                      payment: payment,
+                      asIncome: forIncomeTransaction,
+                      topN: 4,
+                    );
+
+                    return RecurringCard(payment: payment, listForDistributionBar: listForDistributionBar);
+                  }),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
 
-  List<Widget> findAndCreateRecurringCards(BuildContext context) {
+  void initRecurringTransactions({required final bool forIncome}) {
     // get all transactions
     final transactions = Data().transactions.transactionInYearRange(
           minYear: widget.minYear,
           maxYear: widget.maxYear,
-          onlyIncome: widget.viewRecurringAs == ViewRecurringAs.incomes,
+          onlyIncome: forIncome,
         );
 
     // get all transaction Income | Expenses
-    recurringPayments = findMonthlyRecurringPayments(
-      transactions.toList(),
-      widget.viewRecurringAs == ViewRecurringAs.incomes,
-    );
+    recurringPayments = findMonthlyRecurringPayments(transactions.toList(), forIncome);
 
     // Sort descending
     if (widget.viewRecurringAs == ViewRecurringAs.incomes) {
@@ -70,17 +86,6 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     } else {
       recurringPayments.sort((a, b) => a.total.compareTo(b.total));
     }
-
-    List<Widget> widgets = [];
-
-    for (final RecurringPayment payment in recurringPayments) {
-      widgets.add(_buildRecurringCard(
-        context,
-        payment,
-        widget.viewRecurringAs == ViewRecurringAs.incomes,
-      ));
-    }
-    return widgets;
   }
 
   Color getColorFromText(String? text) {
@@ -90,8 +95,9 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     return getColorFromString(text);
   }
 
-  Widget _buildRecurringCard(BuildContext context, RecurringPayment payment, bool asIncome) {
-    List<Pair<int, double>> list = payment.getListOfCategoryIdAndSum();
+  List<Distribution> getTopDistributions(
+      {required RecurringPayment payment, required bool asIncome, required int topN}) {
+    final List<Pair<int, double>> list = payment.getListOfCategoryIdAndSum();
     // Sort descending
     if (asIncome) {
       list.sort((a, b) => b.second.compareTo(a.second));
@@ -102,7 +108,8 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     List<Distribution> listForDistributionBar = [];
 
     // keep at most [n] number of items
-    int topCategoryToShow = min(4, list.length);
+    final int topCategoryToShow = min(topN, list.length);
+
     for (final categoryIdAndSum in list.take(topCategoryToShow)) {
       final Category? category = Data().categories.get(categoryIdAndSum.first);
       if (category == null) {
@@ -119,8 +126,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
         ));
       }
     }
-
-    return RecurringCard(payment: payment, listForDistributionBar: listForDistributionBar);
+    return listForDistributionBar;
   }
 
   Widget header(final BuildContext context, final String title) {
