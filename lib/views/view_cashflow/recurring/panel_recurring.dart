@@ -36,7 +36,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     List<Widget> listOfCards = findAndCreateRecurringCards(context);
 
     return Container(
-      color: getColorTheme(context).surfaceVariant,
+      color: getColorTheme(context).background,
       child: Center(
         child: SizedBox(
           width: 600,
@@ -51,8 +51,14 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   }
 
   List<Widget> findAndCreateRecurringCards(BuildContext context) {
-    final transactions = Data().transactions.transactionInYearRange(widget.minYear, widget.maxYear);
+    // get all transactions
+    final transactions = Data().transactions.transactionInYearRange(
+          minYear: widget.minYear,
+          maxYear: widget.maxYear,
+          onlyIncome: widget.viewRecurringAs == ViewRecurringAs.incomes,
+        );
 
+    // get all transaction Income | Expenses
     recurringPayments = findMonthlyRecurringPayments(
       transactions.toList(),
       widget.viewRecurringAs == ViewRecurringAs.incomes,
@@ -114,10 +120,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
       }
     }
 
-    return RecurringCard(
-      payment: payment,
-      listForDistributionBar: listForDistributionBar,
-    );
+    return RecurringCard(payment: payment, listForDistributionBar: listForDistributionBar);
   }
 
   Widget header(final BuildContext context, final String title) {
@@ -154,26 +157,28 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     List<RecurringPayment> monthlyRecurringPayments = [];
     final numberOfYears = (widget.maxYear - widget.minYear) + 1;
 
-    payeeIdToAmounts.getKeys().forEach((payeeId) {
-      List<double> amounts = payeeIdToAmounts.getValues(payeeId);
-      List<int> months = payeeIdToMonths.getValues(payeeId);
+    payeeIdToAmounts.getKeys().forEach(
+      (payeeId) {
+        List<double> amounts = payeeIdToAmounts.getValues(payeeId);
+        List<int> months = payeeIdToMonths.getValues(payeeId);
 
-      double totalAmount = amounts.reduce((a, b) => a + b);
-      int frequency = amounts.length;
+        double totalAmount = amounts.reduce((a, b) => a + b);
+        int frequency = amounts.length;
 
-      // Check if the frequency indicates monthly recurrence
-      if (isMonthlyRecurrence(months)) {
-        monthlyRecurringPayments.add(
-          RecurringPayment(
-            payeeId,
-            numberOfYears,
-            totalAmount,
-            frequency,
-            convertMapToListOfPair<int, double>(payeeIdCategoryIdsAndSums[payeeId]!.values),
-          ),
-        );
-      }
-    });
+        // Check if the frequency indicates monthly recurrence
+        if (isMonthlyRecurrence(months)) {
+          monthlyRecurringPayments.add(
+            RecurringPayment(
+              payeeId,
+              numberOfYears,
+              totalAmount,
+              frequency,
+              convertMapToListOfPair<int, double>(payeeIdCategoryIdsAndSums[payeeId]!.values),
+            ),
+          );
+        }
+      },
+    );
 
     return monthlyRecurringPayments;
   }

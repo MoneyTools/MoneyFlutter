@@ -33,9 +33,16 @@ class Transactions extends MoneyObjects<Transaction> {
     return flattenList;
   }
 
-  Iterable<Transaction> transactionInYearRange(final int minYear, final int maxYear) {
-    return iterableList(includeDeleted: true)
-        .where((element) => isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear));
+  Iterable<Transaction> transactionInYearRange({
+    required final int minYear,
+    required final int maxYear,
+    required final bool? onlyIncome,
+  }) {
+    return iterableList(includeDeleted: true).where((element) =>
+        isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
+        ((onlyIncome == null ||
+            (onlyIncome == true && element.amount.value.amount > 0) ||
+            (onlyIncome == false && element.amount.value.amount < 0))));
   }
 
   DateRange dateRangeIncludingClosedAccount = DateRange();
