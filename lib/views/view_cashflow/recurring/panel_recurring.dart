@@ -59,8 +59,11 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
                       asIncome: forIncomeTransaction,
                       topN: 4,
                     );
-
-                    return RecurringCard(payment: payment, listForDistributionBar: listForDistributionBar);
+                    return RecurringCard(
+                      payment: payment,
+                      listForDistributionBar: listForDistributionBar,
+                      occurrences: payment.monthSums,
+                    );
                   }),
             ),
           ),
@@ -144,6 +147,8 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   List<RecurringPayment> findMonthlyRecurringPayments(List<Transaction> transactions, bool forIncome) {
     AccumulatorList<int, double> payeeIdToAmounts = AccumulatorList<int, double>();
     AccumulatorList<int, int> payeeIdToMonths = AccumulatorList<int, int>();
+
+    MapAccumulator<int, int, double> payeeIdMonthAndSums = MapAccumulator<int, int, double>();
     Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
 
     // Step 1: Group transactions by payeeId and record transaction months
@@ -154,6 +159,14 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
         payeeIdToAmounts.cumulate(payeeId, transaction.amount.value.amount);
         payeeIdToMonths.cumulate(payeeId, transaction.dateTime.value!.month);
 
+        /// Cumulate by [PayeeId].[months].[Sum]
+        payeeIdMonthAndSums.cumulate(
+          payeeId,
+          transaction.dateTime.value!.month,
+          transaction.amount.value.amount,
+        );
+
+        /// Cumulate by Categories
         if (!payeeIdCategoryIdsAndSums.containsKey(payeeId)) {
           payeeIdCategoryIdsAndSums[payeeId] = AccumulatorSum<int, double>();
         }
@@ -167,21 +180,28 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
 
     payeeIdToAmounts.getKeys().forEach(
       (payeeId) {
-        List<double> amounts = payeeIdToAmounts.getValues(payeeId);
-        List<int> months = payeeIdToMonths.getValues(payeeId);
+        List<double> amounts = payeeIdToAmounts.getList(payeeId);
+        List<int> months = payeeIdToMonths.getList(payeeId);
 
         double totalAmount = amounts.reduce((a, b) => a + b);
         int frequency = amounts.length;
 
         // Check if the frequency indicates monthly recurrence
         if (isMonthlyRecurrence(months)) {
+          List<double> sumPerMonths = List.generate(12, (index) => 0);
+
+          payeeIdMonthAndSums.getLevel1(payeeId)!.values.forEach((month, sum) {
+            sumPerMonths[month - 1] = sum.abs();
+          });
+
           monthlyRecurringPayments.add(
             RecurringPayment(
-              payeeId,
-              numberOfYears,
-              totalAmount,
-              frequency,
-              convertMapToListOfPair<int, double>(payeeIdCategoryIdsAndSums[payeeId]!.values),
+              payeeId: payeeId,
+              numberOfYears: numberOfYears,
+              total: totalAmount,
+              frequency: frequency,
+              monthSums: sumPerMonths,
+              categoryIdsAndSums: convertMapToListOfPair<int, double>(payeeIdCategoryIdsAndSums[payeeId]!.values),
             ),
           );
         }

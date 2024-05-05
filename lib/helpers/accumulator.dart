@@ -22,23 +22,23 @@ class AccumulatorSum<T, V> {
 }
 
 class AccumulatorList<T, V> {
-  final Map<T, Set<V>> _values = {};
+  final Map<T, Set<V>> values = {};
 
   void cumulate(T key, V value) {
-    if (_values.containsKey(key)) {
-      final existingSet = _values[key] as Set<V>;
+    if (values.containsKey(key)) {
+      final existingSet = values[key] as Set<V>;
       existingSet.add(value);
     } else {
       // first time setting the set
-      _values[key] = <V>{value}; // Ensure type safety for the set
+      values[key] = <V>{value}; // Ensure type safety for the set
     }
   }
 
   List<T> getKeys() {
-    return _values.keys.toList();
+    return values.keys.toList();
   }
 
-  List<V> getValues(T key) {
-    return _values[key]?.toList() ?? [];
+  List<V> getList(T key) {
+    return values[key]?.toList() ?? [];
   }
 }

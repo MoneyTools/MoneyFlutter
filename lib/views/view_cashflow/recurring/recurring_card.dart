@@ -5,16 +5,19 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
 import 'package:money/widgets/distribution_bar.dart';
 import 'package:money/widgets/gaps.dart';
+import 'package:money/widgets/mini_timeline.dart';
 import 'package:money/widgets/money_widget.dart';
 
 class RecurringCard extends StatelessWidget {
   final RecurringPayment payment;
   final List<Distribution> listForDistributionBar;
+  final List<double> occurrences;
 
   const RecurringCard({
     super.key,
     required this.payment,
     required this.listForDistributionBar,
+    required this.occurrences,
   });
 
   @override
@@ -52,9 +55,14 @@ class RecurringCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      Text(
-                        '${payment.frequency} occurrences',
-                        style: textTheme.bodyMedium,
+                      Row(
+                        children: [
+                          Text(
+                            '${payment.frequency} occurrences, averaging each ',
+                            style: textTheme.bodyMedium,
+                          ),
+                          MoneyWidget(amountModel: MoneyModel(amount: payment.total / payment.frequency)),
+                        ],
                       ),
                       Row(
                         children: [
@@ -63,6 +71,15 @@ class RecurringCard extends StatelessWidget {
                         ],
                       ),
                     ],
+                  ),
+                ),
+                gapLarge(),
+                Container(
+                  height: 40,
+                  margin: const EdgeInsets.fromLTRB(0, 3, 0, 3),
+                  child: HorizontalTimelineGraph(
+                    values: occurrences,
+                    color: getColorTheme(context).primary,
                   ),
                 ),
                 gapLarge(),
