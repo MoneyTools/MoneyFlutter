@@ -77,8 +77,10 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
           onlyIncome: forIncome,
         );
 
+    final flatTransactions = Data().transactions.flatTransactions(transactions);
+
     // get all transaction Income | Expenses
-    recurringPayments = findMonthlyRecurringPayments(transactions.toList(), forIncome);
+    recurringPayments = findMonthlyRecurringPayments(flatTransactions, forIncome);
 
     // Sort descending
     if (widget.viewRecurringAs == ViewRecurringAs.incomes) {

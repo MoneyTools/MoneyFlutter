@@ -45,6 +45,24 @@ class Transactions extends MoneyObjects<Transaction> {
             (onlyIncome == false && element.amount.value.amount < 0))));
   }
 
+  List<Transaction> flatTransactions(final Iterable<Transaction> transactions) {
+    List<Transaction> flatList = [];
+    for (final t in transactions) {
+      if (t.isSplit) {
+        for (final s in t.splits) {
+          final fakeTransaction = Transaction(status: t.status.value);
+          fakeTransaction.dateTime.value = t.dateTime.value;
+          fakeTransaction.categoryId.value = s.categoryId.value;
+          fakeTransaction.amount.value = s.amount.value;
+          flatList.add(fakeTransaction);
+        }
+      } else {
+        flatList.add(t);
+      }
+    }
+    return flatList;
+  }
+
   DateRange dateRangeIncludingClosedAccount = DateRange();
   DateRange dateRangeActiveAccount = DateRange();
 
