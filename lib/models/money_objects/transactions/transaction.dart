@@ -313,7 +313,7 @@ class Transaction extends MoneyObject {
     valueFromInstance: (final MoneyObject instance) {
       return (instance as Transaction).amount.value;
     },
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.amount,
     setValue: (final MoneyObject instance, dynamic newValue) {
       (instance as Transaction).amount.value.amount = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
     },
@@ -329,7 +329,7 @@ class Transaction extends MoneyObject {
     serializeName: 'SalesTax',
     useAsColumn: false,
     valueFromInstance: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
+    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.amount,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByValue((a as Transaction).salesTax.value.amount, (b as Transaction).salesTax.value.amount, ascending),
   );
@@ -431,7 +431,6 @@ class Transaction extends MoneyObject {
     type: FieldType.widget,
     importance: 80,
     name: 'Currency',
-    serializeName: 'Currency',
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     defaultValue: '',

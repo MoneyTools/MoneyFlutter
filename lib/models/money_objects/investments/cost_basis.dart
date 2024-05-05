@@ -168,8 +168,11 @@ class CostBasisCalculator {
               Investment? add = i.transactionInstance!.transferInstance!.getReceiverTransaction()?.investmentInstance;
               assert(add != null, "Other side of the Transfer needs to be an Investment transaction");
               if (add != null) {
-                assert(add.investmentType.value == InvestmentType.add.index,
-                    "Other side of transfer should be an Add transaction");
+                if (add.investmentType.value == InvestmentType.add.index) {
+                  // assert(add.investmentType.value == InvestmentType.add.index,
+                  // "Other side of transfer should be an Add transaction");
+                  continue;
+                }
 
                 // now instead of doing a simple Add on the other side, we need to remember the cost basis of each purchase
                 // used to cover the remove
