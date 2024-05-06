@@ -102,10 +102,12 @@ class ViewCashFlowState extends ViewWidgetState {
           maxYear: Data().transactions.dateRangeActiveAccount.max!.year,
           onChanged: (minYear, maxYear) {
             debouncer.run(() {
-              setState(() {
-                this.minYear = minYear;
-                this.maxYear = maxYear;
-              });
+              it(mounted) {
+                setState(() {
+                  this.minYear = minYear;
+                  this.maxYear = maxYear;
+                });
+              }
             });
           },
         ),

@@ -76,16 +76,16 @@ class Payees extends MoneyObjects<Payee> {
     clear();
 
     final List<String> names = <String>[
+      'Liberty Food',
+      'Central Perk',
       'John',
       'Paul',
       'George',
       'Ringo',
-      'Jean-Pierre',
+      'JP Dev',
       'Chris',
       'Bill',
       'Steve',
-      'Sue',
-      'Barbara'
     ];
     for (int i = 0; i < names.length; i++) {
       appendNewMoneyObject(

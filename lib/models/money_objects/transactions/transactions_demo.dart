@@ -28,7 +28,14 @@ extension TransactionsDemoData on Transactions {
   }
 
   void transactionForDemoData(final DateTime date, final Account account) {
-    final categoryId = Random().nextInt(10);
+    int categoryId = Random().nextInt(10);
+
+    int payeeId = Random().nextInt(10);
+    
+    if (payeeId == 0 || payeeId == 1) {
+      // The first tow payees are "Food related" so assign the "Food" category
+      categoryId = Data().categories.getByName('Food')!.uniqueId;
+    }
 
     // generate an amount
     // Expenses should be a negative value;
@@ -38,7 +45,7 @@ extension TransactionsDemoData on Transactions {
       'Id': -1,
       'Account': account.id.value,
       'Date': date,
-      'Payee': Random().nextInt(10),
+      'Payee': payeeId,
       'Category': categoryId,
       'Amount': amount,
     };
