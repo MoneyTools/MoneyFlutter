@@ -96,8 +96,8 @@ class ColorPalette extends StatelessWidget {
           context,
           getColorTheme(context).secondary,
           getColorTheme(context).onSecondary,
-          'onSecondaryContainer',
-          'secondaryContainer',
+          'onSecondary',
+          'secondary',
         ),
         _buildColorBar(
           context,

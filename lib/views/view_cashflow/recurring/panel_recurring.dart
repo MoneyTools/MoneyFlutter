@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
@@ -147,6 +148,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   List<RecurringPayment> findMonthlyRecurringPayments(List<Transaction> transactions, bool forIncome) {
     AccumulatorList<int, double> payeeIdToAmounts = AccumulatorList<int, double>();
     AccumulatorList<int, int> payeeIdToMonths = AccumulatorList<int, int>();
+    AccumulatorList<int, Transaction> payeeIdToTransactions = AccumulatorList<int, Transaction>();
 
     MapAccumulator<int, int, double> payeeIdMonthAndSums = MapAccumulator<int, int, double>();
     Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
@@ -156,6 +158,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
       if (forIncome && transaction.amount.value.amount > 0 ||
           forIncome == false && transaction.amount.value.amount <= 0) {
         int payeeId = transaction.payee.value;
+        payeeIdToTransactions.cumulate(payeeId, transaction);
         payeeIdToAmounts.cumulate(payeeId, transaction.amount.value.amount);
         payeeIdToMonths.cumulate(payeeId, transaction.dateTime.value!.month);
 
@@ -194,6 +197,12 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
             sumPerMonths[month - 1] = sum.abs();
           });
 
+          /// Date Range of transactions
+          DateRange dateRange = DateRange();
+          for (var t in payeeIdToTransactions.getList(payeeId)) {
+            dateRange.inflate(t.dateTime.value);
+          }
+
           monthlyRecurringPayments.add(
             RecurringPayment(
               payeeId: payeeId,
@@ -201,6 +210,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
               total: totalAmount,
               frequency: frequency,
               monthSums: sumPerMonths,
+              dateRange: dateRange,
               categoryIdsAndSums: convertMapToListOfPair<int, double>(payeeIdCategoryIdsAndSums[payeeId]!.values),
             ),
           );

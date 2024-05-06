@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.1] 2024-05-06
+
+### Updated
+
+- Improve TimeLine-range-slider
+
 ## [version 1.8.0] 2024-05-02
 
 ### Updated

@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/date_range.dart';
 
 class RecurringPayment {
   final int payeeId;
@@ -9,6 +10,7 @@ class RecurringPayment {
   final int frequency;
   final List<double> monthSums;
   final List<Pair<int, double>> categoryIdsAndSums;
+  final DateRange dateRange;
 
   RecurringPayment({
     required this.payeeId,
@@ -17,6 +19,7 @@ class RecurringPayment {
     required this.frequency,
     required this.monthSums,
     required this.categoryIdsAndSums,
+    required this.dateRange,
   });
 
   List<Pair<int, double>> getListOfCategoryIdAndSum() {

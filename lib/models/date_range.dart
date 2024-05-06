@@ -21,7 +21,7 @@ class DateRange {
     }
   }
 
-  num durationInYears() {
+  int get durationInYears {
     if (hasNullDates) {
       return 0;
     }
@@ -29,7 +29,19 @@ class DateRange {
     return (_valueOrZeroIfNull(max!.year) - _valueOrZeroIfNull(min!.year)) + 1;
   }
 
-  num _valueOrZeroIfNull(final num? value) {
+  int get durationInMonths {
+    return durationInDays ~/ 30; // Close enough
+  }
+
+  int get durationInDays {
+    // Calculate the difference between the two dates
+    final Duration difference = max!.difference(min!);
+
+    // Get the number of days from the difference
+    return difference.inDays;
+  }
+
+  int _valueOrZeroIfNull(final int? value) {
     if (value == null) {
       return 0;
     }
@@ -55,7 +67,7 @@ class DateRange {
   }
 
   String toStringYears() {
-    return '${yearToString(min)} - ${yearToString(max)} (${durationInYears()})';
+    return '${yearToString(min)} - ${yearToString(max)} ($durationInYears years)';
   }
 
   bool isBetween(final DateTime date) {
