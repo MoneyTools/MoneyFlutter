@@ -11,16 +11,10 @@ import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_card.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
-import 'package:money/widgets/box.dart';
 import 'package:money/widgets/distribution_bar.dart';
 
-enum ViewRecurringAs {
-  incomes,
-  expenses,
-}
-
 class PanelRecurrings extends StatefulWidget {
-  final ViewRecurringAs viewRecurringAs;
+  final CashflowViewAs viewRecurringAs;
   final int minYear;
   final int maxYear;
 
@@ -35,41 +29,29 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
 
   @override
   Widget build(BuildContext context) {
-    bool forIncomeTransaction = widget.viewRecurringAs == ViewRecurringAs.incomes;
+    bool forIncomeTransaction = widget.viewRecurringAs == CashflowViewAs.recurringIncomes;
 
     initRecurringTransactions(forIncome: forIncomeTransaction);
 
     return Container(
       color: getColorTheme(context).background,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Box(margin: 8, child: Text('${recurringPayments.length} possible recurring transactions')),
-          Expanded(
-            child: SizedBox(
-              width: 600,
-              child: ListView.builder(
-                  padding: const EdgeInsets.all(21),
-                  itemCount: recurringPayments.length,
-                  itemBuilder: (context, index) {
-                    // build the Card UI
-                    final payment = recurringPayments[index];
-                    List<Distribution> listForDistributionBar = getTopDistributions(
-                      payment: payment,
-                      asIncome: forIncomeTransaction,
-                      topN: 4,
-                    );
-                    return RecurringCard(
-                      payment: payment,
-                      listForDistributionBar: listForDistributionBar,
-                      occurrences: payment.monthSums,
-                    );
-                  }),
-            ),
-          ),
-        ],
-      ),
+      child: ListView.builder(
+          padding: const EdgeInsets.all(21),
+          itemCount: recurringPayments.length,
+          itemBuilder: (context, index) {
+            // build the Card UI
+            final payment = recurringPayments[index];
+            List<Distribution> listForDistributionBar = getTopDistributions(
+              payment: payment,
+              asIncome: forIncomeTransaction,
+              topN: 4,
+            );
+            return RecurringCard(
+              payment: payment,
+              listForDistributionBar: listForDistributionBar,
+              occurrences: payment.monthSums,
+            );
+          }),
     );
   }
 
@@ -87,9 +69,10 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     recurringPayments = findMonthlyRecurringPayments(flatTransactions, forIncome);
 
     // Sort descending
-    if (widget.viewRecurringAs == ViewRecurringAs.incomes) {
+    if (widget.viewRecurringAs == CashflowViewAs.recurringIncomes) {
       recurringPayments.sort((a, b) => b.total.compareTo(a.total));
-    } else {
+    }
+    if (widget.viewRecurringAs == CashflowViewAs.recurringExpenses) {
       recurringPayments.sort((a, b) => a.total.compareTo(b.total));
     }
   }

@@ -11,7 +11,7 @@ import 'package:money/views/view.dart';
 import 'package:money/views/view_cashflow/panel_sankey.dart';
 import 'package:money/views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/views/view_header.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/views/view_transactions/no_transactions.dart';
 import 'package:money/widgets/pick_number.dart';
 import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/widgets/years_range_selector.dart';
@@ -24,8 +24,6 @@ class ViewCashFlow extends ViewWidget {
 }
 
 class ViewCashFlowState extends ViewWidgetState {
-  ViewRecurringAs viewRecurringAs = ViewRecurringAs.expenses;
-
   late int minYear;
   late int maxYear;
 
@@ -59,57 +57,81 @@ class ViewCashFlowState extends ViewWidgetState {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        ViewHeader(
-          title: 'Cash Flow',
-          count: totalIncomes + totalExpenses,
-          description: 'See where assets are allocated.',
-          child: getViewSelector(),
-        ),
+        // Header
+        ViewHeader.buildViewHeaderContainer(context, _buildHeaderContent()),
+        // View
         Expanded(
-          child: getView(),
+          child: Container(
+            color: getColorTheme(context).background,
+            child: getView(),
+          ),
         ),
       ],
     );
   }
 
   Widget getView() {
+    if (Data().transactions.isEmpty) {
+      return const NoTransaction();
+    }
+
     switch (Settings().cashflowViewAs) {
       case CashflowViewAs.sankey:
-        return Container(
-            color: getColorTheme(context).background, child: PanelSanKey(minYear: this.minYear, maxYear: this.maxYear));
-      case CashflowViewAs.recurring:
+        return PanelSanKey(minYear: this.minYear, maxYear: this.maxYear);
+      case CashflowViewAs.recurringIncomes:
         return PanelRecurrings(
           minYear: this.minYear,
           maxYear: this.maxYear,
-          viewRecurringAs: viewRecurringAs,
+          viewRecurringAs: Settings().cashflowViewAs,
+        );
+      case CashflowViewAs.recurringExpenses:
+        return PanelRecurrings(
+          minYear: this.minYear,
+          maxYear: this.maxYear,
+          viewRecurringAs: Settings().cashflowViewAs,
         );
     }
   }
 
-  Widget getViewSelector() {
+  Widget _buildHeaderContent() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+        Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          runSpacing: 8,
+          spacing: 21,
+          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Text('Cash Flow', style: getTextTheme(context).titleLarge, textAlign: TextAlign.start),
             _buildSelectView(),
-            gapLarge(),
-            _buildRecurringSettings(),
+            if (Settings().cashflowViewAs != CashflowViewAs.sankey)
+              NumberPicker(
+                title: 'Occurrence',
+                selectedNumber: Settings().cashflowRecurringOccurrences,
+                onChanged: (int value) {
+                  Settings().cashflowRecurringOccurrences = value;
+                  Settings().store();
+                },
+              ),
           ],
         ),
-        YearRangeSlider(
-          minYear: Data().transactions.dateRangeActiveAccount.min!.year,
-          maxYear: Data().transactions.dateRangeActiveAccount.max!.year,
-          onChanged: (minYear, maxYear) {
-            debouncer.run(() {
-              it(mounted) {
-                setState(() {
-                  this.minYear = minYear;
-                  this.maxYear = maxYear;
-                });
-              }
-            });
-          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+          child: YearRangeSlider(
+            minYear: Data().transactions.dateRangeActiveAccount.min!.year,
+            maxYear: Data().transactions.dateRangeActiveAccount.max!.year,
+            onChanged: (minYear, maxYear) {
+              debouncer.run(() {
+                if (mounted) {
+                  setState(() {
+                    this.minYear = minYear;
+                    this.maxYear = maxYear;
+                  });
+                }
+              });
+            },
+          ),
         ),
       ],
     );
@@ -124,8 +146,12 @@ class ViewCashFlowState extends ViewWidgetState {
           label: Text('Sankey'),
         ),
         ButtonSegment<CashflowViewAs>(
-          value: CashflowViewAs.recurring,
-          label: Text('Recurring'),
+          value: CashflowViewAs.recurringIncomes,
+          label: Text('Incomes'),
+        ),
+        ButtonSegment<CashflowViewAs>(
+          value: CashflowViewAs.recurringExpenses,
+          label: Text('Expenses'),
         ),
       ],
       selected: <CashflowViewAs>{Settings().cashflowViewAs},
@@ -135,45 +161,6 @@ class ViewCashFlowState extends ViewWidgetState {
           Settings().store();
         });
       },
-    );
-  }
-
-  Widget _buildRecurringSettings() {
-    if (Settings().cashflowViewAs == CashflowViewAs.sankey) {
-      return const SizedBox();
-    }
-
-    return Row(
-      children: [
-        SegmentedButton<ViewRecurringAs>(
-          style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-          segments: const <ButtonSegment<ViewRecurringAs>>[
-            ButtonSegment<ViewRecurringAs>(
-              value: ViewRecurringAs.incomes,
-              label: Text('Incomes'),
-            ),
-            ButtonSegment<ViewRecurringAs>(
-              value: ViewRecurringAs.expenses,
-              label: Text('Expenses'),
-            ),
-          ],
-          selected: <ViewRecurringAs>{viewRecurringAs},
-          onSelectionChanged: (final Set<ViewRecurringAs> newSelection) {
-            setState(() {
-              viewRecurringAs = newSelection.first;
-            });
-          },
-        ),
-        gapMedium(),
-        NumberPicker(
-          title: 'Occurrence',
-          selectedNumber: Settings().cashflowRecurringOccurrences,
-          onChanged: (int value) {
-            Settings().cashflowRecurringOccurrences = value;
-            Settings().store();
-          },
-        ),
-      ],
     );
   }
 }

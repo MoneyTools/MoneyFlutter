@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.2] 2024-05-07
+
+### Updated
+
+- Improve CashFlow layout
+
 ## [version 1.8.1] 2024-05-06
 
 ### Updated

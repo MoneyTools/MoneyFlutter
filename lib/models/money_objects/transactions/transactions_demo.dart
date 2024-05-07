@@ -31,7 +31,7 @@ extension TransactionsDemoData on Transactions {
     int categoryId = Random().nextInt(10);
 
     int payeeId = Random().nextInt(10);
-    
+
     if (payeeId == 0 || payeeId == 1) {
       // The first tow payees are "Food related" so assign the "Food" category
       categoryId = Data().categories.getByName('Food')!.uniqueId;

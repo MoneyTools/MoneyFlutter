@@ -25,15 +25,21 @@ class ViewHeader extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: getColorTheme(context).surfaceVariant,
-        border: Border.all(color: getColorTheme(context).outline),
-        // borderRadius: const BorderRadius.all(Radius.circular(8)),
-      ),
-      child: Settings().isSmallScreen ? _buildSmall(context) : _buildLarge(context),
+    return buildViewHeaderContainer(
+      context,
+      Settings().isSmallScreen ? _buildSmall(context) : _buildLarge(context),
     );
+  }
+
+  static buildViewHeaderContainer(final BuildContext context, final Widget child) {
+    return Container(
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: getColorTheme(context).surfaceVariant,
+          border: Border.all(color: getColorTheme(context).outline),
+          // borderRadius: const BorderRadius.all(Radius.circular(8)),
+        ),
+        child: child);
   }
 
   Widget _buildLarge(final BuildContext context) {

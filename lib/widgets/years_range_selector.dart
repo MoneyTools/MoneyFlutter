@@ -36,7 +36,13 @@ class YearRangeSliderState extends State<YearRangeSlider> {
   @override
   Widget build(BuildContext context) {
     int fullSpread = widget.maxYear - widget.minYear;
+    if (widget.minYear == 0 || widget.maxYear == 0 || fullSpread == 0) {
+      return const Text('No date range yet');
+    }
 
+    if (fullSpread == 0) {
+      return Text(widget.maxYear.toString());
+    }
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
         updateRange(constraints.maxWidth);

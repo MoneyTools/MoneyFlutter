@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/widgets/box.dart';
+import 'package:money/widgets/gaps.dart';
 
 class NumberPicker extends StatefulWidget {
   final String title;
@@ -22,13 +22,14 @@ class _NumberPickerState extends State<NumberPicker> {
 
   @override
   Widget build(BuildContext context) {
-    return Box(
-      height: 50,
-      width: 200,
+    return SizedBox(
+      height: 40,
+      width: 150,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Text(widget.title),
+          Text('${widget.title}:'),
+          gapSmall(),
           DropdownButton<int>(
             value: _selectedNumber,
             items: List.generate(
