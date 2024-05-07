@@ -67,7 +67,7 @@ class DateRange {
   }
 
   String toStringYears() {
-    return '${yearToString(min)} - ${yearToString(max)} ($durationInYears years)';
+    return '${yearToString(min)} ($durationInYears years) ${yearToString(max)}';
   }
 
   bool isBetween(final DateTime date) {

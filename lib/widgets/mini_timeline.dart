@@ -1,10 +1,11 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 
 class HorizontalTimelineGraph extends StatelessWidget {
-  final List<double> values;
+  final List<Pair<int, double>> values;
   final Color color;
 
   const HorizontalTimelineGraph({super.key, required this.values, required this.color});
@@ -14,16 +15,22 @@ class HorizontalTimelineGraph extends StatelessWidget {
     return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
       List<Widget> bars = [];
 
-      final num maxValue = values.reduce(max);
-      double ratio = constraints.maxHeight / maxValue;
-      for (final value in values) {
-        final double height = value * ratio;
-        bars.add(
-          Tooltip(
-            message: getAmountAsShorthandText(value),
-            child: _buildVerticalBar(height),
-          ),
-        );
+      if (values.isNotEmpty) {
+        num maxValue = 0;
+        for (final p in values) {
+          maxValue = max(maxValue, p.second.abs());
+        }
+
+        double ratio = constraints.maxHeight / maxValue;
+        for (final value in values) {
+          final double height = value.second.abs() * ratio;
+          bars.add(
+            Tooltip(
+              message: '${value.first} X ${doubleToCurrency(value.second)}',
+              child: _buildVerticalBar(height),
+            ),
+          );
+        }
       }
 
       return Column(

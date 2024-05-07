@@ -34,41 +34,46 @@ class Box extends StatelessWidget {
       }
     }
 
-    return Stack(children: [
-      Container(
-        width: width,
-        height: height,
-        margin: adjustedMargin,
-        padding: EdgeInsets.all(padding),
-        constraints: BoxConstraints(
-          minWidth: width ?? 500,
-          maxWidth: width ?? 500,
-        ),
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.rectangle,
-          borderRadius: BorderRadius.circular(8.0), // Bor
-          border: Border.all(
-            width: 1,
-            color: Colors.grey.withOpacity(0.5),
+    return Stack(
+      alignment: AlignmentDirectional.topCenter,
+      children: [
+        Container(
+          width: width,
+          height: height,
+          margin: adjustedMargin,
+          padding: EdgeInsets.all(padding),
+          constraints: BoxConstraints(
+            minWidth: width ?? 500,
+            maxWidth: width ?? 500,
           ),
-        ),
-        child: child,
-      ),
-      if (title.isNotEmpty)
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 13.0,
-          ),
-          child: Card(
-            elevation: 1,
-            shadowColor: Colors.transparent,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(title, style: getTextTheme(context).titleSmall),
+          decoration: BoxDecoration(
+            color: color,
+            shape: BoxShape.rectangle,
+            borderRadius: BorderRadius.circular(8.0), // Bor
+            border: Border.all(
+              width: 1,
+              color: Colors.grey.withOpacity(0.5),
             ),
           ),
+          child: child,
         ),
-    ]);
+        if (title.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 13),
+            child: Card(
+              elevation: 1,
+              shadowColor: Colors.transparent,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  title,
+                  style: getTextTheme(context).titleSmall,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
   }
 }

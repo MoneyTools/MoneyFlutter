@@ -1,17 +1,11 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/list_helper.dart';
-import 'package:money/models/date_range.dart';
-import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_card.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
-import 'package:money/widgets/distribution_bar.dart';
 
 class PanelRecurrings extends StatefulWidget {
   final CashflowViewAs viewRecurringAs;
@@ -45,16 +39,10 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
           itemBuilder: (context, index) {
             // build the Card UI
             final payment = recurringPayments[index];
-            List<Distribution> listForDistributionBar = getTopDistributions(
-              payment: payment,
-              asIncome: forIncomeTransaction,
-              topN: 4,
-            );
             return RecurringCard(
               index: index + 1,
               payment: payment,
-              monthDistribution: payment.monthSums,
-              categoryDistribution: listForDistributionBar,
+              forIncomeTransaction: forIncomeTransaction,
             );
           }),
     );
@@ -71,56 +59,16 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     final flatTransactions = Data().transactions.flatTransactions(transactions);
 
     // get all transaction Income | Expenses
-    recurringPayments = findMonthlyRecurringPayments(flatTransactions, forIncome);
+    // recurringPayments =
+    findMonthlyRecurringPayments(flatTransactions, forIncome);
 
-    // Sort descending
+    // Sort descending - biggest amount first
     if (widget.viewRecurringAs == CashflowViewAs.recurringIncomes) {
       recurringPayments.sort((a, b) => b.total.compareTo(a.total));
     }
     if (widget.viewRecurringAs == CashflowViewAs.recurringExpenses) {
       recurringPayments.sort((a, b) => a.total.compareTo(b.total));
     }
-  }
-
-  Color getColorFromText(String? text) {
-    if (text == null) {
-      return Colors.transparent;
-    }
-    return getColorFromString(text);
-  }
-
-  List<Distribution> getTopDistributions(
-      {required RecurringPayment payment, required bool asIncome, required int topN}) {
-    final List<Pair<int, double>> list = payment.getListOfCategoryIdAndSum();
-    // Sort descending
-    if (asIncome) {
-      list.sort((a, b) => b.second.compareTo(a.second));
-    } else {
-      list.sort((a, b) => a.second.compareTo(b.second));
-    }
-
-    List<Distribution> listForDistributionBar = [];
-
-    // keep at most [n] number of items
-    final int topCategoryToShow = min(topN, list.length);
-
-    for (final categoryIdAndSum in list.take(topCategoryToShow)) {
-      final Category? category = Data().categories.get(categoryIdAndSum.first);
-      if (category == null) {
-        listForDistributionBar.add(Distribution(
-          title: '< no category >',
-          color: Colors.transparent,
-          amount: categoryIdAndSum.second,
-        ));
-      } else {
-        listForDistributionBar.add(Distribution(
-          title: category.name.value,
-          color: category.getColorOrAncestorsColor(),
-          amount: categoryIdAndSum.second,
-        ));
-      }
-    }
-    return listForDistributionBar;
   }
 
   Widget header(final BuildContext context, final String title) {
@@ -133,80 +81,39 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     );
   }
 
-  List<RecurringPayment> findMonthlyRecurringPayments(List<Transaction> transactions, bool forIncome) {
-    AccumulatorList<int, double> payeeIdToAmounts = AccumulatorList<int, double>();
-    AccumulatorList<int, int> payeeIdToMonths = AccumulatorList<int, int>();
-    AccumulatorList<int, Transaction> payeeIdToTransactions = AccumulatorList<int, Transaction>();
+  void findMonthlyRecurringPayments(List<Transaction> transactions, bool isIncomeTransaction) {
+    // reset the content
+    recurringPayments.clear();
 
-    MapAccumulator<int, int, double> payeeIdMonthAndSums = MapAccumulator<int, int, double>();
-    Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
+    AccumulatorList<int, Transaction> groupTransactionsByPayeeId = AccumulatorList<int, Transaction>();
+    AccumulatorList<int, int> groupMonthsListByPayeeId = AccumulatorList<int, int>();
 
     // Step 1: Group transactions by payeeId and record transaction months
-    for (var transaction in transactions) {
-      if (forIncome && transaction.amount.value.amount > 0 ||
-          forIncome == false && transaction.amount.value.amount <= 0) {
-        int payeeId = transaction.payee.value;
-        payeeIdToTransactions.cumulate(payeeId, transaction);
-        payeeIdToAmounts.cumulate(payeeId, transaction.amount.value.amount);
-        payeeIdToMonths.cumulate(payeeId, transaction.dateTime.value!.month);
+    for (final transaction in transactions.where((final t) =>
+        (isIncomeTransaction && t.amount.value.amount > 0) ||
+        (isIncomeTransaction == false && t.amount.value.amount <= 0))) {
+      int payeeId = transaction.payee.value;
 
-        /// Cumulate by [PayeeId].[months].[Sum]
-        payeeIdMonthAndSums.cumulate(
-          payeeId,
-          transaction.dateTime.value!.month,
-          transaction.amount.value.amount,
-        );
-
-        /// Cumulate by Categories
-        if (!payeeIdCategoryIdsAndSums.containsKey(payeeId)) {
-          payeeIdCategoryIdsAndSums[payeeId] = AccumulatorSum<int, double>();
-        }
-        payeeIdCategoryIdsAndSums[payeeId]!.cumulate(transaction.categoryId.value, transaction.amount.value.amount);
-      }
+      groupTransactionsByPayeeId.cumulate(payeeId, transaction);
+      groupMonthsListByPayeeId.cumulate(payeeId, transaction.dateTime.value!.month);
     }
 
     // Step 2: Calculate average amount and frequency for each payeeId
-    List<RecurringPayment> monthlyRecurringPayments = [];
-    final numberOfYears = (widget.maxYear - widget.minYear) + 1;
+    for (final payeeId in groupMonthsListByPayeeId.getKeys()) {
+      List<int> months = groupMonthsListByPayeeId.getList(payeeId);
 
-    payeeIdToAmounts.getKeys().forEach(
-      (payeeId) {
-        List<double> amounts = payeeIdToAmounts.getList(payeeId);
-        List<int> months = payeeIdToMonths.getList(payeeId);
-
-        double totalAmount = amounts.reduce((a, b) => a + b);
-        int frequency = amounts.length;
-
-        // Check if the frequency indicates monthly recurrence
-        if (isMonthlyRecurrence(months)) {
-          List<double> sumPerMonths = List.generate(12, (index) => 0);
-          final AccumulatorSum<int, double> monthSums = payeeIdMonthAndSums.getLevel1(payeeId)!;
-          monthSums.values.forEach((int month, double sum) {
-            sumPerMonths[month - 1] = sum.abs();
-          });
-
-          /// Date Range of transactions
-          DateRange dateRange = DateRange();
-          for (var t in payeeIdToTransactions.getList(payeeId)) {
-            dateRange.inflate(t.dateTime.value);
-          }
-
-          monthlyRecurringPayments.add(
-            RecurringPayment(
-              payeeId: payeeId,
-              numberOfYears: numberOfYears,
-              total: totalAmount,
-              frequency: frequency,
-              monthSums: sumPerMonths,
-              dateRange: dateRange,
-              categoryIdsAndSums: convertMapToListOfPair<int, double>(payeeIdCategoryIdsAndSums[payeeId]!.values),
-            ),
-          );
-        }
-      },
-    );
-
-    return monthlyRecurringPayments;
+      // Check if the frequency indicates monthly recurrence
+      if (isMonthlyRecurrence(months)) {
+        // keep this payment
+        recurringPayments.add(
+          RecurringPayment(
+            payeeId: payeeId,
+            forIncomeTransaction: isIncomeTransaction,
+            transactions: groupTransactionsByPayeeId.getList(payeeId),
+          ),
+        );
+      }
+    }
   }
 
   bool isMonthlyRecurrence(List<int> months) {

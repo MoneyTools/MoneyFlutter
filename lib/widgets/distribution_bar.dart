@@ -14,8 +14,8 @@ class Distribution {
 
   Distribution({
     required this.title,
-    required this.color,
     required this.amount,
+    this.color = Colors.transparent,
   });
 }
 
@@ -42,7 +42,7 @@ class DistributionBar extends StatelessWidget {
 
     return Box(
       title: title,
-      padding: 13,
+      padding: 21,
       child: Column(
         children: [
           _buildHorizontalBar(),
@@ -88,6 +88,7 @@ class DistributionBar extends StatelessWidget {
       );
 
       detailRowWidgets.add(_buildDetailRow(
+        context,
         segment.title,
         MyCircle(colorFill: segment.color, size: 16),
         segment.amount,
@@ -128,7 +129,12 @@ class DistributionBar extends StatelessWidget {
     );
   }
 
-  Widget _buildDetailRow(String label, Widget colorWidget, double value) {
+  Widget _buildDetailRow(
+    final BuildContext context,
+    final String label,
+    final Widget colorWidget,
+    final double value,
+  ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -139,7 +145,7 @@ class DistributionBar extends StatelessWidget {
             flex: 2,
             child: Text(
               label,
-              style: const TextStyle(fontSize: 10),
+              style: getTextTheme(context).labelMedium,
               textAlign: TextAlign.justify,
               textWidthBasis: TextWidthBasis.longestLine,
               softWrap: false,
