@@ -57,7 +57,7 @@ class PanelSanKey extends StatelessWidget {
 
   void transformData() {
     final transactions =
-        Data().transactions.transactionInYearRange(minYear: minYear, maxYear: maxYear, onlyIncome: null);
+        Data().transactions.transactionInYearRange(minYear: minYear, maxYear: maxYear, incomesOrExpenses: null);
 
     for (Transaction element in transactions) {
       final Category? category = Data().categories.get(element.categoryId.value);

@@ -12,15 +12,15 @@ import 'package:money/widgets/money_widget.dart';
 class RecurringCard extends StatelessWidget {
   final int index;
   final RecurringPayment payment;
-  final List<Distribution> listForDistributionBar;
-  final List<double> occurrences;
+  final List<double> monthDistribution;
+  final List<Distribution> categoryDistribution;
 
   const RecurringCard({
     super.key,
     required this.index,
     required this.payment,
-    required this.listForDistributionBar,
-    required this.occurrences,
+    required this.monthDistribution,
+    required this.categoryDistribution,
   });
 
   @override
@@ -46,7 +46,7 @@ class RecurringCard extends StatelessWidget {
                 gapLarge(),
 
                 // Category Distributions
-                Expanded(child: DistributionBar(title: 'Categories', segments: listForDistributionBar)),
+                Expanded(child: DistributionBar(title: 'Categories', segments: categoryDistribution)),
               ],
             ),
           ),
@@ -87,7 +87,7 @@ class RecurringCard extends StatelessWidget {
             height: 55,
             margin: const EdgeInsets.symmetric(vertical: 8),
             child: HorizontalTimelineGraph(
-              values: occurrences,
+              values: monthDistribution,
               color: getColorTheme(context).primary,
             ),
           ),

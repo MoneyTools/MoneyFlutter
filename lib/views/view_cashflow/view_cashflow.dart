@@ -62,6 +62,7 @@ class ViewCashFlowState extends ViewWidgetState {
         // View
         Expanded(
           child: Container(
+            key: Key(minYear.toString() + maxYear.toString()), // rebuild if the date changes
             color: getColorTheme(context).background,
             child: getView(),
           ),

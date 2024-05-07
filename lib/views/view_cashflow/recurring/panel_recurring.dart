@@ -26,13 +26,17 @@ class PanelRecurrings extends StatefulWidget {
 
 class _PanelRecurringsState extends State<PanelRecurrings> {
   List<RecurringPayment> recurringPayments = [];
+  late bool forIncomeTransaction;
+
+  @override
+  void initState() {
+    super.initState();
+    forIncomeTransaction = widget.viewRecurringAs == CashflowViewAs.recurringIncomes;
+    initRecurringTransactions(forIncome: forIncomeTransaction);
+  }
 
   @override
   Widget build(BuildContext context) {
-    bool forIncomeTransaction = widget.viewRecurringAs == CashflowViewAs.recurringIncomes;
-
-    initRecurringTransactions(forIncome: forIncomeTransaction);
-
     return Container(
       color: getColorTheme(context).background,
       child: ListView.builder(
@@ -49,8 +53,8 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
             return RecurringCard(
               index: index + 1,
               payment: payment,
-              listForDistributionBar: listForDistributionBar,
-              occurrences: payment.monthSums,
+              monthDistribution: payment.monthSums,
+              categoryDistribution: listForDistributionBar,
             );
           }),
     );
@@ -61,7 +65,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     final transactions = Data().transactions.transactionInYearRange(
           minYear: widget.minYear,
           maxYear: widget.maxYear,
-          onlyIncome: forIncome,
+          incomesOrExpenses: forIncome,
         );
 
     final flatTransactions = Data().transactions.flatTransactions(transactions);
@@ -176,8 +180,8 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
         // Check if the frequency indicates monthly recurrence
         if (isMonthlyRecurrence(months)) {
           List<double> sumPerMonths = List.generate(12, (index) => 0);
-
-          payeeIdMonthAndSums.getLevel1(payeeId)!.values.forEach((month, sum) {
+          final AccumulatorSum<int, double> monthSums = payeeIdMonthAndSums.getLevel1(payeeId)!;
+          monthSums.values.forEach((int month, double sum) {
             sumPerMonths[month - 1] = sum.abs();
           });
 
@@ -206,10 +210,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   }
 
   bool isMonthlyRecurrence(List<int> months) {
-    // Check if the months between transactions suggest a monthly recurrence
-    Set<int> uniqueMonths = months.toSet();
-
-    // we can conclude that if paid more than 5 months its a recurring monthly event
-    return uniqueMonths.length >= Settings().cashflowRecurringOccurrences;
+    // we can conclude that if paid more than 'n' months its a recurring monthly event
+    return months.length == Settings().cashflowRecurringOccurrences;
   }
 }

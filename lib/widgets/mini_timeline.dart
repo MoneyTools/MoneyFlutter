@@ -74,7 +74,7 @@ class HorizontalTimelineGraph extends StatelessWidget {
       );
     } else {
       return Container(
-        height: height,
+        height: max(1, height),
         width: 5,
         decoration: BoxDecoration(
           color: color,

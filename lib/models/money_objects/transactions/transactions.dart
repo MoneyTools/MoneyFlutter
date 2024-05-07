@@ -36,13 +36,13 @@ class Transactions extends MoneyObjects<Transaction> {
   Iterable<Transaction> transactionInYearRange({
     required final int minYear,
     required final int maxYear,
-    required final bool? onlyIncome,
+    required final bool? incomesOrExpenses,
   }) {
     return iterableList(includeDeleted: true).where((element) =>
         isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
-        ((onlyIncome == null ||
-            (onlyIncome == true && element.amount.value.amount > 0) ||
-            (onlyIncome == false && element.amount.value.amount < 0))));
+        ((incomesOrExpenses == null ||
+            (incomesOrExpenses == true && element.amount.value.amount > 0) ||
+            (incomesOrExpenses == false && element.amount.value.amount < 0))));
   }
 
   List<Transaction> flatTransactions(final Iterable<Transaction> transactions) {
