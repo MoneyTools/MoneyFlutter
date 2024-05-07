@@ -5,7 +5,6 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
 import 'package:money/widgets/box.dart';
 import 'package:money/widgets/distribution_bar.dart';
-import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/mini_timeline.dart';
 import 'package:money/widgets/money_widget.dart';
 
@@ -27,23 +26,21 @@ class RecurringCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: getColorTheme(context).background,
-      elevation: 1,
+      margin: const EdgeInsets.only(bottom: 21),
+      elevation: 4,
       child: SizedBox(
         width: 400,
         child: IntrinsicHeight(
           child: Padding(
             padding: const EdgeInsets.all(13.0),
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 // Header
                 _buildHeader(context),
 
-                gapLarge(),
-
                 // break down the numbers
                 _buildDetailAverages(context),
-
-                gapLarge(),
 
                 // Category Distributions
                 Expanded(child: DistributionBar(title: 'Categories', segments: categoryDistribution)),
@@ -92,20 +89,20 @@ class RecurringCard extends StatelessWidget {
             ),
           ),
 
-          _buildTextAmountBox(context, 'Per Transaction (${payment.frequency})', payment.total / payment.frequency),
+          _buildTextAmountRow(context, 'Per Transaction (${payment.frequency})', payment.total / payment.frequency),
           // Average per yearS
-          _buildTextAmountBox(context, 'Year', payment.total / (payment.dateRange.durationInYears)),
+          _buildTextAmountRow(context, 'Year', payment.total / (payment.dateRange.durationInYears)),
           // Average per month
-          _buildTextAmountBox(context, 'Month', payment.total / (payment.dateRange.durationInMonths)),
+          _buildTextAmountRow(context, 'Month', payment.total / (payment.dateRange.durationInMonths)),
           // Average per day
-          _buildTextAmountBox(context, 'Day', payment.total / (payment.dateRange.durationInDays)),
+          _buildTextAmountRow(context, 'Day', payment.total / (payment.dateRange.durationInDays)),
         ],
       ),
     );
   }
 }
 
-Widget _buildTextAmountBox(final BuildContext context, final String title, final double amount) {
+Widget _buildTextAmountRow(final BuildContext context, final String title, final double amount) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [

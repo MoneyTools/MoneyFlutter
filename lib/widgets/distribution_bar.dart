@@ -122,7 +122,7 @@ class DistributionBar extends StatelessWidget {
 
   Widget _buildRowOfDetails() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: detailRowWidgets,
     );
