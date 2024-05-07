@@ -20,11 +20,12 @@ class Distribution {
 }
 
 class DistributionBar extends StatelessWidget {
+  final String title;
   final List<Distribution> segments;
   final List<Widget> segmentWidgets = [];
   final List<Widget> detailRowWidgets = [];
 
-  DistributionBar({super.key, required this.segments});
+  DistributionBar({super.key, required this.title, required this.segments});
 
   @override
   Widget build(BuildContext context) {
@@ -39,12 +40,16 @@ class DistributionBar extends StatelessWidget {
 
     initWidgets(context);
 
-    return Column(
-      children: [
-        _buildHorizontalBar(),
-        gapSmall(),
-        Expanded(child: _buildRowOfDetails()),
-      ],
+    return Box(
+      title: title,
+      padding: 13,
+      child: Column(
+        children: [
+          _buildHorizontalBar(),
+          gapSmall(),
+          Expanded(child: _buildRowOfDetails()),
+        ],
+      ),
     );
   }
 
@@ -116,12 +121,10 @@ class DistributionBar extends StatelessWidget {
   }
 
   Widget _buildRowOfDetails() {
-    return Box(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: detailRowWidgets,
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: detailRowWidgets,
     );
   }
 

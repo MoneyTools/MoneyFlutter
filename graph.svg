@@ -349,7 +349,7 @@
 <!-- /lib/models/money_objects/securities/securities.dart&#45;&gt;/lib/models/money_objects/investments/investments.dart -->
 <g id="edge6" class="edge">
 <title>/lib/models/money_objects/securities/securities.dart&#45;&gt;/lib/models/money_objects/investments/investments.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M915.81,-479.13C926.56,-523.03 961.64,-638.93 1041,-685.9 1059.65,-696.94 1409.9,-688.94 1431,-693.9 1436.11,-695.1 1441.31,-696.8 1446.38,-698.76"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M915.89,-479.13C926.83,-523.04 962.41,-638.97 1042,-685.9 1060.62,-696.88 1409.96,-688.96 1431,-693.9 1436.11,-695.1 1441.31,-696.8 1446.38,-698.76"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1444.82,-701.9 1455.39,-702.62 1447.58,-695.46 1444.82,-701.9"/>
 </g>
 <!-- /lib/storage/data/data.dart -->
@@ -781,7 +781,7 @@
 <!-- /lib/models/money_objects/rent_buildings/rent_building.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart -->
 <g id="edge59" class="edge">
 <title>/lib/models/money_objects/rent_buildings/rent_building.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M3303.33,-587.48C3293.46,-584.4 3282.99,-581.63 3273,-579.9 3254.93,-576.78 2957.94,-582.53 2943,-571.9 2889.29,-533.68 2945.1,-470.66 2891,-433 2864.77,-414.74 620,-436.01 590,-425 577.3,-420.34 565.46,-411.48 555.9,-402.62"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M3303.33,-587.48C3293.47,-584.39 3282.99,-581.62 3273,-579.9 3254.38,-576.69 2948.04,-583.34 2933,-571.9 2881.67,-532.85 2942.72,-471.53 2891,-433 2878.19,-423.45 605,-430.5 590,-425 577.3,-420.34 565.46,-411.48 555.9,-402.62"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="558.45,-400.21 548.88,-395.66 553.52,-405.18 558.45,-400.21"/>
 </g>
 <!-- /lib/models/money_objects/rent_buildings/rent_building.dart&#45;&gt;/lib/models/money_objects/money_objects.dart -->
@@ -805,8 +805,8 @@
 <!-- /lib/models/money_objects/rent_buildings/rent_building.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart -->
 <g id="edge67" class="edge">
 <title>/lib/models/money_objects/rent_buildings/rent_building.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M3302.92,-587.4C3293.17,-584.37 3282.85,-581.63 3273,-579.9 3258.55,-577.36 3021.28,-579.93 3009,-571.9 2951.78,-534.51 3000.4,-470.1 2943,-433 2924.71,-421.18 2571.42,-432.59 2551,-425 2538.19,-420.24 2526.16,-411.36 2516.42,-402.52"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="2518.86,-400 2509.24,-395.56 2513.99,-405.03 2518.86,-400"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M3302.92,-587.4C3293.17,-584.37 3282.85,-581.63 3273,-579.9 3244.1,-574.82 3034.02,-587.24 3009,-571.9 2949.02,-535.11 2993.16,-469.51 2933,-433 2914.85,-421.99 2570.89,-432.4 2551,-425 2538.19,-420.23 2526.17,-411.35 2516.42,-402.51"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="2518.86,-400 2509.25,-395.55 2513.99,-405.03 2518.86,-400"/>
 </g>
 <!-- /lib/models/money_objects/rental_unit/rental_unit.dart -->
 <g id="node42" class="node">
@@ -1945,7 +1945,7 @@
 <!-- /lib/models/money_objects/investments/cost_basis.dart&#45;&gt;/lib/models/money_objects/investments/security_sales.dart -->
 <g id="edge211" class="edge">
 <title>/lib/models/money_objects/investments/cost_basis.dart&#45;&gt;/lib/models/money_objects/investments/security_sales.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1335.35,-718.96C1249.12,-714.93 1063.3,-704.23 1041,-685.9 980.46,-636.14 988.78,-406.72 1018,-334 1022.26,-323.4 1029.05,-313.03 1035.95,-304.16"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1335.49,-718.93C1249.54,-714.87 1064.31,-704.09 1042,-685.9 981.25,-636.37 988.78,-406.73 1018,-334 1022.26,-323.4 1029.05,-313.03 1035.95,-304.16"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1038.44,-306.64 1042.1,-296.69 1033.04,-302.18 1038.44,-306.64"/>
 </g>
 <!-- /lib/models/money_objects/investments/cost_basis.dart&#45;&gt;/lib/models/money_objects/investments/investment_types.dart -->
@@ -1957,14 +1957,14 @@
 <!-- /lib/models/money_objects/investments/account_holdings.dart -->
 <g id="node53" class="node">
 <title>/lib/models/money_objects/investments/account_holdings.dart</title>
-<path fill="Lavender" stroke="black" stroke-width="1.3" d="M1169.75,-623.9C1169.75,-623.9 1062.25,-623.9 1062.25,-623.9 1056.25,-623.9 1050.25,-617.9 1050.25,-611.9 1050.25,-611.9 1050.25,-599.9 1050.25,-599.9 1050.25,-593.9 1056.25,-587.9 1062.25,-587.9 1062.25,-587.9 1169.75,-587.9 1169.75,-587.9 1175.75,-587.9 1181.75,-593.9 1181.75,-599.9 1181.75,-599.9 1181.75,-611.9 1181.75,-611.9 1181.75,-617.9 1175.75,-623.9 1169.75,-623.9"/>
-<text text-anchor="middle" x="1116" y="-600.65" font-family="Arial" font-size="15.00">account_holdings</text>
+<path fill="Lavender" stroke="black" stroke-width="1.3" d="M1170.75,-623.9C1170.75,-623.9 1063.25,-623.9 1063.25,-623.9 1057.25,-623.9 1051.25,-617.9 1051.25,-611.9 1051.25,-611.9 1051.25,-599.9 1051.25,-599.9 1051.25,-593.9 1057.25,-587.9 1063.25,-587.9 1063.25,-587.9 1170.75,-587.9 1170.75,-587.9 1176.75,-587.9 1182.75,-593.9 1182.75,-599.9 1182.75,-599.9 1182.75,-611.9 1182.75,-611.9 1182.75,-617.9 1176.75,-623.9 1170.75,-623.9"/>
+<text text-anchor="middle" x="1117" y="-600.65" font-family="Arial" font-size="15.00">account_holdings</text>
 </g>
 <!-- /lib/models/money_objects/investments/cost_basis.dart&#45;&gt;/lib/models/money_objects/investments/account_holdings.dart -->
 <g id="edge205" class="edge">
 <title>/lib/models/money_objects/investments/cost_basis.dart&#45;&gt;/lib/models/money_objects/investments/account_holdings.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1335.45,-717.73C1300.15,-713.88 1249.9,-705.24 1210,-685.9 1182.96,-672.8 1157.21,-650.18 1139.51,-632.49"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1142.36,-630.4 1132.88,-625.68 1137.35,-635.28 1142.36,-630.4"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1335.42,-717.79C1300.11,-713.97 1249.85,-705.34 1210,-685.9 1183.17,-672.81 1157.69,-650.19 1140.21,-632.5"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1143.12,-630.47 1133.67,-625.69 1138.07,-635.32 1143.12,-630.47"/>
 </g>
 <!-- /lib/models/money_objects/investments/cost_basis.dart&#45;&gt;/lib/models/money_objects/investments/investment.dart -->
 <g id="edge209" class="edge">
@@ -2107,32 +2107,32 @@
 <!-- /lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/securities/security.dart -->
 <g id="edge237" class="edge">
 <title>/lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/securities/security.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1049.97,-596.09C1033.93,-591.19 1017.97,-583.61 1006,-571.9 959.62,-526.52 990.54,-490.78 961,-433 955.82,-422.87 948.88,-412.59 942.19,-403.65"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1050.96,-596.37C1034.58,-591.48 1018.23,-583.84 1006,-571.9 959.56,-526.58 990.54,-490.78 961,-433 955.82,-422.87 948.88,-412.59 942.19,-403.65"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="944.95,-401.5 936.05,-395.76 939.43,-405.8 944.95,-401.5"/>
 </g>
 <!-- /lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart -->
 <g id="edge235" class="edge">
 <title>/lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1181.85,-599.83C1297.1,-590.92 1523.38,-573.27 1525,-571.9 1573.6,-530.78 1510.03,-472.45 1560,-433 1573.76,-422.14 2173.53,-426.49 2191,-425 2282.3,-417.21 2387.78,-398.1 2446.81,-386.48"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1183.14,-599.79C1298.25,-590.87 1523.39,-573.27 1525,-571.9 1573.6,-530.77 1510.03,-472.45 1560,-433 1573.76,-422.14 2173.53,-426.49 2191,-425 2282.3,-417.21 2387.78,-398.1 2446.81,-386.48"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="2447.27,-389.96 2456.39,-384.58 2445.9,-383.09 2447.27,-389.96"/>
 </g>
 <!-- /lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/investments/security_purchase.dart -->
 <g id="edge234" class="edge">
 <title>/lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/investments/security_purchase.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1168.53,-587.42C1174.95,-583.26 1180.74,-578.15 1185,-571.9 1202.85,-545.71 1202.1,-453.91 1200.39,-406.23"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1203.89,-406.14 1199.99,-396.28 1196.9,-406.42 1203.89,-406.14"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1168.45,-587.52C1174.91,-583.34 1180.73,-578.2 1185,-571.9 1202.78,-545.66 1202.06,-453.88 1200.38,-406.22"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1203.88,-406.13 1199.98,-396.28 1196.88,-406.41 1203.88,-406.13"/>
 </g>
 <!-- /lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/investments/security_sales.dart -->
 <g id="edge236" class="edge">
 <title>/lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/investments/security_sales.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1050.13,-593.93C1038.69,-589.04 1028.18,-582 1021,-571.9 990.94,-529.64 1032.37,-371.8 1051.37,-306.53"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1054.7,-307.59 1054.18,-297.01 1047.99,-305.61 1054.7,-307.59"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1050.93,-594.27C1039.19,-589.36 1028.37,-582.23 1021,-571.9 990.87,-529.69 1032.34,-371.82 1051.36,-306.54"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1054.7,-307.59 1054.17,-297.01 1047.98,-305.61 1054.7,-307.59"/>
 </g>
 <!-- /lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/investments/security_fifo_queue.dart -->
 <g id="edge233" class="edge">
 <title>/lib/models/money_objects/investments/account_holdings.dart&#45;&gt;/lib/models/money_objects/investments/security_fifo_queue.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1114.43,-587.65C1112.26,-563.71 1108.29,-520.08 1105.65,-491.03"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1109.14,-490.81 1104.75,-481.17 1102.17,-491.45 1109.14,-490.81"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1115.31,-587.65C1112.97,-563.71 1108.7,-520.08 1105.85,-491.03"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="1109.34,-490.78 1104.89,-481.17 1102.38,-491.46 1109.34,-490.78"/>
 </g>
 <!-- /lib/models/money_objects/investments/investment.dart&#45;&gt;/lib/models/money_objects/transactions/transaction.dart -->
 <g id="edge243" class="edge">
@@ -2161,7 +2161,7 @@
 <!-- /lib/models/money_objects/investments/investment.dart&#45;&gt;/lib/models/fields/fields.dart -->
 <g id="edge239" class="edge">
 <title>/lib/models/money_objects/investments/investment.dart&#45;&gt;/lib/models/fields/fields.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1447.19,-600.17C1388.44,-594.2 1282.14,-584.19 1191,-579.9 1151.21,-578.03 512.18,-583.28 474,-571.9 357.76,-537.24 302.28,-531.37 244,-425 223.7,-387.95 234.16,-337.55 244.14,-306.43"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M1447.34,-600.17C1388.79,-594.19 1282.84,-584.18 1192,-579.9 1152.15,-578.02 512.23,-583.3 474,-571.9 357.76,-537.24 302.28,-531.37 244,-425 223.7,-387.95 234.16,-337.55 244.14,-306.43"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="247.45,-307.59 247.38,-296.99 240.83,-305.32 247.45,-307.59"/>
 </g>
 <!-- /lib/models/money_objects/investments/investment.dart&#45;&gt;/lib/storage/data/data.dart -->
@@ -2899,7 +2899,7 @@
 <!-- /lib/main.dart&#45;&gt;/lib/storage/import/import_pdf.dart -->
 <g id="edge342" class="edge">
 <title>/lib/main.dart&#45;&gt;/lib/storage/import/import_pdf.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M17035.76,-1037.56C16953.1,-1018.32 16700.13,-952.57 16525,-832.8 16455.71,-785.41 16473.88,-727.63 16397,-693.9 16359.43,-677.41 4616.2,-705.22 4580,-685.9 4559.94,-675.2 4546.13,-653.16 4537.65,-635.08"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M17035.76,-1034.66C16955.65,-1008.02 16714.58,-925.23 16525,-832.8 16415.95,-779.63 16407.02,-725.94 16290,-693.9 16270.39,-688.53 4597.94,-695.47 4580,-685.9 4559.94,-675.2 4546.13,-653.16 4537.65,-635.08"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="4540.91,-633.79 4533.72,-626 4534.48,-636.57 4540.91,-633.79"/>
 </g>
 <!-- /lib/main.dart&#45;&gt;/lib/storage/import/import_qif.dart -->
@@ -3097,7 +3097,7 @@
 <!-- /lib/main.dart&#45;&gt;/lib/widgets/snack_bar.dart -->
 <g id="edge359" class="edge">
 <title>/lib/main.dart&#45;&gt;/lib/widgets/snack_bar.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M17090.38,-1043.95C17205.32,-1044.81 17646.87,-1041.55 17732,-942.6 17768.04,-900.7 17769.19,-734.78 17732,-693.9 17641.81,-594.74 16664.88,-586.49 16531,-579.9 16516.17,-579.17 14405.53,-579.87 14393,-571.9 14365,-554.09 14351.78,-516.71 14345.75,-490.48"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M17090.38,-1043.95C17205.32,-1044.81 17646.87,-1041.55 17732,-942.6 17768.04,-900.7 17769.18,-734.79 17732,-693.9 17642.04,-594.97 16667.55,-586.49 16534,-579.9 16519.15,-579.17 14405.55,-579.88 14393,-571.9 14365,-554.09 14351.78,-516.71 14345.75,-490.48"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="14349.22,-490.01 14343.79,-480.92 14342.36,-491.41 14349.22,-490.01"/>
 </g>
 <!-- /lib/widgets/keyboard_widget.dart -->
@@ -3181,7 +3181,7 @@
 <!-- /lib/views/view_loans/view_loans.dart&#45;&gt;/lib/models/money_objects/money_object.dart -->
 <g id="edge369" class="edge">
 <title>/lib/views/view_loans/view_loans.dart&#45;&gt;/lib/models/money_objects/money_object.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8361.1,-690.68 16665.78,-696.13 16676,-685.9 16709.3,-652.57 16698.32,-621.39 16676,-579.9 16550.34,-346.31 16432.01,-327.4 16178,-251 16136.48,-238.51 3730.85,-257.53 3690,-243 3676.86,-238.32 3664.51,-229.33 3654.55,-220.38"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8361.11,-690.68 16670.77,-696.14 16681,-685.9 16714.3,-652.57 16703.41,-621.34 16681,-579.9 16553.92,-344.96 16433.96,-327.35 16178,-251 16136.45,-238.61 3730.85,-257.53 3690,-243 3676.86,-238.32 3664.51,-229.33 3654.55,-220.38"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="3657.17,-218.05 3647.53,-213.66 3652.33,-223.11 3657.17,-218.05"/>
 </g>
 <!-- /lib/views/view_loans/view_loans.dart&#45;&gt;/lib/models/fields/fields.dart -->
@@ -3211,7 +3211,7 @@
 <!-- /lib/views/view_loans/view_loans.dart&#45;&gt;/lib/helpers/list_helper.dart -->
 <g id="edge365" class="edge">
 <title>/lib/views/view_loans/view_loans.dart&#45;&gt;/lib/helpers/list_helper.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8406.71,-680.27 17104.87,-689.61 17166,-685.9 17557.45,-662.12 17650.96,-609.76 18042,-579.9 18055.86,-578.84 18281.64,-581.17 18292,-571.9 18338.48,-530.31 18265.32,-474.36 18312,-433 18326.89,-419.81 18654.64,-437.64 18670,-425 18701.98,-398.69 18661.14,-363.7 18690,-334 18700.22,-323.49 18712.98,-337.56 18722,-326 18742.51,-299.73 18731.58,-282.93 18722,-251 18708.08,-204.6 18704.5,-183.25 18662,-160 18598.79,-125.43 16273.25,-123.15 15887.85,-123.01"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8406.73,-680.27 17107.85,-689.63 17169,-685.9 17559.13,-662.12 17652.29,-609.73 18042,-579.9 18055.86,-578.84 18281.64,-581.17 18292,-571.9 18338.48,-530.31 18265.32,-474.36 18312,-433 18326.89,-419.81 18654.64,-437.64 18670,-425 18701.98,-398.69 18661.14,-363.7 18690,-334 18700.22,-323.49 18712.98,-337.56 18722,-326 18742.51,-299.73 18731.58,-282.93 18722,-251 18708.08,-204.6 18704.5,-183.25 18662,-160 18598.79,-125.43 16273.25,-123.15 15887.85,-123.01"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15887.96,-119.51 15877.95,-123 15887.95,-126.51 15887.96,-119.51"/>
 </g>
 <!-- /lib/widgets/center_message.dart -->
@@ -3223,7 +3223,7 @@
 <!-- /lib/views/view_loans/view_loans.dart&#45;&gt;/lib/widgets/center_message.dart -->
 <g id="edge371" class="edge">
 <title>/lib/views/view_loans/view_loans.dart&#45;&gt;/lib/widgets/center_message.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8403.49,-681.01 16633.15,-689.18 16691,-685.9 17111.19,-662.11 17212.64,-615.47 17632,-579.9 17663.05,-577.27 17742.99,-583.27 17772,-571.9 17867.5,-534.47 17906.27,-517.78 17950,-425 17967.24,-388.41 17978.3,-362.9 17950,-334 17935.23,-318.91 17586.61,-339.04 17570,-326 17542.87,-304.7 17577.32,-272.07 17550,-251 17538.29,-241.97 15434.2,-247.14 15420,-243 15403.52,-238.2 15387.18,-228.67 15373.89,-219.35"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8403.53,-681 16638.11,-689.19 16696,-685.9 17113.98,-662.11 17214.85,-615.41 17632,-579.9 17663.05,-577.26 17742.99,-583.27 17772,-571.9 17867.5,-534.47 17906.27,-517.78 17950,-425 17967.24,-388.41 17978.3,-362.9 17950,-334 17935.23,-318.91 17586.61,-339.04 17570,-326 17542.87,-304.7 17577.32,-272.07 17550,-251 17538.29,-241.97 15434.2,-247.14 15420,-243 15403.52,-238.2 15387.18,-228.67 15373.89,-219.35"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15376.09,-216.62 15365.96,-213.52 15371.94,-222.26 15376.09,-216.62"/>
 </g>
 <!-- /lib/widgets/chart.dart -->
@@ -3235,7 +3235,7 @@
 <!-- /lib/views/view_loans/view_loans.dart&#45;&gt;/lib/widgets/chart.dart -->
 <g id="edge372" class="edge">
 <title>/lib/views/view_loans/view_loans.dart&#45;&gt;/lib/widgets/chart.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8400.99,-681.58 16266.8,-690.33 16322,-685.9 16481.29,-673.11 16928.35,-693.52 17032,-571.9 17072.04,-524.91 17075.44,-476.86 17032,-433 17015.93,-416.78 16227.73,-439.4 16210,-425 16177.86,-398.89 16222.17,-360.08 16190,-334 16168.66,-316.7 15225.52,-338.39 15201,-326 15191.88,-321.39 15184.46,-313.27 15178.78,-305"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M8320.91,-703.42C8329.1,-699.5 8338.17,-695.92 8347,-693.9 8401.06,-681.56 16276.73,-690.4 16332,-685.9 16489.09,-673.11 16929.91,-691.97 17032,-571.9 17071.99,-524.87 17075.44,-476.86 17032,-433 17015.93,-416.78 16227.73,-439.4 16210,-425 16177.86,-398.89 16222.17,-360.08 16190,-334 16168.66,-316.7 15225.52,-338.39 15201,-326 15191.88,-321.39 15184.46,-313.27 15178.78,-305"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15181.94,-303.45 15173.74,-296.74 15175.96,-307.1 15181.94,-303.45"/>
 </g>
 <!-- /lib/widgets/list_view/transactions/list_view_transactions.dart -->
@@ -3493,7 +3493,7 @@
 <!-- /lib/views/view_aliases/view_aliases.dart&#45;&gt;/lib/models/money_objects/aliases/alias.dart -->
 <g id="edge411" class="edge">
 <title>/lib/views/view_aliases/view_aliases.dart&#45;&gt;/lib/models/money_objects/aliases/alias.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M9341.29,-703.41C9350.36,-699.49 9360.35,-695.91 9370,-693.9 9381.92,-691.42 16373.4,-694.51 16382,-685.9 16415.29,-652.57 16404.64,-621.22 16382,-579.9 16323.72,-473.53 16268.42,-467.05 16152,-433 16133.49,-427.58 5060.29,-425.34 5041,-425 4498.57,-415.55 3839.01,-386.4 3673.23,-378.82"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M9341.29,-703.41C9350.36,-699.49 9360.35,-695.91 9370,-693.9 9381.94,-691.41 16383.38,-694.52 16392,-685.9 16425.29,-652.57 16415.03,-621 16392,-579.9 16330.86,-470.8 16272.36,-466.96 16152,-433 16114.87,-422.52 5079.57,-425.67 5041,-425 4498.57,-415.55 3839.01,-386.4 3673.23,-378.82"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="3673.4,-375.32 3663.25,-378.36 3673.08,-382.32 3673.4,-375.32"/>
 </g>
 <!-- /lib/views/view_aliases/view_aliases.dart&#45;&gt;/lib/models/money_objects/money_object.dart -->
@@ -3505,7 +3505,7 @@
 <!-- /lib/views/view_aliases/view_aliases.dart&#45;&gt;/lib/models/fields/fields.dart -->
 <g id="edge408" class="edge">
 <title>/lib/views/view_aliases/view_aliases.dart&#45;&gt;/lib/models/fields/fields.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M9341.29,-703.41C9350.36,-699.49 9360.35,-695.91 9370,-693.9 9381.94,-691.41 16388.38,-694.53 16397,-685.9 16430.29,-652.57 16413.52,-624.02 16397,-579.9 16366.63,-498.8 16347.54,-469.48 16269,-433 16243.35,-421.09 15786.81,-434.01 15760,-425 15695.21,-403.21 15700.96,-355.3 15636,-334 15585.42,-317.42 355.48,-345.64 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M9341.29,-703.41C9350.36,-699.49 9360.35,-695.91 9370,-693.9 9381.96,-691.41 16398.37,-694.54 16407,-685.9 16440.29,-652.57 16423.94,-623.86 16407,-579.9 16375.33,-497.72 16354.23,-469.34 16274,-433 16247.99,-421.22 15787.07,-434.1 15760,-425 15695.2,-403.22 15700.96,-355.3 15636,-334 15585.42,-317.42 355.48,-345.64 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="278.17,-301.82 268.89,-296.71 272.96,-306.5 278.17,-301.82"/>
 </g>
 <!-- /lib/views/view_aliases/view_aliases.dart&#45;&gt;/lib/storage/data/data.dart -->
@@ -3733,7 +3733,7 @@
 <!-- /lib/views/view_payees/view_payees.dart&#45;&gt;/lib/models/money_objects/payees/payee.dart -->
 <g id="edge443" class="edge">
 <title>/lib/views/view_payees/view_payees.dart&#45;&gt;/lib/models/money_objects/payees/payee.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11399.75,-842.25C11402.19,-841.69 11404.61,-841.2 11407,-840.8 11417.59,-839.02 17584.41,-840.4 17592,-832.8 17637.92,-786.82 17655.18,-503.15 17583,-433 17569.48,-419.86 16244.45,-428.87 16226,-425 16126.04,-404.06 16115.01,-354.68 16015,-334 15992.26,-329.3 2660.03,-335.86 2639,-326 2629.26,-321.43 2621.06,-313.2 2614.67,-304.83"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11399.75,-842.25C11402.19,-841.69 11404.61,-841.2 11407,-840.8 11417.59,-839.02 17584.41,-840.4 17592,-832.8 17638.94,-785.8 17651.98,-501.46 17581,-433 17567.45,-419.94 16244.42,-428.86 16226,-425 16126.04,-404.06 16115.01,-354.68 16015,-334 15992.26,-329.3 2660.03,-335.86 2639,-326 2629.26,-321.43 2621.06,-313.2 2614.67,-304.83"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="2617.68,-303.03 2609.14,-296.77 2611.91,-306.99 2617.68,-303.03"/>
 </g>
 <!-- /lib/views/view_payees/view_payees.dart&#45;&gt;/lib/models/money_objects/transactions/transaction.dart -->
@@ -3745,7 +3745,7 @@
 <!-- /lib/views/view_payees/view_payees.dart&#45;&gt;/lib/models/fields/fields.dart -->
 <g id="edge441" class="edge">
 <title>/lib/views/view_payees/view_payees.dart&#45;&gt;/lib/models/fields/fields.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11399.75,-842.25C11402.19,-841.69 11404.61,-841.2 11407,-840.8 11443.24,-834.72 16664.64,-848.2 16698,-832.8 16882.72,-747.51 17064.32,-577.42 16921,-433 16910.78,-422.7 15888.56,-432.28 15876,-425 15835.51,-401.52 15863.57,-357.34 15823,-334 15799.65,-320.57 331.04,-335.94 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11399.75,-842.25C11402.19,-841.69 11404.61,-841.2 11407,-840.8 11443.22,-834.72 16662.54,-847.94 16696,-832.8 16882.77,-748.3 17070.4,-578.5 16926,-433 16915.73,-422.65 15888.62,-432.32 15876,-425 15835.51,-401.52 15863.57,-357.34 15823,-334 15799.65,-320.57 331.04,-335.94 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="278.17,-301.82 268.89,-296.71 272.96,-306.5 278.17,-301.82"/>
 </g>
 <!-- /lib/views/view_payees/view_payees.dart&#45;&gt;/lib/storage/data/data.dart -->
@@ -3781,19 +3781,19 @@
 <!-- /lib/views/view_payees/view_payees.dart&#45;&gt;/lib/widgets/list_view/transactions/list_view_transactions.dart -->
 <g id="edge448" class="edge">
 <title>/lib/views/view_payees/view_payees.dart&#45;&gt;/lib/widgets/list_view/transactions/list_view_transactions.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11399.75,-842.25C11402.19,-841.69 11404.61,-841.2 11407,-840.8 11424.96,-837.79 16639.13,-845.69 16652,-832.8 16914.57,-569.83 16481.95,-607.24 16319,-579.9 16234.92,-565.79 13334.93,-579.27 13250,-571.9 13051.45,-554.67 12821.92,-508.67 12699.21,-481.92"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11399.75,-842.25C11402.19,-841.69 11404.61,-841.2 11407,-840.8 11424.96,-837.79 16639.13,-845.69 16652,-832.8 16908.94,-575.47 16473.74,-604.89 16329,-579.9 16244.72,-565.35 13335.21,-579.29 13250,-571.9 13051.45,-554.68 12821.92,-508.67 12699.21,-481.92"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="12700.11,-478.54 12689.59,-479.82 12698.61,-485.38 12700.11,-478.54"/>
 </g>
 <!-- /lib/views/view_payees/picker_payee_or_transfer.dart&#45;&gt;/lib/models/money_objects/payees/payee.dart -->
 <g id="edge450" class="edge">
 <title>/lib/views/view_payees/picker_payee_or_transfer.dart&#45;&gt;/lib/models/money_objects/payees/payee.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11279.15,-842.22C11283.49,-841.67 11287.79,-841.19 11292,-840.8 11445.22,-826.5 13908.2,-837.95 14062,-832.8 15081.3,-798.67 15335.39,-767.39 16352,-685.9 16888.81,-642.87 17916.7,-814.88 17537,-433 17523.32,-419.24 16159.12,-428.31 16140,-425 16019.36,-404.14 16000.69,-354.55 15880,-334 15857.34,-330.14 2659.81,-335.76 2639,-326 2629.26,-321.43 2621.06,-313.2 2614.67,-304.83"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11279.15,-842.22C11283.49,-841.67 11287.79,-841.19 11292,-840.8 11445.56,-826.47 13913.86,-837.95 14068,-832.8 15089.07,-798.67 15343.65,-767.93 16362,-685.9 16894.02,-643.05 17912.33,-811.5 17536,-433 17522.33,-419.25 16159.11,-428.3 16140,-425 16019.36,-404.14 16000.69,-354.55 15880,-334 15857.34,-330.14 2659.81,-335.76 2639,-326 2629.26,-321.43 2621.06,-313.2 2614.67,-304.83"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="2617.68,-303.03 2609.14,-296.77 2611.91,-306.99 2617.68,-303.03"/>
 </g>
 <!-- /lib/views/view_payees/picker_payee_or_transfer.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart -->
 <g id="edge449" class="edge">
 <title>/lib/views/view_payees/picker_payee_or_transfer.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11280.27,-842.22C11284.23,-841.69 11288.15,-841.21 11292,-840.8 11570.75,-810.87 16140.83,-887.16 16336,-685.9 16368.8,-652.08 16364.15,-617.68 16336,-579.9 16199.66,-396.9 16069.8,-466.06 15844,-433 15798.33,-426.31 2594.42,-440.65 2551,-425 2538.01,-420.32 2525.86,-411.32 2516.07,-402.37"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11280.27,-842.22C11284.23,-841.69 11288.15,-841.21 11292,-840.8 11571.31,-810.82 16150.43,-887.55 16346,-685.9 16378.8,-652.08 16374.25,-617.6 16346,-579.9 16337.29,-568.27 15858.38,-435.07 15844,-433 15798.31,-426.44 2594.42,-440.65 2551,-425 2538.01,-420.32 2525.86,-411.32 2516.07,-402.37"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="2518.8,-400.15 2509.2,-395.67 2513.91,-405.16 2518.8,-400.15"/>
 </g>
 <!-- /lib/views/view_payees/picker_payee_or_transfer.dart&#45;&gt;/lib/views/view_accounts/picker_account.dart -->
@@ -3823,7 +3823,7 @@
 <!-- /lib/views/view_payees/picker_payee.dart&#45;&gt;/lib/models/money_objects/payees/payee.dart -->
 <g id="edge455" class="edge">
 <title>/lib/views/view_payees/picker_payee.dart&#45;&gt;/lib/models/money_objects/payees/payee.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11322.68,-720.73C11827.98,-720.02 15809.7,-713.61 16336,-685.9 16861.2,-658.25 17862.95,-805.82 17492,-433 17476.4,-417.33 15919,-436.31 15900,-425 15860.34,-401.4 15889.71,-357.51 15850,-334 15830.26,-322.32 2659.77,-335.73 2639,-326 2629.26,-321.43 2621.06,-313.2 2614.67,-304.83"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11322.39,-720.73C11827,-720.06 15818.53,-713.89 16346,-685.9 16866.86,-658.26 17859.89,-802.74 17492,-433 17476.4,-417.33 15919,-436.31 15900,-425 15860.34,-401.4 15889.71,-357.51 15850,-334 15830.26,-322.32 2659.77,-335.73 2639,-326 2629.26,-321.43 2621.06,-313.2 2614.67,-304.83"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="2617.68,-303.03 2609.14,-296.77 2611.91,-306.99 2617.68,-303.03"/>
 </g>
 <!-- /lib/views/view_payees/picker_payee.dart&#45;&gt;/lib/storage/data/data.dart -->
@@ -3835,7 +3835,7 @@
 <!-- /lib/views/view_payees/picker_payee.dart&#45;&gt;/lib/widgets/picker_edit_box.dart -->
 <g id="edge456" class="edge">
 <title>/lib/views/view_payees/picker_payee.dart&#45;&gt;/lib/widgets/picker_edit_box.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11322.61,-720.69C11857.78,-719.54 16295.78,-709.28 16319,-685.9 16352.2,-652.47 16352.25,-613.27 16319,-579.9 16307.83,-568.69 14054.83,-579.58 14041,-571.9 14009.9,-554.62 13990.92,-516.84 13980.94,-490.4"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11322.43,-720.56C11858.03,-718.14 16317.37,-697.62 16329,-685.9 16362.2,-652.47 16362.25,-613.27 16329,-579.9 16317.78,-568.64 14054.89,-579.61 14041,-571.9 14009.9,-554.62 13990.92,-516.84 13980.94,-490.4"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="13984.26,-489.29 13977.63,-481.02 13977.65,-491.62 13984.26,-489.29"/>
 </g>
 <!-- /lib/views/view_pending_changes/view_pending_changes.dart -->
@@ -3997,7 +3997,7 @@
 <!-- /lib/views/view_investments/view_investments.dart&#45;&gt;/lib/models/fields/fields.dart -->
 <g id="edge475" class="edge">
 <title>/lib/views/view_investments/view_investments.dart&#45;&gt;/lib/models/fields/fields.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M9490.13,-703.39C9501.25,-699.48 9513.41,-695.9 9525,-693.9 9536.78,-691.87 16402.55,-694.36 16411,-685.9 16493.85,-602.95 16435.49,-495.02 16336,-433 16312.61,-418.42 15866.32,-433.18 15840,-425 15770.19,-403.31 15772.97,-355.14 15703,-334 15651.82,-318.54 355.69,-345.72 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M9490.13,-703.39C9501.25,-699.48 9513.41,-695.9 9525,-693.9 9536.8,-691.87 16412.54,-694.37 16421,-685.9 16504.12,-602.68 16443.32,-494.41 16343,-433 16319.16,-418.41 15866.69,-433.29 15840,-425 15770.19,-403.32 15772.97,-355.14 15703,-334 15651.82,-318.54 355.69,-345.72 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="278.17,-301.82 268.89,-296.71 272.96,-306.5 278.17,-301.82"/>
 </g>
 <!-- /lib/views/view_investments/view_investments.dart&#45;&gt;/lib/storage/data/data.dart -->
@@ -4051,7 +4051,7 @@
 <!-- /lib/views/view_settings.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart -->
 <g id="edge487" class="edge">
 <title>/lib/views/view_settings.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11525.86,-842.47C11528.93,-841.82 11532,-841.25 11535,-840.8 11599.49,-831.13 16166.48,-847.53 16230,-832.8 16400.21,-793.33 16650.95,-706.95 16531,-579.9 16520.38,-568.65 16407.29,-574.25 16392,-571.9 16142.37,-533.61 16091.62,-464.17 15841,-433 15814.72,-429.73 614.87,-434.08 590,-425 577.29,-420.36 565.45,-411.5 555.9,-402.64"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11525.86,-842.47C11528.93,-841.82 11532,-841.25 11535,-840.8 11599.49,-831.13 16166.45,-847.41 16230,-832.8 16401.29,-793.43 16654.73,-707.62 16534,-579.9 16523.14,-568.42 16407.62,-574.29 16392,-571.9 16142.35,-533.76 16091.62,-464.17 15841,-433 15814.72,-429.73 614.87,-434.08 590,-425 577.29,-420.36 565.45,-411.5 555.9,-402.64"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="558.44,-400.23 548.87,-395.67 553.51,-405.2 558.44,-400.23"/>
 </g>
 <!-- /lib/views/view_settings.dart&#45;&gt;/lib/models/settings.dart -->
@@ -4075,19 +4075,19 @@
 <!-- /lib/views/view_settings.dart&#45;&gt;/lib/widgets/dialog.dart -->
 <g id="edge488" class="edge">
 <title>/lib/views/view_settings.dart&#45;&gt;/lib/widgets/dialog.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11525.86,-842.47C11528.93,-841.81 11532,-841.25 11535,-840.8 11612.26,-829.23 17082.21,-840.08 17160,-832.8 17561.92,-795.18 17901.81,-954.68 18030,-571.9 18049.6,-513.36 18072.15,-478.1 18030,-433 17918.99,-314.2 16732.33,-343.32 16570,-334 16118.11,-308.05 15569.18,-285.54 15419.36,-279.56"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11525.86,-842.47C11528.93,-841.81 11532,-841.25 11535,-840.8 11612.28,-829.23 17083.2,-840.09 17161,-832.8 17562.49,-795.17 17901.94,-954.28 18030,-571.9 18049.6,-513.36 18072.15,-478.1 18030,-433 17918.99,-314.2 16732.33,-343.32 16570,-334 16118.11,-308.05 15569.18,-285.54 15419.36,-279.56"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15419.78,-276.07 15409.65,-279.17 15419.5,-283.06 15419.78,-276.07"/>
 </g>
 <!-- /lib/views/view_settings.dart&#45;&gt;/lib/widgets/gaps.dart -->
 <g id="edge489" class="edge">
 <title>/lib/views/view_settings.dart&#45;&gt;/lib/widgets/gaps.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11525.86,-842.47C11528.93,-841.81 11532,-841.25 11535,-840.8 11601.69,-830.8 16322.65,-836.06 16390,-832.8 16561.91,-824.49 17816.22,-813.24 17932,-685.9 17950.9,-665.11 17951.82,-452.92 17932,-433 17924.74,-425.7 16460.09,-427.03 16450,-425 16346.27,-404.1 16333.71,-354.97 16230,-334 16198.06,-327.54 15086.09,-340.67 15057,-326 15047.87,-321.4 15040.46,-313.27 15034.78,-305"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11525.86,-842.47C11528.93,-841.81 11532,-841.25 11535,-840.8 11601.71,-830.8 16324.62,-836.06 16392,-832.8 16563.69,-824.49 17816.37,-813.08 17932,-685.9 17950.9,-665.11 17951.82,-452.92 17932,-433 17924.74,-425.7 16460.09,-427.03 16450,-425 16346.27,-404.1 16333.71,-354.97 16230,-334 16198.06,-327.54 15086.09,-340.67 15057,-326 15047.87,-321.4 15040.46,-313.27 15034.78,-305"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15037.94,-303.46 15029.74,-296.75 15031.96,-307.11 15037.94,-303.46"/>
 </g>
 <!-- /lib/views/view_categories/view_categories.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart -->
 <g id="edge495" class="edge">
 <title>/lib/views/view_categories/view_categories.dart&#45;&gt;/lib/models/money_objects/currencies/currency.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10159.34,-703.4C10169.72,-699.48 10181.11,-695.9 10192,-693.9 10202.46,-691.98 16311.48,-693.43 16319,-685.9 16352.29,-652.57 16351.82,-613.7 16319,-579.9 16308.47,-569.05 16061.89,-574.52 16047,-571.9 15852.94,-537.78 15820.53,-464.31 15626,-433 15600.23,-428.85 614.52,-433.96 590,-425 577.29,-420.36 565.45,-411.5 555.9,-402.64"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10159.34,-703.4C10169.72,-699.48 10181.11,-695.9 10192,-693.9 10202.48,-691.97 16321.47,-693.44 16329,-685.9 16362.29,-652.57 16361.84,-613.68 16329,-579.9 16318.08,-568.66 16062.44,-574.61 16047,-571.9 15852.93,-537.88 15820.53,-464.31 15626,-433 15600.23,-428.85 614.52,-433.96 590,-425 577.29,-420.36 565.45,-411.5 555.9,-402.64"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="558.44,-400.23 548.87,-395.67 553.51,-405.2 558.44,-400.23"/>
 </g>
 <!-- /lib/views/view_categories/view_categories.dart&#45;&gt;/lib/models/money_objects/transactions/transaction.dart -->
@@ -4111,7 +4111,7 @@
 <!-- /lib/views/view_categories/view_categories.dart&#45;&gt;/lib/models/fields/fields.dart -->
 <g id="edge491" class="edge">
 <title>/lib/views/view_categories/view_categories.dart&#45;&gt;/lib/models/fields/fields.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10159.34,-703.4C10169.72,-699.48 10181.11,-695.9 10192,-693.9 10204.39,-691.62 17440.1,-694.81 17449,-685.9 17482.29,-652.57 17479.93,-615.44 17449,-579.9 17293.91,-401.67 16631.57,-451.12 16396,-433 16366.31,-430.72 15887.19,-437.15 15860,-425 15809.75,-402.55 15826.41,-356.09 15776,-334 15726.8,-312.44 355.93,-345.81 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10159.34,-703.4C10169.72,-699.48 10181.11,-695.9 10192,-693.9 10204.39,-691.62 17440.1,-694.81 17449,-685.9 17482.29,-652.57 17479.91,-615.46 17449,-579.9 17295.15,-402.91 16637.81,-451.08 16404,-433 16373.86,-430.67 15887.6,-437.33 15860,-425 15809.74,-402.55 15826.41,-356.09 15776,-334 15726.8,-312.44 355.93,-345.81 306,-326 294.42,-321.41 283.95,-312.8 275.54,-304.14"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="278.17,-301.82 268.89,-296.71 272.96,-306.5 278.17,-301.82"/>
 </g>
 <!-- /lib/views/view_categories/view_categories.dart&#45;&gt;/lib/storage/data/data.dart -->
@@ -4153,8 +4153,8 @@
 <!-- /lib/views/view_categories/view_categories.dart&#45;&gt;/lib/widgets/list_view/transactions/list_view_transactions.dart -->
 <g id="edge501" class="edge">
 <title>/lib/views/view_categories/view_categories.dart&#45;&gt;/lib/widgets/list_view/transactions/list_view_transactions.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10159.34,-703.4C10169.72,-699.48 10181.11,-695.9 10192,-693.9 10202.43,-691.98 16294.5,-693.41 16302,-685.9 16335.29,-652.57 16335.27,-613.26 16302,-579.9 16294.52,-572.4 13260.56,-572.82 13250,-571.9 13051.45,-554.67 12821.92,-508.66 12699.21,-481.92"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="12700.11,-478.54 12689.59,-479.82 12698.61,-485.37 12700.11,-478.54"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M10159.34,-703.4C10169.72,-699.48 10181.11,-695.9 10192,-693.9 10202.45,-691.98 16304.49,-693.42 16312,-685.9 16345.29,-652.57 16345.27,-613.26 16312,-579.9 16304.49,-572.37 13260.59,-572.82 13250,-571.9 13051.45,-554.67 12821.92,-508.67 12699.21,-481.92"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="12700.11,-478.54 12689.59,-479.82 12698.61,-485.38 12700.11,-478.54"/>
 </g>
 <!-- /lib/views/view_categories/picker_category.dart&#45;&gt;/lib/models/money_objects/categories/category.dart -->
 <g id="edge503" class="edge">
@@ -4327,13 +4327,13 @@
 <!-- /lib/views/view_cashflow/view_cashflow.dart&#45;&gt;/lib/helpers/color_helper.dart -->
 <g id="edge518" class="edge">
 <title>/lib/views/view_cashflow/view_cashflow.dart&#45;&gt;/lib/helpers/color_helper.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6420.36,-703.39C6432.07,-699.47 6444.85,-695.89 6457,-693.9 6522.83,-683.1 15997.32,-697.59 16063,-685.9 16197.69,-661.92 16217.38,-604.27 16352,-579.9 16384.66,-573.99 17515.3,-581.74 17547,-571.9 17658.23,-537.38 17709.41,-527.88 17764,-425 17803.07,-351.37 17769.52,-286.29 17694,-251 17669.78,-239.68 15794.14,-252.11 15769,-243 15756.02,-238.29 15743.87,-229.3 15734.08,-220.35"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6420.36,-703.39C6432.07,-699.47 6444.85,-695.89 6457,-693.9 6588.66,-672.3 15931.52,-708.57 16063,-685.9 16201.94,-661.94 16223.13,-604.27 16362,-579.9 16394.42,-574.21 17515.56,-581.66 17547,-571.9 17658.23,-537.38 17709.41,-527.88 17764,-425 17803.07,-351.37 17769.52,-286.29 17694,-251 17669.78,-239.68 15794.14,-252.11 15769,-243 15756.02,-238.29 15743.87,-229.3 15734.08,-220.35"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15736.81,-218.12 15727.21,-213.65 15731.93,-223.14 15736.81,-218.12"/>
 </g>
 <!-- /lib/views/view_cashflow/view_cashflow.dart&#45;&gt;/lib/helpers/misc_helpers.dart -->
 <g id="edge519" class="edge">
 <title>/lib/views/view_cashflow/view_cashflow.dart&#45;&gt;/lib/helpers/misc_helpers.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6420.36,-703.39C6432.07,-699.47 6444.85,-695.89 6457,-693.9 6490.42,-688.42 16179.72,-696.17 16212,-685.9 16289.79,-661.15 16284.27,-604.85 16362,-579.9 16431.93,-557.45 17613.78,-593.42 17684,-571.9 17790.28,-539.32 17785.91,-466.18 17892,-433 17916.29,-425.4 18328.81,-439.1 18350,-425 18386.78,-400.53 18355.27,-361.31 18390,-334 18405.97,-321.44 18421.95,-341.57 18435,-326 18456.41,-300.45 18458.02,-275.11 18435,-251 18421.71,-237.08 18276.84,-255.25 18262,-243 18232.74,-218.84 18271.71,-183.6 18242,-160 18216.14,-139.46 15973.48,-144.4 15785.93,-139.07"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6420.36,-703.39C6432.07,-699.47 6444.85,-695.89 6457,-693.9 6490.44,-688.41 16184.63,-695.92 16217,-685.9 16296.72,-661.21 16292.34,-604.8 16372,-579.9 16441.57,-558.15 17614.31,-593.26 17684,-571.9 17790.28,-539.32 17785.91,-466.18 17892,-433 17916.29,-425.4 18328.81,-439.1 18350,-425 18386.78,-400.53 18355.27,-361.31 18390,-334 18405.97,-321.44 18421.95,-341.57 18435,-326 18456.41,-300.45 18458.02,-275.11 18435,-251 18421.71,-237.08 18276.84,-255.25 18262,-243 18232.74,-218.84 18271.71,-183.6 18242,-160 18216.14,-139.46 15973.48,-144.4 15785.93,-139.07"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15786.18,-135.57 15776.02,-138.58 15785.83,-142.56 15786.18,-135.57"/>
 </g>
 <!-- /lib/widgets/sankey/sankey.dart -->
@@ -4717,8 +4717,8 @@
 <!-- /lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/list_view/column_filter_panel.dart -->
 <g id="edge576" class="edge">
 <title>/lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/list_view/column_filter_panel.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11656.22,-598.94C11730.07,-593.4 11844.58,-585.22 11944,-579.9 11966.98,-578.67 12130.83,-582.98 12151,-571.9 12183.25,-554.18 12204.71,-516.22 12216.37,-489.88"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="12219.5,-491.45 12220.14,-480.87 12213.05,-488.74 12219.5,-491.45"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11656.28,-604.18C11802.53,-602.29 12108.97,-595.52 12151,-571.9 12182.91,-553.97 12204.34,-516.4 12216.1,-490.19"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="12219.22,-491.78 12219.91,-481.2 12212.78,-489.04 12219.22,-491.78"/>
 </g>
 <!-- /lib/views/view_rentals/view_rentals.dart&#45;&gt;/lib/models/money_objects/rent_buildings/rent_building.dart -->
 <g id="edge583" class="edge">
@@ -4783,7 +4783,7 @@
 <!-- /lib/views/view_rentals/view_rentals.dart&#45;&gt;/lib/helpers/list_helper.dart -->
 <g id="edge580" class="edge">
 <title>/lib/views/view_rentals/view_rentals.dart&#45;&gt;/lib/helpers/list_helper.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6549.04,-703.41C6557.52,-699.5 6566.9,-695.91 6576,-693.9 6642.36,-679.23 16294.21,-690.69 16362,-685.9 16697.81,-662.15 16776.31,-605.24 17112,-579.9 17155.21,-576.64 17849.52,-580.47 17892,-571.9 18052.01,-539.62 18072.23,-466.47 18232,-433 18249.3,-429.38 18536.37,-436.25 18550,-425 18581.94,-398.65 18542.72,-365.15 18570,-334 18576.85,-326.17 18586.03,-334.52 18592,-326 18611.12,-298.7 18596.62,-284.01 18592,-251 18586.17,-209.34 18599.41,-185.56 18566,-160 18510.81,-117.78 16266.33,-121.86 15887.91,-122.84"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6549.04,-703.41C6557.52,-699.5 6566.9,-695.91 6576,-693.9 6642.42,-679.22 16304.15,-690.76 16372,-685.9 16703.4,-662.15 16780.72,-605.21 17112,-579.9 17155.21,-576.6 17849.52,-580.47 17892,-571.9 18052.01,-539.62 18072.23,-466.47 18232,-433 18249.3,-429.38 18536.37,-436.25 18550,-425 18581.94,-398.65 18542.72,-365.15 18570,-334 18576.85,-326.17 18586.03,-334.52 18592,-326 18611.12,-298.7 18596.62,-284.01 18592,-251 18586.17,-209.34 18599.41,-185.56 18566,-160 18510.81,-117.78 16266.33,-121.86 15887.91,-122.84"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15887.95,-119.34 15877.96,-122.87 15887.97,-126.34 15887.95,-119.34"/>
 </g>
 <!-- /lib/views/view_rentals/view_rentals.dart&#45;&gt;/lib/widgets/chart.dart -->
@@ -5554,65 +5554,71 @@
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M13207.05,-357.67C13218.74,-348.72 13234.25,-338.71 13250,-334 13274.04,-326.81 15034.58,-337.27 15057,-326 15066.13,-321.41 15073.55,-313.29 15079.23,-305.02"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15082.05,-307.12 15084.27,-296.76 15076.07,-303.47 15082.05,-307.12"/>
 </g>
+<!-- /lib/widgets/box.dart&#45;&gt;/lib/helpers/color_helper.dart -->
+<g id="edge706" class="edge">
+<title>/lib/widgets/box.dart&#45;&gt;/lib/helpers/color_helper.dart</title>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M15113.59,-258.67C15118.37,-255.54 15123.64,-252.72 15129,-251 15184.43,-233.17 15598.37,-263.15 15653,-243 15665.96,-238.22 15678.1,-229.21 15687.89,-220.28"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15690.04,-223.07 15694.77,-213.59 15685.16,-218.05 15690.04,-223.07"/>
+</g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/models/constants.dart -->
-<g id="edge708" class="edge">
+<g id="edge709" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/models/constants.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18248.68,-856.65C18294.87,-852.33 18383.45,-844.55 18459,-840.8 18469.49,-840.28 18829.26,-839.89 18837,-832.8 18877.86,-795.36 18873.06,-372.3 18833,-334 18806.29,-308.46 18209.82,-254.19 18173,-251 17324.99,-177.62 17110.91,-181.5 16260,-160 14938.12,-126.6 4732.81,-123.23 3911.47,-123.01"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="3911.5,-119.51 3901.49,-123.01 3911.49,-126.51 3911.5,-119.51"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/models/settings.dart -->
-<g id="edge709" class="edge">
+<g id="edge710" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/models/settings.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18248.46,-860.13C18348.34,-861.18 18653.61,-861.96 18686,-832.8 18851.22,-684.03 18840.25,-445.67 18648,-334 18631.47,-324.4 17978.23,-331.74 17960,-326 17903.56,-308.23 17906.53,-268.48 17850,-251 17829.49,-244.66 11689.47,-243.08 11668,-243 8408.36,-230.87 4382.86,-199.14 3910.83,-195.37"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="3911.11,-191.87 3901.08,-195.29 3911.06,-198.87 3911.11,-191.87"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/storage/import/import_transactions_from_text.dart -->
-<g id="edge710" class="edge">
+<g id="edge711" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/storage/import/import_transactions_from_text.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18185.42,-858.6C17823.78,-846.09 14427.8,-730.24 11680,-693.9 11654.62,-693.56 4394.3,-693.24 4370,-685.9 4335.11,-675.35 4301.05,-650.87 4278.37,-631.93"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="4280.74,-629.35 4270.87,-625.49 4276.18,-634.66 4280.74,-629.35"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/app_caption.dart -->
-<g id="edge706" class="edge">
+<g id="edge707" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/app_caption.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18225.61,-842.36C18237.11,-819.22 18257.6,-777.96 18271.25,-750.48"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="18274.27,-752.27 18275.58,-741.76 18268,-749.16 18274.27,-752.27"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/views/view_pending_changes/bage_pending_changes.dart -->
-<g id="edge712" class="edge">
+<g id="edge713" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/views/view_pending_changes/bage_pending_changes.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18185.37,-861.27C17823.19,-867.83 14422.12,-928.55 11671,-946.6 11645.81,-946.76 10788.65,-951.83 10764,-946.6 10728.32,-939.03 10696.88,-910.08 10677.26,-887.86"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="10680.01,-885.69 10670.87,-880.33 10674.67,-890.22 10680.01,-885.69"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/views/view_settings.dart -->
-<g id="edge711" class="edge">
+<g id="edge712" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/views/view_settings.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18185.37,-861.27C17823.19,-867.83 14422.12,-928.55 11671,-946.6 11578.41,-947.21 11552.87,-956.77 11535,-942.6 11516.49,-927.92 11500.53,-906.49 11489.44,-889.24"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="11492.46,-887.47 11484.22,-880.81 11486.51,-891.15 11492.46,-887.47"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/helpers/color_helper.dart -->
-<g id="edge707" class="edge">
+<g id="edge708" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/helpers/color_helper.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18248.44,-859.37C18368.04,-857.96 18788.95,-851.68 18810,-832.8 18885.63,-764.96 18845,-708.5 18845,-606.9 18845,-606.9 18845,-606.9 18845,-459.9 18845,-401.82 18856.06,-369.38 18810,-334 18792.93,-320.89 18052.4,-338.68 18035,-326 18006.6,-305.31 18038.47,-271.6 18010,-251 17984.78,-232.76 15798.27,-253.6 15769,-243 15756.02,-238.3 15743.87,-229.3 15734.08,-220.35"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15736.81,-218.13 15727.21,-213.65 15731.92,-223.14 15736.81,-218.13"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/widgets/zoom.dart -->
-<g id="edge715" class="edge">
+<g id="edge716" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/widgets/zoom.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18202.24,-842.21C18156.71,-789.81 18011.85,-634.36 17852,-579.9 17832.43,-573.23 14891.72,-584.06 14875,-571.9 14849.72,-553.52 14841.87,-516.87 14839.6,-490.93"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="14843.11,-490.92 14839,-481.15 14836.12,-491.34 14843.11,-490.92"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/widgets/three_part_label.dart -->
-<g id="edge714" class="edge">
+<g id="edge715" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/widgets/three_part_label.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18248.74,-857.39C18282.11,-854.22 18331.36,-847.19 18343,-832.8 18381.83,-784.81 18362.62,-752.43 18343,-693.9 18296.83,-556.13 18273.97,-501.82 18146,-433 17991.47,-349.9 16745.35,-340.07 16570,-334 16535.96,-332.82 15376.56,-335.98 15344,-326 15328.36,-321.21 15313,-311.81 15300.51,-302.59"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15302.75,-299.9 15292.71,-296.53 15298.46,-305.43 15302.75,-299.9"/>
 </g>
 <!-- /lib/appbar.dart&#45;&gt;/lib/widgets/color_palette.dart -->
-<g id="edge713" class="edge">
+<g id="edge714" class="edge">
 <title>/lib/appbar.dart&#45;&gt;/lib/widgets/color_palette.dart</title>
-<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18210.84,-842.44C18198.68,-810.22 18168.99,-740.02 18126,-693.9 18062.2,-625.45 18037.53,-610.19 17949,-579.9 17239.86,-337.23 17017.64,-469.16 16269,-433 16245.17,-431.85 15432.3,-433.48 15410,-425 15397.61,-420.29 15386.17,-411.42 15376.96,-402.57"/>
-<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15379.71,-400.38 15370.24,-395.64 15374.69,-405.25 15379.71,-400.38"/>
+<path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M18210.84,-842.44C18198.68,-810.22 18168.99,-740.02 18126,-693.9 18062.2,-625.45 18037.53,-610.21 17949,-579.9 17241.98,-337.86 17020.43,-469.13 16274,-433 16250.03,-431.84 15432.43,-433.53 15410,-425 15397.61,-420.29 15386.17,-411.42 15376.96,-402.57"/>
+<polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="15379.71,-400.38 15370.23,-395.64 15374.69,-405.25 15379.71,-400.38"/>
 </g>
 <!-- metrics -->
 <g id="node182" class="node">
@@ -5620,14 +5626,14 @@
 <path fill="Lavender" stroke="black" stroke-width="1.3" d="M19235.75,-1138.6C19235.75,-1138.6 19122.25,-1138.6 19122.25,-1138.6 19116.25,-1138.6 19110.25,-1132.6 19110.25,-1126.6 19110.25,-1126.6 19110.25,-962.6 19110.25,-962.6 19110.25,-956.6 19116.25,-950.6 19122.25,-950.6 19122.25,-950.6 19235.75,-950.6 19235.75,-950.6 19241.75,-950.6 19247.75,-956.6 19247.75,-962.6 19247.75,-962.6 19247.75,-1126.6 19247.75,-1126.6 19247.75,-1132.6 19241.75,-1138.6 19235.75,-1138.6"/>
 <text text-anchor="start" x="19118.25" y="-1120.35" font-family="Arial" font-size="15.00"> isAcyclic: false </text>
 <text text-anchor="start" x="19118.25" y="-1102.35" font-family="Arial" font-size="15.00"> numNodes: 181 &#160;</text>
-<text text-anchor="start" x="19118.25" y="-1084.35" font-family="Arial" font-size="15.00"> numEdges: 715 &#160;</text>
-<text text-anchor="start" x="19118.25" y="-1066.35" font-family="Arial" font-size="15.00"> avgDegree: 3.95 </text>
+<text text-anchor="start" x="19118.25" y="-1084.35" font-family="Arial" font-size="15.00"> numEdges: 716 &#160;</text>
+<text text-anchor="start" x="19118.25" y="-1066.35" font-family="Arial" font-size="15.00"> avgDegree: 3.96 </text>
 <text text-anchor="start" x="19118.25" y="-1048.35" font-family="Arial" font-size="15.00"> numOrphans: 13 </text>
-<text text-anchor="start" x="19118.25" y="-1030.35" font-family="Arial" font-size="15.00"> ccd: 10261 </text>
-<text text-anchor="start" x="19118.25" y="-1012.35" font-family="Arial" font-size="15.00"> acd: 56.69 </text>
+<text text-anchor="start" x="19118.25" y="-1030.35" font-family="Arial" font-size="15.00"> ccd: 10262 </text>
+<text text-anchor="start" x="19118.25" y="-1012.35" font-family="Arial" font-size="15.00"> acd: 56.7 </text>
 <text text-anchor="start" x="19118.25" y="-994.35" font-family="Arial" font-size="15.00"> nccd: 8.66 </text>
-<text text-anchor="start" x="19118.25" y="-976.35" font-family="Arial" font-size="15.00"> totalSloc: 17474 </text>
-<text text-anchor="start" x="19118.25" y="-958.35" font-family="Arial" font-size="15.00"> avgSloc: 96.54 </text>
+<text text-anchor="start" x="19118.25" y="-976.35" font-family="Arial" font-size="15.00"> totalSloc: 17487 </text>
+<text text-anchor="start" x="19118.25" y="-958.35" font-family="Arial" font-size="15.00"> avgSloc: 96.61 </text>
 </g>
 </g>
 </svg>

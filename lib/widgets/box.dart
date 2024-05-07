@@ -1,42 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 
 class Box extends StatelessWidget {
-  final Widget child;
+  final String title;
+  final double? margin;
+  final double padding;
   final Color? color;
   final double? width;
   final double? height;
-  final double? margin;
+  final Widget child;
 
   const Box({
     super.key,
+    this.title = '',
     this.color,
     this.width,
     this.height,
     this.margin,
+    this.padding = 8,
     required this.child,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      height: height,
-      margin: margin == null ? null : EdgeInsets.all(margin!),
-      padding: const EdgeInsets.all(8),
-      constraints: BoxConstraints(
-        minWidth: width ?? 500,
-        maxWidth: width ?? 500,
-      ),
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.rectangle,
-        borderRadius: BorderRadius.circular(8.0), // Bor
-        border: Border.all(
-          width: 1,
-          color: Colors.grey.withOpacity(0.5),
+    EdgeInsetsGeometry? adjustedMargin = margin == null ? null : EdgeInsets.all(margin!);
+    // adjust the margin to account for the title bleeding out of the box
+    if (title.isNotEmpty) {
+      const increaseTopMarginBy = EdgeInsets.only(top: 13);
+      if (adjustedMargin == null) {
+        adjustedMargin = increaseTopMarginBy;
+      } else {
+        adjustedMargin.add(increaseTopMarginBy);
+      }
+    }
+
+    return Stack(children: [
+      Container(
+        width: width,
+        height: height,
+        margin: adjustedMargin,
+        padding: EdgeInsets.all(padding),
+        constraints: BoxConstraints(
+          minWidth: width ?? 500,
+          maxWidth: width ?? 500,
         ),
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.rectangle,
+          borderRadius: BorderRadius.circular(8.0), // Bor
+          border: Border.all(
+            width: 1,
+            color: Colors.grey.withOpacity(0.5),
+          ),
+        ),
+        child: child,
       ),
-      child: child,
-    );
+      if (title.isNotEmpty)
+        Padding(
+          padding: const EdgeInsets.only(
+            left: 13.0,
+          ),
+          child: Card(
+            elevation: 1,
+            shadowColor: Colors.transparent,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Text(title, style: getTextTheme(context).titleSmall),
+            ),
+          ),
+        ),
+    ]);
   }
 }

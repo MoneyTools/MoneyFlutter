@@ -28,7 +28,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
   late int _minYear = widget.minYear;
   late int _maxYear = widget.maxYear;
   final double sliderEdgePadding = 20;
-  double _dragButtonWidth = 150;
+  final double _dragButtonWidth = 150;
   double _dragButtonPosition = 0;
   double _dragGesturePosition = 0;
   int _spanSelectedYears = 0;
@@ -108,7 +108,6 @@ class YearRangeSliderState extends State<YearRangeSlider> {
     double centerOfSpan = _minYear + _spanSelectedYears / 2;
     double offsetFromLeftInYear = centerOfSpan - widget.minYear;
     double selectedYearPositionInPixel = (offsetFromLeftInYear * eachYearInPixel);
-    _dragButtonWidth = max((_spanSelectedYears * eachYearInPixel) - (sliderEdgePadding / 2), 150);
 
     _dragButtonPosition = selectedYearPositionInPixel - (_dragButtonWidth / 2);
     // clamp position

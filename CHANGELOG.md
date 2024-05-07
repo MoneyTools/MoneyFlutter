@@ -4,6 +4,7 @@
 
 ### Updated
 
+- Improve recurring card UI
 - Improve CashFlow layout
 
 ## [version 1.8.1] 2024-05-06

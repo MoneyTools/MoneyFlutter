@@ -10,12 +10,14 @@ import 'package:money/widgets/mini_timeline.dart';
 import 'package:money/widgets/money_widget.dart';
 
 class RecurringCard extends StatelessWidget {
+  final int index;
   final RecurringPayment payment;
   final List<Distribution> listForDistributionBar;
   final List<double> occurrences;
 
   const RecurringCard({
     super.key,
+    required this.index,
     required this.payment,
     required this.listForDistributionBar,
     required this.occurrences,
@@ -32,27 +34,19 @@ class RecurringCard extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(13.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 // Header
                 _buildHeader(context),
 
-                // total over time
-                _buildExplanations(context),
+                gapLarge(),
 
-                // Timeline 1 to 12 months
-                Container(
-                  height: 50,
-                  margin: const EdgeInsets.fromLTRB(0, 3, 0, 3),
-                  child: HorizontalTimelineGraph(
-                    values: occurrences,
-                    color: getColorTheme(context).primary,
-                  ),
-                ),
+                // break down the numbers
+                _buildDetailAverages(context),
+
                 gapLarge(),
 
                 // Category Distributions
-                Expanded(child: DistributionBar(segments: listForDistributionBar)),
+                Expanded(child: DistributionBar(title: 'Categories', segments: listForDistributionBar)),
               ],
             ),
           ),
@@ -64,60 +58,47 @@ class RecurringCard extends StatelessWidget {
   Widget _buildHeader(final BuildContext context) {
     TextTheme textTheme = getTextTheme(context);
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
+        Opacity(opacity: 0.5, child: Text('#$index ')),
         Expanded(
-          flex: 2,
+          flex: 1,
           child: SelectableText(
             Data().payees.getNameFromId(payment.payeeId),
             maxLines: 1,
             style: textTheme.titleMedium,
           ),
         ),
+        Expanded(child: IntrinsicWidth(child: Text(payment.dateRange.toStringYears()))),
         IntrinsicWidth(child: MoneyWidget(amountModel: MoneyModel(amount: payment.total))),
       ],
     );
   }
 
-  Widget _buildExplanations(final BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Text('Range from ${payment.dateRange.toStringYears()} '),
-        _buildDetailAverages(context),
-      ],
-    );
-  }
-
   Widget _buildDetailAverages(final BuildContext context) {
-    TextTheme textTheme = getTextTheme(context);
     return Box(
-      margin: 8,
+      title: 'Averages',
+      padding: 13,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                '${payment.frequency} occurrences, averaging each ',
-                style: textTheme.bodyMedium,
-              ),
-              MoneyWidget(amountModel: MoneyModel(amount: payment.total / payment.frequency)),
-            ],
+          Container(
+            height: 55,
+            margin: const EdgeInsets.symmetric(vertical: 8),
+            child: HorizontalTimelineGraph(
+              values: occurrences,
+              color: getColorTheme(context).primary,
+            ),
           ),
-          // average per year
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // Average per yearS
-              _buildTextAmountBox(context, 'Year', payment.total / (payment.dateRange.durationInYears)),
-              // Average per month
-              _buildTextAmountBox(context, 'Month', payment.total / (payment.dateRange.durationInMonths)),
-              // Average per day
-              _buildTextAmountBox(context, 'Day', payment.total / (payment.dateRange.durationInDays)),
-            ],
-          ),
+
+          _buildTextAmountBox(context, 'Per Transaction (${payment.frequency})', payment.total / payment.frequency),
+          // Average per yearS
+          _buildTextAmountBox(context, 'Year', payment.total / (payment.dateRange.durationInYears)),
+          // Average per month
+          _buildTextAmountBox(context, 'Month', payment.total / (payment.dateRange.durationInMonths)),
+          // Average per day
+          _buildTextAmountBox(context, 'Day', payment.total / (payment.dateRange.durationInDays)),
         ],
       ),
     );
@@ -125,13 +106,11 @@ class RecurringCard extends StatelessWidget {
 }
 
 Widget _buildTextAmountBox(final BuildContext context, final String title, final double amount) {
-  return Box(
-      margin: 4,
-      width: 140,
-      child: Column(
-        children: [
-          Text(title, style: getTextTheme(context).titleMedium),
-          MoneyWidget(amountModel: MoneyModel(amount: amount)),
-        ],
-      ));
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(title, style: getTextTheme(context).titleMedium),
+      MoneyWidget(amountModel: MoneyModel(amount: amount)),
+    ],
+  );
 }

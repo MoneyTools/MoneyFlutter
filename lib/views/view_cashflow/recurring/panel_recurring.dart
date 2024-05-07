@@ -47,6 +47,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
               topN: 4,
             );
             return RecurringCard(
+              index: index + 1,
               payment: payment,
               listForDistributionBar: listForDistributionBar,
               occurrences: payment.monthSums,
