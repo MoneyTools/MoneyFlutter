@@ -44,10 +44,11 @@ class DistributionBar extends StatelessWidget {
       title: title,
       padding: 21,
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buildHorizontalBar(),
           gapSmall(),
-          Expanded(child: _buildRowOfDetails()),
+          _buildRowOfDetails(),
         ],
       ),
     );
@@ -71,16 +72,8 @@ class DistributionBar extends StatelessWidget {
             message: segment.title,
             child: Container(
               alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: backgroundColorOfSegment,
-                border: Border(
-                  right: BorderSide(
-                    color: Theme.of(context).scaffoldBackgroundColor,
-                    // Width of border (last segment has no border)
-                    width: segment == segments.last ? 0.0 : 2.0,
-                  ),
-                ),
-              ),
+              color: backgroundColorOfSegment,
+              margin: EdgeInsets.only(right: segment == segments.last ? 0.0 : 1.0),
               child: _builtSegmentOverlayText(segment.percentage, foregroundColorOfSegment),
             ),
           ),
@@ -123,7 +116,6 @@ class DistributionBar extends StatelessWidget {
 
   Widget _buildRowOfDetails() {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: detailRowWidgets,
     );

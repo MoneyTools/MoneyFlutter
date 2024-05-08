@@ -37,16 +37,21 @@ class RecurringCard extends StatelessWidget {
             // Header
             _buildHeader(context),
 
-            // break down the numbers
-            _buildDetailAverages(context),
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 21,
+              runSpacing: 21,
+              children: [
+                // break down the numbers
+                _buildDetailAverages(context),
 
-            // Category Distributions
-            IntrinsicHeight(
-              child: DistributionBar(
-                title: 'Categories',
-                segments: payment.categoryDistribution,
-              ),
-            ),
+                // Category Distributions
+                DistributionBar(
+                  title: 'Categories',
+                  segments: payment.categoryDistribution,
+                ),
+              ],
+            )
           ],
         ),
       ),
