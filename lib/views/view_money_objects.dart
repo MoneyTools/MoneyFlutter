@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
@@ -39,8 +38,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   int _lastSelectedItemId = -1;
   int _sortByFieldIndex = 0;
   bool _sortAscending = true;
+
   VoidCallback? onAddNewEntry;
   VoidCallback? onCopyInfoPanelTransactions;
+  Function(BuildContext, MoneyObject)? onMergeToItem;
 
   // detail panel
   Object? subViewSelectedItem;
@@ -364,6 +365,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       child: MoneyObjectCard(
         title: getClassNameSingular(),
         moneyObject: moneyObject,
+        onMergeWith: onMergeToItem,
         onEdit: showDialogAndActionsForMoneyObject,
         onDelete: onDeleteRequestedByUser,
       ),

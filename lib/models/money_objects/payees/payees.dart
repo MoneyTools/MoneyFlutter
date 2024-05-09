@@ -55,6 +55,22 @@ class Payees extends MoneyObjects<Payee> {
     return payee;
   }
 
+  static void removePayeesThatHaveNoTransactions(List<int> payeeIds) {
+    for (final payeeId in payeeIds) {
+      final Payee? payeeToCheck = Data().payees.get(payeeId);
+      if (payeeToCheck != null) {
+        if (Data()
+                .transactions
+                .iterableList()
+                .firstWhereOrNull((element) => element.payee.value == payeeToCheck.uniqueId) ==
+            null) {
+          // No transactions for this payee, we can delete it
+          Data().payees.deleteItem(payeeToCheck);
+        }
+      }
+    }
+  }
+
   @override
   void loadFromJson(final List<MyJson> rows) {
     clear();

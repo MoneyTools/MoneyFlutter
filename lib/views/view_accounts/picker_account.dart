@@ -40,7 +40,7 @@ Widget pickerAccount({
 
   return PickerEditBox(
     title: 'Account',
-    options: options,
+    items: options,
     initialValue: selectedName,
     onChanged: (String newSelection) {
       final Account? found = Data().accounts.getByName(newSelection);

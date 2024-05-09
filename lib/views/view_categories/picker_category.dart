@@ -12,7 +12,7 @@ Widget pickerCategory({
 
   return PickerEditBox(
     title: 'Category',
-    options: options,
+    items: options,
     initialValue: selectedName,
     onChanged: (String newSelection) {
       final Category? found = Data().categories.getByName(newSelection);

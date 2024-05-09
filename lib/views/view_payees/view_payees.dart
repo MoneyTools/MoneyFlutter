@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
-
-import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/widgets/center_message.dart';
-
-import 'package:money/widgets/chart.dart';
+import 'package:money/models/money_objects/transactions/transactions.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_money_objects.dart';
+import 'package:money/views/view_payees/merge_payees.dart';
+import 'package:money/widgets/center_message.dart';
+import 'package:money/widgets/chart.dart';
 import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
+import 'package:money/widgets/mini_timeline_daily.dart';
 
 part 'view_payees_details_panels.dart';
 
@@ -21,6 +22,18 @@ class ViewPayees extends ViewForMoneyObjects {
 }
 
 class ViewPayeesState extends ViewForMoneyObjectsState {
+  ViewPayeesState() {
+    onMergeToItem = (final BuildContext context, final MoneyObject selectedPayee) {
+      // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
+      showDialog(
+        context: context,
+        builder: (context) {
+          return MergeTransactionsDialog(currentPayee: selectedPayee as Payee);
+        },
+      );
+    };
+  }
+
   @override
   String getClassNamePlural() {
     return 'Payees';

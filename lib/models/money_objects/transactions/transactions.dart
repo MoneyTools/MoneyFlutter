@@ -44,7 +44,7 @@ class Transactions extends MoneyObjects<Transaction> {
             (incomesOrExpenses == false && element.amount.value.amount < 0))));
   }
 
-  List<Transaction> flatTransactions(final Iterable<Transaction> transactions) {
+  static List<Transaction> flatTransactions(final Iterable<Transaction> transactions) {
     List<Transaction> flatList = [];
     for (final t in transactions) {
       if (t.isSplit) {
@@ -60,6 +60,19 @@ class Transactions extends MoneyObjects<Transaction> {
       }
     }
     return flatList;
+  }
+
+  static List<Pair<int, double>> transactionSumByTime(
+      List<Transaction> transactions, int timeOffsetInMillisecondsSinceEpoch) {
+    List<Pair<int, double>> timeAndAmounts = [];
+    for (final t in transactions) {
+      timeAndAmounts.add(Pair<int, double>(
+        (t.dateTime.value!.millisecondsSinceEpoch - timeOffsetInMillisecondsSinceEpoch) ~/ Duration.millisecondsPerDay,
+        t.amount.value.amount,
+      ));
+    }
+    timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
+    return timeAndAmounts;
   }
 
   DateRange dateRangeIncludingClosedAccount = DateRange();

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/date_range.dart';
-import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_card.dart';
@@ -66,7 +66,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
           incomesOrExpenses: forIncome,
         );
 
-    final flatTransactions = Data().transactions.flatTransactions(transactions);
+    final flatTransactions = Transactions.flatTransactions(transactions);
 
     // get all transaction Income | Expenses
     // recurringPayments =

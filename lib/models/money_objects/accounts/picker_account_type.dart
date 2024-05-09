@@ -11,7 +11,7 @@ Widget pickerAccountType({
 
   return PickerEditBox(
     title: 'Accounts',
-    options: getAccountTypeAsText(),
+    items: getAccountTypeAsText(),
     initialValue: selectedName,
     onChanged: (String newSelection) {
       onSelected(getAccountTypeFromText(newSelection));

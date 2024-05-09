@@ -6,13 +6,13 @@ class PickerEditBox extends StatefulWidget {
   const PickerEditBox({
     super.key,
     required this.title,
-    required this.options,
+    required this.items,
     this.initialValue,
     required this.onChanged,
   });
 
   final String title;
-  final List<String> options;
+  final List<String> items;
   final String? initialValue;
   final Function(String) onChanged;
 
@@ -60,7 +60,8 @@ class PickerEditBoxState extends State<PickerEditBox> {
               showPopupSelection(
                   title: widget.title,
                   context: context,
-                  options: widget.options,
+                  items: widget.items,
+                  selectedItem: _textController.text,
                   onSelected: (final String text) {
                     setState(() {
                       _textController.text = text;

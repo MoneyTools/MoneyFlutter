@@ -7,6 +7,7 @@ import 'package:money/widgets/box.dart';
 class MoneyObjectCard extends StatelessWidget {
   final String title;
   final MoneyObject? moneyObject;
+  final Function? onMergeWith;
   final Function? onEdit;
   final Function? onDelete;
 
@@ -15,6 +16,7 @@ class MoneyObjectCard extends StatelessWidget {
     required this.title,
     this.moneyObject,
     this.onEdit,
+    this.onMergeWith,
     this.onDelete,
   });
 
@@ -34,16 +36,25 @@ class MoneyObjectCard extends StatelessWidget {
               ),
               Row(
                 children: [
-                  if (onEdit != null)
+                  if (onMergeWith != null)
                     IconButton(
-                      icon: const Icon(Icons.edit),
+                      icon: const Icon(Icons.merge),
                       onPressed: () {
-                        onEdit?.call(
+                        onMergeWith?.call(
                           context,
                           moneyObject,
                         );
                       },
                     ),
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: () {
+                      onEdit?.call(
+                        context,
+                        moneyObject,
+                      );
+                    },
+                  ),
                   if (onDelete != null)
                     IconButton(
                       icon: const Icon(Icons.delete_outline),

@@ -4,6 +4,7 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_model.dart';
+import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
 import 'package:money/widgets/box.dart';
@@ -87,15 +88,10 @@ class RecurringCard extends StatelessWidget {
   }
 
   Widget _buildBoxTimelinePerDayOverYears(final BuildContext context) {
-    List<Pair<int, double>> timeAndAmounts = [];
-    for (final t in payment.transactions) {
-      timeAndAmounts.add(Pair<int, double>(
-        (t.dateTime.value!.millisecondsSinceEpoch - dateRangeSearch.min!.millisecondsSinceEpoch) ~/
-            Duration.millisecondsPerDay,
-        t.amount.value.amount,
-      ));
-    }
-    timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
+    List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(
+      payment.transactions,
+      dateRangeSearch.min!.millisecondsSinceEpoch,
+    );
 
     return Box(
       title: 'Timeline',
@@ -104,7 +100,7 @@ class RecurringCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           MiniTimelineDaily(
-            values: timeAndAmounts,
+            values: sumByDays,
             yearStart: dateRangeSearch.min!.year,
             yearEnd: dateRangeSearch.max!.year,
             color: getColorTheme(context).primary,

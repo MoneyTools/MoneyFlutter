@@ -12,7 +12,7 @@ Widget pickerPayee({
 
   return PickerEditBox(
     title: 'Payee',
-    options: options,
+    items: options,
     initialValue: selectedName,
     onChanged: (String newSelection) {
       final Payee? found = Data().payees.getByName(newSelection);

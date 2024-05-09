@@ -19,6 +19,26 @@ class AccumulatorSum<T, V> {
   dynamic getValue(T key) {
     return values[key] ?? 0;
   }
+
+  T? getKeyWithLargestSum() {
+    T? keyFound;
+    V? maxFound;
+
+    values.forEach(
+      (key, value) {
+        if (keyFound == null) {
+          keyFound = key;
+          maxFound = value;
+        } else {
+          if ((maxFound as num) < (value as num)) {
+            keyFound = key;
+            maxFound = value;
+          }
+        }
+      },
+    );
+    return keyFound;
+  }
 }
 
 class AccumulatorList<T, V> {

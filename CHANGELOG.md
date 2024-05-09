@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.4] 2024-05-10
+
+### Added
+
+- UX Merge Payees
+
 ## [version 1.8.3] 2024-05-08
 
 ### Updated

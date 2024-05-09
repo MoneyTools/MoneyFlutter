@@ -1,10 +1,15 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
+import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/picker_letter.dart';
 
 showPopupSelection({
   required final BuildContext context,
   required final title,
-  required final List<String> options,
+  required final List<String> items,
+  required final String selectedItem,
   required final Function(String text) onSelected,
 }) {
   showDialog(
@@ -12,11 +17,15 @@ showPopupSelection({
     builder: (final BuildContext context) {
       return AlertDialog(
         title: Text(title),
-        content: SizedBox(
+        content: Container(
+          constraints: const BoxConstraints(
+            minHeight: 500,
+            maxHeight: 700,
+          ),
           width: 400,
-          height: 500,
           child: PickerPanel(
-              options: options,
+              options: items,
+              selectedItem: selectedItem,
               onSelected: (final String selectedValue) {
                 onSelected(selectedValue);
               }),
@@ -28,12 +37,16 @@ showPopupSelection({
 
 class PickerPanel extends StatefulWidget {
   final List<String> options;
+  final String selectedItem;
   final Function(String selectedValue) onSelected;
+  final double itemHeight;
 
   const PickerPanel({
     super.key,
     required this.options,
+    required this.selectedItem,
     required this.onSelected,
+    this.itemHeight = 40,
   });
 
   @override
@@ -45,6 +58,8 @@ class _PickerPanelState extends State<PickerPanel> {
   String _filterStartWidth = '';
   List<String> list = [];
   List<String> uniqueLetters = [];
+  final ScrollController _scrollController = ScrollController();
+  int indexToScrollTo = -1;
 
   @override
   void initState() {
@@ -60,6 +75,19 @@ class _PickerPanelState extends State<PickerPanel> {
           uniqueLetters.add(singleLetter);
         }
       }
+    }
+
+    // Schedule a callback to scroll to the element after the next frame is rendered
+    if (widget.selectedItem.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Find the index of the item that matches the value "Item 3"
+        indexToScrollTo = widget.options.indexOf(widget.selectedItem);
+        if (indexToScrollTo != -1) {
+          indexToScrollTo -= 2; // back up two elements to make it a nicer position
+          indexToScrollTo = max(0, indexToScrollTo); // make sure we are not outside the bounds
+          _scrollController.jumpTo((indexToScrollTo * widget.itemHeight));
+        }
+      });
     }
   }
 
@@ -86,18 +114,35 @@ class _PickerPanelState extends State<PickerPanel> {
                   });
                 },
               ),
+              gapLarge(),
               Expanded(
                 child: ListView.builder(
                   itemCount: list.length,
+                  controller: _scrollController,
+                  itemExtent: widget.itemHeight,
                   itemBuilder: (context, index) {
                     String label = list[index];
-                    return TextButton(
-                      onPressed: () {
+                    bool isSelected = label == widget.selectedItem;
+                    return GestureDetector(
+                      onTap: () {
                         widget.onSelected(label);
                         Navigator.of(context).pop();
                       },
-                      child: Text(
-                        label,
+                      child: Container(
+                        height: widget.itemHeight,
+                        alignment: Alignment.centerLeft,
+                        decoration: BoxDecoration(
+                          color: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
+                          // show a bottom line if not the last item
+                          border: index == list.length - 1
+                              ? null
+                              : Border(
+                                  bottom: BorderSide(
+                                      color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1),
+                                ),
+                        ),
+                        child: Text(label, style: const TextStyle(fontSize: 12)),
+                        // contentPadding: EdgeInsets.zero,
                       ),
                     );
                   },
