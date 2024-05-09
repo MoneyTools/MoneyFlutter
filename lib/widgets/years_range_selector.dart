@@ -31,11 +31,11 @@ class YearRangeSliderState extends State<YearRangeSlider> {
   final double _dragButtonWidth = 150;
   double _dragButtonPosition = 0;
   double _dragGesturePosition = 0;
-  int _spanSelectedYears = 0;
+  int _spanSelectedYears = 1;
 
   @override
   Widget build(BuildContext context) {
-    int fullSpread = widget.maxYear - widget.minYear;
+    int fullSpread = (widget.maxYear - widget.minYear) + 1;
     if (widget.minYear == 0 || widget.maxYear == 0 || fullSpread == 0) {
       return const Text('No date range yet');
     }
@@ -104,7 +104,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
 
     // Position the drag button using the left side position of the in year
     double eachYearInPixel = horizontalMaxWidth / widget.spanInYears;
-    _spanSelectedYears = _maxYear - _minYear;
+    _spanSelectedYears = (_maxYear - _minYear) + 1;
     double centerOfSpan = _minYear + _spanSelectedYears / 2;
     double offsetFromLeftInYear = centerOfSpan - widget.minYear;
     double selectedYearPositionInPixel = (offsetFromLeftInYear * eachYearInPixel);
@@ -134,11 +134,14 @@ class YearRangeSliderState extends State<YearRangeSlider> {
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-          Text(_minYear.toString(), style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
-          Text(spanAsText, style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
-          Text(_maxYear.toString(), style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
-        ]),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(_minYear.toString(), style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
+            Text(spanAsText, style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
+            Text(_maxYear.toString(), style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
+          ],
+        ),
       ),
     );
   }

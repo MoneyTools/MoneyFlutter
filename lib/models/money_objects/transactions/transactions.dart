@@ -23,7 +23,6 @@ class Transactions extends MoneyObjects<Transaction> {
   List<Transaction> getListFlattenSplits() {
     List<Transaction> flattenList = [];
     for (final t in iterableList()) {
-      // if(t.isSplit){
       if (t.categoryId.value == Data().categories.splitCategoryId()) {
         Data().splits.get(t.uniqueId);
       } else {

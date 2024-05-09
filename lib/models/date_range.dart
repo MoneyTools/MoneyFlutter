@@ -6,6 +6,13 @@ class DateRange {
 
   DateRange({this.min, this.max});
 
+  factory DateRange.fromStarEndYears(int yearStart, int yearEnd) {
+    return DateRange(
+      min: DateTime(yearStart, 1, 1),
+      max: DateTime(yearEnd + 1).subtract(const Duration(microseconds: 1)),
+    );
+  }
+
   void inflate(final DateTime? dateTime) {
     if (dateTime != null) {
       min ??= dateTime;
@@ -67,7 +74,11 @@ class DateRange {
   }
 
   String toStringYears() {
-    return '${yearToString(min)} ($durationInYears years) ${yearToString(max)}';
+    return '${yearToString(min)} ($durationInYearsText) ${yearToString(max)}';
+  }
+
+  String get durationInYearsText {
+    return durationInYears > 1 ? '$durationInYears years' : '$durationInYears year';
   }
 
   bool isBetween(final DateTime date) {

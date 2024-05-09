@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/settings.dart';
@@ -24,8 +25,10 @@ class ViewCashFlow extends ViewWidget {
 }
 
 class ViewCashFlowState extends ViewWidgetState {
-  late int minYear;
-  late int maxYear;
+  late DateRange dateRangeTransactions;
+
+  late int selectedYearStart;
+  late int selectedYearEnd;
 
   List<Account> accountsOpened = Data().accounts.getOpenAccounts();
   double totalIncomes = 0.00;
@@ -48,8 +51,13 @@ class ViewCashFlowState extends ViewWidgetState {
   @override
   void initState() {
     super.initState();
-    this.minYear = Data().transactions.dateRangeActiveAccount.min?.year ?? 2020;
-    this.maxYear = Data().transactions.dateRangeActiveAccount.max?.year ?? 2020;
+    dateRangeTransactions = DateRange.fromStarEndYears(
+      Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
+      Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
+    );
+
+    this.selectedYearStart = dateRangeTransactions.min!.year;
+    this.selectedYearEnd = dateRangeTransactions.max!.year;
   }
 
   @override
@@ -62,7 +70,7 @@ class ViewCashFlowState extends ViewWidgetState {
         // View
         Expanded(
           child: Container(
-            key: Key(Settings().cashflowViewAs.toString() + minYear.toString() + maxYear.toString()),
+            key: Key(Settings().cashflowViewAs.toString() + selectedYearStart.toString() + selectedYearEnd.toString()),
             // rebuild if the date changes
             color: getColorTheme(context).background,
             child: getView(),
@@ -79,17 +87,19 @@ class ViewCashFlowState extends ViewWidgetState {
 
     switch (Settings().cashflowViewAs) {
       case CashflowViewAs.sankey:
-        return PanelSanKey(minYear: this.minYear, maxYear: this.maxYear);
+        return PanelSanKey(minYear: this.selectedYearStart, maxYear: this.selectedYearEnd);
       case CashflowViewAs.recurringIncomes:
         return PanelRecurrings(
-          minYear: this.minYear,
-          maxYear: this.maxYear,
+          dateRangeSearch: dateRangeTransactions,
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
           viewRecurringAs: Settings().cashflowViewAs,
         );
       case CashflowViewAs.recurringExpenses:
         return PanelRecurrings(
-          minYear: this.minYear,
-          maxYear: this.maxYear,
+          dateRangeSearch: dateRangeTransactions,
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
           viewRecurringAs: Settings().cashflowViewAs,
         );
     }
@@ -118,23 +128,24 @@ class ViewCashFlowState extends ViewWidgetState {
               ),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-          child: YearRangeSlider(
-            minYear: Data().transactions.dateRangeActiveAccount.min!.year,
-            maxYear: Data().transactions.dateRangeActiveAccount.max!.year,
-            onChanged: (minYear, maxYear) {
-              debouncer.run(() {
-                if (mounted) {
-                  setState(() {
-                    this.minYear = minYear;
-                    this.maxYear = maxYear;
-                  });
-                }
-              });
-            },
+        if (!Data().transactions.isEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: YearRangeSlider(
+              minYear: dateRangeTransactions.min!.year,
+              maxYear: dateRangeTransactions.max!.year,
+              onChanged: (minYear, maxYear) {
+                debouncer.run(() {
+                  if (mounted) {
+                    setState(() {
+                      this.selectedYearStart = minYear;
+                      this.selectedYearEnd = maxYear;
+                    });
+                  }
+                });
+              },
+            ),
           ),
-        ),
       ],
     );
   }

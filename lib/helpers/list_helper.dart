@@ -142,10 +142,10 @@ List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
 }
 
 class Pair<T, U> {
-  final T first;
-  final U second;
+  T first;
+  U second;
 
-  const Pair(this.first, this.second);
+  Pair(this.first, this.second);
 
   @override
   bool operator ==(Object other) {

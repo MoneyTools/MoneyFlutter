@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.3] 2024-05-08
+
+### Updated
+
+- Adaptive Recurring Payment Card now using Wrap
+
 ## [version 1.8.2] 2024-05-07
 
 ### Updated

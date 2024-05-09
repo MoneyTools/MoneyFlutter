@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/money_model.dart';
-import 'package:money/widgets/box.dart';
 import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/money_widget.dart';
@@ -20,12 +19,11 @@ class Distribution {
 }
 
 class DistributionBar extends StatelessWidget {
-  final String title;
   final List<Distribution> segments;
   final List<Widget> segmentWidgets = [];
   final List<Widget> detailRowWidgets = [];
 
-  DistributionBar({super.key, required this.title, required this.segments});
+  DistributionBar({super.key, required this.segments});
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +38,13 @@ class DistributionBar extends StatelessWidget {
 
     initWidgets(context);
 
-    return Box(
-      title: title,
-      padding: 21,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          _buildHorizontalBar(),
-          gapSmall(),
-          _buildRowOfDetails(),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildHorizontalBar(),
+        gapSmall(),
+        _buildRowOfDetails(),
+      ],
     );
   }
 

@@ -36,7 +36,7 @@ class RecurringPayment {
     MapAccumulator<int, int, double> payeeIdMonthAndSums = MapAccumulator<int, int, double>();
     Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
 
-    averagePerMonths = List.generate(12, (index) => const Pair<int, double>(0, 0));
+    averagePerMonths = List.generate(12, (index) => Pair<int, double>(0, 0));
 
     for (final transaction in transactions) {
       total += transaction.amount.value.amount;

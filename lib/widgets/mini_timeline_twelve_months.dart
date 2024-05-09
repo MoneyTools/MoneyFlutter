@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 
-class HorizontalTimelineGraph extends StatelessWidget {
+class MiniTimelineTwelveMonths extends StatelessWidget {
   final List<Pair<int, double>> values;
   final Color color;
 
-  const HorizontalTimelineGraph({super.key, required this.values, required this.color});
+  const MiniTimelineTwelveMonths({super.key, required this.values, required this.color});
 
   @override
   Widget build(BuildContext context) {

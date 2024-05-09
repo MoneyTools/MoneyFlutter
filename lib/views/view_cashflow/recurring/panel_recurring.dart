@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
@@ -9,10 +10,17 @@ import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
 
 class PanelRecurrings extends StatefulWidget {
   final CashflowViewAs viewRecurringAs;
+  final DateRange dateRangeSearch;
   final int minYear;
   final int maxYear;
 
-  const PanelRecurrings({super.key, required this.minYear, required this.maxYear, required this.viewRecurringAs});
+  const PanelRecurrings({
+    super.key,
+    required this.dateRangeSearch,
+    required this.minYear,
+    required this.maxYear,
+    required this.viewRecurringAs,
+  });
 
   @override
   State<PanelRecurrings> createState() => _PanelRecurringsState();
@@ -41,6 +49,8 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
             final payment = recurringPayments[index];
             return RecurringCard(
               index: index + 1,
+              dateRangeSearch: widget.dateRangeSearch,
+              dateRangeSelected: DateRange.fromStarEndYears(widget.minYear, widget.maxYear),
               payment: payment,
               forIncomeTransaction: forIncomeTransaction,
             );
@@ -117,6 +127,9 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   }
 
   bool isMonthlyRecurrence(List<int> months) {
+    if (widget.minYear == widget.maxYear) {
+      return true;
+    }
     // we can conclude that if paid more than 'n' months its a recurring monthly event
     return months.length == Settings().cashflowRecurringOccurrences;
   }
