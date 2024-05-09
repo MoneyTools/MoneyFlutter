@@ -323,3 +323,14 @@ install
 
 run
 ```./graph.sh```
+
+## Deploy
+
+- Install Firebase tool
+  ```npm install -g firebase-tools```
+
+- Enable firebase experiemens
+  ```firebase experiments:enable webframeworks```
+
+- Deploy to your account
+  ```firebase deploy```
