@@ -283,18 +283,17 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     switch (subViewId) {
       /// Details
       case InfoPanelSubViewEnum.details:
-        return getInfoPanelForDetails(selectedIds: selectedIds, isReadOnly: false);
+        return getInfoPanelViewDetails(selectedIds: selectedIds, isReadOnly: false);
 
       /// Chart
       case InfoPanelSubViewEnum.chart:
-        return getPanelForChart(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0);
+        return getInfoPanelViewChart(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0);
 
       /// Transactions
       case InfoPanelSubViewEnum.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child:
-              getInfoPanelSubViewTransactions(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0),
+          child: getInfoPanelViewTransactions(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0),
         );
       default:
         return const Text('- empty -');
@@ -330,7 +329,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         context: context,
         title: '${getClassNameSingular()} #${uniqueId + 1}',
         actionButtons: [],
-        child: getInfoPanelForDetails(selectedIds: <int>[uniqueId], isReadOnly: true),
+        child: getInfoPanelViewDetails(selectedIds: <int>[uniqueId], isReadOnly: true),
       );
     } else {
       setSelectedItem(uniqueId);
@@ -353,7 +352,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getInfoPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+  Widget getInfoPanelViewDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
     final MoneyObject? moneyObject = findObjectById(selectedIds.firstOrNull, list);
 
     if (moneyObject == null) {
@@ -371,14 +370,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
-  Widget getPanelForChart({
+  Widget getInfoPanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
     return const Center(child: Text('No chart to display'));
   }
 
-  Widget getInfoPanelSubViewTransactions({
+  Widget getInfoPanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {

@@ -80,7 +80,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelForDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+  Widget getInfoPanelViewDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
     if (selectedIds.isNotEmpty) {
       final int id = selectedIds.first;
       final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;

@@ -158,7 +158,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getPanelForChart({
+  Widget getInfoPanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -166,7 +166,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelSubViewTransactions({
+  Widget getInfoPanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
