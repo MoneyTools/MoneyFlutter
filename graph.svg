@@ -4799,7 +4799,7 @@
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="12589.07,-315.21 12578.84,-312.48 12585.14,-320.99 12589.07,-315.21"/>
 </g>
 <!-- /lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/details_panel/info_panel_views_enum.dart -->
-<g id="edge593" class="edge">
+<g id="edge592" class="edge">
 <title>/lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/details_panel/info_panel_views_enum.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11025.34,-521.56C11644.98,-518.79 15779.04,-499.93 15790,-488.9 15833.5,-445.1 15832.08,-395.17 15790,-350 15781.42,-340.79 15689.35,-344.41 15677,-342 15548.56,-316.97 15526.21,-271.66 15397,-251 15321.29,-238.89 12711.73,-260.12 12637,-243 12615.45,-238.06 12593.11,-227.9 12575.03,-218.19"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="12576.8,-215.17 12566.36,-213.37 12573.4,-221.29 12576.8,-215.17"/>
@@ -4817,13 +4817,13 @@
 <text text-anchor="middle" x="13811" y="-188.75" font-family="Arial" font-size="15.00">dialog_mutate_money_object</text>
 </g>
 <!-- /lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/dialog_mutate_money_object.dart -->
-<g id="edge592" class="edge">
+<g id="edge594" class="edge">
 <title>/lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/dialog_mutate_money_object.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11025.18,-521.56C11645.81,-518.81 15799.99,-499.99 15811,-488.9 15854.5,-445.1 15851.33,-396.74 15811,-350 15803.08,-340.82 15768.68,-345.28 15757,-342 15657.1,-313.95 15643.64,-271.89 15542,-251 15455.2,-233.16 14034.3,-258.18 13947,-243 13917.35,-237.84 13885.55,-226.95 13860.17,-216.84"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="13861.75,-213.7 13851.17,-213.16 13859.11,-220.18 13861.75,-213.7"/>
 </g>
 <!-- /lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/dialog_button.dart -->
-<g id="edge594" class="edge">
+<g id="edge593" class="edge">
 <title>/lib/views/view_money_objects.dart&#45;&gt;/lib/widgets/dialog_button.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M11025.33,-521.6C11719.34,-518.91 16851.79,-498.65 16889,-488.9 17011.96,-456.67 17018.03,-389.03 17139,-350 17153.48,-345.33 17195.81,-352.31 17207,-342 17264.26,-289.27 17281.77,-223.32 17227,-168 17200.5,-141.23 14633.02,-145.1 14431.77,-139.08"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="14432.04,-135.59 14421.88,-138.57 14431.69,-142.58 14432.04,-135.59"/>
@@ -5776,8 +5776,8 @@
 <text text-anchor="start" x="18327.25" y="-1027.35" font-family="Arial" font-size="15.00"> ccd: 10545 </text>
 <text text-anchor="start" x="18327.25" y="-1009.35" font-family="Arial" font-size="15.00"> acd: 57.62 </text>
 <text text-anchor="start" x="18327.25" y="-991.35" font-family="Arial" font-size="15.00"> nccd: 8.78 </text>
-<text text-anchor="start" x="18327.25" y="-973.35" font-family="Arial" font-size="15.00"> totalSloc: 17980 </text>
-<text text-anchor="start" x="18327.25" y="-955.35" font-family="Arial" font-size="15.00"> avgSloc: 98.25 </text>
+<text text-anchor="start" x="18327.25" y="-973.35" font-family="Arial" font-size="15.00"> totalSloc: 17976 </text>
+<text text-anchor="start" x="18327.25" y="-955.35" font-family="Arial" font-size="15.00"> avgSloc: 98.23 </text>
 </g>
 </g>
 </svg>

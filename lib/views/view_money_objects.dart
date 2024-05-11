@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
@@ -12,9 +13,9 @@ import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/details_panel/info_panel.dart';
 import 'package:money/widgets/details_panel/info_panel_header.dart';
-import 'package:money/widgets/dialog_mutate_money_object.dart';
 import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/dialog_button.dart';
+import 'package:money/widgets/dialog_mutate_money_object.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
 import 'package:money/widgets/list_view/list_view.dart';
 import 'package:money/widgets/widgets.dart';
@@ -85,77 +86,73 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   @override
   Widget build(final BuildContext context) {
-    return LayoutBuilder(
-      builder: (final BuildContext context, final BoxConstraints constraints) {
-        return buildViewContent(
-          AdaptableListView(
-            top: buildHeader(),
-            fieldDefinitions: _fieldToDisplay.definitions,
-            list: list,
-            selectedItemsByUniqueId: _selectedItemsByUniqueId,
-            sortByFieldIndex: _sortByFieldIndex,
-            sortAscending: _sortAscending,
-            onColumnHeaderTap: changeListSortOrder,
-            onColumnHeaderLongPress: onCustomizeColumn,
-            onItemTap: onItemSelected,
-            flexBottom: Settings().isDetailsPanelExpanded ? 1 : 0,
-            bottom: InfoPanel(
-              isExpanded: Settings().isDetailsPanelExpanded,
-              onExpanded: (final bool isExpanded) {
-                setState(() {
-                  Settings().isDetailsPanelExpanded = isExpanded;
-                  Settings().store();
-                });
+    return buildViewContent(
+      AdaptableListView(
+        top: buildHeader(),
+        fieldDefinitions: _fieldToDisplay.definitions,
+        list: list,
+        selectedItemsByUniqueId: _selectedItemsByUniqueId,
+        sortByFieldIndex: _sortByFieldIndex,
+        sortAscending: _sortAscending,
+        onColumnHeaderTap: changeListSortOrder,
+        onColumnHeaderLongPress: onCustomizeColumn,
+        onItemTap: onItemSelected,
+        flexBottom: Settings().isDetailsPanelExpanded ? 1 : 0,
+        bottom: InfoPanel(
+          isExpanded: Settings().isDetailsPanelExpanded,
+          onExpanded: (final bool isExpanded) {
+            setState(() {
+              Settings().isDetailsPanelExpanded = isExpanded;
+              Settings().store();
+            });
+          },
+          selectedItems: _selectedItemsByUniqueId,
+
+          // SubView
+          subPanelSelected: _selectedBottomTabId,
+          subPanelSelectionChanged: updateBottomContent,
+          subPanelContent: getInfoPanelContent,
+
+          // Currency
+          getCurrencyChoices: getCurrencyChoices,
+          currencySelected: _selectedCurrency,
+          currencySelectionChanged: (final int selected) {
+            setState(() {
+              _selectedCurrency = selected;
+            });
+          },
+
+          /// Actions
+          actionButtons: [
+            /// Add
+            if (onAddTransaction != null) InfoPanelHeader.buildAddButton(onAddTransaction!),
+            InfoPanelHeader.buildEditButton(
+              () {
+                showDialogAndActionsForMoneyObject(
+                  context,
+                  getFirstSelectedItem() as MoneyObject,
+                );
               },
-              selectedItems: _selectedItemsByUniqueId,
-
-              // SubView
-              subPanelSelected: _selectedBottomTabId,
-              subPanelSelectionChanged: updateBottomContent,
-              subPanelContent: getInfoPanelContent,
-
-              // Currency
-              getCurrencyChoices: getCurrencyChoices,
-              currencySelected: _selectedCurrency,
-              currencySelectionChanged: (final int selected) {
-                setState(() {
-                  _selectedCurrency = selected;
-                });
-              },
-
-              /// Actions
-              actionButtons: [
-                /// Add
-                if (onAddTransaction != null) InfoPanelHeader.buildAddButton(onAddTransaction!),
-                InfoPanelHeader.buildEditButton(
-                  () {
-                    showDialogAndActionsForMoneyObject(
-                      context,
-                      getFirstSelectedItem() as MoneyObject,
-                    );
-                  },
-                ),
-                const Spacer(),
-
-                /// Copy
-                if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions && onCopyInfoPanelTransactions != null)
-                  InfoPanelHeader.buildCopyButton(onCopyInfoPanelTransactions!),
-                const Spacer(),
-
-                /// Delete
-                InfoPanelHeader.buildDeleteButton(
-                  () {
-                    onDeleteRequestedByUser(
-                      context,
-                      getFirstSelectedItem() as MoneyObject,
-                    );
-                  },
-                ),
-              ],
             ),
-          ),
-        );
-      },
+            const Spacer(),
+
+            /// Copy
+            if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions && onCopyInfoPanelTransactions != null)
+              InfoPanelHeader.buildCopyButton(onCopyInfoPanelTransactions!),
+            const Spacer(),
+
+            /// Delete
+            InfoPanelHeader.buildDeleteButton(
+              () {
+                onDeleteRequestedByUser(
+                  context,
+                  getFirstSelectedItem() as MoneyObject,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
     );
   }
 
