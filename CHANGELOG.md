@@ -1,5 +1,13 @@
 # Change Log
 
+## [version 1.8.5] 2024-05-13
+
+### Added
+
+- Multiple selection
+
+# Change Log
+
 ## [version 1.8.4] 2024-05-10
 
 ### Added

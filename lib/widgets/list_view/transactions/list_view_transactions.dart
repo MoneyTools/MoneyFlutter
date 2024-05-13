@@ -72,7 +72,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
               fields: Fields<Transaction>()..setDefinitions(widget.columnsToInclude),
               list: transactions,
               selectedItemIds: ValueNotifier<List<int>>(<int>[selectedItemIndex]),
-              unSelectable: false,
               onTap: (final BuildContext context2, final int uniqueId) {
                 final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
                 showTransactionAndActions(

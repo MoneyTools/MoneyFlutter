@@ -20,7 +20,6 @@ class MyListView<T> extends StatefulWidget {
   final Function(BuildContext, int)? onDoubleTap;
   final Function(BuildContext, int)? onLongPress;
   final ValueNotifier<List<int>> selectedItemIds;
-  final bool unSelectable;
   final bool asColumnView;
 
   const MyListView({
@@ -28,7 +27,6 @@ class MyListView<T> extends StatefulWidget {
     required this.fields,
     required this.list,
     required this.selectedItemIds,
-    required this.unSelectable, //true = re-selecting the same select item will unselect it
     this.asColumnView = true,
     this.onTap,
     this.onDoubleTap,
@@ -168,12 +166,10 @@ class MyListViewState<T> extends State<MyListView<T>> {
     final bool isDoubleTap = false,
   ]) {
     if (widget.selectedItemIds.value.contains(uniqueId)) {
-      if (widget.unSelectable) {
-        // unselected
-        setState(() {
-          widget.selectedItemIds.value.clear();
-        });
-      }
+      // unselect
+      setState(() {
+        widget.selectedItemIds.value.clear();
+      });
     } else {
       // select
       setState(() {

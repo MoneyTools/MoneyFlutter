@@ -63,7 +63,6 @@ class AdaptableListView extends StatelessWidget {
                 fields: Fields<MoneyObject>()..setDefinitions(fieldDefinitions),
                 asColumnView: useColumns,
                 onTap: onItemTap,
-                unSelectable: true,
               ),
             ),
 
