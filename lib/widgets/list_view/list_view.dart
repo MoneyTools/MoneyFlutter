@@ -20,17 +20,21 @@ class MyListView<T> extends StatefulWidget {
   final Function(BuildContext, int)? onDoubleTap;
   final Function(BuildContext, int)? onLongPress;
   final ValueNotifier<List<int>> selectedItemIds;
+  final Function onSelectionChanged;
   final bool asColumnView;
+  final bool isMultiSelectionOn;
 
   const MyListView({
     super.key,
     required this.fields,
     required this.list,
     required this.selectedItemIds,
-    this.asColumnView = true,
+    required this.onSelectionChanged,
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
+    this.asColumnView = true,
+    this.isMultiSelectionOn = false,
   });
 
   @override
@@ -78,20 +82,52 @@ class MyListViewState<T> extends State<MyListView<T>> {
           final isSelected = widget.selectedItemIds.value.contains(itemInstance.uniqueId);
           return Padding(
             padding: EdgeInsets.symmetric(horizontal: padding),
-            child: MyListItem(
-              onListViewKeyEvent: onListViewKeyEvent,
-              onTap: () {
-                setSelectedItem(itemInstance.uniqueId);
-                FocusScope.of(context).requestFocus();
-              },
-              onLongPress: () {
-                widget.onLongPress?.call(context, itemInstance.uniqueId);
-              },
-              autoFocus: index == widget.selectedItemIds.value.firstOrNull,
-              isSelected: isSelected,
-              adornmentColor: itemInstance.getMutationColor(),
-              child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
-            ),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+              if (widget.isMultiSelectionOn)
+                Checkbox(
+                  value: isSelected,
+                  onChanged: (bool? value) {
+                    setState(() {
+                      if (value == true) {
+                        selectedItem(itemInstance.uniqueId);
+                      }
+                      if (value == false) {
+                        widget.selectedItemIds.value.remove(itemInstance.uniqueId);
+                      }
+                      widget.onSelectionChanged();
+                      FocusScope.of(context).requestFocus();
+                    });
+                  },
+                ),
+              Expanded(
+                child: MyListItem(
+                  onListViewKeyEvent: onListViewKeyEvent,
+                  onTap: () {
+                    if (widget.selectedItemIds.value.contains(itemInstance.uniqueId)) {
+                      widget.selectedItemIds.value.remove(itemInstance.uniqueId);
+                      // unselectedItem(itemInstance.uniqueId);
+                    } else {
+                      if (widget.isMultiSelectionOn == false) {
+                        // single selection
+                        widget.selectedItemIds.value.clear();
+                      }
+                      widget.selectedItemIds.value.add(itemInstance.uniqueId);
+                      // selectedItem(itemInstance.uniqueId);
+                    }
+                    widget.onSelectionChanged();
+                    FocusScope.of(context).requestFocus();
+                  },
+                  onLongPress: () {
+                    widget.onLongPress?.call(context, itemInstance.uniqueId);
+                    FocusScope.of(context).requestFocus();
+                  },
+                  autoFocus: index == widget.selectedItemIds.value.firstOrNull,
+                  isSelected: isSelected,
+                  adornmentColor: itemInstance.getMutationColor(),
+                  child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
+                ),
+              ),
+            ]),
           );
         });
   }
@@ -127,12 +163,12 @@ class MyListViewState<T> extends State<MyListView<T>> {
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.home) {
         setState(() {
-          setSelectedItem(0);
+          selectedItem(0);
         });
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.end) {
         setState(() {
-          setSelectedItem(widget.list.length - 1);
+          selectedItem(widget.list.length - 1);
         });
         return KeyEventResult.handled;
       } else if (event.logicalKey == LogicalKeyboardKey.pageUp) {
@@ -158,38 +194,22 @@ class MyListViewState<T> extends State<MyListView<T>> {
       newPosition = widget.selectedItemIds.value[0] + delta;
     }
 
-    setSelectedItem(newPosition);
+    selectedItem(newPosition);
   }
 
-  void setSelectedItem(
-    final int uniqueId, [
-    final bool isDoubleTap = false,
-  ]) {
-    if (widget.selectedItemIds.value.contains(uniqueId)) {
-      // unselect
-      setState(() {
+  void selectedItem(final int uniqueId) {
+    setState(() {
+      if (widget.isMultiSelectionOn == false) {
+        // single selection so remove any other selection before selecting an item
         widget.selectedItemIds.value.clear();
-      });
-    } else {
-      // select
-      setState(() {
-        widget.selectedItemIds.value.clear();
+      }
+
+      // only add it if its not already there
+      if (!widget.selectedItemIds.value.contains(uniqueId)) {
         widget.selectedItemIds.value.add(uniqueId);
-      });
-    }
-
-    int newPosition = -1;
-
-    if (widget.selectedItemIds.value.isNotEmpty) {
-      newPosition = uniqueId;
-      scrollToId(newPosition);
-    }
-
-    if (isDoubleTap) {
-      widget.onDoubleTap?.call(context, newPosition);
-    } else {
-      widget.onTap?.call(context, newPosition);
-    }
+        widget.onSelectionChanged();
+      }
+    });
   }
 
   MoneyObject getMoneyObjectFromIndex(int index) {

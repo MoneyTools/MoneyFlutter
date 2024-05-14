@@ -57,7 +57,8 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
           child: MyListView<Split>(
             fields: Split.fields!,
             list: rows,
-            selectedItemIds: ValueNotifier<List<int>>(<int>[]),
+            selectedItemIds: ValueNotifier<List<int>>([]),
+            onSelectionChanged: () {},
           ),
         ),
       ],

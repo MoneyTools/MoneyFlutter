@@ -18,6 +18,7 @@ import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/dialog_mutate_money_object.dart';
 import 'package:money/widgets/list_view/column_filter_panel.dart';
 import 'package:money/widgets/list_view/list_view.dart';
+import 'package:money/widgets/list_view/multiple_selection_context.dart';
 import 'package:money/widgets/widgets.dart';
 
 import '../models/fields/field_filter.dart';
@@ -32,7 +33,7 @@ class ViewForMoneyObjects extends StatefulWidget {
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   // list management
   List<MoneyObject> list = <MoneyObject>[];
-  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>(<int>[]);
+  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>([]);
   Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>();
   List<String> listOfUniqueString = <String>[];
   List<ValueSelection> listOfValueSelected = [];
@@ -40,8 +41,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   int _sortByFieldIndex = 0;
   bool _sortAscending = true;
 
+  // Multi selection support
+  bool supportsMultiSelection = false;
+  bool _isMultiSelectionOn = false;
+  VoidCallback? onMultiSelect;
+
   VoidCallback? onAddNewEntry;
   VoidCallback? onCopyInfoPanelTransactions;
+
   Function(BuildContext, MoneyObject)? onMergeToItem;
 
   // detail panel
@@ -54,6 +61,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   final List<FieldFilter> _filterByFieldsValue = [];
   Timer? _deadlineTimer;
   Function? onAddTransaction;
+
+  ViewForMoneyObjectsState() {
+    //
+  }
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<MoneyObject> getFieldsForTable() {
@@ -94,9 +105,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         selectedItemsByUniqueId: _selectedItemsByUniqueId,
         sortByFieldIndex: _sortByFieldIndex,
         sortAscending: _sortAscending,
+        isMultiSelectionOn: _isMultiSelectionOn,
         onColumnHeaderTap: changeListSortOrder,
         onColumnHeaderLongPress: onCustomizeColumn,
-        onItemTap: onItemSelected,
+        onSelectionChanged: () {
+          _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
+        },
+        onItemTap: onItemTap,
         flexBottom: Settings().isDetailsPanelExpanded ? 1 : 0,
         bottom: InfoPanel(
           isExpanded: Settings().isDetailsPanelExpanded,
@@ -156,6 +171,17 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
+  void onSelectAll(final bool selectAll) {
+    setState(() {
+      _selectedItemsByUniqueId.value.clear();
+      if (selectAll) {
+        for (final item in list) {
+          _selectedItemsByUniqueId.value.add(item.uniqueId);
+        }
+      }
+    });
+  }
+
   Widget buildViewContent(final Widget child) {
     return Container(
       color: getColorTheme(context).background,
@@ -164,10 +190,28 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   Widget buildHeader([final Widget? child]) {
+    ViewHeaderMultipleSelection? multipleSelectionOptions;
+    if (supportsMultiSelection) {
+      multipleSelectionOptions = ViewHeaderMultipleSelection(
+        selectedItems: _selectedItemsByUniqueId,
+        isMultiSelectionOn: _isMultiSelectionOn,
+        onToggleMode: () {
+          setState(() {
+            _isMultiSelectionOn = !_isMultiSelectionOn;
+            if (!_isMultiSelectionOn) {
+              setSelectedItem(-1);
+            }
+          });
+        },
+      );
+    }
+
     return ViewHeader(
+      key: Key(_selectedItemsByUniqueId.value.length.toString()),
       title: getClassNamePlural(),
       count: numValueOrDefault(list.length),
       description: getDescription(),
+      multipleSelection: multipleSelectionOptions,
       onAddNewEntry: onAddNewEntry,
       onFilterChanged: onFilterTextChanged,
       child: child,
@@ -311,17 +355,24 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void setSelectedItem(final int uniqueId) {
     // This will cause a UI update and the bottom details will get rendered if its expanded
-    if (uniqueId == -1) {
-      _selectedItemsByUniqueId.value = [];
-    } else {
-      _selectedItemsByUniqueId.value = <int>[uniqueId];
-    }
+    setState(() {
+      //
+      if (uniqueId == -1) {
+        // clear
+        _selectedItemsByUniqueId.value.clear();
+      } else {
+        if (!_selectedItemsByUniqueId.value.contains(uniqueId)) {
+          // _selectedItemsByUniqueId.value = <int>[uniqueId];
+          _selectedItemsByUniqueId.value.add(uniqueId);
+        }
+      }
 
-    // call this to persist the last selected item index
-    saveLastUserActionOnThisView();
+      // call this to persist the last selected item index
+      saveLastUserActionOnThisView();
+    });
   }
 
-  void onItemSelected(final BuildContext context, final int uniqueId) {
+  void onItemTap(final BuildContext context, final int uniqueId) {
     if (isMobile()) {
       myShowDialog(
         context: context,
@@ -329,8 +380,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         actionButtons: [],
         child: getInfoPanelViewDetails(selectedIds: <int>[uniqueId], isReadOnly: true),
       );
-    } else {
-      setSelectedItem(uniqueId);
     }
   }
 
@@ -351,6 +400,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   Widget getInfoPanelViewDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+    if (selectedIds.length > 1) {
+      return CenterMessage(message: 'Multiple selection.(${selectedIds.length})');
+    }
+
     final MoneyObject? moneyObject = findObjectById(selectedIds.firstOrNull, list);
 
     if (moneyObject == null) {

@@ -7,6 +7,8 @@ class MyListItemHeader<T> extends StatelessWidget {
   final FieldDefinitions columns;
   final int sortByColumn;
   final bool sortAscending;
+  final bool itemsAreAllSelected;
+  final Function(bool)? onSelectAll;
   final Function(int columnIndex) onTap;
   final Function(Field<dynamic>)? onLongPress;
 
@@ -15,6 +17,8 @@ class MyListItemHeader<T> extends StatelessWidget {
     required this.columns,
     required this.sortByColumn,
     required this.sortAscending,
+    this.itemsAreAllSelected = false,
+    this.onSelectAll,
     required this.onTap,
     this.onLongPress,
   });
@@ -22,6 +26,16 @@ class MyListItemHeader<T> extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     final List<Widget> headers = <Widget>[];
+    if (onSelectAll != null) {
+      headers.add(
+        Checkbox(
+          value: itemsAreAllSelected,
+          onChanged: (bool? selected) {
+            onSelectAll!(selected == true);
+          },
+        ),
+      );
+    }
     for (int i = 0; i < columns.length; i++) {
       final Field<dynamic> columnDefinition = columns[i];
       headers.add(

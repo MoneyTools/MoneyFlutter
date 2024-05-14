@@ -90,7 +90,9 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       fieldDefinitions: fieldsToDisplay,
       list: list,
       sortAscending: false,
-      selectedItemsByUniqueId: ValueNotifier<List<int>>(<int>[]),
+      onSelectionChanged: () {},
+      isMultiSelectionOn: false,
+      selectedItemsByUniqueId: ValueNotifier<List<int>>([]),
     );
   }
 

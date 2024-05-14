@@ -72,9 +72,14 @@ class MyListItemState extends State<MyListItem> {
           onDoubleTap: widget.onDoubleTap,
           onLongPress: widget.onLongPress,
           child: Container(
+            // height: 40,
             decoration: BoxDecoration(
               color: backgroundColor,
-              border: Border(left: BorderSide(width: 2, color: widget.adornmentColor)),
+              border: Border(
+                top: BorderSide(width: 0.5, color: getColorTheme(context).outline.withOpacity(0.3)),
+                left: BorderSide(width: 2, color: widget.adornmentColor),
+                bottom: BorderSide(width: 0.5, color: getColorTheme(context).outline.withOpacity(0.3)),
+              ),
             ),
             child: widget.child,
           ),

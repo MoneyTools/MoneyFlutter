@@ -11,7 +11,12 @@ class AdaptableListView extends StatelessWidget {
   final int sortByFieldIndex;
   final bool sortAscending;
   final bool applySorting;
+
+  // Selection
   final ValueNotifier<List<int>> selectedItemsByUniqueId;
+  final Function onSelectionChanged;
+  final bool isMultiSelectionOn;
+
   final Function(BuildContext, int)? onItemTap;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field<dynamic> field)? onColumnHeaderLongPress;
@@ -22,6 +27,8 @@ class AdaptableListView extends StatelessWidget {
     required this.fieldDefinitions,
     required this.list,
     required this.selectedItemsByUniqueId,
+    required this.onSelectionChanged,
+    required this.isMultiSelectionOn,
     this.bottom,
     this.flexBottom = 1,
     this.sortByFieldIndex = 0,
@@ -40,40 +47,59 @@ class AdaptableListView extends StatelessWidget {
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
         final bool useColumns = !isSmallWidth(constraints);
-        return Column(
-          children: <Widget>[
-            // Optional upper Title area
-            if (top != null) top!,
+        return ValueListenableBuilder<List<int>>(
+            valueListenable: selectedItemsByUniqueId,
+            builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _) {
+              return Column(
+                children: <Widget>[
+                  // Optional upper Title area
+                  if (top != null) top!,
 
-            if (useColumns)
-              MyListItemHeader<MoneyObject>(
-                columns: fieldDefinitions,
-                sortByColumn: sortByFieldIndex,
-                sortAscending: sortAscending,
-                onTap: (int index) => onColumnHeaderTap?.call(index),
-                onLongPress: (Field<dynamic> field) => onColumnHeaderLongPress?.call(field),
-              ),
+                  if (useColumns)
+                    MyListItemHeader<MoneyObject>(
+                      columns: fieldDefinitions,
+                      sortByColumn: sortByFieldIndex,
+                      sortAscending: sortAscending,
+                      itemsAreAllSelected: list.length == selectedItemsByUniqueId.value.length,
+                      onSelectAll: isMultiSelectionOn
+                          ? (bool selectAllRequested) {
+                              selectedItemsByUniqueId.value.clear();
+                              if (selectAllRequested) {
+                                for (final item in list) {
+                                  selectedItemsByUniqueId.value.add(item.uniqueId);
+                                }
+                              }
+                              onSelectionChanged();
+                            }
+                          : null,
+                      onTap: (int index) => onColumnHeaderTap?.call(index),
+                      onLongPress: (Field<dynamic> field) => onColumnHeaderLongPress?.call(field),
+                    ),
 
-            // The actual List
-            Expanded(
-              flex: 1,
-              child: MyListView<MoneyObject>(
-                list: list,
-                selectedItemIds: selectedItemsByUniqueId,
-                fields: Fields<MoneyObject>()..setDefinitions(fieldDefinitions),
-                asColumnView: useColumns,
-                onTap: onItemTap,
-              ),
-            ),
+                  // The actual List
+                  Expanded(
+                    flex: 1,
+                    child: MyListView<MoneyObject>(
+                      fields: Fields<MoneyObject>()..setDefinitions(fieldDefinitions),
+                      list: list,
+                      selectedItemIds: selectedItemsByUniqueId,
+                      isMultiSelectionOn: isMultiSelectionOn,
+                      onSelectionChanged: onSelectionChanged,
+                      asColumnView: useColumns,
+                      onTap: onItemTap,
+                    ),
+                  ),
 
-            // Optional bottom details panel
-            if (bottom != null)
-              Expanded(
-                  flex: flexBottom,
-                  // this will split the vertical view when expanded
-                  child: bottom!),
-          ],
-        );
+                  // Optional bottom details panel
+                  if (bottom != null)
+                    Expanded(
+                      flex: flexBottom,
+                      // this will split the vertical view when expanded
+                      child: bottom!,
+                    ),
+                ],
+              );
+            });
       },
     );
   }

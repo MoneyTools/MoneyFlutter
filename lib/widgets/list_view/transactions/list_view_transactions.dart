@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_transactions/dialog_mutate_transaction.dart';
 import 'package:money/widgets/list_view/list_view.dart';
 
@@ -32,6 +32,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   late int sortBy = widget.sortFieldIndex;
   late bool sortAscending = widget.sortAscending;
   late int selectedItemIndex = widget.selectedItemIndex;
+  final bool _multiSelectionMode = false;
 
   @override
   void initState() {
@@ -54,6 +55,15 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           columns: widget.columnsToInclude,
           sortByColumn: sortBy,
           sortAscending: sortAscending,
+          onSelectAll: _multiSelectionMode
+              ? (bool? selectAll) {
+                  // selectedItemsByUniqueId.value.clear();
+                  // for (final item in list) {
+                  //   selectedItemsByUniqueId.value.add(item.uniqueId);
+                  //   }
+                  // }
+                }
+              : null,
           onTap: (final int index) {
             setState(() {
               if (sortBy == index) {
@@ -69,19 +79,23 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         // Table list of rows
         Expanded(
           child: MyListView<Transaction>(
-              fields: Fields<Transaction>()..setDefinitions(widget.columnsToInclude),
-              list: transactions,
-              selectedItemIds: ValueNotifier<List<int>>(<int>[selectedItemIndex]),
-              onTap: (final BuildContext context2, final int uniqueId) {
-                final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
-                showTransactionAndActions(
-                  context: context2,
-                  transaction: instance,
-                ).then((value) {
-                  selectedItemIndex = uniqueId;
-                  widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
-                });
-              }),
+            fields: Fields<Transaction>()..setDefinitions(widget.columnsToInclude),
+            list: transactions,
+            selectedItemIds: ValueNotifier<List<int>>([selectedItemIndex]),
+            onSelectionChanged: () {},
+            isMultiSelectionOn: _multiSelectionMode,
+            asColumnView: true,
+            onTap: (final BuildContext context2, final int uniqueId) {
+              final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
+              showTransactionAndActions(
+                context: context2,
+                transaction: instance,
+              ).then((value) {
+                selectedItemIndex = uniqueId;
+                widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
+              });
+            },
+          ),
         ),
       ],
     );
