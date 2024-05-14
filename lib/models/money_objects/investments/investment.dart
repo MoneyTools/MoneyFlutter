@@ -202,7 +202,7 @@ class Investment extends MoneyObject {
     columnWidth: ColumnWidth.small,
     valueFromInstance: (final MoneyObject instance) => (instance as Investment).date,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByDateAndInvestmentType(a as Investment, b as Investment, false, false),
+        sortByDateAndInvestmentType(a as Investment, b as Investment, ascending, false),
   );
 
   FieldString securitySymbol = FieldString(

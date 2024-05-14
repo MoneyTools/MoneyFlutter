@@ -32,7 +32,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   late int sortBy = widget.sortFieldIndex;
   late bool sortAscending = widget.sortAscending;
   late int selectedItemIndex = widget.selectedItemIndex;
-  final bool _multiSelectionMode = false;
+  final bool _isMultiSelectionOn = false;
 
   @override
   void initState() {
@@ -55,7 +55,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           columns: widget.columnsToInclude,
           sortByColumn: sortBy,
           sortAscending: sortAscending,
-          onSelectAll: _multiSelectionMode
+          onSelectAll: _isMultiSelectionOn
               ? (bool? selectAll) {
                   // selectedItemsByUniqueId.value.clear();
                   // for (final item in list) {
@@ -82,8 +82,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
             fields: Fields<Transaction>()..setDefinitions(widget.columnsToInclude),
             list: transactions,
             selectedItemIds: ValueNotifier<List<int>>([selectedItemIndex]),
-            onSelectionChanged: () {},
-            isMultiSelectionOn: _multiSelectionMode,
+            isMultiSelectionOn: _isMultiSelectionOn,
             asColumnView: true,
             onTap: (final BuildContext context2, final int uniqueId) {
               final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;

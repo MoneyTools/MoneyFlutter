@@ -20,7 +20,7 @@ class MyListView<T> extends StatefulWidget {
   final Function(BuildContext, int)? onDoubleTap;
   final Function(BuildContext, int)? onLongPress;
   final ValueNotifier<List<int>> selectedItemIds;
-  final Function onSelectionChanged;
+  final Function? onSelectionChanged;
   final bool asColumnView;
   final bool isMultiSelectionOn;
 
@@ -29,7 +29,7 @@ class MyListView<T> extends StatefulWidget {
     required this.fields,
     required this.list,
     required this.selectedItemIds,
-    required this.onSelectionChanged,
+    this.onSelectionChanged,
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
@@ -94,7 +94,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
                       if (value == false) {
                         widget.selectedItemIds.value.remove(itemInstance.uniqueId);
                       }
-                      widget.onSelectionChanged();
+                      widget.onSelectionChanged?.call();
                       FocusScope.of(context).requestFocus();
                     });
                   },
@@ -114,7 +114,13 @@ class MyListViewState<T> extends State<MyListView<T>> {
                       widget.selectedItemIds.value.add(itemInstance.uniqueId);
                       // selectedItem(itemInstance.uniqueId);
                     }
-                    widget.onSelectionChanged();
+                    if (widget.onSelectionChanged == null) {
+                      setState(() {
+                        // update the selection
+                      });
+                    } else {
+                      widget.onSelectionChanged?.call();
+                    }
                     FocusScope.of(context).requestFocus();
                   },
                   onLongPress: () {
@@ -207,7 +213,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
       // only add it if its not already there
       if (!widget.selectedItemIds.value.contains(uniqueId)) {
         widget.selectedItemIds.value.add(uniqueId);
-        widget.onSelectionChanged();
+        widget.onSelectionChanged?.call();
       }
     });
   }

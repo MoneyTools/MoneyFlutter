@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 class AdaptiveViewWithList extends StatelessWidget {
@@ -51,45 +53,29 @@ class AdaptiveViewWithList extends StatelessWidget {
             valueListenable: selectedItemsByUniqueId,
             builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _) {
               return Column(
-                children: <Widget>[
+                children: [
                   // Optional upper Title area
                   if (top != null) top!,
-
-                  if (useColumns)
-                    MyListItemHeader<MoneyObject>(
-                      columns: fieldDefinitions,
-                      sortByColumn: sortByFieldIndex,
-                      sortAscending: sortAscending,
-                      itemsAreAllSelected: list.length == selectedItemsByUniqueId.value.length,
-                      onSelectAll: isMultiSelectionOn
-                          ? (bool selectAllRequested) {
-                              selectedItemsByUniqueId.value.clear();
-                              if (selectAllRequested) {
-                                for (final item in list) {
-                                  selectedItemsByUniqueId.value.add(item.uniqueId);
-                                }
-                              }
-                              onSelectionChanged();
-                            }
-                          : null,
-                      onTap: (int index) => onColumnHeaderTap?.call(index),
-                      onLongPress: (Field<dynamic> field) => onColumnHeaderLongPress?.call(field),
-                    ),
-
-                  // The actual List
                   Expanded(
-                    flex: 1,
-                    child: MyListView<MoneyObject>(
-                      fields: Fields<MoneyObject>()..setDefinitions(fieldDefinitions),
+                    child: AdaptiveListColumnsOrRows(
+                      // list
                       list: list,
-                      selectedItemIds: selectedItemsByUniqueId,
+                      fieldDefinitions: fieldDefinitions,
+                      sortByFieldIndex: sortByFieldIndex,
+                      sortAscending: sortAscending,
+
+                      // Field & Columns
+                      useColumns: useColumns,
+                      onColumnHeaderTap: onColumnHeaderTap,
+                      onColumnHeaderLongPress: onColumnHeaderLongPress,
+
+                      // Selection
+                      onItemTap: onItemTap,
+                      selectedItemsByUniqueId: selectedItemsByUniqueId,
                       isMultiSelectionOn: isMultiSelectionOn,
                       onSelectionChanged: onSelectionChanged,
-                      asColumnView: useColumns,
-                      onTap: onItemTap,
                     ),
                   ),
-
                   // Optional bottom details panel
                   if (bottom != null)
                     Expanded(
