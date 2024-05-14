@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/get_stock_from_cache_or_backend.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/widgets/dialog_single_text_input.dart';
+import 'package:money/widgets/dialog/dialog_single_text_input.dart';
 
 class StockChartWidget extends StatefulWidget {
   final String symbol;

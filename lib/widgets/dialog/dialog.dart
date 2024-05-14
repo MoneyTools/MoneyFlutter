@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/widgets/dialog_button.dart';
-import 'package:money/widgets/dialog_full_screen.dart';
+import 'package:money/widgets/dialog/dialog_button.dart';
+import 'package:money/widgets/dialog/dialog_full_screen.dart';
 
 void myShowDialog({
   required final BuildContext context,

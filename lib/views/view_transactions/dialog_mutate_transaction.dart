@@ -3,8 +3,8 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
-import 'package:money/widgets/dialog_button.dart';
-import 'package:money/widgets/dialog_full_screen.dart';
+import 'package:money/widgets/dialog/dialog_button.dart';
+import 'package:money/widgets/dialog/dialog_full_screen.dart';
 
 Future<dynamic> showTransactionAndActions({
   required final BuildContext context,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/dialog.dart';
+import 'package:money/widgets/dialog/dialog.dart';
 
 class PendingChanges extends StatefulWidget {
   const PendingChanges({super.key});

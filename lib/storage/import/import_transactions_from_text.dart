@@ -6,8 +6,8 @@ import 'package:money/models/settings.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_panel.dart';
-import 'package:money/widgets/dialog_button.dart';
-import 'package:money/widgets/dialog_full_screen.dart';
+import 'package:money/widgets/dialog/dialog_button.dart';
+import 'package:money/widgets/dialog/dialog_full_screen.dart';
 import 'package:money/widgets/message_box.dart';
 
 void showImportTransactions(
