@@ -4,7 +4,7 @@ import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/securities/security.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/views/adaptable_list_view.dart';
+import 'package:money/views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_stocks/stock_chart.dart';
 import 'package:money/widgets/center_message.dart';
@@ -86,7 +86,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         .where((element) => element.useAsColumn && !exclude.contains(element.name))
         .toList();
 
-    return AdaptableListView(
+    return AdaptiveViewWithList(
       fieldDefinitions: fieldsToDisplay,
       list: list,
       sortAscending: false,

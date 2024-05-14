@@ -10,7 +10,7 @@ import 'package:money/views/view_rentals/rental_pnl.dart';
 import 'package:money/views/view_rentals/rental_pnl_card.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view_money_objects.dart';
-import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
+import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 
 part 'view_rentals_details_panels.dart';
 

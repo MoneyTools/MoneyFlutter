@@ -8,7 +8,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/views/adaptable_list_view.dart';
+import 'package:money/views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/details_panel/info_panel.dart';
@@ -16,9 +16,9 @@ import 'package:money/widgets/details_panel/info_panel_header.dart';
 import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/dialog_button.dart';
 import 'package:money/widgets/dialog_mutate_money_object.dart';
-import 'package:money/widgets/list_view/column_filter_panel.dart';
-import 'package:money/widgets/list_view/list_view.dart';
-import 'package:money/widgets/list_view/multiple_selection_context.dart';
+import 'package:money/views/adaptive_view/adaptive_list/column_filter_panel.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
+import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 import 'package:money/widgets/widgets.dart';
 
 import '../models/fields/field_filter.dart';
@@ -98,7 +98,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   @override
   Widget build(final BuildContext context) {
     return buildViewContent(
-      AdaptableListView(
+      AdaptiveViewWithList(
         top: buildHeader(),
         fieldDefinitions: _fieldToDisplay.definitions,
         list: list,

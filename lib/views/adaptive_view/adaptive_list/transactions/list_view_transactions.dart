@@ -4,7 +4,7 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_transactions/dialog_mutate_transaction.dart';
-import 'package:money/widgets/list_view/list_view.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 class ListViewTransactions extends StatefulWidget {
   final List<Field> columnsToInclude;

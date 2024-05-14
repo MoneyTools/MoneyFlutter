@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/splits/split.dart';
-import 'package:money/widgets/list_view/list_view.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 // Export
 export 'package:money/models/money_objects/splits/splits.dart';

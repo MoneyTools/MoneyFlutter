@@ -2,11 +2,19 @@
     "cmake.configureOnOpen": false,
     "cSpell.words": [
         "BECU",
+        "datetime",
+        "fitid",
         "LTRB",
         "LTWH",
         "mmdb",
+        "nchar",
+        "nvarchar",
+        "Rebalance",
+        "Revolut",
         "sankey",
-        "sqflite"
+        "sqflite",
+        "uniqueidentifier",
+        "Xfer"
     ],
     "editor.wordWrap": "off",
     "editor.wordWrapColumn": 120,

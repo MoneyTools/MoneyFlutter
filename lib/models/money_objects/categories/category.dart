@@ -9,7 +9,7 @@ import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/circle.dart';
-import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/widgets/money_widget.dart';
 import 'package:money/widgets/rectangle.dart';
 

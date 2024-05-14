@@ -12,7 +12,7 @@ import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/three_part_label.dart';
-import 'package:money/widgets/list_view/transactions/list_view_transactions.dart';
+import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view_money_objects.dart';
 

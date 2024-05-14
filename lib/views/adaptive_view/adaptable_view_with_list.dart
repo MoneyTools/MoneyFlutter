@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
-import 'package:money/widgets/list_view/list_view.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
-class AdaptableListView extends StatelessWidget {
+class AdaptiveViewWithList extends StatelessWidget {
   final Widget? top;
   final FieldDefinitions fieldDefinitions;
   final List<MoneyObject> list;
@@ -21,7 +21,7 @@ class AdaptableListView extends StatelessWidget {
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field<dynamic> field)? onColumnHeaderLongPress;
 
-  const AdaptableListView({
+  const AdaptiveViewWithList({
     super.key,
     this.top,
     required this.fieldDefinitions,

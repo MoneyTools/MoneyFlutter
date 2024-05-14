@@ -3,7 +3,7 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 
 class LoanPayment extends MoneyObject {
   static final Fields<LoanPayment> _fields = Fields<LoanPayment>();

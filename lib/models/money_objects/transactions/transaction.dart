@@ -18,7 +18,7 @@ import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/views/view_payees/picker_payee_or_transfer.dart';
-import 'package:money/widgets/list_view/list_item_card.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/widgets/money_widget.dart';
 import 'package:money/widgets/picker_edit_box_date.dart';
 
@@ -646,8 +646,8 @@ class Transaction extends MoneyObject {
     //   this.PayeeName = null;
     // }
     //
-    // // do not copy budgetting information outside of balancing the budget.
-    // // (Note: setting IsBudgetted to false will screw up the budget balance).
+    // // do not copy budgeting information outside of balancing the budget.
+    // // (Note: setting IsBudgeted to false will screw up the budget balance).
     // this.flags &= ~TransactionFlags.Budgeted;
     //
     // if (duplicateTransfers)
@@ -781,7 +781,7 @@ class Transaction extends MoneyObject {
     //   }
     //
     //   if (this.splits != null) {
-    //     if (this.splits.CheckTransfers(money, dangling, deletedaccounts) && !added) {
+    //     if (this.splits.CheckTransfers(money, dangling, deletedAccounts) && !added) {
     //       dangling.add(this); // only add transaction once.
     //     }
     //   }

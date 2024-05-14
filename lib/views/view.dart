@@ -4,7 +4,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_header.dart';
-import 'package:money/widgets/list_view/list_view.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 import 'package:money/widgets/widgets.dart';
 
 class ViewWidget extends StatefulWidget {
