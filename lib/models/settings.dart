@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
@@ -190,7 +191,7 @@ class Settings extends ChangeNotifier {
 
   ThemeData getThemeData() {
     // Validate color range
-    if (colorSelected > colorOptions.length) {
+    if (!isIndexInRange(colorOptions, colorSelected)) {
       colorSelected = 0;
     }
 
