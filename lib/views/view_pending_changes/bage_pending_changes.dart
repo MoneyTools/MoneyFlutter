@@ -28,7 +28,7 @@ class BadgePendingChanges extends StatelessWidget {
       child: IntrinsicWidth(
         child: TextButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey.withAlpha(0x22)),
+            backgroundColor: WidgetStateProperty.all<Color>(Colors.grey.withAlpha(0x22)),
             // You can add more styling properties here as needed
           ),
           onPressed: () {

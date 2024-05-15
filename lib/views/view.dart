@@ -35,7 +35,7 @@ class ViewWidgetState extends State<ViewWidget> {
   /// To be overridden by the derived view
   Widget buildViewContent(final Widget child) {
     return Container(
-      color: getColorTheme(context).background,
+      color: getColorTheme(context).surface,
       child: child,
     );
   }

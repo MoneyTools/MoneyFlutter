@@ -205,7 +205,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
           return Data()
               .splits
               .iterableList()
-              .where((final Split s) => s.transactionId.value == transaction.id.value)
+              .where((final MoneySplit s) => s.transactionId.value == transaction.id.value)
               .toList();
         },
       );

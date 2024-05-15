@@ -184,7 +184,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   Widget buildViewContent(final Widget child) {
     return Container(
-      color: getColorTheme(context).background,
+      color: getColorTheme(context).surface,
       child: child,
     );
   }

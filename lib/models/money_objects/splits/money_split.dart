@@ -16,12 +16,12 @@ import 'package:money/models/money_objects/payees/payee.dart';
   8|BudgetBalanceDate|datetime|0||0
  */
 
-class Split extends MoneyObject {
-  static final _fields = Fields<Split>();
+class MoneySplit extends MoneyObject {
+  static final _fields = Fields<MoneySplit>();
 
   static get fields {
     if (_fields.isEmpty) {
-      final tmp = Split.fromJson({});
+      final tmp = MoneySplit.fromJson({});
       _fields.setDefinitions([
         tmp.payeeId,
         tmp.categoryId,
@@ -42,12 +42,12 @@ class Split extends MoneyObject {
   FieldInt transactionId = FieldInt(
     name: 'Transaction',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Split).transactionId.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).transactionId.value,
   );
 
   // 1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as Split).uniqueId,
+    valueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
   );
 
   // 2
@@ -56,7 +56,7 @@ class Split extends MoneyObject {
     type: FieldType.text,
     align: TextAlign.left,
     valueFromInstance: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as Split).categoryId.value),
+        Data().categories.getNameFromId((instance as MoneySplit).categoryId.value),
   );
 
   // 3
@@ -64,13 +64,14 @@ class Split extends MoneyObject {
     name: 'Payee',
     type: FieldType.text,
     align: TextAlign.left,
-    valueFromInstance: (final MoneyObject instance) => Data().payees.getNameFromId((instance as Split).payeeId.value),
+    valueFromInstance: (final MoneyObject instance) =>
+        Data().payees.getNameFromId((instance as MoneySplit).payeeId.value),
   );
 
   // 4
   FieldMoney amount = FieldMoney(
     name: 'Amount',
-    valueFromInstance: (final MoneyObject instance) => (instance as Split).amount.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).amount.value,
   );
 
   // 5
@@ -82,7 +83,7 @@ class Split extends MoneyObject {
   // 6
   FieldString memo = FieldString(
     name: 'Memo',
-    valueFromInstance: (final MoneyObject instance) => (instance as Split).memo.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).memo.value,
   );
 
   // 7
@@ -90,17 +91,17 @@ class Split extends MoneyObject {
     name: 'Flags',
     columnWidth: ColumnWidth.nano,
     align: TextAlign.center,
-    valueFromInstance: (final MoneyObject instance) => (instance as Split).flags.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).flags.value,
   );
 
   // 8
   FieldDate budgetBalanceDate = FieldDate(
     name: 'Budgeted Date',
-    valueFromInstance: (final MoneyObject instance) => (instance as Split).budgetBalanceDate.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).budgetBalanceDate.value,
   );
 
   /// Constructor
-  Split({
+  MoneySplit({
     // 1
     required int id,
     // 0
@@ -131,8 +132,8 @@ class Split extends MoneyObject {
     this.budgetBalanceDate.value = budgetBalanceDate;
   }
 
-  factory Split.fromJson(final MyJson row) {
-    return Split(
+  factory MoneySplit.fromJson(final MyJson row) {
+    return MoneySplit(
       // 0
       transactionId: row.getInt('Transaction', -1),
       // 1
@@ -153,6 +154,7 @@ class Split extends MoneyObject {
       budgetBalanceDate: row.getDate('BudgetBalanceDate'),
     );
   }
+
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;

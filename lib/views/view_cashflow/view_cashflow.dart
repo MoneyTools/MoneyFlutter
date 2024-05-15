@@ -72,7 +72,7 @@ class ViewCashFlowState extends ViewWidgetState {
           child: Container(
             key: Key(Settings().cashflowViewAs.toString() + selectedYearStart.toString() + selectedYearEnd.toString()),
             // rebuild if the date changes
-            color: getColorTheme(context).background,
+            color: getColorTheme(context).surface,
             child: getView(),
           ),
         ),

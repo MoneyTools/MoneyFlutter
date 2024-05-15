@@ -73,7 +73,7 @@ class ColorPalette extends StatelessWidget {
         ),
         _buildColorBar(
           context,
-          getColorTheme(context).surfaceVariant,
+          getColorTheme(context).surfaceContainerHighest,
           getColorTheme(context).onSurfaceVariant,
           'onSurfaceVariant',
           'surfaceVariant',

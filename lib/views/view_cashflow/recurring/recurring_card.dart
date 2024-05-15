@@ -34,7 +34,7 @@ class RecurringCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: getColorTheme(context).background,
+      color: getColorTheme(context).surface,
       margin: const EdgeInsets.only(bottom: 21),
       elevation: 4,
       child: Container(

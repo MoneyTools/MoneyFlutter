@@ -21,9 +21,9 @@ version: 1.8.6
 
 environment:
   # This is the dart constraint
-  sdk: '>=3.3.0'
+  sdk: '>=3.4.0'
   # This is the Flutter SDK
-  flutter: '>=3.19.0'
+  flutter: '>=3.22.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions

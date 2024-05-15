@@ -83,7 +83,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     final num categoryIdToMatch = t.categoryId.value;
 
     if (t.isSplit) {
-      for (final Split split in t.splits) {
+      for (final MoneySplit split in t.splits) {
         if (isMatchingCategories(split.categoryId.value, rental)) {
           return true;
         }

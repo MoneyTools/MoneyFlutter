@@ -40,7 +40,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: getColorTheme(context).background,
+      color: getColorTheme(context).surface,
       child: ListView.builder(
           padding: const EdgeInsets.all(21),
           itemCount: recurringPayments.length,

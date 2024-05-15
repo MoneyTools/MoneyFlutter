@@ -2,6 +2,10 @@
 
 ## [version 1.8.6] 2024-05-15
 
+### Updated
+
+- Flutter 3.22.0 & Dart 3.4.0
+
 ### Added
 
 - WIP - Multi Editing - works for Transactions Category

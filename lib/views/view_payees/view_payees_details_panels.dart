@@ -45,7 +45,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
             values: sumByDays,
           ),
           Divider(
-            color: getColorTheme(context).background,
+            color: getColorTheme(context).surface,
           ),
         ],
       ),

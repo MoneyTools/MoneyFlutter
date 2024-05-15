@@ -43,8 +43,8 @@ class _PickerLettersState extends State<PickerLetters> {
             // Remove padding
             minimumSize: const Size(30, 22),
             maximumSize: const Size(30, 22),
-            foregroundColor: isSelected ? theme.onPrimary : theme.onBackground,
-            backgroundColor: isSelected ? theme.primary : theme.background,
+            foregroundColor: isSelected ? theme.onPrimary : theme.onSurface,
+            backgroundColor: isSelected ? theme.primary : theme.surface,
           ),
           child: Text(letter, style: const TextStyle(fontSize: 10)),
         ),

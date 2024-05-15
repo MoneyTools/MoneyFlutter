@@ -36,8 +36,8 @@ class Transfer extends MoneyObject {
   final Transaction? related; // the related transaction
 
   final num id; // used when the transfer is part of a split
-  final Split? sourceSplit; // the source split, if it is a transfer in a split.
-  final Split? relatedSplit; // the related split, if it is a transfer in a split.
+  final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
+  final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
 
   final bool isOrphan;
 

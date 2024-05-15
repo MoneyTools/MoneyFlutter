@@ -87,12 +87,12 @@ Widget widgetHeaderButton(
       message: ('$text\n${getSortingTooltipText(sortIndicator)}').trim(),
       child: TextButton(
         style: ButtonStyle(
-          shape: MaterialStateProperty.all<OutlinedBorder>(
+          shape: WidgetStateProperty.all<OutlinedBorder>(
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.zero, // Remove rounded corners
             ),
           ),
-          padding: MaterialStateProperty.all(
+          padding: WidgetStateProperty.all(
             const EdgeInsets.symmetric(
               horizontal: 3.0, // Left and right padding
             ),

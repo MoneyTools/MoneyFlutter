@@ -47,7 +47,7 @@ class InfoPanel extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-          color: getColorTheme(context).surfaceVariant,
+          color: getColorTheme(context).surfaceContainerHighest,
           border: Border(
             left: BorderSide(color: getColorTheme(context).outline),
             top: BorderSide(color: getColorTheme(context).outline),

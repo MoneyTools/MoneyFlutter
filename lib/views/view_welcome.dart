@@ -21,11 +21,10 @@ class WelcomeScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text('Welcome to MyMoney',
-              style: textTheme.headlineSmall!.copyWith(color: getColorTheme(context).onBackground)),
+          Text('Welcome to MyMoney', style: textTheme.headlineSmall!.copyWith(color: getColorTheme(context).onSurface)),
           gapLarge(),
           gapLarge(),
-          Text('No data loaded', style: textTheme.bodySmall!.copyWith(color: getColorTheme(context).onBackground)),
+          Text('No data loaded', style: textTheme.bodySmall!.copyWith(color: getColorTheme(context).onSurface)),
           gapLarge(),
           gapLarge(),
           Wrap(

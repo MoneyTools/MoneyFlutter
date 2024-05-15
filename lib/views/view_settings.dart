@@ -38,7 +38,7 @@ Widget buildCurrenciesPanel(final BuildContext context) {
     widgets.add(
       Container(
         decoration: BoxDecoration(
-          color: getColorTheme(context).surfaceVariant,
+          color: getColorTheme(context).surfaceContainerHighest,
           border: Border.all(color: getColorTheme(context).outline),
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),

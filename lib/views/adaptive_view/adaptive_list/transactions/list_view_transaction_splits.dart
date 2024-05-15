@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/money_objects/splits/split.dart';
+import 'package:money/models/money_objects/splits/money_split.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 // Export
 export 'package:money/models/money_objects/splits/splits.dart';
 
 class ListViewTransactionSplits extends StatefulWidget {
-  final List<Split> Function() getList;
+  final List<MoneySplit> Function() getList;
   final int defaultSortingField;
 
   const ListViewTransactionSplits({
@@ -20,7 +20,7 @@ class ListViewTransactionSplits extends StatefulWidget {
 }
 
 class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
-  List<Split> rows = [];
+  List<MoneySplit> rows = [];
   late int _sortBy = widget.defaultSortingField;
   bool _sortAscending = true;
 
@@ -36,8 +36,8 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
     return Column(
       children: <Widget>[
         // Table Header
-        MyListItemHeader<Split>(
-          columns: Split.fields!.definitions,
+        MyListItemHeader<MoneySplit>(
+          columns: MoneySplit.fields!.definitions,
           sortByColumn: _sortBy,
           sortAscending: _sortAscending,
           onTap: (final int index) {
@@ -54,8 +54,8 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         ),
         // Table list of rows
         Expanded(
-          child: MyListView<Split>(
-            fields: Split.fields!,
+          child: MyListView<MoneySplit>(
+            fields: MoneySplit.fields!,
             list: rows,
             selectedItemIds: ValueNotifier<List<int>>([]),
             onSelectionChanged: () {},

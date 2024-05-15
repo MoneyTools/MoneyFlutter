@@ -20,7 +20,7 @@ class RentalPnLCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Box(
-      color: getColorTheme(context).background,
+      color: getColorTheme(context).surface,
       width: 300,
       // height: 300,
       margin: 10,
