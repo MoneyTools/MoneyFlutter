@@ -12,6 +12,15 @@ export 'package:money/models/money_model.dart';
 
 typedef FieldDefinitions = List<Field<dynamic>>;
 
+Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final String nameToFind) {
+  for (final f in fields) {
+    if (f.name == nameToFind) {
+      return f;
+    }
+  }
+  return null;
+}
+
 class Field<T> {
   late T _value;
 

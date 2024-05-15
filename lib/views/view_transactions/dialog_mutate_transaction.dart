@@ -95,7 +95,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             onPressed: () {
               // Changes were made
               if (dataWasModified) {
-                Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
+                Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: transaction);
               }
               Navigator.of(context).pop(true);
             })
@@ -153,7 +153,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       DialogActionButton(
         text: 'Edit',
         onPressed: () {
-          transaction.stashValueBeforeEditing<Transaction>();
+          transaction.stashValueBeforeEditing();
           setState(() {
             isInEditingMode = true;
           });

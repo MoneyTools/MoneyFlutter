@@ -64,8 +64,8 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
       return ListViewTransactions(
         key: Key(alias.uniqueId.toString()),
         columnsToInclude: <Field>[
-          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdCategory),
           Transaction.fields.getFieldByName(columnIdMemo),
           Transaction.fields.getFieldByName(columnIdAmount),

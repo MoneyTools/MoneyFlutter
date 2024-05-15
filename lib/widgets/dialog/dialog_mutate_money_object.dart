@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/dialog/dialog_full_screen.dart';
@@ -8,20 +9,47 @@ showDialogAndActionsForMoneyObject(
   final BuildContext context,
   final MoneyObject moneyObject,
 ) {
+  showDialogAndActionsForMoneyObjects(context, [moneyObject]);
+}
+
+showDialogAndActionsForMoneyObjects(
+  final BuildContext context,
+  final List<MoneyObject> moneyObjects,
+) {
+  final rollup = moneyObjects[0].rollup(moneyObjects);
+  MyJson beforeEditing = rollup.getPersistableJSon();
+
   return showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DialogMutateMoneyObject(moneyObject: moneyObject);
+        return DialogMutateMoneyObject(
+          moneyObject: rollup,
+          onApplyChange: (MoneyObject objectChanged) {
+            MyJson afterEditing = rollup.getPersistableJSon();
+            MyJson diff = myJsonDiff(before: beforeEditing, after: afterEditing);
+
+            if (diff.keys.isNotEmpty) {
+              for (final m in moneyObjects) {
+                m.stashValueBeforeEditing();
+                diff.forEach((key, value) {
+                  m.mutateField(key, value['after']);
+                });
+              }
+            }
+          },
+        );
       });
 }
 
 /// Dialog content
 class DialogMutateMoneyObject extends StatefulWidget {
   final MoneyObject moneyObject;
+  final Function(MoneyObject) onApplyChange;
 
   const DialogMutateMoneyObject({
     super.key,
     required this.moneyObject,
+    required this.onApplyChange,
   });
 
   @override
@@ -49,7 +77,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _moneyObject.buildWidgets(onEdit: () {
                   setState(() {
-                    dataWasModified = isDataModified();
+                    dataWasModified = isDataModified(_moneyObject);
                   });
                 }),
               ),
@@ -59,7 +87,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: getActionButtons(
               context: context,
-              transaction: _moneyObject,
+              moneyObject: _moneyObject,
               editMode: true,
               dataWasModified: dataWasModified,
             ),
@@ -71,7 +99,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
 
   List<Widget> getActionButtons({
     required BuildContext context,
-    required MoneyObject transaction,
+    required MoneyObject moneyObject,
     required bool editMode,
     required bool dataWasModified,
   }) {
@@ -81,16 +109,16 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
           onPressed: () {
             // Changes were made
             if (dataWasModified) {
-              Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: transaction);
+              widget.onApplyChange(moneyObject);
             }
             Navigator.of(context).pop(true);
           })
     ];
   }
 
-  bool isDataModified() {
-    MyJson afterEditing = _moneyObject.getPersistableJSon();
-    MyJson diff = myJsonDiff(before: _moneyObject.valueBeforeEdit ?? {}, after: afterEditing);
+  bool isDataModified(MoneyObject moneyObject) {
+    MyJson afterEditing = moneyObject.getPersistableJSon();
+    MyJson diff = myJsonDiff(before: moneyObject.valueBeforeEdit ?? {}, after: afterEditing);
     return diff.keys.isNotEmpty;
   }
 }

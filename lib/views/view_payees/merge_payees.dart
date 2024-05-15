@@ -131,14 +131,14 @@ void mutateTransactionsToPayee(final List<Transaction> transactions, final int t
     // keep track of the payeeIds that we remove transactions from
     fromPayeeIds.add(t.payee.value);
 
-    t.stashValueBeforeEditing<Transaction>();
+    t.stashValueBeforeEditing();
 
     t.payee.value = toPayeeId;
     if (categoryId != null) {
       t.categoryId.value = categoryId;
     }
 
-    Data().notifyTransactionChange(
+    Data().notifyMutationChanged(
       mutation: MutationType.changed,
       moneyObject: t,
       fireNotification: false,

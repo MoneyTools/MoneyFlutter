@@ -29,8 +29,8 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
       return ListViewTransactions(
         key: Key(instance.uniqueId.toString()),
         columnsToInclude: <Field>[
-          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdPayee),
           Transaction.fields.getFieldByName(columnIdCategory),
           Transaction.fields.getFieldByName(columnIdMemo),

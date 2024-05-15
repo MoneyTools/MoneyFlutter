@@ -26,8 +26,8 @@ extension ViewLoansDetailsPanels on ViewLoansState {
       return ListViewTransactions(
         key: Key(loan.uniqueId.toString()),
         columnsToInclude: <Field>[
-          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdPayee),
           Transaction.fields.getFieldByName(columnIdCategory),
           Transaction.fields.getFieldByName(columnIdMemo),

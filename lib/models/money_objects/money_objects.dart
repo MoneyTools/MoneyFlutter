@@ -93,7 +93,7 @@ class MoneyObjects<T> {
 
     appendMoneyObject(moneyObject);
 
-    Data().notifyTransactionChange(
+    Data().notifyMutationChanged(
       mutation: MutationType.inserted,
       moneyObject: moneyObject,
       fireNotification: fireNotification,
@@ -311,13 +311,13 @@ class MoneyObjects<T> {
   }
 
   bool mutationUpdateItem(final MoneyObject item) {
-    Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: item);
+    Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: item);
     return true;
   }
 
   /// Remove/tag a Transaction instance from the list in memory
   bool deleteItem(final MoneyObject itemToDelete) {
-    Data().notifyTransactionChange(mutation: MutationType.deleted, moneyObject: itemToDelete);
+    Data().notifyMutationChanged(mutation: MutationType.deleted, moneyObject: itemToDelete);
     return true;
   }
 }

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.6] 2024-05-15
+
+### Added
+
+- WIP - Multi Editing - works for Transactions Category
+
 ## [version 1.8.5] 2024-05-13
 
 ### Added

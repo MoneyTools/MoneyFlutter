@@ -1,19 +1,20 @@
 // Exports
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/json_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/circle.dart';
-import 'package:money/widgets/form_field_widget.dart';
 import 'package:money/widgets/form_field_switch.dart';
+import 'package:money/widgets/form_field_widget.dart';
 
 export 'dart:ui';
 
 export 'package:money/helpers/misc_helpers.dart';
 export 'package:money/models/fields/field.dart';
 
-abstract class MoneyObject {
+class MoneyObject {
+  MoneyObject();
+
   /// All object must have a unique identified
   int get uniqueId => -1;
 
@@ -59,6 +60,19 @@ abstract class MoneyObject {
   bool get isDeleted => mutation == MutationType.deleted;
 
   bool get isChanged => mutation == MutationType.changed;
+
+  MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {
+    return MoneyObject();
+  }
+
+  void mutateField(final String fieldName, dynamic newValue) {
+    stashValueBeforeEditing();
+    final field = getFieldDefinitionByName(fieldDefinitions, fieldName);
+    if (field != null && field.setValue != null) {
+      field.setValue!(this, newValue);
+      Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: this);
+    }
+  }
 
   ///
   /// Column 1 | Column 2 | Column 3
@@ -269,7 +283,7 @@ abstract class MoneyObject {
     return myJsonDiff(before: valueBeforeEdit ?? {}, after: afterEditing);
   }
 
-  void stashValueBeforeEditing<T>() {
+  void stashValueBeforeEditing() {
     if (valueBeforeEdit == null) {
       valueBeforeEdit = getPersistableJSon();
     } else {

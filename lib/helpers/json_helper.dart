@@ -146,3 +146,19 @@ MyJson myJsonDiff({required MyJson before, required MyJson after}) {
   });
   return diff;
 }
+
+MyJson compareAndGenerateCommonJson(MyJson json1, MyJson json2) {
+  MyJson commonJson = {};
+
+  // Iterate over keys in json1
+  json1.forEach((key, value) {
+    // Check if the key exists in json2 and has the same value
+    if (json2.containsKey(key) && json2[key] == value) {
+      // Add the key-value pair to the commonJson
+      commonJson[key] = value;
+    }
+    // commonJson[key] = '';
+  });
+
+  return commonJson;
+}

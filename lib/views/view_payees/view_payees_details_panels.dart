@@ -59,8 +59,8 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
         columnsToInclude: <Field>[
-          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdDate),
+          Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdCategory),
           Transaction.fields.getFieldByName(columnIdMemo),
           Transaction.fields.getFieldByName(columnIdMemo),

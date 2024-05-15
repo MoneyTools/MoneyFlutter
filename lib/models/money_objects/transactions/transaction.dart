@@ -8,6 +8,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
+import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
@@ -16,9 +17,9 @@ import 'package:money/models/money_objects/splits/splits.dart';
 import 'package:money/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/models/money_objects/transfers/transfer.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/views/view_payees/picker_payee_or_transfer.dart';
-import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/widgets/money_widget.dart';
 import 'package:money/widgets/picker_edit_box_date.dart';
 
@@ -207,12 +208,14 @@ class Transaction extends MoneyObject {
       valueFromInstance: (final MoneyObject instance) =>
           Data().categories.getNameFromId((instance as Transaction).categoryId.value),
       valueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
+      setValue: (final MoneyObject instance, dynamic newValue) =>
+          (instance as Transaction).categoryId.value = newValue as int,
       getEditWidget: (final MoneyObject instance, Function onEdited) {
         return pickerCategory(
           itemSelected: Data().categories.get((instance as Transaction).categoryId.value),
           onSelected: (Category? newCategory) {
             if (newCategory != null) {
-              (instance).categoryId.value = newCategory.uniqueId;
+              instance.categoryId.value = newCategory.uniqueId;
               // notify container
               onEdited();
             }
@@ -436,13 +439,10 @@ class Transaction extends MoneyObject {
     defaultValue: '',
     useAsDetailPanels: true,
     valueFromInstance: (final MoneyObject instance) {
-      final account = (instance as Transaction).accountInstance!;
-      return account.currency.valueFromInstance(account);
+      return Currency.buildCurrencyWidget((instance as Transaction).getCurrency());
     },
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-        (a as Transaction).accountInstance!.getAccountCurrencyAsText(),
-        (b as Transaction).accountInstance!.getAccountCurrencyAsText(),
-        ascending),
+        (a as Transaction).getCurrency(), (b as Transaction).accountInstance!.getAccountCurrencyAsText(), ascending),
   );
 
   /// Used for establishing relation between two transactions
@@ -453,10 +453,14 @@ class Transaction extends MoneyObject {
   String? _transferName;
 
   String getCurrency() {
+    if (this.accountInstance == null) {
+      return Constants.defaultCurrency;
+    }
+
     try {
       return this.accountInstance!.currency.value;
     } catch (error) {
-      return 'USD';
+      return Constants.defaultCurrency;
     }
   }
 
@@ -550,7 +554,7 @@ class Transaction extends MoneyObject {
     return caption;
   }
 
-  List<Split> splits = [];
+  List<MoneySplit> splits = [];
 
   bool get isSplit => this.splits.isNotEmpty;
 
@@ -615,6 +619,23 @@ class Transaction extends MoneyObject {
     t.balance = runningBalance;
 
     return t;
+  }
+
+  @override
+  MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {
+    if (moneyObjectInstances.isEmpty) {
+      return Transaction();
+    }
+    if (moneyObjectInstances.length == 1) {
+      return moneyObjectInstances.first;
+    }
+
+    MyJson commonJson = moneyObjectInstances.first.getPersistableJSon();
+
+    for (var t in moneyObjectInstances.skip(1)) {
+      commonJson = compareAndGenerateCommonJson(commonJson, t.getPersistableJSon());
+    }
+    return Transaction.fromJSon(commonJson, 0);
   }
 
   /// <summary>

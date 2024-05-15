@@ -130,7 +130,7 @@ class Data {
     }
   }
 
-  void notifyTransactionChange({
+  void notifyMutationChanged({
     required MutationType mutation,
     required MoneyObject moneyObject,
     bool fireNotification = true,
@@ -312,7 +312,7 @@ class Data {
       }
 
       // Keep track changes done
-      relatedTransaction.stashValueBeforeEditing<Transaction>();
+      relatedTransaction.stashValueBeforeEditing();
       relatedTransaction.payee.value = -1;
       relatedTransaction.transfer.value = transactionSource.id.value;
       relatedTransaction.transferInstance = transfer;
@@ -321,7 +321,7 @@ class Data {
         // This is a new related transaction Append and get a new UniqueID
         transactions.appendNewMoneyObject(relatedTransaction);
       } else {
-        Data().notifyTransactionChange(
+        Data().notifyMutationChanged(
           mutation: MutationType.changed,
           moneyObject: relatedTransaction,
         );
@@ -337,7 +337,7 @@ class Data {
     return true;
   }
 
-  void transferSplitTo(Split s, Account to) {
+  void transferSplitTo(MoneySplit s, Account to) {
     // Transaction t = s.Transaction;
     // if (t.Account == to) {
     //   throw new MoneyException("Cannot transfer to same account");

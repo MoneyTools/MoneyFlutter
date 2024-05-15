@@ -310,7 +310,7 @@ class Account extends MoneyObject {
     valueFromInstance: (final MoneyObject instance) => !(instance as Account).isClosed(),
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Account).isOpen = value as bool;
-      Data().notifyTransactionChange(mutation: MutationType.changed, moneyObject: instance);
+      Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: instance);
     },
   );
 
