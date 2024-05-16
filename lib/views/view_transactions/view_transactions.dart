@@ -3,11 +3,10 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/widgets.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
@@ -71,13 +70,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   @override
   String getDescription() {
     return 'Details actions of your accounts.';
-  }
-
-  @override
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    setState(() {
-      Data().transactions.deleteItem(instance);
-    });
   }
 
   @override

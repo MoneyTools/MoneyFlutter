@@ -167,6 +167,14 @@ class Data {
     Settings().rebuild();
   }
 
+  /// Bulk Delete
+  void deleteItems(final List<MoneyObject> itemsToDelete) {
+    for (final item in itemsToDelete) {
+      Data().notifyMutationChanged(mutation: MutationType.deleted, moneyObject: item, fireNotification: false);
+    }
+    Data().updateAll();
+  }
+
   void assessMutationsCountOfAllModels() {
     Settings().trackMutations.reset();
 

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_header.dart';
-import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
-import 'package:money/widgets/widgets.dart';
 
 class ViewWidget extends StatefulWidget {
   const ViewWidget({super.key});
@@ -61,45 +58,6 @@ class ViewWidgetState extends State<ViewWidget> {
 
   String getDescription() {
     return 'Default list of items';
-  }
-
-  String getCurrency() {
-    // default currency for this view
-    return Constants.defaultCurrency;
-  }
-
-  List<MoneyObject> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return <MoneyObject>[];
-  }
-
-  void clearSelection() {
-    //_selectedItemsByUniqueId.value.clear();
-  }
-
-  void onDeleteRequestedByUser(final BuildContext context, final MoneyObject? myMoneyObjectInstance) {
-    if (myMoneyObjectInstance != null) {
-      showDialog(
-        context: context,
-        builder: (final BuildContext context) {
-          return Center(
-            child: DeleteConfirmationDialog(
-              title: 'Delete ${getClassNameSingular()}',
-              question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
-              content: Column(
-                children: myMoneyObjectInstance.buildWidgets(onEdit: null, compact: true),
-              ),
-              onConfirm: () {
-                onDeleteConfirmedByUser(myMoneyObjectInstance);
-              },
-            ),
-          );
-        },
-      );
-    }
-  }
-
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    // Derived view need to make the actual delete operation
   }
 
   void saveLastUserActionOnThisView() {

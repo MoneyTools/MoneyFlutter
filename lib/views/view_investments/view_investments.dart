@@ -3,7 +3,6 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/widgets/center_message.dart';
 
@@ -66,12 +65,5 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   @override
   Fields<Investment> getFieldsForTable() {
     return Investment.fields;
-  }
-
-  @override
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    setState(() {
-      Data().investments.deleteItem(instance);
-    });
   }
 }

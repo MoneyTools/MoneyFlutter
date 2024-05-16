@@ -191,11 +191,4 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     final list = getTransactionForLastSelectedAccount();
     copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list));
   }
-
-  @override
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    setState(() {
-      Data().accounts.deleteItem(instance);
-    });
-  }
 }

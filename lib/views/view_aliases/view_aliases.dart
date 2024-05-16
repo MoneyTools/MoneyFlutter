@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
+import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/center_message.dart';
-import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 
 class ViewAliases extends ViewForMoneyObjects {
   const ViewAliases({super.key});
@@ -76,12 +75,5 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
       );
     }
     return CenterMessage.noTransaction();
-  }
-
-  @override
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    setState(() {
-      Data().aliases.deleteItem(instance);
-    });
   }
 }

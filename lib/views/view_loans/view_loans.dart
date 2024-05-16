@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
-import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
+import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
+import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/views/view_money_objects.dart';
-import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 
 part 'view_loans_details_panels.dart';
 
@@ -59,12 +58,5 @@ class ViewLoansState extends ViewForMoneyObjectsState {
   @override
   Fields<LoanPayment> getFieldsForTable() {
     return LoanPayment.fields;
-  }
-
-  @override
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    setState(() {
-      Data().loanPayments.deleteItem(instance);
-    });
   }
 }

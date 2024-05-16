@@ -4,6 +4,7 @@
 
 ### Added
 
+- Bulk Delete for Transactions
 - Category list now has a column for [Level]
 
 ### Updated

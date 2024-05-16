@@ -82,11 +82,4 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   Fields<RentBuilding> getFieldsForTable() {
     return RentBuilding.fields!;
   }
-
-  @override
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    setState(() {
-      Data().rentBuildings.deleteItem(instance);
-    });
-  }
 }

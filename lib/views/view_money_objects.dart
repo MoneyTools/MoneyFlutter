@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -79,7 +80,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     onDelete = () {
       onDeleteRequestedByUser(
         context,
-        getFirstSelectedItem() as MoneyObject,
+        getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
       );
     };
   }
@@ -271,30 +272,36 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
   }
 
-  void onDeleteRequestedByUser(final BuildContext context, final MoneyObject? myMoneyObjectInstance) {
-    if (myMoneyObjectInstance != null) {
+  void onDeleteRequestedByUser(final BuildContext context, final List<MoneyObject> moneyObjects) {
+    if (moneyObjects.isNotEmpty) {
+      final String title =
+          moneyObjects.length == 1 ? 'Delete ${getClassNameSingular()}' : 'Delete ${getClassNamePlural()}';
+
+      final String question = moneyObjects.length == 1
+          ? 'Are you sure you want to delete this ${getClassNameSingular()}?'
+          : 'Are you sure you want to delete the ${moneyObjects.length} selected ${getClassNamePlural()}?';
+
       showDialog(
         context: context,
         builder: (final BuildContext context) {
           return Center(
             child: DeleteConfirmationDialog(
-              title: 'Delete ${getClassNameSingular()}',
-              question: 'Are you sure you want to delete this ${getClassNameSingular()}?',
-              content: Column(
-                children: myMoneyObjectInstance.buildWidgets(onEdit: null, compact: true),
-              ),
+              title: title,
+              question: question,
+              content: moneyObjects.length == 1
+                  ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
+                  : Center(
+                      child: Text('${getIntAsText(moneyObjects.length)} ${getClassNamePlural()}',
+                          style: getTextTheme(context).displaySmall),
+                    ),
               onConfirm: () {
-                onDeleteConfirmedByUser(myMoneyObjectInstance);
+                Data().deleteItems(moneyObjects);
               },
             ),
           );
         },
       );
     }
-  }
-
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    // Derived view need to make the actual delete operation
   }
 
   void onFilterTextChanged(final String text) {

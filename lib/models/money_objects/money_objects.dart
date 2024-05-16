@@ -310,15 +310,13 @@ class MoneyObjects<T> {
     return widgets;
   }
 
-  bool mutationUpdateItem(final MoneyObject item) {
+  void mutationUpdateItem(final MoneyObject item) {
     Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: item);
-    return true;
   }
 
   /// Remove/tag a Transaction instance from the list in memory
-  bool deleteItem(final MoneyObject itemToDelete) {
+  void deleteItem(final MoneyObject itemToDelete) {
     Data().notifyMutationChanged(mutation: MutationType.deleted, moneyObject: itemToDelete);
-    return true;
   }
 }
 

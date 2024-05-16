@@ -172,11 +172,4 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }) {
     return _getSubViewContentForTransactions(selectedIds);
   }
-
-  @override
-  void onDeleteConfirmedByUser(final MoneyObject instance) {
-    setState(() {
-      Data().categories.deleteItem(instance);
-    });
-  }
 }
