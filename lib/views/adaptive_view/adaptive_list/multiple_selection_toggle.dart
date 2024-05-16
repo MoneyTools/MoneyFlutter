@@ -21,11 +21,13 @@ class MultipleSelectionToggle extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                    icon: const Icon(Icons.checklist),
-                    isSelected: multipleSelection!.isMultiSelectionOn,
-                    onPressed: () {
-                      multipleSelection!.onToggleMode!();
-                    }),
+                  icon: const Icon(Icons.checklist),
+                  isSelected: multipleSelection!.isMultiSelectionOn,
+                  onPressed: () {
+                    multipleSelection!.onToggleMode!();
+                  },
+                  tooltip: 'Toggle multiple selection',
+                ),
                 if (multipleSelection!.isMultiSelectionOn)
                   Text(getIntAsText(multipleSelection!.selectedItems.value.length)),
               ],

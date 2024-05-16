@@ -19,6 +19,7 @@ class ViewHeader extends StatelessWidget {
   final void Function(String)? onFilterChanged;
   final VoidCallback? onAddNewEntry;
   final VoidCallback? onEdit;
+  final VoidCallback? onDelete;
 
   final Widget? child;
 
@@ -34,6 +35,7 @@ class ViewHeader extends StatelessWidget {
     this.onFilterChanged,
     this.onAddNewEntry,
     this.onEdit,
+    this.onDelete,
     this.child,
   });
 
@@ -87,17 +89,31 @@ class ViewHeader extends StatelessWidget {
       ),
     );
 
-    if (multipleSelection != null || (onEdit != null && selectedItems.value.isNotEmpty)) {
+    if (multipleSelection != null || (selectedItems.value.isNotEmpty && (onEdit != null || onDelete != null))) {
       widgets.add(
         IntrinsicWidth(
           child: Row(
             children: [
-              if (multipleSelection != null) MultipleSelectionToggle(multipleSelection: multipleSelection),
+              // Multiple-Selection
+              if (multipleSelection != null)
+                MultipleSelectionToggle(
+                  multipleSelection: multipleSelection,
+                ),
+
               // Edit
               if (onEdit != null && selectedItems.value.isNotEmpty)
                 IconButton(
                   icon: const Icon(Icons.edit),
                   onPressed: onEdit,
+                  tooltip: 'Edit selected item(s)',
+                ),
+
+              // Delete
+              if (onDelete != null && selectedItems.value.isNotEmpty)
+                IconButton(
+                  icon: const Icon(Icons.delete),
+                  onPressed: onDelete,
+                  tooltip: 'Delete selected item(s)',
                 ),
             ],
           ),

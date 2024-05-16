@@ -48,6 +48,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   VoidCallback? onAddNewEntry;
   VoidCallback? onEdit;
+  VoidCallback? onDelete;
   VoidCallback? onCopyInfoPanelTransactions;
 
   Function(BuildContext, MoneyObject)? onMergeToItem;
@@ -70,6 +71,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       showDialogAndActionsForMoneyObjects(
         context,
         getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
+      );
+    };
+
+    // support Delete by default
+    // if not the desired UX, the derived class can set [onDelete] to null
+    onDelete = () {
+      onDeleteRequestedByUser(
+        context,
+        getFirstSelectedItem() as MoneyObject,
       );
     };
   }
@@ -148,24 +158,18 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           /// Actions
           actionButtons: [
             /// Add
-            if (onAddTransaction != null) InfoPanelHeader.buildAddButton(onAddTransaction!),
+            if (onAddTransaction != null)
+              InfoPanelHeader.buildAddButton(
+                onAddTransaction!,
+              ),
 
             const Spacer(),
 
             /// Copy
             if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions && onCopyInfoPanelTransactions != null)
-              InfoPanelHeader.buildCopyButton(onCopyInfoPanelTransactions!),
-            const Spacer(),
-
-            /// Delete
-            InfoPanelHeader.buildDeleteButton(
-              () {
-                onDeleteRequestedByUser(
-                  context,
-                  getFirstSelectedItem() as MoneyObject,
-                );
-              },
-            ),
+              InfoPanelHeader.buildCopyButton(
+                onCopyInfoPanelTransactions!,
+              ),
           ],
         ),
       ),
@@ -216,6 +220,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       multipleSelection: multipleSelectionOptions,
       onAddNewEntry: onAddNewEntry,
       onEdit: onEdit,
+      onDelete: onDelete,
       onFilterChanged: onFilterTextChanged,
       child: child,
     );

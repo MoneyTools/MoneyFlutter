@@ -148,7 +148,7 @@ class InfoPanelHeader extends StatelessWidget {
       onPressed: () {
         callback();
       },
-      icon: const Icon(Icons.add),
+      icon: const Icon(Icons.add_road),
       tooltip: 'Add a new item',
     );
   }
