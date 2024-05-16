@@ -20,6 +20,10 @@ class MoneyObject {
 
   set uniqueId(int value) {}
 
+  factory MoneyObject.fromJSon(final MyJson json, final double runningBalance) {
+    return MoneyObject();
+  }
+
   FieldDefinitions get fieldDefinitions => [];
 
   FieldDefinitions getFieldDefinitionsForPanel() {
@@ -62,7 +66,19 @@ class MoneyObject {
   bool get isChanged => mutation == MutationType.changed;
 
   MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {
-    return MoneyObject();
+    if (moneyObjectInstances.isEmpty) {
+      return MoneyObject();
+    }
+    if (moneyObjectInstances.length == 1) {
+      return moneyObjectInstances.first;
+    }
+
+    MyJson commonJson = moneyObjectInstances.first.getPersistableJSon();
+
+    for (var t in moneyObjectInstances.skip(1)) {
+      commonJson = compareAndGenerateCommonJson(commonJson, t.getPersistableJSon());
+    }
+    return MoneyObject.fromJSon(commonJson, 0);
   }
 
   void mutateField(final String fieldName, final dynamic newValue, final bool fireNotification) {

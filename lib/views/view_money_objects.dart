@@ -47,6 +47,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   VoidCallback? onMultiSelect;
 
   VoidCallback? onAddNewEntry;
+  VoidCallback? onEdit;
   VoidCallback? onCopyInfoPanelTransactions;
 
   Function(BuildContext, MoneyObject)? onMergeToItem;
@@ -63,7 +64,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   Function? onAddTransaction;
 
   ViewForMoneyObjectsState() {
-    //
+    // support Edit by default
+    // if not the desired UX, the derived class can set [onEdit] to null
+    onEdit = () {
+      showDialogAndActionsForMoneyObjects(
+        context,
+        getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
+      );
+    };
   }
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
@@ -141,14 +149,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           actionButtons: [
             /// Add
             if (onAddTransaction != null) InfoPanelHeader.buildAddButton(onAddTransaction!),
-            InfoPanelHeader.buildEditButton(
-              () {
-                showDialogAndActionsForMoneyObjects(
-                  context,
-                  getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
-                );
-              },
-            ),
+
             const Spacer(),
 
             /// Copy
@@ -209,10 +210,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return ViewHeader(
       key: Key(_selectedItemsByUniqueId.value.length.toString()),
       title: getClassNamePlural(),
-      count: numValueOrDefault(list.length),
+      itemCount: list.length,
+      selectedItems: _selectedItemsByUniqueId,
       description: getDescription(),
       multipleSelection: multipleSelectionOptions,
       onAddNewEntry: onAddNewEntry,
+      onEdit: onEdit,
       onFilterChanged: onFilterTextChanged,
       child: child,
     );
@@ -240,7 +243,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void clearSelection() {
-    //_selectedItemsByUniqueId.value.clear();
+    _selectedItemsByUniqueId.value = [];
   }
 
   void onSort() {

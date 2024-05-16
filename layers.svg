@@ -644,7 +644,7 @@ uuid</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.8.6</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.8.7</text>
   </g>
   <g id='Labels_clipboard'>
     <text class="nodeName" x="750" y="375" font-size="120%">clipboard</text>

@@ -8,6 +8,7 @@
 
 ### Updated
 
+- Moved the Edit button the the View-Header
 - Multi-Editing support for Transaction:Payee
 - Timeline chart is now also a heatmap
 

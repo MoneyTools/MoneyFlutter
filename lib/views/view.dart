@@ -43,7 +43,8 @@ class ViewWidgetState extends State<ViewWidget> {
   Widget buildHeader([final Widget? child]) {
     return ViewHeader(
       title: getClassNamePlural(),
-      count: numValueOrDefault(0),
+      itemCount: 0,
+      selectedItems: ValueNotifier<List<int>>([]),
       description: getDescription(),
       onFilterChanged: null,
       child: child,
