@@ -141,20 +141,33 @@ class Transaction extends MoneyObject {
 
   /// Payee Id (displayed as Text name of the Payee)
   /// SQLite 4|Payee|INT|0||0
-  Field<int> payee = Field<int>(
+  FieldInt payee = FieldInt(
     importance: 4,
     name: 'Payee/Transfer',
     serializeName: 'Payee',
     defaultValue: -1,
     type: FieldType.text,
+    align: TextAlign.left,
     columnWidth: ColumnWidth.largest,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByString((a as Transaction).payeeName, (b as Transaction).payeeName, ascending),
     valueFromInstance: (final MoneyObject instance) {
       return (instance as Transaction).getPayeeOrTransferCaption();
     },
     valueForSerialization: (final MoneyObject instance) => (instance as Transaction).payee.value,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByString((a as Transaction).payeeName, (b as Transaction).payeeName, ascending),
-    getEditWidget: (final MoneyObject instance, Function onEdited) {
+    setValue: (MoneyObject instance, dynamic newValue) {
+      if (newValue == -1) {
+        // -1 means no payee, this is a Transfer
+        // TODO - implement was solution given that the call back here only has one value use for the Payee ID
+      } else {
+        // Payee
+        instance = instance as Transaction;
+        instance.payee.value = (newValue as int); // Payee Id
+        instance.transfer.value = -1;
+        instance.transferInstance = null;
+      }
+    },
+    getEditWidget: (MoneyObject instance, Function onEdited) {
       return SizedBox(
         width: 300,
         height: 70,
@@ -167,13 +180,13 @@ class Transaction extends MoneyObject {
             switch (choice) {
               case TransactionFlavor.payee:
                 if (selectedPayee != null) {
-                  (instance).payee.value = selectedPayee.uniqueId;
-                  (instance).transfer.value = -1;
-                  (instance).transferInstance = null;
+                  instance.payee.value = selectedPayee.uniqueId;
+                  instance.transfer.value = -1;
+                  instance.transferInstance = null;
                 }
               case TransactionFlavor.transfer:
                 if (account != null) {
-                  (instance).payee.value = -1;
+                  instance.payee.value = -1;
                   Data().makeTransferLinkage(instance, account);
                 }
             }

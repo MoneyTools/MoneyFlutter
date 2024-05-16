@@ -32,10 +32,11 @@ showDialogAndActionsForMoneyObjects(
               for (final m in moneyObjects) {
                 m.stashValueBeforeEditing();
                 diff.forEach((key, value) {
-                  m.mutateField(key, value['after']);
+                  m.mutateField(key, value['after'], false);
                 });
               }
             }
+            Data().updateAll();
           },
         );
       });

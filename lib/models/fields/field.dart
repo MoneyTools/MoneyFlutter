@@ -17,6 +17,9 @@ Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final St
     if (f.name == nameToFind) {
       return f;
     }
+    if (f.serializeName == nameToFind) {
+      return f;
+    }
   }
   return null;
 }
@@ -201,11 +204,12 @@ class FieldInt extends Field<int> {
     super.valueFromInstance,
     super.valueForSerialization,
     super.useAsColumn,
+    super.columnWidth,
     super.useAsDetailPanels,
+    super.defaultValue = -1,
+    super.setValue,
     super.getEditWidget,
     super.sort,
-    super.columnWidth,
-    super.defaultValue = -1,
     super.align = TextAlign.right,
     super.type = FieldType.numeric,
   });

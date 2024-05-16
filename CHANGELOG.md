@@ -4,6 +4,7 @@
 
 ### Updated
 
+- Multi-Editing support for Transaction:Payee
 - Timeline chart is now also a heatmap
 
 ## [version 1.8.6] 2024-05-15
@@ -14,7 +15,7 @@
 
 ### Added
 
-- WIP - Multi Editing - works for Transactions Category
+- Multi-Editing support for Transactions:Category
 
 ## [version 1.8.5] 2024-05-13
 

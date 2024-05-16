@@ -156,9 +156,15 @@ class Data {
     }
 
     if (fireNotification) {
-      recalculateBalances();
-      Settings().rebuild();
+      updateAll();
     }
+  }
+
+  /// ReBalance all objects values
+  /// and Rebuild the UI
+  void updateAll() {
+    recalculateBalances();
+    Settings().rebuild();
   }
 
   void assessMutationsCountOfAllModels() {

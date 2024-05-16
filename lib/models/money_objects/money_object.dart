@@ -65,12 +65,13 @@ class MoneyObject {
     return MoneyObject();
   }
 
-  void mutateField(final String fieldName, dynamic newValue) {
+  void mutateField(final String fieldName, final dynamic newValue, final bool fireNotification) {
     stashValueBeforeEditing();
     final field = getFieldDefinitionByName(fieldDefinitions, fieldName);
     if (field != null && field.setValue != null) {
       field.setValue!(this, newValue);
-      Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: this);
+      Data()
+          .notifyMutationChanged(mutation: MutationType.changed, moneyObject: this, fireNotification: fireNotification);
     }
   }
 
