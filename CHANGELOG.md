@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.7] 2024-05-16
+
+### Updated
+
+- Timeline chart is now also a heatmap
+
 ## [version 1.8.6] 2024-05-15
 
 ### Updated

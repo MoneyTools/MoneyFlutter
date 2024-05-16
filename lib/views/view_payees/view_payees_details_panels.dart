@@ -26,28 +26,80 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
       );
     }
 
-    Iterable<Transaction> flatTransactions =
-        Data().transactions.iterableList().where((t) => t.payee.value == selectedIds.first);
-    flatTransactions = Transactions.flatTransactions(flatTransactions.toSet());
+    final List<Transaction> flatTransactions = Transactions.flatTransactions(
+        Data().transactions.iterableList().where((t) => t.payee.value == selectedIds.first));
 
-    List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(
-      flatTransactions.toList(),
-      0,
-    );
+    final DateRange dateRange = DateRange();
+    for (final t in flatTransactions) {
+      dateRange.inflate(t.dateTime.value);
+    }
+
+    double maxValue = 0;
+    final List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(flatTransactions);
+    for (final pair in sumByDays) {
+      maxValue = max(maxValue, pair.second.abs());
+    }
+
+    // Transaction graph of the selected Payee
+    final int yearStart = dateRange.min!.year;
+    final int yearEnd = dateRange.max!.year;
+    final borderColor = getColorTheme(context).onSecondaryContainer.withOpacity(0.3);
+    final TextStyle textStyle = getTextTheme(context).labelSmall!;
 
     return Center(
-      child: Column(
-        children: [
-          MiniTimelineDaily(
-            height: 100,
-            yearStart: Data().transactions.dateRangeActiveAccount.min!.year,
-            yearEnd: Data().transactions.dateRangeActiveAccount.max!.year,
-            values: sumByDays,
-          ),
-          Divider(
-            color: getColorTheme(context).surface,
-          ),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(getAmountAsShorthandText(maxValue), style: textStyle),
+                  Text(getAmountAsShorthandText(maxValue / 2), style: textStyle),
+                  Text('0.00', style: textStyle),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          left: BorderSide(
+                            color: borderColor,
+                            width: 1.0,
+                          ),
+                          bottom: BorderSide(
+                            color: borderColor,
+                            width: 1.0,
+                          ),
+                        ),
+                      ),
+                      child: MiniTimelineDaily(
+                        yearStart: yearStart,
+                        yearEnd: yearEnd,
+                        values: sumByDays,
+                        lineWidth: 3,
+                      ),
+                    ),
+                  ),
+                  gapMedium(),
+                  DateRangeTimeline(
+                    startDate: dateRange.min!,
+                    endDate: dateRange.max!,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

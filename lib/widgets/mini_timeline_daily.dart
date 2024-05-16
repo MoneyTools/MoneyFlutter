@@ -1,88 +1,70 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
+import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/helpers/string_helper.dart';
+import 'package:money/widgets/vertical_line_with_tooltip.dart';
 
 class MiniTimelineDaily extends StatelessWidget {
   final int yearStart;
   final int yearEnd;
-  final Color color;
+  final Color? color;
+  final double lineWidth;
 
-  // [int = time in millisecond], [double = amount]
+  // [int = Days from millisecondFromEpoch], [double = amount]
   final List<Pair<int, double>> values;
-  final double height;
 
   const MiniTimelineDaily({
     super.key,
     required this.yearStart,
     required this.yearEnd,
     required this.values,
-    this.color = Colors.blue,
-    this.height = 50,
+    this.color,
+    this.lineWidth = 2,
   });
 
   @override
   Widget build(BuildContext context) {
-    int numberOfYears = yearEnd - yearStart + 1;
-    double numberOfDays = numberOfYears * 365.25;
-    double maxValueFound = 0;
-    for (final value in values) {
-      maxValueFound = max(maxValueFound, value.second.abs());
-    }
-    double ratio = height / maxValueFound;
-    for (final value in values) {
-      value.second = value.second.abs() * ratio;
-    }
+    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
+      int numberOfYears = yearEnd - yearStart + 1;
 
-    return CustomPaint(
-      size: Size(500, height),
-      painter: _MiniBarChartPainter(values, numberOfDays, color),
-    );
-  }
-}
+      // X Ratio
+      double numberOfDays = numberOfYears * 365.25;
+      double xRatio = constraints.maxWidth / numberOfDays;
 
-class _MiniBarChartPainter extends CustomPainter {
-  final double numberOfDays;
-  final List<Pair<int, double>> values;
-  final Color color;
+      // Y Ratio
+      double maxValueFound = 0;
+      for (final value in values) {
+        maxValueFound = max(maxValueFound, value.second.abs());
+      }
+      double yRatio = constraints.maxHeight / maxValueFound;
 
-  _MiniBarChartPainter(
-    this.values,
-    this.numberOfDays,
-    this.color,
-  );
+      int offsetFromStartingPoint = values.first.first;
 
-  @override
-  bool shouldRepaint(_MiniBarChartPainter oldDelegate) {
-    return false; //values != oldDelegate.values;
-  }
+      List<Widget> bars = [];
+      for (final value in values) {
+        int oneDaySlot = value.first * Duration.millisecondsPerDay;
 
-  @override
-  void paint(Canvas canvas, Size size) {
-    if (size.isEmpty) {
-      return;
-    }
-
-    final paint = Paint();
-    paint.color = color;
-    paint.strokeWidth = 1;
-
-    double xRatio = size.width / numberOfDays;
-
-    for (final pair in values) {
-      final double x = pair.first * xRatio;
-
-      final startPoint = Offset(x, size.height);
-
-      double v = pair.second;
-
-      if (v < 1) {
-        v = 1; // min height to see something
+        bars.add(
+          Positioned(
+            left: xRatio * (value.first - offsetFromStartingPoint),
+            child: VerticalLineWithTooltip(
+              height: value.second.abs() * yRatio,
+              width: lineWidth,
+              color: colorBasedOnValue(value.second).withOpacity(0.5),
+              tooltip:
+                  '${dateToString(DateTime.fromMillisecondsSinceEpoch(oneDaySlot))}\n${doubleToCurrency(value.second)}',
+            ),
+          ),
+        );
       }
 
-      final endPoint = Offset(x, size.height - v);
-
-      canvas.drawLine(startPoint, endPoint, paint);
-    }
+      return Stack(
+        alignment: AlignmentDirectional.bottomStart,
+        children: bars,
+      );
+    });
   }
 }

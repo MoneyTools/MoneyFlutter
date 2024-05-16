@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/widgets/vertical_line_with_tooltip.dart';
 
 class MiniTimelineTwelveMonths extends StatelessWidget {
   final List<Pair<int, double>> values;
@@ -25,9 +26,10 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
         for (final value in values) {
           final double height = value.second.abs() * ratio;
           bars.add(
-            Tooltip(
-              message: '${value.first} X ${doubleToCurrency(value.second)}',
-              child: _buildVerticalBar(height),
+            VerticalLineWithTooltip(
+              height: height,
+              color: color,
+              tooltip: '${value.first} X ${doubleToCurrency(value.second)}',
             ),
           );
         }
@@ -70,24 +72,5 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
 
   Widget _buildMontLabel(final String text) {
     return Text(text, style: const TextStyle(fontSize: 8));
-  }
-
-  Widget _buildVerticalBar(double height) {
-    if (height == 0) {
-      // we do this just to get the tooltip to work
-      return const SizedBox(
-        height: 5,
-        width: 5,
-      );
-    } else {
-      return Container(
-        height: max(1, height),
-        width: 5,
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(2),
-        ),
-      );
-    }
   }
 }

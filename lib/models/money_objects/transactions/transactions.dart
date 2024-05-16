@@ -63,14 +63,14 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   static List<Pair<int, double>> transactionSumByTime(
-      List<Transaction> transactions, int timeOffsetInMillisecondsSinceEpoch) {
+    List<Transaction> transactions,
+  ) {
     List<Pair<int, double>> timeAndAmounts = [];
     for (final t in transactions) {
-      timeAndAmounts.add(Pair<int, double>(
-        (t.dateTime.value!.millisecondsSinceEpoch - timeOffsetInMillisecondsSinceEpoch) ~/ Duration.millisecondsPerDay,
-        t.amount.value.amount,
-      ));
+      int oneDaySlot = t.dateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
+      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.amount.value.amount));
     }
+    // sort by date time
     timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
     return timeAndAmounts;
   }

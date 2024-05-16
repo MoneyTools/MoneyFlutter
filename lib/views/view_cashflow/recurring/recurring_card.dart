@@ -8,6 +8,7 @@ import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
 import 'package:money/widgets/box.dart';
+import 'package:money/widgets/date_range_time_line.dart';
 import 'package:money/widgets/distribution_bar.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/mini_timeline_daily.dart';
@@ -88,10 +89,7 @@ class RecurringCard extends StatelessWidget {
   }
 
   Widget _buildBoxTimelinePerDayOverYears(final BuildContext context) {
-    List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(
-      payment.transactions,
-      dateRangeSearch.min!.millisecondsSinceEpoch,
-    );
+    List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(payment.transactions);
 
     return Box(
       title: 'Timeline',
@@ -99,20 +97,20 @@ class RecurringCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          MiniTimelineDaily(
-            values: sumByDays,
-            yearStart: dateRangeSearch.min!.year,
-            yearEnd: dateRangeSearch.max!.year,
-            color: getColorTheme(context).primary,
+          SizedBox(
+            height: 50,
+            child: MiniTimelineDaily(
+              values: sumByDays,
+              yearStart: dateRangeSearch.min!.year,
+              yearEnd: dateRangeSearch.max!.year,
+              color: getColorTheme(context).primary,
+            ),
           ),
           const Divider(
-            height: 2,
-            thickness: 2,
+            height: 1,
+            thickness: 1,
           ),
-          Opacity(
-            opacity: 0.8,
-            child: _buildDataRangRows(context),
-          ),
+          _buildDataRangRows(context),
           gapLarge(),
           _buildTextAmountRow(
               context, '${getIntAsText(payment.frequency)} transactions averaging', payment.total / payment.frequency),
@@ -122,8 +120,6 @@ class RecurringCard extends StatelessWidget {
   }
 
   Widget _buildDataRangRows(final BuildContext context) {
-    TextStyle style = getTextTheme(context).labelSmall!;
-
     bool identicalSelectedAndFound = dateRangeSearch.min!.year == payment.dateRangeFound.min!.year &&
         dateRangeSearch.max!.year == payment.dateRangeFound.max!.year;
 
@@ -157,42 +153,27 @@ class RecurringCard extends StatelessWidget {
     }
 
     return Column(children: [
-      _buildDateRangeRow(payment.dateRangeFound, style, paddingLevel1Left, paddingLevel1Right),
+      _buildDateRangeRow(payment.dateRangeFound, paddingLevel1Left, paddingLevel1Right, false),
       // Avoid showing twice the same information, we may need only need one data span row of information
       if (!identicalSelectedAndFound)
-        _buildDateRangeRow(dateRangeSelected, style, paddingLevel2Left, paddingLevel2Right),
-      if (!identicalSelectedAndSearch) _buildDateRangeRow(dateRangeSearch, style, 0, 0),
+        _buildDateRangeRow(dateRangeSelected, paddingLevel2Left, paddingLevel2Right, true),
+      if (!identicalSelectedAndSearch) _buildDateRangeRow(dateRangeSearch, 0, 0, true),
     ]);
   }
 
   Widget _buildDateRangeRow(
-      final DateRange dateRange, final TextStyle style, final double paddingLeft, final double paddingRight) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(left: paddingLeft),
-            child: Text(dateRange.min!.year.toString(), style: style),
-          ),
-        ),
-        Expanded(
-            child: Text(
-          dateRange.durationInYearsText,
-          style: style,
-          textAlign: TextAlign.center,
-        )),
-        Expanded(
-          child: Padding(
-            padding: EdgeInsets.only(right: paddingRight),
-            child: Text(
-              dateRange.max!.year.toString(),
-              style: style,
-              textAlign: TextAlign.right,
-            ),
-          ),
-        ),
-      ],
+    final DateRange dateRange,
+    final double paddingLeft,
+    final double paddingRight,
+    final bool showTicks,
+  ) {
+    return Padding(
+      padding: EdgeInsets.only(left: paddingLeft, right: paddingRight),
+      child: DateRangeTimeline(
+        startDate: dateRange.min!,
+        endDate: dateRange.max!,
+        showTicks: showTicks,
+      ),
     );
   }
 
