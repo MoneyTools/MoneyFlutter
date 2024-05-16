@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
 import 'package:money/widgets/filter_input.dart';
@@ -46,7 +45,7 @@ class ViewHeader extends StatelessWidget {
       builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _ /*widget*/) {
         return buildViewHeaderContainer(
           context,
-          Settings().isSmallScreen ? _buildSmall(context) : _buildLarge(context),
+          _buildContent(context),
         );
       },
     );
@@ -63,7 +62,7 @@ class ViewHeader extends StatelessWidget {
         child: child);
   }
 
-  Widget _buildLarge(final BuildContext context) {
+  Widget _buildContent(final BuildContext context) {
     final List<Widget> widgets = [];
 
     widgets.add(
@@ -92,30 +91,34 @@ class ViewHeader extends StatelessWidget {
     if (multipleSelection != null || (selectedItems.value.isNotEmpty && (onEdit != null || onDelete != null))) {
       widgets.add(
         IntrinsicWidth(
-          child: Row(
-            children: [
-              // Multiple-Selection
-              if (multipleSelection != null)
-                MultipleSelectionToggle(
-                  multipleSelection: multipleSelection,
-                ),
+          child: SizedBox(
+            height: 40,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Multiple-Selection
+                if (multipleSelection != null)
+                  MultipleSelectionToggle(
+                    multipleSelection: multipleSelection,
+                  ),
 
-              // Edit
-              if (onEdit != null && selectedItems.value.isNotEmpty)
-                IconButton(
-                  icon: const Icon(Icons.edit),
-                  onPressed: onEdit,
-                  tooltip: 'Edit selected item(s)',
-                ),
+                // Edit
+                if (onEdit != null && selectedItems.value.isNotEmpty)
+                  IconButton(
+                    icon: const Icon(Icons.edit),
+                    onPressed: onEdit,
+                    tooltip: 'Edit selected item(s)',
+                  ),
 
-              // Delete
-              if (onDelete != null && selectedItems.value.isNotEmpty)
-                IconButton(
-                  icon: const Icon(Icons.delete),
-                  onPressed: onDelete,
-                  tooltip: 'Delete selected item(s)',
-                ),
-            ],
+                // Delete
+                if (onDelete != null && selectedItems.value.isNotEmpty)
+                  IconButton(
+                    icon: const Icon(Icons.delete),
+                    onPressed: onDelete,
+                    tooltip: 'Delete selected item(s)',
+                  ),
+              ],
+            ),
           ),
         ),
       );
@@ -149,23 +152,6 @@ class ViewHeader extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildSmall(final BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-      child: Row(
-        children: <Widget>[
-          Expanded(
-            child: FittedBox(
-              fit: BoxFit.scaleDown,
-              alignment: Alignment.centerLeft,
-              child: ThreePartLabel(text1: title, text2: getIntAsText(itemCount.toInt())),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
