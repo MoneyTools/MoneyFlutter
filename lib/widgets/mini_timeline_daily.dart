@@ -13,6 +13,11 @@ class MiniTimelineDaily extends StatelessWidget {
   final Color? color;
   final double lineWidth;
 
+  /// X values are using days from 1970, use this offset to bring back the X scaling to location
+  /// that match the desired UX, supplying the offset days of the first element in the values will start
+  /// the graph on the left side of Zero
+  final int offsetStartingDay;
+
   // [int = Days from millisecondFromEpoch], [double = amount]
   final List<Pair<int, double>> values;
 
@@ -21,6 +26,7 @@ class MiniTimelineDaily extends StatelessWidget {
     required this.yearStart,
     required this.yearEnd,
     required this.values,
+    required this.offsetStartingDay,
     this.color,
     this.lineWidth = 2,
   });
@@ -41,15 +47,13 @@ class MiniTimelineDaily extends StatelessWidget {
       }
       double yRatio = constraints.maxHeight / maxValueFound;
 
-      int offsetFromStartingPoint = values.first.first;
-
       List<Widget> bars = [];
       for (final value in values) {
         int oneDaySlot = value.first * Duration.millisecondsPerDay;
 
         bars.add(
           Positioned(
-            left: xRatio * (value.first - offsetFromStartingPoint),
+            left: xRatio * (value.first - offsetStartingDay),
             child: VerticalLineWithTooltip(
               height: value.second.abs() * yRatio,
               width: lineWidth,

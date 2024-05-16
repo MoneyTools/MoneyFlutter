@@ -83,6 +83,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
                         ),
                       ),
                       child: MiniTimelineDaily(
+                        offsetStartingDay: sumByDays.first.first,
                         yearStart: yearStart,
                         yearEnd: yearEnd,
                         values: sumByDays,

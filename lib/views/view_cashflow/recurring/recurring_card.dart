@@ -103,6 +103,7 @@ class RecurringCard extends StatelessWidget {
               values: sumByDays,
               yearStart: dateRangeSearch.min!.year,
               yearEnd: dateRangeSearch.max!.year,
+              offsetStartingDay: dateRangeSearch.min!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay,
               color: getColorTheme(context).primary,
             ),
           ),
@@ -110,55 +111,13 @@ class RecurringCard extends StatelessWidget {
             height: 1,
             thickness: 1,
           ),
-          _buildDataRangRows(context),
+          _buildDateRangeRow(payment.dateRangeFound, 100, 100, false),
           gapLarge(),
           _buildTextAmountRow(
               context, '${getIntAsText(payment.frequency)} transactions averaging', payment.total / payment.frequency),
         ],
       ),
     );
-  }
-
-  Widget _buildDataRangRows(final BuildContext context) {
-    bool identicalSelectedAndFound = dateRangeSearch.min!.year == payment.dateRangeFound.min!.year &&
-        dateRangeSearch.max!.year == payment.dateRangeFound.max!.year;
-
-    bool identicalSelectedAndSearch = dateRangeSearch.min!.year == dateRangeSelected.min!.year &&
-        dateRangeSearch.max!.year == dateRangeSelected.max!.year;
-
-    // Level 1 paddings between Select and Payment
-    double paddingLevel1Left = 0;
-    double paddingLevel1Right = 0;
-    {
-      if (dateRangeSelected.min!.year != payment.dateRangeFound.min!.year) {
-        paddingLevel1Left += 50;
-      }
-      if (dateRangeSelected.max!.year != payment.dateRangeFound.max!.year) {
-        paddingLevel1Right += 50;
-      }
-    }
-
-    // Level 2 paddings between Selected and Search
-    double paddingLevel2Left = 0;
-    double paddingLevel2Right = 0;
-    {
-      if (dateRangeSelected.min!.year != dateRangeSearch.min!.year) {
-        paddingLevel1Left += 60;
-        paddingLevel2Left += 60;
-      }
-      if (dateRangeSelected.max!.year != dateRangeSearch.max!.year) {
-        paddingLevel1Right += 60;
-        paddingLevel2Right += 60;
-      }
-    }
-
-    return Column(children: [
-      _buildDateRangeRow(payment.dateRangeFound, paddingLevel1Left, paddingLevel1Right, false),
-      // Avoid showing twice the same information, we may need only need one data span row of information
-      if (!identicalSelectedAndFound)
-        _buildDateRangeRow(dateRangeSelected, paddingLevel2Left, paddingLevel2Right, true),
-      if (!identicalSelectedAndSearch) _buildDateRangeRow(dateRangeSearch, 0, 0, true),
-    ]);
   }
 
   Widget _buildDateRangeRow(
