@@ -4,6 +4,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -27,8 +28,9 @@ class Category extends MoneyObject {
         tmp.parentId,
         tmp.name,
         tmp.description,
-        tmp.color,
         tmp.type,
+        tmp.color,
+        tmp.level,
         tmp.budget,
         tmp.budgetBalance,
         tmp.frequency,
@@ -159,6 +161,15 @@ class Category extends MoneyObject {
 
   //-----------------------------------
   // These properties are not persisted
+
+  /// Level
+  FieldQuantity level = FieldQuantity(
+    importance: 80,
+    name: 'Level',
+    columnWidth: ColumnWidth.tiny,
+    valueFromInstance: (final MoneyObject instance) =>
+        countOccurrences((instance as Category).name.value, ':').toDouble() + 1,
+  );
 
   /// Count
   FieldQuantity count = FieldQuantity(

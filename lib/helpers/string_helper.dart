@@ -148,3 +148,17 @@ String formatDoubleTimeZeroFiveNine(double value) {
   final formatter = NumberFormat('#,##0.#####', 'en_US');
   return formatter.format(value);
 }
+
+int countOccurrences(String input, String char) {
+  if (char.length != 1) {
+    throw ArgumentError('The character to count must be a single character.');
+  }
+
+  int count = 0;
+  for (int i = 0; i < input.length; i++) {
+    if (input[i] == char) {
+      count++;
+    }
+  }
+  return count;
+}

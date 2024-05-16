@@ -2,6 +2,10 @@
 
 ## [version 1.8.7] 2024-05-16
 
+### Added
+
+- Category list now has a column for [Level]
+
 ### Updated
 
 - Multi-Editing support for Transaction:Payee
