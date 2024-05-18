@@ -247,21 +247,36 @@ class Category extends MoneyObject {
   }
 
   Color getColorOrAncestorsColor() {
+    final pair = getColorAndLevel(0);
+    return pair.first;
+  }
+
+  Pair<Color, int> getColorAndLevel(int level) {
     if (this.color.value.isNotEmpty) {
-      return getColorFromString(this.color.value);
+      return Pair<Color, int>(getColorFromString(this.color.value), level);
     }
     if (this.parentId.value != -1) {
       final Category? parentCategory = Data().categories.get(this.parentId.value);
       if (parentCategory != null) {
-        return parentCategory.getColorOrAncestorsColor();
+        return parentCategory.getColorAndLevel(level + 1);
       }
     }
     // reach the top
-    return Colors.transparent;
+    return Pair<Color, int>(Colors.transparent, 0);
   }
 
   Widget getColorWidget() {
-    return MyCircle(colorFill: getColorOrAncestorsColor(), size: 12);
+    final Color fillColor = getColorOrAncestorsColor();
+    final Color textColor = fillColor.opacity == 0 ? Colors.grey : contrastColor(fillColor);
+
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        MyCircle(colorFill: fillColor, size: 12),
+        if (this.color.value.isNotEmpty && this.level.valueFromInstance(this) > 1)
+          Text('#', style: TextStyle(fontSize: 10, color: textColor)),
+      ],
+    );
   }
 
   Widget getRectangleWidget() {

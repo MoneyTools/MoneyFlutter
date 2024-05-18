@@ -4,6 +4,7 @@
 
 ### Added
 
+- Category Color indicate the override colors
 - Color Picker
 
 ## [version 1.8.7] 2024-05-16
