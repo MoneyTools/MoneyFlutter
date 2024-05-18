@@ -232,3 +232,16 @@ class Debouncer {
     _timer = Timer(duration, callback);
   }
 }
+
+/// Rounds a given value to the specified number of decimal places.
+///
+/// @param value The value to be rounded.
+/// @param places The number of decimal places to round to.
+/// @return The rounded value.
+/// @throws ArgumentError If the number of decimal places is negative.
+///
+double roundToDecimalPlaces(double value, int places) {
+  if (places < 0) throw ArgumentError('Decimal places must be non-negative');
+  int factor = pow(10, places).toInt();
+  return (value * factor).round() / factor;
+}
