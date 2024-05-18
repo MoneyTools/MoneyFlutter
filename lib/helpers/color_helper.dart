@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/list_helper.dart';
 
 /// return the inverted color
 Color invertColor(final Color color) {
@@ -45,12 +46,17 @@ Color getColorFromString(final String hexColor) {
   return Colors.transparent;
 }
 
-String colorToHexString(final Color color) {
+String colorToHexString(final Color color, {bool alphaFirst = false, bool includeAlpha = true}) {
   final String red = color.red.toRadixString(16).padLeft(2, '0');
   final String green = color.green.toRadixString(16).padLeft(2, '0');
   final String blue = color.blue.toRadixString(16).padLeft(2, '0');
   final String alpha = color.alpha.toRadixString(16).padLeft(2, '0');
-
+  if (includeAlpha == false) {
+    return '#$red$green$blue';
+  }
+  if (alphaFirst) {
+    return '#$alpha$red$green$blue';
+  }
   return '#$red$green$blue$alpha';
 }
 
@@ -128,4 +134,55 @@ Color addHintOfRedToColor(Color color, [int hint = 50]) {
 
   // Return the new color with added red
   return Color.fromRGBO(newRed, color.green, color.blue, color.opacity);
+}
+
+Pair<double, double> getHueAndDarkness(Color color) {
+  // Convert the color to HSL
+  HSLColor hslColor = HSLColor.fromColor(color);
+
+  // Return the hue and darkness values
+  return Pair<double, double>(hslColor.hue, 1 - hslColor.lightness);
+}
+
+Color hsvToColor(double hue, double brightness) {
+  final Color color = HSVColor.fromAHSV(1.0, hue, 1.0, 1.0).toColor();
+  return adjustBrightness(color, brightness);
+}
+
+/// Adjusts the brightness of the input color to the specified value within the valid range (0.0 - 1.0).
+Color adjustBrightness(Color color, double brightness) {
+  // Ensure brightness is within valid range
+  brightness = brightness.clamp(0.0, 1.0);
+
+  // Convert color to HSL
+  HSLColor hslColor = HSLColor.fromColor(color);
+
+  // Adjust lightness component
+  hslColor = hslColor.withLightness(brightness);
+
+  // Convert back to RGB
+  return hslColor.toColor();
+}
+
+/// Retrieves the hue value from the given Color object in the HSL color space.
+double getHueFromColor(Color color) {
+  // Convert color to HSL
+  HSLColor hslColor = HSLColor.fromColor(color);
+
+  // Extract hue value
+  double hue = hslColor.hue;
+
+  return hue;
+}
+
+/// Retrieves the hue and brightness values from the given Color object in the HSL color space.
+Pair<double, double> getHueAndBrightnessFromColor(Color color) {
+  // Convert color to HSL
+  HSLColor hslColor = HSLColor.fromColor(color);
+
+  // Extract hue and lightness values
+  double hue = hslColor.hue;
+  double brightness = hslColor.lightness;
+
+  return Pair<double, double>(hue, brightness);
 }

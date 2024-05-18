@@ -9,8 +9,10 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/circle.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/widgets/circle.dart';
+import 'package:money/widgets/color_picker.dart';
+import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/money_widget.dart';
 import 'package:money/widgets/rectangle.dart';
 
@@ -117,6 +119,12 @@ class Category extends MoneyObject {
     defaultValue: '',
     valueFromInstance: (final MoneyObject instance) => (instance as Category).getColorWidget(),
     valueForSerialization: (final MoneyObject instance) => (instance as Category).color.value,
+    setValue: (final MoneyObject instance, final dynamic value) {
+      (instance as Category).color.value = value as String;
+    },
+    getEditWidget: (final MoneyObject instance, Function onEdited) {
+      return MutateFieldColor(colorAsHex: (instance as Category).color.value);
+    },
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByString((a as Category).color.value, (b as Category).color.value, ascending),
   );
@@ -311,5 +319,58 @@ class Category extends MoneyObject {
       default:
         return '<unknown>';
     }
+  }
+}
+
+class MutateFieldColor extends StatefulWidget {
+  const MutateFieldColor({
+    super.key,
+    required this.colorAsHex,
+  });
+
+  final String colorAsHex;
+
+  @override
+  State<MutateFieldColor> createState() => _MutateFieldColorState();
+}
+
+class _MutateFieldColorState extends State<MutateFieldColor> {
+  late TextEditingController controllerForText = TextEditingController(text: widget.colorAsHex);
+
+  @override
+  Widget build(BuildContext context) {
+    late Color color = getColorFromString(controllerForText.text);
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: TextField(
+            controller: controllerForText,
+            onChanged: (String colorText) {
+              setState(() {
+                color = getColorFromString(colorText);
+              });
+            },
+          ),
+        ),
+        gapLarge(),
+        MyCircle(
+          colorFill: color,
+          colorBorder: Colors.grey,
+          size: 40,
+        ),
+        gapLarge(),
+        Expanded(
+          child: ColorPicker(
+            color: color,
+            onColorChanged: (Color color) {
+              setState(() {
+                controllerForText.text = colorToHexString(color, includeAlpha: false);
+              });
+            },
+          ),
+        ),
+      ],
+    );
   }
 }

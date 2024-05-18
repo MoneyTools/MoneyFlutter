@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.8] 2024-05-18
+
+### Added
+
+- Color Picker
+
 ## [version 1.8.7] 2024-05-16
 
 ### Added

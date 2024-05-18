@@ -184,3 +184,12 @@ class MapAccumulator<K, I, V> {
     return map[key];
   }
 }
+
+List<double> calculateSpread(double start, double end, int numEntries) {
+  double step = (end - start) / (numEntries - 1);
+  List<double> spread = [];
+  for (int i = 0; i < numEntries; i++) {
+    spread.add(start + i * step);
+  }
+  return spread;
+}
