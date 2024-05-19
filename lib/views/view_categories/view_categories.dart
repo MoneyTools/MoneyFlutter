@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -27,6 +29,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
 
   ViewCategoriesState() {
+    onAddNewEntry = () {
+      // add a new Account
+      Data().categories.addNewCategory('New Category');
+      Settings().selectedView = ViewId.viewCategories;
+      Settings().isDetailsPanelExpanded = true;
+    };
+
     onMergeToItem = (final BuildContext context, final MoneyObject selectedObject) {
       // let the user pick another Category and move the transactions of the current selected Category to the destination
       showDialog(

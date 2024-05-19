@@ -4,6 +4,7 @@
 
 ### Added
 
+- Add Category UX
 - Feature for Merging|Appending categories
 
 ## [version 1.8.8] 2024-05-18

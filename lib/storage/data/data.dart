@@ -412,8 +412,7 @@ class Data {
   /// <returns></returns>
   Map<Security, List<Investment>> getTransactionsGroupedBySecurity(Function(Account)? filter, DateTime toDate) {
     Map<Security, List<Investment>> transactionsBySecurity = {};
-    //     SecurityComparer());
-    //
+
     // Sort all add, remove, buy, sell transactions by date and by security.
     for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
       if (t.dateTime.value!.millisecond < toDate.millisecond &&

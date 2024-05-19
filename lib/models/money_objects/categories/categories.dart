@@ -310,6 +310,25 @@ class Categories extends MoneyObjects<Category> {
     );
   }
 
+  Category addNewCategory(final String name) {
+    // find next available name
+    String nextAvailableName = name;
+    int next = 1;
+    while ((getByName(nextAvailableName) != null)) {
+      // already taken
+      nextAvailableName = '$name $next';
+      // the the next one
+      next++;
+    }
+
+    // add a new Category
+    final Category category = Category(id: -1, name: nextAvailableName, type: CategoryType.expense);
+
+    Data().categories.appendNewMoneyObject(category);
+
+    return category;
+  }
+
   void reparentCategory(final Category categoryToReparent, final Category newParentCategory) {
     categoryToReparent.stashValueBeforeEditing();
     categoryToReparent.parentId.value = newParentCategory.uniqueId;
