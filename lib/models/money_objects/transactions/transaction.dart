@@ -7,7 +7,6 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
-import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/investment_types.dart';

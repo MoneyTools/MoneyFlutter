@@ -2,6 +2,7 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 
 class Categories extends MoneyObjects<Category> {
@@ -307,5 +308,19 @@ class Categories extends MoneyObjects<Category> {
     return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
+  }
+
+  void reparentCategory(final Category categoryToReparent, final Category newParentCategory) {
+    categoryToReparent.stashValueBeforeEditing();
+    categoryToReparent.parentId.value = newParentCategory.uniqueId;
+    categoryToReparent.name.value = '${newParentCategory.name.value}:${categoryToReparent.name.value}';
+    Data().notifyMutationChanged(
+      mutation: MutationType.changed,
+      moneyObject: categoryToReparent,
+      fireNotification: false,
+    );
+
+    Data().recalculateBalances();
+    Settings().rebuild();
   }
 }
