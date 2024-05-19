@@ -123,7 +123,14 @@ class Category extends MoneyObject {
       (instance as Category).color.value = value as String;
     },
     getEditWidget: (final MoneyObject instance, Function onEdited) {
-      return MutateFieldColor(colorAsHex: (instance as Category).color.value);
+      return MutateFieldColor(
+        colorAsHex: (instance as Category).color.value,
+        onEdited: (String newValue) {
+          instance.color.value = newValue;
+          Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: instance, fireNotification: false);
+          onEdited();
+        },
+      );
     },
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByString((a as Category).color.value, (b as Category).color.value, ascending),
@@ -153,7 +160,7 @@ class Category extends MoneyObject {
   FieldInt frequency = FieldInt(
     importance: 80,
     serializeName: 'Frequency',
-    useAsColumn: true,
+    useAsColumn: false,
     useAsDetailPanels: false,
     valueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
   );
@@ -174,7 +181,7 @@ class Category extends MoneyObject {
   FieldQuantity level = FieldQuantity(
     importance: 80,
     name: 'Level',
-    columnWidth: ColumnWidth.tiny,
+    columnWidth: ColumnWidth.nano,
     valueFromInstance: (final MoneyObject instance) =>
         countOccurrences((instance as Category).name.value, ':').toDouble() + 1,
   );
@@ -341,9 +348,11 @@ class MutateFieldColor extends StatefulWidget {
   const MutateFieldColor({
     super.key,
     required this.colorAsHex,
+    required this.onEdited,
   });
 
   final String colorAsHex;
+  final Function(String) onEdited;
 
   @override
   State<MutateFieldColor> createState() => _MutateFieldColorState();
@@ -364,6 +373,7 @@ class _MutateFieldColorState extends State<MutateFieldColor> {
             onChanged: (String colorText) {
               setState(() {
                 color = getColorFromString(colorText);
+                widget.onEdited(controllerForText.text);
               });
             },
           ),
@@ -381,6 +391,7 @@ class _MutateFieldColorState extends State<MutateFieldColor> {
             onColorChanged: (Color color) {
               setState(() {
                 controllerForText.text = colorToHexString(color, includeAlpha: false);
+                widget.onEdited(controllerForText.text);
               });
             },
           ),

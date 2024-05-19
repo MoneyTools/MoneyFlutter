@@ -1,9 +1,7 @@
 // Exports
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/circle.dart';
 import 'package:money/widgets/form_field_switch.dart';
 import 'package:money/widgets/form_field_widget.dart';
 
@@ -206,13 +204,7 @@ class MoneyObject {
               title: fieldDefinition.name,
               valueAsText: valueAsString,
               isReadOnly: isReadOnly,
-              child: fieldDefinition.name == 'Color'
-                  ? MyCircle(
-                      colorFill: getColorFromString(valueAsString),
-                      colorBorder: Colors.grey,
-                      size: 30,
-                    )
-                  : fieldDefinition.valueFromInstance(objectInstance),
+              child: fieldDefinition.valueFromInstance(objectInstance),
             );
 
           // all others will be a normal text input
@@ -297,7 +289,10 @@ class MoneyObject {
 
   MyJson getMutatedDiff<T>() {
     MyJson afterEditing = getPersistableJSon();
-    return myJsonDiff(before: valueBeforeEdit ?? {}, after: afterEditing);
+    return myJsonDiff(
+      before: valueBeforeEdit ?? {},
+      after: afterEditing,
+    );
   }
 
   void stashValueBeforeEditing() {

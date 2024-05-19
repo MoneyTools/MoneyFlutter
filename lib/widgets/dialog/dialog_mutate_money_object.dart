@@ -16,6 +16,11 @@ showDialogAndActionsForMoneyObjects(
   final BuildContext context,
   final List<MoneyObject> moneyObjects,
 ) {
+  // Before we edit lets stash the current values of each objects
+  for (final m in moneyObjects) {
+    m.stashValueBeforeEditing();
+  }
+
   final rollup = moneyObjects[0].rollup(moneyObjects);
   MyJson beforeEditing = rollup.getPersistableJSon();
 
@@ -30,7 +35,6 @@ showDialogAndActionsForMoneyObjects(
 
             if (diff.keys.isNotEmpty) {
               for (final m in moneyObjects) {
-                m.stashValueBeforeEditing();
                 diff.forEach((key, value) {
                   m.mutateField(key, value['after'], false);
                 });
