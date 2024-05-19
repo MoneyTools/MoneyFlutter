@@ -342,4 +342,43 @@ class Categories extends MoneyObjects<Category> {
     Data().recalculateBalances();
     Settings().rebuild();
   }
+
+/*
+
+ /// <summary>
+ /// Replace the parent of the given category with a new parent.
+ /// </summary>
+ /// <param name="category">The category to change</param>
+ /// <param name="oldParent">The old parent we are removing</param>
+ /// <param name="newParent">The new parent we are inserting</param>
+ /// <returns>The new updated category</returns>
+ public Category ReParent(Category category, Category oldParent, Category newParent)
+ {
+     if (category == oldParent)
+     {
+         return newParent;
+     }
+
+     string name = category.Name;
+     string oldname = oldParent.Name;
+     Debug.Assert(name.Length > oldname.Length);
+
+     string tail = name.Substring(oldname.Length);
+     string newname = newParent.Name + tail;
+
+     Category c = this.FindCategory(newname);
+     if (c == null)
+     {
+         c = this.GetOrCreateCategory(newname, category.Type);
+         c.Color = category.Color;
+         c.Budget = category.Budget;
+         c.BudgetRange = category.BudgetRange;
+         c.Balance = category.Balance;
+         c.Description = category.Description;
+         c.TaxRefNum = category.TaxRefNum;
+     }
+     return c;
+ }
+
+   */
 }

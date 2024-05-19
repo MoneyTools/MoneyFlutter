@@ -44,7 +44,6 @@ class Field<T> {
   bool useAsColumn;
   bool useAsDetailPanels;
   bool fixedFont = false;
-  bool isMultiLine = false;
   int importance;
 
   /// Get the value of the instance
@@ -67,7 +66,6 @@ class Field<T> {
   Field({
     this.type = FieldType.text,
     this.align = TextAlign.left,
-    this.isMultiLine = false,
     this.columnWidth = ColumnWidth.normal,
     this.fixedFont = false,
     this.name = '',
@@ -301,7 +299,6 @@ class FieldString extends Field<String> {
     super.useAsDetailPanels = true,
     super.align = TextAlign.left,
     super.fixedFont = false,
-    super.isMultiLine = false,
     super.getEditWidget,
     super.setValue,
     super.sort,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-getFormFieldDecoration({required final fieldName, required final bool isReadOnly}) {
+InputDecoration getFormFieldDecoration({required final fieldName, required final bool isReadOnly}) {
   return InputDecoration(
     labelText: fieldName,
-    // border: isReadOnly ? InputBorder.none : null,
-    border: const OutlineInputBorder(),
+    contentPadding: isReadOnly ? const EdgeInsets.symmetric(horizontal: 12) : null,
+    // some padding to match the Editable fields that have a border and padding
+    border: isReadOnly ? null : const OutlineInputBorder(),
   );
 }
 

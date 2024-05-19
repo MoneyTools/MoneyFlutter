@@ -64,36 +64,36 @@ class Category extends MoneyObject {
   /// 1|ParentId|INT|0||0
   FieldInt parentId = FieldInt(
     importance: 1,
+    name: 'ParentId',
     serializeName: 'ParentId',
     useAsColumn: false,
     useAsDetailPanels: false,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).parentId.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
   );
 
   /// Name
   /// 2|Name|nvarchar(80)|1||0
-  Field<String> name = Field<String>(
+  FieldString name = FieldString(
     importance: 2,
-    type: FieldType.text,
     columnWidth: ColumnWidth.largest,
     name: 'Name',
     serializeName: 'Name',
-    defaultValue: '',
     valueFromInstance: (final MoneyObject instance) => (instance as Category).name.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).name.value = value,
   );
 
   /// Description
   /// 3|Description|nvarchar(255)|0||0
-  Field<String> description = Field<String>(
+  FieldString description = FieldString(
     importance: 3,
-    type: FieldType.text,
     columnWidth: ColumnWidth.large,
     name: 'Description',
     serializeName: 'Description',
-    defaultValue: '',
     valueFromInstance: (final MoneyObject instance) => (instance as Category).description.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Category).description.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).description.value = value,
   );
 
   /// Type

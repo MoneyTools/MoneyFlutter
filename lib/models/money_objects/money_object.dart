@@ -111,7 +111,7 @@ class MoneyObject {
     bool compact = false,
   }) {
     if (fieldDefinitions.isEmpty) {
-      return [Text('No fields found for $this')];
+      return [Center(child: Text('No fields found for $this'))];
     }
     final List<Widget> widgets = <Widget>[];
     final definitions = getFieldDefinitionsForPanel();
@@ -140,7 +140,7 @@ class MoneyObject {
     bool isFirstItem = false,
     bool isLastItem = false,
   }) {
-    final isReadOnly = onEdited == null;
+    final isReadOnly = onEdited == null || fieldDefinition.setValue == null;
     final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
 
     if (compact) {
@@ -148,7 +148,7 @@ class MoneyObject {
       return _buildNameValuePair(fieldDefinition, fieldValue);
     }
 
-    final decoration = getFormFieldDecoration(
+    final InputDecoration decoration = getFormFieldDecoration(
       fieldName: fieldDefinition.name,
       isReadOnly: isReadOnly,
     );
@@ -163,64 +163,55 @@ class MoneyObject {
         child: fieldDefinition.getEditWidget!(objectInstance, onEdited),
       );
     } else {
-      if (fieldDefinition.isMultiLine) {
-        return TextFormField(
-          readOnly: isReadOnly,
-          initialValue: fieldValue.toString(),
-          keyboardType: TextInputType.multiline,
-          minLines: 1,
-          //Normal textInputField will be displayed
-          maxLines: 5,
-          // when user presses enter it will adapt to
-          decoration: decoration,
-        );
-      } else {
-        switch (fieldDefinition.type) {
-          case FieldType.toggle:
-            if (isReadOnly) {
-              return MyFormFieldForWidget(
-                title: fieldDefinition.name,
-                valueAsText: fieldDefinition.valueFromInstance(objectInstance).toString(),
-                isReadOnly: true,
-              );
-            }
-            return SwitchFormField(
-              title: fieldDefinition.name,
-              initialValue: fieldDefinition.valueFromInstance(objectInstance),
-              isReadOnly: isReadOnly,
-              validator: (bool? value) {
-                /// Todo
-                return null;
-              },
-              onSaved: (value) {
-                /// Todo
-                fieldDefinition.setValue?.call(objectInstance, value);
-              },
-            );
-
-          case FieldType.widget:
-            final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
+      switch (fieldDefinition.type) {
+        case FieldType.toggle:
+          if (isReadOnly) {
             return MyFormFieldForWidget(
               title: fieldDefinition.name,
-              valueAsText: valueAsString,
-              isReadOnly: isReadOnly,
-              child: fieldDefinition.valueFromInstance(objectInstance),
+              valueAsText: fieldDefinition.valueFromInstance(objectInstance).toString(),
+              isReadOnly: true,
             );
+          }
+          return SwitchFormField(
+            title: fieldDefinition.name,
+            initialValue: fieldDefinition.valueFromInstance(objectInstance),
+            isReadOnly: isReadOnly,
+            validator: (bool? value) {
+              /// Todo
+              return null;
+            },
+            onSaved: (value) {
+              /// Todo
+              fieldDefinition.setValue?.call(objectInstance, value);
+            },
+          );
 
-          // all others will be a normal text input
-          default:
-            String value = fieldDefinition.getString(fieldValue);
-            if (value.isEmpty && isReadOnly) {
-              value = '. . . ';
-            }
-            return Row(
-              children: <Widget>[
-                Expanded(
+        case FieldType.widget:
+          final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
+          return MyFormFieldForWidget(
+            title: fieldDefinition.name,
+            valueAsText: valueAsString,
+            isReadOnly: isReadOnly,
+            child: fieldDefinition.valueFromInstance(objectInstance),
+          );
+
+        // all others will be a normal text input
+        default:
+          String value = fieldDefinition.getString(fieldValue);
+          if (value.isEmpty && isReadOnly) {
+            value = '. . . ';
+          }
+          return Row(
+            children: <Widget>[
+              Expanded(
+                child: Opacity(
+                  opacity: isReadOnly ? 0.6 : 1.0,
                   child: TextFormField(
                     initialValue: value,
                     decoration: decoration,
                     // allow mutation of the value
-                    readOnly: isReadOnly || fieldDefinition.setValue == null,
+                    readOnly: isReadOnly,
+
                     onFieldSubmitted: (String value) {
                       onEdited?.call();
                     },
@@ -229,13 +220,13 @@ class MoneyObject {
                     },
                     onChanged: (String newValue) {
                       fieldDefinition.setValue!(objectInstance, newValue);
-                      // onEdited?.call();
+                      onEdited?.call();
                     },
                   ),
                 ),
-              ],
-            );
-        }
+              ),
+            ],
+          );
       }
     }
   }
