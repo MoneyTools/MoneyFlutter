@@ -242,11 +242,10 @@ class FieldQuantity extends Field<double> {
     super.columnWidth = ColumnWidth.small,
     super.useAsDetailPanels,
     super.defaultValue = 0,
+    super.align = TextAlign.right,
+    super.type = FieldType.quantity,
     super.sort,
-  }) : super(
-          align: TextAlign.right,
-          type: FieldType.quantity,
-        );
+  });
 }
 
 class FieldMoney extends Field<MoneyModel> {
@@ -456,9 +455,13 @@ Widget buildWidgetFromTypeAndValue({
 
     case FieldType.quantity:
       return Row(
-        mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          QuantifyWidget(quantity: value),
+          Expanded(
+            child: QuantifyWidget(
+              quantity: value,
+              align: align,
+            ),
+          ),
         ],
       );
 

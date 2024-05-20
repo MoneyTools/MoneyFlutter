@@ -69,15 +69,75 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
             gapLarge(),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Opacity(
-                opacity: 0.5,
-                child: _buildLearning(),
-              ),
+              child: _buildActionPanel(),
             ),
           ],
         ),
       ),
-      actions: [
+    );
+  }
+
+  Widget _buildActionPanel() {
+    final from = widget.categoryToMove.name.value;
+    final to = _categoryPicked.name.value;
+
+    if (from == to) {
+      return _buildActionOffering('Pick a different category then "$from".', null);
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // Append
+        _buildActionOffering(
+          'Use this option to move "$from" as a child of category of "$to".',
+          ElevatedButton(
+            onPressed: () {
+              if (_categoryPicked == widget.categoryToMove) {
+                showSnackBar(context, 'No need to merge to itself, select a different payee');
+              } else {
+                // reparent Category
+                Data().categories.reparentCategory(widget.categoryToMove, _categoryPicked);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Append'),
+          ),
+        ),
+        gapLarge(),
+        // Merge
+        _buildActionOffering(
+          'Use this option to merge the transactions of "$from" in to "$to".',
+          ElevatedButton(
+            onPressed: () {
+              if (_categoryPicked == widget.categoryToMove) {
+                showSnackBar(context, 'No need to merge to itself, select a different category');
+              } else {
+                // move to Transaction to the picked category
+                moveTransactionsToCategory(
+                  _transactions,
+                  _categoryPicked,
+                );
+
+                // we can now delete picked category
+                widget.categoryToMove.stashValueBeforeEditing();
+                Data().notifyMutationChanged(
+                  mutation: MutationType.deleted,
+                  moneyObject: widget.categoryToMove,
+                  fireNotification: false,
+                );
+
+                Data().recalculateBalances();
+                Settings().rebuild();
+
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Merge'),
+          ),
+        ),
+
+        gapLarge(),
+
         // Cancel
         TextButton(
           onPressed: () {
@@ -85,73 +145,21 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
           },
           child: const Text('Cancel'),
         ),
-
-        // Append
-        ElevatedButton(
-          onPressed: () {
-            if (_categoryPicked == widget.categoryToMove) {
-              showSnackBar(context, 'No need to merge to itself, select a different payee');
-            } else {
-              // reparent Category
-              Data().categories.reparentCategory(widget.categoryToMove, _categoryPicked);
-              Navigator.pop(context);
-            }
-          },
-          child: const Text('Append'),
-        ),
-
-        // Merge
-        ElevatedButton(
-          onPressed: () {
-            if (_categoryPicked == widget.categoryToMove) {
-              showSnackBar(context, 'No need to merge to itself, select a different category');
-            } else {
-              // move to Transaction to the picked category
-              moveTransactionsToCategory(
-                _transactions,
-                _categoryPicked,
-              );
-
-              // we can now delete picked category
-              widget.categoryToMove.stashValueBeforeEditing();
-              Data().notifyMutationChanged(
-                mutation: MutationType.deleted,
-                moneyObject: widget.categoryToMove,
-                fireNotification: false,
-              );
-
-              Data().recalculateBalances();
-              Settings().rebuild();
-
-              Navigator.pop(context);
-            }
-          },
-          child: const Text('Merge'),
-        ),
       ],
     );
   }
 
-  Widget _buildLearning() {
-    final from = widget.categoryToMove.name.value;
-    final to = _categoryPicked.name.value;
-
-    if (from == to) {
-      return infoBox('Selection', 'Pick a different category then "$from".');
-    }
-    return Column(
-      children: [
-        infoBox('Append', 'Use this option to move "$from" as a child of category of "$to".'),
-        gapLarge(),
-        infoBox('Merge', 'Use this option to merge the transactions of "$from" to "$to".'),
-      ],
-    );
-  }
-
-  Widget infoBox(final String title, final String text) {
+  Widget _buildActionOffering(final String text, Widget? action) {
     return Box(
-      title: title,
-      child: Text(text),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (action != null) action,
+          gapMedium(),
+          Text(text),
+          gapMedium(),
+        ],
+      ),
     );
   }
 }

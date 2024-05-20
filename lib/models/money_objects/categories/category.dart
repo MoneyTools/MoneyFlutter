@@ -28,11 +28,11 @@ class Category extends MoneyObject {
       _fields.setDefinitions([
         tmp.id,
         tmp.parentId,
+        tmp.level,
         tmp.name,
         tmp.description,
         tmp.type,
         tmp.color,
-        tmp.level,
         tmp.budget,
         tmp.budgetBalance,
         tmp.frequency,
@@ -180,6 +180,7 @@ class Category extends MoneyObject {
   /// Level
   FieldQuantity level = FieldQuantity(
     importance: 80,
+    align: TextAlign.center,
     name: 'Level',
     columnWidth: ColumnWidth.nano,
     valueFromInstance: (final MoneyObject instance) =>
