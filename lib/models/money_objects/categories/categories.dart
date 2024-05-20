@@ -360,11 +360,6 @@ class Categories extends MoneyObjects<Category> {
       final category = get(id);
       if (category != null) {
         category.updateNameBaseOnParent();
-        Data().notifyMutationChanged(
-          mutation: MutationType.changed,
-          moneyObject: category,
-          fireNotification: false,
-        );
       }
     }
 

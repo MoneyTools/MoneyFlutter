@@ -371,7 +371,13 @@ class Category extends MoneyObject {
       // No update needed since there is not parent for this category
     } else {
       // rebuild the new full name parent full name + this leaf name
+      stashValueBeforeEditing();
       name.value = '${parentCategory!.name.value}:$leafName';
+      Data().notifyMutationChanged(
+        mutation: MutationType.changed,
+        moneyObject: this,
+        fireNotification: false,
+      );
     }
   }
 }
