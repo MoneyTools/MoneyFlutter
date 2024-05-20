@@ -294,6 +294,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
           case Constants.commandFileSaveSql:
             onSaveSql();
+
           case Constants.commandFileClose:
             onFileClose();
           default:

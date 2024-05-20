@@ -179,9 +179,11 @@ class Data {
     Settings().trackMutations.reset();
 
     for (final element in _listOfTables) {
+      element.resetMutationStateOfObjects();
       element.assessMutationsCounts();
     }
-    Settings().rebuild();
+    Data().version++;
+    Data().updateAll();
   }
 
   List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {

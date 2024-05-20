@@ -135,6 +135,16 @@ class MoneyObjects<T> {
     }
   }
 
+  /// Resets the mutation state of all MoneyObjects by setting their `valueBeforeEdit` to null
+  /// and `mutation` to `MutationType.none`.
+  ///
+  void resetMutationStateOfObjects() {
+    for (final item in _iterableListOfMoneyObject(true)) {
+      item.valueBeforeEdit = null;
+      item.mutation = MutationType.none;
+    }
+  }
+
   List<MoneyObject> getMutatedObjects(MutationType typeOfMutation) {
     return _list.where((element) => element.mutation == typeOfMutation).toList();
   }
