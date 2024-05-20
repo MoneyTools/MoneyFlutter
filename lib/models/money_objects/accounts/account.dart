@@ -217,7 +217,9 @@ class Account extends MoneyObject {
     serializeName: 'SyncGuid',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final MoneyObject instance) => (instance as Account).syncGuid.value,
+    valueForSerialization: (final MoneyObject instance) =>
+        // this field can not be blank, it needs to be a valid GUID or Null
+        (instance as Account).syncGuid.value.isEmpty ? null : instance.syncGuid.value.isEmpty,
   );
 
   /// Flags
