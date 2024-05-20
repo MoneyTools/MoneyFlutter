@@ -37,7 +37,8 @@ class Category extends MoneyObject {
         tmp.budgetBalance,
         tmp.frequency,
         tmp.taxRefNum,
-        tmp.count,
+        tmp.transactionCount,
+        tmp.transactionCountDescendants,
         tmp.sum,
       ]);
     }
@@ -188,11 +189,19 @@ class Category extends MoneyObject {
   );
 
   /// Count
-  FieldQuantity count = FieldQuantity(
+  FieldQuantity transactionCount = FieldQuantity(
     importance: 98,
-    name: 'Transactions',
+    name: '#T',
     columnWidth: ColumnWidth.tiny,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).count.value,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).transactionCount.value,
+  );
+
+  /// Count
+  FieldQuantity transactionCountDescendants = FieldQuantity(
+    importance: 98,
+    name: '#T~',
+    columnWidth: ColumnWidth.tiny,
+    valueFromInstance: (final MoneyObject instance) => (instance as Category).transactionCountDescendants.value,
   );
 
   /// Running Balance

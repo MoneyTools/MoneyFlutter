@@ -85,6 +85,20 @@ class Categories extends MoneyObjects<Category> {
     }
   }
 
+  List<Category> getTree(final Category rootCategoryToStartFrom) {
+    final List<Category> list = <Category>[];
+    getTreeRecursive(rootCategoryToStartFrom, list);
+    return list;
+  }
+
+  void getTreeRecursive(final Category category, final List<Category> list) {
+    list.add(category);
+    final List<Category> descendants = getCategoriesWithThisParent(category.uniqueId);
+    for (final Category c in descendants) {
+      getTreeRecursive(c, list);
+    }
+  }
+
   List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
     for (final Category item in iterableList()) {
@@ -290,15 +304,23 @@ class Categories extends MoneyObjects<Category> {
   @override
   void onAllDataLoaded() {
     for (final Category category in iterableList()) {
-      category.count.value = 0;
+      category.transactionCount.value = 0;
+      category.transactionCountDescendants.value = 0;
       category.sum.value.amount = 0;
     }
 
     for (final Transaction t in Data().transactions.iterableList()) {
       final Category? item = get(t.categoryId.value);
       if (item != null) {
-        item.count.value++;
+        item.transactionCount.value++;
         item.sum.value.amount += t.amount.value.amount;
+      }
+    }
+
+    // Sum the descendants transaction counts
+    for (final Category category in iterableList()) {
+      for (final descendant in getTree(category)) {
+        category.transactionCountDescendants.value += descendant.transactionCount.value;
       }
     }
   }
@@ -349,43 +371,4 @@ class Categories extends MoneyObjects<Category> {
     Data().recalculateBalances();
     Settings().rebuild();
   }
-
-/*
-
- /// <summary>
- /// Replace the parent of the given category with a new parent.
- /// </summary>
- /// <param name="category">The category to change</param>
- /// <param name="oldParent">The old parent we are removing</param>
- /// <param name="newParent">The new parent we are inserting</param>
- /// <returns>The new updated category</returns>
- public Category ReParent(Category category, Category oldParent, Category newParent)
- {
-     if (category == oldParent)
-     {
-         return newParent;
-     }
-
-     string name = category.Name;
-     string oldname = oldParent.Name;
-     Debug.Assert(name.Length > oldname.Length);
-
-     string tail = name.Substring(oldname.Length);
-     string newname = newParent.Name + tail;
-
-     Category c = this.FindCategory(newname);
-     if (c == null)
-     {
-         c = this.GetOrCreateCategory(newname, category.Type);
-         c.Color = category.Color;
-         c.Budget = category.Budget;
-         c.BudgetRange = category.BudgetRange;
-         c.Balance = category.Balance;
-         c.Description = category.Description;
-         c.TaxRefNum = category.TaxRefNum;
-     }
-     return c;
- }
-
-   */
 }
