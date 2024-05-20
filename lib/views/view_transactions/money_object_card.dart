@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -34,6 +35,7 @@ class MoneyObjectCard extends StatelessWidget {
                 title,
                 style: getTextTheme(context).headlineSmall,
               ),
+              _buildMoneyObjectId(),
               Row(
                 children: [
                   if (onMergeWith != null)
@@ -97,6 +99,19 @@ class MoneyObjectCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildMoneyObjectId() {
+    if (kDebugMode) {
+      return Opacity(
+        opacity: 0.5,
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: SelectableText('ID:${moneyObject!.uniqueId}'),
+        ),
+      );
+    }
+    return const SizedBox();
   }
 }
 

@@ -67,7 +67,7 @@ class Category extends MoneyObject {
     name: 'ParentId',
     serializeName: 'ParentId',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: true,
     valueFromInstance: (final MoneyObject instance) => (instance as Category).parentId.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
   );
@@ -232,8 +232,8 @@ class Category extends MoneyObject {
         top = this.name.value;
         bottom = '';
       } else {
-        top = getName(Data().categories.get(this.parentId.value));
-        bottom = this.name.value.substring(top.length);
+        top = this.leafName;
+        bottom = getName(parentCategory);
       }
 
       return MyListItemAsCard(
@@ -262,12 +262,11 @@ class Category extends MoneyObject {
     if (this.color.value.isNotEmpty) {
       return Pair<Color, int>(getColorFromString(this.color.value), level);
     }
-    if (this.parentId.value != -1) {
-      final Category? parentCategory = Data().categories.get(this.parentId.value);
-      if (parentCategory != null) {
-        return parentCategory.getColorAndLevel(level + 1);
-      }
+
+    if (parentCategory != null) {
+      return parentCategory!.getColorAndLevel(level + 1);
     }
+
     // reach the top
     return Pair<Color, int>(Colors.transparent, 0);
   }
@@ -340,6 +339,29 @@ class Category extends MoneyObject {
         return 'None';
       default:
         return '<unknown>';
+    }
+  }
+
+  Category? get parentCategory {
+    return Data().categories.get(this.parentId.value);
+  }
+
+  ///
+  /// The name of the Category without the ancestor names
+  ///
+  String get leafName {
+    return name.value.split(':').last;
+  }
+
+  /// Updates the name based on the parent category by appending the leaf name of the category to its current name.
+  /// If the parent category is not null, it extracts the leaf name from the current name, and then rebuilds the new full name
+  /// by combining the parent's full name with the leaf name.
+  void updateNameBaseOnParent() {
+    if (parentCategory == null) {
+      // No update needed since there is not parent for this category
+    } else {
+      // rebuild the new full name parent full name + this leaf name
+      name.value = '${parentCategory!.name.value}:$leafName';
     }
   }
 }

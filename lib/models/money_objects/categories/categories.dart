@@ -332,12 +332,19 @@ class Categories extends MoneyObjects<Category> {
   void reparentCategory(final Category categoryToReparent, final Category newParentCategory) {
     categoryToReparent.stashValueBeforeEditing();
     categoryToReparent.parentId.value = newParentCategory.uniqueId;
-    categoryToReparent.name.value = '${newParentCategory.name.value}:${categoryToReparent.name.value}';
-    Data().notifyMutationChanged(
-      mutation: MutationType.changed,
-      moneyObject: categoryToReparent,
-      fireNotification: false,
-    );
+
+    final descendants = getTreeIds(categoryToReparent.uniqueId);
+    for (final id in descendants) {
+      final category = get(id);
+      if (category != null) {
+        category.updateNameBaseOnParent();
+        Data().notifyMutationChanged(
+          mutation: MutationType.changed,
+          moneyObject: category,
+          fireNotification: false,
+        );
+      }
+    }
 
     Data().recalculateBalances();
     Settings().rebuild();
