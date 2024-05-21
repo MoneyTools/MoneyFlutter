@@ -23,6 +23,22 @@ String yearToString(final DateTime? dateTime) {
   return dateTime.year.toString();
 }
 
+/// Converts a nullable DateTime object to an ISO8601 string representation,
+/// or returns a default value if the input is null.
+///
+/// This function takes a nullable DateTime object as input and returns a
+/// string representation of the date and time in the ISO8601 format. If the
+/// input DateTime object is null, the function returns a default value
+/// specified by the `defaultValueIfNull` parameter.
+///
+/// Parameters:
+/// - `value`: The nullable DateTime object to be converted to an ISO8601 string.
+/// - `defaultValueIfNull`: The default value to be returned if the `value`
+///   parameter is null. Defaults to an empty string `''`.
+///
+/// Returns:
+/// - If `value` is not null, the ISO8601 string representation of the date and time.
+/// - If `value` is null, the `defaultValueIfNull` value.
 String dateAsIso8601OrDefault(final DateTime? value, {final String defaultValueIfNull = ''}) {
   if (value == null) {
     return defaultValueIfNull;
@@ -30,7 +46,32 @@ String dateAsIso8601OrDefault(final DateTime? value, {final String defaultValueI
   return value.toIso8601String();
 }
 
-/// Try parsing the date string with each format
+/// Attempts to parse a date string using a list of common date formats.
+///
+/// This function tries to parse the provided [text] string using a list of
+/// predefined date formats. It returns the first valid [DateTime] object
+/// found, or `null` if no valid date is found.
+///
+/// The supported date formats are:
+/// - 'yyyy-MM-dd' (ISO8601)
+/// - 'MM/dd/yyyy' (USA)
+/// - 'dd/MM/yyyy' (Europe)
+/// - 'dd/MM/yy' (Europe)
+/// - 'dd-MM-yy' (Europe)
+///
+/// Example usage:
+/// ```dart
+/// final dateString = '2023-04-15';
+/// final parsedDate = attemptToGetDateFromText(dateString);
+/// if (parsedDate != null) {
+///   print('Parsed date: $parsedDate');
+/// } else {
+///   print('Failed to parse date');
+/// }
+/// ```
+///
+/// @param text The date string to be parsed.
+/// @return The parsed [DateTime] object, or `null` if no valid date is found.
 DateTime? attemptToGetDateFromText(final String text) {
   // Define a list of date formats to try
   List<String> dateFormats = [
