@@ -47,7 +47,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   bool _isMultiSelectionOn = false;
   VoidCallback? onMultiSelect;
 
-  VoidCallback? onAddNewEntry;
+  VoidCallback? onAdd;
   VoidCallback? onEdit;
   VoidCallback? onDelete;
   VoidCallback? onCopyInfoPanelTransactions;
@@ -118,6 +118,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   Widget build(final BuildContext context) {
     return buildViewContent(
       AdaptiveViewWithList(
+        key: Key(list.length.toString()),
         top: buildHeader(),
         fieldDefinitions: _fieldToDisplay.definitions,
         list: list,
@@ -188,6 +189,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     });
   }
 
+  void updateListAndSelect(final int uniqueId) {
+    setState(() {
+      clearSelection();
+      list = getList();
+      setSelectedItem(uniqueId);
+    });
+  }
+
   Widget buildViewContent(final Widget child) {
     return Container(
       color: getColorTheme(context).surface,
@@ -219,9 +228,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       selectedItems: _selectedItemsByUniqueId,
       description: getDescription(),
       multipleSelection: multipleSelectionOptions,
-      onAddNewEntry: onAddNewEntry,
-      onEdit: onEdit,
-      onDelete: onDelete,
+      onAddMoneyObject: onAdd,
+      onEditMoneyObject: onEdit,
+      onDeleteMoneyObject: onDelete,
       onFilterChanged: onFilterTextChanged,
       child: child,
     );
@@ -250,6 +259,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void clearSelection() {
     _selectedItemsByUniqueId.value = [];
+    saveLastUserActionOnThisView();
   }
 
   void onSort() {

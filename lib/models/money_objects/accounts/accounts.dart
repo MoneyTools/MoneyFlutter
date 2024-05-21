@@ -144,7 +144,7 @@ class Accounts extends MoneyObjects<Account> {
     account.name.value = nextAvailableName;
     account.isOpen = true;
 
-    Data().accounts.appendNewMoneyObject(account);
+    Data().accounts.appendNewMoneyObject(account, fireNotification: false);
     return account;
   }
 

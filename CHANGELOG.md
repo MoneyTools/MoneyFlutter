@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.10] 2024-05-21
+
+### Updated
+
+- Scroll into view the newly added Account and Category
+
 ## [version 1.8.9] 2024-05-19
 
 ### Added

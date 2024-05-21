@@ -15,10 +15,11 @@ class ViewHeader extends StatelessWidget {
   // Optional, used for multi-selection UX
   final ViewHeaderMultipleSelection? multipleSelection;
 
+  final VoidCallback? onAddMoneyObject;
+  final VoidCallback? onEditMoneyObject;
+  final VoidCallback? onDeleteMoneyObject;
+
   final void Function(String)? onFilterChanged;
-  final VoidCallback? onAddNewEntry;
-  final VoidCallback? onEdit;
-  final VoidCallback? onDelete;
 
   final Widget? child;
 
@@ -32,9 +33,9 @@ class ViewHeader extends StatelessWidget {
     // optionals
     this.multipleSelection,
     this.onFilterChanged,
-    this.onAddNewEntry,
-    this.onEdit,
-    this.onDelete,
+    this.onAddMoneyObject,
+    this.onEditMoneyObject,
+    this.onDeleteMoneyObject,
     this.child,
   });
 
@@ -73,12 +74,6 @@ class ViewHeader extends StatelessWidget {
               child: Row(
             children: [
               ThreePartLabel(text1: title, text2: getIntAsText(itemCount.toInt())),
-              // Add
-              if (onAddNewEntry != null)
-                IconButton(
-                  icon: const Icon(Icons.add_circle_outline),
-                  onPressed: onAddNewEntry,
-                ),
             ],
           )),
           IntrinsicWidth(
@@ -88,7 +83,9 @@ class ViewHeader extends StatelessWidget {
       ),
     );
 
-    if (multipleSelection != null || (selectedItems.value.isNotEmpty && (onEdit != null || onDelete != null))) {
+    if (multipleSelection != null ||
+        onAddMoneyObject != null ||
+        (selectedItems.value.isNotEmpty && (onEditMoneyObject != null || onDeleteMoneyObject != null))) {
       widgets.add(
         IntrinsicWidth(
           child: SizedBox(
@@ -102,19 +99,26 @@ class ViewHeader extends StatelessWidget {
                     multipleSelection: multipleSelection,
                   ),
 
+                // Add
+                if (onAddMoneyObject != null)
+                  IconButton(
+                    icon: const Icon(Icons.add_circle),
+                    onPressed: onAddMoneyObject,
+                  ),
+
                 // Edit
-                if (onEdit != null && selectedItems.value.isNotEmpty)
+                if (onEditMoneyObject != null && selectedItems.value.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.edit),
-                    onPressed: onEdit,
+                    onPressed: onEditMoneyObject,
                     tooltip: 'Edit selected item(s)',
                   ),
 
                 // Delete
-                if (onDelete != null && selectedItems.value.isNotEmpty)
+                if (onDeleteMoneyObject != null && selectedItems.value.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.delete),
-                    onPressed: onDelete,
+                    onPressed: onDeleteMoneyObject,
                     tooltip: 'Delete selected item(s)',
                   ),
               ],
