@@ -3,6 +3,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
+import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/dialog/dialog_full_screen.dart';
 
@@ -108,23 +109,19 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       DialogActionButton(
         text: 'Delete',
         onPressed: () {
-          showDialog(
+          adaptiveScreenSizeDialog(
             context: context,
-            builder: (final BuildContext context) {
-              return Center(
-                child: DeleteConfirmationDialog(
-                  title: 'Delete',
-                  question: 'Are you sure you want to delete this?',
-                  content: Column(
-                    children: transaction.buildWidgets(onEdit: null, compact: true),
-                  ),
-                  onConfirm: () {
-                    Data().transactions.deleteItem(transaction);
-                    Navigator.of(context).pop(false);
-                  },
-                ),
-              );
-            },
+            title: 'Delete',
+            child: DeleteConfirmationDialog(
+              question: 'Are you sure you want to delete this?',
+              content: Column(
+                children: transaction.buildWidgets(onEdit: null, compact: true),
+              ),
+              onConfirm: () {
+                Data().transactions.deleteItem(transaction);
+                Navigator.of(context).pop(false);
+              },
+            ),
           );
         },
       ),

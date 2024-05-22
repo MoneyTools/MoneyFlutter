@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/dialog/dialog_full_screen.dart';
 
-showDialogAndActionsForMoneyObject(
-  final BuildContext context,
-  final MoneyObject moneyObject,
-) {
-  showDialogAndActionsForMoneyObjects(context, [moneyObject]);
+myShowDialogAndActionsForMoneyObject({
+  required final BuildContext context,
+  required final String title,
+  required final MoneyObject moneyObject,
+}) {
+  myShowDialogAndActionsForMoneyObjects(context: context, title: title, moneyObjects: [moneyObject]);
 }
 
-showDialogAndActionsForMoneyObjects(
-  final BuildContext context,
-  final List<MoneyObject> moneyObjects,
-) {
+myShowDialogAndActionsForMoneyObjects({
+  required final BuildContext context,
+  required final String title,
+  required final List<MoneyObject> moneyObjects,
+}) {
   // Before we edit lets stash the current values of each objects
   for (final m in moneyObjects) {
     m.stashValueBeforeEditing();
@@ -24,26 +27,27 @@ showDialogAndActionsForMoneyObjects(
   final rollup = moneyObjects[0].rollup(moneyObjects);
   MyJson beforeEditing = rollup.getPersistableJSon();
 
-  return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DialogMutateMoneyObject(
-          moneyObject: rollup,
-          onApplyChange: (MoneyObject objectChanged) {
-            MyJson afterEditing = rollup.getPersistableJSon();
-            MyJson diff = myJsonDiff(before: beforeEditing, after: afterEditing);
+  return adaptiveScreenSizeDialog(
+    context: context,
+    title: moneyObjects.length == 1 ? title : '${getIntAsText(moneyObjects.length)} $title',
+    showCloseButton: false,
+    child: DialogMutateMoneyObject(
+      moneyObject: rollup,
+      onApplyChange: (MoneyObject objectChanged) {
+        MyJson afterEditing = rollup.getPersistableJSon();
+        MyJson diff = myJsonDiff(before: beforeEditing, after: afterEditing);
 
-            if (diff.keys.isNotEmpty) {
-              for (final m in moneyObjects) {
-                diff.forEach((key, value) {
-                  m.mutateField(key, value['after'], false);
-                });
-              }
-            }
-            Data().updateAll();
-          },
-        );
-      });
+        if (diff.keys.isNotEmpty) {
+          for (final m in moneyObjects) {
+            diff.forEach((key, value) {
+              m.mutateField(key, value['after'], false);
+            });
+          }
+        }
+        Data().updateAll();
+      },
+    ),
+  );
 }
 
 /// Dialog content
@@ -73,32 +77,29 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
 
   @override
   Widget build(final BuildContext context) {
-    return AutoSizeDialog(
-      child: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _moneyObject.buildWidgets(onEdit: () {
-                  setState(() {
-                    dataWasModified = isDataModified(_moneyObject);
-                  });
-                }),
-              ),
+    return Column(
+      children: [
+        Expanded(
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: _moneyObject.buildWidgets(onEdit: () {
+                setState(() {
+                  dataWasModified = isDataModified(_moneyObject);
+                });
+              }),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: getActionButtons(
-              context: context,
-              moneyObject: _moneyObject,
-              editMode: true,
-              dataWasModified: dataWasModified,
-            ),
+        ),
+        dialogActionButtons(
+          getActionButtons(
+            context: context,
+            moneyObject: _moneyObject,
+            editMode: true,
+            dataWasModified: dataWasModified,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -109,15 +110,24 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
     required bool dataWasModified,
   }) {
     return [
+      // Cancel
       DialogActionButton(
-          text: dataWasModified ? 'Apply' : 'Done',
+          text: 'Cancel',
           onPressed: () {
-            // Changes were made
-            if (dataWasModified) {
-              widget.onApplyChange(moneyObject);
-            }
             Navigator.of(context).pop(true);
-          })
+          }),
+
+      // Apply
+      if (dataWasModified)
+        DialogActionButton(
+            text: 'Apply',
+            onPressed: () {
+              // Changes were made
+              if (dataWasModified) {
+                widget.onApplyChange(moneyObject);
+              }
+              Navigator.of(context).pop(true);
+            }),
     ];
   }
 

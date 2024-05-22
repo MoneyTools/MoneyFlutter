@@ -69,16 +69,17 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     // support Edit by default
     // if not the desired UX, the derived class can set [onEdit] to null
     onEdit = () {
-      showDialogAndActionsForMoneyObjects(
-        context,
-        getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
+      myShowDialogAndActionsForMoneyObjects(
+        context: context,
+        title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
+        moneyObjects: getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
       );
     };
 
     // support Delete by default
     // if not the desired UX, the derived class can set [onDelete] to null
     onDelete = () {
-      onDeleteRequestedByUser(
+      onUserRequestedToDelete(
         context,
         getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
       );
@@ -282,34 +283,52 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
   }
 
-  void onDeleteRequestedByUser(final BuildContext context, final List<MoneyObject> moneyObjects) {
+  void onUserRequestToEdit(final BuildContext context, final List<MoneyObject> moneyObjects) {
+    myShowDialogAndActionsForMoneyObjects(
+      context: context,
+      title: getSingularPluralText('Edit', moneyObjects.length, getClassNameSingular(), getClassNamePlural()),
+      moneyObjects: moneyObjects,
+    );
+  }
+
+  void onUserRequestedToDelete(final BuildContext context, final List<MoneyObject> moneyObjects) {
+    offerToDeleteMoneyObjects(
+      context,
+      moneyObjects,
+      getClassNameSingular(),
+      getClassNamePlural(),
+    );
+  }
+
+  void offerToDeleteMoneyObjects(
+    final BuildContext context,
+    final List<MoneyObject> moneyObjects,
+    final String nameSingular,
+    final String namePlural,
+  ) {
     if (moneyObjects.isNotEmpty) {
-      final String title =
-          moneyObjects.length == 1 ? 'Delete ${getClassNameSingular()}' : 'Delete ${getClassNamePlural()}';
+      final String title = getSingularPluralText('Delete', moneyObjects.length, nameSingular, namePlural);
 
       final String question = moneyObjects.length == 1
-          ? 'Are you sure you want to delete this ${getClassNameSingular()}?'
-          : 'Are you sure you want to delete the ${moneyObjects.length} selected ${getClassNamePlural()}?';
+          ? 'Are you sure you want to delete this $nameSingular?'
+          : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
 
-      showDialog(
+      adaptiveScreenSizeDialog(
         context: context,
-        builder: (final BuildContext context) {
-          return Center(
-            child: DeleteConfirmationDialog(
-              title: title,
-              question: question,
-              content: moneyObjects.length == 1
-                  ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
-                  : Center(
-                      child: Text('${getIntAsText(moneyObjects.length)} ${getClassNamePlural()}',
-                          style: getTextTheme(context).displaySmall),
-                    ),
-              onConfirm: () {
-                Data().deleteItems(moneyObjects);
-              },
-            ),
-          );
-        },
+        title: title,
+        showCloseButton: false,
+        child: DeleteConfirmationDialog(
+          question: question,
+          content: moneyObjects.length == 1
+              ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
+              : Center(
+                  child: Text('${getIntAsText(moneyObjects.length)} $namePlural',
+                      style: getTextTheme(context).displaySmall),
+                ),
+          onConfirm: () {
+            Data().deleteItems(moneyObjects);
+          },
+        ),
       );
     }
   }
@@ -399,7 +418,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void onItemTap(final BuildContext context, final int uniqueId) {
     if (isMobile()) {
-      myShowDialog(
+      adaptiveScreenSizeDialog(
         context: context,
         title: '${getClassNameSingular()} #${uniqueId + 1}',
         actionButtons: [],
@@ -450,8 +469,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         title: getClassNameSingular(),
         moneyObject: moneyObject,
         onMergeWith: onMergeToItem,
-        onEdit: showDialogAndActionsForMoneyObject,
-        onDelete: onDeleteRequestedByUser,
+        onEdit: onUserRequestToEdit,
+        onDelete: onUserRequestedToDelete,
       ),
     );
   }
@@ -602,7 +621,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         }
     }
 
-    myShowDialog(
+    adaptiveScreenSizeDialog(
       context: context,
       title: 'Column Filter (${fieldDefinition.name})',
       child: content,

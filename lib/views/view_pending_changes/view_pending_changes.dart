@@ -10,7 +10,7 @@ class PendingChanges extends StatefulWidget {
   State<PendingChanges> createState() => _PendingChangesState();
 
   static show(final BuildContext context) {
-    myShowDialog(
+    adaptiveScreenSizeDialog(
       context: context,
       title: 'Pending Changes',
       child: const SizedBox(width: 600, child: PendingChanges()),

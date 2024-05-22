@@ -15,6 +15,7 @@ import 'package:money/views/view_payees/merge_payees.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/widgets/date_range_time_line.dart';
+import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/mini_timeline_daily.dart';
 
@@ -31,11 +32,18 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   ViewPayeesState() {
     onMergeToItem = (final BuildContext context, final MoneyObject selectedPayee) {
       // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
-      showDialog(
+      final payee = (selectedPayee as Payee);
+      final transactions =
+          Data().transactions.iterableList(includeDeleted: true).where((t) => t.payee.value == payee.uniqueId);
+
+      adaptiveScreenSizeDialog(
         context: context,
-        builder: (context) {
-          return MergeTransactionsDialog(currentPayee: selectedPayee as Payee);
-        },
+        title: 'Merge ${transactions.length} transactions',
+        showCloseButton: false,
+        child: MergeTransactionsDialog(
+          currentPayee: payee,
+          transactions: transactions.toList(),
+        ),
       );
     };
   }

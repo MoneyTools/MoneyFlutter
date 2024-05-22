@@ -36,44 +36,38 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text('Move ${_transactions.length} transactions'),
-      content: SizedBox(
-        width: 400,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        gapLarge(),
+        gapLarge(),
+        Text('From "${widget.categoryToMove.name.value}"'),
+        gapLarge(),
+        gapLarge(),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            gapLarge(),
-            gapLarge(),
-            Text('From "${widget.categoryToMove.name.value}"'),
-            gapLarge(),
-            gapLarge(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('To '),
-                Expanded(
-                  child: pickerCategory(
-                    itemSelected: widget.categoryToMove,
-                    onSelected: (final Category? newSelection) {
-                      setState(() {
-                        _categoryPicked = newSelection!;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            gapLarge(),
-            gapLarge(),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _buildActionPanel(),
+            const Text('To '),
+            Expanded(
+              child: pickerCategory(
+                itemSelected: widget.categoryToMove,
+                onSelected: (final Category? newSelection) {
+                  setState(() {
+                    _categoryPicked = newSelection!;
+                  });
+                },
+              ),
             ),
           ],
         ),
-      ),
+        gapLarge(),
+        gapLarge(),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: _buildActionPanel(),
+        ),
+      ],
     );
   }
 

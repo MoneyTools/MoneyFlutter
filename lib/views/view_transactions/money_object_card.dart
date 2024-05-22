@@ -48,22 +48,23 @@ class MoneyObjectCard extends StatelessWidget {
                         );
                       },
                     ),
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: () {
-                      onEdit?.call(
-                        context,
-                        moneyObject,
-                      );
-                    },
-                  ),
+                  if (onEdit != null)
+                    IconButton(
+                      icon: const Icon(Icons.edit),
+                      onPressed: () {
+                        onEdit?.call(
+                          context,
+                          [moneyObject!],
+                        );
+                      },
+                    ),
                   if (onDelete != null)
                     IconButton(
                       icon: const Icon(Icons.delete_outline),
                       onPressed: () {
                         onDelete?.call(
                           context,
-                          moneyObject,
+                          [moneyObject!],
                         );
                       },
                     ),

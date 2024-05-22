@@ -6,15 +6,18 @@ import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_payees/picker_payee.dart';
+import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/gaps.dart';
 
 class MergeTransactionsDialog extends StatefulWidget {
   const MergeTransactionsDialog({
     super.key,
     required this.currentPayee,
+    required this.transactions,
   });
 
   final Payee currentPayee;
+  final List<Transaction> transactions;
 
   @override
   State<MergeTransactionsDialog> createState() => _MergeTransactionsDialogState();
@@ -22,20 +25,9 @@ class MergeTransactionsDialog extends StatefulWidget {
 
 class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
   Payee? _selectedPayee;
-  final List<Transaction> _transactions = [];
+
   bool _changeCategoryToDestinationPayee = true;
   int? _estimatedCategory;
-
-  @override
-  void initState() {
-    super.initState();
-
-    for (final t in Data().transactions.iterableList(includeDeleted: true)) {
-      if (t.payee.value == widget.currentPayee.uniqueId) {
-        _transactions.add(t);
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,71 +45,61 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
       _estimatedCategory = categoryIdsFound.getKeyWithLargestSum();
     }
 
-    return AlertDialog(
-      title: Text('Merge ${_transactions.length} transactions'),
-      content: SizedBox(
-        width: 400,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text('From "${widget.currentPayee.name.value}"'),
+        gapLarge(),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text('From "${widget.currentPayee.name.value}"'),
-            gapLarge(),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                const Text('To '),
-                Expanded(
-                  child: pickerPayee(
-                    itemSelected: widget.currentPayee,
-                    onSelected: (final Payee? selectedPayee) {
-                      setState(() {
-                        _selectedPayee = selectedPayee;
-                      });
-                    },
-                  ),
-                ),
-              ],
-            ),
-            gapLarge(),
-            if (_estimatedCategory != null && _estimatedCategory != -1)
-              CheckboxListTile(
-                value: _changeCategoryToDestinationPayee,
-                onChanged: (bool? value) {
-                  // Handle the change event
+            const Text('To '),
+            Expanded(
+              child: pickerPayee(
+                itemSelected: widget.currentPayee,
+                onSelected: (final Payee? selectedPayee) {
                   setState(() {
-                    _changeCategoryToDestinationPayee = value == true;
+                    _selectedPayee = selectedPayee;
                   });
                 },
-                title: Text('Match destination category\n"${Data().categories.getNameFromId(_estimatedCategory!)}"'),
-                dense: true,
-              )
+              ),
+            ),
           ],
         ),
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: () {
-            if (_selectedPayee != null) {
-              if (_selectedPayee == widget.currentPayee) {
-                showSnackBar(context, 'No need to merge to itself, select a different payee');
-              } else {
-                mutateTransactionsToPayee(
-                  _transactions,
-                  _selectedPayee!.uniqueId,
-                  _changeCategoryToDestinationPayee == true ? _estimatedCategory : null,
-                );
-                Navigator.pop(context);
-              }
-            }
-          },
-          child: const Text('Merge'),
+        gapLarge(),
+        if (_estimatedCategory != null && _estimatedCategory != -1)
+          CheckboxListTile(
+            value: _changeCategoryToDestinationPayee,
+            onChanged: (bool? value) {
+              // Handle the change event
+              setState(() {
+                _changeCategoryToDestinationPayee = value == true;
+              });
+            },
+            title: Text('Match destination category\n"${Data().categories.getNameFromId(_estimatedCategory!)}"'),
+            dense: true,
+          ),
+        const Spacer(),
+        dialogActionButtons(
+          [
+            DialogActionButton(
+              text: 'Cancel',
+              onPressed: () => Navigator.pop(context),
+            ),
+            if (_selectedPayee != null && _selectedPayee != widget.currentPayee)
+              DialogActionButton(
+                text: 'Merge',
+                onPressed: () {
+                  mutateTransactionsToPayee(
+                    widget.transactions,
+                    _selectedPayee!.uniqueId,
+                    _changeCategoryToDestinationPayee == true ? _estimatedCategory : null,
+                  );
+                  Navigator.pop(context);
+                },
+              ),
+          ],
         ),
       ],
     );

@@ -7,10 +7,9 @@ import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/gaps.dart';
 
 void showSettings(final BuildContext context) {
-  myShowDialog(
+  adaptiveScreenSizeDialog(
       context: context,
       title: 'Settings',
-      actionButtons: [],
       child: Column(
         children: [
           TextField(

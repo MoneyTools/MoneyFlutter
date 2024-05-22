@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/picker_letter.dart';
 
@@ -12,33 +13,17 @@ showPopupSelection({
   required final String selectedItem,
   required final Function(String text) onSelected,
 }) {
-  showDialog(
+  adaptiveScreenSizeDialog(
     context: context,
-    builder: (final BuildContext context) {
-      return AlertDialog(
-        title: Text(title),
-        shape: RoundedRectangleBorder(
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          side: BorderSide(
-            color: getColorTheme(context).primary.withOpacity(0.3),
-            width: 1,
-          ),
-        ),
-        content: Container(
-          constraints: const BoxConstraints(
-            minHeight: 500,
-            maxHeight: 700,
-          ),
-          width: 400,
-          child: PickerPanel(
-              options: items,
-              selectedItem: selectedItem,
-              onSelected: (final String selectedValue) {
-                onSelected(selectedValue);
-              }),
-        ),
-      );
-    },
+    title: title,
+    child: PickerPanel(
+      options: items,
+      selectedItem: selectedItem,
+      onSelected: (final String selectedValue) {
+        onSelected(selectedValue);
+      },
+    ),
+    actionButtons: [],
   );
 }
 

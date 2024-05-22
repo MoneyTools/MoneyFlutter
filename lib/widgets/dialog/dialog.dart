@@ -1,15 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/dialog/dialog_full_screen.dart';
 
-void myShowDialog({
+class MyAlertDialog extends StatelessWidget {
+  final String title;
+  final IconData? icon;
+  final Widget child;
+  final List<Widget>? actions;
+  final bool scrollable;
+
+  const MyAlertDialog({
+    super.key,
+    required this.title,
+    this.icon,
+    this.actions,
+    required this.child,
+    this.scrollable = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text(title),
+      icon: icon == null ? null : Icon(icon!),
+      shape: RoundedRectangleBorder(
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        side: BorderSide(
+          color: getColorTheme(context).primary.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      content: Container(
+        constraints: const BoxConstraints(
+          minHeight: 500,
+          maxHeight: 700,
+        ),
+        width: 400,
+        child: child,
+      ),
+      actions: actions,
+    );
+  }
+}
+
+void adaptiveScreenSizeDialog({
   required final BuildContext context,
   required final String title,
   required final Widget child,
-  required final List<Widget> actionButtons,
-  final bool includeDoneButton = true,
+  List<Widget>? actionButtons,
+  final bool showCloseButton = true,
 }) {
+  actionButtons ??= [];
   if (isSmallDevice(context)) {
     // Full screen also comes with a Close (X) button
     Navigator.of(context).push(
@@ -28,9 +71,9 @@ void myShowDialog({
     );
   } else {
     // in modal always offer a close button
-    if (includeDoneButton) {
+    if (showCloseButton) {
       actionButtons.add(DialogActionButton(
-          text: 'Done',
+          text: 'Close',
           onPressed: () {
             Navigator.of(context).pop(false);
           }));
@@ -40,11 +83,11 @@ void myShowDialog({
         context: context,
         barrierDismissible: false,
         builder: (final BuildContext context) {
-          return AlertDialog(
-            title: Text(title),
+          return MyAlertDialog(
+            title: title,
             scrollable: true,
-            content: child,
             actions: actionButtons,
+            child: child,
           );
         });
   }

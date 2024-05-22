@@ -162,3 +162,7 @@ int countOccurrences(String input, String char) {
   }
   return count;
 }
+
+String getSingularPluralText(final String title, final int quantity, final String singular, final String plural) {
+  return '$title ${quantity == 1 ? singular : plural}';
+}

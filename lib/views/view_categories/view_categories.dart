@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/views/view_categories/merge_categories.dart';
-import 'package:money/widgets/center_message.dart';
-import 'package:money/widgets/three_part_label.dart';
-import 'package:money/widgets/chart.dart';
-import 'package:money/views/view_money_objects.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
+import 'package:money/views/view_categories/merge_categories.dart';
+import 'package:money/views/view_money_objects.dart';
+import 'package:money/widgets/center_message.dart';
+import 'package:money/widgets/chart.dart';
+import 'package:money/widgets/dialog/dialog.dart';
+import 'package:money/widgets/three_part_label.dart';
 
 part 'view_categories_details_panels.dart';
 
@@ -35,11 +36,11 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
     onMergeToItem = (final BuildContext context, final MoneyObject selectedObject) {
       // let the user pick another Category and move the transactions of the current selected Category to the destination
-      showDialog(
+      adaptiveScreenSizeDialog(
         context: context,
-        builder: (context) {
-          return MergeCategoriesTransactionsDialog(categoryToMove: selectedObject as Category);
-        },
+        title: 'Move Category',
+        showCloseButton: false,
+        child: MergeCategoriesTransactionsDialog(categoryToMove: selectedObject as Category),
       );
     };
   }
