@@ -17,6 +17,13 @@ showPopupSelection({
     builder: (final BuildContext context) {
       return AlertDialog(
         title: Text(title),
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.all(Radius.circular(8)),
+          side: BorderSide(
+            color: getColorTheme(context).primary.withOpacity(0.3),
+            width: 1,
+          ),
+        ),
         content: Container(
           constraints: const BoxConstraints(
             minHeight: 500,
@@ -54,7 +61,7 @@ class PickerPanel extends StatefulWidget {
 }
 
 class _PickerPanelState extends State<PickerPanel> {
-  String _filterContains = '';
+  String _filterByTextAnywhere = '';
   String _filterStartWidth = '';
   List<String> list = [];
   List<String> uniqueLetters = [];
@@ -93,28 +100,46 @@ class _PickerPanelState extends State<PickerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        TextField(
+          decoration: const InputDecoration(
+            contentPadding: EdgeInsets.zero,
+            isDense: true,
+            prefixIcon: Icon(Icons.search),
+            labelText: 'Filter',
+            border: OutlineInputBorder(),
+          ),
+          onChanged: (final String value) {
+            setState(() {
+              _filterByTextAnywhere = value;
+              applyFilter();
+            });
+          },
+        ),
+        gapLarge(),
         Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                  contentPadding: EdgeInsets.zero,
-                  isDense: true,
-                  prefixIcon: Icon(Icons.search),
-                  labelText: 'Filter',
-                  border: OutlineInputBorder(),
+              ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: SingleChildScrollView(
+                  child: PickerLetters(
+                    options: uniqueLetters,
+                    selected: _filterStartWidth,
+                    onSelected: (String selected) {
+                      setState(() {
+                        _filterStartWidth = selected;
+                        applyFilter();
+                      });
+                    },
+                  ),
                 ),
-                onChanged: (final String value) {
-                  setState(() {
-                    _filterContains = value;
-                    applyFilter();
-                  });
-                },
               ),
-              gapLarge(),
+              gapMedium(),
               Expanded(
                 child: ListView.builder(
                   itemCount: list.length,
@@ -151,42 +176,21 @@ class _PickerPanelState extends State<PickerPanel> {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: ScrollConfiguration(
-            behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  PickerLetters(
-                    options: uniqueLetters,
-                    selected: _filterStartWidth,
-                    onSelected: (String selected) {
-                      setState(() {
-                        _filterStartWidth = selected;
-                        applyFilterStartsWidth();
-                      });
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }
 
   void applyFilter() {
-    _filterStartWidth = '';
-    list = widget.options.where((option) => option.toLowerCase().contains(_filterContains.toLowerCase())).toList();
-  }
+    list = widget.options.where((final String option) {
+      if (_filterStartWidth.isNotEmpty && !option.toUpperCase().startsWith(_filterStartWidth)) {
+        return false;
+      }
 
-  void applyFilterStartsWidth() {
-    if (_filterStartWidth.isNotEmpty) {
-      _filterContains = '';
-      list = widget.options.where((option) => option.toUpperCase().startsWith(_filterStartWidth)).toList();
-    }
+      if (_filterByTextAnywhere.isNotEmpty && !option.toLowerCase().contains(_filterByTextAnywhere.toLowerCase())) {
+        return false;
+      }
+
+      return true;
+    }).toList();
   }
 }
