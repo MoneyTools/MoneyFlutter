@@ -28,6 +28,8 @@ class WelcomeScreen extends StatelessWidget {
           gapLarge(),
           gapLarge(),
           Wrap(
+            alignment: WrapAlignment.center,
+            runAlignment: WrapAlignment.center,
             spacing: 10,
             children: <Widget>[
               OutlinedButton(onPressed: onFileNew, child: const Text('New File ...')),

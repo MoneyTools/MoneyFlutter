@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.11] 2024-05-24
+
+### Added
+
+- Android Beta Test deploy
+  
 ## [version 1.8.10] 2024-05-21
 
 ### Updated

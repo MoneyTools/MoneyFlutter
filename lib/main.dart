@@ -65,16 +65,20 @@ class MainView extends StatelessWidget {
     if (!settings.isPreferenceLoaded) {
       return const WorkingIndicator();
     }
+
+    final themeData = settings.getThemeData();
+
     return MaterialApp(
       /// Assign Key Here
       scaffoldMessengerKey: SnackBarService.scaffoldKey,
       debugShowCheckedModeBanner: false,
       title: 'MyMoney by VTeam',
-      theme: settings.getThemeData(),
+      theme: themeData,
       home: MediaQuery(
         key: Key(settings.getUniqueSate()),
         data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
         child: myScaffold(
+          backgroundColor: themeData.colorScheme.secondaryContainer,
           showAppBar: !shouldShowOpenInstructions(),
           body: isPlatformMobile()
               // Mobile has no keyboard support
@@ -116,19 +120,17 @@ class MainView extends StatelessWidget {
   }
 
   Widget buildContentForSmallSurface(final BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: getWidgetForMainContent(context, settings.selectedView),
-          ),
-          MenuHorizontal(
-            settings: settings,
-            onSelected: handleScreenChanged,
-            selectedView: settings.selectedView,
-          ),
-        ],
-      ),
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: getWidgetForMainContent(context, settings.selectedView),
+        ),
+        MenuHorizontal(
+          settings: settings,
+          onSelected: handleScreenChanged,
+          selectedView: settings.selectedView,
+        ),
+      ],
     );
   }
 
@@ -278,8 +280,8 @@ class MainView extends StatelessWidget {
   }
 
   void onSaveToCSV() async {
-    final String fullPathTofileName = await data.saveToCsv();
-    settings.fileManager.rememberWhereTheDataCameFrom(fullPathTofileName);
+    final String fullPathToFileName = await data.saveToCsv();
+    settings.fileManager.rememberWhereTheDataCameFrom(fullPathToFileName);
     data.assessMutationsCountOfAllModels();
   }
 
@@ -337,11 +339,13 @@ class MainView extends StatelessWidget {
   }
 
   Widget myScaffold({
+    required Color backgroundColor,
     required final Widget body,
     final bool showAppBar = true,
     final Widget? bottomNavigationBar,
   }) {
     return Scaffold(
+      backgroundColor: backgroundColor,
       appBar: showAppBar
           ? MyAppBar(
               onFileNew: onFileNew,

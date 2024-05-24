@@ -114,7 +114,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
       DialogActionButton(
           text: 'Cancel',
           onPressed: () {
-            Navigator.of(context).pop(true);
+            Navigator.of(context).pop(false);
           }),
 
       // Apply

@@ -1,17 +1,22 @@
 {
     "cmake.configureOnOpen": false,
     "cSpell.words": [
+        "appbar",
         "BECU",
         "datetime",
         "fitid",
         "fullscreen",
         "LTRB",
         "LTWH",
+        "mmcsv",
         "mmdb",
+        "mymoney",
         "nchar",
         "nvarchar",
+        "Persistable",
         "Rebalance",
         "Revolut",
+        "rollup",
         "sankey",
         "sqflite",
         "uniqueidentifier",
@@ -29,5 +34,10 @@
     "[dart]": {
         "editor.defaultFormatter": "Dart-Code.dart-code"
     },
-    "editor.formatOnType": true
+    "editor.formatOnType": true,
+    "markdownlint.config": {
+        "MD024": { // Rule for multiple headings with the same name
+            "siblings_only": true // Only check for duplicate headings within the same level
+        },
+    }
 }
