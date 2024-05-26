@@ -55,8 +55,6 @@
 
 - Multiple selection
 
-# Change Log
-
 ## [version 1.8.4] 2024-05-10
 
 ### Added
@@ -162,7 +160,7 @@
 
 ## [version 1.7.0] 2024-04-01
 
-- Major refactor, simplify by reducing Template Field<C,T> to Field<T>
+- Major refactor, simplify by reducing Template ```Field<C,T>``` to ```Field<T>```
 - Long Press on Chart Bars will copy the tooltip text to the clipboard
 
 ## [version 1.6.3] 2024-03-31
@@ -219,8 +217,6 @@
 ### Added
 
 - Dialog showing list of pending changes [Added|Modified|Deleted]
-
-# Change Log
 
 ## [version 1.4.8] 2024-03-23
 
@@ -285,16 +281,16 @@
 
 ## [version 1.4.4] 2024-03-18
 
-## Fixed
+### Fixed
 
 - Transaction Amount List and Dialog
 
-## Updated
+### Updated
 
 - Improve layout for Large and small screen
 - Only show the ADD (+) on the details panel if the Transactions tab is selected and expanded
 
-## Added
+### Added
 
 - Display Green, Orange, Red adornments to list items
 - Script for dependency graph using Lakos and to graphviz
@@ -313,9 +309,9 @@
 
 - Fields support for Editable vs ReadOnly
 - List View
-    - Optional Un-Selectable row
-    - Refresh when data is mutated
-    - Prioritize Selection color before Hover color
+  - Optional Un-Selectable row
+  - Refresh when data is mutated
+  - Prioritize Selection color before Hover color
 
 ## [version 1.4.1] 2024-03-15
 
@@ -333,9 +329,9 @@
 
 - Column Header are now aligned with content [ L | C | R ]
 - SanKey
-    - More usable on small devices (phones)
-    - Net Lost now displays on the left side of Expenses
-    - Width is flush to the view port
+  - More usable on small devices (phones)
+  - Net Lost now displays on the left side of Expenses
+  - Width is flush to the view port
 
 ## [version 1.3.9] 2024-03-13
 
@@ -363,7 +359,7 @@
 
 ### Added
 
-- Import transactions using free style Itext
+- Import transactions using free style text
 
 ## [version 1.3.6] 2024-03-03
 
@@ -615,3 +611,4 @@
 ## [version 1.0.0]
 
 - Initial app
+  

@@ -28,7 +28,7 @@ sqlite3 mydata.MyMoney.mmdb .schema
 sqlite3 mydata.MyMoney.mmdb .dumb > backup.sql
 ```
 
-```
+```text
 cid  name       type           notnull  dflt_value  pk
 ---  ---------  -------------  -------  ----------  --
 0    Id         INT            0                    1 
@@ -39,7 +39,7 @@ cid  name       type           notnull  dflt_value  pk
 
 #### 2 - Accounts
 
-```
+```text
 cid  name                    type              notnull  dflt_value  pk
 ---  ----------------------  ----------------  -------  ----------  --
 0    Id                      INT               0                    1
@@ -63,7 +63,7 @@ cid  name                    type              notnull  dflt_value  pk
 
 #### 3 - Aliases
 
-```
+```text
 cid  name     type           notnull  dflt_value  pk
 ---  -------  -------------  -------  ----------  --
 0    Id       INT            0                    1
@@ -74,7 +74,7 @@ cid  name     type           notnull  dflt_value  pk
 
 #### 4 - Categories
 
-```
+```text
 cid  name         type           notnull  dflt_value  pk
 ---  -----------  -------------  -------  ----------  --
 0    Id           INT            0                    1 
@@ -91,7 +91,7 @@ cid  name         type           notnull  dflt_value  pk
 
 #### 5 - Currencies
 
-```
+```text
 cid  name         type          notnull  dflt_value  pk
 ---  -----------  ------------  -------  ----------  --
 0    Id           INT           0                    1 
@@ -104,7 +104,7 @@ cid  name         type          notnull  dflt_value  pk
 
 #### 6 - Investments
 
-```
+```text
 cid  name            type    notnull  dflt_value  pk
 ---  --------------  ------  -------  ----------  --
 0    Id              bigint  0                    1 
@@ -124,7 +124,7 @@ cid  name            type    notnull  dflt_value  pk
 
 #### 7 - LoanPayments
 
-```
+```text
 cid  name       type           notnull  dflt_value  pk
 ---  ---------  -------------  -------  ----------  --
 0    Id         INT            1                    0
@@ -137,7 +137,7 @@ cid  name       type           notnull  dflt_value  pk
 
 #### 8 - OnlineAccounts
 
-```
+```text
 cid  name               type            notnull  dflt_value  pk
 ---  -----------------  --------------  -------  ----------  --
 0    Id                 INT             0                    1
@@ -165,7 +165,7 @@ cid  name               type            notnull  dflt_value  pk
 
 #### 9 - Payees
 
-```
+```text
 cid  name  type           notnull  dflt_value  pk
 ---  ----  -------------  -------  ----------  --
 0    Id    INT            0                    1 
@@ -174,7 +174,7 @@ cid  name  type           notnull  dflt_value  pk
 
 #### 10 - RentBuildings
 
-```
+```text
 cid  name                    type           notnull  dflt_value  pk
 ---  ----------------------  -------------  -------  ----------  --
 0    Id                      INT            0                    1
@@ -199,7 +199,7 @@ cid  name                    type           notnull  dflt_value  pk
 
 #### 11 - RentUnits
 
-```
+```text
 cid  name      type           notnull  dflt_value  pk
 ---  --------  -------------  -------  ----------  --
 0    Id        INT            0                    1 
@@ -211,7 +211,7 @@ cid  name      type           notnull  dflt_value  pk
 
 #### 12 - Securities
 
-```
+```text
 cid  name          type          notnull  dflt_value  pk
 ---  ------------  ------------  -------  ----------  --
 0    Id            INT           0                    1
@@ -227,7 +227,7 @@ cid  name          type          notnull  dflt_value  pk
 
 #### 13 - Splits
 
-```
+```text
 cid  name               type           notnull  dflt_value  pk
 ---  -----------------  -------------  -------  ----------  --
 0    Transaction        bigint         1                    0 
@@ -243,7 +243,7 @@ cid  name               type           notnull  dflt_value  pk
 
 #### 14 - StockSplits
 
-```
+```text
 cid  name         type      notnull  dflt_value  pk
 ---  -----------  --------  -------  ----------  --
 0    Id           bigint    0                    1 
@@ -255,7 +255,7 @@ cid  name         type      notnull  dflt_value  pk
 
 #### 15 - TransactionExtras
 
-```
+```text
 cid  name         type      notnull  dflt_value  pk
 ---  -----------  --------  -------  ----------  --
 0    Id           INT       0                    1
@@ -266,7 +266,7 @@ cid  name         type      notnull  dflt_value  pk
 
 #### 16 - Transactions
 
-```
+```text
 cid  name               type           notnull  dflt_value  pk
 ---  -----------------  -------------  -------  ----------  --
 0    Id                 bigint         0                    1 
@@ -326,11 +326,23 @@ run
 
 ## Deploy
 
-- Install Firebase tool
+### to Web
+
+* Install Firebase tool
   ```npm install -g firebase-tools```
 
-- Enable firebase experiemens
+* Enable firebase experiments
   ```firebase experiments:enable webframeworks```
 
-- Deploy to your account
+* Deploy to your account
   ```firebase deploy```
+
+### To Android Google Play
+
+* Build the bundle
+  
+  ```flutter build appbundle```
+
+* Google App Console
+  * <https://play.google.com/console>
+  * Upload the bundle

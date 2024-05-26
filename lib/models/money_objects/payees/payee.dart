@@ -37,7 +37,6 @@ class Payee extends MoneyObject {
 
   @override
   String getRepresentation() {
-    // TODO
     return name.value;
   }
 
