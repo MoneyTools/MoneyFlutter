@@ -6,7 +6,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_settings.dart';
-import 'package:money/views/view_pending_changes/bage_pending_changes.dart';
+import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
 import 'package:money/widgets/color_palette.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';

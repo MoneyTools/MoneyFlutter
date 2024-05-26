@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/views/view_pending_changes/bage_pending_changes.dart';
+import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
 import 'package:money/widgets/gaps.dart';
 
 class AppCaption extends StatelessWidget {
