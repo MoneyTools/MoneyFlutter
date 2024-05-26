@@ -30,7 +30,7 @@ class ViewPayees extends ViewForMoneyObjects {
 
 class ViewPayeesState extends ViewForMoneyObjectsState {
   ViewPayeesState() {
-    onMergeToItem = (final BuildContext context, final MoneyObject selectedPayee) {
+    onMergeItem = (final BuildContext context, final MoneyObject selectedPayee) {
       // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
       final payee = (selectedPayee as Payee);
       final transactions =

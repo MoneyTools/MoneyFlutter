@@ -28,13 +28,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
 
   ViewCategoriesState() {
-    onAdd = () {
+    onAddItem = () {
       // add a new Account
       final newItem = Data().categories.addNewCategory('New Category');
       updateListAndSelect(newItem.uniqueId);
     };
 
-    onMergeToItem = (final BuildContext context, final MoneyObject selectedObject) {
+    onMergeItem = (final BuildContext context, final MoneyObject selectedObject) {
       // let the user pick another Category and move the transactions of the current selected Category to the destination
       adaptiveScreenSizeDialog(
         context: context,

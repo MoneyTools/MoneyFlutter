@@ -42,7 +42,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   void initState() {
     super.initState();
 
-    onAdd = () {
+    onAddItem = () {
       // add a new Account
       final newItem = Data().accounts.addNewAccount('New Bank Account');
       updateListAndSelect(newItem.uniqueId);

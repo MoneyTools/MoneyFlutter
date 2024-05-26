@@ -16,6 +16,7 @@ class ViewHeader extends StatelessWidget {
   final ViewHeaderMultipleSelection? multipleSelection;
 
   final VoidCallback? onAddMoneyObject;
+  final VoidCallback? onMergeMoneyObject;
   final VoidCallback? onEditMoneyObject;
   final VoidCallback? onDeleteMoneyObject;
 
@@ -34,6 +35,7 @@ class ViewHeader extends StatelessWidget {
     this.multipleSelection,
     this.onFilterChanged,
     this.onAddMoneyObject,
+    this.onMergeMoneyObject,
     this.onEditMoneyObject,
     this.onDeleteMoneyObject,
     this.child,
@@ -85,7 +87,8 @@ class ViewHeader extends StatelessWidget {
 
     if (multipleSelection != null ||
         onAddMoneyObject != null ||
-        (selectedItems.value.isNotEmpty && (onEditMoneyObject != null || onDeleteMoneyObject != null))) {
+        (selectedItems.value.isNotEmpty &&
+            (onEditMoneyObject != null || onMergeMoneyObject != null || onDeleteMoneyObject != null))) {
       widgets.add(
         IntrinsicWidth(
           child: SizedBox(
@@ -104,6 +107,14 @@ class ViewHeader extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.add_circle),
                     onPressed: onAddMoneyObject,
+                  ),
+
+                // Merge/Move
+                if (onMergeMoneyObject != null && selectedItems.value.isNotEmpty)
+                  IconButton(
+                    icon: const Icon(Icons.merge),
+                    onPressed: onMergeMoneyObject,
+                    tooltip: 'Merge/Move selected item(s)',
                   ),
 
                 // Edit

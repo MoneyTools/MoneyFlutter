@@ -47,12 +47,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   bool _isMultiSelectionOn = false;
   VoidCallback? onMultiSelect;
 
-  VoidCallback? onAdd;
-  VoidCallback? onEdit;
-  VoidCallback? onDelete;
+  VoidCallback? onAddItem;
+  VoidCallback? onEditItems;
+  Function(BuildContext, MoneyObject)? onMergeItem;
+  VoidCallback? onDeleteItems;
   VoidCallback? onCopyInfoPanelTransactions;
-
-  Function(BuildContext, MoneyObject)? onMergeToItem;
 
   // detail panel
   Object? subViewSelectedItem;
@@ -65,26 +64,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   Timer? _deadlineTimer;
   Function? onAddTransaction;
 
-  ViewForMoneyObjectsState() {
-    // support Edit by default
-    // if not the desired UX, the derived class can set [onEdit] to null
-    onEdit = () {
-      myShowDialogAndActionsForMoneyObjects(
-        context: context,
-        title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
-        moneyObjects: getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
-      );
-    };
-
-    // support Delete by default
-    // if not the desired UX, the derived class can set [onDelete] to null
-    onDelete = () {
-      onUserRequestedToDelete(
-        context,
-        getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
-      );
-    };
-  }
+  ViewForMoneyObjectsState() {}
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<MoneyObject> getFieldsForTable() {
@@ -113,6 +93,30 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     /// restore selection of items
     setSelectedItem(_lastSelectedItemId);
+  }
+
+  List<Widget> getActionsForSelectedItems() {
+    List<Widget> widgets = [];
+    // support Edit by default
+    // if not the desired UX, the derived class can set [onEdit] to null
+    onEditItems = () {
+      myShowDialogAndActionsForMoneyObjects(
+        context: context,
+        title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
+        moneyObjects: getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
+      );
+    };
+
+    // support Delete by default
+    // if not the desired UX, the derived class can set [onDelete] to null
+    onDeleteItems = () {
+      onUserRequestedToDelete(
+        context,
+        getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
+      );
+    };
+
+    return [];
   }
 
   @override
@@ -229,9 +233,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       selectedItems: _selectedItemsByUniqueId,
       description: getDescription(),
       multipleSelection: multipleSelectionOptions,
-      onAddMoneyObject: onAdd,
-      onEditMoneyObject: onEdit,
-      onDeleteMoneyObject: onDelete,
+      onAddMoneyObject: onAddItem,
+      onMergeMoneyObject: onMergeItem == null
+          ? null
+          : () {
+              onMergeItem!(context, getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value).first);
+            },
+      onEditMoneyObject: onEditItems,
+      onDeleteMoneyObject: onDeleteItems,
       onFilterChanged: onFilterTextChanged,
       child: child,
     );
@@ -292,20 +301,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void onUserRequestedToDelete(final BuildContext context, final List<MoneyObject> moneyObjects) {
-    offerToDeleteMoneyObjects(
-      context,
-      moneyObjects,
-      getClassNameSingular(),
-      getClassNamePlural(),
-    );
-  }
+    final String nameSingular = getClassNameSingular();
+    final String namePlural = getClassNamePlural();
 
-  void offerToDeleteMoneyObjects(
-    final BuildContext context,
-    final List<MoneyObject> moneyObjects,
-    final String nameSingular,
-    final String namePlural,
-  ) {
     if (moneyObjects.isNotEmpty) {
       final String title = getSingularPluralText('Delete', moneyObjects.length, nameSingular, namePlural);
 
@@ -468,7 +466,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       child: MoneyObjectCard(
         title: getClassNameSingular(),
         moneyObject: moneyObject,
-        onMergeWith: onMergeToItem,
+        onMergeWith: onMergeItem,
         onEdit: onUserRequestToEdit,
         onDelete: onUserRequestedToDelete,
       ),

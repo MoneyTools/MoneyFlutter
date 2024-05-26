@@ -159,7 +159,7 @@ class InfoPanelHeader extends StatelessWidget {
         callback.call();
       },
       icon: const Icon(Icons.edit),
-      tooltip: 'Edit selected item',
+      tooltip: 'Edit selected item(s)',
     );
   }
 
@@ -169,7 +169,7 @@ class InfoPanelHeader extends StatelessWidget {
         callback.call();
       },
       icon: const Icon(Icons.delete),
-      tooltip: 'Delete selected item',
+      tooltip: 'Delete selected item(s)',
     );
   }
 
