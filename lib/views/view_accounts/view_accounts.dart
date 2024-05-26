@@ -9,6 +9,7 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
+import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/center_message.dart';
@@ -42,11 +43,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   void initState() {
     super.initState();
 
-    onAddItem = () {
-      // add a new Account
-      final newItem = Data().accounts.addNewAccount('New Bank Account');
-      updateListAndSelect(newItem.uniqueId);
-    };
+    onAddItem = () {};
 
     onAddTransaction = () {
       showImportTransactions(context);
@@ -137,6 +134,24 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   @override
   Widget buildHeader([final Widget? child]) {
     return super.buildHeader(renderToggles());
+  }
+
+  @override
+  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
+    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+
+    if (!forInfoPanelTransactions) {
+      list.insert(
+        0,
+        buildAddItemButton(() {
+          // add a new Account
+          final newItem = Data().accounts.addNewAccount('New Bank Account');
+          updateListAndSelect(newItem.uniqueId);
+        }, 'Add new account'),
+      );
+    }
+
+    return list;
   }
 
   @override

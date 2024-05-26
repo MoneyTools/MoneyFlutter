@@ -19,7 +19,7 @@ class InfoPanel extends StatelessWidget {
   final Function(int) currencySelectionChanged;
 
   // Actions
-  final List<Widget> actionButtons;
+  final List<Widget> Function(bool) actionButtons;
 
   /// Constructor
   const InfoPanel({

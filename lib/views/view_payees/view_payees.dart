@@ -5,10 +5,11 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
-import 'package:money/models/fields/fields.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_payees/merge_payees.dart';
@@ -29,23 +30,35 @@ class ViewPayees extends ViewForMoneyObjects {
 }
 
 class ViewPayeesState extends ViewForMoneyObjectsState {
-  ViewPayeesState() {
-    onMergeItem = (final BuildContext context, final MoneyObject selectedPayee) {
-      // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
-      final payee = (selectedPayee as Payee);
-      final transactions =
-          Data().transactions.iterableList(includeDeleted: true).where((t) => t.payee.value == payee.uniqueId);
+  @override
+  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
+    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
 
-      adaptiveScreenSizeDialog(
-        context: context,
-        title: 'Merge ${transactions.length} transactions',
-        showCloseButton: false,
-        child: MergeTransactionsDialog(
-          currentPayee: payee,
-          transactions: transactions.toList(),
+    /// Merge
+    final MoneyObject? moneyObject = getFirstSelectedItem();
+    if (moneyObject != null) {
+      list.add(
+        buildMergeButton(
+          () {
+            // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
+            final payee = (moneyObject as Payee);
+            final transactions =
+                Data().transactions.iterableList(includeDeleted: true).where((t) => t.payee.value == payee.uniqueId);
+
+            adaptiveScreenSizeDialog(
+              context: context,
+              title: 'Merge ${transactions.length} transactions',
+              showCloseButton: false,
+              child: MergeTransactionsDialog(
+                currentPayee: payee,
+                transactions: transactions.toList(),
+              ),
+            );
+          },
         ),
       );
-    };
+    }
+    return list;
   }
 
   @override

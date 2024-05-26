@@ -5,13 +5,18 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
+import 'package:money/widgets/message_box.dart';
 
 myShowDialogAndActionsForMoneyObject({
   required final BuildContext context,
   required final String title,
   required final MoneyObject moneyObject,
 }) {
-  myShowDialogAndActionsForMoneyObjects(context: context, title: title, moneyObjects: [moneyObject]);
+  myShowDialogAndActionsForMoneyObjects(
+    context: context,
+    title: title,
+    moneyObjects: [moneyObject],
+  );
 }
 
 myShowDialogAndActionsForMoneyObjects({
@@ -19,6 +24,11 @@ myShowDialogAndActionsForMoneyObjects({
   required final String title,
   required final List<MoneyObject> moneyObjects,
 }) {
+  if (moneyObjects.isEmpty) {
+    messageBox(context, 'No items to edit');
+    return;
+  }
+
   // Before we edit lets stash the current values of each objects
   for (final m in moneyObjects) {
     m.stashValueBeforeEditing();

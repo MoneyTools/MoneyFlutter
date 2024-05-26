@@ -15,6 +15,8 @@ class ViewHeader extends StatelessWidget {
   // Optional, used for multi-selection UX
   final ViewHeaderMultipleSelection? multipleSelection;
 
+  final List<Widget> Function(bool)? getActionButtonsForSelectedItems;
+
   final VoidCallback? onAddMoneyObject;
   final VoidCallback? onMergeMoneyObject;
   final VoidCallback? onEditMoneyObject;
@@ -34,6 +36,7 @@ class ViewHeader extends StatelessWidget {
     // optionals
     this.multipleSelection,
     this.onFilterChanged,
+    this.getActionButtonsForSelectedItems,
     this.onAddMoneyObject,
     this.onMergeMoneyObject,
     this.onEditMoneyObject,
@@ -87,52 +90,26 @@ class ViewHeader extends StatelessWidget {
 
     if (multipleSelection != null ||
         onAddMoneyObject != null ||
-        (selectedItems.value.isNotEmpty &&
-            (onEditMoneyObject != null || onMergeMoneyObject != null || onDeleteMoneyObject != null))) {
+        (selectedItems.value.isNotEmpty && getActionButtonsForSelectedItems != null)) {
+      final listOfActionButtons = getActionButtonsForSelectedItems!(false);
+
+      // Multiple-Selection
+      if (multipleSelection != null) {
+        listOfActionButtons.insert(
+          0,
+          MultipleSelectionToggle(
+            multipleSelection: multipleSelection,
+          ),
+        );
+      }
+
       widgets.add(
         IntrinsicWidth(
           child: SizedBox(
             height: 40,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                // Multiple-Selection
-                if (multipleSelection != null)
-                  MultipleSelectionToggle(
-                    multipleSelection: multipleSelection,
-                  ),
-
-                // Add
-                if (onAddMoneyObject != null)
-                  IconButton(
-                    icon: const Icon(Icons.add_circle),
-                    onPressed: onAddMoneyObject,
-                  ),
-
-                // Merge/Move
-                if (onMergeMoneyObject != null && selectedItems.value.isNotEmpty)
-                  IconButton(
-                    icon: const Icon(Icons.merge),
-                    onPressed: onMergeMoneyObject,
-                    tooltip: 'Merge/Move selected item(s)',
-                  ),
-
-                // Edit
-                if (onEditMoneyObject != null && selectedItems.value.isNotEmpty)
-                  IconButton(
-                    icon: const Icon(Icons.edit),
-                    onPressed: onEditMoneyObject,
-                    tooltip: 'Edit selected item(s)',
-                  ),
-
-                // Delete
-                if (onDeleteMoneyObject != null && selectedItems.value.isNotEmpty)
-                  IconButton(
-                    icon: const Icon(Icons.delete),
-                    onPressed: onDeleteMoneyObject,
-                    tooltip: 'Delete selected item(s)',
-                  ),
-              ],
+              children: listOfActionButtons,
             ),
           ),
         ),

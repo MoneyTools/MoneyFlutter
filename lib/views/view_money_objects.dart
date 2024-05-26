@@ -9,6 +9,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/views/adaptive_view/adaptive_list/column_filter_panel.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
@@ -16,10 +17,10 @@ import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_conte
 import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/details_panel/info_panel.dart';
-import 'package:money/widgets/details_panel/info_panel_header.dart';
 import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/widgets/message_box.dart';
 import 'package:money/widgets/widgets.dart';
 
 import '../models/fields/field_filter.dart';
@@ -64,7 +65,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   Timer? _deadlineTimer;
   Function? onAddTransaction;
 
-  ViewForMoneyObjectsState() {}
+  // ViewForMoneyObjectsState() {};
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<MoneyObject> getFieldsForTable() {
@@ -95,28 +96,54 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     setSelectedItem(_lastSelectedItemId);
   }
 
-  List<Widget> getActionsForSelectedItems() {
+  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     List<Widget> widgets = [];
-    // support Edit by default
-    // if not the desired UX, the derived class can set [onEdit] to null
-    onEditItems = () {
-      myShowDialogAndActionsForMoneyObjects(
-        context: context,
-        title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
-        moneyObjects: getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
-      );
-    };
 
-    // support Delete by default
-    // if not the desired UX, the derived class can set [onDelete] to null
-    onDeleteItems = () {
-      onUserRequestedToDelete(
-        context,
-        getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value),
-      );
-    };
+    /// Header of Info panel
+    if (forInfoPanelTransactions) {
+      if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions) {
+        /// Add Transactions
+        if (onAddTransaction != null) {
+          widgets.add(buildAddTransactionsButton(onAddTransaction!));
+        }
 
-    return [];
+        /// Copy
+        if (onCopyInfoPanelTransactions != null) {
+          widgets.add(buildCopyButton(onCopyInfoPanelTransactions!));
+        }
+      }
+    }
+
+    /// Main header
+    else {
+      /// only when there is one or more selection
+      if (_selectedItemsByUniqueId.value.isNotEmpty) {
+        ///  Edit
+        widgets.add(
+          buildEditButton(() {
+            myShowDialogAndActionsForMoneyObjects(
+              context: context,
+              title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
+              moneyObjects: getSelectedItemsFromSelectedList(_selectedItemsByUniqueId.value),
+            );
+          }),
+        );
+
+        /// Delete
+        widgets.add(
+          buildDeleteButton(
+            () {
+              onUserRequestedToDelete(
+                context,
+                getSelectedItemsFromSelectedList(_selectedItemsByUniqueId.value),
+              );
+            },
+          ),
+        );
+      }
+    }
+
+    return widgets;
   }
 
   @override
@@ -163,21 +190,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           },
 
           /// Actions
-          actionButtons: [
-            /// Add
-            if (onAddTransaction != null)
-              InfoPanelHeader.buildAddButton(
-                onAddTransaction!,
-              ),
-
-            const Spacer(),
-
-            /// Copy
-            if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions && onCopyInfoPanelTransactions != null)
-              InfoPanelHeader.buildCopyButton(
-                onCopyInfoPanelTransactions!,
-              ),
-          ],
+          actionButtons: getActionsForSelectedItems,
         ),
       ),
     );
@@ -233,11 +246,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       selectedItems: _selectedItemsByUniqueId,
       description: getDescription(),
       multipleSelection: multipleSelectionOptions,
+      getActionButtonsForSelectedItems: getActionsForSelectedItems,
       onAddMoneyObject: onAddItem,
       onMergeMoneyObject: onMergeItem == null
           ? null
           : () {
-              onMergeItem!(context, getSelectedItemFromSelectedList(_selectedItemsByUniqueId.value).first);
+              onMergeItem!(context, getSelectedItemsFromSelectedList(_selectedItemsByUniqueId.value).first);
             },
       onEditMoneyObject: onEditItems,
       onDeleteMoneyObject: onDeleteItems,
@@ -301,34 +315,37 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void onUserRequestedToDelete(final BuildContext context, final List<MoneyObject> moneyObjects) {
+    if (moneyObjects.isEmpty) {
+      messageBox(context, 'No items to delete');
+      return;
+    }
+
     final String nameSingular = getClassNameSingular();
     final String namePlural = getClassNamePlural();
 
-    if (moneyObjects.isNotEmpty) {
-      final String title = getSingularPluralText('Delete', moneyObjects.length, nameSingular, namePlural);
+    final String title = getSingularPluralText('Delete', moneyObjects.length, nameSingular, namePlural);
 
-      final String question = moneyObjects.length == 1
-          ? 'Are you sure you want to delete this $nameSingular?'
-          : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
+    final String question = moneyObjects.length == 1
+        ? 'Are you sure you want to delete this $nameSingular?'
+        : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
 
-      adaptiveScreenSizeDialog(
-        context: context,
-        title: title,
-        showCloseButton: false,
-        child: DeleteConfirmationDialog(
-          question: question,
-          content: moneyObjects.length == 1
-              ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
-              : Center(
-                  child: Text('${getIntAsText(moneyObjects.length)} $namePlural',
-                      style: getTextTheme(context).displaySmall),
-                ),
-          onConfirm: () {
-            Data().deleteItems(moneyObjects);
-          },
-        ),
-      );
-    }
+    adaptiveScreenSizeDialog(
+      context: context,
+      title: title,
+      showCloseButton: false,
+      child: DeleteConfirmationDialog(
+        question: question,
+        content: moneyObjects.length == 1
+            ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
+            : Center(
+                child:
+                    Text('${getIntAsText(moneyObjects.length)} $namePlural', style: getTextTheme(context).displaySmall),
+              ),
+        onConfirm: () {
+          Data().deleteItems(moneyObjects);
+        },
+      ),
+    );
   }
 
   void onFilterTextChanged(final String text) {
@@ -426,20 +443,26 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   MoneyObject? getFirstSelectedItem() {
-    return getFirstSelectedItemFromSelectedList(_selectedItemsByUniqueId.value);
+    if (_selectedItemsByUniqueId.value.isNotEmpty) {
+      final firstId = _selectedItemsByUniqueId.value.firstOrNull;
+      if (firstId != null) {
+        return list.firstWhereOrNull((moneyObject) => moneyObject.uniqueId == firstId);
+      }
+    }
+    return null;
   }
 
   MoneyObject? getFirstSelectedItemFromSelectedList(final List<int> selectedList) {
     return getMoneyObjectFromFirstSelectedId<MoneyObject>(selectedList, list);
   }
 
-  List<MoneyObject> getSelectedItemFromSelectedList(final List<int> selectedList) {
-    List<MoneyObject> moneyObjects = [];
-
-    for (int uniqueId in selectedList) {
-      moneyObjects.add(list.firstWhere((moneyObject) => moneyObject.uniqueId == uniqueId));
+  List<MoneyObject> getSelectedItemsFromSelectedList(final List<int> selectedList) {
+    if (selectedList.isEmpty) {
+      return [];
     }
-    return moneyObjects;
+
+    final Set<int> selectedIds = selectedList.toSet();
+    return list.where((moneyObject) => selectedIds.contains(moneyObject.uniqueId)).toList();
   }
 
   int? getUniqueIdOfFirstSelectedItem() {

@@ -17,7 +17,7 @@ class InfoPanelHeader extends StatelessWidget {
   final Function currentSelectionChanged;
 
   // Actions
-  final List<Widget> actionButtons;
+  final List<Widget> Function(bool) actionButtons;
 
   /// Constructor
   const InfoPanelHeader({
@@ -57,7 +57,7 @@ class InfoPanelHeader extends StatelessWidget {
                 _buildExpando(),
                 _buildViewSelections(constraints),
                 const Spacer(),
-                IntrinsicWidth(child: Row(children: actionButtons)),
+                IntrinsicWidth(child: Row(children: actionButtons(true))),
                 gapMedium(),
                 _buildCurrencySelections(constraints),
               ],
@@ -140,46 +140,6 @@ class InfoPanelHeader extends StatelessWidget {
       },
       icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less),
       tooltip: 'Expand/Collapse panel',
-    );
-  }
-
-  static Widget buildAddButton(final Function callback) {
-    return IconButton(
-      onPressed: () {
-        callback();
-      },
-      icon: const Icon(Icons.add_road),
-      tooltip: 'Add a new item',
-    );
-  }
-
-  static Widget buildEditButton(final Function callback) {
-    return IconButton(
-      onPressed: () {
-        callback.call();
-      },
-      icon: const Icon(Icons.edit),
-      tooltip: 'Edit selected item(s)',
-    );
-  }
-
-  static Widget buildDeleteButton(final Function callback) {
-    return IconButton(
-      onPressed: () {
-        callback.call();
-      },
-      icon: const Icon(Icons.delete),
-      tooltip: 'Delete selected item(s)',
-    );
-  }
-
-  static Widget buildCopyButton(final Function callback) {
-    return IconButton(
-      onPressed: () {
-        callback.call();
-      },
-      icon: const Icon(Icons.copy_all),
-      tooltip: 'Copy list to clipboard',
     );
   }
 }
