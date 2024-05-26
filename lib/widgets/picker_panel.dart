@@ -85,83 +85,88 @@ class _PickerPanelState extends State<PickerPanel> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        TextField(
-          decoration: const InputDecoration(
-            contentPadding: EdgeInsets.zero,
-            isDense: true,
-            prefixIcon: Icon(Icons.search),
-            labelText: 'Filter',
-            border: OutlineInputBorder(),
+    return SizedBox(
+      width: 200,
+      height: 500,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          TextField(
+            decoration: const InputDecoration(
+              contentPadding: EdgeInsets.zero,
+              isDense: true,
+              prefixIcon: Icon(Icons.search),
+              labelText: 'Filter',
+              border: OutlineInputBorder(),
+            ),
+            onChanged: (final String value) {
+              setState(() {
+                _filterByTextAnywhere = value;
+                applyFilter();
+              });
+            },
           ),
-          onChanged: (final String value) {
-            setState(() {
-              _filterByTextAnywhere = value;
-              applyFilter();
-            });
-          },
-        ),
-        gapLarge(),
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              ScrollConfiguration(
-                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                child: SingleChildScrollView(
-                  child: PickerLetters(
-                    options: uniqueLetters,
-                    selected: _filterStartWidth,
-                    onSelected: (String selected) {
-                      setState(() {
-                        _filterStartWidth = selected;
-                        applyFilter();
-                      });
+          gapLarge(),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                  child: SingleChildScrollView(
+                    child: PickerLetters(
+                      options: uniqueLetters,
+                      selected: _filterStartWidth,
+                      onSelected: (String selected) {
+                        setState(() {
+                          _filterStartWidth = selected;
+                          applyFilter();
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                gapMedium(),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: list.length,
+                    controller: _scrollController,
+                    itemExtent: widget.itemHeight,
+                    itemBuilder: (context, index) {
+                      String label = list[index];
+                      bool isSelected = label == widget.selectedItem;
+                      return GestureDetector(
+                        onTap: () {
+                          widget.onSelected(label);
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: widget.itemHeight,
+                          alignment: Alignment.centerLeft,
+                          decoration: BoxDecoration(
+                            color: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
+                            // show a bottom line if not the last item
+                            border: index == list.length - 1
+                                ? null
+                                : Border(
+                                    bottom: BorderSide(
+                                        color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1),
+                                  ),
+                          ),
+                          child: Text(label, style: const TextStyle(fontSize: 12)),
+                          // contentPadding: EdgeInsets.zero,
+                        ),
+                      );
                     },
                   ),
                 ),
-              ),
-              gapMedium(),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: list.length,
-                  controller: _scrollController,
-                  itemExtent: widget.itemHeight,
-                  itemBuilder: (context, index) {
-                    String label = list[index];
-                    bool isSelected = label == widget.selectedItem;
-                    return GestureDetector(
-                      onTap: () {
-                        widget.onSelected(label);
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        height: widget.itemHeight,
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          color: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
-                          // show a bottom line if not the last item
-                          border: index == list.length - 1
-                              ? null
-                              : Border(
-                                  bottom: BorderSide(
-                                      color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1),
-                                ),
-                        ),
-                        child: Text(label, style: const TextStyle(fontSize: 12)),
-                        // contentPadding: EdgeInsets.zero,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

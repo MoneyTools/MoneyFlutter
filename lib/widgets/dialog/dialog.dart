@@ -36,8 +36,9 @@ class MyAlertDialog extends StatelessWidget {
         constraints: const BoxConstraints(
           minHeight: 500,
           maxHeight: 700,
+          minWidth: 400,
+          maxWidth: 800,
         ),
-        width: 400,
         child: child,
       ),
       actions: actions,

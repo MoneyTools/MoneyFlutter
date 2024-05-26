@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/helpers/value_parser.dart';
+import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
 import 'package:money/widgets/columns_input.dart';
 import 'package:money/widgets/gaps.dart';
@@ -36,16 +36,16 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   @override
   void initState() {
+    super.initState();
     account = widget.account;
     textToParse = widget.inputText;
     convertAndNotify(context, textToParse);
-    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return SizedBox(
+      width: 600,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -55,18 +55,14 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
           Expanded(
             flex: 1,
-            child: SizedBox(
-              width: 400,
-              height: 400,
-              child: ColumnInput(
-                inputText: textToParse,
-                onChange: (String newTextInput) {
-                  setState(() {
-                    convertAndNotify(context, newTextInput);
-                    textToParse = newTextInput;
-                  });
-                },
-              ),
+            child: ColumnInput(
+              inputText: textToParse,
+              onChange: (String newTextInput) {
+                setState(() {
+                  convertAndNotify(context, newTextInput);
+                  textToParse = newTextInput;
+                });
+              },
             ),
           ),
 
@@ -83,7 +79,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               'Total: ${doubleToCurrency(sumOfValues())}',
               textAlign: TextAlign.right,
             ),
-          )
+          ),
+          const Divider(),
         ],
       ),
     );
@@ -91,7 +88,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   Widget _buildHeaderAndAccountPicker() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text('Import transaction to account', style: getTextTheme(context).bodyMedium),
         gapLarge(),

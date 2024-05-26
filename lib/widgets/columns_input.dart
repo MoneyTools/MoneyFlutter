@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/helpers/value_parser.dart';
+import 'package:money/widgets/gaps.dart';
 
 class ColumnInput extends StatefulWidget {
   final String inputText;
@@ -177,17 +178,14 @@ class _ColumnInputState extends State<ColumnInput> {
     return Column(
       children: [
         // ( 1 column | 3 columns )
-        SizedBox(
-          width: 400,
-          child: _buildColumnSelection(),
-        ),
+        _buildColumnSelection(),
+
+        gapLarge(),
 
         // Input text controls
         Expanded(
-            child: Padding(
-          padding: const EdgeInsets.all(8.0),
           child: _buildInputAsSingleOr3Columns(),
-        )),
+        ),
       ],
     );
   }
