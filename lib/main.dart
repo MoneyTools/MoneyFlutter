@@ -24,6 +24,7 @@ import 'package:money/views/view_categories/view_categories.dart';
 import 'package:money/views/view_investments/view_investments.dart';
 import 'package:money/views/view_loans/view_loans.dart';
 import 'package:money/views/view_payees/view_payees.dart';
+import 'package:money/views/view_policy.dart';
 import 'package:money/views/view_rentals/view_rentals.dart';
 import 'package:money/views/view_stocks/view_stocks.dart';
 import 'package:money/views/view_transactions/view_transactions.dart';
@@ -331,6 +332,9 @@ class MainView extends StatelessWidget {
 
       case ViewId.viewRentals:
         return const ViewRentals();
+
+      case ViewId.viewPolicy:
+        return const PolicyScreen();
 
       case ViewId.viewCashFlow:
       default:

@@ -40,6 +40,7 @@ enum ViewId {
   viewInvestments,
   viewStocks,
   viewRentals,
+  viewPolicy,
 }
 
 const List<Color> colorOptions = <Color>[

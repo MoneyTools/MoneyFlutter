@@ -1,5 +1,12 @@
 # Change Log
 
+## [version 1.8.12] 2024-05-26
+
+### Added
+
+- Privacy Policy
+- Licenses
+
 ## [version 1.8.11] 2024-05-24
 
 ### Added
