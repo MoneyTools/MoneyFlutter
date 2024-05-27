@@ -64,6 +64,6 @@ class ViewWidgetState extends State<ViewWidget> {
     // Persist users choice
     Settings().views[getClassNameSingular()] = <String, dynamic>{};
 
-    Settings().store();
+    Settings().preferrenceSave();
   }
 }

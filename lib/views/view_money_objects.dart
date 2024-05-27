@@ -79,14 +79,16 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     _fieldToDisplay = Fields<MoneyObject>();
     _fieldToDisplay.setDefinitions(all.definitions.where((element) => element.useAsColumn).toList());
 
-    final MyJson? viewSetting = Settings().views[getClassNameSingular()];
-    if (viewSetting != null) {
+    // restore last user choices for this view
+    final viewSetting = getViewChoices();
+    {
       _sortByFieldIndex = viewSetting.getInt(settingKeySortBy, 0);
       _sortAscending = viewSetting.getBool(settingKeySortAscending, true);
       _lastSelectedItemId = viewSetting.getInt(settingKeySelectedListItemId, -1);
       final int subViewIndex =
           viewSetting.getInt(settingKeySelectedDetailsPanelTab, InfoPanelSubViewEnum.details.index);
       _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
+      _filterByText = viewSetting.getString(settingKeyFilterText);
     }
 
     list = getList();
@@ -170,7 +172,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           onExpanded: (final bool isExpanded) {
             setState(() {
               Settings().isDetailsPanelExpanded = isExpanded;
-              Settings().store();
+              Settings().preferrenceSave();
             });
           },
           selectedItems: _selectedItemsByUniqueId,
@@ -255,6 +257,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             },
       onEditMoneyObject: onEditItems,
       onDeleteMoneyObject: onDeleteItems,
+      filterText: _filterByText,
       onFilterChanged: onFilterTextChanged,
       child: child,
     );
@@ -531,14 +534,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void saveLastUserChoicesOfView() {
     // Persist users choice
-    Settings().views[getClassNameSingular()] = <String, dynamic>{
-      settingKeySortBy: _sortByFieldIndex,
-      settingKeySortAscending: _sortAscending,
-      settingKeySelectedListItemId: getUniqueIdOfFirstSelectedItem(),
-      settingKeySelectedDetailsPanelTab: _selectedBottomTabId.index,
-    };
+    final viewPreference = getViewChoices();
+    viewPreference[settingKeySortBy] = _sortByFieldIndex;
+    viewPreference[settingKeySortAscending] = _sortAscending;
+    viewPreference[settingKeySelectedListItemId] = getUniqueIdOfFirstSelectedItem();
+    viewPreference[settingKeySelectedDetailsPanelTab] = _selectedBottomTabId.index;
+    viewPreference[settingKeyFilterText] = _filterByText;
 
-    Settings().store();
+    Settings().preferrenceSave();
   }
 
   /// Compile the list of single data value for a column/field definition

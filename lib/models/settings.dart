@@ -107,7 +107,7 @@ class Settings extends ChangeNotifier {
     final int cleanValue = (newScale * 100).round();
     if (isBetweenOrEqual(cleanValue, 40, 400)) {
       textScale = cleanValue / 100.0;
-      store();
+      preferrenceSave();
       notifyListeners();
       return true;
     }
@@ -135,7 +135,7 @@ class Settings extends ChangeNotifier {
 
   Settings._internal();
 
-  Future<bool> retrieve() async {
+  Future<bool> preferrenceLoad() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     colorSelected = intValueOrDefault(preferences.getInt(settingKeyTheme));
     textScale = doubleValueOrDefault(preferences.getDouble(settingKeyTextScale), defaultValueIfNull: 1.0);
@@ -158,7 +158,7 @@ class Settings extends ChangeNotifier {
     return true;
   }
 
-  void store() async {
+  void preferrenceSave() async {
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.setDouble(settingKeyTextScale, textScale);
     await preferences.setInt(settingKeyTheme, colorSelected);

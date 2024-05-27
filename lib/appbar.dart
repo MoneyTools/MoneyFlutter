@@ -63,7 +63,7 @@ class _MyAppBarState extends State<MyAppBar> {
           icon: Settings().useDarkMode ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: () {
             Settings().useDarkMode = !Settings().useDarkMode;
-            Settings().store();
+            Settings().preferrenceSave();
           },
           tooltip: 'Toggle brightness',
         ),
@@ -193,7 +193,7 @@ class _MyAppBarState extends State<MyAppBar> {
       default:
         Settings().colorSelected = value;
     }
-    Settings().store();
+    Settings().preferrenceSave();
   }
 
   Widget widgetMainTitle(

@@ -22,6 +22,7 @@ class ViewHeader extends StatelessWidget {
   final VoidCallback? onEditMoneyObject;
   final VoidCallback? onDeleteMoneyObject;
 
+  final String filterText;
   final void Function(String)? onFilterChanged;
 
   final Widget? child;
@@ -33,9 +34,12 @@ class ViewHeader extends StatelessWidget {
     required this.selectedItems,
     required this.description,
 
+    // filter text
+    this.filterText = '',
+    this.onFilterChanged,
+
     // optionals
     this.multipleSelection,
-    this.onFilterChanged,
     this.getActionButtonsForSelectedItems,
     this.onAddMoneyObject,
     this.onMergeMoneyObject,
@@ -126,6 +130,7 @@ class ViewHeader extends StatelessWidget {
           width: 200,
           child: FilterInput(
               hintText: 'Filter',
+              initialValue: filterText,
               onChanged: (final String text) {
                 onFilterChanged!(text);
               }),

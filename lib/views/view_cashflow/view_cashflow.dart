@@ -123,7 +123,7 @@ class ViewCashFlowState extends ViewWidgetState {
                 selectedNumber: Settings().cashflowRecurringOccurrences,
                 onChanged: (int value) {
                   Settings().cashflowRecurringOccurrences = value;
-                  Settings().store();
+                  Settings().preferrenceSave();
                 },
               ),
           ],
@@ -171,7 +171,7 @@ class ViewCashFlowState extends ViewWidgetState {
       onSelectionChanged: (final Set<CashflowViewAs> newSelection) {
         setState(() {
           Settings().cashflowViewAs = newSelection.first;
-          Settings().store();
+          Settings().preferrenceSave();
         });
       },
     );

@@ -75,6 +75,7 @@ const String settingKeyTextScale = 'textScale';
 const String settingKeyViewsMap = 'views';
 const String settingKeySortBy = 'sortBy';
 const String settingKeySortAscending = 'sortAscending';
+const String settingKeyFilterText = 'filterText';
 const String settingKeySelectedListItemId = 'selectedItemId';
 const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
 const String settingKeyStockApiKey = 'stockServiceApiKey';

@@ -26,7 +26,7 @@ class FileManager {
     if (dataSource.isEmpty) {
       dataFileLastUpdateDateTime = null;
     }
-    Settings().store();
+    Settings().preferrenceSave();
   }
 
   Future<String> generateNextFolderToSaveTo() async {

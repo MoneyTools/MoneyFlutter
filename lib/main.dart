@@ -47,7 +47,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    settings.retrieve();
+    settings.preferrenceLoad();
     return ChangeNotifierProvider.value(
       value: settings,
       child: const MainView(),
@@ -185,7 +185,7 @@ class MainView extends StatelessWidget {
     Settings().rebuild();
 
     settings.fileManager.fileName = Constants.newDataFile;
-    settings.store();
+    settings.preferrenceSave();
 
     Data().accounts.addNewAccount('New Bank Account');
     settings.selectedView = ViewId.viewAccounts;
@@ -237,7 +237,7 @@ class MainView extends StatelessWidget {
             settings.fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
           }
           if (settings.fileManager.fullPathToLastOpenedFile.isNotEmpty) {
-            settings.store();
+            settings.preferrenceSave();
             loadData();
           }
         }
@@ -249,14 +249,14 @@ class MainView extends StatelessWidget {
 
   void onOpenDemoData() async {
     settings.fileManager.fullPathToLastOpenedFile = '';
-    settings.store();
+    settings.preferrenceSave();
     Data().loadFromDemoData();
     Settings().rebuild();
   }
 
   void onFileClose() async {
     settings.fileManager.fullPathToLastOpenedFile = '';
-    settings.store();
+    settings.preferrenceSave();
     data.close();
     Settings().rebuild();
   }
