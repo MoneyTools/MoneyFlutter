@@ -15,6 +15,7 @@
         "DIRECTDEBIT",
         "DIRECTDEP",
         "DTPOSTED",
+        "FEFF",
         "fitid",
         "fullscreen",
         "graphviz",
@@ -40,6 +41,7 @@
         "sqflite",
         "SRVCHG",
         "STMTTRN",
+        "sublist",
         "tinyint",
         "TRNAMT",
         "TRNTYPE",
@@ -47,6 +49,7 @@
         "Undelete",
         "uniqueidentifier",
         "webframeworks",
+        "writeln",
         "Xfer"
     ],
     "editor.wordWrap": "off",

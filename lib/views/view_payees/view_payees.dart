@@ -77,6 +77,11 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().payees.getLastViewChoices();
+  }
+
+  @override
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
     return Data()
         .payees

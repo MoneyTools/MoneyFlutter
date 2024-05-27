@@ -36,6 +36,11 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().investments.getLastViewChoices();
+  }
+
+  @override
   List<Investment> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final list = Data()
         .investments

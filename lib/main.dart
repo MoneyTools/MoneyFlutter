@@ -404,12 +404,10 @@ class MainView extends StatelessWidget {
         () async {
           Clipboard.getData('text/plain').then((final ClipboardData? value) {
             if (value != null) {
-              if (Settings().mostRecentlySelectedAccount != null) {
-                showImportTransactions(
-                  context,
-                  value.text ?? '',
-                );
-              }
+              showImportTransactions(
+                context,
+                value.text ?? '',
+              );
             }
           });
         },

@@ -99,7 +99,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     List<Widget> widgets = [];
 
-    /// Header of Info panel
+    /// Info panel header
     if (forInfoPanelTransactions) {
       if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions) {
         /// Add Transactions
@@ -162,6 +162,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         onColumnHeaderLongPress: onCustomizeColumn,
         onSelectionChanged: () {
           _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
+          saveLastUserChoicesOfView();
         },
         onItemTap: onItemTap,
         flexBottom: Settings().isDetailsPanelExpanded ? 1 : 0,
@@ -272,6 +273,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return 'Default list of items';
   }
 
+  /// must override this in each view
+  MyJson getViewChoices() {
+    return {};
+  }
+
   String getCurrency() {
     // default currency for this view
     return Constants.defaultCurrency;
@@ -283,7 +289,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void clearSelection() {
     _selectedItemsByUniqueId.value = [];
-    saveLastUserActionOnThisView();
+    saveLastUserChoicesOfView();
   }
 
   void onSort() {
@@ -376,7 +382,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   void updateBottomContent(final InfoPanelSubViewEnum tab) {
     setState(() {
       _selectedBottomTabId = tab;
-      saveLastUserActionOnThisView();
+      saveLastUserChoicesOfView();
     });
   }
 
@@ -427,7 +433,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       }
 
       // call this to persist the last selected item index
-      saveLastUserActionOnThisView();
+      saveLastUserChoicesOfView();
     });
   }
 
@@ -520,11 +526,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       }
 
       // Persist users choice
-      saveLastUserActionOnThisView();
+      saveLastUserChoicesOfView();
     });
   }
 
-  void saveLastUserActionOnThisView() {
+  void saveLastUserChoicesOfView() {
     // Persist users choice
     Settings().views[getClassNameSingular()] = <String, dynamic>{
       settingKeySortBy: _sortByFieldIndex,

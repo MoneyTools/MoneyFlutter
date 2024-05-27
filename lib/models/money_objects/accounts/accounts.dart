@@ -9,7 +9,6 @@ import 'package:money/models/money_objects/investments/cost_basis.dart';
 import 'package:money/models/money_objects/investments/security_purchase.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 
 class Accounts extends MoneyObjects<Account> {
@@ -218,10 +217,23 @@ class Accounts extends MoneyObjects<Account> {
     list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
     return list;
   }
-}
 
-Account getLastUsedOrFirstAccount() {
-  Account? account = Settings().mostRecentlySelectedAccount;
-  account ??= Data().accounts.firstItem();
-  return account!;
+  Account getMostRecentlySelectedAccount() {
+    final MyJson lastViewOfAccounts = getLastViewChoices();
+
+    final lastSelectionId = lastViewOfAccounts[settingKeySelectedListItemId];
+    if (lastSelectionId != null) {
+      final Account? accountExist = get(lastSelectionId);
+      if (accountExist != null) {
+        return accountExist;
+      }
+    }
+
+    return firstItem()!;
+  }
+
+  void setMostRecentUsedAccount(Account account) {
+    final MyJson lastViewOfAccounts = getLastViewChoices();
+    lastViewOfAccounts[settingKeySelectedListItemId] = account.id;
+  }
 }

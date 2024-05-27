@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/widgets/box.dart';
@@ -120,8 +119,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
                   fireNotification: false,
                 );
 
-                Data().recalculateBalances();
-                Settings().rebuild();
+                Data().updateAll();
 
                 Navigator.pop(context);
               }

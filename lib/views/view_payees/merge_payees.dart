@@ -3,7 +3,6 @@ import 'package:money/helpers/accumulator.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/payees/payees.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_payees/picker_payee.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
@@ -126,9 +125,6 @@ void mutateTransactionsToPayee(final List<Transaction> transactions, final int t
       fireNotification: false,
     );
   }
-  Data().recalculateBalances();
-
   Payees.removePayeesThatHaveNoTransactions(fromPayeeIds.toList());
-
-  Settings().rebuild();
+  Data().updateAll();
 }

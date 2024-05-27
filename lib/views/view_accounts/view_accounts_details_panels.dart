@@ -54,7 +54,6 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    lastSelectedAccount = account;
     int sortFieldIndex = 0;
     bool sortAscending = true;
     int selectedItemIndex = 0;
@@ -98,12 +97,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   }
 
   List<Transaction> getTransactionForLastSelectedAccount() {
-    if (lastSelectedAccount == null) {
-      return [];
-    }
+    final lastAccount = Data().accounts.getMostRecentlySelectedAccount();
 
     return getTransactions(filter: (Transaction transaction) {
-      return filterByAccountId(transaction, lastSelectedAccount!.uniqueId);
+      return filterByAccountId(transaction, lastAccount.uniqueId);
     });
   }
 }

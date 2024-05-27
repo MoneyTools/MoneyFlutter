@@ -47,10 +47,10 @@ class Payees extends MoneyObjects<Payee> {
 
     // if not found add new payee
     if (payee == null) {
-      payee = Payee()
-        ..id.value = -1
-        ..name.value = name;
-      Data().payees.appendNewMoneyObject(payee);
+      payee = Payee();
+      payee.id.value = -1;
+      payee.name.value = name;
+      Data().payees.appendNewMoneyObject(payee, fireNotification: fireNotification);
     }
     return payee;
   }

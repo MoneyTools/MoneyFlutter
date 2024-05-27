@@ -111,6 +111,11 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().categories.getLastViewChoices();
+  }
+
+  @override
   Widget buildHeader([final Widget? child]) {
     return super.buildHeader(renderToggles());
   }

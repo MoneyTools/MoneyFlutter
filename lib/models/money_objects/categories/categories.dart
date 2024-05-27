@@ -2,7 +2,6 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 
 class Categories extends MoneyObjects<Category> {
@@ -123,11 +122,12 @@ class Categories extends MoneyObjects<Category> {
       );
 
       appendNewMoneyObject(category);
+    } else {
+      if (category.isDeleted) {
+        category.mutation = MutationType.none;
+      }
     }
-    // TODO
-    // else if (result.IsDeleted) {
-    //   result.Undelete();
-    // }
+
     return category;
   }
 
@@ -363,7 +363,6 @@ class Categories extends MoneyObjects<Category> {
       }
     }
 
-    Data().recalculateBalances();
-    Settings().rebuild();
+    Data().updateAll();
   }
 }

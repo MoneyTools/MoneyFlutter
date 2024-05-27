@@ -35,6 +35,11 @@ class ViewLoansState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().loanPayments.getLastViewChoices();
+  }
+
+  @override
   List<LoanPayment> getList({bool includeDeleted = false, bool applyFilter = true}) {
     return Data().loanPayments.iterableList(includeDeleted: includeDeleted).toList();
   }

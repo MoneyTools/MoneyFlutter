@@ -42,6 +42,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().securities.getLastViewChoices();
+  }
+
+  @override
   Fields<Security> getFieldsForTable() {
     return Security.fields;
   }

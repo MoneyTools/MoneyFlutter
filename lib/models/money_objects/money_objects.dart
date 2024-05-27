@@ -23,6 +23,11 @@ class MoneyObjects<T> {
 
   String collectionName = '';
 
+  String getTypeName() {
+    Type t = T;
+    return t.toString().split('.').last;
+  }
+
   final List<MoneyObject> _list = <MoneyObject>[];
   final Map<num, MoneyObject> _map = <num, MoneyObject>{};
 
@@ -327,6 +332,10 @@ class MoneyObjects<T> {
   /// Remove/tag a Transaction instance from the list in memory
   void deleteItem(final MoneyObject itemToDelete) {
     Data().notifyMutationChanged(mutation: MutationType.deleted, moneyObject: itemToDelete);
+  }
+
+  MyJson getLastViewChoices() {
+    return Settings().getLastViewChoices(getTypeName());
   }
 }
 

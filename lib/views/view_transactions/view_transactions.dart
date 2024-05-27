@@ -73,6 +73,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().transactions.getLastViewChoices();
+  }
+
+  @override
   Fields<Transaction> getFieldsForTable() {
     return Transaction.fields;
   }

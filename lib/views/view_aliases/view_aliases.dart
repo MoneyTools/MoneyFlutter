@@ -32,6 +32,11 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().aliases.getLastViewChoices();
+  }
+
+  @override
   Fields<Alias> getFieldsForTable() {
     return Alias.getFields();
   }

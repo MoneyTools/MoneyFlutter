@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
@@ -123,9 +122,9 @@ class Settings extends ChangeNotifier {
   //--------------------------------------------------------
   Map<String, MyJson> views = <String, MyJson>{};
 
-  MyJson? getLastViewSettings(final String viewOfModel) {
+  MyJson getLastViewChoices(final String viewOfModel) {
     final MyJson? viewSetting = views[viewOfModel];
-    return viewSetting;
+    return viewSetting ?? {};
   }
 
   static final Settings _singleton = Settings._internal();
@@ -153,7 +152,7 @@ class Settings extends ChangeNotifier {
     isDetailsPanelExpanded = preferences.getBool(settingKeyDetailsPanelExpanded) == true;
     fileManager.fullPathToLastOpenedFile = preferences.getString(settingKeyLastLoadedPathToDatabase) ?? '';
 
-    views = loadMapFromPrefs(preferences, settingKeyViewsMap);
+    views = loadMapFromPreferences(preferences, settingKeyViewsMap);
 
     isPreferenceLoaded = true;
     return true;
@@ -170,7 +169,7 @@ class Settings extends ChangeNotifier {
     await preferences.setBool(settingKeyRentalsSupport, rentals);
     await preferences.setString(settingKeyStockApiKey, apiKeyForStocks);
 
-    storeMapToPrefs(preferences, settingKeyViewsMap, views);
+    storeMapToPreferences(preferences, settingKeyViewsMap, views);
 
     if (fileManager.fullPathToLastOpenedFile.isEmpty) {
       await preferences.remove(settingKeyLastLoadedPathToDatabase);
@@ -202,12 +201,12 @@ class Settings extends ChangeNotifier {
     return themeData;
   }
 
-  Map<String, MyJson> loadMapFromPrefs(
-    final SharedPreferences prefs,
+  Map<String, MyJson> loadMapFromPreferences(
+    final SharedPreferences preferences,
     final String key,
   ) {
     try {
-      final String? serializedMap = prefs.getString(key);
+      final String? serializedMap = preferences.getString(key);
       if (serializedMap != null) {
         // first deserialize
         final MyJson parsedMap = json.decode(serializedMap) as MyJson;
@@ -225,27 +224,25 @@ class Settings extends ChangeNotifier {
     return <String, MyJson>{};
   }
 
-  void storeMapToPrefs(
-    final SharedPreferences prefs,
+  void storeMapToPreferences(
+    final SharedPreferences preferences,
     final String key,
     final Map<String, MyJson> mapOfJson,
   ) {
-    prefs.setString(key, json.encode(mapOfJson));
+    preferences.setString(key, json.encode(mapOfJson));
   }
-
-  Account? mostRecentlySelectedAccount;
 }
 
 Future<void> saveBoolArray(final String key, List<bool> boolArray) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
+  SharedPreferences preferences = await SharedPreferences.getInstance();
   List<String> boolStrings = boolArray.map((boolValue) => boolValue.toString()).toList();
   String encodedArray = json.encode(boolStrings);
-  await prefs.setString(key, encodedArray);
+  await preferences.setString(key, encodedArray);
 }
 
 Future<List<bool>> getBoolArray(final String key) async {
-  SharedPreferences prefs = await SharedPreferences.getInstance();
-  String? encodedArray = prefs.getString(key);
+  SharedPreferences preferences = await SharedPreferences.getInstance();
+  String? encodedArray = preferences.getString(key);
   if (encodedArray != null) {
     List<String> boolStrings = json.decode(encodedArray).cast<String>();
     List<bool> boolArray = boolStrings.map((boolString) => boolString == 'true').toList();

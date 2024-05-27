@@ -43,9 +43,9 @@ class Aliases extends MoneyObjects<Alias> {
     return aliasFound.payeeInstance;
   }
 
-  Payee? findOrCreateNewPayee(final String text) {
+  Payee? findOrCreateNewPayee(final String text, {bool fireNotification = true}) {
     Payee? payee = findByMatch(text);
-    payee ??= Data().payees.findOrAddPayee(text);
+    payee ??= Data().payees.findOrAddPayee(text, fireNotification: fireNotification);
     return payee;
   }
 

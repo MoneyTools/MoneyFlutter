@@ -41,6 +41,11 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Settings().views['Transfer'] ?? {};
+  }
+
+  @override
   Fields<Transfer> getFieldsForTable() {
     return Transfer.fields;
   }

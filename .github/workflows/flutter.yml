@@ -18,6 +18,9 @@ jobs:
         with:
           flutter-version: '3.22.1'
 
+      - name: Disable CLI animations
+        run: flutter config --no-cli-animations
+        
       - name: Get dependencies
         run: flutter pub get
 

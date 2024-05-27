@@ -33,7 +33,6 @@ class ViewAccounts extends ViewForMoneyObjects {
 
 class ViewAccountsState extends ViewForMoneyObjectsState {
   final List<Widget> pivots = <Widget>[];
-  Account? lastSelectedAccount;
 
   ViewAccountsState() {
     onCopyInfoPanelTransactions = _onCopyInfoPanelTransactions;
@@ -107,6 +106,11 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  MyJson getViewChoices() {
+    return Data().accounts.getLastViewChoices();
+  }
+
+  @override
   Fields<Account> getFieldsForTable() {
     return Account.fields;
   }
@@ -166,15 +170,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     } else {
       return list.toList();
     }
-  }
-
-  @override
-  void setSelectedItem(final int uniqueId) {
-    final Account? account = getMoneyObjectFromFirstSelectedId<Account>(<int>[uniqueId], list);
-    if (account != null && account.id.value > -1) {
-      Settings().mostRecentlySelectedAccount = account;
-    }
-    super.setSelectedItem(uniqueId);
   }
 
   @override

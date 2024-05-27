@@ -43,6 +43,11 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     return 'Properties to rent.';
   }
 
+  @override
+  MyJson getViewChoices() {
+    return Data().rentBuildings.getLastViewChoices();
+  }
+
   String getUnitsAsString(final List<RentUnit> listOfUnits) {
     final List<String> listAsText = <String>[];
     for (RentUnit unit in listOfUnits) {
