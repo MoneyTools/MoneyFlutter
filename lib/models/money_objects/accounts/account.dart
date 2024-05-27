@@ -35,6 +35,7 @@ class Account extends MoneyObject {
         tmp.reconcileWarning,
         tmp.lastSync,
         tmp.syncGuid,
+        tmp.updatedOn,
         tmp.flags,
         tmp.lastBalance,
         tmp.categoryIdForPrincipal,
@@ -51,6 +52,7 @@ class Account extends MoneyObject {
 
   Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
   Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
+  DateTime? mostRecentTransaction;
 
   @override
   int get uniqueId => id.value;
@@ -207,7 +209,7 @@ class Account extends MoneyObject {
     importance: 90,
     serializeName: 'LastSync',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as Account).lastSync.value),
+    valueFromInstance: (final MoneyObject instance) => (instance as Account).lastSync.value,
     valueForSerialization: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as Account).lastSync.value),
   );
 
@@ -313,6 +315,18 @@ class Account extends MoneyObject {
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Account).isOpen = value as bool;
       Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: instance);
+    },
+  );
+
+  FieldDate updatedOn = FieldDate(
+    importance: 90,
+    name: 'Updated',
+    columnWidth: ColumnWidth.tiny,
+    valueFromInstance: (final MoneyObject instance) {
+      if ((instance as Account).lastSync.value == null) {
+        return instance.mostRecentTransaction;
+      }
+      return instance.lastSync.value;
     },
   );
 
