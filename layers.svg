@@ -566,8 +566,8 @@ shared_preferences</title>
 1 /direct/collection
 2 /direct/path
 3 /transitive/ffi
-4 /transitive/js
-5 /transitive/meta</title>
+4 /transitive/meta
+5 /transitive/web</title>
     </g>
     <g>
       <circle cx="1220" cy="205" r="10" fill="blue"/>
@@ -644,7 +644,7 @@ uuid</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.8.7</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.8.13</text>
   </g>
   <g id='Labels_clipboard'>
     <text class="nodeName" x="750" y="375" font-size="120%">clipboard</text>
@@ -660,7 +660,7 @@ uuid</title>
   </g>
   <g id='Labels_fl_chart'>
     <text class="nodeName" x="3750" y="225" font-size="120%">fl_chart</text>
-    <text class="nodeName" x="3750" y="245" font-size="80%">0.67.0</text>
+    <text class="nodeName" x="3750" y="245" font-size="80%">0.68.0</text>
   </g>
   <g id='Labels_http'>
     <text class="nodeName" x="1950" y="225" font-size="120%">http</text>
@@ -680,7 +680,7 @@ uuid</title>
   </g>
   <g id='Labels_sqlite3'>
     <text class="nodeName" x="1350" y="225" font-size="120%">sqlite3</text>
-    <text class="nodeName" x="1350" y="245" font-size="80%">2.4.2</text>
+    <text class="nodeName" x="1350" y="245" font-size="80%">2.4.3</text>
   </g>
   <g id='Labels_url_launcher'>
     <text class="nodeName" x="450" y="225" font-size="120%">url_launcher</text>

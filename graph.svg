@@ -1359,13 +1359,13 @@
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="7649.9,-391.36 7658.99,-385.93 7648.49,-384.5 7649.9,-391.36"/>
 </g>
 <!-- /lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart -->
-<g id="edge133" class="edge">
+<g id="edge132" class="edge">
 <title>/lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/accounts/account.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6966.77,-357.84C6967.32,-345.73 6968.06,-329.21 6968.69,-315.06"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="6972.18,-315.52 6969.13,-305.38 6965.18,-315.21 6972.18,-315.52"/>
 </g>
 <!-- /lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/accounts/account_types_enum.dart -->
-<g id="edge132" class="edge">
+<g id="edge133" class="edge">
 <title>/lib/models/money_objects/accounts/accounts.dart&#45;&gt;/lib/models/money_objects/accounts/account_types_enum.dart</title>
 <path fill="none" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" d="M6927.56,-369.67C6864.81,-358.67 6742.03,-327.01 6689,-243 6667.41,-208.8 6665.92,-185.21 6689,-152 6689.88,-150.73 6690.82,-149.52 6691.82,-148.36"/>
 <polygon fill="#aabbaa" fill-opacity="0.533333" stroke="#aabbaa" stroke-width="1.3" stroke-opacity="0.533333" points="6693.99,-151.12 6699.01,-141.79 6689.27,-145.96 6693.99,-151.12"/>
@@ -6110,8 +6110,8 @@
 <text text-anchor="start" x="17713.25" y="-1079.35" font-family="Arial" font-size="15.00"> ccd: 12868 </text>
 <text text-anchor="start" x="17713.25" y="-1061.35" font-family="Arial" font-size="15.00"> acd: 67.02 </text>
 <text text-anchor="start" x="17713.25" y="-1043.35" font-family="Arial" font-size="15.00"> nccd: 10.11 </text>
-<text text-anchor="start" x="17713.25" y="-1025.35" font-family="Arial" font-size="15.00"> totalSloc: 19099 </text>
-<text text-anchor="start" x="17713.25" y="-1007.35" font-family="Arial" font-size="15.00"> avgSloc: 99.47 </text>
+<text text-anchor="start" x="17713.25" y="-1025.35" font-family="Arial" font-size="15.00"> totalSloc: 19118 </text>
+<text text-anchor="start" x="17713.25" y="-1007.35" font-family="Arial" font-size="15.00"> avgSloc: 99.57 </text>
 </g>
 </g>
 </svg>

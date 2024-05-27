@@ -3,8 +3,8 @@ import 'dart:math';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
+import 'package:money/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/models/money_objects/investments/cost_basis.dart';
 import 'package:money/models/money_objects/investments/security_purchase.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -108,6 +108,14 @@ class Accounts extends MoneyObjects<Account> {
         final double currentMaxBalanceValue =
             account.maxBalancePerYears[yearOfTheTransaction] ?? IntValues.minSigned(32).toDouble();
         account.maxBalancePerYears[yearOfTheTransaction] = max(currentMaxBalanceValue, account.balance);
+
+        // keep track of the most recent record transaction for the account
+        if (t.dateTime.value != null) {
+          if (account.mostRecentTransaction == null ||
+              account.mostRecentTransaction!.compareTo(t.dateTime.value!) < 0) {
+            account.mostRecentTransaction = t.dateTime.value;
+          }
+        }
       }
     }
 
