@@ -12,7 +12,6 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/views/adaptive_view/adaptive_list/column_filter_panel.dart';
-import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
@@ -540,13 +539,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     };
 
     Settings().store();
-  }
-
-  SortIndicator getSortIndicated(final int columnNumber) {
-    if (columnNumber == _sortByFieldIndex) {
-      return _sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
-    }
-    return SortIndicator.none;
   }
 
   /// Compile the list of single data value for a column/field definition

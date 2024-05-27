@@ -71,13 +71,23 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           // Results
           Expanded(
             flex: 2,
-            child: ImportTransactionsList(values: values),
+            child: ImportTransactionsList(
+              values: values,
+            ),
           ),
+
+          const Divider(),
+
+          // sumarry
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(
-              'Total: ${doubleToCurrency(sumOfValues())}',
-              textAlign: TextAlign.right,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('${getIntAsText(values.length)} entries'),
+                Text(ValuesQuality.getDateRange(values).toStringDays()),
+                Text('Total: ${doubleToCurrency(sumOfValues())}', textAlign: TextAlign.right),
+              ],
             ),
           ),
           const Divider(),

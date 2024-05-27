@@ -121,13 +121,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       }
     }
   }
-
-  SortIndicator getSortIndicated(final int columnNumber) {
-    if (columnNumber == sortBy) {
-      return sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
-    }
-    return SortIndicator.none;
-  }
 }
 
 List<Transaction> getTransactions({bool Function(Transaction)? filter}) {

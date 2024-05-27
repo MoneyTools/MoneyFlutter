@@ -41,6 +41,10 @@ class DateRange {
   }
 
   int get durationInDays {
+    if (max == null || min == null) {
+      return 0;
+    }
+
     // Calculate the difference between the two dates
     final Duration difference = max!.difference(min!);
 
@@ -75,6 +79,10 @@ class DateRange {
 
   String toStringYears() {
     return '${yearToString(min)} ($durationInYearsText) ${yearToString(max)}';
+  }
+
+  String toStringDays() {
+    return '${dateToString(min)} ($durationInDays days) ${dateToString(max)}';
   }
 
   String get durationInYearsText {

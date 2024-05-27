@@ -76,17 +76,17 @@ DateTime? attemptToGetDateFromText(final String text) {
   // Define a list of date formats to try
   List<String> dateFormats = [
     'yyyy-MM-dd', // ISO8601
-    'MM/dd/yyyy', // USA
-    'dd/MM/yyyy', // Europe
-    'dd/MM/yy', // Europe
-    'dd-MM-yy', // Europe
+    'MM/dd/yyyy', // USA format 4 digit year
+    'MM/dd/yy', // USA format 2 digit year
+    'dd/MM/yyyy', // European format with full year
+    'dd/MM/yy', // European format 2 digit year
     // Add more formats as needed...
   ];
 
   DateTime? parsedDate;
   for (String format in dateFormats) {
     parsedDate = DateFormat(format).tryParse(text);
-    if (parsedDate != null && parsedDate.year > 1990) {
+    if (parsedDate != null && parsedDate.year >= 1900 && parsedDate.year <= 2099) {
       break; // Stop parsing if a valid date is found
     }
   }

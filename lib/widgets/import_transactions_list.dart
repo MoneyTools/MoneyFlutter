@@ -1,60 +1,98 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/widgets/column_header_button.dart';
 import 'package:money/widgets/semantic_text.dart';
 
-class ImportTransactionsList extends StatelessWidget {
+class ImportTransactionsList extends StatefulWidget {
   final List<ValuesQuality> values;
 
   const ImportTransactionsList({super.key, required this.values});
 
   @override
+  State<ImportTransactionsList> createState() => _ImportTransactionsListState();
+}
+
+class _ImportTransactionsListState extends State<ImportTransactionsList> {
+  int _sortBy = 0; // 0=Date, 1=Memo, 2=Amount
+  bool _sortAscending = false;
+
+  @override
   Widget build(BuildContext context) {
-    if (values.isEmpty) {
+    if (widget.values.isEmpty) {
       return buildWarning(context, 'No transactions');
     }
+    ValuesQuality.sort(widget.values, _sortBy, _sortAscending);
+
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text('Date', textAlign: TextAlign.center),
-              Text('Description/Payee', textAlign: TextAlign.center),
-              Text('Amount', textAlign: TextAlign.center)
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            buildColumnHeaderButton(
+              context,
+              'Date',
+              TextAlign.left,
+              1,
+              getSortIndicator(_sortBy, 0, _sortAscending),
+              () => updateSortChoice(0),
+              null,
+            ),
+            buildColumnHeaderButton(
+              context,
+              'Description/Payee',
+              TextAlign.left,
+              2,
+              getSortIndicator(_sortBy, 1, _sortAscending),
+              () => updateSortChoice(1),
+              null,
+            ),
+            buildColumnHeaderButton(
+              context,
+              'Amount',
+              TextAlign.right,
+              1,
+              getSortIndicator(_sortBy, 2, _sortAscending),
+              () => updateSortChoice(2),
+              null,
+            ),
+          ],
         ),
         Expanded(
           child: ListView.builder(
-            itemCount: values.length,
+            itemCount: widget.values.length,
             itemBuilder: (context, index) {
-              return Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                        SizedBox(width: 100, child: values[index].date.valueAsDateWidget(context)),
-                        // Date
-                        Expanded(
-                          child: _buildDescriptionOrPayee(context, values[index].description),
-                        ),
-                        // Description
-                        SizedBox(width: 100, child: values[index].amount.valueAsAmountWidget(context)),
-                        // Amount
-                      ]),
-                    ],
-                  ),
-                ),
+              return Column(
+                children: [
+                  const Divider(),
+                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    // Date
+                    Expanded(flex: 1, child: widget.values[index].date.valueAsDateWidget(context)),
+                    // Description
+                    Expanded(
+                      flex: 2,
+                      child: _buildDescriptionOrPayee(context, widget.values[index].description),
+                    ),
+                    // Amount
+                    Expanded(flex: 1, child: widget.values[index].amount.valueAsAmountWidget(context)),
+                  ]),
+                ],
               );
             },
           ),
         ),
       ],
     );
+  }
+
+  void updateSortChoice(final int sortBy) {
+    setState(() {
+      if (sortBy == _sortBy) {
+        _sortAscending = !_sortAscending;
+      } else {
+        _sortBy = sortBy;
+      }
+    });
   }
 
   Widget _buildDescriptionOrPayee(BuildContext context, ValueQuality valueQuality) {

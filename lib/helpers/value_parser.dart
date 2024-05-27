@@ -7,6 +7,7 @@ import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/widgets/semantic_text.dart';
 
 class ValuesParser {
@@ -196,6 +197,28 @@ class ValuesQuality {
   factory ValuesQuality.empty() {
     return ValuesQuality(
         date: const ValueQuality(''), description: const ValueQuality(''), amount: const ValueQuality(''));
+  }
+
+  static DateRange getDateRange(final List<ValuesQuality> list) {
+    DateRange range = DateRange();
+    for (final v in list) {
+      range.inflate(v.date.asDate());
+    }
+    return range;
+  }
+
+  static void sort(final List<ValuesQuality> list, final int sortBy, final bool ascending) {
+    list.sort((a, b) {
+      switch (sortBy) {
+        case 0:
+          return sortByDate(a.date.asDate(), b.date.asDate(), ascending);
+        case 1:
+          return sortByString(a.description.asString(), b.description.asString(), ascending);
+        case 2:
+          return sortByValue(a.amount.asAmount(), b.amount.asAmount(), ascending);
+      }
+      return 0;
+    });
   }
 }
 

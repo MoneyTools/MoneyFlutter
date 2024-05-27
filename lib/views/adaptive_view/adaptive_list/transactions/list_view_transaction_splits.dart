@@ -75,13 +75,6 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
     //   );
     // }
   }
-
-  SortIndicator getSortIndicated(final int columnNumber) {
-    if (columnNumber == _sortBy) {
-      return _sortAscending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
-    }
-    return SortIndicator.none;
-  }
 }
 
 typedef FilterFunction = bool Function(Split);
