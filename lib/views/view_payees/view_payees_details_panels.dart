@@ -116,7 +116,6 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
           Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdCategory),
           Transaction.fields.getFieldByName(columnIdMemo),
-          Transaction.fields.getFieldByName(columnIdMemo),
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(

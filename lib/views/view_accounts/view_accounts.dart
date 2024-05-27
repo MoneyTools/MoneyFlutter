@@ -34,10 +34,6 @@ class ViewAccounts extends ViewForMoneyObjects {
 class ViewAccountsState extends ViewForMoneyObjectsState {
   final List<Widget> pivots = <Widget>[];
 
-  ViewAccountsState() {
-    onCopyInfoPanelTransactions = _onCopyInfoPanelTransactions;
-  }
-
   @override
   void initState() {
     super.initState();
@@ -196,8 +192,8 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     }
   }
 
-  void _onCopyInfoPanelTransactions() {
-    final list = getTransactionForLastSelectedAccount();
-    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list));
+  @override
+  List<MoneyObject> getInfoTransactions() {
+    return getTransactionForLastSelectedAccount();
   }
 }

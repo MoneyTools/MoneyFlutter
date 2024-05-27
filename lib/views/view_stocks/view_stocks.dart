@@ -22,10 +22,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   Security? lastSecuritySelected;
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 
-  ViewStocksState() {
-    onCopyInfoPanelTransactions = _onCopyInfoPanelTransactions;
-  }
-
   @override
   String getClassNamePlural() {
     return 'Stocks';
@@ -127,12 +123,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return list;
   }
 
-  void _onCopyInfoPanelTransactions() {
-    if (lastSecuritySelected != null) {
-      final list = getListOfInvestment(lastSecuritySelected!);
-      copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list));
-    }
-  }
+  // @override
+  // List<Transaction> getInfoTransactions() {
+  //   return getListOfInvestment(lastSecuritySelected!);
+  // }
 
   void sortList(
     final List<Investment> list,

@@ -24,10 +24,6 @@ class ViewRentals extends ViewForMoneyObjects {
 class ViewRentalsState extends ViewForMoneyObjectsState {
   RentBuilding? lastSelectedRental;
 
-  ViewRentalsState() {
-    onCopyInfoPanelTransactions = _onCopyInfoPanelTransactions;
-  }
-
   @override
   String getClassNamePlural() {
     return 'Rentals';
@@ -78,9 +74,9 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     return _getSubViewContentForTransactions(selectedIds);
   }
 
-  void _onCopyInfoPanelTransactions() {
-    final list = getTransactionLastSelectedItem();
-    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list));
+  @override
+  List<MoneyObject> getInfoTransactions() {
+    return getTransactionLastSelectedItem();
   }
 
   @override

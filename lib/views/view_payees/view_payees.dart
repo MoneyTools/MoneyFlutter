@@ -110,6 +110,17 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  List<MoneyObject> getInfoTransactions() {
+    final Payee? payee = getFirstSelectedItem() as Payee?;
+    if (payee != null && payee.id.value > -1) {
+      return getTransactions(
+        filter: (final Transaction transaction) => transaction.payee.value == payee.id.value,
+      );
+    }
+    return [];
+  }
+
+  @override
   Fields<Payee> getFieldsForTable() {
     return Payee.fields;
   }

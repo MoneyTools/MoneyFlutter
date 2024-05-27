@@ -51,7 +51,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   VoidCallback? onEditItems;
   Function(BuildContext, MoneyObject)? onMergeItem;
   VoidCallback? onDeleteItems;
-  VoidCallback? onCopyInfoPanelTransactions;
 
   // detail panel
   Object? subViewSelectedItem;
@@ -97,6 +96,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     setSelectedItem(_lastSelectedItemId);
   }
 
+  void onCopyInfoPanelTransactions() {
+    final listToCopy = getInfoTransactions();
+    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(listToCopy));
+  }
+
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     List<Widget> widgets = [];
 
@@ -109,9 +113,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         }
 
         /// Copy
-        if (onCopyInfoPanelTransactions != null) {
-          widgets.add(buildCopyButton(onCopyInfoPanelTransactions!));
-        }
+        widgets.add(buildCopyButton(onCopyInfoPanelTransactions));
       }
     }
 
@@ -516,6 +518,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     required final bool showAsNativeCurrency,
   }) {
     return const Center(child: Text('No transactions'));
+  }
+
+  List<MoneyObject> getInfoTransactions() {
+    return [];
   }
 
   void changeListSortOrder(final int columnNumber) {
