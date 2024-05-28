@@ -144,7 +144,7 @@ class Transactions extends MoneyObjects<Transaction> {
           // this is correct
         } else {
           // this needs to be cleared
-          // TODO should the other side transaction be cleared too?
+          // TODO - should the other side transaction be cleared too?
           transactionSource.transferInstance = null;
         }
       } else {
@@ -215,7 +215,7 @@ class Transactions extends MoneyObjects<Transaction> {
     required final DateTime dateTime,
     required final double amount,
   }) {
-    // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
+    // TODO - make this more precises, at the moment we only match amount and date YYYY,MM,DD
     return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
       if (transaction.accountId.value == accountId && transaction.amount.value.amount == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&

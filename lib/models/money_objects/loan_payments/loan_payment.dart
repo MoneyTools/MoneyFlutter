@@ -31,7 +31,7 @@ class LoanPayment extends MoneyObject {
 
   @override
   String getRepresentation() {
-    // TODO better
+    // This can be improved    
     return 'Loan $uniqueId';
   }
 

@@ -66,7 +66,7 @@ Future<bool> importQFX(
         ..originalPayee.value = item.name
         ..payee.value = payeeIdMatchingPayeeText;
 
-      // TODO if investment transaction
+      // TODO - if investment transaction
       // ..categoryId.value = getInvestmentCategoryFromOfxType(item)
 
       Data().transactions.appendNewMoneyObject(t);

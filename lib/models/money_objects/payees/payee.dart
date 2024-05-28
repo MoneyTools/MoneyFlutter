@@ -46,13 +46,13 @@ class Payee extends MoneyObject {
   );
 
   // 1
-  Field<String> name = Field<String>(
+  FieldString name = FieldString(
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
-    defaultValue: '',
     valueFromInstance: (final MoneyObject instance) => (instance as Payee).name.value,
     valueForSerialization: (final MoneyObject instance) => (instance as Payee).name.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Payee).name.value = value as String,
   );
 
   FieldQuantity count = FieldQuantity(
