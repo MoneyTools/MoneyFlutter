@@ -303,8 +303,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         // No sorting function found, fallback to String sorting
         list.sort((final MoneyObject a, final MoneyObject b) {
           return sortByString(
-            fieldDefinition.valueFromInstance(a).toString(),
-            fieldDefinition.valueFromInstance(b).toString(),
+            fieldDefinition.getValueForDisplay(a).toString(),
+            fieldDefinition.getValueForDisplay(b).toString(),
             _sortAscending,
           );
         });
@@ -555,7 +555,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
-      String fieldValue = columnToCustomerFilterOn.valueFromInstance(moneyObject).toString();
+      String fieldValue = columnToCustomerFilterOn.getValueForDisplay(moneyObject).toString();
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
@@ -568,7 +568,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     double max = 0.0;
     final List<MoneyObject> list = getList(applyFilter: false);
     for (int i = 0; i < list.length; i++) {
-      dynamic fieldValue = fieldDefinition.valueFromInstance(list[i]);
+      dynamic fieldValue = fieldDefinition.getValueForDisplay(list[i]);
 
       if (fieldDefinition.type == FieldType.amount && fieldValue is String) {
         fieldValue = attemptToGetDoubleFromText(fieldValue) ?? 0;
@@ -590,7 +590,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     String max = '';
 
     for (final item in getList(applyFilter: false)) {
-      final String fieldValue = columnToCustomerFilterOn.valueFromInstance(item) as String;
+      final String fieldValue = columnToCustomerFilterOn.getValueForDisplay(item) as String;
       if (min.isEmpty || min.compareTo(fieldValue) == 1) {
         min = fieldValue;
       }

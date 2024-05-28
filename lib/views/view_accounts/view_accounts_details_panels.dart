@@ -34,7 +34,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         final Account account = item as Account;
         if (account.isOpen) {
           listOfPairXY.add(PairXY(account.name.value,
-              showAsNativeCurrency ? account.balance : account.balanceNormalized.valueFromInstance(account)));
+              showAsNativeCurrency ? account.balance : account.balanceNormalized.getValueForDisplay(account)));
         }
       }
 

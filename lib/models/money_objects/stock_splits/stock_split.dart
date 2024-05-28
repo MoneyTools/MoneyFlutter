@@ -19,7 +19,7 @@ class StockSplit extends MoneyObject {
 
   // 0
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => instance.uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   // 1

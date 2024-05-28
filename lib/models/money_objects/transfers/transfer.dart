@@ -47,7 +47,7 @@ class Transfer extends MoneyObject {
   FieldDate senderTransactionDate = FieldDate(
     importance: 1,
     name: 'Sent on',
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).geSenderTransactionDate(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).geSenderTransactionDate(),
   );
 
   /// Account
@@ -56,7 +56,7 @@ class Transfer extends MoneyObject {
     type: FieldType.text,
     name: 'Sender',
     defaultValue: -1,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getSenderAccountName(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getSenderAccountName(),
   );
 
   /// Status
@@ -65,8 +65,8 @@ class Transfer extends MoneyObject {
     name: 'SS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
-    valueFromInstance: (final MoneyObject instance) =>
-        (instance as Transfer).source.status.valueFromInstance(instance.source),
+    getValueForDisplay: (final MoneyObject instance) =>
+        (instance as Transfer).source.status.getValueForDisplay(instance.source),
   );
 
   /// memo
@@ -74,7 +74,7 @@ class Transfer extends MoneyObject {
     importance: 4,
     name: 'Sender memo',
     columnWidth: ColumnWidth.largest,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getMemoSource(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getMemoSource(),
   );
 
   //
@@ -85,7 +85,7 @@ class Transfer extends MoneyObject {
   FieldDate receiverTransactionDate = FieldDate(
     importance: 10,
     name: 'Date Received',
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getReceiverTransactionDate(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getReceiverTransactionDate(),
   );
 
   /// Account
@@ -94,7 +94,7 @@ class Transfer extends MoneyObject {
     type: FieldType.text,
     name: 'Recipient account',
     defaultValue: -1,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getReceiverAccountName(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getReceiverAccountName(),
   );
 
   /// Status
@@ -103,8 +103,8 @@ class Transfer extends MoneyObject {
     name: 'RS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
-    valueFromInstance: (final MoneyObject instance) =>
-        (instance as Transfer).source.status.valueFromInstance(instance.source),
+    getValueForDisplay: (final MoneyObject instance) =>
+        (instance as Transfer).source.status.getValueForDisplay(instance.source),
   );
 
   /// memo
@@ -112,7 +112,7 @@ class Transfer extends MoneyObject {
     importance: 97,
     name: 'Recipient memo',
     columnWidth: ColumnWidth.largest,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getMemoDestination(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getMemoDestination(),
   );
 
   ///
@@ -123,7 +123,7 @@ class Transfer extends MoneyObject {
   FieldString troubleshoot = FieldString(
     importance: 98,
     name: 'Troubleshoot',
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).getTroubleshoot(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getTroubleshoot(),
   );
 
   /// Transfer amount
@@ -131,7 +131,7 @@ class Transfer extends MoneyObject {
     importance: 99,
     name: 'Amount',
     columnWidth: ColumnWidth.small,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transfer).source.amount.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).source.amount.value,
   );
 
   Transfer({

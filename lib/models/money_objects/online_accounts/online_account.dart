@@ -33,7 +33,7 @@ class OnlineAccount extends MoneyObject {
 
   // 0
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
   );
 
   // 1

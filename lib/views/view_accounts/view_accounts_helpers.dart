@@ -6,7 +6,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
     Data()
         .accounts
         .activeAccount(types)
-        .forEach((final Account x) => total += x.balanceNormalized.valueFromInstance(x).amount);
+        .forEach((final Account x) => total += x.balanceNormalized.getValueForDisplay(x).amount);
     return total;
   }
 

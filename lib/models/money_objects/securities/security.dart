@@ -47,40 +47,40 @@ class Security extends MoneyObject {
 
   // 0
   FieldId id = FieldId(
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).uniqueId,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).uniqueId,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).uniqueId,
   );
 
   // 1
   FieldString name = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).name.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).name.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).name.value,
   );
 
   // 2
   FieldString symbol = FieldString(
     name: 'Symbol',
     serializeName: 'Symbol',
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).symbol.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).symbol.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).symbol.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).symbol.value,
   );
 
   // 3
   FieldMoney price = FieldMoney(
     name: 'Price',
     serializeName: 'Price',
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).price.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).price.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).price.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value,
   );
 
   // 4
   FieldMoney lastPrice = FieldMoney(
     name: 'Last Price',
     serializeName: 'LastPrice',
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).lastPrice.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).lastPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value,
   );
 
   // 5
@@ -88,8 +88,8 @@ class Security extends MoneyObject {
     name: 'CUSPID',
     serializeName: 'CUSPID',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).cuspid.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).cuspid.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
   );
 
   // 6
@@ -98,24 +98,24 @@ class Security extends MoneyObject {
     serializeName: 'Type',
     columnWidth: ColumnWidth.tiny,
     align: TextAlign.center,
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).securityType.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).securityType.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
   );
 
   // 7
   FieldInt taxable = FieldInt(
     name: 'Taxable',
     serializeName: 'Taxable',
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).taxable.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).taxable.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).taxable.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).taxable.value,
   );
 
   // 8
   FieldDate priceDate = FieldDate(
     name: 'Date',
     serializeName: 'Date',
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).priceDate.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
   );
 
   // Not persisted fields
@@ -123,18 +123,18 @@ class Security extends MoneyObject {
   FieldInt numberOfTrades = FieldInt(
     name: 'Trades',
     columnWidth: ColumnWidth.nano,
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).numberOfTrades.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).numberOfTrades.value,
   );
 
   FieldQuantity outstandingShares = FieldQuantity(
     name: 'Shares',
     defaultValue: 0,
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).outstandingShares.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).outstandingShares.value,
   );
 
   FieldMoney balance = FieldMoney(
     name: 'Balance',
-    valueFromInstance: (final MoneyObject instance) => (instance as Security).balance.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).balance.value,
   );
 
   Security({

@@ -141,7 +141,7 @@ class MoneyObject {
     bool isLastItem = false,
   }) {
     final isReadOnly = onEdited == null || fieldDefinition.setValue == null;
-    final dynamic fieldValue = fieldDefinition.valueFromInstance(objectInstance);
+    final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
 
     if (compact) {
       // simple [Name  Value] pair
@@ -168,13 +168,13 @@ class MoneyObject {
           if (isReadOnly) {
             return MyFormFieldForWidget(
               title: fieldDefinition.name,
-              valueAsText: fieldDefinition.valueFromInstance(objectInstance).toString(),
+              valueAsText: fieldDefinition.getValueForDisplay(objectInstance).toString(),
               isReadOnly: true,
             );
           }
           return SwitchFormField(
             title: fieldDefinition.name,
-            initialValue: fieldDefinition.valueFromInstance(objectInstance),
+            initialValue: fieldDefinition.getValueForDisplay(objectInstance),
             isReadOnly: isReadOnly,
             validator: (bool? value) {
               /// Todo
@@ -187,12 +187,12 @@ class MoneyObject {
           );
 
         case FieldType.widget:
-          final String valueAsString = fieldDefinition.valueForSerialization(objectInstance).toString();
+          final String valueAsString = fieldDefinition.getValueForSerialization(objectInstance).toString();
           return MyFormFieldForWidget(
             title: fieldDefinition.name,
             valueAsText: valueAsString,
             isReadOnly: isReadOnly,
-            child: fieldDefinition.valueFromInstance(objectInstance),
+            child: fieldDefinition.getValueForDisplay(objectInstance),
           );
 
         // all others will be a normal text input
@@ -264,7 +264,7 @@ class MoneyObject {
 
     for (final Field<dynamic> field in fieldDefinitions) {
       if (field.serializeName != '') {
-        json[field.serializeName] = field.valueForSerialization(this);
+        json[field.serializeName] = field.getValueForSerialization(this);
       }
     }
     return json;

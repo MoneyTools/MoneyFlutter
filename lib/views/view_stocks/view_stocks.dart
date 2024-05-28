@@ -139,8 +139,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       // No sorting function found, fallback to String sorting
       list.sort((final MoneyObject a, final MoneyObject b) {
         return sortByString(
-          fieldDefinition.valueFromInstance(a).toString(),
-          fieldDefinition.valueFromInstance(b).toString(),
+          fieldDefinition.getValueForDisplay(a).toString(),
+          fieldDefinition.getValueForDisplay(b).toString(),
           sortAscending,
         );
       });

@@ -38,7 +38,7 @@ class Fields<T> {
     final List<Widget> cells = <Widget>[];
 
     for (final Field fieldDefinition in definitions) {
-      final dynamic value = fieldDefinition.valueFromInstance(objectInstance);
+      final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
       cells.add(
         Expanded(
           flex: fieldDefinition.columnWidth.index,
@@ -85,7 +85,7 @@ class Fields<T> {
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
       final Field<dynamic> fieldDefinition = definitions[fieldIndex];
       if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
-        final dynamic rawValue = fieldDefinition.valueFromInstance(objectInstance);
+        final dynamic rawValue = fieldDefinition.getValueForDisplay(objectInstance);
         strings.add(fieldDefinition.getString(rawValue));
       }
     }
@@ -102,7 +102,7 @@ class Fields<T> {
 
     for (final fieldDefinition in fieldDefinitionsForColumns) {
       // Value of this field
-      final String fieldValue = fieldDefinition.valueFromInstance(objectInstance).toString().toLowerCase();
+      final String fieldValue = fieldDefinition.getValueForDisplay(objectInstance).toString().toLowerCase();
 
       if (filterByFieldsValue.isNotEmpty) {
         for (final FieldFilter filter in filterByFieldsValue) {
@@ -136,7 +136,7 @@ class Fields<T> {
   String getCsvRowValues(final MoneyObject item) {
     final List<dynamic> listOfValues = <dynamic>[];
     for (final Field<dynamic> field in definitions) {
-      listOfValues.add('"${field.valueForSerialization(item)}"');
+      listOfValues.add('"${field.getValueForSerialization(item)}"');
     }
     return listOfValues.join(',');
   }

@@ -42,7 +42,7 @@ class Payee extends MoneyObject {
 
   // 0
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as Payee).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Payee).uniqueId,
   );
 
   // 1
@@ -50,20 +50,20 @@ class Payee extends MoneyObject {
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
-    valueFromInstance: (final MoneyObject instance) => (instance as Payee).name.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Payee).name.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Payee).name.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Payee).name.value = value as String,
   );
 
   FieldQuantity count = FieldQuantity(
     name: 'Transactions',
     columnWidth: ColumnWidth.small,
-    valueFromInstance: (final MoneyObject instance) => (instance as Payee).count.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).count.value,
   );
 
   FieldMoney sum = FieldMoney(
     name: 'Sum',
-    valueFromInstance: (final MoneyObject instance) => (instance as Payee).sum.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).sum.value,
   );
 
   Payee() {

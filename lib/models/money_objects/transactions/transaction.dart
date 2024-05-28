@@ -77,7 +77,7 @@ class Transaction extends MoneyObject {
   /// ID
   /// SQLite  0|Id|bigint|0||1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).uniqueId,
   );
 
   /// Account Id
@@ -90,9 +90,9 @@ class Transaction extends MoneyObject {
     defaultValue: -1,
     // useAsColumn: false,
     // useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         Data().accounts.getNameFromId((instance as Transaction).accountId.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).accountId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).accountId.value,
   );
 
   /// Date
@@ -101,8 +101,8 @@ class Transaction extends MoneyObject {
     importance: 2,
     name: 'Date',
     serializeName: 'Date',
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).dateTime.value,
-    valueForSerialization: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).dateTime.value,
+    getValueForSerialization: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).dateTime.value),
     getEditWidget: (final MoneyObject instance, Function onEdited) {
       return PickerEditBoxDate(
@@ -128,9 +128,9 @@ class Transaction extends MoneyObject {
     useAsDetailPanels: false,
     name: columnIdStatus,
     serializeName: 'Status',
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         transactionStatusToLetter((instance as Transaction).status.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).status.value.index,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).status.value.index,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
       transactionStatusToLetter((a as Transaction).status.value),
       transactionStatusToLetter((b as Transaction).status.value),
@@ -150,10 +150,10 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.largest,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByString((a as Transaction).payeeName, (b as Transaction).payeeName, ascending),
-    valueFromInstance: (final MoneyObject instance) {
+    getValueForDisplay: (final MoneyObject instance) {
       return (instance as Transaction).getPayeeOrTransferCaption();
     },
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).payee.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).payee.value,
     setValue: (MoneyObject instance, dynamic newValue) {
       if (newValue == -1) {
         // -1 means no payee, this is a Transfer
@@ -204,8 +204,8 @@ class Transaction extends MoneyObject {
     name: 'Original Payee',
     serializeName: 'OriginalPayee',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
   );
 
   /// Category Id
@@ -217,9 +217,9 @@ class Transaction extends MoneyObject {
       name: 'Category',
       serializeName: 'Category',
       defaultValue: -1,
-      valueFromInstance: (final MoneyObject instance) =>
+      getValueForDisplay: (final MoneyObject instance) =>
           Data().categories.getNameFromId((instance as Transaction).categoryId.value),
-      valueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
+      getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
       setValue: (final MoneyObject instance, dynamic newValue) =>
           (instance as Transaction).categoryId.value = newValue as int,
       getEditWidget: (final MoneyObject instance, Function onEdited) {
@@ -242,8 +242,8 @@ class Transaction extends MoneyObject {
     name: 'Memo',
     serializeName: 'Memo',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).memo.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).memo.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).memo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).memo.value,
   );
 
   /// Number
@@ -253,8 +253,8 @@ class Transaction extends MoneyObject {
     name: 'Number',
     serializeName: 'Number',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).number.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).number.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).number.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).number.value,
   );
 
   /// Reconciled Date
@@ -264,9 +264,9 @@ class Transaction extends MoneyObject {
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).reconciledDate.value),
-    valueForSerialization: (final MoneyObject instance) =>
+    getValueForSerialization: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).reconciledDate.value),
   );
 
@@ -277,9 +277,9 @@ class Transaction extends MoneyObject {
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).budgetBalanceDate.value),
-    valueForSerialization: (final MoneyObject instance) =>
+    getValueForSerialization: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).budgetBalanceDate.value),
   );
 
@@ -292,8 +292,8 @@ class Transaction extends MoneyObject {
     defaultValue: -1,
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).transfer.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).transfer.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transfer.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transfer.value,
   );
 
   /// FITID
@@ -303,8 +303,8 @@ class Transaction extends MoneyObject {
     name: 'FITID',
     serializeName: 'FITID',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).fitid.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).fitid.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fitid.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fitid.value,
   );
 
   /// Flags
@@ -315,8 +315,8 @@ class Transaction extends MoneyObject {
     serializeName: 'Flags',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).flags.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).flags.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).flags.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).flags.value,
   );
 
   /// Amount
@@ -325,10 +325,10 @@ class Transaction extends MoneyObject {
     importance: 97,
     name: columnIdAmount,
     serializeName: 'Amount',
-    valueFromInstance: (final MoneyObject instance) {
+    getValueForDisplay: (final MoneyObject instance) {
       return (instance as Transaction).amount.value;
     },
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.amount,
     setValue: (final MoneyObject instance, dynamic newValue) {
       (instance as Transaction).amount.value.amount = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
     },
@@ -343,8 +343,8 @@ class Transaction extends MoneyObject {
     name: 'Sales Tax',
     serializeName: 'SalesTax',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.amount,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.amount,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByValue((a as Transaction).salesTax.value.amount, (b as Transaction).salesTax.value.amount, ascending),
   );
@@ -357,8 +357,8 @@ class Transaction extends MoneyObject {
     serializeName: 'TransferSplit',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
   );
 
   /// MergeDate
@@ -369,9 +369,9 @@ class Transaction extends MoneyObject {
     serializeName: 'MergeDate',
     useAsDetailPanels: false,
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).mergeDate.value),
-    valueForSerialization: (final MoneyObject instance) =>
+    getValueForSerialization: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as Transaction).mergeDate.value),
   );
 
@@ -385,7 +385,7 @@ class Transaction extends MoneyObject {
     name: columnIdAmountNormalized,
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => MoneyModel(
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
         amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.amount),
         iso4217: Constants.defaultCurrency),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
@@ -402,7 +402,7 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.small,
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => MoneyModel(
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).balance,
       iso4217: instance.getCurrency(),
     ),
@@ -414,7 +414,7 @@ class Transaction extends MoneyObject {
     name: 'Balance(USD)',
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: false,
-    valueFromInstance: (final MoneyObject instance) => MoneyModel(
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).getNormalizedAmount((instance).balance),
       iso4217: Constants.defaultCurrency,
     ),
@@ -450,7 +450,7 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.tiny,
     defaultValue: '',
     useAsDetailPanels: true,
-    valueFromInstance: (final MoneyObject instance) {
+    getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget((instance as Transaction).getCurrency());
     },
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(

@@ -59,7 +59,7 @@ class Category extends MoneyObject {
   /// Id
   /// 0|Id|INT|0||1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).uniqueId,
   );
 
   /// 1|ParentId|INT|0||0
@@ -69,8 +69,8 @@ class Category extends MoneyObject {
     serializeName: 'ParentId',
     useAsColumn: false,
     useAsDetailPanels: true,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).parentId.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).parentId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
   );
 
   /// Name
@@ -80,8 +80,8 @@ class Category extends MoneyObject {
     columnWidth: ColumnWidth.largest,
     name: 'Name',
     serializeName: 'Name',
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).name.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Category).name.value = value,
   );
 
@@ -92,8 +92,8 @@ class Category extends MoneyObject {
     columnWidth: ColumnWidth.large,
     name: 'Description',
     serializeName: 'Description',
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).description.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).description.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).description.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).description.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Category).description.value = value,
   );
 
@@ -105,8 +105,8 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     serializeName: 'Type',
     defaultValue: CategoryType.none,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).type.value.index,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).type.value.index,
   );
 
   /// Color
@@ -118,8 +118,8 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     defaultValue: '',
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).getColorWidget(),
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).color.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).getColorWidget(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).color.value,
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).color.value = value as String;
     },
@@ -143,8 +143,8 @@ class Category extends MoneyObject {
     importance: 99,
     name: 'Budget',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).budget.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).budget.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value,
   );
 
   /// Budget Balance
@@ -153,8 +153,8 @@ class Category extends MoneyObject {
     importance: 80,
     name: 'BudgetBalance',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
   );
 
   /// 8|Frequency|INT|0||0
@@ -163,7 +163,7 @@ class Category extends MoneyObject {
     serializeName: 'Frequency',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
   );
 
   /// 9|TaxRefNum|INT|0||0
@@ -172,7 +172,7 @@ class Category extends MoneyObject {
     serializeName: 'TaxRefNum',
     useAsColumn: false,
     useAsDetailPanels: false,
-    valueForSerialization: (final MoneyObject instance) => (instance as Category).taxRefNum.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).taxRefNum.value,
   );
 
   //-----------------------------------
@@ -184,7 +184,7 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     name: 'Level',
     columnWidth: ColumnWidth.nano,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         countOccurrences((instance as Category).name.value, ':').toDouble() + 1,
   );
 
@@ -193,7 +193,7 @@ class Category extends MoneyObject {
     importance: 98,
     name: '#T',
     columnWidth: ColumnWidth.tiny,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).transactionCount.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCount.value,
   );
 
   /// Count
@@ -201,14 +201,14 @@ class Category extends MoneyObject {
     importance: 98,
     name: '#T~',
     columnWidth: ColumnWidth.tiny,
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).transactionCountDescendants.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCountDescendants.value,
   );
 
   /// Running Balance
   FieldMoney sum = FieldMoney(
     importance: 99,
     name: 'Sum',
-    valueFromInstance: (final MoneyObject instance) => (instance as Category).sum.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).sum.value,
   );
 
   Category({
@@ -289,7 +289,7 @@ class Category extends MoneyObject {
       alignment: Alignment.center,
       children: [
         MyCircle(colorFill: fillColor, size: 12),
-        if (this.color.value.isNotEmpty && this.level.valueFromInstance(this) > 1)
+        if (this.color.value.isNotEmpty && this.level.getValueForDisplay(this) > 1)
           Text('#', style: TextStyle(fontSize: 10, color: textColor)),
       ],
     );

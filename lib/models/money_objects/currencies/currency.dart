@@ -30,7 +30,7 @@ class Currency extends MoneyObject {
 
   // 0
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => instance.uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   /// 1
@@ -39,8 +39,8 @@ class Currency extends MoneyObject {
     importance: 1,
     name: 'Symbol',
     serializeName: 'Symbol',
-    valueFromInstance: (final MoneyObject instance) => (instance as Currency).symbol.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Currency).symbol.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).symbol.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).symbol.value,
   );
 
   /// 2
@@ -49,8 +49,8 @@ class Currency extends MoneyObject {
     importance: 2,
     name: 'Name',
     serializeName: 'Name',
-    valueFromInstance: (final MoneyObject instance) => (instance as Currency).name.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Currency).name.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).name.value,
   );
 
   /// 3
@@ -59,8 +59,8 @@ class Currency extends MoneyObject {
     importance: 3,
     name: 'Ratio',
     serializeName: 'Ratio',
-    valueFromInstance: (final MoneyObject instance) => (instance as Currency).ratio.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Currency).ratio.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).ratio.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).ratio.value,
   );
 
   // 4
@@ -68,8 +68,8 @@ class Currency extends MoneyObject {
     importance: 4,
     name: 'LastRatio',
     serializeName: 'LastRatio',
-    valueFromInstance: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
   );
 
   /// 5
@@ -77,8 +77,8 @@ class Currency extends MoneyObject {
   FieldString cultureCode = FieldString(
     name: 'Culture Code',
     serializeName: 'CultureCode',
-    valueFromInstance: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
   );
 
   Currency({

@@ -46,7 +46,7 @@ class Alias extends MoneyObject {
   /// ID
   /// 0    Id       INT            0                 1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as Alias).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).uniqueId,
   );
 
   /// Pattern
@@ -57,8 +57,8 @@ class Alias extends MoneyObject {
     name: 'Pattern',
     serializeName: 'Pattern',
     defaultValue: '',
-    valueFromInstance: (final MoneyObject instance) => (instance as Alias).pattern.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Alias).pattern.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Alias).pattern.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).pattern.value,
   );
 
   /// 2    Flags    INT            1                 0
@@ -69,8 +69,8 @@ class Alias extends MoneyObject {
     name: 'Flags',
     serializeName: 'Flags',
     defaultValue: 0,
-    valueFromInstance: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
-    valueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
+    getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
   );
 
   /// Payee
@@ -81,8 +81,8 @@ class Alias extends MoneyObject {
     name: 'Payee',
     serializeName: 'Payee',
     defaultValue: 0,
-    valueFromInstance: (final MoneyObject instance) => Payee.getName((instance as Alias).payeeInstance),
-    valueForSerialization: (final MoneyObject instance) => (instance as Alias).payeeId.value,
+    getValueForDisplay: (final MoneyObject instance) => Payee.getName((instance as Alias).payeeInstance),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).payeeId.value,
   );
 
   // Not persisted

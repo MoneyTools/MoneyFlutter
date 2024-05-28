@@ -37,7 +37,7 @@ class AccountAlias extends MoneyObject {
     serializeName: 'Id',
     defaultValue: -1,
     useAsColumn: false,
-    valueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
   );
 
   // 1

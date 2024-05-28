@@ -19,7 +19,7 @@ class RentUnit extends MoneyObject {
   /// Id
   /// 0|Id|INT|0||1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => instance.uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   /// Building Id
@@ -29,7 +29,7 @@ class RentUnit extends MoneyObject {
     name: 'Building',
     serializeName: 'Building',
     useAsColumn: false,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).building.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).building.value,
   );
 
   /// 2
@@ -38,7 +38,7 @@ class RentUnit extends MoneyObject {
     importance: 2,
     name: 'Name',
     serializeName: 'Name',
-    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).name.value,
   );
 
   /// 3
@@ -47,7 +47,7 @@ class RentUnit extends MoneyObject {
     importance: 3,
     name: 'Renter',
     serializeName: 'Renter',
-    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).renter.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).renter.value,
   );
 
   /// 4
@@ -56,7 +56,7 @@ class RentUnit extends MoneyObject {
     importance: 4,
     name: 'Note',
     serializeName: 'Note',
-    valueForSerialization: (final MoneyObject instance) => (instance as RentUnit).note.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).note.value,
   );
 
   // not persisted field

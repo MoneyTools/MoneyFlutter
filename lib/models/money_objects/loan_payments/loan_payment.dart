@@ -31,14 +31,14 @@ class LoanPayment extends MoneyObject {
 
   @override
   String getRepresentation() {
-    // This can be improved    
+    // This can be improved
     return 'Loan $uniqueId';
   }
 
   /// ID
   /// 0|Id|INT|1||0
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).uniqueId,
   );
 
   /// 1|AccountId|INT|1||0
@@ -47,8 +47,8 @@ class LoanPayment extends MoneyObject {
     name: 'Account',
     serializeName: 'AccountId',
     defaultValue: -1,
-    valueFromInstance: (final MoneyObject instance) => Account.getName((instance as LoanPayment).accountInstance),
-    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).accountId.value,
+    getValueForDisplay: (final MoneyObject instance) => Account.getName((instance as LoanPayment).accountInstance),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).accountId.value,
   );
 
   /// Date
@@ -57,8 +57,9 @@ class LoanPayment extends MoneyObject {
     importance: 2,
     serializeName: 'Date',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as LoanPayment).date.value),
-    valueForSerialization: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as LoanPayment).date.value),
+    getValueForDisplay: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as LoanPayment).date.value),
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateAsIso8601OrDefault((instance as LoanPayment).date.value),
   );
 
   /// 3
@@ -67,8 +68,8 @@ class LoanPayment extends MoneyObject {
     importance: 98,
     name: 'Principal',
     serializeName: 'Principal',
-    valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
   );
 
   /// Interest
@@ -77,8 +78,8 @@ class LoanPayment extends MoneyObject {
     importance: 99,
     name: 'Interest',
     serializeName: 'Interest',
-    valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
   );
 
   // 5
@@ -89,8 +90,8 @@ class LoanPayment extends MoneyObject {
     name: 'Memo',
     serializeName: 'Memo',
     defaultValue: '',
-    valueFromInstance: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
   );
 
   // Not persisted

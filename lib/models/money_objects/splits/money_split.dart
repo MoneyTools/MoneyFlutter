@@ -42,12 +42,12 @@ class MoneySplit extends MoneyObject {
   FieldInt transactionId = FieldInt(
     name: 'Transaction',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).transactionId.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).transactionId.value,
   );
 
   // 1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
   );
 
   // 2
@@ -55,7 +55,7 @@ class MoneySplit extends MoneyObject {
     name: 'Category',
     type: FieldType.text,
     align: TextAlign.left,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         Data().categories.getNameFromId((instance as MoneySplit).categoryId.value),
   );
 
@@ -64,14 +64,14 @@ class MoneySplit extends MoneyObject {
     name: 'Payee',
     type: FieldType.text,
     align: TextAlign.left,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         Data().payees.getNameFromId((instance as MoneySplit).payeeId.value),
   );
 
   // 4
   FieldMoney amount = FieldMoney(
     name: 'Amount',
-    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).amount.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).amount.value,
   );
 
   // 5
@@ -83,7 +83,7 @@ class MoneySplit extends MoneyObject {
   // 6
   FieldString memo = FieldString(
     name: 'Memo',
-    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).memo.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).memo.value,
   );
 
   // 7
@@ -91,13 +91,13 @@ class MoneySplit extends MoneyObject {
     name: 'Flags',
     columnWidth: ColumnWidth.nano,
     align: TextAlign.center,
-    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).flags.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).flags.value,
   );
 
   // 8
   FieldDate budgetBalanceDate = FieldDate(
     name: 'Budgeted Date',
-    valueFromInstance: (final MoneyObject instance) => (instance as MoneySplit).budgetBalanceDate.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).budgetBalanceDate.value,
   );
 
   /// Constructor

@@ -53,7 +53,7 @@ class Investment extends MoneyObject {
   /// Id
   //// 0    Id              bigint  0                    1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).uniqueId,
   );
 
   /// 1    Security        INT     1                    0
@@ -62,8 +62,8 @@ class Investment extends MoneyObject {
     name: 'Security',
     serializeName: 'Security',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).security.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).security.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).security.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).security.value,
   );
 
   /// 2    UnitPrice       money   1                    0
@@ -71,8 +71,8 @@ class Investment extends MoneyObject {
     importance: 3,
     name: 'Price',
     serializeName: 'UnitPrice',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
   );
 
   /// 3    Units           money   0                    0
@@ -80,16 +80,16 @@ class Investment extends MoneyObject {
     importance: 2,
     name: 'Units',
     serializeName: 'Units',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).units.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).units.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).units.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).units.value,
   );
 
   /// 4    Commission      money   0                    0
   FieldMoney commission = FieldMoney(
     name: 'Commission',
     serializeName: 'Commission',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).commission.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).commission.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value,
   );
 
   /// 5    MarkUpDown      money   0                    0
@@ -97,8 +97,8 @@ class Investment extends MoneyObject {
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
   );
 
   /// 6    Taxes           money   0                    0
@@ -106,24 +106,24 @@ class Investment extends MoneyObject {
     name: 'Taxes',
     serializeName: 'Taxes',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxes.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxes.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value,
   );
 
   /// 7    Fees            money   0                    0
   FieldMoney fees = FieldMoney(
     name: 'Fees',
     serializeName: 'Fees',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).fees.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fees.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value,
   );
 
   /// 8    Load            money   0                    0
   FieldMoney load = FieldMoney(
     name: 'Load',
     serializeName: 'Load',
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).load.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).load.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value,
   );
 
   /// 9    InvestmentType  INT     1                    0
@@ -133,9 +133,9 @@ class Investment extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     type: FieldType.text,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         getInvestmentTypeTextFromValue((instance as Investment).investmentType.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
   );
 
   /// 10   TradeType       INT     0                    0
@@ -144,9 +144,9 @@ class Investment extends MoneyObject {
     serializeName: 'TradeType',
     type: FieldType.text,
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         InvestmentTradeType.values[(instance as Investment).tradeType.value].name.toUpperCase(),
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).tradeType.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).tradeType.value,
   );
 
   /// 11   TaxExempt       bit     0                    0
@@ -157,8 +157,8 @@ class Investment extends MoneyObject {
     align: TextAlign.center,
     useAsColumn: false,
     type: FieldType.text,
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).taxExempt.value == 1 ? 'No' : 'Yes',
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxExempt.value == 1 ? 'No' : 'Yes',
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
   );
 
   /// 12   Withholding     money   0                    0
@@ -166,8 +166,8 @@ class Investment extends MoneyObject {
     name: 'Withholding',
     serializeName: 'Withholding',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).withholding.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).withholding.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value,
   );
 
   /// --------------------------------------------
@@ -200,7 +200,7 @@ class Investment extends MoneyObject {
     importance: 0,
     useAsColumn: true,
     columnWidth: ColumnWidth.small,
-    valueFromInstance: (final MoneyObject instance) => (instance as Investment).date,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).date,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByDateAndInvestmentType(a as Investment, b as Investment, ascending, false),
   );
@@ -209,7 +209,7 @@ class Investment extends MoneyObject {
     name: 'Symbol',
     useAsColumn: true,
     columnWidth: ColumnWidth.small,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         Data().securities.getSymbolFromId((instance as Investment).security.value),
   );
 
@@ -217,7 +217,7 @@ class Investment extends MoneyObject {
       name: 'Account',
       useAsColumn: true,
       columnWidth: ColumnWidth.largest,
-      valueFromInstance: (final MoneyObject instance) {
+      getValueForDisplay: (final MoneyObject instance) {
         final investment = instance as Investment;
         final Transaction? transaction = Data().transactions.get(investment.uniqueId);
         if (transaction != null) {
@@ -228,7 +228,7 @@ class Investment extends MoneyObject {
 
   FieldMoney amount = FieldMoney(
       name: 'Amount',
-      valueFromInstance: (final MoneyObject instance) {
+      getValueForDisplay: (final MoneyObject instance) {
         return MoneyModel(amount: (instance as Investment).finalAmount.amount);
       });
 
@@ -257,7 +257,7 @@ class Investment extends MoneyObject {
 
   FieldMoney runningBalance = FieldMoney(
       name: 'Balance',
-      valueFromInstance: (final MoneyObject instance) {
+      getValueForDisplay: (final MoneyObject instance) {
         return (instance as Investment).runningBalance.value;
       });
 

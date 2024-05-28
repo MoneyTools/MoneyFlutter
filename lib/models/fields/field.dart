@@ -47,7 +47,10 @@ class Field<T> {
   int importance;
 
   /// Get the value of the instance
-  dynamic Function(MoneyObject) valueFromInstance;
+  dynamic Function(MoneyObject) getValueForDisplay;
+
+  /// Get the value for storing the instance
+  dynamic Function(MoneyObject) getValueForSerialization;
 
   /// Customize/override the edit widget
   Widget Function(MoneyObject, Function onEdited)? getEditWidget;
@@ -55,13 +58,7 @@ class Field<T> {
   /// override the value edited
   dynamic Function(MoneyObject, dynamic)? setValue;
 
-  /// Get the value for storing the instance
-  dynamic Function(MoneyObject) valueForSerialization;
   int Function(MoneyObject, MoneyObject, bool)? sort;
-
-  // void operator = (final T newValue) {
-  //   _value = newValue;
-  // };
 
   Field({
     this.type = FieldType.text,
@@ -70,12 +67,14 @@ class Field<T> {
     this.fixedFont = false,
     this.name = '',
     this.serializeName = '',
+
+    // Value related
     required final T defaultValue,
-    this.importance = -1,
-    this.valueFromInstance = defaultCallbackValue,
+    this.getValueForDisplay = defaultCallbackValue,
+    this.getValueForSerialization = defaultCallbackValue,
     this.getEditWidget,
     this.setValue,
-    this.valueForSerialization = defaultCallbackValue,
+    this.importance = -1,
     this.useAsColumn = true,
     this.useAsDetailPanels = true,
     this.sort,
@@ -92,18 +91,18 @@ class Field<T> {
 
     ///----------------------------------------------
     /// How to get the value of this field
-    if (valueFromInstance == defaultCallbackValue) {
+    if (getValueForDisplay == defaultCallbackValue) {
       switch (this.type) {
         case FieldType.numeric:
         case FieldType.quantity:
-          valueFromInstance = (final MoneyObject c) => value as num;
-          valueForSerialization = valueFromInstance;
+          getValueForDisplay = (final MoneyObject c) => value as num;
+          getValueForSerialization = getValueForDisplay;
         case FieldType.text:
-          valueFromInstance = (final MoneyObject objectInstance) => value.toString();
+          getValueForDisplay = (final MoneyObject objectInstance) => value.toString();
         case FieldType.amount:
-          valueFromInstance = (final MoneyObject c) => MoneyWidget(amountModel: value as MoneyModel);
+          getValueForDisplay = (final MoneyObject c) => MoneyWidget(amountModel: value as MoneyModel);
         case FieldType.date:
-          valueFromInstance = (final MoneyObject c) => dateToString(value as DateTime?);
+          getValueForDisplay = (final MoneyObject c) => dateToString(value as DateTime?);
         default:
           //
           debugPrint('No match');
@@ -112,10 +111,10 @@ class Field<T> {
 
     ///----------------------------------------------
     /// How to serialize this field
-    if (valueForSerialization == defaultCallbackValue) {
+    if (getValueForSerialization == defaultCallbackValue) {
       // if there's no override function
       // apply the same data value to serial
-      valueForSerialization = valueFromInstance;
+      getValueForSerialization = getValueForDisplay;
     }
 
     ///----------------------------------------------
@@ -128,17 +127,17 @@ class Field<T> {
         case FieldType.quantity:
         case FieldType.amountShorthand:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByValue(valueFromInstance(a) as num, valueFromInstance(b) as num, ascending);
+              sortByValue(getValueForDisplay(a) as num, getValueForDisplay(b) as num, ascending);
         case FieldType.amount:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByValue(valueFromInstance(a).amount, valueFromInstance(b).amount, ascending);
+              sortByValue(getValueForDisplay(a).amount, getValueForDisplay(b).amount, ascending);
         case FieldType.date:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByDate(valueFromInstance(a), valueFromInstance(b), ascending);
+              sortByDate(getValueForDisplay(a), getValueForDisplay(b), ascending);
         case FieldType.text:
         default:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByString(valueFromInstance(a).toString(), valueFromInstance(b).toString(), ascending);
+              sortByString(getValueForDisplay(a).toString(), getValueForDisplay(b).toString(), ascending);
       }
     }
   }
@@ -199,8 +198,8 @@ class FieldInt extends Field<int> {
     super.importance,
     super.name,
     super.serializeName,
-    super.valueFromInstance,
-    super.valueForSerialization,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
     super.useAsColumn,
     super.columnWidth,
     super.useAsDetailPanels,
@@ -218,8 +217,8 @@ class FieldDouble extends Field<double> {
     super.importance,
     super.name,
     super.serializeName,
-    super.valueFromInstance,
-    super.valueForSerialization,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
     super.useAsColumn,
     super.defaultValue = 0.00,
     super.useAsDetailPanels,
@@ -235,8 +234,8 @@ class FieldQuantity extends Field<double> {
     super.importance,
     super.name,
     super.serializeName,
-    super.valueFromInstance,
-    super.valueForSerialization,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
     super.setValue,
     super.useAsColumn,
     super.columnWidth = ColumnWidth.small,
@@ -253,8 +252,8 @@ class FieldMoney extends Field<MoneyModel> {
     super.importance,
     super.name,
     super.serializeName,
-    super.valueFromInstance,
-    super.valueForSerialization,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
     super.setValue,
     super.useAsColumn,
     super.columnWidth = ColumnWidth.small,
@@ -272,8 +271,8 @@ class FieldDate extends Field<DateTime?> {
     super.importance,
     super.name,
     super.serializeName,
-    super.valueFromInstance,
-    super.valueForSerialization,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
     super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,
@@ -291,8 +290,8 @@ class FieldString extends Field<String> {
     super.importance,
     super.name,
     super.serializeName,
-    super.valueFromInstance,
-    super.valueForSerialization,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
     super.useAsColumn = true,
     super.columnWidth,
     super.useAsDetailPanels = true,
@@ -307,28 +306,17 @@ class FieldString extends Field<String> {
         ) {
     if (sort == null) {
       super.sort = (final MoneyObject a, final MoneyObject b, final bool ascending) {
-        return sortByString(valueFromInstance(a), valueFromInstance(b), ascending);
+        return sortByString(getValueForDisplay(a), getValueForDisplay(b), ascending);
       };
     }
   }
 }
 
-class DeclareNoSerialized<T> extends Field<T> {
-  DeclareNoSerialized({
-    required super.defaultValue,
-    super.type,
-    super.name,
-    super.align,
-    super.valueFromInstance,
-    super.valueForSerialization,
-  }) : super(serializeName: '');
-}
-
 class FieldId extends Field<int> {
   FieldId({
     super.importance = 0,
-    super.valueFromInstance,
-    super.valueForSerialization,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
   }) : super(
           serializeName: 'Id',
           useAsColumn: false,

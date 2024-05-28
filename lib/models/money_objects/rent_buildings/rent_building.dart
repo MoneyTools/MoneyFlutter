@@ -85,7 +85,7 @@ class RentBuilding extends MoneyObject {
   /// ID
   // 0    Id                      INT            0                    1
   FieldId id = FieldId(
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).uniqueId,
   );
 
   /// Name
@@ -94,8 +94,8 @@ class RentBuilding extends MoneyObject {
     importance: 1,
     name: 'Name',
     serializeName: 'Name',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).name.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).name.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).name.value,
   );
 
   /// Address
@@ -104,8 +104,8 @@ class RentBuilding extends MoneyObject {
     importance: 2,
     name: 'Address',
     serializeName: 'Address',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).address.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).address.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).address.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).address.value,
   );
 
   /// PurchasedDate
@@ -115,9 +115,9 @@ class RentBuilding extends MoneyObject {
     name: 'Purchased Date',
     serializeName: 'PurchasedDate',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as RentBuilding).purchasedDate.value),
-    valueForSerialization: (final MoneyObject instance) =>
+    getValueForSerialization: (final MoneyObject instance) =>
         dateAsIso8601OrDefault((instance as RentBuilding).purchasedDate.value),
   );
 
@@ -128,8 +128,8 @@ class RentBuilding extends MoneyObject {
     name: 'Purchased Price',
     serializeName: 'PurchasedPrice',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
   );
 
   /// LandValue
@@ -138,8 +138,8 @@ class RentBuilding extends MoneyObject {
     importance: 2,
     name: 'LandValue',
     serializeName: 'LandValue',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
   );
 
   /// EstimatedValue
@@ -148,8 +148,8 @@ class RentBuilding extends MoneyObject {
     importance: 2,
     name: 'EstimatedValue',
     serializeName: 'EstimatedValue',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
   );
 
   /// OwnershipName1
@@ -159,8 +159,8 @@ class RentBuilding extends MoneyObject {
     name: 'OwnershipName1',
     serializeName: 'OwnershipName1',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
   );
 
   /// OwnershipName2
@@ -170,8 +170,8 @@ class RentBuilding extends MoneyObject {
     name: 'OwnershipName2',
     serializeName: 'OwnershipName2',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
   );
 
   /// OwnershipPercentage1
@@ -181,8 +181,8 @@ class RentBuilding extends MoneyObject {
     name: 'OwnershipPercentage1',
     serializeName: 'OwnershipPercentage1',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
   );
 
   /// OwnershipPercentage2
@@ -192,8 +192,8 @@ class RentBuilding extends MoneyObject {
     name: 'OwnershipPercentage2',
     serializeName: 'OwnershipPercentage2',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
   );
 
   /// Note
@@ -203,8 +203,8 @@ class RentBuilding extends MoneyObject {
     name: 'Note',
     serializeName: 'Note',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).note.value,
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).note.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).note.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).note.value,
   );
 
   /// CategoryForTaxes
@@ -214,9 +214,9 @@ class RentBuilding extends MoneyObject {
     name: 'CategoryForTaxes',
     serializeName: 'CategoryForTaxes',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForTaxes.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForTaxes.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForTaxes.value,
   );
 
   /// CategoryForIncome
@@ -226,9 +226,9 @@ class RentBuilding extends MoneyObject {
     name: 'CategoryForIncome',
     serializeName: 'CategoryForIncome',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForIncome.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForIncome.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForIncome.value,
   );
 
   /// CategoryForInterest
@@ -238,9 +238,9 @@ class RentBuilding extends MoneyObject {
     name: 'CategoryForInterest',
     serializeName: 'CategoryForInterest',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForInterest.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForInterest.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForInterest.value,
   );
 
   /// CategoryForRepairs
@@ -250,9 +250,9 @@ class RentBuilding extends MoneyObject {
     name: 'CategoryForRepairs',
     serializeName: 'CategoryForRepairs',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForRepairs.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForRepairs.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForRepairs.value,
   );
 
   /// CategoryForMaintenance
@@ -262,9 +262,9 @@ class RentBuilding extends MoneyObject {
     name: 'CategoryForMaintenance',
     serializeName: 'CategoryForMaintenance',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForMaintenance.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForMaintenance.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForMaintenance.value,
   );
 
   /// CategoryForManagement
@@ -274,9 +274,9 @@ class RentBuilding extends MoneyObject {
     name: 'CategoryForManagement',
     serializeName: 'CategoryForManagement',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForManagement.value),
-    valueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForManagement.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForManagement.value,
   );
 
   String getCategoryName(final int id) {
@@ -285,12 +285,12 @@ class RentBuilding extends MoneyObject {
 
   FieldQuantity transactionsForIncomes = FieldQuantity(
     name: 'I#',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).transactionsForIncomes.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).transactionsForIncomes.value,
   );
 
   FieldQuantity transactionsForExpenses = FieldQuantity(
     name: 'E#',
-    valueFromInstance: (final MoneyObject instance) => (instance as RentBuilding).transactionsForExpenses.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).transactionsForExpenses.value,
   );
 
   /// Currency
@@ -301,7 +301,7 @@ class RentBuilding extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     defaultValue: '',
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         Currency.buildCurrencyWidget((instance as RentBuilding).getCurrencyOfAssociatedAccount()),
   );
 
@@ -317,7 +317,7 @@ class RentBuilding extends MoneyObject {
   FieldMoney revenue = FieldMoney(
     importance: 20,
     name: 'Revenue',
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.income),
   );
 
@@ -325,7 +325,7 @@ class RentBuilding extends MoneyObject {
   FieldMoney expense = FieldMoney(
     importance: 21,
     name: 'Expenses',
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenses),
   );
 
@@ -334,7 +334,7 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Interest',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseInterest),
   );
 
@@ -343,7 +343,7 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Maintenance',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseMaintenance),
   );
 
@@ -352,7 +352,7 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Management',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseManagement),
   );
 
@@ -361,7 +361,7 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Repair',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseRepairs),
   );
 
@@ -370,7 +370,7 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Taxes',
     useAsColumn: false,
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseTaxes),
   );
 
@@ -378,7 +378,7 @@ class RentBuilding extends MoneyObject {
   FieldMoney profit = FieldMoney(
     importance: 22,
     name: 'Profit',
-    valueFromInstance: (final MoneyObject instance) =>
+    getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.profit),
   );
 
