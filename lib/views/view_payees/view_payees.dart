@@ -33,30 +33,31 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   @override
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+    if (!forInfoPanelTransactions) {
+      /// Merge
+      final MoneyObject? moneyObject = getFirstSelectedItem();
+      if (moneyObject != null) {
+        list.add(
+          buildMergeButton(
+            () {
+              // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
+              final payee = (moneyObject as Payee);
+              final transactions =
+                  Data().transactions.iterableList(includeDeleted: true).where((t) => t.payee.value == payee.uniqueId);
 
-    /// Merge
-    final MoneyObject? moneyObject = getFirstSelectedItem();
-    if (moneyObject != null) {
-      list.add(
-        buildMergeButton(
-          () {
-            // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
-            final payee = (moneyObject as Payee);
-            final transactions =
-                Data().transactions.iterableList(includeDeleted: true).where((t) => t.payee.value == payee.uniqueId);
-
-            adaptiveScreenSizeDialog(
-              context: context,
-              title: 'Merge ${transactions.length} transactions',
-              showCloseButton: false,
-              child: MergeTransactionsDialog(
-                currentPayee: payee,
-                transactions: transactions.toList(),
-              ),
-            );
-          },
-        ),
-      );
+              adaptiveScreenSizeDialog(
+                context: context,
+                title: 'Merge ${transactions.length} transactions',
+                showCloseButton: false,
+                child: MergeTransactionsDialog(
+                  currentPayee: payee,
+                  transactions: transactions.toList(),
+                ),
+              );
+            },
+          ),
+        );
+      }
     }
     return list;
   }
