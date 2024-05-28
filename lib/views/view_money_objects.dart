@@ -96,9 +96,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     setSelectedItem(_lastSelectedItemId);
   }
 
-  void onCopyInfoPanelTransactions() {
+  void onCopyListFromMainView() {
+    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list, forSerialization: false));
+  }
+
+  void onCopyListFromInfoPanel() {
     final listToCopy = getInfoTransactions();
-    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(listToCopy));
+    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(listToCopy, forSerialization: true));
   }
 
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
@@ -112,8 +116,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           widgets.add(buildAddTransactionsButton(onAddTransaction!));
         }
 
-        /// Copy
-        widgets.add(buildCopyButton(onCopyInfoPanelTransactions));
+        /// Copy Info List
+        widgets.add(buildCopyButton(onCopyListFromInfoPanel));
       }
     }
 
@@ -143,6 +147,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             },
           ),
         );
+
+        /// Copy List
+        widgets.add(buildCopyButton(onCopyListFromMainView));
       }
     }
 

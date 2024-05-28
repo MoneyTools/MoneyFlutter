@@ -190,12 +190,12 @@ class MoneyObjects<T> {
     return getCsvFromList(getListSortedById());
   }
 
-  static String getCsvHeader(final FieldDefinitions declarations) {
+  static String getCsvHeader(final FieldDefinitions declarations, final bool forSerialization) {
     final List<String> headerList = <String>[];
 
     for (final Field<dynamic> field in declarations) {
-      if (field.serializeName != '') {
-        headerList.add('"${field.serializeName}"');
+      if (isFieldMatchingCondition(field, forSerialization)) {
+        headerList.add('"${field.getBestFieldDescribingName()}"');
       }
     }
     return headerList.join(',');
@@ -212,7 +212,11 @@ class MoneyObjects<T> {
     return fieldNames;
   }
 
-  static String getCsvFromList(final List<MoneyObject> moneyObjects, [final String valueSeparator = ',']) {
+  static String getCsvFromList(
+    final List<MoneyObject> moneyObjects, {
+    final String valueSeparator = ',',
+    bool forSerialization = true,
+  }) {
     final StringBuffer csv = StringBuffer();
 
     // Add the UTF-8 BOM for Excel
@@ -223,11 +227,11 @@ class MoneyObjects<T> {
       final FieldDefinitions declarations = moneyObjects.first.fieldDefinitions;
 
       // CSV Header
-      csv.writeln(getCsvHeader(declarations));
+      csv.writeln(getCsvHeader(declarations, forSerialization));
 
       // CSV Rows values
       for (final MoneyObject item in moneyObjects) {
-        csv.writeln(toStringAsSeparatedValues(declarations, item, valueSeparator));
+        csv.writeln(toStringAsSeparatedValues(declarations, item, valueSeparator, forSerialization));
       }
     }
 
@@ -249,16 +253,22 @@ class MoneyObjects<T> {
     List<Object> declarations,
     MoneyObject item, [
     final String valueSeparator = ',',
+    bool forSerialization = true,
   ]) {
     final List<String> listValues = <String>[];
     for (final dynamic field in declarations) {
-      if (field.serializeName != '') {
-        final dynamic value = field.valueForSerialization(item);
+      if (isFieldMatchingCondition(field, forSerialization)) {
+        final dynamic value = forSerialization ? field.valueForSerialization(item) : field.getValueForDisplay(item);
         final String valueAsString = '"$value"';
         listValues.add(valueAsString);
       }
     }
     return listValues.join(valueSeparator);
+  }
+
+  static bool isFieldMatchingCondition(final field, bool forSerialization) {
+    return ((forSerialization == true && field.serializeName.isNotEmpty) ||
+        (forSerialization == false && field.useAsColumn));
   }
 
   List<String> getListOfValueAsStrings(List<Object> declarations, MoneyObject item) {
@@ -291,7 +301,7 @@ class MoneyObjects<T> {
             diffWidgets.add(diffTextNewValue(value['after'].toString()));
           case MutationType.deleted:
             diffWidgets.add(instanceName);
-            diffWidgets.add(diffTextOldValue(value.toString()));
+            diffWidgets.add(diffTextOldValue(value['after'].toString()));
           case MutationType.changed:
           default:
             diffWidgets.add(instanceName);

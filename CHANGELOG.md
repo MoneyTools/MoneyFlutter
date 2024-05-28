@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.14] 2024-05-28
+
+### Added
+
+- Copy CSV to clipboard for Main List and Info Panel
+  
 ## [version 1.8.13] 2024-05-27
 
 ### Added
@@ -322,9 +328,9 @@
 
 - Fields support for Editable vs ReadOnly
 - List View
-    - Optional Un-Selectable row
-    - Refresh when data is mutated
-    - Prioritize Selection color before Hover color
+  - Optional Un-Selectable row
+  - Refresh when data is mutated
+  - Prioritize Selection color before Hover color
 
 ## [version 1.4.1] 2024-03-15
 
@@ -342,9 +348,9 @@
 
 - Column Header are now aligned with content [ L | C | R ]
 - SanKey
-    - More usable on small devices (phones)
-    - Net Lost now displays on the left side of Expenses
-    - Width is flush to the view port
+  - More usable on small devices (phones)
+  - Net Lost now displays on the left side of Expenses
+  - Width is flush to the view port
 
 ## [version 1.3.9] 2024-03-13
 
