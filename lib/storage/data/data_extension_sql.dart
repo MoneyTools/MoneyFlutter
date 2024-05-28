@@ -37,10 +37,13 @@ extension DataFromSql on Data {
 
   Future<bool> saveToSql({
     required final String filePathToLoad,
-    required final Function callbackWhenLoaded,
+    required final Function(bool, String) callbackWhenLoaded,
   }) async {
     try {
       final MyDatabase db = MyDatabase(filePathToLoad);
+
+      // Save transaction first
+      transactions.saveSql(db, 'Transactions');
 
       onlineAccounts.saveSql(db, 'OnlineAccounts');
       accounts.saveSql(db, 'Accounts');
@@ -49,7 +52,6 @@ extension DataFromSql on Data {
       accountAliases.saveSql(db, 'AccountAliases');
       categories.saveSql(db, 'Categories');
       currencies.saveSql(db, 'Currencies');
-      transactions.saveSql(db, 'Transactions');
       securities.saveSql(db, 'Securities');
       stockSplits.saveSql(db, 'StockSplits');
       rentBuildings.saveSql(db, 'Buildings');
@@ -58,10 +60,11 @@ extension DataFromSql on Data {
 
       db.dispose();
     } catch (e) {
-      debugLog(e.toString());
-      callbackWhenLoaded(false);
+      callbackWhenLoaded(false, e.toString());
+      return false;
     }
-    callbackWhenLoaded(true);
+
+    callbackWhenLoaded(true, '');
     return true;
   }
 }

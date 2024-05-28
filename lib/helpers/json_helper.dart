@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/helpers/string_helper.dart';
 
 typedef MyJson = Map<String, dynamic>;
 
@@ -117,7 +118,7 @@ extension MyJsonExtensions on MyJson {
 
 String encodeValueWrapStringTypes(dynamic value) {
   if (value is String) {
-    return "'$value'";
+    return "'${escapeString(value)}'";
   } else {
     return value.toString();
   }

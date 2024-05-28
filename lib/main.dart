@@ -31,6 +31,7 @@ import 'package:money/views/view_transactions/view_transactions.dart';
 import 'package:money/views/view_transfers/view_transfers.dart';
 import 'package:money/views/view_welcome.dart';
 import 'package:money/widgets/keyboard_widget.dart';
+import 'package:money/widgets/message_box.dart';
 import 'package:money/widgets/snack_bar.dart';
 import 'package:money/widgets/working.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,7 @@ class MainView extends StatelessWidget {
     return MaterialApp(
       /// Assign Key Here
       scaffoldMessengerKey: SnackBarService.scaffoldKey,
+      navigatorKey: DialogService().navigatorKey,
       debugShowCheckedModeBanner: false,
       title: 'MyMoney by VTeam',
       theme: themeData,
@@ -294,8 +296,12 @@ class MainView extends StatelessWidget {
 
     data.saveToSql(
         filePathToLoad: settings.fileManager.fullPathToLastOpenedFile,
-        callbackWhenLoaded: (final bool success) {
-          data.assessMutationsCountOfAllModels();
+        callbackWhenLoaded: (final bool success, final String message) {
+          if (success) {
+            data.assessMutationsCountOfAllModels();
+          } else {
+            DialogService().showMessageBox('Error Saving', message);
+          }
         });
 
     settings.fileManager.rememberWhereTheDataCameFrom(settings.fileManager.fullPathToLastOpenedFile);

@@ -166,3 +166,7 @@ int countOccurrences(String input, String char) {
 String getSingularPluralText(final String title, final int quantity, final String singular, final String plural) {
   return '$title ${quantity == 1 ? singular : plural}';
 }
+
+String escapeString(String input) {
+  return input.replaceAll("'", "''");
+}
