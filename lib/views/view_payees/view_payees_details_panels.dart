@@ -29,6 +29,10 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
     final List<Transaction> flatTransactions = Transactions.flatTransactions(
         Data().transactions.iterableList().where((t) => t.payee.value == selectedIds.first));
 
+    if (flatTransactions.isEmpty) {
+      return const Center(child: Text('No transactions'));
+    }
+
     final DateRange dateRange = DateRange();
     for (final t in flatTransactions) {
       dateRange.inflate(t.dateTime.value);
