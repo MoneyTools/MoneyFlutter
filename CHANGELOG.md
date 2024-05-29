@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.15] 2024-05-29
+
+### Added
+
+- Payee View: new column for Catgories
+  
 ## [version 1.8.14] 2024-05-28
 
 ### Added

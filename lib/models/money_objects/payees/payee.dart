@@ -22,6 +22,7 @@ class Payee extends MoneyObject {
       _fields.setDefinitions([
         tmp.id,
         tmp.name,
+        tmp.categoriesAsText,
         tmp.count,
         tmp.sum,
       ]);
@@ -55,13 +56,21 @@ class Payee extends MoneyObject {
     setValue: (final MoneyObject instance, dynamic value) => (instance as Payee).name.value = value as String,
   );
 
+  FieldString categoriesAsText = FieldString(
+    importance: 2,
+    name: 'Categories',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
+  );
+
   FieldQuantity count = FieldQuantity(
+    importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).count.value,
   );
 
   FieldMoney sum = FieldMoney(
+    importance: 99,
     name: 'Sum',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).sum.value,
   );
@@ -74,6 +83,8 @@ class Payee extends MoneyObject {
         );
   }
 
+  Set<String> categories = {};
+
   factory Payee.fromJson(final MyJson row) {
     return Payee();
   }
@@ -84,5 +95,19 @@ class Payee extends MoneyObject {
 
   static String getName(final Payee? payee) {
     return payee == null ? '' : payee.name.value;
+  }
+
+  String getCategoriesAsString() {
+    if (categories.isEmpty) {
+      return '';
+    }
+
+    if (categories.length == 1) {
+      return categories.first;
+    }
+    if (categories.length == 2) {
+      return categories.join('; ');
+    }
+    return '${getIntAsText(categories.length)} categories';
   }
 }

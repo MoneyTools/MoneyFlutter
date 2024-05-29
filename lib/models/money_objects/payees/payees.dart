@@ -124,6 +124,10 @@ class Payees extends MoneyObjects<Payee> {
       if (item != null) {
         item.count.value++;
         item.sum.value.amount += t.amount.value.amount;
+        final categoryName = Data().categories.getNameFromId(t.categoryId.value).trim();
+        if (categoryName.isNotEmpty) {
+          item.categories.add(Data().categories.getNameFromId(t.categoryId.value));
+        }
       }
     }
   }
