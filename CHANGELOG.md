@@ -4,6 +4,7 @@
 
 ### Added
 
+- Payee Merge can now choose the categeory to use
 - Payee View: new column for Catgories
   
 ## [version 1.8.14] 2024-05-28

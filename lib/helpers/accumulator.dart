@@ -11,6 +11,10 @@ class AccumulatorSum<T, V> {
     }
   }
 
+  void clear() {
+    values.clear();
+  }
+
   // Replace this function with your specific logic for accumulating values of type T
   dynamic _accumulate(V existingValue, V value) {
     return (existingValue as num) + (value as num);
