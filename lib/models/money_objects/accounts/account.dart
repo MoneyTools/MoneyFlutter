@@ -327,7 +327,7 @@ class Account extends MoneyObject {
       if ((instance as Account).lastSync.value == null) {
         return instance.mostRecentTransaction;
       }
-      return instance.lastSync.value;
+      return newestDate(instance.lastSync.value, instance.mostRecentTransaction);
     },
   );
 

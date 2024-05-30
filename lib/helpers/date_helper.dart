@@ -132,3 +132,41 @@ String geDateAndTimeAsText(final DateTime? dateTime) {
   }
   return dateTimeAsText;
 }
+
+/// Return the newest of two given [DateTime] values.
+///
+/// If both [a] and [b] are `null`, this function will return `null`.
+/// If one of the parameters is `null`, this function will return the non-null [DateTime] object.
+/// If both parameters are non-null, this function will return the [DateTime] object that is the most recent.
+///
+/// @param a The first [DateTime] object to compare.
+/// @param b The second [DateTime] object to compare.
+/// @return The newest [DateTime] object, or `null` if both inputs are `null`.
+DateTime? newestDate(final DateTime? a, final DateTime? b) {
+  if (a == null) {
+    return b;
+  }
+  if (b == null) {
+    return a;
+  }
+  return a.isAfter(b) ? a : b;
+}
+
+/// Return the oldest of two given [DateTime] values.
+///
+/// If both [a] and [b] are `null`, this function will return `null`.
+/// If one of the parameters is `null`, this function will return the non-null [DateTime] object.
+/// If both parameters are non-null, this function will return the [DateTime] object that is the oldest.
+///
+/// @param a The first [DateTime] object to compare.
+/// @param b The second [DateTime] object to compare.
+/// @return The oldest [DateTime] object, or `null` if both inputs are `null`.
+DateTime? oldestDate(final DateTime? a, final DateTime? b) {
+  if (a == null) {
+    return b;
+  }
+  if (b == null) {
+    return a;
+  }
+  return a.isBefore(b) ? a : b;
+}

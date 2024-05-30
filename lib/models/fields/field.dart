@@ -10,6 +10,9 @@ import 'package:money/widgets/quantity_widget.dart';
 
 export 'package:money/models/money_model.dart';
 
+/// This is the base class for all field types.
+/// It defines common properties and methods that are shared across different field types.
+
 typedef FieldDefinitions = List<Field<dynamic>>;
 
 Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final String nameToFind) {
@@ -412,6 +415,7 @@ Alignment textAlignToAlignment(final TextAlign textAlign) {
   }
 }
 
+/// This enum defines the different types of fields supported
 enum FieldType {
   text,
   numeric,
@@ -483,6 +487,7 @@ Widget buildWidgetFromTypeAndValue({
 
 dynamic defaultCallbackValue(final dynamic instance) => '';
 
+/// This enum defines the different column widths that can be used for displaying fields in a table or grid layout.
 enum ColumnWidth {
   hide, // 0
   nano, // 1
