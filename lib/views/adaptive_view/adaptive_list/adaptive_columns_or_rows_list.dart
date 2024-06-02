@@ -4,27 +4,33 @@ import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 class AdaptiveListColumnsOrRows extends StatelessWidget {
   const AdaptiveListColumnsOrRows({
     super.key,
-    required this.useColumns,
+    required this.list,
     required this.fieldDefinitions,
     this.sortByFieldIndex = 0,
     this.sortAscending = true,
-    required this.list,
     required this.selectedItemsByUniqueId,
     this.isMultiSelectionOn = false,
     this.onSelectionChanged,
+    this.onContextMenu,
+    required this.displayAsColumns,
     this.onColumnHeaderTap,
     this.onColumnHeaderLongPress,
     this.onItemTap,
   });
 
-  final bool useColumns;
+  final List<MoneyObject> list;
   final FieldDefinitions fieldDefinitions;
   final int sortByFieldIndex;
   final bool sortAscending;
-  final List<MoneyObject> list;
+
+  // Selections
   final ValueNotifier<List<int>> selectedItemsByUniqueId;
   final bool isMultiSelectionOn;
   final Function? onSelectionChanged;
+  final Function? onContextMenu;
+
+  // Display as Card vs Columns
+  final bool displayAsColumns;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field field)? onColumnHeaderLongPress;
   final Function(BuildContext p1, int p2)? onItemTap;
@@ -33,7 +39,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        if (useColumns)
+        if (displayAsColumns)
           MyListItemHeader<MoneyObject>(
             columns: fieldDefinitions,
             sortByColumn: sortByFieldIndex,
@@ -63,7 +69,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
             selectedItemIds: selectedItemsByUniqueId,
             isMultiSelectionOn: isMultiSelectionOn,
             onSelectionChanged: onSelectionChanged,
-            asColumnView: useColumns,
+            displayAsColumn: displayAsColumns,
             onTap: onItemTap,
           ),
         ),

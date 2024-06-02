@@ -16,24 +16,24 @@ export 'package:money/views/adaptive_view/adaptive_list/list_item_header.dart';
 class MyListView<T> extends StatefulWidget {
   final Fields<T> fields;
   final List<T> list;
+  final bool displayAsColumn;
   final Function(BuildContext, int)? onTap;
   final Function(BuildContext, int)? onDoubleTap;
   final Function(BuildContext, int)? onLongPress;
   final ValueNotifier<List<int>> selectedItemIds;
   final Function? onSelectionChanged;
-  final bool asColumnView;
   final bool isMultiSelectionOn;
 
   const MyListView({
     super.key,
     required this.fields,
     required this.list,
-    required this.selectedItemIds,
-    this.onSelectionChanged,
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
-    this.asColumnView = true,
+    this.displayAsColumn = true,
+    required this.selectedItemIds,
+    this.onSelectionChanged,
     this.isMultiSelectionOn = false,
   });
 
@@ -62,7 +62,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
   Widget build(final BuildContext context) {
     final TextScaler textScaler = MediaQuery.textScalerOf(context);
 
-    if (widget.asColumnView) {
+    if (widget.displayAsColumn) {
       rowHeight = 30;
       padding = 8.0;
     } else {
@@ -139,7 +139,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
   Widget buildListItemContent(final bool isSelected, final MoneyObject itemInstance, final bool isLastItemOfTheList) {
-    return widget.asColumnView
+    return widget.displayAsColumn
         ? itemInstance.buildFieldsAsWidgetForLargeScreen!(widget.fields, itemInstance as T)
         : Container(
             padding: const EdgeInsets.all(8),

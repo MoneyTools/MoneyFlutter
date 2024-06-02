@@ -48,24 +48,27 @@ class AdaptiveViewWithList extends StatelessWidget {
     }
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        final bool useColumns = !isSmallWidth(constraints);
+        final bool displayAsColumns = !isSmallWidth(constraints);
         return ValueListenableBuilder<List<int>>(
             valueListenable: selectedItemsByUniqueId,
             builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _) {
               return Column(
                 children: [
-                  // Optional upper Title area
+                  // Top - Title area
                   if (top != null) top!,
+
+                  // Middle
                   Expanded(
                     child: AdaptiveListColumnsOrRows(
-                      // list
+                      // List of Money Object instances
                       list: list,
                       fieldDefinitions: fieldDefinitions,
                       sortByFieldIndex: sortByFieldIndex,
                       sortAscending: sortAscending,
 
-                      // Field & Columns
-                      useColumns: useColumns,
+                      // Display as Cards or Columns
+                      // On small device you can display rows a Cards instead of Columns
+                      displayAsColumns: displayAsColumns,
                       onColumnHeaderTap: onColumnHeaderTap,
                       onColumnHeaderLongPress: onColumnHeaderLongPress,
 
@@ -74,9 +77,11 @@ class AdaptiveViewWithList extends StatelessWidget {
                       selectedItemsByUniqueId: selectedItemsByUniqueId,
                       isMultiSelectionOn: isMultiSelectionOn,
                       onSelectionChanged: onSelectionChanged,
+                      onContextMenu: () {},
                     ),
                   ),
-                  // Optional bottom details panel
+
+                  // Bottom Info panel
                   if (bottom != null)
                     Expanded(
                       flex: flexBottom,

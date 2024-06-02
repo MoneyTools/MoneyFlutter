@@ -100,7 +100,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           sortAscending: sortInstructions.ascending,
 
           // Field & Columns
-          useColumns: true,
+          displayAsColumns: true,
           onColumnHeaderTap: (int columnHeaderIndex) {
             if (columnHeaderIndex == sortInstructions.column) {
               // toggle order

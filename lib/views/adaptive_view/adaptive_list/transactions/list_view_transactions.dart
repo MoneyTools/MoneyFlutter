@@ -83,7 +83,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
             list: transactions,
             selectedItemIds: ValueNotifier<List<int>>([selectedItemIndex]),
             isMultiSelectionOn: _isMultiSelectionOn,
-            asColumnView: true,
+            displayAsColumn: true,
             onTap: (final BuildContext context2, final int uniqueId) {
               final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
               showTransactionAndActions(
