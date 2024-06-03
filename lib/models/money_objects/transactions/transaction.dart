@@ -453,8 +453,6 @@ class Transaction extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget((instance as Transaction).getCurrency());
     },
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-        (a as Transaction).getCurrency(), (b as Transaction).accountInstance!.getAccountCurrencyAsText(), ascending),
   );
 
   /// Used for establishing relation between two transactions
@@ -465,15 +463,11 @@ class Transaction extends MoneyObject {
   String? _transferName;
 
   String getCurrency() {
-    if (this.accountInstance == null) {
+    if (this.accountInstance == null || this.accountInstance!.currency.value.isEmpty) {
       return Constants.defaultCurrency;
     }
 
-    try {
-      return this.accountInstance!.currency.value;
-    } catch (error) {
-      return Constants.defaultCurrency;
-    }
+    return this.accountInstance!.currency.value;
   }
 
   String get transferName {

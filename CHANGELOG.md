@@ -1,6 +1,12 @@
 # Change Log
 
-## [version 1.8.15] 2024-05-29
+## [version 1.8.16] 2024-05-29
+
+### Fixed
+
+- Transaction view: Sorting by currency
+
+## [version 1.8.16] 2024-06-03
 
 ### Added
 
