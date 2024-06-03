@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 class AdaptiveViewWithList extends StatelessWidget {
   final Widget? top;
   final FieldDefinitions fieldDefinitions;
+  final List<FieldFilter> filters;
   final List<MoneyObject> list;
   final Widget? bottom;
   final int flexBottom;
@@ -26,8 +28,9 @@ class AdaptiveViewWithList extends StatelessWidget {
   const AdaptiveViewWithList({
     super.key,
     this.top,
-    required this.fieldDefinitions,
     required this.list,
+    required this.fieldDefinitions,
+    required this.filters,
     required this.selectedItemsByUniqueId,
     required this.onSelectionChanged,
     required this.isMultiSelectionOn,
@@ -63,6 +66,7 @@ class AdaptiveViewWithList extends StatelessWidget {
                       // List of Money Object instances
                       list: list,
                       fieldDefinitions: fieldDefinitions,
+                      filters: filters,
                       sortByFieldIndex: sortByFieldIndex,
                       sortAscending: sortAscending,
 

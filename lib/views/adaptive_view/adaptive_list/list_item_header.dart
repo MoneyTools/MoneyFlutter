@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/fields/fields.dart';
+import 'package:money/models/fields/field_filter.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/widgets/column_header_button.dart';
 
 /// A Row for a Table view
 class MyListItemHeader<T> extends StatelessWidget {
   final FieldDefinitions columns;
+  final List<FieldFilter> filterOn;
   final int sortByColumn;
   final bool sortAscending;
   final bool itemsAreAllSelected;
@@ -15,6 +17,7 @@ class MyListItemHeader<T> extends StatelessWidget {
   const MyListItemHeader({
     super.key,
     required this.columns,
+    required this.filterOn,
     required this.sortByColumn,
     required this.sortAscending,
     this.itemsAreAllSelected = false,
@@ -45,6 +48,7 @@ class MyListItemHeader<T> extends StatelessWidget {
           columnDefinition.align,
           columnDefinition.columnWidth.index,
           getSortIndicator(sortByColumn, i, sortAscending),
+          filterOn.firstWhereOrNull((item) => item.fieldName == columnDefinition.name) != null,
           // Press
           () {
             onTap(i);

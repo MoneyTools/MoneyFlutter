@@ -162,8 +162,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       AdaptiveViewWithList(
         key: Key(list.length.toString()),
         top: buildHeader(),
-        fieldDefinitions: _fieldToDisplay.definitions,
         list: list,
+        fieldDefinitions: _fieldToDisplay.definitions,
+        filters: _filterByFieldsValue,
         selectedItemsByUniqueId: _selectedItemsByUniqueId,
         sortByFieldIndex: _sortByFieldIndex,
         sortAscending: _sortAscending,

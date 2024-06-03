@@ -38,6 +38,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         // Table Header
         MyListItemHeader<MoneySplit>(
           columns: MoneySplit.fields!.definitions,
+          filterOn: const [],
           sortByColumn: _sortBy,
           sortAscending: _sortAscending,
           onTap: (final int index) {

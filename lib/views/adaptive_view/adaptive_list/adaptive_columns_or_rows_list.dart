@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 class AdaptiveListColumnsOrRows extends StatelessWidget {
@@ -6,6 +7,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     super.key,
     required this.list,
     required this.fieldDefinitions,
+    required this.filters,
     this.sortByFieldIndex = 0,
     this.sortAscending = true,
     required this.selectedItemsByUniqueId,
@@ -20,6 +22,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
 
   final List<MoneyObject> list;
   final FieldDefinitions fieldDefinitions;
+  final List<FieldFilter> filters;
   final int sortByFieldIndex;
   final bool sortAscending;
 
@@ -42,6 +45,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         if (displayAsColumns)
           MyListItemHeader<MoneyObject>(
             columns: fieldDefinitions,
+            filterOn: filters,
             sortByColumn: sortByFieldIndex,
             sortAscending: sortAscending,
             itemsAreAllSelected: list.length == selectedItemsByUniqueId.value.length,

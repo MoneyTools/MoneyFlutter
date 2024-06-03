@@ -4,6 +4,7 @@
 
 ### Updated
 
+- Show a filter-icon if a column is using fitlering
 - Performance: using CompareIgnoreCase2
 
 ### Fixed

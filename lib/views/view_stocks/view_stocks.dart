@@ -96,6 +96,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           // list
           list: list,
           fieldDefinitions: fieldsToDisplay,
+          filters: const [],
           sortByFieldIndex: sortInstructions.column,
           sortAscending: sortInstructions.ascending,
 

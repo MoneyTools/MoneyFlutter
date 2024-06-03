@@ -53,6 +53,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         // Table Header
         MyListItemHeader<Transaction>(
           columns: widget.columnsToInclude,
+          filterOn: const [],
           sortByColumn: sortBy,
           sortAscending: sortAscending,
           onSelectAll: _isMultiSelectionOn

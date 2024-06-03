@@ -7,15 +7,14 @@ Widget buildColumnHeaderButton(
   final TextAlign textAlign,
   final int flex,
   final SortIndicator sortIndicator,
+  final bool hasFilters,
   final VoidCallback? onClick,
   final VoidCallback? onLongPress,
 ) {
-  final Widget? orderIndicator = buildSortIconNameWidget(sortIndicator);
-
   return Expanded(
     flex: flex,
     child: Tooltip(
-      message: ('$text\n${getSortingTooltipText(sortIndicator)}').trim(),
+      message: ('$text\n${_getTooltipText(sortIndicator, hasFilters)}').trim(),
       child: TextButton(
         style: ButtonStyle(
           shape: WidgetStateProperty.all<OutlinedBorder>(
@@ -32,21 +31,21 @@ Widget buildColumnHeaderButton(
         onPressed: onClick,
         onLongPress: onLongPress,
         // clipBehavior: Clip.hardEdge,
-        child: _buildTextAndSortOrder(context, textAlign, text, orderIndicator),
+        child: _buildTextAndSortAndFilter(context, textAlign, text, _buildAdorners(sortIndicator, hasFilters)),
       ),
     ),
   );
 }
 
-Widget _buildTextAndSortOrder(
+Widget _buildTextAndSortAndFilter(
   BuildContext context,
   TextAlign align,
   final String text,
-  final Widget? orderIndicator,
+  final Widget adorner,
 ) {
   switch (align) {
     case TextAlign.center:
-      return HeaderContentCenter(text: text, trailingWidget: orderIndicator);
+      return HeaderContentCenter(text: text, trailingWidget: adorner);
 
     case TextAlign.right:
     case TextAlign.end:
@@ -62,7 +61,7 @@ Widget _buildTextAndSortOrder(
               style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
             ),
           ),
-          if (orderIndicator != null) orderIndicator,
+          adorner,
         ],
       );
 
@@ -79,13 +78,25 @@ Widget _buildTextAndSortOrder(
             overflow: TextOverflow.clip,
             style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
           ),
-          if (orderIndicator != null) orderIndicator,
+          adorner,
         ],
       );
   }
 }
 
-Widget? buildSortIconNameWidget(final SortIndicator sortIndicator) {
+Widget _buildAdorners(
+  final SortIndicator sortIndicator,
+  final bool hasFilters,
+) {
+  return Row(
+    children: [
+      buildSortIconNameWidget(sortIndicator),
+      _buildAdornerFoFilter(hasFilters),
+    ],
+  );
+}
+
+Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
   switch (sortIndicator) {
     case SortIndicator.sortAscending:
       return const Icon(Icons.arrow_upward, size: 20.0);
@@ -93,20 +104,30 @@ Widget? buildSortIconNameWidget(final SortIndicator sortIndicator) {
       return const Icon(Icons.arrow_downward, size: 20.0);
     case SortIndicator.none:
     default:
-      return null;
+      return const SizedBox();
   }
 }
 
-String getSortingTooltipText(final SortIndicator sortIndicator) {
+Widget _buildAdornerFoFilter(final bool filterOn) {
+  if (filterOn) {
+    return const Icon(Icons.filter_alt_outlined, size: 20.0);
+  }
+  return const SizedBox();
+}
+
+String _getTooltipText(final SortIndicator sortIndicator, final bool filterOn) {
+  String tooltip = filterOn ? 'Filtering\n' : '';
+
   switch (sortIndicator) {
     case SortIndicator.sortAscending:
-      return 'Ascending';
+      tooltip += 'Sorting Ascending';
     case SortIndicator.sortDescending:
-      return 'Descending';
+      tooltip += 'Sorting Descending';
     case SortIndicator.none:
     default:
-      return '';
+      break;
   }
+  return tooltip;
 }
 
 enum SortIndicator {
