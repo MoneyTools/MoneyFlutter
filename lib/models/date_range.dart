@@ -78,7 +78,7 @@ class DateRange {
   }
 
   String toStringYears() {
-    return '${yearToString(min)} ($durationInYearsText) ${yearToString(max)}';
+    return '${dateToYearString(min)} ($durationInYearsText) ${dateToYearString(max)}';
   }
 
   String toStringDays() {

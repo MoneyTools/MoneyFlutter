@@ -1,110 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
-
 import 'package:money/models/settings.dart';
-
-class MenuHorizontal extends StatefulWidget {
-  final void Function(ViewId) onSelected;
-  final ViewId selectedView;
-  final Settings settings;
-
-  const MenuHorizontal({
-    super.key,
-    required this.settings,
-    required this.onSelected,
-    required this.selectedView,
-  });
-
-  @override
-  State<MenuHorizontal> createState() => _MenuHorizontalState();
-}
-
-class _MenuHorizontalState extends State<MenuHorizontal> {
-  ViewId _selectedView = ViewId.viewCashFlow;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedView = widget.selectedView;
-  }
-
-  @override
-  Widget build(final BuildContext context) {
-    return NavigationBar(
-      selectedIndex: _selectedView.index,
-      onDestinationSelected: (final int index) {
-        final view = ViewId.values[index];
-        setState(() {
-          _selectedView = view;
-        });
-        widget.onSelected(view);
-      },
-      destinations: getAppBarDestinations(widget.settings),
-      height: 52,
-      indicatorColor: getColorTheme(context).onSecondary,
-      backgroundColor: getColorTheme(context).secondaryContainer,
-      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
-    );
-  }
-}
-
-class MenuVertical extends StatefulWidget {
-  final void Function(ViewId) onSelectItem;
-  final ViewId selectedView;
-  final bool useIndicator;
-  final Settings settings;
-
-  const MenuVertical({
-    super.key,
-    required this.settings,
-    required this.onSelectItem,
-    required this.selectedView,
-    this.useIndicator = false,
-  });
-
-  @override
-  State<MenuVertical> createState() => _MenuVerticalState();
-}
-
-class _MenuVerticalState extends State<MenuVertical> {
-  ViewId _selectedView = ViewId.viewCashFlow;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedView = widget.selectedView;
-  }
-
-  @override
-  Widget build(final BuildContext context) {
-    bool isVeryLargeDevice = MediaQuery.of(context).size.width > 1000;
-    final List<NavigationRailDestination> destinations = getNavRailDestination(widget.settings);
-    return Container(
-      color: getColorTheme(context).secondaryContainer,
-      child: SingleChildScrollView(
-        child: IntrinsicHeight(
-          child: NavigationRail(
-            minWidth: 50,
-            destinations: destinations,
-            selectedIndex: _selectedView.index,
-            useIndicator: widget.useIndicator,
-            labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
-            indicatorColor: getColorTheme(context).onSecondary,
-            backgroundColor: getColorTheme(context).secondaryContainer,
-            onDestinationSelected: (final int index) {
-              final view = ViewId.values[index];
-              setState(() {
-                _selectedView = view;
-              });
-              widget.onSelectItem(view);
-            },
-          ),
-        ),
-      ),
-    );
-  }
-}
 
 List<NavigationDestination> getAppBarDestinations(final Settings settings) {
   final List<NavigationDestination> appBarDestinations = <NavigationDestination>[
@@ -198,4 +95,106 @@ List<NavigationRailDestination> getNavRailDestination(final Settings settings) {
     ),
   );
   return navRailDestinations.toList();
+}
+
+class MenuHorizontal extends StatefulWidget {
+  final void Function(ViewId) onSelected;
+  final ViewId selectedView;
+  final Settings settings;
+
+  const MenuHorizontal({
+    super.key,
+    required this.settings,
+    required this.onSelected,
+    required this.selectedView,
+  });
+
+  @override
+  State<MenuHorizontal> createState() => MenuHorizontalState();
+}
+
+class MenuHorizontalState extends State<MenuHorizontal> {
+  ViewId _selectedView = ViewId.viewCashFlow;
+
+  @override
+  Widget build(final BuildContext context) {
+    return NavigationBar(
+      selectedIndex: _selectedView.index,
+      onDestinationSelected: (final int index) {
+        final view = ViewId.values[index];
+        setState(() {
+          _selectedView = view;
+        });
+        widget.onSelected(view);
+      },
+      destinations: getAppBarDestinations(widget.settings),
+      height: 52,
+      indicatorColor: getColorTheme(context).onSecondary,
+      backgroundColor: getColorTheme(context).secondaryContainer,
+      labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedView = widget.selectedView;
+  }
+}
+
+class MenuVertical extends StatefulWidget {
+  final void Function(ViewId) onSelectItem;
+  final ViewId selectedView;
+  final bool useIndicator;
+  final Settings settings;
+
+  const MenuVertical({
+    super.key,
+    required this.settings,
+    required this.onSelectItem,
+    required this.selectedView,
+    this.useIndicator = false,
+  });
+
+  @override
+  State<MenuVertical> createState() => MenuVerticalState();
+}
+
+class MenuVerticalState extends State<MenuVertical> {
+  ViewId _selectedView = ViewId.viewCashFlow;
+
+  @override
+  Widget build(final BuildContext context) {
+    bool isVeryLargeDevice = MediaQuery.of(context).size.width > 1000;
+    final List<NavigationRailDestination> destinations = getNavRailDestination(widget.settings);
+    return Container(
+      color: getColorTheme(context).secondaryContainer,
+      child: SingleChildScrollView(
+        child: IntrinsicHeight(
+          child: NavigationRail(
+            minWidth: 50,
+            destinations: destinations,
+            selectedIndex: _selectedView.index,
+            useIndicator: widget.useIndicator,
+            labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
+            indicatorColor: getColorTheme(context).onSecondary,
+            backgroundColor: getColorTheme(context).secondaryContainer,
+            onDestinationSelected: (final int index) {
+              final view = ViewId.values[index];
+              setState(() {
+                _selectedView = view;
+              });
+              widget.onSelectItem(view);
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedView = widget.selectedView;
+  }
 }

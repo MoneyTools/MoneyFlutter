@@ -13,27 +13,11 @@ class ViewWidget extends StatefulWidget {
 
 class ViewWidgetState extends State<ViewWidget> {
   @override
-  void initState() {
-    super.initState();
-
-    final MyJson? viewSetting = Settings().views[getClassNameSingular()];
-    if (viewSetting != null) {}
-  }
-
-  @override
   Widget build(final BuildContext context) {
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
         return buildViewContent(const Center(child: Text('Content goes here')));
       },
-    );
-  }
-
-  /// To be overridden by the derived view
-  Widget buildViewContent(final Widget child) {
-    return Container(
-      color: getColorTheme(context).surface,
-      child: child,
     );
   }
 
@@ -48,16 +32,32 @@ class ViewWidgetState extends State<ViewWidget> {
     );
   }
 
-  String getClassNameSingular() {
-    return 'Item';
+  /// To be overridden by the derived view
+  Widget buildViewContent(final Widget child) {
+    return Container(
+      color: getColorTheme(context).surface,
+      child: child,
+    );
   }
 
   String getClassNamePlural() {
     return 'Items';
   }
 
+  String getClassNameSingular() {
+    return 'Item';
+  }
+
   String getDescription() {
     return 'Default list of items';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    final MyJson? viewSetting = Settings().views[getClassNameSingular()];
+    if (viewSetting != null) {}
   }
 
   void saveLastUserActionOnThisView() {

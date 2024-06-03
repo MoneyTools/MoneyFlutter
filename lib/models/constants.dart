@@ -1,5 +1,43 @@
 import 'package:flutter/material.dart';
 
+const List<Color> colorOptions = <Color>[
+  Colors.deepPurple,
+  Colors.blue,
+  Colors.teal,
+  Colors.green,
+  Colors.yellow,
+  Colors.orange,
+  Colors.pink,
+];
+
+const List<String> colorText = <String>[
+  'Purple',
+  'Blue',
+  'Teal',
+  'Green',
+  'Yellow',
+  'Orange',
+  'Pink',
+];
+
+const String settingKeyCashflowRecurringOccurrences = 'keyCashflowOccurrences';
+const String settingKeyCashflowView = 'keyCashflowView';
+const String settingKeyDarkMode = 'themeDarkMode';
+const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';
+const String settingKeyDomainAccounts = 'accountDetailsTransactions';
+const String settingKeyFilterText = 'filterText';
+const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
+const String settingKeyLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
+const String settingKeyRentalsSupport = 'rentals';
+const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
+const String settingKeySelectedListItemId = 'selectedItemId';
+const String settingKeySortAscending = 'sortAscending';
+const String settingKeySortBy = 'sortBy';
+const String settingKeyStockApiKey = 'stockServiceApiKey';
+const String settingKeyTextScale = 'textScale';
+const String settingKeyTheme = 'themeColor';
+const String settingKeyViewsMap = 'views';
+
 class Constants {
   static const String demoData = '<Demo Data>';
   static const String newDataFile = '<New file>';
@@ -28,6 +66,29 @@ class Constants {
   static const int commandFileClose = 2005;
 }
 
+class IntValues {
+  static int maxSigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (1 << (bitCount - 1)) - 1;
+  }
+
+  // ...
+  static int maxUnsigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (1 << bitCount) - 1;
+  }
+
+  static int minSigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (-1 << (bitCount - 1)) - 1;
+  }
+
+  static int minUnsigned(int bitCount) {
+    RangeError.checkValueInInterval(bitCount, 1, 64);
+    return (-1 << (bitCount - 1));
+  }
+}
+
 enum ViewId {
   viewCashFlow,
   viewAccounts,
@@ -41,66 +102,4 @@ enum ViewId {
   viewStocks,
   viewRentals,
   viewPolicy,
-}
-
-const List<Color> colorOptions = <Color>[
-  Colors.deepPurple,
-  Colors.blue,
-  Colors.teal,
-  Colors.green,
-  Colors.yellow,
-  Colors.orange,
-  Colors.pink,
-];
-
-const List<String> colorText = <String>[
-  'Purple',
-  'Blue',
-  'Teal',
-  'Green',
-  'Yellow',
-  'Orange',
-  'Pink',
-];
-
-const String settingKeyDomainAccounts = 'accountDetailsTransactions';
-
-const String settingKeyLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
-const String settingKeyTheme = 'themeColor';
-const String settingKeyDarkMode = 'themeDarkMode';
-const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
-const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';
-const String settingKeyRentalsSupport = 'rentals';
-const String settingKeyTextScale = 'textScale';
-const String settingKeyViewsMap = 'views';
-const String settingKeySortBy = 'sortBy';
-const String settingKeySortAscending = 'sortAscending';
-const String settingKeyFilterText = 'filterText';
-const String settingKeySelectedListItemId = 'selectedItemId';
-const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
-const String settingKeyStockApiKey = 'stockServiceApiKey';
-const String settingKeyCashflowView = 'keyCashflowView';
-const String settingKeyCashflowRecurringOccurrences = 'keyCashflowOccurrences';
-
-class IntValues {
-  // ...
-  static int maxUnsigned(int bitCount) {
-    RangeError.checkValueInInterval(bitCount, 1, 64);
-    return (1 << bitCount) - 1;
-  }
-
-  static int minSigned(int bitCount) {
-    RangeError.checkValueInInterval(bitCount, 1, 64);
-    return (-1 << (bitCount - 1)) - 1;
-  }
-
-  static int maxSigned(int bitCount) {
-    RangeError.checkValueInInterval(bitCount, 1, 64);
-    return (1 << (bitCount - 1)) - 1;
-  }
-
-  static int minUnsigned(int bitCount) {
-    RangeError.checkValueInInterval(bitCount, 1, 64);
-    return (-1 << (bitCount - 1));
-  }
 }

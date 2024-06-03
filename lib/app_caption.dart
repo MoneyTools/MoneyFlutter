@@ -55,7 +55,7 @@ class LoadedDataFileAndTime extends StatelessWidget {
           ),
           gapMedium(),
           Text(
-            geDateAndTimeAsText(lastModifiedDateTime),
+            dateToDateTimeString(lastModifiedDateTime),
             textAlign: TextAlign.left,
             overflow: TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),

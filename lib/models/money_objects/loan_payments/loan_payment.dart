@@ -57,9 +57,10 @@ class LoanPayment extends MoneyObject {
     importance: 2,
     serializeName: 'Date',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as LoanPayment).date.value),
+    getValueForDisplay: (final MoneyObject instance) =>
+        dateToIso8601OrDefaultString((instance as LoanPayment).date.value),
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as LoanPayment).date.value),
+        dateToIso8601OrDefaultString((instance as LoanPayment).date.value),
   );
 
   /// 3

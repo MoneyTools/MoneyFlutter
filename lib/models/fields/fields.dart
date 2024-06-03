@@ -14,82 +14,12 @@ class Fields<T> {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
-  bool get isEmpty {
-    return definitions.isEmpty;
-  }
-
-  void setDefinitions(List<Field<dynamic>> list) {
-    definitions.clear();
-    for (var object in list) {
-      definitions.add(object);
-    }
-  }
-
-  Field getFieldByName(final String name) {
-    return definitions.firstWhere((field) => field.name == name);
-  }
-
   Iterable<Field> get fieldDefinitionsForColumns {
     return definitions.where((element) => element.useAsColumn == true);
   }
 
-  /// Used in table view
-  Widget getRowOfColumns(final MoneyObject objectInstance) {
-    final List<Widget> cells = <Widget>[];
-
-    for (final Field fieldDefinition in definitions) {
-      final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
-      cells.add(
-        Expanded(
-          flex: fieldDefinition.columnWidth.index,
-          child: buildWidgetFromTypeAndValue(
-            value: value,
-            type: fieldDefinition.type,
-            align: fieldDefinition.align,
-            fixedFont: fieldDefinition.fixedFont,
-            // currency: fieldDefinition.currency,
-          ),
-        ),
-      );
-    }
-
-    return Row(children: cells);
-  }
-
-  FieldDefinitions getFieldsForClass<C>() {
-    definitions.sort((final Field<dynamic> a, final Field<dynamic> b) {
-      int result = 0;
-
-      if (a.importance == -1 && b.importance >= 0) {
-        return 1;
-      }
-
-      if (b.importance == -1 && a.importance >= 0) {
-        return -1;
-      }
-
-      result = a.importance.compareTo(b.importance);
-
-      if (result == 0) {
-        // secondary sorting order is based on [serializeName]
-        return a.serializeName.compareTo(b.serializeName);
-      }
-      return result;
-    });
-
-    return definitions;
-  }
-
-  List<String> getListOfFieldValueAsString(final MoneyObject objectInstance, [final bool includeHiddenFields = false]) {
-    final List<String> strings = <String>[];
-    for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
-      final Field<dynamic> fieldDefinition = definitions[fieldIndex];
-      if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
-        final dynamic rawValue = fieldDefinition.getValueForDisplay(objectInstance);
-        strings.add(fieldDefinition.getString(rawValue));
-      }
-    }
-    return strings;
+  bool get isEmpty {
+    return definitions.isEmpty;
   }
 
   bool applyFilters(
@@ -139,5 +69,75 @@ class Fields<T> {
       listOfValues.add('"${field.getValueForSerialization(item)}"');
     }
     return listOfValues.join(',');
+  }
+
+  Field getFieldByName(final String name) {
+    return definitions.firstWhere((field) => field.name == name);
+  }
+
+  FieldDefinitions getFieldsForClass<C>() {
+    definitions.sort((final Field<dynamic> a, final Field<dynamic> b) {
+      int result = 0;
+
+      if (a.importance == -1 && b.importance >= 0) {
+        return 1;
+      }
+
+      if (b.importance == -1 && a.importance >= 0) {
+        return -1;
+      }
+
+      result = a.importance.compareTo(b.importance);
+
+      if (result == 0) {
+        // secondary sorting order is based on [serializeName]
+        return a.serializeName.compareTo(b.serializeName);
+      }
+      return result;
+    });
+
+    return definitions;
+  }
+
+  List<String> getListOfFieldValueAsString(final MoneyObject objectInstance, [final bool includeHiddenFields = false]) {
+    final List<String> strings = <String>[];
+    for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
+      final Field<dynamic> fieldDefinition = definitions[fieldIndex];
+      if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
+        final dynamic rawValue = fieldDefinition.getValueForDisplay(objectInstance);
+        strings.add(fieldDefinition.getString(rawValue));
+      }
+    }
+    return strings;
+  }
+
+  /// Used in table view
+  Widget getRowOfColumns(final MoneyObject objectInstance) {
+    final List<Widget> cells = <Widget>[];
+
+    for (final Field fieldDefinition in definitions) {
+      final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
+      cells.add(
+        Expanded(
+          flex: fieldDefinition.columnWidth.index,
+          child: buildWidgetFromTypeAndValue(
+            value: value,
+            type: fieldDefinition.type,
+            align: fieldDefinition.align,
+            fixedFont: fieldDefinition.fixedFont,
+            // currency: fieldDefinition.currency,
+          ),
+        ),
+      );
+    }
+
+    return Row(children: cells);
+  }
+
+  void setDefinitions(List<Field<dynamic>> list) {
+    definitions.clear();
+    for (var object in list) {
+      definitions.add(object);
+    }
   }
 }

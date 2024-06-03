@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,6 @@ import 'package:money/widgets/snack_bar.dart';
 import 'package:money/widgets/working.dart';
 import 'package:provider/provider.dart';
 
-final Settings settings = Settings();
-final Data data = Data();
-
 void main() {
   runApp(const MainApp());
 }
@@ -47,9 +45,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    settings.preferrenceLoad();
+    Settings().preferrenceLoad();
     return ChangeNotifierProvider.value(
-      value: settings,
+      value: Settings(),
       child: const MainView(),
     );
   }
@@ -63,11 +61,11 @@ class MainView extends StatelessWidget {
     final settings = Provider.of<Settings>(context);
     settings.isSmallScreen = MediaQuery.of(context).size.width < 800;
 
-    if (!settings.isPreferenceLoaded) {
+    if (!Settings().isPreferenceLoaded) {
       return const WorkingIndicator();
     }
 
-    final themeData = settings.getThemeData();
+    final themeData = Settings().getThemeData();
 
     return MaterialApp(
       /// Assign Key Here
@@ -77,8 +75,8 @@ class MainView extends StatelessWidget {
       title: 'MyMoney by VTeam',
       theme: themeData,
       home: MediaQuery(
-        key: Key(settings.getUniqueSate()),
-        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(settings.textScale)),
+        key: Key(Settings().getUniqueSate()),
+        data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(Settings().textScale)),
         child: myScaffold(
           backgroundColor: themeData.colorScheme.secondaryContainer,
           showAppBar: !shouldShowOpenInstructions(),
@@ -106,7 +104,7 @@ class MainView extends StatelessWidget {
       );
     }
 
-    if (settings.fileManager.shouldLoadLastDataFile()) {
+    if (Settings().fileManager.shouldLoadLastDataFile()) {
       // loading a file
       loadData();
       return const WorkingIndicator();
@@ -121,22 +119,6 @@ class MainView extends StatelessWidget {
     return buildContentForLargeSurface(context);
   }
 
-  Widget buildContentForSmallSurface(final BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: getWidgetForMainContent(context, settings.selectedView),
-        ),
-        MenuHorizontal(
-          key: Key(settings.selectedView.toString()),
-          settings: settings,
-          onSelected: handleScreenChanged,
-          selectedView: settings.selectedView,
-        ),
-      ],
-    );
-  }
-
   Widget buildContentForLargeSurface(final BuildContext context) {
     return SafeArea(
       bottom: false,
@@ -145,16 +127,16 @@ class MainView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MenuVertical(
-            key: Key(settings.selectedView.toString()),
-            settings: settings,
+            key: Key(Settings().selectedView.toString()),
+            settings: Settings(),
             onSelectItem: handleScreenChanged,
-            selectedView: settings.selectedView,
+            selectedView: Settings().selectedView,
             useIndicator: true,
           ),
           Expanded(
             child: Container(
               color: getColorTheme(context).secondaryContainer,
-              child: getWidgetForMainContent(context, settings.selectedView),
+              child: getWidgetForMainContent(context, Settings().selectedView),
             ),
           )
         ],
@@ -162,214 +144,19 @@ class MainView extends StatelessWidget {
     );
   }
 
-  bool shouldShowOpenInstructions() {
-    if (settings.isPreferenceLoaded &&
-        Data().accounts.isEmpty &&
-        settings.fileManager.fullPathToLastOpenedFile.isEmpty) {
-      return true;
-    }
-    return false;
-  }
-
-  void loadData() async {
-    settings.fileManager.state = DataFileState.loading;
-    data.loadFromPath(filePathToLoad: settings.fileManager.fullPathToLastOpenedFile).then((final bool success) {
-      settings.fileManager.state = DataFileState.loaded;
-      settings.rebuild();
-    });
-  }
-
-  void handleScreenChanged(final ViewId selectedView) {
-    settings.selectedView = selectedView;
-  }
-
-  void onFileNew() async {
-    data.close();
-    Settings().rebuild();
-
-    settings.fileManager.fileName = Constants.newDataFile;
-    settings.preferrenceSave();
-
-    Data().accounts.addNewAccount('New Bank Account');
-    settings.selectedView = ViewId.viewAccounts;
-    settings.fileManager.state = DataFileState.loaded;
-    Settings().rebuild();
-  }
-
-  void onFileOpen() async {
-    FilePickerResult? pickerResult;
-
-    try {
-      if (Platform.isAndroid || Platform.isIOS) {
-        // Special case for Android
-        // See https://github.com/miguelpruivo/flutter_file_picker/issues/729
-        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
-      } else {
-        pickerResult = await FilePicker.platform.pickFiles(
-          type: FileType.custom,
-          allowedExtensions: <String>[
-            'mmdb',
-            'mmcsv',
-            'sdf',
-            'qfx',
-            'ofx',
-            'pdf',
-            'json',
-          ],
-        );
-      }
-    } catch (e) {
-      debugLog(e.toString());
-    }
-
-    if (pickerResult != null) {
-      try {
-        final String? fileExtension = pickerResult.files.single.extension;
-
-        if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
-          if (kIsWeb) {
-            settings.fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
-
-            final Uint8List? file = pickerResult.files.single.bytes;
-            if (file != null) {
-              // String s = String.fromCharCodes(file);
-              // var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
-              // debugLog("--------$s");
-            }
-          } else {
-            settings.fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
-          }
-          if (settings.fileManager.fullPathToLastOpenedFile.isNotEmpty) {
-            settings.preferrenceSave();
-            loadData();
-          }
-        }
-      } catch (e) {
-        debugLog(e.toString());
-      }
-    }
-  }
-
-  void onOpenDemoData() async {
-    settings.fileManager.fullPathToLastOpenedFile = '';
-    settings.preferrenceSave();
-    Data().loadFromDemoData();
-    Settings().rebuild();
-  }
-
-  void onFileClose() async {
-    settings.fileManager.fullPathToLastOpenedFile = '';
-    settings.preferrenceSave();
-    data.close();
-    Settings().rebuild();
-  }
-
-  void onImport() async {
-    final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
-    if (pickerResult != null) {
-      switch (pickerResult.files.single.extension?.toLowerCase()) {
-        case 'qif':
-          importQIF(pickerResult.files.single.path.toString());
-        case 'qfx':
-          importQFX(pickerResult.files.single.path.toString(), data);
-        case 'pdf':
-          importPDF(pickerResult.files.single.path.toString(), data);
-      }
-    }
-  }
-
-  void onShowFileLocation() async {
-    String path = await settings.fileManager.generateNextFolderToSaveTo();
-    openFolder(path);
-  }
-
-  void onSaveToCSV() async {
-    final String fullPathToFileName = await data.saveToCsv();
-    settings.fileManager.rememberWhereTheDataCameFrom(fullPathToFileName);
-    data.assessMutationsCountOfAllModels();
-  }
-
-  void onSaveToSql() async {
-    if (settings.fileManager.fullPathToLastOpenedFile.isEmpty) {
-      // this happens if the user started with a new file and click save to SQL
-      settings.fileManager.fullPathToLastOpenedFile = await settings.fileManager.defaultFolderToSaveTo('mymoney.mmdb');
-    }
-
-    data.saveToSql(
-        filePathToLoad: settings.fileManager.fullPathToLastOpenedFile,
-        callbackWhenLoaded: (final bool success, final String message) {
-          if (success) {
-            data.assessMutationsCountOfAllModels();
-          } else {
-            DialogService().showMessageBox('Error Saving', message);
-          }
-        });
-
-    settings.fileManager.rememberWhereTheDataCameFrom(settings.fileManager.fullPathToLastOpenedFile);
-  }
-
-  Widget getWidgetForMainContent(final BuildContext context, final ViewId screenIndex) {
-    switch (screenIndex) {
-      case ViewId.viewAccounts:
-        return const ViewAccounts();
-
-      case ViewId.viewLoans:
-        return const ViewLoans();
-
-      case ViewId.viewCategories:
-        return const ViewCategories();
-
-      case ViewId.viewPayees:
-        return const ViewPayees();
-
-      case ViewId.viewAliases:
-        return const ViewAliases();
-
-      case ViewId.viewTransactions:
-        return const ViewTransactions();
-
-      case ViewId.viewTransfers:
-        return const ViewTransfers();
-
-      case ViewId.viewInvestments:
-        return const ViewInvestments();
-
-      case ViewId.viewStocks:
-        return const ViewStocks();
-
-      case ViewId.viewRentals:
-        return const ViewRentals();
-
-      case ViewId.viewPolicy:
-        return const PolicyScreen();
-
-      case ViewId.viewCashFlow:
-      default:
-        return const ViewCashFlow();
-    }
-  }
-
-  Widget myScaffold({
-    required Color backgroundColor,
-    required final Widget body,
-    final bool showAppBar = true,
-    final Widget? bottomNavigationBar,
-  }) {
-    return Scaffold(
-      backgroundColor: backgroundColor,
-      appBar: showAppBar
-          ? MyAppBar(
-              onFileNew: onFileNew,
-              onFileOpen: onFileOpen,
-              onFileClose: onFileClose,
-              onShowFileLocation: onShowFileLocation,
-              onImport: onImport,
-              onSaveCsv: onSaveToCSV,
-              onSaveSql: onSaveToSql,
-            )
-          : null,
-      body: body,
-      bottomNavigationBar: bottomNavigationBar,
+  Widget buildContentForSmallSurface(final BuildContext context) {
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: getWidgetForMainContent(context, Settings().selectedView),
+        ),
+        MenuHorizontal(
+          key: Key(Settings().selectedView.toString()),
+          settings: Settings(),
+          onSelected: handleScreenChanged,
+          selectedView: Settings().selectedView,
+        ),
+      ],
     );
   }
 
@@ -421,5 +208,217 @@ class MainView extends StatelessWidget {
         isMetaPressed: true,
       ),
     ];
+  }
+
+  Widget getWidgetForMainContent(final BuildContext context, final ViewId screenIndex) {
+    switch (screenIndex) {
+      case ViewId.viewAccounts:
+        return const ViewAccounts();
+
+      case ViewId.viewLoans:
+        return const ViewLoans();
+
+      case ViewId.viewCategories:
+        return const ViewCategories();
+
+      case ViewId.viewPayees:
+        return const ViewPayees();
+
+      case ViewId.viewAliases:
+        return const ViewAliases();
+
+      case ViewId.viewTransactions:
+        return const ViewTransactions();
+
+      case ViewId.viewTransfers:
+        return const ViewTransfers();
+
+      case ViewId.viewInvestments:
+        return const ViewInvestments();
+
+      case ViewId.viewStocks:
+        return const ViewStocks();
+
+      case ViewId.viewRentals:
+        return const ViewRentals();
+
+      case ViewId.viewPolicy:
+        return const PolicyScreen();
+
+      case ViewId.viewCashFlow:
+      default:
+        return const ViewCashFlow();
+    }
+  }
+
+  void handleScreenChanged(final ViewId selectedView) {
+    Settings().selectedView = selectedView;
+  }
+
+  void loadData() async {
+    Settings().fileManager.state = DataFileState.loading;
+    Data().loadFromPath(filePathToLoad: Settings().fileManager.fullPathToLastOpenedFile).then((final bool success) {
+      Settings().fileManager.state = DataFileState.loaded;
+      Settings().rebuild();
+    });
+  }
+
+  Widget myScaffold({
+    required Color backgroundColor,
+    required final Widget body,
+    final bool showAppBar = true,
+    final Widget? bottomNavigationBar,
+  }) {
+    return Scaffold(
+      backgroundColor: backgroundColor,
+      appBar: showAppBar
+          ? MyAppBar(
+              onFileNew: onFileNew,
+              onFileOpen: onFileOpen,
+              onFileClose: onFileClose,
+              onShowFileLocation: onShowFileLocation,
+              onImport: onImport,
+              onSaveCsv: onSaveToCSV,
+              onSaveSql: onSaveToSql,
+            )
+          : null,
+      body: body,
+      bottomNavigationBar: bottomNavigationBar,
+    );
+  }
+
+  void onFileClose() async {
+    Settings().fileManager.fullPathToLastOpenedFile = '';
+    Settings().preferrenceSave();
+    Data().close();
+    Settings().rebuild();
+  }
+
+  void onFileNew() async {
+    Data().close();
+    Settings().rebuild();
+
+    Settings().fileManager.fileName = Constants.newDataFile;
+    Settings().preferrenceSave();
+
+    Data().accounts.addNewAccount('New Bank Account');
+    Settings().selectedView = ViewId.viewAccounts;
+    Settings().fileManager.state = DataFileState.loaded;
+    Settings().rebuild();
+  }
+
+  void onFileOpen() async {
+    FilePickerResult? pickerResult;
+
+    try {
+      if (Platform.isAndroid || Platform.isIOS) {
+        // Special case for Android
+        // See https://github.com/miguelpruivo/flutter_file_picker/issues/729
+        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
+      } else {
+        pickerResult = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: <String>[
+            'mmdb',
+            'mmcsv',
+            'sdf',
+            'qfx',
+            'ofx',
+            'pdf',
+            'json',
+          ],
+        );
+      }
+    } catch (e) {
+      debugLog(e.toString());
+    }
+
+    if (pickerResult != null) {
+      try {
+        final String? fileExtension = pickerResult.files.single.extension;
+
+        if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
+          if (kIsWeb) {
+            Settings().fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
+
+            final Uint8List? file = pickerResult.files.single.bytes;
+            if (file != null) {
+              // String s = String.fromCharCodes(file);
+              // var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
+              // debugLog("--------$s");
+            }
+          } else {
+            Settings().fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
+          }
+          if (Settings().fileManager.fullPathToLastOpenedFile.isNotEmpty) {
+            Settings().preferrenceSave();
+            loadData();
+          }
+        }
+      } catch (e) {
+        debugLog(e.toString());
+      }
+    }
+  }
+
+  void onImport() async {
+    final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
+    if (pickerResult != null) {
+      switch (pickerResult.files.single.extension?.toLowerCase()) {
+        case 'qif':
+          importQIF(pickerResult.files.single.path.toString());
+        case 'qfx':
+          importQFX(pickerResult.files.single.path.toString(), Data());
+        case 'pdf':
+          importPDF(pickerResult.files.single.path.toString(), Data());
+      }
+    }
+  }
+
+  void onOpenDemoData() async {
+    Settings().fileManager.fullPathToLastOpenedFile = '';
+    Settings().preferrenceSave();
+    Data().loadFromDemoData();
+    Settings().rebuild();
+  }
+
+  void onSaveToCSV() async {
+    final String fullPathToFileName = await Data().saveToCsv();
+    Settings().fileManager.rememberWhereTheDataCameFrom(fullPathToFileName);
+    Data().assessMutationsCountOfAllModels();
+  }
+
+  void onSaveToSql() async {
+    if (Settings().fileManager.fullPathToLastOpenedFile.isEmpty) {
+      // this happens if the user started with a new file and click save to SQL
+      Settings().fileManager.fullPathToLastOpenedFile =
+          await Settings().fileManager.defaultFolderToSaveTo('mymoney.mmdb');
+    }
+
+    Data().saveToSql(
+        filePathToLoad: Settings().fileManager.fullPathToLastOpenedFile,
+        callbackWhenLoaded: (final bool success, final String message) {
+          if (success) {
+            Data().assessMutationsCountOfAllModels();
+          } else {
+            DialogService().showMessageBox('Error Saving', message);
+          }
+        });
+
+    Settings().fileManager.rememberWhereTheDataCameFrom(Settings().fileManager.fullPathToLastOpenedFile);
+  }
+
+  void onShowFileLocation() async {
+    String path = await Settings().fileManager.generateNextFolderToSaveTo();
+    openFolder(path);
+  }
+
+  bool shouldShowOpenInstructions() {
+    if (Settings().isPreferenceLoaded &&
+        Data().accounts.isEmpty &&
+        Settings().fileManager.fullPathToLastOpenedFile.isEmpty) {
+      return true;
+    }
+    return false;
   }
 }

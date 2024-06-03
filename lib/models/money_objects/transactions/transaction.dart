@@ -103,7 +103,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Date',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).dateTime.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Transaction).dateTime.value),
+        dateToIso8601OrDefaultString((instance as Transaction).dateTime.value),
     getEditWidget: (final MoneyObject instance, Function onEdited) {
       return PickerEditBoxDate(
         initialValue: (instance as Transaction).dateTimeAsText,
@@ -265,9 +265,9 @@ class Transaction extends MoneyObject {
     serializeName: 'ReconciledDate',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Transaction).reconciledDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).reconciledDate.value),
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Transaction).reconciledDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).reconciledDate.value),
   );
 
   /// Budget Balance Date
@@ -278,9 +278,9 @@ class Transaction extends MoneyObject {
     serializeName: 'ReconciledDate',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Transaction).budgetBalanceDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).budgetBalanceDate.value),
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Transaction).budgetBalanceDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).budgetBalanceDate.value),
   );
 
   /// Transfer
@@ -370,9 +370,9 @@ class Transaction extends MoneyObject {
     useAsDetailPanels: false,
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Transaction).mergeDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).mergeDate.value),
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Transaction).mergeDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).mergeDate.value),
   );
 
   //------------------------------------------------------------------------

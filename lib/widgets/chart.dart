@@ -9,11 +9,35 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/widgets/center_message.dart';
 
-class PairXY {
-  String xText = '';
-  num yValue = 0.0;
+FlBorderData getBorders(final double min, final double max) {
+  return FlBorderData(
+    show: true,
+    border: Border(
+        top: BorderSide(
+          color: getHorizontalLineColorBasedOnValue(max),
+        ),
+        bottom: BorderSide(
+          color: getHorizontalLineColorBasedOnValue(min),
+        )),
+  );
+}
 
-  PairXY(this.xText, this.yValue);
+Color getHorizontalLineColorBasedOnValue(final double value) {
+  return colorBasedOnValue(value).withOpacity(0.3);
+}
+
+Widget getWidgetChartAmount(final double value, final TitleMeta meta) {
+  final Widget widget = Text(
+    Currency.getAmountAsStringUsingCurrency(value, decimalDigits: 0),
+    textAlign: TextAlign.end,
+    softWrap: false,
+    style: const TextStyle(fontSize: 10),
+  );
+
+  return SideTitleWidget(
+    axisSide: meta.axisSide,
+    child: widget,
+  );
 }
 
 class Chart extends StatelessWidget {
@@ -144,33 +168,9 @@ class Chart extends StatelessWidget {
   }
 }
 
-Widget getWidgetChartAmount(final double value, final TitleMeta meta) {
-  final Widget widget = Text(
-    Currency.getAmountAsStringUsingCurrency(value, decimalDigits: 0),
-    textAlign: TextAlign.end,
-    softWrap: false,
-    style: const TextStyle(fontSize: 10),
-  );
+class PairXY {
+  String xText = '';
+  num yValue = 0.0;
 
-  return SideTitleWidget(
-    axisSide: meta.axisSide,
-    child: widget,
-  );
-}
-
-FlBorderData getBorders(final double min, final double max) {
-  return FlBorderData(
-    show: true,
-    border: Border(
-        top: BorderSide(
-          color: getHorizontalLineColorBasedOnValue(max),
-        ),
-        bottom: BorderSide(
-          color: getHorizontalLineColorBasedOnValue(min),
-        )),
-  );
-}
-
-Color getHorizontalLineColorBasedOnValue(final double value) {
-  return colorBasedOnValue(value).withOpacity(0.3);
+  PairXY(this.xText, this.yValue);
 }

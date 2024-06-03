@@ -16,7 +16,7 @@ class FileManager {
   String fileName = '';
 
   String getLastModifiedDateTime() {
-    return geDateAndTimeAsText(dataFileLastUpdateDateTime);
+    return dateToDateTimeString(dataFileLastUpdateDateTime);
   }
 
   DataFileState state = DataFileState.empty;

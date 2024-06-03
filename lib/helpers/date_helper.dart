@@ -1,51 +1,5 @@
 import 'package:intl/intl.dart';
 
-String dateToString(final DateTime? date) {
-  if (date == null) {
-    return '____-__-__';
-  }
-  return DateFormat('yyyy-MM-dd').format(date);
-}
-
-String dateTimeToString(final DateTime? dateTime) {
-  if (dateTime == null) {
-    return '____-__-__ __:__:__';
-  }
-
-  return dateTime.toIso8601String();
-}
-
-String yearToString(final DateTime? dateTime) {
-  if (dateTime == null) {
-    return '____';
-  }
-
-  return dateTime.year.toString();
-}
-
-/// Converts a nullable DateTime object to an ISO8601 string representation,
-/// or returns a default value if the input is null.
-///
-/// This function takes a nullable DateTime object as input and returns a
-/// string representation of the date and time in the ISO8601 format. If the
-/// input DateTime object is null, the function returns a default value
-/// specified by the `defaultValueIfNull` parameter.
-///
-/// Parameters:
-/// - `value`: The nullable DateTime object to be converted to an ISO8601 string.
-/// - `defaultValueIfNull`: The default value to be returned if the `value`
-///   parameter is null. Defaults to an empty string `''`.
-///
-/// Returns:
-/// - If `value` is not null, the ISO8601 string representation of the date and time.
-/// - If `value` is null, the `defaultValueIfNull` value.
-String dateAsIso8601OrDefault(final DateTime? value, {final String defaultValueIfNull = ''}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value.toIso8601String();
-}
-
 /// Attempts to parse a date string using a list of common date formats.
 ///
 /// This function tries to parse the provided [text] string using a list of
@@ -93,44 +47,61 @@ DateTime? attemptToGetDateFromText(final String text) {
   return parsedDate;
 }
 
-/// Input will look like this "20240103120000.000[-5:EST]"
-///                            01234567890123456789012345
-///                            0........10--------20_____
-DateTime? parseQfxDataFormat(final String qfxDate) {
-  // Extract date components
-  try {
-    // Extract date and time components
-    final int year = int.parse(qfxDate.substring(0, 4));
-    final int month = int.parse(qfxDate.substring(4, 6));
-    final int day = int.parse(qfxDate.substring(6, 8));
-    final int hour = int.parse(qfxDate.substring(8, 10));
-    final int minute = int.parse(qfxDate.substring(10, 12));
-    final int second = int.parse(qfxDate.substring(12, 14));
-
-    // Create DateTime object
-    DateTime dateTime = DateTime(year, month, day, hour, minute, second);
-
-    // Import UTC based
-    // dateTime = dateTime.toUtc();
-
-    // // Extract time zone offset and abbreviation
-    // final tokens = qfxDate.substring(19).split(':');
-    // final int timeZoneOffset = int.parse(tokens[0]);
-    //
-    // // Adjust DateTime object with time zone offset
-    // dateTime = dateTime.add(Duration(hours: timeZoneOffset));
-    return dateTime;
-  } catch (e) {
-    return null;
-  }
-}
-
-String geDateAndTimeAsText(final DateTime? dateTime) {
+String dateToDateTimeString(final DateTime? dateTime) {
   String dateTimeAsText = '';
   if (dateTime != null) {
     dateTimeAsText += dateTime.toIso8601String().replaceAll('T', ' ');
   }
   return dateTimeAsText;
+}
+
+/// Converts a nullable DateTime object to an ISO8601 string representation,
+/// or returns a default value if the input is null.
+///
+/// This function takes a nullable DateTime object as input and returns a
+/// string representation of the date and time in the ISO8601 format. If the
+/// input DateTime object is null, the function returns a default value
+/// specified by the `defaultValueIfNull` parameter.
+///
+/// Parameters:
+/// - `value`: The nullable DateTime object to be converted to an ISO8601 string.
+/// - `defaultValueIfNull`: The default value to be returned if the `value`
+///   parameter is null. Defaults to an empty string `''`.
+///
+/// Returns:
+/// - If `value` is not null, the ISO8601 string representation of the date and time.
+/// - If `value` is null, the `defaultValueIfNull` value.
+String dateToIso8601OrDefaultString(final DateTime? value, {final String defaultValueIfNull = ''}) {
+  if (value == null) {
+    return defaultValueIfNull;
+  }
+  return value.toIso8601String();
+}
+
+String dateToString(final DateTime? date) {
+  if (date == null) {
+    return '____-__-__';
+  }
+  return DateFormat('yyyy-MM-dd').format(date);
+}
+
+/// Converts a nullable DateTime object to a string representation of the year.
+///
+/// This function takes a nullable DateTime object as input and returns a string
+/// containing the year component of the DateTime object. If the input DateTime
+/// object is null, the function returns a default placeholder value.
+///
+/// Parameters:
+/// - `dateTime`: The nullable DateTime object to be converted to a year string.
+///
+/// Returns:
+/// - If `dateTime` is not null, a string represe
+String dateToYearString(final DateTime? dateTime) {
+  if (dateTime == null) {
+    return '____';
+  }
+
+  return dateTime.year.toString();
 }
 
 /// Return the newest of two given [DateTime] values.
@@ -169,4 +140,36 @@ DateTime? oldestDate(final DateTime? a, final DateTime? b) {
     return a;
   }
   return a.isBefore(b) ? a : b;
+}
+
+/// Input will look like this "20240103120000.000[-5:EST]"
+///                            01234567890123456789012345
+///                            0........10--------20_____
+DateTime? parseQfxDataFormat(final String qfxDate) {
+  // Extract date components
+  try {
+    // Extract date and time components
+    final int year = int.parse(qfxDate.substring(0, 4));
+    final int month = int.parse(qfxDate.substring(4, 6));
+    final int day = int.parse(qfxDate.substring(6, 8));
+    final int hour = int.parse(qfxDate.substring(8, 10));
+    final int minute = int.parse(qfxDate.substring(10, 12));
+    final int second = int.parse(qfxDate.substring(12, 14));
+
+    // Create DateTime object
+    DateTime dateTime = DateTime(year, month, day, hour, minute, second);
+
+    // Import UTC based
+    // dateTime = dateTime.toUtc();
+
+    // // Extract time zone offset and abbreviation
+    // final tokens = qfxDate.substring(19).split(':');
+    // final int timeZoneOffset = int.parse(tokens[0]);
+    //
+    // // Adjust DateTime object with time zone offset
+    // dateTime = dateTime.add(Duration(hours: timeZoneOffset));
+    return dateTime;
+  } catch (e) {
+    return null;
+  }
 }

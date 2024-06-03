@@ -10,10 +10,139 @@ import 'package:money/widgets/quantity_widget.dart';
 
 export 'package:money/models/money_model.dart';
 
-/// This is the base class for all field types.
-/// It defines common properties and methods that are shared across different field types.
+Widget buildFieldWidgetForAmount({
+  final dynamic value = 0,
+  final String currency = Constants.defaultCurrency,
+  final bool shorthand = false,
+  final TextAlign align = TextAlign.right,
+}) {
+  return FittedBox(
+    fit: BoxFit.scaleDown,
+    alignment: textAlignToAlignment(align),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+      child: Text(
+        shorthand
+            ? getAmountAsShorthandText(value as num)
+            : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
+        textAlign: align,
+        style: const TextStyle(fontFamily: 'RobotoMono'),
+      ),
+    ),
+  );
+}
 
-typedef FieldDefinitions = List<Field<dynamic>>;
+Widget buildFieldWidgetForDate({
+  final DateTime? date,
+  final TextAlign align = TextAlign.left,
+}) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+    child: Text(
+      dateToString(date),
+      textAlign: align,
+      overflow: TextOverflow.ellipsis, // Clip with ellipsis
+      maxLines: 1, // Restrict to single line,
+      style: const TextStyle(fontFamily: 'RobotoMono'),
+    ),
+  );
+}
+
+Widget buildFieldWidgetForNumber({
+  final num value = 0,
+  final bool shorthand = false,
+  final TextAlign align = TextAlign.right,
+}) {
+  return FittedBox(
+    fit: BoxFit.scaleDown,
+    alignment: textAlignToAlignment(align),
+    child: Padding(
+      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+      child: Text(
+        shorthand
+            ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
+            : value.toString(),
+        textAlign: align,
+        style: const TextStyle(fontFamily: 'RobotoMono'),
+      ),
+    ),
+  );
+}
+
+Widget buildFieldWidgetForText({
+  final String text = '',
+  final TextAlign align = TextAlign.left,
+  final bool fixedFont = false,
+}) {
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+    child: Text(
+      text, textAlign: align,
+      overflow: TextOverflow.ellipsis, // Clip with ellipsis
+      maxLines: 1, // Restrict to single line,
+      style: TextStyle(fontFamily: fixedFont ? 'RobotoMono' : 'RobotoFlex'),
+    ),
+  );
+}
+
+Widget buildWidgetFromTypeAndValue({
+  required final dynamic value,
+  required final FieldType type,
+  required final TextAlign align,
+  required final bool fixedFont,
+  String currency = Constants.defaultCurrency,
+}) {
+  switch (type) {
+    case FieldType.numeric:
+      if (value is String) {
+        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+      }
+      return buildFieldWidgetForNumber(value: value as num, shorthand: false, align: align);
+
+    case FieldType.numericShorthand:
+      return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);
+
+    case FieldType.quantity:
+      return Row(
+        children: [
+          Expanded(
+            child: QuantifyWidget(
+              quantity: value,
+              align: align,
+            ),
+          ),
+        ],
+      );
+
+    case FieldType.amount:
+      if (value is String) {
+        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+      }
+      if (value is MoneyModel) {
+        return Row(
+          children: [
+            const Spacer(), // align right
+            MoneyWidget(amountModel: value),
+          ],
+        );
+      }
+      return buildFieldWidgetForAmount(value: value, shorthand: false, align: align, currency: currency);
+    case FieldType.amountShorthand:
+      return buildFieldWidgetForAmount(value: value, shorthand: true, align: align);
+    case FieldType.widget:
+      return Center(child: value as Widget);
+    case FieldType.date:
+      if (value is String) {
+        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+      }
+      return buildFieldWidgetForDate(date: value, align: align);
+    case FieldType.text:
+    default:
+      return buildFieldWidgetForText(text: value.toString(), align: align, fixedFont: fixedFont);
+  }
+}
+
+dynamic defaultCallbackValue(final dynamic instance) => '';
 
 Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final String nameToFind) {
   for (final f in fields) {
@@ -27,20 +156,41 @@ Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final St
   return null;
 }
 
+Alignment textAlignToAlignment(final TextAlign textAlign) {
+  switch (textAlign) {
+    case TextAlign.left:
+      return Alignment.centerLeft;
+    case TextAlign.center:
+      return Alignment.center;
+    case TextAlign.right:
+    default:
+      return Alignment.centerRight;
+  }
+}
+
+/// This is the base class for all field types.
+/// It defines common properties and methods that are shared across different field types.
+
+typedef FieldDefinitions = List<Field<dynamic>>;
+
+/// This enum defines the different column widths that can be used for displaying fields in a table or grid layout.
+enum ColumnWidth {
+  hide, // 0
+  nano, // 1
+  tiny, // 1
+  small, // 2
+  normal, // 3
+  large, // 4
+  largest, // 5
+}
+
 class Field<T> {
   late T _value;
 
-  // ignore: unnecessary_getters_setters
-  T get value {
-    return _value;
-  }
-
-  set value(T v) {
-    _value = v;
-  }
-
   String name;
+
   String serializeName;
+
   FieldType type;
   ColumnWidth columnWidth;
   TextAlign align;
@@ -145,6 +295,15 @@ class Field<T> {
     }
   }
 
+  // ignore: unnecessary_getters_setters
+  T get value {
+    return _value;
+  }
+
+  set value(T v) {
+    _value = v;
+  }
+
   String getBestFieldDescribingName() {
     if (serializeName.isNotEmpty) {
       return serializeName;
@@ -196,23 +355,23 @@ class Field<T> {
   }
 }
 
-class FieldInt extends Field<int> {
-  FieldInt({
+class FieldDate extends Field<DateTime?> {
+  FieldDate({
     super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
     super.getValueForSerialization,
     super.useAsColumn,
-    super.columnWidth,
     super.useAsDetailPanels,
-    super.defaultValue = -1,
-    super.setValue,
-    super.getEditWidget,
     super.sort,
-    super.align = TextAlign.right,
-    super.type = FieldType.numeric,
-  });
+    super.columnWidth = ColumnWidth.tiny,
+    super.getEditWidget,
+  }) : super(
+          defaultValue: null,
+          align: TextAlign.left,
+          type: FieldType.date,
+        );
 }
 
 class FieldDouble extends Field<double> {
@@ -232,21 +391,35 @@ class FieldDouble extends Field<double> {
         );
 }
 
-class FieldQuantity extends Field<double> {
-  FieldQuantity({
+class FieldId extends Field<int> {
+  FieldId({
+    super.importance = 0,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
+  }) : super(
+          serializeName: 'Id',
+          useAsColumn: false,
+          useAsDetailPanels: false,
+          defaultValue: -1,
+        );
+}
+
+class FieldInt extends Field<int> {
+  FieldInt({
     super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
     super.getValueForSerialization,
-    super.setValue,
     super.useAsColumn,
-    super.columnWidth = ColumnWidth.small,
+    super.columnWidth,
     super.useAsDetailPanels,
-    super.defaultValue = 0,
-    super.align = TextAlign.right,
-    super.type = FieldType.quantity,
+    super.defaultValue = -1,
+    super.setValue,
+    super.getEditWidget,
     super.sort,
+    super.align = TextAlign.right,
+    super.type = FieldType.numeric,
   });
 }
 
@@ -269,23 +442,22 @@ class FieldMoney extends Field<MoneyModel> {
         );
 }
 
-class FieldDate extends Field<DateTime?> {
-  FieldDate({
+class FieldQuantity extends Field<double> {
+  FieldQuantity({
     super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
     super.getValueForSerialization,
+    super.setValue,
     super.useAsColumn,
+    super.columnWidth = ColumnWidth.small,
     super.useAsDetailPanels,
+    super.defaultValue = 0,
+    super.align = TextAlign.right,
+    super.type = FieldType.quantity,
     super.sort,
-    super.columnWidth = ColumnWidth.tiny,
-    super.getEditWidget,
-  }) : super(
-          defaultValue: null,
-          align: TextAlign.left,
-          type: FieldType.date,
-        );
+  });
 }
 
 class FieldString extends Field<String> {
@@ -315,106 +487,6 @@ class FieldString extends Field<String> {
   }
 }
 
-class FieldId extends Field<int> {
-  FieldId({
-    super.importance = 0,
-    super.getValueForDisplay,
-    super.getValueForSerialization,
-  }) : super(
-          serializeName: 'Id',
-          useAsColumn: false,
-          useAsDetailPanels: false,
-          defaultValue: -1,
-        );
-}
-
-Widget buildFieldWidgetForDate({
-  final DateTime? date,
-  final TextAlign align = TextAlign.left,
-}) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-    child: Text(
-      dateToString(date),
-      textAlign: align,
-      overflow: TextOverflow.ellipsis, // Clip with ellipsis
-      maxLines: 1, // Restrict to single line,
-      style: const TextStyle(fontFamily: 'RobotoMono'),
-    ),
-  );
-}
-
-Widget buildFieldWidgetForText({
-  final String text = '',
-  final TextAlign align = TextAlign.left,
-  final bool fixedFont = false,
-}) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-    child: Text(
-      text, textAlign: align,
-      overflow: TextOverflow.ellipsis, // Clip with ellipsis
-      maxLines: 1, // Restrict to single line,
-      style: TextStyle(fontFamily: fixedFont ? 'RobotoMono' : 'RobotoFlex'),
-    ),
-  );
-}
-
-Widget buildFieldWidgetForAmount({
-  final dynamic value = 0,
-  final String currency = Constants.defaultCurrency,
-  final bool shorthand = false,
-  final TextAlign align = TextAlign.right,
-}) {
-  return FittedBox(
-    fit: BoxFit.scaleDown,
-    alignment: textAlignToAlignment(align),
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-      child: Text(
-        shorthand
-            ? getAmountAsShorthandText(value as num)
-            : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
-        textAlign: align,
-        style: const TextStyle(fontFamily: 'RobotoMono'),
-      ),
-    ),
-  );
-}
-
-Widget buildFieldWidgetForNumber({
-  final num value = 0,
-  final bool shorthand = false,
-  final TextAlign align = TextAlign.right,
-}) {
-  return FittedBox(
-    fit: BoxFit.scaleDown,
-    alignment: textAlignToAlignment(align),
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-      child: Text(
-        shorthand
-            ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
-            : value.toString(),
-        textAlign: align,
-        style: const TextStyle(fontFamily: 'RobotoMono'),
-      ),
-    ),
-  );
-}
-
-Alignment textAlignToAlignment(final TextAlign textAlign) {
-  switch (textAlign) {
-    case TextAlign.left:
-      return Alignment.centerLeft;
-    case TextAlign.center:
-      return Alignment.center;
-    case TextAlign.right:
-    default:
-      return Alignment.centerRight;
-  }
-}
-
 /// This enum defines the different types of fields supported
 enum FieldType {
   text,
@@ -426,74 +498,4 @@ enum FieldType {
   date,
   toggle, // On/Off
   widget,
-}
-
-Widget buildWidgetFromTypeAndValue({
-  required final dynamic value,
-  required final FieldType type,
-  required final TextAlign align,
-  required final bool fixedFont,
-  String currency = Constants.defaultCurrency,
-}) {
-  switch (type) {
-    case FieldType.numeric:
-      if (value is String) {
-        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
-      }
-      return buildFieldWidgetForNumber(value: value as num, shorthand: false, align: align);
-
-    case FieldType.numericShorthand:
-      return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);
-
-    case FieldType.quantity:
-      return Row(
-        children: [
-          Expanded(
-            child: QuantifyWidget(
-              quantity: value,
-              align: align,
-            ),
-          ),
-        ],
-      );
-
-    case FieldType.amount:
-      if (value is String) {
-        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
-      }
-      if (value is MoneyModel) {
-        return Row(
-          children: [
-            const Spacer(), // align right
-            MoneyWidget(amountModel: value),
-          ],
-        );
-      }
-      return buildFieldWidgetForAmount(value: value, shorthand: false, align: align, currency: currency);
-    case FieldType.amountShorthand:
-      return buildFieldWidgetForAmount(value: value, shorthand: true, align: align);
-    case FieldType.widget:
-      return Center(child: value as Widget);
-    case FieldType.date:
-      if (value is String) {
-        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
-      }
-      return buildFieldWidgetForDate(date: value, align: align);
-    case FieldType.text:
-    default:
-      return buildFieldWidgetForText(text: value.toString(), align: align, fixedFont: fixedFont);
-  }
-}
-
-dynamic defaultCallbackValue(final dynamic instance) => '';
-
-/// This enum defines the different column widths that can be used for displaying fields in a table or grid layout.
-enum ColumnWidth {
-  hide, // 0
-  nano, // 1
-  tiny, // 1
-  small, // 2
-  normal, // 3
-  large, // 4
-  largest, // 5
 }

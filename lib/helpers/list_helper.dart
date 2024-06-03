@@ -5,6 +5,36 @@ import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
+List<double> calculateSpread(double start, double end, int numEntries) {
+  double step = (end - start) / (numEntries - 1);
+  List<double> spread = [];
+  for (int i = 0; i < numEntries; i++) {
+    spread.add(start + i * step);
+  }
+  return spread;
+}
+
+List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
+  List<Pair<T, U>> list = [];
+  map.forEach((key, value) {
+    list.add(Pair(key, value));
+  });
+  return list;
+}
+
+List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
+  // Calculate total amount
+  double totalAmount = keyValuePairs.fold(0, (prev, entry) => prev + entry.value);
+
+  // Convert each amount to a percentage and retain key association
+  List<KeyValue> percentages = keyValuePairs.map((entry) {
+    double percentage = (entry.value / totalAmount) * 100;
+    return KeyValue(key: entry.key, value: percentage.isNaN ? 0.0 : percentage); // Handle division by zero
+  }).toList();
+
+  return percentages;
+}
+
 List<num> getMinMaxValues(final List<double> list) {
   if (list.isEmpty) {
     return <num>[0, 0];
@@ -39,20 +69,19 @@ T? getMoneyObjectFromFirstSelectedId<T>(final List<int> selectedIds, final List<
   return null;
 }
 
-int sortByString(final dynamic a, final dynamic b, final bool ascending) {
-  if (ascending) {
-    return stringCompareIgnoreCasing2(a as String, b as String);
-  } else {
-    return stringCompareIgnoreCasing2(b as String, a as String);
-  }
+bool isIndexInRange(List array, int index) {
+  return index >= 0 && index < array.length;
 }
 
-int sortByValue(final num a, final num b, final bool ascending) {
-  if (ascending) {
-    return a.compareTo(b);
-  } else {
-    return b.compareTo(a);
+List<String> padList(List<String> list, int length, String padding) {
+  if (list.length >= length) {
+    return list;
   }
+  List<String> paddedList = List<String>.from(list);
+  for (int i = list.length; i < length; i++) {
+    paddedList.add(padding);
+  }
+  return paddedList;
 }
 
 int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = true]) {
@@ -79,19 +108,63 @@ int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = tru
   }
 }
 
-bool isIndexInRange(List array, int index) {
-  return index >= 0 && index < array.length;
+int sortByString(final dynamic a, final dynamic b, final bool ascending) {
+  if (ascending) {
+    return stringCompareIgnoreCasing2(a as String, b as String);
+  } else {
+    return stringCompareIgnoreCasing2(b as String, a as String);
+  }
 }
 
-List<String> padList(List<String> list, int length, String padding) {
-  if (list.length >= length) {
-    return list;
+int sortByValue(final num a, final num b, final bool ascending) {
+  if (ascending) {
+    return a.compareTo(b);
+  } else {
+    return b.compareTo(a);
   }
-  List<String> paddedList = List<String>.from(list);
-  for (int i = list.length; i < length; i++) {
-    paddedList.add(padding);
+}
+
+class KeyValue {
+  dynamic key;
+  dynamic value;
+
+  KeyValue({required this.key, required this.value});
+}
+
+/// Ensure unique Key [K] instances, that cumulate unique instance of [I] another accumulator
+/// this last accumulator stores [V]
+class MapAccumulator<K, I, V> {
+  Map<K, AccumulatorSum<I, V>> map = {};
+
+  void cumulate(K k, I i, V v) {
+    if (!map.containsKey(k)) {
+      map[k] = AccumulatorSum<I, V>();
+    }
+    map[k]!.cumulate(i, v);
   }
-  return paddedList;
+
+  AccumulatorSum<I, V>? getLevel1(K key) {
+    return map[key];
+  }
+}
+
+class Pair<T, U> {
+  T first;
+  U second;
+
+  Pair(this.first, this.second);
+
+  @override
+  int get hashCode => first.hashCode ^ second.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Pair<T, U> && other.first == first && other.second == second;
+  }
+
+  @override
+  String toString() => '($first, $second)';
 }
 
 class SortedSet<T> {
@@ -119,77 +192,4 @@ class SortedSet<T> {
     }
     return low;
   }
-}
-
-class KeyValue {
-  dynamic key;
-  dynamic value;
-
-  KeyValue({required this.key, required this.value});
-}
-
-List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
-  // Calculate total amount
-  double totalAmount = keyValuePairs.fold(0, (prev, entry) => prev + entry.value);
-
-  // Convert each amount to a percentage and retain key association
-  List<KeyValue> percentages = keyValuePairs.map((entry) {
-    double percentage = (entry.value / totalAmount) * 100;
-    return KeyValue(key: entry.key, value: percentage.isNaN ? 0.0 : percentage); // Handle division by zero
-  }).toList();
-
-  return percentages;
-}
-
-class Pair<T, U> {
-  T first;
-  U second;
-
-  Pair(this.first, this.second);
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-    return other is Pair<T, U> && other.first == first && other.second == second;
-  }
-
-  @override
-  int get hashCode => first.hashCode ^ second.hashCode;
-
-  @override
-  String toString() => '($first, $second)';
-}
-
-List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
-  List<Pair<T, U>> list = [];
-  map.forEach((key, value) {
-    list.add(Pair(key, value));
-  });
-  return list;
-}
-
-/// Ensure unique Key [K] instances, that cumulate unique instance of [I] another accumulator
-/// this last accumulator stores [V]
-class MapAccumulator<K, I, V> {
-  Map<K, AccumulatorSum<I, V>> map = {};
-
-  void cumulate(K k, I i, V v) {
-    if (!map.containsKey(k)) {
-      map[k] = AccumulatorSum<I, V>();
-    }
-    map[k]!.cumulate(i, v);
-  }
-
-  AccumulatorSum<I, V>? getLevel1(K key) {
-    return map[key];
-  }
-}
-
-List<double> calculateSpread(double start, double end, int numEntries) {
-  double step = (end - start) / (numEntries - 1);
-  List<double> spread = [];
-  for (int i = 0; i < numEntries; i++) {
-    spread.add(start + i * step);
-  }
-  return spread;
 }

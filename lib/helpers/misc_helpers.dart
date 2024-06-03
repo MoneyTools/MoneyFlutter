@@ -7,14 +7,69 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/models/constants.dart';
 
-String stringValueOrDefault(final String? value, {final String defaultValueIfNull = ''}) {
+/// Remove non-numeric characters from the currency text
+double? attemptToGetDoubleFromText(String text) {
+  text = text.trim();
+  double? firstSimpleCase = double.tryParse(text);
+  if (firstSimpleCase != null) {
+    return firstSimpleCase;
+  }
+
+  // Remove non-numeric characters except for periods and commas
+  String cleanedText = text.replaceAll(RegExp(r'[^\d.,]'), '');
+
+  // Replace commas with periods for consistent parsing
+  cleanedText = cleanedText.replaceAll(',', '.');
+
+  // Remove any leading/trailing periods
+  cleanedText = cleanedText.replaceAll(RegExp(r'^\.+|\.+$'), '');
+
+  // If there are multiple periods, keep only the last one
+  int lastIndex = cleanedText.lastIndexOf('.');
+  if (lastIndex != -1) {
+    String beforeDecimal = cleanedText.substring(0, lastIndex);
+    beforeDecimal = beforeDecimal.replaceAll('.', '');
+    cleanedText = beforeDecimal + cleanedText.substring(lastIndex);
+  }
+
+  // Parse the cleaned text into a double
+  double? amount = double.tryParse(cleanedText);
+  if (amount == null) {
+    return null;
+  }
+  if (text.startsWith('-')) {
+    return -amount;
+  }
+  return amount;
+}
+
+bool boolValueOrDefault(final bool? value, {final bool defaultValueIfNull = false}) {
   if (value == null) {
     return defaultValueIfNull;
   }
   return value;
 }
 
-num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
+void copyToClipboardAndInformUser(final BuildContext context, final String textToCopy) {
+  FlutterClipboard.copy(textToCopy).then(
+    (_) => showSnackBar(context, 'Copied to clipboard'),
+  );
+}
+
+DateTime dateValueOrDefault(final DateTime? value, {final DateTime? defaultValueIfNull}) {
+  if (value == null) {
+    return defaultValueIfNull ?? DateTime.now();
+  }
+  return value;
+}
+
+void debugLog(final String message) {
+  if (kDebugMode) {
+    print(message);
+  }
+}
+
+double doubleValueOrDefault(final double? value, {final double defaultValueIfNull = 0}) {
   if (value == null) {
     return defaultValueIfNull;
   }
@@ -28,25 +83,24 @@ int intValueOrDefault(final int? value, {final int defaultValueIfNull = 0}) {
   return value;
 }
 
-double doubleValueOrDefault(final double? value, {final double defaultValueIfNull = 0}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
+bool isBetween(final num value, final num min, final num max) {
+  return value > min && value < max;
 }
 
-bool boolValueOrDefault(final bool? value, {final bool defaultValueIfNull = false}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
+bool isBetweenOrEqual(final num value, final num min, final num max) {
+  return value >= min && value <= max;
 }
 
-DateTime dateValueOrDefault(final DateTime? value, {final DateTime? defaultValueIfNull}) {
-  if (value == null) {
-    return defaultValueIfNull ?? DateTime.now();
-  }
-  return value;
+bool isPlatformMobile() {
+  return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+}
+
+bool isSmallDevice(final BuildContext context) {
+  // Get the screen size
+  final screenSize = MediaQuery.of(context).size;
+
+  // Determine if the screen width is smaller than a certain threshold
+  return screenSize.width < 600;
 }
 
 bool isSmallWidth(
@@ -59,12 +113,11 @@ bool isSmallWidth(
   return false;
 }
 
-bool isSmallDevice(final BuildContext context) {
-  // Get the screen size
-  final screenSize = MediaQuery.of(context).size;
-
-  // Determine if the screen width is smaller than a certain threshold
-  return screenSize.width < 600;
+num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
+  if (value == null) {
+    return defaultValueIfNull;
+  }
+  return value;
 }
 
 double roundDouble(final double value, final int places) {
@@ -72,20 +125,29 @@ double roundDouble(final double value, final int places) {
   return ((value * mod).round().toDouble() / mod);
 }
 
-extension Range on num {
-  bool isBetween(final num from, final num to) {
-    return from < this && this < to;
-  }
-
-  bool isBetweenOrEqual(final num from, final num to) {
-    return from < this && this < to;
-  }
+/// Rounds a given value to the specified number of decimal places.
+///
+/// @param value The value to be rounded.
+/// @param places The number of decimal places to round to.
+/// @return The rounded value.
+/// @throws ArgumentError If the number of decimal places is negative.
+///
+double roundToDecimalPlaces(double value, int places) {
+  if (places < 0) throw ArgumentError('Decimal places must be non-negative');
+  int factor = pow(10, places).toInt();
+  return (value * factor).round() / factor;
 }
 
-void debugLog(final String message) {
-  if (kDebugMode) {
-    print(message);
+/// Round up to next divisor level
+int roundToNextNaturalFit(final int number, final int divisor) {
+  if (number % divisor == 0) {
+    // already at the nature next fit
+    return number;
   }
+  // Calculate the remainder when dividing the number by the divisor.
+  final int remainder = number % divisor;
+  final int base = number - remainder;
+  return base + divisor;
 }
 
 /// Next rounded upper value
@@ -124,85 +186,6 @@ int roundToTheNextNaturalFit(final int value) {
   return 10;
 }
 
-/// Round up to next divisor level
-int roundToNextNaturalFit(final int number, final int divisor) {
-  if (number % divisor == 0) {
-    // already at the nature next fit
-    return number;
-  }
-  // Calculate the remainder when dividing the number by the divisor.
-  final int remainder = number % divisor;
-  final int base = number - remainder;
-  return base + divisor;
-}
-
-class TimeLapse {
-  Stopwatch? stopwatch;
-
-  TimeLapse() {
-    stopwatch = Stopwatch()..start();
-  }
-
-  // End stopwatch and print time spent
-  void endAndPrint() {
-    // print('Elapsed time: ${stopwatch?.elapsedMilliseconds} milliseconds');
-  }
-}
-
-bool isBetween(final num value, final num min, final num max) {
-  return value > min && value < max;
-}
-
-bool isBetweenOrEqual(final num value, final num min, final num max) {
-  return value >= min && value <= max;
-}
-
-/// Remove non-numeric characters from the currency text
-double? attemptToGetDoubleFromText(String text) {
-  text = text.trim();
-  double? firstSimpleCase = double.tryParse(text);
-  if (firstSimpleCase != null) {
-    return firstSimpleCase;
-  }
-
-  // Remove non-numeric characters except for periods and commas
-  String cleanedText = text.replaceAll(RegExp(r'[^\d.,]'), '');
-
-  // Replace commas with periods for consistent parsing
-  cleanedText = cleanedText.replaceAll(',', '.');
-
-  // Remove any leading/trailing periods
-  cleanedText = cleanedText.replaceAll(RegExp(r'^\.+|\.+$'), '');
-
-  // If there are multiple periods, keep only the last one
-  int lastIndex = cleanedText.lastIndexOf('.');
-  if (lastIndex != -1) {
-    String beforeDecimal = cleanedText.substring(0, lastIndex);
-    beforeDecimal = beforeDecimal.replaceAll('.', '');
-    cleanedText = beforeDecimal + cleanedText.substring(lastIndex);
-  }
-
-  // Parse the cleaned text into a double
-  double? amount = double.tryParse(cleanedText);
-  if (amount == null) {
-    return null;
-  }
-  if (text.startsWith('-')) {
-    return -amount;
-  }
-  return amount;
-}
-
-bool isPlatformMobile() {
-  return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
-}
-
-void copyToClipboardAndInformUser(final BuildContext context, final String textToCopy) {
-  FlutterClipboard.copy(textToCopy).then(
-    (_) => showSnackBar(context, 'Copied to clipboard'),
-  );
-}
-
 void showSnackBar(final BuildContext context, final String message) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
@@ -210,6 +193,13 @@ void showSnackBar(final BuildContext context, final String message) {
       duration: const Duration(seconds: 1),
     ),
   );
+}
+
+String stringValueOrDefault(final String? value, {final String defaultValueIfNull = ''}) {
+  if (value == null) {
+    return defaultValueIfNull;
+  }
+  return value;
 }
 
 double trimToFiveDecimalPlaces(double value) {
@@ -233,15 +223,25 @@ class Debouncer {
   }
 }
 
-/// Rounds a given value to the specified number of decimal places.
-///
-/// @param value The value to be rounded.
-/// @param places The number of decimal places to round to.
-/// @return The rounded value.
-/// @throws ArgumentError If the number of decimal places is negative.
-///
-double roundToDecimalPlaces(double value, int places) {
-  if (places < 0) throw ArgumentError('Decimal places must be non-negative');
-  int factor = pow(10, places).toInt();
-  return (value * factor).round() / factor;
+class TimeLapse {
+  Stopwatch? stopwatch;
+
+  TimeLapse() {
+    stopwatch = Stopwatch()..start();
+  }
+
+  // End stopwatch and print time spent
+  void endAndPrint() {
+    // print('Elapsed time: ${stopwatch?.elapsedMilliseconds} milliseconds');
+  }
+}
+
+extension Range on num {
+  bool isBetween(final num from, final num to) {
+    return from < this && this < to;
+  }
+
+  bool isBetweenOrEqual(final num from, final num to) {
+    return from < this && this < to;
+  }
 }

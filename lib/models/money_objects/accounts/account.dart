@@ -211,7 +211,7 @@ class Account extends MoneyObject {
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).lastSync.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Account).lastSync.value),
+        dateToIso8601OrDefaultString((instance as Account).lastSync.value),
   );
 
   /// SyncGuid
@@ -241,9 +241,10 @@ class Account extends MoneyObject {
     importance: 98,
     serializeName: 'LastBalance',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => dateAsIso8601OrDefault((instance as Account).lastBalance.value),
+    getValueForDisplay: (final MoneyObject instance) =>
+        dateToIso8601OrDefaultString((instance as Account).lastBalance.value),
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as Account).lastBalance.value),
+        dateToIso8601OrDefaultString((instance as Account).lastBalance.value),
   );
 
   /// categoryIdForPrincipal

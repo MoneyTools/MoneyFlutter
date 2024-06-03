@@ -116,9 +116,9 @@ class RentBuilding extends MoneyObject {
     serializeName: 'PurchasedDate',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as RentBuilding).purchasedDate.value),
+        dateToIso8601OrDefaultString((instance as RentBuilding).purchasedDate.value),
     getValueForSerialization: (final MoneyObject instance) =>
-        dateAsIso8601OrDefault((instance as RentBuilding).purchasedDate.value),
+        dateToIso8601OrDefaultString((instance as RentBuilding).purchasedDate.value),
   );
 
   /// PurchasedPrice

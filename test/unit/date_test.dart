@@ -7,7 +7,7 @@ void main() {
     const DateTime? dateTime = null;
 
     // Act
-    final result = geDateAndTimeAsText(dateTime);
+    final result = dateToDateTimeString(dateTime);
 
     // Assert
     expect(result, isEmpty);
@@ -18,7 +18,7 @@ void main() {
     final dateTime = DateTime(2023, 04, 15, 10, 30, 00);
 
     // Act
-    final result = geDateAndTimeAsText(dateTime);
+    final result = dateToDateTimeString(dateTime);
 
     // Assert
     expect(result, '2023-04-15 10:30:00.000');
