@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/list_helper.dart';
 
 Widget buildMergeButton(final Function callback) {
   return IconButton(
     onPressed: () {
       callback();
     },
-    icon: const Icon(Icons.merge),
+    icon: const Icon(Icons.merge_outlined),
     tooltip: 'Merge item(s)',
   );
 }
@@ -35,7 +36,7 @@ Widget buildEditButton(final Function callback) {
     onPressed: () {
       callback.call();
     },
-    icon: const Icon(Icons.edit),
+    icon: const Icon(Icons.edit_outlined),
     tooltip: 'Edit selected item(s)',
   );
 }
@@ -45,7 +46,7 @@ Widget buildDeleteButton(final Function callback) {
     onPressed: () {
       callback.call();
     },
-    icon: const Icon(Icons.delete),
+    icon: const Icon(Icons.delete_outline),
     tooltip: 'Delete selected item(s)',
   );
 }
@@ -57,5 +58,24 @@ Widget buildCopyButton(final Function callback) {
     },
     icon: const Icon(Icons.copy_all),
     tooltip: 'Copy list to clipboard',
+  );
+}
+
+Widget buildJumpToButton(final List<Pair<String, Function>> listOfViewToJumpTo) {
+  final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
+  for (var i = 0; i < listOfViewToJumpTo.length; i++) {
+    list.add(PopupMenuItem<int>(
+      value: i,
+      child: Text(listOfViewToJumpTo[i].first),
+    ));
+  }
+  return PopupMenuButton<int>(
+    icon: const Icon(Icons.open_in_new_outlined),
+    itemBuilder: (final BuildContext context) {
+      return list;
+    },
+    onSelected: (final int index) {
+      listOfViewToJumpTo[index].second.call();
+    },
   );
 }

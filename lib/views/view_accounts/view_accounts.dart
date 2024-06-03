@@ -141,6 +141,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
 
     if (!forInfoPanelTransactions) {
+      // Place this in front off all the other actions button
       list.insert(
         0,
         buildAddItemButton(() {
@@ -149,6 +150,22 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
           updateListAndSelect(newItem.uniqueId);
         }, 'Add new account'),
       );
+
+      // this can go last
+      if (getFirstSelectedItem() != null) {
+        list.add(
+          buildJumpToButton(
+            [
+              Pair<String, Function>("Jump to Transactions view...", () {
+                final account = getFirstSelectedItem() as Account?;
+                if (account != null) {
+                  Settings().selectedView = ViewId.viewTransactions;
+                }
+              }),
+            ],
+          ),
+        );
+      }
     }
 
     return list;

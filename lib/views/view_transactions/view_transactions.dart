@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/widgets.dart';
@@ -75,6 +78,48 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   @override
   MyJson getViewChoices() {
     return Data().transactions.getLastViewChoices();
+  }
+
+  @override
+  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
+    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+
+    if (!forInfoPanelTransactions && getFirstSelectedItem() != null) {
+      // this can go last
+      list.add(
+        buildJumpToButton(
+          [
+            Pair<String, Function>("Jump to Account view...", () {
+              final transaction = getFirstSelectedItem() as Transaction?;
+              if (transaction != null) {
+                // Preselect the Account of this Transaction
+                Data().accounts.getLastViewChoices()[settingKeySelectedListItemId] = transaction.accountId.value;
+                Settings().selectedView = ViewId.viewAccounts;
+              }
+            }),
+            Pair<String, Function>("Jump to Category view...", () {
+              final transaction = getFirstSelectedItem() as Transaction?;
+              if (transaction != null) {
+                // Preselect the Account of this Transaction
+                Data().categories.getLastViewChoices()[settingKeySelectedListItemId] = transaction.categoryId.value;
+                Settings().selectedView = ViewId.viewCategories;
+              }
+            }),
+            Pair<String, Function>("Jump to Payee view...", () {
+              final transaction = getFirstSelectedItem() as Transaction?;
+              if (transaction != null) {
+                // Preselect the Account of this Transaction
+                Data().payees.getLastViewChoices()[settingKeySelectedListItemId] = transaction.payee.value;
+                Settings().selectedView = ViewId.viewPayees;
+              }
+            }),
+            Pair<String, Function>("Jump to Transfer view...", () {}),
+          ],
+        ),
+      );
+    }
+
+    return list;
   }
 
   @override

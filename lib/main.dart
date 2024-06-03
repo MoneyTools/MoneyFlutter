@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -129,6 +128,7 @@ class MainView extends StatelessWidget {
           child: getWidgetForMainContent(context, settings.selectedView),
         ),
         MenuHorizontal(
+          key: Key(settings.selectedView.toString()),
           settings: settings,
           onSelected: handleScreenChanged,
           selectedView: settings.selectedView,
@@ -145,6 +145,7 @@ class MainView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MenuVertical(
+            key: Key(settings.selectedView.toString()),
             settings: settings,
             onSelectItem: handleScreenChanged,
             selectedView: settings.selectedView,

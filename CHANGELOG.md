@@ -2,6 +2,10 @@
 
 ## [version 1.8.16] 2024-05-29
 
+### Added
+
+- WIP: Jump from Transaction to view for Accounts, Categories, or Payees
+
 ### Updated
 
 - Show a filter-icon if a column is using fitlering
