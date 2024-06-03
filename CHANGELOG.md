@@ -2,6 +2,10 @@
 
 ## [version 1.8.16] 2024-05-29
 
+### Updated
+
+- Performance: using CompareIgnoreCase2
+
 ### Fixed
 
 - Transaction view: Sorting by currency

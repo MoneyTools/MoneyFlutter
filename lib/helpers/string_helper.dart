@@ -24,7 +24,14 @@ int stringCompareIgnoreCasing1(final String textA, final String textB) {
 }
 
 int stringCompareIgnoreCasing2(final String str1, final String str2) {
-  final int minLength = min(str1.length, str2.length);
+  if (str1 == str2) {
+    return 0;
+  }
+
+  final int length1 = str1.length;
+  final int length2 = str2.length;
+
+  final int minLength = min(length1, length2);
 
   for (int i = 0; i < minLength; i++) {
     final int result = str1[i].toLowerCase().compareTo(str2[i].toLowerCase());
@@ -32,13 +39,8 @@ int stringCompareIgnoreCasing2(final String str1, final String str2) {
       return result;
     }
   }
-  if (str1.length == str2.length) {
-    return 0;
-  }
-  if (str1.length > str2.length) {
-    return 1;
-  }
-  return -1;
+
+  return length1.compareTo(length2);
 }
 
 String getStringDelimitedStartEndTokens(

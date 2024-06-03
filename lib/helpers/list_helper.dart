@@ -41,9 +41,9 @@ T? getMoneyObjectFromFirstSelectedId<T>(final List<int> selectedIds, final List<
 
 int sortByString(final dynamic a, final dynamic b, final bool ascending) {
   if (ascending) {
-    return stringCompareIgnoreCasing1(a as String, b as String);
+    return stringCompareIgnoreCasing2(a as String, b as String);
   } else {
-    return stringCompareIgnoreCasing1(b as String, a as String);
+    return stringCompareIgnoreCasing2(b as String, a as String);
   }
 }
 

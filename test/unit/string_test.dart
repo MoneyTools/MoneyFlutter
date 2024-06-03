@@ -23,39 +23,45 @@ void main() {
     });
   });
 
-  group('String Comparison Perf:', () {
-    test('Case-Insensitive A', () {
-      final Stopwatch stopwatch = Stopwatch()..start(); // Start the stopwatch
+  test('String Comparison Perf:', () {
+    int time1 = 0;
+    int time2 = 0;
 
-      for (int i = 0; i < 200000; i++) {
-        expect(stringCompareIgnoreCasing1('world', 'WORLD'), 0);
-        expect(stringCompareIgnoreCasing1('banana', ''), 1);
-        expect(stringCompareIgnoreCasing1('', 'banana'), -1);
-        expect(
-            stringCompareIgnoreCasing1('a very long string that is different right from the start',
-                'The very long string that is different right from the start'),
-            -1);
-      }
+///////////////////////// stringCompareIgnoreCasing1
 
-      stopwatch.stop(); // Stop the stopwatch after the operation
-      debugLog('Elapsed time to lower   : ${stopwatch.elapsedMilliseconds} milliseconds');
-    });
+    final Stopwatch stopwatch = Stopwatch()..start(); // Start the stopwatch
 
-    test('Case-Insensitive B', () {
-      final Stopwatch stopwatch = Stopwatch()..start(); // Start the stopwatch
+    for (int i = 0; i < 200000; i++) {
+      expect(stringCompareIgnoreCasing1('world', 'WORLD'), 0);
+      expect(stringCompareIgnoreCasing1('banana', ''), 1);
+      expect(stringCompareIgnoreCasing1('', 'banana'), -1);
+      expect(
+          stringCompareIgnoreCasing1('a very long string that is different right from the start',
+              'The very long string that is different right from the start'),
+          -1);
+    }
 
-      for (int i = 0; i < 200000; i++) {
-        expect(stringCompareIgnoreCasing2('world', 'WORLD'), 0);
-        expect(stringCompareIgnoreCasing2('banana', ''), 1);
-        expect(stringCompareIgnoreCasing2('', 'banana'), -1);
-        expect(
-            stringCompareIgnoreCasing2('a very long string that is different right from the start',
-                'The very long string that is different right from the start'),
-            -1);
-      }
-      stopwatch.stop(); // Stop the stopwatch after the operation
-      debugLog('Elapsed time incremental: ${stopwatch.elapsedMilliseconds} milliseconds');
-    });
+    stopwatch.stop(); // Stop the stopwatch after the operation
+    time1 = stopwatch.elapsedMilliseconds;
+    debugLog('Elapsed time stringCompareIgnoreCasing1: $time1 milliseconds');
+
+///////////////////////// stringCompareIgnoreCasing2
+    final Stopwatch stopwatch2 = Stopwatch()..start(); // Start the stopwatch
+
+    for (int i = 0; i < 200000; i++) {
+      expect(stringCompareIgnoreCasing2('world', 'WORLD'), 0);
+      expect(stringCompareIgnoreCasing2('banana', ''), 1);
+      expect(stringCompareIgnoreCasing2('', 'banana'), -1);
+      expect(
+          stringCompareIgnoreCasing2('a very long string that is different right from the start',
+              'The very long string that is different right from the start'),
+          -1);
+    }
+    stopwatch2.stop(); // Stop the stopwatch after the operation
+    time2 = stopwatch2.elapsedMilliseconds;
+    debugLog('Elapsed time stringCompareIgnoreCasing2: $time2 milliseconds');
+
+    expect(time2 < time1, true);
   });
 
   group('String getStringBetweenTwoTokens:', () {
