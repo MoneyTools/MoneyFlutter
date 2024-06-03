@@ -64,10 +64,30 @@
     "[dart]": {
         "editor.defaultFormatter": "Dart-Code.dart-code"
     },
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.expand": false,
+    "explorer.fileNesting.patterns": {
+        "pubspec.yaml": "changelog.md, readme.md, privacy.html, license, .metadata, pubspec.lock, analysis_options.yaml, devtools_options.yaml",
+        "graph.sh": "graph.dot, graph.svg",
+        "layers.sh": "layers.svg",
+    },
     "editor.formatOnType": true,
     "markdownlint.config": {
         "MD024": { // Rule for multiple headings with the same name
             "siblings_only": true // Only check for duplicate headings within the same level
         },
+    },
+    "files.exclude": {
+        "android/": true,
+        "ios/": true,
+        "macos/": true,
+        "windows/": true,
+        "linux/": true,
+        "web/": true,
+        "node_modules/": true,
+        "build/": true,
+        ".dart_tool/": true,
+        ".firebase/": true,
+        ".idea/": true,
     }
 }
