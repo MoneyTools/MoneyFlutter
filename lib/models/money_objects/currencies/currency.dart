@@ -134,7 +134,7 @@ class Currency extends MoneyObject {
   /// Convert from ISO 4217 to a locale
   static String? getLocaleFromCurrencyIso4217(String iso4217code) {
     // Map currency codes to their respective locales
-    final currencyLocales = {
+    const currencyLocales = {
       'AED': 'ar_AE',
       'AFN': 'ps_AF',
       'ALL': 'sq_AL',
@@ -320,16 +320,11 @@ class Currency extends MoneyObject {
     if (amount is String) {
       return amount; // its already a string
     }
+    // determining the locale to be used when formatting the currency amount
+    String localeToUse = iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
+        ? 'en_US'
+        : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
 
-    String? localeToUse = Currency.getLocaleFromCurrencyIso4217(iso4217code);
-    if (localeToUse == null || localeToUse.isEmpty) {
-      // this means
-      // error the ISO4217 code is unknown
-      // or
-      // that the Currency is not yet supported in Dart/Intl
-      // so fallback to 'USD'
-      localeToUse = 'en_US';
-    }
     final currencyFormat = NumberFormat.simpleCurrency(
       locale: localeToUse,
       name: iso4217code,
