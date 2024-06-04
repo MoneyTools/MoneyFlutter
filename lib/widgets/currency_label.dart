@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/widgets/gaps.dart';
 
 class CurrencyLabel extends StatelessWidget {
   final String threeLetterCurrencySymbol;
@@ -19,9 +20,9 @@ class CurrencyLabel extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset('assets/flags/$flagId.png', height: 10),
-            const SizedBox(width: 4),
             Text(threeLetterCurrencySymbol),
+            gapSmall(),
+            Image.asset('assets/flags/$flagId.png', height: 10),
           ],
         ),
       ),
