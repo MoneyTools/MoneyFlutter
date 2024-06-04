@@ -2,6 +2,10 @@
 
 ## [version 1.8.17] 2024-05-04
 
+### Fixed
+
+- use package [sqlite3_flutter_libs] for Windows
+  
 ### Updated
 
 - Filter by Column

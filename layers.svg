@@ -137,6 +137,9 @@
   <g id='Node_sqlite3'>
     <rect x="1204" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
+  <g id='Node_sqlite3_flutter_libs'>
+    <rect x="904" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+  </g>
   <g id='Node_url_launcher'>
     <rect x="304" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
@@ -238,6 +241,11 @@ shared_preferences</title>
       <title>money
 ⬇
 sqlite3</title>
+    </path>
+    <path class="line" d="M280 95 C 290 225,910 225, 920 355" fill="none" stroke="#377E22">
+      <title>money
+⬇
+sqlite3_flutter_libs</title>
     </path>
     <path class="line" d="M280 95 C 290 150,310 150, 320 205" fill="none" stroke="#377E22">
       <title>money
@@ -404,7 +412,7 @@ intl</title>
   <g id='Counters_money'>
     <g>
       <circle cx="280" cy="95" r="10" fill="green"/>
-      <text x="280" y="95" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">21</text>
+      <text x="280" y="95" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">22</text>
       <title>money
 ⬇
 1 /dev/flutter_launcher_icons
@@ -426,8 +434,9 @@ intl</title>
 17 /direct/provider
 18 /direct/shared_preferences
 19 /direct/sqlite3
-20 /direct/url_launcher
-21 /direct/uuid</title>
+20 /direct/sqlite3_flutter_libs
+21 /direct/url_launcher
+22 /direct/uuid</title>
     </g>
   </g>
   <g id='Counters_clipboard'>
@@ -577,6 +586,15 @@ shared_preferences</title>
 sqlite3</title>
     </g>
   </g>
+  <g id='Counters_sqlite3_flutter_libs'>
+    <g>
+      <circle cx="920" cy="355" r="10" fill="blue"/>
+      <text x="920" y="355" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <title>1 /root/money
+⬇
+sqlite3_flutter_libs</title>
+    </g>
+  </g>
   <g id='Counters_url_launcher'>
     <g>
       <circle cx="580" cy="245" r="10" fill="green"/>
@@ -682,9 +700,13 @@ uuid</title>
     <text class="nodeName" x="1350" y="225" font-size="120%">sqlite3</text>
     <text class="nodeName" x="1350" y="245" font-size="80%">2.4.3</text>
   </g>
+  <g id='Labels_sqlite3_flutter_libs'>
+    <text class="nodeName" x="1050" y="375" font-size="120%">sqlite3_flutter_libs</text>
+    <text class="nodeName" x="1050" y="395" font-size="80%">0.5.23</text>
+  </g>
   <g id='Labels_url_launcher'>
     <text class="nodeName" x="450" y="225" font-size="120%">url_launcher</text>
-    <text class="nodeName" x="450" y="245" font-size="80%">6.2.6</text>
+    <text class="nodeName" x="450" y="245" font-size="80%">6.3.0</text>
   </g>
   <g id='Labels_uuid'>
     <text class="nodeName" x="2250" y="225" font-size="120%">uuid</text>

@@ -42,7 +42,7 @@ dependencies:
   file_picker: 8.0.3
   shared_preferences: ^2.2.2
   sqlite3: 2.4.3
-  #  sqlite3_flutter_libs: ^0.5.19+1
+  sqlite3_flutter_libs:
   url_launcher: ^6.2.4
   csv: ^6.0.0
   uuid: ^4.3.3
