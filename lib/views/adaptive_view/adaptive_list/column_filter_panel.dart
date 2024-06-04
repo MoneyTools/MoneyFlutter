@@ -1,13 +1,16 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/widgets/gaps.dart';
 
 class ColumnFilterPanel extends StatefulWidget {
   final List<ValueSelection> listOfUniqueInstances;
+  final TextAlign textAlign;
 
   const ColumnFilterPanel({
     super.key,
     required this.listOfUniqueInstances,
+    this.textAlign = TextAlign.left,
   });
 
   @override
@@ -31,8 +34,9 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
         .toList();
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Filter input box
         TextField(
           onChanged: (value) {
             setState(() {
@@ -41,8 +45,13 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
           },
           decoration: const InputDecoration(
             labelText: 'filter',
+            border: OutlineInputBorder(),
           ),
         ),
+
+        gapLarge(),
+
+        // Clear All / Select  All
         TextButton(
           onPressed: () {
             setState(() {
@@ -54,22 +63,26 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
           },
           child: Text('${areAllItemSelected() ? 'Unselect all' : 'Select all'} ${getItemCounts()}'),
         ),
-        SizedBox(
-          height: 400,
-          width: 300,
-          child: ListView.builder(
-            itemCount: list.length,
-            itemBuilder: (final BuildContext context, final int index) {
-              return CheckboxListTile(
-                title: Text(list[index].name),
-                value: list[index].isSelected,
-                onChanged: (final bool? isChecked) {
-                  setState(() {
-                    list[index].isSelected = isChecked == true;
-                  });
-                },
-              );
-            },
+        Expanded(
+          child: SizedBox(
+            width: 300,
+            child: ListView.builder(
+              itemCount: list.length,
+              itemBuilder: (final BuildContext context, final int index) {
+                return CheckboxListTile(
+                  title: Text(
+                    list[index].name,
+                    textAlign: widget.textAlign,
+                  ),
+                  value: list[index].isSelected,
+                  onChanged: (final bool? isChecked) {
+                    setState(() {
+                      list[index].isSelected = isChecked == true;
+                    });
+                  },
+                );
+              },
+            ),
           ),
         ),
         const Divider(),

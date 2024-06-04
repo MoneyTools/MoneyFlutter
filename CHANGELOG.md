@@ -1,6 +1,12 @@
 # Change Log
 
-## [version 1.8.16] 2024-05-29
+## [version 1.8.17] 2024-05-04
+
+### Updated
+
+- Filter by Column
+
+## [version 1.8.16] 2024-05-03
 
 ### Added
 
@@ -15,7 +21,7 @@
 
 - Transaction view: Sorting by currency
 
-## [version 1.8.16] 2024-06-03
+## [version 1.8.16] 2024-06-02
 
 ### Added
 

@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
@@ -566,94 +566,87 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       String fieldValue = columnToCustomerFilterOn.getValueForDisplay(moneyObject).toString();
       set.add(fieldValue);
     }
+    return set.toList();
+  }
+
+  /// Compile the list of single date value for a column/field definition
+  List<String> getUniqueInstancesOfDates(final Field<dynamic> columnToCustomerFilterOn) {
+    final Set<String> set = <String>{}; // This is a Set()
+    final List<MoneyObject> list = getList(applyFilter: false);
+    for (final moneyObject in list) {
+      final String fieldValue = dateToString(columnToCustomerFilterOn.getValueForDisplay(moneyObject));
+      set.add(fieldValue);
+    }
     final List<String> uniqueValues = set.toList();
     uniqueValues.sort();
     return uniqueValues;
   }
 
-  List<double> getMinMaxValues(final Field<dynamic> fieldDefinition) {
-    double min = 0.0;
-    double max = 0.0;
+  /// Compile the list of single date value for a column/field definition
+  List<String> getUniqueInstancesOfNumbers(final Field<dynamic> columnToCustomerFilterOn) {
+    final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
-    for (int i = 0; i < list.length; i++) {
-      dynamic fieldValue = fieldDefinition.getValueForDisplay(list[i]);
-
-      if (fieldDefinition.type == FieldType.amount && fieldValue is String) {
-        fieldValue = attemptToGetDoubleFromText(fieldValue) ?? 0;
-      }
-
-      if (min > fieldValue) {
-        min = fieldValue;
-      }
-      if (max < fieldValue) {
-        max = fieldValue;
-      }
+    for (final moneyObject in list) {
+      final String fieldValue = formatDoubleTrimZeros(columnToCustomerFilterOn.getValueForDisplay(moneyObject));
+      set.add(fieldValue);
     }
-
-    return <double>[min, max];
-  }
-
-  List<String> getMinMaxDates(final Field<dynamic> columnToCustomerFilterOn) {
-    String min = '';
-    String max = '';
-
-    for (final item in getList(applyFilter: false)) {
-      final String fieldValue = columnToCustomerFilterOn.getValueForDisplay(item) as String;
-      if (min.isEmpty || min.compareTo(fieldValue) == 1) {
-        min = fieldValue;
-      }
-      if (max.isEmpty || max.compareTo(fieldValue) == -1) {
-        max = fieldValue;
-      }
-    }
-
-    return <String>[min, max];
+    final List<String> uniqueValues = set.toList();
+    uniqueValues.sort((a, b) => compareStringsAsNumbers(a, b));
+    return uniqueValues;
   }
 
   void onCustomizeColumn(final Field<dynamic> fieldDefinition) {
     Widget content;
+    listOfValueSelected.clear();
 
     switch (fieldDefinition.type) {
-      case FieldType.amount:
+      case FieldType.quantity:
         {
-          final List<double> minMax = getMinMaxValues(fieldDefinition);
-          content = SizedBox(
-            height: 200,
-            width: 200,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Text(Currency.getAmountAsStringUsingCurrency(minMax[0])),
-                Text(Currency.getAmountAsStringUsingCurrency(minMax[1])),
-              ],
-            ),
+          listOfUniqueString = getUniqueInstancesOfNumbers(fieldDefinition);
+
+          for (final item in listOfUniqueString) {
+            listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
+          }
+
+          content = ColumnFilterPanel(
+            listOfUniqueInstances: listOfValueSelected,
+            textAlign: TextAlign.right,
           );
         }
 
       case FieldType.date:
         {
-          final List<String> minMax = getMinMaxDates(fieldDefinition);
-          content = SizedBox(
-            height: 200,
-            width: 200,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: <Widget>[
-                Text(minMax[0]),
-                Text(minMax[1]),
-              ],
-            ),
+          listOfUniqueString = getUniqueInstancesOfDates(fieldDefinition);
+
+          for (final item in listOfUniqueString) {
+            listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
+          }
+
+          content = ColumnFilterPanel(
+            listOfUniqueInstances: listOfValueSelected,
+            textAlign: TextAlign.left,
           );
         }
+
       case FieldType.text:
       default:
         {
           listOfUniqueString = getUniqueInstances(fieldDefinition);
-          listOfValueSelected.clear();
+
+          if (fieldDefinition.type == FieldType.amount) {
+            listOfUniqueString.sort((a, b) => compareStringsAsAmount(a, b));
+          } else {
+            listOfUniqueString.sort();
+          }
+
           for (final item in listOfUniqueString) {
             listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
           }
-          content = ColumnFilterPanel(listOfUniqueInstances: listOfValueSelected);
+
+          content = ColumnFilterPanel(
+            listOfUniqueInstances: listOfValueSelected,
+            textAlign: fieldDefinition.type == FieldType.amount ? TextAlign.right : TextAlign.left,
+          );
         }
     }
 

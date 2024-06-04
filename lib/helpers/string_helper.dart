@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:path_provider/path_provider.dart';
 
 int countOccurrences(String input, String char) {
@@ -172,4 +173,18 @@ int stringCompareIgnoreCasing2(final String str1, final String str2) {
   }
 
   return length1.compareTo(length2);
+}
+
+int compareStringsAsNumbers(final String a, final String b) {
+  if (a.length == b.length) {
+    return a.compareTo(b);
+  }
+  return a.length.compareTo(b.length);
+}
+
+int compareStringsAsAmount(final String a, final String b) {
+  final valueA = attemptToGetDoubleFromText(a) ?? 0.00;
+  final valueB = attemptToGetDoubleFromText(b) ?? 0.00;
+
+  return valueA.compareTo(valueB);
 }
