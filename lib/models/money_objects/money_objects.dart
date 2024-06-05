@@ -343,10 +343,6 @@ class MoneyObjects<T> {
   void deleteItem(final MoneyObject itemToDelete) {
     Data().notifyMutationChanged(mutation: MutationType.deleted, moneyObject: itemToDelete);
   }
-
-  MyJson getLastViewChoices() {
-    return Settings().getLastViewChoices(getTypeName());
-  }
 }
 
 MoneyObject? findObjectById(final int? uniqueId, final List<MoneyObject> listToSearch) {

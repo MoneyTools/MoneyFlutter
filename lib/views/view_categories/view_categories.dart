@@ -111,8 +111,8 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().categories.getLastViewChoices();
+  String getViewId() {
+    return Data().categories.getTypeName();
   }
 
   @override

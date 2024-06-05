@@ -8,7 +8,7 @@ import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 class AdaptiveViewWithList extends StatelessWidget {
   final Widget? top;
   final FieldDefinitions fieldDefinitions;
-  final List<FieldFilter> filters;
+  final FieldFilters filters;
   final List<MoneyObject> list;
   final Widget? bottom;
   final int flexBottom;
@@ -18,7 +18,7 @@ class AdaptiveViewWithList extends StatelessWidget {
 
   // Selection
   final ValueNotifier<List<int>> selectedItemsByUniqueId;
-  final Function onSelectionChanged;
+  final Function(int) onSelectionChanged;
   final bool isMultiSelectionOn;
 
   final Function(BuildContext, int)? onItemTap;

@@ -54,16 +54,9 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = 0;
-    bool sortAscending = true;
-    int selectedItemIndex = 0;
-
-    final MyJson? viewSetting = Settings().views[settingKeyDomainAccounts];
-    if (viewSetting != null) {
-      sortFieldIndex = viewSetting.getInt(settingKeySortBy, 0);
-      sortAscending = viewSetting.getBool(settingKeySortAscending, true);
-      selectedItemIndex = viewSetting.getInt(settingKeySelectedListItemId, -1);
-    }
+    int sortFieldIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySortBy')) ?? 0;
+    bool sortAscending = PreferencesHelper().getBool(getPreferenceKey('info_$settingKeySortAscending')) ?? true;
+    int selectedItemIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySelectedListItemId')) ?? -1;
 
     final FieldDefinitions columnsToDisplay = <Field>[
       Transaction.fields.getFieldByName(columnIdDate),
@@ -77,30 +70,25 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     return ListViewTransactions(
         key: Key('transaction_list_currency_${showAsNativeCurrency}_version${Data().version}'),
         columnsToInclude: columnsToDisplay,
-        getList: getTransactionForLastSelectedAccount,
+        getList: () => getTransactionForLastSelectedAccount(account),
         sortFieldIndex: sortFieldIndex,
         sortAscending: sortAscending,
         selectedItemIndex: selectedItemIndex,
-        onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, int selectedId) {
+        onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int uniqueId) {
           // keep track of user choice
           sortFieldIndex = sortByFieldIndex;
           sortAscending = sortAscending;
-          selectedId = selectedId;
 
           // Save user choices
-          Settings().views[settingKeyDomainAccounts] = <String, dynamic>{
-            settingKeySortBy: sortByFieldIndex,
-            settingKeySortAscending: sortAscending,
-            settingKeySelectedListItemId: selectedId,
-          };
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
+          PreferencesHelper().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
         });
   }
 
-  List<Transaction> getTransactionForLastSelectedAccount() {
-    final lastAccount = Data().accounts.getMostRecentlySelectedAccount();
-
+  List<Transaction> getTransactionForLastSelectedAccount(final Account account) {
     return getTransactions(filter: (Transaction transaction) {
-      return filterByAccountId(transaction, lastAccount.uniqueId);
+      return filterByAccountId(transaction, account.uniqueId);
     });
   }
 }

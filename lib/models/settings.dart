@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
@@ -7,7 +5,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:money/storage/preferences_helper.dart';
 
 enum CashflowViewAs {
   sankey,
@@ -119,14 +117,6 @@ class Settings extends ChangeNotifier {
   // Tracking changes
   final DataMutations trackMutations = DataMutations();
 
-  //--------------------------------------------------------
-  Map<String, MyJson> views = <String, MyJson>{};
-
-  MyJson getLastViewChoices(final String viewOfModel) {
-    final MyJson? viewSetting = views[viewOfModel];
-    return viewSetting ?? {};
-  }
-
   static final Settings _singleton = Settings._internal();
 
   factory Settings() {
@@ -136,7 +126,8 @@ class Settings extends ChangeNotifier {
   Settings._internal();
 
   Future<bool> preferrenceLoad() async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final PreferencesHelper preferences = await PreferencesHelper.init();
+
     colorSelected = intValueOrDefault(preferences.getInt(settingKeyTheme));
     textScale = doubleValueOrDefault(preferences.getDouble(settingKeyTextScale), defaultValueIfNull: 1.0);
     useDarkMode = boolValueOrDefault(preferences.getBool(settingKeyDarkMode), defaultValueIfNull: false);
@@ -152,14 +143,12 @@ class Settings extends ChangeNotifier {
     isDetailsPanelExpanded = preferences.getBool(settingKeyDetailsPanelExpanded) == true;
     fileManager.fullPathToLastOpenedFile = preferences.getString(settingKeyLastLoadedPathToDatabase) ?? '';
 
-    views = loadMapFromPreferences(preferences, settingKeyViewsMap);
-
     isPreferenceLoaded = true;
     return true;
   }
 
-  void preferrenceSave() async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
+  Future<void> preferrenceSave() async {
+    final PreferencesHelper preferences = PreferencesHelper();
     await preferences.setDouble(settingKeyTextScale, textScale);
     await preferences.setInt(settingKeyTheme, colorSelected);
     await preferences.setInt(settingKeyCashflowView, cashflowViewAs.index);
@@ -169,23 +158,8 @@ class Settings extends ChangeNotifier {
     await preferences.setBool(settingKeyRentalsSupport, rentals);
     await preferences.setString(settingKeyStockApiKey, apiKeyForStocks);
 
-    storeMapToPreferences(preferences, settingKeyViewsMap, views);
-
-    if (fileManager.fullPathToLastOpenedFile.isEmpty) {
-      await preferences.remove(settingKeyLastLoadedPathToDatabase);
-    } else {
-      await preferences.setString(settingKeyLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile);
-    }
-  }
-
-  void stash(final String key, final String value) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    preferences.setString(key, value);
-  }
-
-  Future<String> unStash(final String key, final String value) async {
-    final SharedPreferences preferences = await SharedPreferences.getInstance();
-    return preferences.getString(key) ?? '';
+    // last path to the source of data
+    await preferences.setString(settingKeyLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile, true);
   }
 
   ThemeData getThemeData() {
@@ -199,55 +173,5 @@ class Settings extends ChangeNotifier {
       brightness: useDarkMode ? Brightness.dark : Brightness.light,
     );
     return themeData;
-  }
-
-  Map<String, MyJson> loadMapFromPreferences(
-    final SharedPreferences preferences,
-    final String key,
-  ) {
-    try {
-      final String? serializedMap = preferences.getString(key);
-      if (serializedMap != null) {
-        // first deserialize
-        final MyJson parsedMap = json.decode(serializedMap) as MyJson;
-
-        // second to JSon map
-        final Map<String, MyJson> resultMap =
-            parsedMap.map((final String key, final dynamic value) => MapEntry<String, MyJson>(key, value as MyJson));
-
-        return resultMap;
-      }
-    } catch (_) {
-      //
-    }
-
-    return <String, MyJson>{};
-  }
-
-  void storeMapToPreferences(
-    final SharedPreferences preferences,
-    final String key,
-    final Map<String, MyJson> mapOfJson,
-  ) {
-    preferences.setString(key, json.encode(mapOfJson));
-  }
-}
-
-Future<void> saveBoolArray(final String key, List<bool> boolArray) async {
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  List<String> boolStrings = boolArray.map((boolValue) => boolValue.toString()).toList();
-  String encodedArray = json.encode(boolStrings);
-  await preferences.setString(key, encodedArray);
-}
-
-Future<List<bool>> getBoolArray(final String key) async {
-  SharedPreferences preferences = await SharedPreferences.getInstance();
-  String? encodedArray = preferences.getString(key);
-  if (encodedArray != null) {
-    List<String> boolStrings = json.decode(encodedArray).cast<String>();
-    List<bool> boolArray = boolStrings.map((boolString) => boolString == 'true').toList();
-    return boolArray;
-  } else {
-    return []; // Default value if array is not found
   }
 }

@@ -78,8 +78,8 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().payees.getLastViewChoices();
+  String getViewId() {
+    return Data().payees.getTypeName();
   }
 
   @override

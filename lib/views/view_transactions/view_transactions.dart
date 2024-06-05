@@ -7,6 +7,7 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/preferences_helper.dart';
 import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/views/view_money_objects.dart';
@@ -76,8 +77,8 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().transactions.getLastViewChoices();
+  String getViewId() {
+    return Data().transactions.getTypeName();
   }
 
   @override
@@ -93,23 +94,27 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               final transaction = getFirstSelectedItem() as Transaction?;
               if (transaction != null) {
                 // Preselect the Account of this Transaction
-                Data().accounts.getLastViewChoices()[settingKeySelectedListItemId] = transaction.accountId.value;
+                PreferencesHelper().setInt(getViewPreferenceId(settingKeyDomainAccounts, settingKeySelectedListItemId),
+                    transaction.accountId.value);
                 Settings().selectedView = ViewId.viewAccounts;
               }
             }),
             Pair<String, Function>("Jump to Category view...", () {
               final transaction = getFirstSelectedItem() as Transaction?;
               if (transaction != null) {
-                // Preselect the Account of this Transaction
-                Data().categories.getLastViewChoices()[settingKeySelectedListItemId] = transaction.categoryId.value;
+                // Preselect the Category of this Transaction
+                PreferencesHelper().setInt(
+                    getViewPreferenceId(settingKeyDomainCategories, settingKeySelectedListItemId),
+                    transaction.categoryId.value);
                 Settings().selectedView = ViewId.viewCategories;
               }
             }),
             Pair<String, Function>("Jump to Payee view...", () {
               final transaction = getFirstSelectedItem() as Transaction?;
               if (transaction != null) {
-                // Preselect the Account of this Transaction
-                Data().payees.getLastViewChoices()[settingKeySelectedListItemId] = transaction.payee.value;
+                // Preselect the Payee of this Transaction
+                PreferencesHelper().setInt(getViewPreferenceId(settingKeyDomainPayees, settingKeySelectedListItemId),
+                    transaction.categoryId.value);
                 Settings().selectedView = ViewId.viewPayees;
               }
             }),

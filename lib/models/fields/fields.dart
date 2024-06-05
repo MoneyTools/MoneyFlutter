@@ -47,7 +47,7 @@ class Fields<T> {
   bool applyFilters(
     final MoneyObject objectInstance,
     final String filterBytFreeStyleLowerCaseText, // Optional empty string
-    final List<FieldFilter> filterByFieldsValue, // Optional empty array
+    final FieldFilters filterByFieldsValue, // Optional empty array
   ) {
     // Optimize - Simple case of using partial text search in all fields, no Column field fitering
     if (filterByFieldsValue.isEmpty) {
@@ -106,7 +106,7 @@ class Fields<T> {
 
   bool isMatchingColumnFiltering(
     final MoneyObject objectInstance,
-    final List<FieldFilter> filterByFieldsValue,
+    final FieldFilters filterByFieldsValue,
   ) {
     for (final fieldDefinition in fieldDefinitionsForColumns) {
       String fieldValueAsString = _getFieldValueAsStringForFiltering(
@@ -134,9 +134,9 @@ class Fields<T> {
   bool isFieldMatching(
     Field<dynamic> fieldDefinition,
     String fieldValueAsStringInLowerCase,
-    List<FieldFilter> filterByFieldsValue,
+    FieldFilters filterByFieldsValue,
   ) {
-    for (final FieldFilter filter in filterByFieldsValue) {
+    for (final FieldFilter filter in filterByFieldsValue.list) {
       if (fieldDefinition.name == filter.fieldName) {
         if (fieldValueAsStringInLowerCase == filter.filterTextInLowerCase) {
           return true;

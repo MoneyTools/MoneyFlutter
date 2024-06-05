@@ -40,8 +40,8 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().rentBuildings.getLastViewChoices();
+  String getViewId() {
+    return Data().rentBuildings.getTypeName();
   }
 
   String getUnitsAsString(final List<RentUnit> listOfUnits) {

@@ -24,8 +24,9 @@ const String settingKeyCashflowRecurringOccurrences = 'keyCashflowOccurrences';
 const String settingKeyCashflowView = 'keyCashflowView';
 const String settingKeyDarkMode = 'themeDarkMode';
 const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';
-const String settingKeyDomainAccounts = 'accountDetailsTransactions';
+const String settingKeyDomainAccountsInfoTransactions = 'accountDetailsTransactions';
 const String settingKeyFilterText = 'filterText';
+const String settingKeyFilterColumnsText = 'filterColumnsText';
 const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
 const String settingKeyLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
 const String settingKeyRentalsSupport = 'rentals';
@@ -36,7 +37,10 @@ const String settingKeySortBy = 'sortBy';
 const String settingKeyStockApiKey = 'stockServiceApiKey';
 const String settingKeyTextScale = 'textScale';
 const String settingKeyTheme = 'themeColor';
-const String settingKeyViewsMap = 'views';
+
+const String settingKeyDomainAccounts = 'accounts';
+const String settingKeyDomainCategories = 'categories';
+const String settingKeyDomainPayees = 'payees';
 
 class Constants {
   static const String demoData = '<Demo Data>';
@@ -102,4 +106,16 @@ enum ViewId {
   viewStocks,
   viewRentals,
   viewPolicy,
+}
+
+String getViewPreferenceId(final String view, final String suffix) {
+  return 'view_${view.toLowerCase()}_$suffix';
+}
+
+String getViewPreferenceIdAccount(final String suffix) {
+  return getViewPreferenceId(settingKeyDomainAccounts, suffix);
+}
+
+String getViewPreferenceIdAccountLastSelected() {
+  return getViewPreferenceId(settingKeyDomainAccounts, settingKeySelectedListItemId);
 }

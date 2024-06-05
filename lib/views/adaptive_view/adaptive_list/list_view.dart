@@ -21,7 +21,7 @@ class MyListView<T> extends StatefulWidget {
   final Function(BuildContext, int)? onDoubleTap;
   final Function(BuildContext, int)? onLongPress;
   final ValueNotifier<List<int>> selectedItemIds;
-  final Function? onSelectionChanged;
+  final Function(int /* uniqueId */)? onSelectionChanged;
   final bool isMultiSelectionOn;
 
   const MyListView({
@@ -94,7 +94,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
                       if (value == false) {
                         widget.selectedItemIds.value.remove(itemInstance.uniqueId);
                       }
-                      widget.onSelectionChanged?.call();
+                      widget.onSelectionChanged?.call(itemInstance.uniqueId);
                       FocusScope.of(context).requestFocus();
                     });
                   },
@@ -105,22 +105,15 @@ class MyListViewState<T> extends State<MyListView<T>> {
                   onTap: () {
                     if (widget.selectedItemIds.value.contains(itemInstance.uniqueId)) {
                       widget.selectedItemIds.value.remove(itemInstance.uniqueId);
-                      // unselectedItem(itemInstance.uniqueId);
                     } else {
                       if (widget.isMultiSelectionOn == false) {
                         // single selection
                         widget.selectedItemIds.value.clear();
                       }
                       widget.selectedItemIds.value.add(itemInstance.uniqueId);
-                      // selectedItem(itemInstance.uniqueId);
                     }
-                    if (widget.onSelectionChanged == null) {
-                      setState(() {
-                        // update the selection
-                      });
-                    } else {
-                      widget.onSelectionChanged?.call();
-                    }
+                    widget.onSelectionChanged?.call(itemInstance.uniqueId);
+
                     FocusScope.of(context).requestFocus();
                   },
                   onLongPress: () {
@@ -213,7 +206,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
       // only add it if its not already there
       if (!widget.selectedItemIds.value.contains(uniqueId)) {
         widget.selectedItemIds.value.add(uniqueId);
-        widget.onSelectionChanged?.call();
+        widget.onSelectionChanged?.call(uniqueId);
       }
     });
   }

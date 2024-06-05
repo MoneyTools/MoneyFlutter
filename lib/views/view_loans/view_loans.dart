@@ -35,8 +35,8 @@ class ViewLoansState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().loanPayments.getLastViewChoices();
+  String getViewId() {
+    return Data().loanPayments.getTypeName();
   }
 
   @override

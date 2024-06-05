@@ -41,8 +41,8 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Settings().views['Transfer'] ?? {};
+  String getViewId() {
+    return 'transfer';
   }
 
   @override

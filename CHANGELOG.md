@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.18] 2024-05-05
+
+### Added
+
+- Persist Column filters
+  
 ## [version 1.8.17] 2024-05-04
 
 ### Fixed

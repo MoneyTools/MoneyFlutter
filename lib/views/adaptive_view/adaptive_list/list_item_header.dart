@@ -6,7 +6,7 @@ import 'package:money/widgets/column_header_button.dart';
 /// A Row for a Table view
 class MyListItemHeader<T> extends StatelessWidget {
   final FieldDefinitions columns;
-  final List<FieldFilter> filterOn;
+  final FieldFilters filterOn;
   final int sortByColumn;
   final bool sortAscending;
   final bool itemsAreAllSelected;
@@ -48,7 +48,7 @@ class MyListItemHeader<T> extends StatelessWidget {
           columnDefinition.align,
           columnDefinition.columnWidth.index,
           getSortIndicator(sortByColumn, i, sortAscending),
-          filterOn.firstWhereOrNull((item) => item.fieldName == columnDefinition.name) != null,
+          filterOn.list.firstWhereOrNull((item) => item.fieldName == columnDefinition.name) != null,
           // Press
           () {
             onTap(i);

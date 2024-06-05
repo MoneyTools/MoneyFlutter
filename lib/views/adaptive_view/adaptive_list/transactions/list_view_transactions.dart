@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
@@ -53,7 +54,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         // Table Header
         MyListItemHeader<Transaction>(
           columns: widget.columnsToInclude,
-          filterOn: const [],
+          filterOn: FieldFilters(),
           sortByColumn: sortBy,
           sortAscending: sortAscending,
           onSelectAll: _isMultiSelectionOn
@@ -82,9 +83,15 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           child: MyListView<Transaction>(
             fields: Fields<Transaction>()..setDefinitions(widget.columnsToInclude),
             list: transactions,
+            displayAsColumn: true,
             selectedItemIds: ValueNotifier<List<int>>([selectedItemIndex]),
             isMultiSelectionOn: _isMultiSelectionOn,
-            displayAsColumn: true,
+            onSelectionChanged: (final int uniqueId) {
+              setState(() {
+                selectedItemIndex = uniqueId;
+                widget.onUserChoiceChanged?.call(sortBy, sortAscending, uniqueId);
+              });
+            },
             onTap: (final BuildContext context2, final int uniqueId) {
               final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
               showTransactionAndActions(

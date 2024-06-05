@@ -9,6 +9,7 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
+import 'package:money/storage/preferences_helper.dart';
 import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_money_objects.dart';
@@ -102,8 +103,8 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().accounts.getLastViewChoices();
+  String getViewId() {
+    return Data().accounts.getTypeName();
   }
 
   @override
@@ -198,7 +199,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Account? account = getMoneyObjectFromFirstSelectedId<Account>(selectedIds, list);
+    final Account? account = getFirstSelectedItem() as Account?;
     if (account == null) {
       return const CenterMessage(message: 'No account selected.');
     } else {
@@ -211,6 +212,10 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   @override
   List<MoneyObject> getInfoTransactions() {
-    return getTransactionForLastSelectedAccount();
+    final Account? account = getFirstSelectedItem() as Account?;
+    if (account != null) {
+      return getTransactionForLastSelectedAccount(account);
+    }
+    return [];
   }
 }

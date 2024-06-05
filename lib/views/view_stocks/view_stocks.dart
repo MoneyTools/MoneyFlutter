@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/securities/security.dart';
@@ -38,8 +39,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().securities.getLastViewChoices();
+  String getViewId() {
+    return Data().securities.getTypeName();
   }
 
   @override
@@ -96,7 +97,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           // list
           list: list,
           fieldDefinitions: fieldsToDisplay,
-          filters: const [],
+          filters: FieldFilters(),
           sortByFieldIndex: sortInstructions.column,
           sortAscending: sortInstructions.ascending,
 

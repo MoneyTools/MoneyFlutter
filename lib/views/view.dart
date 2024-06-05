@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/settings.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_header.dart';
 
 class ViewWidget extends StatefulWidget {
@@ -50,20 +48,5 @@ class ViewWidgetState extends State<ViewWidget> {
 
   String getDescription() {
     return 'Default list of items';
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    final MyJson? viewSetting = Settings().views[getClassNameSingular()];
-    if (viewSetting != null) {}
-  }
-
-  void saveLastUserActionOnThisView() {
-    // Persist users choice
-    Settings().views[getClassNameSingular()] = <String, dynamic>{};
-
-    Settings().preferrenceSave();
   }
 }

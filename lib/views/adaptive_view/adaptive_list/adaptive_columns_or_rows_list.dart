@@ -22,14 +22,14 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
 
   final List<MoneyObject> list;
   final FieldDefinitions fieldDefinitions;
-  final List<FieldFilter> filters;
+  final FieldFilters filters;
   final int sortByFieldIndex;
   final bool sortAscending;
 
   // Selections
   final ValueNotifier<List<int>> selectedItemsByUniqueId;
   final bool isMultiSelectionOn;
-  final Function? onSelectionChanged;
+  final Function(int /* uniqueId */)? onSelectionChanged;
   final Function? onContextMenu;
 
   // Display as Card vs Columns
@@ -57,7 +57,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
                         selectedItemsByUniqueId.value.add(item.uniqueId);
                       }
                     }
-                    onSelectionChanged?.call();
+                    onSelectionChanged?.call(-1);
                   }
                 : null,
             onTap: (int index) => onColumnHeaderTap?.call(index),

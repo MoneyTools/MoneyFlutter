@@ -36,8 +36,8 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  MyJson getViewChoices() {
-    return Data().investments.getLastViewChoices();
+  String getViewId() {
+    return Data().investments.getTypeName();
   }
 
   @override

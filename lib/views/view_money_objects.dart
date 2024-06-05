@@ -9,6 +9,7 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/preferences_helper.dart';
 import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/views/adaptive_view/adaptive_list/column_filter_panel.dart';
@@ -59,11 +60,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   // header
   String _filterByText = '';
-  final List<FieldFilter> _filterByFieldsValue = [];
+  FieldFilters _filterByFieldsValue = FieldFilters();
   Timer? _deadlineTimer;
   Function? onAddTransaction;
-
-  // ViewForMoneyObjectsState() {};
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
   Fields<MoneyObject> getFieldsForTable() {
@@ -75,25 +74,37 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     super.initState();
 
     var all = getFieldsForTable();
+
     _fieldToDisplay = Fields<MoneyObject>();
     _fieldToDisplay.setDefinitions(all.definitions.where((element) => element.useAsColumn).toList());
 
     // restore last user choices for this view
-    final viewSetting = getViewChoices();
-    {
-      _sortByFieldIndex = viewSetting.getInt(settingKeySortBy, 0);
-      _sortAscending = viewSetting.getBool(settingKeySortAscending, true);
-      _lastSelectedItemId = viewSetting.getInt(settingKeySelectedListItemId, -1);
-      final int subViewIndex =
-          viewSetting.getInt(settingKeySelectedDetailsPanelTab, InfoPanelSubViewEnum.details.index);
-      _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
-      _filterByText = viewSetting.getString(settingKeyFilterText);
-    }
+    _sortByFieldIndex = PreferencesHelper().getInt(getPreferenceKey(settingKeySortBy)) ?? 0;
+    _sortAscending = PreferencesHelper().getBool(getPreferenceKey(settingKeySortAscending)) ?? true;
+    _lastSelectedItemId = PreferencesHelper().getInt(getPreferenceKey(settingKeySelectedListItemId)) ?? -1;
+
+    final int subViewIndex = PreferencesHelper().getInt(getPreferenceKey(settingKeySelectedDetailsPanelTab)) ??
+        InfoPanelSubViewEnum.details.index;
+
+    _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
+
+    // Filters
+
+    // load text filter
+    _filterByText = PreferencesHelper().getString(getPreferenceKey(settingKeyFilterText)) ?? '';
+
+    // load the column filters
+    _filterByFieldsValue =
+        FieldFilters.fromList(PreferencesHelper().getStringList(getPreferenceKey(settingKeyFilterColumnsText)) ?? []);
 
     list = getList();
 
     /// restore selection of items
     setSelectedItem(_lastSelectedItemId);
+  }
+
+  String getPreferenceKey(final String suffix) {
+    return getViewPreferenceId(getViewId(), suffix);
   }
 
   void onCopyListFromMainView() {
@@ -171,7 +182,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         isMultiSelectionOn: _isMultiSelectionOn,
         onColumnHeaderTap: changeListSortOrder,
         onColumnHeaderLongPress: onCustomizeColumn,
-        onSelectionChanged: () {
+        onSelectionChanged: (int _) {
           _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
           saveLastUserChoicesOfView();
         },
@@ -286,8 +297,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   /// must override this in each view
-  MyJson getViewChoices() {
-    return {};
+  String getViewId() {
+    return '_id_';
   }
 
   String getCurrency() {
@@ -372,6 +383,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       _deadlineTimer = null;
       setState(() {
         _filterByText = text.toLowerCase();
+        saveLastUserChoicesOfView();
         list = getList();
       });
     });
@@ -444,8 +456,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         }
       }
 
-      // call this to persist the last selected item index
-      saveLastUserChoicesOfView();
+      // persist the last selected item index
+      PreferencesHelper().setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
     });
   }
 
@@ -548,14 +560,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void saveLastUserChoicesOfView() {
     // Persist users choice
-    final viewPreference = getViewChoices();
-    viewPreference[settingKeySortBy] = _sortByFieldIndex;
-    viewPreference[settingKeySortAscending] = _sortAscending;
-    viewPreference[settingKeySelectedListItemId] = getUniqueIdOfFirstSelectedItem();
-    viewPreference[settingKeySelectedDetailsPanelTab] = _selectedBottomTabId.index;
-    viewPreference[settingKeyFilterText] = _filterByText;
-
-    Settings().preferrenceSave();
+    PreferencesHelper().setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
+    PreferencesHelper().setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
+    PreferencesHelper().setInt(getPreferenceKey(settingKeySelectedListItemId), getUniqueIdOfFirstSelectedItem() ?? -1);
+    PreferencesHelper().setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
+    PreferencesHelper().setString(getPreferenceKey(settingKeyFilterText), _filterByText);
+    PreferencesHelper()
+        .setStringList(getPreferenceKey(settingKeyFilterColumnsText), _filterByFieldsValue.toStringList());
   }
 
   /// Compile the list of single data value for a column/field definition
@@ -661,6 +672,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             Navigator.of(context).pop(false);
             setState(() {
               _filterByFieldsValue.clear();
+
               for (final value in listOfValueSelected) {
                 if (value.isSelected) {
                   FieldFilter fieldFilter = FieldFilter(
@@ -670,10 +682,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
                   _filterByFieldsValue.add(fieldFilter);
                 }
               }
+
               if (_filterByFieldsValue.length == listOfValueSelected.length) {
                 // all unique values are selected so clear the column filter;
                 _filterByFieldsValue.clear();
               }
+
+              saveLastUserChoicesOfView();
+
               list = getList();
             });
           },

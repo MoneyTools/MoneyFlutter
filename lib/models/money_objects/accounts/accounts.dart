@@ -10,6 +10,7 @@ import 'package:money/models/money_objects/investments/security_purchase.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/preferences_helper.dart';
 
 class Accounts extends MoneyObjects<Account> {
   Accounts() {
@@ -219,9 +220,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   Account getMostRecentlySelectedAccount() {
-    final MyJson lastViewOfAccounts = getLastViewChoices();
-
-    final lastSelectionId = lastViewOfAccounts[settingKeySelectedListItemId];
+    final int? lastSelectionId = PreferencesHelper().getInt(getViewPreferenceIdAccountLastSelected());
     if (lastSelectionId != null) {
       final Account? accountExist = get(lastSelectionId);
       if (accountExist != null) {
@@ -233,7 +232,6 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   void setMostRecentUsedAccount(Account account) {
-    final MyJson lastViewOfAccounts = getLastViewChoices();
-    lastViewOfAccounts[settingKeySelectedListItemId] = account.id;
+    PreferencesHelper().setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
   }
 }

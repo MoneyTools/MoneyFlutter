@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/splits/money_split.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
@@ -38,7 +39,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         // Table Header
         MyListItemHeader<MoneySplit>(
           columns: MoneySplit.fields!.definitions,
-          filterOn: const [],
+          filterOn: FieldFilters(),
           sortByColumn: _sortBy,
           sortAscending: _sortAscending,
           onTap: (final int index) {
@@ -59,7 +60,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
             fields: MoneySplit.fields!,
             list: rows,
             selectedItemIds: ValueNotifier<List<int>>([]),
-            onSelectionChanged: () {},
+            onSelectionChanged: (int _) {},
           ),
         ),
       ],
