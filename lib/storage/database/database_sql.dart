@@ -1,12 +1,14 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:money/helpers/json_helper.dart';
 import 'package:sqlite3/sqlite3.dart';
 
+/// local client SQLite access
 class MyDatabaseImplementation {
   late final Database _db;
 
-  MyDatabaseImplementation(final String fileToOpen) {
+  Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     if (File(fileToOpen).existsSync()) {
       _db = sqlite3.open(fileToOpen);
     } else {

@@ -5,7 +5,7 @@ const String subFolderName = 'mymoney_csv_files';
 
 extension DataFromCsv on Data {
   Future<void> loadFromCsv(String filePathToLoad) async {
-    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
+    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad, Uint8List(0));
 
     if (pathToDatabaseFile != null) {
       final subFolder = MyFileSystems.append(MyFileSystems.getFolderFromFilePath(pathToDatabaseFile), subFolderName);

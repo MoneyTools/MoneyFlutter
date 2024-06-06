@@ -1,5 +1,6 @@
 // Imports
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/json_helper.dart';
@@ -209,9 +210,12 @@ class Data {
     return allMutationGroups;
   }
 
-  Future<String?> validateDataBasePathIsValidAndExist(final String? filePath) async {
+  Future<String?> validateDataBasePathIsValidAndExist(final String? filePath, final Uint8List fileBytes) async {
     try {
       if (filePath != null) {
+        if (fileBytes.isNotEmpty) {
+          return filePath;
+        }
         if (File(filePath).existsSync()) {
           return filePath;
         }
@@ -235,7 +239,7 @@ class Data {
       // Sqlite
       if (filePathToLoad.toLowerCase().endsWith('.mmdb')) {
         // Load from SQLite
-        if (await loadFromSql(filePathToLoad)) {
+        if (await loadFromSql(filePathToLoad, Settings().fileManager.fileBytes)) {
           Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
           Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
         } else {

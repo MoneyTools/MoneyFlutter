@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/string_helper.dart';
@@ -12,6 +14,7 @@ enum DataFileState {
 
 class FileManager {
   String fullPathToLastOpenedFile = '';
+  Uint8List fileBytes = Uint8List(0); // use for WebInMemory SQL database
   DateTime? dataFileLastUpdateDateTime;
   String fileName = '';
 

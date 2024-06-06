@@ -1,5 +1,6 @@
 import 'dart:io';
 
+// Import the file_picker package
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -258,8 +259,10 @@ class MainView extends StatelessWidget {
   void loadData() async {
     Settings().fileManager.state = DataFileState.loading;
     Data().loadFromPath(filePathToLoad: Settings().fileManager.fullPathToLastOpenedFile).then((final bool success) {
-      Settings().fileManager.state = DataFileState.loaded;
-      Settings().rebuild();
+      if (success) {
+        Settings().fileManager.state = DataFileState.loaded;
+        Settings().rebuild();
+      }
     });
   }
 
@@ -309,44 +312,49 @@ class MainView extends StatelessWidget {
 
   void onFileOpen() async {
     FilePickerResult? pickerResult;
+    const supportedFileTypes = <String>[
+      'mmdb',
+      'mmcsv',
+      'sdf',
+      'qfx',
+      'ofx',
+      'pdf',
+      'json',
+    ];
 
     try {
+      // WEB
+      if (kIsWeb) {
+        pickerResult = await FilePicker.platform.pickFiles(
+          type: FileType.any,
+        );
+      } else
+      // Mobile
       if (Platform.isAndroid || Platform.isIOS) {
-        // Special case for Android
         // See https://github.com/miguelpruivo/flutter_file_picker/issues/729
         pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
-      } else {
+      } else
+      // Desktop
+      {
         pickerResult = await FilePicker.platform.pickFiles(
           type: FileType.custom,
-          allowedExtensions: <String>[
-            'mmdb',
-            'mmcsv',
-            'sdf',
-            'qfx',
-            'ofx',
-            'pdf',
-            'json',
-          ],
+          allowedExtensions: supportedFileTypes,
         );
       }
     } catch (e) {
       debugLog(e.toString());
     }
 
-    if (pickerResult != null) {
+    if (pickerResult != null && pickerResult.files.isNotEmpty) {
       try {
         final String? fileExtension = pickerResult.files.single.extension;
 
         if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
           if (kIsWeb) {
-            Settings().fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
+            PlatformFile file = pickerResult.files.first;
 
-            final Uint8List? file = pickerResult.files.single.bytes;
-            if (file != null) {
-              // String s = String.fromCharCodes(file);
-              // var outputAsUint8List = new Uint8List.fromList(s.codeUnits);
-              // debugLog("--------$s");
-            }
+            Settings().fileManager.fullPathToLastOpenedFile = file.name;
+            Settings().fileManager.fileBytes = file.bytes!;
           } else {
             Settings().fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
           }

@@ -1,13 +1,15 @@
 part of 'data.dart';
 
 extension DataFromSql on Data {
-  Future<bool> loadFromSql(String filePathToLoad) async {
+  Future<bool> loadFromSql(final String filePathToLoad, final Uint8List fileBytes) async {
     // Load from SQLite
-    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad);
+    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad, fileBytes);
 
-    if (pathToDatabaseFile != null) {
+    if (pathToDatabaseFile != null || fileBytes.isNotEmpty) {
       // Open or create the database
-      final MyDatabase db = MyDatabase(pathToDatabaseFile);
+      final MyDatabase db = MyDatabase();
+
+      await db.load(filePathToLoad, fileBytes);
 
       accountAliases.loadFromJson(db.select('SELECT * FROM AccountAliases'));
       accounts.loadFromJson(db.select('SELECT * FROM Accounts'));
@@ -40,7 +42,7 @@ extension DataFromSql on Data {
     required final Function(bool, String) callbackWhenLoaded,
   }) async {
     try {
-      final MyDatabase db = MyDatabase(filePathToLoad);
+      final MyDatabase db = MyDatabase();
 
       // Save transaction first
       transactions.saveSql(db, 'Transactions');
