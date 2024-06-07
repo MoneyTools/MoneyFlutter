@@ -88,8 +88,6 @@ class Transaction extends MoneyObject {
     name: 'Account',
     serializeName: 'Account',
     defaultValue: -1,
-    // useAsColumn: false,
-    // useAsDetailPanels: false,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().accounts.getNameFromId((instance as Transaction).accountId.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).accountId.value,
@@ -125,7 +123,7 @@ class Transaction extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     defaultValue: TransactionStatus.none,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     name: columnIdStatus,
     serializeName: 'Status',
     getValueForDisplay: (final MoneyObject instance) =>
@@ -291,7 +289,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Transfer',
     defaultValue: -1,
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transfer.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transfer.value,
   );
@@ -314,7 +312,7 @@ class Transaction extends MoneyObject {
     name: 'Flags',
     serializeName: 'Flags',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).flags.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).flags.value,
   );
@@ -356,7 +354,7 @@ class Transaction extends MoneyObject {
     name: 'TransferSplit',
     serializeName: 'TransferSplit',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
   );
@@ -367,7 +365,7 @@ class Transaction extends MoneyObject {
     importance: 10,
     name: 'Merge Date',
     serializeName: 'MergeDate',
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as Transaction).mergeDate.value),
@@ -384,7 +382,7 @@ class Transaction extends MoneyObject {
     importance: 98,
     name: columnIdAmountNormalized,
     columnWidth: ColumnWidth.small,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
         amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.amount),
         iso4217: Constants.defaultCurrency),
@@ -401,7 +399,7 @@ class Transaction extends MoneyObject {
     name: columnIdBalance,
     columnWidth: ColumnWidth.small,
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).balance,
       iso4217: instance.getCurrency(),
@@ -413,7 +411,7 @@ class Transaction extends MoneyObject {
     importance: 99,
     name: 'Balance(USD)',
     columnWidth: ColumnWidth.small,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).getNormalizedAmount((instance).balance),
       iso4217: Constants.defaultCurrency,
@@ -449,7 +447,6 @@ class Transaction extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     defaultValue: '',
-    useAsDetailPanels: true,
     getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget((instance as Transaction).getCurrency());
     },

@@ -143,6 +143,8 @@ Widget buildWidgetFromTypeAndValue({
 }
 
 dynamic defaultCallbackValue(final dynamic instance) => '';
+bool defaultCallbackValueTrue(final dynamic instance) => true;
+bool defaultCallbackValueFalse(final dynamic instance) => false;
 
 Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final String nameToFind) {
   for (final f in fields) {
@@ -187,17 +189,19 @@ enum ColumnWidth {
 class Field<T> {
   late T _value;
 
+  // Static properties
   String name;
-
   String serializeName;
-
   FieldType type;
   ColumnWidth columnWidth;
   TextAlign align;
-  bool useAsColumn;
-  bool useAsDetailPanels;
   bool fixedFont = false;
   int importance;
+
+  bool useAsColumn;
+
+  // This properties are evaluated against the instnace of the object
+  bool Function(MoneyObject) useAsDetailPanels;
 
   /// Get the value of the instance
   dynamic Function(MoneyObject) getValueForDisplay;
@@ -229,7 +233,7 @@ class Field<T> {
     this.setValue,
     this.importance = -1,
     this.useAsColumn = true,
-    this.useAsDetailPanels = true,
+    this.useAsDetailPanels = defaultCallbackValueTrue,
     this.sort,
   }) {
     ///----------------------------------------------
@@ -399,7 +403,7 @@ class FieldId extends Field<int> {
   }) : super(
           serializeName: 'Id',
           useAsColumn: false,
-          useAsDetailPanels: false,
+          useAsDetailPanels: defaultCallbackValueFalse,
           defaultValue: -1,
         );
 }
@@ -469,7 +473,7 @@ class FieldString extends Field<String> {
     super.getValueForSerialization,
     super.useAsColumn = true,
     super.columnWidth,
-    super.useAsDetailPanels = true,
+    super.useAsDetailPanels = defaultCallbackValueTrue,
     super.align = TextAlign.left,
     super.fixedFont = false,
     super.getEditWidget,

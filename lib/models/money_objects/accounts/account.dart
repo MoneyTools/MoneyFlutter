@@ -8,6 +8,7 @@ import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/accounts/picker_account_type.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
+// import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 
@@ -161,7 +162,6 @@ class Account extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     defaultValue: '',
-    useAsDetailPanels: true,
     getValueForDisplay: (final MoneyObject instance) =>
         Currency.buildCurrencyWidget((instance as Account).getAccountCurrencyAsText()),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).getAccountCurrencyAsText(),
@@ -199,7 +199,7 @@ class Account extends MoneyObject {
   FieldInt reconcileWarning = FieldInt(
     serializeName: 'ReconcileWarning',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).reconcileWarning.value,
   );
 
@@ -219,7 +219,7 @@ class Account extends MoneyObject {
   FieldString syncGuid = FieldString(
     serializeName: 'SyncGuid',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) =>
         // this field can not be blank, it needs to be a valid GUID or Null
         (instance as Account).syncGuid.value.isEmpty ? null : instance.syncGuid.value.isEmpty,
@@ -230,7 +230,7 @@ class Account extends MoneyObject {
   FieldInt flags = FieldInt(
     serializeName: 'Flags',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).flags.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).flags.value,
   );
@@ -251,11 +251,14 @@ class Account extends MoneyObject {
   /// 15 | CategoryIdForPrincipal|INT|0||0
   Field<int> categoryIdForPrincipal = Field<int>(
     importance: 98,
+    name: 'Catgory for Principal',
     serializeName: 'CategoryIdForPrincipal',
     defaultValue: 0,
     useAsColumn: false,
-    useAsDetailPanels: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).categoryIdForPrincipal.value,
+    useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
+    type: FieldType.text,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Account).categoryIdForPrincipal.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForPrincipal.value,
   );
 
@@ -263,11 +266,14 @@ class Account extends MoneyObject {
   /// 16|CategoryIdForInterest|INT|0||0
   Field<int> categoryIdForInterest = Field<int>(
     importance: -1,
+    name: 'Catgory for Interest',
     serializeName: 'CategoryIdForInterest',
+    type: FieldType.text,
     defaultValue: 0,
     useAsColumn: false,
-    useAsDetailPanels: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).categoryIdForInterest.value,
+    useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Account).categoryIdForInterest.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForInterest.value,
   );
 
@@ -279,7 +285,7 @@ class Account extends MoneyObject {
     importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.tiny,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).count.value,
   );
 
@@ -300,7 +306,7 @@ class Account extends MoneyObject {
   FieldMoney balanceNormalized = FieldMoney(
       importance: 99,
       name: 'Balance(USD)',
-      useAsDetailPanels: false,
+      useAsDetailPanels: defaultCallbackValueFalse,
       getValueForDisplay: (final MoneyObject instance) {
         final accountInstance = instance as Account;
         return MoneyModel(
@@ -311,7 +317,7 @@ class Account extends MoneyObject {
     name: 'Account is open',
     defaultValue: false,
     useAsColumn: false,
-    useAsDetailPanels: true,
+    useAsDetailPanels: defaultCallbackValueTrue,
     type: FieldType.toggle,
     getValueForDisplay: (final MoneyObject instance) => !(instance as Account).isClosed(),
     setValue: (final MoneyObject instance, dynamic value) {

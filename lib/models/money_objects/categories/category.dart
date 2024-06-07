@@ -68,7 +68,6 @@ class Category extends MoneyObject {
     name: 'ParentId',
     serializeName: 'ParentId',
     useAsColumn: false,
-    useAsDetailPanels: true,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).parentId.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
   );
@@ -162,7 +161,7 @@ class Category extends MoneyObject {
     importance: 80,
     serializeName: 'Frequency',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
   );
 
@@ -171,7 +170,7 @@ class Category extends MoneyObject {
     importance: 80,
     serializeName: 'TaxRefNum',
     useAsColumn: false,
-    useAsDetailPanels: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).taxRefNum.value,
   );
 

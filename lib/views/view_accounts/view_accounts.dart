@@ -203,10 +203,17 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     if (account == null) {
       return const CenterMessage(message: 'No account selected.');
     } else {
-      return _getSubViewContentForTransactions(
-        account: account,
-        showAsNativeCurrency: showAsNativeCurrency,
-      );
+      if (account.type.value == AccountType.loan) {
+        return _getSubViewContentForTransactionsForLoans(
+          account: account,
+          showAsNativeCurrency: showAsNativeCurrency,
+        );
+      } else {
+        return _getSubViewContentForTransactions(
+          account: account,
+          showAsNativeCurrency: showAsNativeCurrency,
+        );
+      }
     }
   }
 

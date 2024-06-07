@@ -56,9 +56,8 @@ class LoanPayment extends MoneyObject {
   FieldDate date = FieldDate(
     importance: 2,
     serializeName: 'Date',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as LoanPayment).date.value),
+    useAsColumn: true,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).date.value,
     getValueForSerialization: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as LoanPayment).date.value),
   );

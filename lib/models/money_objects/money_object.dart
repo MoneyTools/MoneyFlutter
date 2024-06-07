@@ -25,7 +25,7 @@ class MoneyObject {
   FieldDefinitions get fieldDefinitions => [];
 
   FieldDefinitions getFieldDefinitionsForPanel() {
-    return fieldDefinitions.where((element) => element.useAsDetailPanels).toList();
+    return fieldDefinitions.where((element) => element.useAsDetailPanels(this)).toList();
   }
 
   /// Return the best way to identify this instance, e.g. Name

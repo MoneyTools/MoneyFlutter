@@ -86,6 +86,65 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         });
   }
 
+  // Details Panel for Transactions
+  Widget _getSubViewContentForTransactionsForLoans({
+    required final Account account,
+    required final bool showAsNativeCurrency,
+  }) {
+    int sortFieldIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySortBy')) ?? 0;
+    bool sortAscending = PreferencesHelper().getBool(getPreferenceKey('info_$settingKeySortAscending')) ?? true;
+    int selectedItemIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySelectedListItemId')) ?? -1;
+
+    final FieldDefinitions columnsToDisplay = <Field>[
+      Transaction.fields.getFieldByName(columnIdDate),
+      Transaction.fields.getFieldByName(columnIdAccount),
+      Transaction.fields.getFieldByName(columnIdPayee),
+      Transaction.fields.getFieldByName(columnIdCategory),
+      Transaction.fields.getFieldByName(columnIdStatus),
+      Transaction.fields.getFieldByName(showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized),
+      Transaction.fields.getFieldByName(showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized),
+    ];
+
+    final List<int> cateogoriesToMatch = [account.categoryIdForInterest.value, account.categoryIdForPrincipal.value];
+
+    final list = Data()
+        .transactions
+        .iterableList()
+        .where((t) =>
+            cateogoriesToMatch.contains(t.categoryId.value) ||
+            doesSplitContainsCategory(t, [account.categoryIdForInterest.value, account.categoryIdForPrincipal.value]))
+        .toList();
+
+    return ListViewTransactions(
+        key: Key('transaction_list_currency_${showAsNativeCurrency}_version${Data().version}'),
+        columnsToInclude: columnsToDisplay,
+        getList: () => list,
+        sortFieldIndex: sortFieldIndex,
+        sortAscending: sortAscending,
+        selectedItemIndex: selectedItemIndex,
+        onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int uniqueId) {
+          // keep track of user choice
+          // sortFieldIndex = sortByFieldIndex;
+          sortAscending = sortAscending;
+
+          // Save user choices
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
+          PreferencesHelper().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
+        });
+  }
+
+  bool doesSplitContainsCategory(Transaction t, List<int> cateogoriesToMatch) {
+    if (t.isSplit) {
+      for (var s in t.splits) {
+        if (cateogoriesToMatch.contains(s.categoryId.value)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
   List<Transaction> getTransactionForLastSelectedAccount(final Account account) {
     return getTransactions(filter: (Transaction transaction) {
       return filterByAccountId(transaction, account.uniqueId);
