@@ -43,10 +43,10 @@ extension DataFromSql on Data {
   }) async {
     try {
       final MyDatabase db = MyDatabase();
+      db.load(filePathToLoad, Uint8List(0));
 
       // Save transaction first
       transactions.saveSql(db, 'Transactions');
-
       onlineAccounts.saveSql(db, 'OnlineAccounts');
       accounts.saveSql(db, 'Accounts');
       payees.saveSql(db, 'Payees');
