@@ -330,6 +330,6 @@ class Currency extends MoneyObject {
       name: iso4217code,
       decimalDigits: decimalDigits,
     );
-    return currencyFormat.format(amount);
+    return currencyFormat.format(isAlmostZero(amount) ? 0.00 : amount);
   }
 }

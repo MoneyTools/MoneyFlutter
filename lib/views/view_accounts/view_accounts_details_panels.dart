@@ -177,7 +177,6 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     }
 
     return AdaptiveListColumnsOrRows(
-      // List of Money Object instances
       list: agregatedList,
       fieldDefinitions: LoanPayment.fields.fieldDefinitionsForColumns.toList(),
       filters: FieldFilters(),

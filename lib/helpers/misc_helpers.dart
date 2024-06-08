@@ -245,3 +245,7 @@ extension Range on num {
     return from < this && this < to;
   }
 }
+
+bool isAlmostZero(double value, [double epsilon = 0.009]) {
+  return value.abs() <= epsilon;
+}

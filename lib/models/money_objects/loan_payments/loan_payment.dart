@@ -19,7 +19,6 @@ class LoanPayment extends MoneyObject {
         tmpInstance.accountId,
         tmpInstance.memo,
         tmpInstance.reference,
-        tmpInstance.total,
         tmpInstance.rate,
         tmpInstance.interest,
         tmpInstance.principal,
@@ -72,7 +71,6 @@ class LoanPayment extends MoneyObject {
   /// 3
   /// 3|Principal|money|0||0
   FieldMoney principal = FieldMoney(
-    importance: 98,
     name: 'Principal',
     serializeName: 'Principal',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
@@ -82,7 +80,6 @@ class LoanPayment extends MoneyObject {
   /// Interest
   /// 4|Interest|money|0||0
   FieldMoney interest = FieldMoney(
-    importance: 99,
     name: 'Interest',
     serializeName: 'Interest',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
@@ -105,49 +102,43 @@ class LoanPayment extends MoneyObject {
   // Not persisted
   Account? accountInstance;
 
-  FieldMoney total = FieldMoney(
+  FieldMoney payment = FieldMoney(
     name: 'Payment',
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as LoanPayment)._total;
-    },
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment)._totalPrincipalAndInterest,
   );
 
   FieldString reference = FieldString(
     name: 'Reference',
     columnWidth: ColumnWidth.largest,
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as LoanPayment).reference.value;
-    },
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).reference.value,
   );
 
-  double get _total => this.principal.value.amount + this.interest.value.amount;
+  double get _totalPrincipalAndInterest => this.principal.value.amount + this.interest.value.amount;
 
-  FieldString rate = FieldString(
+  FieldPercentage rate = FieldPercentage(
     name: 'Rate %',
-    align: TextAlign.right,
-    fixedFont: true,
-    columnWidth: ColumnWidth.tiny,
-    getValueForDisplay: (final MoneyObject instance) {
-      final l = (instance as LoanPayment);
-      if (l.balance.value.amount == 0) {
-        return '';
-      }
-
-      // Calculate the monthly interest rate
-      double annualInterestRate = (l.interest.value.amount * 12) // Convert to annual interest rate
-          /
-          l.balance.value.amount;
-
-      return '${roundDouble(annualInterestRate * 100, 2).abs()}%';
-    },
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).getRate(),
     importance: 98,
   );
 
+  double getRate() {
+    double previouseBalance = this.balance.value.amount - this.principal.value.amount;
+    if (previouseBalance == 0) {
+      return 0.00;
+    }
+
+    // Calculate the monthly interest rate
+    double annualInterestRate = (this.interest.value.amount * 12) // Convert to annual interest rate
+        /
+        previouseBalance;
+
+    return annualInterestRate.abs();
+  }
+
   FieldMoney balance = FieldMoney(
-    name: 'Balance',
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as LoanPayment).balance.value.amount;
-    },
+    name: 'xxx',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).balance.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).balance.value.amount,
     importance: 99,
   );
 

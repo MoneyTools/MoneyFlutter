@@ -229,12 +229,14 @@ class Fields<T> {
       cells.add(
         Expanded(
           flex: fieldDefinition.columnWidth.index,
-          child: buildWidgetFromTypeAndValue(
-            value: value,
-            type: fieldDefinition.type,
-            align: fieldDefinition.align,
-            fixedFont: fieldDefinition.fixedFont,
-            // currency: fieldDefinition.currency,
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+            child: buildWidgetFromTypeAndValue(
+              value: value,
+              type: fieldDefinition.type,
+              align: fieldDefinition.align,
+              fixedFont: fieldDefinition.fixedFont,
+            ),
           ),
         ),
       );

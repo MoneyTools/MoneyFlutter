@@ -19,14 +19,14 @@ Widget buildFieldWidgetForAmount({
   return FittedBox(
     fit: BoxFit.scaleDown,
     alignment: textAlignToAlignment(align),
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-      child: Text(
-        shorthand
-            ? getAmountAsShorthandText(value as num)
-            : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
-        textAlign: align,
-        style: const TextStyle(fontFamily: 'RobotoMono'),
+    child: Text(
+      shorthand
+          ? getAmountAsShorthandText(value as num)
+          : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
+      textAlign: align,
+      style: TextStyle(
+        fontFamily: 'RobotoMono',
+        color: getTextColorToUse(value, true),
       ),
     ),
   );
@@ -36,15 +36,12 @@ Widget buildFieldWidgetForDate({
   final DateTime? date,
   final TextAlign align = TextAlign.left,
 }) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-    child: Text(
-      dateToString(date),
-      textAlign: align,
-      overflow: TextOverflow.ellipsis, // Clip with ellipsis
-      maxLines: 1, // Restrict to single line,
-      style: const TextStyle(fontFamily: 'RobotoMono'),
-    ),
+  return Text(
+    dateToString(date),
+    textAlign: align,
+    overflow: TextOverflow.ellipsis, // Clip with ellipsis
+    maxLines: 1, // Restrict to single line,
+    style: const TextStyle(fontFamily: 'RobotoMono'),
   );
 }
 
@@ -56,16 +53,41 @@ Widget buildFieldWidgetForNumber({
   return FittedBox(
     fit: BoxFit.scaleDown,
     alignment: textAlignToAlignment(align),
-    child: Padding(
-      padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-      child: Text(
-        shorthand
-            ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
-            : value.toString(),
-        textAlign: align,
-        style: const TextStyle(fontFamily: 'RobotoMono'),
-      ),
+    child: Text(
+      shorthand
+          ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
+          : value.toString(),
+      textAlign: align,
+      style: const TextStyle(fontFamily: 'RobotoMono'),
     ),
+  );
+}
+
+Widget buildFieldWidgetForPercentage({
+  final double value = 0,
+}) {
+  // 0.000 to 100.000%
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.end,
+    children: [
+      Opacity(
+        opacity: value == 0 ? 0.4 : 1,
+        child: Text(
+          (value * 100).toStringAsFixed(3),
+          textAlign: TextAlign.right,
+          style: const TextStyle(
+            fontFamily: 'RobotoMono',
+          ),
+        ),
+      ),
+      const Opacity(
+        opacity: 0.8,
+        child: Text(
+          ' %',
+          style: TextStyle(fontSize: 9),
+        ),
+      ),
+    ],
   );
 }
 
@@ -74,14 +96,11 @@ Widget buildFieldWidgetForText({
   final TextAlign align = TextAlign.left,
   final bool fixedFont = false,
 }) {
-  return Padding(
-    padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-    child: Text(
-      text, textAlign: align,
-      overflow: TextOverflow.ellipsis, // Clip with ellipsis
-      maxLines: 1, // Restrict to single line,
-      style: TextStyle(fontFamily: fixedFont ? 'RobotoMono' : 'RobotoFlex'),
-    ),
+  return Text(
+    text, textAlign: align,
+    overflow: TextOverflow.ellipsis, // Clip with ellipsis
+    maxLines: 1, // Restrict to single line,
+    style: TextStyle(fontFamily: fixedFont ? 'RobotoMono' : 'RobotoFlex'),
   );
 }
 
@@ -113,6 +132,9 @@ Widget buildWidgetFromTypeAndValue({
           ),
         ],
       );
+
+    case FieldType.percentage:
+      return buildFieldWidgetForPercentage(value: value);
 
     case FieldType.amount:
       if (value is String) {
@@ -325,6 +347,7 @@ class Field<T> {
       case FieldType.numericShorthand:
         return getAmountAsShorthandText(value as num);
       case FieldType.quantity:
+      case FieldType.percentage:
         return formatDoubleTimeZeroFiveNine(value);
       case FieldType.amount:
         if (type is MoneyModel) {
@@ -392,6 +415,24 @@ class FieldDouble extends Field<double> {
   }) : super(
           align: TextAlign.right,
           type: FieldType.numeric,
+        );
+}
+
+class FieldPercentage extends Field<double> {
+  FieldPercentage({
+    super.importance,
+    super.name,
+    super.serializeName,
+    super.getValueForDisplay,
+    super.getValueForSerialization,
+    super.useAsColumn,
+    super.defaultValue = 0.000,
+    super.useAsDetailPanels,
+    super.sort,
+  }) : super(
+          align: TextAlign.right,
+          type: FieldType.percentage,
+          fixedFont: true,
         );
 }
 
@@ -497,6 +538,7 @@ enum FieldType {
   numeric,
   numericShorthand,
   quantity,
+  percentage,
   amount,
   amountShorthand,
   date,
