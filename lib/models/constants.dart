@@ -96,7 +96,6 @@ class IntValues {
 enum ViewId {
   viewCashFlow,
   viewAccounts,
-  viewLoans,
   viewCategories,
   viewPayees,
   viewAliases,

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
@@ -8,16 +10,20 @@ import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 class LoanPayment extends MoneyObject {
   static final Fields<LoanPayment> _fields = Fields<LoanPayment>();
 
-  static get fields {
+  static Fields<LoanPayment> get fields {
     if (_fields.isEmpty) {
       final tmpInstance = LoanPayment.fromJson({});
       _fields.setDefinitions([
         tmpInstance.id,
-        tmpInstance.accountId,
         tmpInstance.date,
+        tmpInstance.accountId,
         tmpInstance.memo,
-        tmpInstance.principal,
+        tmpInstance.reference,
+        tmpInstance.total,
+        tmpInstance.rate,
         tmpInstance.interest,
+        tmpInstance.principal,
+        tmpInstance.balance,
       ]);
     }
     return _fields;
@@ -43,10 +49,11 @@ class LoanPayment extends MoneyObject {
 
   /// 1|AccountId|INT|1||0
   Field<int> accountId = Field<int>(
-    importance: 1,
+    importance: 2,
     name: 'Account',
     serializeName: 'AccountId',
     defaultValue: -1,
+    type: FieldType.text,
     getValueForDisplay: (final MoneyObject instance) => Account.getName((instance as LoanPayment).accountInstance),
     getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).accountId.value,
   );
@@ -54,7 +61,7 @@ class LoanPayment extends MoneyObject {
   /// Date
   /// 2|Date|datetime|1||0
   FieldDate date = FieldDate(
-    importance: 2,
+    importance: 1,
     serializeName: 'Date',
     useAsColumn: true,
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).date.value,
@@ -89,6 +96,7 @@ class LoanPayment extends MoneyObject {
     type: FieldType.text,
     name: 'Memo',
     serializeName: 'Memo',
+    useAsColumn: false,
     defaultValue: '',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
@@ -97,20 +105,69 @@ class LoanPayment extends MoneyObject {
   // Not persisted
   Account? accountInstance;
 
+  FieldMoney total = FieldMoney(
+    name: 'Payment',
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as LoanPayment)._total;
+    },
+  );
+
+  FieldString reference = FieldString(
+    name: 'Reference',
+    columnWidth: ColumnWidth.largest,
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as LoanPayment).reference.value;
+    },
+  );
+
+  double get _total => this.principal.value.amount + this.interest.value.amount;
+
+  FieldString rate = FieldString(
+    name: 'Rate %',
+    align: TextAlign.right,
+    fixedFont: true,
+    columnWidth: ColumnWidth.tiny,
+    getValueForDisplay: (final MoneyObject instance) {
+      final l = (instance as LoanPayment);
+      if (l.balance.value.amount == 0) {
+        return '';
+      }
+
+      // Calculate the monthly interest rate
+      double annualInterestRate = (l.interest.value.amount * 12) // Convert to annual interest rate
+          /
+          l.balance.value.amount;
+
+      return '${roundDouble(annualInterestRate * 100, 2).abs()}%';
+    },
+    importance: 98,
+  );
+
+  FieldMoney balance = FieldMoney(
+    name: 'Balance',
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as LoanPayment).balance.value.amount;
+    },
+    importance: 99,
+  );
+
   LoanPayment({
     required final int id,
     required final int accountId,
     required final DateTime? date,
+    required final String memo,
     required final double principal,
     required final double interest,
-    required final String memo,
+    final String reference = '',
   }) {
     this.id.value = id;
     this.accountId.value = accountId;
     accountInstance = Data().accounts.get(this.accountId.value);
     this.date.value = date;
+    this.memo.value = memo;
     this.principal.value.amount = principal;
     this.interest.value.amount = interest;
+    this.reference.value = reference;
 
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: Account.getName(accountInstance),

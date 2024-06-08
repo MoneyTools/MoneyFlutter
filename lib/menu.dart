@@ -18,12 +18,6 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
       selectedIcon: Icon(Icons.account_balance),
     ),
     const NavigationDestination(
-      label: 'Loans',
-      tooltip: 'Loans',
-      icon: Icon(Icons.trending_down),
-      selectedIcon: Icon(Icons.trending_down),
-    ),
-    const NavigationDestination(
       label: 'Categories',
       tooltip: 'Categories',
       icon: Icon(Icons.type_specimen),

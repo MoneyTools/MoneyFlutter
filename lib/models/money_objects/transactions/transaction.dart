@@ -810,4 +810,19 @@ class Transaction extends MoneyObject {
     //     }
     //   }
   }
+
+  bool isMatchingAnyOfTheseCategoris(List<int> cateogoriesToMatch) {
+    if (cateogoriesToMatch.contains(categoryId.value)) {
+      return true;
+    }
+
+    if (this.isSplit) {
+      for (var s in this.splits) {
+        if (cateogoriesToMatch.contains(s.categoryId.value)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
 }

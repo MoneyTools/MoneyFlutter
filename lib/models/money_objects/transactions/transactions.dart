@@ -20,13 +20,25 @@ class Transactions extends MoneyObjects<Transaction> {
     collectionName = 'Transactions';
   }
 
-  List<Transaction> getListFlattenSplits() {
+  List<Transaction> getListFlattenSplits({final bool Function(Transaction)? whereClause}) {
     List<Transaction> flattenList = [];
     for (final t in iterableList()) {
-      if (t.categoryId.value == Data().categories.splitCategoryId()) {
-        Data().splits.get(t.uniqueId);
-      } else {
-        flattenList.add(t);
+      if (whereClause == null || whereClause(t)) {
+        if (t.categoryId.value == Data().categories.splitCategoryId()) {
+          for (final s in t.splits) {
+            final fakeT = Transaction(status: t.status.value)
+              ..dateTime.value = t.dateTime.value
+              ..accountId.value = t.accountId.value
+              ..payee.value = s.payeeId.value == -1 ? t.payee.value : s.payeeId.value
+              ..categoryId.value = s.categoryId.value
+              ..memo.value = s.memo.value
+              ..amount.value = s.amount.value;
+
+            flattenList.add(fakeT);
+          }
+        } else {
+          flattenList.add(t);
+        }
       }
     }
     return flattenList;

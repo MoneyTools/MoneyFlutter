@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.19] 2024-05-08
+
+### Updated
+
+- Loans: Display list of transactions
+
 ## [version 1.8.18] 2024-05-05
 
 ### Added

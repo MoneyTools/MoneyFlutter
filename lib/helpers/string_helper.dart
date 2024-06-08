@@ -188,3 +188,24 @@ int compareStringsAsAmount(final String a, final String b) {
 
   return valueA.compareTo(valueB);
 }
+
+String concat(
+  final String existingValue,
+  final String valueToConcat, [
+  final String separatorIfNeeded = '; ',
+  bool doNotConcactIfPresent = false,
+]) {
+  if (valueToConcat.isEmpty) {
+    // Nothing to concat
+    return existingValue;
+  }
+
+  if (existingValue.isEmpty) {
+    return valueToConcat;
+  } else {
+    if (doNotConcactIfPresent && existingValue.contains(separatorIfNeeded)) {
+      return existingValue;
+    }
+    return existingValue + separatorIfNeeded + valueToConcat;
+  }
+}
