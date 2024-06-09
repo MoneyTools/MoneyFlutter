@@ -2,6 +2,10 @@
 
 ## [version 1.8.20] 2024-05-09
 
+### Added
+
+- Main Menu
+
 ### Updated
 
 - Pending Changes dialog can now [Save to SQL] [Save to CSV]
