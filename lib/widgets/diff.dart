@@ -24,19 +24,9 @@ Widget diffText(
   final Color textColor,
   final bool lineTrough,
 ) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 4.0),
-    child: Chip(
-      padding: EdgeInsets.zero,
-      visualDensity: VisualDensity.compact,
-      label: Text(text),
-      backgroundColor: backgroundColor,
-      side: const BorderSide(color: Colors.transparent, width: 0.0),
-      labelStyle: TextStyle(
-        fontSize: 10,
-        color: textColor,
-        decoration: lineTrough ? TextDecoration.lineThrough : null, // Strike out text
-      ),
-    ),
+  return Container(
+    padding: const EdgeInsets.all(2),
+    color: backgroundColor,
+    child: Text(text, style: const TextStyle(fontSize: 10)),
   );
 }

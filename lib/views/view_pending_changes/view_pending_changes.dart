@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/dialog/dialog.dart';
+import 'package:money/widgets/gaps.dart';
+import 'package:money/widgets/working.dart';
 
 class PendingChanges extends StatefulWidget {
   const PendingChanges({super.key});
@@ -13,53 +16,153 @@ class PendingChanges extends StatefulWidget {
     adaptiveScreenSizeDialog(
       context: context,
       title: 'Pending Changes',
-      child: const SizedBox(width: 600, child: PendingChanges()),
+      child: const SizedBox(
+        width: 600,
+        height: 900,
+        child: PendingChanges(),
+      ),
       actionButtons: [],
     );
   }
 }
 
 class _PendingChangesState extends State<PendingChanges> {
+  bool _isLoading = true;
+
   final List<Mutations> _data = [
     Mutations(
       typeOfMutation: MutationType.inserted,
       title: 'Added',
-      titleColor: Colors.green,
-      isExpanded: false,
+      color: Colors.green,
     ),
     Mutations(
       typeOfMutation: MutationType.changed,
       title: 'Modified',
-      titleColor: Colors.orange,
-      isExpanded: false,
+      color: Colors.orange,
     ),
     Mutations(
       typeOfMutation: MutationType.deleted,
       title: 'Deleted',
-      titleColor: Colors.red,
-      isExpanded: false,
+      color: Colors.red,
     ),
   ];
 
+  int _displayMutationType = 0; // 0=Added, 1=Modified, 2=Deleted
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  void _load() {
+    for (final Mutations m in _data) {
+      m.initMutationList();
+    }
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: ExpansionPanelList(
-        expansionCallback: (int index, bool isExpanded) {
+    if (_isLoading) {
+      return const WorkingIndicator();
+    }
+    final selectedMutationType = _data[_displayMutationType];
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        _buildColumnSelection(),
+        gapLarge(),
+        _buildSubSegmentsButtons(selectedMutationType),
+        gapLarge(),
+        Expanded(child: _buildListOfDetailsOfSelectedGroup(selectedMutationType)),
+      ],
+    );
+  }
+
+  Widget _buildColumnSelection() {
+    return Center(
+      child: SegmentedButton<int>(
+        // style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+        segments: <ButtonSegment<int>>[
+          _buildSegment(0, _data[0]),
+          _buildSegment(1, _data[1]),
+          _buildSegment(2, _data[2]),
+        ],
+        selected: {_displayMutationType},
+        onSelectionChanged: (final Set<int> newSelection) {
           setState(() {
-            _data[index].isExpanded = isExpanded;
+            _displayMutationType = newSelection.first;
           });
         },
-        children: _data.map<ExpansionPanel>((Mutations item) {
-          return ExpansionPanel(
-            headerBuilder: (BuildContext context, bool isExpanded) {
-              return item.getHeader();
-            },
-            body: item.getContent(),
-            isExpanded: item.isExpanded,
-          );
-        }).toList(),
       ),
+    );
+  }
+
+  ButtonSegment<int> _buildSegment(final int id, Mutations mutations) {
+    return ButtonSegment<int>(
+      value: id,
+      label: SizedBox(
+          width: 120,
+          child: Badge(
+              backgroundColor: mutations.color,
+              label: Text(
+                getIntAsText(mutations.count),
+              ),
+              alignment: Alignment.centerRight,
+              offset: const Offset(-30, 0),
+              child: Text(mutations.title))),
+    );
+  }
+
+  Widget _buildSubSegmentsButtons(Mutations mutations) {
+    List<Widget> groupSelectors = [];
+
+    for (int i = 0; i < mutations.mutationGroups.length; i++) {
+      final group = mutations.mutationGroups[i];
+      final w = Container(
+        padding: const EdgeInsets.only(bottom: 4),
+        child: Badge(
+          backgroundColor: mutations.color,
+          label: Text(
+            getIntAsText(group.whatWasMutated.length),
+          ),
+          child: InputChip(
+            label: Text(group.title),
+            selected: i == mutations.selectedGroup,
+            onSelected: (bool value) {
+              setState(() {
+                mutations.selectedGroup = i;
+              });
+            },
+          ),
+        ),
+      );
+
+      groupSelectors.add(w);
+    }
+
+    return Wrap(spacing: 10, runSpacing: 10, children: groupSelectors);
+  }
+
+  Widget _buildListOfDetailsOfSelectedGroup(Mutations mutations) {
+    if (mutations.selectedGroup > mutations.mutationGroups.length) {
+      return const Text('No mutations');
+    }
+
+    final MutationGroup g = mutations.mutationGroups[mutations.selectedGroup];
+
+    return ListView.separated(
+      itemCount: g.whatWasMutated.length,
+      itemBuilder: (context, index) {
+        return g.whatWasMutated[index];
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider();
+      },
     );
   }
 }
@@ -67,58 +170,24 @@ class _PendingChangesState extends State<PendingChanges> {
 class Mutations {
   MutationType typeOfMutation;
   String title;
-  Color titleColor;
-  bool isExpanded;
+  Color color;
   int count = 0;
-  late Widget content;
+  int selectedGroup = 0;
+
+  List<MutationGroup> mutationGroups = [];
 
   Mutations({
     required this.typeOfMutation,
-    required this.title, // [Added | Modified | Deleted]
-    required this.titleColor,
-    required this.isExpanded,
-  }) {
-    content = getMutatedObject(typeOfMutation);
-  }
+    required this.title,
+    required this.color,
+  });
 
-  Widget getHeader() {
-    return ListTile(
-      title: Text('$title ($count)'),
-      textColor: titleColor,
-    );
-  }
-
-  Widget getContent() {
-    return content;
-  }
-
-  Widget getMutatedObject(final MutationType typeOfMutation) {
-    List<Widget> widgets = [];
+  void initMutationList() {
     count = 0;
-    for (final MutationGroup mutationGroup in Data().getMutationGroups(typeOfMutation)) {
-      count += mutationGroup.whatWasMutated.length;
+    mutationGroups = Data().getMutationGroups(typeOfMutation);
 
-      widgets.add(ListTile(title: Text('"${mutationGroup.title}"')));
-
-      widgets.add(
-        SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-                width: 3000,
-                // height: 300,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: mutationGroup.whatWasMutated,
-                  ),
-                ))),
-      );
+    for (final m in mutationGroups) {
+      count += m.whatWasMutated.length;
     }
-
-    if (widgets.isEmpty) {
-      return const Center(child: Text('- none -'));
-    }
-
-    return Column(children: widgets);
   }
 }

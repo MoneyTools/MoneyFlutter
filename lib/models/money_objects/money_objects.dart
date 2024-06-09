@@ -2,7 +2,6 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
@@ -10,6 +9,7 @@ import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/database/database.dart';
 import 'package:money/widgets/diff.dart';
+import 'package:money/widgets/gaps.dart';
 
 // Exports
 export 'package:collection/collection.dart';
@@ -291,44 +291,71 @@ class MoneyObjects<T> {
 
       jsonDelta.forEach((key, value) {
         // Field Name
-        Widget instanceName = Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: Text(key),
-        );
+        Widget instanceName = Text(key, style: const TextStyle(fontSize: 10));
+
         switch (moneyObject.mutation) {
           case MutationType.inserted:
-            diffWidgets.add(instanceName);
-            diffWidgets.add(diffTextNewValue(value['after'].toString()));
+            final valueToAddAsString = value['after'].toString();
+            if (valueToAddAsString.isNotEmpty) {
+              diffWidgets.add(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    instanceName,
+                    diffTextNewValue(valueToAddAsString),
+                  ],
+                ),
+              );
+            }
+
           case MutationType.deleted:
-            diffWidgets.add(instanceName);
-            diffWidgets.add(diffTextOldValue(value['after'].toString()));
+            diffWidgets.add(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  instanceName,
+                  diffTextOldValue(value['after'].toString()),
+                ],
+              ),
+            );
           case MutationType.changed:
           default:
-            diffWidgets.add(instanceName);
-            diffWidgets.add(diffTextOldValue(value['before'].toString()));
-            diffWidgets.add(diffTextNewValue(value['after'].toString()));
+            diffWidgets.add(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  instanceName,
+                  diffTextOldValue(value['before'].toString()),
+                  diffTextNewValue(value['after'].toString()),
+                ],
+              ),
+            );
         }
       });
 
       widgets.add(
-        Container(
-          margin: const EdgeInsets.fromLTRB(0, 0, 0, 4),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Colors.grey.withOpacity(0.5), // Border color
-              width: 1.0, // Border width
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('"${moneyObject.getRepresentation()}"'),
+                Opacity(
+                    opacity: 0.5,
+                    child: SelectableText(
+                      moneyObject.uniqueId.toString(),
+                      style: const TextStyle(fontSize: 8),
+                    )),
+              ],
             ),
-            borderRadius: BorderRadius.circular(8.0), // Optional: border radius
-          ),
-          child: ListTile(
-            dense: true,
-            title: Text('"${moneyObject.getRepresentation()}"'),
-            subtitle: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+            gapSmall(),
+            Wrap(
+              spacing: 13,
+              runSpacing: 13,
               children: diffWidgets,
             ),
-            trailing: kDebugMode ? Text(moneyObject.uniqueId.toString()) : null,
-          ),
+          ],
         ),
       );
     }

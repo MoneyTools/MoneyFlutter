@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_pending_changes/view_pending_changes.dart';
 
@@ -67,7 +68,7 @@ class BadgePendingChanges extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Text(
-        prefix + value.toString(),
+        prefix + getIntAsText(value),
         style: textStyle,
       ),
     );
