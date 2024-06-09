@@ -65,8 +65,8 @@ class ViewHeader extends StatelessWidget {
     return Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: getColorTheme(context).surfaceContainerHighest,
-          border: Border.all(color: getColorTheme(context).outline),
+          color: getColorTheme(context).surfaceContainer,
+          // border: Border.all(color: getColorTheme(context).primary),
           // borderRadius: const BorderRadius.all(Radius.circular(8)),
         ),
         child: child);

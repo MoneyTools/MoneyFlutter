@@ -41,6 +41,8 @@ class ColorPalette extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        const Divider(),
+        const Text('Helper for debugging'),
         _buildColorBar(
           context,
           Colors.white,

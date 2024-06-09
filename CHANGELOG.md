@@ -2,14 +2,15 @@
 
 ## [version 1.8.20] 2024-05-09
 
+### Updated
+
+- Move Import to main menu
+- Pending Changes dialog can now [Save to SQL] [Save to CSV]
+
 ### Added
 
 - Main Menu
 
-### Updated
-
-- Pending Changes dialog can now [Save to SQL] [Save to CSV]
-  
 ## [version 1.8.19] 2024-05-08
 
 ### Updated

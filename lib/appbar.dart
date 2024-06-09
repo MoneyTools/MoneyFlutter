@@ -6,7 +6,6 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_settings.dart';
-import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
 import 'package:money/widgets/color_palette.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';
@@ -43,20 +42,19 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget build(final BuildContext context) {
     return AppBar(
       backgroundColor: getColorTheme(context).secondaryContainer,
+
+      // Menu
+      leading: _buildPopupMenu(),
+
+      // Center Title
       title: AppCaption(
         child: LoadedDataFileAndTime(
             filePath: Settings().fileManager.fullPathToLastOpenedFile,
             lastModifiedDateTime: Settings().fileManager.dataFileLastUpdateDateTime),
       ),
-      leading: _buildPopupMenu(),
+
+      // Button on the right side
       actions: <Widget>[
-        IconButton(
-          icon: const Icon(Icons.cloud_download),
-          onPressed: () async {
-            widget.onImport();
-          },
-          tooltip: 'Import',
-        ),
         IconButton(
           icon: Settings().useDarkMode ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: () {
@@ -76,69 +74,29 @@ class _MyAppBarState extends State<MyAppBar> {
       itemBuilder: (final BuildContext context) {
         final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
         // New
-        list.add(
-          const PopupMenuItem<int>(
-            value: Constants.commandFileNew,
-            child: Text('New'),
-          ),
-        );
+        addMenuItem(list, Constants.commandFileNew, 'New', Icons.new_label);
+
         // Open
-        list.add(
-          const PopupMenuItem<int>(
-            value: Constants.commandFileOpen,
-            child: Text('Open'),
-          ),
-        );
+        addMenuItem(list, Constants.commandFileOpen, 'Open...', Icons.file_open_outlined);
+
+        // Import
+        addMenuItem(list, Constants.commandImport, 'Import...', Icons.cloud_download);
+
+        // Add Transactions
+        addMenuItem(list, Constants.commandAddTransactions, 'Add transactions...', Icons.add_card);
 
         // File Location
-        list.add(
-          const PopupMenuItem<int>(
-            value: Constants.commandFileLocation,
-            child: Text('File location'),
-          ),
-        );
+        addMenuItem(list, Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined);
 
         // Save CSV
-        list.add(PopupMenuItem<int>(
-            value: Constants.commandFileSaveCsv,
-            child: Row(
-              children: [
-                const Text('Save to CSV'),
-                const SizedBox(
-                  width: 8,
-                ),
-                BadgePendingChanges(
-                  itemsAdded: Settings().trackMutations.added,
-                  itemsChanged: Settings().trackMutations.changed,
-                  itemsDeleted: Settings().trackMutations.deleted,
-                )
-              ],
-            )));
+        addMenuItem(list, Constants.commandFileSaveCsv, 'Save to CSV', Icons.save);
 
         // Save SQL
-        list.add(PopupMenuItem<int>(
-            value: Constants.commandFileSaveSql,
-            child: Row(
-              children: [
-                const Text('Save to SQL'),
-                const SizedBox(
-                  width: 8,
-                ),
-                BadgePendingChanges(
-                  itemsAdded: Settings().trackMutations.added,
-                  itemsChanged: Settings().trackMutations.changed,
-                  itemsDeleted: Settings().trackMutations.deleted,
-                )
-              ],
-            )));
+        addMenuItem(list, Constants.commandFileSaveSql, 'Save to SQL', Icons.save);
 
         // Close
-        list.add(
-          const PopupMenuItem<int>(
-            value: Constants.commandFileClose,
-            child: Text('Close'),
-          ),
-        );
+        addMenuItem(list, Constants.commandFileSaveSql, 'Close file', Icons.close);
+
         return list;
       },
       onSelected: (final int index) {
@@ -152,6 +110,12 @@ class _MyAppBarState extends State<MyAppBar> {
           case Constants.commandFileLocation:
             widget.onShowFileLocation();
 
+          case Constants.commandImport:
+            widget.onImport();
+
+          case Constants.commandAddTransactions:
+            showImportTransactions(context);
+
           case Constants.commandFileSaveCsv:
             widget.onSaveCsv();
 
@@ -164,6 +128,19 @@ class _MyAppBarState extends State<MyAppBar> {
             debugPrint(' unhandled $index');
         }
       },
+    );
+  }
+
+  void addMenuItem(final list, final int id, final String caption, final IconData iconData) {
+    list.add(
+      PopupMenuItem<int>(
+        value: id,
+        child: ThreePartLabel(
+          icon: Icon(iconData),
+          text1: caption,
+          small: true,
+        ),
+      ),
     );
   }
 
@@ -192,26 +169,18 @@ class _MyAppBarState extends State<MyAppBar> {
               ),
             );
           });
-          actionList.add(
-            const PopupMenuItem<int>(
-              value: Constants.commandAddTransactions,
-              child: ThreePartLabel(
-                text1: 'Add transactions',
-                icon: Icon(Icons.add_card, color: Colors.grey),
-                small: true,
-              ),
-            ),
-          );
+
           actionList.add(
             const PopupMenuItem<int>(
               value: Constants.commandSettings,
               child: ThreePartLabel(
-                text1: 'Settings',
+                text1: 'General...',
                 icon: Icon(Icons.settings, color: Colors.grey),
                 small: true,
               ),
             ),
           );
+
           actionList.add(
             PopupMenuItem<int>(
               value: Constants.commandIncludeClosedAccount,
@@ -221,11 +190,12 @@ class _MyAppBarState extends State<MyAppBar> {
                         ? Icons.check_box_outline_blank_outlined
                         : Icons.check_box_outlined,
                     color: Colors.grey),
-                text1: 'Closed Accounts',
+                text1: 'Display closed accounts',
                 small: true,
               ),
             ),
           );
+
           actionList.add(
             PopupMenuItem<int>(
               value: Constants.commandIncludeRentals,
@@ -237,6 +207,7 @@ class _MyAppBarState extends State<MyAppBar> {
               ),
             ),
           );
+
           actionList.add(
             PopupMenuItem<int>(
               value: Constants.commandTextZoom,
