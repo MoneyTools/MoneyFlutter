@@ -96,85 +96,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     bool sortAscending = PreferencesHelper().getBool(getPreferenceKey('info_$settingKeySortAscending')) ?? true;
     int selectedItemIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySelectedListItemId')) ?? -1;
 
-    final List<int> cateogoriesToMatch = [account.categoryIdForInterest.value, account.categoryIdForPrincipal.value];
-
-    // include the manual entries done in the LoanPayments table
-    List<LoanPayment> agregatedList = Data()
-        .loanPayments
-        .iterableList(includeDeleted: false)
-        .where((a) => a.accountId.value == account.uniqueId)
-        .toList();
-
-    // include the bank transactions matching th Account Categories for Principal and Interest
-    var listOfTransactions = Data()
-        .transactions
-        .getListFlattenSplits(whereClause: (t) => t.isMatchingAnyOfTheseCategoris(cateogoriesToMatch));
-
-    // Rollup into a sinclude Payment based on Date to match Principal and Interest payment
-    Map<String, PaymentRollup> payments = {};
-
-    for (final t in listOfTransactions) {
-      // Key is based on date
-      String key = '${t.dateTimeAsText} ${t.uniqueId}';
-      PaymentRollup? pr = payments[key];
-
-      bool isFromSplit = false;
-      if (pr == null) {
-        pr = PaymentRollup();
-        pr.accountId = t.accountId.value;
-        payments[key] = pr;
-      } else {
-        isFromSplit = true;
-      }
-
-      // Date
-      pr.date = t.dateTime.value!;
-
-      // Reference (combination of Memo and Payee)
-      pr.reference = concat(pr.reference, t.memo.value, ';', true);
-      if (isFromSplit) {
-        pr.reference = concat(pr.reference, '<Split>', ';', true);
-      }
-      pr.reference = concat(pr.reference, t.payeeOrTransferCaption, ';', true);
-
-      // Principal
-      if (t.categoryId.value == account.categoryIdForPrincipal.value) {
-        pr.principal = t.amount.value.amount;
-      }
-
-      // Interest
-      if (t.categoryId.value == account.categoryIdForInterest.value) {
-        pr.interest = t.amount.value.amount;
-      }
-    }
-
-    int fakeId = 10000000;
-
-    for (final pr in payments.values) {
-      agregatedList.add(
-        LoanPayment(
-          id: fakeId++,
-          accountId: pr.accountId,
-          date: pr.date,
-          interest: pr.interest,
-          principal: pr.principal,
-          memo: '',
-          reference: pr.reference,
-        ),
-      );
-    }
-
-    agregatedList.sort((a, b) => sortByDate(a.date.value, b.date.value, true));
-
-    double runningBalance = 0.00;
-
-    for (final p in agregatedList) {
-      runningBalance += p.principal.value.amount;
-      p.balance.value.amount = runningBalance;
-
-      // Special hack to include the Manual LoanPayment memo into th reference text
-      p.reference.value = concat(p.memo.value, p.reference.value);
-    }
+    List<LoanPayment> agregatedList = getAccountLoanPayments(account);
 
     return AdaptiveListColumnsOrRows(
       list: agregatedList,
@@ -203,12 +125,4 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       return filterByAccountId(transaction, account.uniqueId);
     });
   }
-}
-
-class PaymentRollup {
-  late DateTime date;
-  int accountId = -1;
-  String reference = '';
-  double principal = 0;
-  double interest = 0;
 }

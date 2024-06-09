@@ -60,7 +60,7 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
       selectedIcon: Icon(Icons.candlestick_chart_outlined),
     )
   ];
-  if (settings.rentals) {
+  if (settings.includeRentalManagement) {
     appBarDestinations.add(const NavigationDestination(
       label: 'Rentals',
       tooltip: 'Rentals',

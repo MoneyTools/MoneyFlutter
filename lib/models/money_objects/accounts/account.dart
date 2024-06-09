@@ -53,7 +53,6 @@ class Account extends MoneyObject {
 
   Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
   Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
-  DateTime? mostRecentTransaction;
 
   @override
   int get uniqueId => id.value;
@@ -332,9 +331,9 @@ class Account extends MoneyObject {
     columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) {
       if ((instance as Account).lastSync.value == null) {
-        return instance.mostRecentTransaction;
+        return instance.updatedOn.value;
       }
-      return newestDate(instance.lastSync.value, instance.mostRecentTransaction);
+      return newestDate(instance.lastSync.value, instance.updatedOn.value);
     },
   );
 

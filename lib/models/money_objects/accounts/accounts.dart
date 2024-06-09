@@ -7,6 +7,7 @@ import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/models/money_objects/investments/cost_basis.dart';
 import 'package:money/models/money_objects/investments/security_purchase.dart';
+import 'package:money/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
@@ -111,9 +112,8 @@ class Accounts extends MoneyObjects<Account> {
 
         // keep track of the most recent record transaction for the account
         if (t.dateTime.value != null) {
-          if (account.mostRecentTransaction == null ||
-              account.mostRecentTransaction!.compareTo(t.dateTime.value!) < 0) {
-            account.mostRecentTransaction = t.dateTime.value;
+          if (account.updatedOn.value == null || account.updatedOn.value!.compareTo(t.dateTime.value!) < 0) {
+            account.updatedOn.value = t.dateTime.value;
           }
         }
       }
@@ -133,6 +133,15 @@ class Accounts extends MoneyObjects<Account> {
       for (SecurityPurchase sp in calculator.getHolding(account).getHoldings()) {
         account.balance += sp.latestMarketValue!;
       }
+    }
+
+    // Loans
+    final accountLoans =
+        Data().accounts.iterableList().where((account) => account.type.value == AccountType.loan).toList();
+    for (final account in accountLoans) {
+      final latestPayment = getAccountLoanPayments(account).last;
+      account.updatedOn.value = latestPayment.date.value;
+      account.balance = latestPayment.balance.value.amount;
     }
   }
 

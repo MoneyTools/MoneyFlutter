@@ -16,7 +16,7 @@ enum CashflowViewAs {
 
 class Settings extends ChangeNotifier {
   String getUniqueSate() {
-    return '$colorSelected $useDarkMode ${Data().version}';
+    return '$colorSelected $useDarkMode ${Data().version} $includeClosedAccounts $includeRentalManagement';
   }
 
   void rebuild() {
@@ -30,7 +30,7 @@ class Settings extends ChangeNotifier {
 
   set isPreferenceLoaded(bool value) {
     _isPreferenceLoaded = value;
-    notifyListeners();
+    rebuild();
   }
 
   /// Dark/Light theme
@@ -40,7 +40,7 @@ class Settings extends ChangeNotifier {
 
   set useDarkMode(bool value) {
     _useDarkMode = value;
-    notifyListeners();
+    rebuild();
   }
 
   /// Color theme
@@ -50,7 +50,7 @@ class Settings extends ChangeNotifier {
 
   set colorSelected(int value) {
     _colorSelected = value;
-    notifyListeners();
+    rebuild();
   }
 
   bool isSmallScreen = true;
@@ -62,21 +62,39 @@ class Settings extends ChangeNotifier {
 
   set selectedView(ViewId value) {
     _selectedScreen = value;
-    notifyListeners();
+    rebuild();
   }
 
   FileManager fileManager = FileManager();
 
-  bool rentals = false;
-  bool includeClosedAccounts = false;
+  /// Support Rental Management
+  bool _rentals = false;
 
+  bool get includeRentalManagement => _rentals;
+
+  set includeRentalManagement(bool value) {
+    _rentals = value;
+    rebuild();
+  }
+
+  /// Hide/Show Closed Accounts
+  bool _includeClosedAccounts = false;
+
+  bool get includeClosedAccounts => _includeClosedAccounts;
+
+  set includeClosedAccounts(bool value) {
+    _includeClosedAccounts = value;
+    rebuild();
+  }
+
+  /// Hide/Show Info panel
   bool _isDetailsPanelExpanded = false;
 
   bool get isDetailsPanelExpanded => _isDetailsPanelExpanded;
 
   set isDetailsPanelExpanded(bool value) {
     _isDetailsPanelExpanded = value;
-    notifyListeners();
+    rebuild();
   }
 
   CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
@@ -107,7 +125,7 @@ class Settings extends ChangeNotifier {
     if (isBetweenOrEqual(cleanValue, 40, 400)) {
       textScale = cleanValue / 100.0;
       preferrenceSave();
-      notifyListeners();
+      rebuild();
       return true;
     }
     return false;
@@ -133,7 +151,7 @@ class Settings extends ChangeNotifier {
     textScale = doubleValueOrDefault(preferences.getDouble(settingKeyTextScale), defaultValueIfNull: 1.0);
     useDarkMode = boolValueOrDefault(preferences.getBool(settingKeyDarkMode), defaultValueIfNull: false);
 
-    rentals = preferences.getBool(settingKeyRentalsSupport) == true;
+    includeRentalManagement = preferences.getBool(settingKeyRentalsSupport) == true;
     cashflowViewAs = CashflowViewAs.values[
         intValueOrDefault(preferences.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
     cashflowRecurringOccurrences =
@@ -156,7 +174,7 @@ class Settings extends ChangeNotifier {
     await preferences.setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
     await preferences.setBool(settingKeyDarkMode, useDarkMode);
     await preferences.setBool(settingKeyIncludeClosedAccounts, includeClosedAccounts);
-    await preferences.setBool(settingKeyRentalsSupport, rentals);
+    await preferences.setBool(settingKeyRentalsSupport, includeRentalManagement);
     await preferences.setString(settingKeyStockApiKey, apiKeyForStocks);
 
     // last path to the source of data

@@ -200,7 +200,10 @@ class _MyAppBarState extends State<MyAppBar> {
             PopupMenuItem<int>(
               value: Constants.commandIncludeRentals,
               child: ThreePartLabel(
-                icon: Icon(!Settings().rentals ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
+                icon: Icon(
+                    !Settings().includeRentalManagement
+                        ? Icons.check_box_outline_blank_outlined
+                        : Icons.check_box_outlined,
                     color: Colors.grey),
                 text1: 'Rentals',
                 small: true,
@@ -258,7 +261,7 @@ class _MyAppBarState extends State<MyAppBar> {
       case Constants.commandIncludeClosedAccount:
         Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
       case Constants.commandIncludeRentals:
-        Settings().rentals = !Settings().rentals;
+        Settings().includeRentalManagement = !Settings().includeRentalManagement;
       default:
         Settings().colorSelected = value;
     }
