@@ -250,15 +250,15 @@ class MoneyObjects<T> {
   }
 
   static String toStringAsSeparatedValues(
-    List<Object> declarations,
+    FieldDefinitions fieldDefinitions,
     MoneyObject item, [
     final String valueSeparator = ',',
     bool forSerialization = true,
   ]) {
     final List<String> listValues = <String>[];
-    for (final dynamic field in declarations) {
+    for (final Field field in fieldDefinitions) {
       if (isFieldMatchingCondition(field, forSerialization)) {
-        final dynamic value = forSerialization ? field.valueForSerialization(item) : field.getValueForDisplay(item);
+        final dynamic value = forSerialization ? field.getValueForSerialization(item) : field.getValueForDisplay(item);
         final String valueAsString = '"$value"';
         listValues.add(valueAsString);
       }
@@ -271,11 +271,14 @@ class MoneyObjects<T> {
         (forSerialization == false && field.useAsColumn));
   }
 
-  List<String> getListOfValueAsStrings(List<Object> declarations, MoneyObject item) {
+  List<String> getListOfValueAsStrings(
+    FieldDefinitions fieldDefinitions,
+    MoneyObject item,
+  ) {
     final List<String> listValues = <String>[];
-    for (final dynamic field in declarations) {
+    for (final Field field in fieldDefinitions) {
       if (field.serializeName != '') {
-        final dynamic value = field.valueForSerialization(item);
+        final dynamic value = field.getValueForSerialization(item);
         listValues.add(value.toString());
       }
     }
@@ -340,7 +343,7 @@ class MoneyObjects<T> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('"${moneyObject.getRepresentation()}"'),
+                Text(moneyObject.getRepresentation(), style: const TextStyle(fontWeight: FontWeight.w700)),
                 Opacity(
                     opacity: 0.5,
                     child: SelectableText(
@@ -350,10 +353,13 @@ class MoneyObjects<T> {
               ],
             ),
             gapSmall(),
-            Wrap(
-              spacing: 13,
-              runSpacing: 13,
-              children: diffWidgets,
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Wrap(
+                spacing: 13,
+                runSpacing: 13,
+                children: diffWidgets,
+              ),
             ),
           ],
         ),

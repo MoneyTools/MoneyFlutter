@@ -361,7 +361,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     adaptiveScreenSizeDialog(
       context: context,
       title: title,
-      showCloseButton: false,
+      captionForClose: null, // this will hide the close button
       child: DeleteConfirmationDialog(
         question: question,
         content: moneyObjects.length == 1

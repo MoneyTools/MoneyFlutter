@@ -22,7 +22,7 @@ void showImportTransactions(
 
   adaptiveScreenSizeDialog(
     context: context,
-    showCloseButton: false,
+    captionForClose: null, // this will hide the close button
     title: 'Import from text',
     child: Column(
       children: [

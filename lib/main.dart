@@ -277,8 +277,8 @@ class MainView extends StatelessWidget {
               onFileClose: onFileClose,
               onShowFileLocation: onShowFileLocation,
               onImport: onImport,
-              onSaveCsv: onSaveToCSV,
-              onSaveSql: onSaveToSql,
+              onSaveCsv: Settings().onSaveToCsv,
+              onSaveSql: Settings().onSaveToSql,
             )
           : null,
       body: body,
@@ -384,32 +384,6 @@ class MainView extends StatelessWidget {
     Settings().preferrenceSave();
     Data().loadFromDemoData();
     Settings().rebuild();
-  }
-
-  void onSaveToCSV() async {
-    final String fullPathToFileName = await Data().saveToCsv();
-    Settings().fileManager.rememberWhereTheDataCameFrom(fullPathToFileName);
-    Data().assessMutationsCountOfAllModels();
-  }
-
-  void onSaveToSql() async {
-    if (Settings().fileManager.fullPathToLastOpenedFile.isEmpty) {
-      // this happens if the user started with a new file and click save to SQL
-      Settings().fileManager.fullPathToLastOpenedFile =
-          await Settings().fileManager.defaultFolderToSaveTo('mymoney.mmdb');
-    }
-
-    Data().saveToSql(
-        filePathToLoad: Settings().fileManager.fullPathToLastOpenedFile,
-        callbackWhenLoaded: (final bool success, final String message) {
-          if (success) {
-            Data().assessMutationsCountOfAllModels();
-          } else {
-            DialogService().showMessageBox('Error Saving', message);
-          }
-        });
-
-    Settings().fileManager.rememberWhereTheDataCameFrom(Settings().fileManager.fullPathToLastOpenedFile);
   }
 
   void onShowFileLocation() async {

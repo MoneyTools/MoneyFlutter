@@ -40,7 +40,7 @@ myShowDialogAndActionsForMoneyObjects({
   return adaptiveScreenSizeDialog(
     context: context,
     title: moneyObjects.length == 1 ? title : '${getIntAsText(moneyObjects.length)} $title',
-    showCloseButton: false,
+    captionForClose: null, // this will hide the close button
     child: DialogMutateMoneyObject(
       moneyObject: rollup,
       onApplyChange: (MoneyObject objectChanged) {

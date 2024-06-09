@@ -48,7 +48,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
               adaptiveScreenSizeDialog(
                 context: context,
                 title: 'Merge ${transactions.length} transactions',
-                showCloseButton: false,
+                captionForClose: null, // this will hide the close button
                 child: MergeTransactionsDialog(
                   currentPayee: payee,
                   transactions: transactions.toList(),

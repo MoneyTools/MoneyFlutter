@@ -6,6 +6,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
 import 'package:money/storage/preferences_helper.dart';
+import 'package:money/widgets/message_box.dart';
 
 enum CashflowViewAs {
   sankey,
@@ -173,5 +174,31 @@ class Settings extends ChangeNotifier {
       brightness: useDarkMode ? Brightness.dark : Brightness.light,
     );
     return themeData;
+  }
+
+  void onSaveToCsv() async {
+    final String fullPathToFileName = await Data().saveToCsv();
+    Settings().fileManager.rememberWhereTheDataCameFrom(fullPathToFileName);
+    Data().assessMutationsCountOfAllModels();
+  }
+
+  void onSaveToSql() async {
+    if (Settings().fileManager.fullPathToLastOpenedFile.isEmpty) {
+      // this happens if the user started with a new file and click save to SQL
+      Settings().fileManager.fullPathToLastOpenedFile =
+          await Settings().fileManager.defaultFolderToSaveTo('mymoney.mmdb');
+    }
+
+    Data().saveToSql(
+        filePathToLoad: Settings().fileManager.fullPathToLastOpenedFile,
+        callbackWhenLoaded: (final bool success, final String message) {
+          if (success) {
+            Data().assessMutationsCountOfAllModels();
+          } else {
+            DialogService().showMessageBox('Error Saving', message);
+          }
+        });
+
+    Settings().fileManager.rememberWhereTheDataCameFrom(Settings().fileManager.fullPathToLastOpenedFile);
   }
 }

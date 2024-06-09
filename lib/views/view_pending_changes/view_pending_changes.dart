@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/dialog/dialog.dart';
+import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/working.dart';
 
@@ -16,12 +18,26 @@ class PendingChanges extends StatefulWidget {
     adaptiveScreenSizeDialog(
       context: context,
       title: 'Pending Changes',
+      captionForClose: 'Cancel', // this will hide the close button
       child: const SizedBox(
         width: 600,
         height: 900,
         child: PendingChanges(),
       ),
-      actionButtons: [],
+      actionButtons: [
+        DialogActionButton(
+            text: 'Save to SQL',
+            onPressed: () {
+              Settings().onSaveToSql();
+              Navigator.of(context).pop(true);
+            }),
+        DialogActionButton(
+            text: 'Save to CSV',
+            onPressed: () {
+              Settings().onSaveToCsv();
+              Navigator.of(context).pop(true);
+            }),
+      ],
     );
   }
 }
@@ -149,7 +165,7 @@ class _PendingChangesState extends State<PendingChanges> {
   }
 
   Widget _buildListOfDetailsOfSelectedGroup(Mutations mutations) {
-    if (mutations.selectedGroup > mutations.mutationGroups.length) {
+    if (mutations.selectedGroup >= mutations.mutationGroups.length) {
       return const Text('No mutations');
     }
 

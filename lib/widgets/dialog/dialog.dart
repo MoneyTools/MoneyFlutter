@@ -51,7 +51,7 @@ void adaptiveScreenSizeDialog({
   required final String title,
   required final Widget child,
   List<Widget>? actionButtons,
-  final bool showCloseButton = true,
+  final String? captionForClose = 'Close',
 }) {
   actionButtons ??= [];
   if (isSmallDevice(context)) {
@@ -72,12 +72,15 @@ void adaptiveScreenSizeDialog({
     );
   } else {
     // in modal always offer a close button
-    if (showCloseButton) {
-      actionButtons.add(DialogActionButton(
-          text: 'Close',
+    if (captionForClose != null) {
+      actionButtons.add(
+        DialogActionButton(
+          text: captionForClose,
           onPressed: () {
             Navigator.of(context).pop(false);
-          }));
+          },
+        ),
+      );
     }
 
     showDialog(

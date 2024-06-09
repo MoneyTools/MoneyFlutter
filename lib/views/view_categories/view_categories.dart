@@ -39,7 +39,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       adaptiveScreenSizeDialog(
         context: context,
         title: 'Move Category',
-        showCloseButton: false,
+        captionForClose: null, // this will hide the close button
         child: MergeCategoriesTransactionsDialog(categoryToMove: selectedObject as Category),
       );
     };

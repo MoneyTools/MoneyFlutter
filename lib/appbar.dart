@@ -240,7 +240,7 @@ class _MyAppBarState extends State<MyAppBar> {
             value: Constants.commandFileSaveCsv,
             child: Row(
               children: [
-                const Text('Save CSV'),
+                const Text('Save to CSV'),
                 const SizedBox(
                   width: 8,
                 ),
@@ -257,7 +257,7 @@ class _MyAppBarState extends State<MyAppBar> {
             value: Constants.commandFileSaveSql,
             child: Row(
               children: [
-                const Text('Save SQL'),
+                const Text('Save to SQL'),
                 const SizedBox(
                   width: 8,
                 ),
