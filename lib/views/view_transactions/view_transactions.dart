@@ -8,9 +8,10 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/preferences_helper.dart';
-import 'package:money/views/action_buttons.dart';
+
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/views/view_money_objects.dart';
+import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/widgets.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
