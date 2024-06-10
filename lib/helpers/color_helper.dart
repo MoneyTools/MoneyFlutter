@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/settings.dart';
 
 Color addHintOfGreenToColor(Color color, [int hint = 50]) {
   // Calculate the new green value
@@ -98,6 +99,26 @@ Color colorBasedOnValue(final double value) {
   }
   // value == 0
   return Colors.grey;
+}
+
+enum ColorState { success, warning, error, neutral }
+
+Color getColorFromState(final ColorState state) {
+  final bool isDarkModeOne = Settings().useDarkMode;
+
+  switch (state) {
+    case ColorState.success:
+      return isDarkModeOne ? Colors.green.shade300 : Colors.green.shade800;
+
+    case ColorState.warning:
+      return isDarkModeOne ? Colors.amber.shade300 : Colors.amber.shade800;
+
+    case ColorState.error:
+      return isDarkModeOne ? Colors.red.shade200 : Colors.red.shade800;
+
+    case ColorState.neutral:
+      return isDarkModeOne ? Colors.grey.shade500 : Colors.grey.shade600;
+  }
 }
 
 Widget colorBox(Color color, Color colorText) {

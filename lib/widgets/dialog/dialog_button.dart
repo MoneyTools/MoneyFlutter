@@ -17,7 +17,7 @@ class DialogActionButton extends StatelessWidget {
 
 Widget dialogActionButtons(final List<Widget> actionsButtons) {
   return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    mainAxisAlignment: MainAxisAlignment.end,
     children: actionsButtons,
   );
 }

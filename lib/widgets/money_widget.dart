@@ -3,7 +3,6 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/models/settings.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
 class MoneyWidget extends StatelessWidget {
@@ -54,23 +53,14 @@ Color? getTextColorToUse(
   final double amount,
   final bool autoColor,
 ) {
-  final bool isDarkModeOne = Settings().useDarkMode;
   if (autoColor) {
     if (isAlmostZero(amount)) {
-      return Colors.grey.withOpacity(0.8);
+      return getColorFromState(ColorState.neutral);
     }
     if (amount < 0) {
-      if (isDarkModeOne) {
-        return const Color.fromRGBO(255, 160, 160, 1);
-      } else {
-        return const Color.fromRGBO(160, 0, 0, 1);
-      }
+      return getColorFromState(ColorState.error);
     } else {
-      if (isDarkModeOne) {
-        return const Color.fromRGBO(160, 255, 160, 1);
-      } else {
-        return const Color.fromRGBO(0, 100, 0, 1);
-      }
+      return getColorFromState(ColorState.success);
     }
   }
   return null;

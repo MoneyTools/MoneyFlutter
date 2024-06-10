@@ -50,7 +50,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   VoidCallback? onAddItem;
   VoidCallback? onEditItems;
-  Function(BuildContext, MoneyObject)? onMergeItem;
   VoidCallback? onDeleteItems;
 
   // detail panel
@@ -271,11 +270,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       multipleSelection: multipleSelectionOptions,
       getActionButtonsForSelectedItems: getActionsForSelectedItems,
       onAddMoneyObject: onAddItem,
-      onMergeMoneyObject: onMergeItem == null
-          ? null
-          : () {
-              onMergeItem!(context, getSelectedItemsFromSelectedList(_selectedItemsByUniqueId.value).first);
-            },
       onEditMoneyObject: onEditItems,
       onDeleteMoneyObject: onDeleteItems,
       filterText: _filterByText,
@@ -540,7 +534,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       child: MoneyObjectCard(
         title: getClassNameSingular(),
         moneyObject: moneyObject,
-        onMergeWith: onMergeItem,
         onEdit: onUserRequestToEdit,
         onDelete: onUserRequestedToDelete,
       ),

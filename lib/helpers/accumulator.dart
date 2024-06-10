@@ -20,14 +20,14 @@ class AccumulatorList<T, V> {
   }
 }
 
-class AccumulatorSum<T, V> {
-  final Map<T, V> values = {};
+class AccumulatorSum<K, V> {
+  final Map<K, V> values = {};
 
   void clear() {
     values.clear();
   }
 
-  void cumulate(T key, V value) {
+  void cumulate(K key, V value) {
     if (values.containsKey(key)) {
       // Use dynamic type for accumulated value as specific behavior depends on T
       final V? existingValue = values[key];
@@ -37,8 +37,8 @@ class AccumulatorSum<T, V> {
     }
   }
 
-  T? getKeyWithLargestSum() {
-    T? keyFound;
+  K? getKeyWithLargestSum() {
+    K? keyFound;
     V? maxFound;
 
     values.forEach(
@@ -57,12 +57,16 @@ class AccumulatorSum<T, V> {
     return keyFound;
   }
 
-  dynamic getValue(T key) {
+  dynamic getValue(K key) {
     return values[key] ?? 0;
   }
 
   // Replace this function with your specific logic for accumulating values of type T
   dynamic _accumulate(V existingValue, V value) {
     return (existingValue as num) + (value as num);
+  }
+
+  List<MapEntry<K, V>> getEntries() {
+    return values.entries.toList();
   }
 }

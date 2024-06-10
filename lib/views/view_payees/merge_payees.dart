@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/payees/payees.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_payees/picker_payee.dart';
+import 'package:money/widgets/box.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/gaps.dart';
 
@@ -41,7 +43,9 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
           Row(
             children: [
               const SizedBox(width: 100, child: Text('From payee')),
-              Chip(label: Text(widget.currentPayee.name.value)),
+              Expanded(
+                child: Box(child: Text(widget.currentPayee.name.value)),
+              ),
             ],
           ),
           gapLarge(),
@@ -50,14 +54,16 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
             children: [
               const SizedBox(width: 100, child: Text('To payee')),
               Expanded(
-                child: pickerPayee(
-                  itemSelected: widget.currentPayee,
-                  onSelected: (final Payee? selectedPayee) {
-                    setState(() {
-                      _selectedPayee = selectedPayee;
-                      getAssociatedCategories();
-                    });
-                  },
+                child: Box(
+                  child: pickerPayee(
+                    itemSelected: widget.currentPayee,
+                    onSelected: (final Payee? selectedPayee) {
+                      setState(() {
+                        _selectedPayee = selectedPayee;
+                        getAssociatedCategories();
+                      });
+                    },
+                  ),
                 ),
               ),
             ],
@@ -98,7 +104,6 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
           categoryIdsFound.cumulate(t.categoryId.value, 1);
         }
       }
-      _estimatedCategory = categoryIdsFound.getKeyWithLargestSum();
     }
   }
 
@@ -108,13 +113,18 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
     }
 
     List<Widget> radioButtonChoices = [];
+    final sortedDecendingListOfCategories = categoryIdsFound.getEntries();
+    sortedDecendingListOfCategories.sort((a, b) => sortByValue(a.value, b.value, false));
 
-    categoryIdsFound.values.forEach((keyId, valueSum) {
-      final categoryName = Data().categories.getNameFromId(keyId).trim();
+    for (final entry in sortedDecendingListOfCategories) {
+      final categoryId = entry.key;
+      final categoryCounts = entry.value;
+
+      final categoryName = Data().categories.getNameFromId(categoryId).trim();
       if (categoryName.isNotEmpty) {
         radioButtonChoices.add(ListTile(
           leading: Radio<int?>(
-            value: keyId,
+            value: categoryId,
             groupValue: _estimatedCategory,
             onChanged: (int? value) {
               setState(() {
@@ -126,7 +136,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                'Category',
+                'or change to category',
                 style: getTextTheme(context).bodySmall,
               ),
               gapMedium(),
@@ -136,11 +146,10 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
                   child: Badge(
                     textColor: getColorTheme(context).onPrimaryContainer,
                     backgroundColor: getColorTheme(context).primaryContainer,
-                    label: Text(getIntAsText(valueSum)),
-                    child: Chip(
-                      clipBehavior: Clip.hardEdge,
-                      label: Text(
-                        Data().categories.getNameFromId(keyId),
+                    label: Text(getIntAsText(categoryCounts)),
+                    child: Box(
+                      child: Text(
+                        Data().categories.getNameFromId(categoryId),
                         maxLines: 1,
                         // overflow: TextOverflow.clip, // Clip the overflow text
                         softWrap: false,
@@ -153,7 +162,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
           ),
         ));
       }
-    });
+    }
 
     if (radioButtonChoices.isNotEmpty) {
       radioButtonChoices.insert(
@@ -168,13 +177,18 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
               });
             },
           ),
-          title: const Text('Keep current categories'),
+          title: const Text('Keep all transactions to their current categories'),
         ),
       );
     }
 
-    return Column(
-      children: radioButtonChoices,
+    return SizedBox(
+      height: 400,
+      child: SingleChildScrollView(
+        child: Column(
+          children: radioButtonChoices,
+        ),
+      ),
     );
   }
 }

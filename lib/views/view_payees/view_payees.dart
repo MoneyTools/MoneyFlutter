@@ -30,6 +30,7 @@ class ViewPayees extends ViewForMoneyObjects {
 }
 
 class ViewPayeesState extends ViewForMoneyObjectsState {
+  /// add more top leve action buttons
   @override
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     final list = super.getActionsForSelectedItems(forInfoPanelTransactions);

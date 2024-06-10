@@ -6,6 +6,7 @@ import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/views/action_buttons.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_categories/merge_categories.dart';
 import 'package:money/views/view_money_objects.dart';
@@ -32,16 +33,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       // add a new Account
       final newItem = Data().categories.addNewCategory('New Category');
       updateListAndSelect(newItem.uniqueId);
-    };
-
-    onMergeItem = (final BuildContext context, final MoneyObject selectedObject) {
-      // let the user pick another Category and move the transactions of the current selected Category to the destination
-      adaptiveScreenSizeDialog(
-        context: context,
-        title: 'Move Category',
-        captionForClose: null, // this will hide the close button
-        child: MergeCategoriesTransactionsDialog(categoryToMove: selectedObject as Category),
-      );
     };
   }
 
@@ -118,6 +109,31 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   @override
   Widget buildHeader([final Widget? child]) {
     return super.buildHeader(renderToggles());
+  }
+
+  /// add more top leve action buttons
+  @override
+  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
+    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+    if (!forInfoPanelTransactions) {
+      /// Merge
+      final MoneyObject? moneyObject = getFirstSelectedItem();
+      if (moneyObject != null) {
+        list.add(
+          buildMergeButton(
+            () {
+              // let the user pick another Category and move the transactions of the current selected Category to the destination
+              adaptiveScreenSizeDialog(
+                  context: context,
+                  title: 'Move Category',
+                  captionForClose: 'Cancel', // this will hide the close button
+                  child: MergeCategoriesTransactionsDialog(categoryToMove: getFirstSelectedItem() as Category));
+            },
+          ),
+        );
+      }
+    }
+    return list;
   }
 
   @override
