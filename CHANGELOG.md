@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.21] 2024-05-10
+
+### Added
+
+- New [clear all filters] button in the header
+
 ## [version 1.8.20] 2024-05-09
 
 ### Updated

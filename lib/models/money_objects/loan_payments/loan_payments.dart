@@ -63,10 +63,10 @@ class PaymentRollup {
 }
 
 List<LoanPayment> getAccountLoanPayments(Account account) {
-  final List<int> cateogoriesToMatch = [account.categoryIdForInterest.value, account.categoryIdForPrincipal.value];
+  final List<int> categoriesToMatch = [account.categoryIdForInterest.value, account.categoryIdForPrincipal.value];
 
   // include the manual entries done in the LoanPayments table
-  List<LoanPayment> agregatedList = Data()
+  List<LoanPayment> aggregatedList = Data()
       .loanPayments
       .iterableList(includeDeleted: false)
       .where((a) => a.accountId.value == account.uniqueId)
@@ -74,9 +74,9 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
 
   // include the bank transactions matching th Account Categories for Principal and Interest
   var listOfTransactions =
-      Data().transactions.getListFlattenSplits(whereClause: (t) => t.isMatchingAnyOfTheseCategoris(cateogoriesToMatch));
+      Data().transactions.getListFlattenSplits(whereClause: (t) => t.isMatchingAnyOfTheseCategoris(categoriesToMatch));
 
-  // Rollup into a sinclude Payment based on Date to match Principal and Interest payment
+  // Rollup into a single Payment based on Date to match Principal and Interest payment
   Map<String, PaymentRollup> payments = {};
 
   for (final t in listOfTransactions) {
@@ -117,7 +117,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   int fakeId = 10000000;
 
   for (final pr in payments.values) {
-    agregatedList.add(
+    aggregatedList.add(
       LoanPayment(
         id: fakeId++,
         accountId: pr.accountId,
@@ -130,16 +130,16 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     );
   }
 
-  agregatedList.sort((a, b) => sortByDate(a.date.value, b.date.value, true));
+  aggregatedList.sort((a, b) => sortByDate(a.date.value, b.date.value, true));
 
   double runningBalance = 0.00;
 
-  for (final p in agregatedList) {
+  for (final p in aggregatedList) {
     runningBalance += p.principal.value.amount;
     p.balance.value.amount = runningBalance;
 
     // Special hack to include the Manual LoanPayment memo into th reference text
     p.reference.value = concat(p.memo.value, p.reference.value);
   }
-  return agregatedList;
+  return aggregatedList;
 }

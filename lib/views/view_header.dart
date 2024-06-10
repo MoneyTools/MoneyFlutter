@@ -24,6 +24,7 @@ class ViewHeader extends StatelessWidget {
 
   final String filterText;
   final void Function(String)? onFilterChanged;
+  final void Function()? onClearAllFilters;
 
   final Widget? child;
 
@@ -37,6 +38,8 @@ class ViewHeader extends StatelessWidget {
     // filter text
     this.filterText = '',
     this.onFilterChanged,
+    // ignore: avoid_init_to_null
+    this.onClearAllFilters = null,
 
     // optionals
     this.multipleSelection,
@@ -134,6 +137,16 @@ class ViewHeader extends StatelessWidget {
               onChanged: (final String text) {
                 onFilterChanged!(text);
               }),
+        ),
+      );
+    }
+
+    if (onClearAllFilters != null) {
+      widgets.add(
+        IconButton(
+          icon: const Icon(Icons.filter_alt_off_outlined),
+          tooltip: 'Clear all filters',
+          onPressed: onClearAllFilters,
         ),
       );
     }

@@ -139,9 +139,11 @@ class Accounts extends MoneyObjects<Account> {
     final accountLoans =
         Data().accounts.iterableList().where((account) => account.type.value == AccountType.loan).toList();
     for (final account in accountLoans) {
-      final latestPayment = getAccountLoanPayments(account).last;
-      account.updatedOn.value = latestPayment.date.value;
-      account.balance = latestPayment.balance.value.amount;
+      final LoanPayment? latestPayment = getAccountLoanPayments(account).lastOrNull;
+      if (latestPayment != null) {
+        account.updatedOn.value = latestPayment.date.value;
+        account.balance = latestPayment.balance.value.amount;
+      }
     }
   }
 

@@ -280,8 +280,24 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       onDeleteMoneyObject: onDeleteItems,
       filterText: _filterByText,
       onFilterChanged: onFilterTextChanged,
+      onClearAllFilters: areFiltersOn()
+          ? () {
+              // remove any filters from the view
+              setState(() {
+                resetFiltersAndGetList();
+              });
+            }
+          : null,
       child: child,
     );
+  }
+
+  void resetFiltersAndGetList() {
+    _filterByText = '';
+    _filterByFieldsValue.clear();
+
+    saveLastUserChoicesOfView();
+    list = getList();
   }
 
   String getClassNameSingular() {
@@ -389,18 +405,23 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     });
   }
 
-  bool isMatchingFilters(final MoneyObject instance) {
+  bool areFiltersOn() {
     if (_filterByText.isEmpty && _filterByFieldsValue.isEmpty) {
-      // nothing to filter by
-      return true;
+      return false;
     }
+    return true;
+  }
 
-    // apply filtering
-    return getFieldsForTable().applyFilters(
-      instance,
-      _filterByText,
-      _filterByFieldsValue,
-    );
+  bool isMatchingFilters(final MoneyObject instance) {
+    if (areFiltersOn()) {
+      // apply filtering
+      return getFieldsForTable().applyFilters(
+        instance,
+        _filterByText,
+        _filterByFieldsValue,
+      );
+    }
+    return true;
   }
 
   void updateBottomContent(final InfoPanelSubViewEnum tab) {
