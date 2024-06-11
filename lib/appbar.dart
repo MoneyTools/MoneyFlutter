@@ -8,6 +8,7 @@ import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_settings.dart';
 import 'package:money/widgets/color_palette.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
+import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';
 
@@ -56,6 +57,33 @@ class _MyAppBarState extends State<MyAppBar> {
 
       // Button on the right side
       actions: <Widget>[
+        // Hide/Show closed accounts
+        IconButton(
+          icon: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Opacity(
+                opacity: Settings().includeClosedAccounts ? 1.0 : 0.5,
+                child: const Icon(
+                  Icons.inventory,
+                  size: 18,
+                ),
+              ),
+              gapSmall(),
+              Text(
+                Settings().includeClosedAccounts ? 'Viewing' : 'Hidden',
+                style: TextStyle(fontSize: 8, color: getColorTheme(context).primary),
+              ),
+            ],
+          ),
+          onPressed: () {
+            Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
+            Settings().preferrenceSave();
+          },
+          tooltip: Settings().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
+        ),
+
+        // Dark / Light mode
         IconButton(
           icon: Settings().useDarkMode ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: () {
@@ -172,19 +200,6 @@ class _MyAppBarState extends State<MyAppBar> {
         child: ThreePartLabel(
           text1: 'General...',
           icon: Icon(Icons.settings, color: Colors.grey),
-          small: true,
-        ),
-      ),
-    );
-
-    actionList.add(
-      PopupMenuItem<int>(
-        value: Constants.commandIncludeClosedAccount,
-        child: ThreePartLabel(
-          icon: Icon(
-              !Settings().includeClosedAccounts ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
-              color: Colors.grey),
-          text1: 'Display closed accounts',
           small: true,
         ),
       ),
