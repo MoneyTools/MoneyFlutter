@@ -28,11 +28,11 @@ class Category extends MoneyObject {
       _fields.setDefinitions([
         tmp.id,
         tmp.parentId,
+        tmp.color,
         tmp.level,
         tmp.name,
         tmp.description,
         tmp.type,
-        tmp.color,
         tmp.budget,
         tmp.budgetBalance,
         tmp.frequency,
@@ -115,7 +115,7 @@ class Category extends MoneyObject {
     serializeName: 'Color',
     type: FieldType.widget,
     align: TextAlign.center,
-    columnWidth: ColumnWidth.tiny,
+    columnWidth: ColumnWidth.nano,
     defaultValue: '',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).getColorWidget(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).color.value,
@@ -132,8 +132,10 @@ class Category extends MoneyObject {
         },
       );
     },
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByString((a as Category).color.value, (b as Category).color.value, ascending),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+        (a as Category).getColorOrAncestorsColor().computeLuminance(),
+        (b as Category).getColorOrAncestorsColor().computeLuminance(),
+        ascending),
   );
 
   /// Budget

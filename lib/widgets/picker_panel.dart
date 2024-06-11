@@ -123,6 +123,7 @@ class _PickerPanelState extends State<PickerPanel> {
                         setState(() {
                           _filterStartWidth = selected;
                           applyFilter();
+                          _scrollController.jumpTo(0);
                         });
                       },
                     ),
