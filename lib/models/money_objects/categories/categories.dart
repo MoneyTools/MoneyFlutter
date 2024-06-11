@@ -227,6 +227,10 @@ class Categories extends MoneyObjects<Category> {
     return getOrCreateCategory('UnassignedSplit', CategoryType.none);
   }
 
+  Category addNewTopLevelCategory() {
+    return addNewCategory('New Category');
+  }
+
   @override
   void loadDemoData() {
     clear();

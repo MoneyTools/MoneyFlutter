@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.22] 2024-05-11
+
+### Added
+
+- UI to add a new Category
+
 ## [version 1.8.21] 2024-05-10
 
 ### Added

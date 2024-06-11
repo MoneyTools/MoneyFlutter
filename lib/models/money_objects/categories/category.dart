@@ -7,6 +7,7 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/categories/category_types.dart';
+import 'package:money/models/money_objects/categories/picker_category_type.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
@@ -106,6 +107,19 @@ class Category extends MoneyObject {
     defaultValue: CategoryType.none,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).type.value.index,
+    setValue: (final MoneyObject instance, final dynamic value) {
+      (instance as Category).type.value = CategoryType.values[value as int];
+    },
+    getEditWidget: (final MoneyObject instance, Function onEdited) {
+      final i = instance as Category;
+      return pickerCategoryType(
+        itemSelected: i.type.value,
+        onSelected: (CategoryType selectedType) {
+          i.type.value = selectedType;
+          onEdited();
+        },
+      );
+    },
   );
 
   /// Color
@@ -331,7 +345,11 @@ class Category extends MoneyObject {
   }
 
   String getTypeAsText() {
-    switch (type.value) {
+    return getTextFromType(type.value);
+  }
+
+  static String getTextFromType(final CategoryType type) {
+    switch (type) {
       case CategoryType.income:
         return 'Income';
       case CategoryType.expense:
@@ -350,6 +368,27 @@ class Category extends MoneyObject {
         return 'None';
       default:
         return '<unknown>';
+    }
+  }
+
+  static List<String> getCategoryTypes() {
+    return [
+      getTextFromType(CategoryType.income),
+      getTextFromType(CategoryType.expense),
+      getTextFromType(CategoryType.recurringExpense),
+      getTextFromType(CategoryType.saving),
+      getTextFromType(CategoryType.reserved),
+      getTextFromType(CategoryType.transfer),
+      getTextFromType(CategoryType.investment),
+      getTextFromType(CategoryType.none),
+    ];
+  }
+
+  static CategoryType getCategoryTypeFromName(final String categoyTypeName) {
+    try {
+      return CategoryType.values.byName(categoyTypeName.toLowerCase());
+    } catch (_) {
+      return CategoryType.none;
     }
   }
 

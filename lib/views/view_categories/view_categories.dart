@@ -121,6 +121,16 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
     if (!forInfoPanelTransactions) {
+      // Add a new Category
+      list.insert(
+        0,
+        buildAddItemButton(() {
+          // add a new Category
+          final newItem = Data().categories.addNewTopLevelCategory();
+          updateListAndSelect(newItem.uniqueId);
+        }, 'Add new category'),
+      );
+
       /// Merge
       final MoneyObject? moneyObject = getFirstSelectedItem();
       if (moneyObject != null) {
