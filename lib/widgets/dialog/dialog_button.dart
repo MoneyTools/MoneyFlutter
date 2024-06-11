@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/list_helper.dart';
+import 'package:money/widgets/widgets.dart';
 
 class DialogActionButton extends StatelessWidget {
   final String text;
@@ -83,21 +83,58 @@ Widget buildCopyButton(final Function callback) {
   );
 }
 
-Widget buildJumpToButton(final List<Pair<String, Function>> listOfViewToJumpTo) {
+class InternalViewSwitching {
+  final IconData? icon;
+  final String title;
+  final Function callback;
+
+  InternalViewSwitching(this.icon, this.title, this.callback);
+}
+
+Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
   final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
   for (var i = 0; i < listOfViewToJumpTo.length; i++) {
-    list.add(PopupMenuItem<int>(
-      value: i,
-      child: Text(listOfViewToJumpTo[i].first),
-    ));
+    list.add(
+      PopupMenuItem<int>(
+        value: i,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Expanded(
+              child: ThreePartLabel(
+                icon: Icon(listOfViewToJumpTo[i].icon),
+                text1: listOfViewToJumpTo[i].title,
+                small: true,
+              ),
+            ),
+            const Icon(Icons.menu_open_outlined),
+          ],
+        ),
+      ),
+    );
   }
+  return myPopupMenuIconButton(
+      icon: Icons.open_in_new_outlined,
+      tooltip: 'Switch view',
+      list: list,
+      onSelected: (final index) {
+        listOfViewToJumpTo[index].callback();
+      });
+}
+
+PopupMenuButton<int> myPopupMenuIconButton({
+  required final IconData icon,
+  required final String tooltip,
+  required final List<PopupMenuItem<int>> list,
+  required final Function(int) onSelected,
+}) {
   return PopupMenuButton<int>(
-    icon: const Icon(Icons.open_in_new_outlined),
+    icon: Icon(icon),
+    tooltip: tooltip,
+    position: PopupMenuPosition.under,
     itemBuilder: (final BuildContext context) {
       return list;
     },
-    onSelected: (final int index) {
-      listOfViewToJumpTo[index].second.call();
-    },
+    onSelected: onSelected,
   );
 }

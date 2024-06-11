@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/splits/money_split.dart';
 import 'package:money/storage/data/data.dart';
@@ -22,6 +23,10 @@ class ViewRentals extends ViewForMoneyObjects {
 }
 
 class ViewRentalsState extends ViewForMoneyObjectsState {
+  ViewRentalsState() {
+    viewId = ViewId.viewRentals;
+  }
+
   RentBuilding? lastSelectedRental;
 
   @override

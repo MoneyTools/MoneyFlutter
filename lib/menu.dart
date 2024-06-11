@@ -11,62 +11,64 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
       icon: Icon(Icons.analytics),
       selectedIcon: Icon(Icons.analytics),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Accounts',
       tooltip: 'Accounts',
-      icon: Icon(Icons.account_balance),
-      selectedIcon: Icon(Icons.account_balance),
+      icon: ViewId.viewAccounts.getIcon(),
+      selectedIcon: ViewId.viewAccounts.getIcon(),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Categories',
       tooltip: 'Categories',
-      icon: Icon(Icons.type_specimen),
-      selectedIcon: Icon(Icons.type_specimen),
+      icon: ViewId.viewCategories.getIcon(),
+      selectedIcon: ViewId.viewCategories.getIcon(),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Payees',
       tooltip: 'Payees',
-      icon: Icon(Icons.groups),
-      selectedIcon: Icon(Icons.groups),
+      icon: ViewId.viewPayees.getIcon(),
+      selectedIcon: ViewId.viewPayees.getIcon(),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Aliases',
       tooltip: 'Aliases',
-      icon: Icon(Icons.how_to_reg),
-      selectedIcon: Icon(Icons.how_to_reg),
+      icon: ViewId.viewAliases.getIcon(),
+      selectedIcon: ViewId.viewAliases.getIcon(),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Transactions',
       tooltip: 'Transactions',
-      icon: Icon(Icons.receipt_long),
-      selectedIcon: Icon(Icons.receipt_long),
+      icon: ViewId.viewTransactions.getIcon(),
+      selectedIcon: ViewId.viewTransactions.getIcon(),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Transfers',
       tooltip: 'View transfers between accounts',
-      icon: Icon(Icons.swap_horiz),
-      selectedIcon: Icon(Icons.swap_horiz),
+      icon: ViewId.viewTransfers.getIcon(),
+      selectedIcon: ViewId.viewTransfers.getIcon(),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Investments',
       tooltip: 'Investment transactions',
-      icon: Icon(Icons.stacked_line_chart),
-      selectedIcon: Icon(Icons.stacked_line_chart),
+      icon: ViewId.viewInvestments.getIcon(),
+      selectedIcon: ViewId.viewInvestments.getIcon(),
     ),
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Stocks',
       tooltip: 'Stocks tracking',
-      icon: Icon(Icons.candlestick_chart_outlined),
-      selectedIcon: Icon(Icons.candlestick_chart_outlined),
+      icon: ViewId.viewStocks.getIcon(),
+      selectedIcon: ViewId.viewStocks.getIcon(),
     )
   ];
   if (settings.includeRentalManagement) {
-    appBarDestinations.add(const NavigationDestination(
-      label: 'Rentals',
-      tooltip: 'Rentals',
-      icon: Icon(Icons.location_city),
-      selectedIcon: Icon(Icons.location_city),
-    ));
+    appBarDestinations.add(
+      NavigationDestination(
+        label: 'Rentals',
+        tooltip: 'Rentals',
+        icon: ViewId.viewRentals.getIcon(),
+        selectedIcon: ViewId.viewRentals.getIcon(),
+      ),
+    );
   }
 
   return appBarDestinations;

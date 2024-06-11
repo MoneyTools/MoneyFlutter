@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
@@ -37,6 +36,10 @@ class ViewAccounts extends ViewForMoneyObjects {
 
 class ViewAccountsState extends ViewForMoneyObjectsState {
   final List<Widget> pivots = <Widget>[];
+
+  ViewAccountsState() {
+    viewId = ViewId.viewAccounts;
+  }
 
   @override
   void initState() {
@@ -160,12 +163,28 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              Pair<String, Function>("Jump to Transactions view...", () {
-                final account = getFirstSelectedItem() as Account?;
-                if (account != null) {
-                  Settings().selectedView = ViewId.viewTransactions;
-                }
-              }),
+              InternalViewSwitching(
+                ViewId.viewAccounts.getIconData(),
+                'Switch to Transactions',
+                () {
+                  final Account? account = getFirstSelectedItem() as Account?;
+                  if (account != null) {
+                    // Prepare the Transaction view to show only the selected account
+                    FieldFilters filterByAccount = FieldFilters();
+                    filterByAccount.add(FieldFilter(
+                        fieldName: Constants.viewTransactionFieldnameAccount,
+                        filterTextInLowerCase: account.name.value.toLowerCase()));
+
+                    PreferencesHelper().setStringList(
+                      ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+                      filterByAccount.toStringList(),
+                    );
+
+                    // Switch view
+                    Settings().selectedView = ViewId.viewTransactions;
+                  }
+                },
+              ),
             ],
           ),
         );

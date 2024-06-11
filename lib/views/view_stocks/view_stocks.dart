@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -20,6 +21,10 @@ class ViewStocks extends ViewForMoneyObjects {
 }
 
 class ViewStocksState extends ViewForMoneyObjectsState {
+  ViewStocksState() {
+    viewId = ViewId.viewStocks;
+  }
+
   Security? lastSecuritySelected;
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 

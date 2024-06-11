@@ -33,6 +33,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   bool balanceDone = false;
 
   ViewTransactionsState() {
+    viewId = ViewId.viewTransactions;
     supportsMultiSelection = true;
   }
 
@@ -91,35 +92,59 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       list.add(
         buildJumpToButton(
           [
-            Pair<String, Function>("Jump to Account view...", () {
-              final transaction = getFirstSelectedItem() as Transaction?;
-              if (transaction != null) {
-                // Preselect the Account of this Transaction
-                PreferencesHelper().setInt(getViewPreferenceId(settingKeyDomainAccounts, settingKeySelectedListItemId),
-                    transaction.accountId.value);
-                Settings().selectedView = ViewId.viewAccounts;
-              }
-            }),
-            Pair<String, Function>("Jump to Category view...", () {
-              final transaction = getFirstSelectedItem() as Transaction?;
-              if (transaction != null) {
-                // Preselect the Category of this Transaction
-                PreferencesHelper().setInt(
-                    getViewPreferenceId(settingKeyDomainCategories, settingKeySelectedListItemId),
-                    transaction.categoryId.value);
-                Settings().selectedView = ViewId.viewCategories;
-              }
-            }),
-            Pair<String, Function>("Jump to Payee view...", () {
-              final transaction = getFirstSelectedItem() as Transaction?;
-              if (transaction != null) {
-                // Preselect the Payee of this Transaction
-                PreferencesHelper().setInt(getViewPreferenceId(settingKeyDomainPayees, settingKeySelectedListItemId),
-                    transaction.categoryId.value);
-                Settings().selectedView = ViewId.viewPayees;
-              }
-            }),
-            Pair<String, Function>("Jump to Transfer view...", () {}),
+            // Account
+            InternalViewSwitching(
+              ViewId.viewAccounts.getIconData(),
+              'Switch to Accounts',
+              () {
+                final transaction = getFirstSelectedItem() as Transaction?;
+                if (transaction != null) {
+                  // Preselect the Account of this Transaction
+
+                  PreferencesHelper().setInt(
+                    ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
+                    transaction.accountId.value,
+                  );
+
+                  Settings().selectedView = ViewId.viewAccounts;
+                }
+              },
+            ),
+
+            // Category
+            InternalViewSwitching(
+              ViewId.viewCategories.getIconData(),
+              'Switch to Categories',
+              () {
+                final transaction = getFirstSelectedItem() as Transaction?;
+                if (transaction != null) {
+                  // Preselect the Category of this Transaction
+                  PreferencesHelper().setInt(
+                      ViewId.viewCategories.getViewPreferenceId(
+                        settingKeySelectedListItemId,
+                      ),
+                      transaction.categoryId.value);
+                  Settings().selectedView = ViewId.viewCategories;
+                }
+              },
+            ),
+
+            // Payee
+            InternalViewSwitching(
+              ViewId.viewPayees.getIconData(),
+              'Switch to Payees',
+              () {
+                final transaction = getFirstSelectedItem() as Transaction?;
+                if (transaction != null) {
+                  // Preselect the Payee of this Transaction
+                  PreferencesHelper().setInt(
+                    ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
+                    transaction.payee.value,
+                  );
+                  Settings().selectedView = ViewId.viewPayees;
+                }
+              },
+            ),
           ],
         ),
       );

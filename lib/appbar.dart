@@ -7,6 +7,7 @@ import 'package:money/models/settings.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_settings.dart';
 import 'package:money/widgets/color_palette.dart';
+import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';
 
@@ -69,36 +70,35 @@ class _MyAppBarState extends State<MyAppBar> {
   }
 
   Widget _buildPopupMenu() {
-    return PopupMenuButton<int>(
-      child: const Icon(Icons.menu),
-      itemBuilder: (final BuildContext context) {
-        final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
-        // New
-        addMenuItem(list, Constants.commandFileNew, 'New', Icons.new_label);
+    final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
+    // New
+    addMenuItem(list, Constants.commandFileNew, 'New', Icons.new_label);
 
-        // Open
-        addMenuItem(list, Constants.commandFileOpen, 'Open...', Icons.file_open_outlined);
+    // Open
+    addMenuItem(list, Constants.commandFileOpen, 'Open...', Icons.file_open_outlined);
 
-        // Import
-        addMenuItem(list, Constants.commandImport, 'Import...', Icons.cloud_download);
+    // Import
+    addMenuItem(list, Constants.commandImport, 'Import...', Icons.cloud_download);
 
-        // Add Transactions
-        addMenuItem(list, Constants.commandAddTransactions, 'Add transactions...', Icons.add_card);
+    // Add Transactions
+    addMenuItem(list, Constants.commandAddTransactions, 'Add transactions...', Icons.add_card);
 
-        // File Location
-        addMenuItem(list, Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined);
+    // File Location
+    addMenuItem(list, Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined);
 
-        // Save CSV
-        addMenuItem(list, Constants.commandFileSaveCsv, 'Save to CSV', Icons.save);
+    // Save CSV
+    addMenuItem(list, Constants.commandFileSaveCsv, 'Save to CSV', Icons.save);
 
-        // Save SQL
-        addMenuItem(list, Constants.commandFileSaveSql, 'Save to SQL', Icons.save);
+    // Save SQL
+    addMenuItem(list, Constants.commandFileSaveSql, 'Save to SQL', Icons.save);
 
-        // Close
-        addMenuItem(list, Constants.commandFileSaveSql, 'Close file', Icons.close);
+    // Close
+    addMenuItem(list, Constants.commandFileSaveSql, 'Close file', Icons.close);
 
-        return list;
-      },
+    return myPopupMenuIconButton(
+      icon: Icons.menu,
+      tooltip: 'File menu',
+      list: list,
       onSelected: (final int index) {
         switch (index) {
           case Constants.commandFileNew:
@@ -145,95 +145,91 @@ class _MyAppBarState extends State<MyAppBar> {
   }
 
   Widget _buildSettingsMenu() {
-    return PopupMenuButton<int>(
-        icon: const Icon(Icons.settings_outlined),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        itemBuilder: (final BuildContext context) {
-          final List<PopupMenuItem<int>> actionList =
-              List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
-            final bool isSelected = index == Settings().colorSelected;
-            return PopupMenuItem<int>(
-              value: index,
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                decoration: BoxDecoration(
-                  color: isSelected ? getColorTheme(context).secondaryContainer : null,
-                  borderRadius: const BorderRadius.all(Radius.circular(4)),
-                ),
-                child: ThreePartLabel(
-                  icon: Icon(index == Settings().colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
-                      color: colorOptions[index]),
-                  text1: colorText[index],
-                  small: true,
-                ),
-              ),
-            );
-          });
+    final List<PopupMenuItem<int>> actionList =
+        List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
+      final bool isSelected = index == Settings().colorSelected;
+      return PopupMenuItem<int>(
+        value: index,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: isSelected ? getColorTheme(context).secondaryContainer : null,
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
+          ),
+          child: ThreePartLabel(
+            icon: Icon(index == Settings().colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
+                color: colorOptions[index]),
+            text1: colorText[index],
+            small: true,
+          ),
+        ),
+      );
+    });
 
-          actionList.add(
-            const PopupMenuItem<int>(
-              value: Constants.commandSettings,
-              child: ThreePartLabel(
-                text1: 'General...',
-                icon: Icon(Icons.settings, color: Colors.grey),
-                small: true,
-              ),
-            ),
-          );
+    actionList.add(
+      const PopupMenuItem<int>(
+        value: Constants.commandSettings,
+        child: ThreePartLabel(
+          text1: 'General...',
+          icon: Icon(Icons.settings, color: Colors.grey),
+          small: true,
+        ),
+      ),
+    );
 
-          actionList.add(
-            PopupMenuItem<int>(
-              value: Constants.commandIncludeClosedAccount,
-              child: ThreePartLabel(
-                icon: Icon(
-                    !Settings().includeClosedAccounts
-                        ? Icons.check_box_outline_blank_outlined
-                        : Icons.check_box_outlined,
-                    color: Colors.grey),
-                text1: 'Display closed accounts',
-                small: true,
-              ),
-            ),
-          );
+    actionList.add(
+      PopupMenuItem<int>(
+        value: Constants.commandIncludeClosedAccount,
+        child: ThreePartLabel(
+          icon: Icon(
+              !Settings().includeClosedAccounts ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
+              color: Colors.grey),
+          text1: 'Display closed accounts',
+          small: true,
+        ),
+      ),
+    );
 
-          actionList.add(
-            PopupMenuItem<int>(
-              value: Constants.commandIncludeRentals,
-              child: ThreePartLabel(
-                icon: Icon(
-                    !Settings().includeRentalManagement
-                        ? Icons.check_box_outline_blank_outlined
-                        : Icons.check_box_outlined,
-                    color: Colors.grey),
-                text1: 'Rentals',
-                small: true,
-              ),
-            ),
-          );
+    actionList.add(
+      PopupMenuItem<int>(
+        value: Constants.commandIncludeRentals,
+        child: ThreePartLabel(
+          icon: Icon(
+              !Settings().includeRentalManagement ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
+              color: Colors.grey),
+          text1: 'Rentals',
+          small: true,
+        ),
+      ),
+    );
 
-          actionList.add(
-            PopupMenuItem<int>(
-              value: Constants.commandTextZoom,
-              child: ZoomIncreaseDecrease(
-                title: 'Zoom',
-                onDecrease: () {
-                  Settings().fontScaleDecrease();
-                },
-                onIncrease: () {
-                  Settings().fontScaleIncrease();
-                },
-              ),
-            ),
-          );
+    actionList.add(
+      PopupMenuItem<int>(
+        value: Constants.commandTextZoom,
+        child: ZoomIncreaseDecrease(
+          title: 'Zoom',
+          onDecrease: () {
+            Settings().fontScaleDecrease();
+          },
+          onIncrease: () {
+            Settings().fontScaleIncrease();
+          },
+        ),
+      ),
+    );
 
-          if (kDebugMode) {
-            addColorPalette(actionList);
-          }
-          return actionList;
-        },
-        onSelected: (final int value) {
-          onAppBarAction(value);
-        });
+    if (kDebugMode) {
+      addColorPalette(actionList);
+    }
+
+    return myPopupMenuIconButton(
+      icon: Icons.settings_outlined,
+      tooltip: 'Settings',
+      list: actionList,
+      onSelected: (final int value) {
+        onAppBarAction(value);
+      },
+    );
   }
 
   void addColorPalette(List<PopupMenuItem<int>> actionList) {

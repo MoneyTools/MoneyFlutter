@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -22,6 +23,10 @@ class ViewTransfers extends ViewForMoneyObjects {
 }
 
 class ViewTransfersState extends ViewForMoneyObjectsState {
+  ViewTransfersState() {
+    viewId = ViewId.viewTransfers;
+  }
+
   List<Transfer> listOfTransfers = [];
   Map<int, Transfer> loadedTransfers = {};
 

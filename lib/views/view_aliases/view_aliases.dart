@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/aliases/alias.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -16,6 +17,10 @@ class ViewAliases extends ViewForMoneyObjects {
 }
 
 class ViewAliasesState extends ViewForMoneyObjectsState {
+  ViewAliasesState() {
+    viewId = ViewId.viewAliases;
+  }
+
   @override
   String getClassNamePlural() {
     return 'Aliases';

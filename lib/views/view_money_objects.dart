@@ -32,6 +32,8 @@ class ViewForMoneyObjects extends StatefulWidget {
 }
 
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
+  late final ViewId viewId;
+
   // list management
   List<MoneyObject> list = <MoneyObject>[];
   final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>([]);
@@ -102,7 +104,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   String getPreferenceKey(final String suffix) {
-    return getViewPreferenceId(getViewId(), suffix);
+    return viewId.getViewPreferenceId(suffix);
   }
 
   void onCopyListFromMainView() {

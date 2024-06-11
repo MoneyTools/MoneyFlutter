@@ -69,6 +69,10 @@ class Constants {
   static const int commandFileSaveCsv = 2004;
   static const int commandFileSaveSql = 2005;
   static const int commandFileClose = 2006;
+
+  static String viewTransactionFieldnameAccount = 'Account';
+  static String viewTransactionFieldnamePayee = 'Payee/Transfer';
+  static String viewTransactionFieldnameCategory = 'Category';
 }
 
 class IntValues {
@@ -108,14 +112,40 @@ enum ViewId {
   viewPolicy,
 }
 
-String getViewPreferenceId(final String view, final String suffix) {
-  return 'view_${view.toLowerCase()}_$suffix';
-}
+extension ViewExtension on ViewId {
+  String getViewPreferenceId(final String suffix) {
+    // ignore: unnecessary_this
+    return '${this.name.toLowerCase()}_$suffix';
+  }
 
-String getViewPreferenceIdAccount(final String suffix) {
-  return getViewPreferenceId(settingKeyDomainAccounts, suffix);
-}
+  IconData getIconData() {
+    switch (this) {
+      case ViewId.viewCashFlow:
+        return Icons.analytics;
+      case ViewId.viewAccounts:
+        return Icons.account_balance;
+      case ViewId.viewCategories:
+        return Icons.type_specimen;
+      case ViewId.viewPayees:
+        return Icons.groups;
+      case ViewId.viewAliases:
+        return Icons.how_to_reg;
+      case ViewId.viewTransactions:
+        return Icons.receipt_long;
+      case ViewId.viewTransfers:
+        return Icons.swap_horiz;
+      case ViewId.viewInvestments:
+        return Icons.stacked_line_chart;
+      case ViewId.viewStocks:
+        return Icons.candlestick_chart_outlined;
+      case ViewId.viewRentals:
+        return Icons.location_city;
+      case ViewId.viewPolicy:
+        return Icons.policy;
+    }
+  }
 
-String getViewPreferenceIdAccountLastSelected() {
-  return getViewPreferenceId(settingKeyDomainAccounts, settingKeySelectedListItemId);
+  Icon getIcon() {
+    return Icon(getIconData());
+  }
 }

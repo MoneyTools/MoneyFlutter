@@ -4,11 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/date_range.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/preferences_helper.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_payees/merge_payees.dart';
@@ -30,6 +34,10 @@ class ViewPayees extends ViewForMoneyObjects {
 }
 
 class ViewPayeesState extends ViewForMoneyObjectsState {
+  ViewPayeesState() {
+    viewId = ViewId.viewPayees;
+  }
+
   /// add more top leve action buttons
   @override
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
@@ -56,6 +64,38 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
                 ),
               );
             },
+          ),
+        );
+      }
+
+      // this can go last
+      if (getFirstSelectedItem() != null) {
+        list.add(
+          buildJumpToButton(
+            [
+              InternalViewSwitching(
+                ViewId.viewTransactions.getIconData(),
+                'Switch to Transactions',
+                () {
+                  final Payee? payee = getFirstSelectedItem() as Payee?;
+                  if (payee != null) {
+                    // Prepare the Transaction view to show only the selected account
+                    FieldFilters filterByAccount = FieldFilters();
+                    filterByAccount.add(FieldFilter(
+                        fieldName: Constants.viewTransactionFieldnamePayee,
+                        filterTextInLowerCase: payee.name.value.toLowerCase()));
+
+                    PreferencesHelper().setStringList(
+                      ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+                      filterByAccount.toStringList(),
+                    );
+
+                    // Switch view
+                    Settings().selectedView = ViewId.viewTransactions;
+                  }
+                },
+              ),
+            ],
           ),
         );
       }

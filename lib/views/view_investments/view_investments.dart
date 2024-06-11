@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/storage/data/data.dart';
@@ -20,6 +21,10 @@ class ViewInvestments extends ViewForMoneyObjects {
 }
 
 class ViewInvestmentsState extends ViewForMoneyObjectsState {
+  ViewInvestmentsState() {
+    viewId = ViewId.viewInvestments;
+  }
+
   @override
   String getClassNamePlural() {
     return 'Investment';

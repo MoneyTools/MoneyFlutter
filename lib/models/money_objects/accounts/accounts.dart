@@ -230,6 +230,10 @@ class Accounts extends MoneyObjects<Account> {
     return list;
   }
 
+  String getViewPreferenceIdAccountLastSelected() {
+    return ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId);
+  }
+
   Account getMostRecentlySelectedAccount() {
     final int? lastSelectionId = PreferencesHelper().getInt(getViewPreferenceIdAccountLastSelected());
     if (lastSelectionId != null) {
