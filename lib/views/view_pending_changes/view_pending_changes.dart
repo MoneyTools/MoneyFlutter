@@ -77,6 +77,14 @@ class _PendingChangesState extends State<PendingChanges> {
     }
     setState(() {
       _isLoading = false;
+
+      // default to what segment
+      for (int i = 0; i < _data.length; i++) {
+        if (_data[i].count > 0) {
+          _displayMutationType = i;
+          break;
+        }
+      }
     });
   }
 
