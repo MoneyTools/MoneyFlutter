@@ -38,17 +38,21 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
   Widget _getSubViewContentForTransactions(final List<int> selectedIds) {
     final Category? category = getMoneyObjectFromFirstSelectedId<Category>(selectedIds, list);
     if (category != null) {
+      final List<int> listOfDescendentCategories = <int>[];
+      Data().categories.getTreeIdsRecursive(category.uniqueId, listOfDescendentCategories);
+
       return ListViewTransactions(
         key: Key(category.uniqueId.toString()),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdPayee),
+          Transaction.fields.getFieldByName(columnIdCategory),
           Transaction.fields.getFieldByName(columnIdMemo),
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
-          filter: (final Transaction transaction) => transaction.categoryId.value == category.uniqueId,
+          filter: (final Transaction transaction) => listOfDescendentCategories.contains(transaction.categoryId.value),
         ),
       );
     }
