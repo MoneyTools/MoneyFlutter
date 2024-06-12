@@ -519,10 +519,10 @@ class FieldString extends Field<String> {
     super.fixedFont = false,
     super.getEditWidget,
     super.setValue,
+    super.type = FieldType.text,
     super.sort,
   }) : super(
           defaultValue: '',
-          type: FieldType.text,
         ) {
     if (sort == null) {
       super.sort = (final MoneyObject a, final MoneyObject b, final bool ascending) {

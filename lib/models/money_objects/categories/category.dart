@@ -16,6 +16,7 @@ import 'package:money/widgets/color_picker.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/money_widget.dart';
 import 'package:money/widgets/rectangle.dart';
+import 'package:money/widgets/token_text.dart';
 
 // Exports
 export 'package:money/models/money_objects/categories/category_types.dart';
@@ -81,9 +82,12 @@ class Category extends MoneyObject {
     columnWidth: ColumnWidth.largest,
     name: 'Name',
     serializeName: 'Name',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).name.value,
+    type: FieldType.widget,
+    getValueForDisplay: (final MoneyObject instance) => TokenText(text: (instance as Category).name.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Category).name.value = value,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByString((a as Category).name.value, (b as Category).name.value, ascending),
   );
 
   /// Description

@@ -5,6 +5,7 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/picker_letter.dart';
+import 'package:money/widgets/token_text.dart';
 
 showPopupSelection({
   required final BuildContext context,
@@ -156,7 +157,7 @@ class _PickerPanelState extends State<PickerPanel> {
                                         color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1),
                                   ),
                           ),
-                          child: Text(label, style: const TextStyle(fontSize: 12)),
+                          child: TokenText(text: label),
                           // contentPadding: EdgeInsets.zero,
                         ),
                       );
