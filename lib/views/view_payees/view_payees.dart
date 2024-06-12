@@ -80,18 +80,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
                   final Payee? payee = getFirstSelectedItem() as Payee?;
                   if (payee != null) {
                     // Prepare the Transaction view to show only the selected account
-                    FieldFilters filterByAccount = FieldFilters();
-                    filterByAccount.add(FieldFilter(
-                        fieldName: Constants.viewTransactionFieldnamePayee,
-                        filterTextInLowerCase: payee.name.value.toLowerCase()));
-
-                    PreferencesHelper().setStringList(
-                      ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
-                      filterByAccount.toStringList(),
-                    );
-
-                    // Switch view
-                    Settings().selectedView = ViewId.viewTransactions;
+                    switchViewTransacionnForPayee(payee.name.value);
                   }
                 },
               ),

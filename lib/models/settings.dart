@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/fields/field_filter.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
@@ -219,4 +220,20 @@ class Settings extends ChangeNotifier {
 
     Settings().fileManager.rememberWhereTheDataCameFrom(Settings().fileManager.fullPathToLastOpenedFile);
   }
+}
+
+/// Navigation helpers
+
+void switchViewTransacionnForPayee(final String payeeName) {
+  FieldFilters fieldFilters = FieldFilters();
+  fieldFilters.add(
+      FieldFilter(fieldName: Constants.viewTransactionFieldnamePayee, filterTextInLowerCase: payeeName.toLowerCase()));
+
+  PreferencesHelper().setStringList(
+    ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+    fieldFilters.toStringList(),
+  );
+
+  // Switch view
+  Settings().selectedView = ViewId.viewTransactions;
 }

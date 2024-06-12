@@ -5,6 +5,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
 import 'package:money/widgets/box.dart';
@@ -70,16 +71,26 @@ class RecurringCard extends StatelessWidget {
 
   Widget _buildHeader(final BuildContext context) {
     TextTheme textTheme = getTextTheme(context);
+    final String payeeName = Data().payees.getNameFromId(payment.payeeId);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Opacity(opacity: 0.5, child: Text('#$index ')),
         Expanded(
-          child: SelectableText(
-            Data().payees.getNameFromId(payment.payeeId),
-            maxLines: 1,
-            style: textTheme.titleMedium,
+          child: Row(
+            children: [
+              SelectableText(
+                payeeName,
+                maxLines: 1,
+                style: textTheme.titleMedium,
+              ),
+              IconButton(
+                  onPressed: () {
+                    switchViewTransacionnForPayee(payeeName);
+                  },
+                  icon: const Icon(Icons.open_in_new)),
+            ],
           ),
         ),
         gapLarge(),
