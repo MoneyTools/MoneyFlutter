@@ -19,22 +19,12 @@ class SwitchFormField extends FormField<bool> {
   }) : super(
           key: UniqueKey(),
           builder: (FormFieldState<bool> state) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(title),
-                Switch(
-                  value: state.value!,
-                  onChanged: (value) {
-                    state.didChange(value);
-                    onSaved?.call(value);
-                  },
-                ),
-                const Divider(
-                  color: Colors.grey,
-                ),
-              ],
+            return Switch(
+              value: state.value!,
+              onChanged: (value) {
+                state.didChange(value);
+                onSaved?.call(value);
+              },
             );
           },
         );

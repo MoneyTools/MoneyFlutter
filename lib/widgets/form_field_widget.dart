@@ -6,14 +6,14 @@ class MyFormFieldForWidget extends StatefulWidget {
   final String title;
   final String valueAsText;
   final bool isReadOnly;
-  final Widget? child;
+  final Function(String) onChanged;
 
   const MyFormFieldForWidget({
     super.key,
     required this.title,
     required this.valueAsText,
     required this.isReadOnly,
-    this.child,
+    required this.onChanged,
   });
 
   @override
@@ -50,20 +50,12 @@ class MyFormFieldForWidgetState extends State<MyFormFieldForWidget> {
             decoration: getFormFieldDecoration(fieldName: widget.title, isReadOnly: widget.isReadOnly),
             onChanged: (final String value) {
               setState(() {
-                // todo
+                widget.onChanged(value);
               });
             },
           ),
         ),
-        _buildWidgetRepresentation(),
       ],
     );
-  }
-
-  Widget _buildWidgetRepresentation() {
-    if (widget.child == null) {
-      return const SizedBox();
-    }
-    return Padding(padding: const EdgeInsets.fromLTRB(10, 0, 0, 0), child: widget.child!);
   }
 }

@@ -83,7 +83,7 @@ class Category extends MoneyObject {
     name: 'Name',
     serializeName: 'Name',
     type: FieldType.widget,
-    getValueForDisplay: (final MoneyObject instance) => TokenText(text: (instance as Category).name.value),
+    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Category).name.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Category).name.value = value,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>

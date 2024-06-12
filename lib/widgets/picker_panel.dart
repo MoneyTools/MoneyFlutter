@@ -157,7 +157,7 @@ class _PickerPanelState extends State<PickerPanel> {
                                         color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1),
                                   ),
                           ),
-                          child: TokenText(text: label),
+                          child: TokenText(label),
                           // contentPadding: EdgeInsets.zero,
                         ),
                       );

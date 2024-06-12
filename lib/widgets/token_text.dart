@@ -3,7 +3,7 @@ import 'package:money/helpers/color_helper.dart';
 
 // ignore: must_be_immutable
 class TokenText extends StatelessWidget {
-  TokenText({super.key, required this.text}) {
+  TokenText(this.text, {super.key}) {
     tokens = text.split(':');
   }
 
@@ -12,10 +12,7 @@ class TokenText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget separetor = Text(
-      ':',
-      style: TextStyle(color: getColorTheme(context).primary),
-    );
+    final Widget separetor = Text(':', style: TextStyle(color: getColorTheme(context).primary));
     const parentTextStyle = TextStyle(fontSize: 10);
     final List<Widget> widgets = [];
 

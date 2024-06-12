@@ -1,5 +1,6 @@
 // Exports
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/form_field_switch.dart';
@@ -47,11 +48,11 @@ class MoneyObject {
   Color getMutationColor() {
     switch (mutation) {
       case MutationType.inserted:
-        return Colors.green;
+        return getColorFromState(ColorState.success);
       case MutationType.changed:
-        return Colors.orange;
+        return getColorFromState(ColorState.warning);
       case MutationType.deleted:
-        return Colors.red;
+        return getColorFromState(ColorState.error);
       default:
         return Colors.transparent;
     }
@@ -162,17 +163,23 @@ class MoneyObject {
         ),
         child: fieldDefinition.getEditWidget!(objectInstance, onEdited),
       );
-    } else {
-      switch (fieldDefinition.type) {
-        case FieldType.toggle:
-          if (isReadOnly) {
-            return MyFormFieldForWidget(
+    }
+
+    switch (fieldDefinition.type) {
+      case FieldType.toggle:
+        if (isReadOnly) {
+          return MyFormFieldForWidget(
               title: fieldDefinition.name,
               valueAsText: fieldDefinition.getValueForDisplay(objectInstance).toString(),
               isReadOnly: true,
-            );
-          }
-          return SwitchFormField(
+              onChanged: (final String value) {});
+        }
+        return InputDecorator(
+          decoration: InputDecoration(
+            labelText: fieldDefinition.name,
+            border: const OutlineInputBorder(),
+          ),
+          child: SwitchFormField(
             title: fieldDefinition.name,
             initialValue: fieldDefinition.getValueForDisplay(objectInstance),
             isReadOnly: isReadOnly,
@@ -181,53 +188,56 @@ class MoneyObject {
               return null;
             },
             onSaved: (value) {
-              /// Todo
               fieldDefinition.setValue?.call(objectInstance, value);
+              onEdited();
             },
-          );
+          ),
+        );
 
-        case FieldType.widget:
-          final String valueAsString = fieldDefinition.getValueForSerialization(objectInstance).toString();
-          return MyFormFieldForWidget(
-            title: fieldDefinition.name,
-            valueAsText: valueAsString,
-            isReadOnly: isReadOnly,
-            child: fieldDefinition.getValueForDisplay(objectInstance),
-          );
+      case FieldType.widget:
+        final String valueAsString = fieldDefinition.getValueForSerialization(objectInstance).toString();
+        return MyFormFieldForWidget(
+          title: fieldDefinition.name,
+          valueAsText: valueAsString,
+          isReadOnly: isReadOnly,
+          onChanged: (final String value) {
+            fieldDefinition.setValue?.call(objectInstance, value);
+            onEdited?.call();
+          },
+        );
 
-        // all others will be a normal text input
-        default:
-          String value = fieldDefinition.getString(fieldValue);
-          if (value.isEmpty && isReadOnly) {
-            value = '. . . ';
-          }
-          return Row(
-            children: <Widget>[
-              Expanded(
-                child: Opacity(
-                  opacity: isReadOnly ? 0.6 : 1.0,
-                  child: TextFormField(
-                    initialValue: value,
-                    decoration: decoration,
-                    // allow mutation of the value
-                    readOnly: isReadOnly,
+      // all others will be a normal text input
+      default:
+        String value = fieldDefinition.getString(fieldValue);
+        if (value.isEmpty && isReadOnly) {
+          value = '. . . ';
+        }
+        return Row(
+          children: <Widget>[
+            Expanded(
+              child: Opacity(
+                opacity: isReadOnly ? 0.6 : 1.0,
+                child: TextFormField(
+                  initialValue: value,
+                  decoration: decoration,
+                  // allow mutation of the value
+                  readOnly: isReadOnly,
 
-                    onFieldSubmitted: (String value) {
-                      onEdited?.call();
-                    },
-                    onEditingComplete: () {
-                      onEdited?.call();
-                    },
-                    onChanged: (String newValue) {
-                      fieldDefinition.setValue!(objectInstance, newValue);
-                      onEdited?.call();
-                    },
-                  ),
+                  onFieldSubmitted: (String value) {
+                    onEdited?.call();
+                  },
+                  onEditingComplete: () {
+                    onEdited?.call();
+                  },
+                  onChanged: (String newValue) {
+                    fieldDefinition.setValue!(objectInstance, newValue);
+                    onEdited?.call();
+                  },
                 ),
               ),
-            ],
-          );
-      }
+            ),
+          ],
+        );
     }
   }
 
@@ -244,13 +254,15 @@ class MoneyObject {
         ),
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
-            child: Text(fieldDefinition.name),
-          ),
           Expanded(
+            flex: 1,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 10, 0),
+              child: Text(fieldDefinition.name),
+            ),
+          ),
+          IntrinsicWidth(
             child: fieldDefinition.getValueWidgetForDetailView(fieldValue),
           ),
         ],

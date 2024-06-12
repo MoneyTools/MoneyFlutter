@@ -440,13 +440,12 @@ class Transaction extends MoneyObject {
     return "???";
   }
 
-  Field<String> currency = Field<String>(
+  FieldString currency = FieldString(
     type: FieldType.widget,
     importance: 80,
     name: 'Currency',
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
-    defaultValue: '',
     getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget((instance as Transaction).getCurrency());
     },

@@ -8,9 +8,9 @@ import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/accounts/picker_account_type.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
-// import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/widgets/token_text.dart';
 
 import 'account_types_enum.dart';
 
@@ -102,9 +102,12 @@ class Account extends MoneyObject {
     name: 'Name',
     serializeName: 'Name',
     columnWidth: ColumnWidth.large,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).name.value,
+    type: FieldType.widget,
+    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Account).name.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).name.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).name.value = value as String,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByString((a as Account).name.value, (b as Account).name.value, ascending),
   );
 
   // Description
@@ -153,17 +156,17 @@ class Account extends MoneyObject {
 
   /// Currency
   /// 7|Currency|nchar(3)|0||0
-  Field<String> currency = Field<String>(
-    type: FieldType.widget,
+  FieldString currency = FieldString(
     importance: 96,
     name: 'Currency',
     serializeName: 'Currency',
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
-    defaultValue: '',
+    type: FieldType.widget,
     getValueForDisplay: (final MoneyObject instance) =>
         Currency.buildCurrencyWidget((instance as Account).getAccountCurrencyAsText()),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).getAccountCurrencyAsText(),
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).currency.value = value as String,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByString((a as Account).getAccountCurrencyAsText(), (b as Account).getAccountCurrencyAsText(), ascending),
   );
@@ -183,11 +186,10 @@ class Account extends MoneyObject {
 
   /// WebSite
   /// 9|WebSite|nvarchar(512)|0||0
-  Field<String> webSite = Field<String>(
+  FieldString webSite = FieldString(
     importance: 4,
     name: 'WebSite',
     serializeName: 'WebSite',
-    defaultValue: '',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).webSite.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).webSite.value,
