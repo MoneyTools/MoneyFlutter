@@ -307,24 +307,30 @@ class Categories extends MoneyObjects<Category> {
 
   @override
   void onAllDataLoaded() {
+    // reset to zero all counters and sums
     for (final Category category in iterableList()) {
       category.transactionCount.value = 0;
-      category.transactionCountDescendants.value = 0;
       category.sum.value.amount = 0;
+
+      category.transactionCountRollup.value = 0;
+      category.sumRollup.value.amount = 0;
     }
 
+    // first tally the direct category transactions
     for (final Transaction t in Data().transactions.iterableList()) {
       final Category? item = get(t.categoryId.value);
       if (item != null) {
         item.transactionCount.value++;
         item.sum.value.amount += t.amount.value.amount;
-      }
-    }
+        item.transactionCountRollup.value++;
+        item.sumRollup.value.amount += t.amount.value.amount;
 
-    // Sum the descendants transaction counts
-    for (final Category category in iterableList()) {
-      for (final descendant in getTree(category)) {
-        category.transactionCountDescendants.value += descendant.transactionCount.value;
+        List<Category> ancestors = [];
+        item.getAncestors(ancestors);
+        for (final ancestorCategory in ancestors) {
+          ancestorCategory.transactionCountRollup.value++;
+          ancestorCategory.sumRollup.value.amount += t.amount.value.amount;
+        }
       }
     }
   }

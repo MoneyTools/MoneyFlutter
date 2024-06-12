@@ -39,8 +39,9 @@ class Category extends MoneyObject {
         tmp.frequency,
         tmp.taxRefNum,
         tmp.transactionCount,
-        tmp.transactionCountDescendants,
         tmp.sum,
+        tmp.transactionCountRollup,
+        tmp.sumRollup,
       ]);
     }
     return _fields;
@@ -211,19 +212,26 @@ class Category extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCount.value,
   );
 
-  /// Count
-  FieldQuantity transactionCountDescendants = FieldQuantity(
-    importance: 98,
-    name: '#T~',
-    columnWidth: ColumnWidth.tiny,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCountDescendants.value,
-  );
-
   /// Running Balance
   FieldMoney sum = FieldMoney(
     importance: 99,
     name: 'Sum',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).sum.value,
+  );
+
+  /// Count
+  FieldQuantity transactionCountRollup = FieldQuantity(
+    importance: 98,
+    name: '#T~',
+    columnWidth: ColumnWidth.tiny,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCountRollup.value,
+  );
+
+  /// Running Balance
+  FieldMoney sumRollup = FieldMoney(
+    importance: 99,
+    name: 'Sum~',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).sumRollup.value,
   );
 
   Category({
@@ -294,6 +302,13 @@ class Category extends MoneyObject {
 
     // reach the top
     return Pair<Color, int>(Colors.transparent, 0);
+  }
+
+  void getAncestors(List<Category> list) {
+    if (parentCategory != null) {
+      list.add(parentCategory!);
+      parentCategory!.getAncestors(list);
+    }
   }
 
   Widget getColorWidget() {

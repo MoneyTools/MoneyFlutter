@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.23] 2024-05-12
+
+### Added
+
+- Category View now has a [Rollup Sum] column
+  
 ## [version 1.8.22] 2024-05-11
 
 ### Added
