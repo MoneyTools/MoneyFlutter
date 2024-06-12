@@ -108,7 +108,7 @@ class Fields<T> {
     final MoneyObject objectInstance,
     final FieldFilters filterByFieldsValue,
   ) {
-    for (final fieldDefinition in fieldDefinitionsForColumns) {
+    for (final Field fieldDefinition in fieldDefinitionsForColumns) {
       String fieldValueAsString = _getFieldValueAsStringForFiltering(
         objectInstance,
         fieldDefinition,
@@ -160,7 +160,9 @@ class Fields<T> {
     final MoneyObject objectInstance,
     Field<dynamic> fieldDefinition,
   ) {
-    final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+    final dynamic fieldValue = fieldDefinition.type == FieldType.widget
+        ? fieldDefinition.getValueForSerialization(objectInstance)
+        : fieldDefinition.getValueForDisplay(objectInstance);
 
     switch (fieldDefinition.type) {
       case FieldType.date:

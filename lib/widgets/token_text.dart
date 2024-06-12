@@ -12,11 +12,14 @@ class TokenText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Widget separetor = Text(':', style: TextStyle(color: getColorTheme(context).primary));
-    const parentTextStyle = TextStyle(fontSize: 10);
+    final Widget separetor = Padding(
+      padding: const EdgeInsets.only(right: 3),
+      child: Text(':', style: TextStyle(color: getColorTheme(context).primary)),
+    );
+    const parentTextStyle = TextStyle(fontSize: 13);
     final List<Widget> widgets = [];
 
-    for (final token in tokens) {
+    for (final String token in tokens) {
       if (token == tokens.last) {
         widgets.add(Expanded(
           child: Text(
@@ -25,7 +28,7 @@ class TokenText extends StatelessWidget {
           ),
         ));
       } else {
-        widgets.add(Opacity(opacity: 0.8, child: Text(token, style: parentTextStyle)));
+        widgets.add(Opacity(opacity: 0.5, child: Text(token, style: parentTextStyle)));
         widgets.add(separetor);
       }
     }

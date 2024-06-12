@@ -36,7 +36,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
   Widget build(BuildContext context) {
     return Center(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
         children: [
           const Spacer(),

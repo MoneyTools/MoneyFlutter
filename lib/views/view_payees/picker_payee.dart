@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/widgets/picker_edit_box.dart';
@@ -8,6 +9,8 @@ Widget pickerPayee({
   required final Function(Payee?) onSelected,
 }) {
   final List<String> options = Data().payees.getListSorted().map((element) => element.name.value).toList();
+  options.sort((a, b) => sortByString(a, b, true));
+
   String selectedName = itemSelected == null ? '' : itemSelected.name.value;
 
   return PickerEditBox(

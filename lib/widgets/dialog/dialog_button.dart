@@ -9,7 +9,7 @@ class DialogActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
+    return OutlinedButton(
       onPressed: onPressed,
       child: Text(text),
     );
@@ -17,8 +17,9 @@ class DialogActionButton extends StatelessWidget {
 }
 
 Widget dialogActionButtons(final List<Widget> actionsButtons) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.end,
+  return Wrap(
+    alignment: WrapAlignment.end,
+    spacing: 10,
     children: actionsButtons,
   );
 }
