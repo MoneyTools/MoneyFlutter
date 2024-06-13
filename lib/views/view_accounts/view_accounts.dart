@@ -9,7 +9,7 @@ import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/storage/import/import_transactions_from_text.dart';
+import 'package:money/storage/import/import_wizard.dart';
 import 'package:money/storage/preferences_helper.dart';
 import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
@@ -48,7 +48,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     onAddItem = () {};
 
     onAddTransaction = () {
-      showImportTransactions(context);
+      showImportTransactionsWizard(context);
     };
 
     pivots.add(

@@ -49,7 +49,7 @@ Widget buildAddTransactionsButton(final Function callback) {
     onPressed: () {
       callback();
     },
-    icon: const Icon(Icons.add_road),
+    icon: const Icon(Icons.post_add_outlined),
     tooltip: 'Add a new transactions',
   );
 }

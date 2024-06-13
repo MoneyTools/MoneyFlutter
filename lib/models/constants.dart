@@ -65,7 +65,6 @@ class Constants {
   static const int commandFileNew = 2000;
   static const int commandFileOpen = 2001;
   static const int commandFileLocation = 2002;
-  static const int commandImport = 2003;
   static const int commandFileSaveCsv = 2004;
   static const int commandFileSaveSql = 2005;
   static const int commandFileClose = 2006;

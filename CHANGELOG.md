@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.24] 2024-05-13
+
+### Added
+
+- New Import Transaction Wizard
+
 ## [version 1.8.23] 2024-05-12
 
 ### Added

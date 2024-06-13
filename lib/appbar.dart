@@ -5,6 +5,7 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
+import 'package:money/storage/import/import_wizard.dart';
 import 'package:money/views/view_settings.dart';
 import 'package:money/widgets/color_palette.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
@@ -17,7 +18,6 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   final void Function() onFileOpen;
   final void Function() onFileClose;
   final void Function() onShowFileLocation;
-  final void Function() onImport;
   final void Function() onSaveCsv;
   final void Function() onSaveSql;
 
@@ -27,7 +27,6 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
     required this.onFileOpen,
     required this.onFileClose,
     required this.onShowFileLocation,
-    required this.onImport,
     required this.onSaveCsv,
     required this.onSaveSql,
   });
@@ -105,11 +104,8 @@ class _MyAppBarState extends State<MyAppBar> {
     // Open
     addMenuItem(list, Constants.commandFileOpen, 'Open...', Icons.file_open_outlined);
 
-    // Import
-    addMenuItem(list, Constants.commandImport, 'Import...', Icons.cloud_download);
-
     // Add Transactions
-    addMenuItem(list, Constants.commandAddTransactions, 'Add transactions...', Icons.add_card);
+    addMenuItem(list, Constants.commandAddTransactions, 'Add transactions...', Icons.post_add_outlined);
 
     // File Location
     addMenuItem(list, Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined);
@@ -138,11 +134,8 @@ class _MyAppBarState extends State<MyAppBar> {
           case Constants.commandFileLocation:
             widget.onShowFileLocation();
 
-          case Constants.commandImport:
-            widget.onImport();
-
           case Constants.commandAddTransactions:
-            showImportTransactions(context);
+            showImportTransactionsWizard(context);
 
           case Constants.commandFileSaveCsv:
             widget.onSaveCsv();
@@ -266,7 +259,7 @@ class _MyAppBarState extends State<MyAppBar> {
   ) {
     switch (value) {
       case Constants.commandAddTransactions:
-        showImportTransactions(context);
+        showImportTransactionsFromTextInput(context);
       case Constants.commandSettings:
         showSettings(context);
       case Constants.commandIncludeClosedAccount:

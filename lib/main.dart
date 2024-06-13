@@ -14,9 +14,6 @@ import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/file_manager.dart';
-import 'package:money/storage/import/import_pdf.dart';
-import 'package:money/storage/import/import_qfx.dart';
-import 'package:money/storage/import/import_qif.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_accounts/view_accounts.dart';
 import 'package:money/views/view_aliases/view_aliases.dart';
@@ -189,7 +186,7 @@ class MainView extends StatelessWidget {
       KeyAction(
         LogicalKeyboardKey('t'.codeUnitAt(0)),
         'Add transactions',
-        () => showImportTransactions(context, ''),
+        () => showImportTransactionsFromTextInput(context, ''),
         isMetaPressed: true,
       ),
       KeyAction(
@@ -198,7 +195,7 @@ class MainView extends StatelessWidget {
         () async {
           Clipboard.getData('text/plain').then((final ClipboardData? value) {
             if (value != null) {
-              showImportTransactions(
+              showImportTransactionsFromTextInput(
                 context,
                 value.text ?? '',
               );
@@ -276,7 +273,6 @@ class MainView extends StatelessWidget {
               onFileOpen: onFileOpen,
               onFileClose: onFileClose,
               onShowFileLocation: onShowFileLocation,
-              onImport: onImport,
               onSaveCsv: Settings().onSaveToCsv,
               onSaveSql: Settings().onSaveToSql,
             )
@@ -361,20 +357,6 @@ class MainView extends StatelessWidget {
         }
       } catch (e) {
         debugLog(e.toString());
-      }
-    }
-  }
-
-  void onImport() async {
-    final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
-    if (pickerResult != null) {
-      switch (pickerResult.files.single.extension?.toLowerCase()) {
-        case 'qif':
-          importQIF(pickerResult.files.single.path.toString());
-        case 'qfx':
-          importQFX(pickerResult.files.single.path.toString(), Data());
-        case 'pdf':
-          importPDF(pickerResult.files.single.path.toString(), Data());
       }
     }
   }
