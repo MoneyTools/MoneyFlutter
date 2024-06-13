@@ -18,7 +18,7 @@ class PendingChanges extends StatefulWidget {
     adaptiveScreenSizeDialog(
       context: context,
       title: 'Pending Changes',
-      captionForClose: 'Cancel', // this will hide the close button
+      captionForClose: 'Close',
       child: const SizedBox(
         width: 600,
         height: 900,

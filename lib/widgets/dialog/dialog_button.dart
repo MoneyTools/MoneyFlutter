@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/constants.dart';
+import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/widgets.dart';
 
 class DialogActionButton extends StatelessWidget {
+  final IconData? icon;
   final String text;
   final VoidCallback onPressed;
 
-  const DialogActionButton({super.key, required this.text, required this.onPressed});
+  const DialogActionButton({
+    super.key,
+    required this.text,
+    this.icon,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
+    Widget child = icon == null
+        ? Text(text)
+        : IntrinsicWidth(
+            child: Row(
+              children: [Opacity(opacity: 0.5, child: Icon(icon)), gapSmall(), Text(text)],
+            ),
+          );
     return OutlinedButton(
       onPressed: onPressed,
-      child: Text(text),
+      child: child,
     );
   }
 }
@@ -19,7 +34,8 @@ class DialogActionButton extends StatelessWidget {
 Widget dialogActionButtons(final List<Widget> actionsButtons) {
   return Wrap(
     alignment: WrapAlignment.end,
-    spacing: 10,
+    spacing: SizeForPadding.medium,
+    runSpacing: SizeForPadding.medium,
     children: actionsButtons,
   );
 }

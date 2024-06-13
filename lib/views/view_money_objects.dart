@@ -368,23 +368,20 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final String question = moneyObjects.length == 1
         ? 'Are you sure you want to delete this $nameSingular?'
         : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
+    final content = moneyObjects.length == 1
+        ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
+        : Center(
+            child: Text('${getIntAsText(moneyObjects.length)} $namePlural', style: getTextTheme(context).displaySmall),
+          );
 
-    adaptiveScreenSizeDialog(
-      context: context,
-      title: title,
-      captionForClose: null, // this will hide the close button
-      child: DeleteConfirmationDialog(
-        question: question,
-        content: moneyObjects.length == 1
-            ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
-            : Center(
-                child:
-                    Text('${getIntAsText(moneyObjects.length)} $namePlural', style: getTextTheme(context).displaySmall),
-              ),
-        onConfirm: () {
-          Data().deleteItems(moneyObjects);
-        },
-      ),
+    showDeleteConfirmationDialog(
+      context,
+      title,
+      question,
+      content,
+      () {
+        Data().deleteItems(moneyObjects);
+      },
     );
   }
 

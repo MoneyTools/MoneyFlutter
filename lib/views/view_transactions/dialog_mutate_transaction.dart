@@ -3,7 +3,6 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
-import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/dialog/dialog_full_screen.dart';
 
@@ -46,6 +45,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   Widget build(final BuildContext context) {
     return AutoSizeDialog(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             child: SingleChildScrollView(
@@ -63,9 +63,8 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: getActionButtons(
+          dialogActionButtons(
+            getActionButtons(
               context: context,
               transaction: _transaction,
               editMode: isInEditingMode,
@@ -85,12 +84,6 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   }) {
     if (editMode) {
       return [
-        // if (dataWasModified)
-        //   DialogActionButton(
-        //       text: 'Discard',
-        //       onPressed: () {
-        //         Navigator.of(context).pop(false);
-        //       }),
         DialogActionButton(
             text: dataWasModified ? 'Apply' : 'Done',
             onPressed: () {
@@ -105,28 +98,34 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
 
     // Read only more
     return [
+      // Close
+      DialogActionButton(
+          text: 'Close',
+          onPressed: () {
+            Navigator.of(context).pop(false);
+          }),
       // Delete
       DialogActionButton(
+        icon: Icons.delete_outlined,
         text: 'Delete',
         onPressed: () {
-          adaptiveScreenSizeDialog(
-            context: context,
-            title: 'Delete',
-            child: DeleteConfirmationDialog(
-              question: 'Are you sure you want to delete this?',
-              content: Column(
-                children: transaction.buildWidgets(onEdit: null, compact: true),
-              ),
-              onConfirm: () {
-                Data().transactions.deleteItem(transaction);
-                Navigator.of(context).pop(false);
-              },
+          showDeleteConfirmationDialog(
+            context,
+            'Delete Transaction',
+            'Are you sure you want to delete this transaction?',
+            Column(
+              children: transaction.buildWidgets(onEdit: null, compact: true),
             ),
+            () {
+              Data().transactions.deleteItem(transaction);
+              Navigator.of(context).pop(false);
+            },
           );
         },
       ),
       // Duplicate
       DialogActionButton(
+        icon: Icons.copy_outlined,
         text: 'Duplicate',
         onPressed: () {
           _transaction = Transaction()
@@ -148,6 +147,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       ),
       // Edit
       DialogActionButton(
+        icon: Icons.edit_outlined,
         text: 'Edit',
         onPressed: () {
           transaction.stashValueBeforeEditing();
@@ -156,12 +156,6 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
           });
         },
       ),
-      // Close
-      DialogActionButton(
-          text: 'Done',
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          }),
     ];
   }
 

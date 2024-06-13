@@ -92,7 +92,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
                 widget.onUserChoiceChanged?.call(sortBy, sortAscending, uniqueId);
               });
             },
-            onTap: (final BuildContext context2, final int uniqueId) {
+            onLongPress: (final BuildContext context2, final int uniqueId) {
               final Transaction instance = findObjectById(uniqueId, transactions) as Transaction;
               showTransactionAndActions(
                 context: context2,

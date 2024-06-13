@@ -73,7 +73,10 @@ void adaptiveScreenSizeDialog({
   } else {
     // in modal always offer a close button
     if (captionForClose != null) {
-      actionButtons.add(
+      // Cancel and close are inserted on the left side of other buttons
+      // so place it first on the list
+      actionButtons.insert(
+        0,
         DialogActionButton(
           text: captionForClose,
           onPressed: () {

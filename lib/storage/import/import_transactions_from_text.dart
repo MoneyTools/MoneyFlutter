@@ -22,8 +22,34 @@ void showImportTransactionsFromTextInput(
 
   adaptiveScreenSizeDialog(
     context: context,
-    captionForClose: null, // this will hide the close button
     title: 'Import from text',
+    captionForClose: 'Cancel',
+    actionButtons: [
+      // Button - Import
+      DialogActionButton(
+          text: 'Import',
+          onPressed: () {
+            if (parser.isEmpty) {
+              messageBox(context, 'Nothing to import');
+            } else {
+              if (parser.containsErrors()) {
+                messageBox(context, 'Contains errors');
+              } else {
+                // Import
+                for (final triple in parser.lines) {
+                  addTransactionFromDateDescriptionAmount(
+                    account,
+                    triple.date.asDate(),
+                    triple.description.asString(),
+                    triple.amount.asAmount(),
+                  );
+                }
+                Data().updateAll();
+                Navigator.of(context).pop(false);
+              }
+            }
+          }),
+    ], // this will hide the close button
     child: Column(
       children: [
         gapLarge(),
@@ -39,44 +65,6 @@ void showImportTransactionsFromTextInput(
               parser.lines = newParser.lines;
             },
           ),
-        ),
-
-        // Action buttons
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // Button - Cancel
-            DialogActionButton(
-              text: 'Cancel',
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            // Button - Import
-            DialogActionButton(
-                text: 'Import',
-                onPressed: () {
-                  if (parser.isEmpty) {
-                    messageBox(context, 'Nothing to import');
-                  } else {
-                    if (parser.containsErrors()) {
-                      messageBox(context, 'Contains errors');
-                    } else {
-                      // Import
-                      for (final triple in parser.lines) {
-                        addTransactionFromDateDescriptionAmount(
-                          account,
-                          triple.date.asDate(),
-                          triple.description.asString(),
-                          triple.amount.asAmount(),
-                        );
-                      }
-                      Data().updateAll();
-                      Navigator.of(context).pop(false);
-                    }
-                  }
-                }),
-          ],
         ),
       ],
     ),

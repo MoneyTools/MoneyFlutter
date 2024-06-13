@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/storage/data/data.dart';
@@ -90,13 +91,13 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
 
     return Center(
       child: Wrap(
-        spacing: 21,
-        runSpacing: 21,
+        spacing: SizeForPadding.large,
+        runSpacing: SizeForPadding.large,
         children: [
           // Append
           _buildActionOffering(
             'Use this option to move "$from" as a child of category of "$to".',
-            ElevatedButton(
+            OutlinedButton(
               onPressed: () {
                 if (_categoryPicked == widget.categoryToMove) {
                   showSnackBar(context, 'No need to merge to itself, select a different payee');
@@ -113,7 +114,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
           // Merge
           _buildActionOffering(
             'Use this option to merge the transactions of "$from" in to "$to".',
-            ElevatedButton(
+            OutlinedButton(
               onPressed: () {
                 if (_categoryPicked == widget.categoryToMove) {
                   showSnackBar(context, 'No need to merge to itself, select a different category');
