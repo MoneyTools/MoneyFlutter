@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/views/view_rentals/rental_pnl.dart';
 import 'package:money/widgets/money_widget.dart';
@@ -39,7 +40,7 @@ class RentalPnLCard extends StatelessWidget {
                   onPressed: () {
                     copyToClipboardAndInformUser(context, pnl.toString());
                   },
-                  iconSize: 13,
+                  iconSize: SizeForIcon.small,
                   icon: const Icon(Icons.copy),
                 ),
               ],

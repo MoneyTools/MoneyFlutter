@@ -8,7 +8,7 @@ Widget gap(final double size) {
 }
 
 Widget gapSmall() {
-  return gap(4);
+  return gap(5);
 }
 
 Widget gapMedium() {
@@ -16,9 +16,9 @@ Widget gapMedium() {
 }
 
 Widget gapLarge() {
-  return gap(16);
+  return gap(21);
 }
 
 Widget gapHuge() {
-  return gap(64);
+  return gap(55);
 }

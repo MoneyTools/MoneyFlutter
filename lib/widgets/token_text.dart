@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/constants.dart';
 
 // ignore: must_be_immutable
 class TokenText extends StatelessWidget {
@@ -16,7 +17,7 @@ class TokenText extends StatelessWidget {
       padding: const EdgeInsets.only(right: 3),
       child: Text(':', style: TextStyle(color: getColorTheme(context).primary)),
     );
-    const parentTextStyle = TextStyle(fontSize: 13);
+    const parentTextStyle = TextStyle(fontSize: SizeForText.medium);
     final List<Widget> widgets = [];
 
     for (final String token in tokens) {

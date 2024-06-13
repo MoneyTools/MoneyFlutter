@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/categories/category.dart';
@@ -111,8 +112,8 @@ class ViewCashFlowState extends ViewWidgetState {
       children: [
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
-          runSpacing: 8,
-          spacing: 21,
+          runSpacing: SizeForPadding.medium,
+          spacing: SizeForPadding.large,
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('Cash Flow', style: getTextTheme(context).titleLarge, textAlign: TextAlign.start),

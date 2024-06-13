@@ -16,7 +16,7 @@ class AppCaption extends StatelessWidget {
       children: <Widget>[
         Row(children: [
           const Text('MyMoney', textAlign: TextAlign.left),
-          const SizedBox(width: 8),
+          gapMedium(),
           BadgePendingChanges(
             itemsAdded: Settings().trackMutations.added,
             itemsChanged: Settings().trackMutations.changed,

@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
@@ -356,8 +357,8 @@ class MoneyObjects<T> {
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Wrap(
-                spacing: 13,
-                runSpacing: 13,
+                spacing: SizeForPadding.large,
+                runSpacing: SizeForPadding.large,
                 children: diffWidgets,
               ),
             ),

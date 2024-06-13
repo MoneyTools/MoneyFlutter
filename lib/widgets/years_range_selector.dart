@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/constants.dart';
 
 class YearRangeSlider extends StatefulWidget {
   final int minYear;
@@ -133,7 +134,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

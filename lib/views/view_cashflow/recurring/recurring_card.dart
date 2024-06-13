@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
@@ -156,7 +157,7 @@ class RecurringCard extends StatelessWidget {
         children: [
           Container(
             height: 55,
-            margin: const EdgeInsets.symmetric(vertical: 8),
+            margin: const EdgeInsets.symmetric(vertical: SizeForPadding.medium),
             child: MiniTimelineTwelveMonths(
               values: payment.averagePerMonths,
               color: getColorTheme(context).primary,

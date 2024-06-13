@@ -280,9 +280,7 @@ class Category extends MoneyObject {
         rightBottomAsWidget: Row(
           children: <Widget>[
             Text(getTypeAsText()),
-            const SizedBox(
-              width: 8,
-            ),
+            gapMedium(),
             getColorWidget(),
           ],
         ),

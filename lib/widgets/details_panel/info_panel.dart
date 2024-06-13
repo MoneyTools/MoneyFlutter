@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/widgets/details_panel/info_panel_header.dart';
 import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
 
@@ -45,7 +46,7 @@ class InfoPanel extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      margin: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
       decoration: BoxDecoration(
           color: getColorTheme(context).surfaceContainerHighest,
           border: Border(

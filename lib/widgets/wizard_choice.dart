@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/models/constants.dart';
 
 class WizardChoice extends StatelessWidget {
   final String title;
@@ -29,7 +30,7 @@ class WizardChoice extends StatelessWidget {
           title: Text(title),
           titleTextStyle: const TextStyle(fontSize: 20),
           subtitle: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
+            padding: const EdgeInsets.only(top: SizeForPadding.medium),
             child: Text(description),
           ),
           trailing: const Icon(Icons.arrow_forward_ios),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/constants.dart';
 
 class Box extends StatelessWidget {
   final String title;
@@ -26,7 +27,7 @@ class Box extends StatelessWidget {
     EdgeInsetsGeometry? adjustedMargin = margin == null ? null : EdgeInsets.all(margin!);
     // adjust the margin to account for the title bleeding out of the box
     if (title.isNotEmpty) {
-      const increaseTopMarginBy = EdgeInsets.only(top: 13);
+      const increaseTopMarginBy = EdgeInsets.only(top: SizeForPadding.large);
       if (adjustedMargin == null) {
         adjustedMargin = increaseTopMarginBy;
       } else {
@@ -59,12 +60,14 @@ class Box extends StatelessWidget {
         ),
         if (title.isNotEmpty)
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 13),
+            padding: const EdgeInsets.symmetric(
+              horizontal: SizeForPadding.large,
+            ),
             child: Card(
               elevation: 1,
               shadowColor: Colors.transparent,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
                 child: Text(
                   title,
                   style: getTextTheme(context).titleSmall,
