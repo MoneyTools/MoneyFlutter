@@ -7,7 +7,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
 import 'package:money/storage/preferences_helper.dart';
-import 'package:money/widgets/message_box.dart';
+import 'package:money/widgets/snack_bar.dart';
 
 enum CashflowViewAs {
   sankey,
@@ -214,7 +214,7 @@ class Settings extends ChangeNotifier {
           if (success) {
             Data().assessMutationsCountOfAllModels();
           } else {
-            DialogService().showMessageBox('Error Saving', message);
+            SnackBarService.showSnackBar(autoDismiss: false, message: message);
           }
         });
 

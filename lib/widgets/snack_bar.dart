@@ -9,7 +9,8 @@ class SnackBarService {
   }) {
     scaffoldKey.currentState?.showSnackBar(
       SnackBar(
-        content: Text(message),
+        content: SelectableText(message),
+        duration: autoDismiss ? const Duration(milliseconds: 4000) : const Duration(minutes: 100),
         showCloseIcon: !autoDismiss,
       ),
     );
