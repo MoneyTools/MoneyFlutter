@@ -18,3 +18,7 @@ Widget gapMedium() {
 Widget gapLarge() {
   return gap(16);
 }
+
+Widget gapHuge() {
+  return gap(64);
+}
