@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/widgets/details_panel/info_panel_header.dart';
-import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
+import 'package:money/widgets/info_panel/info_panel_header.dart';
+import 'package:money/widgets/info_panel/info_panel_views_enum.dart';
 
 class InfoPanel extends StatelessWidget {
   final bool isExpanded;

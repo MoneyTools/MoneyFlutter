@@ -16,7 +16,7 @@ import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_t
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/chart.dart';
-import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
+import 'package:money/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/three_part_label.dart';
 

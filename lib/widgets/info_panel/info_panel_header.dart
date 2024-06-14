@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/widgets/details_panel/info_panel_views_enum.dart';
+import 'package:money/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/gaps.dart';
 
 class InfoPanelHeader extends StatelessWidget {
