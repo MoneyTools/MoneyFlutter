@@ -216,12 +216,12 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Amounts
   double geSenderTransactionAmount() {
-    return source.amount.value.amount;
+    return source.amount.value.toDouble();
   }
 
   double geReceiverTransactionAmount() {
     if (related != null) {
-      return related!.amount.value.amount;
+      return related!.amount.value.toDouble();
     }
     return 0.00;
   }

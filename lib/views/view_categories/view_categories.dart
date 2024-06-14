@@ -85,7 +85,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     double total = 0.0;
     getList().forEach((final Category category) {
       if (types.isEmpty || (category).type.value == types.first) {
-        total += category.sum.value.amount;
+        total += category.sum.value.toDouble();
       }
     });
     return total;

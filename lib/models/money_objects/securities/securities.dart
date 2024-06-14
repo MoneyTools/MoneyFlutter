@@ -35,7 +35,7 @@ class Securities extends MoneyObjects<Security> {
       security.numberOfTrades.value = list.length;
       final cumulative = Investments.getProfitAndShares(list);
       security.outstandingShares.value = cumulative.quantity;
-      security.balance.value.amount = cumulative.amount;
+      security.balance.value.setAmount(cumulative.amount);
     }
   }
 

@@ -276,13 +276,13 @@ class Data {
     Transaction? relatedTransaction = Data().transactions.findExistingTransactionForAccount(
           accountId: destinationAccount.uniqueId,
           dateTime: transactionSource.dateTime.value!,
-          amount: -transactionSource.amount.value.amount,
+          amount: -transactionSource.amount.value.toDouble(),
         );
     // ignore: prefer_conditional_assignment
     if (relatedTransaction == null) {
       relatedTransaction = Transaction()
         ..accountId.value = destinationAccount.uniqueId
-        ..amount.value.amount = (transactionSource.amount.value.amount * -1) // flip the sign
+        ..amount.value.setAmount((transactionSource.amount.value.toDouble() * -1)) // flip the sign
         ..categoryId.value = transactionSource.categoryId.value
         ..dateTime.value = transactionSource.dateTime.value
         ..fitid.value = transactionSource.fitid.value
@@ -323,7 +323,7 @@ class Data {
     if (relatedTransaction != null) {
       final Transfer transfer;
 
-      if (transactionSource.amount.value.amount < 0) {
+      if (transactionSource.amount.value.toDouble() < 0) {
         // transfer TO
         transfer = Transfer(id: 0, source: transactionSource, related: relatedTransaction, isOrphan: false);
       } else {

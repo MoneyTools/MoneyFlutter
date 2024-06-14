@@ -9,7 +9,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     if (selectedIds.isEmpty) {
       final List<PairXY> list = <PairXY>[];
       for (final RentBuilding entry in getList()) {
-        list.add(PairXY(entry.name.value, entry.profit.value.amount));
+        list.add(PairXY(entry.name.value, entry.profit.value.toDouble()));
       }
       return Chart(
         list: list,

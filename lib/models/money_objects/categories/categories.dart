@@ -310,10 +310,10 @@ class Categories extends MoneyObjects<Category> {
     // reset to zero all counters and sums
     for (final Category category in iterableList()) {
       category.transactionCount.value = 0;
-      category.sum.value.amount = 0;
+      category.sum.value.setAmount(0);
 
       category.transactionCountRollup.value = 0;
-      category.sumRollup.value.amount = 0;
+      category.sumRollup.value.setAmount(0);
     }
 
     // first tally the direct category transactions
@@ -321,15 +321,15 @@ class Categories extends MoneyObjects<Category> {
       final Category? item = get(t.categoryId.value);
       if (item != null) {
         item.transactionCount.value++;
-        item.sum.value.amount += t.amount.value.amount;
+        item.sum.value += t.amount.value.toDouble();
         item.transactionCountRollup.value++;
-        item.sumRollup.value.amount += t.amount.value.amount;
+        item.sumRollup.value += t.amount.value.toDouble();
 
         List<Category> ancestors = [];
         item.getAncestors(ancestors);
         for (final ancestorCategory in ancestors) {
           ancestorCategory.transactionCountRollup.value++;
-          ancestorCategory.sumRollup.value.amount += t.amount.value.amount;
+          ancestorCategory.sumRollup.value += t.amount.value;
         }
       }
     }

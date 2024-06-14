@@ -36,13 +36,13 @@ class MoneyWidget extends StatelessWidget {
     return SelectableText(
       maxLines: 1,
       Currency.getAmountAsStringUsingCurrency(
-        isAlmostZero(amountModel.amount) ? 0.00 : amountModel.amount,
+        isAlmostZero((amountModel.toDouble())) ? 0.00 : amountModel.toDouble(),
         iso4217code: amountModel.iso4217,
       ),
       textAlign: TextAlign.right,
       style: TextStyle(
         fontFamily: 'RobotoMono',
-        color: getTextColorToUse(amountModel.amount, amountModel.autoColor),
+        color: getTextColorToUse(amountModel.toDouble(), amountModel.autoColor),
         fontSize: asTile ? getTextTheme(context).titleMedium!.fontSize : null,
       ),
     );

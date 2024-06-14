@@ -129,7 +129,8 @@ class RentBuilding extends MoneyObject {
     serializeName: 'PurchasedPrice',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value.amount,
+    getValueForSerialization: (final MoneyObject instance) =>
+        (instance as RentBuilding).purchasedPrice.value.toDouble(),
   );
 
   /// LandValue
@@ -139,7 +140,7 @@ class RentBuilding extends MoneyObject {
     name: 'LandValue',
     serializeName: 'LandValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).landValue.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).landValue.value.toDouble(),
     setValue: (final MoneyObject instance, final dynamic value) =>
         (instance as RentBuilding).landValue.setAmount(value),
   );
@@ -151,7 +152,8 @@ class RentBuilding extends MoneyObject {
     name: 'EstimatedValue',
     serializeName: 'EstimatedValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value.amount,
+    getValueForSerialization: (final MoneyObject instance) =>
+        (instance as RentBuilding).estimatedValue.value.toDouble(),
     setValue: (final MoneyObject instance, final dynamic value) =>
         (instance as RentBuilding).estimatedValue.setAmount(value),
   );
@@ -432,10 +434,10 @@ class RentBuilding extends MoneyObject {
 
       if (t.isSplit) {
         for (final split in t.splits) {
-          cumulatePnLValues(pnl, split.categoryId.value, split.amount.value.amount);
+          cumulatePnLValues(pnl, split.categoryId.value, split.amount.value.toDouble());
         }
       } else {
-        cumulatePnLValues(pnl, transactionCategoryId, t.amount.value.amount);
+        cumulatePnLValues(pnl, transactionCategoryId, t.amount.value.toDouble());
       }
     }
 
@@ -526,9 +528,9 @@ class RentBuilding extends MoneyObject {
     instance.name.value = row.getString('Name');
     instance.address.value = row.getString('Address');
     instance.purchasedDate.value = row.getDate('PurchasedDate', defaultIfNotFound: DateTime.now());
-    instance.purchasedPrice.value.amount = row.getDouble('PurchasedPrice');
-    instance.landValue.value.amount = row.getDouble('LandValue');
-    instance.estimatedValue.value.amount = row.getDouble('EstimatedValue');
+    instance.purchasedPrice.value.setAmount(row.getDouble('PurchasedPrice'));
+    instance.landValue.value.setAmount(row.getDouble('LandValue'));
+    instance.estimatedValue.value.setAmount(row.getDouble('EstimatedValue'));
     instance.ownershipName1.value = row.getString('OwnershipName1');
     instance.ownershipName2.value = row.getString('OwnershipName2');
     instance.ownershipPercentage1.value = row.getDouble('OwnershipPercentage1');

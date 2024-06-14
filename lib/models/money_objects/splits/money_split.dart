@@ -125,7 +125,7 @@ class MoneySplit extends MoneyObject {
     this.transactionId.value = transactionId;
     this.categoryId.value = categoryId;
     this.payeeId.value = payeeId;
-    this.amount.value.amount = amount;
+    this.amount.value.setAmount(amount);
     this.transferId.value = transferId;
     this.memo.value = memo;
     this.flags.value = flags;

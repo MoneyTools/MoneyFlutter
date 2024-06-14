@@ -72,7 +72,7 @@ class Investment extends MoneyObject {
     name: 'Price',
     serializeName: 'UnitPrice',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value.toDouble(),
   );
 
   /// 3    Units           money   0                    0
@@ -89,7 +89,7 @@ class Investment extends MoneyObject {
     name: 'Commission',
     serializeName: 'Commission',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).commission.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value.toDouble(),
   );
 
   /// 5    MarkUpDown      money   0                    0
@@ -97,8 +97,8 @@ class Investment extends MoneyObject {
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value.amount,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.amount,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
   );
 
   /// 6    Taxes           money   0                    0
@@ -107,7 +107,7 @@ class Investment extends MoneyObject {
     serializeName: 'Taxes',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxes.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value.toDouble(),
   );
 
   /// 7    Fees            money   0                    0
@@ -115,7 +115,7 @@ class Investment extends MoneyObject {
     name: 'Fees',
     serializeName: 'Fees',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fees.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value.toDouble(),
   );
 
   /// 8    Load            money   0                    0
@@ -123,7 +123,7 @@ class Investment extends MoneyObject {
     name: 'Load',
     serializeName: 'Load',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).load.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value.toDouble(),
   );
 
   /// 9    InvestmentType  INT     1                    0
@@ -167,7 +167,7 @@ class Investment extends MoneyObject {
     serializeName: 'Withholding',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).withholding.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value.toDouble(),
   );
 
   /// --------------------------------------------
@@ -181,14 +181,14 @@ class Investment extends MoneyObject {
 
   double get originalCostBasis {
     // looking for the original un-split cost basis at the date of this transaction.
-    double proceeds = this.unitPrice.value.amount * this.units.value;
+    double proceeds = this.unitPrice.value.toDouble() * this.units.value;
 
-    if (this.transactionInstance!.amount.value.amount != 0) {
+    if (this.transactionInstance!.amount.value.toDouble() != 0) {
       // We may have paid more for the stock than "price" in a buy transaction because of brokerage fees and
       // this can be included in the cost basis.  We may have also received less than "price" in a sale
       // transaction, and that can also reduce our capital gain, so we use the transaction amount if we
       // have one.
-      return this.transactionInstance!.amount.value.amount.abs();
+      return this.transactionInstance!.amount.value.toDouble().abs();
     }
 
     // But if the sale proceeds were not recorded for some reason, then we fall back on the proceeds.
@@ -239,15 +239,15 @@ class Investment extends MoneyObject {
       case InvestmentType.buy:
         // Commission adds to the cost
         cumulative.quantity += this.units.value;
-        cumulative.amount = this.units.value * this.unitPrice.value.amount;
-        cumulative.amount += this.commission.value.amount;
+        cumulative.amount = this.units.value * this.unitPrice.value.toDouble();
+        cumulative.amount += this.commission.value.toDouble();
 
       // case InvestmentType.remove:
       case InvestmentType.sell:
         // commission reduce the revenue
         cumulative.quantity -= this.units.value;
-        cumulative.amount = this.units.value * this.unitPrice.value.amount;
-        cumulative.amount -= this.commission.value.amount;
+        cumulative.amount = this.units.value * this.unitPrice.value.toDouble();
+        cumulative.amount -= this.commission.value.toDouble();
 
       default:
       //
@@ -278,17 +278,17 @@ class Investment extends MoneyObject {
   }) {
     this.id.value = id;
     this.security.value = security;
-    this.unitPrice.value.amount = unitPrice;
+    this.unitPrice.value.setAmount(unitPrice);
     this.units.value = units;
-    this.commission.value.amount = commission;
-    this.markUpDown.value.amount = markUpDown;
-    this.taxes.value.amount = taxes;
-    this.fees.value.amount = fees;
-    this.load.value.amount = load;
+    this.commission.value.setAmount(commission);
+    this.markUpDown.value.setAmount(markUpDown);
+    this.taxes.value.setAmount(taxes);
+    this.fees.value.setAmount(fees);
+    this.load.value.setAmount(load);
     this.investmentType.value = investmentType;
     this.tradeType.value = tradeType;
     this.taxExempt.value = taxExempt;
-    this.withholding.value.amount = withholding;
+    this.withholding.value.setAmount(withholding);
   }
 
   // Fields for this instance

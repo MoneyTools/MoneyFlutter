@@ -96,7 +96,7 @@ class Accounts extends MoneyObjects<Account> {
         }
 
         account.count.value++;
-        account.balance += t.amount.value.amount;
+        account.balance += t.amount.value.toDouble();
 
         final int yearOfTheTransaction = t.dateTime.value!.year;
 
@@ -142,7 +142,7 @@ class Accounts extends MoneyObjects<Account> {
       final LoanPayment? latestPayment = getAccountLoanPayments(account).lastOrNull;
       if (latestPayment != null) {
         account.updatedOn.value = latestPayment.date.value;
-        account.balance = latestPayment.balance.value.amount;
+        account.balance = latestPayment.balance.value.toDouble();
       }
     }
   }

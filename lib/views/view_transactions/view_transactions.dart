@@ -48,7 +48,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         text2: getIntAsText(Data()
             .transactions
             .iterableList()
-            .where((final Transaction element) => element.amount.value.amount > 0)
+            .where((final Transaction element) => element.amount.value.toDouble() > 0)
             .length)));
     pivots.add(ThreePartLabel(
         text1: 'Expenses',
@@ -57,7 +57,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         text2: getIntAsText(Data()
             .transactions
             .iterableList()
-            .where((final Transaction element) => element.amount.value.amount < 0)
+            .where((final Transaction element) => element.amount.value.toDouble() < 0)
             .length)));
     pivots.add(ThreePartLabel(
         text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.iterableList().length)));
@@ -173,7 +173,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       double runningBalance = 0.0;
 
       for (Transaction transaction in list) {
-        runningBalance += transaction.amount.value.amount;
+        runningBalance += transaction.amount.value.toDouble();
         transaction.balance = runningBalance;
       }
       balanceDone = true;
@@ -188,12 +188,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
     // Expenses
     if (_selectedPivot[1]) {
-      return transaction.amount.value.amount < 0;
+      return transaction.amount.value.toDouble() < 0;
     }
 
     // Incomes
     if (_selectedPivot[0]) {
-      return transaction.amount.value.amount > 0;
+      return transaction.amount.value.toDouble() > 0;
     }
     return false;
   }
@@ -236,7 +236,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       transaction;
 
       if (timePeriod.isBetweenEqual(transaction.dateTime.value)) {
-        final num value = transaction.amount.value.amount;
+        final num value = transaction.amount.value.toDouble();
 
         final DateTime date = transaction.dateTime.value!;
         // Format the date as year-month string (e.g., '2023-11')

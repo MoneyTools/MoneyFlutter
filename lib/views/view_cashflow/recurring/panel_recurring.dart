@@ -100,8 +100,8 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
 
     // Step 1: Group transactions by payeeId and record transaction months
     for (final transaction in transactions.where((final t) =>
-        (isIncomeTransaction && t.amount.value.amount > 0) ||
-        (isIncomeTransaction == false && t.amount.value.amount <= 0))) {
+        (isIncomeTransaction && t.amount.value.toDouble() > 0) ||
+        (isIncomeTransaction == false && t.amount.value.toDouble() <= 0))) {
       int payeeId = transaction.payee.value;
 
       groupTransactionsByPayeeId.cumulate(payeeId, transaction);

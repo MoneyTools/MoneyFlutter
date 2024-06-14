@@ -72,7 +72,7 @@ class Security extends MoneyObject {
     name: 'Price',
     serializeName: 'Price',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).price.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value.toDouble(),
   );
 
   // 4
@@ -80,7 +80,7 @@ class Security extends MoneyObject {
     name: 'Last Price',
     serializeName: 'LastPrice',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).lastPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value.toDouble(),
   );
 
   // 5
@@ -151,8 +151,8 @@ class Security extends MoneyObject {
     this.id.value = id;
     this.name.value = name;
     this.symbol.value = symbol;
-    this.price.value.amount = price;
-    this.lastPrice.value.amount = lastPrice;
+    this.price.value.setAmount(price);
+    this.lastPrice.value.setAmount(lastPrice);
     this.cuspid.value = cuspid;
     this.securityType.value = securityType;
     this.taxable.value = taxable;

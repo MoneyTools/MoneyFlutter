@@ -74,7 +74,7 @@ class LoanPayment extends MoneyObject {
     name: 'Principal',
     serializeName: 'Principal',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value.toDouble(),
   );
 
   /// Interest
@@ -83,7 +83,7 @@ class LoanPayment extends MoneyObject {
     name: 'Interest',
     serializeName: 'Interest',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value.toDouble(),
   );
 
   // 5
@@ -113,7 +113,7 @@ class LoanPayment extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).reference.value,
   );
 
-  double get _totalPrincipalAndInterest => this.principal.value.amount + this.interest.value.amount;
+  double get _totalPrincipalAndInterest => this.principal.value.toDouble() + this.interest.value.toDouble();
 
   FieldPercentage rate = FieldPercentage(
     name: 'Rate %',
@@ -122,13 +122,13 @@ class LoanPayment extends MoneyObject {
   );
 
   double getRate() {
-    double previouseBalance = this.balance.value.amount - this.principal.value.amount;
+    double previouseBalance = this.balance.value.toDouble() - this.principal.value.toDouble();
     if (previouseBalance == 0) {
       return 0.00;
     }
 
     // Calculate the monthly interest rate
-    double annualInterestRate = (this.interest.value.amount * 12) // Convert to annual interest rate
+    double annualInterestRate = (this.interest.value.toDouble() * 12) // Convert to annual interest rate
         /
         previouseBalance;
 
@@ -137,8 +137,8 @@ class LoanPayment extends MoneyObject {
 
   FieldMoney balance = FieldMoney(
     name: 'Balance',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).balance.value.amount,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).balance.value.amount,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).balance.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).balance.value.toDouble(),
     importance: 99,
   );
 
@@ -156,8 +156,8 @@ class LoanPayment extends MoneyObject {
     accountInstance = Data().accounts.get(this.accountId.value);
     this.date.value = date;
     this.memo.value = memo;
-    this.principal.value.amount = principal;
-    this.interest.value.amount = interest;
+    this.principal.value.setAmount(principal);
+    this.interest.value.setAmount(interest);
     this.reference.value = reference;
 
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(

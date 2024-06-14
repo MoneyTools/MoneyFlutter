@@ -66,23 +66,23 @@ class PanelSanKey extends StatelessWidget {
           case CategoryType.income:
           case CategoryType.saving:
           case CategoryType.investment:
-            totalIncomes += element.amount.value.amount;
+            totalIncomes += element.amount.value.toDouble();
 
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfIncomes[topCategory];
             mapValue ??= 0;
-            mapOfIncomes[topCategory] = mapValue + element.amount.value.amount;
+            mapOfIncomes[topCategory] = mapValue + element.amount.value.toDouble();
             break;
           case CategoryType.expense:
           case CategoryType.recurringExpense:
-            totalExpenses += element.amount.value.amount;
+            totalExpenses += element.amount.value.toDouble();
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfExpenses[topCategory];
             mapValue ??= 0;
-            mapOfExpenses[topCategory] = mapValue + element.amount.value.amount;
+            mapOfExpenses[topCategory] = mapValue + element.amount.value.toDouble();
             break;
           default:
-            totalNones += element.amount.value.amount;
+            totalNones += element.amount.value.toDouble();
             break;
         }
       }

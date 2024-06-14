@@ -172,7 +172,7 @@ class Transaction extends MoneyObject {
           choice: (instance as Transaction).transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.payee.value),
           account: instance.transferInstance?.getReceiverAccount(),
-          amount: instance.amount.value.amount,
+          amount: instance.amount.value.toDouble(),
           onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
             switch (choice) {
               case TransactionFlavor.payee:
@@ -324,12 +324,11 @@ class Transaction extends MoneyObject {
     name: columnIdAmount,
     serializeName: 'Amount',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).amount.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.amount,
-    setValue: (final MoneyObject instance, dynamic newValue) {
-      (instance as Transaction).amount.value.amount = attemptToGetDoubleFromText(newValue as String) ?? 0.00;
-    },
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.toDouble(),
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).amount.value.setAmount(newValue),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).amount.value.amount, (b as Transaction).amount.value.amount, ascending),
+        sortByValue((a as Transaction).amount.value.toDouble(), (b as Transaction).amount.value.toDouble(), ascending),
   );
 
   /// Sales Tax
@@ -340,9 +339,9 @@ class Transaction extends MoneyObject {
     serializeName: 'SalesTax',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.amount,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).salesTax.value.amount, (b as Transaction).salesTax.value.amount, ascending),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.toDouble(),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+        (a as Transaction).salesTax.value.toDouble(), (b as Transaction).salesTax.value.toDouble(), ascending),
   );
 
   /// Transfer Split
@@ -382,10 +381,10 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-        amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.amount),
+        amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.toDouble()),
         iso4217: Constants.defaultCurrency),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).amount.value.amount, (b as Transaction).amount.value.amount, ascending),
+        sortByValue((a as Transaction).amount.value.toDouble(), (b as Transaction).amount.value.toDouble(), ascending),
   );
 
   /// Balance native
@@ -517,7 +516,7 @@ class Transaction extends MoneyObject {
 
   String getPayeeOrTransferCaption() {
     Investment? investment = investmentInstance;
-    double amount = this.amount.value.amount;
+    double amount = this.amount.value.toDouble();
 
     bool isFrom = false;
     if (transferInstance != null) {
@@ -607,9 +606,9 @@ class Transaction extends MoneyObject {
     t.flags.value = json.getInt('Flags');
 
 // 14 Amount
-    t.amount.value.amount = json.getDouble('Amount');
+    t.amount.value.setAmount(json.getDouble('Amount'));
 // 15 Sales Tax
-    t.salesTax.value.amount = json.getDouble('SalesTax');
+    t.salesTax.value.setAmount(json.getDouble('SalesTax'));
 // 16 Transfer Split
     t.transferSplit.value = json.getInt('TransferSplit', -1);
 // 17 Merge Date

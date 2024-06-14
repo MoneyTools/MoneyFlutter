@@ -52,8 +52,8 @@ class Transactions extends MoneyObjects<Transaction> {
     return iterableList(includeDeleted: true).where((element) =>
         isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
         ((incomesOrExpenses == null ||
-            (incomesOrExpenses == true && element.amount.value.amount > 0) ||
-            (incomesOrExpenses == false && element.amount.value.amount < 0))));
+            (incomesOrExpenses == true && element.amount.value.toDouble() > 0) ||
+            (incomesOrExpenses == false && element.amount.value.toDouble() < 0))));
   }
 
   static List<Transaction> flatTransactions(final Iterable<Transaction> transactions) {
@@ -80,7 +80,7 @@ class Transactions extends MoneyObjects<Transaction> {
     List<Pair<int, double>> timeAndAmounts = [];
     for (final t in transactions) {
       int oneDaySlot = t.dateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
-      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.amount.value.amount));
+      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.amount.value.toDouble()));
     }
     // sort by date time
     timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
@@ -211,7 +211,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
     return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
-      if (transaction.amount.value.amount == amount) {
+      if (transaction.amount.value.toDouble() == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&
             transaction.dateTime.value?.month == dateTime.month &&
             transaction.dateTime.value?.day == dateTime.day) {
@@ -229,7 +229,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     // TODO - make this more precises, at the moment we only match amount and date YYYY,MM,DD
     return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
-      if (transaction.accountId.value == accountId && transaction.amount.value.amount == amount) {
+      if (transaction.accountId.value == accountId && transaction.amount.value.toDouble() == amount) {
         if (transaction.dateTime.value?.year == dateTime.year &&
             transaction.dateTime.value?.month == dateTime.month &&
             transaction.dateTime.value?.day == dateTime.day) {

@@ -242,7 +242,7 @@ class Field<T> {
   int Function(MoneyObject, MoneyObject, bool)? sort;
 
   setAmount(final dynamic newValue) {
-    (this as FieldMoney).value.setAmountValue(newValue);
+    (this as FieldMoney).value.setAmount(newValue);
   }
 
   Field({

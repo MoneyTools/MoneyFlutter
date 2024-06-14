@@ -164,7 +164,7 @@ class Category extends MoneyObject {
     name: 'Budget',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budget.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value.toDouble(),
   );
 
   /// Budget Balance
@@ -174,7 +174,7 @@ class Category extends MoneyObject {
     name: 'BudgetBalance',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value.toDouble(),
   );
 
   /// 8|Frequency|INT|0||0
@@ -256,8 +256,8 @@ class Category extends MoneyObject {
     this.description.value = description;
     this.color.value = color;
     this.type.value = type;
-    this.budget.value.amount = budget;
-    this.budgetBalance.value.amount = budgetBalance;
+    this.budget.value.setAmount(budget);
+    this.budgetBalance.value.setAmount(budgetBalance);
     this.frequency.value = frequency;
     this.taxRefNum.value = taxRefNum;
 

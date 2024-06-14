@@ -39,14 +39,14 @@ class RecurringPayment {
     averagePerMonths = List.generate(12, (index) => Pair<int, double>(0, 0));
 
     for (final transaction in transactions) {
-      total += transaction.amount.value.amount;
+      total += transaction.amount.value.toDouble();
       dateRangeFound.inflate(transaction.dateTime.value);
 
       /// Cumulate by [PayeeId].[month].[Sum]
       payeeIdMonthAndSums.cumulate(
         payeeId,
         transaction.dateTime.value!.month,
-        transaction.amount.value.amount,
+        transaction.amount.value.toDouble(),
       );
 
       /// Rolling average per Month
@@ -54,16 +54,16 @@ class RecurringPayment {
       final Pair<int, double> pair = averagePerMonths[transactionMonth];
       if (pair.first == 0) {
         // first time
-        averagePerMonths[transactionMonth] = Pair<int, double>(1, transaction.amount.value.amount);
+        averagePerMonths[transactionMonth] = Pair<int, double>(1, transaction.amount.value.toDouble());
       } else {
         averagePerMonths[transactionMonth] =
-            Pair<int, double>(pair.first + 1, averageTwoNumbers(pair.second, transaction.amount.value.amount));
+            Pair<int, double>(pair.first + 1, averageTwoNumbers(pair.second, transaction.amount.value.toDouble()));
       }
 
       if (!payeeIdCategoryIdsAndSums.containsKey(payeeId)) {
         payeeIdCategoryIdsAndSums[payeeId] = AccumulatorSum<int, double>();
       }
-      payeeIdCategoryIdsAndSums[payeeId]!.cumulate(transaction.categoryId.value, transaction.amount.value.amount);
+      payeeIdCategoryIdsAndSums[payeeId]!.cumulate(transaction.categoryId.value, transaction.amount.value.toDouble());
     }
 
     // sum per month

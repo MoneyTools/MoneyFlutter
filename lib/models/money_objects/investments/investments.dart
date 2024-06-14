@@ -34,7 +34,7 @@ class Investments extends MoneyObjects<Investment> {
     double runningBalance = 0;
     for (final investment in investments) {
       runningBalance += investment.finalAmount.amount;
-      investment.runningBalance.value.amount = runningBalance;
+      investment.runningBalance.value.setAmount(runningBalance);
     }
   }
 

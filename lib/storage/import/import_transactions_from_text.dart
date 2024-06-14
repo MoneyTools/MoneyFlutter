@@ -85,7 +85,7 @@ void addTransactionFromDateDescriptionAmount(
   t.dateTime.value = date;
   t.payee.value = payee == null ? -1 : payee.id.value;
   t.memo.value = description;
-  t.amount.value.amount = amount;
+  t.amount.value.setAmount(amount);
 
   Data().transactions.appendNewMoneyObject(t, fireNotification: false);
 }
