@@ -88,6 +88,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
   @override
   Widget build(final BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Expanded(
           child: SingleChildScrollView(
