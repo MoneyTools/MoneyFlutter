@@ -74,7 +74,7 @@ class LoanPayment extends MoneyObject {
     name: 'Principal',
     serializeName: 'Principal',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value.amount,
   );
 
   /// Interest
@@ -83,7 +83,7 @@ class LoanPayment extends MoneyObject {
     name: 'Interest',
     serializeName: 'Interest',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value.amount,
   );
 
   // 5
@@ -136,7 +136,7 @@ class LoanPayment extends MoneyObject {
   }
 
   FieldMoney balance = FieldMoney(
-    name: 'xxx',
+    name: 'Balance',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).balance.value.amount,
     getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).balance.value.amount,
     importance: 99,

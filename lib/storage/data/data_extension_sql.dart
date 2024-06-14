@@ -10,7 +10,7 @@ extension DataFromSql on Data {
       final MyDatabase db = MyDatabase();
 
       await db.load(filePathToLoad, fileBytes);
-
+      // Load
       accountAliases.loadFromJson(db.select('SELECT * FROM AccountAliases'));
       accounts.loadFromJson(db.select('SELECT * FROM Accounts'));
       aliases.loadFromJson(db.select('SELECT * FROM Aliases'));
@@ -23,12 +23,12 @@ extension DataFromSql on Data {
       rentBuildings.loadFromJson(db.select('SELECT * FROM RentBuildings'));
       rentUnits.loadFromJson(db.select('SELECT * FROM RentUnits'));
       securities.loadFromJson(db.select('SELECT * FROM Securities'));
+      stockSplits.loadFromJson(db.select('SELECT * FROM StockSplits'));
+
       transactions.loadFromJson(db.select('SELECT * FROM Transactions'));
       transactionExtras.loadFromJson(db.select('SELECT * FROM TransactionExtras'));
-
       // Must come after Transactions are loaded
       splits.loadFromJson(db.select('SELECT * FROM Splits'));
-      stockSplits.loadFromJson(db.select('SELECT * FROM StockSplits'));
 
       // Close the database when done
       db.dispose();
@@ -46,19 +46,23 @@ extension DataFromSql on Data {
       db.load(filePathToLoad, Uint8List(0));
 
       // Save transaction first
-      transactions.saveSql(db, 'Transactions');
-      onlineAccounts.saveSql(db, 'OnlineAccounts');
-      accounts.saveSql(db, 'Accounts');
-      payees.saveSql(db, 'Payees');
-      aliases.saveSql(db, 'Aliases');
       accountAliases.saveSql(db, 'AccountAliases');
+      accounts.saveSql(db, 'Accounts');
+      aliases.saveSql(db, 'Aliases');
       categories.saveSql(db, 'Categories');
       currencies.saveSql(db, 'Currencies');
+      investments.saveSql(db, 'Investments');
+      loanPayments.saveSql(db, 'LoanPayments');
+      onlineAccounts.saveSql(db, 'OnlineAccounts');
+      payees.saveSql(db, 'Payees');
+      rentBuildings.saveSql(db, 'RentBuildings');
+      rentUnits.saveSql(db, 'RentUnits');
       securities.saveSql(db, 'Securities');
       stockSplits.saveSql(db, 'StockSplits');
-      rentBuildings.saveSql(db, 'Buildings');
-      loanPayments.saveSql(db, 'LoanPayments');
+
+      transactions.saveSql(db, 'Transactions');
       transactionExtras.saveSql(db, 'TransactionExtras');
+      splits.saveSql(db, 'Splits');
 
       db.dispose();
     } catch (e) {

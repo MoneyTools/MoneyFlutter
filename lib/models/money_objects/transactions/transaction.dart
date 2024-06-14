@@ -323,9 +323,7 @@ class Transaction extends MoneyObject {
     importance: 97,
     name: columnIdAmount,
     serializeName: 'Amount',
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as Transaction).amount.value;
-    },
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).amount.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.amount,
     setValue: (final MoneyObject instance, dynamic newValue) {
       (instance as Transaction).amount.value.amount = attemptToGetDoubleFromText(newValue as String) ?? 0.00;

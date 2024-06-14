@@ -164,7 +164,7 @@ class Category extends MoneyObject {
     name: 'Budget',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budget.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value.amount,
   );
 
   /// Budget Balance
@@ -174,7 +174,7 @@ class Category extends MoneyObject {
     name: 'BudgetBalance',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value.amount,
   );
 
   /// 8|Frequency|INT|0||0

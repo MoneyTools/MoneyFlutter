@@ -72,7 +72,7 @@ class Security extends MoneyObject {
     name: 'Price',
     serializeName: 'Price',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).price.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value.amount,
   );
 
   // 4
@@ -80,7 +80,7 @@ class Security extends MoneyObject {
     name: 'Last Price',
     serializeName: 'LastPrice',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).lastPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value.amount,
   );
 
   // 5

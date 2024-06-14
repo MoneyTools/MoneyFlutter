@@ -1,3 +1,4 @@
+import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 
@@ -19,6 +20,16 @@ class MoneyModel {
     this.showCurrency = false,
     this.autoColor = true,
   });
+
+  void setAmountValue(final dynamic newValueToSet) {
+    double newValue = 0.00;
+    if (newValueToSet is String) {
+      newValue = attemptToGetDoubleFromText(newValueToSet) ?? 0.00;
+    } else {
+      newValue = newValueToSet as double;
+    }
+    amount = newValue;
+  }
 
   @override
   String toString() {

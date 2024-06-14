@@ -165,7 +165,9 @@ Widget buildWidgetFromTypeAndValue({
 }
 
 dynamic defaultCallbackValue(final dynamic instance) => '';
+
 bool defaultCallbackValueTrue(final dynamic instance) => true;
+
 bool defaultCallbackValueFalse(final dynamic instance) => false;
 
 Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final String nameToFind) {
@@ -238,6 +240,10 @@ class Field<T> {
   dynamic Function(MoneyObject, dynamic)? setValue;
 
   int Function(MoneyObject, MoneyObject, bool)? sort;
+
+  setAmount(final dynamic newValue) {
+    (this as FieldMoney).value.setAmountValue(newValue);
+  }
 
   Field({
     this.type = FieldType.text,

@@ -72,7 +72,7 @@ class Investment extends MoneyObject {
     name: 'Price',
     serializeName: 'UnitPrice',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value.amount,
   );
 
   /// 3    Units           money   0                    0
@@ -89,7 +89,7 @@ class Investment extends MoneyObject {
     name: 'Commission',
     serializeName: 'Commission',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).commission.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value.amount,
   );
 
   /// 5    MarkUpDown      money   0                    0
@@ -97,8 +97,8 @@ class Investment extends MoneyObject {
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value.amount,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.amount,
   );
 
   /// 6    Taxes           money   0                    0
@@ -107,7 +107,7 @@ class Investment extends MoneyObject {
     serializeName: 'Taxes',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxes.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value.amount,
   );
 
   /// 7    Fees            money   0                    0
@@ -115,7 +115,7 @@ class Investment extends MoneyObject {
     name: 'Fees',
     serializeName: 'Fees',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fees.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value.amount,
   );
 
   /// 8    Load            money   0                    0
@@ -123,7 +123,7 @@ class Investment extends MoneyObject {
     name: 'Load',
     serializeName: 'Load',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).load.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value.amount,
   );
 
   /// 9    InvestmentType  INT     1                    0
@@ -167,7 +167,7 @@ class Investment extends MoneyObject {
     serializeName: 'Withholding',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).withholding.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value.amount,
   );
 
   /// --------------------------------------------

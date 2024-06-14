@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.25] 2024-05-14
+
+### Added
+
+- Editing of Rental Building Land & Property evaluation
+
 ## [version 1.8.24] 2024-05-13
 
 ### Added

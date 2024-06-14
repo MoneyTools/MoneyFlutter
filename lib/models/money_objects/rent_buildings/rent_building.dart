@@ -129,7 +129,7 @@ class RentBuilding extends MoneyObject {
     serializeName: 'PurchasedPrice',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value.amount,
   );
 
   /// LandValue
@@ -139,7 +139,9 @@ class RentBuilding extends MoneyObject {
     name: 'LandValue',
     serializeName: 'LandValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).landValue.value.amount,
+    setValue: (final MoneyObject instance, final dynamic value) =>
+        (instance as RentBuilding).landValue.setAmount(value),
   );
 
   /// EstimatedValue
@@ -149,7 +151,9 @@ class RentBuilding extends MoneyObject {
     name: 'EstimatedValue',
     serializeName: 'EstimatedValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value.amount,
+    setValue: (final MoneyObject instance, final dynamic value) =>
+        (instance as RentBuilding).estimatedValue.setAmount(value),
   );
 
   /// OwnershipName1
