@@ -4,6 +4,7 @@
 
 ### Added
 
+- List View Footer
 - NetWorth reveal button on the Application bar
 
 ## [version 1.8.25] 2024-05-14

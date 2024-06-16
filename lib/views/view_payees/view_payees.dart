@@ -16,6 +16,7 @@ import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_payees/merge_payees.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/chart.dart';
+import 'package:money/widgets/columns/footer_widgets.dart';
 import 'package:money/widgets/date_range_time_line.dart';
 import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
@@ -35,6 +36,10 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   ViewPayeesState() {
     viewId = ViewId.viewPayees;
   }
+
+  // Footer related
+  int _footerCountTransactions = 0;
+  double _footerSumBalance = 0.00;
 
   /// add more top leve action buttons
   @override
@@ -111,12 +116,34 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'Transactions':
+        return getFooterForInt(_footerCountTransactions);
+      case 'Sum':
+        return getFooterForAmount(_footerSumBalance);
+      default:
+        return null;
+    }
+  }
+
+  @override
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data()
+    var list = Data()
         .payees
         .iterableList(includeDeleted: includeDeleted)
         .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
         .toList();
+
+    _footerCountTransactions = 0;
+    _footerSumBalance = 0.00;
+
+    for (final item in list) {
+      _footerCountTransactions += item.count.value.toInt();
+      _footerSumBalance += item.sum.value.toDouble();
+    }
+
+    return list;
   }
 
   @override

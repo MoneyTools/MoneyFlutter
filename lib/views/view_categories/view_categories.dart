@@ -15,6 +15,7 @@ import 'package:money/views/view_categories/merge_categories.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/chart.dart';
+import 'package:money/widgets/columns/footer_widgets.dart';
 import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/three_part_label.dart';
@@ -29,9 +30,6 @@ class ViewCategories extends ViewForMoneyObjects {
 }
 
 class ViewCategoriesState extends ViewForMoneyObjectsState {
-  final List<Widget> pivots = <Widget>[];
-  final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
-
   ViewCategoriesState() {
     viewId = ViewId.viewCategories;
     onAddItem = () {
@@ -40,6 +38,16 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       updateListAndSelect(newItem.uniqueId);
     };
   }
+
+  final List<Widget> pivots = <Widget>[];
+  final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
+
+  // Footer related
+  int _footerCountTransactions = 0;
+  int _footerCountTransactionsRollUp = 0;
+
+  double _footerSumBalance = 0.00;
+  double _footerSumBalanceRollUp = 0.00;
 
   @override
   void initState() {
@@ -189,15 +197,46 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case '#T':
+        return getFooterForInt(_footerCountTransactions);
+      case '#T~':
+        return getFooterForInt(_footerCountTransactionsRollUp);
+      case 'Sum':
+        return getFooterForAmount(_footerSumBalance);
+      case 'Sum~':
+        return getFooterForAmount(_footerSumBalanceRollUp);
+      default:
+        return null;
+    }
+  }
+
+  @override
   List<Category> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final List<CategoryType> filterType = getSelectedCategoryType();
-    return Data()
+    final list = Data()
         .categories
         .iterableList(includeDeleted: includeDeleted)
         .where((final Category instance) =>
             (filterType.isEmpty || filterType.contains(instance.type.value)) &&
             (applyFilter == false || isMatchingFilters(instance)))
         .toList();
+
+    _footerCountTransactions = 0;
+    _footerCountTransactionsRollUp = 0;
+
+    _footerSumBalance = 0.00;
+    _footerSumBalanceRollUp = 0.00;
+
+    for (final item in list) {
+      _footerCountTransactions += item.transactionCount.value.toInt();
+      _footerCountTransactionsRollUp += item.transactionCountRollup.value.toInt();
+
+      _footerSumBalance += (item.sum.getValueForDisplay(item) as MoneyModel).toDouble();
+      _footerSumBalanceRollUp += (item.sumRollup.getValueForDisplay(item) as MoneyModel).toDouble();
+    }
+    return list;
   }
 
   List<CategoryType> getSelectedCategoryType() {

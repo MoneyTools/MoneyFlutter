@@ -11,6 +11,7 @@ import 'package:money/storage/preferences_helper.dart';
 
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/views/view_money_objects.dart';
+import 'package:money/widgets/columns/footer_widgets.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/widgets.dart';
 
@@ -31,6 +32,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, true];
   bool balanceDone = false;
+
+  // Footer related
+  final DateRange _footerColumnDate = DateRange();
+  double _footerRunningBalanceUSD = 0.0;
 
   ViewTransactionsState() {
     viewId = ViewId.viewTransactions;
@@ -159,6 +164,18 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'Date':
+        return getFooterForDateRange(_footerColumnDate);
+      case 'Balance(USD)':
+        return getFooterForAmount(_footerRunningBalanceUSD);
+      default:
+        return null;
+    }
+  }
+
+  @override
   List<Transaction> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final List<Transaction> list = Data()
         .transactions
@@ -170,12 +187,21 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     if (!balanceDone) {
       list.sort((final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value));
 
-      double runningBalance = 0.0;
+      double runningNativeBalance = 0.0;
+      _footerRunningBalanceUSD = 0.0;
+      _footerColumnDate.clear();
 
       for (Transaction transaction in list) {
-        runningBalance += transaction.amount.value.toDouble();
-        transaction.balance = runningBalance;
+        _footerColumnDate.inflate(transaction.dateTime.value);
+        runningNativeBalance += transaction.amount.value.toDouble();
+
+        transaction.balance = runningNativeBalance;
+
+        // only the last item is used
+        _footerRunningBalanceUSD =
+            (transaction.balanceNormalized.getValueForDisplay(transaction) as MoneyModel).toDouble();
       }
+
       balanceDone = true;
     }
     return list;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/money_objects.dart';
@@ -10,6 +11,7 @@ import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_stocks/stock_chart.dart';
 import 'package:money/widgets/center_message.dart';
+import 'package:money/widgets/columns/footer_widgets.dart';
 
 class ViewStocks extends ViewForMoneyObjects {
   const ViewStocks({
@@ -24,6 +26,12 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   ViewStocksState() {
     viewId = ViewId.viewStocks;
   }
+
+  // Footer related
+  final DateRange _footerColumnDate = DateRange();
+  int _footerColumnTrades = 0;
+  double _footerColumnShares = 0.00;
+  double _footerColumnBalance = 0.00;
 
   Security? lastSecuritySelected;
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
@@ -56,6 +64,15 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   @override
   List<Security> getList({bool includeDeleted = false, bool applyFilter = true}) {
     final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
+    _footerColumnDate.clear();
+
+    for (final item in list) {
+      _footerColumnDate.inflate(item.priceDate.value);
+      _footerColumnTrades += item.numberOfTrades.value;
+      _footerColumnShares += item.outstandingShares.value;
+      _footerColumnBalance += item.balance.getValueForDisplay(item).toDouble();
+    }
+
     return list;
   }
 
@@ -124,16 +141,27 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     );
   }
 
+  @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'Date':
+        return getFooterForDateRange(_footerColumnDate);
+      case 'Trades':
+        return getFooterForInt(_footerColumnTrades);
+      case 'Shares':
+        return getFooterForInt(_footerColumnShares.toInt());
+      case 'Balance':
+        return getFooterForAmount(_footerColumnBalance);
+      default:
+        return null;
+    }
+  }
+
   List<Investment> getListOfInvestment(Security security) {
     final List<Investment> list = Investments.getInvestmentsFromSecurity(security.uniqueId);
     Investments.calculateRunningBalance(list);
     return list;
   }
-
-  // @override
-  // List<Transaction> getInfoTransactions() {
-  //   return getListOfInvestment(lastSecuritySelected!);
-  // }
 
   void sortList(
     final List<Investment> list,

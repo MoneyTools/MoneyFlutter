@@ -90,18 +90,23 @@ TextStyle adjustOpacityOfTextStyle(final TextStyle textStyle, [final double opac
   );
 }
 
-Color colorBasedOnValue(final double value) {
+Color colorBasedOnValue(final num value) {
   if (value > 0) {
-    return Colors.green;
+    return getColorFromState(ColorState.success);
   }
   if (value < 0) {
-    return Colors.red;
+    return getColorFromState(ColorState.error);
   }
   // value == 0
-  return Colors.grey;
+  return getColorFromState(ColorState.disabled);
 }
 
-enum ColorState { success, warning, error, neutral }
+enum ColorState {
+  success,
+  warning,
+  error,
+  disabled,
+}
 
 Color getColorFromState(final ColorState state) {
   final bool isDarkModeOne = Settings().useDarkMode;
@@ -116,7 +121,7 @@ Color getColorFromState(final ColorState state) {
     case ColorState.error:
       return isDarkModeOne ? Colors.red.shade200 : Colors.red.shade800;
 
-    case ColorState.neutral:
+    case ColorState.disabled:
       return isDarkModeOne ? Colors.grey.shade500 : Colors.grey.shade600;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/widgets/columns/column_content_center.dart';
 
 Widget buildColumnHeaderButton(
   final BuildContext context,
@@ -8,7 +9,7 @@ Widget buildColumnHeaderButton(
   final int flex,
   final SortIndicator sortIndicator,
   final bool hasFilters,
-  final VoidCallback? onClick,
+  final VoidCallback? onPressed,
   final VoidCallback? onLongPress,
 ) {
   return Expanded(
@@ -28,7 +29,7 @@ Widget buildColumnHeaderButton(
             ),
           ),
         ),
-        onPressed: onClick,
+        onPressed: onPressed,
         onLongPress: onLongPress,
         // clipBehavior: Clip.hardEdge,
         child: _buildTextAndSortAndFilter(context, textAlign, text, _buildAdorners(sortIndicator, hasFilters)),
@@ -141,27 +142,4 @@ SortIndicator getSortIndicator(final int currentSort, final int sortToMatch, fin
     return ascending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
   }
   return SortIndicator.none;
-}
-
-class HeaderContentCenter extends StatelessWidget {
-  final String text;
-  final Widget? trailingWidget;
-
-  const HeaderContentCenter({super.key, required this.text, required this.trailingWidget});
-
-  @override
-  Widget build(BuildContext context) {
-    final Widget textWidget = Text(
-      text,
-      softWrap: false,
-      textAlign: TextAlign.center,
-      overflow: TextOverflow.clip,
-      style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
-    );
-
-    if (trailingWidget == null) {
-      return textWidget;
-    }
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [Flexible(child: textWidget), trailingWidget!]);
-  }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/column_header_button.dart';
+import 'package:money/widgets/columns/column_header_button.dart';
 import 'package:money/widgets/semantic_text.dart';
 
 class ImportTransactionsList extends StatefulWidget {

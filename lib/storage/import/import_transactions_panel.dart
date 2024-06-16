@@ -4,7 +4,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
-import 'package:money/widgets/columns_input.dart';
+import 'package:money/widgets/columns/columns_input.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/import_transactions_list.dart';
 

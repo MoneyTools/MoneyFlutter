@@ -24,6 +24,7 @@ class AdaptiveViewWithList extends StatelessWidget {
   final Function(BuildContext, int)? onItemTap;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field<dynamic> field)? onColumnHeaderLongPress;
+  final Widget? Function(Field field)? getColumnFooterWidget;
 
   const AdaptiveViewWithList({
     super.key,
@@ -42,6 +43,7 @@ class AdaptiveViewWithList extends StatelessWidget {
     this.onItemTap,
     this.onColumnHeaderTap,
     this.onColumnHeaderLongPress,
+    this.getColumnFooterWidget,
   });
 
   @override
@@ -75,6 +77,7 @@ class AdaptiveViewWithList extends StatelessWidget {
                       displayAsColumns: displayAsColumns,
                       onColumnHeaderTap: onColumnHeaderTap,
                       onColumnHeaderLongPress: onColumnHeaderLongPress,
+                      getColumnFooterWidget: getColumnFooterWidget,
 
                       // Selection
                       onItemTap: onItemTap,

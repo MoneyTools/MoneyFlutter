@@ -1,4 +1,5 @@
 import 'package:money/helpers/date_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 
 class DateRange {
   DateTime? min;
@@ -11,6 +12,11 @@ class DateRange {
       min: DateTime(yearStart, 1, 1),
       max: DateTime(yearEnd + 1).subtract(const Duration(microseconds: 1)),
     );
+  }
+
+  void clear() {
+    min = null;
+    max = null;
   }
 
   void inflate(final DateTime? dateTime) {
@@ -82,11 +88,22 @@ class DateRange {
   }
 
   String toStringDays() {
-    return '${dateToString(min)} ($durationInDays days) ${dateToString(max)}';
+    return '${dateToString(min)} ($durationInDaysText) ${dateToString(max)}';
+  }
+
+  String toStringDuration() {
+    if (durationInYears > 0) {
+      return durationInYearsText;
+    }
+    return durationInDaysText;
   }
 
   String get durationInYearsText {
-    return durationInYears > 1 ? '$durationInYears years' : '$durationInYears year';
+    return getSingularPluralText(getIntAsText(durationInYears), durationInYears, 'year', 'years');
+  }
+
+  String get durationInDaysText {
+    return getSingularPluralText(getIntAsText(durationInDays), durationInDays, 'day', 'days');
   }
 
   bool isBetween(final DateTime date) {

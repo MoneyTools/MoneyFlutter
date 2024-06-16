@@ -12,6 +12,7 @@ import 'package:money/views/view_rentals/rental_pnl_card.dart';
 import 'package:money/widgets/chart.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
+import 'package:money/widgets/columns/footer_widgets.dart';
 
 part 'view_rentals_details_panels.dart';
 
@@ -28,6 +29,16 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   RentBuilding? lastSelectedRental;
+
+  // Footer related
+
+  double _footerLandValue = 0.00;
+  double _footerEstimatedValue = 0.00;
+  int _footerTransactionsOfIncome = 0;
+  int _footerTransactionsOfExpense = 0;
+  double _footerRevenue = 0.00;
+  double _footerExpenses = 0.00;
+  double _footerProfit = 0.00;
 
   @override
   String getClassNamePlural() {
@@ -59,8 +70,45 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'LandValue':
+        return getFooterForAmount(_footerLandValue);
+      case 'EstimatedValue':
+        return getFooterForAmount(_footerEstimatedValue);
+      case 'I#':
+        return getFooterForInt(_footerTransactionsOfIncome);
+      case 'Revenue':
+        return getFooterForAmount(_footerRevenue);
+      case 'E#':
+        return getFooterForInt(_footerTransactionsOfExpense);
+      case 'Expenses':
+        return getFooterForAmount(_footerExpenses);
+      case 'Profit':
+        return getFooterForAmount(_footerProfit);
+      default:
+        return null;
+    }
+  }
+
+  @override
   List<RentBuilding> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
+    final list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
+
+    _footerExpenses = 0.00;
+    _footerRevenue = 0.00;
+    _footerProfit = 0.00;
+
+    for (final item in list) {
+      _footerLandValue += item.landValue.getValueForDisplay(item).toDouble();
+      _footerEstimatedValue += item.estimatedValue.getValueForDisplay(item).toDouble();
+      _footerTransactionsOfIncome += item.transactionsForIncomes.value.toInt();
+      _footerTransactionsOfExpense += item.transactionsForExpenses.value.toInt();
+      _footerExpenses += item.expense.getValueForDisplay(item).toDouble();
+      _footerRevenue += item.revenue.getValueForDisplay(item).toDouble();
+      _footerProfit += item.profit.getValueForDisplay(item).toDouble();
+    }
+    return list;
   }
 
   @override

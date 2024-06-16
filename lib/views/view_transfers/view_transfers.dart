@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -12,6 +13,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_transactions/money_object_card.dart';
 import 'package:money/widgets/center_message.dart';
+import 'package:money/widgets/columns/footer_widgets.dart';
 
 class ViewTransfers extends ViewForMoneyObjects {
   const ViewTransfers({
@@ -26,6 +28,11 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   ViewTransfersState() {
     viewId = ViewId.viewTransfers;
   }
+
+  // Footer related
+  final DateRange _footerColumnSentOn = DateRange();
+  final DateRange _footerColumnReceivedOn = DateRange();
+  double _footerColumnBalance = 0.00;
 
   List<Transfer> listOfTransfers = [];
   Map<int, Transfer> loadedTransfers = {};
@@ -53,6 +60,20 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   @override
   Fields<Transfer> getFieldsForTable() {
     return Transfer.fields;
+  }
+
+  @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'Sent on':
+        return getFooterForDateRange(_footerColumnSentOn);
+      case 'Date Received':
+        return getFooterForDateRange(_footerColumnReceivedOn);
+      case 'Amount':
+        return getFooterForAmount(_footerColumnBalance);
+      default:
+        return null;
+    }
   }
 
   @override
@@ -86,6 +107,13 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         }
       }
     }
+
+    for (final item in listOfTransfers) {
+      _footerColumnSentOn.inflate(item.senderTransactionDate.getValueForDisplay(item));
+      _footerColumnReceivedOn.inflate(item.receiverTransactionDate.getValueForDisplay(item));
+      _footerColumnBalance += item.transactionAmount.getValueForDisplay(item).toDouble();
+    }
+
     return listOfTransfers;
   }
 

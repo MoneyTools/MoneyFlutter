@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/field_filter.dart';
+import 'package:money/views/adaptive_view/adaptive_list/list_item_footer.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 class AdaptiveListColumnsOrRows extends StatelessWidget {
@@ -18,6 +20,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     this.onColumnHeaderTap,
     this.onColumnHeaderLongPress,
     this.onItemTap,
+    this.getColumnFooterWidget,
   });
 
   final List<MoneyObject> list;
@@ -25,6 +28,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   final FieldFilters filters;
   final int sortByFieldIndex;
   final bool sortAscending;
+  final Widget? Function(Field field)? getColumnFooterWidget;
 
   // Selections
   final ValueNotifier<List<int>> selectedItemsByUniqueId;
@@ -42,8 +46,10 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        // Header
         if (displayAsColumns)
           MyListItemHeader<MoneyObject>(
+            backgoundColor: getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             filterOn: filters,
             sortByColumn: sortByFieldIndex,
@@ -77,6 +83,16 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
             onTap: onItemTap,
           ),
         ),
+
+        // Footer
+        if (displayAsColumns)
+          MyListItemFooter<MoneyObject>(
+            columns: fieldDefinitions,
+            multiSelectionOn: isMultiSelectionOn,
+            getColumnFooterWidget: getColumnFooterWidget,
+            onTap: (int index) => () {},
+            onLongPress: (Field<dynamic> field) => () {},
+          ),
       ],
     );
   }

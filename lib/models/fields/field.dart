@@ -315,7 +315,7 @@ class Field<T> {
               sortByValue(getValueForDisplay(a) as num, getValueForDisplay(b) as num, ascending);
         case FieldType.amount:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByValue(getValueForDisplay(a).amount, getValueForDisplay(b).amount, ascending);
+              sortByValue(getValueForDisplay(a).toDouble(), getValueForDisplay(b).toDouble(), ascending);
         case FieldType.date:
           sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
               sortByDate(getValueForDisplay(a), getValueForDisplay(b), ascending);

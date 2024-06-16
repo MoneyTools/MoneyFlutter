@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/constants.dart';
+import 'package:money/models/date_range.dart';
 import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/accounts/account_types_enum.dart';
@@ -16,6 +17,7 @@ import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_t
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/widgets/center_message.dart';
 import 'package:money/widgets/chart.dart';
+import 'package:money/widgets/columns/footer_widgets.dart';
 import 'package:money/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/three_part_label.dart';
@@ -35,11 +37,17 @@ class ViewAccounts extends ViewForMoneyObjects {
 }
 
 class ViewAccountsState extends ViewForMoneyObjectsState {
-  final List<Widget> pivots = <Widget>[];
-
   ViewAccountsState() {
     viewId = ViewId.viewAccounts;
   }
+
+  // Filter related
+  final List<Widget> pivots = <Widget>[];
+
+  // Footer related
+  final DateRange _footerColumnDate = DateRange();
+  int _footerCountTransactions = 0;
+  double _footerSumBalance = 0.00;
 
   @override
   void initState() {
@@ -144,6 +152,20 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'Transactions':
+        return getFooterForInt(_footerCountTransactions);
+      case 'Balance(USD)':
+        return getFooterForAmount(_footerSumBalance);
+      case 'Updated':
+        return getFooterForDateRange(_footerColumnDate);
+      default:
+        return null;
+    }
+  }
+
+  @override
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
 
@@ -196,16 +218,27 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   @override
   List<Account> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    final list = Data().accounts.activeAccount(
+    List<Account> list = Data().accounts.activeAccount(
           getSelectedAccountType(),
           isActive: Settings().includeClosedAccounts ? null : true,
         );
 
     if (applyFilter) {
-      return list.where((final Account instance) => isMatchingFilters(instance)).toList();
+      list = list.where((final Account instance) => isMatchingFilters(instance)).toList();
     } else {
-      return list.toList();
+      list = list.toList();
     }
+
+    _footerCountTransactions = 0;
+    _footerSumBalance = 0.00;
+    _footerColumnDate.clear();
+
+    for (final account in list) {
+      _footerCountTransactions += account.count.value.toInt();
+      _footerSumBalance += (account.balanceNormalized.getValueForDisplay(account) as MoneyModel).toDouble();
+      _footerColumnDate.inflate(account.updatedOn.value);
+    }
+    return list;
   }
 
   @override

@@ -69,6 +69,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return Fields<MoneyObject>();
   }
 
+  /// to be overrident by derived class
+  Widget? getColumnFooterWidget(final Field field) {
+    return null;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -182,6 +187,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         isMultiSelectionOn: _isMultiSelectionOn,
         onColumnHeaderTap: changeListSortOrder,
         onColumnHeaderLongPress: onCustomizeColumn,
+        getColumnFooterWidget: getColumnFooterWidget,
         onSelectionChanged: (int _) {
           _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
           saveLastUserChoicesOfView();

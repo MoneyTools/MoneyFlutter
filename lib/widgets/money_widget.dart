@@ -55,7 +55,7 @@ Color? getTextColorToUse(
 ) {
   if (autoColor) {
     if (isAlmostZero(amount)) {
-      return getColorFromState(ColorState.neutral);
+      return getColorFromState(ColorState.disabled);
     }
     if (amount < 0) {
       return getColorFromState(ColorState.error);

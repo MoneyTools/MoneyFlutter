@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/fields/field_filter.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/widgets/column_header_button.dart';
+import 'package:money/widgets/columns/column_header_button.dart';
 
 /// A Row for a Table view
 class MyListItemHeader<T> extends StatelessWidget {
+  final Color backgoundColor;
   final FieldDefinitions columns;
   final FieldFilters filterOn;
   final int sortByColumn;
@@ -16,6 +17,7 @@ class MyListItemHeader<T> extends StatelessWidget {
 
   const MyListItemHeader({
     super.key,
+    this.backgoundColor = Colors.transparent,
     required this.columns,
     required this.filterOn,
     required this.sortByColumn,
@@ -60,7 +62,8 @@ class MyListItemHeader<T> extends StatelessWidget {
         ),
       );
     }
-    return Padding(
+    return Container(
+      color: backgoundColor,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(children: headers),
     );
