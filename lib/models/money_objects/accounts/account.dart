@@ -8,6 +8,7 @@ import 'package:money/models/money_objects/accounts/account_types.dart';
 import 'package:money/models/money_objects/accounts/picker_account_type.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/widgets/token_text.dart';
@@ -415,6 +416,13 @@ class Account extends MoneyObject {
 
   bool get isOpen {
     return !isClosed();
+  }
+
+  bool get isMatchingUserChoiceIncludingClosedAccount {
+    if (Settings().includeClosedAccounts) {
+      return true;
+    }
+    return isOpen;
   }
 
   set isOpen(bool value) {

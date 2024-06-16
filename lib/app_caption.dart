@@ -40,9 +40,27 @@ class AppCaption extends StatelessWidget {
     return RevealContent(
       textForClipboard: netWorth.toString(),
       widgets: [
-        const Text('**NetWorth**'),
-        Text(netWorth.toShortHand()),
-        Text(netWorth.toString()),
+        Row(
+          children: [
+            const Opacity(opacity: 0.5, child: Icon(Icons.visibility_outlined)),
+            gapSmall(),
+            const Text('** Net Worth **'),
+          ],
+        ),
+        Row(
+          children: [
+            const Opacity(opacity: 0.5, child: Icon(Icons.visibility_off_outlined)),
+            gapSmall(),
+            Text(netWorth.toShortHand()),
+          ],
+        ),
+        Row(
+          children: [
+            const Opacity(opacity: 0.5, child: Icon(Icons.visibility_off_outlined)),
+            gapSmall(),
+            Text(netWorth.toString()),
+          ],
+        ),
       ],
     );
   }

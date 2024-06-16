@@ -254,7 +254,9 @@ class Accounts extends MoneyObjects<Account> {
     double sum = 0.00;
 
     for (final account in iterableList()) {
-      sum += account.balance;
+      if (account.isMatchingUserChoiceIncludingClosedAccount) {
+        sum += account.balanceNormalized.getValueForDisplay(account).toDouble();
+      }
     }
     return sum;
   }
