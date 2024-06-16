@@ -1,0 +1,3 @@
+#!/bin/sh
+
+firebase deploy
