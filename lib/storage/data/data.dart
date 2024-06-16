@@ -436,4 +436,9 @@ class Data {
     }
     return transactionsBySecurity;
   }
+
+  MoneyModel getNetWorth() {
+    final double sum = accounts.getSumOfAccountBalances();
+    return MoneyModel(amount: sum);
+  }
 }

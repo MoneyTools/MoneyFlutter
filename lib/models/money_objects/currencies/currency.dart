@@ -311,6 +311,14 @@ class Currency extends MoneyObject {
     return currencyLocales[iso4217code];
   }
 
+  // Define a function to get the currency symbol from ISO 4217 code
+  static String getCurrencySymbol(String isoCode) {
+    // Create a NumberFormat instance with the currency name and locale
+    var format = NumberFormat.simpleCurrency(name: isoCode);
+    // Return the currency symbol
+    return format.currencySymbol;
+  }
+
   /// Return a formatted string from the given amount using the supplied ISO4217 code
   static String getAmountAsStringUsingCurrency(
     dynamic amount, {
@@ -331,5 +339,17 @@ class Currency extends MoneyObject {
       decimalDigits: decimalDigits,
     );
     return currencyFormat.format(isAlmostZero(amount) ? 0.00 : amount);
+  }
+
+  /// Return a formatted string from the given amount using the supplied ISO4217 code
+  static String getAmountAsShortHandStringUsingCurrency(
+    dynamic amount, {
+    String iso4217code = Constants.defaultCurrency,
+  }) {
+    if (amount is String) {
+      return amount; // its already a string
+    }
+
+    return getAmountAsShorthandText(amount, symbol: getCurrencySymbol(iso4217code));
   }
 }

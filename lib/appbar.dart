@@ -4,6 +4,7 @@ import 'package:money/app_caption.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/storage/import/import_wizard.dart';
 import 'package:money/views/view_settings.dart';
@@ -49,6 +50,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
       // Center Title
       title: AppCaption(
+        netWorth: Data().getNetWorth(),
         child: LoadedDataFileAndTime(
             filePath: Settings().fileManager.fullPathToLastOpenedFile,
             lastModifiedDateTime: Settings().fileManager.dataFileLastUpdateDateTime),

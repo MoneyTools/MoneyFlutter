@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/date_helper.dart';
+import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
 import 'package:money/widgets/gaps.dart';
+import 'package:money/widgets/reveal_content.dart';
 
 class AppCaption extends StatelessWidget {
   final Widget child;
+  final MoneyModel netWorth;
 
-  const AppCaption({super.key, required this.child});
+  const AppCaption({
+    super.key,
+    required this.netWorth,
+    required this.child,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +28,21 @@ class AppCaption extends StatelessWidget {
             itemsAdded: Settings().trackMutations.added,
             itemsChanged: Settings().trackMutations.changed,
             itemsDeleted: Settings().trackMutations.deleted,
-          )
+          ),
+          _buildNetWorth(),
         ]),
         child,
+      ],
+    );
+  }
+
+  Widget _buildNetWorth() {
+    return RevealContent(
+      textForClipboard: netWorth.toString(),
+      widgets: [
+        const Text('**NetWorth**'),
+        Text(netWorth.toShortHand()),
+        Text(netWorth.toString()),
       ],
     );
   }

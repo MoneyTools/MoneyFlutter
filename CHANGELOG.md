@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.26] 2024-05-16
+
+### Added
+
+- NetWorth reveal button on the Application bar
+
 ## [version 1.8.25] 2024-05-14
 
 ### Added

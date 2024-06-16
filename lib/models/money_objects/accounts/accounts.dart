@@ -249,4 +249,13 @@ class Accounts extends MoneyObjects<Account> {
   void setMostRecentUsedAccount(Account account) {
     PreferencesHelper().setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
   }
+
+  double getSumOfAccountBalances() {
+    double sum = 0.00;
+
+    for (final account in iterableList()) {
+      sum += account.balance;
+    }
+    return sum;
+  }
 }

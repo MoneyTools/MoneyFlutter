@@ -58,4 +58,8 @@ class MoneyModel {
   String toString() {
     return Currency.getAmountAsStringUsingCurrency(_amount, iso4217code: iso4217);
   }
+
+  String toShortHand() {
+    return Currency.getAmountAsShortHandStringUsingCurrency(_amount, iso4217code: iso4217);
+  }
 }
