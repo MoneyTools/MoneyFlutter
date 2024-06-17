@@ -310,7 +310,6 @@ class MainView extends StatelessWidget {
       'sdf',
       'qfx',
       'ofx',
-      'pdf',
       'json',
     ];
 

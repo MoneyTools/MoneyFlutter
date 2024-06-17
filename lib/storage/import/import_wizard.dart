@@ -1,7 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/storage/import/import_pdf.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
@@ -50,8 +49,6 @@ void onImportFromFile() async {
         importQIF(pickerResult.files.single.path.toString());
       case 'qfx':
         importQFX(pickerResult.files.single.path.toString(), Data());
-      case 'pdf':
-        importPDF(pickerResult.files.single.path.toString(), Data());
     }
   }
 }
