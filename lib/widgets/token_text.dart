@@ -39,4 +39,9 @@ class TokenText extends StatelessWidget {
       children: widgets,
     );
   }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return text;
+  }
 }
