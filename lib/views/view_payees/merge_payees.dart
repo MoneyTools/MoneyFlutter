@@ -9,8 +9,27 @@ import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_payees/picker_payee.dart';
 import 'package:money/widgets/box.dart';
+import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/gaps.dart';
+
+void showMergePayee(
+  final BuildContext context,
+  Payee payee,
+) {
+  final transactions =
+      Data().transactions.iterableList(includeDeleted: true).where((t) => t.payee.value == payee.uniqueId);
+
+  adaptiveScreenSizeDialog(
+    context: context,
+    title: 'Merge ${transactions.length} transactions',
+    captionForClose: null, // this will hide the close button
+    child: MergeTransactionsDialog(
+      currentPayee: payee,
+      transactions: transactions.toList(),
+    ),
+  );
+}
 
 class MergeTransactionsDialog extends StatefulWidget {
   const MergeTransactionsDialog({

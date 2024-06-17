@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
+import 'package:money/views/view_payees/merge_payees.dart';
 import 'package:money/views/view_payees/picker_payee.dart';
 import 'package:money/widgets/gaps.dart';
 
@@ -45,12 +46,9 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          children: [
-            SizedBox(width: 250, child: buildChoice()),
-            const Spacer(),
-          ],
-        ),
+        gapMedium(),
+        SizedBox(width: 250, child: buildChoice()),
+        gapSmall(),
         Expanded(
           child: buildIInput(),
         ),
@@ -60,13 +58,24 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
 
   Widget buildIInput() {
     if (_choice == TransactionFlavor.payee) {
-      return presentInput(
-        'Name',
-        pickerPayee(
-            itemSelected: widget.payee,
-            onSelected: (Payee? payee) {
-              widget.onSelected(_choice, payee, widget.account);
-            }),
+      return Row(
+        children: [
+          Expanded(
+            child: pickerPayee(
+                itemSelected: widget.payee,
+                onSelected: (Payee? payee) {
+                  widget.onSelected(_choice, payee, widget.account);
+                }),
+          ),
+          if (widget.payee != null)
+            IconButton(
+              onPressed: () {
+                Navigator.of(context).pop(false);
+                showMergePayee(context, widget.payee!); //transactions.toList());
+              },
+              icon: const Icon(Icons.merge_outlined),
+            ),
+        ],
       );
     } else {
       return presentInput(
@@ -85,7 +94,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(width: 100, child: Text(caption)),
+        if (caption.isNotEmpty) SizedBox(width: 100, child: Text(caption)),
         gapMedium(),
         Expanded(
           child: widget,

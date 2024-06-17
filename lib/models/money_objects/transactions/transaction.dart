@@ -167,7 +167,7 @@ class Transaction extends MoneyObject {
     getEditWidget: (MoneyObject instance, Function onEdited) {
       return SizedBox(
         width: 300,
-        height: 70,
+        height: 80,
         child: PickPayeeOrTransfer(
           choice: (instance as Transaction).transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.payee.value),

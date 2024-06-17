@@ -4,6 +4,7 @@
 
 ### Added
 
+- You can now merge Payee from Transactio Edit dialog
 - Auto Footer-Tally on the InfoPanel-List
 - Long Press on InfoPanel of Loans to show the Detail dialog
   
