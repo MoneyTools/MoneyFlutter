@@ -91,12 +91,14 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = 0;
-    //PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySortBy')) ?? 0;
+    int sortFieldIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySortBy')) ?? 0;
     bool sortAscending = PreferencesHelper().getBool(getPreferenceKey('info_$settingKeySortAscending')) ?? true;
     int selectedItemIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySelectedListItemId')) ?? -1;
 
     List<LoanPayment> agregatedList = getAccountLoanPayments(account);
+
+    MoneyObjects.sortList(
+        agregatedList, LoanPayment.fields.fieldDefinitionsForColumns.toList(), sortFieldIndex, sortAscending);
 
     return AdaptiveListColumnsOrRows(
       list: agregatedList,
@@ -105,18 +107,26 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       sortByFieldIndex: sortFieldIndex,
       sortAscending: sortAscending,
 
-      onColumnHeaderTap: (int columnHeaderIndex) {
-        if (columnHeaderIndex == sortFieldIndex) {
-          // toggle order
-          sortAscending = !sortAscending;
-        } else {
-          sortFieldIndex = columnHeaderIndex;
-        }
-      },
       // Display as Cards or Columns
       // On small device you can display rows a Cards instead of Columns
       displayAsColumns: true,
+      backgoundColorForHeaderFooter: Colors.transparent,
+      onColumnHeaderTap: (int columnHeaderIndex) {
+        // ignore: invalid_use_of_protected_member
+        setState(() {
+          if (columnHeaderIndex == sortFieldIndex) {
+            // toggle order
+            sortAscending = !sortAscending;
+          } else {
+            sortFieldIndex = columnHeaderIndex;
+          }
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySortBy'), sortFieldIndex);
+          PreferencesHelper().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), sortFieldIndex);
+        });
+      },
       selectedItemsByUniqueId: ValueNotifier<List<int>>([selectedItemIndex]),
+      onItemLongPress: (BuildContext context, int itemId) {},
     );
   }
 

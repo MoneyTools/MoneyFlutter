@@ -20,7 +20,9 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     this.onColumnHeaderTap,
     this.onColumnHeaderLongPress,
     this.onItemTap,
+    this.onItemLongPress,
     this.getColumnFooterWidget,
+    this.backgoundColorForHeaderFooter,
   });
 
   final List<MoneyObject> list;
@@ -40,7 +42,9 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   final bool displayAsColumns;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field field)? onColumnHeaderLongPress;
-  final Function(BuildContext p1, int p2)? onItemTap;
+  final Function(BuildContext context, int itemId)? onItemTap;
+  final Function(BuildContext context, int itemId)? onItemLongPress;
+  final Color? backgoundColorForHeaderFooter;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         // Header
         if (displayAsColumns)
           MyListItemHeader<MoneyObject>(
-            backgoundColor: getColorTheme(context).surfaceContainerLow,
+            backgoundColor: backgoundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             filterOn: filters,
             sortByColumn: sortByFieldIndex,
@@ -81,11 +85,12 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
             onSelectionChanged: onSelectionChanged,
             displayAsColumn: displayAsColumns,
             onTap: onItemTap,
+            onLongPress: onItemLongPress,
           ),
         ),
 
         // Footer
-        if (displayAsColumns)
+        if (displayAsColumns && getColumnFooterWidget != null)
           MyListItemFooter<MoneyObject>(
             columns: fieldDefinitions,
             multiSelectionOn: isMultiSelectionOn,

@@ -333,23 +333,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void onSort() {
-    if (isIndexInRange(_fieldToDisplay.definitions, _sortByFieldIndex)) {
-      final Field<dynamic> fieldDefinition = _fieldToDisplay.definitions[_sortByFieldIndex];
-      if (fieldDefinition.sort == null) {
-        // No sorting function found, fallback to String sorting
-        list.sort((final MoneyObject a, final MoneyObject b) {
-          return sortByString(
-            fieldDefinition.getValueForDisplay(a).toString(),
-            fieldDefinition.getValueForDisplay(b).toString(),
-            _sortAscending,
-          );
-        });
-      } else {
-        list.sort((final MoneyObject a, final MoneyObject b) {
-          return fieldDefinition.sort!(a, b, _sortAscending);
-        });
-      }
-    }
+    MoneyObjects.sortList(list, _fieldToDisplay.definitions, _sortByFieldIndex, _sortAscending);
   }
 
   void onUserRequestToEdit(final BuildContext context, final List<MoneyObject> moneyObjects) {

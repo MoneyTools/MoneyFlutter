@@ -39,13 +39,12 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     };
   }
 
-  final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
+  final List<Widget> _pivots = <Widget>[];
 
   // Footer related
   int _footerCountTransactions = 0;
   int _footerCountTransactionsRollUp = 0;
-
   double _footerSumBalance = 0.00;
   double _footerSumBalanceRollUp = 0.00;
 
@@ -53,50 +52,40 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   void initState() {
     super.initState();
 
-    pivots.add(ThreePartLabel(
+    _pivots.add(ThreePartLabel(
         text1: 'None',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
-    pivots.add(ThreePartLabel(
+        text2: Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
+    _pivots.add(ThreePartLabel(
         text1: 'Expense',
         small: true,
         isVertical: true,
         text2: Currency.getAmountAsStringUsingCurrency(
-            getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense, CategoryType.recurringExpense]))));
-    pivots.add(ThreePartLabel(
+            _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense, CategoryType.recurringExpense]))));
+    _pivots.add(ThreePartLabel(
         text1: 'Income',
         small: true,
         isVertical: true,
         text2:
-            Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
-    pivots.add(ThreePartLabel(
+            Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
+    _pivots.add(ThreePartLabel(
         text1: 'Saving',
         small: true,
         isVertical: true,
         text2:
-            Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
-    pivots.add(ThreePartLabel(
+            Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
+    _pivots.add(ThreePartLabel(
         text1: 'Investment',
         small: true,
         isVertical: true,
         text2: Currency.getAmountAsStringUsingCurrency(
-            getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
-    pivots.add(ThreePartLabel(
+            _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
+    _pivots.add(ThreePartLabel(
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(<CategoryType>[]))));
-  }
-
-  double getTotalBalanceOfAccounts(final List<CategoryType> types) {
-    double total = 0.0;
-    getList().forEach((final Category category) {
-      if (types.isEmpty || (category).type.value == types.first) {
-        total += category.sum.value.toDouble();
-      }
-    });
-    return total;
+        text2: Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[]))));
   }
 
   @override
@@ -121,7 +110,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   @override
   Widget buildHeader([final Widget? child]) {
-    return super.buildHeader(renderToggles());
+    return super.buildHeader(_buildToggles());
   }
 
   /// add more top leve action buttons
@@ -214,7 +203,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   @override
   List<Category> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    final List<CategoryType> filterType = getSelectedCategoryType();
+    final List<CategoryType> filterType = _getSelectedCategoryType();
     final list = Data()
         .categories
         .iterableList(includeDeleted: includeDeleted)
@@ -239,27 +228,33 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     return list;
   }
 
-  List<CategoryType> getSelectedCategoryType() {
-    if (_selectedPivot[0]) {
-      return [CategoryType.none];
-    }
-    if (_selectedPivot[1]) {
-      return [CategoryType.expense, CategoryType.recurringExpense];
-    }
-    if (_selectedPivot[2]) {
-      return [CategoryType.income];
-    }
-    if (_selectedPivot[3]) {
-      return [CategoryType.saving];
-    }
-    if (_selectedPivot[4]) {
-      return [CategoryType.investment];
-    }
-
-    return []; // all
+  @override
+  Widget getInfoPanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(selectedIds: selectedIds, showAsNativeCurrency: showAsNativeCurrency);
   }
 
-  Widget renderToggles() {
+  @override
+  Widget getInfoPanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(selectedIds);
+  }
+
+  double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
+    double total = 0.0;
+    getList().forEach((final Category category) {
+      if (types.isEmpty || (category).type.value == types.first) {
+        total += category.sum.value.toDouble();
+      }
+    });
+    return total;
+  }
+
+  Widget _buildToggles() {
     return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
@@ -280,23 +275,27 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
             minWidth: 100.0,
           ),
           isSelected: _selectedPivot,
-          children: pivots,
+          children: _pivots,
         ));
   }
 
-  @override
-  Widget getInfoPanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(selectedIds: selectedIds, showAsNativeCurrency: showAsNativeCurrency);
-  }
+  List<CategoryType> _getSelectedCategoryType() {
+    if (_selectedPivot[0]) {
+      return [CategoryType.none];
+    }
+    if (_selectedPivot[1]) {
+      return [CategoryType.expense, CategoryType.recurringExpense];
+    }
+    if (_selectedPivot[2]) {
+      return [CategoryType.income];
+    }
+    if (_selectedPivot[3]) {
+      return [CategoryType.saving];
+    }
+    if (_selectedPivot[4]) {
+      return [CategoryType.investment];
+    }
 
-  @override
-  Widget getInfoPanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
+    return []; // all
   }
 }

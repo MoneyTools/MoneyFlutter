@@ -76,6 +76,35 @@ class MoneyObjects<T> {
     return _list;
   }
 
+  static List<MoneyObject> sortList(
+    List<MoneyObject> list,
+    final FieldDefinitions fieldDefinitions,
+    final int sortBy,
+    final bool sortAscending,
+  ) {
+    if (!isIndexInRange(fieldDefinitions, sortBy)) {
+      // requested sort is not in range of the available fields
+      return list;
+    }
+
+    final Field<dynamic> fieldDefinition = fieldDefinitions[sortBy];
+    if (fieldDefinition.sort == null) {
+      // No sorting function found, fallback to String sorting
+      list.sort((final MoneyObject a, final MoneyObject b) {
+        return sortByString(
+          fieldDefinition.getValueForDisplay(a).toString(),
+          fieldDefinition.getValueForDisplay(b).toString(),
+          sortAscending,
+        );
+      });
+    } else {
+      list.sort((final MoneyObject a, final MoneyObject b) {
+        return fieldDefinition.sort!(a, b, sortAscending);
+      });
+    }
+    return list;
+  }
+
   void appendMoneyObject(final MoneyObject moneyObject) {
     assert(moneyObject.uniqueId != -1);
 

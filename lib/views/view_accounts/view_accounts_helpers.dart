@@ -73,7 +73,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
             minWidth: 100.0,
           ),
           isSelected: _selectedPivot,
-          children: pivots,
+          children: _pivots,
         ));
   }
 }

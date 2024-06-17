@@ -33,7 +33,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   late int sortBy = widget.sortFieldIndex;
   late bool sortAscending = widget.sortAscending;
   late int selectedItemIndex = widget.selectedItemIndex;
-  final bool _isMultiSelectionOn = false;
 
   @override
   void initState() {
@@ -47,7 +46,8 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
     if (transactions.isEmpty) {
       return const Center(child: Text('No transactions'));
     }
-    sortList(transactions);
+
+    MoneyObjects.sortList(transactions, widget.columnsToInclude, sortBy, sortAscending);
 
     return Column(
       children: <Widget>[
@@ -57,15 +57,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           filterOn: FieldFilters(),
           sortByColumn: sortBy,
           sortAscending: sortAscending,
-          onSelectAll: _isMultiSelectionOn
-              ? (bool? selectAll) {
-                  // selectedItemsByUniqueId.value.clear();
-                  // for (final item in list) {
-                  //   selectedItemsByUniqueId.value.add(item.uniqueId);
-                  //   }
-                  // }
-                }
-              : null,
           onTap: (final int index) {
             setState(() {
               if (sortBy == index) {
@@ -85,7 +76,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
             list: transactions,
             displayAsColumn: true,
             selectedItemIds: ValueNotifier<List<int>>([selectedItemIndex]),
-            isMultiSelectionOn: _isMultiSelectionOn,
             onSelectionChanged: (final int uniqueId) {
               setState(() {
                 selectedItemIndex = uniqueId;
@@ -106,28 +96,6 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         ),
       ],
     );
-  }
-
-  void sortList(List<Transaction> transactions) {
-    if (isIndexInRange(widget.columnsToInclude, sortBy)) {
-      final Field<dynamic> fieldDefinition = widget.columnsToInclude[sortBy];
-      if (fieldDefinition.sort == null) {
-        // No sorting function found, fallback to String sorting
-        transactions.sort((final MoneyObject a, final MoneyObject b) {
-          return sortByString(
-            fieldDefinition.getValueForDisplay(a).toString(),
-            fieldDefinition.getValueForDisplay(b).toString(),
-            sortAscending,
-          );
-        });
-      } else {
-        transactions.sort(
-          (final Transaction a, final Transaction b) {
-            return fieldDefinition.sort!(a, b, sortAscending);
-          },
-        );
-      }
-    }
   }
 }
 

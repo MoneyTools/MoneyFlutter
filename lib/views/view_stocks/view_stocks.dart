@@ -113,7 +113,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       builder: (final BuildContext context, final SortingInstruction sortInstructions, final Widget? _) {
         List<Investment> list = getListOfInvestment(lastSecuritySelected!);
 
-        sortList(list, fieldsToDisplay, sortInstructions.column, sortInstructions.ascending);
+        MoneyObjects.sortList(list, fieldsToDisplay, sortInstructions.column, sortInstructions.ascending);
 
         return AdaptiveListColumnsOrRows(
           // list
@@ -161,31 +161,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     final List<Investment> list = Investments.getInvestmentsFromSecurity(security.uniqueId);
     Investments.calculateRunningBalance(list);
     return list;
-  }
-
-  void sortList(
-    final List<Investment> list,
-    final List<Field> fieldsToDisplay,
-    final int columnIndex,
-    final bool sortAscending,
-  ) {
-    final Field<dynamic> fieldDefinition = fieldsToDisplay[columnIndex];
-    if (fieldDefinition.sort == null) {
-      // No sorting function found, fallback to String sorting
-      list.sort((final MoneyObject a, final MoneyObject b) {
-        return sortByString(
-          fieldDefinition.getValueForDisplay(a).toString(),
-          fieldDefinition.getValueForDisplay(b).toString(),
-          sortAscending,
-        );
-      });
-    } else {
-      list.sort(
-        (final Investment a, final Investment b) {
-          return fieldDefinition.sort!(a, b, sortAscending);
-        },
-      );
-    }
   }
 }
 

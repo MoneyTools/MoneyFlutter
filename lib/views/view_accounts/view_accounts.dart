@@ -26,8 +26,6 @@ part 'view_accounts_details_panels.dart';
 
 part 'view_accounts_helpers.dart';
 
-final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
-
 /// Main view for all Accounts
 class ViewAccounts extends ViewForMoneyObjects {
   const ViewAccounts({super.key});
@@ -42,7 +40,8 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   // Filter related
-  final List<Widget> pivots = <Widget>[];
+  final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
+  final List<Widget> _pivots = <Widget>[];
 
   // Footer related
   final DateRange _footerColumnDate = DateRange();
@@ -59,7 +58,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       showImportTransactionsWizard(context);
     };
 
-    pivots.add(
+    _pivots.add(
       ThreePartLabel(
         text1: 'Banks',
         small: true,
@@ -67,7 +66,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0))),
       ),
     );
-    pivots.add(
+    _pivots.add(
       ThreePartLabel(
         text1: 'Investments',
         small: true,
@@ -75,7 +74,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1))),
       ),
     );
-    pivots.add(
+    _pivots.add(
       ThreePartLabel(
         text1: 'Credit',
         small: true,
@@ -83,7 +82,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2))),
       ),
     );
-    pivots.add(
+    _pivots.add(
       ThreePartLabel(
         text1: 'Assets',
         small: true,
@@ -91,7 +90,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3))),
       ),
     );
-    pivots.add(
+    _pivots.add(
       ThreePartLabel(
         text1: 'All',
         small: true,
@@ -152,20 +151,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Transactions':
-        return getFooterForInt(_footerCountTransactions);
-      case 'Balance(USD)':
-        return getFooterForAmount(_footerSumBalance);
-      case 'Updated':
-        return getFooterForDateRange(_footerColumnDate);
-      default:
-        return null;
-    }
-  }
-
-  @override
   List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
     final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
 
@@ -214,6 +199,20 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     }
 
     return list;
+  }
+
+  @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'Transactions':
+        return getFooterForInt(_footerCountTransactions);
+      case 'Balance(USD)':
+        return getFooterForAmount(_footerSumBalance);
+      case 'Updated':
+        return getFooterForDateRange(_footerColumnDate);
+      default:
+        return null;
+    }
   }
 
   @override

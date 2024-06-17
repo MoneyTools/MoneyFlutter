@@ -1,9 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:money/helpers/list_helper.dart';
 import 'package:money/models/fields/field_filter.dart';
+import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
-import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 class AdaptiveViewWithList extends StatelessWidget {
   final Widget? top;
@@ -49,7 +48,7 @@ class AdaptiveViewWithList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (applySorting) {
-      sortList();
+      MoneyObjects.sortList(list, fieldDefinitions, sortByFieldIndex, sortAscending);
     }
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
@@ -100,25 +99,5 @@ class AdaptiveViewWithList extends StatelessWidget {
             });
       },
     );
-  }
-
-  void sortList() {
-    if (isIndexInRange(fieldDefinitions, sortByFieldIndex)) {
-      final Field<dynamic> fieldDefinition = fieldDefinitions[sortByFieldIndex];
-      if (fieldDefinition.sort == null) {
-        // No sorting function found, fallback to String sorting
-        list.sort((final MoneyObject a, final MoneyObject b) {
-          return sortByString(
-            fieldDefinition.getValueForDisplay(a).toString(),
-            fieldDefinition.getValueForDisplay(b).toString(),
-            sortAscending,
-          );
-        });
-      } else {
-        list.sort((final MoneyObject a, final MoneyObject b) {
-          return fieldDefinition.sort!(a, b, sortAscending);
-        });
-      }
-    }
   }
 }
