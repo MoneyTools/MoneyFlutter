@@ -119,7 +119,7 @@ class _MyAppBarState extends State<MyAppBar> {
     addMenuItem(list, Constants.commandFileSaveSql, 'Save to SQL', Icons.save);
 
     // Close
-    addMenuItem(list, Constants.commandFileSaveSql, 'Close file', Icons.close);
+    addMenuItem(list, Constants.commandFileClose, 'Close file', Icons.close);
 
     return myPopupMenuIconButton(
       icon: Icons.menu,
@@ -147,6 +147,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
           case Constants.commandFileClose:
             widget.onFileClose();
+
           default:
             debugPrint(' unhandled $index');
         }
