@@ -4,6 +4,7 @@
 
 ### Added
 
+- Auto Footer-Tally on the InfoPanel-List
 - Long Press on InfoPanel of Loans to show the Detail dialog
   
 ## [version 1.8.26] 2024-05-16

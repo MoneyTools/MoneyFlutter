@@ -7,7 +7,7 @@ import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/models/money_objects/securities/security.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
+import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_stocks/stock_chart.dart';
 import 'package:money/widgets/center_message.dart';
@@ -114,17 +114,17 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         List<Investment> list = getListOfInvestment(lastSecuritySelected!);
 
         MoneyObjects.sortList(list, fieldsToDisplay, sortInstructions.column, sortInstructions.ascending);
-
-        return AdaptiveListColumnsOrRows(
+        return AdaptiveListColumnsOrRowsSingleSelection(
           // list
           list: list,
           fieldDefinitions: fieldsToDisplay,
           filters: FieldFilters(),
           sortByFieldIndex: sortInstructions.column,
           sortAscending: sortInstructions.ascending,
-
+          selectedId: -1,
           // Field & Columns
           displayAsColumns: true,
+          backgoundColorForHeaderFooter: Colors.transparent,
           onColumnHeaderTap: (int columnHeaderIndex) {
             if (columnHeaderIndex == sortInstructions.column) {
               // toggle order
@@ -134,8 +134,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
             }
             _sortingInstruction.value = sortInstructions.clone();
           },
-          selectedItemsByUniqueId: ValueNotifier<List<int>>([]),
-          isMultiSelectionOn: false,
         );
       },
     );

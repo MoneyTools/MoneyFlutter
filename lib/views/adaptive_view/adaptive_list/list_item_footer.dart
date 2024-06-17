@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/widgets/columns/column_footer_button.dart';
 
@@ -7,6 +6,7 @@ import 'package:money/widgets/columns/column_footer_button.dart';
 class MyListItemFooter<T> extends StatelessWidget {
   final FieldDefinitions columns;
   final bool multiSelectionOn;
+  final Color backgoundColor;
 
   final Function(int columnIndex) onTap;
   final Function(Field<dynamic>)? onLongPress;
@@ -14,6 +14,7 @@ class MyListItemFooter<T> extends StatelessWidget {
 
   const MyListItemFooter({
     super.key,
+    this.backgoundColor = Colors.transparent,
     required this.columns,
     required this.multiSelectionOn,
     required this.onTap,
@@ -53,7 +54,7 @@ class MyListItemFooter<T> extends StatelessWidget {
       );
     }
     return Container(
-      color: getColorTheme(context).surfaceContainerLow,
+      color: backgoundColor,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(children: headers),
     );

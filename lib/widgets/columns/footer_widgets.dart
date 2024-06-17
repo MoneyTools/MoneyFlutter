@@ -41,10 +41,10 @@ Widget getFooterForAmount(final double amount) {
     fontFamily: 'RobotoMono',
   );
 
-  if (isSmallConsidredSmallValue(amount)) {
-    return Text('\$${getAmountAsShorthandText(amount)}', style: style);
+  if (isSmallValue(amount)) {
+    return Text(Currency.getAmountAsStringUsingCurrency(amount), style: style);
   }
-  return Text(Currency.getAmountAsStringUsingCurrency(amount), style: style);
+  return Text('\$${getAmountAsShorthandText(amount)}', style: style);
 }
 
 Widget getFooterForInt(final num value) {
@@ -53,12 +53,12 @@ Widget getFooterForInt(final num value) {
     fontFamily: 'RobotoMono',
   );
 
-  if (isSmallConsidredSmallValue(value)) {
-    return Text(getNumberShorthandText(value), style: style);
+  if (isSmallValue(value)) {
+    return Text(getIntAsText(value.toInt()), style: style);
   }
-  return Text(getIntAsText(value.toInt()), style: style);
+  return Text(getNumberShorthandText(value), style: style);
 }
 
-bool isSmallConsidredSmallValue(final num value) {
+bool isSmallValue(final num value) {
   return isBetween(value, -10000, 10000);
 }

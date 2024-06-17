@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:money/helpers/accumulator.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
 
@@ -129,23 +128,6 @@ class KeyValue {
   dynamic value;
 
   KeyValue({required this.key, required this.value});
-}
-
-/// Ensure unique Key [K] instances, that cumulate unique instance of [I] another accumulator
-/// this last accumulator stores [V]
-class MapAccumulator<K, I, V> {
-  Map<K, AccumulatorSum<I, V>> map = {};
-
-  void cumulate(K k, I i, V v) {
-    if (!map.containsKey(k)) {
-      map[k] = AccumulatorSum<I, V>();
-    }
-    map[k]!.cumulate(i, v);
-  }
-
-  AccumulatorSum<I, V>? getLevel1(K key) {
-    return map[key];
-  }
 }
 
 class Pair<T, U> {

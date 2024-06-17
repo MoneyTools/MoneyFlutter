@@ -54,6 +54,11 @@ class DateRange {
     // Calculate the difference between the two dates
     final Duration difference = max!.difference(min!);
 
+    // minimum 1 day
+    if (difference.inDays < 1) {
+      return 1;
+    }
+
     // Get the number of days from the difference
     return difference.inDays;
   }
@@ -92,7 +97,7 @@ class DateRange {
   }
 
   String toStringDuration() {
-    if (durationInYears > 0) {
+    if (durationInDays >= 365) {
       return durationInYearsText;
     }
     return durationInDaysText;

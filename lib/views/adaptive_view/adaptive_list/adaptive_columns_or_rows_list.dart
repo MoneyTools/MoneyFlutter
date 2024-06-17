@@ -92,6 +92,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         // Footer
         if (displayAsColumns && getColumnFooterWidget != null)
           MyListItemFooter<MoneyObject>(
+            backgoundColor: backgoundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             multiSelectionOn: isMultiSelectionOn,
             getColumnFooterWidget: getColumnFooterWidget,
