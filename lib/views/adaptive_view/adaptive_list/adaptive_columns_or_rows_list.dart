@@ -35,7 +35,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   // Selections
   final ValueNotifier<List<int>> selectedItemsByUniqueId;
   final bool isMultiSelectionOn;
-  final Function(int /* uniqueId */)? onSelectionChanged;
+  final Function(int uniqueId)? onSelectionChanged;
   final Function? onContextMenu;
 
   // Display as Card vs Columns

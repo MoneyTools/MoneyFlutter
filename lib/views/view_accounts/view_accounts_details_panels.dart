@@ -93,7 +93,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   }) {
     int sortFieldIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySortBy')) ?? 0;
     bool sortAscending = PreferencesHelper().getBool(getPreferenceKey('info_$settingKeySortAscending')) ?? true;
-    int selectedItemIndex = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySelectedListItemId')) ?? -1;
+    int selectedItemId = PreferencesHelper().getInt(getPreferenceKey('info_$settingKeySelectedListItemId')) ?? -1;
 
     List<LoanPayment> agregatedList = getAccountLoanPayments(account);
 
@@ -122,11 +122,28 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           }
           PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySortBy'), sortFieldIndex);
           PreferencesHelper().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
-          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), sortFieldIndex);
         });
       },
-      selectedItemsByUniqueId: ValueNotifier<List<int>>([selectedItemIndex]),
-      onItemLongPress: (BuildContext context, int itemId) {},
+      isMultiSelectionOn: false,
+      selectedItemsByUniqueId: ValueNotifier<List<int>>([selectedItemId]),
+      onSelectionChanged: (int uniqueId) {
+        // ignore: invalid_use_of_protected_member
+        setState(() {
+          selectedItemId = uniqueId;
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
+        });
+      },
+      onItemLongPress: (BuildContext context2, int itemId) {
+        final LoanPayment instance = findObjectById(itemId, agregatedList) as LoanPayment;
+        myShowDialogAndActionsForMoneyObject(
+          title: 'Loan Payement',
+          context: context2,
+          moneyObject: instance,
+        ).then((value) {
+          selectedItemId = itemId;
+          PreferencesHelper().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
+        });
+      },
     );
   }
 
