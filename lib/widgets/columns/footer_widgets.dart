@@ -5,33 +5,32 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
-import 'package:money/widgets/gaps.dart';
 
 Widget getFooterForDateRange(final DateRange dateRange) {
-  TextStyle styleSmall = TextStyle(
-    fontSize: 10,
-    color: getColorFromState(ColorState.disabled),
-  );
-  return IntrinsicWidth(
-    child: Row(
-      children: [
-        Expanded(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(dateToString(dateRange.min), style: styleSmall),
-              Text(dateToString(dateRange.max), style: styleSmall),
-            ],
-          ),
+  return Expanded(
+    child: LayoutBuilder(builder: (context, constraints) {
+      bool showDates = constraints.maxWidth > 80;
+      return DefaultTextStyle(
+        style: const TextStyle(
+          fontSize: 10,
+          color: Colors.grey,
+          fontFamily: 'RobotoMono',
         ),
-        gapMedium(),
-        Text(
-          dateRange.toStringDuration().replaceAll(' ', '\n'),
-          style: styleSmall,
-          textAlign: TextAlign.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (showDates) Text(dateToString(dateRange.min)),
+            if (showDates) Text(dateToString(dateRange.max)),
+            Text(
+              dateRange.toStringDuration().padLeft(10),
+              softWrap: true,
+              maxLines: 2,
+            ),
+          ],
         ),
-      ],
-    ),
+      );
+    }),
   );
 }
 

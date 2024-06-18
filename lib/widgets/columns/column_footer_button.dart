@@ -28,13 +28,13 @@ Widget buildColumnFooterButton({
         onPressed: onPressed,
         onLongPress: onLongPress,
         // clipBehavior: Clip.hardEdge,
-        child: _buildTextAndSortAndFilter(context, textAlign, child ?? const SizedBox()),
+        child: _buildText(context, textAlign, child ?? const SizedBox()),
       ),
     ),
   );
 }
 
-Widget _buildTextAndSortAndFilter(
+Widget _buildText(
   BuildContext context,
   TextAlign align,
   Widget content,
@@ -57,6 +57,8 @@ Widget _buildTextAndSortAndFilter(
 
   return Row(
     mainAxisAlignment: rowAlign,
-    children: [content],
+    children: [
+      content,
+    ],
   );
 }

@@ -24,9 +24,9 @@ class MyListItemFooter<T> extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final List<Widget> headers = <Widget>[];
+    final List<Widget> footerWidgets = <Widget>[];
     if (multiSelectionOn) {
-      headers.add(
+      footerWidgets.add(
         Opacity(
           opacity: 0, // We only want to use the same width as the Header Checkbox
           child: Checkbox(
@@ -38,9 +38,11 @@ class MyListItemFooter<T> extends StatelessWidget {
     }
     for (int i = 0; i < columns.length; i++) {
       final Field<dynamic> columnDefinition = columns[i];
-      headers.add(
+      footerWidgets.add(
         buildColumnFooterButton(
-          context: context, textAlign: columnDefinition.align, flex: columnDefinition.columnWidth.index,
+          context: context,
+          textAlign: columnDefinition.align,
+          flex: columnDefinition.columnWidth.index,
           // Press
           onPressed: () {
             onTap(i);
@@ -56,7 +58,7 @@ class MyListItemFooter<T> extends StatelessWidget {
     return Container(
       color: backgoundColor,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Row(children: headers),
+      child: Row(children: footerWidgets),
     );
   }
 }
