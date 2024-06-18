@@ -420,6 +420,7 @@ class Transaction extends MoneyObject {
   ///------------------------------------------------------
   /// Non persisted fields
   String get dateTimeAsText => dateToString(dateTime.value);
+  String get amountAsText => amount.value.toString();
 
   Account? accountInstance;
 

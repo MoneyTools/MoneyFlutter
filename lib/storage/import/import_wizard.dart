@@ -1,5 +1,6 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
@@ -24,7 +25,7 @@ void showImportTransactionsWizard(
           description: 'Locate the file on your device.',
           onPressed: () {
             Navigator.of(context).pop(true);
-            onImportFromFile();
+            onImportFromFile(context);
           },
         ),
         gapHuge(),
@@ -41,14 +42,18 @@ void showImportTransactionsWizard(
   );
 }
 
-void onImportFromFile() async {
+void onImportFromFile(
+  final BuildContext context,
+) async {
   final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
   if (pickerResult != null) {
     switch (pickerResult.files.single.extension?.toLowerCase()) {
       case 'qif':
         importQIF(pickerResult.files.single.path.toString());
       case 'qfx':
-        importQFX(pickerResult.files.single.path.toString(), Data());
+        if (context.mounted) {
+          importQFX(context, pickerResult.files.single.path.toString(), Data());
+        }
     }
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 
 class WizardChoice extends StatelessWidget {
@@ -28,7 +29,7 @@ class WizardChoice extends StatelessWidget {
         constraints: const BoxConstraints(maxWidth: 400),
         child: ListTile(
           title: Text(title),
-          titleTextStyle: const TextStyle(fontSize: 20),
+          titleTextStyle: TextStyle(fontSize: 20, color: getColorTheme(context).onSurface),
           subtitle: Padding(
             padding: const EdgeInsets.only(top: SizeForPadding.medium),
             child: Text(description),

@@ -109,14 +109,15 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         icon: Icons.delete_outlined,
         text: 'Delete',
         onPressed: () {
-          showDeleteConfirmationDialog(
-            context,
-            'Delete Transaction',
-            'Are you sure you want to delete this transaction?',
-            Column(
+          showConfirmationDialog(
+            context: context,
+            title: 'Delete Transaction',
+            question: 'Are you sure you want to delete this transaction?',
+            content: Column(
               children: transaction.buildWidgets(onEdit: null, compact: true),
             ),
-            () {
+            buttonText: 'Delete',
+            onConfirmation: () {
               Data().transactions.deleteItem(transaction);
               Navigator.of(context).pop(false);
             },

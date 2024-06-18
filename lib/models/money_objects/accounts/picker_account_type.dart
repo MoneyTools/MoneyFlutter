@@ -14,7 +14,7 @@ Widget pickerAccountType({
     items: getAccountTypeAsText(),
     initialValue: selectedName,
     onChanged: (String newSelection) {
-      onSelected(getAccountTypeFromText(newSelection));
+      onSelected(getAccountTypeFromText(newSelection)!);
     },
   );
 }

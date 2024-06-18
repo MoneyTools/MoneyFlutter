@@ -41,6 +41,10 @@ class ValueQuality {
     if (amount == null) {
       return buildWarning(context, valueAsString);
     }
+    return widgetDoubleAsCurrency(amount);
+  }
+
+  static widgetDoubleAsCurrency(final double amount) {
     return SelectableText(
       doubleToCurrency(amount),
       textAlign: TextAlign.right,

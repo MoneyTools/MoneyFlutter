@@ -204,10 +204,10 @@ class Accounts extends MoneyObjects<Account> {
 
   Account? findByIdAndType(
     final String accountId,
-    final AccountType accountType,
+    final AccountType? accountType,
   ) {
     return iterableList().firstWhereOrNull((final Account item) {
-      return item.accountId.value == accountId && item.type.value == accountType;
+      return item.accountId.value == accountId && (accountType == null || item.type.value == accountType);
     });
   }
 
@@ -225,7 +225,10 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   List<Account> getListSorted() {
-    final list = iterableList().toList();
+    final list = iterableList()
+        .where((account) =>
+            account.isMatchingUserChoiceIncludingClosedAccount && account.type.value != AccountType.categoryFund)
+        .toList();
     list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
     return list;
   }

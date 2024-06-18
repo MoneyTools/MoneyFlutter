@@ -364,12 +364,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             child: Text('${getIntAsText(moneyObjects.length)} $namePlural', style: getTextTheme(context).displaySmall),
           );
 
-    showDeleteConfirmationDialog(
-      context,
-      title,
-      question,
-      content,
-      () {
+    showConfirmationDialog(
+      context: context,
+      title: title,
+      question: question,
+      content: content,
+      buttonText: 'Delete',
+      onConfirmation: () {
         Data().deleteItems(moneyObjects);
       },
     );

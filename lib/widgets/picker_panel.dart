@@ -141,8 +141,8 @@ class _PickerPanelState extends State<PickerPanel> {
                       bool isSelected = label == widget.selectedItem;
                       return GestureDetector(
                         onTap: () {
-                          widget.onSelected(label);
                           Navigator.of(context).pop();
+                          widget.onSelected(label);
                         },
                         child: Container(
                           height: widget.itemHeight,

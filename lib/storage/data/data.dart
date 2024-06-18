@@ -254,7 +254,7 @@ class Data {
       }
     } catch (e) {
       debugLog(e.toString());
-      SnackBarService.showSnackBar(autoDismiss: false, message: e.toString());
+      SnackBarService.display(autoDismiss: false, message: e.toString());
       // clear any previous file
       Settings().fileManager.rememberWhereTheDataCameFrom('');
       return false;

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.28] 2024-05-18
+
+### Added
+
+- Improve UX for QFX file import
+  
 ## [version 1.8.27] 2024-05-17
 
 ### Added

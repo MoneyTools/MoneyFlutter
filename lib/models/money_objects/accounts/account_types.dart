@@ -8,7 +8,7 @@ enum AccountFlags {
 }
 
 /// Convert a text into a AccountType
-AccountType getAccountTypeFromText(final String text) {
+AccountType? getAccountTypeFromText(final String text) {
   switch (text.toLowerCase()) {
     case 'savings':
       return AccountType.savings;
@@ -34,7 +34,7 @@ AccountType getAccountTypeFromText(final String text) {
     case 'loan':
       return AccountType.loan;
     default:
-      return AccountType.notUsed_7;
+      return null;
   }
 }
 

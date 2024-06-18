@@ -214,7 +214,7 @@ class Settings extends ChangeNotifier {
           if (success) {
             Data().assessMutationsCountOfAllModels();
           } else {
-            SnackBarService.showSnackBar(autoDismiss: false, message: message);
+            SnackBarService.display(autoDismiss: false, message: message);
           }
         });
 
