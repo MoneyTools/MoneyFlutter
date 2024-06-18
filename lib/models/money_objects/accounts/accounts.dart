@@ -27,7 +27,6 @@ class Accounts extends MoneyObjects<Account> {
   void loadDemoData() {
     clear();
     final List<MyJson> demoAccounts = <MyJson>[
-      // ignore: always_specify_types
       {
         'Id': -1,
         'AccountId': 'BankAccountIdForTesting',
@@ -35,25 +34,71 @@ class Accounts extends MoneyObjects<Account> {
         'Type': AccountType.savings.index,
         'Currency': 'USD',
       },
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'Bank Of America', 'Type': AccountType.checking.index, 'Currency': 'USD'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'KeyBank', 'Type': AccountType.moneyMarket.index, 'Currency': 'USD'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'Mattress', 'Type': AccountType.cash.index, 'Currency': 'USD'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'Revolut UK', 'Type': AccountType.credit.index, 'Currency': 'GBP'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'Fidelity', 'Type': AccountType.investment.index, 'Currency': 'USD'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'Bank of Japan', 'Type': AccountType.retirement.index, 'Currency': 'JPY'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'James Bonds', 'Type': AccountType.asset.index, 'Currency': 'GBP'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'KickStarter', 'Type': AccountType.loan.index, 'Currency': 'CAD'},
-      // ignore: always_specify_types
-      {'Id': -1, 'Name': 'Home Remodel', 'Type': AccountType.creditLine.index, 'Currency': 'USD'},
+      {
+        'Id': -1,
+        'Name': 'Bank Of America',
+        'AccountId': '0001',
+        'Type': AccountType.checking.index,
+        'Currency': 'USD',
+      },
+      {
+        'Id': -1,
+        'Name': 'KeyBank',
+        'AccountId': '0002',
+        'Type': AccountType.moneyMarket.index,
+        'Currency': 'USD',
+      },
+      {
+        'Id': -1,
+        'Name': 'Mattress',
+        'AccountId': '0003',
+        'Type': AccountType.cash.index,
+        'Currency': 'USD',
+      },
+      {
+        'Id': -1,
+        'Name': 'Revolut UK',
+        'AccountId': '0005',
+        'Type': AccountType.credit.index,
+        'Currency': 'GBP',
+      },
+      {
+        'Id': -1,
+        'Name': 'Fidelity',
+        'AccountId': '0006',
+        'Type': AccountType.investment.index,
+        'Currency': 'USD',
+      },
+      {
+        'Id': -1,
+        'Name': 'Bank of Japan',
+        'AccountId': '11111',
+        'Type': AccountType.retirement.index,
+        'Currency': 'JPY'
+      },
+      {
+        'Id': -1,
+        'Name': 'James Bonds',
+        'AccountId': '007',
+        'Type': AccountType.asset.index,
+        'Currency': 'GBP',
+      },
+      {
+        'Id': -1,
+        'Name': 'KickStarter',
+        'AccountId': 'K000',
+        'Type': AccountType.loan.index,
+        'Currency': 'CAD',
+      },
+      {
+        'Id': -1,
+        'Name': 'Home Remodel',
+        'AccountId': 'H0001',
+        'Type': AccountType.creditLine.index,
+        'Currency': 'USD',
+      },
     ];
+
     for (final MyJson demoAccount in demoAccounts) {
       appendNewMoneyObject(Account.fromJson(demoAccount), fireNotification: false);
     }
@@ -206,8 +251,8 @@ class Accounts extends MoneyObjects<Account> {
     final String accountId,
     final AccountType? accountType,
   ) {
-    return iterableList().firstWhereOrNull((final Account item) {
-      return item.accountId.value == accountId && (accountType == null || item.type.value == accountType);
+    return iterableList().firstWhereOrNull((final Account account) {
+      return account.accountId.value == accountId && (accountType == null || account.type.value == accountType);
     });
   }
 
