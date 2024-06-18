@@ -1,16 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:money/app_caption.dart';
+import 'package:money/app_title.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
-import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/storage/import/import_wizard.dart';
 import 'package:money/views/view_settings.dart';
 import 'package:money/widgets/color_palette.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';
 
@@ -49,40 +47,12 @@ class _MyAppBarState extends State<MyAppBar> {
       leading: _buildPopupMenu(),
 
       // Center Title
-      title: AppCaption(
-        netWorth: Data().getNetWorth(),
-        child: LoadedDataFileAndTime(
-            filePath: Settings().fileManager.fullPathToLastOpenedFile,
-            lastModifiedDateTime: Settings().fileManager.dataFileLastUpdateDateTime),
-      ),
+      title: AppTitle(),
 
       // Button on the right side
       actions: <Widget>[
         // Hide/Show closed accounts
-        IconButton(
-          icon: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Opacity(
-                opacity: Settings().includeClosedAccounts ? 1.0 : 0.5,
-                child: const Icon(
-                  Icons.inventory,
-                  size: 18,
-                ),
-              ),
-              gapSmall(),
-              Text(
-                Settings().includeClosedAccounts ? 'Viewing' : 'Hidden',
-                style: TextStyle(fontSize: 8, color: getColorTheme(context).primary),
-              ),
-            ],
-          ),
-          onPressed: () {
-            Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
-            Settings().preferrenceSave();
-          },
-          tooltip: Settings().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
-        ),
+        if (!Settings().isSmallScreen) _buildButtonToggleViewClosedAccounts(),
 
         // Dark / Light mode
         IconButton(
@@ -95,6 +65,26 @@ class _MyAppBarState extends State<MyAppBar> {
         ),
         _buildSettingsMenu(),
       ],
+    );
+  }
+
+  Widget _buildButtonToggleViewClosedAccounts() {
+    return IconButton(
+      icon: _buildButtonToggleViewClosedAccountsIcon(),
+      onPressed: () {
+        Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
+      },
+      tooltip: Settings().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
+    );
+  }
+
+  Widget _buildButtonToggleViewClosedAccountsIcon() {
+    return Opacity(
+      opacity: Settings().includeClosedAccounts ? 1.0 : 0.5,
+      child: const Icon(
+        Icons.inventory,
+        size: 18,
+      ),
     );
   }
 
@@ -169,8 +159,22 @@ class _MyAppBarState extends State<MyAppBar> {
   }
 
   Widget _buildSettingsMenu() {
-    final List<PopupMenuItem<int>> actionList =
-        List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
+    final List<PopupMenuItem<int>> actionList = [];
+
+    if (Settings().isSmallScreen) {
+      actionList.add(
+        PopupMenuItem<int>(
+          value: Constants.commandIncludeClosedAccount,
+          child: ThreePartLabel(
+            text1: Settings().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
+            icon: _buildButtonToggleViewClosedAccountsIcon(),
+            small: true,
+          ),
+        ),
+      );
+    }
+
+    final colorPallette = List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
       final bool isSelected = index == Settings().colorSelected;
       return PopupMenuItem<int>(
         value: index,
@@ -190,9 +194,11 @@ class _MyAppBarState extends State<MyAppBar> {
       );
     });
 
+    actionList.addAll(colorPallette);
+
     actionList.add(
       const PopupMenuItem<int>(
-        value: Constants.commandSettings,
+        value: Constants.commandIncludeClosedAccount,
         child: ThreePartLabel(
           text1: 'General...',
           icon: Icon(Icons.settings, color: Colors.grey),

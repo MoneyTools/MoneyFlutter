@@ -96,6 +96,7 @@ class SizeForPadding {
 class SizeForText {
   static const double small = 8;
   static const double medium = 13;
+  static const double normal = 18;
   static const double large = 21;
   static const double huge = 34;
 }

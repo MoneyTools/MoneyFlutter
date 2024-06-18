@@ -29,8 +29,8 @@ class RevealContentState extends State<RevealContent> {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-      onPressed: _toggleReveal,
+    return InkWell(
+      onTap: _toggleReveal,
       onLongPress: () {
         if (widget.textForClipboard.isNotEmpty) {
           copyToClipboardAndInformUser(context, widget.textForClipboard);

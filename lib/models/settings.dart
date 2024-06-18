@@ -85,6 +85,7 @@ class Settings extends ChangeNotifier {
 
   set includeClosedAccounts(bool value) {
     _includeClosedAccounts = value;
+    Settings().preferrenceSave();
     rebuild();
   }
 
@@ -157,7 +158,7 @@ class Settings extends ChangeNotifier {
         intValueOrDefault(preferences.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
     cashflowRecurringOccurrences =
         intValueOrDefault(preferences.getInt(settingKeyCashflowRecurringOccurrences), defaultValueIfNull: 12);
-    includeClosedAccounts = preferences.getBool(settingKeyIncludeClosedAccounts) == true;
+    _includeClosedAccounts = preferences.getBool(settingKeyIncludeClosedAccounts) == true;
     apiKeyForStocks = preferences.getString(settingKeyStockApiKey) ?? '';
 
     isDetailsPanelExpanded = preferences.getBool(settingKeyDetailsPanelExpanded) == true;
