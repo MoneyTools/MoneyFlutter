@@ -76,6 +76,55 @@ class ValueQuality {
   }
 }
 
+class ValuesQuality {
+  bool exist = false;
+  final ValueQuality date;
+  final ValueQuality description;
+  final ValueQuality amount;
+
+  ValuesQuality({required this.date, required this.description, required this.amount});
+
+  factory ValuesQuality.empty() {
+    return ValuesQuality(
+        date: const ValueQuality(''), description: const ValueQuality(''), amount: const ValueQuality(''));
+  }
+
+  bool containsErrors() {
+    return date.hasError || description.hasError || amount.hasError;
+  }
+
+  bool checkIfExistAlready() {
+    exist = isTransactionAlreadyInTheSystem(
+      dateTime: date.asDate(),
+      payeeAsText: description.asString(),
+      amount: amount.asAmount(),
+    );
+    return exist;
+  }
+
+  static DateRange getDateRange(final List<ValuesQuality> list) {
+    DateRange range = DateRange();
+    for (final v in list) {
+      range.inflate(v.date.asDate());
+    }
+    return range;
+  }
+
+  static void sort(final List<ValuesQuality> list, final int sortBy, final bool ascending) {
+    list.sort((a, b) {
+      switch (sortBy) {
+        case 0:
+          return sortByDate(a.date.asDate(), b.date.asDate(), ascending);
+        case 1:
+          return sortByString(a.description.asString(), b.description.asString(), ascending);
+        case 2:
+          return sortByValue(a.amount.asAmount(), b.amount.asAmount(), ascending);
+      }
+      return 0;
+    });
+  }
+}
+
 class ValuesParser {
   List<ValuesQuality> _values = [];
   String errorMessage = '';
@@ -87,6 +136,12 @@ class ValuesParser {
 
   bool get isNotEmpty {
     return !isEmpty;
+  }
+
+  static void evaluateExistence(List<ValuesQuality> values) {
+    for (final vq in values) {
+      vq.checkIfExistAlready();
+    }
   }
 
   // ignore: unnecessary_getters_setters
@@ -250,55 +305,6 @@ class ValuesParser {
       singleText += '${dates[line]}; ${descriptions[line]}; ${amounts[line]}\n';
     }
     return singleText;
-  }
-}
-
-class ValuesQuality {
-  bool exist = false;
-  final ValueQuality date;
-  final ValueQuality description;
-  final ValueQuality amount;
-
-  ValuesQuality({required this.date, required this.description, required this.amount});
-
-  factory ValuesQuality.empty() {
-    return ValuesQuality(
-        date: const ValueQuality(''), description: const ValueQuality(''), amount: const ValueQuality(''));
-  }
-
-  bool containsErrors() {
-    return date.hasError || description.hasError || amount.hasError;
-  }
-
-  bool checkIfExistAlready() {
-    exist = isTransactionAlreadyInTheSystem(
-      dateTime: date.asDate(),
-      payeeAsText: description.asString(),
-      amount: amount.asAmount(),
-    );
-    return exist;
-  }
-
-  static DateRange getDateRange(final List<ValuesQuality> list) {
-    DateRange range = DateRange();
-    for (final v in list) {
-      range.inflate(v.date.asDate());
-    }
-    return range;
-  }
-
-  static void sort(final List<ValuesQuality> list, final int sortBy, final bool ascending) {
-    list.sort((a, b) {
-      switch (sortBy) {
-        case 0:
-          return sortByDate(a.date.asDate(), b.date.asDate(), ascending);
-        case 1:
-          return sortByString(a.description.asString(), b.description.asString(), ascending);
-        case 2:
-          return sortByValue(a.amount.asAmount(), b.amount.asAmount(), ascending);
-      }
-      return 0;
-    });
   }
 }
 

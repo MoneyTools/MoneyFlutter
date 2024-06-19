@@ -2,12 +2,9 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/date_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/helpers/value_parser.dart';
-import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
@@ -16,7 +13,7 @@ import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/dialog/dialog.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/widgets/import_transactions_list.dart';
 import 'package:money/widgets/picker_panel.dart';
 import 'package:money/widgets/snack_bar.dart';
 
@@ -47,7 +44,7 @@ Future<bool> importQFX(
         onSelected: (final String text) {
           final Account? accountSelected = Data().accounts.getByName(text);
           if (accountSelected != null) {
-            _importNow(context, ofx, accountSelected);
+            _showAndConfirmTransactionToImport(context, ofx, accountSelected);
           } else {
             SnackBarService.display(
                 autoDismiss: false,
@@ -56,69 +53,36 @@ Future<bool> importQFX(
           }
         });
   } else {
-    _importNow(context, ofx, account);
+    _showAndConfirmTransactionToImport(context, ofx, account);
   }
 
   return true;
 }
 
-void _importNow(final BuildContext context, final String ofx, final Account account) {
+void _showAndConfirmTransactionToImport(final BuildContext context, final String ofx, final Account account) {
   final List<QFXTransaction> list = getTransactionFromOFX(ofx);
 
-  String messageToUser = '${list.length} transactions found in QFX file, to be imported into "${account.name.value}"';
-
-  final List<Transaction> transactionsNew = [];
-  final List<Transaction> transactionsAlreadyFound = [];
+  final List<ValuesQuality> valuesQuality = [];
 
   // attempt to find or add new transactions
   for (final QFXTransaction item in list) {
     // when there's no 'name' then fallback to 'memo'
     final payeeText = item.name.isEmpty ? item.memo : item.name;
-
-    // skip if it already exist
-    final Transaction? transactionFound = getTransactionAlreadyInTheSystem(
-      dateTime: item.date,
-      payeeAsText: payeeText,
-      amount: item.amount,
-    );
-
-    if (transactionFound == null) {
-      final payeeIdMatchingPayeeText =
-          Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
-
-      // Avoid duplicate transactions
-      final Transaction t = Transaction(status: TransactionStatus.electronic)
-        ..id.value = -1
-        ..accountId.value = account.id.value
-        ..dateTime.value = item.date
-        ..number.value = item.number
-        ..amount.value.setAmount(item.amount)
-        ..fitid.value = item.fitid
-        ..memo.value = item.memo
-        ..originalPayee.value = item.name
-        ..payee.value = payeeIdMatchingPayeeText;
-
-      // TODO - if investment transaction
-      // ..categoryId.value = getInvestmentCategoryFromOfxType(item)
-
-      transactionsNew.add(t);
-    } else {
-      transactionsAlreadyFound.add(transactionFound);
-    }
+    valuesQuality.add(ValuesQuality(
+      date: ValueQuality(item.date.toIso8601String()),
+      // final int payeeIdMatchingPayeeText = Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
+      description: ValueQuality(payeeText),
+      amount: ValueQuality(item.amount.toString()),
+    ));
   }
 
+  String messageToUser = '${list.length} transactions found in QFX file, to be imported into "${account.name.value}"';
+
   Widget questionContent = SizedBox(
-    height: 200,
-    child: SingleChildScrollView(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          IntrinsicHeight(
-              child: _buildListOfTransaction(context, 'Transactions already present:', transactionsAlreadyFound)),
-          IntrinsicHeight(child: _buildListOfTransaction(context, 'Transactions will be added:', transactionsNew)),
-        ],
-      ),
+    height: 400,
+    width: 500,
+    child: ImportTransactionsList(
+      values: valuesQuality,
     ),
   );
 
@@ -129,61 +93,23 @@ void _importNow(final BuildContext context, final String ofx, final Account acco
       content: questionContent,
       buttonText: 'Import',
       onConfirmation: () {
+        final List<Transaction> transactionsToAdd = [];
+        for (final ValuesQuality singleTransactionInput in valuesQuality) {
+          if (!singleTransactionInput.exist) {
+            final t = createNewTransactionFromDateDescriptionAmount(
+              account,
+              singleTransactionInput.date.asDate(),
+              singleTransactionInput.description.asString(),
+              singleTransactionInput.amount.asAmount(),
+            );
+            transactionsToAdd.add(t);
+          }
+        }
         addNewTransactions(
-          transactionsNew,
-          'QFX Imported - $messageToUser',
+          transactionsToAdd,
+          'QFX Imported - ${transactionsToAdd.length} transactions into "${account.name.value}"',
         );
       });
-}
-
-Widget _buildListOfTransaction(final BuildContext context, final String title, final List<Transaction> list) {
-  List<Widget> rows = list
-      .map(
-        (t) => Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            gapSmall(),
-            Expanded(
-              flex: 2,
-              child: Text(t.getAccountName()),
-            ),
-            gapSmall(),
-            Expanded(
-              flex: 2,
-              child: Text(t.dateTimeAsText),
-            ),
-            gapSmall(),
-            Expanded(
-              flex: 3,
-              child: Text(t.payeeName),
-            ),
-            gapSmall(),
-            Expanded(
-              flex: 2,
-              child: ValueQuality.widgetDoubleAsCurrency(attemptToGetDoubleFromText(t.amountAsText) ?? 0.00),
-            ),
-          ],
-        ),
-      )
-      .toList();
-  return DefaultTextStyle(
-    style: TextStyle(
-      fontSize: SizeForText.medium,
-      color: getColorTheme(context).onSurface,
-    ),
-    textAlign: TextAlign.start,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('${list.length} $title',
-            style: const TextStyle(
-              fontSize: SizeForText.large,
-            )),
-        ...rows,
-        gapLarge(),
-      ],
-    ),
-  );
 }
 
 class OfxBankInfo {

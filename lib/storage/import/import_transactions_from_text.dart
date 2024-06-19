@@ -100,6 +100,14 @@ Transaction createNewTransactionFromDateDescriptionAmount(
 /// Add the list of transactions "as is", then notify the user when completed
 /// Note that this does not check for duplicated transaction or resolvs the Payee names
 void addNewTransactions(List<Transaction> transactionsNew, String messageToUserAfterAdding) {
+  if (transactionsNew.isEmpty) {
+    SnackBarService.displayWarning(
+      autoDismiss: true,
+      message: messageToUserAfterAdding,
+    );
+    return;
+  }
+
   for (final transactionToAdd in transactionsNew) {
     Data().transactions.appendNewMoneyObject(transactionToAdd, fireNotification: false);
   }

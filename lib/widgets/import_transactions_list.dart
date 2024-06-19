@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/list_helper.dart';
+import 'package:money/helpers/string_helper.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/columns/column_header_button.dart';
@@ -25,6 +27,12 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    ValuesParser.evaluateExistence(widget.values);
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (widget.values.isEmpty) {
       return buildWarning(context, 'No transactions');
@@ -42,8 +50,40 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
             itemBuilder: (context, index) => _buildTransactionRow(widget.values[index]),
           ),
         ),
+
+        // Footer
+        Container(
+          color: getColorTheme(context).surfaceContainerLow,
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(ValuesQuality.getDateRange(widget.values).toStringDays()),
+              _buildTallyOfItemsToImportOrSkip(),
+              Text('Total: ${doubleToCurrency(sumOfValues())}', textAlign: TextAlign.right),
+            ],
+          ),
+        ),
       ],
     );
+  }
+
+  Widget _buildTallyOfItemsToImportOrSkip() {
+    int totalItems = widget.values.length;
+    int itemsToImport = widget.values.where((item) => !item.exist).length;
+    String text = getIntAsText(widget.values.length);
+    if (totalItems != itemsToImport) {
+      text = '${getIntAsText(itemsToImport)}/${getIntAsText(totalItems)}';
+    }
+    return Text('$text entries');
+  }
+
+  double sumOfValues() {
+    double sum = 0;
+    for (final ValuesQuality value in widget.values) {
+      sum += value.amount.asAmount();
+    }
+    return sum;
   }
 
   void _sortValues() {
@@ -51,19 +91,22 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
   }
 
   Widget _buildColumnHeaders(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: List.generate(
-        _columnNames.length,
-        (index) => buildColumnHeaderButton(
-          context: context,
-          text: _columnNames[index].first,
-          textAlign: _columnNames[index].second,
-          flex: _columnNames[index].third,
-          sortIndicator: getSortIndicator(_sortColumnIndex, index, _sortAscending),
-          hasFilters: false,
-          onPressed: () => _updateSortChoice(index),
-          onLongPress: null,
+    return Container(
+      color: getColorTheme(context).surfaceContainerLow,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(
+          _columnNames.length,
+          (index) => buildColumnHeaderButton(
+            context: context,
+            text: _columnNames[index].first,
+            textAlign: _columnNames[index].second,
+            flex: _columnNames[index].third,
+            sortIndicator: getSortIndicator(_sortColumnIndex, index, _sortAscending),
+            hasFilters: false,
+            onPressed: () => _updateSortChoice(index),
+            onLongPress: null,
+          ),
         ),
       ),
     );

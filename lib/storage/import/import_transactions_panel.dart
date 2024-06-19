@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/string_helper.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
@@ -44,9 +43,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   @override
   Widget build(BuildContext context) {
-    for (final vq in values) {
-      vq.checkIfExistAlready();
-    }
+    ValuesParser.evaluateExistence(values);
 
     return SizedBox(
       width: 600,
@@ -79,35 +76,9 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               values: values,
             ),
           ),
-
-          const Divider(),
-
-          // sumarry
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildTallyOfItemsToImportOrSkip(),
-                Text(ValuesQuality.getDateRange(values).toStringDays()),
-                Text('Total: ${doubleToCurrency(sumOfValues())}', textAlign: TextAlign.right),
-              ],
-            ),
-          ),
-          const Divider(),
         ],
       ),
     );
-  }
-
-  Widget _buildTallyOfItemsToImportOrSkip() {
-    int totalItems = values.length;
-    int itemsToImport = values.where((item) => !item.exist).length;
-    String text = getIntAsText(values.length);
-    if (totalItems != itemsToImport) {
-      text = '${getIntAsText(itemsToImport)}/${getIntAsText(totalItems)}';
-    }
-    return Text('$text entries');
   }
 
   Widget _buildHeaderAndAccountPicker() {
@@ -132,14 +103,6 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
         ),
       ],
     );
-  }
-
-  double sumOfValues() {
-    double sum = 0;
-    for (final ValuesQuality value in values) {
-      sum += value.amount.asAmount();
-    }
-    return sum;
   }
 
   void convertAndNotify(BuildContext context, String inputText) {

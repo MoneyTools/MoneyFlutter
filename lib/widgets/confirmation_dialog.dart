@@ -55,8 +55,11 @@ class ConfirmationDialog extends StatelessWidget {
           children: [
             Text(question, style: Theme.of(context).textTheme.titleMedium),
             gapLarge(),
-            // Content or simple message
-            if (content != null) content!,
+            // optional Content
+            if (content != null)
+              Expanded(
+                child: content!,
+              ),
           ],
         ),
       ),
