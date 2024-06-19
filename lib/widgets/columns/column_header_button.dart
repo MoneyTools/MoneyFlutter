@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/widgets/columns/column_content_center.dart';
 
-Widget buildColumnHeaderButton(
-  final BuildContext context,
-  final String text,
-  final TextAlign textAlign,
-  final int flex,
-  final SortIndicator sortIndicator,
-  final bool hasFilters,
-  final VoidCallback? onPressed,
-  final VoidCallback? onLongPress,
-) {
+Widget buildColumnHeaderButton({
+  required BuildContext context,
+  required String text,
+  required TextAlign textAlign,
+  required int flex,
+  required SortIndicator sortIndicator,
+  required bool hasFilters,
+  required VoidCallback? onPressed,
+  required VoidCallback? onLongPress,
+}) {
   return Expanded(
     flex: flex,
     child: Tooltip(

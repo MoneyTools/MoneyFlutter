@@ -45,18 +45,16 @@ class MyListItemHeader<T> extends StatelessWidget {
       final Field<dynamic> columnDefinition = columns[i];
       headers.add(
         buildColumnHeaderButton(
-          context,
-          columnDefinition.name,
-          columnDefinition.align,
-          columnDefinition.columnWidth.index,
-          getSortIndicator(sortByColumn, i, sortAscending),
-          filterOn.list.firstWhereOrNull((item) => item.fieldName == columnDefinition.name) != null,
-          // Press
-          () {
+          context: context,
+          text: columnDefinition.name,
+          textAlign: columnDefinition.align,
+          flex: columnDefinition.columnWidth.index,
+          sortIndicator: getSortIndicator(sortByColumn, i, sortAscending),
+          hasFilters: filterOn.list.firstWhereOrNull((item) => item.fieldName == columnDefinition.name) != null,
+          onPressed: () {
             onTap(i);
           },
-          // Long Press
-          () {
+          onLongPress: () {
             onLongPress?.call(columnDefinition);
           },
         ),

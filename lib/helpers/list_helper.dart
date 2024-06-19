@@ -130,9 +130,9 @@ class KeyValue {
   KeyValue({required this.key, required this.value});
 }
 
-class Pair<T, U> {
-  T first;
-  U second;
+class Pair<F, S> {
+  F first;
+  S second;
 
   Pair(this.first, this.second);
 
@@ -142,11 +142,31 @@ class Pair<T, U> {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is Pair<T, U> && other.first == first && other.second == second;
+    return other is Pair<F, S> && other.first == first && other.second == second;
   }
 
   @override
   String toString() => '($first, $second)';
+}
+
+class Triple<F, S, T> {
+  F first;
+  S second;
+  T third;
+
+  Triple(this.first, this.second, this.third);
+
+  @override
+  int get hashCode => first.hashCode ^ second.hashCode ^ third.hashCode;
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is Triple<F, S, T> && other.first == first && other.second == second && other.third == third;
+  }
+
+  @override
+  String toString() => '($first, $second, $third)';
 }
 
 class SortedSet<T> {

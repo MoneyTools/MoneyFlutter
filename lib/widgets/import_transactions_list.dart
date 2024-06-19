@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/columns/column_header_button.dart';
@@ -15,110 +16,101 @@ class ImportTransactionsList extends StatefulWidget {
 }
 
 class _ImportTransactionsListState extends State<ImportTransactionsList> {
-  int _sortBy = 0; // 0=Date, 1=Memo, 2=Amount
+  int _sortColumnIndex = 0; // 0=Date, 1=Memo, 2=Amount
   bool _sortAscending = false;
+  late final List<Triple<String, TextAlign, int>> _columnNames = [
+    Triple<String, TextAlign, int>('Date', TextAlign.left, 1),
+    Triple<String, TextAlign, int>('Description/Payee', TextAlign.left, 2),
+    Triple<String, TextAlign, int>('Amount', TextAlign.right, 1),
+  ];
 
   @override
   Widget build(BuildContext context) {
     if (widget.values.isEmpty) {
       return buildWarning(context, 'No transactions');
     }
-    ValuesQuality.sort(widget.values, _sortBy, _sortAscending);
+
+    _sortValues();
 
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            buildColumnHeaderButton(
-              context,
-              'Date',
-              TextAlign.left,
-              1,
-              getSortIndicator(_sortBy, 0, _sortAscending),
-              false,
-              () => updateSortChoice(0),
-              null,
-            ),
-            buildColumnHeaderButton(
-              context,
-              'Description/Payee',
-              TextAlign.left,
-              2,
-              getSortIndicator(_sortBy, 1, _sortAscending),
-              false,
-              () => updateSortChoice(1),
-              null,
-            ),
-            buildColumnHeaderButton(
-              context,
-              'Amount',
-              TextAlign.right,
-              1,
-              getSortIndicator(_sortBy, 2, _sortAscending),
-              false,
-              () => updateSortChoice(2),
-              null,
-            ),
-          ],
-        ),
+        _buildColumnHeaders(context),
         Expanded(
           child: ListView.separated(
-            separatorBuilder: (BuildContext context, int index) {
-              return const Divider();
-            },
+            separatorBuilder: (context, index) => const Divider(),
             itemCount: widget.values.length,
-            itemBuilder: (context, index) {
-              final dateAsWidget = widget.values[index].date.valueAsDateWidget(context);
-              final payeAsWidget = _buildDescriptionOrPayee(context, widget.values[index].description);
-              final amountAsWidget = widget.values[index].amount.valueAsAmountWidget(context);
-
-              return MyBanner(
-                on: widget.values[index].exist,
-                child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  // Date
-                  Expanded(flex: 1, child: dateAsWidget),
-                  // Description
-                  Expanded(
-                    flex: 2,
-                    child: payeAsWidget,
-                  ),
-                  // Amount
-                  Expanded(flex: 1, child: amountAsWidget),
-                ]),
-              );
-            },
+            itemBuilder: (context, index) => _buildTransactionRow(widget.values[index]),
           ),
         ),
       ],
     );
   }
 
-  void updateSortChoice(final int sortBy) {
+  void _sortValues() {
+    ValuesQuality.sort(widget.values, _sortColumnIndex, _sortAscending);
+  }
+
+  Widget _buildColumnHeaders(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: List.generate(
+        _columnNames.length,
+        (index) => buildColumnHeaderButton(
+          context: context,
+          text: _columnNames[index].first,
+          textAlign: _columnNames[index].second,
+          flex: _columnNames[index].third,
+          sortIndicator: getSortIndicator(_sortColumnIndex, index, _sortAscending),
+          hasFilters: false,
+          onPressed: () => _updateSortChoice(index),
+          onLongPress: null,
+        ),
+      ),
+    );
+  }
+
+  void _updateSortChoice(int columnIndex) {
     setState(() {
-      if (sortBy == _sortBy) {
+      if (columnIndex == _sortColumnIndex) {
         _sortAscending = !_sortAscending;
       } else {
-        _sortBy = sortBy;
+        _sortColumnIndex = columnIndex;
       }
+      _sortValues();
     });
   }
 
+  Widget _buildTransactionRow(ValuesQuality value) {
+    final dateAsWidget = value.date.valueAsDateWidget(context);
+    final payeAsWidget = _buildDescriptionOrPayee(context, value.description);
+    final amountAsWidget = value.amount.valueAsAmountWidget(context);
+
+    return MyBanner(
+      on: value.exist,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(flex: 1, child: dateAsWidget),
+          Expanded(flex: 2, child: payeAsWidget),
+          Expanded(flex: 1, child: amountAsWidget),
+        ],
+      ),
+    );
+  }
+
   Widget _buildDescriptionOrPayee(BuildContext context, ValueQuality valueQuality) {
-    late Widget foundMatchingPayee;
-    if (Data().payees.getByName(valueQuality.valueAsString) == null) {
-      foundMatchingPayee = const SizedBox();
-    } else {
-      foundMatchingPayee = const Badge(
-        label: Text("Payee Match"),
-        backgroundColor: Colors.lightBlue,
-        textColor: Colors.black,
-      );
-    }
+    final payeeName = valueQuality.valueAsString;
+    final payeeMatch = Data().payees.getByName(payeeName) != null;
+
     return Row(
       children: [
         Expanded(child: valueQuality.valueAsTextWidget(context)),
-        foundMatchingPayee,
+        if (payeeMatch)
+          const Badge(
+            label: Text("Payee Match"),
+            backgroundColor: Colors.lightBlue,
+            textColor: Colors.black,
+          ),
       ],
     );
   }
