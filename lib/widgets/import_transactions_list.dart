@@ -3,6 +3,7 @@ import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/columns/column_header_button.dart';
 import 'package:money/widgets/semantic_text.dart';
+import 'package:money/widgets/mybanner.dart';
 
 class ImportTransactionsList extends StatefulWidget {
   final List<ValuesQuality> values;
@@ -62,24 +63,29 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
           ],
         ),
         Expanded(
-          child: ListView.builder(
+          child: ListView.separated(
+            separatorBuilder: (BuildContext context, int index) {
+              return const Divider();
+            },
             itemCount: widget.values.length,
             itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  const Divider(),
-                  Row(mainAxisAlignment: MainAxisAlignment.start, children: [
-                    // Date
-                    Expanded(flex: 1, child: widget.values[index].date.valueAsDateWidget(context)),
-                    // Description
-                    Expanded(
-                      flex: 2,
-                      child: _buildDescriptionOrPayee(context, widget.values[index].description),
-                    ),
-                    // Amount
-                    Expanded(flex: 1, child: widget.values[index].amount.valueAsAmountWidget(context)),
-                  ]),
-                ],
+              final dateAsWidget = widget.values[index].date.valueAsDateWidget(context);
+              final payeAsWidget = _buildDescriptionOrPayee(context, widget.values[index].description);
+              final amountAsWidget = widget.values[index].amount.valueAsAmountWidget(context);
+
+              return MyBanner(
+                on: widget.values[index].exist,
+                child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  // Date
+                  Expanded(flex: 1, child: dateAsWidget),
+                  // Description
+                  Expanded(
+                    flex: 2,
+                    child: payeAsWidget,
+                  ),
+                  // Amount
+                  Expanded(flex: 1, child: amountAsWidget),
+                ]),
               );
             },
           ),

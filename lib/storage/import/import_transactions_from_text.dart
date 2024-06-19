@@ -9,6 +9,7 @@ import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/dialog/dialog_button.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/message_box.dart';
+import 'package:money/widgets/snack_bar.dart';
 
 void showImportTransactionsFromTextInput(
   final BuildContext context, [
@@ -20,36 +21,43 @@ void showImportTransactionsFromTextInput(
 
   ValuesParser parser = ValuesParser();
 
+  List<Widget> actionButtons = [
+    // Button - Import
+    DialogActionButton(
+        text: 'Import',
+        onPressed: () {
+          if (parser.isEmpty) {
+            messageBox(context, 'Nothing to import');
+          } else {
+            if (parser.containsErrors()) {
+              messageBox(context, 'Contains errors');
+            } else {
+              // Import
+              final List<Transaction> transactionsToAdd = [];
+              for (final ValuesQuality singleTransactionInput in parser.lines) {
+                if (!singleTransactionInput.exist) {
+                  final t = createNewTransactionFromDateDescriptionAmount(
+                    account,
+                    singleTransactionInput.date.asDate(),
+                    singleTransactionInput.description.asString(),
+                    singleTransactionInput.amount.asAmount(),
+                  );
+                  transactionsToAdd.add(t);
+                }
+              }
+              addNewTransactions(transactionsToAdd, '${transactionsToAdd.length} transactions added');
+
+              Navigator.of(context).pop(false);
+            }
+          }
+        }),
+  ];
+
   adaptiveScreenSizeDialog(
     context: context,
     title: 'Import from text',
     captionForClose: 'Cancel',
-    actionButtons: [
-      // Button - Import
-      DialogActionButton(
-          text: 'Import',
-          onPressed: () {
-            if (parser.isEmpty) {
-              messageBox(context, 'Nothing to import');
-            } else {
-              if (parser.containsErrors()) {
-                messageBox(context, 'Contains errors');
-              } else {
-                // Import
-                for (final triple in parser.lines) {
-                  addTransactionFromDateDescriptionAmount(
-                    account,
-                    triple.date.asDate(),
-                    triple.description.asString(),
-                    triple.amount.asAmount(),
-                  );
-                }
-                Data().updateAll();
-                Navigator.of(context).pop(false);
-              }
-            }
-          }),
-    ], // this will hide the close button
+    actionButtons: actionButtons,
     child: Column(
       children: [
         gapLarge(),
@@ -71,7 +79,7 @@ void showImportTransactionsFromTextInput(
   );
 }
 
-void addTransactionFromDateDescriptionAmount(
+Transaction createNewTransactionFromDateDescriptionAmount(
   final Account account,
   final DateTime date,
   final String description,
@@ -86,6 +94,19 @@ void addTransactionFromDateDescriptionAmount(
   t.payee.value = payee == null ? -1 : payee.id.value;
   t.memo.value = description;
   t.amount.value.setAmount(amount);
+  return t;
+}
 
-  Data().transactions.appendNewMoneyObject(t, fireNotification: false);
+/// Add the list of transactions "as is", then notify the user when completed
+/// Note that this does not check for duplicated transaction or resolvs the Payee names
+void addNewTransactions(List<Transaction> transactionsNew, String messageToUserAfterAdding) {
+  for (final transactionToAdd in transactionsNew) {
+    Data().transactions.appendNewMoneyObject(transactionToAdd, fireNotification: false);
+  }
+  Data().updateAll();
+
+  SnackBarService.displaySuccess(
+    autoDismiss: true,
+    message: messageToUserAfterAdding,
+  );
 }

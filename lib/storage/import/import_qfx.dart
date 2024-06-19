@@ -12,13 +12,13 @@ import 'package:money/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
+import 'package:money/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
 import 'package:money/widgets/confirmation_dialog.dart';
 import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/picker_panel.dart';
 import 'package:money/widgets/snack_bar.dart';
-// import 'package:money/widgets/snack_bar.dart';
 
 Future<bool> importQFX(
   final BuildContext context,
@@ -76,12 +76,11 @@ void _importNow(final BuildContext context, final String ofx, final Account acco
     final payeeText = item.name.isEmpty ? item.memo : item.name;
 
     // skip if it already exist
-    final Transaction? transactionFound = Data().transactions.findExistingTransaction(
-          dateTime: item.date,
-          payeeAsText: payeeText,
-          memo: item.memo,
-          amount: item.amount,
-        );
+    final Transaction? transactionFound = getTransactionAlreadyInTheSystem(
+      dateTime: item.date,
+      payeeAsText: payeeText,
+      amount: item.amount,
+    );
 
     if (transactionFound == null) {
       final payeeIdMatchingPayeeText =
@@ -130,14 +129,9 @@ void _importNow(final BuildContext context, final String ofx, final Account acco
       content: questionContent,
       buttonText: 'Import',
       onConfirmation: () {
-        for (final transactionToAdd in transactionsNew) {
-          Data().transactions.appendNewMoneyObject(transactionToAdd);
-        }
-        Data().updateAll();
-
-        SnackBarService.displaySuccess(
-          autoDismiss: true,
-          message: 'QFX Imported - $messageToUser',
+        addNewTransactions(
+          transactionsNew,
+          'QFX Imported - $messageToUser',
         );
       });
 }

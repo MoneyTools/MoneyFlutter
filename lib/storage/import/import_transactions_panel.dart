@@ -44,6 +44,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   @override
   Widget build(BuildContext context) {
+    for (final vq in values) {
+      vq.checkIfExistAlready();
+    }
+
     return SizedBox(
       width: 600,
       child: Column(
@@ -84,7 +88,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('${getIntAsText(values.length)} entries'),
+                _buildTallyOfItemsToImportOrSkip(),
                 Text(ValuesQuality.getDateRange(values).toStringDays()),
                 Text('Total: ${doubleToCurrency(sumOfValues())}', textAlign: TextAlign.right),
               ],
@@ -94,6 +98,16 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
         ],
       ),
     );
+  }
+
+  Widget _buildTallyOfItemsToImportOrSkip() {
+    int totalItems = values.length;
+    int itemsToImport = values.where((item) => !item.exist).length;
+    String text = getIntAsText(values.length);
+    if (totalItems != itemsToImport) {
+      text = '${getIntAsText(itemsToImport)}/${getIntAsText(totalItems)}';
+    }
+    return Text('$text entries');
   }
 
   Widget _buildHeaderAndAccountPicker() {

@@ -8,6 +8,8 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/semantic_text.dart';
 
 class ValueQuality {
@@ -80,17 +82,21 @@ class ValuesParser {
   List<Widget> rows = [];
 
   bool get isEmpty {
-    return _values.isEmpty;
+    return onlyNewTransactions.isEmpty;
   }
 
   bool get isNotEmpty {
-    return _values.isNotEmpty;
+    return !isEmpty;
   }
 
   // ignore: unnecessary_getters_setters
   List<ValuesQuality> get lines {
     //
     return _values;
+  }
+
+  List<ValuesQuality> get onlyNewTransactions {
+    return _values.where((item) => !item.exist).toList();
   }
 
   set lines(List<ValuesQuality> value) {
@@ -248,6 +254,7 @@ class ValuesParser {
 }
 
 class ValuesQuality {
+  bool exist = false;
   final ValueQuality date;
   final ValueQuality description;
   final ValueQuality amount;
@@ -261,6 +268,15 @@ class ValuesQuality {
 
   bool containsErrors() {
     return date.hasError || description.hasError || amount.hasError;
+  }
+
+  bool checkIfExistAlready() {
+    exist = isTransactionAlreadyInTheSystem(
+      dateTime: date.asDate(),
+      payeeAsText: description.asString(),
+      amount: amount.asAmount(),
+    );
+    return exist;
   }
 
   static DateRange getDateRange(final List<ValuesQuality> list) {
@@ -284,4 +300,29 @@ class ValuesQuality {
       return 0;
     });
   }
+}
+
+bool isTransactionAlreadyInTheSystem({
+  required final DateTime dateTime,
+  required final String payeeAsText,
+  required final double amount,
+}) {
+  return getTransactionAlreadyInTheSystem(
+        dateTime: dateTime,
+        payeeAsText: payeeAsText,
+        amount: amount,
+      ) !=
+      null;
+}
+
+Transaction? getTransactionAlreadyInTheSystem({
+  required final DateTime dateTime,
+  required final String payeeAsText,
+  required final double amount,
+}) {
+  return Data().transactions.findExistingTransaction(
+        dateTime: dateTime,
+        payeeAsText: payeeAsText,
+        amount: amount,
+      );
 }

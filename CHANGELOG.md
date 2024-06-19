@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.29] 2024-05-19
+
+### Added
+
+- Improve [Import by Text Panel], now showing Duplicated/Skipped entries
+
 ## [version 1.8.28] 2024-05-18
 
 ### Added

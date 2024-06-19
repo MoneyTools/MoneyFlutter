@@ -206,7 +206,6 @@ class Transactions extends MoneyObjects<Transaction> {
   Transaction? findExistingTransaction({
     required final DateTime dateTime,
     required final String payeeAsText,
-    required final String memo,
     required final double amount,
   }) {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
