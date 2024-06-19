@@ -114,23 +114,6 @@ class _PickerPanelState extends State<PickerPanel> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                  child: SingleChildScrollView(
-                    child: PickerLetters(
-                      options: uniqueLetters,
-                      selected: _filterStartWidth,
-                      onSelected: (String selected) {
-                        setState(() {
-                          _filterStartWidth = selected;
-                          applyFilter();
-                          _scrollController.jumpTo(0);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-                gapMedium(),
                 Expanded(
                   child: ListView.builder(
                     itemCount: list.length,
@@ -162,6 +145,23 @@ class _PickerPanelState extends State<PickerPanel> {
                         ),
                       );
                     },
+                  ),
+                ),
+                gapMedium(),
+                ScrollConfiguration(
+                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                  child: SingleChildScrollView(
+                    child: PickerLetters(
+                      options: uniqueLetters,
+                      selected: _filterStartWidth,
+                      onSelected: (String selected) {
+                        setState(() {
+                          _filterStartWidth = selected;
+                          applyFilter();
+                          _scrollController.jumpTo(0);
+                        });
+                      },
+                    ),
                   ),
                 ),
               ],
