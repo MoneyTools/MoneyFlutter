@@ -378,7 +378,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void onFilterTextChanged(final String text) {
     _deadlineTimer?.cancel();
-    _deadlineTimer = Timer(const Duration(milliseconds: 500), () {
+    _deadlineTimer = Timer(const Duration(milliseconds: 1200), () {
       _deadlineTimer = null;
       setState(() {
         _filterByText = text.toLowerCase();
