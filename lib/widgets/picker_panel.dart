@@ -7,12 +7,12 @@ import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/picker_letter.dart';
 import 'package:money/widgets/token_text.dart';
 
-showPopupSelection({
-  required final BuildContext context,
-  required final title,
-  required final List<String> items,
-  required final String selectedItem,
-  required final Function(String text) onSelected,
+void showPopupSelection({
+  required BuildContext context,
+  required String title,
+  required List<String> items,
+  required String selectedItem,
+  required Function(String text) onSelected,
 }) {
   adaptiveScreenSizeDialog(
     context: context,
@@ -20,9 +20,7 @@ showPopupSelection({
     child: PickerPanel(
       options: items,
       selectedItem: selectedItem,
-      onSelected: (final String selectedValue) {
-        onSelected(selectedValue);
-      },
+      onSelected: onSelected,
     ),
     actionButtons: [],
   );
@@ -43,13 +41,13 @@ class PickerPanel extends StatefulWidget {
   });
 
   @override
-  State<PickerPanel> createState() => _PickerPanelState();
+  PickerPanelState createState() => PickerPanelState();
 }
 
-class _PickerPanelState extends State<PickerPanel> {
+class PickerPanelState extends State<PickerPanel> {
   String _filterByTextAnywhere = '';
-  String _filterStartWidth = '';
-  List<String> list = [];
+  String _filterStartWith = '';
+  List<String> filteredList = [];
   List<String> uniqueLetters = [];
   final ScrollController _scrollController = ScrollController();
   int indexToScrollTo = -1;
@@ -57,31 +55,9 @@ class _PickerPanelState extends State<PickerPanel> {
   @override
   void initState() {
     super.initState();
-    applyFilter();
-
-    for (final option in widget.options) {
-      String singleLetter = ' ';
-
-      if (option.isNotEmpty) {
-        singleLetter = option[0].toUpperCase();
-        if (!uniqueLetters.contains(singleLetter)) {
-          uniqueLetters.add(singleLetter);
-        }
-      }
-    }
-
-    // Schedule a callback to scroll to the element after the next frame is rendered
-    if (widget.selectedItem.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Find the index of the item that matches the value "Item 3"
-        indexToScrollTo = widget.options.indexOf(widget.selectedItem);
-        if (indexToScrollTo != -1) {
-          indexToScrollTo -= 2; // back up two elements to make it a nicer position
-          indexToScrollTo = max(0, indexToScrollTo); // make sure we are not outside the bounds
-          _scrollController.jumpTo((indexToScrollTo * widget.itemHeight));
-        }
-      });
-    }
+    _initializeFilters();
+    _populateUniqueLetters();
+    _scheduleScrollToSelectedItem();
   }
 
   @override
@@ -90,99 +66,133 @@ class _PickerPanelState extends State<PickerPanel> {
       width: 200,
       height: 500,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          TextField(
-            decoration: const InputDecoration(
-              contentPadding: EdgeInsets.zero,
-              isDense: true,
-              prefixIcon: Icon(Icons.search),
-              labelText: 'Filter',
-              border: OutlineInputBorder(),
-            ),
-            onChanged: (final String value) {
-              setState(() {
-                _filterByTextAnywhere = value;
-                applyFilter();
-              });
-            },
-          ),
+          _buildFilterTextField(),
           gapLarge(),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: list.length,
-                    controller: _scrollController,
-                    itemExtent: widget.itemHeight,
-                    itemBuilder: (context, index) {
-                      String label = list[index];
-                      bool isSelected = label == widget.selectedItem;
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                          widget.onSelected(label);
-                        },
-                        child: Container(
-                          height: widget.itemHeight,
-                          alignment: Alignment.centerLeft,
-                          decoration: BoxDecoration(
-                            color: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
-                            // show a bottom line if not the last item
-                            border: index == list.length - 1
-                                ? null
-                                : Border(
-                                    bottom: BorderSide(
-                                        color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1),
-                                  ),
-                          ),
-                          child: TokenText(label),
-                          // contentPadding: EdgeInsets.zero,
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                gapMedium(),
-                ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-                  child: SingleChildScrollView(
-                    child: PickerLetters(
-                      options: uniqueLetters,
-                      selected: _filterStartWidth,
-                      onSelected: (String selected) {
-                        setState(() {
-                          _filterStartWidth = selected;
-                          applyFilter();
-                          _scrollController.jumpTo(0);
-                        });
-                      },
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          Expanded(child: _buildPickerContent(context)),
         ],
       ),
     );
   }
 
-  void applyFilter() {
-    list = widget.options.where((final String option) {
-      if (_filterStartWidth.isNotEmpty && !option.toUpperCase().startsWith(_filterStartWidth)) {
-        return false;
-      }
+  void _applyFilters() {
+    setState(() {
+      filteredList = widget.options.where((option) {
+        final matchesStart = _filterStartWith.isEmpty || option.toUpperCase().startsWith(_filterStartWith);
+        final matchesAnywhere =
+            _filterByTextAnywhere.isEmpty || option.toLowerCase().contains(_filterByTextAnywhere.toLowerCase());
+        return matchesStart && matchesAnywhere;
+      }).toList();
+    });
+  }
 
-      if (_filterByTextAnywhere.isNotEmpty && !option.toLowerCase().contains(_filterByTextAnywhere.toLowerCase())) {
-        return false;
-      }
+  Widget _buildFilteredList(BuildContext context) {
+    return ListView.builder(
+      itemCount: filteredList.length,
+      controller: _scrollController,
+      itemExtent: widget.itemHeight,
+      itemBuilder: (context, index) {
+        final label = filteredList[index];
+        final isSelected = label == widget.selectedItem;
+        return _buildPickerItem(context, label, isSelected, index);
+      },
+    );
+  }
 
-      return true;
-    }).toList();
+  Widget _buildFilterTextField() {
+    return TextField(
+      decoration: const InputDecoration(
+        contentPadding: EdgeInsets.zero,
+        isDense: true,
+        prefixIcon: Icon(Icons.search),
+        labelText: 'Filter',
+        border: OutlineInputBorder(),
+      ),
+      onChanged: (value) {
+        setState(() {
+          _filterByTextAnywhere = value;
+          _applyFilters();
+        });
+      },
+    );
+  }
+
+  Widget _buildLetterPicker() {
+    return ScrollConfiguration(
+      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+      child: SingleChildScrollView(
+        child: PickerLetters(
+          options: uniqueLetters,
+          selected: _filterStartWith,
+          onSelected: (selected) {
+            setState(() {
+              _filterStartWith = selected;
+              _applyFilters();
+              _scrollController.jumpTo(0);
+            });
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPickerContent(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(child: _buildFilteredList(context)),
+        gapMedium(),
+        _buildLetterPicker(),
+      ],
+    );
+  }
+
+  Widget _buildPickerItem(BuildContext context, String label, bool isSelected, int index) {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).pop();
+        widget.onSelected(label);
+      },
+      child: Container(
+        height: widget.itemHeight,
+        alignment: Alignment.centerLeft,
+        decoration: BoxDecoration(
+          color: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
+          border: index == filteredList.length - 1
+              ? null
+              : Border(bottom: BorderSide(color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1)),
+        ),
+        child: TokenText(label),
+      ),
+    );
+  }
+
+  void _initializeFilters() {
+    setState(() {
+      filteredList = widget.options;
+    });
+  }
+
+  void _populateUniqueLetters() {
+    for (final option in widget.options) {
+      if (option.isNotEmpty) {
+        final singleLetter = option[0].toUpperCase();
+        if (!uniqueLetters.contains(singleLetter)) {
+          uniqueLetters.add(singleLetter);
+        }
+      }
+    }
+  }
+
+  void _scheduleScrollToSelectedItem() {
+    if (widget.selectedItem.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        indexToScrollTo = widget.options.indexOf(widget.selectedItem);
+        if (indexToScrollTo != -1) {
+          indexToScrollTo = max(0, indexToScrollTo - 2);
+          _scrollController.jumpTo(indexToScrollTo * widget.itemHeight);
+        }
+      });
+    }
   }
 }
