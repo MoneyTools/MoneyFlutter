@@ -1,3 +1,7 @@
+// ignore_for_file: unnecessary_this
+
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
@@ -8,12 +12,6 @@ import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
 import 'package:money/storage/preferences_helper.dart';
 import 'package:money/widgets/snack_bar.dart';
-
-enum CashflowViewAs {
-  sankey,
-  recurringIncomes,
-  recurringExpenses,
-}
 
 class Settings extends ChangeNotifier {
   String getUniqueSate() {
@@ -163,6 +161,7 @@ class Settings extends ChangeNotifier {
 
     isDetailsPanelExpanded = preferences.getBool(settingKeyDetailsPanelExpanded) == true;
     fileManager.fullPathToLastOpenedFile = preferences.getString(settingKeyLastLoadedPathToDatabase) ?? '';
+    fileManager.mru = preferences.getStringList(settingKeyMRU) ?? [];
 
     isPreferenceLoaded = true;
     return true;
@@ -181,6 +180,7 @@ class Settings extends ChangeNotifier {
 
     // last path to the source of data
     await preferences.setString(settingKeyLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile, true);
+    await preferences.setStringList(settingKeyMRU, fileManager.mru);
   }
 
   ThemeData getThemeData() {
@@ -194,6 +194,29 @@ class Settings extends ChangeNotifier {
       brightness: useDarkMode ? Brightness.dark : Brightness.light,
     );
     return themeData;
+  }
+
+  void closeFile() {
+    this.fileManager.fullPathToLastOpenedFile = '';
+    this.preferrenceSave();
+    Data().close();
+    this.trackMutations.reset();
+    this.rebuild();
+  }
+
+  void loadFileFromPath(final String path) async {
+    this.fileManager.state = DataFileState.loading;
+    closeFile(); // ensure that we closed current file and state
+
+    Timer(const Duration(milliseconds: 200), () async {
+      await Data().loadFromPath(filePathToLoad: path).then((final bool success) {
+        // if (success) {
+        Settings().fileManager.state = DataFileState.loaded;
+        Settings().rebuild();
+        // }
+      });
+      this.rebuild();
+    });
   }
 
   void onSaveToCsv() async {
@@ -237,4 +260,10 @@ void switchViewTransacionnForPayee(final String payeeName) {
 
   // Switch view
   Settings().selectedView = ViewId.viewTransactions;
+}
+
+enum CashflowViewAs {
+  sankey,
+  recurringIncomes,
+  recurringExpenses,
 }

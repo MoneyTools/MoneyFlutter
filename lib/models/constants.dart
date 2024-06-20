@@ -29,6 +29,7 @@ const String settingKeyFilterText = 'filterText';
 const String settingKeyFilterColumnsText = 'filterColumnsText';
 const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
 const String settingKeyLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
+const String settingKeyMRU = 'mru';
 const String settingKeyRentalsSupport = 'rentals';
 const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
 const String settingKeySelectedListItemId = 'selectedItemId';
@@ -87,14 +88,17 @@ class SizeForDoubles {
 }
 
 class SizeForPadding {
+  static const double nano = 2;
   static const double small = 3;
-  static const double medium = 8;
+  static const double medium = 5;
+  static const double normal = 8;
   static const double large = 13;
   static const double huge = 21;
 }
 
 class SizeForText {
-  static const double small = 8;
+  static const double nano = 8;
+  static const double small = 10;
   static const double medium = 13;
   static const double normal = 18;
   static const double large = 21;

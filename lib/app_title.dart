@@ -7,7 +7,11 @@ import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
 import 'package:money/widgets/gaps.dart';
+import 'package:money/widgets/picker_panel.dart';
 import 'package:money/widgets/reveal_content.dart';
+import 'dart:io' show Platform;
+
+import 'package:money/widgets/token_text.dart';
 
 class AppTitle extends StatelessWidget {
   AppTitle({
@@ -93,27 +97,45 @@ class LoadedDataFileAndTime extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      reverse: true,
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Text(
-            filePath,
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 10),
-          ),
-          gapMedium(),
-          Text(
-            dateToDateTimeString(lastModifiedDateTime),
-            textAlign: TextAlign.left,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-          ),
-          gapMedium(),
-        ],
+    final TokenTextStyle tokenStyle = TokenTextStyle(
+      separator: Platform.pathSeparator,
+      separatorPaddingLeft: SizeForPadding.nano,
+      separatorPaddingRight: SizeForPadding.nano,
+    );
+    return InkWell(
+      onTap: () {
+        showPopupSelection(
+          context: context,
+          title: 'Recent files',
+          showLetterPicker: false,
+          tokenTextStyle: tokenStyle,
+          rightAligned: true,
+          width: 600,
+          items: Settings().fileManager.mru,
+          selectedItem: '',
+          onSelected: (final String selectedTextReprentingFileNamePath) {
+            Settings().loadFileFromPath(selectedTextReprentingFileNamePath);
+          },
+        );
+      },
+      child: SingleChildScrollView(
+        reverse: true,
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TokenText(filePath, style: tokenStyle),
+            const Icon(Icons.expand_more),
+            gapMedium(),
+            Text(
+              dateToDateTimeString(lastModifiedDateTime),
+              textAlign: TextAlign.left,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            ),
+            gapMedium(),
+          ],
+        ),
       ),
     );
   }

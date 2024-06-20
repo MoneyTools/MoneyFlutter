@@ -152,7 +152,7 @@ Widget buildWidgetFromTypeAndValue({
     case FieldType.amountShorthand:
       return buildFieldWidgetForAmount(value: value, shorthand: true, align: align);
     case FieldType.widget:
-      return Center(child: value as Widget);
+      return value as Widget;
     case FieldType.date:
       if (value is String) {
         return buildFieldWidgetForText(text: value, align: align, fixedFont: true);

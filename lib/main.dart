@@ -92,6 +92,8 @@ class MainView extends StatelessWidget {
   }
 
   Widget buildContent(final BuildContext context) {
+    // debugLog('buildContent ${Settings().fileManager.state}');
+
     // Welcome screen
     if (shouldShowOpenInstructions()) {
       return WelcomeScreen(
@@ -103,17 +105,21 @@ class MainView extends StatelessWidget {
 
     if (Settings().fileManager.shouldLoadLastDataFile()) {
       // loading a file
-      loadData();
+      loadDataFromLastKnownFilePath();
       return const WorkingIndicator();
-    }
+    } else {
+      if (Settings().fileManager.state == DataFileState.loaded) {
+        // small screens
+        if (Settings().isSmallScreen) {
+          return buildContentForSmallSurface(context);
+        }
 
-    // small screens
-    if (Settings().isSmallScreen) {
-      return buildContentForSmallSurface(context);
+        // Large screens
+        return buildContentForLargeSurface(context);
+      } else {
+        return const WorkingIndicator();
+      }
     }
-
-    // Large screens
-    return buildContentForLargeSurface(context);
   }
 
   Widget buildContentForLargeSurface(final BuildContext context) {
@@ -249,14 +255,8 @@ class MainView extends StatelessWidget {
     Settings().selectedView = selectedView;
   }
 
-  void loadData() async {
-    Settings().fileManager.state = DataFileState.loading;
-    Data().loadFromPath(filePathToLoad: Settings().fileManager.fullPathToLastOpenedFile).then((final bool success) {
-      if (success) {
-        Settings().fileManager.state = DataFileState.loaded;
-        Settings().rebuild();
-      }
-    });
+  void loadDataFromLastKnownFilePath() async {
+    Settings().loadFileFromPath(Settings().fileManager.fullPathToLastOpenedFile);
   }
 
   Widget myScaffold({
@@ -271,7 +271,7 @@ class MainView extends StatelessWidget {
           ? MyAppBar(
               onFileNew: onFileNew,
               onFileOpen: onFileOpen,
-              onFileClose: onFileClose,
+              onFileClose: Settings().closeFile,
               onShowFileLocation: onShowFileLocation,
               onSaveCsv: Settings().onSaveToCsv,
               onSaveSql: Settings().onSaveToSql,
@@ -282,16 +282,8 @@ class MainView extends StatelessWidget {
     );
   }
 
-  void onFileClose() async {
-    Settings().fileManager.fullPathToLastOpenedFile = '';
-    Settings().preferrenceSave();
-    Data().close();
-    Settings().rebuild();
-  }
-
   void onFileNew() async {
-    Data().close();
-    Settings().rebuild();
+    Settings().closeFile();
 
     Settings().fileManager.fileName = Constants.newDataFile;
     Settings().preferrenceSave();
@@ -351,7 +343,7 @@ class MainView extends StatelessWidget {
           }
           if (Settings().fileManager.fullPathToLastOpenedFile.isNotEmpty) {
             Settings().preferrenceSave();
-            loadData();
+            loadDataFromLastKnownFilePath();
           }
         }
       } catch (e) {
@@ -364,6 +356,7 @@ class MainView extends StatelessWidget {
     Settings().fileManager.fullPathToLastOpenedFile = '';
     Settings().preferrenceSave();
     Data().loadFromDemoData();
+    Settings().fileManager.state == DataFileState.loaded;
     Settings().rebuild();
   }
 
@@ -373,7 +366,8 @@ class MainView extends StatelessWidget {
   }
 
   bool shouldShowOpenInstructions() {
-    if (Settings().isPreferenceLoaded &&
+    if (Settings().fileManager.state == DataFileState.empty &&
+        Settings().isPreferenceLoaded &&
         Data().accounts.isEmpty &&
         Settings().fileManager.fullPathToLastOpenedFile.isEmpty) {
       return true;

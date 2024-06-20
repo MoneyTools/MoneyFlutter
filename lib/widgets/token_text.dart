@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 
 // ignore: must_be_immutable
 class TokenText extends StatelessWidget {
-  TokenText(this.text, {super.key}) {
-    tokens = text.split(':');
+  late final TokenTextStyle style;
+
+  TokenText(
+    this.text, {
+    super.key,
+    this.style = const TokenTextStyle(),
+  }) {
+    tokens = text.split(style.separator);
   }
 
   final String text;
@@ -13,11 +18,13 @@ class TokenText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const TextStyle ancestors = TextStyle(fontSize: SizeForText.small);
+
     final Widget separetor = Padding(
-      padding: const EdgeInsets.only(right: 3),
-      child: Text(':', style: TextStyle(color: getColorTheme(context).primary)),
+      padding: EdgeInsets.only(left: style.separatorPaddingLeft, right: style.separatorPaddingRight),
+      child: Text(style.separator, style: ancestors),
     );
-    const parentTextStyle = TextStyle(fontSize: SizeForText.medium);
+
     final List<Widget> widgets = [];
 
     for (final String token in tokens) {
@@ -26,17 +33,20 @@ class TokenText extends StatelessWidget {
           child: Text(
             token,
             softWrap: false,
+            style: const TextStyle(fontSize: SizeForText.medium),
           ),
         ));
       } else {
-        widgets.add(Opacity(opacity: 0.5, child: Text(token, style: parentTextStyle)));
-        widgets.add(separetor);
+        widgets.add(Opacity(opacity: 0.8, child: Text(token, style: ancestors)));
+        widgets.add(Opacity(opacity: 0.6, child: separetor));
       }
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: widgets,
+    return IntrinsicWidth(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: widgets,
+      ),
     );
   }
 
@@ -44,4 +54,18 @@ class TokenText extends StatelessWidget {
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return text;
   }
+}
+
+class TokenTextStyle {
+  final String separator;
+  final double separatorPaddingLeft;
+  final double separatorPaddingRight;
+  final bool rigthAlign;
+
+  const TokenTextStyle({
+    this.separator = ':',
+    this.separatorPaddingLeft = 0,
+    this.separatorPaddingRight = SizeForPadding.small,
+    this.rigthAlign = false,
+  });
 }

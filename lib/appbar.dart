@@ -136,7 +136,7 @@ class _MyAppBarState extends State<MyAppBar> {
             widget.onSaveSql();
 
           case Constants.commandFileClose:
-            widget.onFileClose();
+            Settings().closeFile();
 
           default:
             debugPrint(' unhandled $index');

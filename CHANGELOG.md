@@ -1,18 +1,24 @@
 # Change Log
 
-## [version 1.8.29] 2024-05-19
+## [version 1.8.30] 2024-06-20
+
+### Added
+
+- MRU - Select previous loaded files directly from the title
+  
+## [version 1.8.29] 2024-06-19
 
 ### Added
 
 - Improve [Import by Text Panel], now showing Duplicated/Skipped entries
 
-## [version 1.8.28] 2024-05-18
+## [version 1.8.28] 2024-06-18
 
 ### Added
 
 - Improve UX for QFX file import
   
-## [version 1.8.27] 2024-05-17
+## [version 1.8.27] 2024-06-17
 
 ### Added
 
@@ -20,44 +26,44 @@
 - Auto Footer-Tally on the InfoPanel-List
 - Long Press on InfoPanel of Loans to show the Detail dialog
   
-## [version 1.8.26] 2024-05-16
+## [version 1.8.26] 2024-06-16
 
 ### Added
 
 - List View Footer
 - NetWorth reveal button on the Application bar
 
-## [version 1.8.25] 2024-05-14
+## [version 1.8.25] 2024-06-14
 
 ### Added
 
 - Editing of Rental Building Land & Property evaluation
 
-## [version 1.8.24] 2024-05-13
+## [version 1.8.24] 2024-06-13
 
 ### Added
 
 - New Import Transaction Wizard
 
-## [version 1.8.23] 2024-05-12
+## [version 1.8.23] 2024-06-12
 
 ### Added
 
 - Category View now has a [Rollup Sum] column
   
-## [version 1.8.22] 2024-05-11
+## [version 1.8.22] 2024-06-11
 
 ### Added
 
 - UI to add a new Category
 
-## [version 1.8.21] 2024-05-10
+## [version 1.8.21] 2024-06-10
 
 ### Added
 
 - New [clear all filters] button in the header
 
-## [version 1.8.20] 2024-05-09
+## [version 1.8.20] 2024-06-09
 
 ### Updated
 
@@ -68,19 +74,19 @@
 
 - Main Menu
 
-## [version 1.8.19] 2024-05-08
+## [version 1.8.19] 2024-06-08
 
 ### Updated
 
 - Loans: Display list of transactions
 
-## [version 1.8.18] 2024-05-05
+## [version 1.8.18] 2024-06-05
 
 ### Added
 
 - Persist Column filters
   
-## [version 1.8.17] 2024-05-04
+## [version 1.8.17] 2024-06-04
 
 ### Fixed
 
@@ -90,7 +96,7 @@
 
 - Filter by Column
 
-## [version 1.8.16] 2024-05-03
+## [version 1.8.16] 2024-06-03
 
 ### Added
 

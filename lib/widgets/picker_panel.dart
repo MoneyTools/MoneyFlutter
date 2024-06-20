@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/constants.dart';
 import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/picker_letter.dart';
@@ -13,11 +14,22 @@ void showPopupSelection({
   required List<String> items,
   required String selectedItem,
   required Function(String text) onSelected,
+  bool showLetterPicker = true,
+  TokenTextStyle tokenTextStyle = const TokenTextStyle(
+    separatorPaddingLeft: SizeForPadding.nano,
+    separatorPaddingRight: SizeForPadding.nano,
+  ),
+  bool rightAligned = false,
+  double? width = 200,
 }) {
   adaptiveScreenSizeDialog(
     context: context,
     title: title,
     child: PickerPanel(
+      width: width,
+      showLetterPicker: showLetterPicker,
+      tokenTextStyle: tokenTextStyle,
+      rightAligned: rightAligned,
       options: items,
       selectedItem: selectedItem,
       onSelected: onSelected,
@@ -31,13 +43,21 @@ class PickerPanel extends StatefulWidget {
   final String selectedItem;
   final Function(String selectedValue) onSelected;
   final double itemHeight;
+  final bool showLetterPicker;
+  final TokenTextStyle tokenTextStyle;
+  final bool rightAligned;
+  final double? width;
 
   const PickerPanel({
     super.key,
     required this.options,
     required this.selectedItem,
     required this.onSelected,
+    this.width = 200,
     this.itemHeight = 40,
+    this.showLetterPicker = true,
+    this.tokenTextStyle = const TokenTextStyle(),
+    this.rightAligned = false,
   });
 
   @override
@@ -63,7 +83,7 @@ class PickerPanelState extends State<PickerPanel> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 200,
+      width: widget.width,
       height: 500,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -119,19 +139,22 @@ class PickerPanelState extends State<PickerPanel> {
   }
 
   Widget _buildLetterPicker() {
-    return ScrollConfiguration(
-      behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
-      child: SingleChildScrollView(
-        child: PickerLetters(
-          options: uniqueLetters,
-          selected: _filterStartWith,
-          onSelected: (selected) {
-            setState(() {
-              _filterStartWith = selected;
-              _applyFilters();
-              _scrollController.jumpTo(0);
-            });
-          },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+      child: ScrollConfiguration(
+        behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+        child: SingleChildScrollView(
+          child: PickerLetters(
+            options: uniqueLetters,
+            selected: _filterStartWith,
+            onSelected: (selected) {
+              setState(() {
+                _filterStartWith = selected;
+                _applyFilters();
+                _scrollController.jumpTo(0);
+              });
+            },
+          ),
         ),
       ),
     );
@@ -141,8 +164,7 @@ class PickerPanelState extends State<PickerPanel> {
     return Row(
       children: [
         Expanded(child: _buildFilteredList(context)),
-        gapMedium(),
-        _buildLetterPicker(),
+        if (widget.showLetterPicker) _buildLetterPicker(),
       ],
     );
   }
@@ -162,7 +184,14 @@ class PickerPanelState extends State<PickerPanel> {
               ? null
               : Border(bottom: BorderSide(color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1)),
         ),
-        child: TokenText(label),
+        child: SingleChildScrollView(
+          reverse: widget.rightAligned,
+          scrollDirection: Axis.horizontal,
+          child: TokenText(
+            label,
+            style: widget.tokenTextStyle,
+          ),
+        ),
       ),
     );
   }
