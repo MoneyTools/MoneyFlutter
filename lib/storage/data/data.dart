@@ -1,7 +1,9 @@
 // Imports
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:archive/archive.dart';
 import 'package:money/helpers/file_systems.dart';
 import 'package:money/helpers/json_helper.dart';
 import 'package:money/helpers/string_helper.dart';
@@ -236,25 +238,31 @@ class Data {
   Future<bool> loadFromPath({required final String filePathToLoad}) async {
     try {
       Settings().fileManager.dataFileLastUpdateDateTime = null;
-      // Sqlite
-      if (filePathToLoad.toLowerCase().endsWith('.mmdb')) {
-        // Load from SQLite
-        if (await loadFromSql(filePathToLoad, Settings().fileManager.fileBytes)) {
+
+      final String fileExtension = MyFileSystems.getFileExtension(filePathToLoad);
+      switch (fileExtension.toLowerCase()) {
+        // Sqlite
+        case '.mmdb':
+          // Load from SQLite
+          if (await loadFromSql(filePathToLoad, Settings().fileManager.fileBytes)) {
+            Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
+            Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
+          } else {
+            Settings().fileManager.rememberWhereTheDataCameFrom('');
+          }
+        case '.mmcsv':
+          // Zip CSV files
+          await loadFromCsv(filePathToLoad);
           Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
           Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
-        } else {
-          Settings().fileManager.rememberWhereTheDataCameFrom('');
-        }
-      } else {
-        // CSV
-        // Load from a folder that contains CSV files
-        await loadFromCsv(filePathToLoad);
-        Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
-        Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
+
+        default:
+          SnackBarService.displayWarning(autoDismiss: false, message: 'Unsupported file type $fileExtension');
+          return false;
       }
     } catch (e) {
       debugLog(e.toString());
-      SnackBarService.display(autoDismiss: false, message: e.toString());
+      SnackBarService.displayError(autoDismiss: false, message: e.toString());
       // clear any previous file
       Settings().fileManager.rememberWhereTheDataCameFrom('');
       return false;

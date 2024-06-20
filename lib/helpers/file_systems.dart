@@ -63,6 +63,14 @@ class MyFileSystems {
     return p.dirname(filePath);
   }
 
+  static String getFileName(final filePath) {
+    return p.basename(filePath);
+  }
+
+  static String getFileExtension(final filePath) {
+    return p.extension(filePath);
+  }
+
   static Future<void> writeFileContentIntoFolder(final String folder, final String fileName, final String content) {
     final String fullPathToFile = MyFileSystems.append(folder, fileName);
     return MyFileSystems.writeToFile(fullPathToFile, content);

@@ -209,3 +209,11 @@ String concat(
     return existingValue + separatorIfNeeded + valueToConcat;
   }
 }
+
+String removeUtf8Bom(String text) {
+  const bom = '\u{FEFF}';
+  if (text.startsWith(bom)) {
+    return text.substring(1);
+  }
+  return text;
+}

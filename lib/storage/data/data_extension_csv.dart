@@ -5,40 +5,74 @@ const String subFolderName = 'mymoney_csv_files';
 
 extension DataFromCsv on Data {
   Future<void> loadFromCsv(String filePathToLoad) async {
-    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad, Uint8List(0));
+    File file = File(filePathToLoad);
+    List<int> bytes = await file.readAsBytes();
 
-    if (pathToDatabaseFile != null) {
-      final subFolder = MyFileSystems.append(MyFileSystems.getFolderFromFilePath(pathToDatabaseFile), subFolderName);
-      await loadCsvFiles(subFolder);
-      Settings().fileManager.rememberWhereTheDataCameFrom(pathToDatabaseFile);
+    // Decode the ZIP file
+    Archive archive = ZipDecoder().decodeBytes(bytes);
+
+    // Extract the files and read the content
+    for (ArchiveFile file in archive) {
+      if (file.isFile) {
+        String fileContent = getZipSingleFileContent(file);
+
+        debugLog(file.name);
+        final String fileNameInLowercase = MyFileSystems.getFileName(file.name).toLowerCase();
+        debugLog(fileNameInLowercase);
+
+        debugLog(fileContent);
+        switch (fileNameInLowercase) {
+          case 'account_aliases.csv':
+            accountAliases.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'accounts.csv':
+            accounts.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'aliases.csv':
+            aliases.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'categories.csv':
+            categories.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'investments.csv':
+            investments.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'loan_payments.csv':
+            loanPayments.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'online_accounts.csv':
+            onlineAccounts.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'payees.csv':
+            payees.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'rent_buildings.csv':
+            rentBuildings.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'rent_units.csv':
+            rentUnits.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'securities.csv':
+            securities.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'splits.csv':
+            splits.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'stock_splits.csv':
+            stockSplits.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'transactions.csv':
+            transactions.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+          case 'transaction_extras.csv':
+            transactionExtras.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+        }
+      }
+    }
+
+    // Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
+  }
+
+  String getZipSingleFileContent(ArchiveFile file) {
+    try {
+      List<int> fileBytes = file.content as List<int>;
+      String fileContent = utf8.decode(fileBytes, allowMalformed: true);
+      // Remove UTF-8 BOM if present
+      fileContent = removeUtf8Bom(fileContent);
+      return fileContent;
+    } catch (_) {
+      return '';
     }
   }
 
-  Future<void> loadCsvFiles(String folder) async {
-    accountAliases.loadFromJson(await readCsvRowAsJsonObjects(folder, 'account_aliases.csv'));
-    accounts.loadFromJson(await readCsvRowAsJsonObjects(folder, 'accounts.csv'));
-    accounts.loadFromJson(await readCsvRowAsJsonObjects(folder, 'accounts.csv'));
-    aliases.loadFromJson(await readCsvRowAsJsonObjects(folder, 'aliases.csv'));
-    categories.loadFromJson(await readCsvRowAsJsonObjects(folder, 'categories.csv'));
-    currencies.loadFromJson(await readCsvRowAsJsonObjects(folder, 'currencies.csv'));
-    investments.loadFromJson(await readCsvRowAsJsonObjects(folder, 'investments.csv'));
-    loanPayments.loadFromJson(await readCsvRowAsJsonObjects(folder, 'loan_payments.csv'));
-    onlineAccounts.loadFromJson(await readCsvRowAsJsonObjects(folder, 'online_accounts.csv'));
-    payees.loadFromJson(await readCsvRowAsJsonObjects(folder, 'payees.csv'));
-    rentBuildings.loadFromJson(await readCsvRowAsJsonObjects(folder, 'rent_buildings.csv'));
-    rentUnits.loadFromJson(await readCsvRowAsJsonObjects(folder, 'rent_units.csv'));
-    securities.loadFromJson(await readCsvRowAsJsonObjects(folder, 'securities.csv'));
-    splits.loadFromJson(await readCsvRowAsJsonObjects(folder, 'splits.csv'));
-    stockSplits.loadFromJson(await readCsvRowAsJsonObjects(folder, 'stock_splits.csv'));
-    transactions.loadFromJson(await readCsvRowAsJsonObjects(folder, 'transactions.csv'));
-    transactionExtras.loadFromJson(await readCsvRowAsJsonObjects(folder, 'transaction_extras.csv'));
-  }
-
-  Future<List<MyJson>> readCsvRowAsJsonObjects(String subFolder, final String filename) async {
-    final String fullPathToFile = MyFileSystems.append(subFolder, filename);
-
+  List<MyJson> rawCsvStringToListOfJsonObjects(String fileContent) {
     List<MyJson> rows = [];
-    String fileContent = await MyFileSystems.readFile(fullPathToFile);
     List<String> lines = getLinesFromTextBlob(fileContent);
     if (lines.length > 1) {
       final List<String> csvHeaderColumns = getColumnInCsvLine(lines[0]);
@@ -57,35 +91,46 @@ extension DataFromCsv on Data {
       throw Exception('No container folder give for saving');
     }
 
-    final String mainFilename = MyFileSystems.append(destinationFolder, mainFileName);
+    // Create the ZIP archive
+    Archive archive = Archive();
 
-    MyFileSystems.ensureFolderExist(destinationFolder).then((final _) {
-      MyFileSystems.writeToFile(mainFilename, DateTime.now().toString());
-      final subFolder = MyFileSystems.append(destinationFolder, subFolderName);
-      MyFileSystems.ensureFolderExist(subFolder).then((final _) {
-        writeEachFiles(subFolder);
-      });
-    });
-    return mainFilename;
+    // Add files to the archive
+    writeEachFiles(archive);
+
+    // Encode the archive to a byte array
+    List<int> zipBytes = ZipEncoder().encode(archive)!;
+
+    // Define the path to the ZIP file
+    final String zipFileName = MyFileSystems.append(destinationFolder, mainFileName);
+    File zipFile = File(zipFileName);
+
+    // Write the ZIP file
+    await zipFile.writeAsBytes(zipBytes);
+    return zipFileName;
   }
 
-  void writeEachFiles(String folder) {
-    MyFileSystems.writeFileContentIntoFolder(folder, 'account_aliases.csv', accountAliases.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'accounts.csv', accounts.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'aliases.csv', aliases.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'categories.csv', categories.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'currencies.csv', currencies.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'investments.csv', investments.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'loan_payments.csv', loanPayments.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'online_accounts.csv', onlineAccounts.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'payees.csv', payees.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'securities.csv', securities.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'splits.csv', splits.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'stock_splits.csv', stockSplits.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'rent_units.csv', rentUnits.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'rent_buildings.csv', rentBuildings.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'rent_units.csv', rentUnits.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'transaction_extras.csv', transactionExtras.toCSV());
-    MyFileSystems.writeFileContentIntoFolder(folder, 'transactions.csv', transactions.toCSV());
+  void writeEachFiles(Archive archive) {
+    addCsvToArchive(archive, 'account_aliases.csv', accountAliases.toCSV());
+    addCsvToArchive(archive, 'accounts.csv', accounts.toCSV());
+    addCsvToArchive(archive, 'aliases.csv', aliases.toCSV());
+    addCsvToArchive(archive, 'categories.csv', categories.toCSV());
+    addCsvToArchive(archive, 'currencies.csv', currencies.toCSV());
+    addCsvToArchive(archive, 'investments.csv', investments.toCSV());
+    addCsvToArchive(archive, 'loan_payments.csv', loanPayments.toCSV());
+    addCsvToArchive(archive, 'online_accounts.csv', onlineAccounts.toCSV());
+    addCsvToArchive(archive, 'payees.csv', payees.toCSV());
+    addCsvToArchive(archive, 'securities.csv', securities.toCSV());
+    addCsvToArchive(archive, 'splits.csv', splits.toCSV());
+    addCsvToArchive(archive, 'stock_splits.csv', stockSplits.toCSV());
+    addCsvToArchive(archive, 'rent_units.csv', rentUnits.toCSV());
+    addCsvToArchive(archive, 'rent_buildings.csv', rentBuildings.toCSV());
+    addCsvToArchive(archive, 'rent_units.csv', rentUnits.toCSV());
+    addCsvToArchive(archive, 'transaction_extras.csv', transactionExtras.toCSV());
+    addCsvToArchive(archive, 'transactions.csv', transactions.toCSV());
+  }
+
+  addCsvToArchive(final Archive archive, final String filename, final textContent) {
+    List<int> bytes = utf8.encode(textContent);
+    archive.addFile(ArchiveFile(filename, bytes.length, bytes));
   }
 }

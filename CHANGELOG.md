@@ -4,6 +4,7 @@
 
 ### Added
 
+- Save and Load Zip .mmcsv file
 - MRU - Select previous loaded files directly from the title
   
 ## [version 1.8.29] 2024-06-19
@@ -96,7 +97,7 @@
 
 - Filter by Column
 
-## [version 1.8.16] 2024-06-03
+## [version 1.8.16] 2024-0-03
 
 ### Added
 
