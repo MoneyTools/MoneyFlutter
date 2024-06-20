@@ -196,18 +196,20 @@ class Settings extends ChangeNotifier {
     return themeData;
   }
 
-  void closeFile() {
+  void closeFile([bool rebuild = true]) {
     Settings().fileManager.state = DataFileState.empty;
     this.fileManager.fullPathToLastOpenedFile = '';
     this.preferrenceSave();
     Data().close();
     this.trackMutations.reset();
-    this.rebuild();
+    if (rebuild) {
+      this.rebuild();
+    }
   }
 
   void loadFileFromPath(final String path) async {
     this.fileManager.state = DataFileState.loading;
-    closeFile(); // ensure that we closed current file and state
+    closeFile(false); // ensure that we closed current file and state
 
     Timer(const Duration(milliseconds: 200), () async {
       await Data().loadFromPath(filePathToLoad: path).then((final bool success) {
