@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/date_helper.dart';
+import 'package:money/helpers/file_systems.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/models/settings.dart';
@@ -9,7 +10,6 @@ import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
 import 'package:money/widgets/gaps.dart';
 import 'package:money/widgets/picker_panel.dart';
 import 'package:money/widgets/reveal_content.dart';
-import 'dart:io' show Platform;
 
 import 'package:money/widgets/token_text.dart';
 
@@ -98,7 +98,7 @@ class LoadedDataFileAndTime extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TokenTextStyle tokenStyle = TokenTextStyle(
-      separator: Platform.pathSeparator,
+      separator: MyFileSystems.pathSeparator,
       separatorPaddingLeft: SizeForPadding.nano,
       separatorPaddingRight: SizeForPadding.nano,
     );

@@ -67,4 +67,6 @@ class MyFileSystems {
     final String fullPathToFile = MyFileSystems.append(folder, fileName);
     return MyFileSystems.writeToFile(fullPathToFile, content);
   }
+
+  static String get pathSeparator => p.separator;
 }

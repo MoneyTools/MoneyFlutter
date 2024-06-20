@@ -76,7 +76,7 @@ class MainView extends StatelessWidget {
         data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(Settings().textScale)),
         child: myScaffold(
           backgroundColor: themeData.colorScheme.secondaryContainer,
-          showAppBar: !shouldShowOpenInstructions(),
+          showAppBar: !_shouldShowOpenInstructions(),
           body: isPlatformMobile()
               // Mobile has no keyboard support
               ? buildContent(context)
@@ -94,31 +94,40 @@ class MainView extends StatelessWidget {
   Widget buildContent(final BuildContext context) {
     // debugLog('buildContent ${Settings().fileManager.state}');
 
-    // Welcome screen
-    if (shouldShowOpenInstructions()) {
-      return WelcomeScreen(
-        onFileNew: onFileNew,
-        onFileOpen: onFileOpen,
-        onOpenDemoData: onOpenDemoData,
-      );
+    if (Settings().fileManager.state == DataFileState.loading) {
+      return const WorkingIndicator();
     }
 
-    if (Settings().fileManager.shouldLoadLastDataFile()) {
-      // loading a file
-      loadDataFromLastKnownFilePath();
-      return const WorkingIndicator();
+    if (Settings().fileManager.state == DataFileState.loaded) {
+      // small screens
+      return _buildAdativeContent(context);
     } else {
-      if (Settings().fileManager.state == DataFileState.loaded) {
-        // small screens
-        if (Settings().isSmallScreen) {
-          return buildContentForSmallSurface(context);
-        }
-
-        // Large screens
-        return buildContentForLargeSurface(context);
+      if (Settings().fileManager.shouldLoadLastDataFile()) {
+        // loading a file
+        _loadDataFromLastKnownFilePath();
       } else {
-        return const WorkingIndicator();
+        // Welcome screen
+        if (_shouldShowOpenInstructions()) {
+          return WelcomeScreen(
+            onFileNew: onFileNew,
+            onFileOpen: onFileOpen,
+            onOpenDemoData: onOpenDemoData,
+          );
+        }
       }
+
+      // In theory the execution should never end up here
+      return Text('MyMoney\n${Settings().fileManager.state}');
+    }
+  }
+
+  Widget _buildAdativeContent(BuildContext context) {
+    if (Settings().isSmallScreen) {
+      // small screens
+      return buildContentForSmallSurface(context);
+    } else {
+      // Large screens
+      return buildContentForLargeSurface(context);
     }
   }
 
@@ -255,7 +264,7 @@ class MainView extends StatelessWidget {
     Settings().selectedView = selectedView;
   }
 
-  void loadDataFromLastKnownFilePath() async {
+  void _loadDataFromLastKnownFilePath() async {
     Settings().loadFileFromPath(Settings().fileManager.fullPathToLastOpenedFile);
   }
 
@@ -343,7 +352,7 @@ class MainView extends StatelessWidget {
           }
           if (Settings().fileManager.fullPathToLastOpenedFile.isNotEmpty) {
             Settings().preferrenceSave();
-            loadDataFromLastKnownFilePath();
+            _loadDataFromLastKnownFilePath();
           }
         }
       } catch (e) {
@@ -356,7 +365,7 @@ class MainView extends StatelessWidget {
     Settings().fileManager.fullPathToLastOpenedFile = '';
     Settings().preferrenceSave();
     Data().loadFromDemoData();
-    Settings().fileManager.state == DataFileState.loaded;
+    Settings().fileManager.state = DataFileState.loaded;
     Settings().rebuild();
   }
 
@@ -365,7 +374,7 @@ class MainView extends StatelessWidget {
     openFolder(path);
   }
 
-  bool shouldShowOpenInstructions() {
+  bool _shouldShowOpenInstructions() {
     if (Settings().fileManager.state == DataFileState.empty &&
         Settings().isPreferenceLoaded &&
         Data().accounts.isEmpty &&

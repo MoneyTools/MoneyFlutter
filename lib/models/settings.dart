@@ -197,6 +197,7 @@ class Settings extends ChangeNotifier {
   }
 
   void closeFile() {
+    Settings().fileManager.state = DataFileState.empty;
     this.fileManager.fullPathToLastOpenedFile = '';
     this.preferrenceSave();
     Data().close();
