@@ -91,7 +91,7 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget _buildPopupMenu() {
     final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
     // New
-    addMenuItem(list, Constants.commandFileNew, 'New', Icons.new_label);
+    addMenuItem(list, Constants.commandFileNew, 'New', Icons.note_add_outlined);
 
     // Open
     addMenuItem(list, Constants.commandFileOpen, 'Open...', Icons.file_open_outlined);
