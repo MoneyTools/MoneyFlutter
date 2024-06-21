@@ -14,9 +14,9 @@ import 'package:money/views/view_cashflow/panel_sankey.dart';
 import 'package:money/views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/views/view_header.dart';
 import 'package:money/views/view_transactions/no_transactions.dart';
-import 'package:money/widgets/pick_number.dart';
-import 'package:money/widgets/sankey/sankey.dart';
-import 'package:money/widgets/years_range_selector.dart';
+import 'package:money/app/core/widgets/pick_number.dart';
+import 'package:money/app/core/widgets/sankey/sankey.dart';
+import 'package:money/app/core/widgets/years_range_selector.dart';
 
 class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/widgets/rectangle.dart';
+import 'package:money/app/core/widgets/rectangle.dart';
 
 class MyCircle extends StatelessWidget {
   final Color colorFill;

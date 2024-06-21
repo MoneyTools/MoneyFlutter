@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/widgets/picker_panel.dart';
+import 'package:money/app/core/widgets/picker_panel.dart';
 
 class PickerEditBox extends StatefulWidget {
   const PickerEditBox({

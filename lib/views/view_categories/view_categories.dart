@@ -13,12 +13,12 @@ import 'package:money/storage/preferences_helper.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_categories/merge_categories.dart';
 import 'package:money/views/view_money_objects.dart';
-import 'package:money/widgets/center_message.dart';
-import 'package:money/widgets/chart.dart';
-import 'package:money/widgets/columns/footer_widgets.dart';
-import 'package:money/widgets/dialog/dialog.dart';
-import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/three_part_label.dart';
+import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/chart.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
+import 'package:money/app/core/widgets/dialog/dialog.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/three_part_label.dart';
 
 part 'view_categories_details_panels.dart';
 

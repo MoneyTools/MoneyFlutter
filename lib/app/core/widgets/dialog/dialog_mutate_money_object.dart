@@ -3,9 +3,9 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/money_objects.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/dialog/dialog.dart';
-import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/message_box.dart';
+import 'package:money/app/core/widgets/dialog/dialog.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/message_box.dart';
 
 myShowDialogAndActionsForMoneyObject({
   required final BuildContext context,

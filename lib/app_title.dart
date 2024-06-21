@@ -7,11 +7,11 @@ import 'package:money/models/money_model.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/picker_panel.dart';
-import 'package:money/widgets/reveal_content.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/picker_panel.dart';
+import 'package:money/app/core/widgets/reveal_content.dart';
 
-import 'package:money/widgets/token_text.dart';
+import 'package:money/app/core/widgets/token_text.dart';
 
 class AppTitle extends StatelessWidget {
   AppTitle({

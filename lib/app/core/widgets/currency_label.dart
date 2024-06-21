@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 
 class CurrencyLabel extends StatelessWidget {
   final String threeLetterCurrencySymbol;

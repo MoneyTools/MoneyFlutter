@@ -7,7 +7,7 @@ import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_money_objects.dart';
-import 'package:money/widgets/center_message.dart';
+import 'package:money/app/core/widgets/center_message.dart';
 
 class ViewAliases extends ViewForMoneyObjects {
   const ViewAliases({super.key});

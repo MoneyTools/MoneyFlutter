@@ -4,9 +4,9 @@ import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_model.dart';
 import 'package:money/views/view_rentals/rental_pnl.dart';
-import 'package:money/widgets/money_widget.dart';
-import 'package:money/widgets/box.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/box.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 
 class RentalPnLCard extends StatelessWidget {
   final RentalPnL pnl;

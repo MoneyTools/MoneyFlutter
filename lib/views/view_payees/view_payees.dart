@@ -14,13 +14,13 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_payees/merge_payees.dart';
-import 'package:money/widgets/center_message.dart';
-import 'package:money/widgets/chart.dart';
-import 'package:money/widgets/columns/footer_widgets.dart';
-import 'package:money/widgets/date_range_time_line.dart';
-import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/mini_timeline_daily.dart';
+import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/chart.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
+import 'package:money/app/core/widgets/date_range_time_line.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/mini_timeline_daily.dart';
 
 part 'view_payees_details_panels.dart';
 

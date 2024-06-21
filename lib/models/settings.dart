@@ -15,7 +15,7 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/storage/data/data_mutations.dart';
 import 'package:money/storage/file_manager.dart';
 import 'package:money/storage/preferences_helper.dart';
-import 'package:money/widgets/snack_bar.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 
 class Settings extends ChangeNotifier {
   String getUniqueSate() {

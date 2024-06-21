@@ -10,7 +10,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/semantic_text.dart';
+import 'package:money/app/core/widgets/semantic_text.dart';
 
 class ValueQuality {
   final String valueAsString;

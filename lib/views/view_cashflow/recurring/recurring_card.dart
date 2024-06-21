@@ -9,13 +9,13 @@ import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_cashflow/recurring/recurring_payment.dart';
-import 'package:money/widgets/box.dart';
-import 'package:money/widgets/date_range_time_line.dart';
-import 'package:money/widgets/distribution_bar.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/mini_timeline_daily.dart';
-import 'package:money/widgets/mini_timeline_twelve_months.dart';
-import 'package:money/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/box.dart';
+import 'package:money/app/core/widgets/date_range_time_line.dart';
+import 'package:money/app/core/widgets/distribution_bar.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/mini_timeline_daily.dart';
+import 'package:money/app/core/widgets/mini_timeline_twelve_months.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 
 class RecurringCard extends StatelessWidget {
   final int index;

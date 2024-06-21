@@ -4,9 +4,9 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_categories/picker_category.dart';
-import 'package:money/widgets/box.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/info_banner.dart';
+import 'package:money/app/core/widgets/box.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/info_banner.dart';
 
 class MergeCategoriesTransactionsDialog extends StatefulWidget {
   const MergeCategoriesTransactionsDialog({

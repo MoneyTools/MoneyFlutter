@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/form_field_switch.dart';
-import 'package:money/widgets/form_field_widget.dart';
+import 'package:money/app/core/widgets/form_field_switch.dart';
+import 'package:money/app/core/widgets/form_field_widget.dart';
 
 export 'dart:ui';
 

@@ -11,12 +11,12 @@ import 'package:money/models/money_objects/categories/picker_category_type.dart'
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
-import 'package:money/widgets/circle.dart';
-import 'package:money/widgets/color_picker.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/money_widget.dart';
-import 'package:money/widgets/rectangle.dart';
-import 'package:money/widgets/token_text.dart';
+import 'package:money/app/core/widgets/circle.dart';
+import 'package:money/app/core/widgets/color_picker.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/rectangle.dart';
+import 'package:money/app/core/widgets/token_text.dart';
 
 // Exports
 export 'package:money/models/money_objects/categories/category_types.dart';

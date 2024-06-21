@@ -21,8 +21,8 @@ import 'package:money/views/view_rentals/view_rentals.dart';
 import 'package:money/views/view_stocks/view_stocks.dart';
 import 'package:money/views/view_transactions/view_transactions.dart';
 import 'package:money/views/view_transfers/view_transfers.dart';
-import 'package:money/widgets/keyboard_widget.dart';
-import 'package:money/widgets/working.dart';
+import 'package:money/app/core/widgets/keyboard_widget.dart';
+import 'package:money/app/core/widgets/working.dart';
 
 import 'home_controller.dart';
 

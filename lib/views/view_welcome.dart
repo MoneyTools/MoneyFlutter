@@ -3,8 +3,8 @@ import 'package:get/get.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/views/view_policy.dart';
-import 'package:money/widgets/dialog/dialog.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/app/core/widgets/dialog/dialog.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({

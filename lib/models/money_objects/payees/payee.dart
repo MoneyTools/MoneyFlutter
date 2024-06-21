@@ -3,7 +3,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
-import 'package:money/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 
 export 'package:money/models/money_objects/money_object.dart';
 

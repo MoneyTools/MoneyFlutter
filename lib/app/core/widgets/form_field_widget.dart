@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/widgets/form_field_switch.dart';
+import 'package:money/app/core/widgets/form_field_switch.dart';
 
 /// Hybrid widget Text on the left, custom widget on the right
 class MyFormFieldForWidget extends StatefulWidget {

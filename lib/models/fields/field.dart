@@ -5,8 +5,8 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/money_objects/currencies/currency.dart';
 import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/widgets/money_widget.dart';
-import 'package:money/widgets/quantity_widget.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/quantity_widget.dart';
 
 export 'package:money/models/money_model.dart';
 

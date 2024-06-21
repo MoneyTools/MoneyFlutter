@@ -19,8 +19,8 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/views/view_categories/picker_category.dart';
 import 'package:money/views/view_payees/picker_payee_or_transfer.dart';
-import 'package:money/widgets/money_widget.dart';
-import 'package:money/widgets/picker_edit_box_date.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/picker_edit_box_date.dart';
 
 // Exports
 export 'package:money/models/money_objects/transactions/transaction_types.dart';

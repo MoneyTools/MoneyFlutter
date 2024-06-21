@@ -8,7 +8,7 @@ import 'package:money/models/date_range.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/distribution_bar.dart';
+import 'package:money/app/core/widgets/distribution_bar.dart';
 
 class RecurringPayment {
   final int payeeId;

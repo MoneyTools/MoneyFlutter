@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 
 class ColumnFilterPanel extends StatefulWidget {
   final List<ValueSelection> listOfUniqueInstances;

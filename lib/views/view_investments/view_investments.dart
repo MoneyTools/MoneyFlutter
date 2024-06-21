@@ -6,12 +6,12 @@ import 'package:money/models/fields/fields.dart';
 import 'package:money/models/money_objects/investments/investments.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/widgets/center_message.dart';
+import 'package:money/app/core/widgets/center_message.dart';
 
-import 'package:money/widgets/chart.dart';
+import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/widgets/columns/footer_widgets.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 
 part 'view_investments_details_panels.dart';
 

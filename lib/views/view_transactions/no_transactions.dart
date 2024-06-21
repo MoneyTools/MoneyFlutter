@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:money/helpers/color_helper.dart';
-import 'package:money/widgets/box.dart';
+import 'package:money/app/core/widgets/box.dart';
 
 class NoTransaction extends StatelessWidget {
   const NoTransaction({super.key});

@@ -3,8 +3,8 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
-import 'package:money/widgets/filter_input.dart';
-import 'package:money/widgets/three_part_label.dart';
+import 'package:money/app/core/widgets/filter_input.dart';
+import 'package:money/app/core/widgets/three_part_label.dart';
 
 class ViewHeader extends StatelessWidget {
   final String title;

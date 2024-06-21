@@ -5,7 +5,7 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/date_helper.dart';
 import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
-import 'package:money/widgets/vertical_line_with_tooltip.dart';
+import 'package:money/app/core/widgets/vertical_line_with_tooltip.dart';
 
 class MiniTimelineDaily extends StatelessWidget {
   final int yearStart;

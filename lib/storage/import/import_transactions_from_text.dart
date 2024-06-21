@@ -5,11 +5,11 @@ import 'package:money/models/money_objects/payees/payee.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_panel.dart';
-import 'package:money/widgets/dialog/dialog.dart';
-import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/message_box.dart';
-import 'package:money/widgets/snack_bar.dart';
+import 'package:money/app/core/widgets/dialog/dialog.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/message_box.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 
 void showImportTransactionsFromTextInput(
   final BuildContext context, [

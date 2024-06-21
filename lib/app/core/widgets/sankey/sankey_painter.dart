@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/string_helper.dart';
 
 import 'package:money/models/constants.dart';
-import 'package:money/widgets/sankey/sankey_colors.dart';
-import 'package:money/widgets/sankey/sankey_helper.dart';
+import 'package:money/app/core/widgets/sankey/sankey_colors.dart';
+import 'package:money/app/core/widgets/sankey/sankey_helper.dart';
 
 // Exports
-export 'package:money/widgets/sankey/sankey_helper.dart';
+export 'package:money/app/core/widgets/sankey/sankey_helper.dart';
 
 class SankeyPainter extends CustomPainter {
   final List<SanKeyEntry> listOfIncomes;

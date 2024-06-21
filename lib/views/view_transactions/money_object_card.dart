@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/money_objects/transactions/transactions.dart';
-import 'package:money/widgets/box.dart';
+import 'package:money/app/core/widgets/box.dart';
 
 class MoneyObjectCard extends StatelessWidget {
   final String title;

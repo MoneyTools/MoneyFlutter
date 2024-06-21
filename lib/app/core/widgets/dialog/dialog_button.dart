@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/models/constants.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/widgets.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 
 class DialogActionButton extends StatelessWidget {
   final IconData? icon;

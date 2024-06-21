@@ -5,9 +5,9 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_qfx.dart';
 import 'package:money/storage/import/import_qif.dart';
 import 'package:money/storage/import/import_transactions_from_text.dart';
-import 'package:money/widgets/dialog/dialog.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/wizard_choice.dart';
+import 'package:money/app/core/widgets/dialog/dialog.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/wizard_choice.dart';
 
 void showImportTransactionsWizard(
   final BuildContext context, [

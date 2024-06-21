@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money/widgets/dialog/dialog.dart';
-import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/app/core/widgets/dialog/dialog.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 
 void showConfirmationDialog({
   required final BuildContext context,

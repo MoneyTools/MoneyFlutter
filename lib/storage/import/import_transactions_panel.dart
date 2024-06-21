@@ -3,9 +3,9 @@ import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/models/money_objects/accounts/account.dart';
 import 'package:money/views/view_accounts/picker_account.dart';
-import 'package:money/widgets/columns/columns_input.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/import_transactions_list.dart';
+import 'package:money/app/core/widgets/columns/columns_input.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/import_transactions_list.dart';
 
 /// use for free style text to transaction import
 class ImportTransactionsPanel extends StatefulWidget {

@@ -11,9 +11,9 @@ import 'package:money/storage/preferences_helper.dart';
 
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/views/view_money_objects.dart';
-import 'package:money/widgets/columns/footer_widgets.dart';
-import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/widgets.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
   final double startingBalance;

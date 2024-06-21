@@ -10,8 +10,8 @@ import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/view_stocks/stock_chart.dart';
-import 'package:money/widgets/center_message.dart';
-import 'package:money/widgets/columns/footer_widgets.dart';
+import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 
 class ViewStocks extends ViewForMoneyObjects {
   const ViewStocks({

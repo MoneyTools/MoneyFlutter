@@ -4,7 +4,7 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/widgets/currency_label.dart';
+import 'package:money/app/core/widgets/currency_label.dart';
 
 /*
   cid  name         type          notnull  default  pk

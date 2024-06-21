@@ -9,8 +9,8 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/database/database.dart';
-import 'package:money/widgets/diff.dart';
-import 'package:money/widgets/gaps.dart';
+import 'package:money/app/core/widgets/diff.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 
 // Exports
 export 'package:collection/collection.dart';

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/money_model.dart';
-import 'package:money/widgets/circle.dart';
-import 'package:money/widgets/gaps.dart';
-import 'package:money/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/circle.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 
 class Distribution {
   final String title;

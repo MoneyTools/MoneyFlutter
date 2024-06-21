@@ -4,9 +4,9 @@ import 'package:money/helpers/list_helper.dart';
 import 'package:money/helpers/string_helper.dart';
 import 'package:money/helpers/value_parser.dart';
 import 'package:money/storage/data/data.dart';
-import 'package:money/widgets/columns/column_header_button.dart';
-import 'package:money/widgets/semantic_text.dart';
-import 'package:money/widgets/mybanner.dart';
+import 'package:money/app/core/widgets/columns/column_header_button.dart';
+import 'package:money/app/core/widgets/semantic_text.dart';
+import 'package:money/app/core/widgets/mybanner.dart';
 
 class ImportTransactionsList extends StatefulWidget {
   final List<ValuesQuality> values;

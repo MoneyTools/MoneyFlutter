@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/widgets/dialog/dialog_button.dart';
-import 'package:money/widgets/dialog/dialog_full_screen.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
 
 class MyAlertDialog extends StatelessWidget {
   final String title;

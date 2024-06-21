@@ -9,10 +9,10 @@ import 'package:money/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/view_rentals/rental_pnl.dart';
 import 'package:money/views/view_rentals/rental_pnl_card.dart';
-import 'package:money/widgets/chart.dart';
+import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/views/view_money_objects.dart';
 import 'package:money/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/widgets/columns/footer_widgets.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 
 part 'view_rentals_details_panels.dart';
 

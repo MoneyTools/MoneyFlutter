@@ -11,7 +11,7 @@ import 'package:money/models/money_objects/money_object.dart';
 import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
-import 'package:money/widgets/token_text.dart';
+import 'package:money/app/core/widgets/token_text.dart';
 
 import 'account_types_enum.dart';
 
