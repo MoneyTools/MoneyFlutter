@@ -7,7 +7,7 @@ import 'package:money/app/data/models/money_objects/accounts/account_types_enum.
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
-import 'package:money/storage/data/data.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 export 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 

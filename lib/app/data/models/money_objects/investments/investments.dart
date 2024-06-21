@@ -2,7 +2,7 @@ import 'package:money/app/data/models/money_objects/investments/investment.dart'
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/storage/data/data.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 // Exports
 export 'package:money/app/data/models/money_objects/investments/investment.dart';

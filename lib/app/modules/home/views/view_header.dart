@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
-import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
+import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
+import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
 import 'package:money/app/core/widgets/filter_input.dart';
 import 'package:money/app/core/widgets/three_part_label.dart';
 

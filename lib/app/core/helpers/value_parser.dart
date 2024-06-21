@@ -9,7 +9,7 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/storage/data/data.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
 
 class ValueQuality {

@@ -8,13 +8,13 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/settings.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/storage/preferences_helper.dart';
-import 'package:money/views/adaptive_view/adaptable_view_with_list.dart';
-import 'package:money/views/adaptive_view/adaptive_list/column_filter_panel.dart';
-import 'package:money/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
-import 'package:money/views/view_header.dart';
-import 'package:money/views/view_transactions/money_object_card.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/data/storage/preferences_helper.dart';
+import 'package:money/app/modules/home/views/adaptive_view/adaptable_view_with_list.dart';
+import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/column_filter_panel.dart';
+import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/multiple_selection_context.dart';
+import 'package:money/app/modules/home/views/view_header.dart';
+import 'package:money/app/modules/home/views/view_transactions/money_object_card.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
@@ -22,7 +22,7 @@ import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/core/widgets/message_box.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 
-import '../app/data/models/fields/field_filter.dart';
+import '../../../data/models/fields/field_filter.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {
   const ViewForMoneyObjects({super.key});

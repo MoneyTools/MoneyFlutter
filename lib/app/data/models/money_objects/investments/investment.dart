@@ -6,7 +6,7 @@ import 'package:money/app/data/models/money_objects/investments/investment_types
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/storage/data/data.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 class Investment extends MoneyObject {
   static final Fields<Investment> _fields = Fields<Investment>();

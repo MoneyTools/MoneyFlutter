@@ -12,7 +12,7 @@ import 'package:money/app/data/models/money_objects/investments/investment_types
 import 'package:money/app/data/models/money_objects/investments/security_sales.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
-import 'package:money/storage/data/data.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 /// <summary>
 /// This class computes the cost basis associated with stock sales.

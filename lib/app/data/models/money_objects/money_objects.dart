@@ -7,8 +7,8 @@ import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/settings.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/storage/database/database.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/data/storage/database/database.dart';
 import 'package:money/app/core/widgets/diff.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 

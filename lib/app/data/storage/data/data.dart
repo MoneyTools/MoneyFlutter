@@ -28,7 +28,7 @@ import 'package:money/app/data/models/money_objects/transaction_extras/transacti
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/app/data/models/settings.dart';
-import 'package:money/storage/database/database.dart';
+import 'package:money/app/data/storage/database/database.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 
 // Exports

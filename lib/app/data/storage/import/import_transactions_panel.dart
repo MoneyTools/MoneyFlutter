@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
-import 'package:money/views/view_accounts/picker_account.dart';
+import 'package:money/app/modules/home/views/view_accounts/picker_account.dart';
 import 'package:money/app/core/widgets/columns/columns_input.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/import_transactions_list.dart';

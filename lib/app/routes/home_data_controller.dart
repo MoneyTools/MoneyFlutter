@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/settings.dart';
-import 'package:money/storage/data/data.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 class DataController extends GetxController {
   // Observable variables

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
-import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
+import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 
 class AdaptiveViewWithList extends StatelessWidget {
   final Widget? top;

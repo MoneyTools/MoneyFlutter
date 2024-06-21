@@ -6,10 +6,10 @@ import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
-import 'package:money/storage/data/data.dart';
-import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
-import 'package:money/views/view_money_objects.dart';
-import 'package:money/views/view_stocks/stock_chart.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
+import 'package:money/app/modules/home/views/view_money_objects.dart';
+import 'package:money/app/modules/home/views/view_stocks/stock_chart.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 

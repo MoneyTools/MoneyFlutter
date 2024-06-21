@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/settings.dart';
-import 'package:money/views/view_pending_changes/view_pending_changes.dart';
+import 'package:money/app/modules/home/views/view_pending_changes/view_pending_changes.dart';
 
 ///
 class BadgePendingChanges extends StatelessWidget {
