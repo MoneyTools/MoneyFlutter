@@ -4,6 +4,7 @@
 
 ### Added
 
+- load zip [.mmcsv] file from WebClient
 - Save and Load Zip .mmcsv file
 - MRU - Select previous loaded files directly from the title
   

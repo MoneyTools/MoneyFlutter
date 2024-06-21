@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:money/helpers/json_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
 import 'package:sqlite3/wasm.dart';
 
 /// implement the Sqlite3 WASM Web Support see https://pub.dev/packages/sqlite3#wasm-web-support
@@ -10,7 +9,7 @@ class MyDatabaseImplementation {
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     _db = await sqliteLoadFromMemory(fileBytes);
-    debugLog(_db.toString());
+    // debugLog(_db.toString());
   }
 
   List<MyJson> select(final String query) {

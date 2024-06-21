@@ -163,3 +163,20 @@ extension MyJsonExtensions on MyJson {
     return jsonEncode(object);
   }
 }
+
+List<MyJson> converFromRawCsvTextToListOfJSonObject(String fileContent) {
+  List<MyJson> rows = [];
+  List<List<String>> lines = getLinesFromRawText(fileContent);
+  if (lines.length > 1) {
+    final List<String> csvHeaderColumns = lines.first;
+    for (final List<String> csvRowValues in lines.skip(1)) {
+      try {
+        final rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
+        rows.add(rowValues);
+      } catch (e) {
+        debugLog(e.toString());
+      }
+    }
+  }
+  return rows;
+}

@@ -177,7 +177,7 @@ class Investment extends MoneyObject {
   /// The actual transaction date.
   Transaction? transactionInstance;
 
-  DateTime get date => this.transactionInstance!.dateTime.value!;
+  DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
 
   double get originalCostBasis {
     // looking for the original un-split cost basis at the date of this transaction.

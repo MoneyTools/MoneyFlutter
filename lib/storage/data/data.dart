@@ -252,7 +252,7 @@ class Data {
           }
         case '.mmcsv':
           // Zip CSV files
-          await loadFromCsv(filePathToLoad);
+          await loadFromCsv(filePathToLoad, Settings().fileManager.fileBytes);
           Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
           Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
 

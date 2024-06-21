@@ -428,10 +428,6 @@ class RentBuilding extends MoneyObject {
         pnlOverYears[year] = pnl;
       }
 
-      if (t.dateTime.value!.year == 1999 && t.dateTime.value!.month == 2 && t.dateTime.value!.day == 12) {
-        debugLog('');
-      }
-
       if (t.isSplit) {
         for (final split in t.splits) {
           cumulatePnLValues(pnl, split.categoryId.value, split.amount.value.toDouble());

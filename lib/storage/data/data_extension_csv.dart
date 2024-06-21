@@ -4,59 +4,61 @@ const String mainFileName = 'mymoney.mmcsv';
 const String subFolderName = 'mymoney_csv_files';
 
 extension DataFromCsv on Data {
-  Future<void> loadFromCsv(String filePathToLoad) async {
-    File file = File(filePathToLoad);
-    List<int> bytes = await file.readAsBytes();
-
+  Future<void> loadFromCsv(String filePathToLoad, final Uint8List fileBytes) async {
     // Decode the ZIP file
-    Archive archive = ZipDecoder().decodeBytes(bytes);
+    late Archive archive;
+    if (fileBytes.isNotEmpty) {
+      archive = ZipDecoder().decodeBytes(fileBytes);
+    } else {
+      File file = File(filePathToLoad);
+      List<int> bytes = await file.readAsBytes();
+      archive = ZipDecoder().decodeBytes(bytes);
+    }
 
     // Extract the files and read the content
     for (ArchiveFile file in archive) {
       if (file.isFile) {
         String fileContent = getZipSingleFileContent(file);
 
-        debugLog(file.name);
+        // debugLog(file.name);
         final String fileNameInLowercase = MyFileSystems.getFileName(file.name).toLowerCase();
-        debugLog(fileNameInLowercase);
+        // debugLog(fileNameInLowercase);
 
-        debugLog(fileContent);
+        // debugLog(fileContent);
         switch (fileNameInLowercase) {
           case 'account_aliases.csv':
-            accountAliases.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            accountAliases.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'accounts.csv':
-            accounts.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            accounts.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'aliases.csv':
-            aliases.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            aliases.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'categories.csv':
-            categories.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            categories.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'investments.csv':
-            investments.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            investments.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'loan_payments.csv':
-            loanPayments.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            loanPayments.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'online_accounts.csv':
-            onlineAccounts.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            onlineAccounts.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'payees.csv':
-            payees.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            payees.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'rent_buildings.csv':
-            rentBuildings.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            rentBuildings.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'rent_units.csv':
-            rentUnits.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            rentUnits.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'securities.csv':
-            securities.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            securities.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'splits.csv':
-            splits.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            splits.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'stock_splits.csv':
-            stockSplits.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            stockSplits.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'transactions.csv':
-            transactions.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            transactions.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
           case 'transaction_extras.csv':
-            transactionExtras.loadFromJson(rawCsvStringToListOfJsonObjects(fileContent));
+            transactionExtras.loadFromJson(converFromRawCsvTextToListOfJSonObject(fileContent));
         }
       }
     }
-
-    // Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
   }
 
   String getZipSingleFileContent(ArchiveFile file) {
@@ -66,23 +68,10 @@ extension DataFromCsv on Data {
       // Remove UTF-8 BOM if present
       fileContent = removeUtf8Bom(fileContent);
       return fileContent;
-    } catch (_) {
+    } catch (e) {
+      debugLog(e.toString());
       return '';
     }
-  }
-
-  List<MyJson> rawCsvStringToListOfJsonObjects(String fileContent) {
-    List<MyJson> rows = [];
-    List<String> lines = getLinesFromTextBlob(fileContent);
-    if (lines.length > 1) {
-      final List<String> csvHeaderColumns = getColumnInCsvLine(lines[0]);
-      for (int lineIndex = 1; lineIndex < lines.length; lineIndex++) {
-        final List<String> csvRowValues = getColumnInCsvLine(lines[lineIndex]);
-        final rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
-        rows.add(rowValues);
-      }
-    }
-    return rows;
   }
 
   Future<String> saveToCsv() async {

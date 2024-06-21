@@ -125,6 +125,9 @@ class ValuesQuality {
   }
 }
 
+/// The `ValuesParser` class is responsible for parsing input data and extracting
+/// relevant values from it. It provides methods for parsing, transforming, and
+/// validating the extracted values.
 class ValuesParser {
   List<ValuesQuality> _values = [];
   String errorMessage = '';
@@ -248,11 +251,11 @@ class ValuesParser {
     _values.clear();
 
     inputString = inputString.trim();
-    List<String> lines = getLinesFromTextBlob(inputString);
+    List<List<String>> lines = getLinesFromRawText(inputString);
     if (lines.isNotEmpty) {
       for (var line in lines) {
         if (line.isNotEmpty) {
-          add(attemptToExtractTriples(line));
+          add(attemptToExtractTriples(line.join(';')));
         }
       }
     }

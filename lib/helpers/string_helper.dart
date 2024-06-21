@@ -79,8 +79,46 @@ String getIntAsText(final int value) {
   return NumberFormat.decimalPattern().format(value);
 }
 
-List<String> getLinesFromTextBlob(final String inputString) {
-  return inputString.trim().split(RegExp(r'\r?\n|\r'));
+List<List<String>> getLinesFromRawText(final String content) {
+  List<List<String>> rows = [];
+  List<String> currentRow = [];
+  StringBuffer currentField = StringBuffer();
+  bool inQuotes = false;
+
+  for (int i = 0; i < content.length; i++) {
+    var char = content[i];
+
+    if (char == '"' && (i + 1 < content.length && content[i + 1] == '"')) {
+      // Handle escaped quotes
+      currentField.write('"');
+      i++; // Skip the next quote
+    } else if (char == '"') {
+      inQuotes = !inQuotes; // Toggle the inQuotes state
+    } else if (char == ',' && !inQuotes) {
+      // End of a field
+      currentRow.add(currentField.toString());
+      currentField = StringBuffer();
+    } else if ((char == '\n' || char == '\r') && !inQuotes) {
+      // End of a row (handle both \n and \r\n)
+      if (currentField.isNotEmpty || currentRow.isNotEmpty) {
+        currentRow.add(currentField.toString());
+        rows.add(currentRow);
+        currentRow = [];
+        currentField = StringBuffer();
+      }
+    } else {
+      // Normal character
+      currentField.write(char);
+    }
+  }
+
+  // Add the last row if it exists
+  if (currentField.isNotEmpty || currentRow.isNotEmpty) {
+    currentRow.add(currentField.toString());
+    rows.add(currentRow);
+  }
+
+  return rows;
 }
 
 /// Clean up input string by removing "white noise"

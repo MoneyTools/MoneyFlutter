@@ -1,6 +1,7 @@
 import 'package:money/models/money_objects/investments/investment.dart';
 import 'package:money/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 
 // Exports
@@ -23,7 +24,8 @@ class Investments extends MoneyObjects<Investment> {
   void onAllDataLoaded() {
     for (final investment in iterableList()) {
       // hydrate the transaction instance associated to the investments
-      investment.transactionInstance = Data().transactions.get(investment.uniqueId);
+      final transactionFound = Data().transactions.get(investment.uniqueId);
+      investment.transactionInstance = transactionFound ?? Transaction();
     }
   }
 
