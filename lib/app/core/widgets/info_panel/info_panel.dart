@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_header.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 

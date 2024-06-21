@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/core/theme/theme_controler.dart';
-import 'package:money/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/list_helper.dart';
 
 Color addHintOfGreenToColor(Color color, [int hint = 50]) {
   // Calculate the new green value

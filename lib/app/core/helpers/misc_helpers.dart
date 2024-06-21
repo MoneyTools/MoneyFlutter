@@ -5,7 +5,7 @@ import 'dart:math';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/data/models/constants.dart';
 
 /// Remove non-numeric characters from the currency text
 double? attemptToGetDoubleFromText(String text) {

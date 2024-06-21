@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:money/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:sqlite3/wasm.dart';
 
 /// implement the Sqlite3 WASM Web Support see https://pub.dev/packages/sqlite3#wasm-web-support

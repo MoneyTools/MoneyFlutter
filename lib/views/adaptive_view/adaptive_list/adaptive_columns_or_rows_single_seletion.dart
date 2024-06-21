@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/accumulator.dart';
-import 'package:money/models/fields/field_filter.dart';
+import 'package:money/app/core/helpers/accumulator.dart';
+import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';

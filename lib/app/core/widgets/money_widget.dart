@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/money_model.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/data/models/money_model.dart';
+import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
 class MoneyWidget extends StatelessWidget {

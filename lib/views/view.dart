@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/views/view_header.dart';
 
 class ViewWidget extends StatefulWidget {

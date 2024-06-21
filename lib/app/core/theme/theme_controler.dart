@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/helpers/list_helper.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController extends GetxController {

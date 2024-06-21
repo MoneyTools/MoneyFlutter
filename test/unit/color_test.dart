@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/list_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 
 void main() {
   group('invertColor Function Tests', () {

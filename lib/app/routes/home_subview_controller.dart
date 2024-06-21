@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class SubViewController extends GetxController {
   // Observable enum

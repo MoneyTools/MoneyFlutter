@@ -1,4 +1,4 @@
-import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class RentalPnL {
   final DateTime date;

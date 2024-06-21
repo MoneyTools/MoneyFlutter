@@ -1,6 +1,6 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 /*

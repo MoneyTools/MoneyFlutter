@@ -3,10 +3,10 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/constants.dart';
-import 'package:money/models/money_objects/currencies/currency.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 
 FlBorderData getBorders(final double min, final double max) {

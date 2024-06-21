@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class HomeController extends GetxController {
   //TODO: Implement HomeController.

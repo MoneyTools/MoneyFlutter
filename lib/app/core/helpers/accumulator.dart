@@ -1,4 +1,4 @@
-import 'package:money/models/date_range.dart';
+import 'package:money/app/data/models/date_range.dart';
 
 /// A generic class that accumulates values of type `V` associated with keys of type `T`.
 /// It uses a `Map<K, Set<V>>` to store the accumulated values.

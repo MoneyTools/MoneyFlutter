@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:money/helpers/misc_helpers.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:path_provider/path_provider.dart';
 
 int countOccurrences(String input, String char) {

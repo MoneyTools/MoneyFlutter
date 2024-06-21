@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/settings.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/data/models/settings.dart';
 import 'package:money/views/view_pending_changes/view_pending_changes.dart';
 
 ///

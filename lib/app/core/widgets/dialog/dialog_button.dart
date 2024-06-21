@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 

@@ -1,6 +1,6 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class SanKeyEntry {
   String name = '';

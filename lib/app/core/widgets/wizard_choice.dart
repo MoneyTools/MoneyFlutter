@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class WizardChoice extends StatelessWidget {
   final String title;

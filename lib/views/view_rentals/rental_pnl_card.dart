@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/constants.dart';
-import 'package:money/models/money_model.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/money_model.dart';
 import 'package:money/views/view_rentals/rental_pnl.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/box.dart';

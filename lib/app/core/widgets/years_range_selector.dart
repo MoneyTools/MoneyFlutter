@@ -3,8 +3,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/constants.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class YearRangeSlider extends StatefulWidget {
   final int minYear;

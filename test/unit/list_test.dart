@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/helpers/accumulator.dart';
+import 'package:money/app/core/helpers/accumulator.dart';
 
 void main() {
   test('AccumulatorSum: empty map', () {

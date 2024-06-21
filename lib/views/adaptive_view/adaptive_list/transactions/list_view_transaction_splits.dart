@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/fields/field_filter.dart';
-import 'package:money/models/money_objects/splits/money_split.dart';
+import 'package:money/app/data/models/fields/field_filter.dart';
+import 'package:money/app/data/models/money_objects/splits/money_split.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_view.dart';
 
 // Export
-export 'package:money/models/money_objects/splits/splits.dart';
+export 'package:money/app/data/models/money_objects/splits/splits.dart';
 
 class ListViewTransactionSplits extends StatefulWidget {
   final List<MoneySplit> Function() getList;

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/value_parser.dart';
-import 'package:money/models/money_objects/accounts/account.dart';
-import 'package:money/models/money_objects/payees/payee.dart';
-import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/app/core/helpers/value_parser.dart';
+import 'package:money/app/data/models/money_objects/accounts/account.dart';
+import 'package:money/app/data/models/money_objects/payees/payee.dart';
+import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/import/import_transactions_panel.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';

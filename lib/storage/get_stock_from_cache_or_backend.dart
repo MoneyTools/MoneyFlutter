@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:money/helpers/date_helper.dart';
-import 'package:money/helpers/file_systems.dart';
-import 'package:money/helpers/json_helper.dart';
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/settings.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
+import 'package:money/app/core/helpers/file_systems.dart';
+import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/data/models/settings.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

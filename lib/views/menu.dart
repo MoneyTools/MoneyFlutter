@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/constants.dart';
-import 'package:money/models/settings.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/settings.dart';
 
 List<NavigationDestination> getAppBarDestinations(final Settings settings) {
   final List<NavigationDestination> appBarDestinations = <NavigationDestination>[

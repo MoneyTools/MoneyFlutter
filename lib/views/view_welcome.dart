@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/settings.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/data/models/settings.dart';
 import 'package:money/views/view_policy.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/gaps.dart';

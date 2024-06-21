@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
-import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
 
 List<double> calculateSpread(double start, double end, int numEntries) {
   double step = (end - start) / (numEntries - 1);

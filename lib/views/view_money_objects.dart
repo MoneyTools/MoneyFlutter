@@ -1,13 +1,13 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/date_helper.dart';
-import 'package:money/helpers/list_helper.dart';
-import 'package:money/helpers/string_helper.dart';
-import 'package:money/models/constants.dart';
-import 'package:money/models/money_objects/money_objects.dart';
-import 'package:money/models/settings.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
+import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/money_objects/money_objects.dart';
+import 'package:money/app/data/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/storage/preferences_helper.dart';
 import 'package:money/views/adaptive_view/adaptable_view_with_list.dart';
@@ -22,7 +22,7 @@ import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/core/widgets/message_box.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 
-import '../models/fields/field_filter.dart';
+import '../app/data/models/fields/field_filter.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {
   const ViewForMoneyObjects({super.key});

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/helpers/date_helper.dart';
-import 'package:money/helpers/file_systems.dart';
-import 'package:money/models/constants.dart';
-import 'package:money/models/money_model.dart';
-import 'package:money/models/settings.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
+import 'package:money/app/core/helpers/file_systems.dart';
+import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/money_model.dart';
+import 'package:money/app/data/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/views/view_pending_changes/badge_pending_changes.dart';
 import 'package:money/app/core/widgets/gaps.dart';

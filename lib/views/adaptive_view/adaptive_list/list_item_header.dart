@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/fields/field_filter.dart';
-import 'package:money/models/money_objects/money_objects.dart';
+import 'package:money/app/data/models/fields/field_filter.dart';
+import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/core/widgets/columns/column_header_button.dart';
 
 /// A Row for a Table view

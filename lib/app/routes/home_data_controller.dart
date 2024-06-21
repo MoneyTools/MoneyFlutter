@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:money/helpers/misc_helpers.dart';
-import 'package:money/models/settings.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/data/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 
 class DataController extends GetxController {

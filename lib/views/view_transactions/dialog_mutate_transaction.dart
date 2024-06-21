@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/models/money_objects/transactions/transaction.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
+import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/app/core/widgets/confirmation_dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';

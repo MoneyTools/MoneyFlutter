@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:money/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesHelper {

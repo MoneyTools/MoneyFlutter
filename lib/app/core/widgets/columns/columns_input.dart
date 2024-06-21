@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/helpers/list_helper.dart';
-import 'package:money/helpers/string_helper.dart';
-import 'package:money/helpers/value_parser.dart';
+import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class ColumnInput extends StatefulWidget {

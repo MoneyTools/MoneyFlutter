@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:money/helpers/color_helper.dart';
-import 'package:money/models/money_objects/money_object.dart';
-import 'package:money/models/money_objects/transactions/transactions.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
+import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/core/widgets/box.dart';
 
 class MoneyObjectCard extends StatelessWidget {

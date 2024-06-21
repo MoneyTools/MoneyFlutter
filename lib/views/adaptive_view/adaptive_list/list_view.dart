@@ -2,13 +2,13 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/models/fields/fields.dart';
-import 'package:money/models/money_objects/money_object.dart';
+import 'package:money/app/data/models/fields/fields.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/views/adaptive_view/adaptive_list/list_item.dart';
 
 // Exports
-export 'package:money/models/fields/fields.dart';
-export 'package:money/models/money_objects/money_object.dart';
+export 'package:money/app/data/models/fields/fields.dart';
+export 'package:money/app/data/models/money_objects/money_object.dart';
 export 'package:money/views/adaptive_view/adaptive_list/list_item.dart';
 export 'package:money/views/adaptive_view/adaptive_list/list_item_card.dart';
 export 'package:money/views/adaptive_view/adaptive_list/list_item_header.dart';
