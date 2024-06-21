@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/core/theme/theme_controler.dart';
-import 'package:money/app_title.dart';
+import 'package:money/views/app_title.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
 import 'package:money/models/settings.dart';
