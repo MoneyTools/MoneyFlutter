@@ -1,12 +1,12 @@
 // ignore_for_file: unnecessary_this
 
 import 'dart:math';
-
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:money/app/core/theme/theme_controler.dart';
 import 'package:money/helpers/misc_helpers.dart';
 import 'package:money/models/money_objects/categories/category.dart';
 import 'package:money/models/money_objects/transactions/transaction.dart';
-import 'package:money/models/settings.dart';
 import 'package:money/storage/data/data.dart';
 import 'package:money/widgets/sankey/sankey.dart';
 import 'package:money/widgets/sankey/sankey_colors.dart';
@@ -34,7 +34,7 @@ class PanelSanKey extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     transformData();
-
+    final ThemeController themeController = Get.find();
     return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
       return SingleChildScrollView(
         scrollDirection: Axis.vertical,
@@ -47,7 +47,7 @@ class PanelSanKey extends StatelessWidget {
               listOfIncomes: sanKeyListOfIncomes,
               listOfExpenses: sanKeyListOfExpenses,
               compactView: isSmallDevice(context),
-              colors: SankeyColors(darkTheme: Settings().useDarkMode),
+              colors: SankeyColors(darkTheme: themeController.isDarkTheme.value),
             ),
           ),
         ),

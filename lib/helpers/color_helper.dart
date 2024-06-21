@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:money/app/core/theme/theme_controler.dart';
 import 'package:money/helpers/list_helper.dart';
-import 'package:money/models/settings.dart';
 
 Color addHintOfGreenToColor(Color color, [int hint = 50]) {
   // Calculate the new green value
@@ -109,7 +110,8 @@ enum ColorState {
 }
 
 Color getColorFromState(final ColorState state) {
-  final bool isDarkModeOne = Settings().useDarkMode;
+  final ThemeController themeController = Get.find();
+  final bool isDarkModeOne = themeController.isDarkTheme.value;
 
   switch (state) {
     case ColorState.success:

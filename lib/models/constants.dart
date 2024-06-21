@@ -23,6 +23,7 @@ const List<String> colorText = <String>[
 const String settingKeyCashflowRecurringOccurrences = 'keyCashflowOccurrences';
 const String settingKeyCashflowView = 'keyCashflowView';
 const String settingKeyDarkMode = 'themeDarkMode';
+const String settingKeyTheme = 'themeColor';
 const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';
 const String settingKeyDomainAccountsInfoTransactions = 'accountDetailsTransactions';
 const String settingKeyFilterText = 'filterText';
@@ -37,7 +38,6 @@ const String settingKeySortAscending = 'sortAscending';
 const String settingKeySortBy = 'sortBy';
 const String settingKeyStockApiKey = 'stockServiceApiKey';
 const String settingKeyTextScale = 'textScale';
-const String settingKeyTheme = 'themeColor';
 
 const String settingKeyDomainAccounts = 'accounts';
 const String settingKeyDomainCategories = 'categories';
@@ -73,6 +73,8 @@ class Constants {
   static String viewTransactionFieldnameAccount = 'Account';
   static String viewTransactionFieldnamePayee = 'Payee/Transfer';
   static String viewTransactionFieldnameCategory = 'Category';
+
+  static String routeWelcomePage = '/welcome';
 }
 
 class SizeForDoubles {

@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:money/app/core/theme/theme_controler.dart';
 import 'package:money/app_title.dart';
 import 'package:money/helpers/color_helper.dart';
 import 'package:money/models/constants.dart';
@@ -13,21 +15,8 @@ import 'package:money/widgets/three_part_label.dart';
 import 'package:money/widgets/zoom.dart';
 
 class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
-  final void Function() onFileNew;
-  final void Function() onFileOpen;
-  final void Function() onFileClose;
-  final void Function() onShowFileLocation;
-  final void Function() onSaveCsv;
-  final void Function() onSaveSql;
-
   const MyAppBar({
     super.key,
-    required this.onFileNew,
-    required this.onFileOpen,
-    required this.onFileClose,
-    required this.onShowFileLocation,
-    required this.onSaveCsv,
-    required this.onSaveSql,
   });
 
   @override
@@ -38,6 +27,8 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
 }
 
 class _MyAppBarState extends State<MyAppBar> {
+  final ThemeController themeController = Get.find();
+
   @override
   Widget build(final BuildContext context) {
     return AppBar(
@@ -56,10 +47,10 @@ class _MyAppBarState extends State<MyAppBar> {
 
         // Dark / Light mode
         IconButton(
-          icon: Settings().useDarkMode ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
+          icon: themeController.isDarkTheme.value ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: () {
-            Settings().useDarkMode = !Settings().useDarkMode;
-            Settings().preferrenceSave();
+            final ThemeController themeController = Get.find();
+            themeController.toggleTheme();
           },
           tooltip: 'Toggle brightness',
         ),
@@ -118,28 +109,32 @@ class _MyAppBarState extends State<MyAppBar> {
       onSelected: (final int index) {
         switch (index) {
           case Constants.commandFileNew:
-            widget.onFileNew();
+            Settings().closeFile();
+            Get.offAllNamed('/home');
 
           case Constants.commandFileOpen:
-            widget.onFileOpen();
+            Settings().onFileOpen().then((_) {
+              Get.offAllNamed('/home');
+            });
 
           case Constants.commandFileLocation:
-            widget.onShowFileLocation();
+            Settings().onShowFileLocation();
 
           case Constants.commandAddTransactions:
             showImportTransactionsWizard(context);
 
           case Constants.commandFileSaveCsv:
-            widget.onSaveCsv();
+            Settings().onSaveToCsv();
 
           case Constants.commandFileSaveSql:
-            widget.onSaveSql();
+            Settings().onSaveToSql();
 
           case Constants.commandFileClose:
             Settings().closeFile();
+            Get.offAllNamed('/welcome');
 
           default:
-            debugPrint(' unhandled $index');
+            debugPrint('unhandled $index');
         }
       },
     );
@@ -175,7 +170,7 @@ class _MyAppBarState extends State<MyAppBar> {
     }
 
     final colorPallette = List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
-      final bool isSelected = index == Settings().colorSelected;
+      final bool isSelected = index == themeController.colorSelected.value;
       return PopupMenuItem<int>(
         value: index,
         child: Container(
@@ -185,7 +180,7 @@ class _MyAppBarState extends State<MyAppBar> {
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
           child: ThreePartLabel(
-            icon: Icon(index == Settings().colorSelected ? Icons.color_lens : Icons.color_lens_outlined,
+            icon: Icon(index == themeController.colorSelected.value ? Icons.color_lens : Icons.color_lens_outlined,
                 color: colorOptions[index]),
             text1: colorText[index],
             small: true,
@@ -276,7 +271,8 @@ class _MyAppBarState extends State<MyAppBar> {
       case Constants.commandIncludeRentals:
         Settings().includeRentalManagement = !Settings().includeRentalManagement;
       default:
-        Settings().colorSelected = value;
+        final ThemeController themeController = Get.find();
+        themeController.setThemeColor(value);
     }
     Settings().preferrenceSave();
   }

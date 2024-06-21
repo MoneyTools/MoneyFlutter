@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/helpers/color_helper.dart';
+import 'package:money/models/settings.dart';
 import 'package:money/views/view_policy.dart';
 import 'package:money/widgets/dialog/dialog.dart';
 import 'package:money/widgets/gaps.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  final VoidCallback onFileNew;
-  final VoidCallback onFileOpen;
-  final VoidCallback onOpenDemoData;
-
   const WelcomeScreen({
     super.key,
-    required this.onFileNew,
-    required this.onFileOpen,
-    required this.onOpenDemoData,
   });
 
   @override
@@ -25,9 +20,6 @@ class WelcomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           const Spacer(),
-          Text('Welcome to MyMoney', style: textTheme.headlineSmall!.copyWith(color: getColorTheme(context).onSurface)),
-          gapLarge(),
-          gapLarge(),
           Text('No data loaded', style: textTheme.bodySmall!.copyWith(color: getColorTheme(context).onSurface)),
           gapLarge(),
           gapLarge(),
@@ -36,9 +28,28 @@ class WelcomeScreen extends StatelessWidget {
             runAlignment: WrapAlignment.center,
             spacing: 10,
             children: <Widget>[
-              OutlinedButton(onPressed: onFileNew, child: const Text('New File ...')),
-              OutlinedButton(onPressed: onFileOpen, child: const Text('Open File ...')),
-              OutlinedButton(onPressed: onOpenDemoData, child: const Text('Use Demo Data'))
+              OutlinedButton(
+                  onPressed: () {
+                    // todo
+                    Get.toNamed('/home');
+                  },
+                  child: const Text('New File ...')),
+              OutlinedButton(
+                  onPressed: () {
+                    Settings().onFileOpen().then((bool succeeded) {
+                      if (succeeded) {
+                        Get.toNamed('/home');
+                      }
+                    });
+                  },
+                  child: const Text('Open File ...')),
+              OutlinedButton(
+                  onPressed: () {
+                    Settings().onOpenDemoData().then((_) {
+                      Get.toNamed('/home');
+                    });
+                  },
+                  child: const Text('Use Demo Data'))
             ],
           ),
           const Spacer(),

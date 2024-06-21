@@ -6,12 +6,6 @@ import 'package:money/helpers/string_helper.dart';
 import 'package:money/models/settings.dart';
 import 'package:path/path.dart' as p;
 
-enum DataFileState {
-  empty,
-  loading,
-  loaded,
-}
-
 class FileManager {
   String fullPathToLastOpenedFile = '';
   List<String> mru = [];
@@ -22,8 +16,6 @@ class FileManager {
   String getLastModifiedDateTime() {
     return dateToDateTimeString(dataFileLastUpdateDateTime);
   }
-
-  DataFileState state = DataFileState.empty;
 
   void rememberWhereTheDataCameFrom(final String dataSource) async {
     addToMRU(dataSource);
@@ -53,9 +45,5 @@ class FileManager {
 
   Future<String> defaultFolderToSaveTo(final String defaultFileName) async {
     return MyFileSystems.append(await getDocumentDirectory(), defaultFileName);
-  }
-
-  bool shouldLoadLastDataFile() {
-    return state == DataFileState.empty && fullPathToLastOpenedFile.isNotEmpty;
   }
 }
