@@ -76,6 +76,7 @@ class Constants {
 
   static String routeWelcomePage = '/welcome';
   static String routeHomePage = '/home';
+  static String routePolicyPage = '/policy';
 }
 
 class SizeForDoubles {
