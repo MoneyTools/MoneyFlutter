@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/core/widgets/text_title.dart';
 import 'package:money/app/modules/home/views/view_policy.dart';
-import 'policy_controller.dart';
 
-class PolicyPage extends GetView<PolicyController> {
+class PolicyPage extends GetView<GetxController> {
   const PolicyPage({super.key});
 
   @override

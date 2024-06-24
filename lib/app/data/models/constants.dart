@@ -74,6 +74,7 @@ class Constants {
   static String routeWelcomePage = '/welcome';
   static String routeHomePage = '/home';
   static String routePolicyPage = '/policy';
+  static String routeSettingsPage = '/settings';
 
   static String untitledFileName = 'Untitled';
 }

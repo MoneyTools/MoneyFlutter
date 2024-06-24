@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/modules/splash_screen.dart';
 import 'package:money/app/modules/welcome/welcome_page.dart';
+import 'package:money/app/routes/general_routes.dart';
 import 'package:money/app/routes/policy_routes.dart';
 
 import 'home_routes.dart';
@@ -22,6 +23,7 @@ class AppPages {
         }),
     ...HomeRoutes.routes,
     ...WelcomeRoutes.routes,
+    ...GeneralRoutes.routes,
     ...PolicyRoutes.routes,
   ];
 }

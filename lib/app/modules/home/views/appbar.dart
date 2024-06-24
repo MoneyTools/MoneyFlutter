@@ -8,7 +8,6 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
-import 'package:money/app/modules/home/views/view_settings.dart';
 import 'package:money/app/core/widgets/color_palette.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/three_part_label.dart';
@@ -158,18 +157,27 @@ class _MyAppBarState extends State<MyAppBar> {
   Widget _buildSettingsMenu() {
     final List<PopupMenuItem<int>> actionList = [];
 
-    if (Settings().isSmallScreen) {
-      actionList.add(
-        PopupMenuItem<int>(
-          value: Constants.commandIncludeClosedAccount,
-          child: ThreePartLabel(
-            text1: Settings().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
-            icon: _buildButtonToggleViewClosedAccountsIcon(),
-            small: true,
-          ),
+    actionList.add(
+      PopupMenuItem<int>(
+        value: Constants.commandIncludeClosedAccount,
+        child: ThreePartLabel(
+          text1: Settings().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
+          icon: _buildButtonToggleViewClosedAccountsIcon(),
+          small: true,
         ),
-      );
-    }
+      ),
+    );
+
+    actionList.add(
+      const PopupMenuItem<int>(
+        value: Constants.commandSettings,
+        child: ThreePartLabel(
+          text1: 'General...',
+          icon: Icon(Icons.settings, color: Colors.grey),
+          small: true,
+        ),
+      ),
+    );
 
     final colorPallette = List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
       final bool isSelected = index == themeController.colorSelected.value;
@@ -192,17 +200,6 @@ class _MyAppBarState extends State<MyAppBar> {
     });
 
     actionList.addAll(colorPallette);
-
-    actionList.add(
-      const PopupMenuItem<int>(
-        value: Constants.commandSettings,
-        child: ThreePartLabel(
-          text1: 'General...',
-          icon: Icon(Icons.settings, color: Colors.grey),
-          small: true,
-        ),
-      ),
-    );
 
     actionList.add(
       PopupMenuItem<int>(
@@ -269,7 +266,7 @@ class _MyAppBarState extends State<MyAppBar> {
       case Constants.commandAddTransactions:
         showImportTransactionsFromTextInput(context);
       case Constants.commandSettings:
-        showSettings(context);
+        Get.toNamed(Constants.routeSettingsPage);
       case Constants.commandIncludeClosedAccount:
         Settings().getPref().includeClosedAccounts = !Settings().getPref().includeClosedAccounts;
       case Constants.commandIncludeRentals:

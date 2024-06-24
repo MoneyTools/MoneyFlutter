@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
-
-import 'package:money/app/core/theme/theme_controler.dart';
 import 'package:get/get.dart';
+import 'package:money/app/core/theme/theme_controler.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/routes/home_data_controller.dart';
 
@@ -30,7 +28,7 @@ class MyApp extends StatelessWidget {
         final String k =
             '${settingController.getUniqueState}|${preferenceController.getUniqueState}|${dataController.getUniqueState}';
 
-        debugLog('Obx-GetMaterialApp');
+        // debugLog('Obx-GetMaterialApp');
         return GetMaterialApp(
           key: Key(k),
           debugShowCheckedModeBanner: false,
