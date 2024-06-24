@@ -90,14 +90,16 @@ class _MyAppBarState extends State<MyAppBar> {
     // Add Transactions
     addMenuItem(list, Constants.commandAddTransactions, 'Add transactions...', Icons.post_add_outlined);
 
-    // File Location
-    addMenuItem(list, Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined);
+    if (!kIsWeb) {
+      // File Location
+      addMenuItem(list, Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined);
 
-    // Save CSV
-    addMenuItem(list, Constants.commandFileSaveCsv, 'Save to CSV', Icons.save);
+      // Save CSV
+      addMenuItem(list, Constants.commandFileSaveCsv, 'Save to CSV', Icons.save);
 
-    // Save SQL
-    addMenuItem(list, Constants.commandFileSaveSql, 'Save to SQL', Icons.save);
+      // Save SQL
+      addMenuItem(list, Constants.commandFileSaveSql, 'Save to SQL', Icons.save);
+    }
 
     // Close
     addMenuItem(list, Constants.commandFileClose, 'Close file', Icons.close);
