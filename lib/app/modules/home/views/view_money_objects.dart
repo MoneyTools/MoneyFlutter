@@ -24,7 +24,9 @@ import 'package:money/app/core/widgets/widgets.dart';
 import '../../../data/models/fields/field_filter.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {
-  const ViewForMoneyObjects({super.key});
+  final bool includeClosedAccount;
+
+  const ViewForMoneyObjects({super.key, this.includeClosedAccount = false});
 
   @override
   State<ViewForMoneyObjects> createState() => ViewForMoneyObjectsState();

@@ -28,7 +28,7 @@ part 'view_accounts_helpers.dart';
 
 /// Main view for all Accounts
 class ViewAccounts extends ViewForMoneyObjects {
-  const ViewAccounts({super.key});
+  const ViewAccounts({super.key, super.includeClosedAccount});
 
   @override
   State<ViewForMoneyObjects> createState() => ViewAccountsState();
@@ -98,6 +98,15 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1))),
       ),
     );
+  }
+
+  @override
+  void didUpdateWidget(ViewAccounts oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Handle changes in widget properties
+    if (oldWidget.includeClosedAccount != widget.includeClosedAccount) {
+      list = getList();
+    }
   }
 
   @override

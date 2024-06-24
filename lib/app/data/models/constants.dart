@@ -43,7 +43,6 @@ const String settingKeyDomainCategories = 'categories';
 const String settingKeyDomainPayees = 'payees';
 
 class Constants {
-  static const String demoData = '<Demo Data>';
   static const String defaultCurrency = 'USD';
 
   // NavigationRail shows if the screen width is greater or equal to

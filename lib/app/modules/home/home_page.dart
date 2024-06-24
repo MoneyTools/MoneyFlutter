@@ -150,9 +150,7 @@ class HomePage extends GetView<HomeController> {
   Widget _getSubView() {
     switch (viewController.currentView.value) {
       case ViewId.viewAccounts:
-        return const ViewAccounts();
-      //   key: Key(Settings().getPref().includeClosedAccounts.toString()),
-      // );
+        return ViewAccounts(includeClosedAccount: Settings().getPref().includeClosedAccounts);
 
       case ViewId.viewCategories:
         return const ViewCategories();
