@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:money/app/data/models/constants.dart';
-import '../modules/home/home_binding.dart';
-import '../modules/home/home_page.dart';
+import 'home_binding.dart';
+import 'home_page.dart';
 
 class HomeRoutes {
   HomeRoutes._();

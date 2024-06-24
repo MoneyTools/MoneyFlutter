@@ -1,8 +1,8 @@
 import 'package:get/get.dart';
 import 'package:money/app/data/models/constants.dart';
 
-import '../modules/welcome/welcome_binding.dart';
-import '../modules/welcome/welcome_page.dart';
+import 'welcome_binding.dart';
+import 'welcome_page.dart';
 
 class WelcomeRoutes {
   WelcomeRoutes._();

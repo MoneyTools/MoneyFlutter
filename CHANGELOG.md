@@ -4,7 +4,9 @@
 
 ### Added
 
-- using GetX
+- General Setting is now a Page instead of a dialog
+- Policies is now a Page
+- Using GetX
 
 ## [version 1.8.30] 2024-06-20
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:money/app/routes/home_data_controller.dart';
-import 'package:money/app/routes/home_subview_controller.dart';
+import 'package:money/app/modules/home/home_data_controller.dart';
+import 'package:money/app/modules/home/home_subview_controller.dart';
 import 'package:money/app/modules/home/views/appbar.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';

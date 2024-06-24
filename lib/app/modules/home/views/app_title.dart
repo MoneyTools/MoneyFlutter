@@ -12,7 +12,7 @@ import 'package:money/app/core/widgets/picker_panel.dart';
 import 'package:money/app/core/widgets/reveal_content.dart';
 
 import 'package:money/app/core/widgets/token_text.dart';
-import 'package:money/app/routes/home_data_controller.dart';
+import 'package:money/app/modules/home/home_data_controller.dart';
 
 class AppTitle extends StatelessWidget {
   AppTitle({

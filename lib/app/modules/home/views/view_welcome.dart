@@ -4,7 +4,7 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/modules/home/views/app_title.dart';
 import 'package:money/app/core/widgets/gaps.dart';
-import 'package:money/app/routes/home_data_controller.dart';
+import 'package:money/app/modules/home/home_data_controller.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({
