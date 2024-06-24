@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/modules/home/views/app_title.dart';
-import 'package:money/app/modules/home/views/view_policy.dart';
-import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -60,11 +58,7 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      adaptiveScreenSizeDialog(
-                        context: context,
-                        title: 'Privacy Policy',
-                        child: const PolicyScreen(),
-                      );
+                      Get.toNamed(Constants.routePolicyPage);
                     },
                     child: const Text('Privacy Policy'),
                   ),
