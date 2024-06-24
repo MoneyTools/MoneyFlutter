@@ -253,9 +253,8 @@ class Data {
           }
         case '.mmcsv':
           // Zip CSV files
-          await loadFromCsv(dateSource.filePath, dateSource.fileBytes);
+          await loadFromZippedCsv(dateSource.filePath, dateSource.fileBytes);
           Settings().fileManager.rememberWhereTheDataCameFrom(dateSource.filePath);
-          Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(dateSource.filePath);
 
         default:
           SnackBarService.displayWarning(autoDismiss: false, message: 'Unsupported file type $fileExtension');

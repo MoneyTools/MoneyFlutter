@@ -4,7 +4,7 @@ const String mainFileName = 'mymoney.mmcsv';
 const String subFolderName = 'mymoney_csv_files';
 
 extension DataFromCsv on Data {
-  Future<void> loadFromCsv(String filePathToLoad, final Uint8List fileBytes) async {
+  Future<void> loadFromZippedCsv(String filePathToLoad, final Uint8List fileBytes) async {
     // Decode the ZIP file
     late Archive archive;
     if (fileBytes.isNotEmpty) {

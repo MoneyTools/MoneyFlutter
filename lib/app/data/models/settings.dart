@@ -161,16 +161,9 @@ class Settings extends GetxController {
     dataController.loadFile(dataSource);
   }
 
-  Future<void> onOpenDemoData() async {
-    Settings().fileManager.fullPathToLastOpenedFile = '';
-    Settings().preferrenceSave();
-    final DataController dataController = Get.find();
-    dataController.loadDemoData();
-  }
-
   void onShowFileLocation() async {
     String path = await Settings().fileManager.generateNextFolderToSaveTo();
-    openFolder(path);
+    showLocalFolder(path);
   }
 
   void onSaveToCsv() async {

@@ -4,6 +4,7 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/modules/home/views/app_title.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/routes/home_data_controller.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({
@@ -39,8 +40,10 @@ class WelcomeScreen extends StatelessWidget {
                   },
                   child: const Text('Open File ...')),
               OutlinedButton(
-                  onPressed: () {
-                    Settings().onOpenDemoData().then((_) {
+                  onPressed: () async {
+                    Settings().closeFile();
+                    final DataController dataController = Get.find();
+                    dataController.loadDemoData().then((_) {
                       Get.offAllNamed(Constants.routeHomePage);
                     });
                   },

@@ -3,7 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
 import 'package:path/path.dart' as p;
 
-Future<void> openFolder(final String folderPath) async {
+Future<void> showLocalFolder(final String folderPath) async {
   final Uri url = Uri.parse('file:$folderPath');
 
   if (!await launchUrl(url)) {
