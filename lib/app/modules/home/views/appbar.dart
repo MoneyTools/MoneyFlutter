@@ -63,15 +63,15 @@ class _MyAppBarState extends State<MyAppBar> {
     return IconButton(
       icon: _buildButtonToggleViewClosedAccountsIcon(),
       onPressed: () {
-        Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
+        Settings().getPref().includeClosedAccounts = !Settings().getPref().includeClosedAccounts;
       },
-      tooltip: Settings().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
+      tooltip: Settings().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
     );
   }
 
   Widget _buildButtonToggleViewClosedAccountsIcon() {
     return Opacity(
-      opacity: Settings().includeClosedAccounts ? 1.0 : 0.5,
+      opacity: Settings().getPref().includeClosedAccounts ? 1.0 : 0.5,
       child: const Icon(
         Icons.inventory,
         size: 18,
@@ -110,11 +110,11 @@ class _MyAppBarState extends State<MyAppBar> {
         switch (index) {
           case Constants.commandFileNew:
             Settings().closeFile();
-            Get.offAllNamed('/home');
+            Get.offAllNamed(Constants.routeHomePage);
 
           case Constants.commandFileOpen:
             Settings().onFileOpen().then((_) {
-              Get.offAllNamed('/home');
+              Get.offAllNamed(Constants.routeHomePage);
             });
 
           case Constants.commandFileLocation:
@@ -131,7 +131,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
           case Constants.commandFileClose:
             Settings().closeFile();
-            Get.offAllNamed('/welcome');
+            Get.offAllNamed(Constants.routeWelcomePage);
 
           default:
             debugPrint('unhandled $index');
@@ -161,7 +161,7 @@ class _MyAppBarState extends State<MyAppBar> {
         PopupMenuItem<int>(
           value: Constants.commandIncludeClosedAccount,
           child: ThreePartLabel(
-            text1: Settings().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
+            text1: Settings().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
             icon: _buildButtonToggleViewClosedAccountsIcon(),
             small: true,
           ),
@@ -207,7 +207,9 @@ class _MyAppBarState extends State<MyAppBar> {
         value: Constants.commandIncludeRentals,
         child: ThreePartLabel(
           icon: Icon(
-              !Settings().includeRentalManagement ? Icons.check_box_outline_blank_outlined : Icons.check_box_outlined,
+              !Settings().getPref().includeRentalManagement
+                  ? Icons.check_box_outline_blank_outlined
+                  : Icons.check_box_outlined,
               color: Colors.grey),
           text1: 'Rentals',
           small: true,
@@ -267,9 +269,9 @@ class _MyAppBarState extends State<MyAppBar> {
       case Constants.commandSettings:
         showSettings(context);
       case Constants.commandIncludeClosedAccount:
-        Settings().includeClosedAccounts = !Settings().includeClosedAccounts;
+        Settings().getPref().includeClosedAccounts = !Settings().getPref().includeClosedAccounts;
       case Constants.commandIncludeRentals:
-        Settings().includeRentalManagement = !Settings().includeRentalManagement;
+        Settings().getPref().includeRentalManagement = !Settings().getPref().includeRentalManagement;
       default:
         final ThemeController themeController = Get.find();
         themeController.setThemeColor(value);

@@ -33,10 +33,10 @@ class HomePage extends GetView<HomeController> {
 
   // Initialize the controller
   final SubViewController viewController = Get.put(SubViewController());
-  final DataController dataController = Get.put(DataController());
 
   @override
   Widget build(BuildContext context) {
+    final DataController dataController = Get.find();
     return Obx(() {
       return Scaffold(
         appBar: const MyAppBar(),
@@ -151,6 +151,8 @@ class HomePage extends GetView<HomeController> {
     switch (viewController.currentView.value) {
       case ViewId.viewAccounts:
         return const ViewAccounts();
+      //   key: Key(Settings().getPref().includeClosedAccounts.toString()),
+      // );
 
       case ViewId.viewCategories:
         return const ViewCategories();

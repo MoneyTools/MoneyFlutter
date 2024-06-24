@@ -11,7 +11,6 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
-import 'package:money/app/data/storage/preferences_helper.dart';
 import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/app/modules/home/views/view_money_objects.dart';
@@ -183,10 +182,10 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                         fieldName: Constants.viewTransactionFieldnameAccount,
                         filterTextInLowerCase: account.name.value.toLowerCase()));
 
-                    PreferencesHelper().setStringList(
-                      ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
-                      filterByAccount.toStringList(),
-                    );
+                    Settings().getPref().setStringList(
+                          ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+                          filterByAccount.toStringList(),
+                        );
 
                     // Switch view
                     Settings().selectedView = ViewId.viewTransactions;
@@ -220,7 +219,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   List<Account> getList({bool includeDeleted = false, bool applyFilter = true}) {
     List<Account> list = Data().accounts.activeAccount(
           getSelectedAccountType(),
-          isActive: Settings().includeClosedAccounts ? null : true,
+          isActive: Settings().getPref().includeClosedAccounts ? null : true,
         );
 
     if (applyFilter) {

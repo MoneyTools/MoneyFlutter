@@ -17,13 +17,26 @@ import 'package:money/app/data/storage/file_manager.dart';
 import 'package:money/app/data/storage/preferences_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 
-class Settings extends ChangeNotifier {
-  String getUniqueSate() {
-    return '${Data().version} $includeClosedAccounts $includeRentalManagement';
+export 'package:money/app/data/storage/preferences_helper.dart';
+
+class Settings extends GetxController {
+  static final Settings _singleton = Settings._internal();
+
+  factory Settings() {
+    return _singleton;
+  }
+
+  Settings._internal();
+
+  String get getUniqueState => '${Data().version}';
+
+  PreferenceController getPref() {
+    final PreferenceController preferenceController = Get.find();
+    return preferenceController;
   }
 
   void rebuild() {
-    notifyListeners();
+    update();
   }
 
   /// State for Preferences
@@ -50,27 +63,6 @@ class Settings extends ChangeNotifier {
   }
 
   FileManager fileManager = FileManager();
-
-  /// Support Rental Management
-  bool _rentals = false;
-
-  bool get includeRentalManagement => _rentals;
-
-  set includeRentalManagement(bool value) {
-    _rentals = value;
-    rebuild();
-  }
-
-  /// Hide/Show Closed Accounts
-  bool _includeClosedAccounts = false;
-
-  bool get includeClosedAccounts => _includeClosedAccounts;
-
-  set includeClosedAccounts(bool value) {
-    _includeClosedAccounts = value;
-    Settings().preferrenceSave();
-    rebuild();
-  }
 
   /// Hide/Show Info panel
   bool _isDetailsPanelExpanded = false;
@@ -121,47 +113,29 @@ class Settings extends ChangeNotifier {
   // Tracking changes
   final DataMutations trackMutations = DataMutations();
 
-  static final Settings _singleton = Settings._internal();
-
-  factory Settings() {
-    return _singleton;
-  }
-
-  Settings._internal();
-
   Future<bool> preferrenceLoad() async {
-    final PreferencesHelper preferences = await PreferencesHelper.init();
+    // await getPref().initPublic();
+    textScale = getPref().getDouble(settingKeyTextScale, 1.0);
 
-    textScale = doubleValueOrDefault(preferences.getDouble(settingKeyTextScale), defaultValueIfNull: 1.0);
-
-    includeRentalManagement = preferences.getBool(settingKeyRentalsSupport) == true;
     cashflowViewAs = CashflowViewAs.values[
-        intValueOrDefault(preferences.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
-    cashflowRecurringOccurrences =
-        intValueOrDefault(preferences.getInt(settingKeyCashflowRecurringOccurrences), defaultValueIfNull: 12);
-    _includeClosedAccounts = preferences.getBool(settingKeyIncludeClosedAccounts) == true;
-    apiKeyForStocks = preferences.getString(settingKeyStockApiKey) ?? '';
-
-    isDetailsPanelExpanded = preferences.getBool(settingKeyDetailsPanelExpanded) == true;
-    fileManager.fullPathToLastOpenedFile = preferences.getString(settingKeyLastLoadedPathToDatabase) ?? '';
-    fileManager.mru = preferences.getStringList(settingKeyMRU) ?? [];
+        intValueOrDefault(getPref().getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
+    cashflowRecurringOccurrences = getPref().getInt(settingKeyCashflowRecurringOccurrences, 12);
+    apiKeyForStocks = getPref().getString(settingKeyStockApiKey, '');
+    isDetailsPanelExpanded = getPref().getBool(settingKeyDetailsPanelExpanded) == true;
+    fileManager.fullPathToLastOpenedFile = getPref().getString(settingKeyLastLoadedPathToDatabase);
 
     isPreferenceLoaded = true;
     return true;
   }
 
-  Future<void> preferrenceSave() async {
-    final PreferencesHelper preferences = PreferencesHelper();
-    await preferences.setDouble(settingKeyTextScale, textScale);
-    await preferences.setInt(settingKeyCashflowView, cashflowViewAs.index);
-    await preferences.setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
-    await preferences.setBool(settingKeyIncludeClosedAccounts, includeClosedAccounts);
-    await preferences.setBool(settingKeyRentalsSupport, includeRentalManagement);
-    await preferences.setString(settingKeyStockApiKey, apiKeyForStocks);
+  void preferrenceSave() {
+    getPref().setDouble(settingKeyTextScale, textScale);
+    getPref().setInt(settingKeyCashflowView, cashflowViewAs.index);
+    getPref().setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
+    getPref().setString(settingKeyStockApiKey, apiKeyForStocks);
 
     // last path to the source of data
-    await preferences.setString(settingKeyLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile, true);
-    await preferences.setStringList(settingKeyMRU, fileManager.mru);
+    getPref().setString(settingKeyLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile, true);
   }
 
   void closeFile([bool rebuild = true]) {
@@ -182,24 +156,15 @@ class Settings extends ChangeNotifier {
     Settings().rebuild();
   }
 
-  Future<void> loadFileFromPath(final String path) async {
-    closeFile(false); // ensure that we closed current file and state
-
-    Timer(const Duration(milliseconds: 200), () async {
-      await Data().loadFromPath(filePathToLoad: path).then((final bool success) {
-        // if (success) {
-
-        // Settings().rebuild();
-        // }
-      });
-      // this.rebuild();
-    });
+  Future<void> loadFileFromPath(final DataSource dataSource) async {
+    final DataController dataController = Get.find();
+    dataController.loadFile(dataSource);
   }
 
   Future<void> onOpenDemoData() async {
     Settings().fileManager.fullPathToLastOpenedFile = '';
     Settings().preferrenceSave();
-    final DataController dataController = Get.put(DataController());
+    final DataController dataController = Get.find();
     dataController.loadDemoData();
   }
 
@@ -267,6 +232,8 @@ class Settings extends ChangeNotifier {
       }
     } catch (e) {
       debugLog(e.toString());
+      SnackBarService.displayError(message: e.toString());
+      return false;
     }
 
     if (pickerResult != null && pickerResult.files.isNotEmpty) {
@@ -274,22 +241,21 @@ class Settings extends ChangeNotifier {
         final String? fileExtension = pickerResult.files.single.extension;
 
         if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
+          DataSource dataSource = DataSource();
           if (kIsWeb) {
             PlatformFile file = pickerResult.files.first;
-
-            Settings().fileManager.fullPathToLastOpenedFile = file.name;
-            Settings().fileManager.fileBytes = file.bytes!;
+            dataSource.filePath = file.name;
+            dataSource.fileBytes = file.bytes!;
           } else {
-            Settings().fileManager.fullPathToLastOpenedFile = pickerResult.files.single.path ?? '';
+            dataSource.filePath = pickerResult.files.single.path ?? '';
           }
-          if (Settings().fileManager.fullPathToLastOpenedFile.isNotEmpty) {
-            Settings().preferrenceSave();
-            // _loadDataFromLastKnownFilePath();
-            return true;
-          }
+          final DataController dataController = Get.find();
+          dataController.loadFile(dataSource);
+          return true;
         }
       } catch (e) {
         debugLog(e.toString());
+        SnackBarService.displayError(message: e.toString());
       }
     }
     return false;
@@ -303,10 +269,10 @@ void switchViewTransacionnForPayee(final String payeeName) {
   fieldFilters.add(
       FieldFilter(fieldName: Constants.viewTransactionFieldnamePayee, filterTextInLowerCase: payeeName.toLowerCase()));
 
-  PreferencesHelper().setStringList(
-    ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
-    fieldFilters.toStringList(),
-  );
+  Settings().getPref().setStringList(
+        ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+        fieldFilters.toStringList(),
+      );
 
   // Switch view
   Settings().selectedView = ViewId.viewTransactions;

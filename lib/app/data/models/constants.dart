@@ -75,6 +75,7 @@ class Constants {
   static String viewTransactionFieldnameCategory = 'Category';
 
   static String routeWelcomePage = '/welcome';
+  static String routeHomePage = '/home';
 }
 
 class SizeForDoubles {

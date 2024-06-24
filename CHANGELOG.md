@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.31] 2024-06-24
+
+### Added
+
+- using GetX
+
 ## [version 1.8.30] 2024-06-20
 
 ### Added

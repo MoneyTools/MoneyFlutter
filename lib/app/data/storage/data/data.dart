@@ -30,6 +30,7 @@ import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/data/storage/database/database.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
+import 'package:money/app/routes/home_data_controller.dart';
 
 // Exports
 export 'package:money/app/core/helpers/json_helper.dart';
@@ -235,26 +236,26 @@ class Data {
   }
 
   /// Automated detection of what type of storage to load the data from
-  Future<bool> loadFromPath({required final String filePathToLoad}) async {
+  Future<bool> loadFromPath(final DataSource dateSource) async {
     try {
       Settings().fileManager.dataFileLastUpdateDateTime = null;
 
-      final String fileExtension = MyFileSystems.getFileExtension(filePathToLoad);
+      final String fileExtension = MyFileSystems.getFileExtension(dateSource.filePath);
       switch (fileExtension.toLowerCase()) {
         // Sqlite
         case '.mmdb':
           // Load from SQLite
-          if (await loadFromSql(filePathToLoad, Settings().fileManager.fileBytes)) {
-            Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
-            Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
+          if (await loadFromSql(dateSource.filePath, Settings().fileManager.fileBytes)) {
+            Settings().fileManager.rememberWhereTheDataCameFrom(dateSource.filePath);
+            Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(dateSource.filePath);
           } else {
             Settings().fileManager.rememberWhereTheDataCameFrom('');
           }
         case '.mmcsv':
           // Zip CSV files
-          await loadFromCsv(filePathToLoad, Settings().fileManager.fileBytes);
-          Settings().fileManager.rememberWhereTheDataCameFrom(filePathToLoad);
-          Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(filePathToLoad);
+          await loadFromCsv(dateSource.filePath, dateSource.fileBytes);
+          Settings().fileManager.rememberWhereTheDataCameFrom(dateSource.filePath);
+          Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(dateSource.filePath);
 
         default:
           SnackBarService.displayWarning(autoDismiss: false, message: 'Unsupported file type $fileExtension');

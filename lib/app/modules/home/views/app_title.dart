@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
@@ -12,6 +13,7 @@ import 'package:money/app/core/widgets/picker_panel.dart';
 import 'package:money/app/core/widgets/reveal_content.dart';
 
 import 'package:money/app/core/widgets/token_text.dart';
+import 'package:money/app/routes/home_data_controller.dart';
 
 class AppTitle extends StatelessWidget {
   AppTitle({
@@ -102,6 +104,8 @@ class LoadedDataFileAndTime extends StatelessWidget {
       separatorPaddingLeft: SizeForPadding.nano,
       separatorPaddingRight: SizeForPadding.nano,
     );
+    final PreferenceController preferenceController = Get.find();
+
     return InkWell(
       onTap: () {
         showPopupSelection(
@@ -111,10 +115,12 @@ class LoadedDataFileAndTime extends StatelessWidget {
           tokenTextStyle: tokenStyle,
           rightAligned: true,
           width: 600,
-          items: Settings().fileManager.mru,
+          items: preferenceController.mru,
           selectedItem: '',
           onSelected: (final String selectedTextReprentingFileNamePath) {
-            Settings().loadFileFromPath(selectedTextReprentingFileNamePath);
+            DataSource dataSource = DataSource(selectedTextReprentingFileNamePath);
+            Settings().loadFileFromPath(dataSource);
+            Get.offAllNamed(Constants.routeHomePage);
           },
         );
       },

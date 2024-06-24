@@ -419,7 +419,7 @@ class Account extends MoneyObject {
   }
 
   bool get isMatchingUserChoiceIncludingClosedAccount {
-    if (Settings().includeClosedAccounts) {
+    if (Settings().getPref().includeClosedAccounts) {
       return true;
     }
     return isOpen;

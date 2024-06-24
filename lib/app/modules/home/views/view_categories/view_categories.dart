@@ -9,7 +9,6 @@ import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/data/storage/preferences_helper.dart';
 import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/app/modules/home/views/view_categories/merge_categories.dart';
 import 'package:money/app/modules/home/views/view_money_objects.dart';
@@ -162,10 +161,10 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                         fieldName: Constants.viewTransactionFieldnameCategory,
                         filterTextInLowerCase: category.name.value.toLowerCase()));
 
-                    PreferencesHelper().setStringList(
-                      ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
-                      filterByAccount.toStringList(),
-                    );
+                    Settings().getPref().setStringList(
+                          ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+                          filterByAccount.toStringList(),
+                        );
 
                     // Switch view
                     Settings().selectedView = ViewId.viewTransactions;

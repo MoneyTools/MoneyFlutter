@@ -7,7 +7,6 @@ import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/data/storage/preferences_helper.dart';
 
 import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/app/modules/home/views/view_money_objects.dart';
@@ -106,10 +105,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 if (transaction != null) {
                   // Preselect the Account of this Transaction
 
-                  PreferencesHelper().setInt(
-                    ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
-                    transaction.accountId.value,
-                  );
+                  Settings().getPref().setInt(
+                        ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
+                        transaction.accountId.value,
+                      );
 
                   Settings().selectedView = ViewId.viewAccounts;
                 }
@@ -124,7 +123,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Category of this Transaction
-                  PreferencesHelper().setInt(
+                  Settings().getPref().setInt(
                       ViewId.viewCategories.getViewPreferenceId(
                         settingKeySelectedListItemId,
                       ),
@@ -142,10 +141,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Payee of this Transaction
-                  PreferencesHelper().setInt(
-                    ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
-                    transaction.payee.value,
-                  );
+                  Settings().getPref().setInt(
+                        ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
+                        transaction.payee.value,
+                      );
                   Settings().selectedView = ViewId.viewPayees;
                 }
               },

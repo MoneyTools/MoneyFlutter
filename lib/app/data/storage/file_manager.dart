@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/data/models/settings.dart';
 import 'package:path/path.dart' as p;
 
 class FileManager {
@@ -17,13 +16,12 @@ class FileManager {
     return dateToDateTimeString(dataFileLastUpdateDateTime);
   }
 
-  void rememberWhereTheDataCameFrom(final String dataSource) async {
+  void rememberWhereTheDataCameFrom(final String dataSource) {
     addToMRU(dataSource);
     fullPathToLastOpenedFile = dataSource;
     if (dataSource.isEmpty) {
       dataFileLastUpdateDateTime = null;
     }
-    await Settings().preferrenceSave();
   }
 
   // move or add the [filePathAndName] to the top of the list of MRU

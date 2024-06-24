@@ -60,7 +60,7 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
       selectedIcon: ViewId.viewStocks.getIcon(),
     )
   ];
-  if (settings.includeRentalManagement) {
+  if (settings.getPref().includeRentalManagement) {
     appBarDestinations.add(
       NavigationDestination(
         label: 'Rentals',

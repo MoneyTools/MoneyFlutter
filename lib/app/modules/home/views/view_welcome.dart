@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/settings.dart';
+import 'package:money/app/modules/home/views/app_title.dart';
 import 'package:money/app/modules/home/views/view_policy.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/gaps.dart';
@@ -13,16 +14,12 @@ class WelcomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textTheme = getTextTheme(context);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           const Spacer(),
-          Text('No data loaded', style: textTheme.bodySmall!.copyWith(color: getColorTheme(context).onSurface)),
-          gapLarge(),
-          gapLarge(),
           Wrap(
             alignment: WrapAlignment.center,
             runAlignment: WrapAlignment.center,
@@ -30,15 +27,15 @@ class WelcomeScreen extends StatelessWidget {
             children: <Widget>[
               OutlinedButton(
                   onPressed: () {
-                    // todo
-                    Get.toNamed('/home');
+                    Settings().closeFile();
+                    Get.offAllNamed(Constants.routeHomePage);
                   },
                   child: const Text('New File ...')),
               OutlinedButton(
                   onPressed: () {
                     Settings().onFileOpen().then((bool succeeded) {
                       if (succeeded) {
-                        Get.toNamed('/home');
+                        Get.offAllNamed(Constants.routeHomePage);
                       }
                     });
                   },
@@ -46,12 +43,14 @@ class WelcomeScreen extends StatelessWidget {
               OutlinedButton(
                   onPressed: () {
                     Settings().onOpenDemoData().then((_) {
-                      Get.toNamed('/home');
+                      Get.offAllNamed(Constants.routeHomePage);
                     });
                   },
                   child: const Text('Use Demo Data'))
             ],
           ),
+          gapLarge(),
+          const LoadedDataFileAndTime(filePath: 'Most recent used files', lastModifiedDateTime: null),
           const Spacer(),
           IntrinsicWidth(
             child: Opacity(
