@@ -1,20 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class SnackBarService {
   static final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   static void display({
+    required String title,
     required String message,
     bool autoDismiss = true,
-    Color? backgroundColor,
+    Color backgroundColor = Colors.black,
   }) {
-    scaffoldKey.currentState?.showSnackBar(
-      SnackBar(
-        backgroundColor: backgroundColor,
-        content: SelectableText(message),
-        duration: autoDismiss ? const Duration(milliseconds: 4000) : const Duration(minutes: 100),
-        showCloseIcon: !autoDismiss,
+    Color textColor = contrastColor(backgroundColor);
+    Get.snackbar(
+      title, message,
+      messageText: SelectableText(message, style: TextStyle(color: textColor)),
+      isDismissible: true,
+      snackPosition: SnackPosition.BOTTOM, // Position of the Snackbar
+      backgroundColor: backgroundColor, // Background color of the Snackbar
+      colorText: textColor, // Text color of the Snackbar
+      duration: autoDismiss ? const Duration(seconds: 5) : null, // Duration for which the Snackbar is displayed
+      mainButton: TextButton(
+        onPressed: () {
+          // Dismiss the Snackbar when the close button is pressed
+          if (Get.isSnackbarOpen) {
+            Get.back();
+          }
+        },
+        child: Icon(Icons.close, color: textColor),
       ),
     );
   }
@@ -23,20 +36,32 @@ class SnackBarService {
     required String message,
     bool autoDismiss = true,
   }) {
-    return display(message: message, autoDismiss: autoDismiss, backgroundColor: getColorFromState(ColorState.success));
+    return display(
+        title: 'OK',
+        message: message,
+        autoDismiss: autoDismiss,
+        backgroundColor: getColorFromState(ColorState.success));
   }
 
   static void displayWarning({
     required String message,
     bool autoDismiss = true,
   }) {
-    return display(message: message, autoDismiss: autoDismiss, backgroundColor: getColorFromState(ColorState.warning));
+    return display(
+        title: 'Warning',
+        message: message,
+        autoDismiss: autoDismiss,
+        backgroundColor: getColorFromState(ColorState.warning));
   }
 
   static void displayError({
     required String message,
     bool autoDismiss = true,
   }) {
-    return display(message: message, autoDismiss: autoDismiss, backgroundColor: getColorFromState(ColorState.error));
+    return display(
+        title: 'Error',
+        message: message,
+        autoDismiss: autoDismiss,
+        backgroundColor: getColorFromState(ColorState.error));
   }
 }

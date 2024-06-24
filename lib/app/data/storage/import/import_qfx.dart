@@ -46,7 +46,7 @@ Future<bool> importQFX(
           if (accountSelected != null) {
             _showAndConfirmTransactionToImport(context, ofx, accountSelected);
           } else {
-            SnackBarService.display(
+            SnackBarService.displayWarning(
                 autoDismiss: false,
                 message: 'QFX Import - No matching "${bankInfo.accountType}" accounts with ID "${bankInfo.accountId}"');
             return false;

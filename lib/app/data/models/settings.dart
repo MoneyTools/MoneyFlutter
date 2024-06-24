@@ -192,7 +192,7 @@ class Settings extends GetxController {
           if (success) {
             Data().assessMutationsCountOfAllModels();
           } else {
-            SnackBarService.display(autoDismiss: false, message: message);
+            SnackBarService.displayError(autoDismiss: false, message: message);
           }
         });
 
