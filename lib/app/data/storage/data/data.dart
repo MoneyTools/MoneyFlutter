@@ -245,7 +245,7 @@ class Data {
         // Sqlite
         case '.mmdb':
           // Load from SQLite
-          if (await loadFromSql(dateSource.filePath, Settings().fileManager.fileBytes)) {
+          if (await loadFromSql(dateSource.filePath, dateSource.fileBytes)) {
             Settings().fileManager.rememberWhereTheDataCameFrom(dateSource.filePath);
             Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(dateSource.filePath);
           } else {

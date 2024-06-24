@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -8,7 +6,7 @@ import 'package:path/path.dart' as p;
 class FileManager {
   String fullPathToLastOpenedFile = '';
   List<String> mru = [];
-  Uint8List fileBytes = Uint8List(0); // use for WebInMemory SQL database
+
   DateTime? dataFileLastUpdateDateTime;
   String fileName = '';
 
