@@ -195,7 +195,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
     actionList.add(
       const PopupMenuItem<int>(
-        value: Constants.commandIncludeClosedAccount,
+        value: Constants.commandSettings,
         child: ThreePartLabel(
           text1: 'General...',
           icon: Icon(Icons.settings, color: Colors.grey),
