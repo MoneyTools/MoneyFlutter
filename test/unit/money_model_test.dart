@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/models/money_model.dart';
+import 'package:money/app/data/models/money_model.dart';
 
 void main() {
   test('test_should_round_positive_decimal_value', () {

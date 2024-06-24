@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
+
+class ThreePartLabel extends StatelessWidget {
+  final Widget? icon;
+  final String text1;
+  final String text2;
+  final bool small;
+  final bool isVertical;
+
+  const ThreePartLabel({
+    super.key,
+    this.icon,
+    this.text1 = '',
+    this.text2 = '',
+    this.small = false,
+    this.isVertical = false,
+  });
+
+  @override
+  Widget build(final BuildContext context) {
+    return isVertical
+        ? Column(children: <Widget>[
+            renderText1(context),
+            renderText2(context),
+          ])
+        : Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              // Icon
+              SizedBox(
+                width: icon == null ? null : 40,
+                child: icon,
+              ),
+              // Text1 <space> Text2
+              renderText1(context),
+              const SizedBox(width: 20),
+              renderText2(context)
+            ],
+          );
+  }
+
+  Widget renderText1(final BuildContext context) {
+    if (small) {
+      return Text(text1, style: getTextTheme(context).labelLarge);
+    } else {
+      return Text(text1, style: getTextTheme(context).titleLarge);
+    }
+  }
+
+  Widget renderText2(final BuildContext context) {
+    return Text(text2, style: getTextTheme(context).bodySmall);
+  }
+}
