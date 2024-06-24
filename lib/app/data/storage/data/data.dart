@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
+import 'package:get/get.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -238,23 +239,20 @@ class Data {
   /// Automated detection of what type of storage to load the data from
   Future<bool> loadFromPath(final DataSource dateSource) async {
     try {
-      Settings().fileManager.dataFileLastUpdateDateTime = null;
-
       final String fileExtension = MyFileSystems.getFileExtension(dateSource.filePath);
       switch (fileExtension.toLowerCase()) {
         // Sqlite
         case '.mmdb':
           // Load from SQLite
           if (await loadFromSql(dateSource.filePath, dateSource.fileBytes)) {
-            Settings().fileManager.rememberWhereTheDataCameFrom(dateSource.filePath);
-            Settings().fileManager.dataFileLastUpdateDateTime = getLastDateTimeModified(dateSource.filePath);
-          } else {
-            Settings().fileManager.rememberWhereTheDataCameFrom('');
+            final PreferenceController preferenceController = Get.find();
+            preferenceController.addToMRU(dateSource.filePath);
           }
         case '.mmcsv':
           // Zip CSV files
           await loadFromZippedCsv(dateSource.filePath, dateSource.fileBytes);
-          Settings().fileManager.rememberWhereTheDataCameFrom(dateSource.filePath);
+          final PreferenceController preferenceController = Get.find();
+          preferenceController.addToMRU(dateSource.filePath);
 
         default:
           SnackBarService.displayWarning(autoDismiss: false, message: 'Unsupported file type $fileExtension');
@@ -263,8 +261,6 @@ class Data {
     } catch (e) {
       debugLog(e.toString());
       SnackBarService.displayError(autoDismiss: false, message: e.toString());
-      // clear any previous file
-      Settings().fileManager.rememberWhereTheDataCameFrom('');
       return false;
     }
 
@@ -413,9 +409,9 @@ class Data {
       moneyObjects.clear();
     }
     version = -1;
+    Settings().ctrlData.dataFileIsClosed();
 
     Settings().trackMutations.reset();
-    Settings().fileManager.rememberWhereTheDataCameFrom('');
   }
 
   /// <summary>

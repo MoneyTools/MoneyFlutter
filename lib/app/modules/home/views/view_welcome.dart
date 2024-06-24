@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
             ],
           ),
           gapLarge(),
-          const LoadedDataFileAndTime(filePath: 'Most recent used files', lastModifiedDateTime: null),
+          const LoadedDataFileAndTime(),
           const Spacer(),
           IntrinsicWidth(
             child: Opacity(

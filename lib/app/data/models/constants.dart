@@ -29,7 +29,6 @@ const String settingKeyDomainAccountsInfoTransactions = 'accountDetailsTransacti
 const String settingKeyFilterText = 'filterText';
 const String settingKeyFilterColumnsText = 'filterColumnsText';
 const String settingKeyIncludeClosedAccounts = 'includeClosedAccounts';
-const String settingKeyLastLoadedPathToDatabase = 'lastLoadedPathToDatabase';
 const String settingKeyMRU = 'mru';
 const String settingKeyRentalsSupport = 'rentals';
 const String settingKeySelectedDetailsPanelTab = 'selectedDetailsPanelTab';
@@ -45,7 +44,6 @@ const String settingKeyDomainPayees = 'payees';
 
 class Constants {
   static const String demoData = '<Demo Data>';
-  static const String newDataFile = '<New file>';
   static const String defaultCurrency = 'USD';
 
   // NavigationRail shows if the screen width is greater or equal to
@@ -77,6 +75,8 @@ class Constants {
   static String routeWelcomePage = '/welcome';
   static String routeHomePage = '/home';
   static String routePolicyPage = '/policy';
+
+  static String untitledFileName = 'Untitled';
 }
 
 class SizeForDoubles {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_model.dart';
@@ -42,9 +41,7 @@ class AppTitle extends StatelessWidget {
               ),
             ),
           ]),
-          LoadedDataFileAndTime(
-              filePath: Settings().fileManager.fullPathToLastOpenedFile,
-              lastModifiedDateTime: Settings().fileManager.dataFileLastUpdateDateTime),
+          const LoadedDataFileAndTime(),
         ],
       );
     });
@@ -88,14 +85,7 @@ Widget _buildRevealContentOption(
 }
 
 class LoadedDataFileAndTime extends StatelessWidget {
-  final String filePath;
-  final DateTime? lastModifiedDateTime;
-
-  const LoadedDataFileAndTime({
-    super.key,
-    required this.filePath,
-    required this.lastModifiedDateTime,
-  });
+  const LoadedDataFileAndTime({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -105,6 +95,7 @@ class LoadedDataFileAndTime extends StatelessWidget {
       separatorPaddingRight: SizeForPadding.nano,
     );
     final PreferenceController preferenceController = Get.find();
+    final DataController dataController = Get.find();
 
     return InkWell(
       onTap: () {
@@ -130,15 +121,15 @@ class LoadedDataFileAndTime extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            TokenText(filePath, style: tokenStyle),
+            TokenText(dataController.currentLoadedFileName.value, style: tokenStyle),
             const Icon(Icons.expand_more),
-            gapMedium(),
-            Text(
-              dateToDateTimeString(lastModifiedDateTime),
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.ellipsis,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            ),
+            // gapMedium(),
+            // Text(
+            //   dateToDateTimeString(lastModifiedDateTime),
+            //   textAlign: TextAlign.left,
+            //   overflow: TextOverflow.ellipsis,
+            //   style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+            // ),
             gapMedium(),
           ],
         ),

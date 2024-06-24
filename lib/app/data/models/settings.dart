@@ -13,7 +13,6 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/data/data_mutations.dart';
-import 'package:money/app/data/storage/file_manager.dart';
 import 'package:money/app/data/storage/preferences_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 
@@ -34,6 +33,8 @@ class Settings extends GetxController {
     final PreferenceController preferenceController = Get.find();
     return preferenceController;
   }
+
+  DataController get ctrlData => Get.find();
 
   /// State for Preferences
   bool _isPreferenceLoaded = false;
@@ -57,8 +58,6 @@ class Settings extends GetxController {
     update();
     debugLog('selectedView $value');
   }
-
-  FileManager fileManager = FileManager();
 
   /// Hide/Show Info panel
   bool _isDetailsPanelExpanded = false;
@@ -118,7 +117,6 @@ class Settings extends GetxController {
     cashflowRecurringOccurrences = getPref().getInt(settingKeyCashflowRecurringOccurrences, 12);
     apiKeyForStocks = getPref().getString(settingKeyStockApiKey, '');
     isDetailsPanelExpanded = getPref().getBool(settingKeyDetailsPanelExpanded) == true;
-    fileManager.fullPathToLastOpenedFile = getPref().getString(settingKeyLastLoadedPathToDatabase);
 
     isPreferenceLoaded = true;
     return true;
@@ -129,23 +127,16 @@ class Settings extends GetxController {
     getPref().setInt(settingKeyCashflowView, cashflowViewAs.index);
     getPref().setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
     getPref().setString(settingKeyStockApiKey, apiKeyForStocks);
-
-    // last path to the source of data
-    getPref().setString(settingKeyLastLoadedPathToDatabase, fileManager.fullPathToLastOpenedFile, true);
   }
 
   void closeFile([bool rebuild = true]) {
-    this.fileManager.fullPathToLastOpenedFile = '';
-    this.preferrenceSave();
     Data().close();
+    ctrlData.dataFileIsClosed();
     this.trackMutations.reset();
   }
 
   void onFileNew() async {
     Settings().closeFile();
-
-    Settings().fileManager.fileName = Constants.newDataFile;
-    Settings().preferrenceSave();
 
     Data().accounts.addNewAccount('New Bank Account');
     Settings().selectedView = ViewId.viewAccounts;
@@ -158,25 +149,28 @@ class Settings extends GetxController {
   }
 
   void onShowFileLocation() async {
-    String path = await Settings().fileManager.generateNextFolderToSaveTo();
+    String path = await ctrlData.generateNextFolderToSaveTo();
     showLocalFolder(path);
   }
 
   void onSaveToCsv() async {
     final String fullPathToFileName = await Data().saveToCsv();
-    Settings().fileManager.rememberWhereTheDataCameFrom(fullPathToFileName);
+
+    getPref().addToMRU(fullPathToFileName);
+
     Data().assessMutationsCountOfAllModels();
   }
 
   void onSaveToSql() async {
-    if (Settings().fileManager.fullPathToLastOpenedFile.isEmpty) {
+    String fileNameAndPath = ctrlData.currentLoadedFileName.value;
+
+    if (fileNameAndPath.isEmpty) {
       // this happens if the user started with a new file and click save to SQL
-      Settings().fileManager.fullPathToLastOpenedFile =
-          await Settings().fileManager.defaultFolderToSaveTo('mymoney.mmdb');
+      fileNameAndPath = await ctrlData.defaultFolderToSaveTo('mymoney.mmdb');
     }
 
     Data().saveToSql(
-        filePathToLoad: Settings().fileManager.fullPathToLastOpenedFile,
+        filePathToLoad: fileNameAndPath,
         callbackWhenLoaded: (final bool success, final String message) {
           if (success) {
             Data().assessMutationsCountOfAllModels();
@@ -185,7 +179,7 @@ class Settings extends GetxController {
           }
         });
 
-    Settings().fileManager.rememberWhereTheDataCameFrom(Settings().fileManager.fullPathToLastOpenedFile);
+    getPref().addToMRU(fileNameAndPath);
   }
 
   Future<bool> onFileOpen() async {

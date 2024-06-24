@@ -164,7 +164,7 @@ Future<String> fullPathToCacheStockFile(final String symbol) async {
 }
 
 Future<String> pathToStockFiles() async {
-  String destinationFolder = await Settings().fileManager.generateNextFolderToSaveTo();
+  String destinationFolder = await Settings().ctrlData.generateNextFolderToSaveTo();
   if (destinationFolder.isEmpty) {
     throw Exception('No container folder give for saving');
   }
