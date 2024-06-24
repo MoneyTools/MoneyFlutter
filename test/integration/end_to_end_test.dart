@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:get/get.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/main.dart';
@@ -14,9 +13,6 @@ void main() async {
 
   group('end-to-end test', () {
     testWidgets('Landing page', (final WidgetTester tester) async {
-      // Enable GetX test mode
-      Get.testMode = true;
-
       // Use an empty SharedPreferences to get the same results each time
       SharedPreferences.setMockInitialValues(<String, Object>{});
 
@@ -36,9 +32,6 @@ void main() async {
         await writeElementsWithTextToFile(tester);
         rethrow; // Re-throw the caught exception to ensure the test fails
       }
-
-      // Enable GetX test mode
-      Get.testMode = false;
     });
   });
 }
