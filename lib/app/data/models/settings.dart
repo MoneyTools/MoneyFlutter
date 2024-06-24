@@ -35,10 +35,6 @@ class Settings extends GetxController {
     return preferenceController;
   }
 
-  void rebuild() {
-    update();
-  }
-
   /// State for Preferences
   bool _isPreferenceLoaded = false;
 
@@ -46,7 +42,7 @@ class Settings extends GetxController {
 
   set isPreferenceLoaded(bool value) {
     _isPreferenceLoaded = value;
-    rebuild();
+    update();
   }
 
   bool isSmallScreen = true;
@@ -58,7 +54,7 @@ class Settings extends GetxController {
 
   set selectedView(ViewId value) {
     _selectedScreen = value;
-    rebuild();
+    update();
     debugLog('selectedView $value');
   }
 
@@ -71,7 +67,7 @@ class Settings extends GetxController {
 
   set isDetailsPanelExpanded(bool value) {
     _isDetailsPanelExpanded = value;
-    rebuild();
+    update();
   }
 
   CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
@@ -102,7 +98,7 @@ class Settings extends GetxController {
     if (isBetweenOrEqual(cleanValue, 40, 400)) {
       textScale = cleanValue / 100.0;
       preferrenceSave();
-      rebuild();
+      update();
       return true;
     }
     return false;
@@ -153,7 +149,7 @@ class Settings extends GetxController {
 
     Data().accounts.addNewAccount('New Bank Account');
     Settings().selectedView = ViewId.viewAccounts;
-    Settings().rebuild();
+    update();
   }
 
   Future<void> loadFileFromPath(final DataSource dataSource) async {

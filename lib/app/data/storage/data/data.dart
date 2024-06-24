@@ -168,7 +168,7 @@ class Data {
   /// and Rebuild the UI
   void updateAll() {
     recalculateBalances();
-    Settings().rebuild();
+    Settings().update();
   }
 
   /// Bulk Delete
