@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
-import 'package:money/app/modules/home/home_subview_controller.dart';
 import 'package:money/app/modules/home/sub_views/app_bar.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
@@ -27,10 +26,7 @@ import 'home_controller.dart';
 RxInt subViewInt = 0.obs;
 
 class HomePage extends GetView<HomeController> {
-  HomePage({super.key});
-
-  // Initialize the controller
-  final SubViewController viewController = Get.put(SubViewController());
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,10 +58,9 @@ class HomePage extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MenuVertical(
-            key: Key(GeneralController().selectedView.toString()),
-            settings: GeneralController(),
+            key: Key(PreferenceController.to.currentView.value.toString()),
             onSelectItem: _handleSubViewSelectionChanged,
-            selectedView: GeneralController().selectedView,
+            selectedView: PreferenceController.to.currentView.value,
             useIndicator: true,
           ),
           Expanded(
@@ -86,17 +81,15 @@ class HomePage extends GetView<HomeController> {
           child: _getSubView(),
         ),
         MenuHorizontal(
-          key: Key(GeneralController().selectedView.toString()),
-          settings: GeneralController(),
-          onSelected: _handleSubViewSelectionChanged,
-          selectedView: GeneralController().selectedView,
-        ),
+            key: Key(PreferenceController.to.currentView.value.toString()),
+            onSelected: _handleSubViewSelectionChanged,
+            selectedView: PreferenceController.to.currentView.value),
       ],
     );
   }
 
   Widget _getSubView() {
-    switch (viewController.currentView.value) {
+    switch (PreferenceController.to.currentView.value) {
       case ViewId.viewAccounts:
         return ViewAccounts(includeClosedAccount: GeneralController().ctlPref.includeClosedAccounts);
 
@@ -134,6 +127,6 @@ class HomePage extends GetView<HomeController> {
   }
 
   void _handleSubViewSelectionChanged(final ViewId selectedView) {
-    viewController.setView(selectedView);
+    PreferenceController.to.setView(selectedView);
   }
 }

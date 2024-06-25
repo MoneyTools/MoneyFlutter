@@ -3,7 +3,7 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/controller/general_controller.dart';
 
-List<NavigationDestination> getAppBarDestinations(final GeneralController settings) {
+List<NavigationDestination> getAppBarDestinations() {
   final List<NavigationDestination> appBarDestinations = <NavigationDestination>[
     const NavigationDestination(
       label: 'Cash Flow',
@@ -60,7 +60,7 @@ List<NavigationDestination> getAppBarDestinations(final GeneralController settin
       selectedIcon: ViewId.viewStocks.getIcon(),
     )
   ];
-  if (settings.ctlPref.includeRentalManagement) {
+  if (PreferenceController.to.includeRentalManagement) {
     appBarDestinations.add(
       NavigationDestination(
         label: 'Rentals',
@@ -74,8 +74,8 @@ List<NavigationDestination> getAppBarDestinations(final GeneralController settin
   return appBarDestinations;
 }
 
-List<NavigationRailDestination> getNavRailDestination(final GeneralController settings) {
-  final List<NavigationDestination> list = getAppBarDestinations(settings);
+List<NavigationRailDestination> getNavRailDestination() {
+  final List<NavigationDestination> list = getAppBarDestinations();
 
   final Iterable<NavigationRailDestination> navRailDestinations = list.map(
     (final NavigationDestination destination) => NavigationRailDestination(
@@ -96,11 +96,9 @@ List<NavigationRailDestination> getNavRailDestination(final GeneralController se
 class MenuHorizontal extends StatefulWidget {
   final void Function(ViewId) onSelected;
   final ViewId selectedView;
-  final GeneralController settings;
 
   const MenuHorizontal({
     super.key,
-    required this.settings,
     required this.onSelected,
     required this.selectedView,
   });
@@ -123,7 +121,7 @@ class MenuHorizontalState extends State<MenuHorizontal> {
         });
         widget.onSelected(view);
       },
-      destinations: getAppBarDestinations(widget.settings),
+      destinations: getAppBarDestinations(),
       height: 52,
       indicatorColor: getColorTheme(context).onSecondary,
       backgroundColor: getColorTheme(context).secondaryContainer,
@@ -142,11 +140,9 @@ class MenuVertical extends StatefulWidget {
   final void Function(ViewId) onSelectItem;
   final ViewId selectedView;
   final bool useIndicator;
-  final GeneralController settings;
 
   const MenuVertical({
     super.key,
-    required this.settings,
     required this.onSelectItem,
     required this.selectedView,
     this.useIndicator = false,
@@ -162,7 +158,7 @@ class MenuVerticalState extends State<MenuVertical> {
   @override
   Widget build(final BuildContext context) {
     bool isVeryLargeDevice = MediaQuery.of(context).size.width > 1000;
-    final List<NavigationRailDestination> destinations = getNavRailDestination(widget.settings);
+    final List<NavigationRailDestination> destinations = getNavRailDestination();
     return Container(
       color: getColorTheme(context).secondaryContainer,
       child: SingleChildScrollView(

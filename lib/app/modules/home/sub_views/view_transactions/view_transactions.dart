@@ -7,7 +7,6 @@ import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
-
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
@@ -110,7 +109,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                         transaction.accountId.value,
                       );
 
-                  GeneralController().selectedView = ViewId.viewAccounts;
+                  PreferenceController.to.setView(ViewId.viewAccounts);
                 }
               },
             ),
@@ -128,7 +127,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                         settingKeySelectedListItemId,
                       ),
                       transaction.categoryId.value);
-                  GeneralController().selectedView = ViewId.viewCategories;
+                  PreferenceController.to.setView(ViewId.viewCategories);
                 }
               },
             ),
@@ -145,7 +144,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                         ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
                         transaction.payee.value,
                       );
-                  GeneralController().selectedView = ViewId.viewPayees;
+                  PreferenceController.to.setView(ViewId.viewPayees);
                 }
               },
             ),

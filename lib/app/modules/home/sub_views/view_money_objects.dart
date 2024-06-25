@@ -82,6 +82,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   void initState() {
     super.initState();
 
+    firstLoad();
+  }
+
+  void firstLoad() async {
     var all = getFieldsForTable();
 
     _fieldToDisplay = Fields<MoneyObject>();
@@ -104,9 +108,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     _filterByText = preferenceController.getString(getPreferenceKey(settingKeyFilterText), '');
 
     // load the column filters
-    preferenceController.getStringList(getPreferenceKey(settingKeyFilterColumnsText)).then((list) {
-      _filterByFieldsValue = FieldFilters.fromList(list);
-    });
+    var tmpList = await preferenceController.getStringList(getPreferenceKey(settingKeyFilterColumnsText));
+    _filterByFieldsValue = FieldFilters.fromList(tmpList);
 
     list = getList();
 

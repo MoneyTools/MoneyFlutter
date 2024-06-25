@@ -66,6 +66,16 @@ class PreferenceController extends GetxController {
     setBool(settingKeyRentalsSupport, value);
   }
 
+
+  ///---------------------------------
+  // Observable enum
+  Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
+
+  // Methods to update the current view
+  void setView(ViewId view) {
+    currentView.value = view;
+  }
+
   @override
   void onInit() async {
     debugLog('PrefereceContoller.onInit()');

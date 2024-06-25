@@ -45,17 +45,6 @@ class GeneralController extends GetxController {
 
   bool isSmallScreen = true;
 
-  /// What screen is selected
-  ViewId _selectedScreen = ViewId.viewCashFlow;
-
-  ViewId get selectedView => _selectedScreen;
-
-  set selectedView(ViewId value) {
-    _selectedScreen = value;
-    update();
-    debugLog('selectedView $value');
-  }
-
   CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
   int cashflowRecurringOccurrences = 12;
   String apiKeyForStocks = '';
@@ -86,8 +75,7 @@ class GeneralController extends GetxController {
     GeneralController().closeFile();
 
     Data().accounts.addNewAccount('New Bank Account');
-    GeneralController().selectedView = ViewId.viewAccounts;
-    update();
+    ctlPref.setView(ViewId.viewAccounts);
   }
 
   Future<void> loadFileFromPath(final DataSource dataSource) async {
@@ -199,13 +187,13 @@ void switchViewTransacionnForPayee(final String payeeName) {
   fieldFilters.add(
       FieldFilter(fieldName: Constants.viewTransactionFieldnamePayee, filterTextInLowerCase: payeeName.toLowerCase()));
 
-  GeneralController().ctlPref.setStringList(
-        ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
-        fieldFilters.toStringList(),
-      );
+  PreferenceController.to.setStringList(
+    ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+    fieldFilters.toStringList(),
+  );
 
   // Switch view
-  GeneralController().selectedView = ViewId.viewTransactions;
+  PreferenceController.to.setView(ViewId.viewTransactions);
 }
 
 enum CashflowViewAs {

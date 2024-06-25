@@ -167,7 +167,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                         );
 
                     // Switch view
-                    GeneralController().selectedView = ViewId.viewTransactions;
+                    PreferenceController.to.setView(ViewId.viewTransactions);
                   }
                 },
               ),
