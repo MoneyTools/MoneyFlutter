@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/settings.dart';
-import 'package:money/app/modules/home/views/app_title.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/modules/home/home_data_controller.dart';
+import 'package:money/app/modules/home/views/view_pending_changes/mru.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({
@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
             ],
           ),
           gapLarge(),
-          const LoadedDataFileAndTime(),
+          const Mru(),
           const Spacer(),
           IntrinsicWidth(
             child: Opacity(
