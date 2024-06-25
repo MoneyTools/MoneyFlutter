@@ -9,15 +9,14 @@ import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/data/data_mutations.dart';
 import 'package:path/path.dart' as p;
+import 'dart:io';
 
 class DataController extends GetxController {
   // Observable variables
   RxBool isLoading = true.obs;
   RxList<String> data = <String>[].obs;
   RxString currentLoadedFileName = Constants.untitledFileName.obs;
-
-  DateTime? dataFileLastUpdateDateTime;
-
+  Rxn<DateTime> currentLoadedFileDateTime = Rxn<DateTime>();
   String fileName = '';
   String get getUniqueState => '${Data().version}';
   bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
@@ -27,6 +26,7 @@ class DataController extends GetxController {
 
   void dataFileIsClosed() {
     currentLoadedFileName.value = Constants.untitledFileName;
+    currentLoadedFileDateTime.value = null;
   }
 
   Future<String> defaultFolderToSaveTo(final String defaultFileName) async {
@@ -55,6 +55,7 @@ class DataController extends GetxController {
     await Data().loadFromPath(dataSource).then((final bool success) async {
       if (success) {
         setCurrentFileName(dataSource.filePath);
+        currentLoadedFileDateTime.value = await getFileModifiedTime(dataSource.filePath);
         Future.delayed(Duration.zero, () {
           Get.offNamed(Constants.routeHomePage);
         });
@@ -97,6 +98,19 @@ class DataController extends GetxController {
     currentLoadedFileName.value = filenameLoaded;
     final PreferenceController preferenceController = Get.find();
     preferenceController.addToMRU(filenameLoaded);
+  }
+
+  static Future<DateTime?> getFileModifiedTime(String filePath) async {
+    try {
+      if (await MyFileSystems.doesFileExist(filePath)) {
+        final file = File(filePath);
+        final fileStat = await file.stat();
+        return fileStat.modified;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
   }
 }
 

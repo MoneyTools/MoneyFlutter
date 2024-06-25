@@ -173,3 +173,39 @@ DateTime? parseQfxDataFormat(final String qfxDate) {
     return null;
   }
 }
+
+String getElapsedTime(DateTime dateTime) {
+  final now = DateTime.now();
+  final difference = now.difference(dateTime);
+
+  if (difference.inDays >= 365) {
+    final years = difference.inDays ~/ 365;
+    final remainingDays = difference.inDays % 365;
+    final months = remainingDays ~/ 30;
+    final days = remainingDays % 30;
+
+    if (months == 0 && days == 0) {
+      return '$years year${years > 1 ? 's' : ''} ago';
+    } else if (days == 0) {
+      return '$years year${years > 1 ? 's' : ''}, $months month${months > 1 ? 's' : ''} ago';
+    } else {
+      return '$years year${years > 1 ? 's' : ''}, $months month${months > 1 ? 's' : ''}, $days day${days > 1 ? 's' : ''} ago';
+    }
+  } else if (difference.inDays >= 30) {
+    final months = difference.inDays ~/ 30;
+    final remainingDays = difference.inDays % 30;
+    if (remainingDays == 0) {
+      return '$months month${months > 1 ? 's' : ''} ago';
+    } else {
+      return '$months month${months > 1 ? 's' : ''}, $remainingDays day${remainingDays > 1 ? 's' : ''} ago';
+    }
+  } else if (difference.inDays >= 1) {
+    return '${difference.inDays} day${difference.inDays > 1 ? 's' : ''} ago';
+  } else if (difference.inHours >= 1) {
+    return '${difference.inHours} hour${difference.inHours > 1 ? 's' : ''} ago';
+  } else if (difference.inMinutes >= 1) {
+    return '${difference.inMinutes} minute${difference.inMinutes > 1 ? 's' : ''} ago';
+  } else {
+    return 'Just now';
+  }
+}

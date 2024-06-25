@@ -37,6 +37,11 @@ class MyFileSystems {
     return file;
   }
 
+  static Future<bool> doesFileExist(final String pathToFile) async {
+    final File file = File(pathToFile);
+    return await file.exists();
+  }
+
   static Future<String> readFile(
     final String pathToFile,
   ) async {
