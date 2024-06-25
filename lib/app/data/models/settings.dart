@@ -12,7 +12,6 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/data/storage/data/data_mutations.dart';
 import 'package:money/app/data/storage/preferences_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 
@@ -105,9 +104,6 @@ class Settings extends GetxController {
 
   double textScale = 1.0;
 
-  // Tracking changes
-  final DataMutations trackMutations = DataMutations();
-
   Future<bool> preferrenceLoad() async {
     // await getPref().initPublic();
     textScale = getPref().getDouble(settingKeyTextScale, 1.0);
@@ -132,7 +128,7 @@ class Settings extends GetxController {
   void closeFile([bool rebuild = true]) {
     Data().close();
     ctrlData.dataFileIsClosed();
-    this.trackMutations.reset();
+    this.ctrlData.trackMutations.reset();
   }
 
   void onFileNew() async {

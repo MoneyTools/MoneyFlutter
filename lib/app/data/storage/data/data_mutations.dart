@@ -1,11 +1,13 @@
+import 'package:get/get.dart';
+
 /// Tracking changes of data
-class DataMutations {
-  int added = 0;
-  int changed = 0;
-  int deleted = 0;
+class DataMutations extends GetxController {
+  RxInt added = 0.obs;
+  RxInt changed = 0.obs;
+  RxInt deleted = 0.obs;
 
   int numberOfChanges() {
-    return added + changed + deleted;
+    return added.value + changed.value + deleted.value;
   }
 
   /// Indicate of any data has changed Added or Deleted
@@ -24,8 +26,8 @@ class DataMutations {
   }
 
   void reset() {
-    added = 0;
-    changed = 0;
-    deleted = 0;
+    added.value = 0;
+    changed.value = 0;
+    deleted.value = 0;
   }
 }

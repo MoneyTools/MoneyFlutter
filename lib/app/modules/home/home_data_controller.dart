@@ -7,6 +7,7 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/settings.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/data/storage/data/data_mutations.dart';
 import 'package:path/path.dart' as p;
 
 class DataController extends GetxController {
@@ -20,6 +21,9 @@ class DataController extends GetxController {
   String fileName = '';
   String get getUniqueState => '${Data().version}';
   bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
+
+  // Tracking changes
+  DataMutations trackMutations = DataMutations();
 
   void dataFileIsClosed() {
     currentLoadedFileName.value = Constants.untitledFileName;

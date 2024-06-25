@@ -26,17 +26,19 @@ class BadgePendingChanges extends StatelessWidget {
 
     return Tooltip(
       message: getTooltipText(),
-      child: IntrinsicWidth(
-        child: TextButton(
-          style: ButtonStyle(
-            backgroundColor: WidgetStateProperty.all<Color>(Colors.grey.withAlpha(0x22)),
-            // You can add more styling properties here as needed
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          padding: const EdgeInsets.all(0),
+          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4), // Adjust border radius
           ),
-          onPressed: () {
-            PendingChanges.show(context);
-          },
-          child: getChangeLabel(context),
+          backgroundColor: Colors.white,
         ),
+        onPressed: () {
+          PendingChanges.show(context);
+        },
+        child: getChangeLabel(context),
       ),
     );
   }
@@ -44,18 +46,20 @@ class BadgePendingChanges extends StatelessWidget {
   Widget getChangeLabel(final BuildContext context) {
     List<Widget> widgets = [];
     TextStyle textStyle = Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
-    if (Settings().trackMutations.added > 0) {
+    if (Settings().ctrlData.trackMutations.added.value > 0) {
       widgets.add(
-        buildCounter('+', Settings().trackMutations.added, textStyle.copyWith(color: Colors.green)),
+        buildCounter('+', Settings().ctrlData.trackMutations.added.value, textStyle.copyWith(color: Colors.green)),
       );
     }
 
-    if (Settings().trackMutations.changed > 0) {
-      widgets.add(buildCounter('=', Settings().trackMutations.changed, textStyle.copyWith(color: Colors.orange)));
+    if (Settings().ctrlData.trackMutations.changed.value > 0) {
+      widgets.add(buildCounter(
+          '=', Settings().ctrlData.trackMutations.changed.value, textStyle.copyWith(color: Colors.orange)));
     }
 
-    if (Settings().trackMutations.deleted > 0) {
-      widgets.add(buildCounter('-', Settings().trackMutations.deleted, textStyle.copyWith(color: Colors.red)));
+    if (Settings().ctrlData.trackMutations.deleted.value > 0) {
+      widgets.add(
+          buildCounter('-', Settings().ctrlData.trackMutations.deleted.value, textStyle.copyWith(color: Colors.red)));
     }
 
     return Row(
@@ -75,6 +79,6 @@ class BadgePendingChanges extends StatelessWidget {
   }
 
   String getTooltipText() {
-    return 'Added: ${Settings().trackMutations.added}\nModified: ${Settings().trackMutations.changed}\nDeleted: ${Settings().trackMutations.deleted}';
+    return 'Added: ${Settings().ctrlData.trackMutations.added}\nModified: ${Settings().ctrlData.trackMutations.changed}\nDeleted: ${Settings().ctrlData.trackMutations.deleted}';
   }
 }

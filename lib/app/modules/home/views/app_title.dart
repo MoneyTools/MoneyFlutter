@@ -25,6 +25,8 @@ class AppTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final DataController dataController = Get.find();
+
     return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -32,14 +34,13 @@ class AppTitle extends StatelessWidget {
           Row(children: [
             IntrinsicWidth(child: _buildNetWorthToggle(context)),
             gapSmall(),
-            SizedBox(
-              height: 20,
-              child: BadgePendingChanges(
-                itemsAdded: Settings().trackMutations.added,
-                itemsChanged: Settings().trackMutations.changed,
-                itemsDeleted: Settings().trackMutations.deleted,
-              ),
-            ),
+            Obx(() {
+              return BadgePendingChanges(
+                itemsAdded: dataController.trackMutations.added.value,
+                itemsChanged: dataController.trackMutations.changed.value,
+                itemsDeleted: dataController.trackMutations.deleted.value,
+              );
+            }),
           ]),
           const LoadedDataFileAndTime(),
         ],
