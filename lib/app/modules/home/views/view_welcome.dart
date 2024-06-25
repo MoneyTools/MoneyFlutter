@@ -4,7 +4,7 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/controller/data_controller.dart';
-import 'package:money/app/modules/home/views/mru.dart';
+import 'package:money/app/modules/home/views/mru_dropdown.dart';
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({
@@ -51,7 +51,7 @@ class WelcomeScreen extends StatelessWidget {
             ],
           ),
           gapLarge(),
-          const Mru(),
+          const MruDropdown(),
           const Spacer(),
           IntrinsicWidth(
             child: Opacity(

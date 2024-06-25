@@ -8,7 +8,7 @@ import 'package:money/app/modules/home/views/view_pending_changes/badge_pending_
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/reveal_content.dart';
 import 'package:money/app/controller/data_controller.dart';
-import 'package:money/app/modules/home/views/mru.dart';
+import 'package:money/app/modules/home/views/mru_dropdown.dart';
 
 class AppTitle extends StatelessWidget {
   AppTitle({
@@ -38,7 +38,7 @@ class AppTitle extends StatelessWidget {
               );
             }),
           ]),
-          const Mru(),
+          const MruDropdown(),
         ],
       );
     });

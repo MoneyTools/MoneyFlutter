@@ -8,8 +8,8 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/controller/data_controller.dart';
 
-class Mru extends StatelessWidget {
-  const Mru({super.key});
+class MruDropdown extends StatelessWidget {
+  const MruDropdown({super.key});
 
   @override
   Widget build(BuildContext context) {
