@@ -161,7 +161,7 @@ class _MyAppBarState extends State<MyAppBar> {
       PopupMenuItem<int>(
         value: Constants.commandIncludeClosedAccount,
         child: ThreePartLabel(
-          text1: GeneralController().ctlPref.includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
+          text1: GeneralController().ctlPref.includeClosedAccounts ? 'Hide "Closed Accounts"' : 'Show "Closed Account"',
           icon: _buildButtonToggleViewClosedAccountsIcon(),
           small: true,
         ),
