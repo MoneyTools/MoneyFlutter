@@ -57,7 +57,7 @@ class Constants {
   static const int commandTextZoom = 1000;
   static const int commandSettings = 1100;
   static const int commandIncludeClosedAccount = 1200;
-  static const int commandIncludeRentals = 1300;
+
   static const int commandAddTransactions = 1400;
 
   static const int commandFileNew = 2000;

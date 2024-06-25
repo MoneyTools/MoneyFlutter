@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.32] 2024-06-25
+
+### Added
+
+- Move Rental checkbox to Settings page
+
 ## [version 1.8.31] 2024-06-24
 
 ### Added

@@ -22,6 +22,18 @@ class GeneralPage extends GetView<GetxController> {
         child: Box(
           child: Column(
             children: [
+              SwitchListTile(
+                title: const Text('Rental'),
+                subtitle: const Text('Manage the expenses and rental income of properties.'),
+                value: Settings().getPref().includeRentalManagement,
+                onChanged: (bool value) {
+                  Settings().getPref().includeRentalManagement = !Settings().getPref().includeRentalManagement;
+                  // setState(() {
+                  //   _isRentalEnabled = value;
+                  // });
+                },
+              ),
+              gapLarge(),
               TextField(
                 decoration: const InputDecoration(
                   labelText: 'Stock service API key',

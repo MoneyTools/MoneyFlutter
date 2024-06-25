@@ -203,21 +203,6 @@ class _MyAppBarState extends State<MyAppBar> {
 
     actionList.add(
       PopupMenuItem<int>(
-        value: Constants.commandIncludeRentals,
-        child: ThreePartLabel(
-          icon: Icon(
-              !Settings().getPref().includeRentalManagement
-                  ? Icons.check_box_outline_blank_outlined
-                  : Icons.check_box_outlined,
-              color: Colors.grey),
-          text1: 'Rentals',
-          small: true,
-        ),
-      ),
-    );
-
-    actionList.add(
-      PopupMenuItem<int>(
         value: Constants.commandTextZoom,
         child: ZoomIncreaseDecrease(
           title: 'Zoom',
@@ -269,8 +254,6 @@ class _MyAppBarState extends State<MyAppBar> {
         Get.toNamed(Constants.routeSettingsPage);
       case Constants.commandIncludeClosedAccount:
         Settings().getPref().includeClosedAccounts = !Settings().getPref().includeClosedAccounts;
-      case Constants.commandIncludeRentals:
-        Settings().getPref().includeRentalManagement = !Settings().getPref().includeRentalManagement;
       default:
         final ThemeController themeController = Get.find();
         themeController.setThemeColor(value);
