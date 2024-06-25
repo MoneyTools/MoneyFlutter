@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/widgets/chart.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
-import 'package:money/app/data/models/money_objects/splits/money_split.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/rental_unit/rental_unit.dart';
+import 'package:money/app/data/models/money_objects/splits/money_split.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
+import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl_card.dart';
-import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 
 part 'view_rentals_details_panels.dart';
 
@@ -134,6 +134,6 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   @override
   Fields<RentBuilding> getFieldsForTable() {
-    return RentBuilding.fields!;
+    return RentBuilding.fields;
   }
 }

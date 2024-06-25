@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/core/widgets/picker_edit_box.dart';
+import 'package:money/app/data/models/money_objects/categories/category.dart';
 
 Widget pickerCategoryType({
   required final CategoryType itemSelected,

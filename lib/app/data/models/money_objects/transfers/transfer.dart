@@ -9,7 +9,7 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 class Transfer extends MoneyObject {
   static final _fields = Fields<Transfer>();
 
-  static get fields {
+  static Fields<Transfer> get fields {
     if (_fields.isEmpty) {
       final tmp = Transfer.fromJson({});
 

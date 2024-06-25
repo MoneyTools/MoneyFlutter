@@ -1,13 +1,12 @@
 // ignore_for_file: unnecessary_this
 
-import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-
-import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
+import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
 
 class StockChartWidget extends StatefulWidget {
   final String symbol;

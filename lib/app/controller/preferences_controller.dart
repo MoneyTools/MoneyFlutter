@@ -1,12 +1,12 @@
 import 'dart:convert';
-import 'package:money/app/core/helpers/json_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/controller/data_controller.dart';
-import 'package:money/app/data/models/fields/field_filter.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:get/get.dart';
+import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/fields/field_filter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceController extends GetxController {
   static PreferenceController get to => Get.find();
@@ -37,7 +37,7 @@ class PreferenceController extends GetxController {
   ///---------------------------------
   /// Hide/Show Info panel
   final RxBool _isDetailsPanelExpanded = false.obs;
-  get isDetailsPanelExpanded => _isDetailsPanelExpanded;
+  RxBool get isDetailsPanelExpanded => _isDetailsPanelExpanded;
   set isDetailsPanelExpanded(value) {
     _isDetailsPanelExpanded.value = value;
     setBool(settingKeyDetailsPanelExpanded, value);

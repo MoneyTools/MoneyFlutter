@@ -1,7 +1,8 @@
 // Function to open a folder in the FileExplorer/Finder
-import 'package:url_launcher/url_launcher.dart';
 import 'dart:io';
+
 import 'package:path/path.dart' as p;
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showLocalFolder(final String folderPath) async {
   final Uri url = Uri.parse('file:$folderPath');

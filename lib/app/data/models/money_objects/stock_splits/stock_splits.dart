@@ -1,7 +1,7 @@
 import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 // Exports
 export 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';

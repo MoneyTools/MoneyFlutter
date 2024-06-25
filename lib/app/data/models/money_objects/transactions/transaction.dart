@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/picker_edit_box_date.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
@@ -19,8 +21,6 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/app/modules/home/sub_views/view_categories/picker_category.dart';
 import 'package:money/app/modules/home/sub_views/view_payees/picker_payee_or_transfer.dart';
-import 'package:money/app/core/widgets/money_widget.dart';
-import 'package:money/app/core/widgets/picker_edit_box_date.dart';
 
 // Exports
 export 'package:money/app/data/models/money_objects/transactions/transaction_types.dart';
@@ -30,7 +30,7 @@ export 'package:money/app/data/models/money_objects/transactions/transaction_typ
 class Transaction extends MoneyObject {
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
-  static get fields {
+  static Fields<Transaction> get fields {
     if (_fields.isEmpty) {
       final tmp = Transaction.fromJSon({}, 0);
       _fields.setDefinitions(
@@ -646,7 +646,7 @@ class Transaction extends MoneyObject {
   /// <param name="from">The account this transaction belongs to</param>
   /// <param name="duplicateTransfers">How to handle transfers.  In a cut/paste situation you want
   /// to create new transfer transactions (true), but in a XmlStore.Load situation we do not (false)</param>
-  postDeserializeFixup(bool duplicateTransfers) {
+  void postDeserializeFixup(bool duplicateTransfers) {
     // if (this.CategoryName != null)
     // {
     //   this.Category = money.Categories.GetOrCreateCategory(this.CategoryName, CategoryType.None);

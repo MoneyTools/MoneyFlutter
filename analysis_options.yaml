@@ -1,4 +1,12 @@
 include: package:flutter_lints/flutter.yaml
 analyzer:
+  exclude:
+    - build/**
+
   errors:
     todo: ignore
+
+linter:
+  rules:
+    - directives_ordering
+    - always_declare_return_types

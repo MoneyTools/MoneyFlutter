@@ -3,10 +3,10 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/core/widgets/columns/column_header_button.dart';
-import 'package:money/app/core/widgets/semantic_text.dart';
 import 'package:money/app/core/widgets/mybanner.dart';
+import 'package:money/app/core/widgets/semantic_text.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 class ImportTransactionsList extends StatefulWidget {
   final List<ValuesQuality> values;

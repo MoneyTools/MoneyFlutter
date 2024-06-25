@@ -3,7 +3,10 @@
 ./format.sh
 
 echo --- Analyze
-dart analyze
+
+dart analyze 
+dart fix --apply
+
 flutter analyze
 
 flutter test

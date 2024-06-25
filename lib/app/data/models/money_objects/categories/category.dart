@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/data/models/fields/fields.dart';
-import 'package:money/app/data/models/money_objects/categories/category_types.dart';
-import 'package:money/app/data/models/money_objects/categories/picker_category_type.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
-import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/app/core/widgets/circle.dart';
 import 'package:money/app/core/widgets/color_picker.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/rectangle.dart';
 import 'package:money/app/core/widgets/token_text.dart';
+import 'package:money/app/data/models/fields/fields.dart';
+import 'package:money/app/data/models/money_objects/categories/category_types.dart';
+import 'package:money/app/data/models/money_objects/categories/picker_category_type.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 // Exports
 export 'package:money/app/data/models/money_objects/categories/category_types.dart';
@@ -24,7 +24,7 @@ export 'package:money/app/data/models/money_objects/categories/category_types.da
 class Category extends MoneyObject {
   static final _fields = Fields<Category>();
 
-  static get fields {
+  static Fields<Category> get fields {
     if (_fields.isEmpty) {
       final tmp = Category.fromJson({});
       _fields.setDefinitions([

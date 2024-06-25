@@ -5,18 +5,20 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/data/models/money_objects/account_aliases/account_aliases.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/accounts.dart';
 import 'package:money/app/data/models/money_objects/aliases/aliases.dart';
 import 'package:money/app/data/models/money_objects/categories/categories.dart';
 import 'package:money/app/data/models/money_objects/currencies/currencies.dart';
-import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
+import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/online_accounts/online_accounts.dart';
@@ -29,18 +31,13 @@ import 'package:money/app/data/models/money_objects/stock_splits/stock_splits.da
 import 'package:money/app/data/models/money_objects/transaction_extras/transaction_extras.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
-
 import 'package:money/app/data/storage/database/database.dart';
-import 'package:money/app/core/widgets/snack_bar.dart';
-import 'package:money/app/controller/data_controller.dart';
 
 // Exports
 export 'package:money/app/core/helpers/json_helper.dart';
 
 part 'data_extension_csv.dart';
-
 part 'data_extension_demo.dart';
-
 part 'data_extension_sql.dart';
 
 class Data {

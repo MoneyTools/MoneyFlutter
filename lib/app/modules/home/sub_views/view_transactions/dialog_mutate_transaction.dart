@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
-import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/core/widgets/confirmation_dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
+import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 Future<dynamic> showTransactionAndActions({
   required final BuildContext context,

@@ -2,25 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/modules/home/sub_views/app_bar.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/modules/home/sub_views/sub_view_selection.dart';
+import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/constants.dart';
-
+import 'package:money/app/modules/home/sub_views/app_bar.dart';
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
+import 'package:money/app/modules/home/sub_views/sub_view_selection.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/view_accounts.dart';
 import 'package:money/app/modules/home/sub_views/view_aliases/view_aliases.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/view_cashflow.dart';
 import 'package:money/app/modules/home/sub_views/view_categories/view_categories.dart';
 import 'package:money/app/modules/home/sub_views/view_investments/view_investments.dart';
 import 'package:money/app/modules/home/sub_views/view_payees/view_payees.dart';
-import 'package:money/app/modules/policies/view_policy.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/view_rentals.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/view_stocks.dart';
 import 'package:money/app/modules/home/sub_views/view_transactions/view_transactions.dart';
 import 'package:money/app/modules/home/sub_views/view_transfers/view_transfers.dart';
-import 'package:money/app/core/widgets/working.dart';
+import 'package:money/app/modules/policies/view_policy.dart';
 
 import 'home_controller.dart';
 

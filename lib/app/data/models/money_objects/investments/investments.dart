@@ -53,7 +53,7 @@ class Investments extends MoneyObjects<Investment> {
     return cumulative;
   }
 
-  static getInvestmentsFromSecurity(final int securityId) {
+  static List<Investment> getInvestmentsFromSecurity(final int securityId) {
     return Data().investments.iterableList().where((item) => item.security.value == securityId).toList();
   }
 

@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:money/app/core/helpers/date_helper.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
@@ -8,9 +9,8 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
-import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
 
 import '../accounts/account.dart';
 
@@ -39,7 +39,7 @@ import '../accounts/account.dart';
 class RentBuilding extends MoneyObject {
   static final _fields = Fields<RentBuilding>();
 
-  static get fields {
+  static Fields<RentBuilding> get fields {
     if (_fields.isEmpty) {
       final tmp = RentBuilding.fromJson({});
       _fields.setDefinitions([
@@ -405,7 +405,7 @@ class RentBuilding extends MoneyObject {
 
   Map<int, RentalPnL> pnlOverYears = {};
 
-  cumulatePnL(Transaction t) {
+  void cumulatePnL(Transaction t) {
     int transactionCategoryId = t.categoryId.value;
 
     if (this.isTransactionOrSplitAssociatedWithThisRental(t)) {
@@ -565,7 +565,7 @@ class RentBuilding extends MoneyObject {
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
-  associateAccountToBuilding() {
+  void associateAccountToBuilding() {
     final Transaction? firstTransactionForThisBuilding = Data()
         .transactions
         .iterableList(includeDeleted: true)

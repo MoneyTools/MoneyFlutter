@@ -7,10 +7,10 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/semantic_text.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/core/widgets/semantic_text.dart';
 
 class ValueQuality {
   final String valueAsString;
@@ -46,7 +46,7 @@ class ValueQuality {
     return widgetDoubleAsCurrency(amount);
   }
 
-  static widgetDoubleAsCurrency(final double amount) {
+  static SelectableText widgetDoubleAsCurrency(final double amount) {
     return SelectableText(
       doubleToCurrency(amount),
       textAlign: TextAlign.right,

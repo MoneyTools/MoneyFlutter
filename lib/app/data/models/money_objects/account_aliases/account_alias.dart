@@ -12,7 +12,7 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 class AccountAlias extends MoneyObject {
   static final _fields = Fields<AccountAlias>();
 
-  static get fields {
+  static Fields<AccountAlias> get fields {
     if (_fields.isEmpty) {
       final tmp = AccountAlias.fromJson({});
       _fields.setDefinitions(
@@ -24,6 +24,7 @@ class AccountAlias extends MoneyObject {
         ],
       );
     }
+    return _fields;
   }
 
   @override

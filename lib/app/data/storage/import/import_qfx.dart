@@ -5,17 +5,17 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
-import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
-import 'package:money/app/data/models/money_objects/accounts/account.dart';
-import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
-import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.dart';
 import 'package:money/app/core/widgets/confirmation_dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/import_transactions_list.dart';
 import 'package:money/app/core/widgets/picker_panel.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
+import 'package:money/app/data/models/money_objects/accounts/account.dart';
+import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
+import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
+import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.dart';
 
 Future<bool> importQFX(
   final BuildContext context,

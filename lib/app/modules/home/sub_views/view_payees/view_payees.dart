@@ -5,16 +5,6 @@ import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/date_range.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
-import 'package:money/app/data/models/money_objects/payees/payee.dart';
-import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
-
-import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
-import 'package:money/app/modules/home/sub_views/view_payees/merge_payees.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
@@ -22,6 +12,15 @@ import 'package:money/app/core/widgets/date_range_time_line.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/mini_timeline_daily.dart';
+import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/date_range.dart';
+import 'package:money/app/data/models/money_objects/money_objects.dart';
+import 'package:money/app/data/models/money_objects/payees/payee.dart';
+import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
+import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/view_payees/merge_payees.dart';
 
 part 'view_payees_details_panels.dart';
 

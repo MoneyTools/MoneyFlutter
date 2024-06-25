@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/chart.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
+import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
+import 'package:money/app/core/widgets/three_part_label.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
@@ -9,22 +16,13 @@ import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
-import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
-import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
-import 'package:money/app/core/widgets/dialog/dialog_button.dart';
-import 'package:money/app/core/widgets/three_part_label.dart';
 
 part 'view_accounts_details_panels.dart';
-
 part 'view_accounts_helpers.dart';
 
 /// Main view for all Accounts

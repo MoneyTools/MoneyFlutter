@@ -139,10 +139,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           title: 'Loan Payement',
           context: context2,
           moneyObject: instance,
-        ).then((value) {
-          selectedItemId = itemId;
-          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
-        });
+        );
+
+        selectedItemId = itemId;
+        PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
       },
     );
   }

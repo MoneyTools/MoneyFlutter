@@ -5,13 +5,12 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
-
-import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/data/storage/database/database.dart';
 import 'package:money/app/core/widgets/diff.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/data/storage/database/database.dart';
 
 // Exports
 export 'package:collection/collection.dart';

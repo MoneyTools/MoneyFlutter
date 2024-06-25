@@ -118,7 +118,7 @@ extension DataFromCsv on Data {
     addCsvToArchive(archive, 'transactions.csv', transactions.toCSV());
   }
 
-  addCsvToArchive(final Archive archive, final String filename, final textContent) {
+  void addCsvToArchive(final Archive archive, final String filename, final textContent) {
     List<int> bytes = utf8.encode(textContent);
     archive.addFile(ArchiveFile(filename, bytes.length, bytes));
   }

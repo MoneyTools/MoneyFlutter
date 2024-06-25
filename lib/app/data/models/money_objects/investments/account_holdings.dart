@@ -1,8 +1,8 @@
 // ignore_for_file: unnecessary_this
 
+import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/investments/security_fifo_queue.dart';
 import 'package:money/app/data/models/money_objects/investments/security_purchase.dart';
-import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/investments/security_sales.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 

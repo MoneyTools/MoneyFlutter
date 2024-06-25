@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/data/models/constants.dart';
-
-import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/modules/home/sub_views/mru_dropdown.dart';
 
 class WelcomeScreen extends StatelessWidget {

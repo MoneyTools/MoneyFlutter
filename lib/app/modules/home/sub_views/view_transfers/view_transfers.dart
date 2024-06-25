@@ -2,6 +2,8 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/fields/fields.dart';
@@ -9,12 +11,9 @@ import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
-
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
 import 'package:money/app/modules/home/sub_views/view_transactions/money_object_card.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 
 class ViewTransfers extends ViewForMoneyObjects {
   const ViewTransfers({

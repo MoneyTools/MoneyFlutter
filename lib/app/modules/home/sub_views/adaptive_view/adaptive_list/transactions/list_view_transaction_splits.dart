@@ -38,7 +38,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
       children: <Widget>[
         // Table Header
         MyListItemHeader<MoneySplit>(
-          columns: MoneySplit.fields!.definitions,
+          columns: MoneySplit.fields.definitions,
           filterOn: FieldFilters(),
           sortByColumn: _sortBy,
           sortAscending: _sortAscending,
@@ -57,7 +57,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         // Table list of rows
         Expanded(
           child: MyListView<MoneySplit>(
-            fields: MoneySplit.fields!,
+            fields: MoneySplit.fields,
             list: rows,
             selectedItemIds: ValueNotifier<List<int>>([]),
             onSelectionChanged: (int _) {},

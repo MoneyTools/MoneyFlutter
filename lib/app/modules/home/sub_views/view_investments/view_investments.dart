@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/chart.dart';
+import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-
-import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
+import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
 
 part 'view_investments_details_panels.dart';
 

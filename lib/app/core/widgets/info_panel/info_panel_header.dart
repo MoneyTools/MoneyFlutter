@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/data/models/money_objects/currencies/currency.dart';
-import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
+import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class InfoPanelHeader extends StatelessWidget {
   final bool isExpanded;

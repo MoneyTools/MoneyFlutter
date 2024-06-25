@@ -1,6 +1,6 @@
 import 'package:money/app/data/models/fields/fields.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 /*
   SQLite table definition
@@ -19,7 +19,7 @@ import 'package:money/app/data/models/money_objects/payees/payee.dart';
 class MoneySplit extends MoneyObject {
   static final _fields = Fields<MoneySplit>();
 
-  static get fields {
+  static Fields<MoneySplit> get fields {
     if (_fields.isEmpty) {
       final tmp = MoneySplit.fromJson({});
       _fields.setDefinitions([

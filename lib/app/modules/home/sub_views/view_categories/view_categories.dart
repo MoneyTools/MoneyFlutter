@@ -187,7 +187,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Category> getFieldsForTable() {
-    return Category.fields ?? Fields<Category>();
+    return Category.fields;
   }
 
   @override

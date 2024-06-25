@@ -1,10 +1,10 @@
 // Exports
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/data/models/fields/fields.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/core/widgets/form_field_switch.dart';
 import 'package:money/app/core/widgets/form_field_widget.dart';
+import 'package:money/app/data/models/fields/fields.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 export 'dart:ui';
 

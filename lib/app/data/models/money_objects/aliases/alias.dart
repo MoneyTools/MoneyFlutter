@@ -12,7 +12,7 @@ export 'package:money/app/data/models/money_objects/aliases/alias_types.dart';
 class Alias extends MoneyObject {
   static final _fields = Fields<Alias>();
 
-  static get fields {
+  static Fields<Alias> get fields {
     if (_fields.isEmpty) {
       final tmp = Alias.fromJson({});
       _fields.setDefinitions([
@@ -25,10 +25,7 @@ class Alias extends MoneyObject {
     return _fields;
   }
 
-  static getFields() {
-    if (fields == null) {
-      Alias.fromJson({});
-    }
+  static dynamic getFields() {
     return fields;
   }
 

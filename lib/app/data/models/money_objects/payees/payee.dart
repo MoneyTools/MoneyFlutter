@@ -1,9 +1,9 @@
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
-import 'package:money/app/core/widgets/money_widget.dart';
 
 export 'package:money/app/data/models/money_objects/money_object.dart';
 
@@ -16,7 +16,7 @@ export 'package:money/app/data/models/money_objects/money_object.dart';
 class Payee extends MoneyObject {
   static final _fields = Fields<Payee>();
 
-  static get fields {
+  static Fields<Payee> get fields {
     if (_fields.isEmpty) {
       final tmp = Payee.fromJson({});
       _fields.setDefinitions([

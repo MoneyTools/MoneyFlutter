@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/quantity_widget.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
-import 'package:money/app/core/widgets/money_widget.dart';
-import 'package:money/app/core/widgets/quantity_widget.dart';
 
 export 'package:money/app/data/models/money_model.dart';
 
@@ -241,7 +241,7 @@ class Field<T> {
 
   int Function(MoneyObject, MoneyObject, bool)? sort;
 
-  setAmount(final dynamic newValue) {
+  void setAmount(final dynamic newValue) {
     (this as FieldMoney).value.setAmount(newValue);
   }
 

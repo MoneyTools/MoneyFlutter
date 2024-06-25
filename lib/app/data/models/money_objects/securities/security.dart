@@ -20,7 +20,7 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 class Security extends MoneyObject {
   static final _fields = Fields<Security>();
 
-  static get fields {
+  static Fields<Security> get fields {
     if (_fields.isEmpty) {
       final tmp = Security.fromJson({});
       _fields.setDefinitions([
