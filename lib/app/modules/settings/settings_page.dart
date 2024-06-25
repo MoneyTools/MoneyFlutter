@@ -7,18 +7,20 @@ import 'package:money/app/core/widgets/text_title.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/views/app_scaffold.dart';
 
 class SettingsPage extends GetView<GetxController> {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return myScaffold(
+      context,
+      AppBar(
         title: const TextTitle('Settings'),
         centerTitle: true,
       ),
-      body: Center(
+      Center(
         child: Box(
           child: Column(
             children: [

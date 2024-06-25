@@ -3,13 +3,14 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/modules/home/home_subview_controller.dart';
-import 'package:money/app/modules/home/views/appbar.dart';
+import 'package:money/app/modules/home/views/app_bar.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/modules/home/views/menu.dart';
+import 'package:money/app/modules/home/views/app_menu.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
+import 'package:money/app/modules/home/views/app_scaffold.dart';
 import 'package:money/app/modules/home/views/view_accounts/view_accounts.dart';
 import 'package:money/app/modules/home/views/view_aliases/view_aliases.dart';
 import 'package:money/app/modules/home/views/view_cashflow/view_cashflow.dart';
@@ -38,9 +39,10 @@ class HomePage extends GetView<HomeController> {
   Widget build(BuildContext context) {
     final DataController dataController = Get.find();
     return Obx(() {
-      return Scaffold(
-        appBar: const MyAppBar(),
-        body: dataController.isLoading.value ? const WorkingIndicator() : _buildAdativeContent(context),
+      return myScaffold(
+        context,
+        const MyAppBar(),
+        dataController.isLoading.value ? const WorkingIndicator() : _buildAdativeContent(context),
       );
     });
   }

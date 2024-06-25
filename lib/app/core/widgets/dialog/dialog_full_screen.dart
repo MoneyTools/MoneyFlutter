@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/modules/home/views/app_scaffold.dart';
 
 ///
 class FullScreenDialog extends StatefulWidget {
@@ -15,11 +16,12 @@ class FullScreenDialog extends StatefulWidget {
 class FullScreenDialogState extends State<FullScreenDialog> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+    return myScaffold(
+      context,
+      AppBar(
         title: Text(widget.title),
       ),
-      body: widget.content,
+      widget.content,
     );
   }
 }

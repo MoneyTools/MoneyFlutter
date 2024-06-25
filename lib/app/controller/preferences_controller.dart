@@ -9,6 +9,8 @@ import 'package:get/get.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class PreferenceController extends GetxController {
+  static PreferenceController get to => Get.find();
+
   final RxBool isReady = false.obs;
 
   SharedPreferences? _preferences;
@@ -16,10 +18,23 @@ class PreferenceController extends GetxController {
   RxList<String> mru = <String>[].obs;
 
   String get getUniqueState =>
-      'isReadry:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts';
+      'isReadry:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
 
-  // User choices
+  //////////////////////////////////////////////////////
+  // Persistable user preference
 
+  ///---------------------------------
+  /// Text Font Size/Scale
+  final RxDouble _textScale = 1.0.obs;
+
+  double get textScale => _textScale.value;
+
+  set textScale(double value) {
+    _textScale.value = value;
+    setDouble(settingKeyTextScale, textScale);
+  }
+
+  ///---------------------------------
   /// Hide/Show Info panel
   final RxBool _isDetailsPanelExpanded = false.obs;
   get isDetailsPanelExpanded => _isDetailsPanelExpanded;
@@ -28,7 +43,8 @@ class PreferenceController extends GetxController {
     setBool(settingKeyDetailsPanelExpanded, value);
   }
 
-  // Show or Hide Account that are marked as Closed
+  ///---------------------------------
+  /// Show or Hide Account that are marked as Closed
   /// Hide/Show Closed Accounts
   final RxBool _includeClosedAccounts = false.obs;
 
@@ -39,7 +55,8 @@ class PreferenceController extends GetxController {
     setBool(settingKeyRentalsSupport, value);
   }
 
-  // Incude Rental feature
+  ///---------------------------------
+  /// Incude Rental feature
   final RxBool _includeRentalManagement = false.obs;
 
   bool get includeRentalManagement => _includeRentalManagement.value;
@@ -64,13 +81,13 @@ class PreferenceController extends GetxController {
     isReady.value = true;
 
     if (mru.isNotEmpty) {
-      debugLog('PrefereceContoller.loadLastFile');
+      // debugLog('PrefereceContoller.loadLastFile');
       DataController dataController = Get.find();
       dataController.loadLastFileSaved();
     } else {
       // queue changing screen after app loaded
       Future.delayed(const Duration(milliseconds: 100), () {
-        debugLog('PrefereceContoller.routeWelcomePage');
+        // debugLog('PrefereceContoller.routeWelcomePage');
         Get.offNamed(Constants.routeWelcomePage);
       });
     }

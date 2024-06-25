@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -51,6 +52,7 @@ class ThemeController extends GetxController {
     final ThemeData themeData = ThemeData(
       colorSchemeSeed: colorOptions[colorSelected.value],
       brightness: Brightness.light,
+      // textTheme: Typography.material2021().black.apply(fontSizeFactor: PreferenceController.to.textScale),
     );
     return themeData;
   }
@@ -60,9 +62,13 @@ class ThemeController extends GetxController {
     if (!isIndexInRange(colorOptions, colorSelected.value)) {
       colorSelected = 0.obs;
     }
+
     final ThemeData themeData = ThemeData(
       colorSchemeSeed: colorOptions[colorSelected.value],
       brightness: Brightness.dark,
+      // textTheme: Typography.material2021().white.apply(
+      //       fontSizeDelta: PreferenceController.to.textScale,
+      //     ),
     );
     return themeData;
   }

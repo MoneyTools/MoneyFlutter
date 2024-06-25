@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/app/controller/general_controller.dart';
 
 /// ( - )  100% ( + )
@@ -20,7 +21,7 @@ class ZoomIncreaseDecrease extends StatefulWidget {
 
 class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
   String zoomValueAsText = '';
-
+  PreferenceController preferenceController = Get.find();
   @override
   void initState() {
     super.initState();
@@ -69,6 +70,6 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
   }
 
   void updateZoomTextFromValue() {
-    zoomValueAsText = '${(GeneralController().textScale * 100).toInt()}%';
+    zoomValueAsText = '${(preferenceController.textScale * 100).toInt()}%';
   }
 }

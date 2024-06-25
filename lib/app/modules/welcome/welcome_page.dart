@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/text_title.dart';
+import 'package:money/app/modules/home/views/app_scaffold.dart';
 import 'package:money/app/modules/home/views/view_welcome.dart';
 
 import 'welcome_controller.dart';
@@ -12,12 +13,13 @@ class WelcomePage extends GetView<WelcomeController> {
   @override
   Widget build(BuildContext context) {
     debugLog('WelcomeScreen');
-    return Scaffold(
-      appBar: AppBar(
+    return myScaffold(
+      context,
+      AppBar(
         title: const TextTitle('Welcome to MyMoney'),
         centerTitle: true,
       ),
-      body: const WelcomeScreen(),
+      const WelcomeScreen(),
     );
   }
 }

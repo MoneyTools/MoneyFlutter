@@ -70,17 +70,17 @@ class GeneralController extends GetxController {
   }
 
   void fontScaleMultiplyBy(final double factor) {
-    setFontScaleTo(textScale * factor);
+    setFontScaleTo(ctlPref.textScale * factor);
   }
 
   void fontScaleDelta(final double addOrSubtract) {
-    setFontScaleTo(textScale + addOrSubtract);
+    setFontScaleTo(ctlPref.textScale + addOrSubtract);
   }
 
   bool setFontScaleTo(final double newScale) {
     final int cleanValue = (newScale * 100).round();
     if (isBetweenOrEqual(cleanValue, 40, 400)) {
-      textScale = cleanValue / 100.0;
+      ctlPref.textScale = cleanValue / 100.0;
       preferrenceSave();
       update();
       return true;
@@ -88,11 +88,7 @@ class GeneralController extends GetxController {
     return false;
   }
 
-  double textScale = 1.0;
-
   Future<bool> preferrenceLoad() async {
-    textScale = ctlPref.getDouble(settingKeyTextScale, 1.0);
-
     cashflowViewAs = CashflowViewAs.values[
         intValueOrDefault(ctlPref.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
     cashflowRecurringOccurrences = ctlPref.getInt(settingKeyCashflowRecurringOccurrences, 12);
@@ -103,7 +99,6 @@ class GeneralController extends GetxController {
   }
 
   void preferrenceSave() {
-    ctlPref.setDouble(settingKeyTextScale, textScale);
     ctlPref.setInt(settingKeyCashflowView, cashflowViewAs.index);
     ctlPref.setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
     ctlPref.setString(settingKeyStockApiKey, apiKeyForStocks);
