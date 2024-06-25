@@ -42,8 +42,8 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   /// add more top leve action buttons
   @override
-  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
-    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
     if (!forInfoPanelTransactions) {
       /// Merge
       final MoneyObject? moneyObject = getFirstSelectedItem();

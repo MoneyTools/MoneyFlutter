@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/fields/fields.dart';
@@ -31,11 +32,6 @@ class ViewCategories extends ViewForMoneyObjects {
 class ViewCategoriesState extends ViewForMoneyObjectsState {
   ViewCategoriesState() {
     viewId = ViewId.viewCategories;
-    onAddItem = () {
-      // add a new Account
-      final newItem = Data().categories.addNewCategory('New Category');
-      updateListAndSelect(newItem.uniqueId);
-    };
   }
 
   final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
@@ -114,17 +110,27 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   /// add more top leve action buttons
   @override
-  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
-    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
     if (!forInfoPanelTransactions) {
-      // Add a new Category
+      // Add a new Category, place this at the top of the list
       list.insert(
         0,
-        buildAddItemButton(() {
-          // add a new Category
-          final newItem = Data().categories.addNewTopLevelCategory();
-          updateListAndSelect(newItem.uniqueId);
-        }, 'Add new category'),
+        buildAddItemButton(
+          () {
+            // add a new Category
+            final Category? currentSelectedCategory = getFirstSelectedItem() as Category?;
+            final newItem = Data().categories.addNewCategory(parentId: currentSelectedCategory?.uniqueId ?? -1);
+            updateListAndSelect(newItem.uniqueId);
+
+            myShowDialogAndActionsForMoneyObject(
+              context: context,
+              title: getClassNameSingular(),
+              moneyObject: newItem,
+            );
+          },
+          'Add new category',
+        ),
       );
 
       /// Merge

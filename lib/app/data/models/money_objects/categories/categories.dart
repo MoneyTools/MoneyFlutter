@@ -227,10 +227,6 @@ class Categories extends MoneyObjects<Category> {
     return getOrCreateCategory('UnassignedSplit', CategoryType.none);
   }
 
-  Category addNewTopLevelCategory() {
-    return addNewCategory('New Category');
-  }
-
   @override
   void loadDemoData() {
     clear();
@@ -342,9 +338,12 @@ class Categories extends MoneyObjects<Category> {
     );
   }
 
-  Category addNewCategory(final String name) {
+  /// Add a new Category ensure that the name is unique under the parent or root
+  Category addNewCategory({final int parentId = -1, final String name = 'New Cagtegory'}) {
+    Category? parent = Data().categories.get(parentId);
     // find next available name
-    String nextAvailableName = name;
+    String prefixName = parent == null ? name : '${parent.name.value}:$name';
+    String nextAvailableName = prefixName;
     int next = 1;
     while ((getByName(nextAvailableName) != null)) {
       // already taken
@@ -353,8 +352,19 @@ class Categories extends MoneyObjects<Category> {
       next++;
     }
 
+    CategoryType typeToUse = CategoryType.expense;
+
+    if (parent != null) {
+      typeToUse = parent.type.value;
+    }
+
     // add a new Category
-    final Category category = Category(id: -1, name: nextAvailableName, type: CategoryType.expense);
+    final Category category = Category(
+      id: -1,
+      parentId: parentId,
+      name: nextAvailableName,
+      type: typeToUse,
+    );
 
     Data().categories.appendNewMoneyObject(category);
 

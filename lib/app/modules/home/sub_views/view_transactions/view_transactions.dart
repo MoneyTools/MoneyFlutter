@@ -87,8 +87,8 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
-    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
 
     if (!forInfoPanelTransactions && getFirstSelectedItem() != null) {
       // this can go last

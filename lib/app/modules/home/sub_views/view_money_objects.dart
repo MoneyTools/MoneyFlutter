@@ -53,7 +53,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   bool _isMultiSelectionOn = false;
   VoidCallback? onMultiSelect;
 
-  VoidCallback? onAddItem;
   VoidCallback? onEditItems;
   VoidCallback? onDeleteItems;
 
@@ -130,7 +129,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(listToCopy, forSerialization: true));
   }
 
-  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     List<Widget> widgets = [];
 
     /// Info panel header
@@ -229,7 +228,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             },
 
             /// Actions
-            actionButtons: getActionsForSelectedItems,
+            getActionButtons: getActionsButtons,
           ),
         );
       }),
@@ -286,8 +285,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       selectedItems: _selectedItemsByUniqueId,
       description: getDescription(),
       multipleSelection: multipleSelectionOptions,
-      getActionButtonsForSelectedItems: getActionsForSelectedItems,
-      onAddMoneyObject: onAddItem,
+      getActionButtons: getActionsButtons,
       onEditMoneyObject: onEditItems,
       onDeleteMoneyObject: onDeleteItems,
       filterText: _filterByText,

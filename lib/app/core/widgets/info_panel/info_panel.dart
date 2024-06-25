@@ -20,7 +20,7 @@ class InfoPanel extends StatelessWidget {
   final Function(int) currencySelectionChanged;
 
   // Actions
-  final List<Widget> Function(bool) actionButtons;
+  final List<Widget> Function(bool) getActionButtons;
 
   /// Constructor
   const InfoPanel({
@@ -40,7 +40,7 @@ class InfoPanel extends StatelessWidget {
     required this.currencySelectionChanged,
 
     // Actions
-    required this.actionButtons,
+    required this.getActionButtons,
   });
 
   @override
@@ -75,7 +75,7 @@ class InfoPanel extends StatelessWidget {
                 currentSelectionChanged: currencySelectionChanged,
 
                 // Actions
-                actionButtons: actionButtons,
+                actionButtons: getActionButtons,
               ),
               if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, listOfSelectedItemIndex)),
             ],

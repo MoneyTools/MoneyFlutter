@@ -15,7 +15,7 @@ class ViewHeader extends StatelessWidget {
   // Optional, used for multi-selection UX
   final ViewHeaderMultipleSelection? multipleSelection;
 
-  final List<Widget> Function(bool)? getActionButtonsForSelectedItems;
+  final List<Widget> Function(bool)? getActionButtons;
 
   final VoidCallback? onAddMoneyObject;
   final VoidCallback? onMergeMoneyObject;
@@ -43,7 +43,7 @@ class ViewHeader extends StatelessWidget {
 
     // optionals
     this.multipleSelection,
-    this.getActionButtonsForSelectedItems,
+    this.getActionButtons,
     this.onAddMoneyObject,
     this.onMergeMoneyObject,
     this.onEditMoneyObject,
@@ -95,10 +95,8 @@ class ViewHeader extends StatelessWidget {
       ),
     );
 
-    if (multipleSelection != null ||
-        onAddMoneyObject != null ||
-        (selectedItems.value.isNotEmpty && getActionButtonsForSelectedItems != null)) {
-      final listOfActionButtons = getActionButtonsForSelectedItems!(false);
+    if (multipleSelection != null || (getActionButtons != null)) {
+      final listOfActionButtons = getActionButtons!(false);
 
       // Multiple-Selection
       if (multipleSelection != null) {

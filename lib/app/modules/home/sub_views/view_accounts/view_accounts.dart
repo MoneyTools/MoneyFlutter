@@ -52,8 +52,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   void initState() {
     super.initState();
 
-    onAddItem = () {};
-
     onAddTransaction = () {
       showImportTransactionsWizard(context);
     };
@@ -160,8 +158,8 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Widget> getActionsForSelectedItems(final bool forInfoPanelTransactions) {
-    final list = super.getActionsForSelectedItems(forInfoPanelTransactions);
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
 
     if (!forInfoPanelTransactions) {
       // Place this in front off all the other actions button
