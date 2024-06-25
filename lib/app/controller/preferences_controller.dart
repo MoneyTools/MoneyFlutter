@@ -20,6 +20,14 @@ class PreferenceController extends GetxController {
 
   // User choices
 
+  /// Hide/Show Info panel
+  final RxBool _isDetailsPanelExpanded = false.obs;
+  get isDetailsPanelExpanded => _isDetailsPanelExpanded;
+  set isDetailsPanelExpanded(value) {
+    _isDetailsPanelExpanded.value = value;
+    setBool(settingKeyDetailsPanelExpanded, value);
+  }
+
   // Show or Hide Account that are marked as Closed
   /// Hide/Show Closed Accounts
   final RxBool _includeClosedAccounts = false.obs;
@@ -70,6 +78,7 @@ class PreferenceController extends GetxController {
 
   Future<void> loadDefaults() async {
     mru.value = _preferences!.getStringList(settingKeyMRU) ?? [];
+    _isDetailsPanelExpanded.value = getBool(settingKeyDetailsPanelExpanded, false);
     _includeClosedAccounts.value = getBool(settingKeyIncludeClosedAccounts, false);
     _includeRentalManagement.value = getBool(settingKeyRentalsSupport, false);
   }

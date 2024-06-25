@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
@@ -34,6 +35,8 @@ class ViewForMoneyObjects extends StatefulWidget {
 
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   late final ViewId viewId;
+
+  PreferenceController preferenceController = Get.find();
 
   // list management
   List<MoneyObject> list = <MoneyObject>[];
@@ -85,9 +88,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     _fieldToDisplay.setDefinitions(all.definitions.where((element) => element.useAsColumn).toList());
 
     // restore last user choices for this view
-    _sortByFieldIndex = GeneralController().ctlPref.getInt(getPreferenceKey(settingKeySortBy), 0);
-    _sortAscending = GeneralController().ctlPref.getBool(getPreferenceKey(settingKeySortAscending), true);
-    _lastSelectedItemId = GeneralController().ctlPref.getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
+    _sortByFieldIndex = preferenceController.getInt(getPreferenceKey(settingKeySortBy), 0);
+    _sortAscending = preferenceController.getBool(getPreferenceKey(settingKeySortAscending), true);
+    _lastSelectedItemId = preferenceController.getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
 
     final int subViewIndex = GeneralController()
         .ctlPref
@@ -98,10 +101,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     // Filters
 
     // load text filter
-    _filterByText = GeneralController().ctlPref.getString(getPreferenceKey(settingKeyFilterText), '');
+    _filterByText = preferenceController.getString(getPreferenceKey(settingKeyFilterText), '');
 
     // load the column filters
-    GeneralController().ctlPref.getStringList(getPreferenceKey(settingKeyFilterColumnsText)).then((list) {
+    preferenceController.getStringList(getPreferenceKey(settingKeyFilterColumnsText)).then((list) {
       _filterByFieldsValue = FieldFilters.fromList(list);
     });
 
@@ -178,53 +181,55 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   @override
   Widget build(final BuildContext context) {
     return buildViewContent(
-      AdaptiveViewWithList(
-        key: Key('${GeneralController().ctlPref.includeClosedAccounts}|${list.length}'),
-        top: buildHeader(),
-        list: list,
-        fieldDefinitions: _fieldToDisplay.definitions,
-        filters: _filterByFieldsValue,
-        selectedItemsByUniqueId: _selectedItemsByUniqueId,
-        sortByFieldIndex: _sortByFieldIndex,
-        sortAscending: _sortAscending,
-        isMultiSelectionOn: _isMultiSelectionOn,
-        onColumnHeaderTap: changeListSortOrder,
-        onColumnHeaderLongPress: onCustomizeColumn,
-        getColumnFooterWidget: getColumnFooterWidget,
-        onSelectionChanged: (int _) {
-          _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
-          saveLastUserChoicesOfView();
-        },
-        onItemTap: onItemTap,
-        flexBottom: GeneralController().isDetailsPanelExpanded ? 1 : 0,
-        bottom: InfoPanel(
-          isExpanded: GeneralController().isDetailsPanelExpanded,
-          onExpanded: (final bool isExpanded) {
-            setState(() {
-              GeneralController().isDetailsPanelExpanded = isExpanded;
-              GeneralController().preferrenceSave();
-            });
+      Obx(() {
+        return AdaptiveViewWithList(
+          key: Key('${preferenceController.includeClosedAccounts}|${list.length}'),
+          top: buildHeader(),
+          list: list,
+          fieldDefinitions: _fieldToDisplay.definitions,
+          filters: _filterByFieldsValue,
+          selectedItemsByUniqueId: _selectedItemsByUniqueId,
+          sortByFieldIndex: _sortByFieldIndex,
+          sortAscending: _sortAscending,
+          isMultiSelectionOn: _isMultiSelectionOn,
+          onColumnHeaderTap: changeListSortOrder,
+          onColumnHeaderLongPress: onCustomizeColumn,
+          getColumnFooterWidget: getColumnFooterWidget,
+          onSelectionChanged: (int _) {
+            _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
+            saveLastUserChoicesOfView();
           },
-          selectedItems: _selectedItemsByUniqueId,
+          onItemTap: onItemTap,
+          flexBottom: preferenceController.isDetailsPanelExpanded.value ? 1 : 0,
+          bottom: InfoPanel(
+            isExpanded: preferenceController.isDetailsPanelExpanded.value,
+            onExpanded: (final bool isExpanded) {
+              setState(() {
+                preferenceController.isDetailsPanelExpanded = isExpanded;
+                GeneralController().preferrenceSave();
+              });
+            },
+            selectedItems: _selectedItemsByUniqueId,
 
-          // SubView
-          subPanelSelected: _selectedBottomTabId,
-          subPanelSelectionChanged: updateBottomContent,
-          subPanelContent: getInfoPanelContent,
+            // SubView
+            subPanelSelected: _selectedBottomTabId,
+            subPanelSelectionChanged: updateBottomContent,
+            subPanelContent: getInfoPanelContent,
 
-          // Currency
-          getCurrencyChoices: getCurrencyChoices,
-          currencySelected: _selectedCurrency,
-          currencySelectionChanged: (final int selected) {
-            setState(() {
-              _selectedCurrency = selected;
-            });
-          },
+            // Currency
+            getCurrencyChoices: getCurrencyChoices,
+            currencySelected: _selectedCurrency,
+            currencySelectionChanged: (final int selected) {
+              setState(() {
+                _selectedCurrency = selected;
+              });
+            },
 
-          /// Actions
-          actionButtons: getActionsForSelectedItems,
-        ),
-      ),
+            /// Actions
+            actionButtons: getActionsForSelectedItems,
+          ),
+        );
+      }),
     );
   }
 
@@ -464,7 +469,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       }
 
       // persist the last selected item index
-      GeneralController().ctlPref.setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
+      preferenceController.setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
     });
   }
 
@@ -566,13 +571,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void saveLastUserChoicesOfView() {
     // Persist users choice
-    GeneralController().ctlPref.setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
-    GeneralController().ctlPref.setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
+    preferenceController.setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
+    preferenceController.setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
     GeneralController()
         .ctlPref
         .setInt(getPreferenceKey(settingKeySelectedListItemId), getUniqueIdOfFirstSelectedItem() ?? -1);
-    GeneralController().ctlPref.setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
-    GeneralController().ctlPref.setString(getPreferenceKey(settingKeyFilterText), _filterByText);
+    preferenceController.setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
+    preferenceController.setString(getPreferenceKey(settingKeyFilterText), _filterByText);
     GeneralController()
         .ctlPref
         .setStringList(getPreferenceKey(settingKeyFilterColumnsText), _filterByFieldsValue.toStringList());

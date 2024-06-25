@@ -54,16 +54,6 @@ class GeneralController extends GetxController {
     debugLog('selectedView $value');
   }
 
-  /// Hide/Show Info panel
-  bool _isDetailsPanelExpanded = false;
-
-  bool get isDetailsPanelExpanded => _isDetailsPanelExpanded;
-
-  set isDetailsPanelExpanded(bool value) {
-    _isDetailsPanelExpanded = value;
-    update();
-  }
-
   CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
   int cashflowRecurringOccurrences = 12;
   String apiKeyForStocks = '';
@@ -107,7 +97,6 @@ class GeneralController extends GetxController {
         intValueOrDefault(ctlPref.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
     cashflowRecurringOccurrences = ctlPref.getInt(settingKeyCashflowRecurringOccurrences, 12);
     apiKeyForStocks = ctlPref.getString(settingKeyStockApiKey, '');
-    isDetailsPanelExpanded = ctlPref.getBool(settingKeyDetailsPanelExpanded) == true;
 
     isPreferenceLoaded = true;
     return true;
