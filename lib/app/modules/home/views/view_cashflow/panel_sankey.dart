@@ -3,7 +3,7 @@
 import 'dart:math';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:money/app/core/theme/theme_controler.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';

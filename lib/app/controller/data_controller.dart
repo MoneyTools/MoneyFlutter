@@ -12,6 +12,8 @@ import 'package:path/path.dart' as p;
 import 'dart:io';
 
 class DataController extends GetxController {
+  static DataController get to => Get.find();
+
   // Observable variables
   RxBool isLoading = true.obs;
   RxList<String> data = <String>[].obs;

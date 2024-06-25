@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/core/theme/theme_controler.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/modules/home/views/app_title.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -207,10 +207,10 @@ class _MyAppBarState extends State<MyAppBar> {
         child: ZoomIncreaseDecrease(
           title: 'Zoom',
           onDecrease: () {
-            GeneralController().fontScaleDecrease();
+            ThemeController.to.fontScaleDecrease();
           },
           onIncrease: () {
-            GeneralController().fontScaleIncrease();
+            ThemeController.to.fontScaleIncrease();
           },
         ),
       ),

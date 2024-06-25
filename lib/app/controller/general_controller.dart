@@ -18,6 +18,8 @@ import 'package:money/app/core/widgets/snack_bar.dart';
 export 'package:money/app/controller/preferences_controller.dart';
 
 class GeneralController extends GetxController {
+  static GeneralController get to => Get.find();
+
   static final GeneralController _singleton = GeneralController._internal();
 
   factory GeneralController() {
@@ -57,36 +59,6 @@ class GeneralController extends GetxController {
   CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
   int cashflowRecurringOccurrences = 12;
   String apiKeyForStocks = '';
-
-  //--------------------------------------------------------
-  // Font scaling
-
-  void fontScaleDecrease() {
-    fontScaleDelta(-0.10);
-  }
-
-  void fontScaleIncrease() {
-    fontScaleDelta(0.10);
-  }
-
-  void fontScaleMultiplyBy(final double factor) {
-    setFontScaleTo(ctlPref.textScale * factor);
-  }
-
-  void fontScaleDelta(final double addOrSubtract) {
-    setFontScaleTo(ctlPref.textScale + addOrSubtract);
-  }
-
-  bool setFontScaleTo(final double newScale) {
-    final int cleanValue = (newScale * 100).round();
-    if (isBetweenOrEqual(cleanValue, 40, 400)) {
-      ctlPref.textScale = cleanValue / 100.0;
-      preferrenceSave();
-      update();
-      return true;
-    }
-    return false;
-  }
 
   Future<bool> preferrenceLoad() async {
     cashflowViewAs = CashflowViewAs.values[

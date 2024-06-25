@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/general_controller.dart';
+import 'package:money/app/controller/theme_controler.dart';
 
 /// ( - )  100% ( + )
 class ZoomIncreaseDecrease extends StatefulWidget {
@@ -49,7 +50,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
           child: TextButton(
               onPressed: () {
                 setState(() {
-                  GeneralController().setFontScaleTo(1.0);
+                  ThemeController.to.setFontScaleTo(1.0);
                   updateZoomTextFromValue();
                 });
               },

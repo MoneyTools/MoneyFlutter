@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/core/theme/theme_controler.dart';
+import 'package:money/app/controller/keyboard_controller.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/modules/settings/settings_routes.dart';
 import 'package:money/app/controller/data_controller.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
   final GeneralController settingController = Get.put(GeneralController());
   final PreferenceController preferenceController = Get.put(PreferenceController());
   final DataController dataController = Get.put(DataController());
+  final ShortcutController shortcutController = Get.put(ShortcutController());
 
   MyApp({super.key});
 

@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 /// Tracking changes of data
 class DataMutations extends GetxController {
+  static DataMutations get to => Get.find();
+
   RxInt added = 0.obs;
   RxInt changed = 0.obs;
   RxInt deleted = 0.obs;

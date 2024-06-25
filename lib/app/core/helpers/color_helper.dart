@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/core/theme/theme_controler.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 
 Color addHintOfGreenToColor(Color color, [int hint = 50]) {

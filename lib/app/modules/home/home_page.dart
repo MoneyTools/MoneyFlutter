@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/modules/home/home_subview_controller.dart';
@@ -9,7 +8,6 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/modules/home/views/app_menu.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/controller/general_controller.dart';
-import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/app/modules/home/views/app_scaffold.dart';
 import 'package:money/app/modules/home/views/view_accounts/view_accounts.dart';
 import 'package:money/app/modules/home/views/view_aliases/view_aliases.dart';
@@ -22,7 +20,6 @@ import 'package:money/app/modules/home/views/view_rentals/view_rentals.dart';
 import 'package:money/app/modules/home/views/view_stocks/view_stocks.dart';
 import 'package:money/app/modules/home/views/view_transactions/view_transactions.dart';
 import 'package:money/app/modules/home/views/view_transfers/view_transfers.dart';
-import 'package:money/app/core/widgets/keyboard_widget.dart';
 import 'package:money/app/core/widgets/working.dart';
 
 import 'home_controller.dart';
@@ -96,57 +93,6 @@ class HomePage extends GetView<HomeController> {
         ),
       ],
     );
-  }
-
-  // ignore: unused_element
-  List<KeyAction> _getKeyboardBindings(final BuildContext context) {
-    return <KeyAction>[
-      KeyAction(
-        LogicalKeyboardKey.equal,
-        'Increase text size',
-        () {
-          GeneralController().fontScaleIncrease();
-        },
-        isMetaPressed: true,
-      ),
-      KeyAction(
-        LogicalKeyboardKey.minus,
-        'Decrease text size',
-        () {
-          GeneralController().fontScaleDecrease();
-        },
-        isMetaPressed: true,
-      ),
-      KeyAction(
-        LogicalKeyboardKey('0'.codeUnitAt(0)),
-        'Normal text size',
-        () {
-          GeneralController().setFontScaleTo(1);
-        },
-        isMetaPressed: true,
-      ),
-      KeyAction(
-        LogicalKeyboardKey('t'.codeUnitAt(0)),
-        'Add transactions',
-        () => showImportTransactionsFromTextInput(context, ''),
-        isMetaPressed: true,
-      ),
-      KeyAction(
-        LogicalKeyboardKey('v'.codeUnitAt(0)),
-        'Paste',
-        () async {
-          Clipboard.getData('text/plain').then((final ClipboardData? value) {
-            if (value != null) {
-              showImportTransactionsFromTextInput(
-                context,
-                value.text ?? '',
-              );
-            }
-          });
-        },
-        isMetaPressed: true,
-      ),
-    ];
   }
 
   Widget _getSubView() {

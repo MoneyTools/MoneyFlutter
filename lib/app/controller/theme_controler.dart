@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 // import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController extends GetxController {
+  static ThemeController get to => Get.find();
+
   RxBool isDarkTheme = false.obs;
   RxInt colorSelected = 0.obs;
 
@@ -52,7 +56,6 @@ class ThemeController extends GetxController {
     final ThemeData themeData = ThemeData(
       colorSchemeSeed: colorOptions[colorSelected.value],
       brightness: Brightness.light,
-      // textTheme: Typography.material2021().black.apply(fontSizeFactor: PreferenceController.to.textScale),
     );
     return themeData;
   }
@@ -66,10 +69,36 @@ class ThemeController extends GetxController {
     final ThemeData themeData = ThemeData(
       colorSchemeSeed: colorOptions[colorSelected.value],
       brightness: Brightness.dark,
-      // textTheme: Typography.material2021().white.apply(
-      //       fontSizeDelta: PreferenceController.to.textScale,
-      //     ),
     );
     return themeData;
+  }
+
+  //--------------------------------------------------------
+  // Font scaling
+
+  void fontScaleDecrease() {
+    fontScaleDelta(-0.10);
+  }
+
+  void fontScaleIncrease() {
+    fontScaleDelta(0.10);
+  }
+
+  void fontScaleMultiplyBy(final double factor) {
+    setFontScaleTo(PreferenceController.to.textScale * factor);
+  }
+
+  void fontScaleDelta(final double addOrSubtract) {
+    setFontScaleTo(PreferenceController.to.textScale + addOrSubtract);
+  }
+
+  bool setFontScaleTo(final double newScale) {
+    final int cleanValue = (newScale * 100).round();
+    if (isBetweenOrEqual(cleanValue, 40, 400)) {
+      PreferenceController.to.textScale = cleanValue / 100.0;
+
+      return true;
+    }
+    return false;
   }
 }
