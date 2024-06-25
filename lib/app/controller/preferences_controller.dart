@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/controller/data_controller.dart';
@@ -67,13 +68,19 @@ class PreferenceController extends GetxController {
   }
 
   ///---------------------------------
-  // Observable enum
+  /// Observable enum
   Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
 
   // Methods to update the current view
   void setView(ViewId view) {
     currentView.value = view;
   }
+
+  ///---------------------------------
+  //
+  RxString apiKeyForStocks = ''.obs;
+  RxInt cashflowRecurringOccurrences = 12.obs;
+  Rx<CashflowViewAs> cashflowViewAs = CashflowViewAs.sankey.obs;
 
   @override
   void onInit() async {
@@ -104,6 +111,10 @@ class PreferenceController extends GetxController {
     _isDetailsPanelExpanded.value = getBool(settingKeyDetailsPanelExpanded, false);
     _includeClosedAccounts.value = getBool(settingKeyIncludeClosedAccounts, false);
     _includeRentalManagement.value = getBool(settingKeyRentalsSupport, false);
+
+    cashflowViewAs.value = CashflowViewAs.values[getInt(settingKeyCashflowView, CashflowViewAs.sankey.index)];
+    cashflowRecurringOccurrences.value = getInt(settingKeyCashflowRecurringOccurrences, 12);
+    apiKeyForStocks.value = getString(settingKeyStockApiKey, '');
   }
 
   void addToMRU(String filePathAndName) {

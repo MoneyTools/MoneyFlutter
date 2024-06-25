@@ -46,7 +46,6 @@ class DataController extends GetxController {
 
   Future<void> loadDemoData() async {
     isLoading.value = true;
-    GeneralController().preferrenceSave();
     Data().loadFromDemoData();
     isLoading.value = false;
   }

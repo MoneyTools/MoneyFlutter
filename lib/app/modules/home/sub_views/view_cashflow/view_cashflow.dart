@@ -71,7 +71,7 @@ class ViewCashFlowState extends ViewWidgetState {
         // View
         Expanded(
           child: Container(
-            key: Key(GeneralController().cashflowViewAs.toString() +
+            key: Key(PreferenceController.to.cashflowViewAs.value.toString() +
                 selectedYearStart.toString() +
                 selectedYearEnd.toString()),
             // rebuild if the date changes
@@ -88,7 +88,7 @@ class ViewCashFlowState extends ViewWidgetState {
       return const NoTransaction();
     }
 
-    switch (GeneralController().cashflowViewAs) {
+    switch (PreferenceController.to.cashflowViewAs.value) {
       case CashflowViewAs.sankey:
         return PanelSanKey(minYear: this.selectedYearStart, maxYear: this.selectedYearEnd);
       case CashflowViewAs.recurringIncomes:
@@ -96,14 +96,14 @@ class ViewCashFlowState extends ViewWidgetState {
           dateRangeSearch: dateRangeTransactions,
           minYear: this.selectedYearStart,
           maxYear: this.selectedYearEnd,
-          viewRecurringAs: GeneralController().cashflowViewAs,
+          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
         );
       case CashflowViewAs.recurringExpenses:
         return PanelRecurrings(
           dateRangeSearch: dateRangeTransactions,
           minYear: this.selectedYearStart,
           maxYear: this.selectedYearEnd,
-          viewRecurringAs: GeneralController().cashflowViewAs,
+          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
         );
     }
   }
@@ -120,13 +120,12 @@ class ViewCashFlowState extends ViewWidgetState {
           children: [
             Text('Cash Flow', style: getTextTheme(context).titleLarge, textAlign: TextAlign.start),
             _buildSelectView(),
-            if (GeneralController().cashflowViewAs != CashflowViewAs.sankey)
+            if (PreferenceController.to.cashflowViewAs.value != CashflowViewAs.sankey)
               NumberPicker(
                 title: 'Occurrence',
-                selectedNumber: GeneralController().cashflowRecurringOccurrences,
+                selectedNumber: PreferenceController.to.cashflowRecurringOccurrences.value,
                 onChanged: (int value) {
-                  GeneralController().cashflowRecurringOccurrences = value;
-                  GeneralController().preferrenceSave();
+                  PreferenceController.to.cashflowRecurringOccurrences.value = value;
                 },
               ),
           ],
@@ -170,11 +169,10 @@ class ViewCashFlowState extends ViewWidgetState {
           label: Text('Expenses'),
         ),
       ],
-      selected: <CashflowViewAs>{GeneralController().cashflowViewAs},
+      selected: <CashflowViewAs>{PreferenceController.to.cashflowViewAs.value},
       onSelectionChanged: (final Set<CashflowViewAs> newSelection) {
         setState(() {
-          GeneralController().cashflowViewAs = newSelection.first;
-          GeneralController().preferrenceSave();
+          PreferenceController.to.cashflowViewAs.value = newSelection.first;
         });
       },
     );

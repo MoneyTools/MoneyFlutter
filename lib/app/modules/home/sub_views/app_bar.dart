@@ -258,6 +258,6 @@ class _MyAppBarState extends State<MyAppBar> {
         final ThemeController themeController = Get.find();
         themeController.setThemeColor(value);
     }
-    GeneralController().preferrenceSave();
+    GeneralController().update();
   }
 }

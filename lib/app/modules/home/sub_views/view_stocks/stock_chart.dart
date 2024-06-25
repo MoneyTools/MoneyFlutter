@@ -30,7 +30,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   void getStockHistoricalData() async {
     // Do we have the API Key to start
-    if (GeneralController().apiKeyForStocks.isEmpty) {
+    if (PreferenceController.to.apiKeyForStocks.value.isEmpty) {
       setState(() {
         this.errorMessage = 'Please setup the API Key for accessing https://twelvedata.com.';
       });
@@ -62,16 +62,16 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   @override
   Widget build(BuildContext context) {
-    if (GeneralController().apiKeyForStocks.isEmpty || lastStatus == StockLookupStatus.invalidApiKey) {
+    if (PreferenceController.to.apiKeyForStocks.value.isEmpty || lastStatus == StockLookupStatus.invalidApiKey) {
       return Center(
         child: ElevatedButton(
           onPressed: () {
             showTextInputDialog(
               context: context,
               title: 'API Key',
-              initialValue: GeneralController().apiKeyForStocks,
+              initialValue: PreferenceController.to.apiKeyForStocks.value,
               onContinue: (final String text) {
-                GeneralController().apiKeyForStocks = text;
+                PreferenceController.to.apiKeyForStocks.value = text;
               },
             );
           },

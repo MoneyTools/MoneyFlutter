@@ -33,36 +33,6 @@ class GeneralController extends GetxController {
   PreferenceController get ctlPref => Get.find();
   DataController get ctlData => Get.find();
 
-  /// State for Preferences
-  bool _isPreferenceLoaded = false;
-
-  bool get isPreferenceLoaded => _isPreferenceLoaded;
-
-  set isPreferenceLoaded(bool value) {
-    _isPreferenceLoaded = value;
-    update();
-  }
-
-  CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
-  int cashflowRecurringOccurrences = 12;
-  String apiKeyForStocks = '';
-
-  Future<bool> preferrenceLoad() async {
-    cashflowViewAs = CashflowViewAs.values[
-        intValueOrDefault(ctlPref.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
-    cashflowRecurringOccurrences = ctlPref.getInt(settingKeyCashflowRecurringOccurrences, 12);
-    apiKeyForStocks = ctlPref.getString(settingKeyStockApiKey, '');
-
-    isPreferenceLoaded = true;
-    return true;
-  }
-
-  void preferrenceSave() {
-    ctlPref.setInt(settingKeyCashflowView, cashflowViewAs.index);
-    ctlPref.setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
-    ctlPref.setString(settingKeyStockApiKey, apiKeyForStocks);
-  }
-
   void closeFile([bool rebuild = true]) {
     Data().close();
     ctlData.dataFileIsClosed();

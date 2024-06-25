@@ -43,7 +43,7 @@ class SettingsPage extends GetView<GetxController> {
                 decoration: const InputDecoration(
                   labelText: 'Stock service API key',
                 ),
-                controller: TextEditingController()..text = GeneralController().apiKeyForStocks,
+                controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks.value,
               ),
               gapLarge(),
               const TextField(

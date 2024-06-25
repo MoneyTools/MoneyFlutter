@@ -7,6 +7,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:get/get.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/view_cashflow.dart';
 
@@ -18,6 +20,8 @@ class DummyHostingApp extends StatefulWidget {
 }
 
 class DummyHostingAppState extends State<DummyHostingApp> {
+  final PreferenceController preferenceController = Get.put(PreferenceController());
+
   @override
   Widget build(final BuildContext context) {
     Data().recalculateBalances();

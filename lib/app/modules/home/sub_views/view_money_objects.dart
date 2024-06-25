@@ -208,7 +208,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             onExpanded: (final bool isExpanded) {
               setState(() {
                 preferenceController.isDetailsPanelExpanded = isExpanded;
-                GeneralController().preferrenceSave();
               });
             },
             selectedItems: _selectedItemsByUniqueId,

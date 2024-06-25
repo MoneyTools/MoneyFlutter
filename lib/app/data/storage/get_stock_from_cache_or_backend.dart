@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
@@ -85,7 +84,7 @@ Future<StockLookupStatus> loadFromCache(final String symbol, List<StockPrice> pr
 Future<StockLookupStatus> loadFromBackend(String symbol, List<StockPrice> prices) async {
   prices.clear();
 
-  if (GeneralController().apiKeyForStocks.isEmpty) {
+  if (PreferenceController.to.apiKeyForStocks.value.isEmpty) {
     // No API Key to make the backend request
     return StockLookupStatus.invalidApiKey;
   }
@@ -93,7 +92,7 @@ Future<StockLookupStatus> loadFromBackend(String symbol, List<StockPrice> prices
   DateTime tenYearsInThePast = DateTime.now().subtract(const Duration(days: 365 * 10));
 
   final Uri uri = Uri.parse(
-      'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${tenYearsInThePast.toIso8601String()}&apikey=${GeneralController().apiKeyForStocks}');
+      'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${tenYearsInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks.value}');
 
   final http.Response response = await http.get(uri);
 
