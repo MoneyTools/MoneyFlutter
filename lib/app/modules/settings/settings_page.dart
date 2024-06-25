@@ -7,7 +7,7 @@ import 'package:money/app/core/widgets/text_title.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/views/app_scaffold.dart';
+import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
 class SettingsPage extends GetView<GetxController> {
   static SettingsPage get to => Get.find();

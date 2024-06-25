@@ -5,7 +5,7 @@ import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 class LoanPayment extends MoneyObject {
   static final Fields<LoanPayment> _fields = Fields<LoanPayment>();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/modules/home/views/app_scaffold.dart';
+import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
 ///
 class FullScreenDialog extends StatefulWidget {

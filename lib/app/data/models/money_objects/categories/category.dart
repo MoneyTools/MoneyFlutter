@@ -10,7 +10,7 @@ import 'package:money/app/data/models/money_objects/categories/category_types.da
 import 'package:money/app/data/models/money_objects/categories/picker_category_type.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/app/core/widgets/circle.dart';
 import 'package:money/app/core/widgets/color_picker.dart';
 import 'package:money/app/core/widgets/gaps.dart';

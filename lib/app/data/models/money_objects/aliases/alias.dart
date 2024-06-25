@@ -4,7 +4,7 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/aliases/alias_types.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
-import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 // Export
 export 'package:money/app/data/models/money_objects/aliases/alias_types.dart';

@@ -8,8 +8,8 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/views/view_rentals/rental_pnl.dart';
-import 'package:money/app/modules/home/views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 
 import '../accounts/account.dart';
