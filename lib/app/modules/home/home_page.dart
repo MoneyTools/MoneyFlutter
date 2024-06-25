@@ -4,7 +4,7 @@ import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/modules/home/sub_views/app_bar.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/modules/home/sub_views/app_menu.dart';
+import 'package:money/app/modules/home/sub_views/sub_view_selection.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
@@ -57,7 +57,7 @@ class HomePage extends GetView<HomeController> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          MenuVertical(
+          SubViewSelectionVertical(
             key: Key(PreferenceController.to.currentView.value.toString()),
             onSelectItem: _handleSubViewSelectionChanged,
             selectedView: PreferenceController.to.currentView.value,
@@ -80,7 +80,7 @@ class HomePage extends GetView<HomeController> {
         Expanded(
           child: _getSubView(),
         ),
-        MenuHorizontal(
+        SubViewSelectionHorizontal(
             key: Key(PreferenceController.to.currentView.value.toString()),
             onSelected: _handleSubViewSelectionChanged,
             selectedView: PreferenceController.to.currentView.value),

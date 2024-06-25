@@ -93,21 +93,21 @@ List<NavigationRailDestination> getNavRailDestination() {
   return navRailDestinations.toList();
 }
 
-class MenuHorizontal extends StatefulWidget {
+class SubViewSelectionHorizontal extends StatefulWidget {
   final void Function(ViewId) onSelected;
   final ViewId selectedView;
 
-  const MenuHorizontal({
+  const SubViewSelectionHorizontal({
     super.key,
     required this.onSelected,
     required this.selectedView,
   });
 
   @override
-  State<MenuHorizontal> createState() => MenuHorizontalState();
+  State<SubViewSelectionHorizontal> createState() => SubViewSelectionHorizontalState();
 }
 
-class MenuHorizontalState extends State<MenuHorizontal> {
+class SubViewSelectionHorizontalState extends State<SubViewSelectionHorizontal> {
   ViewId _selectedView = ViewId.viewCashFlow;
 
   @override
@@ -136,12 +136,12 @@ class MenuHorizontalState extends State<MenuHorizontal> {
   }
 }
 
-class MenuVertical extends StatefulWidget {
+class SubViewSelectionVertical extends StatefulWidget {
   final void Function(ViewId) onSelectItem;
   final ViewId selectedView;
   final bool useIndicator;
 
-  const MenuVertical({
+  const SubViewSelectionVertical({
     super.key,
     required this.onSelectItem,
     required this.selectedView,
@@ -149,10 +149,10 @@ class MenuVertical extends StatefulWidget {
   });
 
   @override
-  State<MenuVertical> createState() => MenuVerticalState();
+  State<SubViewSelectionVertical> createState() => SubViewSelectionVerticalState();
 }
 
-class MenuVerticalState extends State<MenuVertical> {
+class SubViewSelectionVerticalState extends State<SubViewSelectionVertical> {
   ViewId _selectedView = ViewId.viewCashFlow;
 
   @override
