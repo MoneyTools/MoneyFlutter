@@ -66,7 +66,6 @@ class PreferenceController extends GetxController {
     setBool(settingKeyRentalsSupport, value);
   }
 
-
   ///---------------------------------
   // Observable enum
   Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
@@ -81,15 +80,6 @@ class PreferenceController extends GetxController {
     debugLog('PrefereceContoller.onInit()');
     super.onInit();
     await initPrefs();
-  }
-
-  Future<void> initPrefs() async {
-    _preferences = await SharedPreferences.getInstance();
-
-    await loadDefaults();
-
-    isReady.value = true;
-
     if (mru.isNotEmpty) {
       // debugLog('PrefereceContoller.loadLastFile');
       DataController dataController = Get.find();
@@ -101,6 +91,12 @@ class PreferenceController extends GetxController {
         Get.offNamed(Constants.routeWelcomePage);
       });
     }
+  }
+
+  Future<void> initPrefs() async {
+    _preferences = await SharedPreferences.getInstance();
+    await loadDefaults();
+    isReady.value = true;
   }
 
   Future<void> loadDefaults() async {

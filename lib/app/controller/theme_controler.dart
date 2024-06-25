@@ -10,6 +10,7 @@ class ThemeController extends GetxController {
 
   RxBool isDarkTheme = false.obs;
   RxInt colorSelected = 0.obs;
+  Color primaryColor = Colors.grey;
 
   @override
   void onInit() {
@@ -17,27 +18,38 @@ class ThemeController extends GetxController {
     loadThemeFromPreferences();
   }
 
+  void loadThemeFromPreferences() async {
+    if (!PreferenceController.to.isReady.value) {
+      await PreferenceController.to.initPrefs();
+    }
+    isDarkTheme.value = PreferenceController.to.getBool(settingKeyDarkMode, false);
+    colorSelected.value = PreferenceController.to.getInt(settingKeyTheme, 0);
+    updateTheme();
+  }
+
   void toggleThemeMode() {
     isDarkTheme.value = !isDarkTheme.value;
+    primaryColor = themeData.colorScheme.primary;
     saveThemeToPreferences();
-    Get.changeTheme(themeData);
+    updateTheme();
   }
 
   void setThemeColor(final int index) {
     colorSelected.value = index;
+    primaryColor = themeData.colorScheme.primary;
     saveThemeToPreferences();
-    Get.changeTheme(themeData);
-  }
-
-  void loadThemeFromPreferences() async {
-    isDarkTheme.value = PreferenceController.to.getBool(settingKeyDarkMode, false);
-    colorSelected.value = PreferenceController.to.getInt(settingKeyTheme, 0);
-    Get.changeTheme(themeData);
+    updateTheme();
   }
 
   void saveThemeToPreferences() async {
     PreferenceController.to.setBool(settingKeyDarkMode, isDarkTheme.value);
     PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
+  }
+
+  /// this will rebuild the app to use the current theme
+  void updateTheme() {
+    primaryColor = themeData.colorScheme.primary;
+    Get.changeTheme(themeData);
   }
 
   ThemeData get themeData {

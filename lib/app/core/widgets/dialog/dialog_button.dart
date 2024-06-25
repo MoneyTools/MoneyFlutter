@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/widgets.dart';
@@ -119,12 +120,12 @@ Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
           children: [
             Expanded(
               child: ThreePartLabel(
-                icon: Icon(listOfViewToJumpTo[i].icon),
+                icon: const Icon(Icons.menu_open_outlined),
                 text1: listOfViewToJumpTo[i].title,
                 small: true,
               ),
             ),
-            const Icon(Icons.menu_open_outlined),
+            Icon(listOfViewToJumpTo[i].icon),
           ],
         ),
       ),
@@ -149,6 +150,10 @@ PopupMenuButton<int> myPopupMenuIconButton({
     icon: Icon(icon),
     tooltip: tooltip,
     position: PopupMenuPosition.under,
+    shape: RoundedRectangleBorder(
+      side: BorderSide(color: ThemeController.to.primaryColor, width: 2), // Set the border color and width
+      borderRadius: BorderRadius.circular(8), // Set the border radius
+    ),
     itemBuilder: (final BuildContext context) {
       return list;
     },
