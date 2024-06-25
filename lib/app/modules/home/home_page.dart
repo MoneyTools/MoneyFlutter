@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/modules/home/sub_views/app_bar.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/modules/home/sub_views/sub_view_selection.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/view_accounts.dart';
 import 'package:money/app/modules/home/sub_views/view_aliases/view_aliases.dart';
@@ -91,7 +92,7 @@ class HomePage extends GetView<HomeController> {
   Widget _getSubView() {
     switch (PreferenceController.to.currentView.value) {
       case ViewId.viewAccounts:
-        return ViewAccounts(includeClosedAccount: GeneralController().ctlPref.includeClosedAccounts);
+        return ViewAccounts(includeClosedAccount: PreferenceController.to.includeClosedAccounts);
 
       case ViewId.viewCategories:
         return const ViewCategories();

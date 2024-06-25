@@ -1,13 +1,14 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/panel_sankey.dart';

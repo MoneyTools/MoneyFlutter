@@ -56,7 +56,7 @@ class ShortcutController extends GetxController {
         LogicalKeyboardKey.equal,
         'Increase text size',
         () {
-          GeneralController().fontScaleIncrease();
+          DataController.to.fontScaleIncrease();
         },
         isMetaPressed: true,
       ),
@@ -64,7 +64,7 @@ class ShortcutController extends GetxController {
         LogicalKeyboardKey.minus,
         'Decrease text size',
         () {
-          GeneralController().fontScaleDecrease();
+          DataController.to.fontScaleDecrease();
         },
         isMetaPressed: true,
       ),
@@ -72,7 +72,7 @@ class ShortcutController extends GetxController {
         LogicalKeyboardKey('0'.codeUnitAt(0)),
         'Normal text size',
         () {
-          GeneralController().setFontScaleTo(1);
+          DataController.to.setFontScaleTo(1);
         },
         isMetaPressed: true,
       ),

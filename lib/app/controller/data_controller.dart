@@ -1,11 +1,13 @@
-import 'dart:typed_data';
-
+// ignore_for_file: unnecessary_this
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/data/data_mutations.dart';
 import 'package:path/path.dart' as p;
@@ -51,7 +53,7 @@ class DataController extends GetxController {
   }
 
   Future<void> loadFile(final DataSource dataSource) async {
-    GeneralController().closeFile(false); // ensure that we closed current file and state
+    this.closeFile(false); // ensure that we closed current file and state
 
     await Data().loadFromPath(dataSource).then((final bool success) async {
       if (success) {
@@ -69,10 +71,9 @@ class DataController extends GetxController {
   Future<void> loadLastFileSaved() async {
     try {
       isLoading.value = true;
-      final PreferenceController preferenceController = Get.find();
 
-      if (preferenceController.mru.isNotEmpty) {
-        await loadFile(DataSource(preferenceController.mru.first));
+      if (PreferenceController.to.mru.isNotEmpty) {
+        await loadFile(DataSource(PreferenceController.to.mru.first));
         return;
       } else {
         // Once the file is loaded, navigate to the main screen
@@ -112,6 +113,120 @@ class DataController extends GetxController {
     } catch (e) {
       return null;
     }
+  }
+
+  void closeFile([bool rebuild = true]) {
+    Data().close();
+    DataController.to.dataFileIsClosed();
+    DataController.to.trackMutations.reset();
+  }
+
+  void onFileNew() async {
+    this.closeFile();
+
+    Data().accounts.addNewAccount('New Bank Account');
+    PreferenceController.to.setView(ViewId.viewAccounts);
+  }
+
+  Future<void> loadFileFromPath(final DataSource dataSource) async {
+    final DataController dataController = Get.find();
+    dataController.loadFile(dataSource);
+  }
+
+  void onShowFileLocation() async {
+    String path = await DataController.to.generateNextFolderToSaveTo();
+    showLocalFolder(path);
+  }
+
+  void onSaveToCsv() async {
+    final String fullPathToFileName = await Data().saveToCsv();
+
+    PreferenceController.to.addToMRU(fullPathToFileName);
+
+    Data().assessMutationsCountOfAllModels();
+  }
+
+  void onSaveToSql() async {
+    String fileNameAndPath = DataController.to.currentLoadedFileName.value;
+
+    if (fileNameAndPath.isEmpty) {
+      // this happens if the user started with a new file and click save to SQL
+      fileNameAndPath = await DataController.to.defaultFolderToSaveTo('mymoney.mmdb');
+    }
+
+    Data().saveToSql(
+        filePathToLoad: fileNameAndPath,
+        callbackWhenLoaded: (final bool success, final String message) {
+          if (success) {
+            Data().assessMutationsCountOfAllModels();
+          } else {
+            SnackBarService.displayError(autoDismiss: false, message: message);
+          }
+        });
+
+    PreferenceController.to.addToMRU(fileNameAndPath);
+  }
+
+  Future<bool> onFileOpen() async {
+    FilePickerResult? pickerResult;
+
+    const supportedFileTypes = <String>[
+      'mmdb',
+      'mmcsv',
+      'sdf',
+      'qfx',
+      'ofx',
+      'json',
+    ];
+
+    try {
+      // WEB
+      if (kIsWeb) {
+        pickerResult = await FilePicker.platform.pickFiles(
+          type: FileType.any,
+        );
+      } else
+      // Mobile
+      if (Platform.isAndroid || Platform.isIOS) {
+        // See https://github.com/miguelpruivo/flutter_file_picker/issues/729
+        pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
+      } else
+      // Desktop
+      {
+        pickerResult = await FilePicker.platform.pickFiles(
+          type: FileType.custom,
+          allowedExtensions: supportedFileTypes,
+        );
+      }
+    } catch (e) {
+      debugLog(e.toString());
+      SnackBarService.displayError(message: e.toString());
+      return false;
+    }
+
+    if (pickerResult != null && pickerResult.files.isNotEmpty) {
+      try {
+        final String? fileExtension = pickerResult.files.single.extension;
+
+        if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
+          DataSource dataSource = DataSource();
+          if (kIsWeb) {
+            PlatformFile file = pickerResult.files.first;
+            dataSource.filePath = file.name;
+            dataSource.fileBytes = file.bytes!;
+          } else {
+            dataSource.filePath = pickerResult.files.single.path ?? '';
+          }
+          final DataController dataController = Get.find();
+          dataController.loadFile(dataSource);
+          return true;
+        }
+      } catch (e) {
+        debugLog(e.toString());
+        SnackBarService.displayError(message: e.toString());
+      }
+    }
+    return false;
   }
 }
 

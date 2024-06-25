@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
-import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
@@ -28,13 +28,13 @@ class PendingChanges extends StatefulWidget {
         DialogActionButton(
             text: 'Save to SQL',
             onPressed: () {
-              GeneralController().onSaveToSql();
+              DataController.to.onSaveToSql();
               Navigator.of(context).pop(true);
             }),
         DialogActionButton(
             text: 'Save to CSV',
             onPressed: () {
-              GeneralController().onSaveToCsv();
+              DataController.to.onSaveToCsv();
               Navigator.of(context).pop(true);
             }),
       ],

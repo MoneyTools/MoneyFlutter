@@ -2,13 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/column_filter_panel.dart';
@@ -21,8 +23,6 @@ import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/core/widgets/message_box.dart';
 import 'package:money/app/core/widgets/widgets.dart';
-
-import '../../../data/models/fields/field_filter.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {
   final bool includeClosedAccount;
@@ -95,8 +95,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     _sortAscending = preferenceController.getBool(getPreferenceKey(settingKeySortAscending), true);
     _lastSelectedItemId = preferenceController.getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
 
-    final int subViewIndex = GeneralController()
-        .ctlPref
+    final int subViewIndex = PreferenceController.to
         .getInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), InfoPanelSubViewEnum.details.index);
 
     _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
@@ -573,13 +572,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     // Persist users choice
     preferenceController.setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
     preferenceController.setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
-    GeneralController()
-        .ctlPref
+    PreferenceController.to
         .setInt(getPreferenceKey(settingKeySelectedListItemId), getUniqueIdOfFirstSelectedItem() ?? -1);
     preferenceController.setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
     preferenceController.setString(getPreferenceKey(settingKeyFilterText), _filterByText);
-    GeneralController()
-        .ctlPref
+    PreferenceController.to
         .setStringList(getPreferenceKey(settingKeyFilterColumnsText), _filterByFieldsValue.toStringList());
   }
 

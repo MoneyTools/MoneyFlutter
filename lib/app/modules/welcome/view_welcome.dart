@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/modules/home/sub_views/mru_dropdown.dart';
@@ -26,13 +26,13 @@ class WelcomeScreen extends StatelessWidget {
             children: <Widget>[
               OutlinedButton(
                   onPressed: () {
-                    GeneralController().closeFile();
+                    DataController.to.closeFile();
                     Get.offAllNamed(Constants.routeHomePage);
                   },
                   child: const Text('New File ...')),
               OutlinedButton(
                   onPressed: () {
-                    GeneralController().onFileOpen().then((bool succeeded) {
+                    DataController.to.onFileOpen().then((bool succeeded) {
                       if (succeeded) {
                         Get.offAllNamed(Constants.routeHomePage);
                       }
@@ -41,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: const Text('Open File ...')),
               OutlinedButton(
                   onPressed: () async {
-                    GeneralController().closeFile();
+                    DataController.to.closeFile();
                     final DataController dataController = Get.find();
                     dataController.loadDemoData().then((_) {
                       Get.offAllNamed(Constants.routeHomePage);

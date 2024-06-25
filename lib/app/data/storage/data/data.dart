@@ -5,6 +5,7 @@ import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -28,7 +29,7 @@ import 'package:money/app/data/models/money_objects/stock_splits/stock_splits.da
 import 'package:money/app/data/models/money_objects/transaction_extras/transaction_extras.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/database/database.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/controller/data_controller.dart';
@@ -128,7 +129,7 @@ class Data {
 
   void clear() {
     version = -1;
-    GeneralController().ctlData.trackMutations.reset();
+    DataController.to.trackMutations.reset();
 
     for (final element in _listOfTables) {
       element.clear();
@@ -146,16 +147,16 @@ class Data {
     switch (mutation) {
       case MutationType.inserted:
         moneyObject.mutation = MutationType.inserted;
-        GeneralController().ctlData.trackMutations.increaseNumber(increaseAdded: 1);
+        DataController.to.trackMutations.increaseNumber(increaseAdded: 1);
       case MutationType.changed:
         // this if is to ensure that we only count editing once and discard if this was edited on a new inserted items
         if (moneyObject.mutation == MutationType.none) {
           moneyObject.mutation = MutationType.changed;
-          GeneralController().ctlData.trackMutations.increaseNumber(increaseChanged: 1);
+          DataController.to.trackMutations.increaseNumber(increaseChanged: 1);
         }
       case MutationType.deleted:
         moneyObject.mutation = MutationType.deleted;
-        GeneralController().ctlData.trackMutations.increaseNumber(increaseDeleted: 1);
+        DataController.to.trackMutations.increaseNumber(increaseDeleted: 1);
       default:
         break;
     }
@@ -169,7 +170,7 @@ class Data {
   /// and Rebuild the UI
   void updateAll() {
     recalculateBalances();
-    GeneralController().update();
+    DataController.to.update();
   }
 
   /// Bulk Delete
@@ -181,7 +182,7 @@ class Data {
   }
 
   void assessMutationsCountOfAllModels() {
-    GeneralController().ctlData.trackMutations.reset();
+    DataController.to.trackMutations.reset();
 
     for (final element in _listOfTables) {
       element.resetMutationStateOfObjects();
@@ -409,9 +410,9 @@ class Data {
       moneyObjects.clear();
     }
     version = -1;
-    GeneralController().ctlData.dataFileIsClosed();
+    DataController.to.dataFileIsClosed();
 
-    GeneralController().ctlData.trackMutations.reset();
+    DataController.to.trackMutations.reset();
   }
 
   /// <summary>

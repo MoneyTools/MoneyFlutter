@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -163,7 +165,7 @@ Future<String> fullPathToCacheStockFile(final String symbol) async {
 }
 
 Future<String> pathToStockFiles() async {
-  String destinationFolder = await GeneralController().ctlData.generateNextFolderToSaveTo();
+  String destinationFolder = await DataController.to.generateNextFolderToSaveTo();
   if (destinationFolder.isEmpty) {
     throw Exception('No container folder give for saving');
   }

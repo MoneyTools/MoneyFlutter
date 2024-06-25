@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/modules/home/sub_views/view_pending_changes/view_pending_changes.dart';
 
 ///
@@ -46,21 +46,20 @@ class BadgePendingChanges extends StatelessWidget {
   Widget getChangeLabel(final BuildContext context) {
     List<Widget> widgets = [];
     TextStyle textStyle = Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
-    if (GeneralController().ctlData.trackMutations.added.value > 0) {
+    if (DataController.to.trackMutations.added.value > 0) {
       widgets.add(
-        buildCounter(
-            '+', GeneralController().ctlData.trackMutations.added.value, textStyle.copyWith(color: Colors.green)),
+        buildCounter('+', DataController.to.trackMutations.added.value, textStyle.copyWith(color: Colors.green)),
       );
     }
 
-    if (GeneralController().ctlData.trackMutations.changed.value > 0) {
-      widgets.add(buildCounter(
-          '=', GeneralController().ctlData.trackMutations.changed.value, textStyle.copyWith(color: Colors.orange)));
+    if (DataController.to.trackMutations.changed.value > 0) {
+      widgets.add(
+          buildCounter('=', DataController.to.trackMutations.changed.value, textStyle.copyWith(color: Colors.orange)));
     }
 
-    if (GeneralController().ctlData.trackMutations.deleted.value > 0) {
-      widgets.add(buildCounter(
-          '-', GeneralController().ctlData.trackMutations.deleted.value, textStyle.copyWith(color: Colors.red)));
+    if (DataController.to.trackMutations.deleted.value > 0) {
+      widgets.add(
+          buildCounter('-', DataController.to.trackMutations.deleted.value, textStyle.copyWith(color: Colors.red)));
     }
 
     return Row(
@@ -80,6 +79,6 @@ class BadgePendingChanges extends StatelessWidget {
   }
 
   String getTooltipText() {
-    return 'Added: ${GeneralController().ctlData.trackMutations.added}\nModified: ${GeneralController().ctlData.trackMutations.changed}\nDeleted: ${GeneralController().ctlData.trackMutations.deleted}';
+    return 'Added: ${DataController.to.trackMutations.added}\nModified: ${DataController.to.trackMutations.changed}\nDeleted: ${DataController.to.trackMutations.deleted}';
   }
 }

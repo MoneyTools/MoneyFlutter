@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/controller/keyboard_controller.dart';
-import 'package:money/app/controller/theme_controler.dart';
-import 'package:money/app/controller/general_controller.dart';
-import 'package:money/app/modules/settings/settings_routes.dart';
 import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/controller/keyboard_controller.dart';
+import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/modules/home/home_routes.dart';
 import 'package:money/app/modules/policies/policy_routes.dart';
+import 'package:money/app/modules/settings/settings_routes.dart';
 import 'package:money/app/modules/splash_screen.dart';
 import 'package:money/app/modules/welcome/welcome_page.dart';
 import 'package:money/app/modules/welcome/welcome_routes.dart';
@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
   // Leave these declared in this order
   final PreferenceController preferenceController = Get.put(PreferenceController());
   final ThemeController themeController = Get.put(ThemeController());
-  final GeneralController settingController = Get.put(GeneralController());
   final DataController dataController = Get.put(DataController());
   final ShortcutController shortcutController = Get.put(ShortcutController());
 
@@ -33,8 +32,7 @@ class MyApp extends StatelessWidget {
 
     return Obx(
       () {
-        final String k =
-            '${settingController.getUniqueState}|${preferenceController.getUniqueState}|${dataController.getUniqueState}';
+        final String k = '${preferenceController.getUniqueState}|${dataController.getUniqueState}';
 
         // debugLog('Obx-GetMaterialApp');
         return GetMaterialApp(

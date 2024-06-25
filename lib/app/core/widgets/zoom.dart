@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/controller/general_controller.dart';
+import 'package:money/app/controller/preferences_controller.dart';
+
 import 'package:money/app/controller/theme_controler.dart';
 
 /// ( - )  100% ( + )

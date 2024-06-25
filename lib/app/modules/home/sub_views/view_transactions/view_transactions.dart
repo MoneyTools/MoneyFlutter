@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
@@ -104,10 +105,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 if (transaction != null) {
                   // Preselect the Account of this Transaction
 
-                  GeneralController().ctlPref.setInt(
-                        ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
-                        transaction.accountId.value,
-                      );
+                  PreferenceController.to.setInt(
+                    ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
+                    transaction.accountId.value,
+                  );
 
                   PreferenceController.to.setView(ViewId.viewAccounts);
                 }
@@ -122,7 +123,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Category of this Transaction
-                  GeneralController().ctlPref.setInt(
+                  PreferenceController.to.setInt(
                       ViewId.viewCategories.getViewPreferenceId(
                         settingKeySelectedListItemId,
                       ),
@@ -140,10 +141,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Payee of this Transaction
-                  GeneralController().ctlPref.setInt(
-                        ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
-                        transaction.payee.value,
-                      );
+                  PreferenceController.to.setInt(
+                    ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
+                    transaction.payee.value,
+                  );
                   PreferenceController.to.setView(ViewId.viewPayees);
                 }
               },

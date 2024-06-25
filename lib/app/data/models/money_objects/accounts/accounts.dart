@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -10,7 +11,7 @@ import 'package:money/app/data/models/money_objects/investments/security_purchas
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/data/data.dart';
 
 class Accounts extends MoneyObjects<Account> {
@@ -283,7 +284,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   Account getMostRecentlySelectedAccount() {
-    final int lastSelectionId = GeneralController().ctlPref.getInt(getViewPreferenceIdAccountLastSelected(), -1);
+    final int lastSelectionId = PreferenceController.to.getInt(getViewPreferenceIdAccountLastSelected(), -1);
     if (lastSelectionId != -1) {
       final Account? accountExist = get(lastSelectionId);
       if (accountExist != null) {
@@ -295,7 +296,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   void setMostRecentUsedAccount(Account account) {
-    GeneralController().ctlPref.setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
+    PreferenceController.to.setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
   }
 
   double getSumOfAccountBalances() {

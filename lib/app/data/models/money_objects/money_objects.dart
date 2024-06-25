@@ -3,10 +3,11 @@ import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/database/database.dart';
 import 'package:money/app/core/widgets/diff.dart';
@@ -155,15 +156,15 @@ class MoneyObjects<T> {
   }
 
   void assessMutationsCounts() {
-    GeneralController().ctlData.trackMutations.reset();
+    DataController.to.trackMutations.reset();
     for (final item in _iterableListOfMoneyObject(true)) {
       switch (item.mutation) {
         case MutationType.inserted:
-          GeneralController().ctlData.trackMutations.added++;
+          DataController.to.trackMutations.added++;
         case MutationType.changed:
-          GeneralController().ctlData.trackMutations.changed++;
+          DataController.to.trackMutations.changed++;
         case MutationType.deleted:
-          GeneralController().ctlData.trackMutations.deleted++;
+          DataController.to.trackMutations.deleted++;
         default:
           break;
       }

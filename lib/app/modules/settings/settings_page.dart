@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/text_title.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
@@ -29,10 +30,9 @@ class SettingsPage extends GetView<GetxController> {
               SwitchListTile(
                 title: const Text('Rental'),
                 subtitle: const Text('Manage the expenses and rental income of properties.'),
-                value: GeneralController().ctlPref.includeRentalManagement,
+                value: PreferenceController.to.includeRentalManagement,
                 onChanged: (bool value) {
-                  GeneralController().ctlPref.includeRentalManagement =
-                      !GeneralController().ctlPref.includeRentalManagement;
+                  PreferenceController.to.includeRentalManagement = !PreferenceController.to.includeRentalManagement;
                   // setState(() {
                   //   _isRentalEnabled = value;
                   // });

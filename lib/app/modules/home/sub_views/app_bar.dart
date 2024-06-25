@@ -1,12 +1,14 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/modules/home/sub_views/app_title.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/core/widgets/color_palette.dart';
@@ -62,15 +64,15 @@ class _MyAppBarState extends State<MyAppBar> {
     return IconButton(
       icon: _buildButtonToggleViewClosedAccountsIcon(),
       onPressed: () {
-        GeneralController().ctlPref.includeClosedAccounts = !GeneralController().ctlPref.includeClosedAccounts;
+        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
       },
-      tooltip: GeneralController().ctlPref.includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
+      tooltip: PreferenceController.to.includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
     );
   }
 
   Widget _buildButtonToggleViewClosedAccountsIcon() {
     return Opacity(
-      opacity: GeneralController().ctlPref.includeClosedAccounts ? 1.0 : 0.5,
+      opacity: PreferenceController.to.includeClosedAccounts ? 1.0 : 0.5,
       child: const Icon(
         Icons.inventory,
         size: 18,
@@ -110,28 +112,28 @@ class _MyAppBarState extends State<MyAppBar> {
       onSelected: (final int index) {
         switch (index) {
           case Constants.commandFileNew:
-            GeneralController().closeFile();
+            DataController.to.closeFile();
             Get.offAllNamed(Constants.routeHomePage);
 
           case Constants.commandFileOpen:
-            GeneralController().onFileOpen().then((_) {
+            DataController.to.onFileOpen().then((_) {
               Get.offAllNamed(Constants.routeHomePage);
             });
 
           case Constants.commandFileLocation:
-            GeneralController().onShowFileLocation();
+            DataController.to.onShowFileLocation();
 
           case Constants.commandAddTransactions:
             showImportTransactionsWizard(context);
 
           case Constants.commandFileSaveCsv:
-            GeneralController().onSaveToCsv();
+            DataController.to.onSaveToCsv();
 
           case Constants.commandFileSaveSql:
-            GeneralController().onSaveToSql();
+            DataController.to.onSaveToSql();
 
           case Constants.commandFileClose:
-            GeneralController().closeFile();
+            DataController.to.closeFile();
             Get.offAllNamed(Constants.routeWelcomePage);
 
           default:
@@ -161,7 +163,7 @@ class _MyAppBarState extends State<MyAppBar> {
       PopupMenuItem<int>(
         value: Constants.commandIncludeClosedAccount,
         child: ThreePartLabel(
-          text1: GeneralController().ctlPref.includeClosedAccounts ? 'Hide "Closed Accounts"' : 'Show "Closed Account"',
+          text1: PreferenceController.to.includeClosedAccounts ? 'Hide "Closed Accounts"' : 'Show "Closed Account"',
           icon: _buildButtonToggleViewClosedAccountsIcon(),
           small: true,
         ),
@@ -253,11 +255,11 @@ class _MyAppBarState extends State<MyAppBar> {
       case Constants.commandSettings:
         Get.toNamed(Constants.routeSettingsPage);
       case Constants.commandIncludeClosedAccount:
-        GeneralController().ctlPref.includeClosedAccounts = !GeneralController().ctlPref.includeClosedAccounts;
+        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
       default:
         final ThemeController themeController = Get.find();
         themeController.setThemeColor(value);
     }
-    GeneralController().update();
+    DataController.to.update();
   }
 }

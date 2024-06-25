@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/widgets/picker_panel.dart';
 import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/controller/general_controller.dart';
-import 'package:money/app/controller/data_controller.dart';
 
 class MruDropdown extends StatelessWidget {
   const MruDropdown({super.key});
@@ -41,7 +41,7 @@ class MruDropdown extends StatelessWidget {
                     selectedItem: '',
                     onSelected: (final String selectedTextReprentingFileNamePath) {
                       DataSource dataSource = DataSource(selectedTextReprentingFileNamePath);
-                      GeneralController().loadFileFromPath(dataSource);
+                      DataController.to.loadFileFromPath(dataSource);
                       Get.offAllNamed(Constants.routeHomePage);
                     },
                   );

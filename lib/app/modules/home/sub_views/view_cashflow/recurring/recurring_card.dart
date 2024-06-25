@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -6,7 +7,7 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
-import 'package:money/app/controller/general_controller.dart';
+
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
 import 'package:money/app/core/widgets/box.dart';
