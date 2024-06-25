@@ -8,8 +8,8 @@ import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
-class GeneralPage extends GetView<GetxController> {
-  const GeneralPage({super.key});
+class SettingsPage extends GetView<GetxController> {
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
