@@ -131,6 +131,6 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
       return true;
     }
     // we can conclude that if paid more than 'n' months its a recurring monthly event
-    return months.length == Settings().cashflowRecurringOccurrences;
+    return months.length == GeneralController().cashflowRecurringOccurrences;
   }
 }

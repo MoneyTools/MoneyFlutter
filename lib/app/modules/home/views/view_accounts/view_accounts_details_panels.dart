@@ -54,9 +54,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = Settings().getPref().getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
-    bool sortAscending = Settings().getPref().getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
-    int selectedItemIndex = Settings().getPref().getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
+    int sortFieldIndex = GeneralController().getPref().getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
+    bool sortAscending = GeneralController().getPref().getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
+    int selectedItemIndex =
+        GeneralController().getPref().getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
 
     final FieldDefinitions columnsToDisplay = <Field>[
       Transaction.fields.getFieldByName(columnIdDate),
@@ -80,9 +81,9 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           sortAscending = sortAscending;
 
           // Save user choices
-          Settings().getPref().setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
-          Settings().getPref().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
-          Settings().getPref().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
+          GeneralController().getPref().setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
+          GeneralController().getPref().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          GeneralController().getPref().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
         });
   }
 
@@ -91,9 +92,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = Settings().getPref().getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
-    bool sortAscending = Settings().getPref().getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
-    int selectedItemId = Settings().getPref().getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
+    int sortFieldIndex = GeneralController().getPref().getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
+    bool sortAscending = GeneralController().getPref().getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
+    int selectedItemId =
+        GeneralController().getPref().getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
 
     List<LoanPayment> agregatedList = getAccountLoanPayments(account);
 
@@ -120,8 +122,8 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           } else {
             sortFieldIndex = columnHeaderIndex;
           }
-          Settings().getPref().setInt(getPreferenceKey('info_$settingKeySortBy'), sortFieldIndex);
-          Settings().getPref().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          GeneralController().getPref().setInt(getPreferenceKey('info_$settingKeySortBy'), sortFieldIndex);
+          GeneralController().getPref().setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
         });
       },
       isMultiSelectionOn: false,
@@ -130,7 +132,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         // ignore: invalid_use_of_protected_member
         setState(() {
           selectedItemId = uniqueId;
-          Settings().getPref().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
+          GeneralController().getPref().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {
@@ -141,7 +143,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           moneyObject: instance,
         ).then((value) {
           selectedItemId = itemId;
-          Settings().getPref().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
+          GeneralController().getPref().setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
         });
       },
     );

@@ -42,7 +42,7 @@ class _MyAppBarState extends State<MyAppBar> {
       // Button on the right side
       actions: <Widget>[
         // Hide/Show closed accounts
-        if (!Settings().isSmallScreen) _buildButtonToggleViewClosedAccounts(),
+        if (!GeneralController().isSmallScreen) _buildButtonToggleViewClosedAccounts(),
 
         // Dark / Light mode
         IconButton(
@@ -62,15 +62,15 @@ class _MyAppBarState extends State<MyAppBar> {
     return IconButton(
       icon: _buildButtonToggleViewClosedAccountsIcon(),
       onPressed: () {
-        Settings().getPref().includeClosedAccounts = !Settings().getPref().includeClosedAccounts;
+        GeneralController().getPref().includeClosedAccounts = !GeneralController().getPref().includeClosedAccounts;
       },
-      tooltip: Settings().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
+      tooltip: GeneralController().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
     );
   }
 
   Widget _buildButtonToggleViewClosedAccountsIcon() {
     return Opacity(
-      opacity: Settings().getPref().includeClosedAccounts ? 1.0 : 0.5,
+      opacity: GeneralController().getPref().includeClosedAccounts ? 1.0 : 0.5,
       child: const Icon(
         Icons.inventory,
         size: 18,
@@ -110,28 +110,28 @@ class _MyAppBarState extends State<MyAppBar> {
       onSelected: (final int index) {
         switch (index) {
           case Constants.commandFileNew:
-            Settings().closeFile();
+            GeneralController().closeFile();
             Get.offAllNamed(Constants.routeHomePage);
 
           case Constants.commandFileOpen:
-            Settings().onFileOpen().then((_) {
+            GeneralController().onFileOpen().then((_) {
               Get.offAllNamed(Constants.routeHomePage);
             });
 
           case Constants.commandFileLocation:
-            Settings().onShowFileLocation();
+            GeneralController().onShowFileLocation();
 
           case Constants.commandAddTransactions:
             showImportTransactionsWizard(context);
 
           case Constants.commandFileSaveCsv:
-            Settings().onSaveToCsv();
+            GeneralController().onSaveToCsv();
 
           case Constants.commandFileSaveSql:
-            Settings().onSaveToSql();
+            GeneralController().onSaveToSql();
 
           case Constants.commandFileClose:
-            Settings().closeFile();
+            GeneralController().closeFile();
             Get.offAllNamed(Constants.routeWelcomePage);
 
           default:
@@ -161,7 +161,8 @@ class _MyAppBarState extends State<MyAppBar> {
       PopupMenuItem<int>(
         value: Constants.commandIncludeClosedAccount,
         child: ThreePartLabel(
-          text1: Settings().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
+          text1:
+              GeneralController().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
           icon: _buildButtonToggleViewClosedAccountsIcon(),
           small: true,
         ),
@@ -207,10 +208,10 @@ class _MyAppBarState extends State<MyAppBar> {
         child: ZoomIncreaseDecrease(
           title: 'Zoom',
           onDecrease: () {
-            Settings().fontScaleDecrease();
+            GeneralController().fontScaleDecrease();
           },
           onIncrease: () {
-            Settings().fontScaleIncrease();
+            GeneralController().fontScaleIncrease();
           },
         ),
       ),
@@ -253,11 +254,11 @@ class _MyAppBarState extends State<MyAppBar> {
       case Constants.commandSettings:
         Get.toNamed(Constants.routeSettingsPage);
       case Constants.commandIncludeClosedAccount:
-        Settings().getPref().includeClosedAccounts = !Settings().getPref().includeClosedAccounts;
+        GeneralController().getPref().includeClosedAccounts = !GeneralController().getPref().includeClosedAccounts;
       default:
         final ThemeController themeController = Get.find();
         themeController.setThemeColor(value);
     }
-    Settings().preferrenceSave();
+    GeneralController().preferrenceSave();
   }
 }

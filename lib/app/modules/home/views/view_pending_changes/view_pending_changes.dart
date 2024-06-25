@@ -28,13 +28,13 @@ class PendingChanges extends StatefulWidget {
         DialogActionButton(
             text: 'Save to SQL',
             onPressed: () {
-              Settings().onSaveToSql();
+              GeneralController().onSaveToSql();
               Navigator.of(context).pop(true);
             }),
         DialogActionButton(
             text: 'Save to CSV',
             onPressed: () {
-              Settings().onSaveToCsv();
+              GeneralController().onSaveToCsv();
               Navigator.of(context).pop(true);
             }),
       ],

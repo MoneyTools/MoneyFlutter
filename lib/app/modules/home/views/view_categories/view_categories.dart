@@ -161,13 +161,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                         fieldName: Constants.viewTransactionFieldnameCategory,
                         filterTextInLowerCase: category.name.value.toLowerCase()));
 
-                    Settings().getPref().setStringList(
+                    GeneralController().getPref().setStringList(
                           ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
                           filterByAccount.toStringList(),
                         );
 
                     // Switch view
-                    Settings().selectedView = ViewId.viewTransactions;
+                    GeneralController().selectedView = ViewId.viewTransactions;
                   }
                 },
               ),

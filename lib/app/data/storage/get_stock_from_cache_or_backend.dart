@@ -85,7 +85,7 @@ Future<StockLookupStatus> loadFromCache(final String symbol, List<StockPrice> pr
 Future<StockLookupStatus> loadFromBackend(String symbol, List<StockPrice> prices) async {
   prices.clear();
 
-  if (Settings().apiKeyForStocks.isEmpty) {
+  if (GeneralController().apiKeyForStocks.isEmpty) {
     // No API Key to make the backend request
     return StockLookupStatus.invalidApiKey;
   }
@@ -93,7 +93,7 @@ Future<StockLookupStatus> loadFromBackend(String symbol, List<StockPrice> prices
   DateTime tenYearsInThePast = DateTime.now().subtract(const Duration(days: 365 * 10));
 
   final Uri uri = Uri.parse(
-      'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${tenYearsInThePast.toIso8601String()}&apikey=${Settings().apiKeyForStocks}');
+      'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${tenYearsInThePast.toIso8601String()}&apikey=${GeneralController().apiKeyForStocks}');
 
   final http.Response response = await http.get(uri);
 
@@ -164,7 +164,7 @@ Future<String> fullPathToCacheStockFile(final String symbol) async {
 }
 
 Future<String> pathToStockFiles() async {
-  String destinationFolder = await Settings().ctrlData.generateNextFolderToSaveTo();
+  String destinationFolder = await GeneralController().ctrlData.generateNextFolderToSaveTo();
   if (destinationFolder.isEmpty) {
     throw Exception('No container folder give for saving');
   }

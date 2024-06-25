@@ -85,11 +85,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     _fieldToDisplay.setDefinitions(all.definitions.where((element) => element.useAsColumn).toList());
 
     // restore last user choices for this view
-    _sortByFieldIndex = Settings().getPref().getInt(getPreferenceKey(settingKeySortBy), 0);
-    _sortAscending = Settings().getPref().getBool(getPreferenceKey(settingKeySortAscending), true);
-    _lastSelectedItemId = Settings().getPref().getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
+    _sortByFieldIndex = GeneralController().getPref().getInt(getPreferenceKey(settingKeySortBy), 0);
+    _sortAscending = GeneralController().getPref().getBool(getPreferenceKey(settingKeySortAscending), true);
+    _lastSelectedItemId = GeneralController().getPref().getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
 
-    final int subViewIndex = Settings()
+    final int subViewIndex = GeneralController()
         .getPref()
         .getInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), InfoPanelSubViewEnum.details.index);
 
@@ -98,10 +98,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     // Filters
 
     // load text filter
-    _filterByText = Settings().getPref().getString(getPreferenceKey(settingKeyFilterText), '');
+    _filterByText = GeneralController().getPref().getString(getPreferenceKey(settingKeyFilterText), '');
 
     // load the column filters
-    Settings().getPref().getStringList(getPreferenceKey(settingKeyFilterColumnsText)).then((list) {
+    GeneralController().getPref().getStringList(getPreferenceKey(settingKeyFilterColumnsText)).then((list) {
       _filterByFieldsValue = FieldFilters.fromList(list);
     });
 
@@ -179,7 +179,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   Widget build(final BuildContext context) {
     return buildViewContent(
       AdaptiveViewWithList(
-        key: Key('${Settings().getPref().includeClosedAccounts}|${list.length}'),
+        key: Key('${GeneralController().getPref().includeClosedAccounts}|${list.length}'),
         top: buildHeader(),
         list: list,
         fieldDefinitions: _fieldToDisplay.definitions,
@@ -196,13 +196,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           saveLastUserChoicesOfView();
         },
         onItemTap: onItemTap,
-        flexBottom: Settings().isDetailsPanelExpanded ? 1 : 0,
+        flexBottom: GeneralController().isDetailsPanelExpanded ? 1 : 0,
         bottom: InfoPanel(
-          isExpanded: Settings().isDetailsPanelExpanded,
+          isExpanded: GeneralController().isDetailsPanelExpanded,
           onExpanded: (final bool isExpanded) {
             setState(() {
-              Settings().isDetailsPanelExpanded = isExpanded;
-              Settings().preferrenceSave();
+              GeneralController().isDetailsPanelExpanded = isExpanded;
+              GeneralController().preferrenceSave();
             });
           },
           selectedItems: _selectedItemsByUniqueId,
@@ -464,7 +464,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       }
 
       // persist the last selected item index
-      Settings().getPref().setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
+      GeneralController().getPref().setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
     });
   }
 
@@ -566,12 +566,16 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void saveLastUserChoicesOfView() {
     // Persist users choice
-    Settings().getPref().setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
-    Settings().getPref().setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
-    Settings().getPref().setInt(getPreferenceKey(settingKeySelectedListItemId), getUniqueIdOfFirstSelectedItem() ?? -1);
-    Settings().getPref().setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
-    Settings().getPref().setString(getPreferenceKey(settingKeyFilterText), _filterByText);
-    Settings()
+    GeneralController().getPref().setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
+    GeneralController().getPref().setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
+    GeneralController()
+        .getPref()
+        .setInt(getPreferenceKey(settingKeySelectedListItemId), getUniqueIdOfFirstSelectedItem() ?? -1);
+    GeneralController()
+        .getPref()
+        .setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
+    GeneralController().getPref().setString(getPreferenceKey(settingKeyFilterText), _filterByText);
+    GeneralController()
         .getPref()
         .setStringList(getPreferenceKey(settingKeyFilterColumnsText), _filterByFieldsValue.toStringList());
   }

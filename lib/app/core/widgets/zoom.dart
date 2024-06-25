@@ -48,7 +48,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
           child: TextButton(
               onPressed: () {
                 setState(() {
-                  Settings().setFontScaleTo(1.0);
+                  GeneralController().setFontScaleTo(1.0);
                   updateZoomTextFromValue();
                 });
               },
@@ -69,6 +69,6 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
   }
 
   void updateZoomTextFromValue() {
-    zoomValueAsText = '${(Settings().textScale * 100).toInt()}%';
+    zoomValueAsText = '${(GeneralController().textScale * 100).toInt()}%';
   }
 }

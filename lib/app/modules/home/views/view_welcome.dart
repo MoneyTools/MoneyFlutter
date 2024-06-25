@@ -26,13 +26,13 @@ class WelcomeScreen extends StatelessWidget {
             children: <Widget>[
               OutlinedButton(
                   onPressed: () {
-                    Settings().closeFile();
+                    GeneralController().closeFile();
                     Get.offAllNamed(Constants.routeHomePage);
                   },
                   child: const Text('New File ...')),
               OutlinedButton(
                   onPressed: () {
-                    Settings().onFileOpen().then((bool succeeded) {
+                    GeneralController().onFileOpen().then((bool succeeded) {
                       if (succeeded) {
                         Get.offAllNamed(Constants.routeHomePage);
                       }
@@ -41,7 +41,7 @@ class WelcomeScreen extends StatelessWidget {
                   child: const Text('Open File ...')),
               OutlinedButton(
                   onPressed: () async {
-                    Settings().closeFile();
+                    GeneralController().closeFile();
                     final DataController dataController = Get.find();
                     dataController.loadDemoData().then((_) {
                       Get.offAllNamed(Constants.routeHomePage);

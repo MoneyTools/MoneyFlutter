@@ -105,12 +105,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 if (transaction != null) {
                   // Preselect the Account of this Transaction
 
-                  Settings().getPref().setInt(
+                  GeneralController().getPref().setInt(
                         ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
                         transaction.accountId.value,
                       );
 
-                  Settings().selectedView = ViewId.viewAccounts;
+                  GeneralController().selectedView = ViewId.viewAccounts;
                 }
               },
             ),
@@ -123,12 +123,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Category of this Transaction
-                  Settings().getPref().setInt(
+                  GeneralController().getPref().setInt(
                       ViewId.viewCategories.getViewPreferenceId(
                         settingKeySelectedListItemId,
                       ),
                       transaction.categoryId.value);
-                  Settings().selectedView = ViewId.viewCategories;
+                  GeneralController().selectedView = ViewId.viewCategories;
                 }
               },
             ),
@@ -141,11 +141,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Payee of this Transaction
-                  Settings().getPref().setInt(
+                  GeneralController().getPref().setInt(
                         ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
                         transaction.payee.value,
                       );
-                  Settings().selectedView = ViewId.viewPayees;
+                  GeneralController().selectedView = ViewId.viewPayees;
                 }
               },
             ),

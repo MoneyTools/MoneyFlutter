@@ -25,9 +25,10 @@ class GeneralPage extends GetView<GetxController> {
               SwitchListTile(
                 title: const Text('Rental'),
                 subtitle: const Text('Manage the expenses and rental income of properties.'),
-                value: Settings().getPref().includeRentalManagement,
+                value: GeneralController().getPref().includeRentalManagement,
                 onChanged: (bool value) {
-                  Settings().getPref().includeRentalManagement = !Settings().getPref().includeRentalManagement;
+                  GeneralController().getPref().includeRentalManagement =
+                      !GeneralController().getPref().includeRentalManagement;
                   // setState(() {
                   //   _isRentalEnabled = value;
                   // });
@@ -38,7 +39,7 @@ class GeneralPage extends GetView<GetxController> {
                 decoration: const InputDecoration(
                   labelText: 'Stock service API key',
                 ),
-                controller: TextEditingController()..text = Settings().apiKeyForStocks,
+                controller: TextEditingController()..text = GeneralController().apiKeyForStocks,
               ),
               gapLarge(),
               const TextField(

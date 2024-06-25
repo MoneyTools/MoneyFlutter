@@ -18,7 +18,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   final ThemeController themeController = Get.put(ThemeController());
-  final Settings settingController = Get.put(Settings());
+  final GeneralController settingController = Get.put(GeneralController());
   final PreferenceController preferenceController = Get.put(PreferenceController());
   final DataController dataController = Get.put(DataController());
 

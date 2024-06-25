@@ -44,13 +44,13 @@ class DataController extends GetxController {
 
   Future<void> loadDemoData() async {
     isLoading.value = true;
-    Settings().preferrenceSave();
+    GeneralController().preferrenceSave();
     Data().loadFromDemoData();
     isLoading.value = false;
   }
 
   Future<void> loadFile(final DataSource dataSource) async {
-    Settings().closeFile(false); // ensure that we closed current file and state
+    GeneralController().closeFile(false); // ensure that we closed current file and state
 
     await Data().loadFromPath(dataSource).then((final bool success) async {
       if (success) {

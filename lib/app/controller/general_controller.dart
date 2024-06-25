@@ -17,14 +17,14 @@ import 'package:money/app/core/widgets/snack_bar.dart';
 
 export 'package:money/app/controller/preferences_controller.dart';
 
-class Settings extends GetxController {
-  static final Settings _singleton = Settings._internal();
+class GeneralController extends GetxController {
+  static final GeneralController _singleton = GeneralController._internal();
 
-  factory Settings() {
+  factory GeneralController() {
     return _singleton;
   }
 
-  Settings._internal();
+  GeneralController._internal();
 
   String get getUniqueState => '${Data().version}';
 
@@ -132,10 +132,10 @@ class Settings extends GetxController {
   }
 
   void onFileNew() async {
-    Settings().closeFile();
+    GeneralController().closeFile();
 
     Data().accounts.addNewAccount('New Bank Account');
-    Settings().selectedView = ViewId.viewAccounts;
+    GeneralController().selectedView = ViewId.viewAccounts;
     update();
   }
 
@@ -248,13 +248,13 @@ void switchViewTransacionnForPayee(final String payeeName) {
   fieldFilters.add(
       FieldFilter(fieldName: Constants.viewTransactionFieldnamePayee, filterTextInLowerCase: payeeName.toLowerCase()));
 
-  Settings().getPref().setStringList(
+  GeneralController().getPref().setStringList(
         ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
         fieldFilters.toStringList(),
       );
 
   // Switch view
-  Settings().selectedView = ViewId.viewTransactions;
+  GeneralController().selectedView = ViewId.viewTransactions;
 }
 
 enum CashflowViewAs {

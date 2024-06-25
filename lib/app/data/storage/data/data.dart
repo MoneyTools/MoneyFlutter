@@ -128,7 +128,7 @@ class Data {
 
   void clear() {
     version = -1;
-    Settings().ctrlData.trackMutations.reset();
+    GeneralController().ctrlData.trackMutations.reset();
 
     for (final element in _listOfTables) {
       element.clear();
@@ -146,16 +146,16 @@ class Data {
     switch (mutation) {
       case MutationType.inserted:
         moneyObject.mutation = MutationType.inserted;
-        Settings().ctrlData.trackMutations.increaseNumber(increaseAdded: 1);
+        GeneralController().ctrlData.trackMutations.increaseNumber(increaseAdded: 1);
       case MutationType.changed:
         // this if is to ensure that we only count editing once and discard if this was edited on a new inserted items
         if (moneyObject.mutation == MutationType.none) {
           moneyObject.mutation = MutationType.changed;
-          Settings().ctrlData.trackMutations.increaseNumber(increaseChanged: 1);
+          GeneralController().ctrlData.trackMutations.increaseNumber(increaseChanged: 1);
         }
       case MutationType.deleted:
         moneyObject.mutation = MutationType.deleted;
-        Settings().ctrlData.trackMutations.increaseNumber(increaseDeleted: 1);
+        GeneralController().ctrlData.trackMutations.increaseNumber(increaseDeleted: 1);
       default:
         break;
     }
@@ -169,7 +169,7 @@ class Data {
   /// and Rebuild the UI
   void updateAll() {
     recalculateBalances();
-    Settings().update();
+    GeneralController().update();
   }
 
   /// Bulk Delete
@@ -181,7 +181,7 @@ class Data {
   }
 
   void assessMutationsCountOfAllModels() {
-    Settings().ctrlData.trackMutations.reset();
+    GeneralController().ctrlData.trackMutations.reset();
 
     for (final element in _listOfTables) {
       element.resetMutationStateOfObjects();
@@ -409,9 +409,9 @@ class Data {
       moneyObjects.clear();
     }
     version = -1;
-    Settings().ctrlData.dataFileIsClosed();
+    GeneralController().ctrlData.dataFileIsClosed();
 
-    Settings().ctrlData.trackMutations.reset();
+    GeneralController().ctrlData.trackMutations.reset();
   }
 
   /// <summary>

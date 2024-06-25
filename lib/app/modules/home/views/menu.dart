@@ -3,7 +3,7 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/controller/general_controller.dart';
 
-List<NavigationDestination> getAppBarDestinations(final Settings settings) {
+List<NavigationDestination> getAppBarDestinations(final GeneralController settings) {
   final List<NavigationDestination> appBarDestinations = <NavigationDestination>[
     const NavigationDestination(
       label: 'Cash Flow',
@@ -74,7 +74,7 @@ List<NavigationDestination> getAppBarDestinations(final Settings settings) {
   return appBarDestinations;
 }
 
-List<NavigationRailDestination> getNavRailDestination(final Settings settings) {
+List<NavigationRailDestination> getNavRailDestination(final GeneralController settings) {
   final List<NavigationDestination> list = getAppBarDestinations(settings);
 
   final Iterable<NavigationRailDestination> navRailDestinations = list.map(
@@ -96,7 +96,7 @@ List<NavigationRailDestination> getNavRailDestination(final Settings settings) {
 class MenuHorizontal extends StatefulWidget {
   final void Function(ViewId) onSelected;
   final ViewId selectedView;
-  final Settings settings;
+  final GeneralController settings;
 
   const MenuHorizontal({
     super.key,
@@ -142,7 +142,7 @@ class MenuVertical extends StatefulWidget {
   final void Function(ViewId) onSelectItem;
   final ViewId selectedView;
   final bool useIndicator;
-  final Settings settings;
+  final GeneralController settings;
 
   const MenuVertical({
     super.key,

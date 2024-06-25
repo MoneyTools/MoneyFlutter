@@ -34,7 +34,7 @@ class Mru extends StatelessWidget {
           selectedItem: '',
           onSelected: (final String selectedTextReprentingFileNamePath) {
             DataSource dataSource = DataSource(selectedTextReprentingFileNamePath);
-            Settings().loadFileFromPath(dataSource);
+            GeneralController().loadFileFromPath(dataSource);
             Get.offAllNamed(Constants.routeHomePage);
           },
         );

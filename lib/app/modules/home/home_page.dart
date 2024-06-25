@@ -63,10 +63,10 @@ class HomePage extends GetView<HomeController> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           MenuVertical(
-            key: Key(Settings().selectedView.toString()),
-            settings: Settings(),
+            key: Key(GeneralController().selectedView.toString()),
+            settings: GeneralController(),
             onSelectItem: _handleSubViewSelectionChanged,
-            selectedView: Settings().selectedView,
+            selectedView: GeneralController().selectedView,
             useIndicator: true,
           ),
           Expanded(
@@ -87,10 +87,10 @@ class HomePage extends GetView<HomeController> {
           child: _getSubView(),
         ),
         MenuHorizontal(
-          key: Key(Settings().selectedView.toString()),
-          settings: Settings(),
+          key: Key(GeneralController().selectedView.toString()),
+          settings: GeneralController(),
           onSelected: _handleSubViewSelectionChanged,
-          selectedView: Settings().selectedView,
+          selectedView: GeneralController().selectedView,
         ),
       ],
     );
@@ -103,7 +103,7 @@ class HomePage extends GetView<HomeController> {
         LogicalKeyboardKey.equal,
         'Increase text size',
         () {
-          Settings().fontScaleIncrease();
+          GeneralController().fontScaleIncrease();
         },
         isMetaPressed: true,
       ),
@@ -111,7 +111,7 @@ class HomePage extends GetView<HomeController> {
         LogicalKeyboardKey.minus,
         'Decrease text size',
         () {
-          Settings().fontScaleDecrease();
+          GeneralController().fontScaleDecrease();
         },
         isMetaPressed: true,
       ),
@@ -119,7 +119,7 @@ class HomePage extends GetView<HomeController> {
         LogicalKeyboardKey('0'.codeUnitAt(0)),
         'Normal text size',
         () {
-          Settings().setFontScaleTo(1);
+          GeneralController().setFontScaleTo(1);
         },
         isMetaPressed: true,
       ),
@@ -150,7 +150,7 @@ class HomePage extends GetView<HomeController> {
   Widget _getSubView() {
     switch (viewController.currentView.value) {
       case ViewId.viewAccounts:
-        return ViewAccounts(includeClosedAccount: Settings().getPref().includeClosedAccounts);
+        return ViewAccounts(includeClosedAccount: GeneralController().getPref().includeClosedAccounts);
 
       case ViewId.viewCategories:
         return const ViewCategories();
