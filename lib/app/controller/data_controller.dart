@@ -5,7 +5,7 @@ import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/settings.dart';
+import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/data/data_mutations.dart';
 import 'package:path/path.dart' as p;

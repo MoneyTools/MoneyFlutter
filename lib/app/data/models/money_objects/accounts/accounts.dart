@@ -10,7 +10,7 @@ import 'package:money/app/data/models/money_objects/investments/security_purchas
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/app/data/models/settings.dart';
+import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class Accounts extends MoneyObjects<Account> {

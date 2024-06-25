@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/data/models/settings.dart';
+import 'package:money/app/controller/general_controller.dart';
 
 /// ( - )  100% ( + )
 class ZoomIncreaseDecrease extends StatefulWidget {

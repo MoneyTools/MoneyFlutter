@@ -5,7 +5,7 @@ import 'package:money/app/core/theme/theme_controler.dart';
 import 'package:money/app/modules/home/views/app_title.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/settings.dart';
+import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/core/widgets/color_palette.dart';

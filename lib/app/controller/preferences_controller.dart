@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/modules/home/home_data_controller.dart';
+import 'package:money/app/controller/data_controller.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:get/get.dart';

@@ -5,8 +5,8 @@ import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/picker_panel.dart';
 import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/settings.dart';
-import 'package:money/app/modules/home/home_data_controller.dart';
+import 'package:money/app/controller/general_controller.dart';
+import 'package:money/app/controller/data_controller.dart';
 
 class Mru extends StatelessWidget {
   const Mru({super.key});

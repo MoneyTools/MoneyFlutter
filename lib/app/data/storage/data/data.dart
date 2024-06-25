@@ -28,10 +28,10 @@ import 'package:money/app/data/models/money_objects/stock_splits/stock_splits.da
 import 'package:money/app/data/models/money_objects/transaction_extras/transaction_extras.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
-import 'package:money/app/data/models/settings.dart';
+import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/database/database.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
-import 'package:money/app/modules/home/home_data_controller.dart';
+import 'package:money/app/controller/data_controller.dart';
 
 // Exports
 export 'package:money/app/core/helpers/json_helper.dart';

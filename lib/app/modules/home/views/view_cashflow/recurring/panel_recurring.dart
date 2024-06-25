@@ -3,7 +3,7 @@ import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
-import 'package:money/app/data/models/settings.dart';
+import 'package:money/app/controller/general_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/views/view_cashflow/recurring/recurring_card.dart';
 import 'package:money/app/modules/home/views/view_cashflow/recurring/recurring_payment.dart';
