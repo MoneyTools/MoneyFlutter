@@ -125,24 +125,28 @@ class Account extends MoneyObject {
   // Type of account
   // 5|Type|INT|1||0
   Field<AccountType> type = Field<AccountType>(
-      importance: 2,
-      type: FieldType.text,
-      align: TextAlign.center,
-      columnWidth: ColumnWidth.small,
-      name: 'Type',
-      serializeName: 'Type',
-      defaultValue: AccountType.checking,
-      getValueForDisplay: (final MoneyObject instance) => getTypeAsText((instance as Account).type.value),
-      getValueForSerialization: (final MoneyObject instance) => (instance as Account).type.value.index,
-      getEditWidget: (final MoneyObject instance, Function onEdited) {
-        return pickerAccountType(
-          itemSelected: (instance as Account).type.value,
-          onSelected: (AccountType newSelection) {
-            (instance).type.value = newSelection;
-            onEdited(); // notify container
-          },
-        );
-      });
+    importance: 2,
+    type: FieldType.text,
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.small,
+    name: 'Type',
+    serializeName: 'Type',
+    defaultValue: AccountType.checking,
+    getValueForDisplay: (final MoneyObject instance) => getTypeAsText((instance as Account).type.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).type.value.index,
+    getEditWidget: (final MoneyObject instance, Function onEdited) {
+      return pickerAccountType(
+        itemSelected: (instance as Account).type.value,
+        onSelected: (AccountType newSelection) {
+          (instance).type.value = newSelection;
+          onEdited(); // notify container
+        },
+      );
+    },
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Account).type.value = AccountType.values[value];
+    },
+  );
 
   // 6 Open Balance
   // 6|OpeningBalance|money|0||0
