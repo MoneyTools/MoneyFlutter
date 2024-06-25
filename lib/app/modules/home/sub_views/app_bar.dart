@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/modules/home/sub_views/app_title.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -42,14 +43,13 @@ class _MyAppBarState extends State<MyAppBar> {
       // Button on the right side
       actions: <Widget>[
         // Hide/Show closed accounts
-        if (!GeneralController().isSmallScreen) _buildButtonToggleViewClosedAccounts(),
+        if (!isSmallDevice(context)) _buildButtonToggleViewClosedAccounts(),
 
         // Dark / Light mode
         IconButton(
           icon: themeController.isDarkTheme.value ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: () {
-            final ThemeController themeController = Get.find();
-            themeController.toggleTheme();
+            ThemeController.to.toggleThemeMode();
           },
           tooltip: 'Toggle brightness',
         ),

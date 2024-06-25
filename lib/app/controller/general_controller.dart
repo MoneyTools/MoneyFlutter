@@ -43,8 +43,6 @@ class GeneralController extends GetxController {
     update();
   }
 
-  bool isSmallScreen = true;
-
   CashflowViewAs cashflowViewAs = CashflowViewAs.sankey;
   int cashflowRecurringOccurrences = 12;
   String apiKeyForStocks = '';

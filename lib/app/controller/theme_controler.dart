@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-// import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeController extends GetxController {
   static ThemeController get to => Get.find();
@@ -19,7 +17,7 @@ class ThemeController extends GetxController {
     loadThemeFromPreferences();
   }
 
-  void toggleTheme() {
+  void toggleThemeMode() {
     isDarkTheme.value = !isDarkTheme.value;
     saveThemeToPreferences();
     Get.changeTheme(themeData);
@@ -32,16 +30,14 @@ class ThemeController extends GetxController {
   }
 
   void loadThemeFromPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isDarkTheme.value = prefs.getBool(settingKeyDarkMode) ?? false;
-    colorSelected.value = prefs.getInt(settingKeyTheme) ?? 0;
+    isDarkTheme.value = PreferenceController.to.getBool(settingKeyDarkMode, false);
+    colorSelected.value = PreferenceController.to.getInt(settingKeyTheme, 0);
     Get.changeTheme(themeData);
   }
 
   void saveThemeToPreferences() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(settingKeyDarkMode, isDarkTheme.value);
-    prefs.setInt(settingKeyTheme, colorSelected.value);
+    PreferenceController.to.setBool(settingKeyDarkMode, isDarkTheme.value);
+    PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
   }
 
   ThemeData get themeData {

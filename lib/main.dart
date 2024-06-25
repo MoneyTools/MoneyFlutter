@@ -18,9 +18,10 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  // Leave these declared in this order
+  final PreferenceController preferenceController = Get.put(PreferenceController());
   final ThemeController themeController = Get.put(ThemeController());
   final GeneralController settingController = Get.put(GeneralController());
-  final PreferenceController preferenceController = Get.put(PreferenceController());
   final DataController dataController = Get.put(DataController());
   final ShortcutController shortcutController = Get.put(ShortcutController());
 
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: themeController.themeDataLight,
           darkTheme: themeController.themeDataDark,
+          themeMode: themeController.isDarkTheme.value ? ThemeMode.dark : ThemeMode.light,
           title: 'MyMoney by VTeam',
           initialBinding: ApplicationBindings(),
           initialRoute: '/',
