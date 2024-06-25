@@ -85,12 +85,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     _fieldToDisplay.setDefinitions(all.definitions.where((element) => element.useAsColumn).toList());
 
     // restore last user choices for this view
-    _sortByFieldIndex = GeneralController().getPref().getInt(getPreferenceKey(settingKeySortBy), 0);
-    _sortAscending = GeneralController().getPref().getBool(getPreferenceKey(settingKeySortAscending), true);
-    _lastSelectedItemId = GeneralController().getPref().getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
+    _sortByFieldIndex = GeneralController().ctlPref.getInt(getPreferenceKey(settingKeySortBy), 0);
+    _sortAscending = GeneralController().ctlPref.getBool(getPreferenceKey(settingKeySortAscending), true);
+    _lastSelectedItemId = GeneralController().ctlPref.getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
 
     final int subViewIndex = GeneralController()
-        .getPref()
+        .ctlPref
         .getInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), InfoPanelSubViewEnum.details.index);
 
     _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
@@ -98,10 +98,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     // Filters
 
     // load text filter
-    _filterByText = GeneralController().getPref().getString(getPreferenceKey(settingKeyFilterText), '');
+    _filterByText = GeneralController().ctlPref.getString(getPreferenceKey(settingKeyFilterText), '');
 
     // load the column filters
-    GeneralController().getPref().getStringList(getPreferenceKey(settingKeyFilterColumnsText)).then((list) {
+    GeneralController().ctlPref.getStringList(getPreferenceKey(settingKeyFilterColumnsText)).then((list) {
       _filterByFieldsValue = FieldFilters.fromList(list);
     });
 
@@ -179,7 +179,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   Widget build(final BuildContext context) {
     return buildViewContent(
       AdaptiveViewWithList(
-        key: Key('${GeneralController().getPref().includeClosedAccounts}|${list.length}'),
+        key: Key('${GeneralController().ctlPref.includeClosedAccounts}|${list.length}'),
         top: buildHeader(),
         list: list,
         fieldDefinitions: _fieldToDisplay.definitions,
@@ -464,7 +464,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       }
 
       // persist the last selected item index
-      GeneralController().getPref().setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
+      GeneralController().ctlPref.setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
     });
   }
 
@@ -566,17 +566,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void saveLastUserChoicesOfView() {
     // Persist users choice
-    GeneralController().getPref().setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
-    GeneralController().getPref().setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
+    GeneralController().ctlPref.setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
+    GeneralController().ctlPref.setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
     GeneralController()
-        .getPref()
+        .ctlPref
         .setInt(getPreferenceKey(settingKeySelectedListItemId), getUniqueIdOfFirstSelectedItem() ?? -1);
+    GeneralController().ctlPref.setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
+    GeneralController().ctlPref.setString(getPreferenceKey(settingKeyFilterText), _filterByText);
     GeneralController()
-        .getPref()
-        .setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
-    GeneralController().getPref().setString(getPreferenceKey(settingKeyFilterText), _filterByText);
-    GeneralController()
-        .getPref()
+        .ctlPref
         .setStringList(getPreferenceKey(settingKeyFilterColumnsText), _filterByFieldsValue.toStringList());
   }
 

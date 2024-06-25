@@ -191,7 +191,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                         fieldName: Constants.viewTransactionFieldnameAccount,
                         filterTextInLowerCase: account.name.value.toLowerCase()));
 
-                    GeneralController().getPref().setStringList(
+                    GeneralController().ctlPref.setStringList(
                           ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
                           filterByAccount.toStringList(),
                         );
@@ -228,7 +228,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   List<Account> getList({bool includeDeleted = false, bool applyFilter = true}) {
     List<Account> list = Data().accounts.activeAccount(
           getSelectedAccountType(),
-          isActive: GeneralController().getPref().includeClosedAccounts ? null : true,
+          isActive: GeneralController().ctlPref.includeClosedAccounts ? null : true,
         );
 
     if (applyFilter) {

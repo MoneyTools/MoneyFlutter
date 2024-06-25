@@ -283,7 +283,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   Account getMostRecentlySelectedAccount() {
-    final int lastSelectionId = GeneralController().getPref().getInt(getViewPreferenceIdAccountLastSelected(), -1);
+    final int lastSelectionId = GeneralController().ctlPref.getInt(getViewPreferenceIdAccountLastSelected(), -1);
     if (lastSelectionId != -1) {
       final Account? accountExist = get(lastSelectionId);
       if (accountExist != null) {
@@ -295,7 +295,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   void setMostRecentUsedAccount(Account account) {
-    GeneralController().getPref().setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
+    GeneralController().ctlPref.setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
   }
 
   double getSumOfAccountBalances() {

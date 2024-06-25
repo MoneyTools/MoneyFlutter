@@ -75,7 +75,7 @@ extension DataFromCsv on Data {
   }
 
   Future<String> saveToCsv() async {
-    String destinationFolder = await GeneralController().ctrlData.generateNextFolderToSaveTo();
+    String destinationFolder = await GeneralController().ctlData.generateNextFolderToSaveTo();
     if (destinationFolder.isEmpty) {
       throw Exception('No container folder give for saving');
     }

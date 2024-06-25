@@ -157,7 +157,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
 
       // if both accounts are closed skip them if the user does not care
       if (accountSender.isClosed() && accountReceiver.isClosed()) {
-        if (!GeneralController().getPref().includeClosedAccounts) {
+        if (!GeneralController().ctlPref.includeClosedAccounts) {
           // exclude closed account
           return;
         }

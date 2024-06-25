@@ -155,15 +155,15 @@ class MoneyObjects<T> {
   }
 
   void assessMutationsCounts() {
-    GeneralController().ctrlData.trackMutations.reset();
+    GeneralController().ctlData.trackMutations.reset();
     for (final item in _iterableListOfMoneyObject(true)) {
       switch (item.mutation) {
         case MutationType.inserted:
-          GeneralController().ctrlData.trackMutations.added++;
+          GeneralController().ctlData.trackMutations.added++;
         case MutationType.changed:
-          GeneralController().ctrlData.trackMutations.changed++;
+          GeneralController().ctlData.trackMutations.changed++;
         case MutationType.deleted:
-          GeneralController().ctrlData.trackMutations.deleted++;
+          GeneralController().ctlData.trackMutations.deleted++;
         default:
           break;
       }

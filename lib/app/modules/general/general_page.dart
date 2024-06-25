@@ -15,7 +15,7 @@ class GeneralPage extends GetView<GetxController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const TextTitle('General'),
+        title: const TextTitle('Settings'),
         centerTitle: true,
       ),
       body: Center(
@@ -25,10 +25,10 @@ class GeneralPage extends GetView<GetxController> {
               SwitchListTile(
                 title: const Text('Rental'),
                 subtitle: const Text('Manage the expenses and rental income of properties.'),
-                value: GeneralController().getPref().includeRentalManagement,
+                value: GeneralController().ctlPref.includeRentalManagement,
                 onChanged: (bool value) {
-                  GeneralController().getPref().includeRentalManagement =
-                      !GeneralController().getPref().includeRentalManagement;
+                  GeneralController().ctlPref.includeRentalManagement =
+                      !GeneralController().ctlPref.includeRentalManagement;
                   // setState(() {
                   //   _isRentalEnabled = value;
                   // });

@@ -62,15 +62,15 @@ class _MyAppBarState extends State<MyAppBar> {
     return IconButton(
       icon: _buildButtonToggleViewClosedAccountsIcon(),
       onPressed: () {
-        GeneralController().getPref().includeClosedAccounts = !GeneralController().getPref().includeClosedAccounts;
+        GeneralController().ctlPref.includeClosedAccounts = !GeneralController().ctlPref.includeClosedAccounts;
       },
-      tooltip: GeneralController().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
+      tooltip: GeneralController().ctlPref.includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
     );
   }
 
   Widget _buildButtonToggleViewClosedAccountsIcon() {
     return Opacity(
-      opacity: GeneralController().getPref().includeClosedAccounts ? 1.0 : 0.5,
+      opacity: GeneralController().ctlPref.includeClosedAccounts ? 1.0 : 0.5,
       child: const Icon(
         Icons.inventory,
         size: 18,
@@ -161,8 +161,7 @@ class _MyAppBarState extends State<MyAppBar> {
       PopupMenuItem<int>(
         value: Constants.commandIncludeClosedAccount,
         child: ThreePartLabel(
-          text1:
-              GeneralController().getPref().includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
+          text1: GeneralController().ctlPref.includeClosedAccounts ? 'Hide closed accounts' : 'Include closed account',
           icon: _buildButtonToggleViewClosedAccountsIcon(),
           small: true,
         ),
@@ -173,7 +172,7 @@ class _MyAppBarState extends State<MyAppBar> {
       const PopupMenuItem<int>(
         value: Constants.commandSettings,
         child: ThreePartLabel(
-          text1: 'General...',
+          text1: 'Settings...',
           icon: Icon(Icons.settings, color: Colors.grey),
           small: true,
         ),
@@ -254,7 +253,7 @@ class _MyAppBarState extends State<MyAppBar> {
       case Constants.commandSettings:
         Get.toNamed(Constants.routeSettingsPage);
       case Constants.commandIncludeClosedAccount:
-        GeneralController().getPref().includeClosedAccounts = !GeneralController().getPref().includeClosedAccounts;
+        GeneralController().ctlPref.includeClosedAccounts = !GeneralController().ctlPref.includeClosedAccounts;
       default:
         final ThemeController themeController = Get.find();
         themeController.setThemeColor(value);

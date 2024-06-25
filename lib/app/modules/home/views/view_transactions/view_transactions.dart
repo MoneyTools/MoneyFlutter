@@ -105,7 +105,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 if (transaction != null) {
                   // Preselect the Account of this Transaction
 
-                  GeneralController().getPref().setInt(
+                  GeneralController().ctlPref.setInt(
                         ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
                         transaction.accountId.value,
                       );
@@ -123,7 +123,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Category of this Transaction
-                  GeneralController().getPref().setInt(
+                  GeneralController().ctlPref.setInt(
                       ViewId.viewCategories.getViewPreferenceId(
                         settingKeySelectedListItemId,
                       ),
@@ -141,7 +141,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Payee of this Transaction
-                  GeneralController().getPref().setInt(
+                  GeneralController().ctlPref.setInt(
                         ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
                         transaction.payee.value,
                       );

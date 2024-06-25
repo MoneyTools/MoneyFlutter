@@ -46,21 +46,21 @@ class BadgePendingChanges extends StatelessWidget {
   Widget getChangeLabel(final BuildContext context) {
     List<Widget> widgets = [];
     TextStyle textStyle = Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
-    if (GeneralController().ctrlData.trackMutations.added.value > 0) {
+    if (GeneralController().ctlData.trackMutations.added.value > 0) {
       widgets.add(
         buildCounter(
-            '+', GeneralController().ctrlData.trackMutations.added.value, textStyle.copyWith(color: Colors.green)),
+            '+', GeneralController().ctlData.trackMutations.added.value, textStyle.copyWith(color: Colors.green)),
       );
     }
 
-    if (GeneralController().ctrlData.trackMutations.changed.value > 0) {
+    if (GeneralController().ctlData.trackMutations.changed.value > 0) {
       widgets.add(buildCounter(
-          '=', GeneralController().ctrlData.trackMutations.changed.value, textStyle.copyWith(color: Colors.orange)));
+          '=', GeneralController().ctlData.trackMutations.changed.value, textStyle.copyWith(color: Colors.orange)));
     }
 
-    if (GeneralController().ctrlData.trackMutations.deleted.value > 0) {
+    if (GeneralController().ctlData.trackMutations.deleted.value > 0) {
       widgets.add(buildCounter(
-          '-', GeneralController().ctrlData.trackMutations.deleted.value, textStyle.copyWith(color: Colors.red)));
+          '-', GeneralController().ctlData.trackMutations.deleted.value, textStyle.copyWith(color: Colors.red)));
     }
 
     return Row(
@@ -80,6 +80,6 @@ class BadgePendingChanges extends StatelessWidget {
   }
 
   String getTooltipText() {
-    return 'Added: ${GeneralController().ctrlData.trackMutations.added}\nModified: ${GeneralController().ctrlData.trackMutations.changed}\nDeleted: ${GeneralController().ctrlData.trackMutations.deleted}';
+    return 'Added: ${GeneralController().ctlData.trackMutations.added}\nModified: ${GeneralController().ctlData.trackMutations.changed}\nDeleted: ${GeneralController().ctlData.trackMutations.deleted}';
   }
 }

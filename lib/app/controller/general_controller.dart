@@ -28,12 +28,8 @@ class GeneralController extends GetxController {
 
   String get getUniqueState => '${Data().version}';
 
-  PreferenceController getPref() {
-    final PreferenceController preferenceController = Get.find();
-    return preferenceController;
-  }
-
-  DataController get ctrlData => Get.find();
+  PreferenceController get ctlPref => Get.find();
+  DataController get ctlData => Get.find();
 
   /// State for Preferences
   bool _isPreferenceLoaded = false;
@@ -105,30 +101,29 @@ class GeneralController extends GetxController {
   double textScale = 1.0;
 
   Future<bool> preferrenceLoad() async {
-    // await getPref().initPublic();
-    textScale = getPref().getDouble(settingKeyTextScale, 1.0);
+    textScale = ctlPref.getDouble(settingKeyTextScale, 1.0);
 
     cashflowViewAs = CashflowViewAs.values[
-        intValueOrDefault(getPref().getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
-    cashflowRecurringOccurrences = getPref().getInt(settingKeyCashflowRecurringOccurrences, 12);
-    apiKeyForStocks = getPref().getString(settingKeyStockApiKey, '');
-    isDetailsPanelExpanded = getPref().getBool(settingKeyDetailsPanelExpanded) == true;
+        intValueOrDefault(ctlPref.getInt(settingKeyCashflowView), defaultValueIfNull: CashflowViewAs.sankey.index)];
+    cashflowRecurringOccurrences = ctlPref.getInt(settingKeyCashflowRecurringOccurrences, 12);
+    apiKeyForStocks = ctlPref.getString(settingKeyStockApiKey, '');
+    isDetailsPanelExpanded = ctlPref.getBool(settingKeyDetailsPanelExpanded) == true;
 
     isPreferenceLoaded = true;
     return true;
   }
 
   void preferrenceSave() {
-    getPref().setDouble(settingKeyTextScale, textScale);
-    getPref().setInt(settingKeyCashflowView, cashflowViewAs.index);
-    getPref().setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
-    getPref().setString(settingKeyStockApiKey, apiKeyForStocks);
+    ctlPref.setDouble(settingKeyTextScale, textScale);
+    ctlPref.setInt(settingKeyCashflowView, cashflowViewAs.index);
+    ctlPref.setInt(settingKeyCashflowRecurringOccurrences, cashflowRecurringOccurrences);
+    ctlPref.setString(settingKeyStockApiKey, apiKeyForStocks);
   }
 
   void closeFile([bool rebuild = true]) {
     Data().close();
-    ctrlData.dataFileIsClosed();
-    this.ctrlData.trackMutations.reset();
+    ctlData.dataFileIsClosed();
+    this.ctlData.trackMutations.reset();
   }
 
   void onFileNew() async {
@@ -145,24 +140,24 @@ class GeneralController extends GetxController {
   }
 
   void onShowFileLocation() async {
-    String path = await ctrlData.generateNextFolderToSaveTo();
+    String path = await ctlData.generateNextFolderToSaveTo();
     showLocalFolder(path);
   }
 
   void onSaveToCsv() async {
     final String fullPathToFileName = await Data().saveToCsv();
 
-    getPref().addToMRU(fullPathToFileName);
+    ctlPref.addToMRU(fullPathToFileName);
 
     Data().assessMutationsCountOfAllModels();
   }
 
   void onSaveToSql() async {
-    String fileNameAndPath = ctrlData.currentLoadedFileName.value;
+    String fileNameAndPath = ctlData.currentLoadedFileName.value;
 
     if (fileNameAndPath.isEmpty) {
       // this happens if the user started with a new file and click save to SQL
-      fileNameAndPath = await ctrlData.defaultFolderToSaveTo('mymoney.mmdb');
+      fileNameAndPath = await ctlData.defaultFolderToSaveTo('mymoney.mmdb');
     }
 
     Data().saveToSql(
@@ -175,7 +170,7 @@ class GeneralController extends GetxController {
           }
         });
 
-    getPref().addToMRU(fileNameAndPath);
+    ctlPref.addToMRU(fileNameAndPath);
   }
 
   Future<bool> onFileOpen() async {
@@ -248,7 +243,7 @@ void switchViewTransacionnForPayee(final String payeeName) {
   fieldFilters.add(
       FieldFilter(fieldName: Constants.viewTransactionFieldnamePayee, filterTextInLowerCase: payeeName.toLowerCase()));
 
-  GeneralController().getPref().setStringList(
+  GeneralController().ctlPref.setStringList(
         ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
         fieldFilters.toStringList(),
       );
