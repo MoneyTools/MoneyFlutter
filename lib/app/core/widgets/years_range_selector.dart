@@ -7,10 +7,6 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class YearRangeSlider extends StatefulWidget {
-  final int minYear;
-  final int maxYear;
-  final void Function(int minYear, int maxYear) onChanged;
-  late final int spanInYears;
 
   YearRangeSlider({
     super.key,
@@ -20,6 +16,10 @@ class YearRangeSlider extends StatefulWidget {
   }) {
     spanInYears = this.maxYear - this.minYear;
   }
+  final int minYear;
+  final int maxYear;
+  final void Function(int minYear, int maxYear) onChanged;
+  late final int spanInYears;
 
   @override
   YearRangeSliderState createState() => YearRangeSliderState();

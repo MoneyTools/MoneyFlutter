@@ -9,6 +9,23 @@ import 'package:money/app/data/models/money_objects/money_object.dart';
  */
 
 class TransactionExtra extends MoneyObject {
+
+  /// Constructor
+  TransactionExtra({
+    // 0
+    required int id,
+    // 1
+    required int transaction,
+    // 2
+    required int taxYear,
+    // 3
+    required DateTime? taxDate,
+  }) {
+    this.id.value = id;
+    this.transaction.value = transaction;
+    this.taxYear.value = taxYear;
+    this.taxDate.value = taxDate;
+  }
   @override
   int get uniqueId => id.value;
 
@@ -38,21 +55,4 @@ class TransactionExtra extends MoneyObject {
     serializeName: 'TaxDate',
     getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxDate.value,
   );
-
-  /// Constructor
-  TransactionExtra({
-    // 0
-    required int id,
-    // 1
-    required int transaction,
-    // 2
-    required int taxYear,
-    // 3
-    required DateTime? taxDate,
-  }) {
-    this.id.value = id;
-    this.transaction.value = transaction;
-    this.taxYear.value = taxYear;
-    this.taxDate.value = taxDate;
-  }
 }

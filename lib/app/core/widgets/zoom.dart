@@ -6,9 +6,6 @@ import 'package:money/app/controller/theme_controler.dart';
 
 /// ( - )  100% ( + )
 class ZoomIncreaseDecrease extends StatefulWidget {
-  final String title;
-  final VoidCallback onDecrease;
-  final VoidCallback onIncrease;
 
   const ZoomIncreaseDecrease({
     super.key,
@@ -16,6 +13,9 @@ class ZoomIncreaseDecrease extends StatefulWidget {
     required this.onDecrease,
     required this.onIncrease,
   });
+  final String title;
+  final VoidCallback onDecrease;
+  final VoidCallback onIncrease;
 
   @override
   State<ZoomIncreaseDecrease> createState() => _ZoomIncreaseDecreaseState();

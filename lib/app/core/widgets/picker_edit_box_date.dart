@@ -3,14 +3,14 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
 class PickerEditBoxDate extends StatefulWidget {
-  final String? initialValue;
-  final Function(String) onChanged;
 
   const PickerEditBoxDate({
     super.key,
     this.initialValue,
     required this.onChanged,
   });
+  final String? initialValue;
+  final Function(String) onChanged;
 
   @override
   PickerEditBoxDateState createState() => PickerEditBoxDateState();

@@ -14,10 +14,10 @@ import 'package:money/app/data/storage/data/data.dart';
 
 // ignore: must_be_immutable
 class PanelSanKey extends StatelessWidget {
-  final int minYear;
-  final int maxYear;
 
   PanelSanKey({required this.minYear, required this.maxYear, super.key});
+  final int minYear;
+  final int maxYear;
 
   late double totalIncomes = 0.00;
   late double totalExpenses = 0.00;

@@ -192,6 +192,12 @@ class _PendingChangesState extends State<PendingChanges> {
 }
 
 class Mutations {
+
+  Mutations({
+    required this.typeOfMutation,
+    required this.title,
+    required this.color,
+  });
   MutationType typeOfMutation;
   String title;
   Color color;
@@ -199,12 +205,6 @@ class Mutations {
   int selectedGroup = 0;
 
   List<MutationGroup> mutationGroups = [];
-
-  Mutations({
-    required this.typeOfMutation,
-    required this.title,
-    required this.color,
-  });
 
   void initMutationList() {
     count = 0;

@@ -2,17 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class MyListItemAsCard extends StatelessWidget {
-  final String? leftTopAsString;
-  final String? leftBottomAsString;
-  final String? rightTopAsString;
-  final String? rightBottomAsString;
-
-  final Widget? leftTopAsWidget;
-  final Widget? leftBottomAsWidget;
-  final Widget? rightTopAsWidget;
-  final Widget? rightBottomAsWidget;
-
-  final bool bottomBorder;
 
   /// Constructor
   const MyListItemAsCard({
@@ -46,6 +35,17 @@ class MyListItemAsCard extends StatelessWidget {
     //
     this.bottomBorder = true,
   });
+  final String? leftTopAsString;
+  final String? leftBottomAsString;
+  final String? rightTopAsString;
+  final String? rightBottomAsString;
+
+  final Widget? leftTopAsWidget;
+  final Widget? leftBottomAsWidget;
+  final Widget? rightTopAsWidget;
+  final Widget? rightBottomAsWidget;
+
+  final bool bottomBorder;
 
   @override
   Widget build(final BuildContext context) {

@@ -14,15 +14,6 @@ export 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/lis
 export 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_header.dart';
 
 class MyListView<T> extends StatefulWidget {
-  final Fields<T> fields;
-  final List<T> list;
-  final bool displayAsColumn;
-  final Function(BuildContext, int)? onTap;
-  final Function(BuildContext, int)? onDoubleTap;
-  final Function(BuildContext, int)? onLongPress;
-  final ValueNotifier<List<int>> selectedItemIds;
-  final Function(int /* uniqueId */)? onSelectionChanged;
-  final bool isMultiSelectionOn;
 
   const MyListView({
     super.key,
@@ -36,6 +27,15 @@ class MyListView<T> extends StatefulWidget {
     this.onSelectionChanged,
     this.isMultiSelectionOn = false,
   });
+  final Fields<T> fields;
+  final List<T> list;
+  final bool displayAsColumn;
+  final Function(BuildContext, int)? onTap;
+  final Function(BuildContext, int)? onDoubleTap;
+  final Function(BuildContext, int)? onLongPress;
+  final ValueNotifier<List<int>> selectedItemIds;
+  final Function(int /* uniqueId */)? onSelectionChanged;
+  final bool isMultiSelectionOn;
 
   @override
   State<MyListView<T>> createState() => MyListViewState<T>();

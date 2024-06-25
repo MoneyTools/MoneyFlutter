@@ -10,10 +10,6 @@ import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurri
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
 
 class PanelRecurrings extends StatefulWidget {
-  final CashflowViewAs viewRecurringAs;
-  final DateRange dateRangeSearch;
-  final int minYear;
-  final int maxYear;
 
   const PanelRecurrings({
     super.key,
@@ -22,6 +18,10 @@ class PanelRecurrings extends StatefulWidget {
     required this.maxYear,
     required this.viewRecurringAs,
   });
+  final CashflowViewAs viewRecurringAs;
+  final DateRange dateRangeSearch;
+  final int minYear;
+  final int maxYear;
 
   @override
   State<PanelRecurrings> createState() => _PanelRecurringsState();

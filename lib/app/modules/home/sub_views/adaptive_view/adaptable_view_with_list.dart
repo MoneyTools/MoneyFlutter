@@ -5,25 +5,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 
 class AdaptiveViewWithList extends StatelessWidget {
-  final Widget? top;
-  final FieldDefinitions fieldDefinitions;
-  final FieldFilters filters;
-  final List<MoneyObject> list;
-  final Widget? bottom;
-  final int flexBottom;
-  final int sortByFieldIndex;
-  final bool sortAscending;
-  final bool applySorting;
-
-  // Selection
-  final ValueNotifier<List<int>> selectedItemsByUniqueId;
-  final Function(int) onSelectionChanged;
-  final bool isMultiSelectionOn;
-
-  final Function(BuildContext, int)? onItemTap;
-  final Function(int columnHeaderIndex)? onColumnHeaderTap;
-  final Function(Field<dynamic> field)? onColumnHeaderLongPress;
-  final Widget? Function(Field field)? getColumnFooterWidget;
 
   const AdaptiveViewWithList({
     super.key,
@@ -44,6 +25,25 @@ class AdaptiveViewWithList extends StatelessWidget {
     this.onColumnHeaderLongPress,
     this.getColumnFooterWidget,
   });
+  final Widget? top;
+  final FieldDefinitions fieldDefinitions;
+  final FieldFilters filters;
+  final List<MoneyObject> list;
+  final Widget? bottom;
+  final int flexBottom;
+  final int sortByFieldIndex;
+  final bool sortAscending;
+  final bool applySorting;
+
+  // Selection
+  final ValueNotifier<List<int>> selectedItemsByUniqueId;
+  final Function(int) onSelectionChanged;
+  final bool isMultiSelectionOn;
+
+  final Function(BuildContext, int)? onItemTap;
+  final Function(int columnHeaderIndex)? onColumnHeaderTap;
+  final Function(Field<dynamic> field)? onColumnHeaderLongPress;
+  final Widget? Function(Field field)? getColumnFooterWidget;
 
   @override
   Widget build(BuildContext context) {

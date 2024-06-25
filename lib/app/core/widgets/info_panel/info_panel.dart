@@ -5,22 +5,6 @@ import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class InfoPanel extends StatelessWidget {
-  final bool isExpanded;
-  final Function onExpanded;
-  final ValueNotifier<List<int>> selectedItems;
-
-  // SubViews [Details] [Chart] [Transactions]
-  final InfoPanelSubViewEnum subPanelSelected;
-  final Function(InfoPanelSubViewEnum) subPanelSelectionChanged;
-  final Widget Function(InfoPanelSubViewEnum, List<int>) subPanelContent;
-
-  // Currency selection
-  final int currencySelected;
-  final List<String> Function(InfoPanelSubViewEnum, List<int>) getCurrencyChoices;
-  final Function(int) currencySelectionChanged;
-
-  // Actions
-  final List<Widget> Function(bool) getActionButtons;
 
   /// Constructor
   const InfoPanel({
@@ -42,6 +26,22 @@ class InfoPanel extends StatelessWidget {
     // Actions
     required this.getActionButtons,
   });
+  final bool isExpanded;
+  final Function onExpanded;
+  final ValueNotifier<List<int>> selectedItems;
+
+  // SubViews [Details] [Chart] [Transactions]
+  final InfoPanelSubViewEnum subPanelSelected;
+  final Function(InfoPanelSubViewEnum) subPanelSelectionChanged;
+  final Widget Function(InfoPanelSubViewEnum, List<int>) subPanelContent;
+
+  // Currency selection
+  final int currencySelected;
+  final List<String> Function(InfoPanelSubViewEnum, List<int>) getCurrencyChoices;
+  final Function(int) currencySelectionChanged;
+
+  // Actions
+  final List<Widget> Function(bool) getActionButtons;
 
   @override
   Widget build(final BuildContext context) {

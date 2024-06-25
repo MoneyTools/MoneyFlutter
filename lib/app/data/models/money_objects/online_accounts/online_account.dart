@@ -26,51 +26,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
  */
 
 class OnlineAccount extends MoneyObject {
-  @override
-  int get uniqueId => id.value;
-  @override
-  set uniqueId(value) => id.value = value;
-
-  // 0
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
-  );
-
-  // 1
-  final String name;
-
-  // 2
-  final String institution;
-
-  // 3
-  final String ofx;
-
-  // 4
-  final String ofxVersion;
-
-  // 5
-  final String fdic;
-
-  // 6
-  final String userId;
-
-  // 7
-  final String password;
-
-  // 8
-  final String userCred1;
-
-  // 9
-  final String userCred2;
-
-  // 10
-  final String authToken;
-
-  // 11
-  final String bankId;
-
-  // 12
-  final String branchId;
 
   OnlineAccount({
     required this.name,
@@ -116,4 +71,49 @@ class OnlineAccount extends MoneyObject {
       branchId: row.getString('BranchId'),
     )..id.value = row.getInt('Id', -1);
   }
+  @override
+  int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
+
+  // 0
+  FieldId id = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
+  );
+
+  // 1
+  final String name;
+
+  // 2
+  final String institution;
+
+  // 3
+  final String ofx;
+
+  // 4
+  final String ofxVersion;
+
+  // 5
+  final String fdic;
+
+  // 6
+  final String userId;
+
+  // 7
+  final String password;
+
+  // 8
+  final String userCred1;
+
+  // 9
+  final String userCred2;
+
+  // 10
+  final String authToken;
+
+  // 11
+  final String bankId;
+
+  // 12
+  final String branchId;
 }

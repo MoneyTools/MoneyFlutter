@@ -12,6 +12,14 @@ import 'package:money/app/data/models/constants.dart';
 export 'package:money/app/core/widgets/sankey/sankey_helper.dart';
 
 class SankeyPainter extends CustomPainter {
+
+  /// Constructor
+  SankeyPainter({
+    required this.listOfIncomes,
+    required this.listOfExpenses,
+    required this.colors,
+    required this.compactView,
+  });
   final List<SanKeyEntry> listOfIncomes;
   final List<SanKeyEntry> listOfExpenses;
   final bool compactView;
@@ -21,14 +29,6 @@ class SankeyPainter extends CustomPainter {
 
   // double incomeHeight = Constants.targetHeight;
   SankeyColors colors;
-
-  /// Constructor
-  SankeyPainter({
-    required this.listOfIncomes,
-    required this.listOfExpenses,
-    required this.colors,
-    required this.compactView,
-  });
 
   @override
   bool shouldRepaint(final SankeyPainter oldDelegate) => true;

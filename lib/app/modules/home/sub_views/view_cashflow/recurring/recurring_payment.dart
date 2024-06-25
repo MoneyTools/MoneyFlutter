@@ -11,17 +11,6 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 
 class RecurringPayment {
-  final int payeeId;
-  final List<Transaction> transactions;
-  final bool forIncomeTransaction;
-
-  late double total;
-  late DateRange dateRangeFound;
-  late int frequency;
-  late List<double> sumPerMonths;
-  late List<Pair<int, double>> averagePerMonths;
-  late List<Pair<int, double>> categoryIdsAndSums;
-  late List<Distribution> categoryDistribution;
 
   RecurringPayment({
     required this.payeeId,
@@ -81,6 +70,17 @@ class RecurringPayment {
       topN: 4,
     );
   }
+  final int payeeId;
+  final List<Transaction> transactions;
+  final bool forIncomeTransaction;
+
+  late double total;
+  late DateRange dateRangeFound;
+  late int frequency;
+  late List<double> sumPerMonths;
+  late List<Pair<int, double>> averagePerMonths;
+  late List<Pair<int, double>> categoryIdsAndSums;
+  late List<Distribution> categoryDistribution;
 
   List<Distribution> getTopDistributions({
     required RecurringPayment payment,

@@ -14,18 +14,23 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/tra
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
-  final double startingBalance;
 
   const ViewTransactions({
     super.key,
     this.startingBalance = 0.00,
   });
+  final double startingBalance;
 
   @override
   State<ViewForMoneyObjects> createState() => ViewTransactionsState();
 }
 
 class ViewTransactionsState extends ViewForMoneyObjectsState {
+
+  ViewTransactionsState() {
+    viewId = ViewId.viewTransactions;
+    supportsMultiSelection = true;
+  }
   final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
   final List<Widget> pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[false, false, true];
@@ -34,11 +39,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   // Footer related
   final DateRange _footerColumnDate = DateRange();
   double _footerRunningBalanceUSD = 0.0;
-
-  ViewTransactionsState() {
-    viewId = ViewId.viewTransactions;
-    supportsMultiSelection = true;
-  }
 
   @override
   void initState() {

@@ -232,13 +232,13 @@ class DataController extends GetxController {
 }
 
 class DataSource {
-  String filePath;
-
-  Uint8List fileBytes;
   DataSource([
     this.filePath = '',
     Uint8List? fileBytes,
   ]) : fileBytes = fileBytes ?? Uint8List(0);
+  String filePath;
+
+  Uint8List fileBytes;
 
   bool get isByteFile => fileBytes.isNotEmpty && filePath.isNotEmpty;
   bool get isLocalFile => fileBytes.isEmpty && filePath.isNotEmpty && filePath.contains(MyFileSystems.pathSeparator);

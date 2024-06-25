@@ -3,13 +3,6 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class Box extends StatelessWidget {
-  final String title;
-  final double? margin;
-  final double padding;
-  final Color? color;
-  final double? width;
-  final double? height;
-  final Widget child;
 
   const Box({
     super.key,
@@ -21,6 +14,13 @@ class Box extends StatelessWidget {
     this.padding = 8,
     required this.child,
   });
+  final String title;
+  final double? margin;
+  final double padding;
+  final Color? color;
+  final double? width;
+  final double? height;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {

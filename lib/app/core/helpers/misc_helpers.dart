@@ -212,10 +212,10 @@ double trimToFiveDecimalPlaces(double value) {
 }
 
 class Debouncer {
-  final Duration duration;
-  Timer? _timer;
 
   Debouncer([this.duration = const Duration(seconds: 1)]);
+  final Duration duration;
+  Timer? _timer;
 
   void run(VoidCallback callback) {
     _timer?.cancel();
@@ -224,11 +224,11 @@ class Debouncer {
 }
 
 class TimeLapse {
-  Stopwatch? stopwatch;
 
   TimeLapse() {
     stopwatch = Stopwatch()..start();
   }
+  Stopwatch? stopwatch;
 
   // End stopwatch and print time spent
   void endAndPrint() {

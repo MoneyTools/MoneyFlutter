@@ -10,3 +10,4 @@ linter:
   rules:
     - directives_ordering
     - always_declare_return_types
+    - sort_constructors_first

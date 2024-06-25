@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class PickerLetters extends StatefulWidget {
-  final List<String> options;
-  final String? selected;
-  final Function(String selectedValue) onSelected;
-  final bool vertical;
 
   const PickerLetters({
     super.key,
@@ -14,6 +10,10 @@ class PickerLetters extends StatefulWidget {
     required this.onSelected,
     this.vertical = true,
   });
+  final List<String> options;
+  final String? selected;
+  final Function(String selectedValue) onSelected;
+  final bool vertical;
 
   @override
   State<PickerLetters> createState() => _PickerLettersState();

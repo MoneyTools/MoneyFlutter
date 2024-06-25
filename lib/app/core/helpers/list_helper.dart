@@ -124,17 +124,17 @@ int sortByValue(final num a, final num b, final bool ascending) {
 }
 
 class KeyValue {
-  dynamic key;
-  dynamic value;
 
   KeyValue({required this.key, required this.value});
+  dynamic key;
+  dynamic value;
 }
 
 class Pair<F, S> {
-  F first;
-  S second;
 
   Pair(this.first, this.second);
+  F first;
+  S second;
 
   @override
   int get hashCode => first.hashCode ^ second.hashCode;
@@ -150,11 +150,11 @@ class Pair<F, S> {
 }
 
 class Triple<F, S, T> {
+
+  Triple(this.first, this.second, this.third);
   F first;
   S second;
   T third;
-
-  Triple(this.first, this.second, this.third);
 
   @override
   int get hashCode => first.hashCode ^ second.hashCode ^ third.hashCode;
@@ -169,11 +169,11 @@ class Triple<F, S, T> {
   String toString() => '($first, $second, $third)';
 }
 
-class SortedSet<T> {
-  final List<T> _elements = [];
-  final int Function(T a, T b) compare; // Custom comparator function
+class SortedSet<T> { // Custom comparator function
 
   SortedSet(this.compare);
+  final List<T> _elements = [];
+  final int Function(T a, T b) compare;
 
   void add(T element) {
     int insertionIndex = _findInsertionIndex(element);

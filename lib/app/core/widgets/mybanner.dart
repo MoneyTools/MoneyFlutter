@@ -3,14 +3,14 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class MyBanner extends StatelessWidget {
-  final Widget child;
-  final bool on;
 
   const MyBanner({
     super.key,
     required this.child,
     required this.on,
   });
+  final Widget child;
+  final bool on;
 
   @override
   Widget build(BuildContext context) {

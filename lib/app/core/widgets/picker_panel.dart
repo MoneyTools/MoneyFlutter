@@ -39,14 +39,6 @@ void showPopupSelection({
 }
 
 class PickerPanel extends StatefulWidget {
-  final List<String> options;
-  final String selectedItem;
-  final Function(String selectedValue) onSelected;
-  final double itemHeight;
-  final bool showLetterPicker;
-  final TokenTextStyle tokenTextStyle;
-  final bool rightAligned;
-  final double? width;
 
   const PickerPanel({
     super.key,
@@ -59,6 +51,14 @@ class PickerPanel extends StatefulWidget {
     this.tokenTextStyle = const TokenTextStyle(),
     this.rightAligned = false,
   });
+  final List<String> options;
+  final String selectedItem;
+  final Function(String selectedValue) onSelected;
+  final double itemHeight;
+  final bool showLetterPicker;
+  final TokenTextStyle tokenTextStyle;
+  final bool rightAligned;
+  final double? width;
 
   @override
   PickerPanelState createState() => PickerPanelState();

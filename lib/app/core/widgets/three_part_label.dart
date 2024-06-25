@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class ThreePartLabel extends StatelessWidget {
-  final Widget? icon;
-  final String text1;
-  final String text2;
-  final bool small;
-  final bool isVertical;
 
   const ThreePartLabel({
     super.key,
@@ -16,6 +11,11 @@ class ThreePartLabel extends StatelessWidget {
     this.small = false,
     this.isVertical = false,
   });
+  final Widget? icon;
+  final String text1;
+  final String text2;
+  final bool small;
+  final bool isVertical;
 
   @override
   Widget build(final BuildContext context) {

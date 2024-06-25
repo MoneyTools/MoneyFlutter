@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class HeaderContentCenter extends StatelessWidget {
-  final String text;
-  final Widget? trailingWidget;
 
   const HeaderContentCenter({super.key, required this.text, required this.trailingWidget});
+  final String text;
+  final Widget? trailingWidget;
 
   @override
   Widget build(BuildContext context) {

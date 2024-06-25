@@ -8,6 +8,49 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 class LoanPayment extends MoneyObject {
+
+  LoanPayment({
+    required final int id,
+    required final int accountId,
+    required final DateTime? date,
+    required final String memo,
+    required final double principal,
+    required final double interest,
+    final String reference = '',
+  }) {
+    this.id.value = id;
+    this.accountId.value = accountId;
+    accountInstance = Data().accounts.get(this.accountId.value);
+    this.date.value = date;
+    this.memo.value = memo;
+    this.principal.value.setAmount(principal);
+    this.interest.value.setAmount(interest);
+    this.reference.value = reference;
+
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: Account.getName(accountInstance),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(principal),
+          rightBottomAsString: Currency.getAmountAsStringUsingCurrency(interest),
+        );
+  }
+
+  /// Constructor from a SQLite row
+  factory LoanPayment.fromJson(final MyJson row) {
+    return LoanPayment(
+      // 0
+      id: row.getInt('Id', -1),
+      // 1
+      accountId: row.getInt('AccountId', -1),
+      // 2
+      date: row.getDate('Date'),
+      // 3
+      principal: row.getDouble('Principal'),
+      // 4
+      interest: row.getDouble('Interest'),
+      // 3
+      memo: row.getString('Memo'),
+    );
+  }
   static final Fields<LoanPayment> _fields = Fields<LoanPayment>();
 
   static Fields<LoanPayment> get fields {
@@ -142,50 +185,7 @@ class LoanPayment extends MoneyObject {
     importance: 99,
   );
 
-  LoanPayment({
-    required final int id,
-    required final int accountId,
-    required final DateTime? date,
-    required final String memo,
-    required final double principal,
-    required final double interest,
-    final String reference = '',
-  }) {
-    this.id.value = id;
-    this.accountId.value = accountId;
-    accountInstance = Data().accounts.get(this.accountId.value);
-    this.date.value = date;
-    this.memo.value = memo;
-    this.principal.value.setAmount(principal);
-    this.interest.value.setAmount(interest);
-    this.reference.value = reference;
-
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: Account.getName(accountInstance),
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(principal),
-          rightBottomAsString: Currency.getAmountAsStringUsingCurrency(interest),
-        );
-  }
-
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
-
-  /// Constructor from a SQLite row
-  factory LoanPayment.fromJson(final MyJson row) {
-    return LoanPayment(
-      // 0
-      id: row.getInt('Id', -1),
-      // 1
-      accountId: row.getInt('AccountId', -1),
-      // 2
-      date: row.getDate('Date'),
-      // 3
-      principal: row.getDouble('Principal'),
-      // 4
-      interest: row.getDouble('Interest'),
-      // 3
-      memo: row.getString('Memo'),
-    );
-  }
 }

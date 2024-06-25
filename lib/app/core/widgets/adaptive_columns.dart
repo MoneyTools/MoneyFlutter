@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class AdaptiveColumns extends StatelessWidget {
-  final List<Widget> children;
-  final int columnWidth;
 
   /// Constructor
   const AdaptiveColumns({
@@ -11,6 +9,8 @@ class AdaptiveColumns extends StatelessWidget {
     required this.columnWidth,
     required this.children,
   });
+  final List<Widget> children;
+  final int columnWidth;
 
   @override
   Widget build(final BuildContext context) {

@@ -9,6 +9,68 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 
 class Investment extends MoneyObject {
+
+  Investment({
+    required final int id, // 1
+    required final int security, // 1
+    required final double unitPrice, // 2
+    required final double units, // 3
+    required final double commission, // 4
+    required final double markUpDown, // 5
+    required final double taxes, // 6
+    required final double fees, // 7
+    required final double load, // 8
+    required final int investmentType, // 9
+    required final int tradeType, // 10
+    required final int taxExempt, // 11
+    required final double withholding, // 12
+  }) {
+    this.id.value = id;
+    this.security.value = security;
+    this.unitPrice.value.setAmount(unitPrice);
+    this.units.value = units;
+    this.commission.value.setAmount(commission);
+    this.markUpDown.value.setAmount(markUpDown);
+    this.taxes.value.setAmount(taxes);
+    this.fees.value.setAmount(fees);
+    this.load.value.setAmount(load);
+    this.investmentType.value = investmentType;
+    this.tradeType.value = tradeType;
+    this.taxExempt.value = taxExempt;
+    this.withholding.value.setAmount(withholding);
+  }
+
+  /// Constructor from a SQLite row
+  factory Investment.fromJson(final MyJson row) {
+    return Investment(
+// 1
+      id: row.getInt('Id', -1),
+// 1
+      security: row.getInt('Security'),
+// 2
+      unitPrice: row.getDouble('UnitPrice'),
+// 3
+      units: row.getDouble('Units'),
+// 4
+      commission: row.getDouble('Commission'),
+// 5
+      markUpDown: row.getDouble('MarkUpDown'),
+// 6
+      taxes: row.getDouble('Taxes'),
+// 7
+      fees: row.getDouble('Fees'),
+// 8
+      load: row.getDouble('Load'),
+// 9
+      investmentType: row.getInt('InvestmentType'),
+// 10
+      tradeType: row.getInt('TradeType'),
+// 11
+      taxExempt: row.getInt('TaxExempt'),
+// 12
+      withholding: row.getDouble('Withholding'),
+    );
+  }
   static final Fields<Investment> _fields = Fields<Investment>();
 
   static Fields<Investment> get fields {
@@ -261,71 +323,9 @@ class Investment extends MoneyObject {
         return (instance as Investment).runningBalance.value;
       });
 
-  Investment({
-    required final int id, // 1
-    required final int security, // 1
-    required final double unitPrice, // 2
-    required final double units, // 3
-    required final double commission, // 4
-    required final double markUpDown, // 5
-    required final double taxes, // 6
-    required final double fees, // 7
-    required final double load, // 8
-    required final int investmentType, // 9
-    required final int tradeType, // 10
-    required final int taxExempt, // 11
-    required final double withholding, // 12
-  }) {
-    this.id.value = id;
-    this.security.value = security;
-    this.unitPrice.value.setAmount(unitPrice);
-    this.units.value = units;
-    this.commission.value.setAmount(commission);
-    this.markUpDown.value.setAmount(markUpDown);
-    this.taxes.value.setAmount(taxes);
-    this.fees.value.setAmount(fees);
-    this.load.value.setAmount(load);
-    this.investmentType.value = investmentType;
-    this.tradeType.value = tradeType;
-    this.taxExempt.value = taxExempt;
-    this.withholding.value.setAmount(withholding);
-  }
-
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
-
-  /// Constructor from a SQLite row
-  factory Investment.fromJson(final MyJson row) {
-    return Investment(
-// 1
-      id: row.getInt('Id', -1),
-// 1
-      security: row.getInt('Security'),
-// 2
-      unitPrice: row.getDouble('UnitPrice'),
-// 3
-      units: row.getDouble('Units'),
-// 4
-      commission: row.getDouble('Commission'),
-// 5
-      markUpDown: row.getDouble('MarkUpDown'),
-// 6
-      taxes: row.getDouble('Taxes'),
-// 7
-      fees: row.getDouble('Fees'),
-// 8
-      load: row.getDouble('Load'),
-// 9
-      investmentType: row.getInt('InvestmentType'),
-// 10
-      tradeType: row.getInt('TradeType'),
-// 11
-      taxExempt: row.getInt('TaxExempt'),
-// 12
-      withholding: row.getDouble('Withholding'),
-    );
-  }
 
   static int sortByDateAndInvestmentType(final Investment a, final Investment b, final bool ascending, bool ta) {
     int result = sortByDate(a.date, b.date, ascending);

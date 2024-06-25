@@ -18,13 +18,13 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
+  MyApp({super.key});
   // Leave these declared in this order
   final PreferenceController preferenceController = Get.put(PreferenceController());
   final ThemeController themeController = Get.put(ThemeController());
   final DataController dataController = Get.put(DataController());
   final ShortcutController shortcutController = Get.put(ShortcutController());
-
-  MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {

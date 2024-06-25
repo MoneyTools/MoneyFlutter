@@ -10,6 +10,33 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/lis
 export 'package:money/app/data/models/money_objects/aliases/alias_types.dart';
 
 class Alias extends MoneyObject {
+
+  Alias({
+    required final int id,
+    required final String pattern,
+    required final int flags,
+    required final int payeeId,
+  }) {
+    this.id.value = id;
+    this.pattern.value = pattern;
+    this.flags.value = flags;
+    this.payeeId.value = payeeId;
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: Payee.getName(payeeInstance),
+          leftBottomAsString: this.pattern.value,
+          rightBottomAsString: '${getAliasTypeAsString(type)}\n',
+        );
+  }
+
+  /// Constructor from a SQLite row
+  factory Alias.fromJson(final MyJson row) {
+    return Alias(
+      id: row.getInt('Id', -1),
+      pattern: row.getString('Pattern'),
+      flags: row.getInt('Flags'),
+      payeeId: row.getInt('Payee', -1),
+    );
+  }
   static final _fields = Fields<Alias>();
 
   static Fields<Alias> get fields {
@@ -86,36 +113,9 @@ class Alias extends MoneyObject {
   Payee? payeeInstance;
   RegExp? regex;
 
-  Alias({
-    required final int id,
-    required final String pattern,
-    required final int flags,
-    required final int payeeId,
-  }) {
-    this.id.value = id;
-    this.pattern.value = pattern;
-    this.flags.value = flags;
-    this.payeeId.value = payeeId;
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: Payee.getName(payeeInstance),
-          leftBottomAsString: this.pattern.value,
-          rightBottomAsString: '${getAliasTypeAsString(type)}\n',
-        );
-  }
-
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
-
-  /// Constructor from a SQLite row
-  factory Alias.fromJson(final MyJson row) {
-    return Alias(
-      id: row.getInt('Id', -1),
-      pattern: row.getString('Pattern'),
-      flags: row.getInt('Flags'),
-      payeeId: row.getInt('Payee', -1),
-    );
-  }
 
   AliasType get type {
     return flags.value == 0 ? AliasType.none : AliasType.regex;

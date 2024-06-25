@@ -9,9 +9,9 @@ import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
 
 class StockChartWidget extends StatefulWidget {
-  final String symbol;
 
   const StockChartWidget({super.key, required this.symbol});
+  final String symbol;
 
   @override
   StockChartWidgetState createState() => StockChartWidgetState();

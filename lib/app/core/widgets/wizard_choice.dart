@@ -3,9 +3,6 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class WizardChoice extends StatelessWidget {
-  final String title;
-  final String description;
-  final Function onPressed;
 
   const WizardChoice({
     super.key,
@@ -13,6 +10,9 @@ class WizardChoice extends StatelessWidget {
     required this.description,
     required this.onPressed,
   });
+  final String title;
+  final String description;
+  final Function onPressed;
 
   @override
   Widget build(BuildContext context) {

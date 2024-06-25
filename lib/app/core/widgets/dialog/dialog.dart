@@ -5,11 +5,6 @@ import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
 
 class MyAlertDialog extends StatelessWidget {
-  final String title;
-  final IconData? icon;
-  final Widget child;
-  final List<Widget>? actions;
-  final bool scrollable;
 
   const MyAlertDialog({
     super.key,
@@ -19,6 +14,11 @@ class MyAlertDialog extends StatelessWidget {
     required this.child,
     this.scrollable = false,
   });
+  final String title;
+  final IconData? icon;
+  final Widget child;
+  final List<Widget>? actions;
+  final bool scrollable;
 
   @override
   Widget build(BuildContext context) {

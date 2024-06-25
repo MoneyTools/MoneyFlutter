@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
 class FilterInput extends StatelessWidget {
-  final String hintText;
-  final String initialValue;
-  final Function(String) onChanged;
 
   const FilterInput({
     super.key,
@@ -11,6 +8,9 @@ class FilterInput extends StatelessWidget {
     required this.initialValue,
     required this.onChanged,
   });
+  final String hintText;
+  final String initialValue;
+  final Function(String) onChanged;
 
   @override
   Widget build(final BuildContext context) {

@@ -37,6 +37,58 @@ import '../accounts/account.dart';
     17|CategoryForManagement|INT|0||0
    */
 class RentBuilding extends MoneyObject {
+
+  RentBuilding() {
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: name.value,
+          leftBottomAsString: address.value,
+          rightTopAsWidget: MoneyWidget(amountModel: MoneyModel(amount: lifeTimePnL.profit), asTile: true),
+        );
+  }
+
+  factory RentBuilding.fromJson(final MyJson row) {
+    final RentBuilding instance = RentBuilding();
+
+    instance.id.value = row.getInt('Id', -1);
+    instance.name.value = row.getString('Name');
+    instance.address.value = row.getString('Address');
+    instance.purchasedDate.value = row.getDate('PurchasedDate', defaultIfNotFound: DateTime.now());
+    instance.purchasedPrice.value.setAmount(row.getDouble('PurchasedPrice'));
+    instance.landValue.value.setAmount(row.getDouble('LandValue'));
+    instance.estimatedValue.value.setAmount(row.getDouble('EstimatedValue'));
+    instance.ownershipName1.value = row.getString('OwnershipName1');
+    instance.ownershipName2.value = row.getString('OwnershipName2');
+    instance.ownershipPercentage1.value = row.getDouble('OwnershipPercentage1');
+    instance.ownershipPercentage2.value = row.getDouble('OwnershipPercentage2');
+
+    instance.categoryForIncome.value = row.getInt('CategoryForIncome', -1);
+    instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome.value);
+
+    instance.categoryForTaxes.value = row.getInt('CategoryForTaxes', -1);
+    instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes.value);
+
+    instance.categoryForInterest.value = row.getInt('CategoryForInterest', -1);
+    instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest.value);
+
+    instance.categoryForRepairs.value = row.getInt('CategoryForRepairs', -1);
+    instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs.value);
+
+    instance.categoryForMaintenance.value = row.getInt('CategoryForMaintenance', -1);
+    instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance.value);
+
+    instance.categoryForManagement.value = row.getInt('CategoryForManagement', -1);
+    instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement.value);
+
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForMaintenanceTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForManagementTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForRepairsTreeIds);
+    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForInterestTreeIds);
+
+    instance.note.value = row.getString('Note');
+
+    return instance;
+  }
   static final _fields = Fields<RentBuilding>();
 
   static Fields<RentBuilding> get fields {
@@ -507,58 +559,6 @@ class RentBuilding extends MoneyObject {
         this.categoryForMaintenanceTreeIds.contains(transactionCategoryId) ||
         this.categoryForManagementTreeIds.contains(transactionCategoryId) ||
         this.categoryForTaxesTreeIds.contains(transactionCategoryId);
-  }
-
-  RentBuilding() {
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: name.value,
-          leftBottomAsString: address.value,
-          rightTopAsWidget: MoneyWidget(amountModel: MoneyModel(amount: lifeTimePnL.profit), asTile: true),
-        );
-  }
-
-  factory RentBuilding.fromJson(final MyJson row) {
-    final RentBuilding instance = RentBuilding();
-
-    instance.id.value = row.getInt('Id', -1);
-    instance.name.value = row.getString('Name');
-    instance.address.value = row.getString('Address');
-    instance.purchasedDate.value = row.getDate('PurchasedDate', defaultIfNotFound: DateTime.now());
-    instance.purchasedPrice.value.setAmount(row.getDouble('PurchasedPrice'));
-    instance.landValue.value.setAmount(row.getDouble('LandValue'));
-    instance.estimatedValue.value.setAmount(row.getDouble('EstimatedValue'));
-    instance.ownershipName1.value = row.getString('OwnershipName1');
-    instance.ownershipName2.value = row.getString('OwnershipName2');
-    instance.ownershipPercentage1.value = row.getDouble('OwnershipPercentage1');
-    instance.ownershipPercentage2.value = row.getDouble('OwnershipPercentage2');
-
-    instance.categoryForIncome.value = row.getInt('CategoryForIncome', -1);
-    instance.categoryForIncomeTreeIds = Data().categories.getTreeIds(instance.categoryForIncome.value);
-
-    instance.categoryForTaxes.value = row.getInt('CategoryForTaxes', -1);
-    instance.categoryForTaxesTreeIds = Data().categories.getTreeIds(instance.categoryForTaxes.value);
-
-    instance.categoryForInterest.value = row.getInt('CategoryForInterest', -1);
-    instance.categoryForInterestTreeIds = Data().categories.getTreeIds(instance.categoryForInterest.value);
-
-    instance.categoryForRepairs.value = row.getInt('CategoryForRepairs', -1);
-    instance.categoryForRepairsTreeIds = Data().categories.getTreeIds(instance.categoryForRepairs.value);
-
-    instance.categoryForMaintenance.value = row.getInt('CategoryForMaintenance', -1);
-    instance.categoryForMaintenanceTreeIds = Data().categories.getTreeIds(instance.categoryForMaintenance.value);
-
-    instance.categoryForManagement.value = row.getInt('CategoryForManagement', -1);
-    instance.categoryForManagementTreeIds = Data().categories.getTreeIds(instance.categoryForManagement.value);
-
-    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForTaxesTreeIds);
-    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForMaintenanceTreeIds);
-    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForManagementTreeIds);
-    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForRepairsTreeIds);
-    instance.listOfCategoryIdsExpenses.addAll(instance.categoryForInterestTreeIds);
-
-    instance.note.value = row.getString('Note');
-
-    return instance;
   }
 
   // Fields for this instance

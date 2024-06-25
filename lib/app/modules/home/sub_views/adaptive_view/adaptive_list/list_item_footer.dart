@@ -4,13 +4,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 /// A Row for a Table view
 class MyListItemFooter<T> extends StatelessWidget {
-  final FieldDefinitions columns;
-  final bool multiSelectionOn;
-  final Color backgoundColor;
-
-  final Function(int columnIndex) onTap;
-  final Function(Field<dynamic>)? onLongPress;
-  final Widget? Function(Field field)? getColumnFooterWidget;
 
   const MyListItemFooter({
     super.key,
@@ -21,6 +14,13 @@ class MyListItemFooter<T> extends StatelessWidget {
     this.onLongPress,
     this.getColumnFooterWidget,
   });
+  final FieldDefinitions columns;
+  final bool multiSelectionOn;
+  final Color backgoundColor;
+
+  final Function(int columnIndex) onTap;
+  final Function(Field<dynamic>)? onLongPress;
+  final Widget? Function(Field field)? getColumnFooterWidget;
 
   @override
   Widget build(final BuildContext context) {

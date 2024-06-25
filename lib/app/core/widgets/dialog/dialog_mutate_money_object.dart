@@ -62,14 +62,14 @@ void myShowDialogAndActionsForMoneyObjects({
 
 /// Dialog content
 class DialogMutateMoneyObject extends StatefulWidget {
-  final MoneyObject moneyObject;
-  final Function(MoneyObject) onApplyChange;
 
   const DialogMutateMoneyObject({
     super.key,
     required this.moneyObject,
     required this.onApplyChange,
   });
+  final MoneyObject moneyObject;
+  final Function(MoneyObject) onApplyChange;
 
   @override
   State<DialogMutateMoneyObject> createState() => _DialogMutateMoneyObjectState();

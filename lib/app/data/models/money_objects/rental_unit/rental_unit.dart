@@ -11,6 +11,17 @@ import 'package:money/app/data/models/money_objects/money_object.dart';
   4|Note|nvarchar(255)|0||0
  */
 class RentUnit extends MoneyObject {
+
+  RentUnit();
+
+  factory RentUnit.fromJson(final MyJson row) {
+    return RentUnit()
+      ..id.value = row.getInt('Id', -1)
+      ..name.value = row.getString('Name')
+      ..building.value = row.getInt('Building', -1)
+      ..renter.value = row.getString('Renter')
+      ..note.value = row.getString('Note');
+  }
   @override
   int get uniqueId => id.value;
   @override
@@ -62,15 +73,4 @@ class RentUnit extends MoneyObject {
   // not persisted field
   int count = 0;
   double balance = 0.00;
-
-  RentUnit();
-
-  factory RentUnit.fromJson(final MyJson row) {
-    return RentUnit()
-      ..id.value = row.getInt('Id', -1)
-      ..name.value = row.getString('Name')
-      ..building.value = row.getInt('Building', -1)
-      ..renter.value = row.getString('Renter')
-      ..note.value = row.getString('Note');
-  }
 }

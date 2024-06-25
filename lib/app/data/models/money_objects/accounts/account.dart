@@ -20,6 +20,57 @@ export 'package:money/app/data/models/money_objects/accounts/account_types.dart'
 
 /// Accounts like Banks
 class Account extends MoneyObject {
+
+  /// Constructor
+  Account() {
+    buildFieldsAsWidgetForSmallScreen = () {
+      Widget? originalCurrencyAndValue;
+
+      if (currency.value == Constants.defaultCurrency) {
+        originalCurrencyAndValue = Currency.buildCurrencyWidget(currency.value);
+      } else {
+        double ratioCurrency = getCurrencyRatio();
+        originalCurrencyAndValue = Tooltip(
+          message: ratioCurrency.toString(),
+          child: Row(
+            children: [
+              Text(Currency.getAmountAsStringUsingCurrency(balance / ratioCurrency, iso4217code: currency.value)),
+              const SizedBox(width: 4),
+              Currency.buildCurrencyWidget(currency.value),
+            ],
+          ),
+        );
+      }
+
+      return MyListItemAsCard(
+          leftTopAsString: name.value,
+          leftBottomAsString: getTypeAsText(type.value),
+          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
+          rightBottomAsWidget: originalCurrencyAndValue);
+    };
+  }
+
+  /// Constructor from a SQLite row
+  factory Account.fromJson(final MyJson row) {
+    return Account()
+      ..id.value = row.getInt('Id')
+      ..accountId.value = row.getString('AccountId')
+      ..ofxAccountId.value = row.getString('OfxAccountId')
+      ..name.value = row.getString('Name')
+      ..description.value = row.getString('Description')
+      ..type.value = AccountType.values[row.getInt('Type')]
+      ..openingBalance.value = row.getDouble('OpeningBalance')
+      ..currency.value = row.getString('Currency', Constants.defaultCurrency)
+      ..onlineAccount.value = row.getInt('OnlineAccount')
+      ..webSite.value = row.getString('WebSite')
+      ..reconcileWarning.value = row.getInt('ReconcileWarning')
+      ..lastSync.value = row.getDate('LastSync')
+      ..syncGuid.value = row.getString('SyncGuid')
+      ..flags.value = row.getInt('Flags')
+      ..lastBalance.value = row.getDate('LastBalance')
+      ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal', -1)
+      ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest', -1);
+  }
   static final Fields<Account> _fields = Fields<Account>();
 
   static Fields<Account> get fields {
@@ -344,60 +395,9 @@ class Account extends MoneyObject {
     },
   );
 
-  /// Constructor
-  Account() {
-    buildFieldsAsWidgetForSmallScreen = () {
-      Widget? originalCurrencyAndValue;
-
-      if (currency.value == Constants.defaultCurrency) {
-        originalCurrencyAndValue = Currency.buildCurrencyWidget(currency.value);
-      } else {
-        double ratioCurrency = getCurrencyRatio();
-        originalCurrencyAndValue = Tooltip(
-          message: ratioCurrency.toString(),
-          child: Row(
-            children: [
-              Text(Currency.getAmountAsStringUsingCurrency(balance / ratioCurrency, iso4217code: currency.value)),
-              const SizedBox(width: 4),
-              Currency.buildCurrencyWidget(currency.value),
-            ],
-          ),
-        );
-      }
-
-      return MyListItemAsCard(
-          leftTopAsString: name.value,
-          leftBottomAsString: getTypeAsText(type.value),
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
-          rightBottomAsWidget: originalCurrencyAndValue);
-    };
-  }
-
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
-
-  /// Constructor from a SQLite row
-  factory Account.fromJson(final MyJson row) {
-    return Account()
-      ..id.value = row.getInt('Id')
-      ..accountId.value = row.getString('AccountId')
-      ..ofxAccountId.value = row.getString('OfxAccountId')
-      ..name.value = row.getString('Name')
-      ..description.value = row.getString('Description')
-      ..type.value = AccountType.values[row.getInt('Type')]
-      ..openingBalance.value = row.getDouble('OpeningBalance')
-      ..currency.value = row.getString('Currency', Constants.defaultCurrency)
-      ..onlineAccount.value = row.getInt('OnlineAccount')
-      ..webSite.value = row.getString('WebSite')
-      ..reconcileWarning.value = row.getInt('ReconcileWarning')
-      ..lastSync.value = row.getDate('LastSync')
-      ..syncGuid.value = row.getString('SyncGuid')
-      ..flags.value = row.getInt('Flags')
-      ..lastBalance.value = row.getDate('LastBalance')
-      ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal', -1)
-      ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest', -1);
-  }
 
 // cache the currency ratio
   double? ratio;

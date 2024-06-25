@@ -12,27 +12,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
  */
 
 class StockSplit extends MoneyObject {
-  @override
-  int get uniqueId => id.value;
-  @override
-  set uniqueId(value) => id.value = value;
-
-  // 0
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
-  );
-
-  // 1
-  final DateTime? date;
-
-  // 2
-  final int security;
-
-  // 3
-  final int numerator;
-
-  // 4
-  final int denominator;
 
   StockSplit({
     required this.date,
@@ -56,4 +35,25 @@ class StockSplit extends MoneyObject {
       denominator: row.getInt('Denominator'),
     )..id.value = row.getInt('Id', -1);
   }
+  @override
+  int get uniqueId => id.value;
+  @override
+  set uniqueId(value) => id.value = value;
+
+  // 0
+  FieldId id = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
+  );
+
+  // 1
+  final DateTime? date;
+
+  // 2
+  final int security;
+
+  // 3
+  final int numerator;
+
+  // 4
+  final int denominator;
 }

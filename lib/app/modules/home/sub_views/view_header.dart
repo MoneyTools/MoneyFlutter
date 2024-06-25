@@ -7,26 +7,6 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/mul
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
 
 class ViewHeader extends StatelessWidget {
-  final String title;
-  final num itemCount;
-  final ValueNotifier<List<int>> selectedItems;
-  final String description;
-
-  // Optional, used for multi-selection UX
-  final ViewHeaderMultipleSelection? multipleSelection;
-
-  final List<Widget> Function(bool)? getActionButtons;
-
-  final VoidCallback? onAddMoneyObject;
-  final VoidCallback? onMergeMoneyObject;
-  final VoidCallback? onEditMoneyObject;
-  final VoidCallback? onDeleteMoneyObject;
-
-  final String filterText;
-  final void Function(String)? onFilterChanged;
-  final void Function()? onClearAllFilters;
-
-  final Widget? child;
 
   const ViewHeader({
     super.key,
@@ -50,6 +30,26 @@ class ViewHeader extends StatelessWidget {
     this.onDeleteMoneyObject,
     this.child,
   });
+  final String title;
+  final num itemCount;
+  final ValueNotifier<List<int>> selectedItems;
+  final String description;
+
+  // Optional, used for multi-selection UX
+  final ViewHeaderMultipleSelection? multipleSelection;
+
+  final List<Widget> Function(bool)? getActionButtons;
+
+  final VoidCallback? onAddMoneyObject;
+  final VoidCallback? onMergeMoneyObject;
+  final VoidCallback? onEditMoneyObject;
+  final VoidCallback? onDeleteMoneyObject;
+
+  final String filterText;
+  final void Function(String)? onFilterChanged;
+  final void Function()? onClearAllFilters;
+
+  final Widget? child;
 
   @override
   Widget build(final BuildContext context) {

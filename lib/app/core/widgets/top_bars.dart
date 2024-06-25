@@ -9,10 +9,10 @@ import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class BarChartWidget extends StatelessWidget {
-  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
-  final bool asIncome;
 
   const BarChartWidget({super.key, required this.listCategoryNameToAmount, required this.asIncome});
+  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
+  final bool asIncome;
 
   @override
   Widget build(BuildContext context) {

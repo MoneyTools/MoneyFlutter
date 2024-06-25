@@ -5,15 +5,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 /// A Row for a Table view
 class MyListItemHeader<T> extends StatelessWidget {
-  final Color backgoundColor;
-  final FieldDefinitions columns;
-  final FieldFilters filterOn;
-  final int sortByColumn;
-  final bool sortAscending;
-  final bool itemsAreAllSelected;
-  final Function(bool)? onSelectAll;
-  final Function(int columnIndex) onTap;
-  final Function(Field<dynamic>)? onLongPress;
 
   const MyListItemHeader({
     super.key,
@@ -27,6 +18,15 @@ class MyListItemHeader<T> extends StatelessWidget {
     required this.onTap,
     this.onLongPress,
   });
+  final Color backgoundColor;
+  final FieldDefinitions columns;
+  final FieldFilters filterOn;
+  final int sortByColumn;
+  final bool sortAscending;
+  final bool itemsAreAllSelected;
+  final Function(bool)? onSelectAll;
+  final Function(int columnIndex) onTap;
+  final Function(Field<dynamic>)? onLongPress;
 
   @override
   Widget build(final BuildContext context) {

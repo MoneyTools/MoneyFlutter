@@ -41,10 +41,6 @@ Widget getWidgetChartAmount(final double value, final TitleMeta meta) {
 }
 
 class Chart extends StatelessWidget {
-  final List<PairXY> list;
-  final String variableNameHorizontal;
-  final String variableNameVertical;
-  final String currency;
 
   const Chart({
     super.key,
@@ -53,6 +49,10 @@ class Chart extends StatelessWidget {
     this.variableNameHorizontal = 'X',
     this.currency = Constants.defaultCurrency,
   });
+  final List<PairXY> list;
+  final String variableNameHorizontal;
+  final String variableNameVertical;
+  final String currency;
 
   @override
   Widget build(final BuildContext context) {
@@ -169,8 +169,8 @@ class Chart extends StatelessWidget {
 }
 
 class PairXY {
-  String xText = '';
-  num yValue = 0.0;
 
   PairXY(this.xText, this.yValue);
+  String xText = '';
+  num yValue = 0.0;
 }

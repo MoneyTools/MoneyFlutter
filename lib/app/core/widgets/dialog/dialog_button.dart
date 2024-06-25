@@ -5,9 +5,6 @@ import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class DialogActionButton extends StatelessWidget {
-  final IconData? icon;
-  final String text;
-  final VoidCallback onPressed;
 
   const DialogActionButton({
     super.key,
@@ -15,6 +12,9 @@ class DialogActionButton extends StatelessWidget {
     this.icon,
     required this.onPressed,
   });
+  final IconData? icon;
+  final String text;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -102,11 +102,11 @@ Widget buildCopyButton(final Function callback) {
 }
 
 class InternalViewSwitching {
+
+  InternalViewSwitching(this.icon, this.title, this.callback);
   final IconData? icon;
   final String title;
   final Function callback;
-
-  InternalViewSwitching(this.icon, this.title, this.callback);
 }
 
 Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {

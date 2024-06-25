@@ -23,11 +23,6 @@ import 'package:money/app/data/storage/data/data.dart';
 /// splits into account.
 /// </summary>
 class CostBasisCalculator {
-  DateTime toDate;
-
-  Map<Account, AccountHoldings> byAccount = {};
-
-  List<SecuritySale> sales = [];
 
   /// <summary>
   /// Compute capital gains associated with stock sales and whether they are long term or short term gains.
@@ -37,6 +32,11 @@ class CostBasisCalculator {
   CostBasisCalculator(this.toDate) {
     this.calculate();
   }
+  DateTime toDate;
+
+  Map<Account, AccountHoldings> byAccount = {};
+
+  List<SecuritySale> sales = [];
 
   List<SecuritySale> getSales() {
     return this.sales;

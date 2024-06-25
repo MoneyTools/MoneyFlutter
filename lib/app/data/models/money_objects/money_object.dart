@@ -12,16 +12,16 @@ export 'package:money/app/core/helpers/misc_helpers.dart';
 export 'package:money/app/data/models/fields/field.dart';
 
 class MoneyObject {
+
+  factory MoneyObject.fromJSon(final MyJson json, final double runningBalance) {
+    return MoneyObject();
+  }
   MoneyObject();
 
   /// All object must have a unique identified
   int get uniqueId => -1;
 
   set uniqueId(int value) {}
-
-  factory MoneyObject.fromJSon(final MyJson json, final double runningBalance) {
-    return MoneyObject();
-  }
 
   FieldDefinitions get fieldDefinitions => [];
 

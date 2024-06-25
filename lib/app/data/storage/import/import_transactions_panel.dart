@@ -9,10 +9,6 @@ import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.da
 
 /// use for free style text to transaction import
 class ImportTransactionsPanel extends StatefulWidget {
-  final Account account;
-  final String inputText;
-  final Function(Account accountSelected) onAccountChanged;
-  final Function(ValuesParser parser) onTransactionsFound;
 
   const ImportTransactionsPanel({
     super.key,
@@ -21,6 +17,10 @@ class ImportTransactionsPanel extends StatefulWidget {
     required this.onAccountChanged,
     required this.onTransactionsFound,
   });
+  final Account account;
+  final String inputText;
+  final Function(Account accountSelected) onAccountChanged;
+  final Function(ValuesParser parser) onTransactionsFound;
 
   @override
   ImportTransactionsPanelState createState() => ImportTransactionsPanelState();

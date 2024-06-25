@@ -4,14 +4,14 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class ColumnFilterPanel extends StatefulWidget {
-  final List<ValueSelection> listOfUniqueInstances;
-  final TextAlign textAlign;
 
   const ColumnFilterPanel({
     super.key,
     required this.listOfUniqueInstances,
     this.textAlign = TextAlign.left,
   });
+  final List<ValueSelection> listOfUniqueInstances;
+  final TextAlign textAlign;
 
   @override
   State<ColumnFilterPanel> createState() => _ColumnFilterPanelState();
@@ -110,8 +110,8 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 }
 
 class ValueSelection {
-  String name;
-  bool isSelected;
 
   ValueSelection({required this.name, required this.isSelected});
+  String name;
+  bool isSelected;
 }

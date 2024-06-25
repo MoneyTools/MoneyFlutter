@@ -14,6 +14,18 @@ export 'package:money/app/data/models/money_objects/money_object.dart';
   1|Name|nvarchar(255)|1||0
  */
 class Payee extends MoneyObject {
+
+  Payee() {
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: name.value,
+          rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
+          rightBottomAsString: getAmountAsShorthandText(count.value),
+        );
+  }
+
+  factory Payee.fromJson(final MyJson row) {
+    return Payee();
+  }
   static final _fields = Fields<Payee>();
 
   static Fields<Payee> get fields {
@@ -75,19 +87,7 @@ class Payee extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).sum.value,
   );
 
-  Payee() {
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: name.value,
-          rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
-          rightBottomAsString: getAmountAsShorthandText(count.value),
-        );
-  }
-
   Set<String> categories = {};
-
-  factory Payee.fromJson(final MyJson row) {
-    return Payee();
-  }
 
   // Fields for this instance
   @override

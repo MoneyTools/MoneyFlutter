@@ -19,12 +19,12 @@ Future<dynamic> showTransactionAndActions({
 
 /// Dialog content
 class DialogMutateTransaction extends StatefulWidget {
-  final Transaction transaction;
 
   const DialogMutateTransaction({
     super.key,
     required this.transaction,
   });
+  final Transaction transaction;
 
   @override
   State<DialogMutateTransaction> createState() => _DialogMutateTransactionState();

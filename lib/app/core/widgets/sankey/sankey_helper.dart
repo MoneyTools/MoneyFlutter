@@ -8,25 +8,25 @@ class SanKeyEntry {
 }
 
 class ChannelPoint {
-  double x = 0.0;
-  double top = 0.0;
-  double bottom = 0 / 0;
 
   ChannelPoint(this.x, this.top, this.bottom) {
     //
   }
+  double x = 0.0;
+  double top = 0.0;
+  double bottom = 0 / 0;
 }
 
 class Block {
+
+  /// Constructor
+  Block(this.name, this.rect, this.color, this.textColor, this.alignHorizontal, this.alignVertical);
   String name = '';
   Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
   Color color;
   Color textColor = Colors.black;
   TextAlign alignHorizontal = TextAlign.start;
   TextAlign alignVertical = TextAlign.start;
-
-  /// Constructor
-  Block(this.name, this.rect, this.color, this.textColor, this.alignHorizontal, this.alignVertical);
 
   static const double minBlockHeight = 20.0;
   static const double blockWidth = 50.0;

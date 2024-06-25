@@ -94,14 +94,14 @@ List<NavigationRailDestination> getNavRailDestination() {
 }
 
 class SubViewSelectionHorizontal extends StatefulWidget {
-  final void Function(ViewId) onSelected;
-  final ViewId selectedView;
 
   const SubViewSelectionHorizontal({
     super.key,
     required this.onSelected,
     required this.selectedView,
   });
+  final void Function(ViewId) onSelected;
+  final ViewId selectedView;
 
   @override
   State<SubViewSelectionHorizontal> createState() => SubViewSelectionHorizontalState();
@@ -137,9 +137,6 @@ class SubViewSelectionHorizontalState extends State<SubViewSelectionHorizontal> 
 }
 
 class SubViewSelectionVertical extends StatefulWidget {
-  final void Function(ViewId) onSelectItem;
-  final ViewId selectedView;
-  final bool useIndicator;
 
   const SubViewSelectionVertical({
     super.key,
@@ -147,6 +144,9 @@ class SubViewSelectionVertical extends StatefulWidget {
     required this.selectedView,
     this.useIndicator = false,
   });
+  final void Function(ViewId) onSelectItem;
+  final ViewId selectedView;
+  final bool useIndicator;
 
   @override
   State<SubViewSelectionVertical> createState() => SubViewSelectionVerticalState();

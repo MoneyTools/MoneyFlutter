@@ -7,14 +7,14 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/lis
 export 'package:money/app/data/models/money_objects/splits/splits.dart';
 
 class ListViewTransactionSplits extends StatefulWidget {
-  final List<MoneySplit> Function() getList;
-  final int defaultSortingField;
 
   const ListViewTransactionSplits({
     super.key,
     required this.getList,
     this.defaultSortingField = 0,
   });
+  final List<MoneySplit> Function() getList;
+  final int defaultSortingField;
 
   @override
   State<ListViewTransactionSplits> createState() => _ListViewTransactionSplitsState();

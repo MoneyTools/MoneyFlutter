@@ -9,9 +9,9 @@ import 'package:money/app/core/widgets/semantic_text.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class ImportTransactionsList extends StatefulWidget {
-  final List<ValuesQuality> values;
 
   const ImportTransactionsList({super.key, required this.values});
+  final List<ValuesQuality> values;
 
   @override
   State<ImportTransactionsList> createState() => _ImportTransactionsListState();

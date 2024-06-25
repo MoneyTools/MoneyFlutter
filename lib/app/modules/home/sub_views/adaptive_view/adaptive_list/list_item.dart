@@ -3,14 +3,6 @@ import 'package:money/app/core/helpers/color_helper.dart';
 
 /// A Row for a Table view
 class MyListItem extends StatefulWidget {
-  final KeyEventResult Function(FocusNode, KeyEvent) onListViewKeyEvent;
-  final GestureTapCallback? onTap;
-  final GestureTapCallback? onDoubleTap;
-  final GestureTapCallback? onLongPress;
-  final bool isSelected;
-  final bool autoFocus;
-  final Widget child;
-  final Color adornmentColor;
 
   const MyListItem({
     super.key,
@@ -23,6 +15,14 @@ class MyListItem extends StatefulWidget {
     this.adornmentColor = Colors.transparent,
     required this.child,
   });
+  final KeyEventResult Function(FocusNode, KeyEvent) onListViewKeyEvent;
+  final GestureTapCallback? onTap;
+  final GestureTapCallback? onDoubleTap;
+  final GestureTapCallback? onLongPress;
+  final bool isSelected;
+  final bool autoFocus;
+  final Widget child;
+  final Color adornmentColor;
 
   @override
   State<MyListItem> createState() => MyListItemState();

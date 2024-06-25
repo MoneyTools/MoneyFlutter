@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class DateRangeTimeline extends StatelessWidget {
-  final DateTime startDate;
-  final DateTime endDate;
-  final bool showTicks;
 
   const DateRangeTimeline({
     super.key,
@@ -12,6 +9,9 @@ class DateRangeTimeline extends StatelessWidget {
     required this.endDate,
     this.showTicks = true,
   });
+  final DateTime startDate;
+  final DateTime endDate;
+  final bool showTicks;
 
   @override
   Widget build(BuildContext context) {

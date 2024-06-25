@@ -5,9 +5,6 @@ import 'package:money/app/modules/home/sub_views/view_pending_changes/view_pendi
 
 ///
 class BadgePendingChanges extends StatelessWidget {
-  final int itemsAdded;
-  final int itemsChanged;
-  final int itemsDeleted;
 
   /// Constructor
   const BadgePendingChanges({
@@ -16,6 +13,9 @@ class BadgePendingChanges extends StatelessWidget {
     required this.itemsChanged,
     required this.itemsDeleted,
   });
+  final int itemsAdded;
+  final int itemsChanged;
+  final int itemsDeleted;
 
   @override
   Widget build(final BuildContext context) {

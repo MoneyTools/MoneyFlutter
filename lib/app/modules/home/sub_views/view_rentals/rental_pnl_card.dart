@@ -9,14 +9,14 @@ import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
 
 class RentalPnLCard extends StatelessWidget {
-  final RentalPnL pnl;
-  final String? customTitle;
 
   const RentalPnLCard({
     super.key,
     required this.pnl,
     this.customTitle,
   });
+  final RentalPnL pnl;
+  final String? customTitle;
 
   @override
   Widget build(BuildContext context) {

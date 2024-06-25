@@ -3,10 +3,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class VerticalLineWithTooltip extends StatelessWidget {
-  final double height;
-  final double width;
-  final Color color;
-  final String tooltip;
 
   const VerticalLineWithTooltip({
     super.key,
@@ -15,6 +11,10 @@ class VerticalLineWithTooltip extends StatelessWidget {
     required this.color,
     required this.tooltip,
   });
+  final double height;
+  final double width;
+  final Color color;
+  final String tooltip;
 
   @override
   Widget build(BuildContext context) {

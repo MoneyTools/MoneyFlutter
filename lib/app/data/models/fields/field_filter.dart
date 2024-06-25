@@ -1,6 +1,4 @@
 class FieldFilter {
-  final String fieldName;
-  late String filterTextInLowerCase;
 
   FieldFilter({required this.fieldName, required this.filterTextInLowerCase}) {
     filterTextInLowerCase = filterTextInLowerCase.toLowerCase();
@@ -12,6 +10,8 @@ class FieldFilter {
       filterTextInLowerCase: json['filterTextInLowerCase'] as String,
     );
   }
+  final String fieldName;
+  late String filterTextInLowerCase;
 
   Map<String, dynamic> toJson() {
     return {

@@ -17,6 +17,40 @@ import 'package:money/app/data/storage/data/data.dart';
   5    CultureCode  nvarchar(80)  0                 0 
  */
 class Currency extends MoneyObject {
+
+  Currency({
+    required final int id, // 0
+    required final String symbol, // 1
+    required final String name, // 2
+    required final double ratio, // 3
+    required final String cultureCode, // 4
+    required final double lastRatio, // 5
+  }) {
+    this.id.value = id;
+    this.name.value = name;
+    this.symbol.value = symbol;
+    this.ratio.value = ratio;
+    this.cultureCode.value = cultureCode;
+    this.lastRatio.value = lastRatio;
+  }
+
+  /// Constructor from a SQLite row
+  factory Currency.fromJson(final MyJson row) {
+    return Currency(
+      // 0
+      id: row.getInt('Id', -1),
+      // 1
+      symbol: row.getString('Symbol'),
+      // 2
+      name: row.getString('Name'),
+      // 3
+      ratio: row.getDouble('Ratio'),
+      // 4
+      lastRatio: row.getDouble('LastRatio'),
+      // 5
+      cultureCode: row.getString('CultureCode'),
+    );
+  }
   @override
   int get uniqueId => id.value;
 
@@ -80,40 +114,6 @@ class Currency extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
   );
-
-  Currency({
-    required final int id, // 0
-    required final String symbol, // 1
-    required final String name, // 2
-    required final double ratio, // 3
-    required final String cultureCode, // 4
-    required final double lastRatio, // 5
-  }) {
-    this.id.value = id;
-    this.name.value = name;
-    this.symbol.value = symbol;
-    this.ratio.value = ratio;
-    this.cultureCode.value = cultureCode;
-    this.lastRatio.value = lastRatio;
-  }
-
-  /// Constructor from a SQLite row
-  factory Currency.fromJson(final MyJson row) {
-    return Currency(
-      // 0
-      id: row.getInt('Id', -1),
-      // 1
-      symbol: row.getString('Symbol'),
-      // 2
-      name: row.getString('Name'),
-      // 3
-      ratio: row.getDouble('Ratio'),
-      // 4
-      lastRatio: row.getDouble('LastRatio'),
-      // 5
-      cultureCode: row.getString('CultureCode'),
-    );
-  }
 
   static String getCurrencyAsText(final String threeLetterCurrencySymbol) {
     if (threeLetterCurrencySymbol.isEmpty) {

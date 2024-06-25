@@ -6,10 +6,10 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/vertical_line_with_tooltip.dart';
 
 class MiniTimelineTwelveMonths extends StatelessWidget {
-  final List<Pair<int, double>> values;
-  final Color color;
 
   const MiniTimelineTwelveMonths({super.key, required this.values, required this.color});
+  final List<Pair<int, double>> values;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {

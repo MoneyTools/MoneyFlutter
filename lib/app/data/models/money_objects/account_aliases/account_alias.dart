@@ -10,6 +10,21 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
  */
 class AccountAlias extends MoneyObject {
+
+  /// Constructor
+  AccountAlias() {
+    // body
+  }
+
+  /// Constructor from a SQLite row
+  @override
+  factory AccountAlias.fromJson(final MyJson row) {
+    return AccountAlias()
+      ..id.value = row.getInt('Id', -1)
+      ..pattern.value = row.getString('Pattern')
+      ..flags.value = row.getInt('Flag', 0)
+      ..accountId.value = row.getString('AccountId');
+  }
   static final _fields = Fields<AccountAlias>();
 
   static Fields<AccountAlias> get fields {
@@ -62,24 +77,9 @@ class AccountAlias extends MoneyObject {
     defaultValue: '',
   );
 
-  /// Constructor
-  AccountAlias() {
-    // body
-  }
-
   @override
   int get uniqueId => id.value;
 
   @override
   set uniqueId(value) => id.value = value;
-
-  /// Constructor from a SQLite row
-  @override
-  factory AccountAlias.fromJson(final MyJson row) {
-    return AccountAlias()
-      ..id.value = row.getInt('Id', -1)
-      ..pattern.value = row.getString('Pattern')
-      ..flags.value = row.getInt('Flag', 0)
-      ..accountId.value = row.getString('AccountId');
-  }
 }

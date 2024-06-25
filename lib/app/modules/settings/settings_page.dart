@@ -11,9 +11,9 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
 class SettingsPage extends GetView<GetxController> {
-  static SettingsPage get to => Get.find();
 
   const SettingsPage({super.key});
+  static SettingsPage get to => Get.find();
 
   @override
   Widget build(BuildContext context) {

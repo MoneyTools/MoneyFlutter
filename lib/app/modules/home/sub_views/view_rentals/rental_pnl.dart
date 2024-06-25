@@ -1,15 +1,6 @@
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class RentalPnL {
-  final DateTime date;
-  double income;
-  double expenseInterest;
-  double expenseMaintenance;
-  double expenseManagement;
-  double expenseRepairs;
-  double expenseTaxes;
-  String currency;
-  late Map<String, double> distributions;
 
   RentalPnL({
     required this.date,
@@ -24,6 +15,15 @@ class RentalPnL {
   }) {
     this.distributions = distributions ?? {};
   }
+  final DateTime date;
+  double income;
+  double expenseInterest;
+  double expenseMaintenance;
+  double expenseManagement;
+  double expenseRepairs;
+  double expenseTaxes;
+  String currency;
+  late Map<String, double> distributions;
 
   double get expenses => expenseInterest + expenseMaintenance + expenseManagement + expenseRepairs + expenseTaxes;
 

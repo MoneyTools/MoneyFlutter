@@ -41,10 +41,6 @@ part 'data_extension_demo.dart';
 part 'data_extension_sql.dart';
 
 class Data {
-  int version = 0;
-
-  /// singleton
-  static final Data _instance = Data._internal();
 
   /// private constructor
   Data._internal() {
@@ -73,6 +69,10 @@ class Data {
   factory Data() {
     return _instance;
   }
+  int version = 0;
+
+  /// singleton
+  static final Data _instance = Data._internal();
 
   /// 1 Account Aliases
   AccountAliases accountAliases = AccountAliases();

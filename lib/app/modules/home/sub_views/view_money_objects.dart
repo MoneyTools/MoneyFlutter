@@ -24,9 +24,9 @@ import 'package:money/app/modules/home/sub_views/view_header.dart';
 import 'package:money/app/modules/home/sub_views/view_transactions/money_object_card.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {
-  final bool includeClosedAccount;
 
   const ViewForMoneyObjects({super.key, this.includeClosedAccount = false});
+  final bool includeClosedAccount;
 
   @override
   State<ViewForMoneyObjects> createState() => ViewForMoneyObjectsState();

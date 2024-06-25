@@ -7,6 +7,21 @@ import 'package:money/app/data/models/money_objects/splits/splits.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 
 class Transfer extends MoneyObject {
+
+  Transfer({
+    required this.id,
+    required this.source,
+    this.related,
+    this.sourceSplit,
+    this.relatedSplit,
+    required this.isOrphan,
+  }) {
+    // body of constructor
+  }
+
+  factory Transfer.fromJson(final MyJson row) {
+    return Transfer(id: -1, source: Transaction(), isOrphan: true);
+  }
   static final _fields = Fields<Transfer>();
 
   static Fields<Transfer> get fields {
@@ -133,21 +148,6 @@ class Transfer extends MoneyObject {
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).source.amount.value,
   );
-
-  Transfer({
-    required this.id,
-    required this.source,
-    this.related,
-    this.sourceSplit,
-    this.relatedSplit,
-    required this.isOrphan,
-  }) {
-    // body of constructor
-  }
-
-  factory Transfer.fromJson(final MyJson row) {
-    return Transfer(id: -1, source: Transaction(), isOrphan: true);
-  }
 
   // Fields for this instance
   @override

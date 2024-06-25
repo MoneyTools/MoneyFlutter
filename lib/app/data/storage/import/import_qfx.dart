@@ -200,13 +200,6 @@ List<QFXTransaction> getTransactionFromOFX(final String rawOfx) {
 }
 
 class QFXTransaction {
-  late String type;
-  late DateTime date;
-  late double amount;
-  late String name;
-  late String fitid;
-  late String memo;
-  late String number;
 
   QFXTransaction({
     required this.type,
@@ -217,6 +210,13 @@ class QFXTransaction {
     this.memo = '',
     this.number = '',
   });
+  late String type;
+  late DateTime date;
+  late double amount;
+  late String name;
+  late String fitid;
+  late String memo;
+  late String number;
 }
 
 List<QFXTransaction> parseQFXTransactions(final List<String> lines) {

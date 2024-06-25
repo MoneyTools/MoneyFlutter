@@ -4,20 +4,6 @@ import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class InfoPanelHeader extends StatelessWidget {
-  final bool isExpanded;
-  final Function onExpanded;
-
-  // SubView
-  final InfoPanelSubViewEnum subViewSelected;
-  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
-
-  // Currency
-  final List<String> currencyChoices;
-  final int currencySelected;
-  final Function currentSelectionChanged;
-
-  // Actions
-  final List<Widget> Function(bool) actionButtons;
 
   /// Constructor
   const InfoPanelHeader({
@@ -37,6 +23,20 @@ class InfoPanelHeader extends StatelessWidget {
     // Actions
     required this.actionButtons,
   });
+  final bool isExpanded;
+  final Function onExpanded;
+
+  // SubView
+  final InfoPanelSubViewEnum subViewSelected;
+  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
+
+  // Currency
+  final List<String> currencyChoices;
+  final int currencySelected;
+  final Function currentSelectionChanged;
+
+  // Actions
+  final List<Widget> Function(bool) actionButtons;
 
   @override
   Widget build(final BuildContext context) {

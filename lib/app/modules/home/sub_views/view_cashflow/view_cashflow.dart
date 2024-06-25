@@ -26,6 +26,8 @@ class ViewCashFlow extends ViewWidget {
 }
 
 class ViewCashFlowState extends ViewWidgetState {
+
+  ViewCashFlowState();
   late DateRange dateRangeTransactions;
 
   late int selectedYearStart;
@@ -46,8 +48,6 @@ class ViewCashFlowState extends ViewWidgetState {
   List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
 
   Debouncer debouncer = Debouncer();
-
-  ViewCashFlowState();
 
   @override
   void initState() {

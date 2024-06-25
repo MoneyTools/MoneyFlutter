@@ -13,10 +13,10 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 
 class ValueQuality {
-  final String valueAsString;
-  final String warningMessage = '';
 
   const ValueQuality(this.valueAsString);
+  final String valueAsString;
+  final String warningMessage = '';
 
   bool get hasError {
     return warningMessage.isNotEmpty;
@@ -77,10 +77,6 @@ class ValueQuality {
 }
 
 class ValuesQuality {
-  bool exist = false;
-  final ValueQuality date;
-  final ValueQuality description;
-  final ValueQuality amount;
 
   ValuesQuality({required this.date, required this.description, required this.amount});
 
@@ -88,6 +84,10 @@ class ValuesQuality {
     return ValuesQuality(
         date: const ValueQuality(''), description: const ValueQuality(''), amount: const ValueQuality(''));
   }
+  bool exist = false;
+  final ValueQuality date;
+  final ValueQuality description;
+  final ValueQuality amount;
 
   bool containsErrors() {
     return date.hasError || description.hasError || amount.hasError;

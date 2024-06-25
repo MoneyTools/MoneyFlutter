@@ -2,8 +2,6 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 
 class DateRange {
-  DateTime? min;
-  DateTime? max;
 
   DateRange({this.min, this.max});
 
@@ -13,6 +11,8 @@ class DateRange {
       max: DateTime(yearEnd + 1).subtract(const Duration(microseconds: 1)),
     );
   }
+  DateTime? min;
+  DateTime? max;
 
   void clear() {
     min = null;

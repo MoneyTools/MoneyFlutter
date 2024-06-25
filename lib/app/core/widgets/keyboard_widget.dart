@@ -7,40 +7,6 @@ import 'package:flutter_markdown/flutter_markdown.dart';
 /// A keymap widget allowing easy addition of shortcut keys to any widget tree
 /// with an optional help screen overlay
 class KeyboardWidget extends StatefulWidget {
-  final bool hasFocus;
-  final Widget child;
-
-  ///Optional introductory/descriptive text to include above the table of
-  ///keystroke shortcuts. It expects text in the
-  ///[https://daringfireball.net/projects/markdown/] markdown format, using
-  ///the [https://pub.dev/packages/flutter_markdown] flutter markdown package.
-  final String? helpText;
-
-  ///Have group the keybindings shown in the overlay grouped according to
-  ///the (optional) headers associated with each shortcut
-  final bool groupByCategory;
-
-  ///The list of keystrokes and methods called
-  final List<KeyAction> bindings;
-
-  ///The keystroke used to show and dismiss the help screen
-  final LogicalKeyboardKey showDismissKey;
-
-  ///The number of columns of text in the help screen
-  final int columnCount;
-  final bool showMap;
-  final VoidCallback? callbackOnHide;
-
-  ///The color of the surface of the card used to display a help screen.
-  ///If null, the card color of the inherited [ThemeData.colorScheme] will be used
-  final Color? backgroundColor;
-
-  ///Whether underlines should be shown between each help entry
-  final bool showLines;
-
-  ///The text style for the text used in the help screen. If null, the
-  ///inherited [TextTheme.labelSmall] is used.
-  final TextStyle? textStyle;
 
   /// Creates a new KeyboardWidget with a list of Keystrokes and associated
   /// functions [bindings], a required [child] widget and an optional
@@ -78,6 +44,40 @@ class KeyboardWidget extends StatefulWidget {
     this.showMap = false,
     this.callbackOnHide,
   }) : assert(columnCount > 0);
+  final bool hasFocus;
+  final Widget child;
+
+  ///Optional introductory/descriptive text to include above the table of
+  ///keystroke shortcuts. It expects text in the
+  ///[https://daringfireball.net/projects/markdown/] markdown format, using
+  ///the [https://pub.dev/packages/flutter_markdown] flutter markdown package.
+  final String? helpText;
+
+  ///Have group the keybindings shown in the overlay grouped according to
+  ///the (optional) headers associated with each shortcut
+  final bool groupByCategory;
+
+  ///The list of keystrokes and methods called
+  final List<KeyAction> bindings;
+
+  ///The keystroke used to show and dismiss the help screen
+  final LogicalKeyboardKey showDismissKey;
+
+  ///The number of columns of text in the help screen
+  final int columnCount;
+  final bool showMap;
+  final VoidCallback? callbackOnHide;
+
+  ///The color of the surface of the card used to display a help screen.
+  ///If null, the card color of the inherited [ThemeData.colorScheme] will be used
+  final Color? backgroundColor;
+
+  ///Whether underlines should be shown between each help entry
+  final bool showLines;
+
+  ///The text style for the text used in the help screen. If null, the
+  ///inherited [TextTheme.labelSmall] is used.
+  final TextStyle? textStyle;
 
   @override
   KeyboardWidgetState createState() => KeyboardWidgetState();
@@ -591,10 +591,6 @@ class KeyboardWidgetState extends State<KeyboardWidget> {
 ///includes a category header for the shortcut.
 @immutable
 class KeyAction {
-  final SingleActivator keyActivator;
-  final String description;
-  final VoidCallback callback;
-  final String categoryHeader;
 
   ///Creates a KeystrokeRep with the given LogicalKeyboardKey [keyStroke],
   ///[description] and [callback] method. Includes optional bool values (defaulting
@@ -637,6 +633,10 @@ class KeyAction {
           alt: isAltPressed,
           meta: isMetaPressed,
         );
+  final SingleActivator keyActivator;
+  final String description;
+  final VoidCallback callback;
+  final String categoryHeader;
 
   bool get isControlPressed => keyActivator.control;
 

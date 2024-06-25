@@ -12,11 +12,6 @@ enum TransactionFlavor {
 }
 
 class PickPayeeOrTransfer extends StatefulWidget {
-  final TransactionFlavor choice;
-  final Payee? payee;
-  final Account? account;
-  final double amount;
-  final Function(TransactionFlavor choice, Payee? payee, Account? account) onSelected;
 
   const PickPayeeOrTransfer({
     super.key,
@@ -26,6 +21,11 @@ class PickPayeeOrTransfer extends StatefulWidget {
     required this.amount,
     required this.onSelected,
   });
+  final TransactionFlavor choice;
+  final Payee? payee;
+  final Account? account;
+  final double amount;
+  final Function(TransactionFlavor choice, Payee? payee, Account? account) onSelected;
 
   @override
   State<PickPayeeOrTransfer> createState() => _PickPayeeOrTransferState();

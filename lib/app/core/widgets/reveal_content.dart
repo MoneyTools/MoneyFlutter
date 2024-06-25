@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class RevealContent extends StatefulWidget {
-  final List<Widget> widgets;
-  final String textForClipboard;
 
   const RevealContent({
     super.key,
     required this.widgets,
     this.textForClipboard = '',
   });
+  final List<Widget> widgets;
+  final String textForClipboard;
 
   @override
   RevealContentState createState() => RevealContentState();

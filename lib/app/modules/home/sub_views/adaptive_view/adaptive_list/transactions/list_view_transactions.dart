@@ -8,12 +8,6 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/ada
 import 'package:money/app/modules/home/sub_views/view_transactions/dialog_mutate_transaction.dart';
 
 class ListViewTransactions extends StatefulWidget {
-  final List<Field> columnsToInclude;
-  final List<Transaction> Function() getList;
-  final int sortFieldIndex;
-  final bool sortAscending;
-  final int selectedItemIndex;
-  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
 
   const ListViewTransactions({
     super.key,
@@ -24,6 +18,12 @@ class ListViewTransactions extends StatefulWidget {
     this.onUserChoiceChanged,
     this.selectedItemIndex = 0,
   });
+  final List<Field> columnsToInclude;
+  final List<Transaction> Function() getList;
+  final int sortFieldIndex;
+  final bool sortAscending;
+  final int selectedItemIndex;
+  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
 
   @override
   State<ListViewTransactions> createState() => _ListViewTransactionsState();

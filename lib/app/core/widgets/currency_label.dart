@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class CurrencyLabel extends StatelessWidget {
-  final String threeLetterCurrencySymbol;
-  final String flagId;
 
   const CurrencyLabel({
     super.key,
     required this.threeLetterCurrencySymbol,
     required this.flagId,
   });
+  final String threeLetterCurrencySymbol;
+  final String flagId;
 
   @override
   Widget build(BuildContext context) {

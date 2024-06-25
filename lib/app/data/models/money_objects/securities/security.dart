@@ -18,6 +18,52 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
  */
 
 class Security extends MoneyObject {
+
+  Security({
+    required int id,
+    required String name,
+    required String symbol,
+    required double price,
+    required double lastPrice,
+    required String cuspid,
+    required int securityType,
+    required int taxable,
+    required DateTime? priceDate,
+  }) {
+    this.id.value = id;
+    this.name.value = name;
+    this.symbol.value = symbol;
+    this.price.value.setAmount(price);
+    this.lastPrice.value.setAmount(lastPrice);
+    this.cuspid.value = cuspid;
+    this.securityType.value = securityType;
+    this.taxable.value = taxable;
+    this.priceDate.value = priceDate;
+  }
+
+  /// Constructor from a SQLite row
+  factory Security.fromJson(final MyJson row) {
+    return Security(
+      // 0
+      id: row.getInt('Id', -1),
+      // 1
+      name: row.getString('Name'),
+      // 2
+      symbol: row.getString('Symbol'),
+      // 3
+      price: row.getDouble('Price'),
+      // 4
+      lastPrice: row.getDouble('LastPrice'),
+      // 5
+      cuspid: row.getString('CUSPID'),
+      // 6
+      securityType: row.getInt('SecurityType'),
+      // 7
+      taxable: row.getInt('Taxable'),
+      // 8
+      priceDate: row.getDate('PriceDate'),
+    );
+  }
   static final _fields = Fields<Security>();
 
   static Fields<Security> get fields {
@@ -136,52 +182,6 @@ class Security extends MoneyObject {
     name: 'Balance',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).balance.value,
   );
-
-  Security({
-    required int id,
-    required String name,
-    required String symbol,
-    required double price,
-    required double lastPrice,
-    required String cuspid,
-    required int securityType,
-    required int taxable,
-    required DateTime? priceDate,
-  }) {
-    this.id.value = id;
-    this.name.value = name;
-    this.symbol.value = symbol;
-    this.price.value.setAmount(price);
-    this.lastPrice.value.setAmount(lastPrice);
-    this.cuspid.value = cuspid;
-    this.securityType.value = securityType;
-    this.taxable.value = taxable;
-    this.priceDate.value = priceDate;
-  }
-
-  /// Constructor from a SQLite row
-  factory Security.fromJson(final MyJson row) {
-    return Security(
-      // 0
-      id: row.getInt('Id', -1),
-      // 1
-      name: row.getString('Name'),
-      // 2
-      symbol: row.getString('Symbol'),
-      // 3
-      price: row.getDouble('Price'),
-      // 4
-      lastPrice: row.getDouble('LastPrice'),
-      // 5
-      cuspid: row.getString('CUSPID'),
-      // 6
-      securityType: row.getInt('SecurityType'),
-      // 7
-      taxable: row.getInt('Taxable'),
-      // 8
-      priceDate: row.getDate('PriceDate'),
-    );
-  }
 
   // Fields for this instance
   @override

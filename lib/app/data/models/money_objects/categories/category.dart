@@ -22,6 +22,71 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/lis
 export 'package:money/app/data/models/money_objects/categories/category_types.dart';
 
 class Category extends MoneyObject {
+
+  Category({
+    required final int id,
+    final int parentId = -1,
+    required final String name,
+    final String description = '',
+    final String color = '',
+    required final CategoryType type,
+    final double budget = 0,
+    final double budgetBalance = 0,
+    final int frequency = 0,
+    final int taxRefNum = 0,
+  }) {
+    this.id.value = id;
+    this.parentId.value = parentId;
+    this.name.value = name;
+    this.description.value = description;
+    this.color.value = color;
+    this.type.value = type;
+    this.budget.value.setAmount(budget);
+    this.budgetBalance.value.setAmount(budgetBalance);
+    this.frequency.value = frequency;
+    this.taxRefNum.value = taxRefNum;
+
+    buildFieldsAsWidgetForSmallScreen = () {
+      String top = '';
+      String bottom = '';
+
+      if (this.parentId.value == -1) {
+        top = this.name.value;
+        bottom = '';
+      } else {
+        top = this.leafName;
+        bottom = getName(parentCategory);
+      }
+
+      return MyListItemAsCard(
+        leftTopAsString: top,
+        leftBottomAsString: bottom,
+        rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
+        rightBottomAsWidget: Row(
+          children: <Widget>[
+            Text(getTypeAsText()),
+            gapMedium(),
+            getColorWidget(),
+          ],
+        ),
+      );
+    };
+  }
+
+  factory Category.fromJson(final MyJson row) {
+    return Category(
+      id: row.getInt('Id', -1),
+      parentId: row.getInt('ParentId', -1),
+      name: row.getString('Name'),
+      description: row.getString('Description'),
+      color: row.getString('Color').trim(),
+      type: Category.getTypeFromInt(row.getInt('Type')),
+      budget: row.getDouble('Budget'),
+      budgetBalance: row.getDouble('Balance'),
+      frequency: row.getInt('Frequency'),
+      taxRefNum: row.getInt('TaxRefNum'),
+    );
+  }
   static final _fields = Fields<Category>();
 
   static Fields<Category> get fields {
@@ -238,56 +303,6 @@ class Category extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).sumRollup.value,
   );
 
-  Category({
-    required final int id,
-    final int parentId = -1,
-    required final String name,
-    final String description = '',
-    final String color = '',
-    required final CategoryType type,
-    final double budget = 0,
-    final double budgetBalance = 0,
-    final int frequency = 0,
-    final int taxRefNum = 0,
-  }) {
-    this.id.value = id;
-    this.parentId.value = parentId;
-    this.name.value = name;
-    this.description.value = description;
-    this.color.value = color;
-    this.type.value = type;
-    this.budget.value.setAmount(budget);
-    this.budgetBalance.value.setAmount(budgetBalance);
-    this.frequency.value = frequency;
-    this.taxRefNum.value = taxRefNum;
-
-    buildFieldsAsWidgetForSmallScreen = () {
-      String top = '';
-      String bottom = '';
-
-      if (this.parentId.value == -1) {
-        top = this.name.value;
-        bottom = '';
-      } else {
-        top = this.leafName;
-        bottom = getName(parentCategory);
-      }
-
-      return MyListItemAsCard(
-        leftTopAsString: top,
-        leftBottomAsString: bottom,
-        rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
-        rightBottomAsWidget: Row(
-          children: <Widget>[
-            Text(getTypeAsText()),
-            gapMedium(),
-            getColorWidget(),
-          ],
-        ),
-      );
-    };
-  }
-
   Color getColorOrAncestorsColor() {
     final pair = getColorAndLevel(0);
     return pair.first;
@@ -334,21 +349,6 @@ class Category extends MoneyObject {
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
-
-  factory Category.fromJson(final MyJson row) {
-    return Category(
-      id: row.getInt('Id', -1),
-      parentId: row.getInt('ParentId', -1),
-      name: row.getString('Name'),
-      description: row.getString('Description'),
-      color: row.getString('Color').trim(),
-      type: Category.getTypeFromInt(row.getInt('Type')),
-      budget: row.getDouble('Budget'),
-      budgetBalance: row.getDouble('Balance'),
-      frequency: row.getInt('Frequency'),
-      taxRefNum: row.getInt('TaxRefNum'),
-    );
-  }
 
   static String getName(final Category? instance) {
     return instance == null ? '' : (instance).name.value;

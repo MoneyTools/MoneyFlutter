@@ -28,6 +28,65 @@ export 'package:money/app/data/models/money_objects/transactions/transaction_typ
 /// Main source of information for this App
 /// All transactions are loaded in this class [Transaction] and [Split]
 class Transaction extends MoneyObject {
+
+  Transaction({
+    final TransactionStatus status = TransactionStatus.none,
+  }) {
+    this.status.value = status;
+    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
+          leftTopAsString: payeeName,
+          leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
+          rightTopAsWidget: MoneyWidget(amountModel: amount.value, asTile: true),
+          rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
+        );
+  }
+
+  factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
+    final Transaction t = Transaction();
+// 0 ID
+    t.id.value = json.getInt('Id', -1);
+// 1 Account ID
+    t.accountId.value = json.getInt('Account', -1);
+    t.accountInstance = Data().accounts.get(t.accountId.value);
+// 2 Date Time
+    t.dateTime.value = json.getDate('Date');
+// 3 Status
+    t.status.value = TransactionStatus.values[json.getInt('Status')];
+// 4 Payee ID
+    t.payee.value = json.getInt('Payee', -1);
+// 5 Original Payee
+    t.originalPayee.value = json.getString('OriginalPayee');
+// 6 Category Id
+    t.categoryId.value = json.getInt('Category', -1);
+// 7 Memo
+    t.memo.value = json.getString('Memo');
+// 8 Number
+    t.number.value = json.getString('Number');
+// 9 Reconciled Date
+    t.reconciledDate.value = json.getDate('ReconciledDate');
+// 10 BudgetBalanceDate
+    t.budgetBalanceDate.value = json.getDate('BudgetBalanceDate');
+// 11 Transfer
+    t.transfer.value = json.getInt('Transfer', -1);
+// 12 FITID
+    t.fitid.value = json.getString('FITID');
+// 13 Flags
+    t.flags.value = json.getInt('Flags');
+
+// 14 Amount
+    t.amount.value.setAmount(json.getDouble('Amount'));
+// 15 Sales Tax
+    t.salesTax.value.setAmount(json.getDouble('SalesTax'));
+// 16 Transfer Split
+    t.transferSplit.value = json.getInt('TransferSplit', -1);
+// 17 Merge Date
+    t.mergeDate.value = json.getDate('MergeDate');
+
+// not serialized
+    t.balance = runningBalance;
+
+    return t;
+  }
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
   static Fields<Transaction> get fields {
@@ -558,68 +617,9 @@ class Transaction extends MoneyObject {
 
   bool get isSplit => this.splits.isNotEmpty;
 
-  Transaction({
-    final TransactionStatus status = TransactionStatus.none,
-  }) {
-    this.status.value = status;
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: payeeName,
-          leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
-          rightTopAsWidget: MoneyWidget(amountModel: amount.value, asTile: true),
-          rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
-        );
-  }
-
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
-
-  factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
-    final Transaction t = Transaction();
-// 0 ID
-    t.id.value = json.getInt('Id', -1);
-// 1 Account ID
-    t.accountId.value = json.getInt('Account', -1);
-    t.accountInstance = Data().accounts.get(t.accountId.value);
-// 2 Date Time
-    t.dateTime.value = json.getDate('Date');
-// 3 Status
-    t.status.value = TransactionStatus.values[json.getInt('Status')];
-// 4 Payee ID
-    t.payee.value = json.getInt('Payee', -1);
-// 5 Original Payee
-    t.originalPayee.value = json.getString('OriginalPayee');
-// 6 Category Id
-    t.categoryId.value = json.getInt('Category', -1);
-// 7 Memo
-    t.memo.value = json.getString('Memo');
-// 8 Number
-    t.number.value = json.getString('Number');
-// 9 Reconciled Date
-    t.reconciledDate.value = json.getDate('ReconciledDate');
-// 10 BudgetBalanceDate
-    t.budgetBalanceDate.value = json.getDate('BudgetBalanceDate');
-// 11 Transfer
-    t.transfer.value = json.getInt('Transfer', -1);
-// 12 FITID
-    t.fitid.value = json.getString('FITID');
-// 13 Flags
-    t.flags.value = json.getInt('Flags');
-
-// 14 Amount
-    t.amount.value.setAmount(json.getDouble('Amount'));
-// 15 Sales Tax
-    t.salesTax.value.setAmount(json.getDouble('SalesTax'));
-// 16 Transfer Split
-    t.transferSplit.value = json.getInt('TransferSplit', -1);
-// 17 Merge Date
-    t.mergeDate.value = json.getDate('MergeDate');
-
-// not serialized
-    t.balance = runningBalance;
-
-    return t;
-  }
 
   @override
   MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {

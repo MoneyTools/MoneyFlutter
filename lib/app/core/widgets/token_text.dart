@@ -3,7 +3,6 @@ import 'package:money/app/data/models/constants.dart';
 
 // ignore: must_be_immutable
 class TokenText extends StatelessWidget {
-  late final TokenTextStyle style;
 
   TokenText(
     this.text, {
@@ -12,6 +11,7 @@ class TokenText extends StatelessWidget {
   }) {
     tokens = text.split(style.separator);
   }
+  late final TokenTextStyle style;
 
   final String text;
   List<String> tokens = [];
@@ -57,10 +57,6 @@ class TokenText extends StatelessWidget {
 }
 
 class TokenTextStyle {
-  final String separator;
-  final double separatorPaddingLeft;
-  final double separatorPaddingRight;
-  final bool rigthAlign;
 
   const TokenTextStyle({
     this.separator = ':',
@@ -68,4 +64,8 @@ class TokenTextStyle {
     this.separatorPaddingRight = SizeForPadding.small,
     this.rigthAlign = false,
   });
+  final String separator;
+  final double separatorPaddingLeft;
+  final double separatorPaddingRight;
+  final bool rigthAlign;
 }

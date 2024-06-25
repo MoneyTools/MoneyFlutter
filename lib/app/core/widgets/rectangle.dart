@@ -2,12 +2,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class MyRectangle extends StatelessWidget {
-  final Color colorFill;
-  final Color colorBorder;
-  final double size;
-  final double borderSize;
-  final bool showBorder;
-  final BoxShape shape;
 
   const MyRectangle({
     super.key,
@@ -18,6 +12,12 @@ class MyRectangle extends StatelessWidget {
     this.showBorder = false,
     this.borderSize = 2,
   });
+  final Color colorFill;
+  final Color colorBorder;
+  final double size;
+  final double borderSize;
+  final bool showBorder;
+  final BoxShape shape;
 
   @override
   Widget build(final BuildContext context) {

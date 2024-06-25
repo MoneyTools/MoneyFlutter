@@ -142,9 +142,9 @@ class HueGradientPainter extends CustomPainter {
 }
 
 class BrightnessGradientPainter extends CustomPainter {
-  final double hue;
 
   BrightnessGradientPainter({required this.hue});
+  final double hue;
 
   @override
   void paint(Canvas canvas, Size size) {

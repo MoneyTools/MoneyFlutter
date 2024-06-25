@@ -8,14 +8,14 @@ import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class ColumnInput extends StatefulWidget {
-  final String inputText;
-  final Function(String) onChange;
 
   const ColumnInput({
     super.key,
     required this.inputText,
     required this.onChange,
   });
+  final String inputText;
+  final Function(String) onChange;
 
   @override
   State<ColumnInput> createState() => _ColumnInputState();

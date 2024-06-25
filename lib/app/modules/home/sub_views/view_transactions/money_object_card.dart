@@ -6,11 +6,6 @@ import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 
 class MoneyObjectCard extends StatelessWidget {
-  final String title;
-  final MoneyObject? moneyObject;
-  final Function? onMergeWith;
-  final Function? onEdit;
-  final Function? onDelete;
 
   const MoneyObjectCard({
     super.key,
@@ -20,6 +15,11 @@ class MoneyObjectCard extends StatelessWidget {
     this.onMergeWith,
     this.onDelete,
   });
+  final String title;
+  final MoneyObject? moneyObject;
+  final Function? onMergeWith;
+  final Function? onEdit;
+  final Function? onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -117,14 +117,14 @@ class MoneyObjectCard extends StatelessWidget {
 }
 
 class TransactionCard extends StatelessWidget {
-  final String title;
-  final Transaction? transaction;
 
   const TransactionCard({
     super.key,
     required this.title,
     this.transaction,
   });
+  final String title;
+  final Transaction? transaction;
 
   @override
   Widget build(BuildContext context) {

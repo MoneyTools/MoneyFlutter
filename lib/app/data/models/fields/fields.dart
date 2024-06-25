@@ -29,12 +29,12 @@ export 'package:money/app/data/models/fields/field.dart';
 ///
 /// @param <T> The data type associated with the field definitions.
 class Fields<T> {
-  final FieldDefinitions definitions = [];
 
   /// Constructor
   Fields() {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
+  final FieldDefinitions definitions = [];
 
   Iterable<Field> get fieldDefinitionsForColumns {
     return definitions.where((element) => element.useAsColumn == true);

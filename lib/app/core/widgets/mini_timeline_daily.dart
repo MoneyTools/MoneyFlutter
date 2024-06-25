@@ -8,6 +8,16 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/vertical_line_with_tooltip.dart';
 
 class MiniTimelineDaily extends StatelessWidget {
+
+  const MiniTimelineDaily({
+    super.key,
+    required this.yearStart,
+    required this.yearEnd,
+    required this.values,
+    required this.offsetStartingDay,
+    this.color,
+    this.lineWidth = 2,
+  });
   final int yearStart;
   final int yearEnd;
   final Color? color;
@@ -20,16 +30,6 @@ class MiniTimelineDaily extends StatelessWidget {
 
   // [int = Days from millisecondFromEpoch], [double = amount]
   final List<Pair<int, double>> values;
-
-  const MiniTimelineDaily({
-    super.key,
-    required this.yearStart,
-    required this.yearEnd,
-    required this.values,
-    required this.offsetStartingDay,
-    this.color,
-    this.lineWidth = 2,
-  });
 
   @override
   Widget build(BuildContext context) {

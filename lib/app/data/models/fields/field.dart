@@ -211,39 +211,6 @@ enum ColumnWidth {
 }
 
 class Field<T> {
-  late T _value;
-
-  // Static properties
-  String name;
-  String serializeName;
-  FieldType type;
-  ColumnWidth columnWidth;
-  TextAlign align;
-  bool fixedFont = false;
-  int importance;
-
-  bool useAsColumn;
-
-  // This properties are evaluated against the instnace of the object
-  bool Function(MoneyObject) useAsDetailPanels;
-
-  /// Get the value of the instance
-  dynamic Function(MoneyObject) getValueForDisplay;
-
-  /// Get the value for storing the instance
-  dynamic Function(MoneyObject) getValueForSerialization;
-
-  /// Customize/override the edit widget
-  Widget Function(MoneyObject, Function onEdited)? getEditWidget;
-
-  /// override the value edited
-  dynamic Function(MoneyObject, dynamic)? setValue;
-
-  int Function(MoneyObject, MoneyObject, bool)? sort;
-
-  void setAmount(final dynamic newValue) {
-    (this as FieldMoney).value.setAmount(newValue);
-  }
 
   Field({
     this.type = FieldType.text,
@@ -325,6 +292,39 @@ class Field<T> {
               sortByString(getValueForDisplay(a).toString(), getValueForDisplay(b).toString(), ascending);
       }
     }
+  }
+  late T _value;
+
+  // Static properties
+  String name;
+  String serializeName;
+  FieldType type;
+  ColumnWidth columnWidth;
+  TextAlign align;
+  bool fixedFont = false;
+  int importance;
+
+  bool useAsColumn;
+
+  // This properties are evaluated against the instnace of the object
+  bool Function(MoneyObject) useAsDetailPanels;
+
+  /// Get the value of the instance
+  dynamic Function(MoneyObject) getValueForDisplay;
+
+  /// Get the value for storing the instance
+  dynamic Function(MoneyObject) getValueForSerialization;
+
+  /// Customize/override the edit widget
+  Widget Function(MoneyObject, Function onEdited)? getEditWidget;
+
+  /// override the value edited
+  dynamic Function(MoneyObject, dynamic)? setValue;
+
+  int Function(MoneyObject, MoneyObject, bool)? sort;
+
+  void setAmount(final dynamic newValue) {
+    (this as FieldMoney).value.setAmount(newValue);
   }
 
   // ignore: unnecessary_getters_setters

@@ -17,6 +17,61 @@ import 'package:money/app/data/storage/data/data.dart';
  */
 
 class MoneySplit extends MoneyObject {
+
+  /// Constructor
+  MoneySplit({
+    // 1
+    required int id,
+    // 0
+    required int transactionId,
+    // 2
+    required int categoryId,
+    // 3
+    required int payeeId,
+    // 4
+    required double amount,
+    // 5
+    required int transferId,
+    // 6
+    required String memo,
+    // 7
+    required int flags,
+    // 8
+    required DateTime? budgetBalanceDate,
+  }) {
+    this.id.value = id;
+    this.transactionId.value = transactionId;
+    this.categoryId.value = categoryId;
+    this.payeeId.value = payeeId;
+    this.amount.value.setAmount(amount);
+    this.transferId.value = transferId;
+    this.memo.value = memo;
+    this.flags.value = flags;
+    this.budgetBalanceDate.value = budgetBalanceDate;
+  }
+
+  factory MoneySplit.fromJson(final MyJson row) {
+    return MoneySplit(
+      // 0
+      transactionId: row.getInt('Transaction', -1),
+      // 1
+      id: row.getInt('Id', -1),
+      // 2
+      categoryId: row.getInt('Category', -1),
+      // 3
+      payeeId: row.getInt('Payee', -1),
+      // 4
+      amount: row.getDouble('Amount'),
+      // 5
+      transferId: row.getInt('Transfer', -1),
+      // 6
+      memo: row.getString('Memo'),
+      // 7
+      flags: row.getInt('Flags'),
+      // 8
+      budgetBalanceDate: row.getDate('BudgetBalanceDate'),
+    );
+  }
   static final _fields = Fields<MoneySplit>();
 
   static Fields<MoneySplit> get fields {
@@ -99,61 +154,6 @@ class MoneySplit extends MoneyObject {
     name: 'Budgeted Date',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).budgetBalanceDate.value,
   );
-
-  /// Constructor
-  MoneySplit({
-    // 1
-    required int id,
-    // 0
-    required int transactionId,
-    // 2
-    required int categoryId,
-    // 3
-    required int payeeId,
-    // 4
-    required double amount,
-    // 5
-    required int transferId,
-    // 6
-    required String memo,
-    // 7
-    required int flags,
-    // 8
-    required DateTime? budgetBalanceDate,
-  }) {
-    this.id.value = id;
-    this.transactionId.value = transactionId;
-    this.categoryId.value = categoryId;
-    this.payeeId.value = payeeId;
-    this.amount.value.setAmount(amount);
-    this.transferId.value = transferId;
-    this.memo.value = memo;
-    this.flags.value = flags;
-    this.budgetBalanceDate.value = budgetBalanceDate;
-  }
-
-  factory MoneySplit.fromJson(final MyJson row) {
-    return MoneySplit(
-      // 0
-      transactionId: row.getInt('Transaction', -1),
-      // 1
-      id: row.getInt('Id', -1),
-      // 2
-      categoryId: row.getInt('Category', -1),
-      // 3
-      payeeId: row.getInt('Payee', -1),
-      // 4
-      amount: row.getDouble('Amount'),
-      // 5
-      transferId: row.getInt('Transfer', -1),
-      // 6
-      memo: row.getString('Memo'),
-      // 7
-      flags: row.getInt('Flags'),
-      // 8
-      budgetBalanceDate: row.getDate('BudgetBalanceDate'),
-    );
-  }
 
   // Fields for this instance
   @override

@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class NumberPicker extends StatefulWidget {
-  final String title;
-  final int selectedNumber;
-  final Function(int) onChanged;
 
   const NumberPicker({
     super.key,
@@ -12,6 +9,9 @@ class NumberPicker extends StatefulWidget {
     required this.onChanged,
     required this.selectedNumber,
   });
+  final String title;
+  final int selectedNumber;
+  final Function(int) onChanged;
 
   @override
   State<NumberPicker> createState() => _NumberPickerState();

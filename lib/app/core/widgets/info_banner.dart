@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class InfoBanner extends StatelessWidget {
-  final ColorState type;
-  final String message;
-  final IconData icon;
 
   const InfoBanner({
     super.key,
@@ -36,6 +33,9 @@ class InfoBanner extends StatelessWidget {
       icon: Icons.error,
     );
   }
+  final ColorState type;
+  final String message;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {

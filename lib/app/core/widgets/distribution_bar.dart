@@ -6,24 +6,24 @@ import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/data/models/money_model.dart';
 
 class Distribution {
-  final String title;
-  final Color color;
-  final double amount;
-  double percentage = 0;
 
   Distribution({
     required this.title,
     required this.amount,
     this.color = Colors.transparent,
   });
+  final String title;
+  final Color color;
+  final double amount;
+  double percentage = 0;
 }
 
 class DistributionBar extends StatelessWidget {
+
+  DistributionBar({super.key, required this.segments});
   final List<Distribution> segments;
   final List<Widget> segmentWidgets = [];
   final List<Widget> detailRowWidgets = [];
-
-  DistributionBar({super.key, required this.segments});
 
   @override
   Widget build(BuildContext context) {

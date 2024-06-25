@@ -18,12 +18,6 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
 
 class RecurringCard extends StatelessWidget {
-  final int index;
-  final RecurringPayment payment;
-  final DateRange dateRangeSelected;
-  final DateRange dateRangeSearch;
-
-  final bool forIncomeTransaction;
 
   const RecurringCard({
     super.key,
@@ -33,6 +27,12 @@ class RecurringCard extends StatelessWidget {
     required this.payment,
     required this.forIncomeTransaction,
   });
+  final int index;
+  final RecurringPayment payment;
+  final DateRange dateRangeSelected;
+  final DateRange dateRangeSearch;
+
+  final bool forIncomeTransaction;
 
   @override
   Widget build(BuildContext context) {

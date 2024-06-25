@@ -4,14 +4,6 @@ import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
 class MoneyModel {
-  /// Amount to display
-  double _amount;
-
-  /// USD | CAD | GBP
-  String iso4217;
-
-  bool showCurrency;
-  bool autoColor;
 
   /// Constructor
   MoneyModel({
@@ -20,6 +12,14 @@ class MoneyModel {
     this.showCurrency = false,
     this.autoColor = true,
   }) : _amount = amount;
+  /// Amount to display
+  double _amount;
+
+  /// USD | CAD | GBP
+  String iso4217;
+
+  bool showCurrency;
+  bool autoColor;
 
   /// Add operator
   MoneyModel operator +(final dynamic value) {

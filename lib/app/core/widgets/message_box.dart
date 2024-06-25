@@ -24,10 +24,10 @@ void messageBox(
 }
 
 class DialogService {
-  // singleton
-  static final DialogService _instance = DialogService._internal();
   factory DialogService() => _instance;
   DialogService._internal();
+  // singleton
+  static final DialogService _instance = DialogService._internal();
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 

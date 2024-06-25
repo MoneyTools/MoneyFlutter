@@ -4,9 +4,6 @@ import 'package:money/app/core/helpers/string_helper.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
 class QuantifyWidget extends StatelessWidget {
-  /// Amount to display
-  final double quantity;
-  final TextAlign align;
 
   /// Constructor
   const QuantifyWidget({
@@ -14,6 +11,9 @@ class QuantifyWidget extends StatelessWidget {
     required this.quantity,
     this.align = TextAlign.right,
   });
+  /// Amount to display
+  final double quantity;
+  final TextAlign align;
 
   @override
   Widget build(final BuildContext context) {
