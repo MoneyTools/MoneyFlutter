@@ -11,11 +11,13 @@ void myShowDialogAndActionsForMoneyObject({
   required final BuildContext context,
   required final String title,
   required final MoneyObject moneyObject,
+  Function? onApplyChange,
 }) {
   myShowDialogAndActionsForMoneyObjects(
     context: context,
     title: title,
     moneyObjects: [moneyObject],
+    onApplyChange: onApplyChange,
   );
 }
 
@@ -23,6 +25,7 @@ void myShowDialogAndActionsForMoneyObjects({
   required final BuildContext context,
   required final String title,
   required final List<MoneyObject> moneyObjects,
+  Function? onApplyChange,
 }) {
   if (moneyObjects.isEmpty) {
     messageBox(context, 'No items to edit');
@@ -55,6 +58,7 @@ void myShowDialogAndActionsForMoneyObjects({
           }
         }
         Data().updateAll();
+        onApplyChange?.call();
       },
     ),
   );

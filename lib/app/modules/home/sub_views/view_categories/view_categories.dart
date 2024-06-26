@@ -161,10 +161,16 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                 );
             updateListAndSelect(newItem.uniqueId);
 
+            // Queue up the edit dialog
             myShowDialogAndActionsForMoneyObject(
               context: context,
               title: getClassNameSingular(),
               moneyObject: newItem,
+              onApplyChange: () {
+                setState(() {
+                  /// update
+                });
+              },
             );
           },
           'Add new category',

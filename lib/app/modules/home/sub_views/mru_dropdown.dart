@@ -40,7 +40,7 @@ class MruDropdown extends StatelessWidget {
                   items: preferenceController.mru,
                   selectedItem: '',
                   onSelected: (final String selectedTextReprentingFileNamePath) {
-                    DataSource dataSource = DataSource(selectedTextReprentingFileNamePath);
+                    DataSource dataSource = DataSource(filePath: selectedTextReprentingFileNamePath);
                     DataController.to.loadFileFromPath(dataSource);
                     Get.offAllNamed(Constants.routeHomePage);
                   },

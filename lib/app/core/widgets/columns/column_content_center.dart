@@ -13,7 +13,9 @@ class HeaderContentCenter extends StatelessWidget {
       softWrap: false,
       textAlign: TextAlign.center,
       overflow: TextOverflow.clip,
-      style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+      style: getTextTheme(context).labelSmall!.copyWith(
+            color: getColorTheme(context).secondary,
+          ),
     );
 
     if (trailingWidget == null) {
@@ -21,7 +23,10 @@ class HeaderContentCenter extends StatelessWidget {
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [Flexible(child: textWidget), trailingWidget!],
+      children: [
+        Flexible(child: textWidget),
+        trailingWidget!,
+      ],
     );
   }
 }

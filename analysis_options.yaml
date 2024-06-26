@@ -27,12 +27,12 @@ linter:
     matching_super_parameters: true
     sort_constructors_first: true
     always_put_control_body_on_new_line: true
+    use_key_in_widget_constructors: true
+    directives_ordering: true
     # sort_constructors_order:
     #   - super
     #   - required
     #   - positional
     # always_put_required_named_parameters_first: false
-    # use_key_in_widget_constructors: true
     # sort_unnamed_constructors_first: true    
     # no_leading_underscores_for_local_identifiers: false
-    # directives_ordering: true

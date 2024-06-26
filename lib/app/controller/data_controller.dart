@@ -74,7 +74,11 @@ class DataController extends GetxController {
       isLoading.value = true;
 
       if (PreferenceController.to.mru.isNotEmpty) {
-        await loadFile(DataSource(PreferenceController.to.mru.first));
+        await loadFile(
+          DataSource(
+            filePath: PreferenceController.to.mru.first,
+          ),
+        );
         return;
       } else {
         // Once the file is loaded, navigate to the main screen
@@ -211,13 +215,12 @@ class DataController extends GetxController {
         final String? fileExtension = pickerResult.files.single.extension;
 
         if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
-          DataSource dataSource = DataSource();
+          late DataSource dataSource;
           if (kIsWeb) {
             PlatformFile file = pickerResult.files.first;
-            dataSource.filePath = file.name;
-            dataSource.fileBytes = file.bytes!;
+            dataSource = DataSource(filePath: file.name, fileBytes: file.bytes!);
           } else {
-            dataSource.filePath = pickerResult.files.single.path ?? '';
+            dataSource = DataSource(filePath: pickerResult.files.single.path ?? '');
           }
           final DataController dataController = Get.find();
           dataController.loadFile(dataSource);
@@ -233,14 +236,16 @@ class DataController extends GetxController {
 }
 
 class DataSource {
-  DataSource([
+  DataSource({
     this.filePath = '',
     Uint8List? fileBytes,
-  ]) : fileBytes = fileBytes ?? Uint8List(0);
-  String filePath;
+  }) : _fileBytes = fileBytes ?? Uint8List(0);
 
-  Uint8List fileBytes;
+  final String filePath;
+  final Uint8List _fileBytes;
 
-  bool get isByteFile => fileBytes.isNotEmpty && filePath.isNotEmpty;
-  bool get isLocalFile => fileBytes.isEmpty && filePath.isNotEmpty && filePath.contains(MyFileSystems.pathSeparator);
+  bool get isByteFile => _fileBytes.isNotEmpty && filePath.isNotEmpty;
+  bool get isLocalFile => _fileBytes.isEmpty && filePath.isNotEmpty && filePath.contains(MyFileSystems.pathSeparator);
+
+  Uint8List get fileBytes => _fileBytes;
 }
