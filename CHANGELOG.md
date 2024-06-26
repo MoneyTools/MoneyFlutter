@@ -4,6 +4,7 @@
 
 ### Updated
 
+- Use Markdown in [Policy page]
 - Show a [Clear Filters] on empty list
   
 ## [version 1.8.32] 2024-06-25
