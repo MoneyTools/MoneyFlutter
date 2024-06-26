@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.33] 2024-06-26
+
+### Updated
+
+- Show a [Clear Filters] on empty list
+  
 ## [version 1.8.32] 2024-06-25
 
 ### Added

@@ -9,6 +9,7 @@ import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/message_box.dart';
@@ -200,14 +201,46 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return widgets;
   }
 
+  Widget centerEmptyList(Key key) {
+    String message = 'No ${getClassNamePlural()}';
+    Widget? widgetForClearFilter;
+    if (areFiltersOn()) {
+      message += ' found';
+      widgetForClearFilter = OutlinedButton(
+        onPressed: () {
+          setState(() {
+            resetFiltersAndGetList();
+          });
+        },
+        child: Row(
+          children: [
+            const Text('Clear Filters'),
+            gapSmall(),
+            const Icon(Icons.filter_alt_off_outlined),
+          ],
+        ),
+      );
+    }
+    return CenterMessage(
+      key: key,
+      message: message,
+      child: widgetForClearFilter,
+    );
+  }
+
   @override
   Widget build(final BuildContext context) {
     return buildViewContent(
       Obx(() {
+        final key = Key(
+          '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}',
+        );
+
+        if (list.isEmpty) {
+          return centerEmptyList(key);
+        }
         return AdaptiveViewWithList(
-          key: Key(
-            '${preferenceController.includeClosedAccounts}|${list.length}',
-          ),
+          key: key,
           top: buildHeader(),
           list: list,
           fieldDefinitions: _fieldToDisplay.definitions,

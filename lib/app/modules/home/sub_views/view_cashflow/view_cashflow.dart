@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/pick_number.dart';
 import 'package:money/app/core/widgets/sankey/sankey.dart';
 import 'package:money/app/core/widgets/years_range_selector.dart';
@@ -16,7 +17,6 @@ import 'package:money/app/modules/home/sub_views/view.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/panel_sankey.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/app/modules/home/sub_views/view_header.dart';
-import 'package:money/app/modules/home/sub_views/view_transactions/no_transactions.dart';
 
 class ViewCashFlow extends ViewWidget {
   const ViewCashFlow({super.key});
@@ -86,7 +86,7 @@ class ViewCashFlowState extends ViewWidgetState {
 
   Widget getView() {
     if (Data().transactions.isEmpty) {
-      return const NoTransaction();
+      return CenterMessage.noTransaction();
     }
 
     switch (PreferenceController.to.cashflowViewAs.value) {
