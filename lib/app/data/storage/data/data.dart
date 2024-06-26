@@ -153,6 +153,10 @@ class Data {
           DataController.to.trackMutations.increaseNumber(increaseChanged: 1);
         }
       case MutationType.deleted:
+        if (moneyObject.mutation == MutationType.inserted) {
+          // in case the delete item was a revcently added item, we need to deduct it from the sum
+          DataController.to.trackMutations.increaseNumber(increaseAdded: -1);
+        }
         moneyObject.mutation = MutationType.deleted;
         DataController.to.trackMutations.increaseNumber(increaseDeleted: 1);
       default:

@@ -122,8 +122,8 @@ class DataController extends GetxController {
 
   void closeFile([bool rebuild = true]) {
     Data().close();
-    DataController.to.dataFileIsClosed();
-    DataController.to.trackMutations.reset();
+    dataFileIsClosed();
+    trackMutations.reset();
   }
 
   void onFileNew() async {
@@ -134,12 +134,11 @@ class DataController extends GetxController {
   }
 
   Future<void> loadFileFromPath(final DataSource dataSource) async {
-    final DataController dataController = Get.find();
-    dataController.loadFile(dataSource);
+    loadFile(dataSource);
   }
 
   void onShowFileLocation() async {
-    String path = await DataController.to.generateNextFolderToSaveTo();
+    String path = await generateNextFolderToSaveTo();
     showLocalFolder(path);
   }
 
@@ -148,22 +147,22 @@ class DataController extends GetxController {
 
     PreferenceController.to.addToMRU(fullPathToFileName);
 
-    Data().assessMutationsCountOfAllModels();
+    trackMutations.reset();
   }
 
   void onSaveToSql() async {
-    String fileNameAndPath = DataController.to.currentLoadedFileName.value;
+    String fileNameAndPath = currentLoadedFileName.value;
 
     if (fileNameAndPath.isEmpty) {
       // this happens if the user started with a new file and click save to SQL
-      fileNameAndPath = await DataController.to.defaultFolderToSaveTo('mymoney.mmdb');
+      fileNameAndPath = await defaultFolderToSaveTo('mymoney.mmdb');
     }
 
     Data().saveToSql(
       filePathToLoad: fileNameAndPath,
       callbackWhenLoaded: (final bool success, final String message) {
         if (success) {
-          Data().assessMutationsCountOfAllModels();
+          trackMutations.reset();
         } else {
           SnackBarService.displayError(autoDismiss: false, message: message);
         }
@@ -222,8 +221,8 @@ class DataController extends GetxController {
           } else {
             dataSource = DataSource(filePath: pickerResult.files.single.path ?? '');
           }
-          final DataController dataController = Get.find();
-          dataController.loadFile(dataSource);
+
+          loadFile(dataSource);
           return true;
         }
       } catch (e) {
