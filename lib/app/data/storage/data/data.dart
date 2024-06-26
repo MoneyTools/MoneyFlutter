@@ -41,6 +41,12 @@ part 'data_extension_demo.dart';
 part 'data_extension_sql.dart';
 
 class Data {
+  // private constructor
+
+  /// singleton access
+  factory Data() {
+    return _instance;
+  }
 
   /// private constructor
   Data._internal() {
@@ -63,11 +69,6 @@ class Data {
       rentBuildings, // 10
       rentUnits, // 11
     ];
-  } // private constructor
-
-  /// singleton access
-  factory Data() {
-    return _instance;
   }
   int version = 0;
 
@@ -173,7 +174,11 @@ class Data {
   /// Bulk Delete
   void deleteItems(final List<MoneyObject> itemsToDelete) {
     for (final item in itemsToDelete) {
-      Data().notifyMutationChanged(mutation: MutationType.deleted, moneyObject: item, fireNotification: false);
+      Data().notifyMutationChanged(
+        mutation: MutationType.deleted,
+        moneyObject: item,
+        fireNotification: false,
+      );
     }
     Data().updateAll();
   }
@@ -212,7 +217,10 @@ class Data {
     return allMutationGroups;
   }
 
-  Future<String?> validateDataBasePathIsValidAndExist(final String? filePath, final Uint8List fileBytes) async {
+  Future<String?> validateDataBasePathIsValidAndExist(
+    final String? filePath,
+    final Uint8List fileBytes,
+  ) async {
     try {
       if (filePath != null) {
         if (fileBytes.isNotEmpty) {
@@ -253,7 +261,10 @@ class Data {
           preferenceController.addToMRU(dateSource.filePath);
 
         default:
-          SnackBarService.displayWarning(autoDismiss: false, message: 'Unsupported file type $fileExtension');
+          SnackBarService.displayWarning(
+            autoDismiss: false,
+            message: 'Unsupported file type $fileExtension',
+          );
           return false;
       }
     } catch (e) {
@@ -269,9 +280,12 @@ class Data {
     return true;
   }
 
-  Transaction? getOrCreateRelatedTransaction(Transaction transactionSource, Account destinationAccount) {
+  Transaction? getOrCreateRelatedTransaction(
+    Transaction transactionSource,
+    Account destinationAccount,
+  ) {
     if (transactionSource.accountId.value == destinationAccount.uniqueId) {
-      debugLog("Cannot transfer to same account");
+      debugLog('Cannot transfer to same account');
       return null;
     }
 
@@ -284,7 +298,9 @@ class Data {
     if (relatedTransaction == null) {
       relatedTransaction = Transaction()
         ..accountId.value = destinationAccount.uniqueId
-        ..amount.value.setAmount((transactionSource.amount.value.toDouble() * -1)) // flip the sign
+        ..amount.value.setAmount(
+              (transactionSource.amount.value.toDouble() * -1),
+            ) // flip the sign
         ..categoryId.value = transactionSource.categoryId.value
         ..dateTime.value = transactionSource.dateTime.value
         ..fitid.value = transactionSource.fitid.value
@@ -319,7 +335,10 @@ class Data {
     return relatedTransaction;
   }
 
-  bool makeTransferLinkage(Transaction transactionSource, Account destinationAccount) {
+  bool makeTransferLinkage(
+    Transaction transactionSource,
+    Account destinationAccount,
+  ) {
     Transaction? relatedTransaction = getOrCreateRelatedTransaction(transactionSource, destinationAccount);
 
     if (relatedTransaction != null) {
@@ -327,10 +346,20 @@ class Data {
 
       if (transactionSource.amount.value.toDouble() < 0) {
         // transfer TO
-        transfer = Transfer(id: 0, source: transactionSource, related: relatedTransaction, isOrphan: false);
+        transfer = Transfer(
+          id: 0,
+          source: transactionSource,
+          related: relatedTransaction,
+          isOrphan: false,
+        );
       } else {
         // transfer FROM
-        transfer = Transfer(id: 0, source: relatedTransaction, related: transactionSource, isOrphan: false);
+        transfer = Transfer(
+          id: 0,
+          source: relatedTransaction,
+          related: transactionSource,
+          isOrphan: false,
+        );
       }
 
       // Keep track changes done
@@ -418,7 +447,10 @@ class Data {
   /// <param name="filter">The account filter or null if you want them all</param>
   /// <param name="toDate">Get all transactions up to but not including this date</param>
   /// <returns></returns>
-  Map<Security, List<Investment>> getTransactionsGroupedBySecurity(Function(Account)? filter, DateTime toDate) {
+  Map<Security, List<Investment>> getTransactionsGroupedBySecurity(
+    Function(Account)? filter,
+    DateTime toDate,
+  ) {
     Map<Security, List<Investment>> transactionsBySecurity = {};
 
     // Sort all add, remove, buy, sell transactions by date and by security.

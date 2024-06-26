@@ -6,10 +6,9 @@ import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 
 class MoneyObjectCard extends StatelessWidget {
-
   const MoneyObjectCard({
-    super.key,
     required this.title,
+    super.key,
     this.moneyObject,
     this.onEdit,
     this.onMergeWith,
@@ -71,11 +70,14 @@ class MoneyObjectCard extends StatelessWidget {
                   IconButton(
                     icon: const Icon(Icons.copy_all),
                     onPressed: () {
-                      copyToClipboardAndInformUser(context, moneyObject!.getPersistableJSon().toString());
+                      copyToClipboardAndInformUser(
+                        context,
+                        moneyObject!.getPersistableJSon().toString(),
+                      );
                     },
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
@@ -117,10 +119,9 @@ class MoneyObjectCard extends StatelessWidget {
 }
 
 class TransactionCard extends StatelessWidget {
-
   const TransactionCard({
-    super.key,
     required this.title,
+    super.key,
     this.transaction,
   });
   final String title;

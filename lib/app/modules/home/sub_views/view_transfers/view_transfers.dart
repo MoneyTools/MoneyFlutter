@@ -77,11 +77,16 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Transfer> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<Transfer> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     final List<Transaction> listOfTransactions = Data()
         .transactions
         .iterableList(includeDeleted: includeDeleted)
-        .where((final Transaction transaction) => transaction.transfer.value != -1)
+        .where(
+          (final Transaction transaction) => transaction.transfer.value != -1,
+        )
         .toList();
 
     // Add the Senders
@@ -89,7 +94,11 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
       final Transaction? transactionReceiver = Data().transactions.get(transaction.transfer.value);
       if (transaction.amount.value.toDouble() <= 0) {
         // Display only the Sender/From Transaction you know that its the sender because the amount id negative (deducted)
-        keepThisTransfer(transactionSender: transaction, transactionReceiver: transactionReceiver, isOrphan: false);
+        keepThisTransfer(
+          transactionSender: transaction,
+          transactionReceiver: transactionReceiver,
+          isOrphan: false,
+        );
       }
     }
 
@@ -102,8 +111,14 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
           if (transaction.transferSplit.value <= 0) {
             debugLog('This is a split');
           }
-          debugLog('related account not found ${transaction.uniqueId} ${transaction.amount.value}');
-          keepThisTransfer(transactionSender: transactionReceiver!, transactionReceiver: transaction, isOrphan: true);
+          debugLog(
+            'related account not found ${transaction.uniqueId} ${transaction.amount.value}',
+          );
+          keepThisTransfer(
+            transactionSender: transactionReceiver!,
+            transactionReceiver: transaction,
+            isOrphan: true,
+          );
         }
       }
     }
@@ -118,7 +133,10 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+  Widget getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
     if (selectedIds.isNotEmpty) {
       final int id = selectedIds.first;
       final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
@@ -131,10 +149,16 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
               spacing: 30,
               children: [
                 IntrinsicWidth(
-                  child: TransactionCard(title: 'Sender', transaction: transfer.getSenderTransaction()),
+                  child: TransactionCard(
+                    title: 'Sender',
+                    transaction: transfer.getSenderTransaction(),
+                  ),
                 ),
                 IntrinsicWidth(
-                  child: TransactionCard(title: 'Receiver', transaction: transfer.getReceiverTransaction()),
+                  child: TransactionCard(
+                    title: 'Receiver',
+                    transaction: transfer.getReceiverTransaction(),
+                  ),
                 ),
               ],
             ),

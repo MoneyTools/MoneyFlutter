@@ -14,16 +14,15 @@ export 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/lis
 export 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_header.dart';
 
 class MyListView<T> extends StatefulWidget {
-
   const MyListView({
-    super.key,
     required this.fields,
     required this.list,
+    required this.selectedItemIds,
+    super.key,
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
     this.displayAsColumn = true,
-    required this.selectedItemIds,
     this.onSelectionChanged,
     this.isMultiSelectionOn = false,
   });
@@ -50,7 +49,9 @@ class MyListViewState<T> extends State<MyListView<T>> {
   void initState() {
     super.initState();
     if (widget.selectedItemIds.value.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((final _) => scrollToId(widget.selectedItemIds.value.first));
+      WidgetsBinding.instance.addPostFrameCallback(
+        (final _) => scrollToId(widget.selectedItemIds.value.first),
+      );
     }
   }
 
@@ -71,18 +72,20 @@ class MyListViewState<T> extends State<MyListView<T>> {
     }
 
     return ListView.builder(
-        primary: false,
-        scrollDirection: Axis.vertical,
-        controller: scrollController,
-        itemCount: widget.list.length,
-        itemExtent: textScaler.scale(rowHeight),
-        itemBuilder: (final BuildContext context, final int index) {
-          final MoneyObject itemInstance = getMoneyObjectFromIndex(index);
-          final isLastItemOfTheList = (index == widget.list.length - 1);
-          final isSelected = widget.selectedItemIds.value.contains(itemInstance.uniqueId);
-          return Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
+      primary: false,
+      scrollDirection: Axis.vertical,
+      controller: scrollController,
+      itemCount: widget.list.length,
+      itemExtent: textScaler.scale(rowHeight),
+      itemBuilder: (final BuildContext context, final int index) {
+        final MoneyObject itemInstance = getMoneyObjectFromIndex(index);
+        final isLastItemOfTheList = (index == widget.list.length - 1);
+        final isSelected = widget.selectedItemIds.value.contains(itemInstance.uniqueId);
+        return Padding(
+          padding: EdgeInsets.symmetric(horizontal: padding),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
               if (widget.isMultiSelectionOn)
                 Checkbox(
                   value: isSelected,
@@ -123,17 +126,30 @@ class MyListViewState<T> extends State<MyListView<T>> {
                   autoFocus: index == widget.selectedItemIds.value.firstOrNull,
                   isSelected: isSelected,
                   adornmentColor: itemInstance.getMutationColor(),
-                  child: buildListItemContent(isSelected, itemInstance, isLastItemOfTheList),
+                  child: buildListItemContent(
+                    isSelected,
+                    itemInstance,
+                    isLastItemOfTheList,
+                  ),
                 ),
               ),
-            ]),
-          );
-        });
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  Widget buildListItemContent(final bool isSelected, final MoneyObject itemInstance, final bool isLastItemOfTheList) {
+  Widget buildListItemContent(
+    final bool isSelected,
+    final MoneyObject itemInstance,
+    final bool isLastItemOfTheList,
+  ) {
     return widget.displayAsColumn
-        ? itemInstance.buildFieldsAsWidgetForLargeScreen!(widget.fields, itemInstance as T)
+        ? itemInstance.buildFieldsAsWidgetForLargeScreen!(
+            widget.fields,
+            itemInstance as T,
+          )
         : Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -148,7 +164,10 @@ class MyListViewState<T> extends State<MyListView<T>> {
           );
   }
 
-  KeyEventResult onListViewKeyEvent(final FocusNode node, final KeyEvent event) {
+  KeyEventResult onListViewKeyEvent(
+    final FocusNode node,
+    final KeyEvent event,
+  ) {
     if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
       setState(() {
         selectedItemOffset(-1);

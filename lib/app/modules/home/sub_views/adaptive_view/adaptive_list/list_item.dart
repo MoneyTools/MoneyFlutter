@@ -3,17 +3,16 @@ import 'package:money/app/core/helpers/color_helper.dart';
 
 /// A Row for a Table view
 class MyListItem extends StatefulWidget {
-
   const MyListItem({
-    super.key,
     required this.onListViewKeyEvent,
     required this.isSelected,
+    required this.child,
+    super.key,
     this.autoFocus = false,
     this.onTap,
     this.onDoubleTap,
     this.onLongPress,
     this.adornmentColor = Colors.transparent,
-    required this.child,
   });
   final KeyEventResult Function(FocusNode, KeyEvent) onListViewKeyEvent;
   final GestureTapCallback? onTap;
@@ -71,14 +70,20 @@ class MyListItemState extends State<MyListItem> {
           },
           onDoubleTap: widget.onDoubleTap,
           onLongPress: widget.onLongPress,
-          child: Container(
+          child: DecoratedBox(
             // height: 40,
             decoration: BoxDecoration(
               color: backgroundColor,
               border: Border(
-                top: BorderSide(width: 0.5, color: getColorTheme(context).outline.withOpacity(0.3)),
+                top: BorderSide(
+                  width: 0.5,
+                  color: getColorTheme(context).outline.withOpacity(0.3),
+                ),
                 left: BorderSide(width: 2, color: widget.adornmentColor),
-                bottom: BorderSide(width: 0.5, color: getColorTheme(context).outline.withOpacity(0.3)),
+                bottom: BorderSide(
+                  width: 0.5,
+                  color: getColorTheme(context).outline.withOpacity(0.3),
+                ),
               ),
             ),
             child: widget.child,

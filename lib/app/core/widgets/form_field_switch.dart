@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
-InputDecoration getFormFieldDecoration({required final fieldName, required final bool isReadOnly}) {
+InputDecoration getFormFieldDecoration({
+  required final fieldName,
+  required final bool isReadOnly,
+}) {
   return InputDecoration(
     labelText: fieldName,
     contentPadding: isReadOnly ? const EdgeInsets.symmetric(horizontal: 12) : null,

@@ -32,7 +32,12 @@ Widget buildColumnHeaderButton({
         onPressed: onPressed,
         onLongPress: onLongPress,
         // clipBehavior: Clip.hardEdge,
-        child: _buildTextAndSortAndFilter(context, textAlign, text, _buildAdorners(sortIndicator, hasFilters)),
+        child: _buildTextAndSortAndFilter(
+          context,
+          textAlign,
+          text,
+          _buildAdorners(sortIndicator, hasFilters),
+        ),
       ),
     ),
   );
@@ -137,7 +142,11 @@ enum SortIndicator {
   sortDescending,
 }
 
-SortIndicator getSortIndicator(final int currentSort, final int sortToMatch, final bool ascending) {
+SortIndicator getSortIndicator(
+  final int currentSort,
+  final int sortToMatch,
+  final bool ascending,
+) {
   if (sortToMatch == currentSort) {
     return ascending ? SortIndicator.sortAscending : SortIndicator.sortDescending;
   }

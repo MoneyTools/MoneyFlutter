@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class AdaptiveColumns extends StatelessWidget {
-
   /// Constructor
   const AdaptiveColumns({
     super.key,
@@ -42,11 +41,13 @@ class AdaptiveColumns extends StatelessWidget {
         // debugLog('${constraints.maxWidth} QC:$quantity cw:$optimalColumnWidth');
 
         List<Widget> sizedWidgets = children
-            .map((widget) => Container(
-                  padding: const EdgeInsets.all(4),
-                  width: optimalColumnWidth,
-                  child: widget,
-                ))
+            .map(
+              (widget) => Container(
+                padding: const EdgeInsets.all(4),
+                width: optimalColumnWidth,
+                child: widget,
+              ),
+            )
             .toList();
 
         return Center(

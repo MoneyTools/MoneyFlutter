@@ -5,7 +5,6 @@ import 'package:money/app/modules/home/sub_views/view_pending_changes/view_pendi
 
 ///
 class BadgePendingChanges extends StatelessWidget {
-
   /// Constructor
   const BadgePendingChanges({
     super.key,
@@ -48,18 +47,32 @@ class BadgePendingChanges extends StatelessWidget {
     TextStyle textStyle = Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
     if (DataController.to.trackMutations.added.value > 0) {
       widgets.add(
-        buildCounter('+', DataController.to.trackMutations.added.value, textStyle.copyWith(color: Colors.green)),
+        buildCounter(
+          '+',
+          DataController.to.trackMutations.added.value,
+          textStyle.copyWith(color: Colors.green),
+        ),
       );
     }
 
     if (DataController.to.trackMutations.changed.value > 0) {
       widgets.add(
-          buildCounter('=', DataController.to.trackMutations.changed.value, textStyle.copyWith(color: Colors.orange)));
+        buildCounter(
+          '=',
+          DataController.to.trackMutations.changed.value,
+          textStyle.copyWith(color: Colors.orange),
+        ),
+      );
     }
 
     if (DataController.to.trackMutations.deleted.value > 0) {
       widgets.add(
-          buildCounter('-', DataController.to.trackMutations.deleted.value, textStyle.copyWith(color: Colors.red)));
+        buildCounter(
+          '-',
+          DataController.to.trackMutations.deleted.value,
+          textStyle.copyWith(color: Colors.red),
+        ),
+      );
     }
 
     return Row(
@@ -68,7 +81,11 @@ class BadgePendingChanges extends StatelessWidget {
     );
   }
 
-  Widget buildCounter(final String prefix, final int value, final TextStyle textStyle) {
+  Widget buildCounter(
+    final String prefix,
+    final int value,
+    final TextStyle textStyle,
+  ) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 3),
       child: Text(

@@ -13,7 +13,6 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 
 class ValueQuality {
-
   const ValueQuality(this.valueAsString);
   final String valueAsString;
   final String warningMessage = '';
@@ -77,12 +76,18 @@ class ValueQuality {
 }
 
 class ValuesQuality {
-
-  ValuesQuality({required this.date, required this.description, required this.amount});
+  ValuesQuality({
+    required this.date,
+    required this.description,
+    required this.amount,
+  });
 
   factory ValuesQuality.empty() {
     return ValuesQuality(
-        date: const ValueQuality(''), description: const ValueQuality(''), amount: const ValueQuality(''));
+      date: const ValueQuality(''),
+      description: const ValueQuality(''),
+      amount: const ValueQuality(''),
+    );
   }
   bool exist = false;
   final ValueQuality date;
@@ -110,15 +115,27 @@ class ValuesQuality {
     return range;
   }
 
-  static void sort(final List<ValuesQuality> list, final int sortBy, final bool ascending) {
+  static void sort(
+    final List<ValuesQuality> list,
+    final int sortBy,
+    final bool ascending,
+  ) {
     list.sort((a, b) {
       switch (sortBy) {
         case 0:
           return sortByDate(a.date.asDate(), b.date.asDate(), ascending);
         case 1:
-          return sortByString(a.description.asString(), b.description.asString(), ascending);
+          return sortByString(
+            a.description.asString(),
+            b.description.asString(),
+            ascending,
+          );
         case 2:
-          return sortByValue(a.amount.asAmount(), b.amount.asAmount(), ascending);
+          return sortByValue(
+            a.amount.asAmount(),
+            b.amount.asAmount(),
+            ascending,
+          );
       }
       return 0;
     });
@@ -222,14 +239,22 @@ class ValuesParser {
     if (lines.isNotEmpty) {
       for (var line in lines) {
         rows.add(
-          Row(children: [
-            SizedBox(width: 100, child: line.date.valueAsDateWidget(context)),
-            // Date
-            SizedBox(width: 300, child: line.description.valueAsTextWidget(context)),
-            // Description
-            SizedBox(width: 100, child: line.amount.valueAsAmountWidget(context)),
-            // Amount
-          ]),
+          Row(
+            children: [
+              SizedBox(width: 100, child: line.date.valueAsDateWidget(context)),
+              // Date
+              SizedBox(
+                width: 300,
+                child: line.description.valueAsTextWidget(context),
+              ),
+              // Description
+              SizedBox(
+                width: 100,
+                child: line.amount.valueAsAmountWidget(context),
+              ),
+              // Amount
+            ],
+          ),
         );
       }
     }

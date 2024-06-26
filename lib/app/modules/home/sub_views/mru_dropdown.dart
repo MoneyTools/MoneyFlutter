@@ -22,41 +22,47 @@ class MruDropdown extends StatelessWidget {
     final DataController dataController = Get.find();
 
     return SingleChildScrollView(
-        reverse: true,
-        scrollDirection: Axis.horizontal,
-        child: Obx(() {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: () {
-                  showPopupSelection(
-                    context: context,
-                    title: 'Recent files',
-                    showLetterPicker: false,
-                    tokenTextStyle: tokenStyle,
-                    rightAligned: true,
-                    width: 600,
-                    items: preferenceController.mru,
-                    selectedItem: '',
-                    onSelected: (final String selectedTextReprentingFileNamePath) {
-                      DataSource dataSource = DataSource(selectedTextReprentingFileNamePath);
-                      DataController.to.loadFileFromPath(dataSource);
-                      Get.offAllNamed(Constants.routeHomePage);
-                    },
-                  );
-                },
-                child: Row(
-                  children: [
-                    TokenText(dataController.currentLoadedFileName.value, style: tokenStyle),
-                    const Icon(Icons.expand_more),
-                  ],
-                ),
+      reverse: true,
+      scrollDirection: Axis.horizontal,
+      child: Obx(() {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            InkWell(
+              onTap: () {
+                showPopupSelection(
+                  context: context,
+                  title: 'Recent files',
+                  showLetterPicker: false,
+                  tokenTextStyle: tokenStyle,
+                  rightAligned: true,
+                  width: 600,
+                  items: preferenceController.mru,
+                  selectedItem: '',
+                  onSelected: (final String selectedTextReprentingFileNamePath) {
+                    DataSource dataSource = DataSource(selectedTextReprentingFileNamePath);
+                    DataController.to.loadFileFromPath(dataSource);
+                    Get.offAllNamed(Constants.routeHomePage);
+                  },
+                );
+              },
+              child: Row(
+                children: [
+                  TokenText(
+                    dataController.currentLoadedFileName.value,
+                    style: tokenStyle,
+                  ),
+                  const Icon(Icons.expand_more),
+                ],
               ),
-              _buildTimeStampOfFile(dataController.currentLoadedFileDateTime.value),
-            ],
-          );
-        }));
+            ),
+            _buildTimeStampOfFile(
+              dataController.currentLoadedFileDateTime.value,
+            ),
+          ],
+        );
+      }),
+    );
   }
 
   Widget _buildTimeStampOfFile(final DateTime? dataSourceTimeStamp) {

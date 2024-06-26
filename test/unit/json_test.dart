@@ -33,7 +33,10 @@ void main() {
       expect(myMap.getInt('age'), 25);
       expect(myMap.getBool('isStudent'), false);
       expect(myMap.getBool('isHuman'), true);
-      expect(dateToIso8601OrDefaultString(myMap.getDate('birthday')), '1999-12-25T00:00:00.000');
+      expect(
+        dateToIso8601OrDefaultString(myMap.getDate('birthday')),
+        '1999-12-25T00:00:00.000',
+      );
     });
   });
 }

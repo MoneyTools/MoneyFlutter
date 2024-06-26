@@ -4,11 +4,11 @@ import 'package:money/app/core/widgets/picker_panel.dart';
 
 class PickerEditBox extends StatefulWidget {
   const PickerEditBox({
-    super.key,
     required this.title,
     required this.items,
-    this.initialValue,
     required this.onChanged,
+    super.key,
+    this.initialValue,
   });
 
   final String title;
@@ -26,12 +26,12 @@ class PickerEditBoxState extends State<PickerEditBox> {
   @override
   void initState() {
     super.initState();
-    _textController.text = widget.initialValue ?? "";
+    _textController.text = widget.initialValue ?? '';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         color: getColorTheme(context).tertiaryContainer.withOpacity(0.3),
         border: Border(bottom: BorderSide(color: getColorTheme(context).outline)),
@@ -58,19 +58,20 @@ class PickerEditBoxState extends State<PickerEditBox> {
           IconButton(
             onPressed: () {
               showPopupSelection(
-                  title: widget.title,
-                  context: context,
-                  items: widget.items,
-                  selectedItem: _textController.text,
-                  onSelected: (final String text) {
-                    setState(() {
-                      _textController.text = text;
-                      widget.onChanged(text);
-                    });
+                title: widget.title,
+                context: context,
+                items: widget.items,
+                selectedItem: _textController.text,
+                onSelected: (final String text) {
+                  setState(() {
+                    _textController.text = text;
+                    widget.onChanged(text);
                   });
+                },
+              );
             },
             icon: const Icon(Icons.arrow_drop_down),
-          )
+          ),
         ],
       ),
     );

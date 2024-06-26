@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class MyListItemAsCard extends StatelessWidget {
-
   /// Constructor
   const MyListItemAsCard({
     super.key,
@@ -65,7 +64,9 @@ class MyListItemAsCard extends StatelessWidget {
               either(
                 leftBottomAsWidget,
                 leftBottomAsString,
-                adjustOpacityOfTextStyle(Theme.of(context).textTheme.bodyMedium!),
+                adjustOpacityOfTextStyle(
+                  Theme.of(context).textTheme.bodyMedium!,
+                ),
                 TextAlign.left,
               ),
             ],

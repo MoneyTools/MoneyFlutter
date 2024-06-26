@@ -40,7 +40,11 @@ String formatDoubleTrimZeros(double value) {
   return formatter.format(value);
 }
 
-String getAmountAsShorthandText(final num value, {final int decimalDigits = 0, final String symbol = ''}) {
+String getAmountAsShorthandText(
+  final num value, {
+  final int decimalDigits = 0,
+  final String symbol = '',
+}) {
   return NumberFormat.compactCurrency(
     decimalDigits: decimalDigits,
     symbol: symbol, // if you want to add currency symbol then pass that in this else leave it empty.
@@ -134,7 +138,12 @@ String getNumberShorthandText(final num value) {
   return NumberFormat.compact().format(value);
 }
 
-String getSingularPluralText(final String title, final int quantity, final String singular, final String plural) {
+String getSingularPluralText(
+  final String title,
+  final int quantity,
+  final String singular,
+  final String plural,
+) {
   return '$title ${quantity == 1 ? singular : plural}';
 }
 

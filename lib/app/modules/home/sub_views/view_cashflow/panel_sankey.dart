@@ -14,7 +14,6 @@ import 'package:money/app/data/storage/data/data.dart';
 
 // ignore: must_be_immutable
 class PanelSanKey extends StatelessWidget {
-
   PanelSanKey({required this.minYear, required this.maxYear, super.key});
   final int minYear;
   final int maxYear;
@@ -36,29 +35,34 @@ class PanelSanKey extends StatelessWidget {
   Widget build(final BuildContext context) {
     transformData();
     final ThemeController themeController = Get.find();
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      return SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Container(
-          width: constraints.maxWidth,
-          height: max(constraints.maxHeight, 1000),
-          padding: const EdgeInsets.all(8),
-          child: CustomPaint(
-            painter: SankeyPainter(
-              listOfIncomes: sanKeyListOfIncomes,
-              listOfExpenses: sanKeyListOfExpenses,
-              compactView: isSmallDevice(context),
-              colors: SankeyColors(darkTheme: themeController.isDarkTheme.value),
+    return LayoutBuilder(
+      builder: (final BuildContext context, final BoxConstraints constraints) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+          child: Container(
+            width: constraints.maxWidth,
+            height: max(constraints.maxHeight, 1000),
+            padding: const EdgeInsets.all(8),
+            child: CustomPaint(
+              painter: SankeyPainter(
+                listOfIncomes: sanKeyListOfIncomes,
+                listOfExpenses: sanKeyListOfExpenses,
+                compactView: isSmallDevice(context),
+                colors: SankeyColors(darkTheme: themeController.isDarkTheme.value),
+              ),
             ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 
   void transformData() {
-    final transactions =
-        Data().transactions.transactionInYearRange(minYear: minYear, maxYear: maxYear, incomesOrExpenses: null);
+    final transactions = Data().transactions.transactionInYearRange(
+          minYear: minYear,
+          maxYear: maxYear,
+          incomesOrExpenses: null,
+        );
 
     for (Transaction element in transactions) {
       final Category? category = Data().categories.get(element.categoryId.value);
@@ -92,28 +96,46 @@ class PanelSanKey extends StatelessWidget {
     // Clean up the Incomes, drop 0.00
     mapOfIncomes.removeWhere((final Category k, final double v) => v <= 0.00);
     // Sort Descending
-    mapOfIncomes = Map<Category, double>.fromEntries(mapOfIncomes.entries.toList()
-      ..sort(
-          (final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e2.value - e1.value).toInt()));
+    mapOfIncomes = Map<Category, double>.fromEntries(
+      mapOfIncomes.entries.toList()
+        ..sort(
+          (
+            final MapEntry<Category, double> e1,
+            final MapEntry<Category, double> e2,
+          ) =>
+              (e2.value - e1.value).toInt(),
+        ),
+    );
 
     mapOfIncomes.forEach((final Category key, final double value) {
-      sanKeyListOfIncomes.add(SanKeyEntry()
-        ..name = key.name.value
-        ..value = value);
+      sanKeyListOfIncomes.add(
+        SanKeyEntry()
+          ..name = key.name.value
+          ..value = value,
+      );
     });
 
     // Clean up the Expenses, drop 0.00
     mapOfExpenses.removeWhere((final Category k, final double v) => v == 0.00);
 
     // Sort Ascending, in the case of expenses that means the largest negative number to the least negative number
-    mapOfExpenses = Map<Category, double>.fromEntries(mapOfExpenses.entries.toList()
-      ..sort(
-          (final MapEntry<Category, double> e1, final MapEntry<Category, double> e2) => (e1.value - e2.value).toInt()));
+    mapOfExpenses = Map<Category, double>.fromEntries(
+      mapOfExpenses.entries.toList()
+        ..sort(
+          (
+            final MapEntry<Category, double> e1,
+            final MapEntry<Category, double> e2,
+          ) =>
+              (e1.value - e2.value).toInt(),
+        ),
+    );
 
     mapOfExpenses.forEach((final Category key, final double value) {
-      sanKeyListOfExpenses.add(SanKeyEntry()
-        ..name = key.name.value
-        ..value = value);
+      sanKeyListOfExpenses.add(
+        SanKeyEntry()
+          ..name = key.name.value
+          ..value = value,
+      );
     });
 
     final double heightNeededToRenderIncomes = getHeightNeededToRender(sanKeyListOfIncomes);

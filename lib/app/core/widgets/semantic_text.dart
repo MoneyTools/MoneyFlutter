@@ -6,5 +6,8 @@ Widget buildTitle(BuildContext context, String text) {
 }
 
 Widget buildWarning(BuildContext context, String text) {
-  return Text(text, style: getTextTheme(context).bodyMedium!.copyWith(color: Colors.orange));
+  return Text(
+    text,
+    style: getTextTheme(context).bodyMedium!.copyWith(color: Colors.orange),
+  );
 }

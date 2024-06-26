@@ -34,7 +34,14 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewCategories;
   }
 
-  final List<bool> _selectedPivot = <bool>[false, false, false, false, false, true];
+  final List<bool> _selectedPivot = <bool>[
+    false,
+    false,
+    false,
+    false,
+    false,
+    true,
+  ];
   final List<Widget> _pivots = <Widget>[];
 
   // Footer related
@@ -47,40 +54,69 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   void initState() {
     super.initState();
 
-    _pivots.add(ThreePartLabel(
+    _pivots.add(
+      ThreePartLabel(
         text1: 'None',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]))));
-    _pivots.add(ThreePartLabel(
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
         text1: 'Expense',
         small: true,
         isVertical: true,
         text2: Currency.getAmountAsStringUsingCurrency(
-            _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.expense, CategoryType.recurringExpense]))));
-    _pivots.add(ThreePartLabel(
+          _getTotalBalanceOfAccounts(<CategoryType>[
+            CategoryType.expense,
+            CategoryType.recurringExpense,
+          ]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
         text1: 'Income',
         small: true,
         isVertical: true,
-        text2:
-            Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]))));
-    _pivots.add(ThreePartLabel(
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
         text1: 'Saving',
         small: true,
         isVertical: true,
-        text2:
-            Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]))));
-    _pivots.add(ThreePartLabel(
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
         text1: 'Investment',
         small: true,
         isVertical: true,
         text2: Currency.getAmountAsStringUsingCurrency(
-            _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]))));
-    _pivots.add(ThreePartLabel(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(_getTotalBalanceOfAccounts(<CategoryType>[]))));
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[]),
+        ),
+      ),
+    );
   }
 
   @override
@@ -120,7 +156,9 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
           () {
             // add a new Category
             final Category? currentSelectedCategory = getFirstSelectedItem() as Category?;
-            final newItem = Data().categories.addNewCategory(parentId: currentSelectedCategory?.uniqueId ?? -1);
+            final newItem = Data().categories.addNewCategory(
+                  parentId: currentSelectedCategory?.uniqueId ?? -1,
+                );
             updateListAndSelect(newItem.uniqueId);
 
             myShowDialogAndActionsForMoneyObject(
@@ -141,10 +179,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
             () {
               // let the user pick another Category and move the transactions of the current selected Category to the destination
               adaptiveScreenSizeDialog(
-                  context: context,
-                  title: 'Move Category',
-                  captionForClose: 'Cancel', // this will hide the close button
-                  child: MergeCategoriesTransactionsDialog(categoryToMove: getFirstSelectedItem() as Category));
+                context: context,
+                title: 'Move Category',
+                captionForClose: 'Cancel', // this will hide the close button
+                child: MergeCategoriesTransactionsDialog(
+                  categoryToMove: getFirstSelectedItem() as Category,
+                ),
+              );
             },
           ),
         );
@@ -163,9 +204,12 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                   if (category != null) {
                     // Prepare the Transaction view to show only the selected account
                     FieldFilters filterByAccount = FieldFilters();
-                    filterByAccount.add(FieldFilter(
+                    filterByAccount.add(
+                      FieldFilter(
                         fieldName: Constants.viewTransactionFieldnameCategory,
-                        filterTextInLowerCase: category.name.value.toLowerCase()));
+                        filterTextInLowerCase: category.name.value.toLowerCase(),
+                      ),
+                    );
 
                     PreferenceController.to.setStringList(
                       ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
@@ -207,14 +251,19 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Category> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<Category> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     final List<CategoryType> filterType = _getSelectedCategoryType();
     final list = Data()
         .categories
         .iterableList(includeDeleted: includeDeleted)
-        .where((final Category instance) =>
-            (filterType.isEmpty || filterType.contains(instance.type.value)) &&
-            (applyFilter == false || isMatchingFilters(instance)))
+        .where(
+          (final Category instance) =>
+              (filterType.isEmpty || filterType.contains(instance.type.value)) &&
+              (applyFilter == false || isMatchingFilters(instance)),
+        )
         .toList();
 
     _footerCountTransactions = 0;
@@ -238,7 +287,10 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    return _getSubViewContentForChart(selectedIds: selectedIds, showAsNativeCurrency: showAsNativeCurrency);
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
   }
 
   @override
@@ -261,27 +313,28 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   Widget _buildToggles() {
     return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-        child: ToggleButtons(
-          direction: Axis.horizontal,
-          onPressed: (final int index) {
-            setState(() {
-              for (int i = 0; i < _selectedPivot.length; i++) {
-                _selectedPivot[i] = i == index;
-              }
-              list = getList();
-              clearSelection();
-            });
-          },
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          constraints: const BoxConstraints(
-            minHeight: 40.0,
-            minWidth: 100.0,
-          ),
-          isSelected: _selectedPivot,
-          children: _pivots,
-        ));
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+      child: ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (final int index) {
+          setState(() {
+            for (int i = 0; i < _selectedPivot.length; i++) {
+              _selectedPivot[i] = i == index;
+            }
+            list = getList();
+            clearSelection();
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 100.0,
+        ),
+        isSelected: _selectedPivot,
+        children: _pivots,
+      ),
+    );
   }
 
   List<CategoryType> _getSelectedCategoryType() {

@@ -31,7 +31,9 @@ class Investments extends MoneyObjects<Investment> {
 
   static void calculateRunningBalance(List<Investment> investments) {
     // first sort by date, TradeType, Amount
-    investments.sort((a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true));
+    investments.sort(
+      (a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
+    );
 
     double runningBalance = 0;
     for (final investment in investments) {
@@ -42,7 +44,9 @@ class Investments extends MoneyObjects<Investment> {
 
   static StockCumulative getProfitAndShares(List<Investment> investments) {
     // StockCumulative sort by date, TradeType, Amount
-    investments.sort((a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true));
+    investments.sort(
+      (a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
+    );
 
     StockCumulative cumulative = StockCumulative();
 

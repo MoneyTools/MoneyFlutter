@@ -3,13 +3,12 @@ import 'package:money/app/core/widgets/form_field_switch.dart';
 
 /// Hybrid widget Text on the left, custom widget on the right
 class MyFormFieldForWidget extends StatefulWidget {
-
   const MyFormFieldForWidget({
-    super.key,
     required this.title,
     required this.valueAsText,
     required this.isReadOnly,
     required this.onChanged,
+    super.key,
   });
   final String title;
   final String valueAsText;
@@ -47,7 +46,10 @@ class MyFormFieldForWidgetState extends State<MyFormFieldForWidget> {
         Expanded(
           child: TextFormField(
             controller: controller,
-            decoration: getFormFieldDecoration(fieldName: widget.title, isReadOnly: widget.isReadOnly),
+            decoration: getFormFieldDecoration(
+              fieldName: widget.title,
+              isReadOnly: widget.isReadOnly,
+            ),
             onChanged: (final String value) {
               setState(() {
                 widget.onChanged(value);

@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class PickerLetters extends StatefulWidget {
-
   const PickerLetters({
-    super.key,
     required this.options,
-    this.selected,
     required this.onSelected,
+    super.key,
+    this.selected,
     this.vertical = true,
   });
   final List<String> options;

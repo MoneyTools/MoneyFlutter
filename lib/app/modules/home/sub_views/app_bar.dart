@@ -85,20 +85,45 @@ class _MyAppBarState extends State<MyAppBar> {
     addMenuItem(list, Constants.commandFileNew, 'New', Icons.note_add_outlined);
 
     // Open
-    addMenuItem(list, Constants.commandFileOpen, 'Open...', Icons.file_open_outlined);
+    addMenuItem(
+      list,
+      Constants.commandFileOpen,
+      'Open...',
+      Icons.file_open_outlined,
+    );
 
     // Add Transactions
-    addMenuItem(list, Constants.commandAddTransactions, 'Add transactions...', Icons.post_add_outlined);
+    addMenuItem(
+      list,
+      Constants.commandAddTransactions,
+      'Add transactions...',
+      Icons.post_add_outlined,
+    );
 
     if (!kIsWeb) {
       // File Location
-      addMenuItem(list, Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined);
+      addMenuItem(
+        list,
+        Constants.commandFileLocation,
+        'File location...',
+        Icons.folder_open_outlined,
+      );
 
       // Save CSV
-      addMenuItem(list, Constants.commandFileSaveCsv, 'Save to CSV', Icons.save);
+      addMenuItem(
+        list,
+        Constants.commandFileSaveCsv,
+        'Save to CSV',
+        Icons.save,
+      );
 
       // Save SQL
-      addMenuItem(list, Constants.commandFileSaveSql, 'Save to SQL', Icons.save);
+      addMenuItem(
+        list,
+        Constants.commandFileSaveSql,
+        'Save to SQL',
+        Icons.save,
+      );
     }
 
     // Close
@@ -142,7 +167,12 @@ class _MyAppBarState extends State<MyAppBar> {
     );
   }
 
-  void addMenuItem(final list, final int id, final String caption, final IconData iconData) {
+  void addMenuItem(
+    final list,
+    final int id,
+    final String caption,
+    final IconData iconData,
+  ) {
     list.add(
       PopupMenuItem<int>(
         value: id,
@@ -191,8 +221,10 @@ class _MyAppBarState extends State<MyAppBar> {
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
           child: ThreePartLabel(
-            icon: Icon(index == themeController.colorSelected.value ? Icons.color_lens : Icons.color_lens_outlined,
-                color: colorOptions[index]),
+            icon: Icon(
+              index == themeController.colorSelected.value ? Icons.color_lens : Icons.color_lens_outlined,
+              color: colorOptions[index],
+            ),
             text1: colorText[index],
             small: true,
           ),

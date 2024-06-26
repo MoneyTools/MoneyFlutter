@@ -4,9 +4,9 @@ import 'package:money/app/core/helpers/list_helper.dart';
 
 class ColorPicker extends StatefulWidget {
   const ColorPicker({
-    super.key,
     required this.color,
     required this.onColorChanged,
+    super.key,
   });
 
   final Color color;
@@ -48,7 +48,7 @@ class _ColorPickerState extends State<ColorPicker> {
     if (hue > maxHue) {
       hue = maxHue;
     }
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
@@ -142,7 +142,6 @@ class HueGradientPainter extends CustomPainter {
 }
 
 class BrightnessGradientPainter extends CustomPainter {
-
   BrightnessGradientPainter({required this.hue});
   final double hue;
 

@@ -29,7 +29,6 @@ export 'package:money/app/data/models/fields/field.dart';
 ///
 /// @param <T> The data type associated with the field definitions.
 class Fields<T> {
-
   /// Constructor
   Fields() {
     assert(T != dynamic, 'Type T cannot be dynamic');
@@ -52,7 +51,10 @@ class Fields<T> {
     // Optimize - Simple case of using partial text search in all fields, no Column field fitering
     if (filterByFieldsValue.isEmpty) {
       // If no field filters are provided, check if the lowerCaseTextToFind matches
-      return isMatchingFreeStyleText(objectInstance, filterBytFreeStyleLowerCaseText);
+      return isMatchingFreeStyleText(
+        objectInstance,
+        filterBytFreeStyleLowerCaseText,
+      );
     }
 
     // Optimize - Looking for column matching
@@ -72,7 +74,11 @@ class Fields<T> {
 
       if (wasFoundColumnFilters == false) {
         // continue to search for a column match
-        if (isFieldMatching(fieldDefinition, fieldValueAsString, filterByFieldsValue)) {
+        if (isFieldMatching(
+          fieldDefinition,
+          fieldValueAsString,
+          filterByFieldsValue,
+        )) {
           wasFoundColumnFilters = true;
         }
       }
@@ -90,7 +96,10 @@ class Fields<T> {
   }
 
   // check if the lowerCaseTextToFind matches any of the fields text value
-  bool isMatchingFreeStyleText(MoneyObject objectInstance, String filterBytFreeStyleLowerCaseText) {
+  bool isMatchingFreeStyleText(
+    MoneyObject objectInstance,
+    String filterBytFreeStyleLowerCaseText,
+  ) {
     for (final fieldDefinition in fieldDefinitionsForColumns) {
       final fieldValueAsString = _getFieldValueAsStringForFiltering(
         objectInstance,
@@ -114,7 +123,11 @@ class Fields<T> {
         fieldDefinition,
       );
 
-      if (isFieldMatching(fieldDefinition, fieldValueAsString, filterByFieldsValue)) {
+      if (isFieldMatching(
+        fieldDefinition,
+        fieldValueAsString,
+        filterByFieldsValue,
+      )) {
         return true;
       }
     }
@@ -210,7 +223,10 @@ class Fields<T> {
     return definitions;
   }
 
-  List<String> getListOfFieldValueAsString(final MoneyObject objectInstance, [final bool includeHiddenFields = false]) {
+  List<String> getListOfFieldValueAsString(
+    final MoneyObject objectInstance, [
+    final bool includeHiddenFields = false,
+  ]) {
     final List<String> strings = <String>[];
     for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
       final Field<dynamic> fieldDefinition = definitions[fieldIndex];

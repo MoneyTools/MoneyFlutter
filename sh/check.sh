@@ -1,13 +1,12 @@
 #!/bin/sh
-
-./format.sh
-
 echo --- Analyze
 
 dart analyze 
 dart fix --apply
 
 flutter analyze
+
+./format.sh
 
 flutter test
 

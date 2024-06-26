@@ -4,24 +4,17 @@ import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class InfoPanelHeader extends StatelessWidget {
-
   /// Constructor
   const InfoPanelHeader({
-    super.key,
     required this.isExpanded,
-    required this.onExpanded,
-
-    // SubView
+    required this.onExpanded, // SubView
     required this.subViewSelected,
-    required this.subViewSelectionChanged,
-
-    // Currency
+    required this.subViewSelectionChanged, // Currency
     required this.currencyChoices,
     required this.currencySelected,
-    required this.currentSelectionChanged,
-
-    // Actions
+    required this.currentSelectionChanged, // Actions
     required this.actionButtons,
+    super.key,
   });
   final bool isExpanded;
   final Function onExpanded;
@@ -72,7 +65,9 @@ class InfoPanelHeader extends StatelessWidget {
     final bool smallDevice = constraints.maxWidth < 700;
 
     return SegmentedButton<int>(
-      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
       showSelectedIcon: constraints.maxWidth > 1000,
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
@@ -96,7 +91,9 @@ class InfoPanelHeader extends StatelessWidget {
         if (!isExpanded) {
           onExpanded(true);
         }
-        subViewSelectionChanged(InfoPanelSubViewEnum.values[newSelection.first]);
+        subViewSelectionChanged(
+          InfoPanelSubViewEnum.values[newSelection.first],
+        );
       },
     );
   }
@@ -114,7 +111,9 @@ class InfoPanelHeader extends StatelessWidget {
     }
 
     return SegmentedButton<int>(
-      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
       showSelectedIcon: !smallDevice,
       segments: <ButtonSegment<int>>[
         ButtonSegment<int>(

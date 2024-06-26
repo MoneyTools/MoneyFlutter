@@ -75,7 +75,7 @@ class Accounts extends MoneyObjects<Account> {
         'Name': 'Bank of Japan',
         'AccountId': '11111',
         'Type': AccountType.retirement.index,
-        'Currency': 'JPY'
+        'Currency': 'JPY',
       },
       {
         'Id': -1,
@@ -101,7 +101,10 @@ class Accounts extends MoneyObjects<Account> {
     ];
 
     for (final MyJson demoAccount in demoAccounts) {
-      appendNewMoneyObject(Account.fromJson(demoAccount), fireNotification: false);
+      appendNewMoneyObject(
+        Account.fromJson(demoAccount),
+        fireNotification: false,
+      );
     }
   }
 
@@ -168,10 +171,12 @@ class Accounts extends MoneyObjects<Account> {
     final investmentAccounts = Data()
         .accounts
         .iterableList()
-        .where((account) =>
-            account.type.value == AccountType.moneyMarket ||
-            account.type.value == AccountType.investment ||
-            account.type.value == AccountType.retirement)
+        .where(
+          (account) =>
+              account.type.value == AccountType.moneyMarket ||
+              account.type.value == AccountType.investment ||
+              account.type.value == AccountType.retirement,
+        )
         .toList();
 
     CostBasisCalculator calculator = CostBasisCalculator(DateTime.now());
@@ -218,7 +223,11 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   List<Account> getOpenRealAccounts() {
-    return iterableList().where((final Account account) => !account.isFakeAccount() && account.isOpen).toList();
+    return iterableList()
+        .where(
+          (final Account account) => !account.isFakeAccount() && account.isOpen,
+        )
+        .toList();
   }
 
   bool activeBankAccount(final Account account) {
@@ -272,8 +281,10 @@ class Accounts extends MoneyObjects<Account> {
 
   List<Account> getListSorted() {
     final list = iterableList()
-        .where((account) =>
-            account.isMatchingUserChoiceIncludingClosedAccount && account.type.value != AccountType.categoryFund)
+        .where(
+          (account) =>
+              account.isMatchingUserChoiceIncludingClosedAccount && account.type.value != AccountType.categoryFund,
+        )
         .toList();
     list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
     return list;

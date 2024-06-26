@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 
 /// a basic text that is centered in the parent container
 class CenterMessage extends StatelessWidget {
-
   /// constructor
-  const CenterMessage({super.key, required this.message});
+  const CenterMessage({required this.message, super.key});
 
   factory CenterMessage.noTransaction() {
     return const CenterMessage(message: 'No transactions.');

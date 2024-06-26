@@ -9,13 +9,12 @@ import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.da
 
 /// use for free style text to transaction import
 class ImportTransactionsPanel extends StatefulWidget {
-
   const ImportTransactionsPanel({
-    super.key,
     required this.account,
     required this.inputText,
     required this.onAccountChanged,
     required this.onTransactionsFound,
+    super.key,
   });
   final Account account;
   final String inputText;
@@ -86,7 +85,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text('Import transaction to account', style: getTextTheme(context).bodyMedium),
+        Text(
+          'Import transaction to account',
+          style: getTextTheme(context).bodyMedium,
+        ),
         gapLarge(),
         Expanded(
           child: pickerAccount(

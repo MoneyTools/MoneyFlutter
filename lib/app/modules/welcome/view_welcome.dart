@@ -11,11 +11,10 @@ class WelcomeScreen extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           const Spacer(),
           Wrap(
@@ -24,29 +23,32 @@ class WelcomeScreen extends StatelessWidget {
             spacing: 10,
             children: <Widget>[
               OutlinedButton(
-                  onPressed: () {
-                    DataController.to.closeFile();
-                    Get.offAllNamed(Constants.routeHomePage);
-                  },
-                  child: const Text('New File ...')),
+                onPressed: () {
+                  DataController.to.closeFile();
+                  Get.offAllNamed(Constants.routeHomePage);
+                },
+                child: const Text('New File ...'),
+              ),
               OutlinedButton(
-                  onPressed: () {
-                    DataController.to.onFileOpen().then((bool succeeded) {
-                      if (succeeded) {
-                        Get.offAllNamed(Constants.routeHomePage);
-                      }
-                    });
-                  },
-                  child: const Text('Open File ...')),
-              OutlinedButton(
-                  onPressed: () async {
-                    DataController.to.closeFile();
-                    final DataController dataController = Get.find();
-                    dataController.loadDemoData().then((_) {
+                onPressed: () {
+                  DataController.to.onFileOpen().then((final bool succeeded) {
+                    if (succeeded) {
                       Get.offAllNamed(Constants.routeHomePage);
-                    });
-                  },
-                  child: const Text('Use Demo Data'))
+                    }
+                  });
+                },
+                child: const Text('Open File ...'),
+              ),
+              OutlinedButton(
+                onPressed: () async {
+                  DataController.to.closeFile();
+                  final DataController dataController = Get.find();
+                  dataController.loadDemoData().then((final _) {
+                    Get.offAllNamed(Constants.routeHomePage);
+                  });
+                },
+                child: const Text('Use Demo Data'),
+              ),
             ],
           ),
           gapLarge(),
@@ -56,7 +58,6 @@ class WelcomeScreen extends StatelessWidget {
             child: Opacity(
               opacity: 0.5,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TextButton(
                     onPressed: () {

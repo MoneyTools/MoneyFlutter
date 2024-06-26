@@ -60,7 +60,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text1: 'Banks',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0))),
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0)),
+        ),
       ),
     );
     _pivots.add(
@@ -68,7 +70,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text1: 'Investments',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1))),
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1)),
+        ),
       ),
     );
     _pivots.add(
@@ -76,7 +80,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text1: 'Credit',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2))),
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2)),
+        ),
       ),
     );
     _pivots.add(
@@ -84,7 +90,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text1: 'Assets',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3))),
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3)),
+        ),
       ),
     );
     _pivots.add(
@@ -92,7 +100,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         text1: 'All',
         small: true,
         isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1))),
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1)),
+        ),
       ),
     );
   }
@@ -133,7 +143,10 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   // default currency for this view
   @override
-  List<String> getCurrencyChoices(final InfoPanelSubViewEnum subViewId, final List<int> selectedItems) {
+  List<String> getCurrencyChoices(
+    final InfoPanelSubViewEnum subViewId,
+    final List<int> selectedItems,
+  ) {
     switch (subViewId) {
       case InfoPanelSubViewEnum.chart: // Chart
       case InfoPanelSubViewEnum.transactions: // Transactions
@@ -164,11 +177,14 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       // Place this in front off all the other actions button
       list.insert(
         0,
-        buildAddItemButton(() {
-          // add a new Account
-          final newItem = Data().accounts.addNewAccount('New Bank Account');
-          updateListAndSelect(newItem.uniqueId);
-        }, 'Add new account'),
+        buildAddItemButton(
+          () {
+            // add a new Account
+            final newItem = Data().accounts.addNewAccount('New Bank Account');
+            updateListAndSelect(newItem.uniqueId);
+          },
+          'Add new account',
+        ),
       );
 
       // this can go last
@@ -184,9 +200,12 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                   if (account != null) {
                     // Prepare the Transaction view Filter to show only the selected account
                     FieldFilters filterByAccount = FieldFilters();
-                    filterByAccount.add(FieldFilter(
+                    filterByAccount.add(
+                      FieldFilter(
                         fieldName: Constants.viewTransactionFieldnameAccount,
-                        filterTextInLowerCase: account.name.value.toLowerCase()));
+                        filterTextInLowerCase: account.name.value.toLowerCase(),
+                      ),
+                    );
 
                     PreferenceController.to.setStringList(
                       ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
@@ -222,7 +241,10 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Account> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<Account> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     List<Account> list = Data().accounts.activeAccount(
           getSelectedAccountType(),
           isActive: PreferenceController.to.includeClosedAccounts ? null : true,
@@ -251,7 +273,10 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    return _getSubViewContentForChart(selectedIds: selectedIds, showAsNativeCurrency: showAsNativeCurrency);
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
   }
 
   @override

@@ -18,7 +18,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
  */
 
 class Security extends MoneyObject {
-
   Security({
     required int id,
     required String name,

@@ -24,7 +24,6 @@ import 'package:money/app/modules/home/sub_views/view_header.dart';
 import 'package:money/app/modules/home/sub_views/view_transactions/money_object_card.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {
-
   const ViewForMoneyObjects({super.key, this.includeClosedAccount = false});
   final bool includeClosedAccount;
 
@@ -87,22 +86,35 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     var all = getFieldsForTable();
 
     _fieldToDisplay = Fields<MoneyObject>();
-    _fieldToDisplay.setDefinitions(all.definitions.where((element) => element.useAsColumn).toList());
+    _fieldToDisplay.setDefinitions(
+      all.definitions.where((element) => element.useAsColumn).toList(),
+    );
 
     // restore last user choices for this view
     _sortByFieldIndex = preferenceController.getInt(getPreferenceKey(settingKeySortBy), 0);
-    _sortAscending = preferenceController.getBool(getPreferenceKey(settingKeySortAscending), true);
-    _lastSelectedItemId = preferenceController.getInt(getPreferenceKey(settingKeySelectedListItemId), -1);
+    _sortAscending = preferenceController.getBool(
+      getPreferenceKey(settingKeySortAscending),
+      true,
+    );
+    _lastSelectedItemId = preferenceController.getInt(
+      getPreferenceKey(settingKeySelectedListItemId),
+      -1,
+    );
 
-    final int subViewIndex = PreferenceController.to
-        .getInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), InfoPanelSubViewEnum.details.index);
+    final int subViewIndex = PreferenceController.to.getInt(
+      getPreferenceKey(settingKeySelectedDetailsPanelTab),
+      InfoPanelSubViewEnum.details.index,
+    );
 
     _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
 
     // Filters
 
     // load text filter
-    _filterByText = preferenceController.getString(getPreferenceKey(settingKeyFilterText), '');
+    _filterByText = preferenceController.getString(
+      getPreferenceKey(settingKeyFilterText),
+      '',
+    );
 
     // load the column filters
     var tmpList = await preferenceController.getStringList(getPreferenceKey(settingKeyFilterColumnsText));
@@ -119,12 +131,18 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void onCopyListFromMainView() {
-    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(list, forSerialization: false));
+    copyToClipboardAndInformUser(
+      context,
+      MoneyObjects.getCsvFromList(list, forSerialization: false),
+    );
   }
 
   void onCopyListFromInfoPanel() {
     final listToCopy = getInfoTransactions();
-    copyToClipboardAndInformUser(context, MoneyObjects.getCsvFromList(listToCopy, forSerialization: true));
+    copyToClipboardAndInformUser(
+      context,
+      MoneyObjects.getCsvFromList(listToCopy, forSerialization: true),
+    );
   }
 
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
@@ -153,7 +171,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             myShowDialogAndActionsForMoneyObjects(
               context: context,
               title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
-              moneyObjects: getSelectedItemsFromSelectedList(_selectedItemsByUniqueId.value),
+              moneyObjects: getSelectedItemsFromSelectedList(
+                _selectedItemsByUniqueId.value,
+              ),
             );
           }),
         );
@@ -164,7 +184,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             () {
               onUserRequestedToDelete(
                 context,
-                getSelectedItemsFromSelectedList(_selectedItemsByUniqueId.value),
+                getSelectedItemsFromSelectedList(
+                  _selectedItemsByUniqueId.value,
+                ),
               );
             },
           ),
@@ -183,7 +205,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return buildViewContent(
       Obx(() {
         return AdaptiveViewWithList(
-          key: Key('${preferenceController.includeClosedAccounts}|${list.length}'),
+          key: Key(
+            '${preferenceController.includeClosedAccounts}|${list.length}',
+          ),
           top: buildHeader(),
           list: list,
           fieldDefinitions: _fieldToDisplay.definitions,
@@ -329,7 +353,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return Constants.defaultCurrency;
   }
 
-  List<MoneyObject> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<MoneyObject> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     return <MoneyObject>[];
   }
 
@@ -339,18 +366,34 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void onSort() {
-    MoneyObjects.sortList(list, _fieldToDisplay.definitions, _sortByFieldIndex, _sortAscending);
+    MoneyObjects.sortList(
+      list,
+      _fieldToDisplay.definitions,
+      _sortByFieldIndex,
+      _sortAscending,
+    );
   }
 
-  void onUserRequestToEdit(final BuildContext context, final List<MoneyObject> moneyObjects) {
+  void onUserRequestToEdit(
+    final BuildContext context,
+    final List<MoneyObject> moneyObjects,
+  ) {
     myShowDialogAndActionsForMoneyObjects(
       context: context,
-      title: getSingularPluralText('Edit', moneyObjects.length, getClassNameSingular(), getClassNamePlural()),
+      title: getSingularPluralText(
+        'Edit',
+        moneyObjects.length,
+        getClassNameSingular(),
+        getClassNamePlural(),
+      ),
       moneyObjects: moneyObjects,
     );
   }
 
-  void onUserRequestedToDelete(final BuildContext context, final List<MoneyObject> moneyObjects) {
+  void onUserRequestedToDelete(
+    final BuildContext context,
+    final List<MoneyObject> moneyObjects,
+  ) {
     if (moneyObjects.isEmpty) {
       messageBox(context, 'No items to delete');
       return;
@@ -359,15 +402,25 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final String nameSingular = getClassNameSingular();
     final String namePlural = getClassNamePlural();
 
-    final String title = getSingularPluralText('Delete', moneyObjects.length, nameSingular, namePlural);
+    final String title = getSingularPluralText(
+      'Delete',
+      moneyObjects.length,
+      nameSingular,
+      namePlural,
+    );
 
     final String question = moneyObjects.length == 1
         ? 'Are you sure you want to delete this $nameSingular?'
         : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
     final content = moneyObjects.length == 1
-        ? Column(children: moneyObjects.first.buildWidgets(onEdit: null, compact: true))
+        ? Column(
+            children: moneyObjects.first.buildWidgets(onEdit: null, compact: true),
+          )
         : Center(
-            child: Text('${getIntAsText(moneyObjects.length)} $namePlural', style: getTextTheme(context).displaySmall),
+            child: Text(
+              '${getIntAsText(moneyObjects.length)} $namePlural',
+              style: getTextTheme(context).displaySmall,
+            ),
           );
 
     showConfirmationDialog(
@@ -420,21 +473,33 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     });
   }
 
-  Widget getInfoPanelContent(final InfoPanelSubViewEnum subViewId, final List<int> selectedIds) {
+  Widget getInfoPanelContent(
+    final InfoPanelSubViewEnum subViewId,
+    final List<int> selectedIds,
+  ) {
     switch (subViewId) {
       /// Details
       case InfoPanelSubViewEnum.details:
-        return getInfoPanelViewDetails(selectedIds: selectedIds, isReadOnly: false);
+        return getInfoPanelViewDetails(
+          selectedIds: selectedIds,
+          isReadOnly: false,
+        );
 
       /// Chart
       case InfoPanelSubViewEnum.chart:
-        return getInfoPanelViewChart(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0);
+        return getInfoPanelViewChart(
+          selectedIds: selectedIds,
+          showAsNativeCurrency: _selectedCurrency == 0,
+        );
 
       /// Transactions
       case InfoPanelSubViewEnum.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: getInfoPanelViewTransactions(selectedIds: selectedIds, showAsNativeCurrency: _selectedCurrency == 0),
+          child: getInfoPanelViewTransactions(
+            selectedIds: selectedIds,
+            showAsNativeCurrency: _selectedCurrency == 0,
+          ),
         );
       default:
         return const Text('- empty -');
@@ -442,7 +507,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   /// Override in your view
-  List<String> getCurrencyChoices(final InfoPanelSubViewEnum subViewId, final List<int> selectedItems) {
+  List<String> getCurrencyChoices(
+    final InfoPanelSubViewEnum subViewId,
+    final List<int> selectedItems,
+  ) {
     switch (subViewId) {
       case InfoPanelSubViewEnum.details:
       case InfoPanelSubViewEnum.chart:
@@ -467,7 +535,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       }
 
       // persist the last selected item index
-      preferenceController.setInt(getPreferenceKey(settingKeySelectedListItemId), _lastSelectedItemId);
+      preferenceController.setInt(
+        getPreferenceKey(settingKeySelectedListItemId),
+        _lastSelectedItemId,
+      );
     });
   }
 
@@ -477,7 +548,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         context: context,
         title: '${getClassNameSingular()} #${uniqueId + 1}',
         actionButtons: [],
-        child: getInfoPanelViewDetails(selectedIds: <int>[uniqueId], isReadOnly: true),
+        child: getInfoPanelViewDetails(
+          selectedIds: <int>[uniqueId],
+          isReadOnly: true,
+        ),
       );
     }
   }
@@ -492,11 +566,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return null;
   }
 
-  MoneyObject? getFirstSelectedItemFromSelectedList(final List<int> selectedList) {
+  MoneyObject? getFirstSelectedItemFromSelectedList(
+    final List<int> selectedList,
+  ) {
     return getMoneyObjectFromFirstSelectedId<MoneyObject>(selectedList, list);
   }
 
-  List<MoneyObject> getSelectedItemsFromSelectedList(final List<int> selectedList) {
+  List<MoneyObject> getSelectedItemsFromSelectedList(
+    final List<int> selectedList,
+  ) {
     if (selectedList.isEmpty) {
       return [];
     }
@@ -509,13 +587,22 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return _selectedItemsByUniqueId.value.firstOrNull;
   }
 
-  Widget getInfoPanelHeader(final BuildContext context, final num index, final MoneyObject item) {
+  Widget getInfoPanelHeader(
+    final BuildContext context,
+    final num index,
+    final MoneyObject item,
+  ) {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  Widget getInfoPanelViewDetails({required final List<int> selectedIds, required final bool isReadOnly}) {
+  Widget getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
     if (selectedIds.length > 1) {
-      return CenterMessage(message: 'Multiple selection.(${selectedIds.length})');
+      return CenterMessage(
+        message: 'Multiple selection.(${selectedIds.length})',
+      );
     }
 
     final MoneyObject? moneyObject = findObjectById(selectedIds.firstOrNull, list);
@@ -569,18 +656,36 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   void saveLastUserChoicesOfView() {
     // Persist users choice
-    preferenceController.setInt(getPreferenceKey(settingKeySortBy), _sortByFieldIndex);
-    preferenceController.setBool(getPreferenceKey(settingKeySortAscending), _sortAscending);
-    PreferenceController.to
-        .setInt(getPreferenceKey(settingKeySelectedListItemId), getUniqueIdOfFirstSelectedItem() ?? -1);
-    preferenceController.setInt(getPreferenceKey(settingKeySelectedDetailsPanelTab), _selectedBottomTabId.index);
-    preferenceController.setString(getPreferenceKey(settingKeyFilterText), _filterByText);
-    PreferenceController.to
-        .setStringList(getPreferenceKey(settingKeyFilterColumnsText), _filterByFieldsValue.toStringList());
+    preferenceController.setInt(
+      getPreferenceKey(settingKeySortBy),
+      _sortByFieldIndex,
+    );
+    preferenceController.setBool(
+      getPreferenceKey(settingKeySortAscending),
+      _sortAscending,
+    );
+    PreferenceController.to.setInt(
+      getPreferenceKey(settingKeySelectedListItemId),
+      getUniqueIdOfFirstSelectedItem() ?? -1,
+    );
+    preferenceController.setInt(
+      getPreferenceKey(settingKeySelectedDetailsPanelTab),
+      _selectedBottomTabId.index,
+    );
+    preferenceController.setString(
+      getPreferenceKey(settingKeyFilterText),
+      _filterByText,
+    );
+    PreferenceController.to.setStringList(
+      getPreferenceKey(settingKeyFilterColumnsText),
+      _filterByFieldsValue.toStringList(),
+    );
   }
 
   /// Compile the list of single data value for a column/field definition
-  List<String> getUniqueInstances(final Field<dynamic> columnToCustomerFilterOn) {
+  List<String> getUniqueInstances(
+    final Field<dynamic> columnToCustomerFilterOn,
+  ) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
@@ -591,11 +696,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   /// Compile the list of single date value for a column/field definition
-  List<String> getUniqueInstancesOfDates(final Field<dynamic> columnToCustomerFilterOn) {
+  List<String> getUniqueInstancesOfDates(
+    final Field<dynamic> columnToCustomerFilterOn,
+  ) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
-      final String fieldValue = dateToString(columnToCustomerFilterOn.getValueForDisplay(moneyObject));
+      final String fieldValue = dateToString(
+        columnToCustomerFilterOn.getValueForDisplay(moneyObject),
+      );
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
@@ -604,11 +713,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   /// Compile the list of single date value for a column/field definition
-  List<String> getUniqueInstancesOfNumbers(final Field<dynamic> columnToCustomerFilterOn) {
+  List<String> getUniqueInstancesOfNumbers(
+    final Field<dynamic> columnToCustomerFilterOn,
+  ) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
-      final String fieldValue = formatDoubleTrimZeros(columnToCustomerFilterOn.getValueForDisplay(moneyObject));
+      final String fieldValue = formatDoubleTrimZeros(
+        columnToCustomerFilterOn.getValueForDisplay(moneyObject),
+      );
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
@@ -703,7 +816,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
               list = getList();
             });
           },
-        )
+        ),
       ],
     );
   }

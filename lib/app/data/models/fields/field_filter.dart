@@ -1,5 +1,4 @@
 class FieldFilter {
-
   FieldFilter({required this.fieldName, required this.filterTextInLowerCase}) {
     filterTextInLowerCase = filterTextInLowerCase.toLowerCase();
   }
@@ -37,7 +36,12 @@ class FieldFilters {
     for (final pair in inputList) {
       final tokens = pair.split('=');
       if (tokens.length == 2) {
-        list.add(FieldFilter(fieldName: tokens[0], filterTextInLowerCase: tokens[1].toLowerCase()));
+        list.add(
+          FieldFilter(
+            fieldName: tokens[0],
+            filterTextInLowerCase: tokens[1].toLowerCase(),
+          ),
+        );
       }
     }
   }

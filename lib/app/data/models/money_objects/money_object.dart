@@ -12,11 +12,11 @@ export 'package:money/app/core/helpers/misc_helpers.dart';
 export 'package:money/app/data/models/fields/field.dart';
 
 class MoneyObject {
+  MoneyObject();
 
   factory MoneyObject.fromJSon(final MyJson json, final double runningBalance) {
     return MoneyObject();
   }
-  MoneyObject();
 
   /// All object must have a unique identified
   int get uniqueId => -1;
@@ -80,13 +80,20 @@ class MoneyObject {
     return MoneyObject.fromJSon(commonJson, 0);
   }
 
-  void mutateField(final String fieldName, final dynamic newValue, final bool fireNotification) {
+  void mutateField(
+    final String fieldName,
+    final dynamic newValue,
+    final bool fireNotification,
+  ) {
     stashValueBeforeEditing();
     final field = getFieldDefinitionByName(fieldDefinitions, fieldName);
     if (field != null && field.setValue != null) {
       field.setValue!(this, newValue);
-      Data()
-          .notifyMutationChanged(mutation: MutationType.changed, moneyObject: this, fireNotification: fireNotification);
+      Data().notifyMutationChanged(
+        mutation: MutationType.changed,
+        moneyObject: this,
+        fireNotification: fireNotification,
+      );
     }
   }
 
@@ -125,10 +132,12 @@ class MoneyObject {
         isFirstItem: fieldDefinition == definitions.first,
         isLastItem: fieldDefinition == definitions.last,
       );
-      widgets.add(Padding(
-        padding: compact ? const EdgeInsets.symmetric(horizontal: 8.0) : const EdgeInsets.all(8.0),
-        child: widget,
-      ));
+      widgets.add(
+        Padding(
+          padding: compact ? const EdgeInsets.symmetric(horizontal: 8.0) : const EdgeInsets.all(8.0),
+          child: widget,
+        ),
+      );
     }
     return widgets;
   }
@@ -169,10 +178,11 @@ class MoneyObject {
       case FieldType.toggle:
         if (isReadOnly) {
           return MyFormFieldForWidget(
-              title: fieldDefinition.name,
-              valueAsText: fieldDefinition.getValueForDisplay(objectInstance).toString(),
-              isReadOnly: true,
-              onChanged: (final String value) {});
+            title: fieldDefinition.name,
+            valueAsText: fieldDefinition.getValueForDisplay(objectInstance).toString(),
+            isReadOnly: true,
+            onChanged: (final String value) {},
+          );
         }
         return InputDecorator(
           decoration: InputDecoration(
@@ -245,7 +255,7 @@ class MoneyObject {
     Field<dynamic> fieldDefinition,
     final dynamic fieldValue,
   ) {
-    return Container(
+    return DecoratedBox(
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(

@@ -10,7 +10,12 @@ class NoTransaction extends StatelessWidget {
     return Center(
       child: Box(
         height: 80,
-        child: Center(child: Text('There are no transactions yet.', style: getTextTheme(context).bodyLarge)),
+        child: Center(
+          child: Text(
+            'There are no transactions yet.',
+            style: getTextTheme(context).bodyLarge,
+          ),
+        ),
       ),
     );
   }

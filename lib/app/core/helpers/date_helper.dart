@@ -71,7 +71,10 @@ String dateToDateTimeString(final DateTime? dateTime) {
 /// Returns:
 /// - If `value` is not null, the ISO8601 string representation of the date and time.
 /// - If `value` is null, the `defaultValueIfNull` value.
-String dateToIso8601OrDefaultString(final DateTime? value, {final String defaultValueIfNull = ''}) {
+String dateToIso8601OrDefaultString(
+  final DateTime? value, {
+  final String defaultValueIfNull = '',
+}) {
   if (value == null) {
     return defaultValueIfNull;
   }

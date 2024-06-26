@@ -37,21 +37,23 @@ Future<bool> importQFX(
         Data().accounts.getListSorted().map((element) => element.name.value).toList();
 
     showPopupSelection(
-        title: 'Pick account to import to',
-        context: context,
-        items: activeAccountNames,
-        selectedItem: bankInfo.accountId,
-        onSelected: (final String text) {
-          final Account? accountSelected = Data().accounts.getByName(text);
-          if (accountSelected != null) {
-            _showAndConfirmTransactionToImport(context, ofx, accountSelected);
-          } else {
-            SnackBarService.displayWarning(
-                autoDismiss: false,
-                message: 'QFX Import - No matching "${bankInfo.accountType}" accounts with ID "${bankInfo.accountId}"');
-            return false;
-          }
-        });
+      title: 'Pick account to import to',
+      context: context,
+      items: activeAccountNames,
+      selectedItem: bankInfo.accountId,
+      onSelected: (final String text) {
+        final Account? accountSelected = Data().accounts.getByName(text);
+        if (accountSelected != null) {
+          _showAndConfirmTransactionToImport(context, ofx, accountSelected);
+        } else {
+          SnackBarService.displayWarning(
+            autoDismiss: false,
+            message: 'QFX Import - No matching "${bankInfo.accountType}" accounts with ID "${bankInfo.accountId}"',
+          );
+          return false;
+        }
+      },
+    );
   } else {
     _showAndConfirmTransactionToImport(context, ofx, account);
   }
@@ -59,7 +61,11 @@ Future<bool> importQFX(
   return true;
 }
 
-void _showAndConfirmTransactionToImport(final BuildContext context, final String ofx, final Account account) {
+void _showAndConfirmTransactionToImport(
+  final BuildContext context,
+  final String ofx,
+  final Account account,
+) {
   final List<QFXTransaction> list = getTransactionFromOFX(ofx);
 
   final List<ValuesQuality> valuesQuality = [];
@@ -68,12 +74,14 @@ void _showAndConfirmTransactionToImport(final BuildContext context, final String
   for (final QFXTransaction item in list) {
     // when there's no 'name' then fallback to 'memo'
     final payeeText = item.name.isEmpty ? item.memo : item.name;
-    valuesQuality.add(ValuesQuality(
-      date: ValueQuality(item.date.toIso8601String()),
-      // final int payeeIdMatchingPayeeText = Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
-      description: ValueQuality(payeeText),
-      amount: ValueQuality(item.amount.toString()),
-    ));
+    valuesQuality.add(
+      ValuesQuality(
+        date: ValueQuality(item.date.toIso8601String()),
+        // final int payeeIdMatchingPayeeText = Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
+        description: ValueQuality(payeeText),
+        amount: ValueQuality(item.amount.toString()),
+      ),
+    );
   }
 
   String messageToUser = '${list.length} transactions found in QFX file, to be imported into "${account.name.value}"';
@@ -87,29 +95,30 @@ void _showAndConfirmTransactionToImport(final BuildContext context, final String
   );
 
   showConfirmationDialog(
-      context: context,
-      title: 'Import QFX',
-      question: messageToUser,
-      content: questionContent,
-      buttonText: 'Import',
-      onConfirmation: () {
-        final List<Transaction> transactionsToAdd = [];
-        for (final ValuesQuality singleTransactionInput in valuesQuality) {
-          if (!singleTransactionInput.exist) {
-            final t = createNewTransactionFromDateDescriptionAmount(
-              account,
-              singleTransactionInput.date.asDate(),
-              singleTransactionInput.description.asString(),
-              singleTransactionInput.amount.asAmount(),
-            );
-            transactionsToAdd.add(t);
-          }
+    context: context,
+    title: 'Import QFX',
+    question: messageToUser,
+    content: questionContent,
+    buttonText: 'Import',
+    onConfirmation: () {
+      final List<Transaction> transactionsToAdd = [];
+      for (final ValuesQuality singleTransactionInput in valuesQuality) {
+        if (!singleTransactionInput.exist) {
+          final t = createNewTransactionFromDateDescriptionAmount(
+            account,
+            singleTransactionInput.date.asDate(),
+            singleTransactionInput.description.asString(),
+            singleTransactionInput.amount.asAmount(),
+          );
+          transactionsToAdd.add(t);
         }
-        addNewTransactions(
-          transactionsToAdd,
-          'QFX Imported - ${transactionsToAdd.length} transactions into "${account.name.value}"',
-        );
-      });
+      }
+      addNewTransactions(
+        transactionsToAdd,
+        'QFX Imported - ${transactionsToAdd.length} transactions into "${account.name.value}"',
+      );
+    },
+  );
 }
 
 class OfxBankInfo {
@@ -200,7 +209,6 @@ List<QFXTransaction> getTransactionFromOFX(final String rawOfx) {
 }
 
 class QFXTransaction {
-
   QFXTransaction({
     required this.type,
     required this.date,
@@ -234,8 +242,13 @@ List<QFXTransaction> parseQFXTransactions(final List<String> lines) {
     if (rawTransactionText.isNotEmpty) {
       final QFXTransaction currentTransaction = QFXTransaction(
         type: findAndGetValueOf(rawTransactionText, '<TRNTYPE>', ''),
-        date: parseQfxDataFormat(findAndGetValueOf(rawTransactionText, '<DTPOSTED>', '')) ?? DateTime.now(),
-        amount: double.parse(findAndGetValueOf(rawTransactionText, '<TRNAMT>', '0.00')),
+        date: parseQfxDataFormat(
+              findAndGetValueOf(rawTransactionText, '<DTPOSTED>', ''),
+            ) ??
+            DateTime.now(),
+        amount: double.parse(
+          findAndGetValueOf(rawTransactionText, '<TRNAMT>', '0.00'),
+        ),
         name: findAndGetValueOf(rawTransactionText, '<NAME>', ''),
         fitid: findAndGetValueOf(rawTransactionText, '<FITID>', ''),
         memo: findAndGetValueOf(rawTransactionText, '<MEMO>', ''),
@@ -248,7 +261,11 @@ List<QFXTransaction> parseQFXTransactions(final List<String> lines) {
   return transactions;
 }
 
-String findAndGetValueOf(final String line, final String tokenTextToFind, final String valueIfNotFound) {
+String findAndGetValueOf(
+  final String line,
+  final String tokenTextToFind,
+  final String valueIfNotFound,
+) {
   int position = line.indexOf(tokenTextToFind);
   if (position != -1) {
     String tokenStartingLine = line.substring(position);

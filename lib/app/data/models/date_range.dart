@@ -2,7 +2,6 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 
 class DateRange {
-
   DateRange({this.min, this.max});
 
   factory DateRange.fromStarEndYears(int yearStart, int yearEnd) {
@@ -104,11 +103,21 @@ class DateRange {
   }
 
   String get durationInYearsText {
-    return getSingularPluralText(getIntAsText(durationInYears), durationInYears, 'year', 'years');
+    return getSingularPluralText(
+      getIntAsText(durationInYears),
+      durationInYears,
+      'year',
+      'years',
+    );
   }
 
   String get durationInDaysText {
-    return getSingularPluralText(getIntAsText(durationInDays), durationInDays, 'day', 'days');
+    return getSingularPluralText(
+      getIntAsText(durationInDays),
+      durationInDays,
+      'day',
+      'days',
+    );
   }
 
   bool isBetween(final DateTime date) {

@@ -17,7 +17,6 @@ import 'package:money/app/data/storage/data/data.dart';
  */
 
 class MoneySplit extends MoneyObject {
-
   /// Constructor
   MoneySplit({
     // 1

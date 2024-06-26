@@ -8,11 +8,10 @@ import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class ColumnInput extends StatefulWidget {
-
   const ColumnInput({
-    super.key,
     required this.inputText,
     required this.onChange,
+    super.key,
   });
   final String inputText;
   final Function(String) onChange;
@@ -192,7 +191,9 @@ class _ColumnInputState extends State<ColumnInput> {
 
   Widget _buildColumnSelection() {
     return SegmentedButton<int>(
-      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
       segments: const <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
@@ -258,7 +259,11 @@ class _ColumnInputState extends State<ColumnInput> {
     }
   }
 
-  Widget columnTextInput(final String title, final TextEditingController controller, final FocusNode focusNode) {
+  Widget columnTextInput(
+    final String title,
+    final TextEditingController controller,
+    final FocusNode focusNode,
+  ) {
     return TextField(
       controller: controller,
       focusNode: focusNode,
@@ -277,7 +282,10 @@ class _ColumnInputState extends State<ColumnInput> {
 
 class TextInputFormatterRemoveEmptyLines extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
     String cleanedText = removeEmptyLines(newValue.text);
     if (newValue.text.endsWith('\n')) {
       cleanedText += '\n';

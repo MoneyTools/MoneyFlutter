@@ -12,14 +12,13 @@ enum TransactionFlavor {
 }
 
 class PickPayeeOrTransfer extends StatefulWidget {
-
   const PickPayeeOrTransfer({
-    super.key,
     required this.choice,
     required this.payee,
     required this.account,
     required this.amount,
     required this.onSelected,
+    super.key,
   });
   final TransactionFlavor choice;
   final Payee? payee;
@@ -62,16 +61,20 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
         children: [
           Expanded(
             child: pickerPayee(
-                itemSelected: widget.payee,
-                onSelected: (Payee? payee) {
-                  widget.onSelected(_choice, payee, widget.account);
-                }),
+              itemSelected: widget.payee,
+              onSelected: (Payee? payee) {
+                widget.onSelected(_choice, payee, widget.account);
+              },
+            ),
           ),
           if (widget.payee != null)
             IconButton(
               onPressed: () {
                 Navigator.of(context).pop(false);
-                showMergePayee(context, widget.payee!); //transactions.toList());
+                showMergePayee(
+                  context,
+                  widget.payee!,
+                ); //transactions.toList());
               },
               icon: const Icon(Icons.merge_outlined),
             ),
@@ -105,7 +108,9 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
 
   Widget buildChoice() {
     return SegmentedButton<TransactionFlavor>(
-      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
       segments: const <ButtonSegment<TransactionFlavor>>[
         ButtonSegment<TransactionFlavor>(
           value: TransactionFlavor.payee,

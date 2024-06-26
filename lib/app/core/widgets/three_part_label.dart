@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class ThreePartLabel extends StatelessWidget {
-
   const ThreePartLabel({
     super.key,
     this.icon,
@@ -20,10 +19,12 @@ class ThreePartLabel extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return isVertical
-        ? Column(children: <Widget>[
-            renderText1(context),
-            renderText2(context),
-          ])
+        ? Column(
+            children: <Widget>[
+              renderText1(context),
+              renderText2(context),
+            ],
+          )
         : Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
@@ -35,7 +36,7 @@ class ThreePartLabel extends StatelessWidget {
               // Text1 <space> Text2
               renderText1(context),
               const SizedBox(width: 20),
-              renderText2(context)
+              renderText2(context),
             ],
           );
   }

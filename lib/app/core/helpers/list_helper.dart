@@ -28,7 +28,10 @@ List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
   // Convert each amount to a percentage and retain key association
   List<KeyValue> percentages = keyValuePairs.map((entry) {
     double percentage = (entry.value / totalAmount) * 100;
-    return KeyValue(key: entry.key, value: percentage.isNaN ? 0.0 : percentage); // Handle division by zero
+    return KeyValue(
+      key: entry.key,
+      value: percentage.isNaN ? 0.0 : percentage,
+    ); // Handle division by zero
   }).toList();
 
   return percentages;
@@ -60,7 +63,10 @@ List<num> getMinMaxValues(final List<double> list) {
 }
 
 /// Return the first element of type T in a list given a list of possible index;
-T? getMoneyObjectFromFirstSelectedId<T>(final List<int> selectedIds, final List<dynamic> listOfItems) {
+T? getMoneyObjectFromFirstSelectedId<T>(
+  final List<int> selectedIds,
+  final List<dynamic> listOfItems,
+) {
   if (selectedIds.isNotEmpty) {
     final int id = selectedIds.first;
     return listOfItems.firstWhereOrNull((element) => (element as MoneyObject).uniqueId == id);
@@ -83,7 +89,11 @@ List<String> padList(List<String> list, int length, String padding) {
   return paddedList;
 }
 
-int sortByDate(final DateTime? a, final DateTime? b, [final bool ascending = true]) {
+int sortByDate(
+  final DateTime? a,
+  final DateTime? b, [
+  final bool ascending = true,
+]) {
   if (a == null && b == null) {
     return 0;
   }
@@ -124,14 +134,12 @@ int sortByValue(final num a, final num b, final bool ascending) {
 }
 
 class KeyValue {
-
   KeyValue({required this.key, required this.value});
   dynamic key;
   dynamic value;
 }
 
 class Pair<F, S> {
-
   Pair(this.first, this.second);
   F first;
   S second;
@@ -141,7 +149,9 @@ class Pair<F, S> {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
     return other is Pair<F, S> && other.first == first && other.second == second;
   }
 
@@ -150,7 +160,6 @@ class Pair<F, S> {
 }
 
 class Triple<F, S, T> {
-
   Triple(this.first, this.second, this.third);
   F first;
   S second;
@@ -161,7 +170,9 @@ class Triple<F, S, T> {
 
   @override
   bool operator ==(Object other) {
-    if (identical(this, other)) return true;
+    if (identical(this, other)) {
+      return true;
+    }
     return other is Triple<F, S, T> && other.first == first && other.second == second && other.third == third;
   }
 
@@ -169,7 +180,8 @@ class Triple<F, S, T> {
   String toString() => '($first, $second, $third)';
 }
 
-class SortedSet<T> { // Custom comparator function
+class SortedSet<T> {
+  // Custom comparator function
 
   SortedSet(this.compare);
   final List<T> _elements = [];

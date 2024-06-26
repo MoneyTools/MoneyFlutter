@@ -62,7 +62,6 @@ void myShowDialogAndActionsForMoneyObjects({
 
 /// Dialog content
 class DialogMutateMoneyObject extends StatefulWidget {
-
   const DialogMutateMoneyObject({
     super.key,
     required this.moneyObject,
@@ -94,11 +93,13 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _moneyObject.buildWidgets(onEdit: () {
-                setState(() {
-                  dataWasModified = isDataModified(_moneyObject);
-                });
-              }),
+              children: _moneyObject.buildWidgets(
+                onEdit: () {
+                  setState(() {
+                    dataWasModified = isDataModified(_moneyObject);
+                  });
+                },
+              ),
             ),
           ),
         ),
@@ -123,28 +124,33 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
     return [
       // Cancel
       DialogActionButton(
-          text: 'Cancel',
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          }),
+        text: 'Cancel',
+        onPressed: () {
+          Navigator.of(context).pop(false);
+        },
+      ),
 
       // Apply
       if (dataWasModified)
         DialogActionButton(
-            text: 'Apply',
-            onPressed: () {
-              // Changes were made
-              if (dataWasModified) {
-                widget.onApplyChange(moneyObject);
-              }
-              Navigator.of(context).pop(true);
-            }),
+          text: 'Apply',
+          onPressed: () {
+            // Changes were made
+            if (dataWasModified) {
+              widget.onApplyChange(moneyObject);
+            }
+            Navigator.of(context).pop(true);
+          },
+        ),
     ];
   }
 
   bool isDataModified(MoneyObject moneyObject) {
     MyJson afterEditing = moneyObject.getPersistableJSon();
-    MyJson diff = myJsonDiff(before: moneyObject.valueBeforeEdit ?? {}, after: afterEditing);
+    MyJson diff = myJsonDiff(
+      before: moneyObject.valueBeforeEdit ?? {},
+      after: afterEditing,
+    );
     return diff.keys.isNotEmpty;
   }
 }

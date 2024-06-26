@@ -33,12 +33,18 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       for (final MoneyObject item in getList()) {
         final Account account = item as Account;
         if (account.isOpen) {
-          listOfPairXY.add(PairXY(account.name.value,
-              showAsNativeCurrency ? account.balance : account.balanceNormalized.getValueForDisplay(account)));
+          listOfPairXY.add(
+            PairXY(
+              account.name.value,
+              showAsNativeCurrency ? account.balance : account.balanceNormalized.getValueForDisplay(account),
+            ),
+          );
         }
       }
 
-      listOfPairXY.sort((final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt());
+      listOfPairXY.sort(
+        (final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt(),
+      );
 
       return Chart(
         key: Key(selectedIds.toString()),
@@ -63,27 +69,43 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       Transaction.fields.getFieldByName(columnIdPayee),
       Transaction.fields.getFieldByName(columnIdCategory),
       Transaction.fields.getFieldByName(columnIdStatus),
-      Transaction.fields.getFieldByName(showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized),
-      Transaction.fields.getFieldByName(showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized),
+      Transaction.fields.getFieldByName(
+        showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
+      ),
+      Transaction.fields.getFieldByName(
+        showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
+      ),
     ];
 
     return ListViewTransactions(
-        key: Key('transaction_list_currency_${showAsNativeCurrency}_version${Data().version}'),
-        columnsToInclude: columnsToDisplay,
-        getList: () => getTransactionForLastSelectedAccount(account),
-        sortFieldIndex: sortFieldIndex,
-        sortAscending: sortAscending,
-        selectedItemIndex: selectedItemIndex,
-        onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int uniqueId) {
-          // keep track of user choice
-          sortFieldIndex = sortByFieldIndex;
-          sortAscending = sortAscending;
+      key: Key(
+        'transaction_list_currency_${showAsNativeCurrency}_version${Data().version}',
+      ),
+      columnsToInclude: columnsToDisplay,
+      getList: () => getTransactionForLastSelectedAccount(account),
+      sortFieldIndex: sortFieldIndex,
+      sortAscending: sortAscending,
+      selectedItemIndex: selectedItemIndex,
+      onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int uniqueId) {
+        // keep track of user choice
+        sortFieldIndex = sortByFieldIndex;
+        sortAscending = sortAscending;
 
-          // Save user choices
-          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
-          PreferenceController.to.setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
-          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
-        });
+        // Save user choices
+        PreferenceController.to.setInt(
+          getPreferenceKey('info_$settingKeySortBy'),
+          sortByFieldIndex,
+        );
+        PreferenceController.to.setBool(
+          getPreferenceKey('info_$settingKeySortAscending'),
+          sortAscending,
+        );
+        PreferenceController.to.setInt(
+          getPreferenceKey('info_$settingKeySelectedListItemId'),
+          uniqueId,
+        );
+      },
+    );
   }
 
   // Details Panel for Transactions
@@ -98,7 +120,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     List<LoanPayment> agregatedList = getAccountLoanPayments(account);
 
     MoneyObjects.sortList(
-        agregatedList, LoanPayment.fields.fieldDefinitionsForColumns.toList(), sortFieldIndex, sortAscending);
+      agregatedList,
+      LoanPayment.fields.fieldDefinitionsForColumns.toList(),
+      sortFieldIndex,
+      sortAscending,
+    );
 
     return AdaptiveListColumnsOrRows(
       list: agregatedList,
@@ -120,8 +146,14 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           } else {
             sortFieldIndex = columnHeaderIndex;
           }
-          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySortBy'), sortFieldIndex);
-          PreferenceController.to.setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          PreferenceController.to.setInt(
+            getPreferenceKey('info_$settingKeySortBy'),
+            sortFieldIndex,
+          );
+          PreferenceController.to.setBool(
+            getPreferenceKey('info_$settingKeySortAscending'),
+            sortAscending,
+          );
         });
       },
       isMultiSelectionOn: false,
@@ -130,7 +162,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         // ignore: invalid_use_of_protected_member
         setState(() {
           selectedItemId = uniqueId;
-          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
+          PreferenceController.to.setInt(
+            getPreferenceKey('info_$settingKeySelectedListItemId'),
+            selectedItemId,
+          );
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {
@@ -142,14 +177,21 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         );
 
         selectedItemId = itemId;
-        PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), selectedItemId);
+        PreferenceController.to.setInt(
+          getPreferenceKey('info_$settingKeySelectedListItemId'),
+          selectedItemId,
+        );
       },
     );
   }
 
-  List<Transaction> getTransactionForLastSelectedAccount(final Account account) {
-    return getTransactions(filter: (Transaction transaction) {
-      return filterByAccountId(transaction, account.uniqueId);
-    });
+  List<Transaction> getTransactionForLastSelectedAccount(
+    final Account account,
+  ) {
+    return getTransactions(
+      filter: (Transaction transaction) {
+        return filterByAccountId(transaction, account.uniqueId);
+      },
+    );
   }
 }

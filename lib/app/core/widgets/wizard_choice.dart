@@ -3,7 +3,6 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class WizardChoice extends StatelessWidget {
-
   const WizardChoice({
     super.key,
     required this.title,
@@ -19,7 +18,9 @@ class WizardChoice extends StatelessWidget {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0), // Adjust the value to change the radius
+          borderRadius: BorderRadius.circular(
+            8.0,
+          ), // Adjust the value to change the radius
         ),
       ),
       onPressed: () {

@@ -14,7 +14,6 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/tra
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
-
   const ViewTransactions({
     super.key,
     this.startingBalance = 0.00,
@@ -26,7 +25,6 @@ class ViewTransactions extends ViewForMoneyObjects {
 }
 
 class ViewTransactionsState extends ViewForMoneyObjectsState {
-
   ViewTransactionsState() {
     viewId = ViewId.viewTransactions;
     supportsMultiSelection = true;
@@ -44,26 +42,46 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   void initState() {
     super.initState();
 
-    pivots.add(ThreePartLabel(
+    pivots.add(
+      ThreePartLabel(
         text1: 'Incomes',
         small: true,
         isVertical: true,
-        text2: getIntAsText(Data()
-            .transactions
-            .iterableList()
-            .where((final Transaction element) => element.amount.value.toDouble() > 0)
-            .length)));
-    pivots.add(ThreePartLabel(
+        text2: getIntAsText(
+          Data()
+              .transactions
+              .iterableList()
+              .where(
+                (final Transaction element) => element.amount.value.toDouble() > 0,
+              )
+              .length,
+        ),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
         text1: 'Expenses',
         small: true,
         isVertical: true,
-        text2: getIntAsText(Data()
-            .transactions
-            .iterableList()
-            .where((final Transaction element) => element.amount.value.toDouble() < 0)
-            .length)));
-    pivots.add(ThreePartLabel(
-        text1: 'All', small: true, isVertical: true, text2: getIntAsText(Data().transactions.iterableList().length)));
+        text2: getIntAsText(
+          Data()
+              .transactions
+              .iterableList()
+              .where(
+                (final Transaction element) => element.amount.value.toDouble() < 0,
+              )
+              .length,
+        ),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: getIntAsText(Data().transactions.iterableList().length),
+      ),
+    );
   }
 
   @override
@@ -123,10 +141,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 if (transaction != null) {
                   // Preselect the Category of this Transaction
                   PreferenceController.to.setInt(
-                      ViewId.viewCategories.getViewPreferenceId(
-                        settingKeySelectedListItemId,
-                      ),
-                      transaction.categoryId.value);
+                    ViewId.viewCategories.getViewPreferenceId(
+                      settingKeySelectedListItemId,
+                    ),
+                    transaction.categoryId.value,
+                  );
                   PreferenceController.to.setView(ViewId.viewCategories);
                 }
               },
@@ -174,16 +193,23 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Transaction> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<Transaction> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     final List<Transaction> list = Data()
         .transactions
         .iterableList(includeDeleted: includeDeleted)
-        .where((final Transaction transaction) =>
-            isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)))
+        .where(
+          (final Transaction transaction) =>
+              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
+        )
         .toList();
 
     if (!balanceDone) {
-      list.sort((final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value));
+      list.sort(
+        (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
+      );
 
       double runningNativeBalance = 0.0;
       _footerRunningBalanceUSD = 0.0;
@@ -224,26 +250,27 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
   Widget renderToggles() {
     return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-        child: ToggleButtons(
-          direction: Axis.horizontal,
-          onPressed: (final int index) {
-            setState(() {
-              for (int i = 0; i < _selectedPivot.length; i++) {
-                _selectedPivot[i] = i == index;
-              }
-              list = getList();
-            });
-          },
-          borderRadius: const BorderRadius.all(Radius.circular(8)),
-          constraints: const BoxConstraints(
-            minHeight: 40.0,
-            minWidth: 100.0,
-          ),
-          isSelected: _selectedPivot,
-          children: pivots,
-        ));
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+      child: ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (final int index) {
+          setState(() {
+            for (int i = 0; i < _selectedPivot.length; i++) {
+              _selectedPivot[i] = i == index;
+            }
+            list = getList();
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 100.0,
+        ),
+        isSelected: _selectedPivot,
+        children: pivots,
+      ),
+    );
   }
 
   @override
@@ -253,8 +280,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }) {
     final Map<String, num> tallyPerMonths = <String, num>{};
 
-    final DateRange timePeriod =
-        DateRange(min: DateTime.now().subtract(const Duration(days: 356)).startOfDay, max: DateTime.now().endOfDay);
+    final DateRange timePeriod = DateRange(
+      min: DateTime.now().subtract(const Duration(days: 356)).startOfDay,
+      max: DateTime.now().endOfDay,
+    );
 
     getList().forEach((final Transaction transaction) {
       transaction;
@@ -267,7 +296,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
 
         // Update the map or add a new entry
-        tallyPerMonths.update(yearMonth, (final num total) => total + value, ifAbsent: () => value);
+        tallyPerMonths.update(
+          yearMonth,
+          (final num total) => total + value,
+          ifAbsent: () => value,
+        );
       }
     });
 
@@ -302,7 +335,9 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
           return Data()
               .splits
               .iterableList()
-              .where((final MoneySplit s) => s.transactionId.value == transaction.id.value)
+              .where(
+                (final MoneySplit s) => s.transactionId.value == transaction.id.value,
+              )
               .toList();
         },
       );

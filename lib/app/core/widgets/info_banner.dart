@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class InfoBanner extends StatelessWidget {
-
   const InfoBanner({
-    super.key,
     required this.type,
     required this.message,
     required this.icon,
+    super.key,
   });
 
   factory InfoBanner.success(String message) {

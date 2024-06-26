@@ -37,10 +37,11 @@ class SnackBarService {
     bool autoDismiss = true,
   }) {
     return display(
-        title: 'OK',
-        message: message,
-        autoDismiss: autoDismiss,
-        backgroundColor: getColorFromState(ColorState.success));
+      title: 'OK',
+      message: message,
+      autoDismiss: autoDismiss,
+      backgroundColor: getColorFromState(ColorState.success),
+    );
   }
 
   static void displayWarning({
@@ -48,10 +49,11 @@ class SnackBarService {
     bool autoDismiss = true,
   }) {
     return display(
-        title: 'Warning',
-        message: message,
-        autoDismiss: autoDismiss,
-        backgroundColor: getColorFromState(ColorState.warning));
+      title: 'Warning',
+      message: message,
+      autoDismiss: autoDismiss,
+      backgroundColor: getColorFromState(ColorState.warning),
+    );
   }
 
   static void displayError({
@@ -59,9 +61,10 @@ class SnackBarService {
     bool autoDismiss = true,
   }) {
     return display(
-        title: 'Error',
-        message: message,
-        autoDismiss: autoDismiss,
-        backgroundColor: getColorFromState(ColorState.error));
+      title: 'Error',
+      message: message,
+      autoDismiss: autoDismiss,
+      backgroundColor: getColorFromState(ColorState.error),
+    );
   }
 }

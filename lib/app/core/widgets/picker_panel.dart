@@ -39,12 +39,11 @@ void showPopupSelection({
 }
 
 class PickerPanel extends StatefulWidget {
-
   const PickerPanel({
-    super.key,
     required this.options,
     required this.selectedItem,
     required this.onSelected,
+    super.key,
     this.width = 200,
     this.itemHeight = 40,
     this.showLetterPicker = true,
@@ -169,7 +168,12 @@ class PickerPanelState extends State<PickerPanel> {
     );
   }
 
-  Widget _buildPickerItem(BuildContext context, String label, bool isSelected, int index) {
+  Widget _buildPickerItem(
+    BuildContext context,
+    String label,
+    bool isSelected,
+    int index,
+  ) {
     return InkWell(
       onTap: () {
         Navigator.of(context).pop();
@@ -182,7 +186,12 @@ class PickerPanelState extends State<PickerPanel> {
           color: isSelected ? getColorTheme(context).primaryContainer : Colors.transparent,
           border: index == filteredList.length - 1
               ? null
-              : Border(bottom: BorderSide(color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2), width: 1)),
+              : Border(
+                  bottom: BorderSide(
+                    color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2),
+                    width: 1,
+                  ),
+                ),
         ),
         child: SingleChildScrollView(
           reverse: widget.rightAligned,

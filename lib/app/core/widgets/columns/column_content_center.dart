@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 
 class HeaderContentCenter extends StatelessWidget {
-
-  const HeaderContentCenter({super.key, required this.text, required this.trailingWidget});
+  const HeaderContentCenter({required this.text, required this.trailingWidget, super.key});
   final String text;
   final Widget? trailingWidget;
 
@@ -20,6 +19,9 @@ class HeaderContentCenter extends StatelessWidget {
     if (trailingWidget == null) {
       return textWidget;
     }
-    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [Flexible(child: textWidget), trailingWidget!]);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [Flexible(child: textWidget), trailingWidget!],
+    );
   }
 }

@@ -62,7 +62,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Security> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<Security> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
     _footerColumnDate.clear();
 
@@ -105,15 +108,26 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     }
     final exclude = ['Symbol', 'Load', 'Fees'];
     final List<Field> fieldsToDisplay = Investment.fields.definitions
-        .where((element) => element.useAsColumn && !exclude.contains(element.name))
+        .where(
+          (element) => element.useAsColumn && !exclude.contains(element.name),
+        )
         .toList();
 
     return ValueListenableBuilder<SortingInstruction>(
       valueListenable: _sortingInstruction,
-      builder: (final BuildContext context, final SortingInstruction sortInstructions, final Widget? _) {
+      builder: (
+        final BuildContext context,
+        final SortingInstruction sortInstructions,
+        final Widget? _,
+      ) {
         List<Investment> list = getListOfInvestment(lastSecuritySelected!);
 
-        MoneyObjects.sortList(list, fieldsToDisplay, sortInstructions.column, sortInstructions.ascending);
+        MoneyObjects.sortList(
+          list,
+          fieldsToDisplay,
+          sortInstructions.column,
+          sortInstructions.ascending,
+        );
         return AdaptiveListColumnsOrRowsSingleSelection(
           // list
           list: list,

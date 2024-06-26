@@ -11,7 +11,6 @@ import 'package:money/app/data/models/money_objects/money_object.dart';
   4|Note|nvarchar(255)|0||0
  */
 class RentUnit extends MoneyObject {
-
   RentUnit();
 
   factory RentUnit.fromJson(final MyJson row) {

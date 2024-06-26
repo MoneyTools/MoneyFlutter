@@ -7,14 +7,13 @@ import 'package:money/app/data/models/money_objects/splits/splits.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 
 class Transfer extends MoneyObject {
-
   Transfer({
     required this.id,
     required this.source,
+    required this.isOrphan,
     this.related,
     this.sourceSplit,
     this.relatedSplit,
-    required this.isOrphan,
   }) {
     // body of constructor
   }

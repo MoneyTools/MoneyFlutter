@@ -26,7 +26,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
  */
 
 class OnlineAccount extends MoneyObject {
-
   OnlineAccount({
     required this.name,
     required this.institution,

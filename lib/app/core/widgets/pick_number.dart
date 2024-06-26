@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class NumberPicker extends StatefulWidget {
-
   const NumberPicker({
-    super.key,
     required this.title,
     required this.onChanged,
     required this.selectedNumber,
+    super.key,
   });
   final String title;
   final int selectedNumber;
@@ -33,11 +32,12 @@ class _NumberPickerState extends State<NumberPicker> {
           DropdownButton<int>(
             value: _selectedNumber,
             items: List.generate(
-                12,
-                (index) => DropdownMenuItem(
-                      value: index + 1,
-                      child: Text('${index + 1}'),
-                    )),
+              12,
+              (index) => DropdownMenuItem(
+                value: index + 1,
+                child: Text('${index + 1}'),
+              ),
+            ),
             onChanged: (int? value) {
               setState(() {
                 _selectedNumber = value!;

@@ -5,17 +5,16 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 /// A Row for a Table view
 class MyListItemHeader<T> extends StatelessWidget {
-
   const MyListItemHeader({
-    super.key,
-    this.backgoundColor = Colors.transparent,
     required this.columns,
     required this.filterOn,
     required this.sortByColumn,
     required this.sortAscending,
+    required this.onTap,
+    super.key,
+    this.backgoundColor = Colors.transparent,
     this.itemsAreAllSelected = false,
     this.onSelectAll,
-    required this.onTap,
     this.onLongPress,
   });
   final Color backgoundColor;
@@ -50,7 +49,10 @@ class MyListItemHeader<T> extends StatelessWidget {
           textAlign: columnDefinition.align,
           flex: columnDefinition.columnWidth.index,
           sortIndicator: getSortIndicator(sortByColumn, i, sortAscending),
-          hasFilters: filterOn.list.firstWhereOrNull((item) => item.fieldName == columnDefinition.name) != null,
+          hasFilters: filterOn.list.firstWhereOrNull(
+                (item) => item.fieldName == columnDefinition.name,
+              ) !=
+              null,
           onPressed: () {
             onTap(i);
           },

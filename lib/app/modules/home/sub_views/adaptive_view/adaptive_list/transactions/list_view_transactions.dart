@@ -8,11 +8,10 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/ada
 import 'package:money/app/modules/home/sub_views/view_transactions/dialog_mutate_transaction.dart';
 
 class ListViewTransactions extends StatefulWidget {
-
   const ListViewTransactions({
-    super.key,
     required this.columnsToInclude,
     required this.getList,
+    super.key,
     this.sortFieldIndex = 0,
     this.sortAscending = true,
     this.onUserChoiceChanged,
@@ -42,7 +41,12 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       return const Center(child: Text('No transactions'));
     }
 
-    MoneyObjects.sortList(transactions, widget.columnsToInclude, sortBy, sortAscending);
+    MoneyObjects.sortList(
+      transactions,
+      widget.columnsToInclude,
+      sortBy,
+      sortAscending,
+    );
 
     return AdaptiveListColumnsOrRowsSingleSelection(
       list: transactions,

@@ -23,25 +23,29 @@ class AppTitle extends StatelessWidget {
   Widget build(BuildContext context) {
     final DataController dataController = Get.find();
 
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Row(children: [
-            IntrinsicWidth(child: _buildNetWorthToggle(context)),
-            gapSmall(),
-            Obx(() {
-              return BadgePendingChanges(
-                itemsAdded: dataController.trackMutations.added.value,
-                itemsChanged: dataController.trackMutations.changed.value,
-                itemsDeleted: dataController.trackMutations.deleted.value,
-              );
-            }),
-          ]),
-          const MruDropdown(),
-        ],
-      );
-    });
+    return LayoutBuilder(
+      builder: (final BuildContext context, final BoxConstraints constraints) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                IntrinsicWidth(child: _buildNetWorthToggle(context)),
+                gapSmall(),
+                Obx(() {
+                  return BadgePendingChanges(
+                    itemsAdded: dataController.trackMutations.added.value,
+                    itemsChanged: dataController.trackMutations.changed.value,
+                    itemsDeleted: dataController.trackMutations.deleted.value,
+                  );
+                }),
+              ],
+            ),
+            const MruDropdown(),
+          ],
+        );
+      },
+    );
   }
 
   Widget _buildNetWorthToggle(
@@ -71,12 +75,13 @@ Widget _buildRevealContentOption(
       Text(text, style: textStyle),
       gapSmall(),
       Opacity(
-          opacity: 0.8,
-          child: Icon(
-            hidden ? Icons.visibility_outlined : Icons.visibility_off_outlined,
-            size: 16,
-            color: color,
-          )),
+        opacity: 0.8,
+        child: Icon(
+          hidden ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+          size: 16,
+          color: color,
+        ),
+      ),
     ],
   );
 }

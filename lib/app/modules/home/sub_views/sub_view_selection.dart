@@ -58,7 +58,7 @@ List<NavigationDestination> getAppBarDestinations() {
       tooltip: 'Stocks tracking',
       icon: ViewId.viewStocks.getIcon(),
       selectedIcon: ViewId.viewStocks.getIcon(),
-    )
+    ),
   ];
   if (PreferenceController.to.includeRentalManagement) {
     appBarDestinations.add(
@@ -94,11 +94,10 @@ List<NavigationRailDestination> getNavRailDestination() {
 }
 
 class SubViewSelectionHorizontal extends StatefulWidget {
-
   const SubViewSelectionHorizontal({
-    super.key,
     required this.onSelected,
     required this.selectedView,
+    super.key,
   });
   final void Function(ViewId) onSelected;
   final ViewId selectedView;
@@ -137,11 +136,10 @@ class SubViewSelectionHorizontalState extends State<SubViewSelectionHorizontal> 
 }
 
 class SubViewSelectionVertical extends StatefulWidget {
-
   const SubViewSelectionVertical({
-    super.key,
     required this.onSelectItem,
     required this.selectedView,
+    super.key,
     this.useIndicator = false,
   });
   final void Function(ViewId) onSelectItem;

@@ -69,11 +69,16 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Investment> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<Investment> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     final list = Data()
         .investments
         .iterableList(includeDeleted: includeDeleted)
-        .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
+        .where(
+          (instance) => (applyFilter == false || isMatchingFilters(instance)),
+        )
         .toList();
     Investments.calculateRunningBalance(list);
 
@@ -91,7 +96,10 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    return _getSubViewContentForChart(selectedIds: selectedIds, showAsNativeCurrency: showAsNativeCurrency);
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
   }
 
   @override

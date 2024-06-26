@@ -26,17 +26,19 @@ class PendingChanges extends StatefulWidget {
       ),
       actionButtons: [
         DialogActionButton(
-            text: 'Save to SQL',
-            onPressed: () {
-              DataController.to.onSaveToSql();
-              Navigator.of(context).pop(true);
-            }),
+          text: 'Save to SQL',
+          onPressed: () {
+            DataController.to.onSaveToSql();
+            Navigator.of(context).pop(true);
+          },
+        ),
         DialogActionButton(
-            text: 'Save to CSV',
-            onPressed: () {
-              DataController.to.onSaveToCsv();
-              Navigator.of(context).pop(true);
-            }),
+          text: 'Save to CSV',
+          onPressed: () {
+            DataController.to.onSaveToCsv();
+            Navigator.of(context).pop(true);
+          },
+        ),
       ],
     );
   }
@@ -102,7 +104,9 @@ class _PendingChangesState extends State<PendingChanges> {
         gapLarge(),
         _buildSubSegmentsButtons(selectedMutationType),
         gapLarge(),
-        Expanded(child: _buildListOfDetailsOfSelectedGroup(selectedMutationType)),
+        Expanded(
+          child: _buildListOfDetailsOfSelectedGroup(selectedMutationType),
+        ),
       ],
     );
   }
@@ -130,15 +134,17 @@ class _PendingChangesState extends State<PendingChanges> {
     return ButtonSegment<int>(
       value: id,
       label: SizedBox(
-          width: 120,
-          child: Badge(
-              backgroundColor: mutations.color,
-              label: Text(
-                getIntAsText(mutations.count),
-              ),
-              alignment: Alignment.centerRight,
-              offset: const Offset(-30, 0),
-              child: Text(mutations.title))),
+        width: 120,
+        child: Badge(
+          backgroundColor: mutations.color,
+          label: Text(
+            getIntAsText(mutations.count),
+          ),
+          alignment: Alignment.centerRight,
+          offset: const Offset(-30, 0),
+          child: Text(mutations.title),
+        ),
+      ),
     );
   }
 
@@ -192,7 +198,6 @@ class _PendingChangesState extends State<PendingChanges> {
 }
 
 class Mutations {
-
   Mutations({
     required this.typeOfMutation,
     required this.title,

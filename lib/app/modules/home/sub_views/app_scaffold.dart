@@ -10,9 +10,10 @@ Widget myScaffold(
     textScaler: TextScaler.linear(PreferenceController.to.textScale),
   );
   return MediaQuery(
-      data: data,
-      child: Scaffold(
-        appBar: appBar,
-        body: body,
-      ));
+    data: data,
+    child: Scaffold(
+      appBar: appBar,
+      body: body,
+    ),
+  );
 }

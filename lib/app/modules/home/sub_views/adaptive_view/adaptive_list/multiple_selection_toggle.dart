@@ -5,8 +5,8 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/mul
 
 class MultipleSelectionToggle extends StatelessWidget {
   const MultipleSelectionToggle({
-    super.key,
     required this.multipleSelection,
+    super.key,
   });
 
   final ViewHeaderMultipleSelection? multipleSelection;
@@ -16,12 +16,18 @@ class MultipleSelectionToggle extends StatelessWidget {
     bool isSelected = multipleSelection!.isMultiSelectionOn;
     return ValueListenableBuilder<List<int>>(
       valueListenable: multipleSelection!.selectedItems,
-      builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _) {
+      builder: (
+        final BuildContext context,
+        final List<int> listOfSelectedItemIndex,
+        final _,
+      ) {
         return Tooltip(
           message: 'Toggle multi-selection',
           child: TextButton.icon(
             icon: const Icon(Icons.checklist),
-            label: Text(getIntAsText(multipleSelection!.selectedItems.value.length)),
+            label: Text(
+              getIntAsText(multipleSelection!.selectedItems.value.length),
+            ),
             onPressed: () {
               multipleSelection!.onToggleMode!();
             },

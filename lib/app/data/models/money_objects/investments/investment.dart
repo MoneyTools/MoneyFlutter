@@ -9,7 +9,6 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 
 class Investment extends MoneyObject {
-
   Investment({
     required final int id, // 1
     required final int security, // 1
@@ -195,8 +194,9 @@ class Investment extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     type: FieldType.text,
-    getValueForDisplay: (final MoneyObject instance) =>
-        getInvestmentTypeTextFromValue((instance as Investment).investmentType.value),
+    getValueForDisplay: (final MoneyObject instance) => getInvestmentTypeTextFromValue(
+      (instance as Investment).investmentType.value,
+    ),
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
   );
 
@@ -263,8 +263,12 @@ class Investment extends MoneyObject {
     useAsColumn: true,
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).date,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByDateAndInvestmentType(a as Investment, b as Investment, ascending, false),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByDateAndInvestmentType(
+      a as Investment,
+      b as Investment,
+      ascending,
+      false,
+    ),
   );
 
   FieldString securitySymbol = FieldString(
@@ -276,23 +280,25 @@ class Investment extends MoneyObject {
   );
 
   FieldString transactionAccountName = FieldString(
-      name: 'Account',
-      useAsColumn: true,
-      columnWidth: ColumnWidth.largest,
-      getValueForDisplay: (final MoneyObject instance) {
-        final investment = instance as Investment;
-        final Transaction? transaction = Data().transactions.get(investment.uniqueId);
-        if (transaction != null) {
-          return Data().accounts.getNameFromId(transaction.accountId.value);
-        }
-        return '?not found?';
-      });
+    name: 'Account',
+    useAsColumn: true,
+    columnWidth: ColumnWidth.largest,
+    getValueForDisplay: (final MoneyObject instance) {
+      final investment = instance as Investment;
+      final Transaction? transaction = Data().transactions.get(investment.uniqueId);
+      if (transaction != null) {
+        return Data().accounts.getNameFromId(transaction.accountId.value);
+      }
+      return '?not found?';
+    },
+  );
 
   FieldMoney amount = FieldMoney(
-      name: 'Amount',
-      getValueForDisplay: (final MoneyObject instance) {
-        return MoneyModel(amount: (instance as Investment).finalAmount.amount);
-      });
+    name: 'Amount',
+    getValueForDisplay: (final MoneyObject instance) {
+      return MoneyModel(amount: (instance as Investment).finalAmount.amount);
+    },
+  );
 
   StockCumulative get finalAmount {
     StockCumulative cumulative = StockCumulative();
@@ -318,26 +324,40 @@ class Investment extends MoneyObject {
   }
 
   FieldMoney runningBalance = FieldMoney(
-      name: 'Balance',
-      getValueForDisplay: (final MoneyObject instance) {
-        return (instance as Investment).runningBalance.value;
-      });
+    name: 'Balance',
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as Investment).runningBalance.value;
+    },
+  );
 
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
-  static int sortByDateAndInvestmentType(final Investment a, final Investment b, final bool ascending, bool ta) {
+  static int sortByDateAndInvestmentType(
+    final Investment a,
+    final Investment b,
+    final bool ascending,
+    bool ta,
+  ) {
     int result = sortByDate(a.date, b.date, ascending);
 
     if (result == 0) {
       // If on the same date sort so that "Buy" is before "Sell"
-      result = sortByValue(a.investmentType.value, b.investmentType.value, ascending);
+      result = sortByValue(
+        a.investmentType.value,
+        b.investmentType.value,
+        ascending,
+      );
     }
 
     if (result == 0) {
       // If on the same date sort so that "Buy" is before "Sell"
-      result = sortByValue(a.finalAmount.amount.abs(), b.finalAmount.amount.abs(), !ascending);
+      result = sortByValue(
+        a.finalAmount.amount.abs(),
+        b.finalAmount.amount.abs(),
+        !ascending,
+      );
     }
     return result;
   }

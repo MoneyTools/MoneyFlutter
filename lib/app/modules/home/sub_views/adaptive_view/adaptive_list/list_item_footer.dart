@@ -4,13 +4,12 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 /// A Row for a Table view
 class MyListItemFooter<T> extends StatelessWidget {
-
   const MyListItemFooter({
-    super.key,
-    this.backgoundColor = Colors.transparent,
     required this.columns,
     required this.multiSelectionOn,
     required this.onTap,
+    super.key,
+    this.backgoundColor = Colors.transparent,
     this.onLongPress,
     this.getColumnFooterWidget,
   });

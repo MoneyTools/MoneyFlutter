@@ -1,7 +1,10 @@
 part of 'data.dart';
 
 extension DataFromSql on Data {
-  Future<bool> loadFromSql(final String filePathToLoad, final Uint8List fileBytes) async {
+  Future<bool> loadFromSql(
+    final String filePathToLoad,
+    final Uint8List fileBytes,
+  ) async {
     // Load from SQLite
     final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad, fileBytes);
 

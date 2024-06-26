@@ -51,7 +51,10 @@ class MyFileSystems {
   }
 
   /// Generic text file write
-  static Future<void> writeToFile(final String pathToFile, final String data) async {
+  static Future<void> writeToFile(
+    final String pathToFile,
+    final String data,
+  ) async {
     final File file = File(pathToFile);
 
     if (!await file.exists()) {
@@ -77,7 +80,11 @@ class MyFileSystems {
     return p.extension(filePath);
   }
 
-  static Future<void> writeFileContentIntoFolder(final String folder, final String fileName, final String content) {
+  static Future<void> writeFileContentIntoFolder(
+    final String folder,
+    final String fileName,
+    final String content,
+  ) {
     final String fullPathToFile = MyFileSystems.append(folder, fileName);
     return MyFileSystems.writeToFile(fullPathToFile, content);
   }

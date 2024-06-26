@@ -44,7 +44,9 @@ class MoneyObjects<T> {
     return _list.length;
   }
 
-  Iterable<MoneyObject> _iterableListOfMoneyObject([bool includeDeleted = false]) {
+  Iterable<MoneyObject> _iterableListOfMoneyObject([
+    bool includeDeleted = false,
+  ]) {
     if (includeDeleted) {
       // No filtering needed
       return _list;
@@ -120,7 +122,10 @@ class MoneyObjects<T> {
     return nextId + 1;
   }
 
-  MoneyObject appendNewMoneyObject(final MoneyObject moneyObject, {bool fireNotification = true}) {
+  MoneyObject appendNewMoneyObject(
+    final MoneyObject moneyObject, {
+    bool fireNotification = true,
+  }) {
     assert(moneyObject.uniqueId == -1);
 
     // assign the next available unique ID
@@ -220,7 +225,10 @@ class MoneyObjects<T> {
     return getCsvFromList(getListSortedById());
   }
 
-  static String getCsvHeader(final FieldDefinitions declarations, final bool forSerialization) {
+  static String getCsvHeader(
+    final FieldDefinitions declarations,
+    final bool forSerialization,
+  ) {
     final List<String> headerList = <String>[];
 
     for (final Field<dynamic> field in declarations) {
@@ -261,7 +269,14 @@ class MoneyObjects<T> {
 
       // CSV Rows values
       for (final MoneyObject item in moneyObjects) {
-        csv.writeln(toStringAsSeparatedValues(declarations, item, valueSeparator, forSerialization));
+        csv.writeln(
+          toStringAsSeparatedValues(
+            declarations,
+            item,
+            valueSeparator,
+            forSerialization,
+          ),
+        );
       }
     }
 
@@ -373,13 +388,17 @@ class MoneyObjects<T> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(moneyObject.getRepresentation(), style: const TextStyle(fontWeight: FontWeight.w700)),
+                Text(
+                  moneyObject.getRepresentation(),
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
                 Opacity(
-                    opacity: 0.5,
-                    child: SelectableText(
-                      moneyObject.uniqueId.toString(),
-                      style: const TextStyle(fontSize: 8),
-                    )),
+                  opacity: 0.5,
+                  child: SelectableText(
+                    moneyObject.uniqueId.toString(),
+                    style: const TextStyle(fontSize: 8),
+                  ),
+                ),
               ],
             ),
             gapSmall(),
@@ -399,16 +418,25 @@ class MoneyObjects<T> {
   }
 
   void mutationUpdateItem(final MoneyObject item) {
-    Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: item);
+    Data().notifyMutationChanged(
+      mutation: MutationType.changed,
+      moneyObject: item,
+    );
   }
 
   /// Remove/tag a Transaction instance from the list in memory
   void deleteItem(final MoneyObject itemToDelete) {
-    Data().notifyMutationChanged(mutation: MutationType.deleted, moneyObject: itemToDelete);
+    Data().notifyMutationChanged(
+      mutation: MutationType.deleted,
+      moneyObject: itemToDelete,
+    );
   }
 }
 
-MoneyObject? findObjectById(final int? uniqueId, final List<MoneyObject> listToSearch) {
+MoneyObject? findObjectById(
+  final int? uniqueId,
+  final List<MoneyObject> listToSearch,
+) {
   if (uniqueId == null) {
     return null;
   }

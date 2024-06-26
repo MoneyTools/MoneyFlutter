@@ -23,9 +23,20 @@ class Aliases extends MoneyObjects<Alias> {
   @override
   void loadDemoData() {
     clear();
-    appendNewMoneyObject(Alias(id: -1, payeeId: 2, pattern: 'ABC', flags: AliasType.none.index));
-    appendNewMoneyObject(Alias(id: -1, payeeId: 2, pattern: 'abc', flags: AliasType.none.index));
-    appendNewMoneyObject(Alias(id: -1, payeeId: 3, pattern: '.*starbucks.*', flags: AliasType.regex.index));
+    appendNewMoneyObject(
+      Alias(id: -1, payeeId: 2, pattern: 'ABC', flags: AliasType.none.index),
+    );
+    appendNewMoneyObject(
+      Alias(id: -1, payeeId: 2, pattern: 'abc', flags: AliasType.none.index),
+    );
+    appendNewMoneyObject(
+      Alias(
+        id: -1,
+        payeeId: 3,
+        pattern: '.*starbucks.*',
+        flags: AliasType.regex.index,
+      ),
+    );
   }
 
   @override
@@ -43,7 +54,10 @@ class Aliases extends MoneyObjects<Alias> {
     return aliasFound.payeeInstance;
   }
 
-  Payee? findOrCreateNewPayee(final String text, {bool fireNotification = true}) {
+  Payee? findOrCreateNewPayee(
+    final String text, {
+    bool fireNotification = true,
+  }) {
     Payee? payee = findByMatch(text);
     payee ??= Data().payees.findOrAddPayee(text, fireNotification: fireNotification);
     return payee;
@@ -59,7 +73,10 @@ class Aliases extends MoneyObjects<Alias> {
   }
 
   /// Attempt to find a Payee match by text, if failed adds a new Payee
-  int getPayeeIdFromTextMatchingOrAdd(final String text, {bool fireNotification = true}) {
+  int getPayeeIdFromTextMatchingOrAdd(
+    final String text, {
+    bool fireNotification = true,
+  }) {
     int id = getPayeeIdFromTextMatching(text);
     if (id == -1) {
       id = Data().payees.findOrAddPayee(text, fireNotification: fireNotification).uniqueId;

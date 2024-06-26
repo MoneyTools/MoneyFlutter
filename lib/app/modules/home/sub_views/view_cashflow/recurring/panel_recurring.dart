@@ -10,7 +10,6 @@ import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurri
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
 
 class PanelRecurrings extends StatefulWidget {
-
   const PanelRecurrings({
     super.key,
     required this.dateRangeSearch,
@@ -43,19 +42,20 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     return Container(
       color: getColorTheme(context).surface,
       child: ListView.builder(
-          padding: const EdgeInsets.all(21),
-          itemCount: recurringPayments.length,
-          itemBuilder: (context, index) {
-            // build the Card UI
-            final payment = recurringPayments[index];
-            return RecurringCard(
-              index: index + 1,
-              dateRangeSearch: widget.dateRangeSearch,
-              dateRangeSelected: DateRange.fromStarEndYears(widget.minYear, widget.maxYear),
-              payment: payment,
-              forIncomeTransaction: forIncomeTransaction,
-            );
-          }),
+        padding: const EdgeInsets.all(21),
+        itemCount: recurringPayments.length,
+        itemBuilder: (context, index) {
+          // build the Card UI
+          final payment = recurringPayments[index];
+          return RecurringCard(
+            index: index + 1,
+            dateRangeSearch: widget.dateRangeSearch,
+            dateRangeSelected: DateRange.fromStarEndYears(widget.minYear, widget.maxYear),
+            payment: payment,
+            forIncomeTransaction: forIncomeTransaction,
+          );
+        },
+      ),
     );
   }
 
@@ -92,7 +92,10 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     );
   }
 
-  void findMonthlyRecurringPayments(List<Transaction> transactions, bool isIncomeTransaction) {
+  void findMonthlyRecurringPayments(
+    List<Transaction> transactions,
+    bool isIncomeTransaction,
+  ) {
     // reset the content
     recurringPayments.clear();
 
@@ -100,13 +103,18 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     AccumulatorList<int, int> groupMonthsListByPayeeId = AccumulatorList<int, int>();
 
     // Step 1: Group transactions by payeeId and record transaction months
-    for (final transaction in transactions.where((final t) =>
-        (isIncomeTransaction && t.amount.value.toDouble() > 0) ||
-        (isIncomeTransaction == false && t.amount.value.toDouble() <= 0))) {
+    for (final transaction in transactions.where(
+      (final t) =>
+          (isIncomeTransaction && t.amount.value.toDouble() > 0) ||
+          (isIncomeTransaction == false && t.amount.value.toDouble() <= 0),
+    )) {
       int payeeId = transaction.payee.value;
 
       groupTransactionsByPayeeId.cumulate(payeeId, transaction);
-      groupMonthsListByPayeeId.cumulate(payeeId, transaction.dateTime.value!.month);
+      groupMonthsListByPayeeId.cumulate(
+        payeeId,
+        transaction.dateTime.value!.month,
+      );
     }
 
     // Step 2: Calculate average amount and frequency for each payeeId

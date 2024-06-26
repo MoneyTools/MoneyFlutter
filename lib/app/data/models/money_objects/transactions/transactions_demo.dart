@@ -17,7 +17,9 @@ extension TransactionsDemoData on Transactions {
 
   List<DateTime> generateRandomDates(int count) {
     final now = DateTime.now();
-    final tenYearsAgo = now.subtract(const Duration(days: 365 * 10)); // Adjust for leap years if needed
+    final tenYearsAgo = now.subtract(
+      const Duration(days: 365 * 10),
+    ); // Adjust for leap years if needed
 
     final random = Random();
     final dates = List<DateTime>.generate(count, (index) {

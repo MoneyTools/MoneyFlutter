@@ -22,14 +22,13 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/lis
 export 'package:money/app/data/models/money_objects/categories/category_types.dart';
 
 class Category extends MoneyObject {
-
   Category({
     required final int id,
-    final int parentId = -1,
     required final String name,
+    required final CategoryType type,
+    final int parentId = -1,
     final String description = '',
     final String color = '',
-    required final CategoryType type,
     final double budget = 0,
     final double budgetBalance = 0,
     final int frequency = 0,
@@ -151,8 +150,11 @@ class Category extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Category).name.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Category).name.value = value,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByString((a as Category).name.value, (b as Category).name.value, ascending),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Category).name.value,
+      (b as Category).name.value,
+      ascending,
+    ),
   );
 
   /// Description
@@ -211,15 +213,20 @@ class Category extends MoneyObject {
         colorAsHex: (instance as Category).color.value,
         onEdited: (String newValue) {
           instance.color.value = newValue;
-          Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: instance, fireNotification: false);
+          Data().notifyMutationChanged(
+            mutation: MutationType.changed,
+            moneyObject: instance,
+            fireNotification: false,
+          );
           onEdited();
         },
       );
     },
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-        (a as Category).getColorOrAncestorsColor().computeLuminance(),
-        (b as Category).getColorOrAncestorsColor().computeLuminance(),
-        ascending),
+      (a as Category).getColorOrAncestorsColor().computeLuminance(),
+      (b as Category).getColorOrAncestorsColor().computeLuminance(),
+      ascending,
+    ),
   );
 
   /// Budget
@@ -343,7 +350,10 @@ class Category extends MoneyObject {
   }
 
   Widget getRectangleWidget() {
-    return MyRectangle(colorFill: getColorFromString(this.color.value), size: 12);
+    return MyRectangle(
+      colorFill: getColorFromString(this.color.value),
+      size: 12,
+    );
   }
 
   // Fields for this instance
@@ -441,9 +451,9 @@ class Category extends MoneyObject {
 
 class MutateFieldColor extends StatefulWidget {
   const MutateFieldColor({
-    super.key,
     required this.colorAsHex,
     required this.onEdited,
+    super.key,
   });
 
   final String colorAsHex;

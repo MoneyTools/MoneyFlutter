@@ -7,7 +7,6 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class YearRangeSlider extends StatefulWidget {
-
   YearRangeSlider({
     super.key,
     required this.minYear,
@@ -113,7 +112,10 @@ class YearRangeSliderState extends State<YearRangeSlider> {
     _dragButtonPosition = selectedYearPositionInPixel - (_dragButtonWidth / 2);
     // clamp position
     // do not go beyond the right side
-    _dragButtonPosition = min(_dragButtonPosition, horizontalMaxWidth - _dragButtonWidth - sliderEdgePadding);
+    _dragButtonPosition = min(
+      _dragButtonPosition,
+      horizontalMaxWidth - _dragButtonWidth - sliderEdgePadding,
+    );
     // left side starts after the space allocated for the left slider
     _dragButtonPosition = max(_dragButtonPosition, sliderEdgePadding);
   }
@@ -138,9 +140,27 @@ class YearRangeSliderState extends State<YearRangeSlider> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(_minYear.toString(), style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
-            Text(spanAsText, style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
-            Text(_maxYear.toString(), style: TextStyle(fontSize: 12, color: getColorTheme(context).onPrimary)),
+            Text(
+              _minYear.toString(),
+              style: TextStyle(
+                fontSize: 12,
+                color: getColorTheme(context).onPrimary,
+              ),
+            ),
+            Text(
+              spanAsText,
+              style: TextStyle(
+                fontSize: 12,
+                color: getColorTheme(context).onPrimary,
+              ),
+            ),
+            Text(
+              _maxYear.toString(),
+              style: TextStyle(
+                fontSize: 12,
+                color: getColorTheme(context).onPrimary,
+              ),
+            ),
           ],
         ),
       ),

@@ -37,9 +37,8 @@ class ColorPalette extends StatelessWidget {
   const ColorPalette({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(final BuildContext context) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const Divider(),
         const Text('Helper for debugging'),
@@ -158,10 +157,16 @@ class ColorPalette extends StatelessWidget {
                         ),
                       ),
                       gapSmall(),
-                      Text(colorNameForeground, style: getTextTheme(context).bodyMedium!.copyWith(color: foreground)),
+                      Text(
+                        colorNameForeground,
+                        style: getTextTheme(context).bodyMedium!.copyWith(color: foreground),
+                      ),
                     ],
                   ),
-                  Text(colorNameBackground, style: getTextTheme(context).bodyMedium!.copyWith(color: foreground)),
+                  Text(
+                    colorNameBackground,
+                    style: getTextTheme(context).bodyMedium!.copyWith(color: foreground),
+                  ),
                 ],
               ),
             ),

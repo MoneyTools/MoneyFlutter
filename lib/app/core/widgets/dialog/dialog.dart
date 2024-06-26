@@ -5,13 +5,12 @@ import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
 
 class MyAlertDialog extends StatelessWidget {
-
   const MyAlertDialog({
     super.key,
     required this.title,
+    required this.child,
     this.icon,
     this.actions,
-    required this.child,
     this.scrollable = false,
   });
   final String title;
@@ -87,15 +86,16 @@ void adaptiveScreenSizeDialog({
     }
 
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (final BuildContext context) {
-          return MyAlertDialog(
-            title: title,
-            scrollable: true,
-            actions: actionButtons,
-            child: child,
-          );
-        });
+      context: context,
+      barrierDismissible: false,
+      builder: (final BuildContext context) {
+        return MyAlertDialog(
+          title: title,
+          scrollable: true,
+          actions: actionButtons,
+          child: child,
+        );
+      },
+    );
   }
 }

@@ -17,7 +17,6 @@ import 'package:money/app/data/storage/data/data.dart';
   5    CultureCode  nvarchar(80)  0                 0 
  */
 class Currency extends MoneyObject {
-
   Currency({
     required final int id, // 0
     required final String symbol, // 1
@@ -350,6 +349,9 @@ class Currency extends MoneyObject {
       return amount; // its already a string
     }
 
-    return getAmountAsShorthandText(amount, symbol: getCurrencySymbol(iso4217code));
+    return getAmountAsShorthandText(
+      amount,
+      symbol: getCurrencySymbol(iso4217code),
+    );
   }
 }

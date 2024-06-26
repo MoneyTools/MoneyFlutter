@@ -8,7 +8,6 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 class LoanPayment extends MoneyObject {
-
   LoanPayment({
     required final int id,
     required final int accountId,

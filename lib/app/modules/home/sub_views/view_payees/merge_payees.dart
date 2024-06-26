@@ -33,9 +33,9 @@ void showMergePayee(
 
 class MergeTransactionsDialog extends StatefulWidget {
   const MergeTransactionsDialog({
-    super.key,
     required this.currentPayee,
     required this.transactions,
+    super.key,
   });
 
   final Payee currentPayee;
@@ -141,45 +141,47 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
 
       final categoryName = Data().categories.getNameFromId(categoryId).trim();
       if (categoryName.isNotEmpty) {
-        radioButtonChoices.add(ListTile(
-          leading: Radio<int?>(
-            value: categoryId,
-            groupValue: _estimatedCategory,
-            onChanged: (int? value) {
-              setState(() {
-                _estimatedCategory = value;
-              });
-            },
-          ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                'or change to category',
-                style: getTextTheme(context).bodySmall,
-              ),
-              gapMedium(),
-              Expanded(
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Badge(
-                    textColor: getColorTheme(context).onPrimaryContainer,
-                    backgroundColor: getColorTheme(context).primaryContainer,
-                    label: Text(getIntAsText(categoryCounts)),
-                    child: Box(
-                      child: Text(
-                        Data().categories.getNameFromId(categoryId),
-                        maxLines: 1,
-                        // overflow: TextOverflow.clip, // Clip the overflow text
-                        softWrap: false,
+        radioButtonChoices.add(
+          ListTile(
+            leading: Radio<int?>(
+              value: categoryId,
+              groupValue: _estimatedCategory,
+              onChanged: (int? value) {
+                setState(() {
+                  _estimatedCategory = value;
+                });
+              },
+            ),
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  'or change to category',
+                  style: getTextTheme(context).bodySmall,
+                ),
+                gapMedium(),
+                Expanded(
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Badge(
+                      textColor: getColorTheme(context).onPrimaryContainer,
+                      backgroundColor: getColorTheme(context).primaryContainer,
+                      label: Text(getIntAsText(categoryCounts)),
+                      child: Box(
+                        child: Text(
+                          Data().categories.getNameFromId(categoryId),
+                          maxLines: 1,
+                          // overflow: TextOverflow.clip, // Clip the overflow text
+                          softWrap: false,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ));
+        );
       }
     }
 

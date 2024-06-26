@@ -10,7 +10,6 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/lis
 export 'package:money/app/data/models/money_objects/aliases/alias_types.dart';
 
 class Alias extends MoneyObject {
-
   Alias({
     required final int id,
     required final String pattern,

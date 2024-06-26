@@ -20,7 +20,9 @@ class Transactions extends MoneyObjects<Transaction> {
     collectionName = 'Transactions';
   }
 
-  List<Transaction> getListFlattenSplits({final bool Function(Transaction)? whereClause}) {
+  List<Transaction> getListFlattenSplits({
+    final bool Function(Transaction)? whereClause,
+  }) {
     List<Transaction> flattenList = [];
     for (final t in iterableList()) {
       if (whereClause == null || whereClause(t)) {
@@ -49,14 +51,18 @@ class Transactions extends MoneyObjects<Transaction> {
     required final int maxYear,
     required final bool? incomesOrExpenses,
   }) {
-    return iterableList(includeDeleted: true).where((element) =>
-        isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
-        ((incomesOrExpenses == null ||
-            (incomesOrExpenses == true && element.amount.value.toDouble() > 0) ||
-            (incomesOrExpenses == false && element.amount.value.toDouble() < 0))));
+    return iterableList(includeDeleted: true).where(
+      (element) =>
+          isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
+          ((incomesOrExpenses == null ||
+              (incomesOrExpenses == true && element.amount.value.toDouble() > 0) ||
+              (incomesOrExpenses == false && element.amount.value.toDouble() < 0))),
+    );
   }
 
-  static List<Transaction> flatTransactions(final Iterable<Transaction> transactions) {
+  static List<Transaction> flatTransactions(
+    final Iterable<Transaction> transactions,
+  ) {
     List<Transaction> flatList = [];
     for (final t in transactions) {
       if (t.isSplit) {
@@ -166,7 +172,8 @@ class Transactions extends MoneyObjects<Transaction> {
         // check for error
         if (transactionRelated == null) {
           debugLog(
-              'Transaction.transferID of ${transactionSource.uniqueId} missing related transaction id $transferId');
+            'Transaction.transferID of ${transactionSource.uniqueId} missing related transaction id $transferId',
+          );
           continue;
         }
 
@@ -176,14 +183,22 @@ class Transactions extends MoneyObjects<Transaction> {
           // ignore: prefer_conditional_assignment
           if (transactionSource.transferInstance == null) {
             // cache the transfer
-            transactionSource.transferInstance =
-                Transfer(id: 0, source: transactionSource, related: transactionRelated, isOrphan: false);
+            transactionSource.transferInstance = Transfer(
+              id: 0,
+              source: transactionSource,
+              related: transactionRelated,
+              isOrphan: false,
+            );
           }
           // ignore: prefer_conditional_assignment
           if (transactionRelated.transferInstance == null) {
             // cache the transfer
-            transactionRelated.transferInstance =
-                Transfer(id: 0, source: transactionRelated, related: transactionSource, isOrphan: false);
+            transactionRelated.transferInstance = Transfer(
+              id: 0,
+              source: transactionRelated,
+              related: transactionSource,
+              isOrphan: false,
+            );
           }
           continue;
         }

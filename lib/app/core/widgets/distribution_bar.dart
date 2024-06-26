@@ -6,7 +6,6 @@ import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/data/models/money_model.dart';
 
 class Distribution {
-
   Distribution({
     required this.title,
     required this.amount,
@@ -19,15 +18,17 @@ class Distribution {
 }
 
 class DistributionBar extends StatelessWidget {
-
-  DistributionBar({super.key, required this.segments});
+  DistributionBar({required this.segments, super.key});
   final List<Distribution> segments;
   final List<Widget> segmentWidgets = [];
   final List<Widget> detailRowWidgets = [];
 
   @override
   Widget build(BuildContext context) {
-    double sum = segments.fold(0, (previousValue, element) => previousValue + element.amount.abs());
+    double sum = segments.fold(
+      0,
+      (previousValue, element) => previousValue + element.amount.abs(),
+    );
     if (sum > 0) {
       for (final segment in segments) {
         segment.percentage = segment.amount.abs() / sum;
@@ -68,18 +69,23 @@ class DistributionBar extends StatelessWidget {
               alignment: Alignment.center,
               color: backgroundColorOfSegment,
               margin: EdgeInsets.only(right: segment == segments.last ? 0.0 : 1.0),
-              child: _builtSegmentOverlayText(segment.percentage, foregroundColorOfSegment),
+              child: _builtSegmentOverlayText(
+                segment.percentage,
+                foregroundColorOfSegment,
+              ),
             ),
           ),
         ),
       );
 
-      detailRowWidgets.add(_buildDetailRow(
-        context,
-        segment.title,
-        MyCircle(colorFill: segment.color, size: 16),
-        segment.amount,
-      ));
+      detailRowWidgets.add(
+        _buildDetailRow(
+          context,
+          segment.title,
+          MyCircle(colorFill: segment.color, size: 16),
+          segment.amount,
+        ),
+      );
     }
   }
 
@@ -128,21 +134,23 @@ class DistributionBar extends StatelessWidget {
         colorWidget,
         gapSmall(),
         Expanded(
-            flex: 2,
-            child: Text(
-              label,
-              style: getTextTheme(context).labelMedium,
-              textAlign: TextAlign.justify,
-              textWidthBasis: TextWidthBasis.longestLine,
-              softWrap: false,
-            )),
-        Expanded(
-            child: MoneyWidget(
-          amountModel: MoneyModel(
-            amount: value,
+          flex: 2,
+          child: Text(
+            label,
+            style: getTextTheme(context).labelMedium,
+            textAlign: TextAlign.justify,
+            textWidthBasis: TextWidthBasis.longestLine,
+            softWrap: false,
           ),
-          asTile: false,
-        )),
+        ),
+        Expanded(
+          child: MoneyWidget(
+            amountModel: MoneyModel(
+              amount: value,
+            ),
+            asTile: false,
+          ),
+        ),
       ],
     );
   }

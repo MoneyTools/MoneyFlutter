@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class RevealContent extends StatefulWidget {
-
   const RevealContent({
-    super.key,
     required this.widgets,
+    super.key,
     this.textForClipboard = '',
   });
   final List<Widget> widgets;

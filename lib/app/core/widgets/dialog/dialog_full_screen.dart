@@ -4,8 +4,11 @@ import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
 ///
 class FullScreenDialog extends StatefulWidget {
-
-  const FullScreenDialog({super.key, required this.title, required this.content});
+  const FullScreenDialog({
+    required this.title,
+    required this.content,
+    super.key,
+  });
   final String title;
   final Widget content;
 
@@ -27,7 +30,6 @@ class FullScreenDialogState extends State<FullScreenDialog> {
 }
 
 class AutoSizeDialog extends StatelessWidget {
-
   const AutoSizeDialog({super.key, required this.child});
   final Widget child;
 

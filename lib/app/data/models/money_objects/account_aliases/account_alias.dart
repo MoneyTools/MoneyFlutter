@@ -10,7 +10,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
  */
 class AccountAlias extends MoneyObject {
-
   /// Constructor
   AccountAlias() {
     // body

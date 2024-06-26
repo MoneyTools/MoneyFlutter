@@ -3,11 +3,10 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
 class PickerEditBoxDate extends StatefulWidget {
-
   const PickerEditBoxDate({
+    required this.onChanged,
     super.key,
     this.initialValue,
-    required this.onChanged,
   });
   final String? initialValue;
   final Function(String) onChanged;
@@ -22,7 +21,7 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
   @override
   void initState() {
     super.initState();
-    _textController.text = widget.initialValue ?? "";
+    _textController.text = widget.initialValue ?? '';
   }
 
   @override
@@ -47,8 +46,10 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
         ),
         IconButton(
           onPressed: () async {
-            DateTime dateSelected = dateValueOrDefault(attemptToGetDateFromText(widget.initialValue ?? ''),
-                defaultValueIfNull: DateTime.now());
+            DateTime dateSelected = dateValueOrDefault(
+              attemptToGetDateFromText(widget.initialValue ?? ''),
+              defaultValueIfNull: DateTime.now(),
+            );
             final DateTime? pickedDate = await showDatePicker(
               context: context,
               initialDate: dateSelected,
@@ -61,7 +62,7 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
             }
           },
           icon: const Icon(Icons.arrow_drop_down),
-        )
+        ),
       ],
     );
   }

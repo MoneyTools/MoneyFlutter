@@ -28,7 +28,6 @@ export 'package:money/app/data/models/money_objects/transactions/transaction_typ
 /// Main source of information for this App
 /// All transactions are loaded in this class [Transaction] and [Split]
 class Transaction extends MoneyObject {
-
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
   }) {
@@ -205,8 +204,11 @@ class Transaction extends MoneyObject {
     type: FieldType.text,
     align: TextAlign.left,
     columnWidth: ColumnWidth.largest,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByString((a as Transaction).payeeName, (b as Transaction).payeeName, ascending),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Transaction).payeeName,
+      (b as Transaction).payeeName,
+      ascending,
+    ),
     getValueForDisplay: (final MoneyObject instance) {
       return (instance as Transaction).getPayeeOrTransferCaption();
     },
@@ -232,7 +234,11 @@ class Transaction extends MoneyObject {
           payee: Data().payees.get(instance.payee.value),
           account: instance.transferInstance?.getReceiverAccount(),
           amount: instance.amount.value.toDouble(),
-          onSelected: (TransactionFlavor choice, Payee? selectedPayee, Account? account) {
+          onSelected: (
+            TransactionFlavor choice,
+            Payee? selectedPayee,
+            Account? account,
+          ) {
             switch (choice) {
               case TransactionFlavor.payee:
                 if (selectedPayee != null) {
@@ -268,29 +274,30 @@ class Transaction extends MoneyObject {
   /// Category Id
   /// SQLite 6|Category|INT|0||0
   Field<int> categoryId = Field<int>(
-      importance: 10,
-      type: FieldType.text,
-      columnWidth: ColumnWidth.large,
-      name: 'Category',
-      serializeName: 'Category',
-      defaultValue: -1,
-      getValueForDisplay: (final MoneyObject instance) =>
-          Data().categories.getNameFromId((instance as Transaction).categoryId.value),
-      getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
-      setValue: (final MoneyObject instance, dynamic newValue) =>
-          (instance as Transaction).categoryId.value = newValue as int,
-      getEditWidget: (final MoneyObject instance, Function onEdited) {
-        return pickerCategory(
-          itemSelected: Data().categories.get((instance as Transaction).categoryId.value),
-          onSelected: (Category? newCategory) {
-            if (newCategory != null) {
-              instance.categoryId.value = newCategory.uniqueId;
-              // notify container
-              onEdited();
-            }
-          },
-        );
-      });
+    importance: 10,
+    type: FieldType.text,
+    columnWidth: ColumnWidth.large,
+    name: 'Category',
+    serializeName: 'Category',
+    defaultValue: -1,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Transaction).categoryId.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).categoryId.value = newValue as int,
+    getEditWidget: (final MoneyObject instance, Function onEdited) {
+      return pickerCategory(
+        itemSelected: Data().categories.get((instance as Transaction).categoryId.value),
+        onSelected: (Category? newCategory) {
+          if (newCategory != null) {
+            instance.categoryId.value = newCategory.uniqueId;
+            // notify container
+            onEdited();
+          }
+        },
+      );
+    },
+  );
 
   /// Memo
   /// 7|Memo|nvarchar(255)|0||0
@@ -321,10 +328,12 @@ class Transaction extends MoneyObject {
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).reconciledDate.value),
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).reconciledDate.value),
+    getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).reconciledDate.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).reconciledDate.value,
+    ),
   );
 
   /// Budget Balance Date
@@ -334,10 +343,12 @@ class Transaction extends MoneyObject {
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).budgetBalanceDate.value),
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).budgetBalanceDate.value),
+    getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).budgetBalanceDate.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).budgetBalanceDate.value,
+    ),
   );
 
   /// Transfer
@@ -386,8 +397,11 @@ class Transaction extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.toDouble(),
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).amount.value.setAmount(newValue),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).amount.value.toDouble(), (b as Transaction).amount.value.toDouble(), ascending),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).amount.value.toDouble(),
+      (b as Transaction).amount.value.toDouble(),
+      ascending,
+    ),
   );
 
   /// Sales Tax
@@ -400,7 +414,10 @@ class Transaction extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.toDouble(),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-        (a as Transaction).salesTax.value.toDouble(), (b as Transaction).salesTax.value.toDouble(), ascending),
+      (a as Transaction).salesTax.value.toDouble(),
+      (b as Transaction).salesTax.value.toDouble(),
+      ascending,
+    ),
   );
 
   /// Transfer Split
@@ -440,10 +457,14 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-        amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.toDouble()),
-        iso4217: Constants.defaultCurrency),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).amount.value.toDouble(), (b as Transaction).amount.value.toDouble(), ascending),
+      amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.toDouble()),
+      iso4217: Constants.defaultCurrency,
+    ),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).amount.value.toDouble(),
+      (b as Transaction).amount.value.toDouble(),
+      ascending,
+    ),
   );
 
   /// Balance native
@@ -472,8 +493,11 @@ class Transaction extends MoneyObject {
       amount: (instance as Transaction).getNormalizedAmount((instance).balance),
       iso4217: Constants.defaultCurrency,
     ),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByValue((a as Transaction).balance, (b as Transaction).balance, ascending),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).balance,
+      (b as Transaction).balance,
+      ascending,
+    ),
   );
 
   ///------------------------------------------------------
@@ -494,7 +518,7 @@ class Transaction extends MoneyObject {
     if (getAccount() != null) {
       return getAccount()!.name.value;
     }
-    return "???";
+    return '???';
   }
 
   FieldString currency = FieldString(
@@ -504,7 +528,9 @@ class Transaction extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) {
-      return Currency.buildCurrencyWidget((instance as Transaction).getCurrency());
+      return Currency.buildCurrencyWidget(
+        (instance as Transaction).getCurrency(),
+      );
     },
   );
 

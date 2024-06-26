@@ -3,11 +3,10 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class MyBanner extends StatelessWidget {
-
   const MyBanner({
-    super.key,
     required this.child,
     required this.on,
+    super.key,
   });
   final Widget child;
   final bool on;
@@ -24,7 +23,10 @@ class MyBanner extends StatelessWidget {
             angle: -5 * pi / 180, // Convert degrees to radians
             child: Container(
               color: Colors.grey,
-              child: const Text(' Skipping Duplicate ', style: TextStyle(color: Colors.black, fontSize: 10)),
+              child: const Text(
+                ' Skipping Duplicate ',
+                style: TextStyle(color: Colors.black, fontSize: 10),
+              ),
             ),
           ),
       ],

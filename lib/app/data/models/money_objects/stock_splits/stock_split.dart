@@ -12,7 +12,6 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
  */
 
 class StockSplit extends MoneyObject {
-
   StockSplit({
     required this.date,
     required this.security,

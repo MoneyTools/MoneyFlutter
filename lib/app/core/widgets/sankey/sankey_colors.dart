@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 class SankeyColors {
-
   SankeyColors({required bool darkTheme}) {
     if (darkTheme) {
       textColor = const Color(0xffffffff);

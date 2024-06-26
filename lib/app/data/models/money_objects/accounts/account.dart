@@ -20,7 +20,6 @@ export 'package:money/app/data/models/money_objects/accounts/account_types.dart'
 
 /// Accounts like Banks
 class Account extends MoneyObject {
-
   /// Constructor
   Account() {
     buildFieldsAsWidgetForSmallScreen = () {
@@ -34,7 +33,12 @@ class Account extends MoneyObject {
           message: ratioCurrency.toString(),
           child: Row(
             children: [
-              Text(Currency.getAmountAsStringUsingCurrency(balance / ratioCurrency, iso4217code: currency.value)),
+              Text(
+                Currency.getAmountAsStringUsingCurrency(
+                  balance / ratioCurrency,
+                  iso4217code: currency.value,
+                ),
+              ),
               const SizedBox(width: 4),
               Currency.buildCurrencyWidget(currency.value),
             ],
@@ -43,10 +47,11 @@ class Account extends MoneyObject {
       }
 
       return MyListItemAsCard(
-          leftTopAsString: name.value,
-          leftBottomAsString: getTypeAsText(type.value),
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
-          rightBottomAsWidget: originalCurrencyAndValue);
+        leftTopAsString: name.value,
+        leftBottomAsString: getTypeAsText(type.value),
+        rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
+        rightBottomAsWidget: originalCurrencyAndValue,
+      );
     };
   }
 
@@ -97,7 +102,7 @@ class Account extends MoneyObject {
         tmp.balanceNative,
         tmp.currency,
         tmp.balanceNormalized,
-        tmp.isAccountOpen
+        tmp.isAccountOpen,
       ]);
     }
     return _fields;
@@ -158,8 +163,11 @@ class Account extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Account).name.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).name.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).name.value = value as String,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByString((a as Account).name.value, (b as Account).name.value, ascending),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Account).name.value,
+      (b as Account).name.value,
+      ascending,
+    ),
   );
 
   // Description
@@ -219,12 +227,16 @@ class Account extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     type: FieldType.widget,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Currency.buildCurrencyWidget((instance as Account).getAccountCurrencyAsText()),
+    getValueForDisplay: (final MoneyObject instance) => Currency.buildCurrencyWidget(
+      (instance as Account).getAccountCurrencyAsText(),
+    ),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).getAccountCurrencyAsText(),
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).currency.value = value as String,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByString((a as Account).getAccountCurrencyAsText(), (b as Account).getAccountCurrencyAsText(), ascending),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Account).getAccountCurrencyAsText(),
+      (b as Account).getAccountCurrencyAsText(),
+      ascending,
+    ),
   );
 
   String getAccountCurrencyAsText() {
@@ -355,20 +367,26 @@ class Account extends MoneyObject {
     name: 'BalanceN',
     getValueForDisplay: (final MoneyObject instance) {
       final accountInstance = instance as Account;
-      return MoneyModel(amount: accountInstance.balance, iso4217: accountInstance.getAccountCurrencyAsText());
+      return MoneyModel(
+        amount: accountInstance.balance,
+        iso4217: accountInstance.getAccountCurrencyAsText(),
+      );
     },
   );
 
   /// Balance Normalized use in the List view
   FieldMoney balanceNormalized = FieldMoney(
-      importance: 99,
-      name: 'Balance(USD)',
-      useAsDetailPanels: defaultCallbackValueFalse,
-      getValueForDisplay: (final MoneyObject instance) {
-        final accountInstance = instance as Account;
-        return MoneyModel(
-            amount: accountInstance.getCurrencyRatio() * accountInstance.balance, iso4217: Constants.defaultCurrency);
-      });
+    importance: 99,
+    name: 'Balance(USD)',
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForDisplay: (final MoneyObject instance) {
+      final accountInstance = instance as Account;
+      return MoneyModel(
+        amount: accountInstance.getCurrencyRatio() * accountInstance.balance,
+        iso4217: Constants.defaultCurrency,
+      );
+    },
+  );
 
   Field<bool> isAccountOpen = Field<bool>(
     name: 'Account is open',
@@ -379,7 +397,10 @@ class Account extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => !(instance as Account).isClosed(),
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Account).isOpen = value as bool;
-      Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: instance);
+      Data().notifyMutationChanged(
+        mutation: MutationType.changed,
+        moneyObject: instance,
+      );
     },
   );
 

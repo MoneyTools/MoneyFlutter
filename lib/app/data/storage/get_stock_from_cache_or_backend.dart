@@ -10,7 +10,6 @@ import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class StockPrice {
-
   /// Constructor
   const StockPrice({required this.date, required this.price});
   final DateTime date;
@@ -19,7 +18,10 @@ class StockPrice {
 
 const flagAsInvalidSymbol = 'invalid-symbol';
 
-Future<StockLookupStatus> getFromCacheOrBackend(String symbol, List<StockPrice> prices) async {
+Future<StockLookupStatus> getFromCacheOrBackend(
+  String symbol,
+  List<StockPrice> prices,
+) async {
   symbol = symbol.toLowerCase();
 
   prices.clear();
@@ -50,7 +52,10 @@ enum StockLookupStatus {
   invalidApiKey,
 }
 
-Future<StockLookupStatus> loadFromCache(final String symbol, List<StockPrice> prices) async {
+Future<StockLookupStatus> loadFromCache(
+  final String symbol,
+  List<StockPrice> prices,
+) async {
   final String mainFilenameStockSymbol = await fullPathToCacheStockFile(symbol);
 
   String? csvContent;
@@ -73,7 +78,10 @@ Future<StockLookupStatus> loadFromCache(final String symbol, List<StockPrice> pr
       } else {
         final List<String> twoColumns = csvLines[row].split(',');
         if (twoColumns.length == 2) {
-          final StockPrice sp = StockPrice(date: DateTime.parse(twoColumns[0]), price: double.parse(twoColumns[1]));
+          final StockPrice sp = StockPrice(
+            date: DateTime.parse(twoColumns[0]),
+            price: double.parse(twoColumns[1]),
+          );
           prices.add(sp);
         }
       }
@@ -83,7 +91,10 @@ Future<StockLookupStatus> loadFromCache(final String symbol, List<StockPrice> pr
   return StockLookupStatus.notFoundInCache;
 }
 
-Future<StockLookupStatus> loadFromBackend(String symbol, List<StockPrice> prices) async {
+Future<StockLookupStatus> loadFromBackend(
+  String symbol,
+  List<StockPrice> prices,
+) async {
   prices.clear();
 
   if (PreferenceController.to.apiKeyForStocks.value.isEmpty) {
@@ -94,7 +105,8 @@ Future<StockLookupStatus> loadFromBackend(String symbol, List<StockPrice> prices
   DateTime tenYearsInThePast = DateTime.now().subtract(const Duration(days: 365 * 10));
 
   final Uri uri = Uri.parse(
-      'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${tenYearsInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks.value}');
+    'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${tenYearsInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks.value}',
+  );
 
   final http.Response response = await http.get(uri);
 

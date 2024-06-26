@@ -8,7 +8,9 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
   }) {
     final List<PairXY> list = <PairXY>[];
     for (final Investment entry in getList()) {
-      list.add(PairXY(entry.security.value.toString(), entry.originalCostBasis));
+      list.add(
+        PairXY(entry.security.value.toString(), entry.originalCostBasis),
+      );
     }
 
     return Chart(

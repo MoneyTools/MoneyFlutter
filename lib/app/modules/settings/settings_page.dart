@@ -11,7 +11,6 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
 class SettingsPage extends GetView<GetxController> {
-
   const SettingsPage({super.key});
   static SettingsPage get to => Get.find();
 
@@ -29,7 +28,9 @@ class SettingsPage extends GetView<GetxController> {
             children: [
               SwitchListTile(
                 title: const Text('Rental'),
-                subtitle: const Text('Manage the expenses and rental income of properties.'),
+                subtitle: const Text(
+                  'Manage the expenses and rental income of properties.',
+                ),
                 value: PreferenceController.to.includeRentalManagement,
                 onChanged: (bool value) {
                   PreferenceController.to.includeRentalManagement = !PreferenceController.to.includeRentalManagement;

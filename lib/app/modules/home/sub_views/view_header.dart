@@ -7,13 +7,12 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/mul
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
 
 class ViewHeader extends StatelessWidget {
-
   const ViewHeader({
-    super.key,
     required this.title,
     required this.itemCount,
     required this.selectedItems,
     required this.description,
+    super.key,
 
     // filter text
     this.filterText = '',
@@ -55,7 +54,12 @@ class ViewHeader extends StatelessWidget {
   Widget build(final BuildContext context) {
     return ValueListenableBuilder<List<int>>(
       valueListenable: selectedItems,
-      builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _ /*widget*/) {
+      builder: (
+        final BuildContext context,
+        final List<int> listOfSelectedItemIndex,
+        final _,
+        /*widget*/
+      ) {
         return buildViewHeaderContainer(
           context,
           _buildContent(context),
@@ -64,15 +68,19 @@ class ViewHeader extends StatelessWidget {
     );
   }
 
-  static Container buildViewHeaderContainer(final BuildContext context, final Widget child) {
+  static Container buildViewHeaderContainer(
+    final BuildContext context,
+    final Widget child,
+  ) {
     return Container(
-        padding: const EdgeInsets.all(8),
-        decoration: BoxDecoration(
-          color: getColorTheme(context).surfaceContainer,
-          // border: Border.all(color: getColorTheme(context).primary),
-          // borderRadius: const BorderRadius.all(Radius.circular(8)),
-        ),
-        child: child);
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: getColorTheme(context).surfaceContainer,
+        // border: Border.all(color: getColorTheme(context).primary),
+        // borderRadius: const BorderRadius.all(Radius.circular(8)),
+      ),
+      child: child,
+    );
   }
 
   Widget _buildContent(final BuildContext context) {
@@ -83,14 +91,21 @@ class ViewHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           IntrinsicWidth(
-              child: Row(
-            children: [
-              ThreePartLabel(text1: title, text2: getIntAsText(itemCount.toInt())),
-            ],
-          )),
+            child: Row(
+              children: [
+                ThreePartLabel(
+                  text1: title,
+                  text2: getIntAsText(itemCount.toInt()),
+                ),
+              ],
+            ),
+          ),
           IntrinsicWidth(
-              child: Text(description,
-                  style: getTextTheme(context).bodySmall!.copyWith(color: getColorTheme(context).onSurfaceVariant))),
+            child: Text(
+              description,
+              style: getTextTheme(context).bodySmall!.copyWith(color: getColorTheme(context).onSurfaceVariant),
+            ),
+          ),
         ],
       ),
     );
@@ -130,11 +145,12 @@ class ViewHeader extends StatelessWidget {
         SizedBox(
           width: 200,
           child: FilterInput(
-              hintText: 'Filter',
-              initialValue: filterText,
-              onChanged: (final String text) {
-                onFilterChanged!(text);
-              }),
+            hintText: 'Filter',
+            initialValue: filterText,
+            onChanged: (final String text) {
+              onFilterChanged!(text);
+            },
+          ),
         ),
       );
     }

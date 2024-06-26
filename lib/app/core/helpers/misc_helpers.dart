@@ -43,20 +43,29 @@ double? attemptToGetDoubleFromText(String text) {
   return amount;
 }
 
-bool boolValueOrDefault(final bool? value, {final bool defaultValueIfNull = false}) {
+bool boolValueOrDefault(
+  final bool? value, {
+  final bool defaultValueIfNull = false,
+}) {
   if (value == null) {
     return defaultValueIfNull;
   }
   return value;
 }
 
-void copyToClipboardAndInformUser(final BuildContext context, final String textToCopy) {
+void copyToClipboardAndInformUser(
+  final BuildContext context,
+  final String textToCopy,
+) {
   FlutterClipboard.copy(textToCopy).then(
     (_) => showSnackBar(context, 'Copied to clipboard'),
   );
 }
 
-DateTime dateValueOrDefault(final DateTime? value, {final DateTime? defaultValueIfNull}) {
+DateTime dateValueOrDefault(
+  final DateTime? value, {
+  final DateTime? defaultValueIfNull,
+}) {
   if (value == null) {
     return defaultValueIfNull ?? DateTime.now();
   }
@@ -69,7 +78,10 @@ void debugLog(final String message) {
   }
 }
 
-double doubleValueOrDefault(final double? value, {final double defaultValueIfNull = 0}) {
+double doubleValueOrDefault(
+  final double? value, {
+  final double defaultValueIfNull = 0,
+}) {
   if (value == null) {
     return defaultValueIfNull;
   }
@@ -133,7 +145,9 @@ double roundDouble(final double value, final int places) {
 /// @throws ArgumentError If the number of decimal places is negative.
 ///
 double roundToDecimalPlaces(double value, int places) {
-  if (places < 0) throw ArgumentError('Decimal places must be non-negative');
+  if (places < 0) {
+    throw ArgumentError('Decimal places must be non-negative');
+  }
   int factor = pow(10, places).toInt();
   return (value * factor).round() / factor;
 }
@@ -195,7 +209,10 @@ void showSnackBar(final BuildContext context, final String message) {
   );
 }
 
-String stringValueOrDefault(final String? value, {final String defaultValueIfNull = ''}) {
+String stringValueOrDefault(
+  final String? value, {
+  final String defaultValueIfNull = '',
+}) {
   if (value == null) {
     return defaultValueIfNull;
   }
@@ -212,7 +229,6 @@ double trimToFiveDecimalPlaces(double value) {
 }
 
 class Debouncer {
-
   Debouncer([this.duration = const Duration(seconds: 1)]);
   final Duration duration;
   Timer? _timer;
@@ -224,7 +240,6 @@ class Debouncer {
 }
 
 class TimeLapse {
-
   TimeLapse() {
     stopwatch = Stopwatch()..start();
   }

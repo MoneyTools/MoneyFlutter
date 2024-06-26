@@ -23,7 +23,6 @@ import 'package:money/app/data/storage/data/data.dart';
 /// splits into account.
 /// </summary>
 class CostBasisCalculator {
-
   /// <summary>
   /// Compute capital gains associated with stock sales and whether they are long term or short term gains.
   /// </summary>
@@ -157,7 +156,11 @@ class CostBasisCalculator {
               i.units.value > 0) {
             if (i.transactionInstance!.transferInstance == null) {
               for (SecuritySale sale in holdings.sell(
-                  Data().securities.get(i.security.value)!, i.date, i.units.value, i.originalCostBasis)) {
+                Data().securities.get(i.security.value)!,
+                i.date,
+                i.units.value,
+                i.originalCostBasis,
+              )) {
                 this.sales.add(sale);
               }
             }
@@ -166,7 +169,10 @@ class CostBasisCalculator {
             // bugbug; could this ever be a split? Don't think so...
             if (i.transactionInstance?.transferInstance != null) {
               Investment? add = i.transactionInstance!.transferInstance!.getReceiverTransaction()?.investmentInstance;
-              assert(add != null, "Other side of the Transfer needs to be an Investment transaction");
+              assert(
+                add != null,
+                'Other side of the Transfer needs to be an Investment transaction',
+              );
               if (add != null) {
                 if (add.investmentType.value == InvestmentType.add.index) {
                   // assert(add.investmentType.value == InvestmentType.add.index,
@@ -178,11 +184,21 @@ class CostBasisCalculator {
                 // used to cover the remove
                 var securityInstance = Data().securities.get(i.security.value);
                 if (securityInstance != null) {
-                  for (SecuritySale sale in holdings.sell(securityInstance, i.date, i.units.value, 0)) {
+                  for (SecuritySale sale in holdings.sell(
+                    securityInstance,
+                    i.date,
+                    i.units.value,
+                    0,
+                  )) {
                     var targetHoldings = this.getHolding(add.transactionInstance!.accountInstance!);
                     if (sale.dateAcquired != null) {
                       // now transfer the cost basis over to the target account.
-                      targetHoldings.buy(s, sale.dateAcquired!, sale.unitsSold, sale.costBasisPerUnit * sale.unitsSold);
+                      targetHoldings.buy(
+                        s,
+                        sale.dateAcquired!,
+                        sale.unitsSold,
+                        sale.costBasisPerUnit * sale.unitsSold,
+                      );
                       for (SecuritySale pending in targetHoldings.processPendingSales(s)) {
                         this.sales.add(pending);
                       }

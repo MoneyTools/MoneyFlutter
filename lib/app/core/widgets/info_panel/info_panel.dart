@@ -5,26 +5,19 @@ import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class InfoPanel extends StatelessWidget {
-
   /// Constructor
   const InfoPanel({
-    super.key,
     required this.isExpanded,
     required this.onExpanded,
-    required this.selectedItems,
-
-    // sub-views
+    required this.selectedItems, // sub-views
     required this.subPanelSelected,
     required this.subPanelSelectionChanged,
-    required this.subPanelContent,
-
-    // Currency
+    required this.subPanelContent, // Currency
     required this.getCurrencyChoices,
     required this.currencySelected,
-    required this.currencySelectionChanged,
-
-    // Actions
+    required this.currencySelectionChanged, // Actions
     required this.getActionButtons,
+    super.key,
   });
   final bool isExpanded;
   final Function onExpanded;
@@ -48,16 +41,24 @@ class InfoPanel extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
       decoration: BoxDecoration(
-          color: getColorTheme(context).surfaceContainerHighest,
-          border: Border(
-            left: BorderSide(color: getColorTheme(context).outline),
-            top: BorderSide(color: getColorTheme(context).outline),
-            right: BorderSide(color: getColorTheme(context).outline),
-          ),
-          borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8))),
+        color: getColorTheme(context).surfaceContainerHighest,
+        border: Border(
+          left: BorderSide(color: getColorTheme(context).outline),
+          top: BorderSide(color: getColorTheme(context).outline),
+          right: BorderSide(color: getColorTheme(context).outline),
+        ),
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(8),
+          topRight: Radius.circular(8),
+        ),
+      ),
       child: ValueListenableBuilder<List<int>>(
         valueListenable: selectedItems,
-        builder: (final BuildContext context, final List<int> listOfSelectedItemIndex, final _) {
+        builder: (
+          final BuildContext context,
+          final List<int> listOfSelectedItemIndex,
+          final _,
+        ) {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -70,14 +71,23 @@ class InfoPanel extends StatelessWidget {
                 subViewSelectionChanged: subPanelSelectionChanged,
 
                 // Currency
-                currencyChoices: getCurrencyChoices(subPanelSelected, listOfSelectedItemIndex),
+                currencyChoices: getCurrencyChoices(
+                  subPanelSelected,
+                  listOfSelectedItemIndex,
+                ),
                 currencySelected: currencySelected,
                 currentSelectionChanged: currencySelectionChanged,
 
                 // Actions
                 actionButtons: getActionButtons,
               ),
-              if (isExpanded) Expanded(child: subPanelContent(subPanelSelected, listOfSelectedItemIndex)),
+              if (isExpanded)
+                Expanded(
+                  child: subPanelContent(
+                    subPanelSelected,
+                    listOfSelectedItemIndex,
+                  ),
+                ),
             ],
           );
         },

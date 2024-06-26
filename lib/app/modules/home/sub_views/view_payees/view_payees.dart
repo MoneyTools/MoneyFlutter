@@ -120,7 +120,9 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
     var list = Data()
         .payees
         .iterableList(includeDeleted: includeDeleted)
-        .where((instance) => (applyFilter == false || isMatchingFilters(instance)))
+        .where(
+          (instance) => (applyFilter == false || isMatchingFilters(instance)),
+        )
         .toList();
 
     _footerCountTransactions = 0;

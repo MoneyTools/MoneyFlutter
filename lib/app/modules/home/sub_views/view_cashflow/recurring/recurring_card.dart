@@ -18,14 +18,13 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
 
 class RecurringCard extends StatelessWidget {
-
   const RecurringCard({
-    super.key,
     required this.index,
     required this.dateRangeSearch,
     required this.dateRangeSelected,
     required this.payment,
     required this.forIncomeTransaction,
+    super.key,
   });
   final int index;
   final RecurringPayment payment;
@@ -63,7 +62,7 @@ class RecurringCard extends StatelessWidget {
                 // Category Distributions
                 _buildBoxDistribution(context),
               ],
-            )
+            ),
           ],
         ),
       ),
@@ -87,10 +86,11 @@ class RecurringCard extends StatelessWidget {
                 style: textTheme.titleMedium,
               ),
               IconButton(
-                  onPressed: () {
-                    switchViewTransacionnForPayee(payeeName);
-                  },
-                  icon: const Icon(Icons.open_in_new)),
+                onPressed: () {
+                  switchViewTransacionnForPayee(payeeName);
+                },
+                icon: const Icon(Icons.open_in_new),
+              ),
             ],
           ),
         ),
@@ -126,7 +126,10 @@ class RecurringCard extends StatelessWidget {
           _buildDateRangeRow(payment.dateRangeFound, 100, 100, false),
           gapLarge(),
           _buildTextAmountRow(
-              context, '${getIntAsText(payment.frequency)} transactions averaging', payment.total / payment.frequency),
+            context,
+            '${getIntAsText(payment.frequency)} transactions averaging',
+            payment.total / payment.frequency,
+          ),
         ],
       ),
     );
@@ -165,11 +168,23 @@ class RecurringCard extends StatelessWidget {
           ),
 
           // Average per yearS
-          _buildTextAmountRow(context, 'Year', payment.total / (payment.dateRangeFound.durationInYears)),
+          _buildTextAmountRow(
+            context,
+            'Year',
+            payment.total / (payment.dateRangeFound.durationInYears),
+          ),
           // Average per month
-          _buildTextAmountRow(context, 'Month', payment.total / (payment.dateRangeFound.durationInMonths)),
+          _buildTextAmountRow(
+            context,
+            'Month',
+            payment.total / (payment.dateRangeFound.durationInMonths),
+          ),
           // Average per day
-          _buildTextAmountRow(context, 'Day', payment.total / (payment.dateRangeFound.durationInDays)),
+          _buildTextAmountRow(
+            context,
+            'Day',
+            payment.total / (payment.dateRangeFound.durationInDays),
+          ),
         ],
       ),
     );
@@ -184,7 +199,11 @@ class RecurringCard extends StatelessWidget {
   }
 }
 
-Widget _buildTextAmountRow(final BuildContext context, final String title, final double amount) {
+Widget _buildTextAmountRow(
+  final BuildContext context,
+  final String title,
+  final double amount,
+) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
     children: [

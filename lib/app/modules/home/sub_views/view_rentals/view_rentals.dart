@@ -92,7 +92,10 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<RentBuilding> getList({bool includeDeleted = false, bool applyFilter = true}) {
+  List<RentBuilding> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
     final list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
 
     _footerExpenses = 0.00;
@@ -116,7 +119,10 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    return _getSubViewContentForChart(selectedIds: selectedIds, showAsNativeCurrency: showAsNativeCurrency);
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
   }
 
   @override

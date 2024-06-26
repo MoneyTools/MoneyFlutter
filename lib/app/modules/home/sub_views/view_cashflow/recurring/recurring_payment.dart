@@ -11,7 +11,6 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 
 class RecurringPayment {
-
   RecurringPayment({
     required this.payeeId,
     required this.forIncomeTransaction,
@@ -45,14 +44,22 @@ class RecurringPayment {
         // first time
         averagePerMonths[transactionMonth] = Pair<int, double>(1, transaction.amount.value.toDouble());
       } else {
-        averagePerMonths[transactionMonth] =
-            Pair<int, double>(pair.first + 1, averageTwoNumbers(pair.second, transaction.amount.value.toDouble()));
+        averagePerMonths[transactionMonth] = Pair<int, double>(
+          pair.first + 1,
+          averageTwoNumbers(
+            pair.second,
+            transaction.amount.value.toDouble(),
+          ),
+        );
       }
 
       if (!payeeIdCategoryIdsAndSums.containsKey(payeeId)) {
         payeeIdCategoryIdsAndSums[payeeId] = AccumulatorSum<int, double>();
       }
-      payeeIdCategoryIdsAndSums[payeeId]!.cumulate(transaction.categoryId.value, transaction.amount.value.toDouble());
+      payeeIdCategoryIdsAndSums[payeeId]!.cumulate(
+        transaction.categoryId.value,
+        transaction.amount.value.toDouble(),
+      );
     }
 
     // sum per month
@@ -62,7 +69,9 @@ class RecurringPayment {
       sumPerMonths[month - 1] = sum.abs();
     });
 
-    categoryIdsAndSums = convertMapToListOfPair<int, double>(payeeIdCategoryIdsAndSums[payeeId]!.values);
+    categoryIdsAndSums = convertMapToListOfPair<int, double>(
+      payeeIdCategoryIdsAndSums[payeeId]!.values,
+    );
 
     categoryDistribution = getTopDistributions(
       payment: this,
@@ -103,16 +112,20 @@ class RecurringPayment {
     for (final categoryIdAndSum in list.take(topCategoryToShow)) {
       final Category? category = Data().categories.get(categoryIdAndSum.first);
       if (category == null) {
-        listForDistributionBar.add(Distribution(
-          title: '< no category >',
-          amount: categoryIdAndSum.second,
-        ));
+        listForDistributionBar.add(
+          Distribution(
+            title: '< no category >',
+            amount: categoryIdAndSum.second,
+          ),
+        );
       } else {
-        listForDistributionBar.add(Distribution(
-          title: category.name.value,
-          color: category.getColorOrAncestorsColor(),
-          amount: categoryIdAndSum.second,
-        ));
+        listForDistributionBar.add(
+          Distribution(
+            title: category.name.value,
+            color: category.getColorOrAncestorsColor(),
+            amount: categoryIdAndSum.second,
+          ),
+        );
       }
     }
     return listForDistributionBar;

@@ -59,10 +59,9 @@ class Payees extends MoneyObjects<Payee> {
     for (final payeeId in payeeIds) {
       final Payee? payeeToCheck = Data().payees.get(payeeId);
       if (payeeToCheck != null) {
-        if (Data()
-                .transactions
-                .iterableList()
-                .firstWhereOrNull((element) => element.payee.value == payeeToCheck.uniqueId) ==
+        if (Data().transactions.iterableList().firstWhereOrNull(
+                  (element) => element.payee.value == payeeToCheck.uniqueId,
+                ) ==
             null) {
           // No transactions for this payee, we can delete it
           Data().payees.deleteItem(payeeToCheck);

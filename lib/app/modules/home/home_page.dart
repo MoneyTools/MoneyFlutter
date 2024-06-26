@@ -68,7 +68,7 @@ class HomePage extends GetView<HomeController> {
               color: getColorTheme(context).secondaryContainer,
               child: _getSubView(),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -81,9 +81,10 @@ class HomePage extends GetView<HomeController> {
           child: _getSubView(),
         ),
         SubViewSelectionHorizontal(
-            key: Key(PreferenceController.to.currentView.value.toString()),
-            onSelected: _handleSubViewSelectionChanged,
-            selectedView: PreferenceController.to.currentView.value),
+          key: Key(PreferenceController.to.currentView.value.toString()),
+          onSelected: _handleSubViewSelectionChanged,
+          selectedView: PreferenceController.to.currentView.value,
+        ),
       ],
     );
   }
@@ -91,7 +92,9 @@ class HomePage extends GetView<HomeController> {
   Widget _getSubView() {
     switch (PreferenceController.to.currentView.value) {
       case ViewId.viewAccounts:
-        return ViewAccounts(includeClosedAccount: PreferenceController.to.includeClosedAccounts);
+        return ViewAccounts(
+          includeClosedAccount: PreferenceController.to.includeClosedAccounts,
+        );
 
       case ViewId.viewCategories:
         return const ViewCategories();

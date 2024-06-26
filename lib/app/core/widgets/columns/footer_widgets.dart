@@ -8,29 +8,31 @@ import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 Widget getFooterForDateRange(final DateRange dateRange) {
   return Expanded(
-    child: LayoutBuilder(builder: (context, constraints) {
-      bool showDates = constraints.maxWidth > 80;
-      return DefaultTextStyle(
-        style: const TextStyle(
-          fontSize: 10,
-          color: Colors.grey,
-          fontFamily: 'RobotoMono',
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (showDates) Text(dateToString(dateRange.min)),
-            if (showDates) Text(dateToString(dateRange.max)),
-            Text(
-              dateRange.toStringDuration().padLeft(10),
-              softWrap: true,
-              maxLines: 2,
-            ),
-          ],
-        ),
-      );
-    }),
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        bool showDates = constraints.maxWidth > 80;
+        return DefaultTextStyle(
+          style: const TextStyle(
+            fontSize: 10,
+            color: Colors.grey,
+            fontFamily: 'RobotoMono',
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (showDates) Text(dateToString(dateRange.min)),
+              if (showDates) Text(dateToString(dateRange.max)),
+              Text(
+                dateRange.toStringDuration().padLeft(10),
+                softWrap: true,
+                maxLines: 2,
+              ),
+            ],
+          ),
+        );
+      },
+    ),
   );
 }
 

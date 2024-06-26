@@ -8,13 +8,12 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/vertical_line_with_tooltip.dart';
 
 class MiniTimelineDaily extends StatelessWidget {
-
   const MiniTimelineDaily({
-    super.key,
     required this.yearStart,
     required this.yearEnd,
     required this.values,
     required this.offsetStartingDay,
+    super.key,
     this.color,
     this.lineWidth = 2,
   });
@@ -33,42 +32,44 @@ class MiniTimelineDaily extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (final BuildContext context, final BoxConstraints constraints) {
-      int numberOfYears = yearEnd - yearStart + 1;
+    return LayoutBuilder(
+      builder: (final BuildContext context, final BoxConstraints constraints) {
+        int numberOfYears = yearEnd - yearStart + 1;
 
-      // X Ratio
-      double numberOfDays = numberOfYears * 365.25;
-      double xRatio = constraints.maxWidth / numberOfDays;
+        // X Ratio
+        double numberOfDays = numberOfYears * 365.25;
+        double xRatio = constraints.maxWidth / numberOfDays;
 
-      // Y Ratio
-      double maxValueFound = 0;
-      for (final value in values) {
-        maxValueFound = max(maxValueFound, value.second.abs());
-      }
-      double yRatio = constraints.maxHeight / maxValueFound;
+        // Y Ratio
+        double maxValueFound = 0;
+        for (final value in values) {
+          maxValueFound = max(maxValueFound, value.second.abs());
+        }
+        double yRatio = constraints.maxHeight / maxValueFound;
 
-      List<Widget> bars = [];
-      for (final value in values) {
-        int oneDaySlot = value.first * Duration.millisecondsPerDay;
+        List<Widget> bars = [];
+        for (final value in values) {
+          int oneDaySlot = value.first * Duration.millisecondsPerDay;
 
-        bars.add(
-          Positioned(
-            left: xRatio * (value.first - offsetStartingDay),
-            child: VerticalLineWithTooltip(
-              height: value.second.abs() * yRatio,
-              width: lineWidth,
-              color: colorBasedOnValue(value.second).withOpacity(0.5),
-              tooltip:
-                  '${dateToString(DateTime.fromMillisecondsSinceEpoch(oneDaySlot))}\n${doubleToCurrency(value.second)}',
+          bars.add(
+            Positioned(
+              left: xRatio * (value.first - offsetStartingDay),
+              child: VerticalLineWithTooltip(
+                height: value.second.abs() * yRatio,
+                width: lineWidth,
+                color: colorBasedOnValue(value.second).withOpacity(0.5),
+                tooltip:
+                    '${dateToString(DateTime.fromMillisecondsSinceEpoch(oneDaySlot))}\n${doubleToCurrency(value.second)}',
+              ),
             ),
-          ),
-        );
-      }
+          );
+        }
 
-      return Stack(
-        alignment: AlignmentDirectional.bottomStart,
-        children: bars,
-      );
-    });
+        return Stack(
+          alignment: AlignmentDirectional.bottomStart,
+          children: bars,
+        );
+      },
+    );
   }
 }

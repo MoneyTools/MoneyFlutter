@@ -9,8 +9,7 @@ import 'package:money/app/core/widgets/semantic_text.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class ImportTransactionsList extends StatefulWidget {
-
-  const ImportTransactionsList({super.key, required this.values});
+  const ImportTransactionsList({required this.values, super.key});
   final List<ValuesQuality> values;
 
   @override
@@ -60,7 +59,10 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
             children: [
               Text(ValuesQuality.getDateRange(widget.values).toStringDays()),
               _buildTallyOfItemsToImportOrSkip(),
-              Text('Total: ${doubleToCurrency(sumOfValues())}', textAlign: TextAlign.right),
+              Text(
+                'Total: ${doubleToCurrency(sumOfValues())}',
+                textAlign: TextAlign.right,
+              ),
             ],
           ),
         ),
@@ -141,7 +143,10 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
     );
   }
 
-  Widget _buildDescriptionOrPayee(BuildContext context, ValueQuality valueQuality) {
+  Widget _buildDescriptionOrPayee(
+    BuildContext context,
+    ValueQuality valueQuality,
+  ) {
     final payeeName = valueQuality.valueAsString;
     final payeeMatch = Data().payees.getByName(payeeName) != null;
 
@@ -150,7 +155,7 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
         Expanded(child: valueQuality.valueAsTextWidget(context)),
         if (payeeMatch)
           const Badge(
-            label: Text("Payee Match"),
+            label: Text('Payee Match'),
             backgroundColor: Colors.lightBlue,
             textColor: Colors.black,
           ),

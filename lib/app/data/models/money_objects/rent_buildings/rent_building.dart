@@ -37,12 +37,14 @@ import '../accounts/account.dart';
     17|CategoryForManagement|INT|0||0
    */
 class RentBuilding extends MoneyObject {
-
   RentBuilding() {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,
           leftBottomAsString: address.value,
-          rightTopAsWidget: MoneyWidget(amountModel: MoneyModel(amount: lifeTimePnL.profit), asTile: true),
+          rightTopAsWidget: MoneyWidget(
+            amountModel: MoneyModel(amount: lifeTimePnL.profit),
+            asTile: true,
+          ),
         );
   }
 
@@ -167,10 +169,12 @@ class RentBuilding extends MoneyObject {
     name: 'Purchased Date',
     serializeName: 'PurchasedDate',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as RentBuilding).purchasedDate.value),
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as RentBuilding).purchasedDate.value),
+    getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as RentBuilding).purchasedDate.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as RentBuilding).purchasedDate.value,
+    ),
   );
 
   /// PurchasedPrice
@@ -359,8 +363,9 @@ class RentBuilding extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     defaultValue: '',
-    getValueForDisplay: (final MoneyObject instance) =>
-        Currency.buildCurrencyWidget((instance as RentBuilding).getCurrencyOfAssociatedAccount()),
+    getValueForDisplay: (final MoneyObject instance) => Currency.buildCurrencyWidget(
+      (instance as RentBuilding).getCurrencyOfAssociatedAccount(),
+    ),
   );
 
   String getCurrencyOfAssociatedAccount() {
@@ -392,8 +397,9 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Interest',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseInterest),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as RentBuilding).lifeTimePnL.expenseInterest,
+    ),
   );
 
   /// Expenses-Maintenance
@@ -401,8 +407,9 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Maintenance',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseMaintenance),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as RentBuilding).lifeTimePnL.expenseMaintenance,
+    ),
   );
 
   /// Expenses-Management
@@ -410,8 +417,9 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Management',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseManagement),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as RentBuilding).lifeTimePnL.expenseManagement,
+    ),
   );
 
   /// Expenses-Repair
@@ -419,8 +427,9 @@ class RentBuilding extends MoneyObject {
     importance: 21,
     name: '  Expense-Repair',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseRepairs),
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as RentBuilding).lifeTimePnL.expenseRepairs,
+    ),
   );
 
   /// Expenses-Taxes
@@ -465,7 +474,10 @@ class RentBuilding extends MoneyObject {
 
       RentalPnL? pnl = pnlOverYears[year];
       if (pnl == null) {
-        pnl = RentalPnL(date: t.dateTime.value!, currency: getCurrencyOfAssociatedAccount());
+        pnl = RentalPnL(
+          date: t.dateTime.value!,
+          currency: getCurrencyOfAssociatedAccount(),
+        );
 
         if (this.ownershipName1.value.isNotEmpty) {
           String name = '${this.ownershipName1.value} (${ownershipPercentage1.value}%)';
@@ -482,10 +494,18 @@ class RentBuilding extends MoneyObject {
 
       if (t.isSplit) {
         for (final split in t.splits) {
-          cumulatePnLValues(pnl, split.categoryId.value, split.amount.value.toDouble());
+          cumulatePnLValues(
+            pnl,
+            split.categoryId.value,
+            split.amount.value.toDouble(),
+          );
         }
       } else {
-        cumulatePnLValues(pnl, transactionCategoryId, t.amount.value.toDouble());
+        cumulatePnLValues(
+          pnl,
+          transactionCategoryId,
+          t.amount.value.toDouble(),
+        );
       }
     }
 
@@ -566,10 +586,10 @@ class RentBuilding extends MoneyObject {
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
   void associateAccountToBuilding() {
-    final Transaction? firstTransactionForThisBuilding = Data()
-        .transactions
-        .iterableList(includeDeleted: true)
-        .firstWhereOrNull((t) => this.categoryForIncomeTreeIds.contains(t.categoryId.value));
+    final Transaction? firstTransactionForThisBuilding =
+        Data().transactions.iterableList(includeDeleted: true).firstWhereOrNull(
+              (t) => this.categoryForIncomeTreeIds.contains(t.categoryId.value),
+            );
     if (firstTransactionForThisBuilding != null) {
       this.account = firstTransactionForThisBuilding.accountInstance;
     }

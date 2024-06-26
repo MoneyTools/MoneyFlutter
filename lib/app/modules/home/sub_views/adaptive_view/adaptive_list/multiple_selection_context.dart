@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 
 class ViewHeaderMultipleSelection {
-
   ViewHeaderMultipleSelection({
     required this.onToggleMode,
     required this.isMultiSelectionOn,

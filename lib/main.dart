@@ -18,7 +18,6 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
-
   MyApp({super.key});
   // Leave these declared in this order
   final PreferenceController preferenceController = Get.put(PreferenceController());
@@ -46,14 +45,15 @@ class MyApp extends StatelessWidget {
           initialRoute: '/',
           getPages: [
             GetPage(
-                name: '/',
-                page: () {
-                  PreferenceController preferenceController = Get.find();
-                  if (preferenceController.isReady.value) {
-                    return const WelcomePage();
-                  }
-                  return const SplashScreen();
-                }),
+              name: '/',
+              page: () {
+                PreferenceController preferenceController = Get.find();
+                if (preferenceController.isReady.value) {
+                  return const WelcomePage();
+                }
+                return const SplashScreen();
+              },
+            ),
             ...HomeRoutes.routes,
             ...WelcomeRoutes.routes,
             ...SettingsRoutes.routes,

@@ -27,7 +27,8 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
     }
 
     final List<Transaction> flatTransactions = Transactions.flatTransactions(
-        Data().transactions.iterableList().where((t) => t.payee.value == selectedIds.first));
+      Data().transactions.iterableList().where((t) => t.payee.value == selectedIds.first),
+    );
 
     if (flatTransactions.isEmpty) {
       return const Center(child: Text('No transactions'));
@@ -63,7 +64,10 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(getAmountAsShorthandText(maxValue), style: textStyle),
-                  Text(getAmountAsShorthandText(maxValue / 2), style: textStyle),
+                  Text(
+                    getAmountAsShorthandText(maxValue / 2),
+                    style: textStyle,
+                  ),
                   Text('0.00', style: textStyle),
                 ],
               ),
@@ -73,7 +77,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: Container(
+                    child: DecoratedBox(
                       decoration: BoxDecoration(
                         border: Border(
                           left: BorderSide(

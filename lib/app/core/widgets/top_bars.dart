@@ -9,8 +9,11 @@ import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class BarChartWidget extends StatelessWidget {
-
-  const BarChartWidget({super.key, required this.listCategoryNameToAmount, required this.asIncome});
+  const BarChartWidget({
+    required this.listCategoryNameToAmount,
+    required this.asIncome,
+    super.key,
+  });
   final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
   final bool asIncome;
 
@@ -65,16 +68,22 @@ class BarChartWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-            flex: 2,
-            child: Text(
-              label,
-              style: const TextStyle(fontSize: 9),
-              textAlign: TextAlign.justify,
-              textWidthBasis: TextWidthBasis.longestLine,
-              softWrap: false,
-            )),
+          flex: 2,
+          child: Text(
+            label,
+            style: const TextStyle(fontSize: 9),
+            textAlign: TextAlign.justify,
+            textWidthBasis: TextWidthBasis.longestLine,
+            softWrap: false,
+          ),
+        ),
         colorWidget,
-        Expanded(child: MoneyWidget(amountModel: MoneyModel(amount: value * (asIncome ? 1 : -1)), asTile: false)),
+        Expanded(
+          child: MoneyWidget(
+            amountModel: MoneyModel(amount: value * (asIncome ? 1 : -1)),
+            asTile: false,
+          ),
+        ),
       ],
     );
   }

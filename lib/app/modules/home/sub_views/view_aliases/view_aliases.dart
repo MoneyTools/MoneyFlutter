@@ -51,7 +51,9 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
     return Data()
         .aliases
         .iterableList(includeDeleted: includeDeleted)
-        .where((instance) => applyFilter == false || isMatchingFilters(instance))
+        .where(
+          (instance) => applyFilter == false || isMatchingFilters(instance),
+        )
         .toList();
   }
 

@@ -10,8 +10,8 @@ import 'package:money/app/modules/home/sub_views/view_categories/picker_category
 
 class MergeCategoriesTransactionsDialog extends StatefulWidget {
   const MergeCategoriesTransactionsDialog({
-    super.key,
     required this.categoryToMove,
+    super.key,
   });
 
   final Category categoryToMove;
@@ -86,7 +86,9 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
     final to = _categoryPicked.name.value;
 
     if (from == to) {
-      return Center(child: InfoBanner.warning('Pick a different category then "$from".'));
+      return Center(
+        child: InfoBanner.warning('Pick a different category then "$from".'),
+      );
     }
 
     return Center(
@@ -100,7 +102,10 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
             OutlinedButton(
               onPressed: () {
                 if (_categoryPicked == widget.categoryToMove) {
-                  showSnackBar(context, 'No need to merge to itself, select a different payee');
+                  showSnackBar(
+                    context,
+                    'No need to merge to itself, select a different payee',
+                  );
                 } else {
                   // reparent Category
                   Data().categories.reparentCategory(widget.categoryToMove, _categoryPicked);
@@ -117,7 +122,10 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
             OutlinedButton(
               onPressed: () {
                 if (_categoryPicked == widget.categoryToMove) {
-                  showSnackBar(context, 'No need to merge to itself, select a different category');
+                  showSnackBar(
+                    context,
+                    'No need to merge to itself, select a different category',
+                  );
                 } else {
                   // move to Transaction to the picked category
                   moveTransactionsToCategory(
@@ -165,7 +173,10 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
   }
 }
 
-void moveTransactionsToCategory(final List<Transaction> transactions, final Category moveToCategory) {
+void moveTransactionsToCategory(
+  final List<Transaction> transactions,
+  final Category moveToCategory,
+) {
   for (final t in transactions) {
     t.stashValueBeforeEditing();
     t.categoryId.value = moveToCategory.uniqueId;

@@ -3,7 +3,6 @@ import 'package:money/app/data/models/constants.dart';
 
 // ignore: must_be_immutable
 class TokenText extends StatelessWidget {
-
   TokenText(
     this.text, {
     super.key,
@@ -21,7 +20,10 @@ class TokenText extends StatelessWidget {
     const TextStyle ancestors = TextStyle(fontSize: SizeForText.small);
 
     final Widget separetor = Padding(
-      padding: EdgeInsets.only(left: style.separatorPaddingLeft, right: style.separatorPaddingRight),
+      padding: EdgeInsets.only(
+        left: style.separatorPaddingLeft,
+        right: style.separatorPaddingRight,
+      ),
       child: Text(style.separator, style: ancestors),
     );
 
@@ -29,13 +31,15 @@ class TokenText extends StatelessWidget {
 
     for (final String token in tokens) {
       if (token == tokens.last) {
-        widgets.add(Expanded(
-          child: Text(
-            token,
-            softWrap: false,
-            style: const TextStyle(fontSize: SizeForText.medium),
+        widgets.add(
+          Expanded(
+            child: Text(
+              token,
+              softWrap: false,
+              style: const TextStyle(fontSize: SizeForText.medium),
+            ),
           ),
-        ));
+        );
       } else {
         widgets.add(Opacity(opacity: 0.8, child: Text(token, style: ancestors)));
         widgets.add(Opacity(opacity: 0.6, child: separetor));
@@ -57,7 +61,6 @@ class TokenText extends StatelessWidget {
 }
 
 class TokenTextStyle {
-
   const TokenTextStyle({
     this.separator = ':',
     this.separatorPaddingLeft = 0,

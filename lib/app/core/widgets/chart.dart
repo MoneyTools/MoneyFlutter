@@ -13,12 +13,13 @@ FlBorderData getBorders(final double min, final double max) {
   return FlBorderData(
     show: true,
     border: Border(
-        top: BorderSide(
-          color: getHorizontalLineColorBasedOnValue(max),
-        ),
-        bottom: BorderSide(
-          color: getHorizontalLineColorBasedOnValue(min),
-        )),
+      top: BorderSide(
+        color: getHorizontalLineColorBasedOnValue(max),
+      ),
+      bottom: BorderSide(
+        color: getHorizontalLineColorBasedOnValue(min),
+      ),
+    ),
   );
 }
 
@@ -41,7 +42,6 @@ Widget getWidgetChartAmount(final double value, final TitleMeta meta) {
 }
 
 class Chart extends StatelessWidget {
-
   const Chart({
     super.key,
     required this.list,
@@ -135,13 +135,21 @@ class Chart extends StatelessWidget {
               );
             },
           ),
-          touchCallback: (final FlTouchEvent event, final BarTouchResponse? barTouchResponse) {
+          touchCallback: (
+            final FlTouchEvent event,
+            final BarTouchResponse? barTouchResponse,
+          ) {
             if (event is FlLongPressStart) {
               if (barTouchResponse != null) {
                 if (barTouchResponse.spot != null) {
                   HapticFeedback.lightImpact();
-                  copyToClipboardAndInformUser(context,
-                      getTooltipText(barTouchResponse.spot!.touchedBarGroup, barTouchResponse.spot!.touchedRodData));
+                  copyToClipboardAndInformUser(
+                    context,
+                    getTooltipText(
+                      barTouchResponse.spot!.touchedBarGroup,
+                      barTouchResponse.spot!.touchedRodData,
+                    ),
+                  );
                 }
               }
             }
@@ -169,7 +177,6 @@ class Chart extends StatelessWidget {
 }
 
 class PairXY {
-
   PairXY(this.xText, this.yValue);
   String xText = '';
   num yValue = 0.0;

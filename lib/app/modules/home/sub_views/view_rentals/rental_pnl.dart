@@ -1,7 +1,6 @@
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class RentalPnL {
-
   RentalPnL({
     required this.date,
     this.income = 0,

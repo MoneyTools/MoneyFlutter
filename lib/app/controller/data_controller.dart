@@ -86,7 +86,7 @@ class DataController extends GetxController {
       }
     } catch (e) {
       // Handle error
-      debugLog("Error fetching data: $e");
+      debugLog('Error fetching data: $e');
     }
   }
 
@@ -156,14 +156,15 @@ class DataController extends GetxController {
     }
 
     Data().saveToSql(
-        filePathToLoad: fileNameAndPath,
-        callbackWhenLoaded: (final bool success, final String message) {
-          if (success) {
-            Data().assessMutationsCountOfAllModels();
-          } else {
-            SnackBarService.displayError(autoDismiss: false, message: message);
-          }
-        });
+      filePathToLoad: fileNameAndPath,
+      callbackWhenLoaded: (final bool success, final String message) {
+        if (success) {
+          Data().assessMutationsCountOfAllModels();
+        } else {
+          SnackBarService.displayError(autoDismiss: false, message: message);
+        }
+      },
+    );
 
     PreferenceController.to.addToMRU(fileNameAndPath);
   }

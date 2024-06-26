@@ -3,7 +3,6 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class Box extends StatelessWidget {
-
   const Box({
     super.key,
     this.title = '',
@@ -67,7 +66,9 @@ class Box extends StatelessWidget {
               elevation: 1,
               shadowColor: Colors.transparent,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: SizeForPadding.medium,
+                ),
                 child: Text(
                   title,
                   style: getTextTheme(context).titleSmall,

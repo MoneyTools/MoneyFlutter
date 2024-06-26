@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/rectangle.dart';
 
 class MyCircle extends StatelessWidget {
-
   const MyCircle({
-    super.key,
     required this.colorFill,
-    this.colorBorder = Colors.grey,
     required this.size,
+    super.key,
+    this.colorBorder = Colors.grey,
     this.showBorder = false,
   });
   final Color colorFill;

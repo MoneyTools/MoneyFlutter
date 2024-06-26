@@ -25,20 +25,21 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
   @override
   void loadDemoData() {
     clear();
-    final Account? accountForLoan = Data()
-        .accounts
-        .iterableList()
-        .firstWhereOrNull((final Account element) => element.type.value == AccountType.loan);
+    final Account? accountForLoan = Data().accounts.iterableList().firstWhereOrNull(
+          (final Account element) => element.type.value == AccountType.loan,
+        );
     if (accountForLoan != null) {
       for (int i = 0; i < 12 * 20; i++) {
-        appendNewMoneyObject(LoanPayment(
-          id: -1,
-          accountId: accountForLoan.id.value,
-          date: DateTime.now(),
-          principal: 100,
-          interest: 10,
-          memo: '',
-        ));
+        appendNewMoneyObject(
+          LoanPayment(
+            id: -1,
+            accountId: accountForLoan.id.value,
+            date: DateTime.now(),
+            principal: 100,
+            interest: 10,
+            memo: '',
+          ),
+        );
       }
     }
   }
@@ -63,7 +64,10 @@ class PaymentRollup {
 }
 
 List<LoanPayment> getAccountLoanPayments(Account account) {
-  final List<int> categoriesToMatch = [account.categoryIdForInterest.value, account.categoryIdForPrincipal.value];
+  final List<int> categoriesToMatch = [
+    account.categoryIdForInterest.value,
+    account.categoryIdForPrincipal.value,
+  ];
 
   // include the manual entries done in the LoanPayments table
   List<LoanPayment> aggregatedList = Data()
@@ -73,8 +77,9 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
       .toList();
 
   // include the bank transactions matching th Account Categories for Principal and Interest
-  var listOfTransactions =
-      Data().transactions.getListFlattenSplits(whereClause: (t) => t.isMatchingAnyOfTheseCategoris(categoriesToMatch));
+  var listOfTransactions = Data().transactions.getListFlattenSplits(
+        whereClause: (t) => t.isMatchingAnyOfTheseCategoris(categoriesToMatch),
+      );
 
   // Rollup into a single Payment based on Date to match Principal and Interest payment
   Map<String, PaymentRollup> payments = {};

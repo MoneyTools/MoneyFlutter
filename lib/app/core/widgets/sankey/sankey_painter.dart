@@ -12,7 +12,6 @@ import 'package:money/app/data/models/constants.dart';
 export 'package:money/app/core/widgets/sankey/sankey_helper.dart';
 
 class SankeyPainter extends CustomPainter {
-
   /// Constructor
   SankeyPainter({
     required this.listOfIncomes,
@@ -45,9 +44,16 @@ class SankeyPainter extends CustomPainter {
 
     double verticalStackOfTargets = topOfCenters;
 
-    final double totalIncome = listOfIncomes.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value);
-    final double totalExpense =
-        listOfExpenses.fold(0.00, (final double sum, final SanKeyEntry item) => sum + item.value).abs();
+    final double totalIncome = listOfIncomes.fold(
+      0.00,
+      (final double sum, final SanKeyEntry item) => sum + item.value,
+    );
+    final double totalExpense = listOfExpenses
+        .fold(
+          0.00,
+          (final double sum, final SanKeyEntry item) => sum + item.value,
+        )
+        .abs();
 
     final double bestHeightForIncomeBlock = compactView ? 200 : 300;
 
@@ -58,7 +64,12 @@ class SankeyPainter extends CustomPainter {
     lastHeight = max(Block.minBlockHeight, lastHeight);
     final Block targetRevenues = Block(
       'Revenue\n${getAmountAsShorthandText(totalIncome)}',
-      ui.Rect.fromLTWH(horizontalCenter - (columnWidth), verticalStackOfTargets, columnWidth, lastHeight),
+      ui.Rect.fromLTWH(
+        horizontalCenter - (columnWidth),
+        verticalStackOfTargets,
+        columnWidth,
+        lastHeight,
+      ),
       colors.colorIncome,
       colors.textColor,
       TextAlign.center,
@@ -71,7 +82,12 @@ class SankeyPainter extends CustomPainter {
     lastHeight = max(Block.minBlockHeight, lastHeight);
     final Block targetExpenses = Block(
       'Expenses\n-${getAmountAsShorthandText(totalExpense)}',
-      ui.Rect.fromLTWH(horizontalCenter + columnWidth * 0.1, topOfCenters, columnWidth, lastHeight),
+      ui.Rect.fromLTWH(
+        horizontalCenter + columnWidth * 0.1,
+        topOfCenters,
+        columnWidth,
+        lastHeight,
+      ),
       colors.colorExpense,
       colors.textColor,
       TextAlign.center,
@@ -82,13 +98,27 @@ class SankeyPainter extends CustomPainter {
     double stackVerticalPosition = 0.0;
 
     stackVerticalPosition += renderSourcesToTarget(
-        canvas, listOfIncomes, 0, stackVerticalPosition, targetRevenues, colors.colorIncome, colors.textColor);
+      canvas,
+      listOfIncomes,
+      0,
+      stackVerticalPosition,
+      targetRevenues,
+      colors.colorIncome,
+      colors.textColor,
+    );
 
     stackVerticalPosition += gap * 5;
 
     // Right Side - "Source of Expenses"
     stackVerticalPosition += renderSourcesToTarget(
-        canvas, listOfExpenses, maxWidth - columnWidth, 0, targetExpenses, colors.colorExpense, colors.textColor);
+      canvas,
+      listOfExpenses,
+      maxWidth - columnWidth,
+      0,
+      targetExpenses,
+      colors.colorExpense,
+      colors.textColor,
+    );
 
     final double heightProfitFromIncomeSection = targetRevenues.rect.height - targetExpenses.rect.height;
 
@@ -96,10 +126,17 @@ class SankeyPainter extends CustomPainter {
     drawChanel(
       canvas: canvas,
       // right side of the Revenues Box
-      start: ChannelPoint(targetRevenues.rect.right, targetRevenues.rect.top,
-          targetRevenues.rect.bottom - heightProfitFromIncomeSection),
+      start: ChannelPoint(
+        targetRevenues.rect.right,
+        targetRevenues.rect.top,
+        targetRevenues.rect.bottom - heightProfitFromIncomeSection,
+      ),
       // Left side of the Expenses box
-      end: ChannelPoint(targetExpenses.rect.left + 1, targetExpenses.rect.top, targetExpenses.rect.bottom),
+      end: ChannelPoint(
+        targetExpenses.rect.left + 1,
+        targetExpenses.rect.top,
+        targetExpenses.rect.bottom,
+      ),
       color: colors.colorExpense,
     );
 
@@ -146,12 +183,27 @@ class SankeyPainter extends CustomPainter {
     late ChannelPoint netStart;
     late ChannelPoint netEnd;
     if (netAmount < 0) {
-      netStart = ChannelPoint(targetNet.rect.right - 1, targetNet.rect.top, targetNet.rect.bottom);
-      netEnd = ChannelPoint(targetRevenues.rect.right, targetRevenues.rect.bottom, targetExpenses.rect.bottom);
+      netStart = ChannelPoint(
+        targetNet.rect.right - 1,
+        targetNet.rect.top,
+        targetNet.rect.bottom,
+      );
+      netEnd = ChannelPoint(
+        targetRevenues.rect.right,
+        targetRevenues.rect.bottom,
+        targetExpenses.rect.bottom,
+      );
     } else {
-      netStart = ChannelPoint(targetRevenues.rect.right, targetRevenues.rect.bottom - heightProfitFromIncomeSection,
-          targetRevenues.rect.bottom);
-      netEnd = ChannelPoint(targetNet.rect.left + 1, targetNet.rect.top, targetNet.rect.bottom);
+      netStart = ChannelPoint(
+        targetRevenues.rect.right,
+        targetRevenues.rect.bottom - heightProfitFromIncomeSection,
+        targetRevenues.rect.bottom,
+      );
+      netEnd = ChannelPoint(
+        targetNet.rect.left + 1,
+        targetNet.rect.top,
+        targetNet.rect.bottom,
+      );
     }
 
     drawChanel(
@@ -184,12 +236,20 @@ class SankeyPainter extends CustomPainter {
       // Net Lost
       text += 'Lost\n';
       rect = ui.Rect.fromLTWH(
-          horizontalCenter - (columnWidth + gap), targetRevenues.rect.bottom + (gap), columnWidth, lastHeight);
+        horizontalCenter - (columnWidth + gap),
+        targetRevenues.rect.bottom + (gap),
+        columnWidth,
+        lastHeight,
+      );
     } else {
       // Net Profit
       text += 'Profit\n';
       rect = ui.Rect.fromLTWH(
-          horizontalCenter + (columnWidth * 0.1), targetExpenses.rect.bottom + (gap), columnWidth, lastHeight);
+        horizontalCenter + (columnWidth * 0.1),
+        targetExpenses.rect.bottom + (gap),
+        columnWidth,
+        lastHeight,
+      );
     }
     text += getAmountAsShorthandText(netAmount);
 
@@ -225,7 +285,10 @@ class SankeyPainter extends CustomPainter {
     // Prepare the sources (Left Side)
     for (SanKeyEntry element in list) {
       // Prepare a Left Block
-      final double height = max(Constants.minBlockHeight, element.value.abs() * ratioPriceToHeight);
+      final double height = max(
+        Constants.minBlockHeight,
+        element.value.abs() * ratioPriceToHeight,
+      );
       final double boxTop = top + verticalPosition;
       final ui.Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
       String text = compactView ? shortenLongText(element.name) : element.name;

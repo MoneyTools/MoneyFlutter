@@ -85,7 +85,10 @@ Color adjustBrightness(Color color, double brightness) {
 /// The [color] property of the new [TextStyle] object is set to the original [textStyle.color] with the specified [opacity] applied.
 /// All other properties of the [textStyle] are preserved in the new [TextStyle] object.
 ///
-TextStyle adjustOpacityOfTextStyle(final TextStyle textStyle, [final double opacity = 0.7]) {
+TextStyle adjustOpacityOfTextStyle(
+  final TextStyle textStyle, [
+  final double opacity = 0.7,
+]) {
   return textStyle.copyWith(
     color: textStyle.color!.withOpacity(opacity),
   );
@@ -149,7 +152,11 @@ Widget colorBox(Color color, Color colorText) {
 /// If [alphaFirst] is true, the returned string will have the alpha value placed before the RGB values.
 /// Otherwise, the returned string will have the RGB values followed by the alpha value.
 ///
-String colorToHexString(final Color color, {bool alphaFirst = false, bool includeAlpha = true}) {
+String colorToHexString(
+  final Color color, {
+  bool alphaFirst = false,
+  bool includeAlpha = true,
+}) {
   final String red = color.red.toRadixString(16).padLeft(2, '0');
   final String green = color.green.toRadixString(16).padLeft(2, '0');
   final String blue = color.blue.toRadixString(16).padLeft(2, '0');

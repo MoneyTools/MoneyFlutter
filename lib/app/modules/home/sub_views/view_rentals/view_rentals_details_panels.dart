@@ -28,10 +28,13 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
         pnl ??= RentalPnL(date: DateTime(year, 1, 1));
         pnlCards.add(RentalPnLCard(pnl: pnl));
       }
-      pnlCards.add(RentalPnLCard(
-        pnl: rental.lifeTimePnL,
-        customTitle: 'Life Time P&L',
-      ));
+
+      pnlCards.add(
+        RentalPnLCard(
+          pnl: rental.lifeTimePnL,
+          customTitle: 'Life Time P&L',
+        ),
+      );
 
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
@@ -79,7 +82,10 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     );
   }
 
-  bool filterByRentalCategories(final Transaction t, final RentBuilding rental) {
+  bool filterByRentalCategories(
+    final Transaction t,
+    final RentBuilding rental,
+  ) {
     final num categoryIdToMatch = t.categoryId.value;
 
     if (t.isSplit) {
@@ -94,7 +100,10 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     return isMatchingCategories(categoryIdToMatch, rental);
   }
 
-  bool isMatchingCategories(final num categoryIdToMatch, final RentBuilding rental) {
+  bool isMatchingCategories(
+    final num categoryIdToMatch,
+    final RentBuilding rental,
+  ) {
     Data().categories.getTreeIds(rental.categoryForIncome.value);
 
     return rental.categoryForIncomeTreeIds.contains(categoryIdToMatch) ||

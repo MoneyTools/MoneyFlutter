@@ -9,8 +9,7 @@ import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
 
 class StockChartWidget extends StatefulWidget {
-
-  const StockChartWidget({super.key, required this.symbol});
+  const StockChartWidget({required this.symbol, super.key});
   final String symbol;
 
   @override
@@ -81,10 +80,11 @@ class StockChartWidgetState extends State<StockChartWidget> {
     }
     if (errorMessage.isNotEmpty) {
       return Center(
-          child: Text(
-        errorMessage,
-        style: const TextStyle(color: Colors.orange),
-      ));
+        child: Text(
+          errorMessage,
+          style: const TextStyle(color: Colors.orange),
+        ),
+      );
     }
 
     if (dataPoints.isEmpty) {
@@ -115,18 +115,22 @@ class StockChartWidgetState extends State<StockChartWidget> {
             ),
           ),
           bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 50,
-            getTitlesWidget: (double value, TitleMeta meta) {
-              if (value == meta.min || value == meta.max) {
-                return const SizedBox();
-              }
-              final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
-              return Text(formatDate(date),
-                  textAlign: TextAlign.center, style: const TextStyle(fontSize: 10)); // Format as HH:MM
-            },
-          )),
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 50,
+              getTitlesWidget: (double value, TitleMeta meta) {
+                if (value == meta.min || value == meta.max) {
+                  return const SizedBox();
+                }
+                final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                return Text(
+                  formatDate(date),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(fontSize: 10),
+                ); // Format as HH:MM
+              },
+            ),
+          ),
         ),
         borderData: getBorders(0, 0),
         lineTouchData: const LineTouchData(enabled: false),

@@ -36,9 +36,12 @@ void main() {
       expect(stringCompareIgnoreCasing1('banana', ''), 1);
       expect(stringCompareIgnoreCasing1('', 'banana'), -1);
       expect(
-          stringCompareIgnoreCasing1('a very long string that is different right from the start',
-              'The very long string that is different right from the start'),
-          -1);
+        stringCompareIgnoreCasing1(
+          'a very long string that is different right from the start',
+          'The very long string that is different right from the start',
+        ),
+        -1,
+      );
     }
 
     stopwatch.stop(); // Stop the stopwatch after the operation
@@ -53,9 +56,12 @@ void main() {
       expect(stringCompareIgnoreCasing2('banana', ''), 1);
       expect(stringCompareIgnoreCasing2('', 'banana'), -1);
       expect(
-          stringCompareIgnoreCasing2('a very long string that is different right from the start',
-              'The very long string that is different right from the start'),
-          -1);
+        stringCompareIgnoreCasing2(
+          'a very long string that is different right from the start',
+          'The very long string that is different right from the start',
+        ),
+        -1,
+      );
     }
     stopwatch2.stop(); // Stop the stopwatch after the operation
     time2 = stopwatch2.elapsedMilliseconds;
@@ -142,7 +148,10 @@ void main() {
     });
 
     test('Extract amount from string with dollars', () {
-      expect(attemptToGetDoubleFromText('Price: \$10,000.99'), equals(10000.99));
+      expect(
+        attemptToGetDoubleFromText('Price: \$10,000.99'),
+        equals(10000.99),
+      );
     });
 
     test('Extract amount from string with pounds', () {
@@ -158,7 +167,10 @@ void main() {
     });
 
     test('Extract amount from string with invalid format', () {
-      expect(attemptToGetDoubleFromText('Invalid amount: \$1,2,3,4,5,6.78'), 123456.78);
+      expect(
+        attemptToGetDoubleFromText('Invalid amount: \$1,2,3,4,5,6.78'),
+        123456.78,
+      );
     });
   });
 
@@ -169,9 +181,15 @@ void main() {
 
     // Additional test cases
     expect(attemptToGetDoubleFromText('\$123'), equals(123.0)); // No decimals
-    expect(attemptToGetDoubleFromText('\$0.99'), equals(0.99)); // Less than 1 dollar
+    expect(
+      attemptToGetDoubleFromText('\$0.99'),
+      equals(0.99),
+    ); // Less than 1 dollar
     expect(attemptToGetDoubleFromText('\$0'), equals(0.0)); // Zero amount
-    expect(attemptToGetDoubleFromText('Invalid string'), isNull); // Invalid input
+    expect(
+      attemptToGetDoubleFromText('Invalid string'),
+      isNull,
+    ); // Invalid input
   });
 
   test('Extract amount from currency text long decimals', () {

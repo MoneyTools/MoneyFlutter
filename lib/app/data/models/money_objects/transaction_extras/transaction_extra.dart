@@ -9,7 +9,6 @@ import 'package:money/app/data/models/money_objects/money_object.dart';
  */
 
 class TransactionExtra extends MoneyObject {
-
   /// Constructor
   TransactionExtra({
     // 0

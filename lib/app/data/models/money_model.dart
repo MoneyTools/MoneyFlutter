@@ -4,7 +4,6 @@ import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
 class MoneyModel {
-
   /// Constructor
   MoneyModel({
     required double amount,
@@ -12,6 +11,7 @@ class MoneyModel {
     this.showCurrency = false,
     this.autoColor = true,
   }) : _amount = amount;
+
   /// Amount to display
   double _amount;
 
@@ -56,10 +56,16 @@ class MoneyModel {
   /// amount formated with currency and separators
   @override
   String toString() {
-    return Currency.getAmountAsStringUsingCurrency(_amount, iso4217code: iso4217);
+    return Currency.getAmountAsStringUsingCurrency(
+      _amount,
+      iso4217code: iso4217,
+    );
   }
 
   String toShortHand() {
-    return Currency.getAmountAsShortHandStringUsingCurrency(_amount, iso4217code: iso4217);
+    return Currency.getAmountAsShortHandStringUsingCurrency(
+      _amount,
+      iso4217code: iso4217,
+    );
   }
 }

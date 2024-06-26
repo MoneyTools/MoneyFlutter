@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 Future<void> showTextInputDialog({
   required BuildContext context,
+  required Function(String) onContinue,
   final String title = 'Input',
   final String initialValue = '',
-  required Function(String) onContinue,
   Function? onCancel,
 }) async {
   return showDialog(

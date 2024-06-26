@@ -22,7 +22,10 @@ Widget buildFieldWidgetForAmount({
     child: Text(
       shorthand
           ? getAmountAsShorthandText(value as num)
-          : Currency.getAmountAsStringUsingCurrency(value, iso4217code: currency),
+          : Currency.getAmountAsStringUsingCurrency(
+              value,
+              iso4217code: currency,
+            ),
       textAlign: align,
       style: TextStyle(
         fontFamily: 'RobotoMono',
@@ -114,12 +117,24 @@ Widget buildWidgetFromTypeAndValue({
   switch (type) {
     case FieldType.numeric:
       if (value is String) {
-        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+        return buildFieldWidgetForText(
+          text: value,
+          align: align,
+          fixedFont: true,
+        );
       }
-      return buildFieldWidgetForNumber(value: value as num, shorthand: false, align: align);
+      return buildFieldWidgetForNumber(
+        value: value as num,
+        shorthand: false,
+        align: align,
+      );
 
     case FieldType.numericShorthand:
-      return buildFieldWidgetForNumber(value: value as num, shorthand: true, align: align);
+      return buildFieldWidgetForNumber(
+        value: value as num,
+        shorthand: true,
+        align: align,
+      );
 
     case FieldType.quantity:
       return Row(
@@ -138,7 +153,11 @@ Widget buildWidgetFromTypeAndValue({
 
     case FieldType.amount:
       if (value is String) {
-        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+        return buildFieldWidgetForText(
+          text: value,
+          align: align,
+          fixedFont: true,
+        );
       }
       if (value is MoneyModel) {
         return Row(
@@ -148,19 +167,36 @@ Widget buildWidgetFromTypeAndValue({
           ],
         );
       }
-      return buildFieldWidgetForAmount(value: value, shorthand: false, align: align, currency: currency);
+      return buildFieldWidgetForAmount(
+        value: value,
+        shorthand: false,
+        align: align,
+        currency: currency,
+      );
     case FieldType.amountShorthand:
-      return buildFieldWidgetForAmount(value: value, shorthand: true, align: align);
+      return buildFieldWidgetForAmount(
+        value: value,
+        shorthand: true,
+        align: align,
+      );
     case FieldType.widget:
       return value as Widget;
     case FieldType.date:
       if (value is String) {
-        return buildFieldWidgetForText(text: value, align: align, fixedFont: true);
+        return buildFieldWidgetForText(
+          text: value,
+          align: align,
+          fixedFont: true,
+        );
       }
       return buildFieldWidgetForDate(date: value, align: align);
     case FieldType.text:
     default:
-      return buildFieldWidgetForText(text: value.toString(), align: align, fixedFont: fixedFont);
+      return buildFieldWidgetForText(
+        text: value.toString(),
+        align: align,
+        fixedFont: fixedFont,
+      );
   }
 }
 
@@ -170,7 +206,10 @@ bool defaultCallbackValueTrue(final dynamic instance) => true;
 
 bool defaultCallbackValueFalse(final dynamic instance) => false;
 
-Field<dynamic>? getFieldDefinitionByName(final FieldDefinitions fields, final String nameToFind) {
+Field<dynamic>? getFieldDefinitionByName(
+  final FieldDefinitions fields,
+  final String nameToFind,
+) {
   for (final f in fields) {
     if (f.name == nameToFind) {
       return f;
@@ -211,17 +250,15 @@ enum ColumnWidth {
 }
 
 class Field<T> {
-
   Field({
+    // Value related
+    required final T defaultValue,
     this.type = FieldType.text,
     this.align = TextAlign.left,
     this.columnWidth = ColumnWidth.normal,
     this.fixedFont = false,
     this.name = '',
     this.serializeName = '',
-
-    // Value related
-    required final T defaultValue,
     this.getValueForDisplay = defaultCallbackValue,
     this.getValueForSerialization = defaultCallbackValue,
     this.getEditWidget,
@@ -278,18 +315,50 @@ class Field<T> {
         case FieldType.numericShorthand:
         case FieldType.quantity:
         case FieldType.amountShorthand:
-          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByValue(getValueForDisplay(a) as num, getValueForDisplay(b) as num, ascending);
+          sort = (
+            final MoneyObject a,
+            final MoneyObject b,
+            final bool ascending,
+          ) =>
+              sortByValue(
+                getValueForDisplay(a) as num,
+                getValueForDisplay(b) as num,
+                ascending,
+              );
         case FieldType.amount:
-          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByValue(getValueForDisplay(a).toDouble(), getValueForDisplay(b).toDouble(), ascending);
+          sort = (
+            final MoneyObject a,
+            final MoneyObject b,
+            final bool ascending,
+          ) =>
+              sortByValue(
+                getValueForDisplay(a).toDouble(),
+                getValueForDisplay(b).toDouble(),
+                ascending,
+              );
         case FieldType.date:
-          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByDate(getValueForDisplay(a), getValueForDisplay(b), ascending);
+          sort = (
+            final MoneyObject a,
+            final MoneyObject b,
+            final bool ascending,
+          ) =>
+              sortByDate(
+                getValueForDisplay(a),
+                getValueForDisplay(b),
+                ascending,
+              );
         case FieldType.text:
         default:
-          sort = (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-              sortByString(getValueForDisplay(a).toString(), getValueForDisplay(b).toString(), ascending);
+          sort = (
+            final MoneyObject a,
+            final MoneyObject b,
+            final bool ascending,
+          ) =>
+              sortByString(
+                getValueForDisplay(a).toString(),
+                getValueForDisplay(b).toString(),
+                ascending,
+              );
       }
     }
   }
@@ -532,7 +601,11 @@ class FieldString extends Field<String> {
         ) {
     if (sort == null) {
       super.sort = (final MoneyObject a, final MoneyObject b, final bool ascending) {
-        return sortByString(getValueForDisplay(a), getValueForDisplay(b), ascending);
+        return sortByString(
+          getValueForDisplay(a),
+          getValueForDisplay(b),
+          ascending,
+        );
       };
     }
   }

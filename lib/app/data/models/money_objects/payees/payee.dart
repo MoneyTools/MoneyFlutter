@@ -14,7 +14,6 @@ export 'package:money/app/data/models/money_objects/money_object.dart';
   1|Name|nvarchar(255)|1||0
  */
 class Payee extends MoneyObject {
-
   Payee() {
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: name.value,

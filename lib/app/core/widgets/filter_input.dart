@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 class FilterInput extends StatelessWidget {
-
   const FilterInput({
-    super.key,
     required this.hintText,
     required this.initialValue,
     required this.onChanged,
+    super.key,
   });
   final String hintText;
   final String initialValue;

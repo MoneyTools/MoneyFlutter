@@ -53,7 +53,9 @@ Future<void> writeElementsWithTextToFile(WidgetTester tester) async {
 
   // Function to recursively traverse the widget tree
   void traverseElement(Element? element) {
-    if (element == null) return; // Handle null element case
+    if (element == null) {
+      return; // Handle null element case
+    }
 
     // Check if the element contains readable text
     if (element.widget is Text || element.widget is ElevatedButton) {

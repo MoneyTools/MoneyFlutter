@@ -24,33 +24,37 @@ void showImportTransactionsFromTextInput(
   List<Widget> actionButtons = [
     // Button - Import
     DialogActionButton(
-        text: 'Import',
-        onPressed: () {
-          if (parser.isEmpty) {
-            messageBox(context, 'Nothing to import');
+      text: 'Import',
+      onPressed: () {
+        if (parser.isEmpty) {
+          messageBox(context, 'Nothing to import');
+        } else {
+          if (parser.containsErrors()) {
+            messageBox(context, 'Contains errors');
           } else {
-            if (parser.containsErrors()) {
-              messageBox(context, 'Contains errors');
-            } else {
-              // Import
-              final List<Transaction> transactionsToAdd = [];
-              for (final ValuesQuality singleTransactionInput in parser.lines) {
-                if (!singleTransactionInput.exist) {
-                  final t = createNewTransactionFromDateDescriptionAmount(
-                    account,
-                    singleTransactionInput.date.asDate(),
-                    singleTransactionInput.description.asString(),
-                    singleTransactionInput.amount.asAmount(),
-                  );
-                  transactionsToAdd.add(t);
-                }
+            // Import
+            final List<Transaction> transactionsToAdd = [];
+            for (final ValuesQuality singleTransactionInput in parser.lines) {
+              if (!singleTransactionInput.exist) {
+                final t = createNewTransactionFromDateDescriptionAmount(
+                  account,
+                  singleTransactionInput.date.asDate(),
+                  singleTransactionInput.description.asString(),
+                  singleTransactionInput.amount.asAmount(),
+                );
+                transactionsToAdd.add(t);
               }
-              addNewTransactions(transactionsToAdd, '${transactionsToAdd.length} transactions added');
-
-              Navigator.of(context).pop(false);
             }
+            addNewTransactions(
+              transactionsToAdd,
+              '${transactionsToAdd.length} transactions added',
+            );
+
+            Navigator.of(context).pop(false);
           }
-        }),
+        }
+      },
+    ),
   ];
 
   adaptiveScreenSizeDialog(
@@ -99,7 +103,10 @@ Transaction createNewTransactionFromDateDescriptionAmount(
 
 /// Add the list of transactions "as is", then notify the user when completed
 /// Note that this does not check for duplicated transaction or resolvs the Payee names
-void addNewTransactions(List<Transaction> transactionsNew, String messageToUserAfterAdding) {
+void addNewTransactions(
+  List<Transaction> transactionsNew,
+  String messageToUserAfterAdding,
+) {
   if (transactionsNew.isEmpty) {
     SnackBarService.displayWarning(
       autoDismiss: true,

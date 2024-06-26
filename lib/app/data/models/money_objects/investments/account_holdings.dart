@@ -77,7 +77,12 @@ class AccountHoldings {
   /// <param name="units">The number of units sold</param>
   /// <param name="amount">The total amount we received from the sale</param>
   /// <returns></returns>
-  List<SecuritySale> sell(Security s, DateTime dateSold, double units, double amount) {
+  List<SecuritySale> sell(
+    Security s,
+    DateTime dateSold,
+    double units,
+    double amount,
+  ) {
     SecurityFifoQueue? queue = queues[s];
 
     if (queue == null) {
@@ -94,7 +99,7 @@ class AccountHoldings {
     SecurityFifoQueue? queue = queues[s];
     if (queue != null) {
       return queue.processPendingSales();
-    }
+    } else {}
     return [];
   }
 

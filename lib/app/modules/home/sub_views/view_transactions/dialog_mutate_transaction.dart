@@ -11,18 +11,18 @@ Future<dynamic> showTransactionAndActions({
   required final Transaction transaction,
 }) {
   return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DialogMutateTransaction(transaction: transaction);
-      });
+    context: context,
+    builder: (final BuildContext context) {
+      return DialogMutateTransaction(transaction: transaction);
+    },
+  );
 }
 
 /// Dialog content
 class DialogMutateTransaction extends StatefulWidget {
-
   const DialogMutateTransaction({
-    super.key,
     required this.transaction,
+    super.key,
   });
   final Transaction transaction;
 
@@ -77,22 +77,26 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   }
 
   List<Widget> getActionButtons({
-    required BuildContext context,
-    required Transaction transaction,
-    required bool editMode,
-    required bool dataWasModified,
+    required final BuildContext context,
+    required final Transaction transaction,
+    required final bool editMode,
+    required final bool dataWasModified,
   }) {
     if (editMode) {
       return [
         DialogActionButton(
-            text: dataWasModified ? 'Apply' : 'Done',
-            onPressed: () {
-              // Changes were made
-              if (dataWasModified) {
-                Data().notifyMutationChanged(mutation: MutationType.changed, moneyObject: transaction);
-              }
-              Navigator.of(context).pop(true);
-            })
+          text: dataWasModified ? 'Apply' : 'Done',
+          onPressed: () {
+            // Changes were made
+            if (dataWasModified) {
+              Data().notifyMutationChanged(
+                mutation: MutationType.changed,
+                moneyObject: transaction,
+              );
+            }
+            Navigator.of(context).pop(true);
+          },
+        ),
       ];
     }
 
@@ -100,10 +104,11 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
     return [
       // Close
       DialogActionButton(
-          text: 'Close',
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          }),
+        text: 'Close',
+        onPressed: () {
+          Navigator.of(context).pop(false);
+        },
+      ),
       // Delete
       DialogActionButton(
         icon: Icons.delete_outlined,
@@ -114,7 +119,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             title: 'Delete Transaction',
             question: 'Are you sure you want to delete this transaction?',
             content: Column(
-              children: transaction.buildWidgets(onEdit: null, compact: true),
+              children: transaction.buildWidgets(compact: true),
             ),
             buttonText: 'Delete',
             onConfirmation: () {
@@ -161,8 +166,11 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   }
 
   bool isDataModified() {
-    MyJson afterEditing = _transaction.getPersistableJSon();
-    MyJson diff = myJsonDiff(before: _transaction.valueBeforeEdit ?? {}, after: afterEditing);
+    final MyJson afterEditing = _transaction.getPersistableJSon();
+    final MyJson diff = myJsonDiff(
+      before: _transaction.valueBeforeEdit ?? {},
+      after: afterEditing,
+    );
     return diff.keys.isNotEmpty;
   }
 }

@@ -2,11 +2,10 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 
 class MyRectangle extends StatelessWidget {
-
   const MyRectangle({
-    super.key,
     required this.size,
     required this.colorFill,
+    super.key,
     this.colorBorder = Colors.grey,
     this.shape = BoxShape.rectangle,
     this.showBorder = false,

@@ -26,7 +26,6 @@ class ViewCashFlow extends ViewWidget {
 }
 
 class ViewCashFlowState extends ViewWidgetState {
-
   ViewCashFlowState();
   late DateRange dateRangeTransactions;
 
@@ -71,9 +70,11 @@ class ViewCashFlowState extends ViewWidgetState {
         // View
         Expanded(
           child: Container(
-            key: Key(PreferenceController.to.cashflowViewAs.value.toString() +
-                selectedYearStart.toString() +
-                selectedYearEnd.toString()),
+            key: Key(
+              PreferenceController.to.cashflowViewAs.value.toString() +
+                  selectedYearStart.toString() +
+                  selectedYearEnd.toString(),
+            ),
             // rebuild if the date changes
             color: getColorTheme(context).surface,
             child: getView(),
@@ -90,7 +91,10 @@ class ViewCashFlowState extends ViewWidgetState {
 
     switch (PreferenceController.to.cashflowViewAs.value) {
       case CashflowViewAs.sankey:
-        return PanelSanKey(minYear: this.selectedYearStart, maxYear: this.selectedYearEnd);
+        return PanelSanKey(
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
+        );
       case CashflowViewAs.recurringIncomes:
         return PanelRecurrings(
           dateRangeSearch: dateRangeTransactions,
@@ -118,7 +122,11 @@ class ViewCashFlowState extends ViewWidgetState {
           spacing: SizeForPadding.large,
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Cash Flow', style: getTextTheme(context).titleLarge, textAlign: TextAlign.start),
+            Text(
+              'Cash Flow',
+              style: getTextTheme(context).titleLarge,
+              textAlign: TextAlign.start,
+            ),
             _buildSelectView(),
             if (PreferenceController.to.cashflowViewAs.value != CashflowViewAs.sankey)
               NumberPicker(
@@ -154,7 +162,9 @@ class ViewCashFlowState extends ViewWidgetState {
 
   Widget _buildSelectView() {
     return SegmentedButton<CashflowViewAs>(
-      style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
       segments: const <ButtonSegment<CashflowViewAs>>[
         ButtonSegment<CashflowViewAs>(
           value: CashflowViewAs.sankey,

@@ -8,7 +8,6 @@ class SanKeyEntry {
 }
 
 class ChannelPoint {
-
   ChannelPoint(this.x, this.top, this.bottom) {
     //
   }
@@ -18,9 +17,15 @@ class ChannelPoint {
 }
 
 class Block {
-
   /// Constructor
-  Block(this.name, this.rect, this.color, this.textColor, this.alignHorizontal, this.alignVertical);
+  Block(
+    this.name,
+    this.rect,
+    this.color,
+    this.textColor,
+    this.alignHorizontal,
+    this.alignVertical,
+  );
   String name = '';
   Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
   Color color;
@@ -40,12 +45,22 @@ class Block {
       canvas.drawRect(rect, paint);
 
       // Title
-      drawTextInRect(canvas, name, rect, color: textColor, textAlign: alignHorizontal);
+      drawTextInRect(
+        canvas,
+        name,
+        rect,
+        color: textColor,
+        textAlign: alignHorizontal,
+      );
     }
   }
 }
 
-void renderSourcesToTargetAsPercentage(final ui.Canvas canvas, final List<Block> list, final Block target) {
+void renderSourcesToTargetAsPercentage(
+  final ui.Canvas canvas,
+  final List<Block> list,
+  final Block target,
+) {
   final double sumOfHeight = sumHeight(list);
 
   double rollingVerticalPositionDrawnOnTheTarget = target.rect.top;
@@ -62,8 +77,11 @@ void renderSourcesToTargetAsPercentage(final ui.Canvas canvas, final List<Block>
     drawChanel(
       canvas: canvas,
       start: ChannelPoint(blockSideToStartFrom, block.rect.top, block.rect.bottom),
-      end: ChannelPoint(targetSideToStartFrom, rollingVerticalPositionDrawnOnTheTarget,
-          rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight),
+      end: ChannelPoint(
+        targetSideToStartFrom,
+        rollingVerticalPositionDrawnOnTheTarget,
+        rollingVerticalPositionDrawnOnTheTarget + targetSectionHeight,
+      ),
       color: block.color,
     );
 
@@ -100,19 +118,20 @@ void drawText(
   context.translate(x, y);
   context.rotate(angleRotationInRadians);
   final TextSpan span = TextSpan(
-      style: TextStyle(
-        color: color,
-        fontSize: fontSize,
-        fontWeight: FontWeight.w500,
-        // shadows: [
-        //   Shadow(
-        //     color: color,
-        //     offset: const Offset(0, 0),
-        //     blurRadius: 2,
-        //   ),
-        // ],
-      ),
-      text: name);
+    style: TextStyle(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: FontWeight.w500,
+      // shadows: [
+      //   Shadow(
+      //     color: color,
+      //     offset: const Offset(0, 0),
+      //     blurRadius: 2,
+      //   ),
+      // ],
+    ),
+    text: name,
+  );
   final TextPainter tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
 
   tp.layout();
@@ -135,14 +154,19 @@ void drawTextInRect(
   context.translate(rect.left, rect.top);
   context.rotate(angleRotationInRadians);
   final TextSpan span = TextSpan(
-      style: TextStyle(
-        color: color,
-        fontSize: fontSize,
-        fontWeight: FontWeight.w500,
-      ),
-      text: name);
+    style: TextStyle(
+      color: color,
+      fontSize: fontSize,
+      fontWeight: FontWeight.w500,
+    ),
+    text: name,
+  );
 
-  final TextPainter textPainter = TextPainter(text: span, textAlign: textAlign, textDirection: ui.TextDirection.ltr);
+  final TextPainter textPainter = TextPainter(
+    text: span,
+    textAlign: textAlign,
+    textDirection: ui.TextDirection.ltr,
+  );
 
   textPainter.layout();
 
@@ -217,13 +241,17 @@ void drawChanel({
 }
 
 double sumHeight(final List<Block> list) {
-  final double sumOfHeight =
-      list.fold(0.0, (final double previousValue, final Block element) => previousValue + element.rect.height);
+  final double sumOfHeight = list.fold(
+    0.0,
+    (final double previousValue, final Block element) => previousValue + element.rect.height,
+  );
   return sumOfHeight;
 }
 
 double sumValue(final List<SanKeyEntry> list) {
-  final double sumOfHeight =
-      list.fold(0.0, (final double previousValue, final SanKeyEntry element) => previousValue + element.value);
+  final double sumOfHeight = list.fold(
+    0.0,
+    (final double previousValue, final SanKeyEntry element) => previousValue + element.value,
+  );
   return sumOfHeight;
 }

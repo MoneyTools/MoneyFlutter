@@ -5,12 +5,11 @@ import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class DialogActionButton extends StatelessWidget {
-
   const DialogActionButton({
     super.key,
     required this.text,
-    this.icon,
     required this.onPressed,
+    this.icon,
   });
   final IconData? icon;
   final String text;
@@ -22,7 +21,11 @@ class DialogActionButton extends StatelessWidget {
         ? Text(text)
         : IntrinsicWidth(
             child: Row(
-              children: [Opacity(opacity: 0.5, child: Icon(icon)), gapSmall(), Text(text)],
+              children: [
+                Opacity(opacity: 0.5, child: Icon(icon)),
+                gapSmall(),
+                Text(text),
+              ],
             ),
           );
     return OutlinedButton(
@@ -102,7 +105,6 @@ Widget buildCopyButton(final Function callback) {
 }
 
 class InternalViewSwitching {
-
   InternalViewSwitching(this.icon, this.title, this.callback);
   final IconData? icon;
   final String title;
@@ -132,12 +134,13 @@ Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
     );
   }
   return myPopupMenuIconButton(
-      icon: Icons.open_in_new_outlined,
-      tooltip: 'Switch view',
-      list: list,
-      onSelected: (final index) {
-        listOfViewToJumpTo[index].callback();
-      });
+    icon: Icons.open_in_new_outlined,
+    tooltip: 'Switch view',
+    list: list,
+    onSelected: (final index) {
+      listOfViewToJumpTo[index].callback();
+    },
+  );
 }
 
 PopupMenuButton<int> myPopupMenuIconButton({
@@ -151,7 +154,10 @@ PopupMenuButton<int> myPopupMenuIconButton({
     tooltip: tooltip,
     position: PopupMenuPosition.under,
     shape: RoundedRectangleBorder(
-      side: BorderSide(color: ThemeController.to.primaryColor, width: 2), // Set the border color and width
+      side: BorderSide(
+        color: ThemeController.to.primaryColor,
+        width: 2,
+      ), // Set the border color and width
       borderRadius: BorderRadius.circular(8), // Set the border radius
     ),
     itemBuilder: (final BuildContext context) {

@@ -130,7 +130,11 @@ class PreferenceController extends GetxController {
   }
 
   // Set a string value to preferences
-  Future<void> setString(String key, String value, [bool removeIfEmpty = false]) async {
+  Future<void> setString(
+    String key,
+    String value, [
+    bool removeIfEmpty = false,
+  ]) async {
     if (removeIfEmpty && value.isEmpty) {
       await remove(key);
     } else {
@@ -196,8 +200,9 @@ class PreferenceController extends GetxController {
         final MyJson parsedMap = json.decode(serializedMap) as MyJson;
 
         // second to JSon map
-        final Map<String, MyJson> resultMap =
-            parsedMap.map((final String key, final dynamic value) => MapEntry<String, MyJson>(key, value as MyJson));
+        final Map<String, MyJson> resultMap = parsedMap.map(
+          (final String key, final dynamic value) => MapEntry<String, MyJson>(key, value as MyJson),
+        );
 
         return resultMap;
       }
@@ -238,7 +243,11 @@ class PreferenceController extends GetxController {
 void switchViewTransacionnForPayee(final String payeeName) {
   FieldFilters fieldFilters = FieldFilters();
   fieldFilters.add(
-      FieldFilter(fieldName: Constants.viewTransactionFieldnamePayee, filterTextInLowerCase: payeeName.toLowerCase()));
+    FieldFilter(
+      fieldName: Constants.viewTransactionFieldnamePayee,
+      filterTextInLowerCase: payeeName.toLowerCase(),
+    ),
+  );
 
   PreferenceController.to.setStringList(
     ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),

@@ -4,10 +4,9 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 
 class ColumnFilterPanel extends StatefulWidget {
-
   const ColumnFilterPanel({
-    super.key,
     required this.listOfUniqueInstances,
+    super.key,
     this.textAlign = TextAlign.left,
   });
   final List<ValueSelection> listOfUniqueInstances;
@@ -30,7 +29,9 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
   Widget build(BuildContext context) {
     // Apply filter
     list = widget.listOfUniqueInstances
-        .where((element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()))
+        .where(
+          (element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()),
+        )
         .toList();
 
     return Column(
@@ -61,7 +62,9 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
               }
             });
           },
-          child: Text('${areAllItemSelected() ? 'Unselect all' : 'Select all'} ${getItemCounts()}'),
+          child: Text(
+            '${areAllItemSelected() ? 'Unselect all' : 'Select all'} ${getItemCounts()}',
+          ),
         ),
         Expanded(
           child: SizedBox(
@@ -110,7 +113,6 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 }
 
 class ValueSelection {
-
   ValueSelection({required this.name, required this.isSelected});
   String name;
   bool isSelected;

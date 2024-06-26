@@ -6,7 +6,6 @@ import 'package:money/app/controller/theme_controler.dart';
 
 /// ( - )  100% ( + )
 class ZoomIncreaseDecrease extends StatefulWidget {
-
   const ZoomIncreaseDecrease({
     super.key,
     required this.title,
@@ -47,15 +46,16 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
           },
         ),
         Tooltip(
-          message: "Cmd/Ctrl 0",
+          message: 'Cmd/Ctrl 0',
           child: TextButton(
-              onPressed: () {
-                setState(() {
-                  ThemeController.to.setFontScaleTo(1.0);
-                  updateZoomTextFromValue();
-                });
-              },
-              child: Text(zoomValueAsText)),
+            onPressed: () {
+              setState(() {
+                ThemeController.to.setFontScaleTo(1.0);
+                updateZoomTextFromValue();
+              });
+            },
+            child: Text(zoomValueAsText),
+          ),
         ),
         IconButton(
           tooltip: 'Cmd/Ctrl +',
