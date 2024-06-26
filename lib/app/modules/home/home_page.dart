@@ -31,13 +31,20 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final DataController dataController = Get.find();
-    return Obx(() {
-      return myScaffold(
-        context,
-        const MyAppBar(),
-        dataController.isLoading.value ? const WorkingIndicator() : _buildAdativeContent(context),
-      );
-    });
+    return Obx(
+      () {
+        return myScaffold(
+          context,
+          const MyAppBar(),
+          dataController.isLoading.value
+              ? const WorkingIndicator()
+              : Container(
+                  color: getColorTheme(context).secondaryContainer,
+                  child: _buildAdativeContent(context),
+                ),
+        );
+      },
+    );
   }
 
   Widget _buildAdativeContent(BuildContext context) {
