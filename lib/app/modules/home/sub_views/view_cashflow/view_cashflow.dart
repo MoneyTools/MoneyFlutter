@@ -14,6 +14,7 @@ import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view.dart';
+import 'package:money/app/modules/home/sub_views/view_cashflow/networth_chart.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/panel_sankey.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/app/modules/home/sub_views/view_header.dart';
@@ -95,6 +96,13 @@ class ViewCashFlowState extends ViewWidgetState {
           minYear: this.selectedYearStart,
           maxYear: this.selectedYearEnd,
         );
+
+      case CashflowViewAs.netWorthOverTime:
+        return NetWorthChart(
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
+        );
+
       case CashflowViewAs.recurringIncomes:
         return PanelRecurrings(
           dateRangeSearch: dateRangeTransactions,
@@ -102,6 +110,7 @@ class ViewCashFlowState extends ViewWidgetState {
           maxYear: this.selectedYearEnd,
           viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
         );
+
       case CashflowViewAs.recurringExpenses:
         return PanelRecurrings(
           dateRangeSearch: dateRangeTransactions,
@@ -169,6 +178,10 @@ class ViewCashFlowState extends ViewWidgetState {
         ButtonSegment<CashflowViewAs>(
           value: CashflowViewAs.sankey,
           label: Text('Sankey'),
+        ),
+        ButtonSegment<CashflowViewAs>(
+          value: CashflowViewAs.netWorthOverTime,
+          label: Text('Networth'),
         ),
         ButtonSegment<CashflowViewAs>(
           value: CashflowViewAs.recurringIncomes,

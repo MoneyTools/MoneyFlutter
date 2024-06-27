@@ -260,6 +260,7 @@ void switchViewTransacionnForPayee(final String payeeName) {
 
 enum CashflowViewAs {
   sankey,
+  netWorthOverTime,
   recurringIncomes,
   recurringExpenses,
 }

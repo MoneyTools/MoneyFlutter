@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.35] 2024-06-28
+
+### Added
+
+- NetWorth chart
+  
 ## [version 1.8.34] 2024-06-27
 
 ### Added
