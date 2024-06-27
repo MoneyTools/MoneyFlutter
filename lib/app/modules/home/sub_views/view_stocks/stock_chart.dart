@@ -68,6 +68,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
             showTextInputDialog(
               context: context,
               title: 'API Key',
+              subTitle: 'for accessing https://twelvedata.com',
               initialValue: PreferenceController.to.apiKeyForStocks.value,
               onContinue: (final String text) {
                 PreferenceController.to.apiKeyForStocks.value = text;

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
+import 'package:money/app/core/widgets/gaps.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showTextInputDialog({
   required BuildContext context,
   required Function(String) onContinue,
   final String title = 'Input',
+  final String subTitle = '',
   final String initialValue = '',
   Function? onCancel,
 }) async {
@@ -15,10 +19,28 @@ Future<void> showTextInputDialog({
       return AlertDialog(
         title: Text(title),
         content: SizedBox(
-          width: 300,
-          child: TextField(
-            controller: textEditingController,
-            decoration: InputDecoration(hintText: 'Enter $title'),
+          width: 400,
+          height: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: Markdown(
+                  data: subTitle,
+                  selectable: true,
+                  onTapLink: (String text, String? href, String title) {
+                    launchUrl(Uri.parse(href!));
+                  },
+                ),
+              ),
+              gapLarge(),
+              Expanded(
+                child: TextField(
+                  controller: textEditingController,
+                  decoration: InputDecoration(hintText: 'Enter $title'),
+                ),
+              ),
+            ],
           ),
         ),
         actions: <Widget>[
