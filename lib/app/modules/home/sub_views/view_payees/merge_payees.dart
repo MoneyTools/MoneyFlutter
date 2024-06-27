@@ -226,6 +226,7 @@ void mutateTransactionsToPayee(
     fromPayeeIds.add(t.payee.value);
 
     t.stashValueBeforeEditing();
+    t.stashOriginalPayee();
 
     t.payee.value = toPayeeId;
     if (categoryId != null) {

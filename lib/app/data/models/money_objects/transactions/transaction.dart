@@ -216,12 +216,13 @@ class Transaction extends MoneyObject {
     },
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).payee.value,
     setValue: (MoneyObject instance, dynamic newValue) {
+      instance = instance as Transaction;
+      instance.stashOriginalPayee();
       if (newValue == -1) {
         // -1 means no payee, this is a Transfer
         // TODO - implement was solution given that the call back here only has one value use for the Payee ID
       } else {
         // Payee
-        instance = instance as Transaction;
         instance.payee.value = (newValue as int); // Payee Id
         instance.transfer.value = -1;
         instance.transferInstance = null;
@@ -260,6 +261,13 @@ class Transaction extends MoneyObject {
       );
     },
   );
+
+  /// keep track of the original Payee information, only do this if the originalPayee info is empty
+  void stashOriginalPayee() {
+    if (this.originalPayee.value.isEmpty) {
+      this.originalPayee.value = this.getPayeeOrTransferCaption();
+    }
+  }
 
   /// OriginalPayee
   /// before auto-aliasing, helps with future merging.
