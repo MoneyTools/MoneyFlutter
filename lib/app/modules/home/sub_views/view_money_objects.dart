@@ -14,6 +14,7 @@ import 'package:money/app/core/widgets/info_panel/info_panel.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/message_box.dart';
 import 'package:money/app/core/widgets/widgets.dart';
+import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
@@ -36,6 +37,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   late final ViewId viewId;
 
   PreferenceController preferenceController = Get.find();
+
+  bool firstLoadCompleted = false;
 
   // list management
   List<MoneyObject> list = <MoneyObject>[];
@@ -125,6 +128,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     /// restore selection of items
     setSelectedItem(_lastSelectedItemId);
+    firstLoadCompleted = true;
   }
 
   String getPreferenceKey(final String suffix) {
@@ -235,7 +239,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         final key = Key(
           '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}',
         );
-
+        if (firstLoadCompleted == false) {
+          return const WorkingIndicator();
+        }
         if (list.isEmpty) {
           return centerEmptyList(key);
         }
@@ -304,6 +310,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     setState(() {
       clearSelection();
       list = getList();
+      firstLoadCompleted = true;
       setSelectedItem(uniqueId);
     });
   }
