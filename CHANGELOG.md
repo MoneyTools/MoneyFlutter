@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.34] 2024-06-27
+
+### Added
+
+- Category suggestion [Approval|Reject]
+  
 ## [version 1.8.33] 2024-06-26
 
 ### Updated

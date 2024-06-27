@@ -2,19 +2,19 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Desktop debug",
+            "name": "debug",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug"
         },
         {
-            "name": "Desktop profile",
+            "name": "profile",
             "request": "launch",
             "type": "dart",
             "flutterMode": "profile"
         },
         {
-            "name": "Desktop release",
+            "name": "release",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"

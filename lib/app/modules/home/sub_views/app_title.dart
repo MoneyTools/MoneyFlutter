@@ -71,6 +71,7 @@ Widget _buildRevealContentOption(
   TextStyle textStyle = TextStyle(fontSize: SizeForText.normal, color: color);
 
   return Row(
+    crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Text(text, style: textStyle),
       gapSmall(),

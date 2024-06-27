@@ -6,6 +6,8 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/picker_edit_box_date.dart';
+import 'package:money/app/core/widgets/suggestion_approval.dart';
+import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
@@ -275,13 +277,39 @@ class Transaction extends MoneyObject {
   /// SQLite 6|Category|INT|0||0
   Field<int> categoryId = Field<int>(
     importance: 10,
-    type: FieldType.text,
+    type: FieldType.widget,
     columnWidth: ColumnWidth.large,
     name: 'Category',
     serializeName: 'Category',
     defaultValue: -1,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as Transaction).categoryId.value),
+    getValueForDisplay: (final MoneyObject instance) {
+      final t = (instance as Transaction);
+      if (t.categoryId.value == -1 && t.possibleMatchingCategoryId != -1) {
+        return SuggestionApproval(
+          child: TokenText(Data().categories.getNameFromId(t.possibleMatchingCategoryId)),
+          onApproved: () {
+            // record the change
+            t.stashValueBeforeEditing();
+
+            // Make change
+            t.categoryId.value = t.possibleMatchingCategoryId;
+            t.possibleMatchingCategoryId = -1;
+
+            // inform of changes
+            Data().notifyMutationChanged(
+              mutation: MutationType.changed,
+              moneyObject: t,
+              fireNotification: false,
+            );
+          },
+          onRejected: () {
+            t.possibleMatchingCategoryId = -1;
+          },
+        );
+      } else {
+        return TokenText(Data().categories.getNameFromId(t.categoryId.value));
+      }
+    },
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).categoryId.value = newValue as int,
@@ -520,6 +548,8 @@ class Transaction extends MoneyObject {
     }
     return '???';
   }
+
+  int possibleMatchingCategoryId = -1;
 
   FieldString currency = FieldString(
     type: FieldType.widget,

@@ -123,11 +123,32 @@ class Transactions extends MoneyObjects<Transaction> {
     }
   }
 
+  int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
+    final transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
+      (item) =>
+          item.accountId.value == t.accountId.value &&
+          item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
+    );
+    if (transactionMatchingAccountPayeeAndHasCategory != null) {
+      return transactionMatchingAccountPayeeAndHasCategory.categoryId.value;
+    }
+    return -1;
+  }
+
   @override
   void onAllDataLoaded() {
     // Now that everything is loaded, lets resolve the Transfers
 
+    final transactionsWithCategories = getListFlattenSplits(
+      whereClause: (Transaction item) => item.categoryId.value != -1,
+    );
+
     for (final Transaction transactionSource in iterableList()) {
+      if (transactionSource.categoryId.value == -1) {
+        transactionSource.possibleMatchingCategoryId =
+            findPossibleMatchingCategoryId(transactionSource, transactionsWithCategories);
+      }
+
       dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value!);
       if (transactionSource.accountInstance?.isOpen == true) {
         dateRangeActiveAccount.inflate(transactionSource.dateTime.value!);
