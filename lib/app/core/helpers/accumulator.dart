@@ -40,6 +40,20 @@ class AccumulatorList<K, V> {
   List<V> getList(K key) {
     return values[key]?.toList() ?? [];
   }
+
+  Set<V>? getValue(K key) {
+    return values[key];
+  }
+
+  bool containsKeyValue(K key, V value) {
+    var setFound = values[key];
+    if (setFound == null) {
+      // the key is not a match
+      return false;
+    }
+
+    return setFound.contains(value);
+  }
 }
 
 /// Tally values
@@ -128,8 +142,8 @@ class AccumulatorDateRange<K> {
 }
 
 /// Ensure unique Key [K] instances, that cumulate unique instance of [I] another accumulator
-/// this last accumulator stores [V]
-class MapAccumulator<K, I, V> {
+/// for Sum of [V]
+class MapAccumulatorSum<K, I, V> {
   Map<K, AccumulatorSum<I, V>> map = {};
 
   void cumulate(K k, I i, V v) {
@@ -141,5 +155,34 @@ class MapAccumulator<K, I, V> {
 
   AccumulatorSum<I, V>? getLevel1(K key) {
     return map[key];
+  }
+}
+
+/// Ensure unique Key [K] instances, that cumulate unique instance of [I] another accumulator
+/// for Set of [V]
+class MapAccumulatorSet<K, I, V> {
+  Map<K, AccumulatorList<I, V>> map = {};
+
+  void cumulate(K k, I i, V v) {
+    if (!map.containsKey(k)) {
+      map[k] = AccumulatorList<I, V>();
+    }
+    map[k]!.cumulate(i, v);
+  }
+
+  AccumulatorList<I, V>? getLevel1(K key1) {
+    return map[key1];
+  }
+
+  /// for example
+  /// cumulating 'species', 'number of Legs', 'name'
+  /// MapAccumulatorSet<String, int, String>
+  /// find ('bird', 2) returns ['duck', 'owl'])
+  ///
+  /// cumulating 'Account ID', 'PayeeNames', 'Categories'
+  /// find (42, 'Starbucks') returns [12,33,207])
+  Set<V> find(K key1, I key2) {
+    final foundInLevel1 = map[key1];
+    return foundInLevel1?.getValue(key2) ?? <V>{};
   }
 }

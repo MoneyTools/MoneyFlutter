@@ -4,7 +4,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
-import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
@@ -255,14 +254,12 @@ class Data {
         case '.mmdb':
           // Load from SQLite
           if (await loadFromSql(dateSource.filePath, dateSource.fileBytes)) {
-            final PreferenceController preferenceController = Get.find();
-            preferenceController.addToMRU(dateSource.filePath);
+            PreferenceController.to.addToMRU(dateSource.filePath);
           }
         case '.mmcsv':
           // Zip CSV files
           await loadFromZippedCsv(dateSource.filePath, dateSource.fileBytes);
-          final PreferenceController preferenceController = Get.find();
-          preferenceController.addToMRU(dateSource.filePath);
+          PreferenceController.to.addToMRU(dateSource.filePath);
 
         default:
           SnackBarService.displayWarning(

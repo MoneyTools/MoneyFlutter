@@ -21,7 +21,7 @@ class RecurringPayment {
     categoryIdsAndSums = [];
     frequency = transactions.length;
 
-    MapAccumulator<int, int, double> payeeIdMonthAndSums = MapAccumulator<int, int, double>();
+    MapAccumulatorSum<int, int, double> payeeIdMonthAndSums = MapAccumulatorSum<int, int, double>();
     Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
 
     averagePerMonths = List.generate(12, (index) => Pair<int, double>(0, 0));

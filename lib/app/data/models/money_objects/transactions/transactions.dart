@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
@@ -135,25 +136,46 @@ class Transactions extends MoneyObjects<Transaction> {
     return -1;
   }
 
+  /// Now that everything is loaded, adjust relation between MoneyObjects
   @override
   void onAllDataLoaded() {
-    // Now that everything is loaded, lets resolve the Transfers
+    // Pre computer possible category matching for Transaction that have no associated categories
+    // Stopwatch watchAll = Stopwatch()..start();
 
-    final transactionsWithCategories = getListFlattenSplits(
-      whereClause: (Transaction item) => item.categoryId.value != -1,
-    );
+    // Stopwatch watchInit = Stopwatch()..start();
+    MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
 
+    final transactionsWithCategories = getListFlattenSplits();
+    for (var t in transactionsWithCategories) {
+      if (t.categoryId.value != -1) {
+        accountsToPayeeNameToCategories.cumulate(t.accountId.value, t.getPayeeOrTransferCaption(), t.categoryId.value);
+      }
+    }
+
+    // watchInit.stop();
+    // debugLog('getListFlattenSplits: ${watchInit.elapsedMilliseconds} ms');
+
+    // Stopwatch watchFind = Stopwatch();
     for (final Transaction transactionSource in iterableList()) {
+      // Pre computer possible category matching for Transaction that have no associated categories
       if (transactionSource.categoryId.value == -1) {
+        // watchFind.start();
+        final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories.find(
+          transactionSource.accountId.value,
+          transactionSource.getPayeeOrTransferCaption(),
+        );
         transactionSource.possibleMatchingCategoryId =
-            findPossibleMatchingCategoryId(transactionSource, transactionsWithCategories);
+            setOfPossibleCategoryId.isEmpty ? -1 : setOfPossibleCategoryId.first;
+        // watchFind.stop();
       }
 
+      // Computer date range of all transactions
       dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value!);
       if (transactionSource.accountInstance?.isOpen == true) {
         dateRangeActiveAccount.inflate(transactionSource.dateTime.value!);
       }
 
+      // Resolve the Transfers
       final int transferId = transactionSource.transfer.value;
       transactionSource.transferInstance = null;
 
@@ -229,6 +251,9 @@ class Transactions extends MoneyObjects<Transaction> {
     // make sure that we have valid min max dates
     dateRangeIncludingClosedAccount.ensureNoNullDates();
     dateRangeActiveAccount.ensureNoNullDates();
+
+    // debugLog('DONE-----: ${watchAll.elapsedMilliseconds} ms');
+    // debugLog('Find-----: ${watchFind.elapsedMilliseconds} ms');
   }
 
   int getNextTransactionId() {
