@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/modules/home/sub_views/view_pending_changes/view_pending_changes.dart';
+import 'package:money/app/modules/pending_changes/pending_changes_dialog.dart';
 
 ///
 class BadgePendingChanges extends StatelessWidget {
@@ -35,7 +35,7 @@ class BadgePendingChanges extends StatelessWidget {
           backgroundColor: Colors.white,
         ),
         onPressed: () {
-          PendingChanges.show(context);
+          PendingChangesDialog.show(context);
         },
         child: getChangeLabel(context),
       ),

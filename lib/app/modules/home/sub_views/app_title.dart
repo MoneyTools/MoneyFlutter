@@ -8,7 +8,7 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/mru_dropdown.dart';
-import 'package:money/app/modules/home/sub_views/view_pending_changes/badge_pending_changes.dart';
+import 'package:money/app/modules/pending_changes/badge_pending_changes.dart';
 
 class AppTitle extends StatelessWidget {
   AppTitle({

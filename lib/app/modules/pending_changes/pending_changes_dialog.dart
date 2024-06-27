@@ -8,11 +8,11 @@ import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
-class PendingChanges extends StatefulWidget {
-  const PendingChanges({super.key});
+class PendingChangesDialog extends StatefulWidget {
+  const PendingChangesDialog({super.key});
 
   @override
-  State<PendingChanges> createState() => _PendingChangesState();
+  State<PendingChangesDialog> createState() => _PendingChangesDialogState();
 
   static void show(final BuildContext context) {
     adaptiveScreenSizeDialog(
@@ -22,7 +22,7 @@ class PendingChanges extends StatefulWidget {
       child: const SizedBox(
         width: 600,
         height: 900,
-        child: PendingChanges(),
+        child: PendingChangesDialog(),
       ),
       actionButtons: [
         DialogActionButton(
@@ -44,23 +44,23 @@ class PendingChanges extends StatefulWidget {
   }
 }
 
-class _PendingChangesState extends State<PendingChanges> {
+class _PendingChangesDialogState extends State<PendingChangesDialog> {
   bool _isLoading = true;
 
   final List<Mutations> _data = [
     Mutations(
       typeOfMutation: MutationType.inserted,
-      title: 'Added',
+      title: 'added',
       color: Colors.green,
     ),
     Mutations(
       typeOfMutation: MutationType.changed,
-      title: 'Modified',
+      title: 'modified',
       color: Colors.orange,
     ),
     Mutations(
       typeOfMutation: MutationType.deleted,
-      title: 'Deleted',
+      title: 'deleted',
       color: Colors.red,
     ),
   ];
@@ -80,7 +80,7 @@ class _PendingChangesState extends State<PendingChanges> {
     setState(() {
       _isLoading = false;
 
-      // default to what segment
+      // default to the first segment that has a count
       for (int i = 0; i < _data.length; i++) {
         if (_data[i].count > 0) {
           _displayMutationType = i;
@@ -135,15 +135,7 @@ class _PendingChangesState extends State<PendingChanges> {
       value: id,
       label: SizedBox(
         width: 120,
-        child: Badge(
-          backgroundColor: mutations.color,
-          label: Text(
-            getIntAsText(mutations.count),
-          ),
-          alignment: Alignment.centerRight,
-          offset: const Offset(-30, 0),
-          child: Text(mutations.title),
-        ),
+        child: Text(mutations.fullTitle, textAlign: TextAlign.center, style: TextStyle(color: mutations.color)),
       ),
     );
   }
@@ -180,7 +172,7 @@ class _PendingChangesState extends State<PendingChanges> {
 
   Widget _buildListOfDetailsOfSelectedGroup(Mutations mutations) {
     if (mutations.selectedGroup >= mutations.mutationGroups.length) {
-      return const Text('No mutations');
+      return Center(child: Text('No items were ${mutations.title}'));
     }
 
     final MutationGroup g = mutations.mutationGroups[mutations.selectedGroup];
@@ -218,5 +210,12 @@ class Mutations {
     for (final m in mutationGroups) {
       count += m.whatWasMutated.length;
     }
+  }
+
+  String get fullTitle {
+    if (count == 0) {
+      return 'None $title';
+    }
+    return '${getIntAsText(count)} $title';
   }
 }
