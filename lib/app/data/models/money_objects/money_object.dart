@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/form_field_switch.dart';
 import 'package:money/app/core/widgets/form_field_widget.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -114,7 +115,7 @@ class MoneyObject {
   ///
   /// Name: Bob
   /// Date: 2020-12-31
-  List<Widget> buildWidgets({
+  List<Widget> buildListOfNamesValuesWidgets({
     Function? onEdit,
     bool compact = false,
   }) {
@@ -124,17 +125,17 @@ class MoneyObject {
     final List<Widget> widgets = <Widget>[];
     final definitions = getFieldDefinitionsForPanel();
     for (final fieldDefinition in definitions) {
-      final Widget widget = getBestWidgetForFieldDefinition(
-        this,
-        fieldDefinition,
-        onEdit,
-        compact,
+      final Widget widget = buildWidgetNameValueFromFieldDefinition(
+        objectInstance: this,
+        fieldDefinition: fieldDefinition,
+        singleLineNameValue: compact, // when passing true, the onEdit is ignored
+        onEdited: onEdit,
         isFirstItem: fieldDefinition == definitions.first,
         isLastItem: fieldDefinition == definitions.last,
       );
       widgets.add(
         Padding(
-          padding: compact ? const EdgeInsets.symmetric(horizontal: 8.0) : const EdgeInsets.all(8.0),
+          padding: compact ? const EdgeInsets.all(0) : const EdgeInsets.all(SizeForPadding.normal),
           child: widget,
         ),
       );
@@ -142,21 +143,21 @@ class MoneyObject {
     return widgets;
   }
 
-  Widget getBestWidgetForFieldDefinition(
-    final MoneyObject objectInstance,
-    final Field<dynamic> fieldDefinition,
-    final Function? onEdited,
-    final bool compact, {
-    bool isFirstItem = false,
-    bool isLastItem = false,
+  Widget buildWidgetNameValueFromFieldDefinition({
+    required final MoneyObject objectInstance,
+    required final Field<dynamic> fieldDefinition,
+    required final bool singleLineNameValue,
+    required final Function? onEdited,
+    final bool isFirstItem = false,
+    final bool isLastItem = false,
   }) {
-    final isReadOnly = onEdited == null || fieldDefinition.setValue == null;
     final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
 
-    if (compact) {
+    if (singleLineNameValue) {
       // simple [Name  Value] pair
       return _buildNameValuePair(fieldDefinition, fieldValue);
     }
+    final isReadOnly = onEdited == null || fieldDefinition.setValue == null;
 
     final InputDecoration decoration = getFormFieldDecoration(
       fieldName: fieldDefinition.name,
@@ -264,6 +265,7 @@ class MoneyObject {
         ),
       ),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(
             flex: 1,
@@ -272,8 +274,12 @@ class MoneyObject {
               child: Text(fieldDefinition.name),
             ),
           ),
-          IntrinsicWidth(
-            child: fieldDefinition.getValueWidgetForDetailView(fieldValue),
+          Expanded(
+            flex: 2,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: fieldDefinition.getValueWidgetForDetailView(fieldValue),
+            ),
           ),
         ],
       ),

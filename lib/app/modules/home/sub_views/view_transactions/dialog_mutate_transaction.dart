@@ -51,7 +51,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: _transaction.buildWidgets(
+                children: _transaction.buildListOfNamesValuesWidgets(
                   onEdit: isInEditingMode
                       ? () {
                           setState(() {
@@ -119,7 +119,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
             title: 'Delete Transaction',
             question: 'Are you sure you want to delete this transaction?',
             content: Column(
-              children: transaction.buildWidgets(compact: true),
+              children: transaction.buildListOfNamesValuesWidgets(compact: true),
             ),
             buttonText: 'Delete',
             onConfirmation: () {

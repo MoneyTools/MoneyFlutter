@@ -97,7 +97,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: _moneyObject.buildWidgets(
+              children: _moneyObject.buildListOfNamesValuesWidgets(
                 onEdit: () {
                   setState(() {
                     dataWasModified = isDataModified(_moneyObject);

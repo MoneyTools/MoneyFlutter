@@ -22,8 +22,8 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/column_filter_panel.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
+import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_header.dart';
-import 'package:money/app/modules/home/sub_views/view_transactions/money_object_card.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {
   const ViewForMoneyObjects({super.key, this.includeClosedAccount = false});
@@ -454,7 +454,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
     final content = moneyObjects.length == 1
         ? Column(
-            children: moneyObjects.first.buildWidgets(onEdit: null, compact: true),
+            children: moneyObjects.first.buildListOfNamesValuesWidgets(onEdit: null, compact: true),
           )
         : Center(
             child: Text(
