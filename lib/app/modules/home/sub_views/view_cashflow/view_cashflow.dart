@@ -137,7 +137,8 @@ class ViewCashFlowState extends ViewWidgetState {
               textAlign: TextAlign.start,
             ),
             _buildSelectView(),
-            if (PreferenceController.to.cashflowViewAs.value != CashflowViewAs.sankey)
+            if ([CashflowViewAs.recurringExpenses, CashflowViewAs.recurringIncomes]
+                .contains(PreferenceController.to.cashflowViewAs.value))
               NumberPicker(
                 title: 'Occurrence',
                 selectedNumber: PreferenceController.to.cashflowRecurringOccurrences.value,
