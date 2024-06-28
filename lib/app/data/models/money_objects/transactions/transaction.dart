@@ -2,10 +2,12 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/picker_edit_box_date.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/core/widgets/suggestion_approval.dart';
 import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -179,22 +181,54 @@ class Transaction extends MoneyObject {
   /// SQLite 3|Status|INT|0||0
   Field<TransactionStatus> status = Field<TransactionStatus>(
     importance: 20,
-    type: FieldType.text,
+    type: FieldType.widget,
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     defaultValue: TransactionStatus.none,
     useAsDetailPanels: defaultCallbackValueFalse,
     name: columnIdStatus,
     serializeName: 'Status',
-    getValueForDisplay: (final MoneyObject instance) =>
-        transactionStatusToLetter((instance as Transaction).status.value),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction)._buildStatusButtonToggle(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).status.value.index,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).status.value = newValue,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
       transactionStatusToLetter((a as Transaction).status.value),
       transactionStatusToLetter((b as Transaction).status.value),
       ascending,
     ),
   );
+
+  Widget _buildStatusButtonToggle() {
+    return TextButton(
+      style: OutlinedButton.styleFrom(
+        padding: EdgeInsets.zero, // Remove all padding
+      ),
+      child: Text(transactionStatusToLetter(this.status.value)),
+      onPressed: () {
+        if (this.status.value == TransactionStatus.reconciled) {
+          // do nothing, its not allowed to change a reconciled transaction
+          SnackBarService.displayWarning(message: 'Reconcile Transaction Status are prevented from changed.');
+          return;
+        }
+        if (this.status.value == TransactionStatus.cleared) {
+          // Attempt to restore/undo
+          if (valueBeforeEdit != null) {
+            // bring back the previous value
+            int oldValue = valueBeforeEdit![this.status.name] ?? 0;
+            this.status.value = TransactionStatus.values[oldValue];
+
+            // if this was the only change to this instance we can undo the mutation state
+            if (mutation == MutationType.changed && MoneyObject.isDataModified(this) == false) {
+              mutation = MutationType.none;
+              DataController.to.trackMutations.increaseNumber(increaseChanged: -1);
+            }
+          }
+        } else {
+          mutateField(this.status.name, TransactionStatus.cleared, true);
+        }
+      },
+    );
+  }
 
   /// Payee Id (displayed as Text name of the Payee)
   /// SQLite 4|Payee|INT|0||0

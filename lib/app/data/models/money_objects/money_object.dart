@@ -65,6 +65,15 @@ class MoneyObject {
 
   bool get isChanged => mutation == MutationType.changed;
 
+  static bool isDataModified(MoneyObject moneyObject) {
+    MyJson afterEditing = moneyObject.getPersistableJSon();
+    MyJson diff = myJsonDiff(
+      before: moneyObject.valueBeforeEdit ?? {},
+      after: afterEditing,
+    );
+    return diff.keys.isNotEmpty;
+  }
+
   MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {
     if (moneyObjectInstances.isEmpty) {
       return MoneyObject();

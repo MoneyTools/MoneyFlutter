@@ -4,6 +4,7 @@
 
 ### Added
 
+- Toggle Transaction Status ['_','C','E','R','V']
 - NetWorth chart
   
 ## [version 1.8.34] 2024-06-27

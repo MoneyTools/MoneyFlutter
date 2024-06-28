@@ -100,7 +100,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
               children: _moneyObject.buildListOfNamesValuesWidgets(
                 onEdit: () {
                   setState(() {
-                    dataWasModified = isDataModified(_moneyObject);
+                    dataWasModified = MoneyObject.isDataModified(_moneyObject);
                   });
                 },
               ),
@@ -147,14 +147,5 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
           },
         ),
     ];
-  }
-
-  bool isDataModified(MoneyObject moneyObject) {
-    MyJson afterEditing = moneyObject.getPersistableJSon();
-    MyJson diff = myJsonDiff(
-      before: moneyObject.valueBeforeEdit ?? {},
-      after: afterEditing,
-    );
-    return diff.keys.isNotEmpty;
   }
 }

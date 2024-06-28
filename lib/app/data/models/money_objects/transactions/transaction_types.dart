@@ -9,7 +9,7 @@ enum TransactionStatus {
 String transactionStatusToLetter(final TransactionStatus status) {
   switch (status) {
     case TransactionStatus.none:
-      return 'N';
+      return '_';
     case TransactionStatus.electronic:
       return 'E';
     case TransactionStatus.cleared:
