@@ -96,7 +96,6 @@ class Transactions extends MoneyObjects<Transaction> {
 
   DateRange dateRangeIncludingClosedAccount = DateRange();
   DateRange dateRangeActiveAccount = DateRange();
-
   double runningBalance = 0.00;
 
   @override
@@ -156,6 +155,9 @@ class Transactions extends MoneyObjects<Transaction> {
     // debugLog('getListFlattenSplits: ${watchInit.elapsedMilliseconds} ms');
 
     // Stopwatch watchFind = Stopwatch();
+    dateRangeActiveAccount.clear();
+    dateRangeIncludingClosedAccount.clear();
+
     for (final Transaction transactionSource in iterableList()) {
       // Pre computer possible category matching for Transaction that have no associated categories
       if (transactionSource.categoryId.value == -1) {
