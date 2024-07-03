@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.36] 2024-07-03
+
+### Updated
+
+- Improve UX for Range Years selector
+  
 ## [version 1.8.35] 2024-06-28
 
 ### Added
