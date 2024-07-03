@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
@@ -8,7 +9,7 @@ import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/three_part_label.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/date_range.dart';
+
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';

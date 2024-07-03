@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/data/models/date_range.dart';
+import 'package:money/app/core/helpers/ranges.dart';
+
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 
 import 'package:money/app/data/storage/data/data.dart';

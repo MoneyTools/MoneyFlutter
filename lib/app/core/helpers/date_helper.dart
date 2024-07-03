@@ -212,3 +212,16 @@ String getElapsedTime(DateTime dateTime) {
     return 'Just now';
   }
 }
+
+/// Extension methods for [DateTime] class.
+extension DateTimeExtension on DateTime {
+  /// Returns start of a day.
+  /// DateTime.now() -> 2019-09-30 17:15:20.294
+  /// DateTime.now().startOfDay -> 2019-09-30 00:00:00.000
+  DateTime get startOfDay => DateTime(year, month, day);
+
+  /// Returns end of a day.
+  /// DateTime.now() -> 2019-09-30 17:15:20.294
+  /// DateTime.now().endOfDay -> 2019-09-30 23:59:59.999
+  DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999, 999);
+}

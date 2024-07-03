@@ -2,29 +2,39 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 
+/// A widget that allows users to select a range of years using a slider.
 class YearRangeSlider extends StatefulWidget {
-  YearRangeSlider({
+  /// Creates a [YearRangeSlider].
+  ///
+  /// [initialRange] specifies the initial range of years.
+  /// [yearRange] specifies the range of years the slider can select.
+  /// [onChanged] is a callback that returns the selected range of years whenever it changes.
+  const YearRangeSlider({
     super.key,
-    required this.minYear,
-    required this.maxYear,
+    required this.initialRange,
+    required this.yearRange,
     required this.onChanged,
-  }) {
-    spanInYears = maxYear - minYear;
-  }
-  final int minYear;
-  final int maxYear;
-  final void Function(int minYear, int maxYear) onChanged;
-  late final int spanInYears;
+  });
+
+  /// The initial range of years.
+  final IntRange initialRange;
+
+  /// The full range of years.
+  final IntRange yearRange;
+
+  /// A callback that returns the selected range of years whenever it changes.
+  final void Function(IntRange range) onChanged;
 
   @override
   YearRangeSliderState createState() => YearRangeSliderState();
 }
 
 class YearRangeSliderState extends State<YearRangeSlider> {
-  late int _selectedYearMin = widget.minYear;
-  late int _selectedYearMax = widget.maxYear;
+  /// The currently selected year range.
+  late final IntRange _selectedYearRange = IntRange(min: widget.initialRange.min, max: widget.initialRange.max);
 
   // Bottom drag related properties
   final double sliderEdgePadding = 20;
@@ -32,65 +42,44 @@ class YearRangeSliderState extends State<YearRangeSlider> {
   double _leftMarginOfBottomText = 0;
   double _dragBottomWidth = 0;
 
-  int get _rangeSpanSelectedYears => _selectedYearMax - _selectedYearMin + 1;
-
   @override
   Widget build(BuildContext context) {
-    if (widget.minYear == 0 || widget.maxYear == 0 || widget.spanInYears == 0) {
+    // If the year range is invalid, display a message.
+    if (!widget.yearRange.isValid()) {
       return const Text('No date range yet');
     }
 
     return LayoutBuilder(
       builder: (BuildContext context, final BoxConstraints constraints) {
         final double visualWidthOfSlider = constraints.maxWidth - (sliderEdgePadding * 2);
-        final double eachYearInPixel = visualWidthOfSlider / widget.spanInYears;
+        final double eachYearInPixel = visualWidthOfSlider / widget.yearRange.span;
 
-        _dragBottomWidth = max((_rangeSpanSelectedYears - 1) * eachYearInPixel, 162);
-
-        final int spanFromStartingPosition = _selectedYearMin - widget.minYear;
-        final double selectedYearPositionInPixel = spanFromStartingPosition * eachYearInPixel;
-        _leftMarginOfBottomText = min(selectedYearPositionInPixel, visualWidthOfSlider - _dragBottomWidth);
-        _leftMarginOfBottomText = max(0, _leftMarginOfBottomText);
+        _updateDragBottomWidth(eachYearInPixel);
+        _updateLeftMarginOfBottomText(visualWidthOfSlider, eachYearInPixel);
 
         return SizedBox(
-          height: 60,
+          height: 58,
           child: Stack(
             alignment: AlignmentDirectional.bottomStart,
             children: [
               RangeSlider(
-                min: widget.minYear.toDouble(),
-                max: widget.maxYear.toDouble(),
-                values: RangeValues(_selectedYearMin.toDouble(), _selectedYearMax.toDouble()),
-                labels: RangeLabels(_selectedYearMin.toString(), _selectedYearMax.toString()),
-                divisions: widget.spanInYears,
+                min: widget.yearRange.min.toDouble(),
+                max: widget.yearRange.max.toDouble(),
+                values: RangeValues(_selectedYearRange.min.toDouble(), _selectedYearRange.max.toDouble()),
+                labels: RangeLabels(_selectedYearRange.min.toString(), _selectedYearRange.max.toString()),
+                divisions: widget.yearRange.span,
                 onChanged: (final RangeValues values) {
                   setState(() {
-                    _selectedYearMin = values.start.toInt();
-                    _selectedYearMax = values.end.toInt();
-                    widget.onChanged(_selectedYearMin, _selectedYearMax);
+                    _selectedYearRange.update(values.start.round(), values.end.round());
+                    widget.onChanged(_selectedYearRange);
                   });
                 },
               ),
               GestureDetector(
                 onHorizontalDragUpdate: (final DragUpdateDetails details) {
                   setState(() {
-                    _dragGesturePosition += details.primaryDelta!;
-                    final double thresholdForMovingToNextPosition = constraints.maxWidth / widget.spanInYears / 4;
-
-                    if (_dragGesturePosition >= thresholdForMovingToNextPosition) {
-                      _dragGesturePosition = 0;
-                      if (_selectedYearMax + 1 <= widget.maxYear) {
-                        _selectedYearMin++;
-                        _selectedYearMax++;
-                      }
-                    } else if (_dragGesturePosition <= -thresholdForMovingToNextPosition) {
-                      _dragGesturePosition = 0;
-                      if (_selectedYearMin - 1 >= widget.minYear) {
-                        _selectedYearMin--;
-                        _selectedYearMax--;
-                      }
-                    }
-                    widget.onChanged(_selectedYearMin, _selectedYearMax);
+                    _handleDragUpdate(details, constraints.maxWidth);
+                    widget.onChanged(_selectedYearRange);
                   });
                 },
                 child: Padding(
@@ -105,10 +94,38 @@ class YearRangeSliderState extends State<YearRangeSlider> {
     );
   }
 
+  void _updateDragBottomWidth(double eachYearInPixel) {
+    const minimumWidthToFitAllElements = 162.0;
+    _dragBottomWidth = max(_selectedYearRange.span * eachYearInPixel, minimumWidthToFitAllElements);
+  }
+
+  void _updateLeftMarginOfBottomText(double visualWidthOfSlider, double eachYearInPixel) {
+    final double selectedYearPositionInPixel = (_selectedYearRange.min - widget.yearRange.min) * eachYearInPixel;
+    _leftMarginOfBottomText = min(selectedYearPositionInPixel, visualWidthOfSlider - _dragBottomWidth);
+    _leftMarginOfBottomText = max(0, _leftMarginOfBottomText);
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details, double maxWidth) {
+    _dragGesturePosition += details.primaryDelta!;
+    final double thresholdForMovingToNextPosition = maxWidth / widget.yearRange.span / 4;
+
+    if (_dragGesturePosition >= thresholdForMovingToNextPosition) {
+      _dragGesturePosition = 0;
+      _selectedYearRange.increment(widget.yearRange.max);
+    } else if (_dragGesturePosition <= -thresholdForMovingToNextPosition) {
+      _dragGesturePosition = 0;
+      _selectedYearRange.decrement(widget.yearRange.min);
+    }
+  }
+
+  /// Builds the drag button that displays the selected year range and allows dragging.
+  ///
+  /// [context] is the build context used to retrieve theme information.
   Widget _buildDragButton(final BuildContext context) {
     final String spanAsText =
-        getSingularPluralText(_rangeSpanSelectedYears.toString(), _rangeSpanSelectedYears, 'years', 'year');
-    final bool canBeDragged = _selectedYearMin != widget.minYear || _selectedYearMax != widget.maxYear;
+        getSingularPluralText(_selectedYearRange.span.toString(), _selectedYearRange.span, 'years', 'year');
+    final bool canBeDragged =
+        _selectedYearRange.min != widget.yearRange.min || _selectedYearRange.max != widget.yearRange.max;
     final Color textColor = getColorTheme(context).primary;
 
     return Container(
@@ -116,10 +133,10 @@ class YearRangeSliderState extends State<YearRangeSlider> {
       margin: EdgeInsets.only(left: _leftMarginOfBottomText),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Text(
-            _selectedYearMin.toString(),
+            _selectedYearRange.min.toString(),
             style: TextStyle(fontSize: 12, color: textColor),
           ),
           Opacity(
@@ -135,7 +152,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
             child: Icon(Icons.drag_indicator_outlined, color: textColor),
           ),
           Text(
-            _selectedYearMax.toString(),
+            _selectedYearRange.max.toString(),
             style: TextStyle(fontSize: 12, color: textColor),
           ),
         ],

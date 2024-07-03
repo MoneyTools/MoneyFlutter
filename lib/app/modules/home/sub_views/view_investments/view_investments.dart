@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';

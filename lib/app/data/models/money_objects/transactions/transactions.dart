@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/data/models/date_range.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
@@ -13,7 +13,6 @@ import 'package:money/app/data/storage/data/data.dart';
 export 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 
 part 'transactions_csv.dart';
-
 part 'transactions_demo.dart';
 
 class Transactions extends MoneyObjects<Transaction> {

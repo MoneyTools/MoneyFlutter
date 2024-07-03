@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/data/models/date_range.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 Widget getFooterForDateRange(final DateRange dateRange) {
