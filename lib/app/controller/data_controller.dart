@@ -94,13 +94,6 @@ class DataController extends GetxController {
     }
   }
 
-  @override
-  void onInit() {
-    super.onInit();
-    debugLog('FileLoaderController onInit()');
-    // loadLastFileSaved();
-  }
-
   void setCurrentFileName(final String filenameLoaded) {
     currentLoadedFileName.value = filenameLoaded;
     final PreferenceController preferenceController = Get.find();

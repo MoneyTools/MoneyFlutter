@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -83,7 +82,6 @@ class PreferenceController extends GetxController {
 
   @override
   void onInit() async {
-    debugLog('PrefereceContoller.onInit()');
     super.onInit();
     await initPrefs();
     if (mru.isNotEmpty) {
