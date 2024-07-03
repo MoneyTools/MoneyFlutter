@@ -162,27 +162,27 @@ extension ViewExtension on ViewId {
   IconData getIconData() {
     switch (this) {
       case ViewId.viewCashFlow:
-        return Icons.analytics;
+        return Icons.query_stats_outlined;
       case ViewId.viewAccounts:
-        return Icons.account_balance;
+        return Icons.account_balance_outlined;
       case ViewId.viewCategories:
-        return Icons.type_specimen;
+        return Icons.category_outlined;
       case ViewId.viewPayees:
-        return Icons.groups;
+        return Icons.groups_3_outlined;
       case ViewId.viewAliases:
-        return Icons.how_to_reg;
+        return Icons.how_to_reg_outlined;
       case ViewId.viewTransactions:
-        return Icons.receipt_long;
+        return Icons.receipt_long_outlined;
       case ViewId.viewTransfers:
-        return Icons.swap_horiz;
+        return Icons.swap_horiz_outlined;
       case ViewId.viewInvestments:
-        return Icons.stacked_line_chart;
+        return Icons.stacked_line_chart_outlined;
       case ViewId.viewStocks:
         return Icons.candlestick_chart_outlined;
       case ViewId.viewRentals:
-        return Icons.location_city;
+        return Icons.location_city_outlined;
       case ViewId.viewPolicy:
-        return Icons.policy;
+        return Icons.policy_outlined;
     }
   }
 

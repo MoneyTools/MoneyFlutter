@@ -5,11 +5,11 @@ import 'package:money/app/data/models/constants.dart';
 
 List<NavigationDestination> getAppBarDestinations() {
   final List<NavigationDestination> appBarDestinations = <NavigationDestination>[
-    const NavigationDestination(
+    NavigationDestination(
       label: 'Cash Flow',
       tooltip: 'Cash Flow',
-      icon: Icon(Icons.analytics),
-      selectedIcon: Icon(Icons.analytics),
+      icon: ViewId.viewCashFlow.getIcon(),
+      selectedIcon: ViewId.viewCashFlow.getIcon(),
     ),
     NavigationDestination(
       label: 'Accounts',
