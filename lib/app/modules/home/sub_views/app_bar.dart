@@ -136,8 +136,8 @@ class _MyAppBarState extends State<MyAppBar> {
       onSelected: (final int index) {
         switch (index) {
           case Constants.commandFileNew:
-            DataController.to.closeFile();
             Get.offAllNamed(Constants.routeHomePage);
+            DataController.to.onFileNew();
 
           case Constants.commandFileOpen:
             DataController.to.onFileOpen().then((_) {

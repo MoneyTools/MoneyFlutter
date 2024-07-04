@@ -24,8 +24,8 @@ class WelcomeScreen extends StatelessWidget {
             children: <Widget>[
               OutlinedButton(
                 onPressed: () {
-                  DataController.to.closeFile();
                   Get.offAllNamed(Constants.routeHomePage);
+                  DataController.to.onFileNew();
                 },
                 child: const Text('New File ...'),
               ),

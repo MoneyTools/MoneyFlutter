@@ -122,8 +122,8 @@ class DataController extends GetxController {
   void onFileNew() async {
     this.closeFile();
 
-    Data().accounts.addNewAccount('New Bank Account');
-    PreferenceController.to.setView(ViewId.viewAccounts);
+    final newAccount = Data().accounts.addNewAccount('New Bank Account');
+    PreferenceController.to.jumpToView(ViewId.viewAccounts, newAccount.uniqueId);
   }
 
   Future<void> loadFileFromPath(final DataSource dataSource) async {
