@@ -123,7 +123,12 @@ class DataController extends GetxController {
     this.closeFile();
 
     final newAccount = Data().accounts.addNewAccount('New Bank Account');
-    PreferenceController.to.jumpToView(ViewId.viewAccounts, newAccount.uniqueId);
+    PreferenceController.to.jumpToView(
+      viewId: ViewId.viewAccounts,
+      selectedId: newAccount.uniqueId,
+      columnFilter: [],
+      textFilter: '',
+    );
   }
 
   Future<void> loadFileFromPath(final DataSource dataSource) async {

@@ -122,13 +122,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Account of this Transaction
-
-                  PreferenceController.to.setInt(
-                    ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId),
-                    transaction.accountId.value,
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewAccounts,
+                    selectedId: transaction.accountId.value,
+                    columnFilter: [],
+                    textFilter: '',
                   );
-
-                  PreferenceController.to.setView(ViewId.viewAccounts);
                 }
               },
             ),
@@ -140,14 +139,13 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               () {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
-                  // Preselect the Category of this Transaction
-                  PreferenceController.to.setInt(
-                    ViewId.viewCategories.getViewPreferenceId(
-                      settingKeySelectedListItemId,
-                    ),
-                    transaction.categoryId.value,
+                  // Preselect the Category of this Transactio
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewCategories,
+                    selectedId: transaction.categoryId.value,
+                    columnFilter: [],
+                    textFilter: '',
                   );
-                  PreferenceController.to.setView(ViewId.viewCategories);
                 }
               },
             ),
@@ -160,11 +158,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Payee of this Transaction
-                  PreferenceController.to.setInt(
-                    ViewId.viewPayees.getViewPreferenceId(settingKeySelectedListItemId),
-                    transaction.payee.value,
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewPayees,
+                    selectedId: transaction.payee.value,
+                    columnFilter: [],
+                    textFilter: '',
                   );
-                  PreferenceController.to.setView(ViewId.viewPayees);
                 }
               },
             ),

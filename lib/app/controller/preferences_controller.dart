@@ -74,13 +74,20 @@ class PreferenceController extends GetxController {
     currentView.value = view;
   }
 
-  void jumpToView(final ViewId viewId, final int selectedId) async {
-    // First reset all filters on that view
-    await setString(viewId.getViewPreferenceId(settingKeyFilterText), '');
-    await setStringList(viewId.getViewPreferenceId(settingKeyFilterColumnsText), []);
+  void jumpToView({
+    required final ViewId viewId,
+    required final int selectedId,
+    required final List<String> columnFilter,
+    required final String textFilter,
+  }) async {
+    // First set all filters on the destination view
+    await setString(viewId.getViewPreferenceId(settingKeyFilterText), textFilter);
+    await setStringList(viewId.getViewPreferenceId(settingKeyFilterColumnsText), columnFilter);
 
     // Set the last selected item, in order to have it selected when the view changes
-    await setInt(viewId.getViewPreferenceId(settingKeySelectedListItemId), selectedId);
+    if (selectedId != -1) {
+      await setInt(viewId.getViewPreferenceId(settingKeySelectedListItemId), selectedId);
+    }
 
     // Change to the requested view
     setView(viewId);

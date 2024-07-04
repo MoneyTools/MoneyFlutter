@@ -201,7 +201,12 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                       );
                   // Switch view
                   if (matchingTransaction != null) {
-                    PreferenceController.to.jumpToView(ViewId.viewTransactions, matchingTransaction.uniqueId);
+                    PreferenceController.to.jumpToView(
+                      viewId: ViewId.viewTransactions,
+                      selectedId: matchingTransaction.uniqueId,
+                      columnFilter: [],
+                      textFilter: '',
+                    );
                     return;
                   }
                 }
@@ -231,27 +236,27 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               InternalViewSwitching(
-                ViewId.viewAccounts.getIconData(),
+                ViewId.viewTransactions.getIconData(),
                 'Switch to Transactions',
                 () {
                   final Account? account = getFirstSelectedItem() as Account?;
                   if (account != null) {
                     // Prepare the Transaction view Filter to show only the selected account
-                    FieldFilters filterByAccount = FieldFilters();
-                    filterByAccount.add(
+                    FieldFilters columnFilters = FieldFilters();
+                    columnFilters.add(
                       FieldFilter(
                         fieldName: Constants.viewTransactionFieldnameAccount,
                         filterTextInLowerCase: account.name.value.toLowerCase(),
                       ),
                     );
 
-                    PreferenceController.to.setStringList(
-                      ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
-                      filterByAccount.toStringList(),
-                    );
-
                     // Switch view
-                    PreferenceController.to.setView(ViewId.viewTransactions);
+                    PreferenceController.to.jumpToView(
+                      viewId: ViewId.viewTransactions,
+                      selectedId: -1,
+                      columnFilter: columnFilters.toStringList(),
+                      textFilter: '',
+                    );
                   }
                 },
               ),

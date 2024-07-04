@@ -209,21 +209,20 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                   final Category? category = getFirstSelectedItem() as Category?;
                   if (category != null) {
                     // Prepare the Transaction view to show only the selected account
-                    FieldFilters filterByAccount = FieldFilters();
-                    filterByAccount.add(
+                    FieldFilters columnFilters = FieldFilters();
+                    columnFilters.add(
                       FieldFilter(
                         fieldName: Constants.viewTransactionFieldnameCategory,
                         filterTextInLowerCase: category.name.value.toLowerCase(),
                       ),
                     );
 
-                    PreferenceController.to.setStringList(
-                      ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
-                      filterByAccount.toStringList(),
+                    PreferenceController.to.jumpToView(
+                      viewId: ViewId.viewTransactions,
+                      selectedId: -1,
+                      columnFilter: columnFilters.toStringList(),
+                      textFilter: '',
                     );
-
-                    // Switch view
-                    PreferenceController.to.setView(ViewId.viewTransactions);
                   }
                 },
               ),
