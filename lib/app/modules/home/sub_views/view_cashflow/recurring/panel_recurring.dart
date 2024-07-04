@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
@@ -61,17 +62,16 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   }
 
   void initRecurringTransactions({required final bool forIncome}) {
-    // get all transactions
-    final transactions = Data().transactions.transactionInYearRange(
-          minYear: widget.minYear,
-          maxYear: widget.maxYear,
-          incomesOrExpenses: forIncome,
-        );
+    // get all transactions meeting the request of date and type
+    bool whereClause(Transaction t) {
+      return isBetweenOrEqual(t.dateTime.value!.year, widget.minYear, widget.maxYear) &&
+          (((forIncome == true && t.amount.value.toDouble() > 0) ||
+              (forIncome == false && t.amount.value.toDouble() < 0)));
+    }
 
-    final flatTransactions = Transactions.flatTransactions(transactions);
+    final flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
 
     // get all transaction Income | Expenses
-    // recurringPayments =
     findMonthlyRecurringPayments(flatTransactions, forIncome);
 
     // Sort descending - biggest amount first

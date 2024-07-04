@@ -266,16 +266,13 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   Transaction? findExistingTransaction({
-    required final DateTime dateTime,
-    required final String payeeAsText,
+    required final DateRange dateRange,
     required final double amount,
   }) {
     // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
     return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
       if (transaction.amount.value.toDouble() == amount) {
-        if (transaction.dateTime.value?.year == dateTime.year &&
-            transaction.dateTime.value?.month == dateTime.month &&
-            transaction.dateTime.value?.day == dateTime.day) {
+        if (dateRange.isBetweenEqual(transaction.dateTime.value)) {
           return true;
         }
       }

@@ -9,7 +9,6 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
-import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class ValueQuality {
@@ -341,22 +340,9 @@ bool isTransactionAlreadyInTheSystem({
   required final String payeeAsText,
   required final double amount,
 }) {
-  return getTransactionAlreadyInTheSystem(
-        dateTime: dateTime,
-        payeeAsText: payeeAsText,
-        amount: amount,
-      ) !=
-      null;
-}
-
-Transaction? getTransactionAlreadyInTheSystem({
-  required final DateTime dateTime,
-  required final String payeeAsText,
-  required final double amount,
-}) {
-  return Data().transactions.findExistingTransaction(
-        dateTime: dateTime,
-        payeeAsText: payeeAsText,
-        amount: amount,
-      );
+  return null !=
+      Data().transactions.findExistingTransaction(
+            dateRange: DateRange(min: dateTime.startOfDay, max: dateTime.endOfDay),
+            amount: amount,
+          );
 }

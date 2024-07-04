@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
@@ -7,6 +8,7 @@ import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/core/widgets/three_part_label.dart';
 import 'package:money/app/data/models/constants.dart';
 
@@ -174,7 +176,42 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     final list = super.getActionsButtons(forInfoPanelTransactions);
 
-    if (!forInfoPanelTransactions) {
+    if (forInfoPanelTransactions) {
+      list.add(
+        buildJumpToButton(
+          [
+            InternalViewSwitching(
+              ViewId.viewTransactions.getIconData(),
+              'Matching Transaction',
+              () {
+                final selectedInfotransaction = getLastInfoPanelTransactionSelection();
+
+                if (selectedInfotransaction != null) {
+                  // Look for transaction matching -1 to +1 date from this transaction
+                  final DateRange approximationDates = DateRange(
+                    min: selectedInfotransaction.dateTime.value!.add(const Duration(days: -1)).startOfDay,
+                    max: selectedInfotransaction.dateTime.value!.add(const Duration(days: 1)).endOfDay,
+                  );
+                  // we are looking for the reverse transaction
+                  final double amountToFind = selectedInfotransaction.amount.value.toDouble() * -1;
+
+                  final matchingTransaction = Data().transactions.findExistingTransaction(
+                        dateRange: approximationDates,
+                        amount: amountToFind,
+                      );
+                  // Switch view
+                  if (matchingTransaction != null) {
+                    PreferenceController.to.jumpToView(ViewId.viewTransactions, matchingTransaction.uniqueId);
+                    return;
+                  }
+                }
+                SnackBarService.displayWarning(message: 'No matching transactons');
+              },
+            ),
+          ],
+        ),
+      );
+    } else {
       // Place this in front off all the other actions button
       list.insert(
         0,

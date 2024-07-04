@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.37] 2024-07-04
+
+### Added
+
+- Jump from Info:Transaction list to first Matching counter Transaction
+  
 ## [version 1.8.36] 2024-07-03
 
 ### Updated

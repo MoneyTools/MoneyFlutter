@@ -74,6 +74,18 @@ class PreferenceController extends GetxController {
     currentView.value = view;
   }
 
+  void jumpToView(final ViewId viewId, final int selectedId) async {
+    // First reset all filters on that view
+    await setString(viewId.getViewPreferenceId(settingKeyFilterText), '');
+    await setStringList(viewId.getViewPreferenceId(settingKeyFilterColumnsText), []);
+
+    // Set the last selected item, in order to have it selected when the view changes
+    await setInt(viewId.getViewPreferenceId(settingKeySelectedListItemId), selectedId);
+
+    // Change to the requested view
+    setView(viewId);
+  }
+
   ///---------------------------------
   //
   RxString apiKeyForStocks = ''.obs;

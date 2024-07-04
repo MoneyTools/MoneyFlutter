@@ -18,6 +18,7 @@ import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
+import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/column_filter_panel.dart';
@@ -203,6 +204,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
 
     return widgets;
+  }
+
+  Transaction? getLastInfoPanelTransactionSelection() {
+    int selectedItemId = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
+    if (selectedItemId == -1) {
+      return null;
+    }
+    return Data().transactions.get(selectedItemId);
   }
 
   Widget centerEmptyList(Key key) {

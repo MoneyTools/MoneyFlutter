@@ -29,9 +29,9 @@ class ListViewTransactions extends StatefulWidget {
 }
 
 class _ListViewTransactionsState extends State<ListViewTransactions> {
-  late int sortBy = widget.sortFieldIndex;
-  late bool sortAscending = widget.sortAscending;
-  late int selectedItemIndex = widget.selectedItemIndex;
+  late int _sortBy = widget.sortFieldIndex;
+  late bool _sortAscending = widget.sortAscending;
+  late int _selectedItemIndex = widget.selectedItemIndex;
 
   @override
   Widget build(final BuildContext context) {
@@ -44,29 +44,32 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
     MoneyObjects.sortList(
       transactions,
       widget.columnsToInclude,
-      sortBy,
-      sortAscending,
+      _sortBy,
+      _sortAscending,
     );
 
     return AdaptiveListColumnsOrRowsSingleSelection(
       list: transactions,
       fieldDefinitions: widget.columnsToInclude,
       filters: FieldFilters(),
-      sortByFieldIndex: sortBy,
-      sortAscending: sortAscending,
+      sortByFieldIndex: _sortBy,
+      sortAscending: _sortAscending,
       selectedId: -1,
       // Field & Columns
       displayAsColumns: true,
       backgoundColorForHeaderFooter: Colors.transparent,
+      onSelectionChanged: (int uniqueId) {
+        widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, uniqueId);
+      },
       onColumnHeaderTap: (final int index) {
         setState(() {
-          if (sortBy == index) {
+          if (_sortBy == index) {
             // same column tap/click again, change the sort order
-            sortAscending = !sortAscending;
+            _sortAscending = !_sortAscending;
           } else {
-            sortBy = index;
+            _sortBy = index;
           }
-          widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedItemIndex);
         });
       },
       onItemLongPress: (final BuildContext context2, final int uniqueId) {
@@ -75,8 +78,8 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           context: context2,
           transaction: instance,
         ).then((value) {
-          selectedItemIndex = uniqueId;
-          widget.onUserChoiceChanged?.call(sortBy, sortAscending, selectedItemIndex);
+          _selectedItemIndex = uniqueId;
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedItemIndex);
         });
       },
     );

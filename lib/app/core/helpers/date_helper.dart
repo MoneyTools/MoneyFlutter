@@ -220,6 +220,8 @@ extension DateTimeExtension on DateTime {
   /// DateTime.now().startOfDay -> 2019-09-30 00:00:00.000
   DateTime get startOfDay => DateTime(year, month, day);
 
+  DateTime get dropTime => startOfDay;
+
   /// Returns end of a day.
   /// DateTime.now() -> 2019-09-30 17:15:20.294
   /// DateTime.now().endOfDay -> 2019-09-30 23:59:59.999
