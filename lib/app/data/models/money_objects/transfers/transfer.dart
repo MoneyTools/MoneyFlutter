@@ -77,11 +77,10 @@ class Transfer extends MoneyObject {
   FieldString senderTransactionStatus = FieldString(
     importance: 3,
     name: 'SS',
-    type: FieldType.widget,
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     getValueForDisplay: (final MoneyObject instance) =>
-        (instance as Transfer).source.status.getValueForDisplay(instance.source),
+        transactionStatusToLetter((instance as Transfer).source.status.value),
   );
 
   /// memo
@@ -116,11 +115,10 @@ class Transfer extends MoneyObject {
   FieldString accountStatusDestination = FieldString(
     importance: 12,
     name: 'RS',
-    type: FieldType.widget,
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     getValueForDisplay: (final MoneyObject instance) =>
-        (instance as Transfer).source.status.getValueForDisplay(instance.source),
+        transactionStatusToLetter((instance as Transfer).related!.status.value),
   );
 
   /// memo

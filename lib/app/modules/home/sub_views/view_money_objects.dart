@@ -762,6 +762,21 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   /// Compile the list of single date value for a column/field definition
+  List<String> getUniqueInstancesOfWidgets(
+    final Field<dynamic> columnToCustomerFilterOn,
+  ) {
+    final Set<String> set = <String>{}; // This is a Set()
+    final List<MoneyObject> list = getList(applyFilter: false);
+    for (final moneyObject in list) {
+      final String fieldValue = columnToCustomerFilterOn.getValueForSerialization(moneyObject).toString();
+      set.add(fieldValue);
+    }
+    final List<String> uniqueValues = set.toList();
+    uniqueValues.sort();
+    return uniqueValues;
+  }
+
+  /// Compile the list of single date value for a column/field definition
   List<String> getUniqueInstancesOfNumbers(
     final Field<dynamic> columnToCustomerFilterOn,
   ) {
@@ -800,6 +815,20 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       case FieldType.date:
         {
           listOfUniqueString = getUniqueInstancesOfDates(fieldDefinition);
+
+          for (final item in listOfUniqueString) {
+            listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
+          }
+
+          content = ColumnFilterPanel(
+            listOfUniqueInstances: listOfValueSelected,
+            textAlign: TextAlign.left,
+          );
+        }
+
+      case FieldType.widget:
+        {
+          listOfUniqueString = getUniqueInstancesOfWidgets(fieldDefinition);
 
           for (final item in listOfUniqueString) {
             listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
