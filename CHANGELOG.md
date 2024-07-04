@@ -4,6 +4,7 @@
 
 ### Added
 
+- Search Payee name using Google Web Search
 - Jump from Info:Transaction list to first Matching counter Transaction
   
 ## [version 1.8.36] 2024-07-03

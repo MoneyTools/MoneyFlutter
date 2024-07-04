@@ -118,16 +118,11 @@ Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
       PopupMenuItem<int>(
         value: i,
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(
-              child: ThreePartLabel(
-                icon: const Icon(Icons.menu_open_outlined),
-                text1: listOfViewToJumpTo[i].title,
-                small: true,
-              ),
-            ),
             Icon(listOfViewToJumpTo[i].icon),
+            gapLarge(),
+            Expanded(child: Text(listOfViewToJumpTo[i].title)),
           ],
         ),
       ),

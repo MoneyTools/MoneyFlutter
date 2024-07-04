@@ -6,6 +6,7 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/app/data/models/constants.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 /// Remove non-numeric characters from the currency text
 double? attemptToGetDoubleFromText(String text) {
@@ -263,4 +264,11 @@ extension Range on num {
 
 bool isAlmostZero(double value, [double epsilon = 0.009]) {
   return value.abs() <= epsilon;
+}
+
+Future<void> launchGoogleSearch(String query) async {
+  final Uri url = Uri.parse('https://www.google.com/search?q=$query');
+  if (!await launchUrl(url)) {
+    throw Exception('Could not launch $url');
+  }
 }
