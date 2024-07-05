@@ -120,22 +120,15 @@ class _ColumnInputState extends State<ColumnInput> {
   int getMaxLineOfAllColumns() {
     int maxLines = 0;
     if (_focusNode1.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn1));
+      maxLines = max(maxLines, getLineCount(_controllerColumn1.text));
     }
     if (_focusNode2.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn2));
+      maxLines = max(maxLines, getLineCount(_controllerColumn2.text));
     }
     if (_focusNode3.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn3));
+      maxLines = max(maxLines, getLineCount(_controllerColumn3.text));
     }
     return maxLines;
-  }
-
-  int getLineCount(final TextEditingController controller) {
-    if (controller.text.trim().isEmpty) {
-      return 0;
-    }
-    return controller.text.trim().split('\n').length;
   }
 
   void _syncText() {
@@ -149,13 +142,13 @@ class _ColumnInputState extends State<ColumnInput> {
     int linesCount = getMaxLineOfAllColumns();
 
     // Update the text in the other columns to match the number of lines
-    if (getLineCount(_controllerColumn1) != linesCount) {
+    if (getLineCount(_controllerColumn1.text) != linesCount) {
       _controllerColumn1.text = adjustLineCount(_controllerColumn1.text, linesCount);
     }
-    if (getLineCount(_controllerColumn2) != linesCount) {
+    if (getLineCount(_controllerColumn2.text) != linesCount) {
       _controllerColumn2.text = adjustLineCount(_controllerColumn2.text, linesCount);
     }
-    if (getLineCount(_controllerColumn3) != linesCount) {
+    if (getLineCount(_controllerColumn3.text) != linesCount) {
       _controllerColumn3.text = adjustLineCount(_controllerColumn3.text, linesCount);
     }
     fromThreeToOneColumn();
@@ -234,7 +227,7 @@ class _ColumnInputState extends State<ColumnInput> {
         autofocus: true,
         maxLines: null,
         // Set maxLines to null for multiline TextField
-        decoration: getDecoration('Date; Description; Amount', getLineCount(_controllerSingleColumn)),
+        decoration: getDecoration('Date; Description; Amount', getLineCount(_controllerSingleColumn.text)),
         onChanged: (final String _) {
           notifyChanged();
         },
@@ -266,7 +259,7 @@ class _ColumnInputState extends State<ColumnInput> {
     final TextEditingController controller,
     final FocusNode focusNode,
   ) {
-    final int lineCount = getLineCount(controller);
+    final int lineCount = getLineCount(controller.text);
 
     return Stack(
       alignment: AlignmentDirectional.topCenter,

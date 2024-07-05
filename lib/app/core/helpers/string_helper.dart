@@ -171,6 +171,13 @@ String getStringDelimitedStartEndTokens(
   return start + content + end;
 }
 
+int getLineCount(final String text) {
+  if (text.trim().isEmpty) {
+    return 0;
+  }
+  return text.trim().split('\n').length;
+}
+
 String removeEmptyLines(String text) {
   // Split the text into lines
   List<String> lines = text.split('\n');
