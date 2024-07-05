@@ -12,9 +12,10 @@ import 'package:money/app/core/widgets/semantic_text.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class ValueQuality {
-  const ValueQuality(this.valueAsString);
+  const ValueQuality(this.valueAsString, {this.dateFormat = 'MM/DD/YYYY'});
   final String valueAsString;
   final String warningMessage = '';
+  final String dateFormat;
 
   bool get hasError {
     return warningMessage.isNotEmpty;
@@ -24,8 +25,8 @@ class ValueQuality {
     return attemptToGetDoubleFromText(valueAsString) ?? 0.00;
   }
 
-  DateTime asDate() {
-    return attemptToGetDateFromText(valueAsString) ?? DateTime.now();
+  DateTime? asDate() {
+    return DateFormat(dateFormat).tryParse(valueAsString);
   }
 
   String asString() {
@@ -57,7 +58,7 @@ class ValueQuality {
       return buildWarning(context, '< no date >');
     }
 
-    final parsedDate = attemptToGetDateFromText(valueAsString);
+    final parsedDate = asDate();
     if (parsedDate == null) {
       return buildWarning(context, valueAsString);
     }
@@ -99,7 +100,7 @@ class ValuesQuality {
 
   bool checkIfExistAlready() {
     exist = isTransactionAlreadyInTheSystem(
-      dateTime: date.asDate(),
+      dateTime: date.asDate() ?? DateTime.now(),
       payeeAsText: description.asString(),
       amount: amount.asAmount(),
     );
@@ -145,6 +146,10 @@ class ValuesQuality {
 /// relevant values from it. It provides methods for parsing, transforming, and
 /// validating the extracted values.
 class ValuesParser {
+  ValuesParser({this.dateFormat = 'MM/DD/YYYY'});
+
+  final String dateFormat;
+
   List<ValuesQuality> _values = [];
   String errorMessage = '';
   List<Widget> rows = [];
@@ -182,6 +187,10 @@ class ValuesParser {
     _values.add(item);
   }
 
+  DateTime? parseForDate(final String input) {
+    return DateFormat(dateFormat).tryParse(input);
+  }
+
   ValuesQuality attemptToExtractTriples(
     String line,
   ) {
@@ -190,13 +199,14 @@ class ValuesParser {
     String amount = '';
 
     line.trim();
-    List<String> threeValues = line.split(RegExp(r'\t|\s|;|\|')).where((token) => token.trim().isNotEmpty).toList();
+    List<String> threeValues = line.split(RegExp(r'\t|;|\|')).where((token) => token.trim().isNotEmpty).toList();
 
-    // Happy path
-    // Date Description Amount
+    // We are looking for these 3 values
+    // Date | Description | Amount
     switch (threeValues.length) {
+      // Only two values
       case 2:
-        DateTime? possibleDate = attemptToGetDateFromText(threeValues.first);
+        DateTime? possibleDate = parseForDate(threeValues.first);
         if (possibleDate == null) {
           description = threeValues.first;
         } else {
@@ -209,24 +219,31 @@ class ValuesParser {
         } else {
           amount = threeValues.last;
         }
+      // Only one value
       case 1:
-        double? possibleAmount = attemptToGetDoubleFromText(threeValues.first);
-        if (possibleAmount == null) {
-          date = threeValues.first;
+        DateTime? possibleDate = parseForDate(threeValues.first);
+        if (possibleDate == null) {
+          double? possibleAmount = attemptToGetDoubleFromText(threeValues.first);
+          if (possibleAmount == null) {
+            description = threeValues.first;
+          }
         } else {
-          amount = possibleAmount.toString();
+          date = threeValues.first;
         }
+      // no value
       case 0:
         return ValuesQuality.empty();
+
+      // Perfect
       case 3:
-      default:
+      default: // 4 or more
         date = threeValues.first;
         description = threeValues.sublist(1, threeValues.length - 1).join(' ');
         amount = threeValues.last;
     }
 
     return ValuesQuality(
-      date: ValueQuality(date),
+      date: ValueQuality(date, dateFormat: dateFormat),
       description: ValueQuality(description),
       amount: ValueQuality(amount),
     );

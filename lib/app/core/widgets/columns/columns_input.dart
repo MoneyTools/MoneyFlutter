@@ -2,19 +2,24 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/ocr/ocr.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class ColumnInput extends StatefulWidget {
   const ColumnInput({
     required this.inputText,
+    required this.dateFormat,
     required this.onChange,
     super.key,
   });
   final String inputText;
   final Function(String) onChange;
+  final String dateFormat;
 
   @override
   State<ColumnInput> createState() => _ColumnInputState();
@@ -74,7 +79,7 @@ class _ColumnInputState extends State<ColumnInput> {
   void updateAllTextControllerContentFromRawText(final String inputText) {
     _controllerSingleColumn.text = inputText;
 
-    ValuesParser parser = ValuesParser();
+    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat);
     parser.convertInputTextToTransactionList(
       context,
       widget.inputText,
@@ -86,7 +91,7 @@ class _ColumnInputState extends State<ColumnInput> {
   }
 
   void fromOneToThreeColumn() {
-    ValuesParser parser = ValuesParser();
+    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat);
     parser.convertInputTextToTransactionList(
       context,
       _controllerSingleColumn.text,
@@ -115,23 +120,22 @@ class _ColumnInputState extends State<ColumnInput> {
   int getMaxLineOfAllColumns() {
     int maxLines = 0;
     if (_focusNode1.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn1.text));
+      maxLines = max(maxLines, getLineCount(_controllerColumn1));
     }
     if (_focusNode2.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn2.text));
+      maxLines = max(maxLines, getLineCount(_controllerColumn2));
     }
     if (_focusNode3.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn3.text));
+      maxLines = max(maxLines, getLineCount(_controllerColumn3));
     }
-    //
-    // maxLines = max(maxLines, getLineCount(_controllerColumn1.text));
-    // maxLines = max(maxLines, getLineCount(_controllerColumn2.text));
-    // maxLines = max(maxLines, getLineCount(_controllerColumn3.text));
     return maxLines;
   }
 
-  int getLineCount(final String text) {
-    return text.split('\n').length;
+  int getLineCount(final TextEditingController controller) {
+    if (controller.text.trim().isEmpty) {
+      return 0;
+    }
+    return controller.text.trim().split('\n').length;
   }
 
   void _syncText() {
@@ -145,13 +149,13 @@ class _ColumnInputState extends State<ColumnInput> {
     int linesCount = getMaxLineOfAllColumns();
 
     // Update the text in the other columns to match the number of lines
-    if (getLineCount(_controllerColumn1.text) != linesCount) {
+    if (getLineCount(_controllerColumn1) != linesCount) {
       _controllerColumn1.text = adjustLineCount(_controllerColumn1.text, linesCount);
     }
-    if (getLineCount(_controllerColumn2.text) != linesCount) {
+    if (getLineCount(_controllerColumn2) != linesCount) {
       _controllerColumn2.text = adjustLineCount(_controllerColumn2.text, linesCount);
     }
-    if (getLineCount(_controllerColumn3.text) != linesCount) {
+    if (getLineCount(_controllerColumn3) != linesCount) {
       _controllerColumn3.text = adjustLineCount(_controllerColumn3.text, linesCount);
     }
     fromThreeToOneColumn();
@@ -230,17 +234,15 @@ class _ColumnInputState extends State<ColumnInput> {
         autofocus: true,
         maxLines: null,
         // Set maxLines to null for multiline TextField
-        decoration: InputDecoration(
-          labelText: 'Date; Description; Amount ( ${_controllerSingleColumn.text.split('\n').length} lines )',
-          border: const OutlineInputBorder(),
-        ),
+        decoration: getDecoration('Date; Description; Amount', getLineCount(_controllerSingleColumn)),
         onChanged: (final String _) {
           notifyChanged();
         },
       );
     } else {
       return Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
             flex: 1,
@@ -264,18 +266,58 @@ class _ColumnInputState extends State<ColumnInput> {
     final TextEditingController controller,
     final FocusNode focusNode,
   ) {
-    return TextField(
-      controller: controller,
-      focusNode: focusNode,
-      autofocus: false,
-      maxLines: null,
-      decoration: InputDecoration(
-        labelText: '$title ( ${_controllerColumn1.text.split('\n').length} lines )',
-        border: const OutlineInputBorder(),
-      ),
-      inputFormatters: [
-        TextInputFormatterRemoveEmptyLines(), // remove empty line
+    final int lineCount = getLineCount(controller);
+
+    return Stack(
+      alignment: AlignmentDirectional.topCenter,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: SizeForPadding.large),
+          child: TextField(
+            controller: controller,
+            focusNode: focusNode,
+            autofocus: false,
+            maxLines: null,
+            keyboardType: TextInputType.multiline,
+            textAlignVertical: TextAlignVertical.top,
+            style: const TextStyle(
+              fontSize: SizeForText.small,
+              overflow: TextOverflow.fade,
+            ),
+            decoration: getDecoration(title, lineCount),
+            inputFormatters: [
+              TextInputFormatterRemoveEmptyLines(), // remove empty line
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: PasteOcr(textController: controller),
+        ),
       ],
+    );
+  }
+
+  Widget? getBadgeCounter(final int lineCount) {
+    if (lineCount > 0) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.small),
+        child: Text('$lineCount lines'),
+      );
+    }
+    return null;
+  }
+
+  InputDecoration getDecoration(final String title, final int lineCount) {
+    return InputDecoration(
+      label: Badge(
+        isLabelVisible: lineCount > 0,
+        backgroundColor: ThemeController.to.primaryColor,
+        offset: const Offset(20.0, 0),
+        label: getBadgeCounter(lineCount),
+        child: Text('$title '),
+      ),
+      border: const OutlineInputBorder(),
     );
   }
 }

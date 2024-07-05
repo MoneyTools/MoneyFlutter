@@ -28,6 +28,22 @@ class ImportTransactionsPanel extends StatefulWidget {
 class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late Account account;
   late String textToParse;
+  final List<String> possibleDateFormats = [
+    'yyyy-MM-dd',
+    'yyyy/MM/dd',
+    'yyyy-dd-MM',
+    'yyyy/dd/MM',
+    'MM-dd-yyyy',
+    'MM/dd/yyyy',
+    'MM-dd-yy',
+    'MM/dd/yy',
+    'dd-MM-yyyy',
+    'dd/MM/yyyy',
+    'dd-MM-yy',
+    'dd/MM/yy',
+  ];
+  late String userChoiceOfDateFormat = possibleDateFormats.first;
+
   final _focusNode = FocusNode();
 
   List<ValuesQuality> values = [];
@@ -57,6 +73,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
             flex: 1,
             child: ColumnInput(
               inputText: textToParse,
+              dateFormat: userChoiceOfDateFormat,
               onChange: (String newTextInput) {
                 setState(() {
                   convertAndNotify(context, newTextInput);
@@ -65,6 +82,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               },
             ),
           ),
+          _buildChoiceOfDateFormat(),
 
           gapLarge(),
 
@@ -107,8 +125,44 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
   }
 
+  Widget _buildChoiceOfDateFormat() {
+    bool textToParseContainsSlash = textToParse.contains('/');
+    bool textToParseContainsDash = textToParse.contains('-');
+
+    final choiceOfDateFormat = possibleDateFormats.where(
+      (item) => (item.contains('/') && textToParseContainsSlash) || (item.contains('-') && textToParseContainsDash),
+    );
+
+    if (choiceOfDateFormat.isEmpty) {
+      return const SizedBox();
+    }
+
+    // make sure that the choice is valid
+    if (!choiceOfDateFormat.contains(userChoiceOfDateFormat)) {
+      userChoiceOfDateFormat = choiceOfDateFormat.first;
+    }
+
+    return DropdownButton<String>(
+      value: userChoiceOfDateFormat,
+      items: choiceOfDateFormat
+          .map(
+            (item) => DropdownMenuItem(
+              value: item,
+              child: Text(item),
+            ),
+          )
+          .toList(),
+      onChanged: (final String? value) {
+        setState(() {
+          userChoiceOfDateFormat = value!;
+          convertAndNotify(context, textToParse);
+        });
+      },
+    );
+  }
+
   void convertAndNotify(BuildContext context, String inputText) {
-    ValuesParser parser = ValuesParser();
+    ValuesParser parser = ValuesParser(dateFormat: userChoiceOfDateFormat);
     parser.convertInputTextToTransactionList(
       context,
       inputText,

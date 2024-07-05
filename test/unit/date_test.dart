@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 
 void main() {
@@ -49,5 +50,11 @@ void main() {
     expect(parsedDate!.year, 2000);
     expect(parsedDate.month, 2);
     expect(parsedDate.day, 3);
+
+    // Europe dd/MM/yyyy
+    parsedDate = DateFormat('dd/MM/yyyy').tryParse('27/01/2024');
+    expect(parsedDate!.year, 2024);
+    expect(parsedDate.month, 1);
+    expect(parsedDate.day, 27);
   });
 }

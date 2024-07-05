@@ -106,7 +106,7 @@ void _showAndConfirmTransactionToImport(
         if (!singleTransactionInput.exist) {
           final t = createNewTransactionFromDateDescriptionAmount(
             account,
-            singleTransactionInput.date.asDate(),
+            singleTransactionInput.date.asDate() ?? DateTime.now(),
             singleTransactionInput.description.asString(),
             singleTransactionInput.amount.asAmount(),
           );

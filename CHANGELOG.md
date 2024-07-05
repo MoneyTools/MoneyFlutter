@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.38] 2024-07-05
+
+### Added
+
+- Use OCR for Import from text, tested on macOS using Tessara-OCR
+  
 ## [version 1.8.37] 2024-07-04
 
 ### Added

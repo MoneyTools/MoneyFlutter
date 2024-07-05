@@ -40,7 +40,13 @@ DateTime? attemptToGetDateFromText(final String text) {
   DateTime? parsedDate;
   for (String format in dateFormats) {
     parsedDate = DateFormat(format).tryParse(text);
-    if (parsedDate != null && parsedDate.year >= 1900 && parsedDate.year <= 2099) {
+    if (parsedDate != null &&
+        parsedDate.year >= 1900 &&
+        parsedDate.year <= 2099 &&
+        parsedDate.month >= 1 &&
+        parsedDate.month <= 12 &&
+        parsedDate.day >= 1 &&
+        parsedDate.day <= 31) {
       break; // Stop parsing if a valid date is found
     }
   }
