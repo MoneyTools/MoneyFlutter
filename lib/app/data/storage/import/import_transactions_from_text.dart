@@ -19,7 +19,7 @@ void showImportTransactionsFromTextInput(
 
   Account account = Data().accounts.getMostRecentlySelectedAccount();
 
-  ValuesParser parser = ValuesParser();
+  ValuesParser parser = ValuesParser(dateFormat: 'MM/dd/yyyy', currency: 'USD');
 
   List<Widget> actionButtons = [
     // Button - Import
@@ -122,6 +122,7 @@ void addNewTransactions(
 
   SnackBarService.displaySuccess(
     autoDismiss: true,
+    title: 'Import',
     message: messageToUserAfterAdding,
   );
 }

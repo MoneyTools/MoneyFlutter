@@ -67,13 +67,14 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
         children: [
           _buildHeaderAndAccountPicker(),
 
-          gapLarge(),
+          gapMedium(),
 
           Expanded(
             flex: 1,
             child: ColumnInput(
               inputText: textToParse,
               dateFormat: userChoiceOfDateFormat,
+              currency: account.getAccountCurrencyAsText(),
               onChange: (String newTextInput) {
                 setState(() {
                   convertAndNotify(context, newTextInput);
@@ -82,7 +83,14 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               },
             ),
           ),
-          _buildChoiceOfDateFormat(),
+          if (values.isNotEmpty)
+            Row(
+              children: [
+                _buildChoiceOfDateFormat(),
+                const Spacer(),
+                _buildChoiceOfAmountFormat(),
+              ],
+            ),
 
           gapLarge(),
 
@@ -129,12 +137,12 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     bool textToParseContainsSlash = textToParse.contains('/');
     bool textToParseContainsDash = textToParse.contains('-');
 
-    final choiceOfDateFormat = possibleDateFormats.where(
+    Iterable<String> choiceOfDateFormat = possibleDateFormats.where(
       (item) => (item.contains('/') && textToParseContainsSlash) || (item.contains('-') && textToParseContainsDash),
     );
 
     if (choiceOfDateFormat.isEmpty) {
-      return const SizedBox();
+      choiceOfDateFormat = possibleDateFormats;
     }
 
     // make sure that the choice is valid
@@ -161,8 +169,15 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
   }
 
+  Widget _buildChoiceOfAmountFormat() {
+    return account.getAccountCurrencyAsWidget();
+  }
+
   void convertAndNotify(BuildContext context, String inputText) {
-    ValuesParser parser = ValuesParser(dateFormat: userChoiceOfDateFormat);
+    ValuesParser parser = ValuesParser(
+      dateFormat: userChoiceOfDateFormat,
+      currency: account.getAccountCurrencyAsText(),
+    );
     parser.convertInputTextToTransactionList(
       context,
       inputText,

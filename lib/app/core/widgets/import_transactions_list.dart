@@ -41,7 +41,14 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
 
     return Column(
       children: [
+        //
+        // header
+        //
         _buildColumnHeaders(context),
+
+        //
+        // list
+        //
         Expanded(
           child: ListView.separated(
             separatorBuilder: (context, index) => const Divider(),
@@ -50,7 +57,9 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
           ),
         ),
 
+        //
         // Footer
+        //
         Container(
           color: getColorTheme(context).surfaceContainerLow,
           padding: const EdgeInsets.all(8.0),

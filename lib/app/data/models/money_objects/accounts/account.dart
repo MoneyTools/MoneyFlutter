@@ -243,6 +243,10 @@ class Account extends MoneyObject {
     return Currency.getCurrencyAsText(currency.value);
   }
 
+  Widget getAccountCurrencyAsWidget() {
+    return Currency.buildCurrencyWidget(getAccountCurrencyAsText());
+  }
+
   /// OnlineAccount
   /// 8|OnlineAccount|INT|0||0
   FieldInt onlineAccount = FieldInt(

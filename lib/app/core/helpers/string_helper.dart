@@ -83,7 +83,7 @@ String getIntAsText(final int value) {
   return NumberFormat.decimalPattern().format(value);
 }
 
-List<List<String>> getLinesFromRawText(final String content) {
+List<List<String>> getLinesFromRawTextCommaSeparated(final String content) {
   List<List<String>> rows = [];
   List<String> currentRow = [];
   StringBuffer currentField = StringBuffer();
@@ -178,12 +178,19 @@ int getLineCount(final String text) {
   return text.trim().split('\n').length;
 }
 
-String removeEmptyLines(String text) {
-  // Split the text into lines
-  List<String> lines = text.split('\n');
+/// Split the text into lines
+List<String> getLinesOfText(final String inputText, {bool includeEmptyLines = true}) {
+  List<String> lines = inputText.split('\n');
+  if (includeEmptyLines == false) {
+    // Filter out the empty lines
+    return lines.where((line) => line.trim().isNotEmpty).toList();
+  }
+  return lines;
+}
 
+String removeEmptyLines(String text) {
   // Filter out the empty lines
-  List<String> nonEmptyLines = lines.where((line) => line.trim().isNotEmpty).toList();
+  List<String> nonEmptyLines = getLinesOfText(text, includeEmptyLines: false);
 
   // Join the non-empty lines back together
   String result = nonEmptyLines.join('\n');
@@ -270,4 +277,58 @@ String removeUtf8Bom(String text) {
     return text.substring(1);
   }
   return text;
+}
+
+double? parseUSDAmount(String input) {
+  final usdPattern = RegExp(r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\.\d+)(\s*USD)?$');
+  final match = usdPattern.firstMatch(input);
+
+  if (match != null) {
+    final numericPart = match.group(1)?.replaceAll(',', '');
+    if (numericPart != null) {
+      final sign = input.startsWith('-') ? -1.0 : 1.0;
+      return double.parse(numericPart) * sign;
+    }
+  }
+
+  return null;
+}
+
+double? parseEuroAmount(String input) {
+  final euroPattern = RegExp(r'^([+-]?(?:\d+(?:\.\d{3})*|\d+))(,\d+)?\s*€?$');
+  final match = euroPattern.firstMatch(input);
+
+  if (match != null) {
+    final integerPart = match.group(1)?.replaceAll('.', '');
+    final decimalPart = match.group(2)?.replaceAll(',', '.');
+
+    if (integerPart != null) {
+      final numericPart = integerPart + (decimalPart ?? '');
+      return double.parse(numericPart);
+    }
+  }
+
+  return null;
+}
+
+String convertParateseToNegativeString(String amountText) {
+  amountText = amountText.trim();
+  if (amountText.contains('(') && amountText.contains(')')) {
+    amountText = amountText.replaceAll('(', '');
+    amountText = amountText.replaceAll(')', '');
+    amountText = '-$amountText';
+  }
+  return amountText;
+}
+
+double? parseAmount(String amountAsText, final String currency) {
+  amountAsText = convertParateseToNegativeString(amountAsText);
+  switch (currency.toLowerCase()) {
+    case 'eur':
+      return parseEuroAmount(amountAsText);
+    case 'usd':
+    case 'cad':
+    default:
+      return parseUSDAmount(amountAsText);
+  }
 }

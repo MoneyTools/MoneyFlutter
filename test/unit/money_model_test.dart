@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_model.dart';
 
 void main() {
@@ -24,5 +25,23 @@ void main() {
     mm.setAmount('123.45');
     expect(mm.toDouble(), equals(123.45));
     expect(mm.toString(), equals('\$123.45'));
+  });
+
+  group('parseAmount', () {
+    test('parses valid USD amounts', () {
+      expect(parseAmount('  +123.45  ', 'USD'), 123.45);
+      expect(parseAmount('  -456.78  ', 'USD'), -456.78);
+      expect(parseAmount('  (789.01)  ', 'USD'), -789.01);
+    });
+
+    test('parses valid EUR amounts', () {
+      expect(parseAmount('  +123,45  ', 'EUR'), 123.45);
+      expect(parseAmount('  -456,78  ', 'EUR'), -456.78);
+      expect(parseAmount('  (789,01)  ', 'EUR'), -789.01);
+    });
+
+    test('returns null for invalid formats', () {
+      expect(parseAmount('hello', 'USD'), isNull);
+    });
   });
 }

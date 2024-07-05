@@ -14,12 +14,14 @@ class ColumnInput extends StatefulWidget {
   const ColumnInput({
     required this.inputText,
     required this.dateFormat,
+    required this.currency,
     required this.onChange,
     super.key,
   });
   final String inputText;
   final Function(String) onChange;
   final String dateFormat;
+  final String currency;
 
   @override
   State<ColumnInput> createState() => _ColumnInputState();
@@ -79,7 +81,7 @@ class _ColumnInputState extends State<ColumnInput> {
   void updateAllTextControllerContentFromRawText(final String inputText) {
     _controllerSingleColumn.text = inputText;
 
-    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat);
+    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat, currency: widget.currency);
     parser.convertInputTextToTransactionList(
       context,
       widget.inputText,
@@ -91,7 +93,7 @@ class _ColumnInputState extends State<ColumnInput> {
   }
 
   void fromOneToThreeColumn() {
-    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat);
+    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat, currency: widget.currency);
     parser.convertInputTextToTransactionList(
       context,
       _controllerSingleColumn.text,
@@ -105,7 +107,7 @@ class _ColumnInputState extends State<ColumnInput> {
   }
 
   String getSingleBufferWithLatest3ColumnsText() {
-    return ValuesParser.assembleIntoSinceTextBuffer(
+    return ValuesParser.assembleIntoSingleTextBuffer(
       _controllerColumn1.text,
       _controllerColumn2.text,
       _controllerColumn3.text,

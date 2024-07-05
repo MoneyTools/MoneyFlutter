@@ -5,17 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
 class ValueQuality {
-  const ValueQuality(this.valueAsString, {this.dateFormat = 'MM/DD/YYYY'});
+  const ValueQuality(this.valueAsString, {this.dateFormat = 'MM/DD/YYYY', this.currency = 'USD'});
   final String valueAsString;
   final String warningMessage = '';
   final String dateFormat;
+  final String currency;
 
   bool get hasError {
     return warningMessage.isNotEmpty;
@@ -42,15 +44,9 @@ class ValueQuality {
     if (amount == null) {
       return buildWarning(context, valueAsString);
     }
-    return widgetDoubleAsCurrency(amount);
-  }
 
-  static SelectableText widgetDoubleAsCurrency(final double amount) {
-    return SelectableText(
-      doubleToCurrency(amount),
-      textAlign: TextAlign.right,
-      style: TextStyle(color: amount > 0 ? Colors.green : Colors.red),
-    );
+    MoneyModel mm = MoneyModel(amount: amount, iso4217: currency);
+    return MoneyWidget(amountModel: mm);
   }
 
   Widget valueAsDateWidget(final BuildContext context) {
@@ -146,9 +142,10 @@ class ValuesQuality {
 /// relevant values from it. It provides methods for parsing, transforming, and
 /// validating the extracted values.
 class ValuesParser {
-  ValuesParser({this.dateFormat = 'MM/DD/YYYY'});
+  ValuesParser({required this.dateFormat, required this.currency});
 
   final String dateFormat;
+  final String currency; // USD, EUR
 
   List<ValuesQuality> _values = [];
   String errorMessage = '';
@@ -194,9 +191,9 @@ class ValuesParser {
   ValuesQuality attemptToExtractTriples(
     String line,
   ) {
-    String date = '';
-    String description = '';
-    String amount = '';
+    String dateAsText = '';
+    String descriptionAsText = '';
+    String amountAsText = '';
 
     line.trim();
     List<String> threeValues = line.split(RegExp(r'\t|;|\|')).where((token) => token.trim().isNotEmpty).toList();
@@ -208,27 +205,27 @@ class ValuesParser {
       case 2:
         DateTime? possibleDate = parseForDate(threeValues.first);
         if (possibleDate == null) {
-          description = threeValues.first;
+          descriptionAsText = threeValues.first;
         } else {
-          date = threeValues.first;
+          dateAsText = threeValues.first;
         }
 
-        double? possibleAmount = attemptToGetDoubleFromText(threeValues.last);
+        double? possibleAmount = parseAmount(threeValues.last, currency);
         if (possibleAmount == null) {
-          description = threeValues.last;
+          descriptionAsText = threeValues.last;
         } else {
-          amount = threeValues.last;
+          amountAsText = threeValues.last;
         }
       // Only one value
       case 1:
         DateTime? possibleDate = parseForDate(threeValues.first);
         if (possibleDate == null) {
-          double? possibleAmount = attemptToGetDoubleFromText(threeValues.first);
+          double? possibleAmount = parseAmount(threeValues.first, currency);
           if (possibleAmount == null) {
-            description = threeValues.first;
+            descriptionAsText = threeValues.first;
           }
         } else {
-          date = threeValues.first;
+          dateAsText = threeValues.first;
         }
       // no value
       case 0:
@@ -237,15 +234,15 @@ class ValuesParser {
       // Perfect
       case 3:
       default: // 4 or more
-        date = threeValues.first;
-        description = threeValues.sublist(1, threeValues.length - 1).join(' ');
-        amount = threeValues.last;
+        dateAsText = threeValues.first;
+        descriptionAsText = threeValues.sublist(1, threeValues.length - 1).join(' ');
+        amountAsText = threeValues.last;
     }
 
     return ValuesQuality(
-      date: ValueQuality(date, dateFormat: dateFormat),
-      description: ValueQuality(description),
-      amount: ValueQuality(amount),
+      date: ValueQuality(dateAsText.trim(), dateFormat: dateFormat),
+      description: ValueQuality(descriptionAsText.trim()),
+      amount: ValueQuality(amountAsText.trim(), currency: currency),
     );
   }
 
@@ -292,11 +289,27 @@ class ValuesParser {
     _values.clear();
 
     inputString = inputString.trim();
-    List<List<String>> lines = getLinesFromRawText(inputString);
-    if (lines.isNotEmpty) {
-      for (var line in lines) {
-        if (line.isNotEmpty) {
-          add(attemptToExtractTriples(line.join(';')));
+
+    if (countOccurrences(inputString, ';') >= 2) {
+      //
+      // Date ; Description ; Amount
+      //
+      List<String> lines = getLinesOfText(inputString, includeEmptyLines: false);
+      if (lines.isNotEmpty) {
+        for (final String line in lines) {
+          add(attemptToExtractTriples(line));
+        }
+      }
+    } else {
+      //
+      // CSV like text
+      //
+      List<List<String>> lines = getLinesFromRawTextCommaSeparated(inputString);
+      if (lines.isNotEmpty) {
+        for (final List<String> line in lines) {
+          if (line.isNotEmpty) {
+            add(attemptToExtractTriples(line.join(';')));
+          }
         }
       }
     }
@@ -326,7 +339,7 @@ class ValuesParser {
     return list;
   }
 
-  static String assembleIntoSinceTextBuffer(
+  static String assembleIntoSingleTextBuffer(
     final String multiStringDates,
     final String multiStringDescriptions,
     final String multiStringAmounts,
