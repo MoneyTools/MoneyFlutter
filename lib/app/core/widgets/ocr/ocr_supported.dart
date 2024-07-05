@@ -5,6 +5,7 @@ import 'package:flusseract/tessdata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:pasteboard/pasteboard.dart';
 import 'package:path_provider/path_provider.dart';
@@ -47,7 +48,7 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
         );
 
         tesseract.utf8Text(image).then((ocrText) {
-          widget.textController.text = ocrText;
+          widget.textController.text = removeEmptyLines(ocrText);
         });
       } on Exception catch (e) {
         // Handle potential errors
