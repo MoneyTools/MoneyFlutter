@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/gaps.dart';
@@ -35,6 +36,8 @@ class _ColumnInputState extends State<ColumnInput> {
   final _focusNode1 = FocusNode();
   final _focusNode2 = FocusNode();
   final _focusNode3 = FocusNode();
+
+  final Debouncer _debouncer = Debouncer();
   bool _pauseTextSync = false;
 
   // Freestyle
@@ -144,28 +147,30 @@ class _ColumnInputState extends State<ColumnInput> {
   }
 
   void _syncText() {
-    if (_pauseTextSync) {
-      return;
-    }
-    // suspend sync in to avoid re-entrance
-    _pauseTextSync = true;
+    _debouncer.run(() {
+      if (_pauseTextSync) {
+        return;
+      }
+      // suspend sync in to avoid re-entrance
+      _pauseTextSync = true;
 
-    // Get the number of lines of text in the first column
-    int linesCount = getMaxLineOfAllColumns();
+      // Get the number of lines of text in the first column
+      int linesCount = getMaxLineOfAllColumns();
 
-    // Update the text in the other columns to match the number of lines
-    if (getLineCount(_controllerColumn1.text) != linesCount) {
-      _controllerColumn1.text = adjustLineCount(_controllerColumn1.text, linesCount);
-    }
-    if (getLineCount(_controllerColumn2.text) != linesCount) {
-      _controllerColumn2.text = adjustLineCount(_controllerColumn2.text, linesCount);
-    }
-    if (getLineCount(_controllerColumn3.text) != linesCount) {
-      _controllerColumn3.text = adjustLineCount(_controllerColumn3.text, linesCount);
-    }
-    fromThreeToOneColumn();
-    _pauseTextSync = false;
-    notifyChanged();
+      // Update the text in the other columns to match the number of lines
+      if (getLineCount(_controllerColumn1.text) != linesCount) {
+        _controllerColumn1.text = adjustLineCount(_controllerColumn1.text, linesCount);
+      }
+      if (getLineCount(_controllerColumn2.text) != linesCount) {
+        _controllerColumn2.text = adjustLineCount(_controllerColumn2.text, linesCount);
+      }
+      if (getLineCount(_controllerColumn3.text) != linesCount) {
+        _controllerColumn3.text = adjustLineCount(_controllerColumn3.text, linesCount);
+      }
+      fromThreeToOneColumn();
+      _pauseTextSync = false;
+      notifyChanged();
+    });
   }
 
   String adjustLineCount(final String multiLineText, final lineCountNeeded) {
