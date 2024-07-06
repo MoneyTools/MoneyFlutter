@@ -4,8 +4,10 @@ import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/column_header_button.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/mybanner.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
+import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class ImportTransactionsList extends StatefulWidget {
@@ -60,6 +62,7 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
         //
         // Footer
         //
+
         Container(
           color: getColorTheme(context).surfaceContainerLow,
           padding: const EdgeInsets.all(8.0),
@@ -68,10 +71,8 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
             children: [
               Text(ValuesQuality.getDateRange(widget.values).toStringDays()),
               _buildTallyOfItemsToImportOrSkip(),
-              Text(
-                'Total: ${doubleToCurrency(sumOfValues())}',
-                textAlign: TextAlign.right,
-              ),
+              const Text('Total:', textAlign: TextAlign.right),
+              MoneyWidget(amountModel: MoneyModel(amount: sumOfValues(), iso4217: widget.values.first.amount.currency)),
             ],
           ),
         ),

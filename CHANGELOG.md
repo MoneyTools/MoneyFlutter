@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.39] 2024-07-06
+
+### Added
+
+- Import text: Ability to toggle Credit/Debit the input amounts
+  
 ## [version 1.8.38] 2024-07-05
 
 ### Added

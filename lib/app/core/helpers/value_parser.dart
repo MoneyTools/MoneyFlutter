@@ -13,18 +13,24 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
 class ValueQuality {
-  const ValueQuality(this.valueAsString, {this.dateFormat = 'MM/DD/YYYY', this.currency = 'USD'});
+  const ValueQuality(
+    this.valueAsString, {
+    this.dateFormat = 'MM/DD/YYYY',
+    this.currency = 'USD',
+    this.reverseAmountValue = false,
+  });
   final String valueAsString;
   final String warningMessage = '';
   final String dateFormat;
   final String currency;
+  final bool reverseAmountValue;
 
   bool get hasError {
     return warningMessage.isNotEmpty;
   }
 
   double asAmount() {
-    return attemptToGetDoubleFromText(valueAsString) ?? 0.00;
+    return (parseAmount(valueAsString, currency) ?? 0.00) * (reverseAmountValue ? -1 : 1);
   }
 
   DateTime? asDate() {
@@ -40,12 +46,12 @@ class ValueQuality {
       return buildWarning(context, '< no amount >');
     }
 
-    double? amount = attemptToGetDoubleFromText(valueAsString);
+    double? amount = parseAmount(valueAsString, currency);
     if (amount == null) {
       return buildWarning(context, valueAsString);
     }
 
-    MoneyModel mm = MoneyModel(amount: amount, iso4217: currency);
+    MoneyModel mm = MoneyModel(amount: asAmount(), iso4217: currency);
     return MoneyWidget(amountModel: mm);
   }
 
@@ -76,6 +82,7 @@ class ValuesQuality {
     required this.date,
     required this.description,
     required this.amount,
+    this.reverseAmountValue = false,
   });
 
   factory ValuesQuality.empty() {
@@ -89,6 +96,7 @@ class ValuesQuality {
   final ValueQuality date;
   final ValueQuality description;
   final ValueQuality amount;
+  final bool reverseAmountValue;
 
   bool containsErrors() {
     return date.hasError || description.hasError || amount.hasError;
@@ -142,10 +150,11 @@ class ValuesQuality {
 /// relevant values from it. It provides methods for parsing, transforming, and
 /// validating the extracted values.
 class ValuesParser {
-  ValuesParser({required this.dateFormat, required this.currency});
+  ValuesParser({required this.dateFormat, required this.currency, this.reverseAmountValue = false});
 
   final String dateFormat;
   final String currency; // USD, EUR
+  final bool reverseAmountValue;
 
   List<ValuesQuality> _values = [];
   String errorMessage = '';
@@ -240,9 +249,24 @@ class ValuesParser {
     }
 
     return ValuesQuality(
-      date: ValueQuality(dateAsText.trim(), dateFormat: dateFormat),
-      description: ValueQuality(descriptionAsText.trim()),
-      amount: ValueQuality(amountAsText.trim(), currency: currency),
+      // date
+      date: ValueQuality(
+        dateAsText.trim(),
+        dateFormat: dateFormat,
+      ),
+
+      // description
+      description: ValueQuality(
+        descriptionAsText.trim(),
+      ),
+
+      // amount
+      amount: ValueQuality(
+        amountAsText.trim(),
+        currency: currency,
+        reverseAmountValue: reverseAmountValue,
+      ),
+      reverseAmountValue: reverseAmountValue,
     );
   }
 

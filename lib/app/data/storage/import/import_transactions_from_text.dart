@@ -34,6 +34,7 @@ void showImportTransactionsFromTextInput(
           } else {
             // Import
             final List<Transaction> transactionsToAdd = [];
+
             for (final ValuesQuality singleTransactionInput in parser.lines) {
               if (!singleTransactionInput.exist) {
                 final t = createNewTransactionFromDateDescriptionAmount(

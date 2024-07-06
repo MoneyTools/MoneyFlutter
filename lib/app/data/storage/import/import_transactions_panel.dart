@@ -43,7 +43,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     'dd/MM/yy',
   ];
   late String userChoiceOfDateFormat = _possibleDateFormats.first;
-
+  int _userChoiceDebitVsCredit = 0;
   final _focusNode = FocusNode();
 
   List<ValuesQuality> _values = [];
@@ -75,6 +75,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               inputText: _textToParse,
               dateFormat: userChoiceOfDateFormat,
               currency: _account.getAccountCurrencyAsText(),
+              reverseAmountValue: _userChoiceDebitVsCredit == 1,
               onChange: (String newTextInput) {
                 setState(() {
                   convertAndNotify(context, newTextInput);
@@ -87,6 +88,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
             Row(
               children: [
                 _buildChoiceOfDateFormat(),
+                const Spacer(),
+                _buildDebitVsCredit(),
                 const Spacer(),
                 _buildChoiceOfAmountFormat(),
               ],
@@ -169,6 +172,31 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
   }
 
+  Widget _buildDebitVsCredit() {
+    return SegmentedButton<int>(
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
+      segments: const <ButtonSegment<int>>[
+        ButtonSegment<int>(
+          value: 0,
+          label: Text('Credit'),
+        ),
+        ButtonSegment<int>(
+          value: 1,
+          label: Text('Debit'),
+        ),
+      ],
+      selected: <int>{_userChoiceDebitVsCredit},
+      onSelectionChanged: (final Set<int> newSelection) {
+        setState(() {
+          _userChoiceDebitVsCredit = newSelection.first;
+          convertAndNotify(context, _textToParse);
+        });
+      },
+    );
+  }
+
   Widget _buildChoiceOfAmountFormat() {
     return _account.getAccountCurrencyAsWidget();
   }
@@ -177,6 +205,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     ValuesParser parser = ValuesParser(
       dateFormat: userChoiceOfDateFormat,
       currency: _account.getAccountCurrencyAsText(),
+      reverseAmountValue: _userChoiceDebitVsCredit == 1,
     );
     parser.convertInputTextToTransactionList(
       context,

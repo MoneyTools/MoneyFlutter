@@ -12,16 +12,18 @@ import 'package:money/app/data/models/constants.dart';
 
 class ColumnInput extends StatefulWidget {
   const ColumnInput({
+    super.key,
     required this.inputText,
     required this.dateFormat,
     required this.currency,
     required this.onChange,
-    super.key,
+    required this.reverseAmountValue,
   });
   final String inputText;
   final Function(String) onChange;
   final String dateFormat;
   final String currency;
+  final bool reverseAmountValue;
 
   @override
   State<ColumnInput> createState() => _ColumnInputState();
@@ -81,7 +83,11 @@ class _ColumnInputState extends State<ColumnInput> {
   void updateAllTextControllerContentFromRawText(final String inputText) {
     _controllerSingleColumn.text = inputText;
 
-    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat, currency: widget.currency);
+    ValuesParser parser = ValuesParser(
+      dateFormat: widget.dateFormat,
+      currency: widget.currency,
+      reverseAmountValue: widget.reverseAmountValue,
+    );
     parser.convertInputTextToTransactionList(
       context,
       widget.inputText,
@@ -93,7 +99,11 @@ class _ColumnInputState extends State<ColumnInput> {
   }
 
   void fromOneToThreeColumn() {
-    ValuesParser parser = ValuesParser(dateFormat: widget.dateFormat, currency: widget.currency);
+    ValuesParser parser = ValuesParser(
+      dateFormat: widget.dateFormat,
+      currency: widget.currency,
+      reverseAmountValue: widget.reverseAmountValue,
+    );
     parser.convertInputTextToTransactionList(
       context,
       _controllerSingleColumn.text,
@@ -229,6 +239,10 @@ class _ColumnInputState extends State<ColumnInput> {
         autofocus: true,
         maxLines: null,
         // Set maxLines to null for multiline TextField
+        style: const TextStyle(
+          fontSize: SizeForText.small,
+          overflow: TextOverflow.fade,
+        ),
         decoration: getDecoration('Date; Description; Amount', getLineCount(_controllerSingleColumn.text)),
         onChanged: (final String _) {
           notifyChanged();
