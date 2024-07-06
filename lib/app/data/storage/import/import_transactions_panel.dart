@@ -26,9 +26,9 @@ class ImportTransactionsPanel extends StatefulWidget {
 }
 
 class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
-  late Account account;
-  late String textToParse;
-  final List<String> possibleDateFormats = [
+  late Account _account;
+  late String _textToParse;
+  final List<String> _possibleDateFormats = [
     'yyyy-MM-dd',
     'yyyy/MM/dd',
     'yyyy-dd-MM',
@@ -42,23 +42,23 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     'dd-MM-yy',
     'dd/MM/yy',
   ];
-  late String userChoiceOfDateFormat = possibleDateFormats.first;
+  late String userChoiceOfDateFormat = _possibleDateFormats.first;
 
   final _focusNode = FocusNode();
 
-  List<ValuesQuality> values = [];
+  List<ValuesQuality> _values = [];
 
   @override
   void initState() {
     super.initState();
-    account = widget.account;
-    textToParse = widget.inputText;
-    convertAndNotify(context, textToParse);
+    _account = widget.account;
+    _textToParse = widget.inputText;
+    convertAndNotify(context, _textToParse);
   }
 
   @override
   Widget build(BuildContext context) {
-    ValuesParser.evaluateExistence(values);
+    ValuesParser.evaluateExistence(_values);
 
     return SizedBox(
       width: 600,
@@ -72,18 +72,18 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           Expanded(
             flex: 1,
             child: ColumnInput(
-              inputText: textToParse,
+              inputText: _textToParse,
               dateFormat: userChoiceOfDateFormat,
-              currency: account.getAccountCurrencyAsText(),
+              currency: _account.getAccountCurrencyAsText(),
               onChange: (String newTextInput) {
                 setState(() {
                   convertAndNotify(context, newTextInput);
-                  textToParse = newTextInput;
+                  _textToParse = newTextInput;
                 });
               },
             ),
           ),
-          if (values.isNotEmpty)
+          if (_values.isNotEmpty)
             Row(
               children: [
                 _buildChoiceOfDateFormat(),
@@ -98,7 +98,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           Expanded(
             flex: 2,
             child: ImportTransactionsList(
-              values: values,
+              values: _values,
             ),
           ),
         ],
@@ -118,12 +118,12 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
         gapLarge(),
         Expanded(
           child: pickerAccount(
-            selected: account,
+            selected: _account,
             onSelected: (final Account? accountSelected) {
               setState(
                 () {
-                  account = accountSelected!;
-                  widget.onAccountChanged(account);
+                  _account = accountSelected!;
+                  widget.onAccountChanged(_account);
                 },
               );
             },
@@ -134,15 +134,15 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   }
 
   Widget _buildChoiceOfDateFormat() {
-    bool textToParseContainsSlash = textToParse.contains('/');
-    bool textToParseContainsDash = textToParse.contains('-');
+    bool textToParseContainsSlash = _textToParse.contains('/');
+    bool textToParseContainsDash = _textToParse.contains('-');
 
-    Iterable<String> choiceOfDateFormat = possibleDateFormats.where(
+    Iterable<String> choiceOfDateFormat = _possibleDateFormats.where(
       (item) => (item.contains('/') && textToParseContainsSlash) || (item.contains('-') && textToParseContainsDash),
     );
 
     if (choiceOfDateFormat.isEmpty) {
-      choiceOfDateFormat = possibleDateFormats;
+      choiceOfDateFormat = _possibleDateFormats;
     }
 
     // make sure that the choice is valid
@@ -163,26 +163,26 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       onChanged: (final String? value) {
         setState(() {
           userChoiceOfDateFormat = value!;
-          convertAndNotify(context, textToParse);
+          convertAndNotify(context, _textToParse);
         });
       },
     );
   }
 
   Widget _buildChoiceOfAmountFormat() {
-    return account.getAccountCurrencyAsWidget();
+    return _account.getAccountCurrencyAsWidget();
   }
 
   void convertAndNotify(BuildContext context, String inputText) {
     ValuesParser parser = ValuesParser(
       dateFormat: userChoiceOfDateFormat,
-      currency: account.getAccountCurrencyAsText(),
+      currency: _account.getAccountCurrencyAsText(),
     );
     parser.convertInputTextToTransactionList(
       context,
       inputText,
     );
-    values = parser.lines;
+    _values = parser.lines;
     widget.onTransactionsFound(parser);
   }
 
