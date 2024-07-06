@@ -22,7 +22,7 @@ class MyAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
+      title: title.isEmpty ? null : Text(title),
       icon: icon == null ? null : Icon(icon!),
       shape: RoundedRectangleBorder(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
@@ -47,7 +47,7 @@ class MyAlertDialog extends StatelessWidget {
 
 void adaptiveScreenSizeDialog({
   required final BuildContext context,
-  required final String title,
+  final String title = '',
   required final Widget child,
   List<Widget>? actionButtons,
   final String? captionForClose = 'Close',

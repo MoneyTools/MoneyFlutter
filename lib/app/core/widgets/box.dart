@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/widgets/columns/input_values.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class Box extends StatelessWidget {
-  const Box({
+  Box({
     super.key,
-    this.title = '',
+    this.title = '', // optional
+    this.header, // optional
     this.color,
     this.width,
     this.height,
     this.margin,
     this.padding = 8,
     required this.child,
-  });
+  }) {
+    assert(title.isNotEmpty && header == null || title.isEmpty && header != null || title.isEmpty && header == null);
+  }
+
   final String title;
+  final Widget? header;
   final double? margin;
   final double padding;
   final Color? color;
@@ -25,7 +32,7 @@ class Box extends StatelessWidget {
   Widget build(BuildContext context) {
     EdgeInsetsGeometry? adjustedMargin = margin == null ? null : EdgeInsets.all(margin!);
     // adjust the margin to account for the title bleeding out of the box
-    if (title.isNotEmpty) {
+    if (title.isNotEmpty || header != null) {
       const increaseTopMarginBy = EdgeInsets.only(top: SizeForPadding.large);
       if (adjustedMargin == null) {
         adjustedMargin = increaseTopMarginBy;
@@ -35,7 +42,7 @@ class Box extends StatelessWidget {
     }
 
     return Stack(
-      alignment: AlignmentDirectional.topCenter,
+      alignment: AlignmentDirectional.topStart,
       children: [
         Container(
           width: width,
@@ -57,27 +64,50 @@ class Box extends StatelessWidget {
           ),
           child: child,
         ),
-        if (title.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: SizeForPadding.large,
-            ),
-            child: Card(
-              elevation: 1,
-              shadowColor: Colors.transparent,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: SizeForPadding.medium,
-                ),
-                child: Text(
-                  title,
-                  style: getTextTheme(context).titleSmall,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-          ),
+        if (title.isNotEmpty || header != null) _buildHeader(context),
       ],
     );
   }
+
+  Widget _buildHeader(final BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: SizeForPadding.normal,
+      ),
+      child: IntrinsicWidth(
+        child: Card(
+          elevation: 1,
+          shadowColor: Colors.transparent,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: SizeForPadding.medium,
+            ),
+            child: title.isEmpty
+                ? header
+                : Text(
+                    title,
+                    style: getTextTheme(context).titleSmall,
+                    textAlign: TextAlign.center,
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget buildHeaderTitleAndCounter(
+  final BuildContext context,
+  final String title,
+  final int count,
+  final String suffix,
+) {
+  Widget boxHeader = Badge(
+    isLabelVisible: count > 0,
+    backgroundColor: ThemeController.to.primaryColor,
+    offset: const Offset(20.0, 0),
+    label: getBadgeCounter(count, suffix),
+    child: Text(title),
+  );
+  return boxHeader;
 }

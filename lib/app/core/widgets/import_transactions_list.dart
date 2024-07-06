@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
+import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/columns/column_header_button.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/mybanner.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -36,58 +40,74 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
   @override
   Widget build(BuildContext context) {
     if (widget.values.isEmpty) {
-      return buildWarning(context, 'No transactions');
+      return Box(
+        title: 'Preview',
+        padding: SizeForPadding.huge,
+        child: buildWarning(context, 'No transactions'),
+      );
     }
 
     _sortValues();
 
-    return Column(
-      children: [
-        //
-        // header
-        //
-        _buildColumnHeaders(context),
+    return Box(
+      header: Badge(
+        backgroundColor: ThemeController.to.primaryColor,
+        offset: const Offset(20.0, 0),
+        label: Text(buildTallyOfItemsToImportOrSkip()),
+      ),
+      child: Column(
+        children: [
+          //
+          // header
+          //
+          _buildColumnHeaders(context),
 
-        //
-        // list
-        //
-        Expanded(
-          child: ListView.separated(
-            separatorBuilder: (context, index) => const Divider(),
-            itemCount: widget.values.length,
-            itemBuilder: (context, index) => _buildTransactionRow(widget.values[index]),
+          //
+          // list
+          //
+          Expanded(
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const Divider(),
+              itemCount: widget.values.length,
+              itemBuilder: (context, index) => _buildTransactionRow(widget.values[index]),
+            ),
           ),
-        ),
 
-        //
-        // Footer
-        //
-
-        Container(
-          color: getColorTheme(context).surfaceContainerLow,
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(ValuesQuality.getDateRange(widget.values).toStringDays()),
-              _buildTallyOfItemsToImportOrSkip(),
-              const Text('Total:', textAlign: TextAlign.right),
-              MoneyWidget(amountModel: MoneyModel(amount: sumOfValues(), iso4217: widget.values.first.amount.currency)),
-            ],
+          //
+          // Footer
+          //
+          Container(
+            color: getColorTheme(context).surfaceContainerLow,
+            padding: const EdgeInsets.all(SizeForPadding.small),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  ValuesQuality.getDateRange(widget.values).toStringDays(),
+                  style: const TextStyle(fontSize: SizeForText.small),
+                ),
+                const Spacer(),
+                const Text('Total', textAlign: TextAlign.right, style: TextStyle(fontSize: SizeForText.small)),
+                gapSmall(),
+                MoneyWidget(
+                  amountModel: MoneyModel(amount: sumOfValues(), iso4217: widget.values.first.amount.currency),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildTallyOfItemsToImportOrSkip() {
+  String buildTallyOfItemsToImportOrSkip() {
     int totalItems = widget.values.length;
     int itemsToImport = widget.values.where((item) => !item.exist).length;
     String text = getIntAsText(widget.values.length);
     if (totalItems != itemsToImport) {
       text = '${getIntAsText(itemsToImport)}/${getIntAsText(totalItems)}';
     }
-    return Text('$text entries');
+    return '$text entries';
   }
 
   double sumOfValues() {

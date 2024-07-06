@@ -2,17 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
+import 'package:money/app/core/widgets/columns/input_values.dart';
 import 'package:money/app/core/widgets/gaps.dart';
-import 'package:money/app/core/widgets/ocr/ocr.dart';
 import 'package:money/app/data/models/constants.dart';
 
-class ColumnInput extends StatefulWidget {
-  const ColumnInput({
+class InputByColumns extends StatefulWidget {
+  const InputByColumns({
     super.key,
     required this.inputText,
     required this.dateFormat,
@@ -27,10 +26,10 @@ class ColumnInput extends StatefulWidget {
   final bool reverseAmountValue;
 
   @override
-  State<ColumnInput> createState() => _ColumnInputState();
+  State<InputByColumns> createState() => _InputByColumnsState();
 }
 
-class _ColumnInputState extends State<ColumnInput> {
+class _InputByColumnsState extends State<InputByColumns> {
   bool _singleColumn = true;
   final _focusNode = FocusNode();
   final _focusNode1 = FocusNode();
@@ -59,6 +58,26 @@ class _ColumnInputState extends State<ColumnInput> {
     startListening();
 
     super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // fromTextInputTextControl(widget.inputText);
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ( 1 column | 3 columns )
+        _buildColumnSelection(),
+
+        gapLarge(),
+
+        // Input text controls
+        Expanded(
+          child: _buildInputAsSingleOr3Columns(),
+        ),
+      ],
+    );
   }
 
   void startListening() {
@@ -185,24 +204,6 @@ class _ColumnInputState extends State<ColumnInput> {
     return padList(lines, lineCountNeeded, '').join('\n');
   }
 
-  @override
-  Widget build(BuildContext context) {
-    // fromTextInputTextControl(widget.inputText);
-    return Column(
-      children: [
-        // ( 1 column | 3 columns )
-        _buildColumnSelection(),
-
-        gapLarge(),
-
-        // Input text controls
-        Expanded(
-          child: _buildInputAsSingleOr3Columns(),
-        ),
-      ],
-    );
-  }
-
   Widget _buildColumnSelection() {
     return SegmentedButton<int>(
       style: const ButtonStyle(
@@ -211,11 +212,11 @@ class _ColumnInputState extends State<ColumnInput> {
       segments: const <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
-          label: Text('1 column input'),
+          label: Text('1 column'),
         ),
         ButtonSegment<int>(
           value: 1,
-          label: Text('3 columns input'),
+          label: Text('3 columns'),
         ),
       ],
       selected: {_singleColumn ? 0 : 1},
@@ -248,90 +249,31 @@ class _ColumnInputState extends State<ColumnInput> {
           fontSize: SizeForText.small,
           overflow: TextOverflow.fade,
         ),
-        decoration: getDecoration('Date; Description; Amount', getLineCount(_controllerSingleColumn.text)),
+        decoration: getDecoration(context, 'Date; Description; Amount', getLineCount(_controllerSingleColumn.text)),
         onChanged: (final String _) {
           notifyChanged();
         },
       );
-    } else {
-      return Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            flex: 1,
-            child: columnTextInput('Date', _controllerColumn1, _focusNode1),
-          ),
-          Expanded(
-            flex: 2,
-            child: columnTextInput('Description', _controllerColumn2, _focusNode2),
-          ),
-          Expanded(
-            flex: 1,
-            child: columnTextInput('Amount', _controllerColumn3, _focusNode3),
-          ),
-        ],
-      );
     }
-  }
 
-  Widget columnTextInput(
-    final String title,
-    final TextEditingController controller,
-    final FocusNode focusNode,
-  ) {
-    final int lineCount = getLineCount(controller.text);
-
-    return Stack(
-      alignment: AlignmentDirectional.topCenter,
+    // 3 columns
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(bottom: SizeForPadding.large),
-          child: TextField(
-            controller: controller,
-            focusNode: focusNode,
-            autofocus: false,
-            maxLines: null,
-            keyboardType: TextInputType.multiline,
-            textAlignVertical: TextAlignVertical.top,
-            style: const TextStyle(
-              fontSize: SizeForText.small,
-              overflow: TextOverflow.fade,
-            ),
-            decoration: getDecoration(title, lineCount),
-            inputFormatters: [
-              TextInputFormatterRemoveEmptyLines(), // remove empty line
-            ],
-          ),
+        Expanded(
+          flex: 1,
+          child: InputValues(title: 'Date', controller: _controllerColumn1),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: PasteOcr(textController: controller),
+        Expanded(
+          flex: 2,
+          child: InputValues(title: 'Description', controller: _controllerColumn2),
+        ),
+        Expanded(
+          flex: 1,
+          child: InputValues(title: 'Amount', controller: _controllerColumn3),
         ),
       ],
-    );
-  }
-
-  Widget? getBadgeCounter(final int lineCount) {
-    if (lineCount > 0) {
-      return Padding(
-        padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.small),
-        child: Text('$lineCount lines'),
-      );
-    }
-    return null;
-  }
-
-  InputDecoration getDecoration(final String title, final int lineCount) {
-    return InputDecoration(
-      label: Badge(
-        isLabelVisible: lineCount > 0,
-        backgroundColor: ThemeController.to.primaryColor,
-        offset: const Offset(20.0, 0),
-        label: getBadgeCounter(lineCount),
-        child: Text('$title '),
-      ),
-      border: const OutlineInputBorder(),
     );
   }
 }

@@ -23,8 +23,8 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
   @override
   Widget build(BuildContext context) {
     return Transform.scale(
-      scale: 0.8, // Adjust scale factor as needed (0.0 to 1.0)
-      alignment: Alignment.center, // Optional: Position the scaled button
+      scale: 0.6, // Adjust scale factor as needed (0.0 to 1.0)
+      alignment: Alignment.bottomCenter, // Optional: Position the scaled button
       child: ElevatedButton.icon(
         onPressed: _recognizeTextFromClipboard,
         icon: const Icon(Icons.content_paste_go_outlined),

@@ -60,7 +60,6 @@ void showImportTransactionsFromTextInput(
 
   adaptiveScreenSizeDialog(
     context: context,
-    title: 'Import from text',
     captionForClose: 'Cancel',
     actionButtons: actionButtons,
     child: Column(

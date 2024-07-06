@@ -5,6 +5,7 @@ import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/columns_input.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/import_transactions_list.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.dart';
 
@@ -78,7 +79,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
           Expanded(
             flex: 1,
-            child: ColumnInput(
+            child: InputByColumns(
               inputText: _textToParse,
               dateFormat: userChoiceOfDateFormat,
               currency: _account.getAccountCurrencyAsText(),
@@ -91,15 +92,22 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               },
             ),
           ),
+
+          ///
+          /// Date Format | Credit/Debit | Currency
+          ///
           if (_values.isNotEmpty)
-            Row(
-              children: [
-                _buildChoiceOfDateFormat(),
-                const Spacer(),
-                _buildDebitVsCredit(),
-                const Spacer(),
-                _buildChoiceOfAmountFormat(),
-              ],
+            Padding(
+              padding: const EdgeInsets.only(top: SizeForPadding.large),
+              child: Row(
+                children: [
+                  _buildChoiceOfDateFormat(),
+                  const Spacer(),
+                  _buildDebitVsCredit(),
+                  gapLarge(),
+                  _buildChoiceOfAmountFormat(),
+                ],
+              ),
             ),
 
           gapLarge(),
@@ -107,8 +115,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           // Results
           Expanded(
             flex: 2,
-            child: ImportTransactionsList(
-              values: _values,
+            child: Center(
+              child: ImportTransactionsList(
+                values: _values,
+              ),
             ),
           ),
         ],
@@ -123,7 +133,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       children: [
         Text(
           'Import transaction to account',
-          style: getTextTheme(context).bodyMedium,
+          style: getTextTheme(context).bodyLarge,
         ),
         gapLarge(),
         Expanded(
