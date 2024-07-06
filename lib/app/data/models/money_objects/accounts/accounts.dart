@@ -193,7 +193,7 @@ class Accounts extends MoneyObjects<Account> {
       final LoanPayment? latestPayment = getAccountLoanPayments(account).lastOrNull;
       if (latestPayment != null) {
         account.updatedOn.value = latestPayment.date.value;
-        account.balance = latestPayment.balance.value.toDouble();
+        account.balance = latestPayment.balance.value.toDouble() * -1;
       }
     }
   }
