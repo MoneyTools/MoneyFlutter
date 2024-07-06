@@ -1,5 +1,52 @@
 import 'package:intl/intl.dart';
 
+List<String> generateAllDateFormats() {
+  final List<String> separators = ['-', '/'];
+  final List<String> yearFormats = ['yyyy', 'yy'];
+  final List<String> monthFormats = ['MM', 'M'];
+  final List<String> dayFormats = ['dd', 'd'];
+
+  List<String> allFormats = [];
+
+  for (String yearFormat in yearFormats) {
+    for (String monthFormat in monthFormats) {
+      for (String dayFormat in dayFormats) {
+        for (String separator in separators) {
+          allFormats.addAll([
+            '$yearFormat$separator$monthFormat$separator$dayFormat',
+            '$monthFormat$separator$dayFormat$separator$yearFormat',
+            '$dayFormat$separator$monthFormat$separator$yearFormat',
+          ]);
+        }
+      }
+    }
+  }
+
+  return allFormats;
+}
+
+List<String> getPossibleDateFormats(String dateString) {
+  if (dateString.trim().isEmpty) {
+    return [];
+  }
+
+  final List<String> possibleFormats = generateAllDateFormats();
+
+  final List<String> validFormats = [];
+
+  for (String format in possibleFormats) {
+    final DateTime? parsedDate = DateFormat(format).tryParse(dateString);
+    if (parsedDate != null) {
+      final String formattedDate = DateFormat(format).format(parsedDate);
+      if (formattedDate == dateString) {
+        validFormats.add(format);
+      }
+    }
+  }
+
+  return validFormats;
+}
+
 /// Attempts to parse a date string using a list of common date formats.
 ///
 /// This function tries to parse the provided [text] string using a list of

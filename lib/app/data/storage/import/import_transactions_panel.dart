@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/columns_input.dart';
 import 'package:money/app/core/widgets/gaps.dart';
@@ -29,17 +30,23 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late Account _account;
   late String _textToParse;
   final List<String> _possibleDateFormats = [
+    // Dash
     'yyyy-MM-dd',
-    'yyyy/MM/dd',
+    'yy-MM-dd',
     'yyyy-dd-MM',
-    'yyyy/dd/MM',
+    'yy-dd-MM',
     'MM-dd-yyyy',
-    'MM/dd/yyyy',
     'MM-dd-yy',
-    'MM/dd/yy',
     'dd-MM-yyyy',
-    'dd/MM/yyyy',
     'dd-MM-yy',
+    // Slash
+    'yyyy/MM/dd',
+    'yy/MM/dd',
+    'yyyy/dd/MM',
+    'yy/dd/MM',
+    'MM/dd/yyyy',
+    'MM/dd/yy',
+    'dd/MM/yyyy',
     'dd/MM/yy',
   ];
   late String userChoiceOfDateFormat = _possibleDateFormats.first;
@@ -137,29 +144,29 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   }
 
   Widget _buildChoiceOfDateFormat() {
-    bool textToParseContainsSlash = _textToParse.contains('/');
-    bool textToParseContainsDash = _textToParse.contains('-');
-
-    Iterable<String> choiceOfDateFormat = _possibleDateFormats.where(
-      (item) => (item.contains('/') && textToParseContainsSlash) || (item.contains('-') && textToParseContainsDash),
-    );
-
-    if (choiceOfDateFormat.isEmpty) {
-      choiceOfDateFormat = _possibleDateFormats;
+    if (_values.isEmpty) {
+      return const SizedBox();
     }
 
-    // make sure that the choice is valid
+    List<String> choiceOfDateFormat = getPossibleDateFormats(_values.first.date.asString());
+
+    if (choiceOfDateFormat.isEmpty) {
+      return const SizedBox();
+    }
+
+    // make sure that the last choice is a valid one
     if (!choiceOfDateFormat.contains(userChoiceOfDateFormat)) {
       userChoiceOfDateFormat = choiceOfDateFormat.first;
     }
 
     return DropdownButton<String>(
+      dropdownColor: getColorTheme(context).secondaryContainer,
       value: userChoiceOfDateFormat,
       items: choiceOfDateFormat
           .map(
             (item) => DropdownMenuItem(
               value: item,
-              child: Text(item),
+              child: Text(item, style: TextStyle(color: getColorTheme(context).onSecondaryContainer)),
             ),
           )
           .toList(),

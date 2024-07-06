@@ -48,7 +48,7 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
         );
 
         tesseract.utf8Text(image).then((ocrText) {
-          widget.textController.text = '${widget.textController.text.trim()}\n${removeEmptyLines(ocrText)}';
+          widget.textController.text = removeEmptyLines('${widget.textController.text}\n$ocrText');
         });
       } on Exception catch (e) {
         // Handle potential errors
