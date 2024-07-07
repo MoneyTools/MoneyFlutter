@@ -96,7 +96,7 @@ class MoneyObject {
     final bool fireNotification,
   ) {
     stashValueBeforeEditing();
-    final field = getFieldDefinitionByName(fieldDefinitions, fieldName);
+    final Field? field = getFieldDefinitionByName(fieldDefinitions, fieldName);
     if (field != null && field.setValue != null) {
       field.setValue!(this, newValue);
       Data().notifyMutationChanged(
@@ -315,7 +315,11 @@ class MoneyObject {
   String toReadableString(Field field) {
     switch (field.type) {
       case FieldType.widget:
-        return field.getValueForSerialization(this).toString();
+        if (field.getValueForReading == null) {
+          return field.getValueForSerialization(this).toString();
+        } else {
+          return field.getValueForReading!(this).toString();
+        }
       case FieldType.text:
       default:
         return field.getValueForDisplay(this).toString();

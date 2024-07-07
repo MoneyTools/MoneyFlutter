@@ -260,6 +260,8 @@ class Field<T> {
     this.name = '',
     this.serializeName = '',
     this.getValueForDisplay = defaultCallbackValue,
+    // ignore: avoid_init_to_null
+    this.getValueForReading = null,
     this.getValueForSerialization = defaultCallbackValue,
     this.getEditWidget,
     this.setValue,
@@ -380,6 +382,9 @@ class Field<T> {
 
   /// Get the value of the instance
   dynamic Function(MoneyObject) getValueForDisplay;
+
+  /// Only need for FieldType.widget
+  dynamic Function(MoneyObject)? getValueForReading;
 
   /// Get the value for storing the instance
   dynamic Function(MoneyObject) getValueForSerialization;
@@ -586,6 +591,7 @@ class FieldString extends Field<String> {
     super.name,
     super.serializeName,
     super.getValueForDisplay,
+    super.getValueForReading,
     super.getValueForSerialization,
     super.useAsColumn = true,
     super.columnWidth,
