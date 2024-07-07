@@ -352,6 +352,8 @@ class Transaction extends MoneyObject {
         return TokenText(Data().categories.getNameFromId(t.categoryId.value));
       }
     },
+    getValueForReading: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Transaction).categoryId.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).categoryId.value = newValue as int,
