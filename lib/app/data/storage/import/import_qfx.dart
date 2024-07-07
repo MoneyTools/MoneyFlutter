@@ -76,7 +76,7 @@ void _showAndConfirmTransactionToImport(
     final payeeText = item.name.isEmpty ? item.memo : item.name;
     valuesQuality.add(
       ValuesQuality(
-        date: ValueQuality(item.date.toIso8601String()),
+        date: ValueQuality(dateToString(item.date), dateFormat: 'yyyy-MM-dd'),
         // final int payeeIdMatchingPayeeText = Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
         description: ValueQuality(payeeText),
         amount: ValueQuality(item.amount.toString()),
@@ -89,8 +89,10 @@ void _showAndConfirmTransactionToImport(
   Widget questionContent = SizedBox(
     height: 400,
     width: 500,
-    child: ImportTransactionsList(
-      values: valuesQuality,
+    child: Center(
+      child: ImportTransactionsList(
+        values: valuesQuality,
+      ),
     ),
   );
 
