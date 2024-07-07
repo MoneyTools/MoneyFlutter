@@ -41,7 +41,7 @@ dependencies:
   dotted_border: ^2.1.0
   file_picker: 8.0.6
   fl_chart: ^0.68.0
-  flusseract:
+  # flusseract:
   flutter_markdown: ^0.7.2+1
   get:
   http: ^1.2.1

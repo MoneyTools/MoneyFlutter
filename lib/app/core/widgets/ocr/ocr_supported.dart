@@ -1,14 +1,14 @@
-import 'dart:io';
+// import 'dart:io';
 
-import 'package:flusseract/flusseract.dart' as flusseract;
-import 'package:flusseract/tessdata.dart';
+// import 'package:flusseract/flusseract.dart' as flusseract;
+// import 'package:flusseract/tessdata.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/core/helpers/string_helper.dart';
+// import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:pasteboard/pasteboard.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 
 class PasteImageOcr extends StatefulWidget {
   const PasteImageOcr({super.key, required this.textController});
@@ -37,19 +37,19 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
     final bytes = await Pasteboard.image;
     if (bytes != null) {
       try {
-        final Directory tempDir = await getTemporaryDirectory();
-        final File file = await File('${tempDir.path}/pasted_image.png').writeAsBytes(bytes);
+        // final Directory tempDir = await getTemporaryDirectory();
+        // final File file = await File('${tempDir.path}/pasted_image.png').writeAsBytes(bytes);
 
-        await TessData.init();
+        // await TessData.init();
 
-        final image = flusseract.PixImage.fromFile(file.path);
-        final tesseract = flusseract.Tesseract(
-          tessDataPath: TessData.tessDataPath,
-        );
+        // final image = flusseract.PixImage.fromFile(file.path);
+        // final tesseract = flusseract.Tesseract(
+        //   tessDataPath: TessData.tessDataPath,
+        // );
 
-        tesseract.utf8Text(image).then((ocrText) {
-          widget.textController.text = removeEmptyLines('${widget.textController.text}\n$ocrText');
-        });
+        // tesseract.utf8Text(image).then((ocrText) {
+        //   widget.textController.text = removeEmptyLines('${widget.textController.text}\n$ocrText');
+        // });
       } on Exception catch (e) {
         // Handle potential errors
         debugLog('Error recognizing text: $e');
