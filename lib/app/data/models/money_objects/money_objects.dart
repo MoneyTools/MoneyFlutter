@@ -303,7 +303,7 @@ class MoneyObjects<T> {
     final List<String> listValues = <String>[];
     for (final Field field in fieldDefinitions) {
       if (isFieldMatchingCondition(field, forSerialization)) {
-        final dynamic value = forSerialization ? field.getValueForSerialization(item) : field.getValueForDisplay(item);
+        final dynamic value = forSerialization ? field.getValueForSerialization(item) : item.toReadableString(field);
         final String valueAsString = '"$value"';
         listValues.add(valueAsString);
       }
