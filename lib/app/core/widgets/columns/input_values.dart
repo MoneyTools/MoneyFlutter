@@ -1,3 +1,6 @@
+import 'dart:io' as io;
+
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -38,10 +41,11 @@ class InputValues extends StatelessWidget {
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: PasteOcr(textController: controller),
-        ),
+        if (!kIsWeb && !io.Platform.isWindows)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: PasteOcr(textController: controller),
+          ),
       ],
     );
   }
