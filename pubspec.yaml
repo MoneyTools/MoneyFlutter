@@ -38,7 +38,7 @@ dependencies:
   collection: 1.18.0
   csv: ^6.0.0
   dotted_border: ^2.1.0
-  file_picker: 8.0.5
+  file_picker: 8.0.6
   fl_chart: ^0.68.0
   flutter_markdown: ^0.7.2+1
   get:
@@ -48,7 +48,7 @@ dependencies:
   path_provider: ^2.1.2
   provider: ^6.1.2
   shared_preferences: ^2.2.2
-  sqlite3: 2.4.3
+  sqlite3: 2.4.4
   sqlite3_flutter_libs:
   url_launcher: ^6.2.4
   uuid: ^4.3.3
