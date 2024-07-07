@@ -311,6 +311,17 @@ class MoneyObject {
     return getPersistableJSon().toString();
   }
 
+  /// attempt to get text that a human could read
+  String toReadableString(Field field) {
+    switch (field.type) {
+      case FieldType.widget:
+        return field.getValueForSerialization(this).toString();
+      case FieldType.text:
+      default:
+        return field.getValueForDisplay(this).toString();
+    }
+  }
+
   bool isMutated<T>() {
     return getMutatedDiff<T>().keys.isNotEmpty;
   }
