@@ -153,6 +153,7 @@ class Transaction extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) =>
         Data().accounts.getNameFromId((instance as Transaction).accountId.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).accountId.value,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).accountId.value = newValue,
   );
 
   /// Date
@@ -162,8 +163,9 @@ class Transaction extends MoneyObject {
     name: 'Date',
     serializeName: 'Date',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).dateTime.value,
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).dateTime.value),
+    getValueForSerialization: (final MoneyObject instance) => dateToSqliteFormat(
+      (instance as Transaction).dateTime.value,
+    ),
     getEditWidget: (final MoneyObject instance, Function onEdited) {
       return PickerEditBoxDate(
         initialValue: (instance as Transaction).dateTimeAsText,
@@ -252,8 +254,8 @@ class Transaction extends MoneyObject {
     setValue: (MoneyObject instance, dynamic newValue) {
       instance = instance as Transaction;
       instance.stashOriginalPayee();
-      if (newValue == -1) {
-        // -1 means no payee, this is a Transfer
+      if (newValue == -1 || newValue == Data().categories.transfer.uniqueId) {
+        // -1 means no payee, this is a Transfer?
         // TODO - implement was solution given that the call back here only has one value use for the Payee ID
       } else {
         // Payee
@@ -276,6 +278,8 @@ class Transaction extends MoneyObject {
             Payee? selectedPayee,
             Account? account,
           ) {
+            bool wasModified = false;
+
             switch (choice) {
               case TransactionFlavor.payee:
                 if (selectedPayee != null) {
@@ -285,11 +289,30 @@ class Transaction extends MoneyObject {
                 }
               case TransactionFlavor.transfer:
                 if (account != null) {
-                  instance.payee.value = -1;
-                  Data().makeTransferLinkage(instance, account);
+                  if (instance.transferInstance != null) {
+                    // this was already a transfer, lets see if the destination account has changed
+                    if (instance.transferInstance?.getReceiverAccount()?.uniqueId == account.uniqueId) {
+                      // same account do noting
+                    } else {
+                      // use the new account destination
+                      Transaction relatedTransaction = instance.transferInstance!.related!;
+                      instance.transferInstance!.related!.accountInstance = Data().accounts.get(
+                            account.uniqueId,
+                          );
+                      relatedTransaction.mutateField(
+                        'Account',
+                        account.uniqueId,
+                        false,
+                      );
+                      wasModified = true;
+                    }
+                  } else {
+                    instance.payee.value = Data().categories.transfer.uniqueId;
+                    Data().makeTransferLinkage(instance, account);
+                  }
                 }
             }
-            onEdited(); // notify container
+            onEdited(wasModified); // notify container
           },
         ),
       );
@@ -618,6 +641,10 @@ class Transaction extends MoneyObject {
 
   String? _transferName;
 
+  bool isTransfer() {
+    return transfer.value != -1;
+  }
+
   String getCurrency() {
     if (this.accountInstance == null || this.accountInstance!.currency.value.isEmpty) {
       return Constants.defaultCurrency;
@@ -645,34 +672,6 @@ class Transaction extends MoneyObject {
       }
     }
     return null;
-  }
-
-  String get payeeOrTransferCaption {
-    return getPayeeOrTransferCaption();
-  }
-
-  // String? _pendingTransferAccountName;
-
-  set payeeOrTransferCaption(final String value) {
-    //   if (this.payeeOrTransferCaption() != value) {
-    //     if (value.isEmpty) {
-    //       this.payee.value = -1;
-    //     } else if (IsTransferCaption(value)) {
-    //       if (money != null) {
-    //         string accountName = ExtractTransferAccountName(value);
-    //         Account a = money.Accounts.FindAccount(accountName);
-    //         if (a != null) {
-    //           money.Transfer(this, a);
-    //           money.Rebalance(a);
-    //         }
-    //       }
-    //     } else {
-    //       // find MyMoney container
-    //       if (money != null) {
-    //         this.Payee = money.Payees.FindPayee(value, true);
-    //       }
-    //     }
-    //   }
   }
 
   String get payeeName => Data().payees.getNameFromId(payee.value);

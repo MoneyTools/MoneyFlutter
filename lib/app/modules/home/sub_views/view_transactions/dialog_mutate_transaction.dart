@@ -53,9 +53,9 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _transaction.buildListOfNamesValuesWidgets(
                   onEdit: isInEditingMode
-                      ? () {
+                      ? (bool wasModified) {
                           setState(() {
-                            dataWasModified = isDataModified();
+                            dataWasModified = wasModified || isDataModified();
                           });
                         }
                       : null,

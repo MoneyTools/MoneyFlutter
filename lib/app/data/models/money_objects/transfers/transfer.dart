@@ -21,6 +21,15 @@ class Transfer extends MoneyObject {
   factory Transfer.fromJson(final MyJson row) {
     return Transfer(id: -1, source: Transaction(), isOrphan: true);
   }
+
+  final num id; // used when the transfer is part of a split
+  final Transaction source; // the source of the transfer.
+  final Transaction? related; // the related transaction
+  final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
+  final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
+
+  final bool isOrphan;
+
   static final _fields = Fields<Transfer>();
 
   static Fields<Transfer> get fields {
@@ -45,15 +54,6 @@ class Transfer extends MoneyObject {
 
   @override
   int get uniqueId => source.uniqueId;
-
-  final Transaction source; // the source of the transfer.
-  final Transaction? related; // the related transaction
-
-  final num id; // used when the transfer is part of a split
-  final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
-  final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
-
-  final bool isOrphan;
 
   //
   // SENDER

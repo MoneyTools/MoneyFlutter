@@ -107,7 +107,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     if (isFromSplit) {
       pr.reference = concat(pr.reference, '<Split>', ';', true);
     }
-    pr.reference = concat(pr.reference, t.payeeOrTransferCaption, ';', true);
+    pr.reference = concat(pr.reference, t.getPayeeOrTransferCaption(), ';', true);
 
     // Principal
     if (t.categoryId.value == account.categoryIdForPrincipal.value) {

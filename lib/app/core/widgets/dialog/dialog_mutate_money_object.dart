@@ -98,9 +98,9 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: _moneyObject.buildListOfNamesValuesWidgets(
-                onEdit: () {
+                onEdit: (bool wasModified) {
                   setState(() {
-                    dataWasModified = MoneyObject.isDataModified(_moneyObject);
+                    dataWasModified = wasModified || MoneyObject.isDataModified(_moneyObject);
                   });
                 },
               ),

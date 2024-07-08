@@ -134,6 +134,13 @@ String dateToIso8601OrDefaultString(
   return value.toIso8601String();
 }
 
+String dateToSqliteFormat(DateTime? dateTime) {
+  if (dateTime == null) {
+    '';
+  }
+  return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime!);
+}
+
 String dateToString(final DateTime? date) {
   if (date == null) {
     return '____-__-__';

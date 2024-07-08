@@ -125,7 +125,7 @@ class MoneyObject {
   /// Name: Bob
   /// Date: 2020-12-31
   List<Widget> buildListOfNamesValuesWidgets({
-    Function? onEdit,
+    Function(bool wasModified)? onEdit,
     bool compact = false,
   }) {
     if (fieldDefinitions.isEmpty) {
@@ -156,7 +156,7 @@ class MoneyObject {
     required final MoneyObject objectInstance,
     required final Field<dynamic> fieldDefinition,
     required final bool singleLineNameValue,
-    required final Function? onEdited,
+    required final Function(bool)? onEdited,
     final bool isFirstItem = false,
     final bool isLastItem = false,
   }) {
@@ -209,7 +209,7 @@ class MoneyObject {
             },
             onSaved: (value) {
               fieldDefinition.setValue?.call(objectInstance, value);
-              onEdited();
+              onEdited(true);
             },
           ),
         );
@@ -222,7 +222,7 @@ class MoneyObject {
           isReadOnly: isReadOnly,
           onChanged: (final String value) {
             fieldDefinition.setValue?.call(objectInstance, value);
-            onEdited?.call();
+            onEdited?.call(false);
           },
         );
 
@@ -244,14 +244,14 @@ class MoneyObject {
                   readOnly: isReadOnly,
 
                   onFieldSubmitted: (String value) {
-                    onEdited?.call();
+                    onEdited?.call(false);
                   },
                   onEditingComplete: () {
-                    onEdited?.call();
+                    onEdited?.call(false);
                   },
                   onChanged: (String newValue) {
                     fieldDefinition.setValue!(objectInstance, newValue);
-                    onEdited?.call();
+                    onEdited?.call(false);
                   },
                 ),
               ),

@@ -14,6 +14,7 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/view_transfers/transfer_sender_receiver.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
   const ViewTransactions({
@@ -335,24 +336,31 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Transaction? transaction = getMoneyObjectFromFirstSelectedId<Transaction>(selectedIds, list);
+    final Transaction? transaction = getFirstSelectedItem() as Transaction?;
+
     //
     // If the category of this transaction is a Split then list the details of the Split
     //
-    if (transaction != null && transaction.categoryId.value == Data().categories.splitCategoryId()) {
-      // this is Split get the split transactions
-      return ListViewTransactionSplits(
-        key: Key('split_transactions ${transaction.uniqueId}'),
-        getList: () {
-          return Data()
-              .splits
-              .iterableList()
-              .where(
-                (final MoneySplit s) => s.transactionId.value == transaction.id.value,
-              )
-              .toList();
-        },
-      );
+    if (transaction != null) {
+      if (transaction.isSplit) {
+        // this is Split get the split transactions
+        return ListViewTransactionSplits(
+          key: Key('split_transactions ${transaction.uniqueId}'),
+          getList: () {
+            return Data()
+                .splits
+                .iterableList()
+                .where(
+                  (final MoneySplit s) => s.transactionId.value == transaction.id.value,
+                )
+                .toList();
+          },
+        );
+      }
+
+      if (transaction.isTransfer()) {
+        return TransferSenderReceiver(transfer: transaction.transferInstance!);
+      }
     }
     return const CenterMessage(message: 'No related transactions');
   }

@@ -12,8 +12,8 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/view_transfers/transfer_sender_receiver.dart';
 
 class ViewTransfers extends ViewForMoneyObjects {
   const ViewTransfers({
@@ -33,9 +33,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   final DateRange _footerColumnSentOn = DateRange();
   final DateRange _footerColumnReceivedOn = DateRange();
   double _footerColumnBalance = 0.00;
-
-  List<Transfer> listOfTransfers = [];
-  Map<int, Transfer> loadedTransfers = {};
 
   @override
   String getClassNamePlural() {
@@ -81,42 +78,47 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<Transaction> listOfTransactions = Data()
+    final List<Transfer> listOfTransfers = [];
+
+    // get all transaction of type transfer where the money was sent from (debited)
+    final List<Transaction> listOfTransactionsUseForTransfer = Data()
         .transactions
-        .iterableList(includeDeleted: includeDeleted)
+        .getListFlattenSplits()
         .where(
           (final Transaction transaction) => transaction.transfer.value != -1,
         )
         .toList();
 
     // Add the Senders
-    for (final transaction in listOfTransactions) {
-      final Transaction? transactionReceiver = Data().transactions.get(transaction.transfer.value);
-      if (transaction.amount.value.toDouble() <= 0) {
-        // Display only the Sender/From Transaction you know that its the sender because the amount id negative (deducted)
+    for (final transactionOfSender in listOfTransactionsUseForTransfer) {
+      // Display only the Sender/From Transaction you know that its the sender because the amount id negative (deducted)
+      if (transactionOfSender.amount.value.toDouble() <= 0) {
+        final Transaction? transactionOfReceiver = Data().transactions.get(transactionOfSender.transfer.value);
         keepThisTransfer(
-          transactionSender: transaction,
-          transactionReceiver: transactionReceiver,
+          list: listOfTransfers,
+          transactionSender: transactionOfSender,
+          transactionReceiver: transactionOfReceiver,
           isOrphan: false,
         );
       }
     }
 
     // Add the Receivers only it they are not already part of the Senders
-    for (final transaction in listOfTransactions) {
-      final Transaction? transactionReceiver = Data().transactions.get(transaction.transfer.value);
-      if (transaction.amount.value.toDouble() > 0) {
-        // the amount is positive, so this is the receiver transaction
-        if (transactionReceiver == null || loadedTransfers[transactionReceiver.uniqueId] == null) {
-          if (transaction.transferSplit.value <= 0) {
+    for (final transactionOfReceiver in listOfTransactionsUseForTransfer) {
+      // the amount is positive, so this is the receiver transaction
+      if (transactionOfReceiver.amount.value.toDouble() > 0) {
+        final Transaction? transactionOfSender = Data().transactions.get(transactionOfReceiver.transfer.value);
+        if (transactionOfSender == null) {
+          if (transactionOfReceiver.transferSplit.value != -1) {
             debugLog('This is a split');
           }
           debugLog(
-            'related account not found ${transaction.uniqueId} ${transaction.amount.value}',
+            'related account not found ${transactionOfReceiver.uniqueId} ${transactionOfReceiver.amount.value}',
           );
           keepThisTransfer(
-            transactionSender: transactionReceiver!,
-            transactionReceiver: transaction,
+            list: listOfTransfers,
+            transactionSender: transactionOfSender!,
+            transactionReceiver: transactionOfReceiver,
             isOrphan: true,
           );
         }
@@ -141,35 +143,14 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
       final int id = selectedIds.first;
       final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
       if (transfer != null) {
-        return SingleChildScrollView(
-          child: Center(
-            child: Wrap(
-              alignment: WrapAlignment.center,
-              runSpacing: 30,
-              spacing: 30,
-              children: [
-                IntrinsicWidth(
-                  child: TransactionCard(
-                    title: 'Sender',
-                    transaction: transfer.getSenderTransaction(),
-                  ),
-                ),
-                IntrinsicWidth(
-                  child: TransactionCard(
-                    title: 'Receiver',
-                    transaction: transfer.getReceiverTransaction(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        return TransferSenderReceiver(transfer: transfer);
       }
     }
     return const CenterMessage(message: 'No item selected.');
   }
 
   void keepThisTransfer({
+    required final List<Transfer> list,
     required Transaction transactionSender,
     required Transaction? transactionReceiver,
     required bool isOrphan,
@@ -194,10 +175,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         isOrphan: isOrphan,
       );
       // transfer.transactionAmount.value = t.amount.value;
-      listOfTransfers.add(transfer);
-      if (!isOrphan) {
-        loadedTransfers[transactionSender.uniqueId] = transfer;
-      }
+      list.add(transfer);
     }
   }
 }
