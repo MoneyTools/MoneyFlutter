@@ -23,6 +23,7 @@ class InputValues extends StatelessWidget {
       children: [
         Box(
           height: 200,
+          width: 800,
           header: buildHeaderTitleAndCounter(context, title, lineCount, 'lines'),
           child: TextField(
             controller: controller,
@@ -66,14 +67,4 @@ InputDecoration getDecoration(
     ),
     border: const OutlineInputBorder(),
   );
-}
-
-Widget? getBadgeCounter(final int count, final String suffix) {
-  if (count > 0) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.small),
-      child: Text('$count $suffix', style: const TextStyle(fontSize: SizeForText.nano)),
-    );
-  }
-  return null;
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/widgets/columns/input_values.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class Box extends StatelessWidget {
@@ -110,4 +109,14 @@ Widget buildHeaderTitleAndCounter(
     child: Text(title),
   );
   return boxHeader;
+}
+
+Widget? getBadgeCounter(final int count, final String suffix) {
+  if (count > 0) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.small),
+      child: Text('$count $suffix', style: const TextStyle(fontSize: SizeForText.nano)),
+    );
+  }
+  return null;
 }

@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
@@ -8,7 +6,6 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/input_values.dart';
 import 'package:money/app/core/widgets/gaps.dart';
-import 'package:money/app/data/models/constants.dart';
 
 class InputByColumns extends StatefulWidget {
   const InputByColumns({
@@ -31,10 +28,6 @@ class InputByColumns extends StatefulWidget {
 
 class _InputByColumnsState extends State<InputByColumns> {
   bool _singleColumn = true;
-  final _focusNode = FocusNode();
-  final _focusNode1 = FocusNode();
-  final _focusNode2 = FocusNode();
-  final _focusNode3 = FocusNode();
 
   final Debouncer _debouncer = Debouncer();
   bool _pauseTextSync = false;
@@ -70,7 +63,7 @@ class _InputByColumnsState extends State<InputByColumns> {
         // ( 1 column | 3 columns )
         _buildColumnSelection(),
 
-        gapLarge(),
+        gapMedium(),
 
         // Input text controls
         Expanded(
@@ -151,20 +144,6 @@ class _InputByColumnsState extends State<InputByColumns> {
     return _controllerSingleColumn.text;
   }
 
-  int getMaxLineOfAllColumns() {
-    int maxLines = 0;
-    if (_focusNode1.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn1.text));
-    }
-    if (_focusNode2.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn2.text));
-    }
-    if (_focusNode3.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn3.text));
-    }
-    return maxLines;
-  }
-
   void _syncText() {
     _debouncer.run(() {
       if (_pauseTextSync) {
@@ -173,19 +152,6 @@ class _InputByColumnsState extends State<InputByColumns> {
       // suspend sync in to avoid re-entrance
       _pauseTextSync = true;
 
-      // Get the number of lines of text in the first column
-      int linesCount = getMaxLineOfAllColumns();
-
-      // Update the text in the other columns to match the number of lines
-      if (getLineCount(_controllerColumn1.text) != linesCount) {
-        _controllerColumn1.text = adjustLineCount(_controllerColumn1.text, linesCount);
-      }
-      if (getLineCount(_controllerColumn2.text) != linesCount) {
-        _controllerColumn2.text = adjustLineCount(_controllerColumn2.text, linesCount);
-      }
-      if (getLineCount(_controllerColumn3.text) != linesCount) {
-        _controllerColumn3.text = adjustLineCount(_controllerColumn3.text, linesCount);
-      }
       fromThreeToOneColumn();
       _pauseTextSync = false;
       notifyChanged();
@@ -239,21 +205,8 @@ class _InputByColumnsState extends State<InputByColumns> {
 
   Widget _buildInputAsSingleOr3Columns() {
     if (_singleColumn) {
-      return TextField(
-        controller: _controllerSingleColumn,
-        focusNode: _focusNode,
-        autofocus: true,
-        maxLines: null,
-        // Set maxLines to null for multiline TextField
-        style: const TextStyle(
-          fontSize: SizeForText.small,
-          overflow: TextOverflow.fade,
-        ),
-        decoration: getDecoration(context, 'Date; Description; Amount', getLineCount(_controllerSingleColumn.text)),
-        onChanged: (final String _) {
-          notifyChanged();
-        },
-      );
+      // 1 column
+      return Center(child: InputValues(title: 'Date; Description; Amount', controller: _controllerSingleColumn));
     }
 
     // 3 columns

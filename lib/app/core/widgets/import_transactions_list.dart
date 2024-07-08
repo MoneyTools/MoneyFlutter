@@ -54,6 +54,7 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
         backgroundColor: ThemeController.to.primaryColor,
         offset: const Offset(20.0, 0),
         label: Text(buildTallyOfItemsToImportOrSkip()),
+        child: const Text('Preview'),
       ),
       child: Column(
         children: [

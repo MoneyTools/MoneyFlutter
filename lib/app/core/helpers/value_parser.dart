@@ -210,35 +210,18 @@ class ValuesParser {
     // We are looking for these 3 values
     // Date | Description | Amount
     switch (threeValues.length) {
-      // Only two values
-      case 2:
-        DateTime? possibleDate = parseForDate(threeValues.first);
-        if (possibleDate == null) {
-          descriptionAsText = threeValues.first;
-        } else {
-          dateAsText = threeValues.first;
-        }
-
-        double? possibleAmount = parseAmount(threeValues.last, currency);
-        if (possibleAmount == null) {
-          descriptionAsText = threeValues.last;
-        } else {
-          amountAsText = threeValues.last;
-        }
-      // Only one value
-      case 1:
-        DateTime? possibleDate = parseForDate(threeValues.first);
-        if (possibleDate == null) {
-          double? possibleAmount = parseAmount(threeValues.first, currency);
-          if (possibleAmount == null) {
-            descriptionAsText = threeValues.first;
-          }
-        } else {
-          dateAsText = threeValues.first;
-        }
       // no value
       case 0:
         return ValuesQuality.empty();
+
+      // Only one value
+      case 1:
+        dateAsText = threeValues.first;
+
+      // Only two values
+      case 2:
+        dateAsText = threeValues.first;
+        descriptionAsText = threeValues[1];
 
       // Perfect
       case 3:
