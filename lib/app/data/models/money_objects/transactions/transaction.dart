@@ -36,6 +36,7 @@ class Transaction extends MoneyObject {
     final TransactionStatus status = TransactionStatus.none,
   }) {
     this.status.value = status;
+    this.flags.value = TransactionFlags.none.index;
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
           leftTopAsString: payeeName,
           leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',

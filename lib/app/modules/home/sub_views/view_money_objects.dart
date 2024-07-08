@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
@@ -66,8 +64,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   // header
   String _filterByText = '';
+
   FieldFilters _filterByFieldsValue = FieldFilters();
-  Timer? _deadlineTimer;
   Function? onAddTransaction;
 
   /// Derived class will override to customize the fields to display in the Adaptive Table
@@ -485,14 +483,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void onFilterTextChanged(final String text) {
-    _deadlineTimer?.cancel();
-    _deadlineTimer = Timer(const Duration(milliseconds: 1200), () {
-      _deadlineTimer = null;
-      setState(() {
-        _filterByText = text.toLowerCase();
-        saveLastUserChoicesOfView();
-        list = getList();
-      });
+    setState(() {
+      _filterByText = text.toLowerCase();
+      saveLastUserChoicesOfView();
+      list = getList();
     });
   }
 

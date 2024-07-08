@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class FilterInput extends StatelessWidget {
-  const FilterInput({
+  FilterInput({
+    super.key,
     required this.hintText,
     required this.initialValue,
     required this.onChanged,
-    super.key,
+    required this.autoSubmitAfterSeconds,
   });
   final String hintText;
   final String initialValue;
+  final int autoSubmitAfterSeconds;
   final Function(String) onChanged;
+  late final Debouncer _debouncerForFilterText = Debouncer(Duration(seconds: autoSubmitAfterSeconds));
 
   @override
   Widget build(final BuildContext context) {
@@ -22,7 +26,17 @@ class FilterInput extends StatelessWidget {
         labelText: hintText,
         border: const OutlineInputBorder(),
       ),
-      onChanged: onChanged,
+      onFieldSubmitted: (String text) {
+        onChanged(text);
+      },
+      onChanged: (final String text) {
+        // optional auto submit
+        if (autoSubmitAfterSeconds != -1) {
+          _debouncerForFilterText.run(() {
+            onChanged(text);
+          });
+        }
+      },
     );
   }
 }

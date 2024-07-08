@@ -47,7 +47,7 @@ class ViewCashFlowState extends ViewWidgetState {
   List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];
   List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
 
-  Debouncer debouncer = Debouncer();
+  final Debouncer _debouncer = Debouncer();
 
   @override
   void initState() {
@@ -155,7 +155,7 @@ class ViewCashFlowState extends ViewWidgetState {
               yearRange: IntRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
               initialRange: IntRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
               onChanged: (final IntRange updateRange) {
-                debouncer.run(() {
+                _debouncer.run(() {
                   if (mounted) {
                     setState(() {
                       this.selectedYearStart = updateRange.min;

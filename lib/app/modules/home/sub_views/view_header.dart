@@ -147,6 +147,7 @@ class ViewHeader extends StatelessWidget {
           child: FilterInput(
             hintText: 'Filter',
             initialValue: filterText,
+            autoSubmitAfterSeconds: -1, // -1 do not auto submit, user has to press Enter
             onChanged: (final String text) {
               onFilterChanged!(text);
             },
