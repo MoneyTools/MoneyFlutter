@@ -465,7 +465,10 @@ class Transaction extends MoneyObject {
     importance: 97,
     name: columnIdAmount,
     serializeName: 'Amount',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).amount.value,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).amount.value.toDouble(),
+      iso4217: instance.getCurrency(),
+    ),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.toDouble(),
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).amount.value.setAmount(newValue),
