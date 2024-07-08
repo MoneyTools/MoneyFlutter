@@ -167,17 +167,19 @@ class Transaction extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => dateToSqliteFormat(
       (instance as Transaction).dateTime.value,
     ),
-    getEditWidget: (final MoneyObject instance, Function onEdited) {
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return PickerEditBoxDate(
         initialValue: (instance as Transaction).dateTimeAsText,
         onChanged: (String? newDateSelected) {
           if (newDateSelected != null) {
             instance.dateTime.value = attemptToGetDateFromText(newDateSelected);
-            onEdited();
+            onEdited(true);
           }
         },
       );
     },
+    setValue: (MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).dateTime.value = attemptToGetDateFromText(newValue),
   );
 
   /// Status N | E | C | R
@@ -265,7 +267,7 @@ class Transaction extends MoneyObject {
         instance.transferInstance = null;
       }
     },
-    getEditWidget: (MoneyObject instance, Function onEdited) {
+    getEditWidget: (MoneyObject instance, Function(bool wasModified) onEdited) {
       return SizedBox(
         width: 300,
         height: 80,
@@ -381,14 +383,14 @@ class Transaction extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).categoryId.value = newValue as int,
-    getEditWidget: (final MoneyObject instance, Function onEdited) {
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return pickerCategory(
         itemSelected: Data().categories.get((instance as Transaction).categoryId.value),
         onSelected: (Category? newCategory) {
           if (newCategory != null) {
             instance.categoryId.value = newCategory.uniqueId;
             // notify container
-            onEdited();
+            onEdited(true);
           }
         },
       );

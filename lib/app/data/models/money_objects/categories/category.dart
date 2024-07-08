@@ -182,13 +182,13 @@ class Category extends MoneyObject {
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).type.value = CategoryType.values[value as int];
     },
-    getEditWidget: (final MoneyObject instance, Function onEdited) {
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       final i = instance as Category;
       return pickerCategoryType(
         itemSelected: i.type.value,
         onSelected: (CategoryType selectedType) {
           i.type.value = selectedType;
-          onEdited();
+          onEdited(true);
         },
       );
     },
@@ -208,7 +208,7 @@ class Category extends MoneyObject {
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).color.value = value as String;
     },
-    getEditWidget: (final MoneyObject instance, Function onEdited) {
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return MutateFieldColor(
         colorAsHex: (instance as Category).color.value,
         onEdited: (String newValue) {
@@ -218,7 +218,7 @@ class Category extends MoneyObject {
             moneyObject: instance,
             fireNotification: false,
           );
-          onEdited();
+          onEdited(true);
         },
       );
     },

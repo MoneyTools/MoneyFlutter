@@ -469,6 +469,7 @@ class FieldDate extends Field<DateTime?> {
     super.serializeName,
     super.getValueForDisplay,
     super.getValueForSerialization,
+    super.setValue,
     super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,

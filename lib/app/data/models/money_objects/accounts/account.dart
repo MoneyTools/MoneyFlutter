@@ -193,12 +193,12 @@ class Account extends MoneyObject {
     defaultValue: AccountType.checking,
     getValueForDisplay: (final MoneyObject instance) => getTypeAsText((instance as Account).type.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).type.value.index,
-    getEditWidget: (final MoneyObject instance, Function onEdited) {
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return pickerAccountType(
         itemSelected: (instance as Account).type.value,
         onSelected: (AccountType newSelection) {
           (instance).type.value = newSelection;
-          onEdited(); // notify container
+          onEdited(true); // notify container
         },
       );
     },
