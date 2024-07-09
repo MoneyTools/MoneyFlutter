@@ -136,7 +136,7 @@ class MoneyObjects<T> {
     Data().notifyMutationChanged(
       mutation: MutationType.inserted,
       moneyObject: moneyObject,
-      fireNotification: fireNotification,
+      recalculateBalances: fireNotification,
     );
     return moneyObject;
   }

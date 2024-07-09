@@ -138,7 +138,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
                   Data().notifyMutationChanged(
                     mutation: MutationType.deleted,
                     moneyObject: widget.categoryToMove,
-                    fireNotification: false,
+                    recalculateBalances: false,
                   );
 
                   Data().updateAll();
@@ -184,7 +184,7 @@ void moveTransactionsToCategory(
     Data().notifyMutationChanged(
       mutation: MutationType.changed,
       moneyObject: t,
-      fireNotification: false,
+      recalculateBalances: false,
     );
   }
 }

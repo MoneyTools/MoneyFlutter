@@ -236,7 +236,7 @@ void mutateTransactionsToPayee(
     Data().notifyMutationChanged(
       mutation: MutationType.changed,
       moneyObject: t,
-      fireNotification: false,
+      recalculateBalances: false,
     );
   }
   Payees.removePayeesThatHaveNoTransactions(fromPayeeIds.toList());

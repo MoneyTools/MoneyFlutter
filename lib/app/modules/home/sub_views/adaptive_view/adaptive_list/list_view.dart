@@ -126,7 +126,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
                   autoFocus: index == widget.selectedItemIds.value.firstOrNull,
                   isSelected: isSelected,
                   adornmentColor: itemInstance.getMutationColor(),
-                  child: buildListItemContent(
+                  child: _buildListItemContent(
                     isSelected,
                     itemInstance,
                     isLastItemOfTheList,
@@ -140,7 +140,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
     );
   }
 
-  Widget buildListItemContent(
+  Widget _buildListItemContent(
     final bool isSelected,
     final MoneyObject itemInstance,
     final bool isLastItemOfTheList,

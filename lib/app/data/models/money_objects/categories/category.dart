@@ -216,7 +216,7 @@ class Category extends MoneyObject {
           Data().notifyMutationChanged(
             mutation: MutationType.changed,
             moneyObject: instance,
-            fireNotification: false,
+            recalculateBalances: false,
           );
           onEdited(true);
         },
@@ -443,7 +443,7 @@ class Category extends MoneyObject {
       Data().notifyMutationChanged(
         mutation: MutationType.changed,
         moneyObject: this,
-        fireNotification: false,
+        recalculateBalances: false,
       );
     }
   }

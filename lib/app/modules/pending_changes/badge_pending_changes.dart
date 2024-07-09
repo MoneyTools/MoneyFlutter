@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/modules/pending_changes/pending_changes_dialog.dart';
 
@@ -96,6 +97,7 @@ class BadgePendingChanges extends StatelessWidget {
   }
 
   String getTooltipText() {
-    return 'Added: ${DataController.to.trackMutations.added}\nModified: ${DataController.to.trackMutations.changed}\nDeleted: ${DataController.to.trackMutations.deleted}';
+    final String lastChangedOn = getElapsedTime(DataController.to.trackMutations.lastDateTimeChanged.value);
+    return 'Added: ${DataController.to.trackMutations.added}\nModified: ${DataController.to.trackMutations.changed}\nDeleted: ${DataController.to.trackMutations.deleted}\n\nEdited $lastChangedOn';
   }
 }

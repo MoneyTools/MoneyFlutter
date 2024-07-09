@@ -78,9 +78,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
+    DataController.to.trackMutations.lastDateTimeChanged;
+
     return ListViewTransactions(
       key: Key(
-        'transaction_list_currency_${showAsNativeCurrency}_version${Data().version}',
+        'transaction_list_currency_${showAsNativeCurrency}_changedOn${DataController.to.trackMutations.lastDateTimeChanged}',
       ),
       columnsToInclude: columnsToDisplay,
       getList: () => getTransactionForLastSelectedAccount(account),

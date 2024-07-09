@@ -245,7 +245,7 @@ class Transaction extends MoneyObject {
             }
           }
         } else {
-          mutateField(this.status.name, TransactionStatus.cleared, true);
+          mutateField(this.status.name, TransactionStatus.cleared, false);
         }
       },
     );
@@ -383,7 +383,7 @@ class Transaction extends MoneyObject {
             Data().notifyMutationChanged(
               mutation: MutationType.changed,
               moneyObject: t,
-              fireNotification: false,
+              recalculateBalances: false,
             );
           },
           onRejected: () {

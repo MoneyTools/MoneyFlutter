@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 class DataMutations extends GetxController {
   static DataMutations get to => Get.find();
 
+  Rx<DateTime> lastDateTimeChanged = Rx<DateTime>(DateTime.now());
   RxInt added = 0.obs;
   RxInt changed = 0.obs;
   RxInt deleted = 0.obs;
@@ -13,7 +14,7 @@ class DataMutations extends GetxController {
   }
 
   /// Indicate of any data has changed Added or Deleted
-  bool hasChanged() {
+  bool isMutated() {
     return numberOfChanges() > 0;
   }
 
@@ -22,12 +23,14 @@ class DataMutations extends GetxController {
     int increaseChanged = 0,
     int increaseDeleted = 0,
   }) {
+    lastDateTimeChanged.value = DateTime.now();
     added += increaseAdded;
     changed += increaseChanged;
     deleted += increaseDeleted;
   }
 
   void reset() {
+    lastDateTimeChanged.value = DateTime.now();
     added.value = 0;
     changed.value = 0;
     deleted.value = 0;

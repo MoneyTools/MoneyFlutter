@@ -23,7 +23,7 @@ class DataController extends GetxController {
   RxString currentLoadedFileName = Constants.untitledFileName.obs;
   Rxn<DateTime> currentLoadedFileDateTime = Rxn<DateTime>();
   String fileName = '';
-  String get getUniqueState => '${Data().version}';
+  String get getUniqueState => '${trackMutations.lastDateTimeChanged}';
   bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
 
   // Tracking changes

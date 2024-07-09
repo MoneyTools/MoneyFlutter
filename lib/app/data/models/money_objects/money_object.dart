@@ -93,7 +93,7 @@ class MoneyObject {
   void mutateField(
     final String fieldName,
     final dynamic newValue,
-    final bool fireNotification,
+    final bool rebalance,
   ) {
     stashValueBeforeEditing();
     final Field? field = getFieldDefinitionByName(fieldDefinitions, fieldName);
@@ -102,7 +102,7 @@ class MoneyObject {
       Data().notifyMutationChanged(
         mutation: MutationType.changed,
         moneyObject: this,
-        fireNotification: fireNotification,
+        recalculateBalances: rebalance,
       );
     }
   }

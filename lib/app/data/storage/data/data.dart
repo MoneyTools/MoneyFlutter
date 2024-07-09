@@ -69,7 +69,6 @@ class Data {
       rentUnits, // 11
     ];
   }
-  int version = 0;
 
   /// singleton
   static final Data _instance = Data._internal();
@@ -125,7 +124,6 @@ class Data {
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
   void clear() {
-    version = -1;
     DataController.to.trackMutations.reset();
 
     for (final element in _listOfTables) {
@@ -133,14 +131,12 @@ class Data {
     }
   }
 
+  /// let the app know that something has changed
   void notifyMutationChanged({
     required MutationType mutation,
     required MoneyObject moneyObject,
-    bool fireNotification = true,
+    bool recalculateBalances = true,
   }) {
-    // let the app know that something has changed
-    version++;
-
     switch (mutation) {
       case MutationType.inserted:
         moneyObject.mutation = MutationType.inserted;
@@ -162,7 +158,7 @@ class Data {
         break;
     }
 
-    if (fireNotification) {
+    if (recalculateBalances) {
       updateAll();
     }
   }
@@ -180,7 +176,7 @@ class Data {
       Data().notifyMutationChanged(
         mutation: MutationType.deleted,
         moneyObject: item,
-        fireNotification: false,
+        recalculateBalances: false,
       );
     }
     Data().updateAll();
@@ -193,7 +189,6 @@ class Data {
       element.resetMutationStateOfObjects();
       element.assessMutationsCounts();
     }
-    Data().version++;
     Data().updateAll();
   }
 
@@ -436,9 +431,7 @@ class Data {
     for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
       moneyObjects.clear();
     }
-    version = -1;
     DataController.to.dataFileIsClosed();
-
     DataController.to.trackMutations.reset();
   }
 
