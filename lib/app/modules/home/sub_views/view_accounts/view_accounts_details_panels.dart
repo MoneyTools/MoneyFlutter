@@ -62,7 +62,8 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
   }) {
     int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
     bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
-    int selectedItemIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
+    int selectedMTransactionId =
+        PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
 
     final FieldDefinitions columnsToDisplay = <Field>[
       Transaction.fields.getFieldByName(columnIdDate),
@@ -88,8 +89,8 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       getList: () => getTransactionForLastSelectedAccount(account),
       sortFieldIndex: sortFieldIndex,
       sortAscending: sortAscending,
-      selectedItemIndex: selectedItemIndex,
-      onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int uniqueId) {
+      selectedMoneyObjectId: selectedMTransactionId,
+      onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int selectedTransactionId) {
         // keep track of user choice
         sortFieldIndex = sortByFieldIndex;
         sortAscending = sortAscending;
@@ -105,7 +106,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         );
         PreferenceController.to.setInt(
           getPreferenceKey('info_$settingKeySelectedListItemId'),
-          uniqueId,
+          selectedTransactionId,
         );
       },
     );

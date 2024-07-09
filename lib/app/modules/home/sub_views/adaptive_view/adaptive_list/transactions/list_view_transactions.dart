@@ -14,13 +14,13 @@ class ListViewTransactions extends StatefulWidget {
     this.sortFieldIndex = 0,
     this.sortAscending = true,
     this.onUserChoiceChanged,
-    this.selectedItemIndex = 0,
+    this.selectedMoneyObjectId = 0,
   });
   final List<Field> columnsToInclude;
   final List<Transaction> Function() getList;
   final int sortFieldIndex;
   final bool sortAscending;
-  final int selectedItemIndex;
+  final int selectedMoneyObjectId;
   final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
 
   @override
@@ -30,7 +30,7 @@ class ListViewTransactions extends StatefulWidget {
 class _ListViewTransactionsState extends State<ListViewTransactions> {
   late int _sortBy = widget.sortFieldIndex;
   late bool _sortAscending = widget.sortAscending;
-  late int _selectedItemIndex = widget.selectedItemIndex;
+  late int _selectedMoneyObjectId = widget.selectedMoneyObjectId;
 
   @override
   Widget build(final BuildContext context) {
@@ -53,7 +53,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       filters: FieldFilters(),
       sortByFieldIndex: _sortBy,
       sortAscending: _sortAscending,
-      selectedId: -1,
+      selectedId: _selectedMoneyObjectId,
       // Field & Columns
       displayAsColumns: true,
       backgoundColorForHeaderFooter: Colors.transparent,
@@ -68,7 +68,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           } else {
             _sortBy = index;
           }
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedItemIndex);
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedMoneyObjectId);
         });
       },
       onItemLongPress: (final BuildContext context2, final int uniqueId) {
@@ -77,8 +77,8 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           context: context2,
           transaction: instance,
         ).then((value) {
-          _selectedItemIndex = uniqueId;
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedItemIndex);
+          _selectedMoneyObjectId = uniqueId;
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedMoneyObjectId);
         });
       },
     );
