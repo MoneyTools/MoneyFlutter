@@ -135,10 +135,10 @@ String dateToIso8601OrDefaultString(
 }
 
 String dateToSqliteFormat(DateTime? dateTime) {
-  if (dateTime == null) {
-    '';
+  if (dateTime != null) {
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
   }
-  return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime!);
+  return '';
 }
 
 String dateToString(final DateTime? date) {
