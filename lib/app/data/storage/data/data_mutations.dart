@@ -23,16 +23,20 @@ class DataMutations extends GetxController {
     int increaseChanged = 0,
     int increaseDeleted = 0,
   }) {
-    lastDateTimeChanged.value = DateTime.now();
+    setLastEditToNow();
     added += increaseAdded;
     changed += increaseChanged;
     deleted += increaseDeleted;
   }
 
   void reset() {
-    lastDateTimeChanged.value = DateTime.now();
+    setLastEditToNow();
     added.value = 0;
     changed.value = 0;
     deleted.value = 0;
+  }
+
+  void setLastEditToNow() {
+    lastDateTimeChanged.value = DateTime.now();
   }
 }

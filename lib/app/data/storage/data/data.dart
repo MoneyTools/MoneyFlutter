@@ -142,10 +142,12 @@ class Data {
         moneyObject.mutation = MutationType.inserted;
         DataController.to.trackMutations.increaseNumber(increaseAdded: 1);
       case MutationType.changed:
-        // this if is to ensure that we only count editing once and discard if this was edited on a new inserted items
+        // ensure that we only count editing once and discard if this was edited on a new inserted items
         if (moneyObject.mutation == MutationType.none) {
           moneyObject.mutation = MutationType.changed;
           DataController.to.trackMutations.increaseNumber(increaseChanged: 1);
+        } else {
+          DataController.to.trackMutations.setLastEditToNow();
         }
       case MutationType.deleted:
         if (moneyObject.mutation == MutationType.inserted) {

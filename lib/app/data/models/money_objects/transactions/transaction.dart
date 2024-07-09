@@ -242,6 +242,8 @@ class Transaction extends MoneyObject {
             if (mutation == MutationType.changed && MoneyObject.isDataModified(this) == false) {
               mutation = MutationType.none;
               DataController.to.trackMutations.increaseNumber(increaseChanged: -1);
+            } else {
+              DataController.to.trackMutations.setLastEditToNow(); // still need to refresh the UI
             }
           }
         } else {
