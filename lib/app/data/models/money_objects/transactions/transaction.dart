@@ -120,6 +120,7 @@ class Transaction extends MoneyObject {
           tmp.amountAsTextNormalized,
           tmp.balanceNative,
           tmp.balanceNormalized,
+          tmp.paidOn,
         ],
       );
     }
@@ -180,7 +181,22 @@ class Transaction extends MoneyObject {
     },
     setValue: (MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).dateTime.value = attemptToGetDateFromText(newValue),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByDateTime(a as Transaction, b as Transaction, ascending),
   );
+
+  static int sortByDateTime(final Transaction a, final Transaction b, final bool ascending) {
+    int result = sortByDate(
+      a.dateTime.value,
+      b.dateTime.value!,
+      ascending,
+    );
+    // To ensure a predictable sort order, always include a tie-breaker
+    if (result == 0) {
+      result = sortByValue(a.uniqueId, b.uniqueId, ascending);
+    }
+    return result;
+  }
 
   /// Status N | E | C | R
   /// SQLite 3|Status|INT|0||0
@@ -634,6 +650,17 @@ class Transaction extends MoneyObject {
       return Currency.buildCurrencyWidget(
         (instance as Transaction).getCurrency(),
       );
+    },
+  );
+
+  FieldString paidOn = FieldString(
+    type: FieldType.text,
+    importance: 80,
+    name: 'Paid On',
+    align: TextAlign.right,
+    columnWidth: ColumnWidth.tiny,
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as Transaction).paidOn.value;
     },
   );
 

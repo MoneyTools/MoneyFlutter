@@ -75,6 +75,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       Transaction.fields.getFieldByName(
         showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
       ),
+      Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
     return ListViewTransactions(

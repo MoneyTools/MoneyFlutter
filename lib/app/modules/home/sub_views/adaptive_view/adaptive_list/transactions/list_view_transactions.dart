@@ -87,15 +87,12 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
 }
 
 List<Transaction> getTransactions({bool Function(Transaction)? filter}) {
-  // default to 'accept all'
   filter ??= (Transaction transaction) => true;
 
   final List<Transaction> list =
       Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
 
-  list.sort(
-    (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
-  );
+  list.sort((a, b) => Transaction.sortByDateTime(a, b, true));
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {

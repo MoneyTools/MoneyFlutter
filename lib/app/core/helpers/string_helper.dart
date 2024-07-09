@@ -20,8 +20,8 @@ int countOccurrences(String input, String char) {
   return count;
 }
 
-String doubleToCurrency(final double value) {
-  NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: '\$');
+String doubleToCurrency(final double value, [final String symbol = '\$']) {
+  NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: symbol);
   // Format the double value as currency text
   return currencyFormatter.format(value);
 }

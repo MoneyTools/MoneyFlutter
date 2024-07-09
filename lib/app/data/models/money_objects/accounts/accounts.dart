@@ -117,6 +117,11 @@ class Accounts extends MoneyObjects<Account> {
       account.minBalancePerYears.clear();
       account.maxBalancePerYears.clear();
 
+      if (account.type.value == AccountType.credit) {
+        // attempt to find statement end + paid on amount
+        _updateCreditCardPaidOn(account);
+      }
+
       // TODO when we deal with downloading online
       // account.onlineAccountInstance = Data().onlineAccounts.get(this.onlineAccountId);
 
@@ -196,6 +201,59 @@ class Accounts extends MoneyObjects<Account> {
         account.balance = latestPayment.balance.value.toDouble() * -1;
       }
     }
+  }
+
+  void _updateCreditCardPaidOn(final Account account) {
+    final transactionForAccountSortedByDateAscending =
+        Data().transactions.iterableList().where((t) => t.accountId.value == account.uniqueId).toList();
+    // sort date as string to match the ListView sorting logic
+    transactionForAccountSortedByDateAscending.sort((a, b) => Transaction.sortByDateTime(a, b, true));
+
+    double statementBalance = 0;
+
+    Set<Transaction> paymentsFound = {};
+
+    for (final t in transactionForAccountSortedByDateAscending) {
+      if (paymentsFound.contains(t)) {
+        // this is one of the assumed payment, exclude it from the side running total
+      } else {
+        statementBalance += t.amount.value.toDouble();
+        // if (account.uniqueId == 184) {
+        //   debugLog(
+        //     '${t.dateTimeAsText}\t${t.getPayeeOrTransferCaption()}\t${t.amount.value.toDouble()}\t$statementBalance',
+        //   );
+        // }
+
+        final foundPayment = findForwardTransactionThatMatchAmount(
+          transactionForAccountSortedByDateAscending,
+          t.dateTime.value!,
+          -1 * statementBalance,
+        );
+
+        if (foundPayment == null) {
+          // t.paidOn.value = doubleToCurrency(statementBalance, '');
+        } else {
+          paymentsFound.add(foundPayment);
+          statementBalance = 0; // reset statment counter
+          t.paidOn.value = foundPayment.dateTimeAsText;
+        }
+      }
+    }
+  }
+
+  Transaction? findForwardTransactionThatMatchAmount(
+    final List<Transaction> transactions,
+    final DateTime date,
+    final double amountToMatch,
+  ) {
+    return transactions.firstWhereOrNull(
+      (t) => t.dateTime.value!.isAfter(date) && compareDoubles(t.amount.value.toDouble(), amountToMatch, 2),
+    );
+  }
+
+  bool compareDoubles(double a, double b, int precision) {
+    final threshold = pow(10, -precision);
+    return (a - b).abs() < threshold;
   }
 
   Account addNewAccount(final String accountName) {

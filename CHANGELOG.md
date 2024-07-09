@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.40] 2024-07-09
+
+### Added
+
+- New column [Paid On] to help with Credit Card statments
+
 ## [version 1.8.39] 2024-07-06
 
 ### Added

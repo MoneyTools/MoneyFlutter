@@ -3,6 +3,7 @@
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 class ShortcutController extends GetxController {
   static ShortcutController get to => Get.find();
@@ -35,6 +36,12 @@ class ShortcutController extends GetxController {
         // Zoom out Ctrl -   Command -
         if (event.logicalKey == LogicalKeyboardKey.minus) {
           ThemeController.to.fontScaleDecrease();
+        }
+
+        //  Ctrl - R  Command - R
+        // rebalance
+        if (event.logicalKey == LogicalKeyboardKey.keyR) {
+          Data().recalculateBalances();
         }
       }
     }
