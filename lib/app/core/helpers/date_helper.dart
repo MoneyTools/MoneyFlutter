@@ -26,7 +26,11 @@ List<String> generateAllDateFormats() {
 }
 
 List<String> getPossibleDateFormats(String dateString) {
-  if (dateString.trim().isEmpty) {
+  return getPossibleDateFormatsForAllValues([dateString]);
+}
+
+List<String> getPossibleDateFormatsForAllValues(List<String> dateStrings) {
+  if (dateStrings.isEmpty) {
     return [];
   }
 
@@ -35,16 +39,28 @@ List<String> getPossibleDateFormats(String dateString) {
   final List<String> validFormats = [];
 
   for (String format in possibleFormats) {
-    final DateTime? parsedDate = DateFormat(format).tryParse(dateString);
-    if (parsedDate != null) {
-      final String formattedDate = DateFormat(format).format(parsedDate);
-      if (formattedDate == dateString) {
-        validFormats.add(format);
+    bool supportedByAll = true;
+    for (final dateString in dateStrings) {
+      if (!doesDateFormatWorkOnThisString(format, dateString)) {
+        supportedByAll = false;
+        break;
       }
+    }
+    if (supportedByAll) {
+      validFormats.add(format);
     }
   }
 
   return validFormats;
+}
+
+bool doesDateFormatWorkOnThisString(String format, String dateString) {
+  final DateTime? parsedDate = DateFormat(format).tryParse(dateString);
+  if (parsedDate != null) {
+    final String formattedDate = DateFormat(format).format(parsedDate);
+    return formattedDate == dateString;
+  }
+  return false;
 }
 
 /// Attempts to parse a date string using a list of common date formats.

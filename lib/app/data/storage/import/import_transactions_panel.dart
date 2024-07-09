@@ -158,10 +158,12 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       return const SizedBox();
     }
 
-    List<String> choiceOfDateFormat = getPossibleDateFormats(_values.first.date.asString());
+    final List<String> listOfDateAsStrings = _values.map((entry) => entry.date.asString()).toList();
+
+    List<String> choiceOfDateFormat = getPossibleDateFormatsForAllValues(listOfDateAsStrings);
 
     if (choiceOfDateFormat.isEmpty) {
-      return const SizedBox();
+      return Text('Bad Date Format', style: TextStyle(color: getColorFromState(ColorState.error)));
     }
 
     // make sure that the last choice is a valid one
