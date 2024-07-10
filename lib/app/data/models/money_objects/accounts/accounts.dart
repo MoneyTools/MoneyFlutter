@@ -219,6 +219,7 @@ class Accounts extends MoneyObjects<Account> {
     for (final t in transactionForAccountSortedByDateAscending) {
       runningBalanceForThisAccount += t.amount.value.toDouble();
       t.balance = runningBalanceForThisAccount;
+      t.paidOn.value = '';
     }
 
     final int length = transactionForAccountSortedByDateAscending.length - 1;
@@ -240,7 +241,7 @@ class Accounts extends MoneyObjects<Account> {
           // t.paidOn.value = doubleToCurrency(statementBalance, '');
         } else {
           transactionWithMatchingBalance.paidOn.value = '${t.dateTimeAsText} ⤵';
-          t.paidOn.value += '${transactionWithMatchingBalance.dateTimeAsText} ⤴';
+          t.paidOn.value = '${transactionWithMatchingBalance.dateTimeAsText} ⤴${t.paidOn.value.isNotEmpty ? '⤵' : ''}';
         }
       }
     }
