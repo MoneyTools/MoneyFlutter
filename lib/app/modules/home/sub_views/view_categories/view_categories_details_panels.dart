@@ -40,6 +40,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
     if (category != null) {
       final List<int> listOfDescendentCategories = <int>[];
       Data().categories.getTreeIdsRecursive(category.uniqueId, listOfDescendentCategories);
+      final SelectionController selectionController = Get.put(SelectionController());
 
       return ListViewTransactions(
         key: Key(category.uniqueId.toString()),
@@ -54,6 +55,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
         getList: () => getTransactions(
           filter: (final Transaction transaction) => listOfDescendentCategories.contains(transaction.categoryId.value),
         ),
+        selectionController: selectionController,
       );
     }
     return CenterMessage.noTransaction();

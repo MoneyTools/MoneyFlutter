@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -70,6 +71,9 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
+    final SelectionController selectionController =
+        Get.put(SelectionController(getPreferenceKey('info_$settingKeySelectedListItemId')));
+
     final Alias? alias = getMoneyObjectFromFirstSelectedId<Alias>(selectedIds, list);
     if (alias != null && alias.id.value > -1) {
       return ListViewTransactions(
@@ -84,6 +88,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
         getList: () => getTransactions(
           filter: (final Transaction transaction) => transaction.payee.value == alias.payeeId.value,
         ),
+        selectionController: selectionController,
       );
     }
     return CenterMessage.noTransaction();

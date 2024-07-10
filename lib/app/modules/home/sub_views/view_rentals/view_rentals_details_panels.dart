@@ -68,7 +68,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     lastSelectedRental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
-
+    final SelectionController selectionController = Get.put(SelectionController());
     return ListViewTransactions(
       columnsToInclude: <Field>[
         Transaction.fields.getFieldByName(columnIdDate),
@@ -79,6 +79,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
         Transaction.fields.getFieldByName(columnIdAmount),
       ],
       getList: () => getTransactionLastSelectedItem(),
+      selectionController: selectionController,
     );
   }
 

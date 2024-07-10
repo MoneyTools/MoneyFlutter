@@ -9,19 +9,19 @@ import 'package:money/app/modules/home/sub_views/view_transactions/dialog_mutate
 
 class ListViewTransactions extends StatefulWidget {
   const ListViewTransactions({
+    super.key,
     required this.columnsToInclude,
     required this.getList,
-    super.key,
+    required this.selectionController,
     this.sortFieldIndex = 0,
     this.sortAscending = true,
     this.onUserChoiceChanged,
-    this.selectedMoneyObjectId = 0,
   });
   final List<Field> columnsToInclude;
   final List<Transaction> Function() getList;
   final int sortFieldIndex;
   final bool sortAscending;
-  final int selectedMoneyObjectId;
+  final SelectionController selectionController;
   final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
 
   @override
@@ -31,15 +31,6 @@ class ListViewTransactions extends StatefulWidget {
 class _ListViewTransactionsState extends State<ListViewTransactions> {
   late int _sortBy = widget.sortFieldIndex;
   late bool _sortAscending = widget.sortAscending;
-  late int _selectedMoneyObjectId = widget.selectedMoneyObjectId;
-  // Create an instance of the controller
-  final SelectionController selectionController = Get.put(SelectionController());
-
-  @override
-  void initState() {
-    super.initState();
-    selectionController.toggleSelection(widget.selectedMoneyObjectId);
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -62,12 +53,13 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       filters: FieldFilters(),
       sortByFieldIndex: _sortBy,
       sortAscending: _sortAscending,
-      selectedId: selectionController.firstSelectedId(),
+      selectedId: widget.selectionController.firstSelectedId,
       // Field & Columns
       displayAsColumns: true,
       backgoundColorForHeaderFooter: Colors.transparent,
       onSelectionChanged: (int uniqueId) {
         widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, uniqueId);
+        widget.selectionController.select(uniqueId);
       },
       onColumnHeaderTap: (final int index) {
         setState(() {
@@ -77,7 +69,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           } else {
             _sortBy = index;
           }
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedMoneyObjectId);
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, widget.selectionController.firstSelectedId);
         });
       },
       onItemLongPress: (final BuildContext context2, final int uniqueId) {
@@ -86,8 +78,8 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           context: context2,
           transaction: instance,
         ).then((value) {
-          _selectedMoneyObjectId = uniqueId;
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedMoneyObjectId);
+          widget.selectionController.select(uniqueId);
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, widget.selectionController.firstSelectedId);
         });
       },
     );

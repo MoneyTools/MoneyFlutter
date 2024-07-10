@@ -117,6 +117,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final Payee? payee = getMoneyObjectFromFirstSelectedId<Payee>(indices, list);
     if (payee != null && payee.id.value > -1) {
+      final SelectionController selectionController = Get.put(SelectionController());
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
         columnsToInclude: <Field>[
@@ -129,6 +130,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
         getList: () => getTransactions(
           filter: (final Transaction transaction) => transaction.payee.value == payee.id.value,
         ),
+        selectionController: selectionController,
       );
     }
     return CenterMessage.noTransaction();

@@ -27,7 +27,7 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
       final List<Transaction> list = getTransactions(
         filter: (final Transaction transaction) => transaction.uniqueId == instance.uniqueId,
       );
-
+      final SelectionController selectionController = Get.put(SelectionController());
       return ListViewTransactions(
         key: Key(instance.uniqueId.toString()),
         columnsToInclude: <Field>[
@@ -39,6 +39,7 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => list,
+        selectionController: selectionController,
       );
     }
     return CenterMessage.noTransaction();
