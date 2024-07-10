@@ -110,7 +110,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
               ),
             ),
 
-          gapLarge(),
+          const Divider(),
+          gapMedium(),
 
           // Results
           Expanded(

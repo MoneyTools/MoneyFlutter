@@ -5,7 +5,7 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/input_values.dart';
-import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class InputByColumns extends StatefulWidget {
   const InputByColumns({
@@ -27,7 +27,7 @@ class InputByColumns extends StatefulWidget {
 }
 
 class _InputByColumnsState extends State<InputByColumns> {
-  bool _singleColumn = true;
+  bool _freeStyleInput = false; // use 3 columns by default
 
   final Debouncer _debouncer = Debouncer();
   bool _pauseTextSync = false;
@@ -55,21 +55,45 @@ class _InputByColumnsState extends State<InputByColumns> {
 
   @override
   Widget build(BuildContext context) {
-    // fromTextInputTextControl(widget.inputText);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // ( 1 column | 3 columns )
-        _buildColumnSelection(),
-
-        gapMedium(),
-
-        // Input text controls
-        Expanded(
-          child: _buildInputAsSingleOr3Columns(),
-        ),
-      ],
+    return DefaultTabController(
+      length: 2,
+      initialIndex: _freeStyleInput ? 1 : 0,
+      child: Column(
+        children: [
+          TabBar(
+            tabs: const [
+              Tab(
+                child: Text('3 columns'),
+              ),
+              Tab(
+                child: Text('Free style'),
+              ),
+            ],
+            onTap: (index) {
+              _freeStyleInput = index == 1;
+              if (_freeStyleInput) {
+                fromThreeToOneColumn();
+              } else {
+                fromOneToThreeColumn();
+              }
+              notifyChanged();
+            },
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: SizeForPadding.normal),
+              child: TabBarView(
+                children: [
+                  // Content for 3 columns
+                  _buildInputFor3Columns(),
+                  // Content for 1 column
+                  _buildInputFor1Column(),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -170,46 +194,17 @@ class _InputByColumnsState extends State<InputByColumns> {
     return padList(lines, lineCountNeeded, '').join('\n');
   }
 
-  Widget _buildColumnSelection() {
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: const <ButtonSegment<int>>[
-        ButtonSegment<int>(
-          value: 0,
-          label: Text('1 column'),
-        ),
-        ButtonSegment<int>(
-          value: 1,
-          label: Text('3 columns'),
-        ),
-      ],
-      selected: {_singleColumn ? 0 : 1},
-      onSelectionChanged: (final Set<int> newSelection) {
-        _singleColumn = newSelection.contains(0);
-        if (_singleColumn) {
-          fromThreeToOneColumn();
-        } else {
-          fromOneToThreeColumn();
-        }
-        notifyChanged();
-        // setState(() {});
-      },
-    );
-  }
-
   void notifyChanged() {
     widget.onChange(_controllerSingleColumn.text);
   }
 
-  Widget _buildInputAsSingleOr3Columns() {
-    if (_singleColumn) {
-      // 1 column
-      return Center(child: InputValues(title: 'Date; Description; Amount', controller: _controllerSingleColumn));
-    }
+  // 1 column
+  Widget _buildInputFor1Column() {
+    return Center(child: InputValues(title: 'Date; Description; Amount', controller: _controllerSingleColumn));
+  }
 
-    // 3 columns
+  // 3 columns
+  Widget _buildInputFor3Columns() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
