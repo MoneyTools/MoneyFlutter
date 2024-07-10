@@ -117,11 +117,6 @@ class Accounts extends MoneyObjects<Account> {
       account.minBalancePerYears.clear();
       account.maxBalancePerYears.clear();
 
-      if (account.type.value == AccountType.credit) {
-        // attempt to find statement end + paid on amount
-        _updateCreditCardPaidOn(account);
-      }
-
       // TODO when we deal with downloading online
       // account.onlineAccountInstance = Data().onlineAccounts.get(this.onlineAccountId);
 
@@ -201,54 +196,76 @@ class Accounts extends MoneyObjects<Account> {
         account.balance = latestPayment.balance.value.toDouble() * -1;
       }
     }
+
+    // Credit Card "Paid On" date
+    // attempt to match Statement balance to a payment
+    for (final Account account in iterableList().where((a) => a.type.value == AccountType.credit)) {
+      _updateCreditCardPaidOn(account);
+    }
   }
 
   void _updateCreditCardPaidOn(final Account account) {
+    // if (account.uniqueId == 184) {
+    //   debugLog('${t.getPayeeOrTransferCaption()} ${t.amountAsText}');
+    // }
+
     final transactionForAccountSortedByDateAscending =
         Data().transactions.iterableList().where((t) => t.accountId.value == account.uniqueId).toList();
     // sort date as string to match the ListView sorting logic
     transactionForAccountSortedByDateAscending.sort((a, b) => Transaction.sortByDateTime(a, b, true));
 
-    double statementBalance = 0;
-
-    Set<Transaction> paymentsFound = {};
+    double runningBalanceForThisAccount = 0;
 
     for (final t in transactionForAccountSortedByDateAscending) {
-      if (paymentsFound.contains(t)) {
-        // this is one of the assumed payment, exclude it from the side running total
-      } else {
-        statementBalance += t.amount.value.toDouble();
-        // if (account.uniqueId == 184) {
-        //   debugLog(
-        //     '${t.dateTimeAsText}\t${t.getPayeeOrTransferCaption()}\t${t.amount.value.toDouble()}\t$statementBalance',
-        //   );
-        // }
+      runningBalanceForThisAccount += t.amount.value.toDouble();
+      t.balance = runningBalanceForThisAccount;
+    }
 
-        final foundPayment = findForwardTransactionThatMatchAmount(
+    final int length = transactionForAccountSortedByDateAscending.length - 1;
+
+    for (int i = length; i >= 0; i--) {
+      final Transaction t = transactionForAccountSortedByDateAscending[i];
+      if (t.amount.value.toDouble() > 0) {
+        // a paymenent or reibursement was made
+
+        final DateTime maxDateToLookAt = t.dateTime.value!.subtract(const Duration(days: 60));
+        final transactionWithMatchingBalance = findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
           transactionForAccountSortedByDateAscending,
-          t.dateTime.value!,
-          -1 * statementBalance,
+          i - 1,
+          maxDateToLookAt,
+          -t.amount.value.toDouble(),
         );
 
-        if (foundPayment == null) {
+        if (transactionWithMatchingBalance == null) {
           // t.paidOn.value = doubleToCurrency(statementBalance, '');
         } else {
-          paymentsFound.add(foundPayment);
-          statementBalance = 0; // reset statment counter
-          t.paidOn.value = foundPayment.dateTimeAsText;
+          transactionWithMatchingBalance.paidOn.value = '${t.dateTimeAsText} ⤵';
+          t.paidOn.value += '${transactionWithMatchingBalance.dateTimeAsText} ⤴';
         }
       }
     }
   }
 
-  Transaction? findForwardTransactionThatMatchAmount(
-    final List<Transaction> transactions,
-    final DateTime date,
+  /// Find a transaction that has a date in the futurebut not more than 2 months and has inverse amount
+  Transaction? findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
+    final List<Transaction> transactionForAccountSortedByDateAscending,
+    final indexStartingFrom,
+    final DateTime validDateInThePast,
     final double amountToMatch,
   ) {
-    return transactions.firstWhereOrNull(
-      (t) => t.dateTime.value!.isAfter(date) && compareDoubles(t.amount.value.toDouble(), amountToMatch, 2),
-    );
+    for (int i = indexStartingFrom; i >= 0; i--) {
+      final Transaction t = transactionForAccountSortedByDateAscending[i];
+
+      if (t.dateTime.value!.isBefore(validDateInThePast)) {
+        return null; // out of range break early
+      }
+
+      if (compareDoubles(t.balance, amountToMatch, 2)) {
+        return t;
+      }
+    }
+
+    return null;
   }
 
   bool compareDoubles(double a, double b, int precision) {
