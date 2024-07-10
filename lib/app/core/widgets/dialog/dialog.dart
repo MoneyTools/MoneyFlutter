@@ -34,9 +34,9 @@ class MyAlertDialog extends StatelessWidget {
       content: Container(
         constraints: const BoxConstraints(
           minHeight: 500,
-          maxHeight: 700,
-          minWidth: 400,
-          maxWidth: 800,
+          maxHeight: 1000,
+          minWidth: 500,
+          maxWidth: 1000,
         ),
         child: child,
       ),
@@ -69,33 +69,36 @@ void adaptiveScreenSizeDialog({
         fullscreenDialog: true,
       ),
     );
-  } else {
-    // in modal always offer a close button
-    if (captionForClose != null) {
-      // Cancel and close are inserted on the left side of other buttons
-      // so place it first on the list
-      actionButtons.insert(
-        0,
-        DialogActionButton(
-          text: captionForClose,
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          },
-        ),
-      );
-    }
+    return;
+  }
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (final BuildContext context) {
-        return MyAlertDialog(
-          title: title,
-          scrollable: true,
-          actions: actionButtons,
-          child: child,
-        );
-      },
+  // Large screen use some space but restric to not be full screen
+
+  // in modal always offer a close button
+  if (captionForClose != null) {
+    // Cancel and close are inserted on the left side of other buttons
+    // so place it first on the list
+    actionButtons.insert(
+      0,
+      DialogActionButton(
+        text: captionForClose,
+        onPressed: () {
+          Navigator.of(context).pop(false);
+        },
+      ),
     );
   }
+
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (final BuildContext context) {
+      return MyAlertDialog(
+        title: title,
+        scrollable: true,
+        actions: actionButtons,
+        child: child,
+      );
+    },
+  );
 }

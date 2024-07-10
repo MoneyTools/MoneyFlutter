@@ -33,7 +33,7 @@ class InputValues extends StatelessWidget {
             keyboardType: TextInputType.multiline,
             textAlignVertical: TextAlignVertical.top,
             style: const TextStyle(
-              fontSize: SizeForText.small,
+              fontSize: SizeForText.medium,
               overflow: TextOverflow.fade,
             ),
             // decoration: getDecoration(context, title, lineCount),

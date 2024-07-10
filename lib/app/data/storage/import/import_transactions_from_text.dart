@@ -63,6 +63,7 @@ void showImportTransactionsFromTextInput(
     captionForClose: 'Cancel',
     actionButtons: actionButtons,
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         gapLarge(),
         Expanded(

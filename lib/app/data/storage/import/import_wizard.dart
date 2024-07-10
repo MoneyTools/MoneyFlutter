@@ -16,7 +16,7 @@ void showImportTransactionsWizard(
   adaptiveScreenSizeDialog(
     context: context,
     captionForClose: 'Cancel',
-    title: 'Import transactons',
+    title: 'Import transactions',
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

@@ -72,7 +72,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
 
     return SizedBox(
-      width: 600,
+      width: 800,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
