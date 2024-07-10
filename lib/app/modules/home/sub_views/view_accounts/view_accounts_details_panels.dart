@@ -84,28 +84,32 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
     DataController.to.trackMutations.lastDateTimeChanged;
 
-    return ListViewTransactions(
-      key: Key(
-        'transaction_list_currency_${showAsNativeCurrency}_changedOn${DataController.to.trackMutations.lastDateTimeChanged}',
-      ),
-      columnsToInclude: columnsToDisplay,
-      getList: () => getTransactionForLastSelectedAccount(account),
-      sortFieldIndex: sortFieldIndex,
-      sortAscending: sortAscending,
-      selectionController: selectionController,
-      onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int selectedTransactionId) {
-        // keep track of user choice
-        sortFieldIndex = sortByFieldIndex;
-        sortAscending = sortAscending;
+    return Obx(
+      () {
+        return ListViewTransactions(
+          key: Key(
+            'transaction_list_currency_${showAsNativeCurrency}_changedOn${DataController.to.trackMutations.lastDateTimeChanged}',
+          ),
+          columnsToInclude: columnsToDisplay,
+          getList: () => getTransactionForLastSelectedAccount(account),
+          sortFieldIndex: sortFieldIndex,
+          sortAscending: sortAscending,
+          selectionController: selectionController,
+          onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int selectedTransactionId) {
+            // keep track of user choice
+            sortFieldIndex = sortByFieldIndex;
+            sortAscending = sortAscending;
 
-        // Save user choices
-        PreferenceController.to.setInt(
-          getPreferenceKey('info_$settingKeySortBy'),
-          sortByFieldIndex,
-        );
-        PreferenceController.to.setBool(
-          getPreferenceKey('info_$settingKeySortAscending'),
-          sortAscending,
+            // Save user choices
+            PreferenceController.to.setInt(
+              getPreferenceKey('info_$settingKeySortBy'),
+              sortByFieldIndex,
+            );
+            PreferenceController.to.setBool(
+              getPreferenceKey('info_$settingKeySortAscending'),
+              sortAscending,
+            );
+          },
         );
       },
     );

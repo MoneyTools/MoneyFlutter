@@ -2,6 +2,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
@@ -41,20 +42,29 @@ class MyListView<T> extends StatefulWidget {
 }
 
 class MyListViewState<T> extends State<MyListView<T>> {
-  final ScrollController scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   double rowHeight = 30;
   double padding = 0;
 
   @override
   void initState() {
     super.initState();
+
+    // render the list with the first selected item in view
+    double initialScrollOffset = 0;
+
     if (widget.selectedItemIds.value.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (final _) => scrollToId(widget.selectedItemIds.value.first),
-      );
+      final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
+      if (firstSelectedIndex != -1) {
+        initialScrollOffset = (firstSelectedIndex * rowHeight);
+        // don't make it flush to the top, we do this in order to give some clue that there's other item above,
+        initialScrollOffset += rowHeight * -1.5;
+      }
     }
+    scrollController = ScrollController(initialScrollOffset: initialScrollOffset);
   }
 
+  /// return -1 if not found
   int getListIndexFromUniqueId(final int uniqueId) {
     return widget.list.indexWhere((element) => (element as MoneyObject).uniqueId == uniqueId);
   }
@@ -243,16 +253,20 @@ class MyListViewState<T> extends State<MyListView<T>> {
     scrollToIndex(index);
   }
 
-  void scrollToIndex(final int index) {
+  bool isIndexInView(final int index) {
     if (index != -1) {
-      final List<int> minMax = scrollListenerWithItemCount();
-
-      // debugLog("${minMax[0]} > $index < ${minMax[1]}");
-
-      if (!index.isBetween(minMax[0], minMax[1])) {
-        final double desiredNewPosition = rowHeight * index;
-        scrollController.jumpTo(desiredNewPosition);
+      final IntRange viewingIndexRange = indexOfItemsInView();
+      if (index.isBetween(viewingIndexRange.min, viewingIndexRange.max)) {
+        return true;
       }
+    }
+    return false;
+  }
+
+  void scrollToIndex(final int index) {
+    if (!isIndexInView(index)) {
+      final double desiredNewPosition = rowHeight * index;
+      scrollController.jumpTo(desiredNewPosition);
     }
   }
 
@@ -263,7 +277,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
 // use this if total item count is known
-  List<int> scrollListenerWithItemCount() {
+  IntRange indexOfItemsInView() {
     final int itemCount = widget.list.length;
     final double scrollOffset = scrollController.position.pixels;
     final double viewportHeight = scrollController.position.viewportDimension;
@@ -272,6 +286,6 @@ class MyListViewState<T> extends State<MyListView<T>> {
     final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
     final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
 
-    return <int>[firstVisibleItemIndex, lastVisibleItemIndex];
+    return IntRange(min: firstVisibleItemIndex, max: lastVisibleItemIndex);
   }
 }

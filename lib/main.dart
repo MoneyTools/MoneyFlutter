@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
 
     return Obx(
       () {
-        final String k = '${preferenceController.getUniqueState}|${dataController.getUniqueState}';
+        final String k = preferenceController.getUniqueState;
 
         // debugLog('Obx-GetMaterialApp');
         return GetMaterialApp(

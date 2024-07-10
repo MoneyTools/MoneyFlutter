@@ -378,6 +378,7 @@ class Data {
         Data().notifyMutationChanged(
           mutation: MutationType.changed,
           moneyObject: relatedTransaction,
+          recalculateBalances: false,
         );
       }
 

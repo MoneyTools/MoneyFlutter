@@ -31,30 +31,28 @@ class HomePage extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     final DataController dataController = Get.find();
-    return Obx(
-      () {
-        return myScaffold(
-          context,
-          const MyAppBar(),
-          dataController.isLoading.value
-              ? const WorkingIndicator()
-              : Container(
-                  color: getColorTheme(context).secondaryContainer,
-                  child: _buildAdativeContent(context),
-                ),
-        );
-      },
+    return myScaffold(
+      context,
+      const MyAppBar(),
+      dataController.isLoading.value
+          ? const WorkingIndicator()
+          : Container(
+              color: getColorTheme(context).secondaryContainer,
+              child: _buildAdativeContent(context),
+            ),
     );
   }
 
   Widget _buildAdativeContent(BuildContext context) {
-    if (isSmallDevice(context)) {
-      // small screens
-      return _buildContentForSmallSurface(context);
-    } else {
-      // Large screens
-      return _buildContentForLargeSurface(context);
-    }
+    return Obx(() {
+      if (isSmallDevice(context)) {
+        // small screens
+        return _buildContentForSmallSurface(context);
+      } else {
+        // Large screens
+        return _buildContentForLargeSurface(context);
+      }
+    });
   }
 
   Widget _buildContentForLargeSurface(final BuildContext context) {
@@ -97,6 +95,7 @@ class HomePage extends GetView<HomeController> {
   }
 
   Widget _getSubView() {
+    debugLog('RENDER _getSubView');
     switch (PreferenceController.to.currentView.value) {
       case ViewId.viewAccounts:
         return ViewAccounts(

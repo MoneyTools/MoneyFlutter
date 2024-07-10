@@ -309,6 +309,7 @@ class Transaction extends MoneyObject {
                   instance.payee.value = selectedPayee.uniqueId;
                   instance.transfer.value = -1;
                   instance.transferInstance = null;
+                  wasModified = true;
                 }
               case TransactionFlavor.transfer:
                 if (account != null) {
