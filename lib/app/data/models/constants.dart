@@ -59,6 +59,7 @@ class Constants {
   static const int commandIncludeClosedAccount = 1200;
 
   static const int commandAddTransactions = 1400;
+  static const int commandRebalance = 1500;
 
   static const int commandFileNew = 2000;
   static const int commandFileOpen = 2001;

@@ -11,6 +11,7 @@ import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/three_part_label.dart';
 import 'package:money/app/core/widgets/zoom.dart';
 import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/modules/home/sub_views/app_title.dart';
@@ -100,6 +101,13 @@ class _MyAppBarState extends State<MyAppBar> {
       Icons.post_add_outlined,
     );
 
+    addMenuItem(
+      list,
+      Constants.commandRebalance,
+      'Rebalance...',
+      Icons.refresh_outlined,
+    );
+
     if (!kIsWeb) {
       // File Location
       addMenuItem(
@@ -149,6 +157,9 @@ class _MyAppBarState extends State<MyAppBar> {
 
           case Constants.commandAddTransactions:
             showImportTransactionsWizard(context);
+
+          case Constants.commandRebalance:
+            Data().recalculateBalances();
 
           case Constants.commandFileSaveCsv:
             DataController.to.onSaveToCsv();
