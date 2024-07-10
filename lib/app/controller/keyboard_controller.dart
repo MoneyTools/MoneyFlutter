@@ -17,7 +17,7 @@ class ShortcutController extends GetxController {
 
   void initShortcuts() {
     // Example: Registering a keyboard shortcut
-    RawKeyboard.instance.addListener(_handleKeyEvent);
+    // RawKeyboard.instance.addListener(_handleKeyEvent);
   }
 
   void _handleKeyEvent(RawKeyEvent event) {
