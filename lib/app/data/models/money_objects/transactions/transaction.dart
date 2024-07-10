@@ -3,6 +3,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
@@ -249,6 +250,7 @@ class Transaction extends MoneyObject {
         } else {
           mutateField(this.status.name, TransactionStatus.cleared, false);
         }
+        SelectionController.to.select(this.uniqueId);
       },
     );
   }

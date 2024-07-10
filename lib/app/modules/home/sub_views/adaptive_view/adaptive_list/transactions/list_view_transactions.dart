@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
@@ -31,6 +32,14 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   late int _sortBy = widget.sortFieldIndex;
   late bool _sortAscending = widget.sortAscending;
   late int _selectedMoneyObjectId = widget.selectedMoneyObjectId;
+  // Create an instance of the controller
+  final SelectionController selectionController = Get.put(SelectionController());
+
+  @override
+  void initState() {
+    super.initState();
+    selectionController.toggleSelection(widget.selectedMoneyObjectId);
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -53,7 +62,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       filters: FieldFilters(),
       sortByFieldIndex: _sortBy,
       sortAscending: _sortAscending,
-      selectedId: _selectedMoneyObjectId,
+      selectedId: selectionController.firstSelectedId(),
       // Field & Columns
       displayAsColumns: true,
       backgoundColorForHeaderFooter: Colors.transparent,
