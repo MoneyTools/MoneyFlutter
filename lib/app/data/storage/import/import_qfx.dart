@@ -7,7 +7,7 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/confirmation_dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
-import 'package:money/app/core/widgets/import_transactions_list.dart';
+import 'package:money/app/core/widgets/import_transactions_list_preview.dart';
 import 'package:money/app/core/widgets/picker_panel.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
@@ -90,7 +90,8 @@ void _showAndConfirmTransactionToImport(
     height: 400,
     width: 500,
     child: Center(
-      child: ImportTransactionsList(
+      child: ImportTransactionsListPreview(
+        accountId: account.uniqueId,
         values: valuesQuality,
       ),
     ),

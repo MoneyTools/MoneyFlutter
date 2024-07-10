@@ -102,10 +102,10 @@ class ValuesQuality {
     return date.hasError || description.hasError || amount.hasError;
   }
 
-  bool checkIfExistAlready() {
+  bool checkIfExistAlready({required final int accountId}) {
     exist = isTransactionAlreadyInTheSystem(
+      accountId: accountId,
       dateTime: date.asDate() ?? DateTime.now(),
-      payeeAsText: description.asString(),
       amount: amount.asAmount(),
     );
     return exist;
@@ -168,9 +168,12 @@ class ValuesParser {
     return !isEmpty;
   }
 
-  static void evaluateExistence(List<ValuesQuality> values) {
+  static void evaluateExistence({
+    required final int accountId,
+    required final List<ValuesQuality> values,
+  }) {
     for (final vq in values) {
-      vq.checkIfExistAlready();
+      vq.checkIfExistAlready(accountId: accountId);
     }
   }
 
@@ -373,12 +376,13 @@ class ValuesParser {
 }
 
 bool isTransactionAlreadyInTheSystem({
+  required final int accountId,
   required final DateTime dateTime,
-  required final String payeeAsText,
   required final double amount,
 }) {
   return null !=
       Data().transactions.findExistingTransaction(
+            accountId: accountId,
             dateRange: DateRange(min: dateTime.startOfDay, max: dateTime.endOfDay),
             amount: amount,
           );

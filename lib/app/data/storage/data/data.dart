@@ -6,8 +6,10 @@ import 'dart:typed_data';
 import 'package:archive/archive.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/data/models/money_objects/account_aliases/account_aliases.dart';
@@ -287,9 +289,12 @@ class Data {
       return null;
     }
 
-    Transaction? relatedTransaction = Data().transactions.findExistingTransactionForAccount(
+    Transaction? relatedTransaction = Data().transactions.findExistingTransaction(
           accountId: destinationAccount.uniqueId,
-          dateTime: transactionSource.dateTime.value!,
+          dateRange: DateRange(
+            min: transactionSource.dateTime.value!.startOfDay,
+            max: transactionSource.dateTime.value!.endOfDay,
+          ),
           amount: -transactionSource.amount.value.toDouble(),
         );
     // ignore: prefer_conditional_assignment

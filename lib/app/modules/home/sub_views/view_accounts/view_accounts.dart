@@ -198,6 +198,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                   final double amountToFind = selectedInfotransaction.amount.value.toDouble() * -1;
 
                   final matchingTransaction = Data().transactions.findExistingTransaction(
+                        accountId: -1,
                         dateRange: approximationDates,
                         amount: amountToFind,
                       );

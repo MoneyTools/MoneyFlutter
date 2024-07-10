@@ -4,7 +4,7 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/columns_input.dart';
 import 'package:money/app/core/widgets/gaps.dart';
-import 'package:money/app/core/widgets/import_transactions_list.dart';
+import 'package:money/app/core/widgets/import_transactions_list_preview.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.dart';
@@ -66,7 +66,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   @override
   Widget build(BuildContext context) {
-    ValuesParser.evaluateExistence(_values);
+    ValuesParser.evaluateExistence(
+      accountId: _account.uniqueId,
+      values: _values,
+    );
 
     return SizedBox(
       width: 600,
@@ -117,7 +120,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           Expanded(
             flex: 2,
             child: Center(
-              child: ImportTransactionsList(
+              child: ImportTransactionsListPreview(
+                accountId: _account.uniqueId,
                 values: _values,
               ),
             ),

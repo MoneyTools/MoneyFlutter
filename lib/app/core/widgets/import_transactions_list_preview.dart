@@ -14,15 +14,20 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
-class ImportTransactionsList extends StatefulWidget {
-  const ImportTransactionsList({required this.values, super.key});
+class ImportTransactionsListPreview extends StatefulWidget {
+  const ImportTransactionsListPreview({
+    super.key,
+    required this.accountId,
+    required this.values,
+  });
+  final int accountId;
   final List<ValuesQuality> values;
 
   @override
-  State<ImportTransactionsList> createState() => _ImportTransactionsListState();
+  State<ImportTransactionsListPreview> createState() => _ImportTransactionsListPreviewState();
 }
 
-class _ImportTransactionsListState extends State<ImportTransactionsList> {
+class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPreview> {
   int _sortColumnIndex = 0; // 0=Date, 1=Memo, 2=Amount
   bool _sortAscending = false;
   late final List<Triple<String, TextAlign, int>> _columnNames = [
@@ -34,7 +39,10 @@ class _ImportTransactionsListState extends State<ImportTransactionsList> {
   @override
   void initState() {
     super.initState();
-    ValuesParser.evaluateExistence(widget.values);
+    ValuesParser.evaluateExistence(
+      accountId: widget.accountId,
+      values: widget.values,
+    );
   }
 
   @override
