@@ -42,12 +42,12 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
     final bytes = await Pasteboard.image;
     if (bytes != null) {
       try {
-        final Directory tempDir = await getTemporaryDirectory();
-        final File file = await File('${tempDir.path}/pasted_image.png').writeAsBytes(bytes);
+        // final Directory tempDir = await getTemporaryDirectory();
+        // final File file = await File('${tempDir.path}/pasted_image.png').writeAsBytes(bytes);
 
         await TessData.init();
 
-        final image = flusseract.PixImage.fromFile(file.path);
+        final image = flusseract.PixImage.fromBytes(bytes);
         final tesseract = flusseract.Tesseract(
           tessDataPath: TessData.tessDataPath,
         );
