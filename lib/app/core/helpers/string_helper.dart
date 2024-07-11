@@ -289,6 +289,8 @@ String removeUtf8Bom(String text) {
 }
 
 double? parseUSDAmount(String input) {
+  input = input.replaceAll('\$', '');
+  input = input.replaceAll('USD', '');
   final usdPattern = RegExp(r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\.\d+)(\s*USD)?$');
   final match = usdPattern.firstMatch(input);
 
@@ -340,4 +342,9 @@ double? parseAmount(String amountAsText, final String currency) {
     default:
       return parseUSDAmount(amountAsText);
   }
+}
+
+/// Remove any characters not in the alloedChars argument
+String cleanString(String inputStr, String allowedChars) {
+  return inputStr.split('').where((char) => allowedChars.contains(char)).join();
 }

@@ -9,6 +9,7 @@ import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
@@ -16,14 +17,15 @@ class ValueQuality {
   const ValueQuality(
     this.valueAsString, {
     this.dateFormat = 'MM/DD/YYYY',
-    this.currency = 'USD',
+    this.currency = Constants.defaultCurrency,
     this.reverseAmountValue = false,
   });
+
+  final String currency;
+  final String dateFormat;
+  final bool reverseAmountValue;
   final String valueAsString;
   final String warningMessage = '';
-  final String dateFormat;
-  final String currency;
-  final bool reverseAmountValue;
 
   bool get hasError {
     return warningMessage.isNotEmpty;
@@ -92,10 +94,11 @@ class ValuesQuality {
       amount: const ValueQuality(''),
     );
   }
-  bool exist = false;
+
+  final ValueQuality amount;
   final ValueQuality date;
   final ValueQuality description;
-  final ValueQuality amount;
+  bool exist = false;
   final bool reverseAmountValue;
 
   bool containsErrors() {
@@ -152,13 +155,13 @@ class ValuesQuality {
 class ValuesParser {
   ValuesParser({required this.dateFormat, required this.currency, this.reverseAmountValue = false});
 
-  final String dateFormat;
   final String currency; // USD, EUR
+  final String dateFormat;
+  String errorMessage = '';
   final bool reverseAmountValue;
+  List<Widget> rows = [];
 
   List<ValuesQuality> _values = [];
-  String errorMessage = '';
-  List<Widget> rows = [];
 
   bool get isEmpty {
     return onlyNewTransactions.isEmpty;
@@ -231,7 +234,7 @@ class ValuesParser {
       default: // 4 or more
         dateAsText = threeValues.first;
         descriptionAsText = threeValues.sublist(1, threeValues.length - 1).join(' ');
-        amountAsText = threeValues.last;
+        amountAsText = cleanString(threeValues.last, '-+0123456789(),.');
     }
 
     return ValuesQuality(
@@ -254,6 +257,10 @@ class ValuesParser {
       ),
       reverseAmountValue: reverseAmountValue,
     );
+  }
+
+  String removeUnneededChart(final String input, final String validCharacters) {
+    return input.replaceAll('\$', ''); // clean up
   }
 
   Widget buildPresentation(context) {
