@@ -2,7 +2,6 @@ import 'dart:io' as io;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/columns/columns_input.dart';
@@ -10,9 +9,15 @@ import 'package:money/app/core/widgets/ocr/ocr.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class InputValues extends StatelessWidget {
-  const InputValues({super.key, required this.controller, required this.title});
+  const InputValues({
+    super.key,
+    required this.controller,
+    required this.title,
+    required this.allowedCharacters,
+  });
   final TextEditingController controller;
   final String title;
+  final String allowedCharacters;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +29,7 @@ class InputValues extends StatelessWidget {
         Box(
           height: 200,
           width: 800,
-          header: buildHeaderTitleAndCounter(context, title, lineCount, 'lines'),
+          header: buildHeaderTitleAndCounter(context, title, '${getIntAsText(lineCount)} lines'),
           child: TextField(
             controller: controller,
             // focusNode: focusNode,
@@ -36,7 +41,6 @@ class InputValues extends StatelessWidget {
               fontSize: SizeForText.medium,
               overflow: TextOverflow.fade,
             ),
-            // decoration: getDecoration(context, title, lineCount),
             inputFormatters: [
               TextInputFormatterRemoveEmptyLines(), // remove empty line
             ],
@@ -45,26 +49,12 @@ class InputValues extends StatelessWidget {
         if (!kIsWeb && !io.Platform.isWindows)
           Align(
             alignment: Alignment.bottomCenter,
-            child: PasteOcr(textController: controller),
+            child: PasteOcr(
+              textController: controller,
+              allowedCharacters: allowedCharacters,
+            ),
           ),
       ],
     );
   }
-}
-
-InputDecoration getDecoration(
-  final BuildContext context,
-  final String title,
-  final int lineCount,
-) {
-  return InputDecoration(
-    label: Badge(
-      isLabelVisible: lineCount > 0,
-      backgroundColor: ThemeController.to.primaryColor,
-      offset: const Offset(20.0, 0),
-      label: getBadgeCounter(lineCount, 'lines'),
-      child: Text('$title '),
-    ),
-    border: const OutlineInputBorder(),
-  );
 }

@@ -11,9 +11,14 @@ import 'package:pasteboard/pasteboard.dart';
 import 'package:path_provider/path_provider.dart';
 
 class PasteImageOcr extends StatefulWidget {
-  const PasteImageOcr({super.key, required this.textController});
+  const PasteImageOcr({
+    super.key,
+    required this.textController,
+    required this.allowedCharacters,
+  });
 
   final TextEditingController textController;
+  final String allowedCharacters;
 
   @override
   State<PasteImageOcr> createState() => _PasteImageOcrState();
@@ -47,6 +52,7 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
           tessDataPath: TessData.tessDataPath,
         );
 
+        tesseract.setWhiteList(widget.allowedCharacters);
         tesseract.utf8Text(image).then((ocrText) {
           widget.textController.text = removeEmptyLines('${widget.textController.text}\n$ocrText');
         });

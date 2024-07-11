@@ -200,7 +200,13 @@ class _InputByColumnsState extends State<InputByColumns> {
 
   // 1 column
   Widget _buildInputFor1Column() {
-    return Center(child: InputValues(title: 'Date; Description; Amount', controller: _controllerSingleColumn));
+    return Center(
+      child: InputValues(
+        title: 'Date; Description; Amount',
+        controller: _controllerSingleColumn,
+        allowedCharacters: '0123456789/_.\\',
+      ),
+    );
   }
 
   // 3 columns
@@ -211,15 +217,28 @@ class _InputByColumnsState extends State<InputByColumns> {
       children: [
         Expanded(
           flex: 1,
-          child: InputValues(title: 'Date', controller: _controllerColumn1),
+          child: InputValues(
+            title: 'Date',
+            controller: _controllerColumn1,
+            allowedCharacters: '0123456789/_.\\',
+          ),
         ),
         Expanded(
           flex: 2,
-          child: InputValues(title: 'Description', controller: _controllerColumn2),
+          child: InputValues(
+            title: 'Description',
+            controller: _controllerColumn2,
+            allowedCharacters: '',
+          ),
         ),
         Expanded(
           flex: 1,
-          child: InputValues(title: 'Amount', controller: _controllerColumn3),
+          child: InputValues(
+            title: 'Amount',
+            controller: _controllerColumn3,
+            allowedCharacters:
+                '0123456789,.()-+', // amounts like 12.34 12,34 1,234.56 1.234,56 +1.234,56 -1,234.56 (1,234.56)
+          ),
         ),
       ],
     );

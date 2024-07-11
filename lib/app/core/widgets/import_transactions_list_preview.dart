@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -58,12 +57,7 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
     _sortValues();
 
     return Box(
-      header: Badge(
-        backgroundColor: ThemeController.to.primaryColor,
-        offset: const Offset(20.0, 0),
-        label: Text(buildTallyOfItemsToImportOrSkip()),
-        child: const Text('Preview'),
-      ),
+      header: buildHeaderTitleAndCounter(context, 'Preview', buildTallyOfItemsToImportOrSkip()),
       child: Column(
         children: [
           //

@@ -98,25 +98,21 @@ class Box extends StatelessWidget {
 Widget buildHeaderTitleAndCounter(
   final BuildContext context,
   final String title,
-  final int count,
-  final String suffix,
+  final String badgeText,
 ) {
   Widget boxHeader = Badge(
-    isLabelVisible: count > 0,
+    isLabelVisible: badgeText.isNotEmpty,
     backgroundColor: ThemeController.to.primaryColor,
     offset: const Offset(20.0, 0),
-    label: getBadgeCounter(count, suffix),
+    label: getBadgeText(badgeText),
     child: Text(title),
   );
   return boxHeader;
 }
 
-Widget? getBadgeCounter(final int count, final String suffix) {
-  if (count > 0) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.small),
-      child: Text('$count $suffix', style: const TextStyle(fontSize: SizeForText.nano)),
-    );
-  }
-  return null;
+Widget getBadgeText(final String text) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.small),
+    child: Text(text, style: const TextStyle(fontSize: SizeForText.small)),
+  );
 }

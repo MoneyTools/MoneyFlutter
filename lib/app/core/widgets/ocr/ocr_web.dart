@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 
 class PasteImageOcr extends StatefulWidget {
-  const PasteImageOcr({super.key, required this.textController});
+  const PasteImageOcr({
+    super.key,
+    required this.textController,
+    required this.allowedCharacters,
+  });
 
   final TextEditingController textController;
-
+  final String allowedCharacters;
   @override
   State<PasteImageOcr> createState() => _PasteImageOcrState();
 }
