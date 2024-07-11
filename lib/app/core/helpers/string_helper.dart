@@ -83,14 +83,23 @@ String getIntAsText(final int value) {
   return NumberFormat.decimalPattern().format(value);
 }
 
-List<List<String>> getLinesFromRawTextCommaSeparated(final String content) {
+/// Parses a raw text string and splits it into rows and columns based on a specified separator character.
+///
+/// The function handles quoted fields and escaped quotes within the text. It returns a list of rows,
+/// where each row is represented as a list of strings (fields).
+///
+/// [content] The raw text string to be parsed.
+/// [separator] The character used to separate fields within a row. Defaults to a comma `,`.
+///
+/// Returns a `List<List<String>>` representing the parsed rows and fields.
+List<List<String>> getLinesFromRawTextWithSeparator(final String content, [final String separator = ',']) {
   List<List<String>> rows = [];
   List<String> currentRow = [];
   StringBuffer currentField = StringBuffer();
   bool inQuotes = false;
 
   for (int i = 0; i < content.length; i++) {
-    var char = content[i];
+    String char = content[i];
 
     if (char == '"' && (i + 1 < content.length && content[i + 1] == '"')) {
       // Handle escaped quotes
@@ -98,7 +107,7 @@ List<List<String>> getLinesFromRawTextCommaSeparated(final String content) {
       i++; // Skip the next quote
     } else if (char == '"') {
       inQuotes = !inQuotes; // Toggle the inQuotes state
-    } else if (char == ',' && !inQuotes) {
+    } else if ((char == separator) && !inQuotes) {
       // End of a field
       currentRow.add(currentField.toString());
       currentField = StringBuffer();
