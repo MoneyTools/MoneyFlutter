@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flusseract/flusseract.dart' as flusseract;
 import 'package:flusseract/tessdata.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +6,6 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:pasteboard/pasteboard.dart';
-import 'package:path_provider/path_provider.dart';
 
 class PasteImageOcr extends StatefulWidget {
   const PasteImageOcr({
@@ -42,12 +39,12 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
     final bytes = await Pasteboard.image;
     if (bytes != null) {
       try {
-        final Directory tempDir = await getTemporaryDirectory();
-        final File file = await File('${tempDir.path}/pasted_image.png').writeAsBytes(bytes);
+        // final Directory tempDir = await getTemporaryDirectory();
+        // final File file = await File('${tempDir.path}/pasted_image.png').writeAsBytes(bytes);
 
         await TessData.init();
 
-        final image = flusseract.PixImage.fromFile(file.path);
+        final image = flusseract.PixImage.fromBytes(bytes);
         final tesseract = flusseract.Tesseract(
           tessDataPath: TessData.tessDataPath,
         );
