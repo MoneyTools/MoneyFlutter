@@ -7,6 +7,7 @@ import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/import_transactions_list_preview.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
+import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.dart';
 
 /// use for free style text to transaction import
@@ -52,6 +53,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   ];
   late String userChoiceOfDateFormat = _possibleDateFormats.first;
   int _userChoiceDebitVsCredit = 0;
+  int _userChoiceNativeVsUSD = 0;
   final _focusNode = FocusNode();
 
   List<ValuesQuality> _values = [];
@@ -85,7 +87,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
             child: InputByColumns(
               inputText: _textToParse,
               dateFormat: userChoiceOfDateFormat,
-              currency: _account.getAccountCurrencyAsText(),
+              currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
               reverseAmountValue: _userChoiceDebitVsCredit == 1,
               onChange: (String newTextInput) {
                 setState(() {
@@ -106,7 +108,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
                 children: [
                   _buildChoiceOfDateFormat(),
                   const Spacer(),
-                  _buildDebitVsCredit(),
+                  _buildChoiceOfDebitVsCredit(),
                   gapLarge(),
                   _buildChoiceOfAmountFormat(),
                 ],
@@ -196,7 +198,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
   }
 
-  Widget _buildDebitVsCredit() {
+  Widget _buildChoiceOfDebitVsCredit() {
     return SegmentedButton<int>(
       style: const ButtonStyle(
         visualDensity: VisualDensity(horizontal: -4, vertical: -4),
@@ -221,14 +223,41 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
   }
 
+  /// Offer assistance for the currency format
   Widget _buildChoiceOfAmountFormat() {
-    return _account.getAccountCurrencyAsWidget();
+    if (_account.getAccountCurrencyAsText() == Constants.defaultCurrency) {
+      // No need to offer switching currency input format
+      return Currency.buildCurrencyWidget(Constants.defaultCurrency);
+    }
+
+    return SegmentedButton<int>(
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
+      segments: <ButtonSegment<int>>[
+        ButtonSegment<int>(
+          value: 0,
+          label: _account.getAccountCurrencyAsWidget(),
+        ),
+        ButtonSegment<int>(
+          value: 1,
+          label: Currency.buildCurrencyWidget(Constants.defaultCurrency),
+        ),
+      ],
+      selected: <int>{_userChoiceNativeVsUSD},
+      onSelectionChanged: (final Set<int> newSelection) {
+        setState(() {
+          _userChoiceNativeVsUSD = newSelection.first;
+          convertAndNotify(context, _textToParse);
+        });
+      },
+    );
   }
 
   void convertAndNotify(BuildContext context, String inputText) {
     ValuesParser parser = ValuesParser(
       dateFormat: userChoiceOfDateFormat,
-      currency: _account.getAccountCurrencyAsText(),
+      currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
       reverseAmountValue: _userChoiceDebitVsCredit == 1,
     );
     parser.convertInputTextToTransactionList(
