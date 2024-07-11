@@ -29,7 +29,7 @@ class ImportTransactionsListPreview extends StatefulWidget {
 
 class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPreview> {
   int _sortColumnIndex = 0; // 0=Date, 1=Memo, 2=Amount
-  bool _sortAscending = false;
+  bool _sortAscending = true;
   late final List<Triple<String, TextAlign, int>> _columnNames = [
     Triple<String, TextAlign, int>('Date', TextAlign.left, 1),
     Triple<String, TextAlign, int>('Description/Payee', TextAlign.left, 2),
