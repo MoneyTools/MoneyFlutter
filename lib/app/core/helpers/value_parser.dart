@@ -300,7 +300,14 @@ class ValuesParser {
 
     inputString = inputString.trim();
 
-    if (countOccurrences(inputString, ';') >= 2) {
+    final List<String> lines = getLinesOfText(inputString, includeEmptyLines: false);
+
+    if (lines.isEmpty) {
+      return; // nothing here
+    }
+
+    // are we dealing with friendly 3 column values separated by ';'
+    if (countOccurrences(lines.first, ';') >= 2) {
       //
       // Date ; Description ; Amount
       //
@@ -312,9 +319,9 @@ class ValuesParser {
       }
     } else {
       //
-      // CSV like text
+      // CSV like text but use space as seperator ' ', instead of ',' this is necesary because some currency use comma in the Amount value
       //
-      List<List<String>> lines = getLinesFromRawTextCommaSeparated(inputString);
+      List<List<String>> lines = getLinesFromRawTextWithSeparator(inputString, ' ');
       if (lines.isNotEmpty) {
         for (final List<String> line in lines) {
           if (line.isNotEmpty) {

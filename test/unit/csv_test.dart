@@ -9,7 +9,7 @@ void main() {
       final expected = [
         ['field1', 'field2', 'field3'],
       ];
-      expect(getLinesFromRawTextCommaSeparated(input), expected);
+      expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('parses multiple lines', () {
@@ -18,7 +18,7 @@ void main() {
         ['field1', 'field2', 'field3'],
         ['field4', 'field5', 'field6'],
       ];
-      expect(getLinesFromRawTextCommaSeparated(input), expected);
+      expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles quoted fields with commas', () {
@@ -26,7 +26,7 @@ void main() {
       final expected = [
         ['field1,with,commas', 'field2', 'field3'],
       ];
-      expect(getLinesFromRawTextCommaSeparated(input), expected);
+      expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles quoted fields spanning multiple lines', () {
@@ -34,7 +34,7 @@ void main() {
       final expected = [
         ['field1\nspanning\nmultiple\nlines', 'field2', 'field3'],
       ];
-      expect(getLinesFromRawTextCommaSeparated(input), expected);
+      expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles escaped double quotes', () {
@@ -42,7 +42,7 @@ void main() {
       final expected = [
         ['field1', 'field2"with"escaped"quotes', 'field3'],
       ];
-      expect(getLinesFromRawTextCommaSeparated(input), expected);
+      expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles empty fields', () {
@@ -50,7 +50,7 @@ void main() {
       final expected = [
         ['field1', '', 'field3'],
       ];
-      expect(getLinesFromRawTextCommaSeparated(input), expected);
+      expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles trailing commas', () {
@@ -58,7 +58,7 @@ void main() {
       final expected = [
         ['field1', 'field2', ''],
       ];
-      expect(getLinesFromRawTextCommaSeparated(input), expected);
+      expect(getLinesFromRawTextWithSeparator(input), expected);
     });
   });
 
