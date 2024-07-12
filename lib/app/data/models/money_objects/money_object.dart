@@ -19,100 +19,19 @@ class MoneyObject {
     return MoneyObject();
   }
 
-  /// All object must have a unique identified
-  int get uniqueId => -1;
-
-  set uniqueId(int value) {}
-
-  FieldDefinitions get fieldDefinitions => [];
-
-  FieldDefinitions getFieldDefinitionsForPanel() {
-    return fieldDefinitions.where((element) => element.useAsDetailPanels(this)).toList();
-  }
-
-  /// Return the best way to identify this instance, e.g. Name
-  String getRepresentation() {
-    return 'Id: $uniqueId'; // By default the ID is the best unique way
-  }
-
-  String getMutatedChangeAsSingleString<T>() {
-    final myJson = getMutatedDiff<T>();
-    return myJson.toString();
-  }
-
-  /// State of any and all object instances
-  /// to indicated any alteration to the data set of the users
-  /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
-  MutationType mutation = MutationType.none;
-  MyJson? valueBeforeEdit;
-
-  Color getMutationColor() {
-    switch (mutation) {
-      case MutationType.inserted:
-        return getColorFromState(ColorState.success);
-      case MutationType.changed:
-        return getColorFromState(ColorState.warning);
-      case MutationType.deleted:
-        return getColorFromState(ColorState.error);
-      default:
-        return Colors.transparent;
-    }
-  }
-
-  bool get isInserted => mutation == MutationType.inserted;
-
-  bool get isDeleted => mutation == MutationType.deleted;
-
-  bool get isChanged => mutation == MutationType.changed;
-
-  static bool isDataModified(MoneyObject moneyObject) {
-    MyJson afterEditing = moneyObject.getPersistableJSon();
-    MyJson diff = myJsonDiff(
-      before: moneyObject.valueBeforeEdit ?? {},
-      after: afterEditing,
-    );
-    return diff.keys.isNotEmpty;
-  }
-
-  MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {
-    if (moneyObjectInstances.isEmpty) {
-      return MoneyObject();
-    }
-    if (moneyObjectInstances.length == 1) {
-      return moneyObjectInstances.first;
-    }
-
-    MyJson commonJson = moneyObjectInstances.first.getPersistableJSon();
-
-    for (var t in moneyObjectInstances.skip(1)) {
-      commonJson = compareAndGenerateCommonJson(commonJson, t.getPersistableJSon());
-    }
-    return MoneyObject.fromJSon(commonJson, 0);
-  }
-
-  void mutateField(
-    final String fieldName,
-    final dynamic newValue,
-    final bool rebalance,
-  ) {
-    stashValueBeforeEditing();
-    final Field? field = getFieldDefinitionByName(fieldDefinitions, fieldName);
-    if (field != null && field.setValue != null) {
-      field.setValue!(this, newValue);
-      Data().notifyMutationChanged(
-        mutation: MutationType.changed,
-        moneyObject: this,
-        recalculateBalances: rebalance,
-      );
-    }
-  }
-
   ///
   /// Column 1 | Column 2 | Column 3
   ///
   Widget Function(Fields, dynamic)? buildFieldsAsWidgetForLargeScreen = (final Fields fields, final dynamic instance) {
     return fields.getRowOfColumns(instance);
   };
+
+  /// State of any and all object instances
+  /// to indicated any alteration to the data set of the users
+  /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
+  MutationType mutation = MutationType.none;
+
+  MyJson? valueBeforeEdit;
 
   ///
   /// Title       |
@@ -261,6 +180,139 @@ class MoneyObject {
     }
   }
 
+  FieldDefinitions get fieldDefinitions => [];
+
+  FieldDefinitions getFieldDefinitionsForPanel() {
+    return fieldDefinitions.where((element) => element.useAsDetailPanels(this)).toList();
+  }
+
+  String getMutatedChangeAsSingleString<T>() {
+    final myJson = getMutatedDiff<T>();
+    return myJson.toString();
+  }
+
+  MyJson getMutatedDiff<T>() {
+    MyJson afterEditing = getPersistableJSon();
+    return myJsonDiff(
+      before: valueBeforeEdit ?? {},
+      after: afterEditing,
+    );
+  }
+
+  Color getMutationColor() {
+    switch (mutation) {
+      case MutationType.inserted:
+        return getColorFromState(ColorState.success);
+      case MutationType.changed:
+        return getColorFromState(ColorState.warning);
+      case MutationType.deleted:
+        return getColorFromState(ColorState.error);
+      default:
+        return Colors.transparent;
+    }
+  }
+
+  /// Serialize object instance to a JSon format
+  MyJson getPersistableJSon() {
+    final MyJson json = {};
+
+    for (final Field<dynamic> field in fieldDefinitions) {
+      if (field.serializeName != '') {
+        json[field.serializeName] = field.getValueForSerialization(this);
+      }
+    }
+    return json;
+  }
+
+  /// Return the best way to identify this instance, e.g. Name
+  String getRepresentation() {
+    return 'Id: $uniqueId'; // By default the ID is the best unique way
+  }
+
+  bool get isChanged => mutation == MutationType.changed;
+
+  static bool isDataModified(MoneyObject moneyObject) {
+    MyJson afterEditing = moneyObject.getPersistableJSon();
+    MyJson diff = myJsonDiff(
+      before: moneyObject.valueBeforeEdit ?? {},
+      after: afterEditing,
+    );
+    return diff.keys.isNotEmpty;
+  }
+
+  bool get isDeleted => mutation == MutationType.deleted;
+
+  bool get isInserted => mutation == MutationType.inserted;
+
+  bool isMutated<T>() {
+    return getMutatedDiff<T>().keys.isNotEmpty;
+  }
+
+  void mutateField(
+    final String fieldName,
+    final dynamic newValue,
+    final bool rebalance,
+  ) {
+    stashValueBeforeEditing();
+    final Field? field = getFieldDefinitionByName(fieldDefinitions, fieldName);
+    if (field != null && field.setValue != null) {
+      field.setValue!(this, newValue);
+      Data().notifyMutationChanged(
+        mutation: MutationType.changed,
+        moneyObject: this,
+        recalculateBalances: rebalance,
+      );
+    }
+  }
+
+  MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {
+    if (moneyObjectInstances.isEmpty) {
+      return MoneyObject();
+    }
+    if (moneyObjectInstances.length == 1) {
+      return moneyObjectInstances.first;
+    }
+
+    MyJson commonJson = moneyObjectInstances.first.getPersistableJSon();
+
+    for (var t in moneyObjectInstances.skip(1)) {
+      commonJson = compareAndGenerateCommonJson(commonJson, t.getPersistableJSon());
+    }
+    return MoneyObject.fromJSon(commonJson, 0);
+  }
+
+  void stashValueBeforeEditing() {
+    if (valueBeforeEdit == null) {
+      valueBeforeEdit = getPersistableJSon();
+    } else {
+      // already stashed
+    }
+  }
+
+  String toJsonString() {
+    return getPersistableJSon().toString();
+  }
+
+  /// attempt to get text that a human could read
+  String toReadableString(Field field) {
+    switch (field.type) {
+      case FieldType.widget:
+        if (field.getValueForReading == null) {
+          return field.getValueForSerialization(this).toString();
+        } else {
+          return field.getValueForReading!(this).toString();
+        }
+      case FieldType.text:
+      default:
+        return field.getValueForDisplay(this).toString();
+    }
+  }
+
+  /// All object must have a unique identified
+  int get uniqueId => -1;
+
+  set uniqueId(int value) {}
+
   Widget _buildNameValuePair(
     Field<dynamic> fieldDefinition,
     final dynamic fieldValue,
@@ -293,57 +345,6 @@ class MoneyObject {
         ],
       ),
     );
-  }
-
-  /// Serialize object instance to a JSon format
-  MyJson getPersistableJSon() {
-    final MyJson json = {};
-
-    for (final Field<dynamic> field in fieldDefinitions) {
-      if (field.serializeName != '') {
-        json[field.serializeName] = field.getValueForSerialization(this);
-      }
-    }
-    return json;
-  }
-
-  String toJsonString() {
-    return getPersistableJSon().toString();
-  }
-
-  /// attempt to get text that a human could read
-  String toReadableString(Field field) {
-    switch (field.type) {
-      case FieldType.widget:
-        if (field.getValueForReading == null) {
-          return field.getValueForSerialization(this).toString();
-        } else {
-          return field.getValueForReading!(this).toString();
-        }
-      case FieldType.text:
-      default:
-        return field.getValueForDisplay(this).toString();
-    }
-  }
-
-  bool isMutated<T>() {
-    return getMutatedDiff<T>().keys.isNotEmpty;
-  }
-
-  MyJson getMutatedDiff<T>() {
-    MyJson afterEditing = getPersistableJSon();
-    return myJsonDiff(
-      before: valueBeforeEdit ?? {},
-      after: afterEditing,
-    );
-  }
-
-  void stashValueBeforeEditing() {
-    if (valueBeforeEdit == null) {
-      valueBeforeEdit = getPersistableJSon();
-    } else {
-      // already stashed
-    }
   }
 }
 

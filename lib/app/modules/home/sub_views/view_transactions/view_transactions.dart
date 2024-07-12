@@ -21,6 +21,7 @@ class ViewTransactions extends ViewForMoneyObjects {
     super.key,
     this.startingBalance = 0.00,
   });
+
   final double startingBalance;
 
   @override
@@ -32,80 +33,16 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewTransactions;
     supportsMultiSelection = true;
   }
-  final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
-  final List<Widget> pivots = <Widget>[];
-  final List<bool> _selectedPivot = <bool>[false, false, true];
+
   bool balanceDone = false;
+  final List<Widget> pivots = <Widget>[];
+  final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
 
   // Footer related
   final DateRange _footerColumnDate = DateRange();
+
   double _footerRunningBalanceUSD = 0.0;
-
-  @override
-  void initState() {
-    super.initState();
-
-    pivots.add(
-      ThreePartLabel(
-        text1: 'Incomes',
-        small: true,
-        isVertical: true,
-        text2: getIntAsText(
-          Data()
-              .transactions
-              .iterableList()
-              .where(
-                (final Transaction element) => element.amount.value.toDouble() > 0,
-              )
-              .length,
-        ),
-      ),
-    );
-    pivots.add(
-      ThreePartLabel(
-        text1: 'Expenses',
-        small: true,
-        isVertical: true,
-        text2: getIntAsText(
-          Data()
-              .transactions
-              .iterableList()
-              .where(
-                (final Transaction element) => element.amount.value.toDouble() < 0,
-              )
-              .length,
-        ),
-      ),
-    );
-    pivots.add(
-      ThreePartLabel(
-        text1: 'All',
-        small: true,
-        isVertical: true,
-        text2: getIntAsText(Data().transactions.iterableList().length),
-      ),
-    );
-  }
-
-  @override
-  String getClassNamePlural() {
-    return 'Transactions';
-  }
-
-  @override
-  String getClassNameSingular() {
-    return 'Transaction';
-  }
-
-  @override
-  String getDescription() {
-    return 'Details actions of your accounts.';
-  }
-
-  @override
-  String getViewId() {
-    return Data().transactions.getTypeName();
-  }
+  final List<bool> _selectedPivot = <bool>[false, false, true];
 
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
@@ -189,8 +126,13 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Fields<Transaction> getFieldsForTable() {
-    return Transaction.fields;
+  String getClassNamePlural() {
+    return 'Transactions';
+  }
+
+  @override
+  String getClassNameSingular() {
+    return 'Transaction';
   }
 
   @override
@@ -206,84 +148,13 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Transaction> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final List<Transaction> list = Data()
-        .transactions
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (final Transaction transaction) =>
-              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
-        )
-        .toList();
-
-    if (!balanceDone) {
-      list.sort(
-        (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
-      );
-
-      double runningNativeBalance = 0.0;
-      _footerRunningBalanceUSD = 0.0;
-      _footerColumnDate.clear();
-
-      for (Transaction transaction in list) {
-        _footerColumnDate.inflate(transaction.dateTime.value);
-        runningNativeBalance += transaction.amount.value.toDouble();
-
-        transaction.balance = runningNativeBalance;
-
-        // only the last item is used
-        _footerRunningBalanceUSD =
-            (transaction.balanceNormalized.getValueForDisplay(transaction) as MoneyModel).toDouble();
-      }
-
-      balanceDone = true;
-    }
-    return list;
+  String getDescription() {
+    return 'Details actions of your accounts.';
   }
 
-  bool isMatchingIncomeExpense(final Transaction transaction) {
-    if (_selectedPivot[2]) {
-      return true;
-    }
-
-    // Expenses
-    if (_selectedPivot[1]) {
-      return transaction.amount.value.toDouble() < 0;
-    }
-
-    // Incomes
-    if (_selectedPivot[0]) {
-      return transaction.amount.value.toDouble() > 0;
-    }
-    return false;
-  }
-
-  Widget renderToggles() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-      child: ToggleButtons(
-        direction: Axis.horizontal,
-        onPressed: (final int index) {
-          setState(() {
-            for (int i = 0; i < _selectedPivot.length; i++) {
-              _selectedPivot[i] = i == index;
-            }
-            list = getList();
-          });
-        },
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 100.0,
-        ),
-        isSelected: _selectedPivot,
-        children: pivots,
-      ),
-    );
+  @override
+  Fields<Transaction> getFieldsForTable() {
+    return Transaction.fields;
   }
 
   @override
@@ -363,5 +234,137 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       }
     }
     return const CenterMessage(message: 'No related transactions');
+  }
+
+  @override
+  List<Transaction> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final List<Transaction> list = Data()
+        .transactions
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (final Transaction transaction) =>
+              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
+        )
+        .toList();
+
+    if (!balanceDone) {
+      list.sort(
+        (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
+      );
+
+      double runningNativeBalance = 0.0;
+      _footerRunningBalanceUSD = 0.0;
+      _footerColumnDate.clear();
+
+      for (Transaction transaction in list) {
+        _footerColumnDate.inflate(transaction.dateTime.value);
+        runningNativeBalance += transaction.amount.value.toDouble();
+
+        transaction.balance = runningNativeBalance;
+
+        // only the last item is used
+        _footerRunningBalanceUSD =
+            (transaction.balanceNormalized.getValueForDisplay(transaction) as MoneyModel).toDouble();
+      }
+
+      balanceDone = true;
+    }
+    return list;
+  }
+
+  @override
+  String getViewId() {
+    return Data().transactions.getTypeName();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    pivots.add(
+      ThreePartLabel(
+        text1: 'Incomes',
+        small: true,
+        isVertical: true,
+        text2: getIntAsText(
+          Data()
+              .transactions
+              .iterableList()
+              .where(
+                (final Transaction element) => element.amount.value.toDouble() > 0,
+              )
+              .length,
+        ),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
+        text1: 'Expenses',
+        small: true,
+        isVertical: true,
+        text2: getIntAsText(
+          Data()
+              .transactions
+              .iterableList()
+              .where(
+                (final Transaction element) => element.amount.value.toDouble() < 0,
+              )
+              .length,
+        ),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: getIntAsText(Data().transactions.iterableList().length),
+      ),
+    );
+  }
+
+  bool isMatchingIncomeExpense(final Transaction transaction) {
+    if (_selectedPivot[2]) {
+      return true;
+    }
+
+    // Expenses
+    if (_selectedPivot[1]) {
+      return transaction.amount.value.toDouble() < 0;
+    }
+
+    // Incomes
+    if (_selectedPivot[0]) {
+      return transaction.amount.value.toDouble() > 0;
+    }
+    return false;
+  }
+
+  Widget renderToggles() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+      child: ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (final int index) {
+          setState(() {
+            for (int i = 0; i < _selectedPivot.length; i++) {
+              _selectedPivot[i] = i == index;
+            }
+            list = getList();
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 100.0,
+        ),
+        isSelected: _selectedPivot,
+        children: pivots,
+      ),
+    );
   }
 }

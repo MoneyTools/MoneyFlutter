@@ -15,19 +15,21 @@ import 'package:money/app/data/storage/data/data_mutations.dart';
 import 'package:path/path.dart' as p;
 
 class DataController extends GetxController {
-  static DataController get to => Get.find();
-
+  Rxn<DateTime> currentLoadedFileDateTime = Rxn<DateTime>();
+  RxString currentLoadedFileName = Constants.untitledFileName.obs;
+  RxList<String> data = <String>[].obs;
+  String fileName = '';
   // Observable variables
   RxBool isLoading = true.obs;
-  RxList<String> data = <String>[].obs;
-  RxString currentLoadedFileName = Constants.untitledFileName.obs;
-  Rxn<DateTime> currentLoadedFileDateTime = Rxn<DateTime>();
-  String fileName = '';
-  String get getUniqueState => '${trackMutations.lastDateTimeChanged}';
-  bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
 
   // Tracking changes
   DataMutations trackMutations = DataMutations();
+
+  void closeFile([bool rebuild = true]) {
+    Data().close();
+    dataFileIsClosed();
+    trackMutations.reset();
+  }
 
   void dataFileIsClosed() {
     currentLoadedFileName.value = Constants.untitledFileName;
@@ -46,6 +48,23 @@ class DataController extends GetxController {
     }
     return await getDocumentDirectory();
   }
+
+  static Future<DateTime?> getFileModifiedTime(String filePath) async {
+    try {
+      if (await MyFileSystems.doesFileExist(filePath)) {
+        final file = File(filePath);
+        final fileStat = await file.stat();
+        return fileStat.modified;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  String get getUniqueState => '${trackMutations.lastDateTimeChanged}';
+
+  bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
 
   Future<void> loadDemoData() async {
     isLoading.value = true;
@@ -66,6 +85,10 @@ class DataController extends GetxController {
       }
       isLoading.value = false;
     });
+  }
+
+  Future<void> loadFileFromPath(final DataSource dataSource) async {
+    loadFile(dataSource);
   }
 
   // Async method to fetch data
@@ -94,31 +117,6 @@ class DataController extends GetxController {
     }
   }
 
-  void setCurrentFileName(final String filenameLoaded) {
-    currentLoadedFileName.value = filenameLoaded;
-    final PreferenceController preferenceController = Get.find();
-    preferenceController.addToMRU(filenameLoaded);
-  }
-
-  static Future<DateTime?> getFileModifiedTime(String filePath) async {
-    try {
-      if (await MyFileSystems.doesFileExist(filePath)) {
-        final file = File(filePath);
-        final fileStat = await file.stat();
-        return fileStat.modified;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
-  void closeFile([bool rebuild = true]) {
-    Data().close();
-    dataFileIsClosed();
-    trackMutations.reset();
-  }
-
   void onFileNew() async {
     this.closeFile();
 
@@ -129,45 +127,6 @@ class DataController extends GetxController {
       columnFilter: [],
       textFilter: '',
     );
-  }
-
-  Future<void> loadFileFromPath(final DataSource dataSource) async {
-    loadFile(dataSource);
-  }
-
-  void onShowFileLocation() async {
-    String path = await generateNextFolderToSaveTo();
-    showLocalFolder(path);
-  }
-
-  void onSaveToCsv() async {
-    final String fullPathToFileName = await Data().saveToCsv();
-
-    PreferenceController.to.addToMRU(fullPathToFileName);
-
-    trackMutations.reset();
-  }
-
-  void onSaveToSql() async {
-    String fileNameAndPath = currentLoadedFileName.value;
-
-    if (fileNameAndPath.isEmpty) {
-      // this happens if the user started with a new file and click save to SQL
-      fileNameAndPath = await defaultFolderToSaveTo('mymoney.mmdb');
-    }
-
-    Data().saveToSql(
-      filePathToLoad: fileNameAndPath,
-      callbackWhenLoaded: (final bool success, final String message) {
-        if (success) {
-          trackMutations.reset();
-        } else {
-          SnackBarService.displayError(autoDismiss: false, message: message);
-        }
-      },
-    );
-
-    PreferenceController.to.addToMRU(fileNameAndPath);
   }
 
   Future<bool> onFileOpen() async {
@@ -230,6 +189,49 @@ class DataController extends GetxController {
     }
     return false;
   }
+
+  void onSaveToCsv() async {
+    final String fullPathToFileName = await Data().saveToCsv();
+
+    PreferenceController.to.addToMRU(fullPathToFileName);
+
+    trackMutations.reset();
+  }
+
+  void onSaveToSql() async {
+    String fileNameAndPath = currentLoadedFileName.value;
+
+    if (fileNameAndPath.isEmpty) {
+      // this happens if the user started with a new file and click save to SQL
+      fileNameAndPath = await defaultFolderToSaveTo('mymoney.mmdb');
+    }
+
+    Data().saveToSql(
+      filePathToLoad: fileNameAndPath,
+      callbackWhenLoaded: (final bool success, final String message) {
+        if (success) {
+          trackMutations.reset();
+        } else {
+          SnackBarService.displayError(autoDismiss: false, message: message);
+        }
+      },
+    );
+
+    PreferenceController.to.addToMRU(fileNameAndPath);
+  }
+
+  void onShowFileLocation() async {
+    String path = await generateNextFolderToSaveTo();
+    showLocalFolder(path);
+  }
+
+  void setCurrentFileName(final String filenameLoaded) {
+    currentLoadedFileName.value = filenameLoaded;
+    final PreferenceController preferenceController = Get.find();
+    preferenceController.addToMRU(filenameLoaded);
+  }
+
+  static DataController get to => Get.find();
 }
 
 class DataSource {
@@ -239,10 +241,12 @@ class DataSource {
   }) : _fileBytes = fileBytes ?? Uint8List(0);
 
   final String filePath;
+
   final Uint8List _fileBytes;
 
-  bool get isByteFile => _fileBytes.isNotEmpty && filePath.isNotEmpty;
-  bool get isLocalFile => _fileBytes.isEmpty && filePath.isNotEmpty && filePath.contains(MyFileSystems.pathSeparator);
-
   Uint8List get fileBytes => _fileBytes;
+
+  bool get isByteFile => _fileBytes.isNotEmpty && filePath.isNotEmpty;
+
+  bool get isLocalFile => _fileBytes.isEmpty && filePath.isNotEmpty && filePath.contains(MyFileSystems.pathSeparator);
 }

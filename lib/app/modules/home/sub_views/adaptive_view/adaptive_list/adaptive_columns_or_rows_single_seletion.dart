@@ -25,35 +25,35 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
     this.backgoundColorForHeaderFooter,
   });
 
-  final List<MoneyObject> list;
-  final FieldDefinitions fieldDefinitions;
-  final FieldFilters filters;
-  final int sortByFieldIndex;
-  final bool sortAscending;
   final Widget? Function(Field field)? getColumnFooterWidget;
-
-  // Selections
-  final int selectedId;
   final Function(int uniqueId)? onSelectionChanged;
-  final Function? onContextMenu;
-
-  // Display as Card vs Columns
-  final bool displayAsColumns;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field field)? onColumnHeaderLongPress;
   final Function(BuildContext context, int itemId)? onItemTap;
   final Function(BuildContext context, int itemId)? onItemLongPress;
   final Color? backgoundColorForHeaderFooter;
+  // Display as Card vs Columns
+  final bool displayAsColumns;
+
+  final FieldDefinitions fieldDefinitions;
+  final FieldFilters filters;
+  final List<MoneyObject> list;
+  final Function? onContextMenu;
+  // Selections
+  final int selectedId;
+
+  final bool sortAscending;
+  final int sortByFieldIndex;
 
   @override
   State<AdaptiveListColumnsOrRowsSingleSelection> createState() => _AdaptiveListColumnsOrRowsSingleSelectionState();
 }
 
 class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListColumnsOrRowsSingleSelection> {
-  late final selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>([widget.selectedId]);
   final AccumulatorSum<Field, double> fieldsForAmounts = AccumulatorSum<Field, double>();
-  final AccumulatorList<Field, String> fieldsForTexts = AccumulatorList<Field, String>();
   final AccumulatorDateRange<Field> fieldsForDates = AccumulatorDateRange<Field>();
+  final AccumulatorList<Field, String> fieldsForTexts = AccumulatorList<Field, String>();
+  late final selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>([widget.selectedId]);
 
   @override
   Widget build(BuildContext context) {
@@ -84,25 +84,6 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
     );
   }
 
-  Widget getColumnFooterWidget(final Field field) {
-    // field considered Balance are excluded from Tallies since they are themself a running tally
-    if (field.name != 'Balance') {
-      if (fieldsForTexts.containsKey(field)) {
-        return getFooterForInt(fieldsForTexts.getList(field).length);
-      }
-
-      if (fieldsForAmounts.containsKey(field)) {
-        return getFooterForAmount(fieldsForAmounts.getValue(field));
-      }
-
-      if (fieldsForDates.containsKey(field)) {
-        return getFooterForDateRange(fieldsForDates.getValue(field)!);
-      }
-    }
-
-    return const SizedBox();
-  }
-
   void cumulateSums() {
     fieldsForTexts.clear();
     fieldsForAmounts.clear();
@@ -130,5 +111,24 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
         }
       }
     }
+  }
+
+  Widget getColumnFooterWidget(final Field field) {
+    // field considered Balance are excluded from Tallies since they are themself a running tally
+    if (field.name != 'Balance') {
+      if (fieldsForTexts.containsKey(field)) {
+        return getFooterForInt(fieldsForTexts.getList(field).length);
+      }
+
+      if (fieldsForAmounts.containsKey(field)) {
+        return getFooterForAmount(fieldsForAmounts.getValue(field));
+      }
+
+      if (fieldsForDates.containsKey(field)) {
+        return getFooterForDateRange(fieldsForDates.getValue(field)!);
+      }
+    }
+
+    return const SizedBox();
   }
 }

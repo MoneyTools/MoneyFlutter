@@ -6,19 +6,15 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 /// </summary>
 class SecuritySale {
   /// <summary>
-  /// This sale represents an error.
-  /// </summary>
-  Exception? error;
-
-  /// <summary>
-  /// The security that was purchased.
-  /// </summary>
-  Security? security;
-
-  /// <summary>
   /// The account that it was sold from.
   /// </summary>
   Account? account;
+
+  /// <summary>
+  /// The original cost basis for this security per unit.  THis is not necessarily the
+  /// UnitPrice we paid for the security, commissions and fees are also taken into account.
+  /// </summary>
+  double costBasisPerUnit = 0;
 
   /// <summary>
   /// The date this security was purchased.
@@ -31,41 +27,24 @@ class SecuritySale {
   DateTime? dateSold;
 
   /// <summary>
+  /// This sale represents an error.
+  /// </summary>
+  Exception? error;
+
+  /// <summary>
   /// The price we got for the units at the time of sale (minus fees and commissions)
   /// </summary>
   double salePricePerUnit = 0;
 
   /// <summary>
+  /// The security that was purchased.
+  /// </summary>
+  Security? security;
+
+  /// <summary>
   /// The number of units sold
   /// </summary>
   double unitsSold = 0;
-
-  /// <summary>
-  /// The original cost basis for this security per unit.  THis is not necessarily the
-  /// UnitPrice we paid for the security, commissions and fees are also taken into account.
-  /// </summary>
-  double costBasisPerUnit = 0;
-
-  /// <summary>
-  /// The total remaining cost basis based on the number of units remaining.
-  /// </summary>
-  double get totalCostBasis {
-    return costBasisPerUnit * unitsSold;
-  }
-
-  /// <summary>
-  /// The total funds received from the transaction
-  /// </summary>
-  double get saleProceeds {
-    return salePricePerUnit * unitsSold;
-  }
-
-  /// <summary>
-  /// The total difference between the Proceeds and the TotalCostBasis
-  /// </summary>
-  double get totalGain {
-    return saleProceeds - totalCostBasis;
-  }
 
   /// <summary>
   /// For a roll-up report where individual SecuritySale is too much detail we
@@ -89,5 +68,26 @@ class SecuritySale {
     if (costBasisPerUnit != cg.costBasisPerUnit) {
       costBasisPerUnit = 0;
     }
+  }
+
+  /// <summary>
+  /// The total funds received from the transaction
+  /// </summary>
+  double get saleProceeds {
+    return salePricePerUnit * unitsSold;
+  }
+
+  /// <summary>
+  /// The total remaining cost basis based on the number of units remaining.
+  /// </summary>
+  double get totalCostBasis {
+    return costBasisPerUnit * unitsSold;
+  }
+
+  /// <summary>
+  /// The total difference between the Proceeds and the TotalCostBasis
+  /// </summary>
+  double get totalGain {
+    return saleProceeds - totalCostBasis;
   }
 }

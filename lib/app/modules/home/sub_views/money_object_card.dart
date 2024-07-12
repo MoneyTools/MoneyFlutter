@@ -15,11 +15,12 @@ class MoneyObjectCard extends StatelessWidget {
     this.onMergeWith,
     this.onDelete,
   });
-  final String title;
+
   final MoneyObject? moneyObject;
-  final Function? onMergeWith;
-  final Function? onEdit;
   final Function? onDelete;
+  final Function? onEdit;
+  final Function? onMergeWith;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -131,6 +132,7 @@ class TransactionCard extends StatelessWidget {
     super.key,
     this.transaction,
   });
+
   final String title;
   final Transaction? transaction;
 

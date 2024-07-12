@@ -10,8 +10,9 @@ import 'package:money/app/data/storage/data/data.dart';
 
 class NetWorthChart extends StatefulWidget {
   const NetWorthChart({super.key, required this.minYear, required this.maxYear});
-  final int minYear;
+
   final int maxYear;
+  final int minYear;
 
   @override
   NetWorthChartState createState() => NetWorthChartState();

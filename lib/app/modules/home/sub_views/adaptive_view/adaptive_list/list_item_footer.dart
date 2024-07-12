@@ -13,13 +13,13 @@ class MyListItemFooter<T> extends StatelessWidget {
     this.onLongPress,
     this.getColumnFooterWidget,
   });
-  final FieldDefinitions columns;
-  final bool multiSelectionOn;
-  final Color backgoundColor;
 
-  final Function(int columnIndex) onTap;
   final Function(Field<dynamic>)? onLongPress;
   final Widget? Function(Field field)? getColumnFooterWidget;
+  final Color backgoundColor;
+  final FieldDefinitions columns;
+  final bool multiSelectionOn;
+  final Function(int columnIndex) onTap;
 
   @override
   Widget build(final BuildContext context) {

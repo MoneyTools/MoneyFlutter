@@ -204,6 +204,156 @@ class Accounts extends MoneyObjects<Account> {
     }
   }
 
+  @override
+  String toCSV() {
+    return MoneyObjects.getCsvFromList(
+      getListSortedById(),
+    );
+  }
+
+  List<Account> activeAccount(
+    final List<AccountType> types, {
+    final bool? isActive = true,
+  }) {
+    return iterableList().where((final Account item) {
+      if (!item.matchType(types)) {
+        return false;
+      }
+      if (isActive == null) {
+        return true;
+      }
+      return item.isOpen == isActive;
+    }).toList();
+  }
+
+  bool activeBankAccount(final Account account) {
+    return account.isActiveBankAccount();
+  }
+
+  Account addNewAccount(final String accountName) {
+    // find next available name
+    String nextAvailableName = accountName;
+    int next = 1;
+    while ((getByName(nextAvailableName) != null)) {
+      // already taken
+      nextAvailableName = '$accountName $next';
+      // the the next one
+      next++;
+    }
+
+    // add a new Account
+    final account = Account();
+    account.name.value = nextAvailableName;
+    account.isOpen = true;
+
+    Data().accounts.appendNewMoneyObject(account, fireNotification: false);
+    return account;
+  }
+
+  bool compareDoubles(double a, double b, int precision) {
+    final threshold = pow(10, -precision);
+    return (a - b).abs() < threshold;
+  }
+
+  /// Find a transaction that has a date in the futurebut not more than 2 months and has inverse amount
+  Transaction? findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
+    final List<Transaction> transactionForAccountSortedByDateAscending,
+    final indexStartingFrom,
+    final DateTime validDateInThePast,
+    final double amountToMatch,
+  ) {
+    for (int i = indexStartingFrom; i >= 0; i--) {
+      final Transaction t = transactionForAccountSortedByDateAscending[i];
+
+      if (t.dateTime.value!.isBefore(validDateInThePast)) {
+        return null; // out of range break early
+      }
+
+      if (compareDoubles(t.balance, amountToMatch, 2)) {
+        return t;
+      }
+    }
+
+    return null;
+  }
+
+  Account? findByIdAndType(
+    final String accountId,
+    final AccountType? accountType,
+  ) {
+    return iterableList().firstWhereOrNull((final Account account) {
+      return account.accountId.value == accountId && (accountType == null || account.type.value == accountType);
+    });
+  }
+
+  Account? getByName(final String name) {
+    return iterableList().firstWhereOrNull((final Account item) {
+      return stringCompareIgnoreCasing2(item.name.value, name) == 0;
+    });
+  }
+
+  List<Account> getListSorted() {
+    final list = iterableList()
+        .where(
+          (account) =>
+              account.isMatchingUserChoiceIncludingClosedAccount && account.type.value != AccountType.categoryFund,
+        )
+        .toList();
+    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
+    return list;
+  }
+
+  Account getMostRecentlySelectedAccount() {
+    final int lastSelectionId = PreferenceController.to.getInt(getViewPreferenceIdAccountLastSelected(), -1);
+    if (lastSelectionId != -1) {
+      final Account? accountExist = get(lastSelectionId);
+      if (accountExist != null) {
+        return accountExist;
+      }
+    }
+
+    return firstItem()!;
+  }
+
+  String getNameFromId(final num id) {
+    final Account? account = get(id);
+    if (account == null) {
+      return id.toString();
+    }
+    return account.name.value;
+  }
+
+  List<Account> getOpenAccounts() {
+    return iterableList().where((final Account account) => account.isOpen).toList();
+  }
+
+  List<Account> getOpenRealAccounts() {
+    return iterableList()
+        .where(
+          (final Account account) => !account.isFakeAccount() && account.isOpen,
+        )
+        .toList();
+  }
+
+  double getSumOfAccountBalances() {
+    double sum = 0.00;
+
+    for (final account in iterableList()) {
+      if (account.isMatchingUserChoiceIncludingClosedAccount) {
+        sum += account.balanceNormalized.getValueForDisplay(account).toDouble();
+      }
+    }
+    return sum;
+  }
+
+  String getViewPreferenceIdAccountLastSelected() {
+    return ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId);
+  }
+
+  void setMostRecentUsedAccount(Account account) {
+    PreferenceController.to.setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
+  }
+
   void _updateCreditCardPaidOn(final Account account) {
     // if (account.uniqueId == 184) {
     //   debugLog('${t.getPayeeOrTransferCaption()} ${t.amountAsText}');
@@ -245,155 +395,5 @@ class Accounts extends MoneyObjects<Account> {
         }
       }
     }
-  }
-
-  /// Find a transaction that has a date in the futurebut not more than 2 months and has inverse amount
-  Transaction? findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
-    final List<Transaction> transactionForAccountSortedByDateAscending,
-    final indexStartingFrom,
-    final DateTime validDateInThePast,
-    final double amountToMatch,
-  ) {
-    for (int i = indexStartingFrom; i >= 0; i--) {
-      final Transaction t = transactionForAccountSortedByDateAscending[i];
-
-      if (t.dateTime.value!.isBefore(validDateInThePast)) {
-        return null; // out of range break early
-      }
-
-      if (compareDoubles(t.balance, amountToMatch, 2)) {
-        return t;
-      }
-    }
-
-    return null;
-  }
-
-  bool compareDoubles(double a, double b, int precision) {
-    final threshold = pow(10, -precision);
-    return (a - b).abs() < threshold;
-  }
-
-  Account addNewAccount(final String accountName) {
-    // find next available name
-    String nextAvailableName = accountName;
-    int next = 1;
-    while ((getByName(nextAvailableName) != null)) {
-      // already taken
-      nextAvailableName = '$accountName $next';
-      // the the next one
-      next++;
-    }
-
-    // add a new Account
-    final account = Account();
-    account.name.value = nextAvailableName;
-    account.isOpen = true;
-
-    Data().accounts.appendNewMoneyObject(account, fireNotification: false);
-    return account;
-  }
-
-  List<Account> getOpenAccounts() {
-    return iterableList().where((final Account account) => account.isOpen).toList();
-  }
-
-  List<Account> getOpenRealAccounts() {
-    return iterableList()
-        .where(
-          (final Account account) => !account.isFakeAccount() && account.isOpen,
-        )
-        .toList();
-  }
-
-  bool activeBankAccount(final Account account) {
-    return account.isActiveBankAccount();
-  }
-
-  List<Account> activeAccount(
-    final List<AccountType> types, {
-    final bool? isActive = true,
-  }) {
-    return iterableList().where((final Account item) {
-      if (!item.matchType(types)) {
-        return false;
-      }
-      if (isActive == null) {
-        return true;
-      }
-      return item.isOpen == isActive;
-    }).toList();
-  }
-
-  String getNameFromId(final num id) {
-    final Account? account = get(id);
-    if (account == null) {
-      return id.toString();
-    }
-    return account.name.value;
-  }
-
-  Account? findByIdAndType(
-    final String accountId,
-    final AccountType? accountType,
-  ) {
-    return iterableList().firstWhereOrNull((final Account account) {
-      return account.accountId.value == accountId && (accountType == null || account.type.value == accountType);
-    });
-  }
-
-  Account? getByName(final String name) {
-    return iterableList().firstWhereOrNull((final Account item) {
-      return stringCompareIgnoreCasing2(item.name.value, name) == 0;
-    });
-  }
-
-  @override
-  String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
-  }
-
-  List<Account> getListSorted() {
-    final list = iterableList()
-        .where(
-          (account) =>
-              account.isMatchingUserChoiceIncludingClosedAccount && account.type.value != AccountType.categoryFund,
-        )
-        .toList();
-    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
-    return list;
-  }
-
-  String getViewPreferenceIdAccountLastSelected() {
-    return ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId);
-  }
-
-  Account getMostRecentlySelectedAccount() {
-    final int lastSelectionId = PreferenceController.to.getInt(getViewPreferenceIdAccountLastSelected(), -1);
-    if (lastSelectionId != -1) {
-      final Account? accountExist = get(lastSelectionId);
-      if (accountExist != null) {
-        return accountExist;
-      }
-    }
-
-    return firstItem()!;
-  }
-
-  void setMostRecentUsedAccount(Account account) {
-    PreferenceController.to.setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
-  }
-
-  double getSumOfAccountBalances() {
-    double sum = 0.00;
-
-    for (final account in iterableList()) {
-      if (account.isMatchingUserChoiceIncludingClosedAccount) {
-        sum += account.balanceNormalized.getValueForDisplay(account).toDouble();
-      }
-    }
-    return sum;
   }
 }

@@ -24,102 +24,14 @@ class MoneyObjects<T> {
 
   String collectionName = '';
 
-  String getTypeName() {
-    Type t = T;
-    return t.toString().split('.').last;
-  }
-
   final List<MoneyObject> _list = <MoneyObject>[];
   final Map<num, MoneyObject> _map = <num, MoneyObject>{};
-
-  void clear() {
-    _list.clear();
-  }
-
-  bool get isEmpty {
-    return _list.isEmpty;
-  }
-
-  int get length {
-    return _list.length;
-  }
-
-  Iterable<MoneyObject> _iterableListOfMoneyObject([
-    bool includeDeleted = false,
-  ]) {
-    if (includeDeleted) {
-      // No filtering needed
-      return _list;
-    }
-    return _list.where((final item) => item.mutation != MutationType.deleted);
-  }
-
-  /// Recast list as type <T>
-  Iterable<T> iterableList({bool includeDeleted = false}) {
-    return _iterableListOfMoneyObject(includeDeleted).whereType<T>();
-  }
-
-  T? firstItem([bool includeDeleted = false]) {
-    final list = iterableList(includeDeleted: includeDeleted).toList();
-    if (list.isEmpty) {
-      return null;
-    }
-    return iterableList(includeDeleted: includeDeleted).toList().first;
-  }
-
-  List<MoneyObject> getListSortedById() {
-    _list.sort((final MoneyObject a, final MoneyObject b) {
-      return sortByValue(
-        (a).uniqueId,
-        (b).uniqueId,
-        true,
-      );
-    });
-    return _list;
-  }
-
-  static List<MoneyObject> sortList(
-    List<MoneyObject> list,
-    final FieldDefinitions fieldDefinitions,
-    final int sortBy,
-    final bool sortAscending,
-  ) {
-    if (!isIndexInRange(fieldDefinitions, sortBy)) {
-      // requested sort is not in range of the available fields
-      return list;
-    }
-
-    final Field<dynamic> fieldDefinition = fieldDefinitions[sortBy];
-    if (fieldDefinition.sort == null) {
-      // No sorting function found, fallback to String sorting
-      list.sort((final MoneyObject a, final MoneyObject b) {
-        return sortByString(
-          fieldDefinition.getValueForDisplay(a).toString(),
-          fieldDefinition.getValueForDisplay(b).toString(),
-          sortAscending,
-        );
-      });
-    } else {
-      list.sort((final MoneyObject a, final MoneyObject b) {
-        return fieldDefinition.sort!(a, b, sortAscending);
-      });
-    }
-    return list;
-  }
 
   void appendMoneyObject(final MoneyObject moneyObject) {
     assert(moneyObject.uniqueId != -1);
 
     _list.add(moneyObject);
     _map[(moneyObject).uniqueId] = moneyObject;
-  }
-
-  int getNextId() {
-    int nextId = -1;
-    for (var moneyObject in _list) {
-      nextId = max(nextId, moneyObject.uniqueId);
-    }
-    return nextId + 1;
   }
 
   MoneyObject appendNewMoneyObject(
@@ -141,24 +53,6 @@ class MoneyObjects<T> {
     return moneyObject;
   }
 
-  T? get(final num id) {
-    return _map[id] as T?;
-  }
-
-  void loadFromJson(final List<MyJson> rows) {
-    clear();
-    for (final MyJson row in rows) {
-      final MoneyObject? newInstance = instanceFromSqlite(row);
-      if (newInstance != null) {
-        appendMoneyObject(newInstance);
-      }
-    }
-  }
-
-  void loadDemoData() {
-    clear();
-  }
-
   void assessMutationsCounts() {
     DataController.to.trackMutations.reset();
     for (final item in _iterableListOfMoneyObject(true)) {
@@ -175,79 +69,28 @@ class MoneyObjects<T> {
     }
   }
 
-  /// Resets the mutation state of all MoneyObjects by setting their `valueBeforeEdit` to null
-  /// and `mutation` to `MutationType.none`.
-  ///
-  void resetMutationStateOfObjects() {
-    for (final item in _iterableListOfMoneyObject(true)) {
-      item.valueBeforeEdit = null;
-      item.mutation = MutationType.none;
+  void clear() {
+    _list.clear();
+  }
+
+  /// Remove/tag a Transaction instance from the list in memory
+  void deleteItem(final MoneyObject itemToDelete) {
+    Data().notifyMutationChanged(
+      mutation: MutationType.deleted,
+      moneyObject: itemToDelete,
+    );
+  }
+
+  T? firstItem([bool includeDeleted = false]) {
+    final list = iterableList(includeDeleted: includeDeleted).toList();
+    if (list.isEmpty) {
+      return null;
     }
+    return iterableList(includeDeleted: includeDeleted).toList().first;
   }
 
-  List<MoneyObject> getMutatedObjects(MutationType typeOfMutation) {
-    return _list.where((element) => element.mutation == typeOfMutation).toList();
-  }
-
-  bool saveSql(final MyDatabase db, final String tableName) {
-    for (final item in _iterableListOfMoneyObject(true)) {
-      switch (item.mutation) {
-        case MutationType.none:
-          break;
-        case MutationType.inserted:
-          db.insert(tableName, item.getPersistableJSon());
-
-        case MutationType.changed:
-          db.update(tableName, item.uniqueId, item.getPersistableJSon());
-
-        case MutationType.deleted:
-          db.delete(tableName, item.uniqueId);
-
-        default:
-          debugPrint('Unhandled change ${item.mutation}');
-      }
-      item.mutation = MutationType.none;
-    }
-    return true;
-  }
-
-  /// Must be override by derived class
-  MoneyObject? instanceFromSqlite(final MyJson row) {
-    return null;
-  }
-
-  /// Override in derived classes
-  void onAllDataLoaded() {
-    // implement in the override derived classes
-  }
-
-  String toCSV() {
-    return getCsvFromList(getListSortedById());
-  }
-
-  static String getCsvHeader(
-    final FieldDefinitions declarations,
-    final bool forSerialization,
-  ) {
-    final List<String> headerList = <String>[];
-
-    for (final Field<dynamic> field in declarations) {
-      if (isFieldMatchingCondition(field, forSerialization)) {
-        headerList.add('"${field.getBestFieldDescribingName()}"');
-      }
-    }
-    return headerList.join(',');
-  }
-
-  List<String> getSerializableFieldNames(final List<Object> declarations) {
-    final List<String> fieldNames = <String>[];
-
-    for (final dynamic field in declarations) {
-      if (field.serializeName != '') {
-        fieldNames.add(field.serializeName);
-      }
-    }
-    return fieldNames;
+  T? get(final num id) {
+    return _map[id] as T?;
   }
 
   static String getCsvFromList(
@@ -283,6 +126,34 @@ class MoneyObjects<T> {
     return csv.toString();
   }
 
+  static String getCsvHeader(
+    final FieldDefinitions declarations,
+    final bool forSerialization,
+  ) {
+    final List<String> headerList = <String>[];
+
+    for (final Field<dynamic> field in declarations) {
+      if (isFieldMatchingCondition(field, forSerialization)) {
+        headerList.add('"${field.getBestFieldDescribingName()}"');
+      }
+    }
+    return headerList.join(',');
+  }
+
+  List<String> getListOfValueAsStrings(
+    FieldDefinitions fieldDefinitions,
+    MoneyObject item,
+  ) {
+    final List<String> listValues = <String>[];
+    for (final Field field in fieldDefinitions) {
+      if (field.serializeName != '') {
+        final dynamic value = field.getValueForSerialization(item);
+        listValues.add(value.toString());
+      }
+    }
+    return listValues;
+  }
+
   List<List<String>> getListOfValueList(List<MoneyObject> moneyObjects) {
     List<List<String>> list = [];
     if (moneyObjects.isNotEmpty) {
@@ -292,6 +163,159 @@ class MoneyObjects<T> {
       }
     }
     return list;
+  }
+
+  List<MoneyObject> getListSortedById() {
+    _list.sort((final MoneyObject a, final MoneyObject b) {
+      return sortByValue(
+        (a).uniqueId,
+        (b).uniqueId,
+        true,
+      );
+    });
+    return _list;
+  }
+
+  List<MoneyObject> getMutatedObjects(MutationType typeOfMutation) {
+    return _list.where((element) => element.mutation == typeOfMutation).toList();
+  }
+
+  int getNextId() {
+    int nextId = -1;
+    for (var moneyObject in _list) {
+      nextId = max(nextId, moneyObject.uniqueId);
+    }
+    return nextId + 1;
+  }
+
+  List<String> getSerializableFieldNames(final List<Object> declarations) {
+    final List<String> fieldNames = <String>[];
+
+    for (final dynamic field in declarations) {
+      if (field.serializeName != '') {
+        fieldNames.add(field.serializeName);
+      }
+    }
+    return fieldNames;
+  }
+
+  String getTypeName() {
+    Type t = T;
+    return t.toString().split('.').last;
+  }
+
+  /// Must be override by derived class
+  MoneyObject? instanceFromSqlite(final MyJson row) {
+    return null;
+  }
+
+  bool get isEmpty {
+    return _list.isEmpty;
+  }
+
+  static bool isFieldMatchingCondition(final field, bool forSerialization) {
+    return ((forSerialization == true && field.serializeName.isNotEmpty) ||
+        (forSerialization == false && field.useAsColumn));
+  }
+
+  /// Recast list as type <T>
+  Iterable<T> iterableList({bool includeDeleted = false}) {
+    return _iterableListOfMoneyObject(includeDeleted).whereType<T>();
+  }
+
+  int get length {
+    return _list.length;
+  }
+
+  void loadDemoData() {
+    clear();
+  }
+
+  void loadFromJson(final List<MyJson> rows) {
+    clear();
+    for (final MyJson row in rows) {
+      final MoneyObject? newInstance = instanceFromSqlite(row);
+      if (newInstance != null) {
+        appendMoneyObject(newInstance);
+      }
+    }
+  }
+
+  void mutationUpdateItem(final MoneyObject item) {
+    Data().notifyMutationChanged(
+      mutation: MutationType.changed,
+      moneyObject: item,
+    );
+  }
+
+  /// Override in derived classes
+  void onAllDataLoaded() {
+    // implement in the override derived classes
+  }
+
+  /// Resets the mutation state of all MoneyObjects by setting their `valueBeforeEdit` to null
+  /// and `mutation` to `MutationType.none`.
+  ///
+  void resetMutationStateOfObjects() {
+    for (final item in _iterableListOfMoneyObject(true)) {
+      item.valueBeforeEdit = null;
+      item.mutation = MutationType.none;
+    }
+  }
+
+  bool saveSql(final MyDatabase db, final String tableName) {
+    for (final item in _iterableListOfMoneyObject(true)) {
+      switch (item.mutation) {
+        case MutationType.none:
+          break;
+        case MutationType.inserted:
+          db.insert(tableName, item.getPersistableJSon());
+
+        case MutationType.changed:
+          db.update(tableName, item.uniqueId, item.getPersistableJSon());
+
+        case MutationType.deleted:
+          db.delete(tableName, item.uniqueId);
+
+        default:
+          debugPrint('Unhandled change ${item.mutation}');
+      }
+      item.mutation = MutationType.none;
+    }
+    return true;
+  }
+
+  static List<MoneyObject> sortList(
+    List<MoneyObject> list,
+    final FieldDefinitions fieldDefinitions,
+    final int sortBy,
+    final bool sortAscending,
+  ) {
+    if (!isIndexInRange(fieldDefinitions, sortBy)) {
+      // requested sort is not in range of the available fields
+      return list;
+    }
+
+    final Field<dynamic> fieldDefinition = fieldDefinitions[sortBy];
+    if (fieldDefinition.sort == null) {
+      // No sorting function found, fallback to String sorting
+      list.sort((final MoneyObject a, final MoneyObject b) {
+        return sortByString(
+          fieldDefinition.getValueForDisplay(a).toString(),
+          fieldDefinition.getValueForDisplay(b).toString(),
+          sortAscending,
+        );
+      });
+    } else {
+      list.sort((final MoneyObject a, final MoneyObject b) {
+        return fieldDefinition.sort!(a, b, sortAscending);
+      });
+    }
+    return list;
+  }
+
+  String toCSV() {
+    return getCsvFromList(getListSortedById());
   }
 
   static String toStringAsSeparatedValues(
@@ -309,25 +333,6 @@ class MoneyObjects<T> {
       }
     }
     return listValues.join(valueSeparator);
-  }
-
-  static bool isFieldMatchingCondition(final field, bool forSerialization) {
-    return ((forSerialization == true && field.serializeName.isNotEmpty) ||
-        (forSerialization == false && field.useAsColumn));
-  }
-
-  List<String> getListOfValueAsStrings(
-    FieldDefinitions fieldDefinitions,
-    MoneyObject item,
-  ) {
-    final List<String> listValues = <String>[];
-    for (final Field field in fieldDefinitions) {
-      if (field.serializeName != '') {
-        final dynamic value = field.getValueForSerialization(item);
-        listValues.add(value.toString());
-      }
-    }
-    return listValues;
   }
 
   List<Widget> whatWasMutated(List<MoneyObject> objects) {
@@ -417,19 +422,14 @@ class MoneyObjects<T> {
     return widgets;
   }
 
-  void mutationUpdateItem(final MoneyObject item) {
-    Data().notifyMutationChanged(
-      mutation: MutationType.changed,
-      moneyObject: item,
-    );
-  }
-
-  /// Remove/tag a Transaction instance from the list in memory
-  void deleteItem(final MoneyObject itemToDelete) {
-    Data().notifyMutationChanged(
-      mutation: MutationType.deleted,
-      moneyObject: itemToDelete,
-    );
+  Iterable<MoneyObject> _iterableListOfMoneyObject([
+    bool includeDeleted = false,
+  ]) {
+    if (includeDeleted) {
+      // No filtering needed
+      return _list;
+    }
+    return _list.where((final item) => item.mutation != MutationType.deleted);
   }
 }
 

@@ -10,10 +10,15 @@ class TokenText extends StatelessWidget {
   }) {
     tokens = text.split(style.separator);
   }
-  late final TokenTextStyle style;
 
+  late final TokenTextStyle style;
   final String text;
   List<String> tokens = [];
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return text;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,11 +58,6 @@ class TokenText extends StatelessWidget {
       ),
     );
   }
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return text;
-  }
 }
 
 class TokenTextStyle {
@@ -67,8 +67,9 @@ class TokenTextStyle {
     this.separatorPaddingRight = SizeForPadding.small,
     this.rigthAlign = false,
   });
+
+  final bool rigthAlign;
   final String separator;
   final double separatorPaddingLeft;
   final double separatorPaddingRight;
-  final bool rigthAlign;
 }

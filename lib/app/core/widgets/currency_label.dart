@@ -7,8 +7,14 @@ class CurrencyLabel extends StatelessWidget {
     required this.flagId,
     super.key,
   });
-  final String threeLetterCurrencySymbol;
+
   final String flagId;
+  final String threeLetterCurrencySymbol;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
+    return '$threeLetterCurrencySymbol:$flagId';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,10 +32,5 @@ class CurrencyLabel extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
-    return '$threeLetterCurrencySymbol:$flagId';
   }
 }

@@ -10,9 +10,10 @@ class DialogActionButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
   });
+
   final IconData? icon;
-  final String text;
   final VoidCallback onPressed;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +106,10 @@ Widget buildCopyButton(final Function callback) {
 
 class InternalViewSwitching {
   InternalViewSwitching(this.icon, this.title, this.callback);
+
+  final Function callback;
   final IconData? icon;
   final String title;
-  final Function callback;
 }
 
 Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {

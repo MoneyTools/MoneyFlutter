@@ -9,8 +9,9 @@ class FullScreenDialog extends StatefulWidget {
     required this.content,
     super.key,
   });
-  final String title;
+
   final Widget content;
+  final String title;
 
   @override
   FullScreenDialogState createState() => FullScreenDialogState();
@@ -31,6 +32,7 @@ class FullScreenDialogState extends State<FullScreenDialog> {
 
 class AutoSizeDialog extends StatelessWidget {
   const AutoSizeDialog({super.key, required this.child});
+
   final Widget child;
 
   @override

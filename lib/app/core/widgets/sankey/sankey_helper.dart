@@ -11,9 +11,10 @@ class ChannelPoint {
   ChannelPoint(this.x, this.top, this.bottom) {
     //
   }
-  double x = 0.0;
-  double top = 0.0;
+
   double bottom = 0 / 0;
+  double top = 0.0;
+  double x = 0.0;
 }
 
 class Block {
@@ -26,15 +27,16 @@ class Block {
     this.alignHorizontal,
     this.alignVertical,
   );
-  String name = '';
-  Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
-  Color color;
-  Color textColor = Colors.black;
+
   TextAlign alignHorizontal = TextAlign.start;
   TextAlign alignVertical = TextAlign.start;
+  Color color;
+  String name = '';
+  Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
+  Color textColor = Colors.black;
 
-  static const double minBlockHeight = 20.0;
   static const double blockWidth = 50.0;
+  static const double minBlockHeight = 20.0;
 
   void draw(final Canvas canvas) {
     if (!rect.hasNaN) {

@@ -27,13 +27,14 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewStocks;
   }
 
+  Security? lastSecuritySelected;
+
+  double _footerColumnBalance = 0.00;
   // Footer related
   final DateRange _footerColumnDate = DateRange();
-  int _footerColumnTrades = 0;
-  double _footerColumnShares = 0.00;
-  double _footerColumnBalance = 0.00;
 
-  Security? lastSecuritySelected;
+  double _footerColumnShares = 0.00;
+  int _footerColumnTrades = 0;
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 
   @override
@@ -47,36 +48,29 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget? getColumnFooterWidget(final Field field) {
+    switch (field.name) {
+      case 'Date':
+        return getFooterForDateRange(_footerColumnDate);
+      case 'Trades':
+        return getFooterForInt(_footerColumnTrades);
+      case 'Shares':
+        return getFooterForInt(_footerColumnShares.toInt());
+      case 'Balance':
+        return getFooterForAmount(_footerColumnBalance);
+      default:
+        return null;
+    }
+  }
+
+  @override
   String getDescription() {
     return 'Stocks tracking.';
   }
 
   @override
-  String getViewId() {
-    return Data().securities.getTypeName();
-  }
-
-  @override
   Fields<Security> getFieldsForTable() {
     return Security.fields;
-  }
-
-  @override
-  List<Security> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
-    _footerColumnDate.clear();
-
-    for (final item in list) {
-      _footerColumnDate.inflate(item.priceDate.value);
-      _footerColumnTrades += item.numberOfTrades.value;
-      _footerColumnShares += item.outstandingShares.value;
-      _footerColumnBalance += item.balance.getValueForDisplay(item).toDouble();
-    }
-
-    return list;
   }
 
   @override
@@ -154,19 +148,26 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Date':
-        return getFooterForDateRange(_footerColumnDate);
-      case 'Trades':
-        return getFooterForInt(_footerColumnTrades);
-      case 'Shares':
-        return getFooterForInt(_footerColumnShares.toInt());
-      case 'Balance':
-        return getFooterForAmount(_footerColumnBalance);
-      default:
-        return null;
+  List<Security> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
+    _footerColumnDate.clear();
+
+    for (final item in list) {
+      _footerColumnDate.inflate(item.priceDate.value);
+      _footerColumnTrades += item.numberOfTrades.value;
+      _footerColumnShares += item.outstandingShares.value;
+      _footerColumnBalance += item.balance.getValueForDisplay(item).toDouble();
     }
+
+    return list;
+  }
+
+  @override
+  String getViewId() {
+    return Data().securities.getTypeName();
   }
 
   List<Investment> getListOfInvestment(Security security) {
@@ -177,8 +178,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 }
 
 class SortingInstruction {
-  int column = 0;
   bool ascending = false;
+  int column = 0;
 
   SortingInstruction clone() {
     // Create a new instance with the same properties

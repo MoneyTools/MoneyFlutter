@@ -71,6 +71,7 @@ class DialogMutateMoneyObject extends StatefulWidget {
     required this.moneyObject,
     required this.onApplyChange,
   });
+
   final MoneyObject moneyObject;
   final Function(MoneyObject) onApplyChange;
 
@@ -80,6 +81,7 @@ class DialogMutateMoneyObject extends StatefulWidget {
 
 class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
   bool dataWasModified = false;
+
   late MoneyObject _moneyObject;
 
   @override

@@ -19,18 +19,19 @@ class PanelRecurrings extends StatefulWidget {
     required this.maxYear,
     required this.viewRecurringAs,
   });
-  final CashflowViewAs viewRecurringAs;
+
   final DateRange dateRangeSearch;
-  final int minYear;
   final int maxYear;
+  final int minYear;
+  final CashflowViewAs viewRecurringAs;
 
   @override
   State<PanelRecurrings> createState() => _PanelRecurringsState();
 }
 
 class _PanelRecurringsState extends State<PanelRecurrings> {
-  List<RecurringPayment> recurringPayments = [];
   late bool forIncomeTransaction;
+  List<RecurringPayment> recurringPayments = [];
 
   @override
   void initState() {
@@ -57,38 +58,6 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
             forIncomeTransaction: forIncomeTransaction,
           );
         },
-      ),
-    );
-  }
-
-  void initRecurringTransactions({required final bool forIncome}) {
-    // get all transactions meeting the request of date and type
-    bool whereClause(Transaction t) {
-      return isBetweenOrEqual(t.dateTime.value!.year, widget.minYear, widget.maxYear) &&
-          (((forIncome == true && t.amount.value.toDouble() > 0) ||
-              (forIncome == false && t.amount.value.toDouble() < 0)));
-    }
-
-    final flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
-
-    // get all transaction Income | Expenses
-    findMonthlyRecurringPayments(flatTransactions, forIncome);
-
-    // Sort descending - biggest amount first
-    if (widget.viewRecurringAs == CashflowViewAs.recurringIncomes) {
-      recurringPayments.sort((a, b) => b.total.compareTo(a.total));
-    }
-    if (widget.viewRecurringAs == CashflowViewAs.recurringExpenses) {
-      recurringPayments.sort((a, b) => a.total.compareTo(b.total));
-    }
-  }
-
-  Widget header(final BuildContext context, final String title) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      child: Text(
-        title,
-        style: getTextTheme(context).titleLarge!,
       ),
     );
   }
@@ -133,6 +102,38 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
           ),
         );
       }
+    }
+  }
+
+  Widget header(final BuildContext context, final String title) {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      child: Text(
+        title,
+        style: getTextTheme(context).titleLarge!,
+      ),
+    );
+  }
+
+  void initRecurringTransactions({required final bool forIncome}) {
+    // get all transactions meeting the request of date and type
+    bool whereClause(Transaction t) {
+      return isBetweenOrEqual(t.dateTime.value!.year, widget.minYear, widget.maxYear) &&
+          (((forIncome == true && t.amount.value.toDouble() > 0) ||
+              (forIncome == false && t.amount.value.toDouble() < 0)));
+    }
+
+    final flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
+
+    // get all transaction Income | Expenses
+    findMonthlyRecurringPayments(flatTransactions, forIncome);
+
+    // Sort descending - biggest amount first
+    if (widget.viewRecurringAs == CashflowViewAs.recurringIncomes) {
+      recurringPayments.sort((a, b) => b.total.compareTo(a.total));
+    }
+    if (widget.viewRecurringAs == CashflowViewAs.recurringExpenses) {
+      recurringPayments.sort((a, b) => a.total.compareTo(b.total));
     }
   }
 

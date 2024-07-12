@@ -15,6 +15,7 @@ class MoneyWidget extends StatelessWidget {
 
   /// Amount to display
   final MoneyModel amountModel;
+
   final bool asTile;
 
   @override

@@ -9,6 +9,20 @@ class AccumulatorList<K, V> {
     values.clear();
   }
 
+  bool containsKey(K key) {
+    return values.containsKey(key);
+  }
+
+  bool containsKeyValue(K key, V value) {
+    var setFound = values[key];
+    if (setFound == null) {
+      // the key is not a match
+      return false;
+    }
+
+    return setFound.contains(value);
+  }
+
   /// Adds a value of type `V` to the set associated with the provided `key` of type `K`.
   ///
   /// If the `key` already exists in the `values` map, it retrieves the existing set
@@ -22,10 +36,6 @@ class AccumulatorList<K, V> {
       // first time setting the set
       values[key] = <V>{value}; // Ensure type safety for the set
     }
-  }
-
-  bool containsKey(K key) {
-    return values.containsKey(key);
   }
 
   /// Returns a list of all the keys present in the `values` map.
@@ -44,16 +54,6 @@ class AccumulatorList<K, V> {
   Set<V>? getValue(K key) {
     return values[key];
   }
-
-  bool containsKeyValue(K key, V value) {
-    var setFound = values[key];
-    if (setFound == null) {
-      // the key is not a match
-      return false;
-    }
-
-    return setFound.contains(value);
-  }
 }
 
 /// Tally values
@@ -62,6 +62,10 @@ class AccumulatorSum<K, V> {
 
   void clear() {
     values.clear();
+  }
+
+  bool containsKey(K key) {
+    return values.containsKey(key);
   }
 
   void cumulate(K key, V value) {
@@ -74,8 +78,8 @@ class AccumulatorSum<K, V> {
     }
   }
 
-  bool containsKey(K key) {
-    return values.containsKey(key);
+  List<MapEntry<K, V>> getEntries() {
+    return values.entries.toList();
   }
 
   K? getKeyWithLargestSum() {
@@ -106,10 +110,6 @@ class AccumulatorSum<K, V> {
   dynamic _accumulate(V existingValue, V value) {
     return (existingValue as num) + (value as num);
   }
-
-  List<MapEntry<K, V>> getEntries() {
-    return values.entries.toList();
-  }
 }
 
 /// Tally values
@@ -120,6 +120,10 @@ class AccumulatorDateRange<K> {
     values.clear();
   }
 
+  bool containsKey(K key) {
+    return values.containsKey(key);
+  }
+
   void cumulate(K key, DateTime value) {
     if (values.containsKey(key)) {
       values[key]!.inflate(value);
@@ -128,16 +132,12 @@ class AccumulatorDateRange<K> {
     }
   }
 
-  bool containsKey(K key) {
-    return values.containsKey(key);
+  List<MapEntry<K, DateRange>> getEntries() {
+    return values.entries.toList();
   }
 
   DateRange? getValue(K key) {
     return values[key];
-  }
-
-  List<MapEntry<K, DateRange>> getEntries() {
-    return values.entries.toList();
   }
 }
 
@@ -170,10 +170,6 @@ class MapAccumulatorSet<K, I, V> {
     map[k]!.cumulate(i, v);
   }
 
-  AccumulatorList<I, V>? getLevel1(K key1) {
-    return map[key1];
-  }
-
   /// for example
   /// cumulating 'species', 'number of Legs', 'name'
   /// MapAccumulatorSet<String, int, String>
@@ -184,5 +180,9 @@ class MapAccumulatorSet<K, I, V> {
   Set<V> find(K key1, I key2) {
     final foundInLevel1 = map[key1];
     return foundInLevel1?.getValue(key2) ?? <V>{};
+  }
+
+  AccumulatorList<I, V>? getLevel1(K key1) {
+    return map[key1];
   }
 }

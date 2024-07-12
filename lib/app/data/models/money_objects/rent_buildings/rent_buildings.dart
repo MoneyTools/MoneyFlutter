@@ -9,23 +9,6 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     collectionName = 'Rental Buildings';
   }
 
-  String getNameFromId(final int id) {
-    final RentBuilding? found = get(id);
-    if (found == null) {
-      return id.toString();
-    }
-    return found.name.value;
-  }
-
-  @override
-  void loadFromJson(final List<MyJson> rows) {
-    clear();
-
-    for (final MyJson row in rows) {
-      appendMoneyObject(RentBuilding.fromJson(row));
-    }
-  }
-
   @override
   void loadDemoData() {
     clear();
@@ -35,6 +18,15 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     instance.name.value = 'AirBnB';
     instance.address.value = 'One Washington DC';
     appendMoneyObject(instance);
+  }
+
+  @override
+  void loadFromJson(final List<MyJson> rows) {
+    clear();
+
+    for (final MyJson row in rows) {
+      appendMoneyObject(RentBuilding.fromJson(row));
+    }
   }
 
   @override
@@ -51,16 +43,24 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     }
   }
 
+  @override
+  String toCSV() {
+    return MoneyObjects.getCsvFromList(
+      getListSortedById(),
+    );
+  }
+
   void cumulateTransactions(final RentBuilding rental) {
     for (Transaction t in Data().transactions.iterableList()) {
       rental.cumulatePnL(t);
     }
   }
 
-  @override
-  String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
+  String getNameFromId(final int id) {
+    final RentBuilding? found = get(id);
+    if (found == null) {
+      return id.toString();
+    }
+    return found.name.value;
   }
 }

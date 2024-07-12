@@ -79,17 +79,31 @@ class RecurringPayment {
       topN: 4,
     );
   }
-  final int payeeId;
-  final List<Transaction> transactions;
-  final bool forIncomeTransaction;
 
-  late double total;
-  late DateRange dateRangeFound;
-  late int frequency;
-  late List<double> sumPerMonths;
   late List<Pair<int, double>> averagePerMonths;
-  late List<Pair<int, double>> categoryIdsAndSums;
   late List<Distribution> categoryDistribution;
+  late List<Pair<int, double>> categoryIdsAndSums;
+  late DateRange dateRangeFound;
+  final bool forIncomeTransaction;
+  late int frequency;
+  final int payeeId;
+  late List<double> sumPerMonths;
+  late double total;
+  final List<Transaction> transactions;
+
+  double averageTwoNumbers(final double a, final double b) {
+    // (-10 - -20) = -30 / 2 = -15
+    if (a < 0 && b < 0) {
+      return (a.abs() + b.abs()) / -2;
+    }
+
+    // (+10 + 20) = +30 / 2 = +15
+    return (a + b) / 2;
+  }
+
+  List<Pair<int, double>> getListOfCategoryIdAndSum() {
+    return categoryIdsAndSums;
+  }
 
   List<Distribution> getTopDistributions({
     required RecurringPayment payment,
@@ -129,19 +143,5 @@ class RecurringPayment {
       }
     }
     return listForDistributionBar;
-  }
-
-  List<Pair<int, double>> getListOfCategoryIdAndSum() {
-    return categoryIdsAndSums;
-  }
-
-  double averageTwoNumbers(final double a, final double b) {
-    // (-10 - -20) = -30 / 2 = -15
-    if (a < 0 && b < 0) {
-      return (a.abs() + b.abs()) / -2;
-    }
-
-    // (+10 + 20) = +30 / 2 = +15
-    return (a + b) / 2;
   }
 }

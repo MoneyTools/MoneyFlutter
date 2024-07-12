@@ -28,24 +28,22 @@ class ViewCashFlow extends ViewWidget {
 
 class ViewCashFlowState extends ViewWidgetState {
   ViewCashFlowState();
-  late DateRange dateRangeTransactions;
-
-  late int selectedYearStart;
-  late int selectedYearEnd;
 
   List<Account> accountsOpened = Data().accounts.getOpenAccounts();
-  double totalIncomes = 0.00;
+  late DateRange dateRangeTransactions;
+  Map<Category, double> mapOfExpenses = <Category, double>{};
+  Map<Category, double> mapOfIncomes = <Category, double>{};
+  double padding = 10.0;
+  List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
+  List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];
+  late int selectedYearEnd;
+  late int selectedYearStart;
   double totalExpenses = 0.00;
-  double totalSavings = 0.00;
+  double totalHeight = 0.0;
+  double totalIncomes = 0.00;
   double totalInvestments = 0.00;
   double totalNones = 0.00;
-  double padding = 10.0;
-  double totalHeight = 0.0;
-
-  Map<Category, double> mapOfIncomes = <Category, double>{};
-  Map<Category, double> mapOfExpenses = <Category, double>{};
-  List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];
-  List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
+  double totalSavings = 0.00;
 
   final Debouncer _debouncer = Debouncer();
 

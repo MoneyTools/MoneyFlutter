@@ -32,6 +32,19 @@ class SnackBarService {
     );
   }
 
+  static void displayError({
+    required String message,
+    String title = 'Error',
+    bool autoDismiss = true,
+  }) {
+    return display(
+      title: title,
+      message: message,
+      autoDismiss: autoDismiss,
+      backgroundColor: getColorFromState(ColorState.error),
+    );
+  }
+
   static void displaySuccess({
     required String message,
     String title = 'OK',
@@ -55,19 +68,6 @@ class SnackBarService {
       message: message,
       autoDismiss: autoDismiss,
       backgroundColor: getColorFromState(ColorState.warning),
-    );
-  }
-
-  static void displayError({
-    required String message,
-    String title = 'Error',
-    bool autoDismiss = true,
-  }) {
-    return display(
-      title: title,
-      message: message,
-      autoDismiss: autoDismiss,
-      backgroundColor: getColorFromState(ColorState.error),
     );
   }
 }

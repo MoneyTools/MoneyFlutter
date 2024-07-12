@@ -9,6 +9,7 @@ class SuggestionApproval extends StatefulWidget {
     required this.onRejected,
     required this.child,
   });
+
   final Widget child;
   final Function onApproved;
   final Function onRejected;
@@ -20,9 +21,14 @@ class SuggestionApproval extends StatefulWidget {
 class SuggestionApprovalState extends State<SuggestionApproval> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _iconOpacityAnimation;
-
   bool _isApproved = false;
   bool _isRejected = false;
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -38,32 +44,6 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
         curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  void _approved() {
-    _animationController.forward().then((_) {
-      setState(() {
-        _isApproved = true;
-        _isRejected = false;
-        widget.onApproved();
-      });
-    });
-  }
-
-  void _reject() {
-    _animationController.forward().then((_) {
-      setState(() {
-        _isRejected = true;
-        _isApproved = false;
-        widget.onRejected();
-      });
-    });
   }
 
   @override
@@ -100,4 +80,24 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
   }
 
   bool get shouldShowButton => _isApproved == false && _isRejected == false;
+
+  void _approved() {
+    _animationController.forward().then((_) {
+      setState(() {
+        _isApproved = true;
+        _isRejected = false;
+        widget.onApproved();
+      });
+    });
+  }
+
+  void _reject() {
+    _animationController.forward().then((_) {
+      setState(() {
+        _isRejected = true;
+        _isApproved = false;
+        widget.onRejected();
+      });
+    });
+  }
 }

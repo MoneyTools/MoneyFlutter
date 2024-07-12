@@ -17,20 +17,21 @@ class ListViewTransactions extends StatefulWidget {
     this.sortAscending = true,
     this.onUserChoiceChanged,
   });
+
+  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
   final List<Field> columnsToInclude;
   final List<Transaction> Function() getList;
-  final int sortFieldIndex;
-  final bool sortAscending;
   final SelectionController selectionController;
-  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
+  final bool sortAscending;
+  final int sortFieldIndex;
 
   @override
   State<ListViewTransactions> createState() => _ListViewTransactionsState();
 }
 
 class _ListViewTransactionsState extends State<ListViewTransactions> {
-  late int _sortBy = widget.sortFieldIndex;
   late bool _sortAscending = widget.sortAscending;
+  late int _sortBy = widget.sortFieldIndex;
 
   @override
   Widget build(final BuildContext context) {

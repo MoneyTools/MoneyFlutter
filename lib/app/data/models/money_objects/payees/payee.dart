@@ -25,32 +25,20 @@ class Payee extends MoneyObject {
   factory Payee.fromJson(final MyJson row) {
     return Payee();
   }
-  static final _fields = Fields<Payee>();
 
-  static Fields<Payee> get fields {
-    if (_fields.isEmpty) {
-      final tmp = Payee.fromJson({});
-      _fields.setDefinitions([
-        tmp.id,
-        tmp.name,
-        tmp.categoriesAsText,
-        tmp.count,
-        tmp.sum,
-      ]);
-    }
-    return _fields;
-  }
+  Set<String> categories = {};
+  FieldString categoriesAsText = FieldString(
+    importance: 2,
+    name: 'Categories',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
+  );
 
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  @override
-  String getRepresentation() {
-    return name.value;
-  }
+  FieldQuantity count = FieldQuantity(
+    importance: 98,
+    name: 'Transactions',
+    columnWidth: ColumnWidth.small,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).count.value,
+  );
 
   // 0
   FieldId id = FieldId(
@@ -67,33 +55,41 @@ class Payee extends MoneyObject {
     setValue: (final MoneyObject instance, dynamic value) => (instance as Payee).name.value = value as String,
   );
 
-  FieldString categoriesAsText = FieldString(
-    importance: 2,
-    name: 'Categories',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
-  );
-
-  FieldQuantity count = FieldQuantity(
-    importance: 98,
-    name: 'Transactions',
-    columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).count.value,
-  );
-
   FieldMoney sum = FieldMoney(
     importance: 99,
     name: 'Sum',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).sum.value,
   );
 
-  Set<String> categories = {};
-
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
-  static String getName(final Payee? payee) {
-    return payee == null ? '' : payee.name.value;
+  @override
+  String getRepresentation() {
+    return name.value;
+  }
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
+
+  static final _fields = Fields<Payee>();
+
+  static Fields<Payee> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Payee.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.name,
+        tmp.categoriesAsText,
+        tmp.count,
+        tmp.sum,
+      ]);
+    }
+    return _fields;
   }
 
   String getCategoriesAsString() {
@@ -108,5 +104,9 @@ class Payee extends MoneyObject {
       return categories.join('; ');
     }
     return '${getIntAsText(categories.length)} categories';
+  }
+
+  static String getName(final Payee? payee) {
+    return payee == null ? '' : payee.name.value;
   }
 }

@@ -24,27 +24,20 @@ class AccountAlias extends MoneyObject {
       ..flags.value = row.getInt('Flag', 0)
       ..accountId.value = row.getString('AccountId');
   }
-  static final _fields = Fields<AccountAlias>();
 
-  static Fields<AccountAlias> get fields {
-    if (_fields.isEmpty) {
-      final tmp = AccountAlias.fromJson({});
-      _fields.setDefinitions(
-        [
-          tmp.id,
-          tmp.pattern,
-          tmp.flags,
-          tmp.accountId,
-        ],
-      );
-    }
-    return _fields;
-  }
+  // 3
+  Field<String> accountId = Field<String>(
+    importance: 3,
+    serializeName: 'AccountId',
+    defaultValue: '',
+  );
 
-  @override
-  String getRepresentation() {
-    return '${pattern.value} ${accountId.value}';
-  }
+  // 2
+  Field<int> flags = Field<int>(
+    importance: 2,
+    serializeName: 'Flags',
+    defaultValue: 0,
+  );
 
   // 0
   Field<int> id = Field<int>(
@@ -62,23 +55,31 @@ class AccountAlias extends MoneyObject {
     defaultValue: '',
   );
 
-  // 2
-  Field<int> flags = Field<int>(
-    importance: 2,
-    serializeName: 'Flags',
-    defaultValue: 0,
-  );
-
-  // 3
-  Field<String> accountId = Field<String>(
-    importance: 3,
-    serializeName: 'AccountId',
-    defaultValue: '',
-  );
+  @override
+  String getRepresentation() {
+    return '${pattern.value} ${accountId.value}';
+  }
 
   @override
   int get uniqueId => id.value;
 
   @override
   set uniqueId(value) => id.value = value;
+
+  static final _fields = Fields<AccountAlias>();
+
+  static Fields<AccountAlias> get fields {
+    if (_fields.isEmpty) {
+      final tmp = AccountAlias.fromJson({});
+      _fields.setDefinitions(
+        [
+          tmp.id,
+          tmp.pattern,
+          tmp.flags,
+          tmp.accountId,
+        ],
+      );
+    }
+    return _fields;
+  }
 }

@@ -71,8 +71,11 @@ class Currencies extends MoneyObjects<Currency> {
     }
   }
 
-  Currency? getCurrencyFromSymbol(final String symbolToMatch) {
-    return iterableList().firstWhereOrNull((currency) => currency.symbol.value == symbolToMatch);
+  @override
+  String toCSV() {
+    return MoneyObjects.getCsvFromList(
+      getListSortedById(),
+    );
   }
 
   String fromSymbolToCountryAlpha2(final String symbol) {
@@ -83,18 +86,15 @@ class Currencies extends MoneyObjects<Currency> {
     return currency.cultureCode.value;
   }
 
+  Currency? getCurrencyFromSymbol(final String symbolToMatch) {
+    return iterableList().firstWhereOrNull((currency) => currency.symbol.value == symbolToMatch);
+  }
+
   double getRatioFromSymbol(final String symbol) {
     Currency? currency = getCurrencyFromSymbol(symbol);
     if (currency == null) {
       return 1;
     }
     return currency.ratio.value;
-  }
-
-  @override
-  String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
   }
 }

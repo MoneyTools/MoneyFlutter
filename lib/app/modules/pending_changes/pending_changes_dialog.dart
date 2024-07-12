@@ -45,8 +45,6 @@ class PendingChangesDialog extends StatefulWidget {
 }
 
 class _PendingChangesDialogState extends State<PendingChangesDialog> {
-  bool _isLoading = true;
-
   final List<Mutations> _data = [
     Mutations(
       typeOfMutation: MutationType.inserted,
@@ -66,28 +64,12 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
   ];
 
   int _displayMutationType = 0; // 0=Added, 1=Modified, 2=Deleted
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     _load();
-  }
-
-  void _load() {
-    for (final Mutations m in _data) {
-      m.initMutationList();
-    }
-    setState(() {
-      _isLoading = false;
-
-      // default to the first segment that has a count
-      for (int i = 0; i < _data.length; i++) {
-        if (_data[i].count > 0) {
-          _displayMutationType = i;
-          break;
-        }
-      }
-    });
   }
 
   @override
@@ -127,6 +109,24 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
           });
         },
       ),
+    );
+  }
+
+  Widget _buildListOfDetailsOfSelectedGroup(Mutations mutations) {
+    if (mutations.selectedGroup >= mutations.mutationGroups.length) {
+      return Center(child: Text('No items were ${mutations.title}'));
+    }
+
+    final MutationGroup g = mutations.mutationGroups[mutations.selectedGroup];
+
+    return ListView.separated(
+      itemCount: g.whatWasMutated.length,
+      itemBuilder: (context, index) {
+        return g.whatWasMutated[index];
+      },
+      separatorBuilder: (BuildContext context, int index) {
+        return const Divider();
+      },
     );
   }
 
@@ -170,22 +170,21 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
     return Wrap(spacing: 10, runSpacing: 10, children: groupSelectors);
   }
 
-  Widget _buildListOfDetailsOfSelectedGroup(Mutations mutations) {
-    if (mutations.selectedGroup >= mutations.mutationGroups.length) {
-      return Center(child: Text('No items were ${mutations.title}'));
+  void _load() {
+    for (final Mutations m in _data) {
+      m.initMutationList();
     }
+    setState(() {
+      _isLoading = false;
 
-    final MutationGroup g = mutations.mutationGroups[mutations.selectedGroup];
-
-    return ListView.separated(
-      itemCount: g.whatWasMutated.length,
-      itemBuilder: (context, index) {
-        return g.whatWasMutated[index];
-      },
-      separatorBuilder: (BuildContext context, int index) {
-        return const Divider();
-      },
-    );
+      // default to the first segment that has a count
+      for (int i = 0; i < _data.length; i++) {
+        if (_data[i].count > 0) {
+          _displayMutationType = i;
+          break;
+        }
+      }
+    });
   }
 }
 
@@ -195,13 +194,20 @@ class Mutations {
     required this.title,
     required this.color,
   });
-  MutationType typeOfMutation;
-  String title;
+
   Color color;
   int count = 0;
-  int selectedGroup = 0;
-
   List<MutationGroup> mutationGroups = [];
+  int selectedGroup = 0;
+  String title;
+  MutationType typeOfMutation;
+
+  String get fullTitle {
+    if (count == 0) {
+      return 'None $title';
+    }
+    return '${getIntAsText(count)} $title';
+  }
 
   void initMutationList() {
     count = 0;
@@ -210,12 +216,5 @@ class Mutations {
     for (final m in mutationGroups) {
       count += m.whatWasMutated.length;
     }
-  }
-
-  String get fullTitle {
-    if (count == 0) {
-      return 'None $title';
-    }
-    return '${getIntAsText(count)} $title';
   }
 }

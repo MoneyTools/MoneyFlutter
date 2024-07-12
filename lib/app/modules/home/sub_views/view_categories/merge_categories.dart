@@ -81,6 +81,24 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
     );
   }
 
+  Widget _buildActionOffering(final String text, Widget action) {
+    return SizedBox(
+      width: 250,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: action,
+          ),
+          gapMedium(),
+          Text(text),
+          gapMedium(),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActionPanel() {
     final from = widget.categoryToMove.name.value;
     final to = _categoryPicked.name.value;
@@ -149,24 +167,6 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
               child: const Text('Merge'),
             ),
           ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildActionOffering(final String text, Widget action) {
-    return SizedBox(
-      width: 250,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: action,
-          ),
-          gapMedium(),
-          Text(text),
-          gapMedium(),
         ],
       ),
     );

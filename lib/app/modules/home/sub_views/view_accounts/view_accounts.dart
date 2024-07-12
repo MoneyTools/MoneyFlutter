@@ -43,73 +43,18 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewAccounts;
   }
 
-  // Filter related
-  final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
-  final List<Widget> _pivots = <Widget>[];
-
   // Footer related
   final DateRange _footerColumnDate = DateRange();
+
   int _footerCountTransactions = 0;
   double _footerSumBalance = 0.00;
+  final List<Widget> _pivots = <Widget>[];
+  // Filter related
+  final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
 
   @override
-  void initState() {
-    super.initState();
-
-    onAddTransaction = () {
-      showImportTransactionsWizard(context);
-    };
-
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Banks',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0)),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Investments',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1)),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Credit',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2)),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Assets',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3)),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'All',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1)),
-        ),
-      ),
-    );
+  Widget buildHeader([final Widget? child]) {
+    return super.buildHeader(renderToggles());
   }
 
   @override
@@ -119,59 +64,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     if (oldWidget.includeClosedAccount != widget.includeClosedAccount) {
       list = getList();
     }
-  }
-
-  @override
-  String getClassNameSingular() {
-    return 'Account';
-  }
-
-  @override
-  String getClassNamePlural() {
-    return 'Accounts';
-  }
-
-  @override
-  String getDescription() {
-    return 'Your main assets.';
-  }
-
-  @override
-  String getViewId() {
-    return Data().accounts.getTypeName();
-  }
-
-  @override
-  Fields<Account> getFieldsForTable() {
-    return Account.fields;
-  }
-
-  // default currency for this view
-  @override
-  List<String> getCurrencyChoices(
-    final InfoPanelSubViewEnum subViewId,
-    final List<int> selectedItems,
-  ) {
-    switch (subViewId) {
-      case InfoPanelSubViewEnum.chart: // Chart
-      case InfoPanelSubViewEnum.transactions: // Transactions
-        final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
-        if (account != null) {
-          if (account.currency.value != Constants.defaultCurrency) {
-            // only offer currency toggle if the account is not USD based
-            return [account.currency.value, Constants.defaultCurrency];
-          }
-        }
-
-        return [Constants.defaultCurrency];
-      default:
-        return [];
-    }
-  }
-
-  @override
-  Widget buildHeader([final Widget? child]) {
-    return super.buildHeader(renderToggles());
   }
 
   @override
@@ -273,6 +165,16 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  String getClassNamePlural() {
+    return 'Accounts';
+  }
+
+  @override
+  String getClassNameSingular() {
+    return 'Account';
+  }
+
+  @override
   Widget? getColumnFooterWidget(final Field field) {
     switch (field.name) {
       case 'Transactions':
@@ -286,32 +188,37 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     }
   }
 
+  // default currency for this view
   @override
-  List<Account> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    List<Account> list = Data().accounts.activeAccount(
-          getSelectedAccountType(),
-          isActive: PreferenceController.to.includeClosedAccounts ? null : true,
-        );
+  List<String> getCurrencyChoices(
+    final InfoPanelSubViewEnum subViewId,
+    final List<int> selectedItems,
+  ) {
+    switch (subViewId) {
+      case InfoPanelSubViewEnum.chart: // Chart
+      case InfoPanelSubViewEnum.transactions: // Transactions
+        final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
+        if (account != null) {
+          if (account.currency.value != Constants.defaultCurrency) {
+            // only offer currency toggle if the account is not USD based
+            return [account.currency.value, Constants.defaultCurrency];
+          }
+        }
 
-    if (applyFilter) {
-      list = list.where((final Account instance) => isMatchingFilters(instance)).toList();
-    } else {
-      list = list.toList();
+        return [Constants.defaultCurrency];
+      default:
+        return [];
     }
+  }
 
-    _footerCountTransactions = 0;
-    _footerSumBalance = 0.00;
-    _footerColumnDate.clear();
+  @override
+  String getDescription() {
+    return 'Your main assets.';
+  }
 
-    for (final account in list) {
-      _footerCountTransactions += account.count.value.toInt();
-      _footerSumBalance += (account.balanceNormalized.getValueForDisplay(account) as MoneyModel).toDouble();
-      _footerColumnDate.inflate(account.updatedOn.value);
-    }
-    return list;
+  @override
+  Fields<Account> getFieldsForTable() {
+    return Account.fields;
   }
 
   @override
@@ -355,5 +262,98 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       return getTransactionForLastSelectedAccount(account);
     }
     return [];
+  }
+
+  @override
+  List<Account> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    List<Account> list = Data().accounts.activeAccount(
+          getSelectedAccountType(),
+          isActive: PreferenceController.to.includeClosedAccounts ? null : true,
+        );
+
+    if (applyFilter) {
+      list = list.where((final Account instance) => isMatchingFilters(instance)).toList();
+    } else {
+      list = list.toList();
+    }
+
+    _footerCountTransactions = 0;
+    _footerSumBalance = 0.00;
+    _footerColumnDate.clear();
+
+    for (final account in list) {
+      _footerCountTransactions += account.count.value.toInt();
+      _footerSumBalance += (account.balanceNormalized.getValueForDisplay(account) as MoneyModel).toDouble();
+      _footerColumnDate.inflate(account.updatedOn.value);
+    }
+    return list;
+  }
+
+  @override
+  String getViewId() {
+    return Data().accounts.getTypeName();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    onAddTransaction = () {
+      showImportTransactionsWizard(context);
+    };
+
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Banks',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(0)),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Investments',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(1)),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Credit',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(2)),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Assets',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(3)),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          getTotalBalanceOfAccounts(getSelectedAccountTypesByIndex(-1)),
+        ),
+      ),
+    );
   }
 }

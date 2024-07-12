@@ -12,6 +12,7 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 class StockPrice {
   /// Constructor
   const StockPrice({required this.date, required this.price});
+
   final DateTime date;
   final double price;
 }

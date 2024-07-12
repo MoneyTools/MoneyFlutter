@@ -12,14 +12,6 @@ class Securities extends MoneyObjects<Security> {
     collectionName = 'Securities';
   }
 
-  String getSymbolFromId(final int securityId) {
-    final Security? security = get(securityId);
-    if (security == null) {
-      return '?$security?';
-    }
-    return security.symbol.value;
-  }
-
   @override
   void loadFromJson(final List<MyJson> rows) {
     clear();
@@ -44,5 +36,13 @@ class Securities extends MoneyObjects<Security> {
     return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
+  }
+
+  String getSymbolFromId(final int securityId) {
+    final Security? security = get(securityId);
+    if (security == null) {
+      return '?$security?';
+    }
+    return security.symbol.value;
   }
 }

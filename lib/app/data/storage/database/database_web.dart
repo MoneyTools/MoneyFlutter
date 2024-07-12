@@ -7,6 +7,14 @@ import 'package:sqlite3/wasm.dart';
 class MyDatabaseImplementation {
   late final CommonDatabase _db;
 
+  /// SQL Delete
+  void delete(final String tableName, final int id) {}
+
+  void dispose() {}
+
+  /// SQL Insert
+  void insert(final String tableName, final MyJson data) {}
+
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     _db = await sqliteLoadFromMemory(fileBytes);
     // debugLog(_db.toString());
@@ -16,16 +24,8 @@ class MyDatabaseImplementation {
     return _db.select(query);
   }
 
-  /// SQL Insert
-  void insert(final String tableName, final MyJson data) {}
-
-  /// SQL Delete
-  void delete(final String tableName, final int id) {}
-
   /// SQL Update
   void update(final String tableName, final int id, final MyJson jsonMap) {}
-
-  void dispose() {}
 }
 
 Future<CommonDatabase> sqliteLoadFromMemory(Uint8List fileBytes) async {

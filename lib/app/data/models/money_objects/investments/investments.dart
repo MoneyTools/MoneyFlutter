@@ -29,6 +29,13 @@ class Investments extends MoneyObjects<Investment> {
     }
   }
 
+  @override
+  String toCSV() {
+    return MoneyObjects.getCsvFromList(
+      getListSortedById(),
+    );
+  }
+
   static void calculateRunningBalance(List<Investment> investments) {
     // first sort by date, TradeType, Amount
     investments.sort(
@@ -40,6 +47,10 @@ class Investments extends MoneyObjects<Investment> {
       runningBalance += investment.finalAmount.amount;
       investment.runningBalance.value.setAmount(runningBalance);
     }
+  }
+
+  static List<Investment> getInvestmentsFromSecurity(final int securityId) {
+    return Data().investments.iterableList().where((item) => item.security.value == securityId).toList();
   }
 
   static StockCumulative getProfitAndShares(List<Investment> investments) {
@@ -55,16 +66,5 @@ class Investments extends MoneyObjects<Investment> {
       cumulative.amount += investment.finalAmount.amount;
     }
     return cumulative;
-  }
-
-  static List<Investment> getInvestmentsFromSecurity(final int securityId) {
-    return Data().investments.iterableList().where((item) => item.security.value == securityId).toList();
-  }
-
-  @override
-  String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
   }
 }

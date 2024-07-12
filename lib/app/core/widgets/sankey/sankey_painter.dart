@@ -19,21 +19,16 @@ class SankeyPainter extends CustomPainter {
     required this.colors,
     required this.compactView,
   });
-  final List<SanKeyEntry> listOfIncomes;
-  final List<SanKeyEntry> listOfExpenses;
-  final bool compactView;
-  double gap = Constants.gapBetweenChannels;
-  double topOfCenters = Constants.gapBetweenChannels * 2;
-  double columnWidth = 0;
 
   // double incomeHeight = Constants.targetHeight;
   SankeyColors colors;
 
-  @override
-  bool shouldRepaint(final SankeyPainter oldDelegate) => true;
-
-  @override
-  bool shouldRebuildSemantics(final SankeyPainter oldDelegate) => false;
+  double columnWidth = 0;
+  final bool compactView;
+  double gap = Constants.gapBetweenChannels;
+  final List<SanKeyEntry> listOfExpenses;
+  final List<SanKeyEntry> listOfIncomes;
+  double topOfCenters = Constants.gapBetweenChannels * 2;
 
   @override
   void paint(final Canvas canvas, final Size size) {
@@ -155,6 +150,63 @@ class SankeyPainter extends CustomPainter {
     );
   }
 
+  @override
+  bool shouldRebuildSemantics(final SankeyPainter oldDelegate) => false;
+
+  @override
+  bool shouldRepaint(final SankeyPainter oldDelegate) => true;
+
+  // Box for "Net Profit/Lost"
+  // The box may show on both side
+  // The right when depicting a "Net Profit"
+  // or
+  // The left when depicting a "Net Lost"
+  Block buildSegmentForNetProfitLost(
+    double netAmount,
+    double lastHeight,
+    double ratioIncomeToExpense,
+    double horizontalCenter,
+    Block targetRevenues,
+    Block targetExpenses,
+  ) {
+    lastHeight = ratioIncomeToExpense * netAmount.abs();
+    lastHeight = max(Block.minBlockHeight, lastHeight);
+
+    String text = 'Net ';
+    late Rect rect;
+    if (netAmount < 0) {
+      // Net Lost
+      text += 'Lost\n';
+      rect = ui.Rect.fromLTWH(
+        horizontalCenter - (columnWidth + gap),
+        targetRevenues.rect.bottom + (gap),
+        columnWidth,
+        lastHeight,
+      );
+    } else {
+      // Net Profit
+      text += 'Profit\n';
+      rect = ui.Rect.fromLTWH(
+        horizontalCenter + (columnWidth * 0.1),
+        targetExpenses.rect.bottom + (gap),
+        columnWidth,
+        lastHeight,
+      );
+    }
+    text += getAmountAsShorthandText(netAmount);
+
+    final Block targetNet = Block(
+      text,
+      rect,
+      colors.colorNet,
+      colors.textColor,
+      TextAlign.center,
+      TextAlign.center,
+    );
+
+    return targetNet;
+  }
+
   // Box for "Net Profit/Lost"
   // The box may show on both side
   // The right when depicting a "Net Profit"
@@ -212,57 +264,6 @@ class SankeyPainter extends CustomPainter {
       end: netEnd,
       color: colors.colorNet,
     );
-  }
-
-  // Box for "Net Profit/Lost"
-  // The box may show on both side
-  // The right when depicting a "Net Profit"
-  // or
-  // The left when depicting a "Net Lost"
-  Block buildSegmentForNetProfitLost(
-    double netAmount,
-    double lastHeight,
-    double ratioIncomeToExpense,
-    double horizontalCenter,
-    Block targetRevenues,
-    Block targetExpenses,
-  ) {
-    lastHeight = ratioIncomeToExpense * netAmount.abs();
-    lastHeight = max(Block.minBlockHeight, lastHeight);
-
-    String text = 'Net ';
-    late Rect rect;
-    if (netAmount < 0) {
-      // Net Lost
-      text += 'Lost\n';
-      rect = ui.Rect.fromLTWH(
-        horizontalCenter - (columnWidth + gap),
-        targetRevenues.rect.bottom + (gap),
-        columnWidth,
-        lastHeight,
-      );
-    } else {
-      // Net Profit
-      text += 'Profit\n';
-      rect = ui.Rect.fromLTWH(
-        horizontalCenter + (columnWidth * 0.1),
-        targetExpenses.rect.bottom + (gap),
-        columnWidth,
-        lastHeight,
-      );
-    }
-    text += getAmountAsShorthandText(netAmount);
-
-    final Block targetNet = Block(
-      text,
-      rect,
-      colors.colorNet,
-      colors.textColor,
-      TextAlign.center,
-      TextAlign.center,
-    );
-
-    return targetNet;
   }
 
   double renderSourcesToTarget(

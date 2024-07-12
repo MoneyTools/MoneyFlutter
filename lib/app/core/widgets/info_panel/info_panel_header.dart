@@ -16,20 +16,21 @@ class InfoPanelHeader extends StatelessWidget {
     required this.actionButtons,
     super.key,
   });
-  final bool isExpanded;
-  final Function onExpanded;
-
-  // SubView
-  final InfoPanelSubViewEnum subViewSelected;
-  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
-
-  // Currency
-  final List<String> currencyChoices;
-  final int currencySelected;
-  final Function currentSelectionChanged;
 
   // Actions
   final List<Widget> Function(bool) actionButtons;
+
+  // Currency
+  final List<String> currencyChoices;
+
+  final int currencySelected;
+  final Function currentSelectionChanged;
+  final bool isExpanded;
+  final Function onExpanded;
+  // SubView
+  final InfoPanelSubViewEnum subViewSelected;
+
+  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
 
   @override
   Widget build(final BuildContext context) {
@@ -56,43 +57,6 @@ class InfoPanelHeader extends StatelessWidget {
               ],
             ),
           ),
-        );
-      },
-    );
-  }
-
-  Widget _buildViewSelections(final BoxConstraints constraints) {
-    final bool smallDevice = constraints.maxWidth < 700;
-
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      showSelectedIcon: constraints.maxWidth > 1000,
-      segments: <ButtonSegment<int>>[
-        ButtonSegment<int>(
-          value: 0,
-          label: smallDevice ? null : const Text('Details'),
-          icon: const Icon(Icons.info_outline),
-        ),
-        ButtonSegment<int>(
-          value: 1,
-          label: smallDevice ? null : const Text('Chart'),
-          icon: const Icon(Icons.bar_chart),
-        ),
-        ButtonSegment<int>(
-          value: 2,
-          label: smallDevice ? null : const Text('Transactions'),
-          icon: const Icon(Icons.calendar_view_day),
-        ),
-      ],
-      selected: <int>{subViewSelected.index},
-      onSelectionChanged: (final Set<int> newSelection) {
-        if (!isExpanded) {
-          onExpanded(true);
-        }
-        subViewSelectionChanged(
-          InfoPanelSubViewEnum.values[newSelection.first],
         );
       },
     );
@@ -139,6 +103,43 @@ class InfoPanelHeader extends StatelessWidget {
       },
       icon: Icon(isExpanded ? Icons.expand_more : Icons.expand_less),
       tooltip: 'Expand/Collapse panel',
+    );
+  }
+
+  Widget _buildViewSelections(final BoxConstraints constraints) {
+    final bool smallDevice = constraints.maxWidth < 700;
+
+    return SegmentedButton<int>(
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
+      showSelectedIcon: constraints.maxWidth > 1000,
+      segments: <ButtonSegment<int>>[
+        ButtonSegment<int>(
+          value: 0,
+          label: smallDevice ? null : const Text('Details'),
+          icon: const Icon(Icons.info_outline),
+        ),
+        ButtonSegment<int>(
+          value: 1,
+          label: smallDevice ? null : const Text('Chart'),
+          icon: const Icon(Icons.bar_chart),
+        ),
+        ButtonSegment<int>(
+          value: 2,
+          label: smallDevice ? null : const Text('Transactions'),
+          icon: const Icon(Icons.calendar_view_day),
+        ),
+      ],
+      selected: <int>{subViewSelected.index},
+      onSelectionChanged: (final Set<int> newSelection) {
+        if (!isExpanded) {
+          onExpanded(true);
+        }
+        subViewSelectionChanged(
+          InfoPanelSubViewEnum.values[newSelection.first],
+        );
+      },
     );
   }
 }

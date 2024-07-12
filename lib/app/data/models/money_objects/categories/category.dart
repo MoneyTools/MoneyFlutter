@@ -86,112 +86,25 @@ class Category extends MoneyObject {
       taxRefNum: row.getInt('TaxRefNum'),
     );
   }
-  static final _fields = Fields<Category>();
 
-  static Fields<Category> get fields {
-    if (_fields.isEmpty) {
-      final tmp = Category.fromJson({});
-      _fields.setDefinitions([
-        tmp.id,
-        tmp.parentId,
-        tmp.color,
-        tmp.level,
-        tmp.name,
-        tmp.description,
-        tmp.type,
-        tmp.budget,
-        tmp.budgetBalance,
-        tmp.frequency,
-        tmp.taxRefNum,
-        tmp.transactionCount,
-        tmp.sum,
-        tmp.transactionCountRollup,
-        tmp.sumRollup,
-      ]);
-    }
-    return _fields;
-  }
-
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  @override
-  String getRepresentation() {
-    return name.value;
-  }
-
-  /// Id
-  /// 0|Id|INT|0||1
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).uniqueId,
-  );
-
-  /// 1|ParentId|INT|0||0
-  FieldInt parentId = FieldInt(
-    importance: 1,
-    name: 'ParentId',
-    serializeName: 'ParentId',
+  /// Budget
+  /// 6|Budget|money|0||0
+  FieldMoney budget = FieldMoney(
+    importance: 99,
+    name: 'Budget',
     useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).parentId.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).budget.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value.toDouble(),
   );
 
-  /// Name
-  /// 2|Name|nvarchar(80)|1||0
-  FieldString name = FieldString(
-    importance: 2,
-    columnWidth: ColumnWidth.largest,
-    name: 'Name',
-    serializeName: 'Name',
-    type: FieldType.widget,
-    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Category).name.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).name.value = value,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-      (a as Category).name.value,
-      (b as Category).name.value,
-      ascending,
-    ),
-  );
-
-  /// Description
-  /// 3|Description|nvarchar(255)|0||0
-  FieldString description = FieldString(
-    importance: 3,
-    columnWidth: ColumnWidth.large,
-    name: 'Description',
-    serializeName: 'Description',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).description.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).description.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).description.value = value,
-  );
-
-  /// Type
-  /// 4|Type|INT|1||0
-  Field<CategoryType> type = Field<CategoryType>(
-    importance: 4,
-    type: FieldType.text,
-    align: TextAlign.center,
-    serializeName: 'Type',
-    defaultValue: CategoryType.none,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).type.value.index,
-    setValue: (final MoneyObject instance, final dynamic value) {
-      (instance as Category).type.value = CategoryType.values[value as int];
-    },
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
-      final i = instance as Category;
-      return pickerCategoryType(
-        itemSelected: i.type.value,
-        onSelected: (CategoryType selectedType) {
-          i.type.value = selectedType;
-          onEdited(true);
-        },
-      );
-    },
+  /// Budget Balance
+  /// 7|Balance|money|0||0
+  FieldMoney budgetBalance = FieldMoney(
+    importance: 80,
+    name: 'BudgetBalance',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value.toDouble(),
   );
 
   /// Color
@@ -229,24 +142,16 @@ class Category extends MoneyObject {
     ),
   );
 
-  /// Budget
-  /// 6|Budget|money|0||0
-  FieldMoney budget = FieldMoney(
-    importance: 99,
-    name: 'Budget',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).budget.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value.toDouble(),
-  );
-
-  /// Budget Balance
-  /// 7|Balance|money|0||0
-  FieldMoney budgetBalance = FieldMoney(
-    importance: 80,
-    name: 'BudgetBalance',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value.toDouble(),
+  /// Description
+  /// 3|Description|nvarchar(255)|0||0
+  FieldString description = FieldString(
+    importance: 3,
+    columnWidth: ColumnWidth.large,
+    name: 'Description',
+    serializeName: 'Description',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).description.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).description.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).description.value = value,
   );
 
   /// 8|Frequency|INT|0||0
@@ -258,13 +163,10 @@ class Category extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
   );
 
-  /// 9|TaxRefNum|INT|0||0
-  FieldInt taxRefNum = FieldInt(
-    importance: 80,
-    serializeName: 'TaxRefNum',
-    useAsColumn: false,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).taxRefNum.value,
+  /// Id
+  /// 0|Id|INT|0||1
+  FieldId id = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).uniqueId,
   );
 
   //-----------------------------------
@@ -280,12 +182,32 @@ class Category extends MoneyObject {
         countOccurrences((instance as Category).name.value, ':').toDouble() + 1,
   );
 
-  /// Count
-  FieldQuantity transactionCount = FieldQuantity(
-    importance: 98,
-    name: '#T',
-    columnWidth: ColumnWidth.tiny,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCount.value,
+  /// Name
+  /// 2|Name|nvarchar(80)|1||0
+  FieldString name = FieldString(
+    importance: 2,
+    columnWidth: ColumnWidth.largest,
+    name: 'Name',
+    serializeName: 'Name',
+    type: FieldType.widget,
+    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Category).name.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).name.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).name.value = value,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Category).name.value,
+      (b as Category).name.value,
+      ascending,
+    ),
+  );
+
+  /// 1|ParentId|INT|0||0
+  FieldInt parentId = FieldInt(
+    importance: 1,
+    name: 'ParentId',
+    serializeName: 'ParentId',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).parentId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
   );
 
   /// Running Balance
@@ -293,6 +215,30 @@ class Category extends MoneyObject {
     importance: 99,
     name: 'Sum',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).sum.value,
+  );
+
+  /// Running Balance
+  FieldMoney sumRollup = FieldMoney(
+    importance: 99,
+    name: 'Sum~',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).sumRollup.value,
+  );
+
+  /// 9|TaxRefNum|INT|0||0
+  FieldInt taxRefNum = FieldInt(
+    importance: 80,
+    serializeName: 'TaxRefNum',
+    useAsColumn: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).taxRefNum.value,
+  );
+
+  /// Count
+  FieldQuantity transactionCount = FieldQuantity(
+    importance: 98,
+    name: '#T',
+    columnWidth: ColumnWidth.tiny,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCount.value,
   );
 
   /// Count
@@ -303,16 +249,98 @@ class Category extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCountRollup.value,
   );
 
-  /// Running Balance
-  FieldMoney sumRollup = FieldMoney(
-    importance: 99,
-    name: 'Sum~',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Category).sumRollup.value,
+  /// Type
+  /// 4|Type|INT|1||0
+  Field<CategoryType> type = Field<CategoryType>(
+    importance: 4,
+    type: FieldType.text,
+    align: TextAlign.center,
+    serializeName: 'Type',
+    defaultValue: CategoryType.none,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).type.value.index,
+    setValue: (final MoneyObject instance, final dynamic value) {
+      (instance as Category).type.value = CategoryType.values[value as int];
+    },
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      final i = instance as Category;
+      return pickerCategoryType(
+        itemSelected: i.type.value,
+        onSelected: (CategoryType selectedType) {
+          i.type.value = selectedType;
+          onEdited(true);
+        },
+      );
+    },
   );
 
-  Color getColorOrAncestorsColor() {
-    final pair = getColorAndLevel(0);
-    return pair.first;
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  @override
+  String getRepresentation() {
+    return name.value;
+  }
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
+
+  static final _fields = Fields<Category>();
+
+  static Fields<Category> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Category.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.parentId,
+        tmp.color,
+        tmp.level,
+        tmp.name,
+        tmp.description,
+        tmp.type,
+        tmp.budget,
+        tmp.budgetBalance,
+        tmp.frequency,
+        tmp.taxRefNum,
+        tmp.transactionCount,
+        tmp.sum,
+        tmp.transactionCountRollup,
+        tmp.sumRollup,
+      ]);
+    }
+    return _fields;
+  }
+
+  void getAncestors(List<Category> list) {
+    if (parentCategory != null) {
+      list.add(parentCategory!);
+      parentCategory!.getAncestors(list);
+    }
+  }
+
+  static CategoryType getCategoryTypeFromName(final String categoyTypeName) {
+    try {
+      return CategoryType.values.byName(categoyTypeName.toLowerCase());
+    } catch (_) {
+      return CategoryType.none;
+    }
+  }
+
+  static List<String> getCategoryTypes() {
+    return [
+      getTextFromType(CategoryType.income),
+      getTextFromType(CategoryType.expense),
+      getTextFromType(CategoryType.recurringExpense),
+      getTextFromType(CategoryType.saving),
+      getTextFromType(CategoryType.reserved),
+      getTextFromType(CategoryType.transfer),
+      getTextFromType(CategoryType.investment),
+      getTextFromType(CategoryType.none),
+    ];
   }
 
   Pair<Color, int> getColorAndLevel(int level) {
@@ -328,11 +356,9 @@ class Category extends MoneyObject {
     return Pair<Color, int>(Colors.transparent, 0);
   }
 
-  void getAncestors(List<Category> list) {
-    if (parentCategory != null) {
-      list.add(parentCategory!);
-      parentCategory!.getAncestors(list);
-    }
+  Color getColorOrAncestorsColor() {
+    final pair = getColorAndLevel(0);
+    return pair.first;
   }
 
   Widget getColorWidget() {
@@ -349,30 +375,15 @@ class Category extends MoneyObject {
     );
   }
 
+  static String getName(final Category? instance) {
+    return instance == null ? '' : (instance).name.value;
+  }
+
   Widget getRectangleWidget() {
     return MyRectangle(
       colorFill: getColorFromString(this.color.value),
       size: 12,
     );
-  }
-
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
-
-  static String getName(final Category? instance) {
-    return instance == null ? '' : (instance).name.value;
-  }
-
-  static CategoryType getTypeFromInt(final int index) {
-    if (isBetween(index, -1, CategoryType.values.length)) {
-      return CategoryType.values[index];
-    }
-    return CategoryType.none;
-  }
-
-  String getTypeAsText() {
-    return getTextFromType(type.value);
   }
 
   static String getTextFromType(final CategoryType type) {
@@ -398,29 +409,15 @@ class Category extends MoneyObject {
     }
   }
 
-  static List<String> getCategoryTypes() {
-    return [
-      getTextFromType(CategoryType.income),
-      getTextFromType(CategoryType.expense),
-      getTextFromType(CategoryType.recurringExpense),
-      getTextFromType(CategoryType.saving),
-      getTextFromType(CategoryType.reserved),
-      getTextFromType(CategoryType.transfer),
-      getTextFromType(CategoryType.investment),
-      getTextFromType(CategoryType.none),
-    ];
+  String getTypeAsText() {
+    return getTextFromType(type.value);
   }
 
-  static CategoryType getCategoryTypeFromName(final String categoyTypeName) {
-    try {
-      return CategoryType.values.byName(categoyTypeName.toLowerCase());
-    } catch (_) {
-      return CategoryType.none;
+  static CategoryType getTypeFromInt(final int index) {
+    if (isBetween(index, -1, CategoryType.values.length)) {
+      return CategoryType.values[index];
     }
-  }
-
-  Category? get parentCategory {
-    return Data().categories.get(this.parentId.value);
+    return CategoryType.none;
   }
 
   ///
@@ -428,6 +425,10 @@ class Category extends MoneyObject {
   ///
   String get leafName {
     return name.value.split(':').last;
+  }
+
+  Category? get parentCategory {
+    return Data().categories.get(this.parentId.value);
   }
 
   /// Updates the name based on the parent category by appending the leaf name of the category to its current name.

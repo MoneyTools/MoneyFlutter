@@ -125,9 +125,9 @@ void _showAndConfirmTransactionToImport(
 }
 
 class OfxBankInfo {
-  String id = '';
   String accountId = '';
   String accountType = '';
+  String id = '';
 
   static OfxBankInfo fromOfx(final String ofx) {
     // start with this
@@ -221,13 +221,14 @@ class QFXTransaction {
     this.memo = '',
     this.number = '',
   });
-  late String type;
-  late DateTime date;
+
   late double amount;
-  late String name;
+  late DateTime date;
   late String fitid;
   late String memo;
+  late String name;
   late String number;
+  late String type;
 }
 
 List<QFXTransaction> parseQFXTransactions(final List<String> lines) {

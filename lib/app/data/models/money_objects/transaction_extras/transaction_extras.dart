@@ -10,11 +10,6 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
     collectionName = 'Transaction Extras';
   }
 
-  void add(final TransactionExtra transaction) {
-    transaction.id.value = iterableList().length;
-    appendMoneyObject(transaction);
-  }
-
   @override
   List<TransactionExtra> loadFromJson(final List<MyJson> rows) {
     clear();
@@ -34,5 +29,10 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
       appendMoneyObject(t);
     }
     return iterableList().toList();
+  }
+
+  void add(final TransactionExtra transaction) {
+    transaction.id.value = iterableList().length;
+    appendMoneyObject(transaction);
   }
 }

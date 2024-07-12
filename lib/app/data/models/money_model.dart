@@ -12,14 +12,24 @@ class MoneyModel {
     this.autoColor = true,
   }) : _amount = amount;
 
-  /// Amount to display
-  double _amount;
+  bool autoColor;
 
   /// USD | CAD | GBP
   String iso4217;
 
   bool showCurrency;
-  bool autoColor;
+
+  /// Amount to display
+  double _amount;
+
+  /// amount formated with currency and separators
+  @override
+  String toString() {
+    return Currency.getAmountAsStringUsingCurrency(
+      _amount,
+      iso4217code: iso4217,
+    );
+  }
 
   /// Add operator
   MoneyModel operator +(final dynamic value) {
@@ -52,15 +62,6 @@ class MoneyModel {
 
   /// the raw value as double
   double toDouble() => _amount;
-
-  /// amount formated with currency and separators
-  @override
-  String toString() {
-    return Currency.getAmountAsStringUsingCurrency(
-      _amount,
-      iso4217code: iso4217,
-    );
-  }
 
   String toShortHand() {
     return Currency.getAmountAsShortHandStringUsingCurrency(

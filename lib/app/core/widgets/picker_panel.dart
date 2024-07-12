@@ -50,13 +50,14 @@ class PickerPanel extends StatefulWidget {
     this.tokenTextStyle = const TokenTextStyle(),
     this.rightAligned = false,
   });
-  final List<String> options;
-  final String selectedItem;
-  final Function(String selectedValue) onSelected;
+
   final double itemHeight;
+  final Function(String selectedValue) onSelected;
+  final List<String> options;
+  final bool rightAligned;
+  final String selectedItem;
   final bool showLetterPicker;
   final TokenTextStyle tokenTextStyle;
-  final bool rightAligned;
   final double? width;
 
   @override
@@ -64,12 +65,13 @@ class PickerPanel extends StatefulWidget {
 }
 
 class PickerPanelState extends State<PickerPanel> {
+  List<String> filteredList = [];
+  int indexToScrollTo = -1;
+  List<String> uniqueLetters = [];
+
   String _filterByTextAnywhere = '';
   String _filterStartWith = '';
-  List<String> filteredList = [];
-  List<String> uniqueLetters = [];
   final ScrollController _scrollController = ScrollController();
-  int indexToScrollTo = -1;
 
   @override
   void initState() {
@@ -106,19 +108,6 @@ class PickerPanelState extends State<PickerPanel> {
     });
   }
 
-  Widget _buildFilteredList(BuildContext context) {
-    return ListView.builder(
-      itemCount: filteredList.length,
-      controller: _scrollController,
-      itemExtent: widget.itemHeight,
-      itemBuilder: (context, index) {
-        final label = filteredList[index];
-        final isSelected = label == widget.selectedItem;
-        return _buildPickerItem(context, label, isSelected, index);
-      },
-    );
-  }
-
   Widget _buildFilterTextField() {
     return TextField(
       decoration: const InputDecoration(
@@ -133,6 +122,19 @@ class PickerPanelState extends State<PickerPanel> {
           _filterByTextAnywhere = value;
           _applyFilters();
         });
+      },
+    );
+  }
+
+  Widget _buildFilteredList(BuildContext context) {
+    return ListView.builder(
+      itemCount: filteredList.length,
+      controller: _scrollController,
+      itemExtent: widget.itemHeight,
+      itemBuilder: (context, index) {
+        final label = filteredList[index];
+        final isSelected = label == widget.selectedItem;
+        return _buildPickerItem(context, label, isSelected, index);
       },
     );
   }

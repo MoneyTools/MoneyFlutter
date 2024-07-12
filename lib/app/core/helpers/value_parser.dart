@@ -27,10 +27,6 @@ class ValueQuality {
   final String valueAsString;
   final String warningMessage = '';
 
-  bool get hasError {
-    return warningMessage.isNotEmpty;
-  }
-
   double asAmount() {
     return (parseAmount(valueAsString, currency) ?? 0.00) * (reverseAmountValue ? -1 : 1);
   }
@@ -41,6 +37,10 @@ class ValueQuality {
 
   String asString() {
     return valueAsString;
+  }
+
+  bool get hasError {
+    return warningMessage.isNotEmpty;
   }
 
   Widget valueAsAmountWidget(final BuildContext context) {
@@ -101,10 +101,6 @@ class ValuesQuality {
   bool exist = false;
   final bool reverseAmountValue;
 
-  bool containsErrors() {
-    return date.hasError || description.hasError || amount.hasError;
-  }
-
   bool checkIfExistAlready({required final int accountId}) {
     exist = isTransactionAlreadyInTheSystem(
       accountId: accountId,
@@ -112,6 +108,10 @@ class ValuesQuality {
       amount: amount.asAmount(),
     );
     return exist;
+  }
+
+  bool containsErrors() {
+    return date.hasError || description.hasError || amount.hasError;
   }
 
   static DateRange getDateRange(final List<ValuesQuality> list) {
@@ -163,44 +163,33 @@ class ValuesParser {
 
   List<ValuesQuality> _values = [];
 
-  bool get isEmpty {
-    return onlyNewTransactions.isEmpty;
-  }
-
-  bool get isNotEmpty {
-    return !isEmpty;
-  }
-
-  static void evaluateExistence({
-    required final int accountId,
-    required final List<ValuesQuality> values,
-  }) {
-    for (final vq in values) {
-      vq.checkIfExistAlready(accountId: accountId);
-    }
-  }
-
-  // ignore: unnecessary_getters_setters
-  List<ValuesQuality> get lines {
-    //
-    return _values;
-  }
-
-  List<ValuesQuality> get onlyNewTransactions {
-    return _values.where((item) => !item.exist).toList();
-  }
-
-  set lines(List<ValuesQuality> value) {
-    //
-    _values = value;
-  }
-
   void add(final ValuesQuality item) {
     _values.add(item);
   }
 
-  DateTime? parseForDate(final String input) {
-    return DateFormat(dateFormat).tryParse(input);
+  static String assembleIntoSingleTextBuffer(
+    final String multiStringDates,
+    final String multiStringDescriptions,
+    final String multiStringAmounts,
+  ) {
+    int maxLines = 0;
+    List<String> dates = multiStringDates.split('\n');
+    maxLines = max(maxLines, dates.length);
+    List<String> descriptions = multiStringDescriptions.split('\n');
+    maxLines = max(maxLines, descriptions.length);
+    List<String> amounts = multiStringAmounts.split('\n');
+    maxLines = max(maxLines, amounts.length);
+
+    // Make them all the same length
+    dates = padList(dates, maxLines, '');
+    descriptions = padList(descriptions, maxLines, '');
+    amounts = padList(amounts, maxLines, '');
+
+    String singleText = '';
+    for (int line = 0; line < maxLines; line++) {
+      singleText += '${dates[line]}; ${descriptions[line]}; ${amounts[line]}\n';
+    }
+    return singleText;
   }
 
   ValuesQuality attemptToExtractTriples(
@@ -257,10 +246,6 @@ class ValuesParser {
       ),
       reverseAmountValue: reverseAmountValue,
     );
-  }
-
-  String removeUnneededChart(final String input, final String validCharacters) {
-    return input.replaceAll('\$', ''); // clean up
   }
 
   Widget buildPresentation(context) {
@@ -339,6 +324,15 @@ class ValuesParser {
     }
   }
 
+  static void evaluateExistence({
+    required final int accountId,
+    required final List<ValuesQuality> values,
+  }) {
+    for (final vq in values) {
+      vq.checkIfExistAlready(accountId: accountId);
+    }
+  }
+
   List<String> getListOfAmountString() {
     final List<String> list = [];
     for (final value in _values) {
@@ -363,29 +357,35 @@ class ValuesParser {
     return list;
   }
 
-  static String assembleIntoSingleTextBuffer(
-    final String multiStringDates,
-    final String multiStringDescriptions,
-    final String multiStringAmounts,
-  ) {
-    int maxLines = 0;
-    List<String> dates = multiStringDates.split('\n');
-    maxLines = max(maxLines, dates.length);
-    List<String> descriptions = multiStringDescriptions.split('\n');
-    maxLines = max(maxLines, descriptions.length);
-    List<String> amounts = multiStringAmounts.split('\n');
-    maxLines = max(maxLines, amounts.length);
+  bool get isEmpty {
+    return onlyNewTransactions.isEmpty;
+  }
 
-    // Make them all the same length
-    dates = padList(dates, maxLines, '');
-    descriptions = padList(descriptions, maxLines, '');
-    amounts = padList(amounts, maxLines, '');
+  bool get isNotEmpty {
+    return !isEmpty;
+  }
 
-    String singleText = '';
-    for (int line = 0; line < maxLines; line++) {
-      singleText += '${dates[line]}; ${descriptions[line]}; ${amounts[line]}\n';
-    }
-    return singleText;
+  // ignore: unnecessary_getters_setters
+  List<ValuesQuality> get lines {
+    //
+    return _values;
+  }
+
+  set lines(List<ValuesQuality> value) {
+    //
+    _values = value;
+  }
+
+  List<ValuesQuality> get onlyNewTransactions {
+    return _values.where((item) => !item.exist).toList();
+  }
+
+  DateTime? parseForDate(final String input) {
+    return DateFormat(dateFormat).tryParse(input);
+  }
+
+  String removeUnneededChart(final String input, final String validCharacters) {
+    return input.replaceAll('\$', ''); // clean up
   }
 }
 

@@ -9,10 +9,12 @@ class FilterInput extends StatelessWidget {
     required this.onChanged,
     required this.autoSubmitAfterSeconds,
   });
+
+  final int autoSubmitAfterSeconds;
   final String hintText;
   final String initialValue;
-  final int autoSubmitAfterSeconds;
   final Function(String) onChanged;
+
   late final Debouncer _debouncerForFilterText = Debouncer(Duration(seconds: autoSubmitAfterSeconds));
 
   @override

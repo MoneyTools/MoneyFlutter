@@ -22,25 +22,26 @@ class YearRangeSlider extends StatefulWidget {
   /// The initial range of years.
   final IntRange initialRange;
 
-  /// The full range of years.
-  final IntRange yearRange;
-
   /// A callback that returns the selected range of years whenever it changes.
   final void Function(IntRange range) onChanged;
+
+  /// The full range of years.
+  final IntRange yearRange;
 
   @override
   YearRangeSliderState createState() => YearRangeSliderState();
 }
 
 class YearRangeSliderState extends State<YearRangeSlider> {
-  /// The currently selected year range.
-  late final IntRange _selectedYearRange = IntRange(min: widget.initialRange.min, max: widget.initialRange.max);
-
   // Bottom drag related properties
   final double sliderEdgePadding = 20;
+
+  double _dragBottomWidth = 0;
   double _dragGesturePosition = 0;
   double _leftMarginOfBottomText = 0;
-  double _dragBottomWidth = 0;
+
+  /// The currently selected year range.
+  late final IntRange _selectedYearRange = IntRange(min: widget.initialRange.min, max: widget.initialRange.max);
 
   @override
   Widget build(BuildContext context) {
@@ -94,30 +95,6 @@ class YearRangeSliderState extends State<YearRangeSlider> {
     );
   }
 
-  void _updateDragBottomWidth(double eachYearInPixel) {
-    const minimumWidthToFitAllElements = 162.0;
-    _dragBottomWidth = max(_selectedYearRange.span * eachYearInPixel, minimumWidthToFitAllElements);
-  }
-
-  void _updateLeftMarginOfBottomText(double visualWidthOfSlider, double eachYearInPixel) {
-    final double selectedYearPositionInPixel = (_selectedYearRange.min - widget.yearRange.min) * eachYearInPixel;
-    _leftMarginOfBottomText = min(selectedYearPositionInPixel, visualWidthOfSlider - _dragBottomWidth);
-    _leftMarginOfBottomText = max(0, _leftMarginOfBottomText);
-  }
-
-  void _handleDragUpdate(DragUpdateDetails details, double maxWidth) {
-    _dragGesturePosition += details.primaryDelta!;
-    final double thresholdForMovingToNextPosition = maxWidth / widget.yearRange.span / 4;
-
-    if (_dragGesturePosition >= thresholdForMovingToNextPosition) {
-      _dragGesturePosition = 0;
-      _selectedYearRange.increment(widget.yearRange.max);
-    } else if (_dragGesturePosition <= -thresholdForMovingToNextPosition) {
-      _dragGesturePosition = 0;
-      _selectedYearRange.decrement(widget.yearRange.min);
-    }
-  }
-
   /// Builds the drag button that displays the selected year range and allows dragging.
   ///
   /// [context] is the build context used to retrieve theme information.
@@ -158,5 +135,29 @@ class YearRangeSliderState extends State<YearRangeSlider> {
         ],
       ),
     );
+  }
+
+  void _handleDragUpdate(DragUpdateDetails details, double maxWidth) {
+    _dragGesturePosition += details.primaryDelta!;
+    final double thresholdForMovingToNextPosition = maxWidth / widget.yearRange.span / 4;
+
+    if (_dragGesturePosition >= thresholdForMovingToNextPosition) {
+      _dragGesturePosition = 0;
+      _selectedYearRange.increment(widget.yearRange.max);
+    } else if (_dragGesturePosition <= -thresholdForMovingToNextPosition) {
+      _dragGesturePosition = 0;
+      _selectedYearRange.decrement(widget.yearRange.min);
+    }
+  }
+
+  void _updateDragBottomWidth(double eachYearInPixel) {
+    const minimumWidthToFitAllElements = 162.0;
+    _dragBottomWidth = max(_selectedYearRange.span * eachYearInPixel, minimumWidthToFitAllElements);
+  }
+
+  void _updateLeftMarginOfBottomText(double visualWidthOfSlider, double eachYearInPixel) {
+    final double selectedYearPositionInPixel = (_selectedYearRange.min - widget.yearRange.min) * eachYearInPixel;
+    _leftMarginOfBottomText = min(selectedYearPositionInPixel, visualWidthOfSlider - _dragBottomWidth);
+    _leftMarginOfBottomText = max(0, _leftMarginOfBottomText);
   }
 }

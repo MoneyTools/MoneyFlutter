@@ -19,6 +19,7 @@ class ImportTransactionsPanel extends StatefulWidget {
     required this.onTransactionsFound,
     super.key,
   });
+
   final Account account;
   final String inputText;
   final Function(Account accountSelected) onAccountChanged;
@@ -29,8 +30,10 @@ class ImportTransactionsPanel extends StatefulWidget {
 }
 
 class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
+  late String userChoiceOfDateFormat = _possibleDateFormats.first;
+
   late Account _account;
-  late String _textToParse;
+  final _focusNode = FocusNode();
   final List<String> _possibleDateFormats = [
     // Dash
     'yyyy-MM-dd',
@@ -51,11 +54,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     'dd/MM/yyyy',
     'dd/MM/yy',
   ];
-  late String userChoiceOfDateFormat = _possibleDateFormats.first;
+
+  late String _textToParse;
   int _userChoiceDebitVsCredit = 0;
   int _userChoiceNativeVsUSD = 0;
-  final _focusNode = FocusNode();
-
   List<ValuesQuality> _values = [];
 
   @override
@@ -133,30 +135,56 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
   }
 
-  Widget _buildHeaderAndAccountPicker() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          'Import transaction to account',
-          style: getTextTheme(context).bodyLarge,
+  void convertAndNotify(BuildContext context, String inputText) {
+    ValuesParser parser = ValuesParser(
+      dateFormat: userChoiceOfDateFormat,
+      currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
+      reverseAmountValue: _userChoiceDebitVsCredit == 1,
+    );
+    parser.convertInputTextToTransactionList(
+      context,
+      inputText,
+    );
+    _values = parser.lines;
+    widget.onTransactionsFound(parser);
+  }
+
+  void removeFocus() {
+    _focusNode.unfocus();
+  }
+
+  void requestFocus() {
+    FocusScope.of(context).requestFocus(_focusNode);
+  }
+
+  /// Offer assistance for the currency format
+  Widget _buildChoiceOfAmountFormat() {
+    if (_account.getAccountCurrencyAsText() == Constants.defaultCurrency) {
+      // No need to offer switching currency input format
+      return Currency.buildCurrencyWidget(Constants.defaultCurrency);
+    }
+
+    return SegmentedButton<int>(
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
+      segments: <ButtonSegment<int>>[
+        ButtonSegment<int>(
+          value: 0,
+          label: _account.getAccountCurrencyAsWidget(),
         ),
-        gapLarge(),
-        Expanded(
-          child: pickerAccount(
-            selected: _account,
-            onSelected: (final Account? accountSelected) {
-              setState(
-                () {
-                  _account = accountSelected!;
-                  widget.onAccountChanged(_account);
-                },
-              );
-            },
-          ),
+        ButtonSegment<int>(
+          value: 1,
+          label: Currency.buildCurrencyWidget(Constants.defaultCurrency),
         ),
       ],
+      selected: <int>{_userChoiceNativeVsUSD},
+      onSelectionChanged: (final Set<int> newSelection) {
+        setState(() {
+          _userChoiceNativeVsUSD = newSelection.first;
+          convertAndNotify(context, _textToParse);
+        });
+      },
     );
   }
 
@@ -223,56 +251,30 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
   }
 
-  /// Offer assistance for the currency format
-  Widget _buildChoiceOfAmountFormat() {
-    if (_account.getAccountCurrencyAsText() == Constants.defaultCurrency) {
-      // No need to offer switching currency input format
-      return Currency.buildCurrencyWidget(Constants.defaultCurrency);
-    }
-
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: <ButtonSegment<int>>[
-        ButtonSegment<int>(
-          value: 0,
-          label: _account.getAccountCurrencyAsWidget(),
+  Widget _buildHeaderAndAccountPicker() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          'Import transaction to account',
+          style: getTextTheme(context).bodyLarge,
         ),
-        ButtonSegment<int>(
-          value: 1,
-          label: Currency.buildCurrencyWidget(Constants.defaultCurrency),
+        gapLarge(),
+        Expanded(
+          child: pickerAccount(
+            selected: _account,
+            onSelected: (final Account? accountSelected) {
+              setState(
+                () {
+                  _account = accountSelected!;
+                  widget.onAccountChanged(_account);
+                },
+              );
+            },
+          ),
         ),
       ],
-      selected: <int>{_userChoiceNativeVsUSD},
-      onSelectionChanged: (final Set<int> newSelection) {
-        setState(() {
-          _userChoiceNativeVsUSD = newSelection.first;
-          convertAndNotify(context, _textToParse);
-        });
-      },
     );
-  }
-
-  void convertAndNotify(BuildContext context, String inputText) {
-    ValuesParser parser = ValuesParser(
-      dateFormat: userChoiceOfDateFormat,
-      currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
-      reverseAmountValue: _userChoiceDebitVsCredit == 1,
-    );
-    parser.convertInputTextToTransactionList(
-      context,
-      inputText,
-    );
-    _values = parser.lines;
-    widget.onTransactionsFound(parser);
-  }
-
-  void requestFocus() {
-    FocusScope.of(context).requestFocus(_focusNode);
-  }
-
-  void removeFocus() {
-    _focusNode.unfocus();
   }
 }

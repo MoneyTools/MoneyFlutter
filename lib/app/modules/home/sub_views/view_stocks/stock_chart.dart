@@ -10,6 +10,7 @@ import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
 
 class StockChartWidget extends StatefulWidget {
   const StockChartWidget({required this.symbol, super.key});
+
   final String symbol;
 
   @override
@@ -25,38 +26,6 @@ class StockChartWidgetState extends State<StockChartWidget> {
   void initState() {
     super.initState();
     getStockHistoricalData();
-  }
-
-  void getStockHistoricalData() async {
-    // Do we have the API Key to start
-    if (PreferenceController.to.apiKeyForStocks.value.isEmpty) {
-      setState(() {
-        this.errorMessage = 'Please setup the API Key for accessing https://twelvedata.com.';
-      });
-      return;
-    }
-
-    List<StockPrice> dateAndPrices = [];
-    StockLookupStatus status = await getFromCacheOrBackend(widget.symbol, dateAndPrices);
-    if (status == StockLookupStatus.validSymbol || status == StockLookupStatus.foundInCache) {
-      List<FlSpot> tmpDataPoints = [];
-      for (final sp in dateAndPrices) {
-        tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
-      }
-      if (mounted) {
-        setState(() {
-          this.dataPoints = tmpDataPoints;
-        });
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          this.lastStatus = status;
-          this.errorMessage = status == StockLookupStatus.invalidSymbol ? 'Invalid Symbol "${widget.symbol}"' : '';
-          this.dataPoints = [];
-        });
-      }
-    }
   }
 
   @override
@@ -137,6 +106,38 @@ class StockChartWidgetState extends State<StockChartWidget> {
         lineTouchData: const LineTouchData(enabled: false),
       ),
     );
+  }
+
+  void getStockHistoricalData() async {
+    // Do we have the API Key to start
+    if (PreferenceController.to.apiKeyForStocks.value.isEmpty) {
+      setState(() {
+        this.errorMessage = 'Please setup the API Key for accessing https://twelvedata.com.';
+      });
+      return;
+    }
+
+    List<StockPrice> dateAndPrices = [];
+    StockLookupStatus status = await getFromCacheOrBackend(widget.symbol, dateAndPrices);
+    if (status == StockLookupStatus.validSymbol || status == StockLookupStatus.foundInCache) {
+      List<FlSpot> tmpDataPoints = [];
+      for (final sp in dateAndPrices) {
+        tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
+      }
+      if (mounted) {
+        setState(() {
+          this.dataPoints = tmpDataPoints;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          this.lastStatus = status;
+          this.errorMessage = status == StockLookupStatus.invalidSymbol ? 'Invalid Symbol "${widget.symbol}"' : '';
+          this.dataPoints = [];
+        });
+      }
+    }
   }
 }
 

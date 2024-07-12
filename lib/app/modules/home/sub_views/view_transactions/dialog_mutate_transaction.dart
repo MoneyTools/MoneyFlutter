@@ -24,6 +24,7 @@ class DialogMutateTransaction extends StatefulWidget {
     required this.transaction,
     super.key,
   });
+
   final Transaction transaction;
 
   @override
@@ -31,8 +32,9 @@ class DialogMutateTransaction extends StatefulWidget {
 }
 
 class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
-  bool isInEditingMode = false;
   bool dataWasModified = false;
+  bool isInEditingMode = false;
+
   late Transaction _transaction;
 
   @override

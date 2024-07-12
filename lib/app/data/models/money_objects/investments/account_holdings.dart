@@ -12,9 +12,28 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 /// in order to minimize capital gains taxes.
 /// </summary>
 class AccountHoldings {
+  Account? account;
   Map<Security, SecurityFifoQueue> queues = <Security, SecurityFifoQueue>{};
 
-  Account? account;
+  /// <summary>
+  /// Record an Add or Buy for a given security.
+  /// </summary>
+  ///<param name="s">The security we are buying</param>
+  /// <param name="datePurchased">The date of the purchase</param>
+  /// <param name="units">THe number of units purchased</param>
+  /// <param name="costBasis">The cost basis for the purchase (usually what you paid for it including trading fees)</param>
+  void buy(Security s, DateTime datePurchased, double units, double costBasis) {
+    SecurityFifoQueue? queue = queues[s];
+
+    if (queue == null) {
+      queue = SecurityFifoQueue();
+      queue.security = s;
+      queue.account = account;
+      queues[s] = queue;
+    }
+
+    queue.buy(datePurchased, units, costBasis);
+  }
 
   /// <summary>
   /// Get current holdings to date.
@@ -25,6 +44,27 @@ class AccountHoldings {
     for (final SecurityFifoQueue queue in this.queues.values) {
       for (SecurityPurchase p in queue.getHoldings()) {
         result.add(p);
+      }
+    }
+    return result;
+  }
+
+  List<SecuritySale> getPendingSales() {
+    List<SecuritySale> result = [];
+    for (var queue in this.queues.values) {
+      for (SecuritySale sale in queue.getPendingSales()) {
+        result.add(sale);
+      }
+    }
+    return result;
+  }
+
+  List<SecuritySale> getPendingSalesForSecurity(Security s) {
+    List<SecuritySale> result = [];
+    SecurityFifoQueue? queue = queues[s];
+    if (queue != null) {
+      for (final SecuritySale sale in queue.getPendingSales()) {
+        result.add(sale);
       }
     }
     return result;
@@ -47,24 +87,12 @@ class AccountHoldings {
     return result;
   }
 
-  /// <summary>
-  /// Record an Add or Buy for a given security.
-  /// </summary>
-  ///<param name="s">The security we are buying</param>
-  /// <param name="datePurchased">The date of the purchase</param>
-  /// <param name="units">THe number of units purchased</param>
-  /// <param name="costBasis">The cost basis for the purchase (usually what you paid for it including trading fees)</param>
-  void buy(Security s, DateTime datePurchased, double units, double costBasis) {
+  List<SecuritySale> processPendingSales(Security s) {
     SecurityFifoQueue? queue = queues[s];
-
-    if (queue == null) {
-      queue = SecurityFifoQueue();
-      queue.security = s;
-      queue.account = account;
-      queues[s] = queue;
-    }
-
-    queue.buy(datePurchased, units, costBasis);
+    if (queue != null) {
+      return queue.processPendingSales();
+    } else {}
+    return [];
   }
 
   /// <summary>
@@ -93,34 +121,5 @@ class AccountHoldings {
     }
 
     return queue.sell(dateSold, units, amount);
-  }
-
-  List<SecuritySale> processPendingSales(Security s) {
-    SecurityFifoQueue? queue = queues[s];
-    if (queue != null) {
-      return queue.processPendingSales();
-    } else {}
-    return [];
-  }
-
-  List<SecuritySale> getPendingSales() {
-    List<SecuritySale> result = [];
-    for (var queue in this.queues.values) {
-      for (SecuritySale sale in queue.getPendingSales()) {
-        result.add(sale);
-      }
-    }
-    return result;
-  }
-
-  List<SecuritySale> getPendingSalesForSecurity(Security s) {
-    List<SecuritySale> result = [];
-    SecurityFifoQueue? queue = queues[s];
-    if (queue != null) {
-      for (final SecuritySale sale in queue.getPendingSales()) {
-        result.add(sale);
-      }
-    }
-    return result;
   }
 }

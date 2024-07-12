@@ -25,11 +25,6 @@ class TransactionExtra extends MoneyObject {
     this.taxYear.value = taxYear;
     this.taxDate.value = taxDate;
   }
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
 
   /// ID
   /// SQLite  0|Id|bigint|0||1
@@ -37,10 +32,10 @@ class TransactionExtra extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).uniqueId,
   );
 
-  // 1
-  FieldInt transaction = FieldInt(
-    serializeName: 'Transaction',
-    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).transaction.value,
+  // 4
+  FieldDate taxDate = FieldDate(
+    serializeName: 'TaxDate',
+    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxDate.value,
   );
 
   // 2
@@ -49,9 +44,15 @@ class TransactionExtra extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxYear.value,
   );
 
-  // 4
-  FieldDate taxDate = FieldDate(
-    serializeName: 'TaxDate',
-    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxDate.value,
+  // 1
+  FieldInt transaction = FieldInt(
+    serializeName: 'Transaction',
+    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).transaction.value,
   );
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
 }

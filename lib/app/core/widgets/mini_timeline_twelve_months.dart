@@ -11,8 +11,9 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
     required this.color,
     super.key,
   });
-  final List<Pair<int, double>> values;
+
   final Color color;
+  final List<Pair<int, double>> values;
 
   @override
   Widget build(BuildContext context) {

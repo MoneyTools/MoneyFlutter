@@ -11,6 +11,11 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 /// in order to minimize capital gains taxes.
 /// </summary>
 class SecurityFifoQueue {
+  /// <summary>
+  /// The account the security is held in.
+  /// </summary>
+  Account? account;
+
   List<SecurityPurchase> list = [];
 
   /// <summary>
@@ -22,11 +27,6 @@ class SecurityFifoQueue {
   /// The security that we are tracking with this queue.
   /// </summary>
   Security? security;
-
-  /// <summary>
-  /// The account the security is held in.
-  /// </summary>
-  Account? account;
 
   /// <summary>
   /// Record an Add or Buy for a given security.
@@ -51,6 +51,34 @@ class SecurityFifoQueue {
     }
 
     this.list.add(sp);
+  }
+
+  List<SecurityPurchase> getHoldings() {
+    List<SecurityPurchase> result = [];
+    for (SecurityPurchase sp in this.list) {
+      if (sp.unitsRemaining > 0) {
+        result.add(sp);
+      }
+    }
+    return result;
+  }
+
+  List<SecuritySale> getPendingSales() {
+    return this.pending;
+  }
+
+  List<SecuritySale> processPendingSales() {
+// now that more has arrived, time to see if we can process those pending sales.
+    List<SecuritySale> copy = List.from(this.pending);
+    this.pending.clear();
+    List<SecuritySale> result = [];
+    for (final SecuritySale s in copy) {
+      // this will put any remainder back in the pending list if it still can't be covered.
+      for (SecuritySale real in this.sell(s.dateSold!, s.unitsSold, s.unitsSold * s.salePricePerUnit)) {
+        result.add(real);
+      }
+    }
+    return result;
   }
 
   /// <summary>
@@ -89,34 +117,6 @@ class SecurityFifoQueue {
       ss.salePricePerUnit = salePricePerUnit;
 
       this.pending.add(ss);
-    }
-    return result;
-  }
-
-  List<SecuritySale> getPendingSales() {
-    return this.pending;
-  }
-
-  List<SecuritySale> processPendingSales() {
-// now that more has arrived, time to see if we can process those pending sales.
-    List<SecuritySale> copy = List.from(this.pending);
-    this.pending.clear();
-    List<SecuritySale> result = [];
-    for (final SecuritySale s in copy) {
-      // this will put any remainder back in the pending list if it still can't be covered.
-      for (SecuritySale real in this.sell(s.dateSold!, s.unitsSold, s.unitsSold * s.salePricePerUnit)) {
-        result.add(real);
-      }
-    }
-    return result;
-  }
-
-  List<SecurityPurchase> getHoldings() {
-    List<SecurityPurchase> result = [];
-    for (SecurityPurchase sp in this.list) {
-      if (sp.unitsRemaining > 0) {
-        result.add(sp);
-      }
     }
     return result;
   }

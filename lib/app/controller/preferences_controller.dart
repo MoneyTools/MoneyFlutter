@@ -8,96 +8,40 @@ import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceController extends GetxController {
-  static PreferenceController get to => Get.find();
+  ///---------------------------------
+  //
+  RxString apiKeyForStocks = ''.obs;
+
+  RxInt cashflowRecurringOccurrences = 12.obs;
+  Rx<CashflowViewAs> cashflowViewAs = CashflowViewAs.sankey.obs;
+
+  ///---------------------------------
+  /// Observable enum
+  Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
 
   final RxBool isReady = false.obs;
-
-  SharedPreferences? _preferences;
-
   RxList<String> mru = <String>[].obs;
-
-  String get getUniqueState =>
-      'isReadry:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
-
-  //////////////////////////////////////////////////////
-  // Persistable user preference
-
-  ///---------------------------------
-  /// Text Font Size/Scale
-  final RxDouble _textScale = 1.0.obs;
-
-  double get textScale => _textScale.value;
-
-  set textScale(double value) {
-    _textScale.value = value;
-    setDouble(settingKeyTextScale, textScale);
-  }
-
-  ///---------------------------------
-  /// Hide/Show Info panel
-  final RxBool _isDetailsPanelExpanded = false.obs;
-  RxBool get isDetailsPanelExpanded => _isDetailsPanelExpanded;
-  set isDetailsPanelExpanded(value) {
-    _isDetailsPanelExpanded.value = value;
-    setBool(settingKeyDetailsPanelExpanded, value);
-  }
 
   ///---------------------------------
   /// Show or Hide Account that are marked as Closed
   /// Hide/Show Closed Accounts
   final RxBool _includeClosedAccounts = false.obs;
 
-  bool get includeClosedAccounts => _includeClosedAccounts.value;
-
-  set includeClosedAccounts(bool value) {
-    _includeClosedAccounts.value = value;
-    setBool(settingKeyRentalsSupport, value);
-  }
-
   ///---------------------------------
   /// Incude Rental feature
   final RxBool _includeRentalManagement = false.obs;
 
-  bool get includeRentalManagement => _includeRentalManagement.value;
+  ///---------------------------------
+  /// Hide/Show Info panel
+  final RxBool _isDetailsPanelExpanded = false.obs;
 
-  set includeRentalManagement(bool value) {
-    _includeRentalManagement.value = value;
-    setBool(settingKeyRentalsSupport, value);
-  }
+  SharedPreferences? _preferences;
+  //////////////////////////////////////////////////////
+  // Persistable user preference
 
   ///---------------------------------
-  /// Observable enum
-  Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
-
-  // Methods to update the current view
-  void setView(ViewId view) {
-    currentView.value = view;
-  }
-
-  void jumpToView({
-    required final ViewId viewId,
-    required final int selectedId,
-    required final List<String> columnFilter,
-    required final String textFilter,
-  }) async {
-    // First set all filters on the destination view
-    await setString(viewId.getViewPreferenceId(settingKeyFilterText), textFilter);
-    await setStringList(viewId.getViewPreferenceId(settingKeyFilterColumnsText), columnFilter);
-
-    // Set the last selected item, in order to have it selected when the view changes
-    if (selectedId != -1) {
-      await setInt(viewId.getViewPreferenceId(settingKeySelectedListItemId), selectedId);
-    }
-
-    // Change to the requested view
-    setView(viewId);
-  }
-
-  ///---------------------------------
-  //
-  RxString apiKeyForStocks = ''.obs;
-  RxInt cashflowRecurringOccurrences = 12.obs;
-  Rx<CashflowViewAs> cashflowViewAs = CashflowViewAs.sankey.obs;
+  /// Text Font Size/Scale
+  final RxDouble _textScale = 1.0.obs;
 
   @override
   void onInit() async {
@@ -116,23 +60,6 @@ class PreferenceController extends GetxController {
     }
   }
 
-  Future<void> initPrefs() async {
-    _preferences = await SharedPreferences.getInstance();
-    await loadDefaults();
-    isReady.value = true;
-  }
-
-  Future<void> loadDefaults() async {
-    mru.value = _preferences!.getStringList(settingKeyMRU) ?? [];
-    _isDetailsPanelExpanded.value = getBool(settingKeyDetailsPanelExpanded, false);
-    _includeClosedAccounts.value = getBool(settingKeyIncludeClosedAccounts, false);
-    _includeRentalManagement.value = getBool(settingKeyRentalsSupport, false);
-
-    cashflowViewAs.value = CashflowViewAs.values[getInt(settingKeyCashflowView, CashflowViewAs.sankey.index)];
-    cashflowRecurringOccurrences.value = getInt(settingKeyCashflowRecurringOccurrences, 12);
-    apiKeyForStocks.value = getString(settingKeyStockApiKey, '');
-  }
-
   void addToMRU(String filePathAndName) {
     if (filePathAndName.isNotEmpty) {
       // load and place on top
@@ -146,37 +73,9 @@ class PreferenceController extends GetxController {
     }
   }
 
-  // Set a string value to preferences
-  Future<void> setString(
-    String key,
-    String value, [
-    bool removeIfEmpty = false,
-  ]) async {
-    if (removeIfEmpty && value.isEmpty) {
-      await remove(key);
-    } else {
-      await _preferences?.setString(key, value);
-    }
-  }
-
-  // Retrieve a string value from preferences
-  String getString(String key, [String defaultValueIfNotFound = '']) {
-    return _preferences?.getString(key) ?? defaultValueIfNotFound;
-  }
-
-  // Set an integer value to preferences
-  Future<void> setInt(String key, int value) async {
-    await _preferences?.setInt(key, value);
-  }
-
-  // Retrieve an integer value from preferences
-  int getInt(String key, [int defaultValueIfNotFound = 0]) {
-    return _preferences?.getInt(key) ?? defaultValueIfNotFound;
-  }
-
-  // Set a boolean value to preferences
-  Future<void> setBool(String key, bool value) async {
-    await _preferences?.setBool(key, value);
+  // Clear all values from preferences
+  Future<void> clear() async {
+    await _preferences?.clear();
   }
 
   // Retrieve a boolean value from preferences
@@ -184,28 +83,14 @@ class PreferenceController extends GetxController {
     return _preferences?.getBool(key) ?? defaultValueIfNotFound;
   }
 
-  // Set a double value to preferences
-  Future<void> setDouble(String key, double value) async {
-    await _preferences?.setDouble(key, value);
-  }
-
   // Retrieve a double value from preferences
   double getDouble(String key, [double defaultValueIfNotFound = 0.0]) {
     return _preferences?.getDouble(key) ?? defaultValueIfNotFound;
   }
 
-  // Set a list of strings to preferences
-  Future<void> setStringList(String key, List<String> value) async {
-    if (value.isEmpty) {
-      remove(key);
-    } else {
-      await _preferences?.setStringList(key, value);
-    }
-  }
-
-  // Retrieve a list of strings from preferences
-  Future<List<String>> getStringList(String key) async {
-    return _preferences?.getStringList(key) ?? [];
+  // Retrieve an integer value from preferences
+  int getInt(String key, [int defaultValueIfNotFound = 0]) {
+    return _preferences?.getInt(key) ?? defaultValueIfNotFound;
   }
 
   // Retrieve a MyJson object value from preferences
@@ -230,6 +115,96 @@ class PreferenceController extends GetxController {
     return <String, MyJson>{};
   }
 
+  // Retrieve a string value from preferences
+  String getString(String key, [String defaultValueIfNotFound = '']) {
+    return _preferences?.getString(key) ?? defaultValueIfNotFound;
+  }
+
+  // Retrieve a list of strings from preferences
+  Future<List<String>> getStringList(String key) async {
+    return _preferences?.getStringList(key) ?? [];
+  }
+
+  String get getUniqueState =>
+      'isReadry:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
+
+  bool get includeClosedAccounts => _includeClosedAccounts.value;
+
+  set includeClosedAccounts(bool value) {
+    _includeClosedAccounts.value = value;
+    setBool(settingKeyRentalsSupport, value);
+  }
+
+  bool get includeRentalManagement => _includeRentalManagement.value;
+
+  set includeRentalManagement(bool value) {
+    _includeRentalManagement.value = value;
+    setBool(settingKeyRentalsSupport, value);
+  }
+
+  Future<void> initPrefs() async {
+    _preferences = await SharedPreferences.getInstance();
+    await loadDefaults();
+    isReady.value = true;
+  }
+
+  RxBool get isDetailsPanelExpanded => _isDetailsPanelExpanded;
+
+  set isDetailsPanelExpanded(value) {
+    _isDetailsPanelExpanded.value = value;
+    setBool(settingKeyDetailsPanelExpanded, value);
+  }
+
+  void jumpToView({
+    required final ViewId viewId,
+    required final int selectedId,
+    required final List<String> columnFilter,
+    required final String textFilter,
+  }) async {
+    // First set all filters on the destination view
+    await setString(viewId.getViewPreferenceId(settingKeyFilterText), textFilter);
+    await setStringList(viewId.getViewPreferenceId(settingKeyFilterColumnsText), columnFilter);
+
+    // Set the last selected item, in order to have it selected when the view changes
+    if (selectedId != -1) {
+      await setInt(viewId.getViewPreferenceId(settingKeySelectedListItemId), selectedId);
+    }
+
+    // Change to the requested view
+    setView(viewId);
+  }
+
+  Future<void> loadDefaults() async {
+    mru.value = _preferences!.getStringList(settingKeyMRU) ?? [];
+    _isDetailsPanelExpanded.value = getBool(settingKeyDetailsPanelExpanded, false);
+    _includeClosedAccounts.value = getBool(settingKeyIncludeClosedAccounts, false);
+    _includeRentalManagement.value = getBool(settingKeyRentalsSupport, false);
+
+    cashflowViewAs.value = CashflowViewAs.values[getInt(settingKeyCashflowView, CashflowViewAs.sankey.index)];
+    cashflowRecurringOccurrences.value = getInt(settingKeyCashflowRecurringOccurrences, 12);
+    apiKeyForStocks.value = getString(settingKeyStockApiKey, '');
+  }
+
+  // Remove a value from preferences
+  Future<void> remove(String key) async {
+    await _preferences?.remove(key);
+  }
+
+  // Set a boolean value to preferences
+  Future<void> setBool(String key, bool value) async {
+    await _preferences?.setBool(key, value);
+  }
+
+  // Set a double value to preferences
+  Future<void> setDouble(String key, double value) async {
+    await _preferences?.setDouble(key, value);
+  }
+
+  // Set an integer value to preferences
+  Future<void> setInt(String key, int value) async {
+    await _preferences?.setInt(key, value);
+  }
+
   Future<void> setMapOfMyJson(
     final String key,
     final Map<String, MyJson> mapOfJson,
@@ -244,15 +219,41 @@ class PreferenceController extends GetxController {
     _preferences?.setString(key, json.encode(myJson));
   }
 
-  // Remove a value from preferences
-  Future<void> remove(String key) async {
-    await _preferences?.remove(key);
+  // Set a string value to preferences
+  Future<void> setString(
+    String key,
+    String value, [
+    bool removeIfEmpty = false,
+  ]) async {
+    if (removeIfEmpty && value.isEmpty) {
+      await remove(key);
+    } else {
+      await _preferences?.setString(key, value);
+    }
   }
 
-  // Clear all values from preferences
-  Future<void> clear() async {
-    await _preferences?.clear();
+  // Set a list of strings to preferences
+  Future<void> setStringList(String key, List<String> value) async {
+    if (value.isEmpty) {
+      remove(key);
+    } else {
+      await _preferences?.setStringList(key, value);
+    }
   }
+
+  // Methods to update the current view
+  void setView(ViewId view) {
+    currentView.value = view;
+  }
+
+  double get textScale => _textScale.value;
+
+  set textScale(double value) {
+    _textScale.value = value;
+    setDouble(settingKeyTextScale, textScale);
+  }
+
+  static PreferenceController get to => Get.find();
 }
 
 /// Navigation helpers

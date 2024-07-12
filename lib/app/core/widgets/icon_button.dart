@@ -8,10 +8,11 @@ class MyIconButton extends StatefulWidget {
     required this.tooltip,
     required this.onPressed,
   });
-  final String tooltip;
+
   final Color hoverColor;
   final IconData icon;
   final VoidCallback onPressed;
+  final String tooltip;
 
   @override
   MyIconButtonState createState() => MyIconButtonState();

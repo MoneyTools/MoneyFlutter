@@ -8,8 +8,9 @@ class PasteImageOcr extends StatefulWidget {
     required this.allowedCharacters,
   });
 
-  final TextEditingController textController;
   final String allowedCharacters;
+  final TextEditingController textController;
+
   @override
   State<PasteImageOcr> createState() => _PasteImageOcrState();
 }

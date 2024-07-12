@@ -99,6 +99,7 @@ class SubViewSelectionHorizontal extends StatefulWidget {
     required this.selectedView,
     super.key,
   });
+
   final void Function(ViewId) onSelected;
   final ViewId selectedView;
 
@@ -108,6 +109,12 @@ class SubViewSelectionHorizontal extends StatefulWidget {
 
 class SubViewSelectionHorizontalState extends State<SubViewSelectionHorizontal> {
   ViewId _selectedView = ViewId.viewCashFlow;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedView = widget.selectedView;
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -127,12 +134,6 @@ class SubViewSelectionHorizontalState extends State<SubViewSelectionHorizontal> 
       labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
     );
   }
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedView = widget.selectedView;
-  }
 }
 
 class SubViewSelectionVertical extends StatefulWidget {
@@ -142,6 +143,7 @@ class SubViewSelectionVertical extends StatefulWidget {
     super.key,
     this.useIndicator = false,
   });
+
   final void Function(ViewId) onSelectItem;
   final ViewId selectedView;
   final bool useIndicator;
@@ -152,6 +154,12 @@ class SubViewSelectionVertical extends StatefulWidget {
 
 class SubViewSelectionVerticalState extends State<SubViewSelectionVertical> {
   ViewId _selectedView = ViewId.viewCashFlow;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedView = widget.selectedView;
+  }
 
   @override
   Widget build(final BuildContext context) {
@@ -180,11 +188,5 @@ class SubViewSelectionVerticalState extends State<SubViewSelectionVertical> {
         ),
       ),
     );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedView = widget.selectedView;
   }
 }

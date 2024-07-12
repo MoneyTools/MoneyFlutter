@@ -2,6 +2,12 @@ import 'package:get/get.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
 class HomeController extends GetxController {
+  @override
+  void onClose() {
+    super.onClose();
+    debugLog('Closed!');
+  }
+
   //TODO: Implement HomeController.
 
   @override
@@ -14,11 +20,5 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     debugLog('Ready!');
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-    debugLog('Closed!');
   }
 }

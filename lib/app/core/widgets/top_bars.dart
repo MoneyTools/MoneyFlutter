@@ -14,8 +14,9 @@ class BarChartWidget extends StatelessWidget {
     required this.asIncome,
     super.key,
   });
-  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
+
   final bool asIncome;
+  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
 
   @override
   Widget build(BuildContext context) {

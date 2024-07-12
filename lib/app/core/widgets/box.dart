@@ -18,14 +18,14 @@ class Box extends StatelessWidget {
     assert(title.isNotEmpty && header == null || title.isEmpty && header != null || title.isEmpty && header == null);
   }
 
-  final String title;
+  final Widget child;
+  final Color? color;
   final Widget? header;
+  final double? height;
   final double? margin;
   final double padding;
-  final Color? color;
+  final String title;
   final double? width;
-  final double? height;
-  final Widget child;
 
   @override
   Widget build(BuildContext context) {

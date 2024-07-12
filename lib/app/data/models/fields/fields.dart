@@ -33,15 +33,8 @@ class Fields<T> {
   Fields() {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
+
   final FieldDefinitions definitions = [];
-
-  Iterable<Field> get fieldDefinitionsForColumns {
-    return definitions.where((element) => element.useAsColumn == true);
-  }
-
-  bool get isEmpty {
-    return definitions.isEmpty;
-  }
 
   bool applyFilters(
     final MoneyObject objectInstance,
@@ -95,96 +88,8 @@ class Fields<T> {
     return wasFoundFreeStyleTextSearch && wasFoundColumnFilters;
   }
 
-  // check if the lowerCaseTextToFind matches any of the fields text value
-  bool isMatchingFreeStyleText(
-    MoneyObject objectInstance,
-    String filterBytFreeStyleLowerCaseText,
-  ) {
-    for (final fieldDefinition in fieldDefinitionsForColumns) {
-      final fieldValueAsString = _getFieldValueAsStringForFiltering(
-        objectInstance,
-        fieldDefinition,
-      );
-
-      if (fieldValueAsString.contains(filterBytFreeStyleLowerCaseText)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  bool isMatchingColumnFiltering(
-    final MoneyObject objectInstance,
-    final FieldFilters filterByFieldsValue,
-  ) {
-    for (final Field fieldDefinition in fieldDefinitionsForColumns) {
-      String fieldValueAsString = _getFieldValueAsStringForFiltering(
-        objectInstance,
-        fieldDefinition,
-      );
-
-      if (isFieldMatching(
-        fieldDefinition,
-        fieldValueAsString,
-        filterByFieldsValue,
-      )) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /// Checks if a given field definition matches the provided filters.
-  ///
-  /// This function is used to determine whether a field definition matches the
-  /// specified filters in the filtering process.
-  ///
-  /// @param fieldDefinition The [Field] definition to be checked.
-  /// @param fieldValueAsStringInLowerCase The field value as a lowercase string.
-  /// @param filterByFieldsValue The list of [FieldFilter] objects containing the
-  ///        field name and the filter text.
-  /// @return `true` if the field definition matches the filters, `false` otherwise.
-  bool isFieldMatching(
-    Field<dynamic> fieldDefinition,
-    String fieldValueAsStringInLowerCase,
-    FieldFilters filterByFieldsValue,
-  ) {
-    for (final FieldFilter filter in filterByFieldsValue.list) {
-      if (fieldDefinition.name == filter.fieldName) {
-        if (fieldValueAsStringInLowerCase == filter.filterTextInLowerCase) {
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  /// Converts the given field value to a string representation suitable for filtering.
-  ///
-  /// For date fields, the value is converted to a string in the format "YYYY-MM-DD" without the time component.
-  /// For all other field types, the value is converted to a lowercase string using the generic `toString()` method.
-  ///
-  /// This function is used to prepare field values for comparison during the filtering process.
-  ///
-  /// @param fieldDefinition The [Field] definition for the current field.
-  /// @param fieldValue The value of the current field.
-  /// @return The string representation of the field value, suitable for filtering.
-  String _getFieldValueAsStringForFiltering(
-    final MoneyObject objectInstance,
-    Field<dynamic> fieldDefinition,
-  ) {
-    final dynamic fieldValue = fieldDefinition.type == FieldType.widget
-        ? fieldDefinition.getValueForSerialization(objectInstance)
-        : fieldDefinition.getValueForDisplay(objectInstance);
-
-    switch (fieldDefinition.type) {
-      case FieldType.date:
-        return dateToString(fieldValue);
-      case FieldType.quantity:
-        return formatDoubleTrimZeros(fieldValue);
-      default:
-        return fieldValue.toString().toLowerCase();
-    }
+  Iterable<Field> get fieldDefinitionsForColumns {
+    return definitions.where((element) => element.useAsColumn == true);
   }
 
   String getCsvRowValues(final MoneyObject item) {
@@ -263,10 +168,106 @@ class Fields<T> {
     return Row(children: cells);
   }
 
+  bool get isEmpty {
+    return definitions.isEmpty;
+  }
+
+  /// Checks if a given field definition matches the provided filters.
+  ///
+  /// This function is used to determine whether a field definition matches the
+  /// specified filters in the filtering process.
+  ///
+  /// @param fieldDefinition The [Field] definition to be checked.
+  /// @param fieldValueAsStringInLowerCase The field value as a lowercase string.
+  /// @param filterByFieldsValue The list of [FieldFilter] objects containing the
+  ///        field name and the filter text.
+  /// @return `true` if the field definition matches the filters, `false` otherwise.
+  bool isFieldMatching(
+    Field<dynamic> fieldDefinition,
+    String fieldValueAsStringInLowerCase,
+    FieldFilters filterByFieldsValue,
+  ) {
+    for (final FieldFilter filter in filterByFieldsValue.list) {
+      if (fieldDefinition.name == filter.fieldName) {
+        if (fieldValueAsStringInLowerCase == filter.filterTextInLowerCase) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  bool isMatchingColumnFiltering(
+    final MoneyObject objectInstance,
+    final FieldFilters filterByFieldsValue,
+  ) {
+    for (final Field fieldDefinition in fieldDefinitionsForColumns) {
+      String fieldValueAsString = _getFieldValueAsStringForFiltering(
+        objectInstance,
+        fieldDefinition,
+      );
+
+      if (isFieldMatching(
+        fieldDefinition,
+        fieldValueAsString,
+        filterByFieldsValue,
+      )) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // check if the lowerCaseTextToFind matches any of the fields text value
+  bool isMatchingFreeStyleText(
+    MoneyObject objectInstance,
+    String filterBytFreeStyleLowerCaseText,
+  ) {
+    for (final fieldDefinition in fieldDefinitionsForColumns) {
+      final fieldValueAsString = _getFieldValueAsStringForFiltering(
+        objectInstance,
+        fieldDefinition,
+      );
+
+      if (fieldValueAsString.contains(filterBytFreeStyleLowerCaseText)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   void setDefinitions(List<Field<dynamic>> list) {
     definitions.clear();
     for (var object in list) {
       definitions.add(object);
+    }
+  }
+
+  /// Converts the given field value to a string representation suitable for filtering.
+  ///
+  /// For date fields, the value is converted to a string in the format "YYYY-MM-DD" without the time component.
+  /// For all other field types, the value is converted to a lowercase string using the generic `toString()` method.
+  ///
+  /// This function is used to prepare field values for comparison during the filtering process.
+  ///
+  /// @param fieldDefinition The [Field] definition for the current field.
+  /// @param fieldValue The value of the current field.
+  /// @return The string representation of the field value, suitable for filtering.
+  String _getFieldValueAsStringForFiltering(
+    final MoneyObject objectInstance,
+    Field<dynamic> fieldDefinition,
+  ) {
+    final dynamic fieldValue = fieldDefinition.type == FieldType.widget
+        ? fieldDefinition.getValueForSerialization(objectInstance)
+        : fieldDefinition.getValueForDisplay(objectInstance);
+
+    switch (fieldDefinition.type) {
+      case FieldType.date:
+        return dateToString(fieldValue);
+      case FieldType.quantity:
+        return formatDoubleTrimZeros(fieldValue);
+      default:
+        return fieldValue.toString().toLowerCase();
     }
   }
 }

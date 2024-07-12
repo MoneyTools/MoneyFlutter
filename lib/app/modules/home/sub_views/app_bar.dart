@@ -22,10 +22,10 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   });
 
   @override
-  final Size preferredSize = const Size.fromHeight(kToolbarHeight);
+  State<MyAppBar> createState() => _MyAppBarState();
 
   @override
-  State<MyAppBar> createState() => _MyAppBarState();
+  final Size preferredSize = const Size.fromHeight(kToolbarHeight);
 }
 
 class _MyAppBarState extends State<MyAppBar> {
@@ -58,6 +58,55 @@ class _MyAppBarState extends State<MyAppBar> {
         _buildSettingsMenu(),
       ],
     );
+  }
+
+  void addColorPalette(List<PopupMenuItem<int>> actionList) {
+    actionList.add(
+      const PopupMenuItem<int>(
+        value: -1,
+        child: SizedBox(
+          height: 300,
+          child: SingleChildScrollView(
+            child: ColorPalette(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void addMenuItem(
+    final list,
+    final int id,
+    final String caption,
+    final IconData iconData,
+  ) {
+    list.add(
+      PopupMenuItem<int>(
+        value: id,
+        child: ThreePartLabel(
+          icon: Icon(iconData),
+          text1: caption,
+          small: true,
+        ),
+      ),
+    );
+  }
+
+  void onAppBarAction(
+    final int value,
+  ) {
+    switch (value) {
+      case Constants.commandAddTransactions:
+        showImportTransactionsFromTextInput(context);
+      case Constants.commandSettings:
+        Get.toNamed(Constants.routeSettingsPage);
+      case Constants.commandIncludeClosedAccount:
+        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
+      default:
+        final ThemeController themeController = Get.find();
+        themeController.setThemeColor(value);
+    }
+    DataController.to.update();
   }
 
   Widget _buildButtonToggleViewClosedAccounts() {
@@ -178,24 +227,6 @@ class _MyAppBarState extends State<MyAppBar> {
     );
   }
 
-  void addMenuItem(
-    final list,
-    final int id,
-    final String caption,
-    final IconData iconData,
-  ) {
-    list.add(
-      PopupMenuItem<int>(
-        value: id,
-        child: ThreePartLabel(
-          icon: Icon(iconData),
-          text1: caption,
-          small: true,
-        ),
-      ),
-    );
-  }
-
   Widget _buildSettingsMenu() {
     final List<PopupMenuItem<int>> actionList = [];
 
@@ -272,36 +303,5 @@ class _MyAppBarState extends State<MyAppBar> {
         onAppBarAction(value);
       },
     );
-  }
-
-  void addColorPalette(List<PopupMenuItem<int>> actionList) {
-    actionList.add(
-      const PopupMenuItem<int>(
-        value: -1,
-        child: SizedBox(
-          height: 300,
-          child: SingleChildScrollView(
-            child: ColorPalette(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void onAppBarAction(
-    final int value,
-  ) {
-    switch (value) {
-      case Constants.commandAddTransactions:
-        showImportTransactionsFromTextInput(context);
-      case Constants.commandSettings:
-        Get.toNamed(Constants.routeSettingsPage);
-      case Constants.commandIncludeClosedAccount:
-        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
-      default:
-        final ThemeController themeController = Get.find();
-        themeController.setThemeColor(value);
-    }
-    DataController.to.update();
   }
 }

@@ -14,8 +14,9 @@ class RentalPnLCard extends StatelessWidget {
     super.key,
     this.customTitle,
   });
-  final RentalPnL pnl;
+
   final String? customTitle;
+  final RentalPnL pnl;
 
   @override
   Widget build(BuildContext context) {

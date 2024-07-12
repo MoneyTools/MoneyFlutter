@@ -29,26 +29,23 @@ class ViewHeader extends StatelessWidget {
     this.onDeleteMoneyObject,
     this.child,
   });
-  final String title;
-  final num itemCount;
-  final ValueNotifier<List<int>> selectedItems;
-  final String description;
 
+  final List<Widget> Function(bool)? getActionButtons;
+  final void Function(String)? onFilterChanged;
+  final void Function()? onClearAllFilters;
+  final Widget? child;
+  final String description;
+  final String filterText;
+  final num itemCount;
   // Optional, used for multi-selection UX
   final ViewHeaderMultipleSelection? multipleSelection;
 
-  final List<Widget> Function(bool)? getActionButtons;
-
   final VoidCallback? onAddMoneyObject;
-  final VoidCallback? onMergeMoneyObject;
-  final VoidCallback? onEditMoneyObject;
   final VoidCallback? onDeleteMoneyObject;
-
-  final String filterText;
-  final void Function(String)? onFilterChanged;
-  final void Function()? onClearAllFilters;
-
-  final Widget? child;
+  final VoidCallback? onEditMoneyObject;
+  final VoidCallback? onMergeMoneyObject;
+  final ValueNotifier<List<int>> selectedItems;
+  final String title;
 
   @override
   Widget build(final BuildContext context) {

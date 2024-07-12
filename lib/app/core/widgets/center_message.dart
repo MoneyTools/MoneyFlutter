@@ -7,14 +7,16 @@ class CenterMessage extends StatelessWidget {
   /// constructor
   const CenterMessage({required this.message, this.child, super.key});
 
-  factory CenterMessage.noTransaction() {
-    return const CenterMessage(message: 'No transactions.');
-  }
   factory CenterMessage.noItems() {
     return const CenterMessage(message: 'No items');
   }
-  final String message;
+
+  factory CenterMessage.noTransaction() {
+    return const CenterMessage(message: 'No transactions.');
+  }
+
   final Widget? child;
+  final String message;
 
   @override
   Widget build(final BuildContext context) {

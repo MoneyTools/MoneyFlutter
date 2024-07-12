@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
@@ -16,10 +15,11 @@ class InputByColumns extends StatefulWidget {
     required this.onChange,
     required this.reverseAmountValue,
   });
+
+  final String currency;
+  final String dateFormat;
   final String inputText;
   final Function(String) onChange;
-  final String dateFormat;
-  final String currency;
   final bool reverseAmountValue;
 
   @override
@@ -27,14 +27,6 @@ class InputByColumns extends StatefulWidget {
 }
 
 class _InputByColumnsState extends State<InputByColumns> {
-  bool _freeStyleInput = false; // use 3 columns by default
-
-  final Debouncer _debouncer = Debouncer();
-  bool _pauseTextSync = false;
-
-  // Freestyle
-  final _controllerSingleColumn = TextEditingController();
-
   // Date
   final _controllerColumn1 = TextEditingController();
 
@@ -44,11 +36,28 @@ class _InputByColumnsState extends State<InputByColumns> {
   // Amount
   final _controllerColumn3 = TextEditingController();
 
+  // Freestyle
+  final _controllerSingleColumn = TextEditingController();
+
+  final Debouncer _debouncer = Debouncer();
+  bool _freeStyleInput = false; // use 3 columns by default
+  bool _pauseTextSync = false;
+
+  @override
+  void dispose() {
+    _controllerSingleColumn.dispose();
+    _stopListening();
+    _controllerColumn1.dispose();
+    _controllerColumn2.dispose();
+    _controllerColumn3.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
-    updateAllTextControllerContentFromRawText(widget.inputText);
+    _updateAllTextControllerContentFromRawText(widget.inputText);
 
-    startListening();
+    _startListening();
 
     super.initState();
   }
@@ -72,11 +81,11 @@ class _InputByColumnsState extends State<InputByColumns> {
             onTap: (index) {
               _freeStyleInput = index == 1;
               if (_freeStyleInput) {
-                fromThreeToOneColumn();
+                _fromThreeToOneColumn();
               } else {
-                fromOneToThreeColumn();
+                _fromOneToThreeColumn();
               }
-              notifyChanged();
+              _notifyChanged();
             },
           ),
           Expanded(
@@ -95,107 +104,6 @@ class _InputByColumnsState extends State<InputByColumns> {
         ],
       ),
     );
-  }
-
-  void startListening() {
-    _controllerColumn1.addListener(_syncText);
-    _controllerColumn2.addListener(_syncText);
-    _controllerColumn3.addListener(_syncText);
-  }
-
-  void stopListening() {
-    _controllerColumn1.removeListener(_syncText);
-    _controllerColumn2.removeListener(_syncText);
-    _controllerColumn3.removeListener(_syncText);
-  }
-
-  @override
-  void dispose() {
-    _controllerSingleColumn.dispose();
-    stopListening();
-    _controllerColumn1.dispose();
-    _controllerColumn2.dispose();
-    _controllerColumn3.dispose();
-    super.dispose();
-  }
-
-  void updateAllTextControllerContentFromRawText(final String inputText) {
-    _controllerSingleColumn.text = inputText;
-
-    ValuesParser parser = ValuesParser(
-      dateFormat: widget.dateFormat,
-      currency: widget.currency,
-      reverseAmountValue: widget.reverseAmountValue,
-    );
-    parser.convertInputTextToTransactionList(
-      context,
-      widget.inputText,
-    );
-
-    _controllerColumn1.text = parser.getListOfDatesString().join('\n');
-    _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
-    _controllerColumn3.text = parser.getListOfAmountString().join('\n');
-  }
-
-  void fromOneToThreeColumn() {
-    ValuesParser parser = ValuesParser(
-      dateFormat: widget.dateFormat,
-      currency: widget.currency,
-      reverseAmountValue: widget.reverseAmountValue,
-    );
-    parser.convertInputTextToTransactionList(
-      context,
-      _controllerSingleColumn.text,
-    );
-
-    _pauseTextSync = true;
-    _controllerColumn1.text = parser.getListOfDatesString().join('\n');
-    _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
-    _controllerColumn3.text = parser.getListOfAmountString().join('\n');
-    _pauseTextSync = false;
-  }
-
-  String getSingleBufferWithLatest3ColumnsText() {
-    return ValuesParser.assembleIntoSingleTextBuffer(
-      _controllerColumn1.text,
-      _controllerColumn2.text,
-      _controllerColumn3.text,
-    );
-  }
-
-  String fromThreeToOneColumn() {
-    _controllerSingleColumn.text = getSingleBufferWithLatest3ColumnsText();
-    return _controllerSingleColumn.text;
-  }
-
-  void _syncText() {
-    _debouncer.run(() {
-      if (_pauseTextSync) {
-        return;
-      }
-      // suspend sync in to avoid re-entrance
-      _pauseTextSync = true;
-
-      fromThreeToOneColumn();
-      _pauseTextSync = false;
-      notifyChanged();
-    });
-  }
-
-  String adjustLineCount(final String multiLineText, final lineCountNeeded) {
-    var lines = multiLineText.split('\n');
-
-    if (lines.length > lineCountNeeded) {
-      // remove trailing empty lines
-      if (lines.last.trim() == '') {
-        lines.removeLast();
-      }
-    }
-    return padList(lines, lineCountNeeded, '').join('\n');
-  }
-
-  void notifyChanged() {
-    widget.onChange(_controllerSingleColumn.text);
   }
 
   // 1 column
@@ -242,6 +150,85 @@ class _InputByColumnsState extends State<InputByColumns> {
         ),
       ],
     );
+  }
+
+  void _fromOneToThreeColumn() {
+    ValuesParser parser = ValuesParser(
+      dateFormat: widget.dateFormat,
+      currency: widget.currency,
+      reverseAmountValue: widget.reverseAmountValue,
+    );
+    parser.convertInputTextToTransactionList(
+      context,
+      _controllerSingleColumn.text,
+    );
+
+    _pauseTextSync = true;
+    _controllerColumn1.text = parser.getListOfDatesString().join('\n');
+    _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
+    _controllerColumn3.text = parser.getListOfAmountString().join('\n');
+    _pauseTextSync = false;
+  }
+
+  String _fromThreeToOneColumn() {
+    _controllerSingleColumn.text = _getSingleBufferWithLatest3ColumnsText();
+    return _controllerSingleColumn.text;
+  }
+
+  String _getSingleBufferWithLatest3ColumnsText() {
+    return ValuesParser.assembleIntoSingleTextBuffer(
+      _controllerColumn1.text,
+      _controllerColumn2.text,
+      _controllerColumn3.text,
+    );
+  }
+
+  void _notifyChanged() {
+    widget.onChange(_controllerSingleColumn.text);
+  }
+
+  void _startListening() {
+    _controllerColumn1.addListener(_syncText);
+    _controllerColumn2.addListener(_syncText);
+    _controllerColumn3.addListener(_syncText);
+  }
+
+  void _stopListening() {
+    _controllerColumn1.removeListener(_syncText);
+    _controllerColumn2.removeListener(_syncText);
+    _controllerColumn3.removeListener(_syncText);
+  }
+
+  void _syncText() {
+    _debouncer.run(() {
+      if (_pauseTextSync) {
+        return;
+      }
+      // suspend sync in to avoid re-entrance
+      _pauseTextSync = true;
+
+      _fromThreeToOneColumn();
+      _pauseTextSync = false;
+      _notifyChanged();
+    });
+  }
+
+  void _updateAllTextControllerContentFromRawText(final String inputText) {
+    _controllerSingleColumn.text = inputText;
+
+    ValuesParser parser = ValuesParser(
+      dateFormat: widget.dateFormat,
+      currency: widget.currency,
+      reverseAmountValue: widget.reverseAmountValue,
+    );
+    parser.convertInputTextToTransactionList(
+      context,
+      widget.inputText,
+    );
+
+    _controllerColumn1.text = parser.getListOfDatesString().join('\n');
+    _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
+    _controllerColumn3.text = parser.getListOfAmountString().join('\n');
   }
 }
 

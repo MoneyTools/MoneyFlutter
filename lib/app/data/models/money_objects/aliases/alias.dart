@@ -36,35 +36,18 @@ class Alias extends MoneyObject {
       payeeId: row.getInt('Payee', -1),
     );
   }
-  static final _fields = Fields<Alias>();
 
-  static Fields<Alias> get fields {
-    if (_fields.isEmpty) {
-      final tmp = Alias.fromJson({});
-      _fields.setDefinitions([
-        tmp.id,
-        tmp.pattern,
-        tmp.flags,
-        tmp.payeeId,
-      ]);
-    }
-    return _fields;
-  }
-
-  static dynamic getFields() {
-    return fields;
-  }
-
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  @override
-  String getRepresentation() {
-    return pattern.value;
-  }
+  /// 2    Flags    INT            1                 0
+  Field<int> flags = Field<int>(
+    type: FieldType.text,
+    align: TextAlign.center,
+    importance: 3,
+    name: 'Flags',
+    serializeName: 'Flags',
+    defaultValue: 0,
+    getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
+  );
 
   /// ID
   /// 0    Id       INT            0                 1
@@ -84,18 +67,6 @@ class Alias extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Alias).pattern.value,
   );
 
-  /// 2    Flags    INT            1                 0
-  Field<int> flags = Field<int>(
-    type: FieldType.text,
-    align: TextAlign.center,
-    importance: 3,
-    name: 'Flags',
-    serializeName: 'Flags',
-    defaultValue: 0,
-    getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
-  );
-
   /// Payee
   /// 3 Payee INT 1 0
   Field<int> payeeId = Field<int>(
@@ -110,14 +81,41 @@ class Alias extends MoneyObject {
 
   // Not persisted
   Payee? payeeInstance;
+
   RegExp? regex;
 
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
-  AliasType get type {
-    return flags.value == 0 ? AliasType.none : AliasType.regex;
+  @override
+  String getRepresentation() {
+    return pattern.value;
+  }
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
+
+  static final _fields = Fields<Alias>();
+
+  static Fields<Alias> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Alias.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.pattern,
+        tmp.flags,
+        tmp.payeeId,
+      ]);
+    }
+    return _fields;
+  }
+
+  static dynamic getFields() {
+    return fields;
   }
 
   bool isMatch(final String text) {
@@ -135,5 +133,9 @@ class Alias extends MoneyObject {
       }
     }
     return false;
+  }
+
+  AliasType get type {
+    return flags.value == 0 ? AliasType.none : AliasType.regex;
   }
 }

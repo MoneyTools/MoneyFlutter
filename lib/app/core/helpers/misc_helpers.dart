@@ -231,7 +231,9 @@ double trimToFiveDecimalPlaces(double value) {
 
 class Debouncer {
   Debouncer([this.duration = const Duration(seconds: 1)]);
+
   final Duration duration;
+
   Timer? _timer;
 
   void run(VoidCallback callback) {
@@ -244,6 +246,7 @@ class TimeLapse {
   TimeLapse() {
     stopwatch = Stopwatch()..start();
   }
+
   Stopwatch? stopwatch;
 
   // End stopwatch and print time spent

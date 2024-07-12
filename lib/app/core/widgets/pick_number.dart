@@ -8,9 +8,10 @@ class NumberPicker extends StatefulWidget {
     required this.selectedNumber,
     super.key,
   });
-  final String title;
-  final int selectedNumber;
+
   final Function(int) onChanged;
+  final int selectedNumber;
+  final String title;
 
   @override
   State<NumberPicker> createState() => _NumberPickerState();

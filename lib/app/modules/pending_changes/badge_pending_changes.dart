@@ -13,6 +13,7 @@ class BadgePendingChanges extends StatelessWidget {
     required this.itemsChanged,
     required this.itemsDeleted,
   });
+
   final int itemsAdded;
   final int itemsChanged;
   final int itemsDeleted;
@@ -39,6 +40,20 @@ class BadgePendingChanges extends StatelessWidget {
           PendingChangesDialog.show(context);
         },
         child: getChangeLabel(context),
+      ),
+    );
+  }
+
+  Widget buildCounter(
+    final String prefix,
+    final int value,
+    final TextStyle textStyle,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: Text(
+        prefix + getIntAsText(value),
+        style: textStyle,
       ),
     );
   }
@@ -79,20 +94,6 @@ class BadgePendingChanges extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: widgets,
-    );
-  }
-
-  Widget buildCounter(
-    final String prefix,
-    final int value,
-    final TextStyle textStyle,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Text(
-        prefix + getIntAsText(value),
-        style: textStyle,
-      ),
     );
   }
 

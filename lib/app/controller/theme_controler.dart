@@ -6,16 +6,33 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class ThemeController extends GetxController {
-  static ThemeController get to => Get.find();
-
-  RxBool isDarkTheme = false.obs;
   RxInt colorSelected = 0.obs;
+  RxBool isDarkTheme = false.obs;
   Color primaryColor = Colors.grey;
 
   @override
   void onInit() {
     super.onInit();
     loadThemeFromPreferences();
+  }
+
+  //--------------------------------------------------------
+  // Font scaling
+
+  void fontScaleDecrease() {
+    fontScaleDelta(-0.10);
+  }
+
+  void fontScaleDelta(final double addOrSubtract) {
+    setFontScaleTo(PreferenceController.to.textScale + addOrSubtract);
+  }
+
+  void fontScaleIncrease() {
+    fontScaleDelta(0.10);
+  }
+
+  void fontScaleMultiplyBy(final double factor) {
+    setFontScaleTo(PreferenceController.to.textScale * factor);
   }
 
   void loadThemeFromPreferences() async {
@@ -27,11 +44,19 @@ class ThemeController extends GetxController {
     updateTheme();
   }
 
-  void toggleThemeMode() {
-    isDarkTheme.value = !isDarkTheme.value;
-    primaryColor = themeData.colorScheme.primary;
-    saveThemeToPreferences();
-    updateTheme();
+  void saveThemeToPreferences() async {
+    PreferenceController.to.setBool(settingKeyDarkMode, isDarkTheme.value);
+    PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
+  }
+
+  bool setFontScaleTo(final double newScale) {
+    final int cleanValue = (newScale * 100).round();
+    if (isBetweenOrEqual(cleanValue, 40, 400)) {
+      PreferenceController.to.textScale = cleanValue / 100.0;
+
+      return true;
+    }
+    return false;
   }
 
   void setThemeColor(final int index) {
@@ -41,31 +66,8 @@ class ThemeController extends GetxController {
     updateTheme();
   }
 
-  void saveThemeToPreferences() async {
-    PreferenceController.to.setBool(settingKeyDarkMode, isDarkTheme.value);
-    PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
-  }
-
-  /// this will rebuild the app to use the current theme
-  void updateTheme() {
-    primaryColor = themeData.colorScheme.primary;
-    Get.changeTheme(themeData);
-  }
-
   ThemeData get themeData {
     return isDarkTheme.value ? themeDataDark : themeDataLight;
-  }
-
-  ThemeData get themeDataLight {
-    // Validate color range
-    if (!isIndexInRange(colorOptions, colorSelected.value)) {
-      colorSelected = 0.obs;
-    }
-    final ThemeData themeData = ThemeData(
-      colorSchemeSeed: colorOptions[colorSelected.value],
-      brightness: Brightness.light,
-    );
-    return themeData;
   }
 
   ThemeData get themeDataDark {
@@ -81,32 +83,30 @@ class ThemeController extends GetxController {
     return themeData;
   }
 
-  //--------------------------------------------------------
-  // Font scaling
-
-  void fontScaleDecrease() {
-    fontScaleDelta(-0.10);
-  }
-
-  void fontScaleIncrease() {
-    fontScaleDelta(0.10);
-  }
-
-  void fontScaleMultiplyBy(final double factor) {
-    setFontScaleTo(PreferenceController.to.textScale * factor);
-  }
-
-  void fontScaleDelta(final double addOrSubtract) {
-    setFontScaleTo(PreferenceController.to.textScale + addOrSubtract);
-  }
-
-  bool setFontScaleTo(final double newScale) {
-    final int cleanValue = (newScale * 100).round();
-    if (isBetweenOrEqual(cleanValue, 40, 400)) {
-      PreferenceController.to.textScale = cleanValue / 100.0;
-
-      return true;
+  ThemeData get themeDataLight {
+    // Validate color range
+    if (!isIndexInRange(colorOptions, colorSelected.value)) {
+      colorSelected = 0.obs;
     }
-    return false;
+    final ThemeData themeData = ThemeData(
+      colorSchemeSeed: colorOptions[colorSelected.value],
+      brightness: Brightness.light,
+    );
+    return themeData;
+  }
+
+  static ThemeController get to => Get.find();
+
+  void toggleThemeMode() {
+    isDarkTheme.value = !isDarkTheme.value;
+    primaryColor = themeData.colorScheme.primary;
+    saveThemeToPreferences();
+    updateTheme();
+  }
+
+  /// this will rebuild the app to use the current theme
+  void updateTheme() {
+    primaryColor = themeData.colorScheme.primary;
+    Get.changeTheme(themeData);
   }
 }

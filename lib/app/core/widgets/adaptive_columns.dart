@@ -8,6 +8,7 @@ class AdaptiveColumns extends StatelessWidget {
     required this.columnWidth,
     required this.children,
   });
+
   final List<Widget> children;
   final int columnWidth;
 
@@ -18,14 +19,6 @@ class AdaptiveColumns extends StatelessWidget {
     } else {
       return multiColumns();
     }
-  }
-
-  /// For small device list a phone simply use a single list of fields
-  Widget singleColumn() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: children,
-    );
   }
 
   // optimize for larger screen into multiple columns
@@ -66,6 +59,14 @@ class AdaptiveColumns extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  /// For small device list a phone simply use a single list of fields
+  Widget singleColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
     );
   }
 }

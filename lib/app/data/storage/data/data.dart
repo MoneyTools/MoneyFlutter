@@ -72,9 +72,6 @@ class Data {
     ];
   }
 
-  /// singleton
-  static final Data _instance = Data._internal();
-
   /// 1 Account Aliases
   AccountAliases accountAliases = AccountAliases();
 
@@ -125,6 +122,19 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
+  /// singleton
+  static final Data _instance = Data._internal();
+
+  void assessMutationsCountOfAllModels() {
+    DataController.to.trackMutations.reset();
+
+    for (final element in _listOfTables) {
+      element.resetMutationStateOfObjects();
+      element.assessMutationsCounts();
+    }
+    Data().updateAll();
+  }
+
   void clear() {
     DataController.to.trackMutations.reset();
 
@@ -133,45 +143,13 @@ class Data {
     }
   }
 
-  /// let the app know that something has changed
-  void notifyMutationChanged({
-    required MutationType mutation,
-    required MoneyObject moneyObject,
-    bool recalculateBalances = true,
-  }) {
-    switch (mutation) {
-      case MutationType.inserted:
-        moneyObject.mutation = MutationType.inserted;
-        DataController.to.trackMutations.increaseNumber(increaseAdded: 1);
-      case MutationType.changed:
-        // ensure that we only count editing once and discard if this was edited on a new inserted items
-        if (moneyObject.mutation == MutationType.none) {
-          moneyObject.mutation = MutationType.changed;
-          DataController.to.trackMutations.increaseNumber(increaseChanged: 1);
-        } else {
-          DataController.to.trackMutations.setLastEditToNow();
-        }
-      case MutationType.deleted:
-        if (moneyObject.mutation == MutationType.inserted) {
-          // in case the delete item was a revcently added item, we need to deduct it from the sum
-          DataController.to.trackMutations.increaseNumber(increaseAdded: -1);
-        }
-        moneyObject.mutation = MutationType.deleted;
-        DataController.to.trackMutations.increaseNumber(increaseDeleted: 1);
-      default:
-        break;
+  /// Close data source
+  void close() {
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.clear();
     }
-
-    if (recalculateBalances) {
-      updateAll();
-    }
-  }
-
-  /// ReBalance all objects values
-  /// and Rebuild the UI
-  void updateAll() {
-    recalculateBalances();
-    DataController.to.update();
+    DataController.to.dataFileIsClosed();
+    DataController.to.trackMutations.reset();
   }
 
   /// Bulk Delete
@@ -186,14 +164,10 @@ class Data {
     Data().updateAll();
   }
 
-  void assessMutationsCountOfAllModels() {
-    DataController.to.trackMutations.reset();
-
-    for (final element in _listOfTables) {
-      element.resetMutationStateOfObjects();
-      element.assessMutationsCounts();
-    }
-    Data().updateAll();
+  DateTime? getLastDateTimeModified(final String fullPathToFile) {
+    File file = File(fullPathToFile);
+    // Get the last modified date and time of the file
+    return file.lastModifiedSync();
   }
 
   List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {
@@ -219,65 +193,9 @@ class Data {
     return allMutationGroups;
   }
 
-  Future<String?> validateDataBasePathIsValidAndExist(
-    final String? filePath,
-    final Uint8List fileBytes,
-  ) async {
-    try {
-      if (filePath != null) {
-        if (fileBytes.isNotEmpty) {
-          return filePath;
-        }
-        if (File(filePath).existsSync()) {
-          return filePath;
-        }
-      }
-    } catch (e) {
-      // next line will handle things
-    }
-    return null;
-  }
-
-  DateTime? getLastDateTimeModified(final String fullPathToFile) {
-    File file = File(fullPathToFile);
-    // Get the last modified date and time of the file
-    return file.lastModifiedSync();
-  }
-
-  /// Automated detection of what type of storage to load the data from
-  Future<bool> loadFromPath(final DataSource dateSource) async {
-    try {
-      final String fileExtension = MyFileSystems.getFileExtension(dateSource.filePath);
-      switch (fileExtension.toLowerCase()) {
-        // Sqlite
-        case '.mmdb':
-          // Load from SQLite
-          if (await loadFromSql(dateSource.filePath, dateSource.fileBytes)) {
-            PreferenceController.to.addToMRU(dateSource.filePath);
-          }
-        case '.mmcsv':
-          // Zip CSV files
-          await loadFromZippedCsv(dateSource.filePath, dateSource.fileBytes);
-          PreferenceController.to.addToMRU(dateSource.filePath);
-
-        default:
-          SnackBarService.displayWarning(
-            autoDismiss: false,
-            message: 'Unsupported file type $fileExtension',
-          );
-          return false;
-      }
-    } catch (e) {
-      debugLog(e.toString());
-      SnackBarService.displayError(autoDismiss: false, message: e.toString());
-      return false;
-    }
-
-    // All individual table were loaded, now let the cross reference money object create linked to other tables
-    recalculateBalances();
-
-    // Notify that loading is completed
-    return true;
+  MoneyModel getNetWorth() {
+    final double sum = accounts.getSumOfAccountBalances();
+    return MoneyModel(amount: sum);
   }
 
   Transaction? getOrCreateRelatedTransaction(
@@ -338,6 +256,72 @@ class Data {
     return relatedTransaction;
   }
 
+  /// <summary>
+  /// Get a list of all Investment transactions grouped by security
+  /// </summary>
+  /// <param name="filter">The account filter or null if you want them all</param>
+  /// <param name="toDate">Get all transactions up to but not including this date</param>
+  /// <returns></returns>
+  Map<Security, List<Investment>> getTransactionsGroupedBySecurity(
+    Function(Account)? filter,
+    DateTime toDate,
+  ) {
+    Map<Security, List<Investment>> transactionsBySecurity = {};
+
+    // Sort all add, remove, buy, sell transactions by date and by security.
+    for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
+      if (t.dateTime.value!.millisecond < toDate.millisecond &&
+          (filter == null || filter(t.accountInstance!)) &&
+          t.investmentInstance != null &&
+          t.investmentInstance!.investmentType.value != InvestmentType.none.index) {
+        Investment i = t.investmentInstance!;
+        Security? s = Data().securities.get(i.security.value);
+        if (s != null) {
+          List<Investment> list = transactionsBySecurity[s] ?? [];
+          transactionsBySecurity[s] = list;
+          list.add(i);
+        }
+      }
+    }
+    return transactionsBySecurity;
+  }
+
+  /// Automated detection of what type of storage to load the data from
+  Future<bool> loadFromPath(final DataSource dateSource) async {
+    try {
+      final String fileExtension = MyFileSystems.getFileExtension(dateSource.filePath);
+      switch (fileExtension.toLowerCase()) {
+        // Sqlite
+        case '.mmdb':
+          // Load from SQLite
+          if (await loadFromSql(dateSource.filePath, dateSource.fileBytes)) {
+            PreferenceController.to.addToMRU(dateSource.filePath);
+          }
+        case '.mmcsv':
+          // Zip CSV files
+          await loadFromZippedCsv(dateSource.filePath, dateSource.fileBytes);
+          PreferenceController.to.addToMRU(dateSource.filePath);
+
+        default:
+          SnackBarService.displayWarning(
+            autoDismiss: false,
+            message: 'Unsupported file type $fileExtension',
+          );
+          return false;
+      }
+    } catch (e) {
+      debugLog(e.toString());
+      SnackBarService.displayError(autoDismiss: false, message: e.toString());
+      return false;
+    }
+
+    // All individual table were loaded, now let the cross reference money object create linked to other tables
+    recalculateBalances();
+
+    // Notify that loading is completed
+    return true;
+  }
+
   bool makeTransferLinkage(
     Transaction transactionSource,
     Account destinationAccount,
@@ -392,6 +376,47 @@ class Data {
     return true;
   }
 
+  /// let the app know that something has changed
+  void notifyMutationChanged({
+    required MutationType mutation,
+    required MoneyObject moneyObject,
+    bool recalculateBalances = true,
+  }) {
+    switch (mutation) {
+      case MutationType.inserted:
+        moneyObject.mutation = MutationType.inserted;
+        DataController.to.trackMutations.increaseNumber(increaseAdded: 1);
+      case MutationType.changed:
+        // ensure that we only count editing once and discard if this was edited on a new inserted items
+        if (moneyObject.mutation == MutationType.none) {
+          moneyObject.mutation = MutationType.changed;
+          DataController.to.trackMutations.increaseNumber(increaseChanged: 1);
+        } else {
+          DataController.to.trackMutations.setLastEditToNow();
+        }
+      case MutationType.deleted:
+        if (moneyObject.mutation == MutationType.inserted) {
+          // in case the delete item was a revcently added item, we need to deduct it from the sum
+          DataController.to.trackMutations.increaseNumber(increaseAdded: -1);
+        }
+        moneyObject.mutation = MutationType.deleted;
+        DataController.to.trackMutations.increaseNumber(increaseDeleted: 1);
+      default:
+        break;
+    }
+
+    if (recalculateBalances) {
+      updateAll();
+    }
+  }
+
+  /// When Changes are done we can force a reevaluation of the balances
+  void recalculateBalances() {
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.onAllDataLoaded();
+    }
+  }
+
   void transferSplitTo(MoneySplit s, Account to) {
     // Transaction t = s.Transaction;
     // if (t.Account == to) {
@@ -427,54 +452,29 @@ class Data {
     // this.Rebalance(to);
   }
 
-  /// When Changes are done we can force a reevaluation of the balances
-  void recalculateBalances() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.onAllDataLoaded();
-    }
+  /// ReBalance all objects values
+  /// and Rebuild the UI
+  void updateAll() {
+    recalculateBalances();
+    DataController.to.update();
   }
 
-  /// Close data source
-  void close() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.clear();
-    }
-    DataController.to.dataFileIsClosed();
-    DataController.to.trackMutations.reset();
-  }
-
-  /// <summary>
-  /// Get a list of all Investment transactions grouped by security
-  /// </summary>
-  /// <param name="filter">The account filter or null if you want them all</param>
-  /// <param name="toDate">Get all transactions up to but not including this date</param>
-  /// <returns></returns>
-  Map<Security, List<Investment>> getTransactionsGroupedBySecurity(
-    Function(Account)? filter,
-    DateTime toDate,
-  ) {
-    Map<Security, List<Investment>> transactionsBySecurity = {};
-
-    // Sort all add, remove, buy, sell transactions by date and by security.
-    for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
-      if (t.dateTime.value!.millisecond < toDate.millisecond &&
-          (filter == null || filter(t.accountInstance!)) &&
-          t.investmentInstance != null &&
-          t.investmentInstance!.investmentType.value != InvestmentType.none.index) {
-        Investment i = t.investmentInstance!;
-        Security? s = Data().securities.get(i.security.value);
-        if (s != null) {
-          List<Investment> list = transactionsBySecurity[s] ?? [];
-          transactionsBySecurity[s] = list;
-          list.add(i);
+  Future<String?> validateDataBasePathIsValidAndExist(
+    final String? filePath,
+    final Uint8List fileBytes,
+  ) async {
+    try {
+      if (filePath != null) {
+        if (fileBytes.isNotEmpty) {
+          return filePath;
+        }
+        if (File(filePath).existsSync()) {
+          return filePath;
         }
       }
+    } catch (e) {
+      // next line will handle things
     }
-    return transactionsBySecurity;
-  }
-
-  MoneyModel getNetWorth() {
-    final double sum = accounts.getSumOfAccountBalances();
-    return MoneyModel(amount: sum);
+    return null;
   }
 }

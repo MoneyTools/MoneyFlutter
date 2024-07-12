@@ -31,15 +31,16 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   RentBuilding? lastSelectedRental;
 
+  double _footerEstimatedValue = 0.00;
+  double _footerExpenses = 0.00;
   // Footer related
 
   double _footerLandValue = 0.00;
-  double _footerEstimatedValue = 0.00;
-  int _footerTransactionsOfIncome = 0;
-  int _footerTransactionsOfExpense = 0;
-  double _footerRevenue = 0.00;
-  double _footerExpenses = 0.00;
+
   double _footerProfit = 0.00;
+  double _footerRevenue = 0.00;
+  int _footerTransactionsOfExpense = 0;
+  int _footerTransactionsOfIncome = 0;
 
   @override
   String getClassNamePlural() {
@@ -49,25 +50,6 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Rental';
-  }
-
-  @override
-  String getDescription() {
-    return 'Properties to rent.';
-  }
-
-  @override
-  String getViewId() {
-    return Data().rentBuildings.getTypeName();
-  }
-
-  String getUnitsAsString(final List<RentUnit> listOfUnits) {
-    final List<String> listAsText = <String>[];
-    for (RentUnit unit in listOfUnits) {
-      listAsText.add('${unit.name}:${unit.renter}');
-    }
-
-    return listAsText.join('\n');
   }
 
   @override
@@ -93,26 +75,13 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<RentBuilding> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
+  String getDescription() {
+    return 'Properties to rent.';
+  }
 
-    _footerExpenses = 0.00;
-    _footerRevenue = 0.00;
-    _footerProfit = 0.00;
-
-    for (final item in list) {
-      _footerLandValue += item.landValue.getValueForDisplay(item).toDouble();
-      _footerEstimatedValue += item.estimatedValue.getValueForDisplay(item).toDouble();
-      _footerTransactionsOfIncome += item.transactionsForIncomes.value.toInt();
-      _footerTransactionsOfExpense += item.transactionsForExpenses.value.toInt();
-      _footerExpenses += item.expense.getValueForDisplay(item).toDouble();
-      _footerRevenue += item.revenue.getValueForDisplay(item).toDouble();
-      _footerProfit += item.profit.getValueForDisplay(item).toDouble();
-    }
-    return list;
+  @override
+  Fields<RentBuilding> getFieldsForTable() {
+    return RentBuilding.fields;
   }
 
   @override
@@ -140,7 +109,39 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Fields<RentBuilding> getFieldsForTable() {
-    return RentBuilding.fields;
+  List<RentBuilding> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
+
+    _footerExpenses = 0.00;
+    _footerRevenue = 0.00;
+    _footerProfit = 0.00;
+
+    for (final item in list) {
+      _footerLandValue += item.landValue.getValueForDisplay(item).toDouble();
+      _footerEstimatedValue += item.estimatedValue.getValueForDisplay(item).toDouble();
+      _footerTransactionsOfIncome += item.transactionsForIncomes.value.toInt();
+      _footerTransactionsOfExpense += item.transactionsForExpenses.value.toInt();
+      _footerExpenses += item.expense.getValueForDisplay(item).toDouble();
+      _footerRevenue += item.revenue.getValueForDisplay(item).toDouble();
+      _footerProfit += item.profit.getValueForDisplay(item).toDouble();
+    }
+    return list;
+  }
+
+  @override
+  String getViewId() {
+    return Data().rentBuildings.getTypeName();
+  }
+
+  String getUnitsAsString(final List<RentUnit> listOfUnits) {
+    final List<String> listAsText = <String>[];
+    for (RentUnit unit in listOfUnits) {
+      listAsText.add('${unit.name}:${unit.renter}');
+    }
+
+    return listAsText.join('\n');
   }
 }

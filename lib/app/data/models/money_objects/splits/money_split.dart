@@ -71,6 +71,79 @@ class MoneySplit extends MoneyObject {
       budgetBalanceDate: row.getDate('BudgetBalanceDate'),
     );
   }
+
+  // 4
+  FieldMoney amount = FieldMoney(
+    name: 'Amount',
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).amount.value,
+  );
+
+  // 8
+  FieldDate budgetBalanceDate = FieldDate(
+    name: 'Budgeted Date',
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).budgetBalanceDate.value,
+  );
+
+  // 2
+  FieldInt categoryId = FieldInt(
+    name: 'Category',
+    type: FieldType.text,
+    align: TextAlign.left,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as MoneySplit).categoryId.value),
+  );
+
+  // 7
+  FieldInt flags = FieldInt(
+    name: 'Flags',
+    columnWidth: ColumnWidth.nano,
+    align: TextAlign.center,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).flags.value,
+  );
+
+  // 1
+  FieldId id = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
+  );
+
+  // 6
+  FieldString memo = FieldString(
+    name: 'Memo',
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).memo.value,
+  );
+
+  // 3
+  FieldInt payeeId = FieldInt(
+    name: 'Payee',
+    type: FieldType.text,
+    align: TextAlign.left,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().payees.getNameFromId((instance as MoneySplit).payeeId.value),
+  );
+
+  // 0
+  FieldInt transactionId = FieldInt(
+    name: 'Transaction',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).transactionId.value,
+  );
+
+  // 5
+  FieldInt transferId = FieldInt(
+    name: 'Transfer',
+    useAsColumn: false,
+  );
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
+
   static final _fields = Fields<MoneySplit>();
 
   static Fields<MoneySplit> get fields {
@@ -85,76 +158,4 @@ class MoneySplit extends MoneyObject {
     }
     return _fields;
   }
-
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  // 0
-  FieldInt transactionId = FieldInt(
-    name: 'Transaction',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).transactionId.value,
-  );
-
-  // 1
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
-  );
-
-  // 2
-  FieldInt categoryId = FieldInt(
-    name: 'Category',
-    type: FieldType.text,
-    align: TextAlign.left,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as MoneySplit).categoryId.value),
-  );
-
-  // 3
-  FieldInt payeeId = FieldInt(
-    name: 'Payee',
-    type: FieldType.text,
-    align: TextAlign.left,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().payees.getNameFromId((instance as MoneySplit).payeeId.value),
-  );
-
-  // 4
-  FieldMoney amount = FieldMoney(
-    name: 'Amount',
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).amount.value,
-  );
-
-  // 5
-  FieldInt transferId = FieldInt(
-    name: 'Transfer',
-    useAsColumn: false,
-  );
-
-  // 6
-  FieldString memo = FieldString(
-    name: 'Memo',
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).memo.value,
-  );
-
-  // 7
-  FieldInt flags = FieldInt(
-    name: 'Flags',
-    columnWidth: ColumnWidth.nano,
-    align: TextAlign.center,
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).flags.value,
-  );
-
-  // 8
-  FieldDate budgetBalanceDate = FieldDate(
-    name: 'Budgeted Date',
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).budgetBalanceDate.value,
-  );
-
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
 }

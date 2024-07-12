@@ -21,16 +21,8 @@ class RentUnit extends MoneyObject {
       ..renter.value = row.getString('Renter')
       ..note.value = row.getString('Note');
   }
-  @override
-  int get uniqueId => id.value;
-  @override
-  set uniqueId(value) => id.value = value;
 
-  /// Id
-  /// 0|Id|INT|0||1
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
-  );
+  double balance = 0.00;
 
   /// Building Id
   /// 1|Building|INT|1||0
@@ -42,6 +34,15 @@ class RentUnit extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).building.value,
   );
 
+  // not persisted field
+  int count = 0;
+
+  /// Id
+  /// 0|Id|INT|0||1
+  FieldId id = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
+  );
+
   /// 2
   /// 2|Name|nvarchar(255)|1||0
   FieldString name = FieldString(
@@ -49,15 +50,6 @@ class RentUnit extends MoneyObject {
     name: 'Name',
     serializeName: 'Name',
     getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).name.value,
-  );
-
-  /// 3
-  /// 3|Renter|nvarchar(255)|0||0
-  FieldString renter = FieldString(
-    importance: 3,
-    name: 'Renter',
-    serializeName: 'Renter',
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).renter.value,
   );
 
   /// 4
@@ -69,7 +61,18 @@ class RentUnit extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).note.value,
   );
 
-  // not persisted field
-  int count = 0;
-  double balance = 0.00;
+  /// 3
+  /// 3|Renter|nvarchar(255)|0||0
+  FieldString renter = FieldString(
+    importance: 3,
+    name: 'Renter',
+    serializeName: 'Renter',
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).renter.value,
+  );
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
 }

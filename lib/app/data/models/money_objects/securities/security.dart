@@ -63,6 +63,109 @@ class Security extends MoneyObject {
       priceDate: row.getDate('PriceDate'),
     );
   }
+
+  FieldMoney balance = FieldMoney(
+    name: 'Balance',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).balance.value,
+  );
+
+  // 5
+  FieldString cuspid = FieldString(
+    name: 'CUSPID',
+    serializeName: 'CUSPID',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).cuspid.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
+  );
+
+  // 0
+  FieldId id = FieldId(
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).uniqueId,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).uniqueId,
+  );
+
+  // 4
+  FieldMoney lastPrice = FieldMoney(
+    name: 'Last Price',
+    serializeName: 'LastPrice',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).lastPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value.toDouble(),
+  );
+
+  // 1
+  FieldString name = FieldString(
+    name: 'Name',
+    serializeName: 'Name',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).name.value,
+  );
+
+  // Not persisted fields
+
+  FieldInt numberOfTrades = FieldInt(
+    name: 'Trades',
+    columnWidth: ColumnWidth.nano,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).numberOfTrades.value,
+  );
+
+  FieldQuantity outstandingShares = FieldQuantity(
+    name: 'Shares',
+    defaultValue: 0,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).outstandingShares.value,
+  );
+
+  // 3
+  FieldMoney price = FieldMoney(
+    name: 'Price',
+    serializeName: 'Price',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).price.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value.toDouble(),
+  );
+
+  // 8
+  FieldDate priceDate = FieldDate(
+    name: 'Date',
+    serializeName: 'Date',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
+  );
+
+  // 6
+  FieldInt securityType = FieldInt(
+    name: 'Type',
+    serializeName: 'Type',
+    columnWidth: ColumnWidth.tiny,
+    align: TextAlign.center,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).securityType.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
+  );
+
+  // 2
+  FieldString symbol = FieldString(
+    name: 'Symbol',
+    serializeName: 'Symbol',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).symbol.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).symbol.value,
+  );
+
+  // 7
+  FieldInt taxable = FieldInt(
+    name: 'Taxable',
+    serializeName: 'Taxable',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).taxable.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Security).taxable.value,
+  );
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
+
   static final _fields = Fields<Security>();
 
   static Fields<Security> get fields {
@@ -83,106 +186,4 @@ class Security extends MoneyObject {
     }
     return _fields;
   }
-
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  // 0
-  FieldId id = FieldId(
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).uniqueId,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).uniqueId,
-  );
-
-  // 1
-  FieldString name = FieldString(
-    name: 'Name',
-    serializeName: 'Name',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).name.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).name.value,
-  );
-
-  // 2
-  FieldString symbol = FieldString(
-    name: 'Symbol',
-    serializeName: 'Symbol',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).symbol.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).symbol.value,
-  );
-
-  // 3
-  FieldMoney price = FieldMoney(
-    name: 'Price',
-    serializeName: 'Price',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).price.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value.toDouble(),
-  );
-
-  // 4
-  FieldMoney lastPrice = FieldMoney(
-    name: 'Last Price',
-    serializeName: 'LastPrice',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).lastPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value.toDouble(),
-  );
-
-  // 5
-  FieldString cuspid = FieldString(
-    name: 'CUSPID',
-    serializeName: 'CUSPID',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).cuspid.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
-  );
-
-  // 6
-  FieldInt securityType = FieldInt(
-    name: 'Type',
-    serializeName: 'Type',
-    columnWidth: ColumnWidth.tiny,
-    align: TextAlign.center,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).securityType.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
-  );
-
-  // 7
-  FieldInt taxable = FieldInt(
-    name: 'Taxable',
-    serializeName: 'Taxable',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).taxable.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).taxable.value,
-  );
-
-  // 8
-  FieldDate priceDate = FieldDate(
-    name: 'Date',
-    serializeName: 'Date',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
-  );
-
-  // Not persisted fields
-
-  FieldInt numberOfTrades = FieldInt(
-    name: 'Trades',
-    columnWidth: ColumnWidth.nano,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).numberOfTrades.value,
-  );
-
-  FieldQuantity outstandingShares = FieldQuantity(
-    name: 'Shares',
-    defaultValue: 0,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).outstandingShares.value,
-  );
-
-  FieldMoney balance = FieldMoney(
-    name: 'Balance',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).balance.value,
-  );
-
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
 }

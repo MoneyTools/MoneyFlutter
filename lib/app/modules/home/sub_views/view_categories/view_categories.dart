@@ -35,6 +35,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewCategories;
   }
 
+  // Footer related
+  int _footerCountTransactions = 0;
+
+  int _footerCountTransactionsRollUp = 0;
+  double _footerSumBalance = 0.00;
+  double _footerSumBalanceRollUp = 0.00;
+  final List<Widget> _pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[
     false,
     false,
@@ -43,102 +50,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     false,
     true,
   ];
-  final List<Widget> _pivots = <Widget>[];
-
-  // Footer related
-  int _footerCountTransactions = 0;
-  int _footerCountTransactionsRollUp = 0;
-  double _footerSumBalance = 0.00;
-  double _footerSumBalanceRollUp = 0.00;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'None',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Expense',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[
-            CategoryType.expense,
-            CategoryType.recurringExpense,
-          ]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Income',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Saving',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Investment',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'All',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[]),
-        ),
-      ),
-    );
-  }
-
-  @override
-  String getClassNamePlural() {
-    return 'Categories';
-  }
-
-  @override
-  String getClassNameSingular() {
-    return 'Category';
-  }
-
-  @override
-  String getDescription() {
-    return 'Classification of your money transactions.';
-  }
-
-  @override
-  String getViewId() {
-    return Data().categories.getTypeName();
-  }
 
   @override
   Widget buildHeader([final Widget? child]) {
@@ -236,8 +147,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Fields<Category> getFieldsForTable() {
-    return Category.fields;
+  String getClassNamePlural() {
+    return 'Categories';
+  }
+
+  @override
+  String getClassNameSingular() {
+    return 'Category';
   }
 
   @override
@@ -254,6 +170,35 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       default:
         return null;
     }
+  }
+
+  @override
+  String getDescription() {
+    return 'Classification of your money transactions.';
+  }
+
+  @override
+  Fields<Category> getFieldsForTable() {
+    return Category.fields;
+  }
+
+  @override
+  Widget getInfoPanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
+  }
+
+  @override
+  Widget getInfoPanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(selectedIds);
   }
 
   @override
@@ -289,32 +234,77 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
+  String getViewId() {
+    return Data().categories.getTypeName();
   }
 
   @override
-  Widget getInfoPanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
-  }
+  void initState() {
+    super.initState();
 
-  double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
-    double total = 0.0;
-    getList().forEach((final Category category) {
-      if (types.isEmpty || (category).type.value == types.first) {
-        total += category.sum.value.toDouble();
-      }
-    });
-    return total;
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'None',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Expense',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[
+            CategoryType.expense,
+            CategoryType.recurringExpense,
+          ]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Income',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Saving',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Investment',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[]),
+        ),
+      ),
+    );
   }
 
   Widget _buildToggles() {
@@ -361,5 +351,15 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     }
 
     return []; // all
+  }
+
+  double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
+    double total = 0.0;
+    getList().forEach((final Category category) {
+      if (types.isEmpty || (category).type.value == types.first) {
+        total += category.sum.value.toDouble();
+      }
+    });
+    return total;
   }
 }

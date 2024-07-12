@@ -12,11 +12,11 @@ class PickerEditBox extends StatefulWidget {
     this.initialValue,
   });
 
-  final String title;
-  final List<String> items;
-  final String? initialValue;
-  final Function(String) onChanged;
   final Function(String)? onAddNew;
+  final String? initialValue;
+  final List<String> items;
+  final Function(String) onChanged;
+  final String title;
 
   @override
   PickerEditBoxState createState() => PickerEditBoxState();
@@ -64,6 +64,20 @@ class PickerEditBoxState extends State<PickerEditBox> {
     );
   }
 
+  Widget _buildrAddNew() {
+    // Only show the Add New button if there's text not in the existing list of items
+    if (widget.onAddNew == null || _textController.text.trim().isEmpty || widget.items.contains(_textController.text)) {
+      return const SizedBox();
+    }
+
+    return IconButton(
+      onPressed: () {
+        widget.onAddNew?.call(_textController.text.trim());
+      },
+      icon: const Icon(Icons.add_circle_outline),
+    );
+  }
+
   Widget _buildrDropDownButton() {
     return IconButton(
       onPressed: () {
@@ -81,20 +95,6 @@ class PickerEditBoxState extends State<PickerEditBox> {
         );
       },
       icon: const Icon(Icons.arrow_drop_down),
-    );
-  }
-
-  Widget _buildrAddNew() {
-    // Only show the Add New button if there's text not in the existing list of items
-    if (widget.onAddNew == null || _textController.text.trim().isEmpty || widget.items.contains(_textController.text)) {
-      return const SizedBox();
-    }
-
-    return IconButton(
-      onPressed: () {
-        widget.onAddNew?.call(_textController.text.trim());
-      },
-      icon: const Icon(Icons.add_circle_outline),
     );
   }
 }

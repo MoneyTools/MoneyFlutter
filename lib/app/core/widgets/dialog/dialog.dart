@@ -13,11 +13,12 @@ class MyAlertDialog extends StatelessWidget {
     this.actions,
     this.scrollable = false,
   });
-  final String title;
-  final IconData? icon;
-  final Widget child;
+
   final List<Widget>? actions;
+  final Widget child;
+  final IconData? icon;
   final bool scrollable;
+  final String title;
 
   @override
   Widget build(BuildContext context) {

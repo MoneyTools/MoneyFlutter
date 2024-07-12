@@ -31,91 +31,52 @@ class CostBasisCalculator {
   CostBasisCalculator(this.toDate) {
     this.calculate();
   }
-  DateTime toDate;
 
   Map<Account, AccountHoldings> byAccount = {};
-
   List<SecuritySale> sales = [];
+  DateTime toDate;
 
-  List<SecuritySale> getSales() {
-    return this.sales;
-  }
+  void applySplit(Security s, StockSplit split) {
+    for (AccountHoldings holding in this.byAccount.values) {
+      double total = 0;
+      for (SecurityPurchase purchase in holding.getPurchases(s)) {
+        purchase.unitsRemaining = purchase.unitsRemaining * split.numerator / split.denominator;
+        purchase.costBasisPerUnit = purchase.costBasisPerUnit * split.denominator / split.numerator;
+        total += purchase.unitsRemaining;
+      }
 
-  /// <summary>
-  /// Get the current holdings per account.
-  /// </summary>
-  /// <param name="a">The account</param>
-  /// <returns>The holdings listing securities that are still owned</returns>
-  AccountHoldings getHolding(Account a) {
-    AccountHoldings? holdings = this.byAccount[a];
-    if (holdings == null) {
-      holdings = AccountHoldings();
-      holdings.account = a;
-    }
-    this.byAccount[a] = holdings;
-    return holdings;
-  }
-
-  /// <summary>
-  /// Return all securities that are still owned (have not been sold)
-  /// </summary>
-  /// <param name="account">Specified account or null for all accounts.</param>
-  /// <returns></returns>
-  List<SecurityGroup> getHoldingsBySecurityType(Account filter) {
-    // Map<SecurityType, SecurityGroup> result = {};
-    //
-    // for (var accountHolding in this.byAccount.values) {
-    //   if (filter == null || filter(accountHolding.Account)) {
-    //     for (var sp in accountHolding.getHoldings()) {
-    //       var type = sp.Security.SecurityType;
-    //       SecurityGroup? group;
-    //       if (!result.TryGetValue(type, out group)) {
-    //         group = SecurityGroup();
-    //         group.date = this.toDate;
-    //         group.security = sp.Security;
-    //         group.type = type;
-    //         group.purchases = [];
-    // // result[type] = group;
-    // // }
-    // // else if (group.Security != sp.Security)
-    // // {
-    // // group.Security = null; // is a multisecurity group.
-    // // }
-    // // group.Purchases.add(sp);
-    // // }
-    // // }
-    // // }
-    // return List<SecurityGroup>(result.values
-    // );
-    return [];
-  }
-
-  /// <summary>
-  /// Get all non-zero holdings remaining for the purchases listed in the given groupByType and
-  /// group them be individual security.
-  /// </summary>
-  /// <returns></returns>
-  List<SecurityGroup> regroupBySecurity(SecurityGroup groupByType) {
-    SplayTreeMap<Security, SecurityGroup> holdingsBySecurity = SplayTreeMap<Security, SecurityGroup>();
-
-    // Sort all add, remove, buy, sell transactions by date and by security.
-    for (SecurityPurchase sp in groupByType.purchases) {
-      Security? s = sp.security;
-      if (s != null) {
-        SecurityGroup? group = holdingsBySecurity[s];
-        if (group == null) {
-          group = SecurityGroup();
-          group.date = this.toDate;
-          group.security = s;
-          group.type = SecurityType.values[s.securityType.value];
-          group.purchases = [];
-          holdingsBySecurity[s] = group;
+      // yikes also have to split the pending sales...?
+      for (SecuritySale pending in holding.getPendingSalesForSecurity(s)) {
+        if (pending.dateSold!.millisecond < split.date!.millisecond) {
+          pending.unitsSold = pending.unitsSold * split.numerator / split.denominator;
+          pending.salePricePerUnit = pending.salePricePerUnit * split.denominator / split.numerator;
         }
-        group.purchases.add(sp);
+      }
+
+      if (s.securityType.value == SecurityType.equity.index) {
+        // companies don't want to deal with fractional stocks, they usually distribute a "cash in lieu"
+        // transaction in this case to compensate you for the rounding error.
+        double floor = total.floor().toDouble();
+        if (floor != total) {
+          double diff = total - floor;
+          double adjustment = (total - diff) / total;
+
+          // distribute this rounding error back into the units remaining so we remember it.
+          for (SecurityPurchase purchase in holding.getPurchases(s)) {
+            purchase.unitsRemaining = (purchase.unitsRemaining * adjustment);
+          }
+        }
       }
     }
+  }
 
-    return List<SecurityGroup>.from(holdingsBySecurity.values);
+  void applySplits(Security s, List<StockSplit> splits, DateTime dateTime) {
+    StockSplit? next = splits.firstOrNull;
+    while (next != null && next.date!.millisecond < dateTime.millisecond) {
+      this.applySplit(s, next);
+      splits.remove(next);
+      next = splits.firstOrNull;
+    }
   }
 
   /// <summary>
@@ -217,47 +178,53 @@ class CostBasisCalculator {
     }
   }
 
-  void applySplits(Security s, List<StockSplit> splits, DateTime dateTime) {
-    StockSplit? next = splits.firstOrNull;
-    while (next != null && next.date!.millisecond < dateTime.millisecond) {
-      this.applySplit(s, next);
-      splits.remove(next);
-      next = splits.firstOrNull;
+  /// <summary>
+  /// Get the current holdings per account.
+  /// </summary>
+  /// <param name="a">The account</param>
+  /// <returns>The holdings listing securities that are still owned</returns>
+  AccountHoldings getHolding(Account a) {
+    AccountHoldings? holdings = this.byAccount[a];
+    if (holdings == null) {
+      holdings = AccountHoldings();
+      holdings.account = a;
     }
+    this.byAccount[a] = holdings;
+    return holdings;
   }
 
-  void applySplit(Security s, StockSplit split) {
-    for (AccountHoldings holding in this.byAccount.values) {
-      double total = 0;
-      for (SecurityPurchase purchase in holding.getPurchases(s)) {
-        purchase.unitsRemaining = purchase.unitsRemaining * split.numerator / split.denominator;
-        purchase.costBasisPerUnit = purchase.costBasisPerUnit * split.denominator / split.numerator;
-        total += purchase.unitsRemaining;
-      }
-
-      // yikes also have to split the pending sales...?
-      for (SecuritySale pending in holding.getPendingSalesForSecurity(s)) {
-        if (pending.dateSold!.millisecond < split.date!.millisecond) {
-          pending.unitsSold = pending.unitsSold * split.numerator / split.denominator;
-          pending.salePricePerUnit = pending.salePricePerUnit * split.denominator / split.numerator;
-        }
-      }
-
-      if (s.securityType.value == SecurityType.equity.index) {
-        // companies don't want to deal with fractional stocks, they usually distribute a "cash in lieu"
-        // transaction in this case to compensate you for the rounding error.
-        double floor = total.floor().toDouble();
-        if (floor != total) {
-          double diff = total - floor;
-          double adjustment = (total - diff) / total;
-
-          // distribute this rounding error back into the units remaining so we remember it.
-          for (SecurityPurchase purchase in holding.getPurchases(s)) {
-            purchase.unitsRemaining = (purchase.unitsRemaining * adjustment);
-          }
-        }
-      }
-    }
+  /// <summary>
+  /// Return all securities that are still owned (have not been sold)
+  /// </summary>
+  /// <param name="account">Specified account or null for all accounts.</param>
+  /// <returns></returns>
+  List<SecurityGroup> getHoldingsBySecurityType(Account filter) {
+    // Map<SecurityType, SecurityGroup> result = {};
+    //
+    // for (var accountHolding in this.byAccount.values) {
+    //   if (filter == null || filter(accountHolding.Account)) {
+    //     for (var sp in accountHolding.getHoldings()) {
+    //       var type = sp.Security.SecurityType;
+    //       SecurityGroup? group;
+    //       if (!result.TryGetValue(type, out group)) {
+    //         group = SecurityGroup();
+    //         group.date = this.toDate;
+    //         group.security = sp.Security;
+    //         group.type = type;
+    //         group.purchases = [];
+    // // result[type] = group;
+    // // }
+    // // else if (group.Security != sp.Security)
+    // // {
+    // // group.Security = null; // is a multisecurity group.
+    // // }
+    // // group.Purchases.add(sp);
+    // // }
+    // // }
+    // // }
+    // return List<SecurityGroup>(result.values
+    // );
+    return [];
   }
 
   List<SecuritySale> getPendingSales(Function(Account) forAccounts) {
@@ -271,5 +238,37 @@ class CostBasisCalculator {
       }
     }
     return result;
+  }
+
+  List<SecuritySale> getSales() {
+    return this.sales;
+  }
+
+  /// <summary>
+  /// Get all non-zero holdings remaining for the purchases listed in the given groupByType and
+  /// group them be individual security.
+  /// </summary>
+  /// <returns></returns>
+  List<SecurityGroup> regroupBySecurity(SecurityGroup groupByType) {
+    SplayTreeMap<Security, SecurityGroup> holdingsBySecurity = SplayTreeMap<Security, SecurityGroup>();
+
+    // Sort all add, remove, buy, sell transactions by date and by security.
+    for (SecurityPurchase sp in groupByType.purchases) {
+      Security? s = sp.security;
+      if (s != null) {
+        SecurityGroup? group = holdingsBySecurity[s];
+        if (group == null) {
+          group = SecurityGroup();
+          group.date = this.toDate;
+          group.security = s;
+          group.type = SecurityType.values[s.securityType.value];
+          group.purchases = [];
+          holdingsBySecurity[s] = group;
+        }
+        group.purchases.add(sp);
+      }
+    }
+
+    return List<SecurityGroup>.from(holdingsBySecurity.values);
   }
 }

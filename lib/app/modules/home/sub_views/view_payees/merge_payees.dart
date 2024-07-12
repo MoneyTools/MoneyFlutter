@@ -46,10 +46,10 @@ class MergeTransactionsDialog extends StatefulWidget {
 }
 
 class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
-  Payee? _selectedPayee;
+  AccumulatorSum<int, int> categoryIdsFound = AccumulatorSum<int, int>();
 
   int? _estimatedCategory;
-  AccumulatorSum<int, int> categoryIdsFound = AccumulatorSum<int, int>();
+  Payee? _selectedPayee;
 
   @override
   Widget build(BuildContext context) {

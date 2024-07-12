@@ -34,17 +34,16 @@ class MyListItemAsCard extends StatelessWidget {
     //
     this.bottomBorder = true,
   });
-  final String? leftTopAsString;
-  final String? leftBottomAsString;
-  final String? rightTopAsString;
-  final String? rightBottomAsString;
-
-  final Widget? leftTopAsWidget;
-  final Widget? leftBottomAsWidget;
-  final Widget? rightTopAsWidget;
-  final Widget? rightBottomAsWidget;
 
   final bool bottomBorder;
+  final String? leftBottomAsString;
+  final Widget? leftBottomAsWidget;
+  final String? leftTopAsString;
+  final Widget? leftTopAsWidget;
+  final String? rightBottomAsString;
+  final Widget? rightBottomAsWidget;
+  final String? rightTopAsString;
+  final Widget? rightTopAsWidget;
 
   @override
   Widget build(final BuildContext context) {

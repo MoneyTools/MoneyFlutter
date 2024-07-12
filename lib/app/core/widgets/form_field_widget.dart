@@ -10,10 +10,11 @@ class MyFormFieldForWidget extends StatefulWidget {
     required this.onChanged,
     super.key,
   });
-  final String title;
-  final String valueAsText;
+
   final bool isReadOnly;
   final Function(String) onChanged;
+  final String title;
+  final String valueAsText;
 
   @override
   MyFormFieldForWidgetState createState() => MyFormFieldForWidgetState();

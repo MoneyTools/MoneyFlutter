@@ -29,10 +29,10 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewTransfers;
   }
 
+  double _footerColumnBalance = 0.00;
+  final DateRange _footerColumnReceivedOn = DateRange();
   // Footer related
   final DateRange _footerColumnSentOn = DateRange();
-  final DateRange _footerColumnReceivedOn = DateRange();
-  double _footerColumnBalance = 0.00;
 
   @override
   String getClassNamePlural() {
@@ -42,21 +42,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Transfer';
-  }
-
-  @override
-  String getDescription() {
-    return 'Transfers between accounts.';
-  }
-
-  @override
-  String getViewId() {
-    return 'transfer';
-  }
-
-  @override
-  Fields<Transfer> getFieldsForTable() {
-    return Transfer.fields;
   }
 
   @override
@@ -71,6 +56,31 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
       default:
         return null;
     }
+  }
+
+  @override
+  String getDescription() {
+    return 'Transfers between accounts.';
+  }
+
+  @override
+  Fields<Transfer> getFieldsForTable() {
+    return Transfer.fields;
+  }
+
+  @override
+  Widget getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    if (selectedIds.isNotEmpty) {
+      final int id = selectedIds.first;
+      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
+      if (transfer != null) {
+        return TransferSenderReceiver(transfer: transfer);
+      }
+    }
+    return const CenterMessage(message: 'No item selected.');
   }
 
   @override
@@ -135,18 +145,8 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewDetails({
-    required final List<int> selectedIds,
-    required final bool isReadOnly,
-  }) {
-    if (selectedIds.isNotEmpty) {
-      final int id = selectedIds.first;
-      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
-      if (transfer != null) {
-        return TransferSenderReceiver(transfer: transfer);
-      }
-    }
-    return const CenterMessage(message: 'No item selected.');
+  String getViewId() {
+    return 'transfer';
   }
 
   void keepThisTransfer({

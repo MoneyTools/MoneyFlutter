@@ -24,25 +24,25 @@ class AdaptiveViewWithList extends StatelessWidget {
     this.onColumnHeaderLongPress,
     this.getColumnFooterWidget,
   });
-  final Widget? top;
-  final FieldDefinitions fieldDefinitions;
-  final FieldFilters filters;
-  final List<MoneyObject> list;
-  final Widget? bottom;
-  final int flexBottom;
-  final int sortByFieldIndex;
-  final bool sortAscending;
-  final bool applySorting;
-
-  // Selection
-  final ValueNotifier<List<int>> selectedItemsByUniqueId;
-  final Function(int) onSelectionChanged;
-  final bool isMultiSelectionOn;
 
   final Function(BuildContext, int)? onItemTap;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field<dynamic> field)? onColumnHeaderLongPress;
   final Widget? Function(Field field)? getColumnFooterWidget;
+  final bool applySorting;
+  final Widget? bottom;
+  final FieldDefinitions fieldDefinitions;
+  final FieldFilters filters;
+  final int flexBottom;
+  final bool isMultiSelectionOn;
+  final List<MoneyObject> list;
+  final Function(int) onSelectionChanged;
+  // Selection
+  final ValueNotifier<List<int>> selectedItemsByUniqueId;
+
+  final bool sortAscending;
+  final int sortByFieldIndex;
+  final Widget? top;
 
   @override
   Widget build(BuildContext context) {

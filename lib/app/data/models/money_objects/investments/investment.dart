@@ -70,7 +70,203 @@ class Investment extends MoneyObject {
       withholding: row.getDouble('Withholding'),
     );
   }
+
+  FieldMoney amount = FieldMoney(
+    name: 'Amount',
+    getValueForDisplay: (final MoneyObject instance) {
+      return MoneyModel(amount: (instance as Investment).finalAmount.amount);
+    },
+  );
+
+  /// 4    Commission      money   0                    0
+  FieldMoney commission = FieldMoney(
+    name: 'Commission',
+    serializeName: 'Commission',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).commission.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value.toDouble(),
+  );
+
+  /// 7    Fees            money   0                    0
+  FieldMoney fees = FieldMoney(
+    name: 'Fees',
+    serializeName: 'Fees',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fees.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value.toDouble(),
+  );
+
+  /// Id
+  //// 0    Id              bigint  0                    1
+  FieldId id = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).uniqueId,
+  );
+
+  /// 9    InvestmentType  INT     1                    0
+  FieldInt investmentType = FieldInt(
+    name: 'Action',
+    serializeName: 'InvestmentType',
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.tiny,
+    type: FieldType.text,
+    getValueForDisplay: (final MoneyObject instance) => getInvestmentTypeTextFromValue(
+      (instance as Investment).investmentType.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
+  );
+
+  /// 8    Load            money   0                    0
+  FieldMoney load = FieldMoney(
+    name: 'Load',
+    serializeName: 'Load',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).load.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value.toDouble(),
+  );
+
+  /// 5    MarkUpDown      money   0                    0
+  FieldMoney markUpDown = FieldMoney(
+    name: 'MarkUpDown',
+    serializeName: 'MarkUpDown',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
+  );
+
+  FieldMoney runningBalance = FieldMoney(
+    name: 'Balance',
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as Investment).runningBalance.value;
+    },
+  );
+
+  /// 1    Security        INT     1                    0
+  FieldInt security = FieldInt(
+    importance: 1,
+    name: 'Security',
+    serializeName: 'Security',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).security.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).security.value,
+  );
+
+  FieldString securitySymbol = FieldString(
+    name: 'Symbol',
+    useAsColumn: true,
+    columnWidth: ColumnWidth.small,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().securities.getSymbolFromId((instance as Investment).security.value),
+  );
+
+  /// 11   TaxExempt       bit     0                    0
+  FieldInt taxExempt = FieldInt(
+    name: 'Taxable',
+    serializeName: 'TaxExempt',
+    columnWidth: ColumnWidth.nano,
+    align: TextAlign.center,
+    useAsColumn: false,
+    type: FieldType.text,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxExempt.value == 1 ? 'No' : 'Yes',
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
+  );
+
+  /// 6    Taxes           money   0                    0
+  FieldMoney taxes = FieldMoney(
+    name: 'Taxes',
+    serializeName: 'Taxes',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxes.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value.toDouble(),
+  );
+
+  /// 10   TradeType       INT     0                    0
+  FieldInt tradeType = FieldInt(
+    name: 'TradeType',
+    serializeName: 'TradeType',
+    type: FieldType.text,
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) =>
+        InvestmentTradeType.values[(instance as Investment).tradeType.value].name.toUpperCase(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).tradeType.value,
+  );
+
+  FieldString transactionAccountName = FieldString(
+    name: 'Account',
+    useAsColumn: true,
+    columnWidth: ColumnWidth.largest,
+    getValueForDisplay: (final MoneyObject instance) {
+      final investment = instance as Investment;
+      final Transaction? transaction = Data().transactions.get(investment.uniqueId);
+      if (transaction != null) {
+        return Data().accounts.getNameFromId(transaction.accountId.value);
+      }
+      return '?not found?';
+    },
+  );
+
+  FieldDate transactionDate = FieldDate(
+    name: 'Date',
+    importance: 0,
+    useAsColumn: true,
+    columnWidth: ColumnWidth.small,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).date,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByDateAndInvestmentType(
+      a as Investment,
+      b as Investment,
+      ascending,
+      false,
+    ),
+  );
+
+  /// --------------------------------------------
+  /// Not Persisted
+  ///
+
+  /// The actual transaction date.
+  Transaction? transactionInstance;
+
+  /// 2    UnitPrice       money   1                    0
+  FieldMoney unitPrice = FieldMoney(
+    importance: 3,
+    name: 'Price',
+    serializeName: 'UnitPrice',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value.toDouble(),
+  );
+
+  /// 3    Units           money   0                    0
+  FieldQuantity units = FieldQuantity(
+    importance: 2,
+    name: 'Units',
+    serializeName: 'Units',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).units.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).units.value,
+  );
+
+  /// 12   Withholding     money   0                    0
+  FieldMoney withholding = FieldMoney(
+    name: 'Withholding',
+    serializeName: 'Withholding',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).withholding.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value.toDouble(),
+  );
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  @override
+  String getRepresentation() {
+    return security.value.toString();
+  }
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
+
   static final Fields<Investment> _fields = Fields<Investment>();
+
+  DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
 
   static Fields<Investment> get fields {
     if (_fields.isEmpty) {
@@ -100,206 +296,6 @@ class Investment extends MoneyObject {
     return _fields;
   }
 
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  @override
-  String getRepresentation() {
-    return security.value.toString();
-  }
-
-  /// Id
-  //// 0    Id              bigint  0                    1
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).uniqueId,
-  );
-
-  /// 1    Security        INT     1                    0
-  FieldInt security = FieldInt(
-    importance: 1,
-    name: 'Security',
-    serializeName: 'Security',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).security.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).security.value,
-  );
-
-  /// 2    UnitPrice       money   1                    0
-  FieldMoney unitPrice = FieldMoney(
-    importance: 3,
-    name: 'Price',
-    serializeName: 'UnitPrice',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value.toDouble(),
-  );
-
-  /// 3    Units           money   0                    0
-  FieldQuantity units = FieldQuantity(
-    importance: 2,
-    name: 'Units',
-    serializeName: 'Units',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).units.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).units.value,
-  );
-
-  /// 4    Commission      money   0                    0
-  FieldMoney commission = FieldMoney(
-    name: 'Commission',
-    serializeName: 'Commission',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).commission.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).commission.value.toDouble(),
-  );
-
-  /// 5    MarkUpDown      money   0                    0
-  FieldMoney markUpDown = FieldMoney(
-    name: 'MarkUpDown',
-    serializeName: 'MarkUpDown',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
-  );
-
-  /// 6    Taxes           money   0                    0
-  FieldMoney taxes = FieldMoney(
-    name: 'Taxes',
-    serializeName: 'Taxes',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxes.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value.toDouble(),
-  );
-
-  /// 7    Fees            money   0                    0
-  FieldMoney fees = FieldMoney(
-    name: 'Fees',
-    serializeName: 'Fees',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fees.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value.toDouble(),
-  );
-
-  /// 8    Load            money   0                    0
-  FieldMoney load = FieldMoney(
-    name: 'Load',
-    serializeName: 'Load',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).load.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).load.value.toDouble(),
-  );
-
-  /// 9    InvestmentType  INT     1                    0
-  FieldInt investmentType = FieldInt(
-    name: 'Action',
-    serializeName: 'InvestmentType',
-    align: TextAlign.center,
-    columnWidth: ColumnWidth.tiny,
-    type: FieldType.text,
-    getValueForDisplay: (final MoneyObject instance) => getInvestmentTypeTextFromValue(
-      (instance as Investment).investmentType.value,
-    ),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
-  );
-
-  /// 10   TradeType       INT     0                    0
-  FieldInt tradeType = FieldInt(
-    name: 'TradeType',
-    serializeName: 'TradeType',
-    type: FieldType.text,
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        InvestmentTradeType.values[(instance as Investment).tradeType.value].name.toUpperCase(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).tradeType.value,
-  );
-
-  /// 11   TaxExempt       bit     0                    0
-  FieldInt taxExempt = FieldInt(
-    name: 'Taxable',
-    serializeName: 'TaxExempt',
-    columnWidth: ColumnWidth.nano,
-    align: TextAlign.center,
-    useAsColumn: false,
-    type: FieldType.text,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxExempt.value == 1 ? 'No' : 'Yes',
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
-  );
-
-  /// 12   Withholding     money   0                    0
-  FieldMoney withholding = FieldMoney(
-    name: 'Withholding',
-    serializeName: 'Withholding',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).withholding.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value.toDouble(),
-  );
-
-  /// --------------------------------------------
-  /// Not Persisted
-  ///
-
-  /// The actual transaction date.
-  Transaction? transactionInstance;
-
-  DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
-
-  double get originalCostBasis {
-    // looking for the original un-split cost basis at the date of this transaction.
-    double proceeds = this.unitPrice.value.toDouble() * this.units.value;
-
-    if (this.transactionInstance!.amount.value.toDouble() != 0) {
-      // We may have paid more for the stock than "price" in a buy transaction because of brokerage fees and
-      // this can be included in the cost basis.  We may have also received less than "price" in a sale
-      // transaction, and that can also reduce our capital gain, so we use the transaction amount if we
-      // have one.
-      return this.transactionInstance!.amount.value.toDouble().abs();
-    }
-
-    // But if the sale proceeds were not recorded for some reason, then we fall back on the proceeds.
-    return proceeds;
-  }
-
-  FieldDate transactionDate = FieldDate(
-    name: 'Date',
-    importance: 0,
-    useAsColumn: true,
-    columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).date,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByDateAndInvestmentType(
-      a as Investment,
-      b as Investment,
-      ascending,
-      false,
-    ),
-  );
-
-  FieldString securitySymbol = FieldString(
-    name: 'Symbol',
-    useAsColumn: true,
-    columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().securities.getSymbolFromId((instance as Investment).security.value),
-  );
-
-  FieldString transactionAccountName = FieldString(
-    name: 'Account',
-    useAsColumn: true,
-    columnWidth: ColumnWidth.largest,
-    getValueForDisplay: (final MoneyObject instance) {
-      final investment = instance as Investment;
-      final Transaction? transaction = Data().transactions.get(investment.uniqueId);
-      if (transaction != null) {
-        return Data().accounts.getNameFromId(transaction.accountId.value);
-      }
-      return '?not found?';
-    },
-  );
-
-  FieldMoney amount = FieldMoney(
-    name: 'Amount',
-    getValueForDisplay: (final MoneyObject instance) {
-      return MoneyModel(amount: (instance as Investment).finalAmount.amount);
-    },
-  );
-
   StockCumulative get finalAmount {
     StockCumulative cumulative = StockCumulative();
     switch (InvestmentType.values[this.investmentType.value]) {
@@ -323,16 +319,21 @@ class Investment extends MoneyObject {
     return cumulative;
   }
 
-  FieldMoney runningBalance = FieldMoney(
-    name: 'Balance',
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as Investment).runningBalance.value;
-    },
-  );
+  double get originalCostBasis {
+    // looking for the original un-split cost basis at the date of this transaction.
+    double proceeds = this.unitPrice.value.toDouble() * this.units.value;
 
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
+    if (this.transactionInstance!.amount.value.toDouble() != 0) {
+      // We may have paid more for the stock than "price" in a buy transaction because of brokerage fees and
+      // this can be included in the cost basis.  We may have also received less than "price" in a sale
+      // transaction, and that can also reduce our capital gain, so we use the transaction amount if we
+      // have one.
+      return this.transactionInstance!.amount.value.toDouble().abs();
+    }
+
+    // But if the sale proceeds were not recorded for some reason, then we fall back on the proceeds.
+    return proceeds;
+  }
 
   static int sortByDateAndInvestmentType(
     final Investment a,

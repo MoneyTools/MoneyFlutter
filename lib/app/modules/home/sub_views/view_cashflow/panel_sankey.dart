@@ -15,21 +15,20 @@ import 'package:money/app/data/storage/data/data.dart';
 // ignore: must_be_immutable
 class PanelSanKey extends StatelessWidget {
   PanelSanKey({required this.minYear, required this.maxYear, super.key});
-  final int minYear;
-  final int maxYear;
 
-  late double totalIncomes = 0.00;
+  late Map<Category, double> mapOfExpenses = <Category, double>{};
+  late Map<Category, double> mapOfIncomes = <Category, double>{};
+  final int maxYear;
+  final int minYear;
+  late double padding = 10.0;
+  late List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
+  late List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];
   late double totalExpenses = 0.00;
-  late double totalSavings = 0.00;
+  late double totalHeight = 0.0;
+  late double totalIncomes = 0.00;
   late double totalInvestments = 0.00;
   late double totalNones = 0.00;
-  late double padding = 10.0;
-  late double totalHeight = 0.0;
-
-  late Map<Category, double> mapOfIncomes = <Category, double>{};
-  late Map<Category, double> mapOfExpenses = <Category, double>{};
-  late List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];
-  late List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
+  late double totalSavings = 0.00;
 
   @override
   Widget build(final BuildContext context) {

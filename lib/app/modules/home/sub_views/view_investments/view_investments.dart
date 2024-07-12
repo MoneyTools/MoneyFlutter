@@ -27,11 +27,12 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewInvestments;
   }
 
+  double _footerColumnCommission = 0.00;
   // Footer related
   final DateRange _footerColumnDate = DateRange();
-  int _footerColumnUnits = 0;
-  double _footerColumnCommission = 0.00;
+
   double _footerColumnFees = 0.00;
+  int _footerColumnUnits = 0;
 
   @override
   String getClassNamePlural() {
@@ -41,16 +42,6 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Investment';
-  }
-
-  @override
-  String getDescription() {
-    return 'Track your stock portfolio.';
-  }
-
-  @override
-  String getViewId() {
-    return Data().investments.getTypeName();
   }
 
   @override
@@ -67,6 +58,35 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
       default:
         return null;
     }
+  }
+
+  @override
+  String getDescription() {
+    return 'Track your stock portfolio.';
+  }
+
+  @override
+  Fields<Investment> getFieldsForTable() {
+    return Investment.fields;
+  }
+
+  @override
+  Widget getInfoPanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
+  }
+
+  @override
+  Widget getInfoPanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(selectedIds);
   }
 
   @override
@@ -93,26 +113,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getInfoPanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
-  }
-
-  @override
-  Fields<Investment> getFieldsForTable() {
-    return Investment.fields;
+  String getViewId() {
+    return Data().investments.getTypeName();
   }
 }

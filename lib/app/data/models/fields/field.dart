@@ -364,30 +364,9 @@ class Field<T> {
       }
     }
   }
-  late T _value;
-
-  // Static properties
-  String name;
-  String serializeName;
-  FieldType type;
-  ColumnWidth columnWidth;
-  TextAlign align;
-  bool fixedFont = false;
-  int importance;
-
-  bool useAsColumn;
-
-  // This properties are evaluated against the instnace of the object
-  bool Function(MoneyObject) useAsDetailPanels;
-
-  /// Get the value of the instance
-  dynamic Function(MoneyObject) getValueForDisplay;
 
   /// Only need for FieldType.widget
   dynamic Function(MoneyObject)? getValueForReading;
-
-  /// Get the value for storing the instance
-  dynamic Function(MoneyObject) getValueForSerialization;
 
   /// Customize/override the edit widget
   Widget Function(MoneyObject, Function(bool wasModified) onEdited)? getEditWidget;
@@ -396,19 +375,27 @@ class Field<T> {
   dynamic Function(MoneyObject, dynamic)? setValue;
 
   int Function(MoneyObject, MoneyObject, bool)? sort;
+  TextAlign align;
+  ColumnWidth columnWidth;
+  bool fixedFont = false;
 
-  void setAmount(final dynamic newValue) {
-    (this as FieldMoney).value.setAmount(newValue);
-  }
+  /// Get the value of the instance
+  dynamic Function(MoneyObject) getValueForDisplay;
 
-  // ignore: unnecessary_getters_setters
-  T get value {
-    return _value;
-  }
+  /// Get the value for storing the instance
+  dynamic Function(MoneyObject) getValueForSerialization;
 
-  set value(T v) {
-    _value = v;
-  }
+  int importance;
+  // Static properties
+  String name;
+
+  String serializeName;
+  FieldType type;
+  bool useAsColumn;
+  // This properties are evaluated against the instnace of the object
+  bool Function(MoneyObject) useAsDetailPanels;
+
+  late T _value;
 
   String getBestFieldDescribingName() {
     if (serializeName.isNotEmpty) {
@@ -459,6 +446,19 @@ class Field<T> {
         style: const TextStyle(fontWeight: FontWeight.bold),
       );
     }
+  }
+
+  void setAmount(final dynamic newValue) {
+    (this as FieldMoney).value.setAmount(newValue);
+  }
+
+  // ignore: unnecessary_getters_setters
+  T get value {
+    return _value;
+  }
+
+  set value(T v) {
+    _value = v;
   }
 }
 

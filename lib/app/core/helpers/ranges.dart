@@ -10,39 +10,18 @@ class DateRange {
       max: DateTime(yearEnd + 1).subtract(const Duration(microseconds: 1)),
     );
   }
-  DateTime? min;
+
   DateTime? max;
+  DateTime? min;
+
+  @override
+  String toString() {
+    return '${dateToString(min)} : ${dateToString(max)}';
+  }
 
   void clear() {
     min = null;
     max = null;
-  }
-
-  void inflate(final DateTime? dateTime) {
-    if (dateTime != null) {
-      min ??= dateTime;
-      max ??= dateTime;
-
-      if (dateTime.compareTo(min!) == -1) {
-        min = dateTime;
-      }
-
-      if (dateTime.compareTo(max!) == 1) {
-        max = dateTime;
-      }
-    }
-  }
-
-  int get durationInYears {
-    if (hasNullDates) {
-      return 0;
-    }
-
-    return (_valueOrZeroIfNull(max!.year) - _valueOrZeroIfNull(min!.year)) + 1;
-  }
-
-  int get durationInMonths {
-    return durationInDays ~/ 30; // Close enough
   }
 
   int get durationInDays {
@@ -62,44 +41,25 @@ class DateRange {
     return difference.inDays;
   }
 
-  int _valueOrZeroIfNull(final int? value) {
-    if (value == null) {
+  String get durationInDaysText {
+    return getSingularPluralText(
+      getIntAsText(durationInDays),
+      durationInDays,
+      'day',
+      'days',
+    );
+  }
+
+  int get durationInMonths {
+    return durationInDays ~/ 30; // Close enough
+  }
+
+  int get durationInYears {
+    if (hasNullDates) {
       return 0;
     }
-    return value;
-  }
 
-  bool get hasNullDates {
-    return min == null || max == null;
-  }
-
-  void ensureNoNullDates() {
-    min ??= max;
-    max ??= min;
-
-    if (min == null && max == null) {
-      min = max = DateTime.now();
-    }
-  }
-
-  @override
-  String toString() {
-    return '${dateToString(min)} : ${dateToString(max)}';
-  }
-
-  String toStringYears() {
-    return '${dateToYearString(min)} ($durationInYearsText) ${dateToYearString(max)}';
-  }
-
-  String toStringDays() {
-    return '${dateToString(min)} ($durationInDaysText) ${dateToString(max)}';
-  }
-
-  String toStringDuration() {
-    if (durationInDays >= 365) {
-      return durationInYearsText;
-    }
-    return durationInDaysText;
+    return (_valueOrZeroIfNull(max!.year) - _valueOrZeroIfNull(min!.year)) + 1;
   }
 
   String get durationInYearsText {
@@ -111,13 +71,32 @@ class DateRange {
     );
   }
 
-  String get durationInDaysText {
-    return getSingularPluralText(
-      getIntAsText(durationInDays),
-      durationInDays,
-      'day',
-      'days',
-    );
+  void ensureNoNullDates() {
+    min ??= max;
+    max ??= min;
+
+    if (min == null && max == null) {
+      min = max = DateTime.now();
+    }
+  }
+
+  bool get hasNullDates {
+    return min == null || max == null;
+  }
+
+  void inflate(final DateTime? dateTime) {
+    if (dateTime != null) {
+      min ??= dateTime;
+      max ??= dateTime;
+
+      if (dateTime.compareTo(min!) == -1) {
+        min = dateTime;
+      }
+
+      if (dateTime.compareTo(max!) == 1) {
+        max = dateTime;
+      }
+    }
   }
 
   bool isBetween(final DateTime date) {
@@ -133,24 +112,36 @@ class DateRange {
     }
     return isBetween(date);
   }
+
+  String toStringDays() {
+    return '${dateToString(min)} ($durationInDaysText) ${dateToString(max)}';
+  }
+
+  String toStringDuration() {
+    if (durationInDays >= 365) {
+      return durationInYearsText;
+    }
+    return durationInDaysText;
+  }
+
+  String toStringYears() {
+    return '${dateToYearString(min)} ($durationInYearsText) ${dateToYearString(max)}';
+  }
+
+  int _valueOrZeroIfNull(final int? value) {
+    if (value == null) {
+      return 0;
+    }
+    return value;
+  }
 }
 
 /// Helper class to encapsulate a range of integers.
 class IntRange {
   IntRange({required this.min, required this.max});
-  int min;
+
   int max;
-
-  /// Returns the span of the range, calculated as the difference between [max] and [min] plus one.
-  int get span => max - min + 1;
-
-  /// Increments the range by one, if possible.
-  void increment(int maxLimit) {
-    if (max + 1 <= maxLimit) {
-      min++;
-      max++;
-    }
-  }
+  int min;
 
   /// Decrements the range by one, if possible.
   void decrement(int minLimit) {
@@ -160,8 +151,19 @@ class IntRange {
     }
   }
 
+  /// Increments the range by one, if possible.
+  void increment(int maxLimit) {
+    if (max + 1 <= maxLimit) {
+      min++;
+      max++;
+    }
+  }
+
   /// Checks if the range is valid.
   bool isValid() => min > 0 && max > 0 && span > 0;
+
+  /// Returns the span of the range, calculated as the difference between [max] and [min] plus one.
+  int get span => max - min + 1;
 
   /// Updates the range with new values.
   void update(int newMin, int newMax) {

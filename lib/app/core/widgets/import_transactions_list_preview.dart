@@ -19,6 +19,7 @@ class ImportTransactionsListPreview extends StatefulWidget {
     required this.accountId,
     required this.values,
   });
+
   final int accountId;
   final List<ValuesQuality> values;
 
@@ -27,13 +28,14 @@ class ImportTransactionsListPreview extends StatefulWidget {
 }
 
 class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPreview> {
-  int _sortColumnIndex = 0; // 0=Date, 1=Memo, 2=Amount
-  bool _sortAscending = true;
   late final List<Triple<String, TextAlign, int>> _columnNames = [
     Triple<String, TextAlign, int>('Date', TextAlign.left, 1),
     Triple<String, TextAlign, int>('Description/Payee', TextAlign.left, 2),
     Triple<String, TextAlign, int>('Amount', TextAlign.right, 1),
   ];
+
+  bool _sortAscending = true;
+  int _sortColumnIndex = 0; // 0=Date, 1=Memo, 2=Amount
 
   @override
   void initState() {
@@ -121,10 +123,6 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
     return sum;
   }
 
-  void _sortValues() {
-    ValuesQuality.sort(widget.values, _sortColumnIndex, _sortAscending);
-  }
-
   Widget _buildColumnHeaders(BuildContext context) {
     return Container(
       color: getColorTheme(context).surfaceContainerLow,
@@ -147,15 +145,24 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
     );
   }
 
-  void _updateSortChoice(int columnIndex) {
-    setState(() {
-      if (columnIndex == _sortColumnIndex) {
-        _sortAscending = !_sortAscending;
-      } else {
-        _sortColumnIndex = columnIndex;
-      }
-      _sortValues();
-    });
+  Widget _buildDescriptionOrPayee(
+    BuildContext context,
+    ValueQuality valueQuality,
+  ) {
+    final payeeName = valueQuality.valueAsString;
+    final payeeMatch = Data().payees.getByName(payeeName) != null;
+
+    return Row(
+      children: [
+        Expanded(child: valueQuality.valueAsTextWidget(context)),
+        if (payeeMatch)
+          const Badge(
+            label: Text('Payee Match'),
+            backgroundColor: Colors.lightBlue,
+            textColor: Colors.black,
+          ),
+      ],
+    );
   }
 
   Widget _buildTransactionRow(ValuesQuality value) {
@@ -176,23 +183,18 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
     );
   }
 
-  Widget _buildDescriptionOrPayee(
-    BuildContext context,
-    ValueQuality valueQuality,
-  ) {
-    final payeeName = valueQuality.valueAsString;
-    final payeeMatch = Data().payees.getByName(payeeName) != null;
+  void _sortValues() {
+    ValuesQuality.sort(widget.values, _sortColumnIndex, _sortAscending);
+  }
 
-    return Row(
-      children: [
-        Expanded(child: valueQuality.valueAsTextWidget(context)),
-        if (payeeMatch)
-          const Badge(
-            label: Text('Payee Match'),
-            backgroundColor: Colors.lightBlue,
-            textColor: Colors.black,
-          ),
-      ],
-    );
+  void _updateSortChoice(int columnIndex) {
+    setState(() {
+      if (columnIndex == _sortColumnIndex) {
+        _sortAscending = !_sortAscending;
+      } else {
+        _sortColumnIndex = columnIndex;
+      }
+      _sortValues();
+    });
   }
 }

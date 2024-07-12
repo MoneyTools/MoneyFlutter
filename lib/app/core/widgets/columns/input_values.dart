@@ -15,9 +15,10 @@ class InputValues extends StatelessWidget {
     required this.title,
     required this.allowedCharacters,
   });
+
+  final String allowedCharacters;
   final TextEditingController controller;
   final String title;
-  final String allowedCharacters;
 
   @override
   Widget build(BuildContext context) {

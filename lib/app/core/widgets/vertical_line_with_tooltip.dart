@@ -10,10 +10,11 @@ class VerticalLineWithTooltip extends StatelessWidget {
     super.key,
     this.width = 5,
   });
-  final double height;
-  final double width;
+
   final Color color;
+  final double height;
   final String tooltip;
+  final double width;
 
   @override
   Widget build(BuildContext context) {

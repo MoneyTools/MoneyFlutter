@@ -11,9 +11,10 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 /// </summary>
 class SecurityPurchase {
   /// <summary>
-  /// The security that was purchased.
+  /// The original cost basis for this security per unit.  THis is not necessarily the
+  /// UnitPrice we paid for the security, commissions and fees are also taken into account.
   /// </summary>
-  Security? security;
+  double costBasisPerUnit = 0;
 
   /// <summary>
   /// The date this security was purchased.
@@ -21,29 +22,14 @@ class SecurityPurchase {
   late DateTime datePurchased;
 
   /// <summary>
+  /// The security that was purchased.
+  /// </summary>
+  Security? security;
+
+  /// <summary>
   /// The number of units remaining from this lot.
   /// </summary>
   double unitsRemaining = 0;
-
-  /// <summary>
-  /// The original cost basis for this security per unit.  THis is not necessarily the
-  /// UnitPrice we paid for the security, commissions and fees are also taken into account.
-  /// </summary>
-  double costBasisPerUnit = 0;
-
-  /// <summary>
-  /// The total remaining cost basis based on the number of units remaining.
-  /// </summary>
-  double get totalCostBasis {
-    return this.costBasisPerUnit * this.unitsRemaining;
-  }
-
-  /// <summary>
-  /// Get market value of remaining units.
-  /// </summary>
-  double? get latestMarketValue {
-    return this.futuresFactor * this.unitsRemaining * this.security!.price.value.toDouble();
-  }
 
   double get futuresFactor {
     double factor = 1;
@@ -52,6 +38,13 @@ class SecurityPurchase {
       factor = 100;
     }
     return factor;
+  }
+
+  /// <summary>
+  /// Get market value of remaining units.
+  /// </summary>
+  double? get latestMarketValue {
+    return this.futuresFactor * this.unitsRemaining * this.security!.price.value.toDouble();
   }
 
   /// <summary>
@@ -80,5 +73,12 @@ class SecurityPurchase {
       ..salePricePerUnit = unitSalePrice;
 
     return s;
+  }
+
+  /// <summary>
+  /// The total remaining cost basis based on the number of units remaining.
+  /// </summary>
+  double get totalCostBasis {
+    return this.costBasisPerUnit * this.unitsRemaining;
   }
 }

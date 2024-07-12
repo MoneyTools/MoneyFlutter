@@ -12,17 +12,19 @@ class ZoomIncreaseDecrease extends StatefulWidget {
     required this.onDecrease,
     required this.onIncrease,
   });
-  final String title;
+
   final VoidCallback onDecrease;
   final VoidCallback onIncrease;
+  final String title;
 
   @override
   State<ZoomIncreaseDecrease> createState() => _ZoomIncreaseDecreaseState();
 }
 
 class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
-  String zoomValueAsText = '';
   PreferenceController preferenceController = Get.find();
+  String zoomValueAsText = '';
+
   @override
   void initState() {
     super.initState();

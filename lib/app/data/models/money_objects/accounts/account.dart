@@ -76,57 +76,6 @@ class Account extends MoneyObject {
       ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal', -1)
       ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest', -1);
   }
-  static final Fields<Account> _fields = Fields<Account>();
-
-  static Fields<Account> get fields {
-    if (_fields.isEmpty) {
-      final tmp = Account.fromJson({});
-      _fields.setDefinitions([
-        tmp.id,
-        tmp.name,
-        tmp.accountId,
-        tmp.description,
-        tmp.type,
-        tmp.openingBalance,
-        tmp.onlineAccount,
-        tmp.webSite,
-        tmp.reconcileWarning,
-        tmp.lastSync,
-        tmp.syncGuid,
-        tmp.updatedOn,
-        tmp.flags,
-        tmp.lastBalance,
-        tmp.categoryIdForPrincipal,
-        tmp.categoryIdForInterest,
-        tmp.count,
-        tmp.balanceNative,
-        tmp.currency,
-        tmp.balanceNormalized,
-        tmp.isAccountOpen,
-      ]);
-    }
-    return _fields;
-  }
-
-  Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
-  Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
-
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  @override
-  String getRepresentation() {
-    return name.value;
-  }
-
-  // Id
-  // 0|Id|INT|0||1
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).uniqueId,
-  );
 
   // Account ID
   // 1|AccountId|nchar(20)|0||0
@@ -138,228 +87,6 @@ class Account extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).accountId.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).accountId.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).accountId.value = value as String,
-  );
-
-  // OFX Account Id
-  // 2|OfxAccountId|nvarchar(50)|0||0
-  FieldString ofxAccountId = FieldString(
-    importance: 1,
-    name: 'OfxAccountId',
-    serializeName: 'OfxAccountId',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).ofxAccountId.value = value as String,
-  );
-
-  // Name
-  // 3|Name|nvarchar(80)|1||0
-  FieldString name = FieldString(
-    importance: 1,
-    name: 'Name',
-    serializeName: 'Name',
-    columnWidth: ColumnWidth.large,
-    type: FieldType.widget,
-    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Account).name.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).name.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).name.value = value as String,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-      (a as Account).name.value,
-      (b as Account).name.value,
-      ascending,
-    ),
-  );
-
-  // Description
-  // 4|Description|nvarchar(255)|0||0
-  FieldString description = FieldString(
-    importance: 3,
-    name: 'Description',
-    serializeName: 'Description',
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).description.value = value as String,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).description.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).description.value,
-  );
-
-  // Type of account
-  // 5|Type|INT|1||0
-  Field<AccountType> type = Field<AccountType>(
-    importance: 2,
-    type: FieldType.text,
-    align: TextAlign.center,
-    columnWidth: ColumnWidth.small,
-    name: 'Type',
-    serializeName: 'Type',
-    defaultValue: AccountType.checking,
-    getValueForDisplay: (final MoneyObject instance) => getTypeAsText((instance as Account).type.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).type.value.index,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
-      return pickerAccountType(
-        itemSelected: (instance as Account).type.value,
-        onSelected: (AccountType newSelection) {
-          (instance).type.value = newSelection;
-          onEdited(true); // notify container
-        },
-      );
-    },
-    setValue: (final MoneyObject instance, dynamic value) {
-      (instance as Account).type.value = AccountType.values[value];
-    },
-  );
-
-  // 6 Open Balance
-  // 6|OpeningBalance|money|0||0
-  Field<double> openingBalance = Field<double>(
-    name: 'Opening Balance',
-    serializeName: 'OpeningBalance',
-    defaultValue: 0,
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).openingBalance.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).openingBalance.value,
-  );
-
-  /// Currency
-  /// 7|Currency|nchar(3)|0||0
-  FieldString currency = FieldString(
-    importance: 96,
-    name: 'Currency',
-    serializeName: 'Currency',
-    align: TextAlign.center,
-    columnWidth: ColumnWidth.tiny,
-    type: FieldType.widget,
-    getValueForDisplay: (final MoneyObject instance) => Currency.buildCurrencyWidget(
-      (instance as Account).getAccountCurrencyAsText(),
-    ),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).getAccountCurrencyAsText(),
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).currency.value = value as String,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-      (a as Account).getAccountCurrencyAsText(),
-      (b as Account).getAccountCurrencyAsText(),
-      ascending,
-    ),
-  );
-
-  String getAccountCurrencyAsText() {
-    return Currency.getCurrencyAsText(currency.value);
-  }
-
-  Widget getAccountCurrencyAsWidget() {
-    return Currency.buildCurrencyWidget(getAccountCurrencyAsText());
-  }
-
-  /// OnlineAccount
-  /// 8|OnlineAccount|INT|0||0
-  FieldInt onlineAccount = FieldInt(
-    name: 'OnlineAccount',
-    serializeName: 'OnlineAccount',
-    useAsColumn: false,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).onlineAccount.value,
-  );
-
-  /// WebSite
-  /// 9|WebSite|nvarchar(512)|0||0
-  FieldString webSite = FieldString(
-    importance: 4,
-    name: 'WebSite',
-    serializeName: 'WebSite',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).webSite.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).webSite.value,
-  );
-
-  /// ReconcileWarning
-  /// 10|ReconcileWarning|INT|0||0
-  FieldInt reconcileWarning = FieldInt(
-    serializeName: 'ReconcileWarning',
-    useAsColumn: false,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).reconcileWarning.value,
-  );
-
-  /// LastSync Date & Time
-  /// 11|LastSync|datetime|0||0
-  FieldDate lastSync = FieldDate(
-    importance: 90,
-    serializeName: 'LastSync',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).lastSync.value,
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Account).lastSync.value),
-  );
-
-  /// SyncGuid
-  /// 12|SyncGuid|uniqueidentifier|0||0
-  FieldString syncGuid = FieldString(
-    serializeName: 'SyncGuid',
-    useAsColumn: false,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForSerialization: (final MoneyObject instance) =>
-        // this field can not be blank, it needs to be a valid GUID or Null
-        (instance as Account).syncGuid.value.isEmpty ? null : instance.syncGuid.value.isEmpty,
-  );
-
-  /// Flags
-  /// 13|Flags|INT|0||0
-  FieldInt flags = FieldInt(
-    serializeName: 'Flags',
-    useAsColumn: false,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).flags.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).flags.value,
-  );
-
-  /// Last Balance date
-  /// 14|LastBalance|datetime|0||0
-  FieldDate lastBalance = FieldDate(
-    importance: 98,
-    serializeName: 'LastBalance',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Account).lastBalance.value),
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Account).lastBalance.value),
-  );
-
-  /// categoryIdForPrincipal
-  /// 15 | CategoryIdForPrincipal|INT|0||0
-  Field<int> categoryIdForPrincipal = Field<int>(
-    importance: 98,
-    name: 'Catgory for Principal',
-    serializeName: 'CategoryIdForPrincipal',
-    defaultValue: 0,
-    useAsColumn: false,
-    useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
-    type: FieldType.text,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as Account).categoryIdForPrincipal.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForPrincipal.value,
-  );
-
-  /// categoryIdForInterest
-  /// 16|CategoryIdForInterest|INT|0||0
-  Field<int> categoryIdForInterest = Field<int>(
-    importance: -1,
-    name: 'Catgory for Interest',
-    serializeName: 'CategoryIdForInterest',
-    type: FieldType.text,
-    defaultValue: 0,
-    useAsColumn: false,
-    useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as Account).categoryIdForInterest.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForInterest.value,
-  );
-
-  // ------------------------------------------------
-  // Properties that are not persisted
-
-  /// Transaction Count
-  FieldQuantity count = FieldQuantity(
-    importance: 98,
-    name: 'Transactions',
-    columnWidth: ColumnWidth.tiny,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).count.value,
   );
 
   /// Balance
@@ -392,6 +119,96 @@ class Account extends MoneyObject {
     },
   );
 
+  /// categoryIdForInterest
+  /// 16|CategoryIdForInterest|INT|0||0
+  Field<int> categoryIdForInterest = Field<int>(
+    importance: -1,
+    name: 'Catgory for Interest',
+    serializeName: 'CategoryIdForInterest',
+    type: FieldType.text,
+    defaultValue: 0,
+    useAsColumn: false,
+    useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Account).categoryIdForInterest.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForInterest.value,
+  );
+
+  /// categoryIdForPrincipal
+  /// 15 | CategoryIdForPrincipal|INT|0||0
+  Field<int> categoryIdForPrincipal = Field<int>(
+    importance: 98,
+    name: 'Catgory for Principal',
+    serializeName: 'CategoryIdForPrincipal',
+    defaultValue: 0,
+    useAsColumn: false,
+    useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
+    type: FieldType.text,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Account).categoryIdForPrincipal.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).categoryIdForPrincipal.value,
+  );
+
+  // ------------------------------------------------
+  // Properties that are not persisted
+
+  /// Transaction Count
+  FieldQuantity count = FieldQuantity(
+    importance: 98,
+    name: 'Transactions',
+    columnWidth: ColumnWidth.tiny,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).count.value,
+  );
+
+  /// Currency
+  /// 7|Currency|nchar(3)|0||0
+  FieldString currency = FieldString(
+    importance: 96,
+    name: 'Currency',
+    serializeName: 'Currency',
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.tiny,
+    type: FieldType.widget,
+    getValueForDisplay: (final MoneyObject instance) => Currency.buildCurrencyWidget(
+      (instance as Account).getAccountCurrencyAsText(),
+    ),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).getAccountCurrencyAsText(),
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).currency.value = value as String,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Account).getAccountCurrencyAsText(),
+      (b as Account).getAccountCurrencyAsText(),
+      ascending,
+    ),
+  );
+
+  // Description
+  // 4|Description|nvarchar(255)|0||0
+  FieldString description = FieldString(
+    importance: 3,
+    name: 'Description',
+    serializeName: 'Description',
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).description.value = value as String,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).description.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).description.value,
+  );
+
+  /// Flags
+  /// 13|Flags|INT|0||0
+  FieldInt flags = FieldInt(
+    serializeName: 'Flags',
+    useAsColumn: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).flags.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).flags.value,
+  );
+
+  // Id
+  // 0|Id|INT|0||1
+  FieldId id = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).uniqueId,
+  );
+
   Field<bool> isAccountOpen = Field<bool>(
     name: 'Account is open',
     defaultValue: false,
@@ -408,6 +225,130 @@ class Account extends MoneyObject {
     },
   );
 
+  /// Last Balance date
+  /// 14|LastBalance|datetime|0||0
+  FieldDate lastBalance = FieldDate(
+    importance: 98,
+    serializeName: 'LastBalance',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) =>
+        dateToIso8601OrDefaultString((instance as Account).lastBalance.value),
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToIso8601OrDefaultString((instance as Account).lastBalance.value),
+  );
+
+  /// LastSync Date & Time
+  /// 11|LastSync|datetime|0||0
+  FieldDate lastSync = FieldDate(
+    importance: 90,
+    serializeName: 'LastSync',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).lastSync.value,
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToIso8601OrDefaultString((instance as Account).lastSync.value),
+  );
+
+  Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
+  Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
+  // Name
+  // 3|Name|nvarchar(80)|1||0
+  FieldString name = FieldString(
+    importance: 1,
+    name: 'Name',
+    serializeName: 'Name',
+    columnWidth: ColumnWidth.large,
+    type: FieldType.widget,
+    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Account).name.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).name.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).name.value = value as String,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Account).name.value,
+      (b as Account).name.value,
+      ascending,
+    ),
+  );
+
+  // OFX Account Id
+  // 2|OfxAccountId|nvarchar(50)|0||0
+  FieldString ofxAccountId = FieldString(
+    importance: 1,
+    name: 'OfxAccountId',
+    serializeName: 'OfxAccountId',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).ofxAccountId.value = value as String,
+  );
+
+  /// OnlineAccount
+  /// 8|OnlineAccount|INT|0||0
+  FieldInt onlineAccount = FieldInt(
+    name: 'OnlineAccount',
+    serializeName: 'OnlineAccount',
+    useAsColumn: false,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).onlineAccount.value,
+  );
+
+  // 6 Open Balance
+  // 6|OpeningBalance|money|0||0
+  Field<double> openingBalance = Field<double>(
+    name: 'Opening Balance',
+    serializeName: 'OpeningBalance',
+    defaultValue: 0,
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).openingBalance.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).openingBalance.value,
+  );
+
+// cache the currency ratio
+  double? ratio;
+
+  /// ReconcileWarning
+  /// 10|ReconcileWarning|INT|0||0
+  FieldInt reconcileWarning = FieldInt(
+    serializeName: 'ReconcileWarning',
+    useAsColumn: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).reconcileWarning.value,
+  );
+
+  /// SyncGuid
+  /// 12|SyncGuid|uniqueidentifier|0||0
+  FieldString syncGuid = FieldString(
+    serializeName: 'SyncGuid',
+    useAsColumn: false,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForSerialization: (final MoneyObject instance) =>
+        // this field can not be blank, it needs to be a valid GUID or Null
+        (instance as Account).syncGuid.value.isEmpty ? null : instance.syncGuid.value.isEmpty,
+  );
+
+  // Type of account
+  // 5|Type|INT|1||0
+  Field<AccountType> type = Field<AccountType>(
+    importance: 2,
+    type: FieldType.text,
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.small,
+    name: 'Type',
+    serializeName: 'Type',
+    defaultValue: AccountType.checking,
+    getValueForDisplay: (final MoneyObject instance) => getTypeAsText((instance as Account).type.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).type.value.index,
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      return pickerAccountType(
+        itemSelected: (instance as Account).type.value,
+        onSelected: (AccountType newSelection) {
+          (instance).type.value = newSelection;
+          onEdited(true); // notify container
+        },
+      );
+    },
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Account).type.value = AccountType.values[value];
+    },
+  );
+
   FieldDate updatedOn = FieldDate(
     importance: 90,
     name: 'Updated',
@@ -420,12 +361,71 @@ class Account extends MoneyObject {
     },
   );
 
+  /// WebSite
+  /// 9|WebSite|nvarchar(512)|0||0
+  FieldString webSite = FieldString(
+    importance: 4,
+    name: 'WebSite',
+    serializeName: 'WebSite',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).webSite.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).webSite.value,
+  );
+
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
-// cache the currency ratio
-  double? ratio;
+  @override
+  String getRepresentation() {
+    return name.value;
+  }
+
+  @override
+  int get uniqueId => id.value;
+
+  @override
+  set uniqueId(value) => id.value = value;
+
+  static final Fields<Account> _fields = Fields<Account>();
+
+  static Fields<Account> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Account.fromJson({});
+      _fields.setDefinitions([
+        tmp.id,
+        tmp.name,
+        tmp.accountId,
+        tmp.description,
+        tmp.type,
+        tmp.openingBalance,
+        tmp.onlineAccount,
+        tmp.webSite,
+        tmp.reconcileWarning,
+        tmp.lastSync,
+        tmp.syncGuid,
+        tmp.updatedOn,
+        tmp.flags,
+        tmp.lastBalance,
+        tmp.categoryIdForPrincipal,
+        tmp.categoryIdForInterest,
+        tmp.count,
+        tmp.balanceNative,
+        tmp.currency,
+        tmp.balanceNormalized,
+        tmp.isAccountOpen,
+      ]);
+    }
+    return _fields;
+  }
+
+  String getAccountCurrencyAsText() {
+    return Currency.getCurrencyAsText(currency.value);
+  }
+
+  Widget getAccountCurrencyAsWidget() {
+    return Currency.buildCurrencyWidget(getAccountCurrencyAsText());
+  }
 
   double getCurrencyRatio() {
     return Data().currencies.getRatioFromSymbol(currency.value);
@@ -433,6 +433,14 @@ class Account extends MoneyObject {
 
   static String getName(final Account? instance) {
     return instance == null ? '' : (instance).name.value;
+  }
+
+  bool isActiveBankAccount() {
+    return isBankAccount() && isOpen;
+  }
+
+  bool isBankAccount() {
+    return type.value == AccountType.savings || type.value == AccountType.checking || type.value == AccountType.cash;
   }
 
   bool isBitOn(final int value, final int bitIndex) {
@@ -443,8 +451,8 @@ class Account extends MoneyObject {
     return isBitOn(flags.value, AccountFlags.closed.index);
   }
 
-  bool get isOpen {
-    return !isClosed();
+  bool isFakeAccount() {
+    return type.value == AccountType.notUsed_7 || type.value == AccountType.categoryFund;
   }
 
   bool get isMatchingUserChoiceIncludingClosedAccount {
@@ -452,6 +460,10 @@ class Account extends MoneyObject {
       return true;
     }
     return isOpen;
+  }
+
+  bool get isOpen {
+    return !isClosed();
   }
 
   set isOpen(bool value) {
@@ -468,17 +480,5 @@ class Account extends MoneyObject {
       return !isFakeAccount();
     }
     return types.contains(type.value);
-  }
-
-  bool isBankAccount() {
-    return type.value == AccountType.savings || type.value == AccountType.checking || type.value == AccountType.cash;
-  }
-
-  bool isFakeAccount() {
-    return type.value == AccountType.notUsed_7 || type.value == AccountType.categoryFund;
-  }
-
-  bool isActiveBankAccount() {
-    return isBankAccount() && isOpen;
   }
 }

@@ -39,6 +39,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   // Footer related
   int _footerCountTransactions = 0;
+
   double _footerSumBalance = 0.00;
 
   /// add more top leve action buttons
@@ -95,16 +96,6 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getDescription() {
-    return 'Who is getting your money.';
-  }
-
-  @override
-  String getViewId() {
-    return Data().payees.getTypeName();
-  }
-
-  @override
   Widget? getColumnFooterWidget(final Field field) {
     switch (field.name) {
       case 'Transactions':
@@ -117,24 +108,13 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    var list = Data()
-        .payees
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (instance) => (applyFilter == false || isMatchingFilters(instance)),
-        )
-        .toList();
+  String getDescription() {
+    return 'Who is getting your money.';
+  }
 
-    _footerCountTransactions = 0;
-    _footerSumBalance = 0.00;
-
-    for (final item in list) {
-      _footerCountTransactions += item.count.value.toInt();
-      _footerSumBalance += item.sum.value.toDouble();
-    }
-
-    return list;
+  @override
+  Fields<Payee> getFieldsForTable() {
+    return Payee.fields;
   }
 
   @override
@@ -168,7 +148,28 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Fields<Payee> getFieldsForTable() {
-    return Payee.fields;
+  List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    var list = Data()
+        .payees
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (instance) => (applyFilter == false || isMatchingFilters(instance)),
+        )
+        .toList();
+
+    _footerCountTransactions = 0;
+    _footerSumBalance = 0.00;
+
+    for (final item in list) {
+      _footerCountTransactions += item.count.value.toInt();
+      _footerSumBalance += item.sum.value.toDouble();
+    }
+
+    return list;
+  }
+
+  @override
+  String getViewId() {
+    return Data().payees.getTypeName();
   }
 }

@@ -3,6 +3,11 @@
 import 'package:get/get.dart';
 
 class WelcomeController extends GetxController {
+  @override
+  void onClose() {
+    super.onClose();
+  }
+
   //TODO: Implement WelcomeController.
 
   @override
@@ -13,10 +18,5 @@ class WelcomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
   }
 }

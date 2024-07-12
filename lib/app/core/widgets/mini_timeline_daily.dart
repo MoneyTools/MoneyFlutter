@@ -17,8 +17,7 @@ class MiniTimelineDaily extends StatelessWidget {
     this.color,
     this.lineWidth = 2,
   });
-  final int yearStart;
-  final int yearEnd;
+
   final Color? color;
   final double lineWidth;
 
@@ -29,6 +28,9 @@ class MiniTimelineDaily extends StatelessWidget {
 
   // [int = Days from millisecondFromEpoch], [double = amount]
   final List<Pair<int, double>> values;
+
+  final int yearEnd;
+  final int yearStart;
 
   @override
   Widget build(BuildContext context) {

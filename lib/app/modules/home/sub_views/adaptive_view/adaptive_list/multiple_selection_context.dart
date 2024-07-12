@@ -6,7 +6,8 @@ class ViewHeaderMultipleSelection {
     required this.isMultiSelectionOn,
     required this.selectedItems,
   });
-  final VoidCallback? onToggleMode;
+
   final bool isMultiSelectionOn;
+  final VoidCallback? onToggleMode;
   final ValueNotifier<List<int>> selectedItems;
 }

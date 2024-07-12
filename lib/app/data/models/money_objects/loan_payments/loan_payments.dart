@@ -16,14 +16,6 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
   }
 
   @override
-  void loadFromJson(final List<MyJson> rows) {
-    clear();
-    for (final MyJson row in rows) {
-      appendMoneyObject(LoanPayment.fromJson(row));
-    }
-  }
-
-  @override
   void loadDemoData() {
     clear();
     final Account? accountForLoan = Data().accounts.iterableList().firstWhereOrNull(
@@ -46,6 +38,14 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
   }
 
   @override
+  void loadFromJson(final List<MyJson> rows) {
+    clear();
+    for (final MyJson row in rows) {
+      appendMoneyObject(LoanPayment.fromJson(row));
+    }
+  }
+
+  @override
   void onAllDataLoaded() {}
 
   @override
@@ -57,11 +57,11 @@ class LoanPayments extends MoneyObjects<LoanPayment> {
 }
 
 class PaymentRollup {
-  late DateTime date;
   int accountId = -1;
-  String reference = '';
-  double principal = 0;
+  late DateTime date;
   double interest = 0;
+  double principal = 0;
+  String reference = '';
 }
 
 List<LoanPayment> getAccountLoanPayments(Account account) {

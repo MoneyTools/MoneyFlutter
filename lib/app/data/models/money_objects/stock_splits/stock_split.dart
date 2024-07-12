@@ -34,25 +34,27 @@ class StockSplit extends MoneyObject {
       denominator: row.getInt('Denominator'),
     )..id.value = row.getInt('Id', -1);
   }
-  @override
-  int get uniqueId => id.value;
-  @override
-  set uniqueId(value) => id.value = value;
+
+  // 1
+  final DateTime? date;
+
+  // 4
+  final int denominator;
 
   // 0
   FieldId id = FieldId(
     getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
-  // 1
-  final DateTime? date;
+  // 3
+  final int numerator;
 
   // 2
   final int security;
 
-  // 3
-  final int numerator;
+  @override
+  int get uniqueId => id.value;
 
-  // 4
-  final int denominator;
+  @override
+  set uniqueId(value) => id.value = value;
 }

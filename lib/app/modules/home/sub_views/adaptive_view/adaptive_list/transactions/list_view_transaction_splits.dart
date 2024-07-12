@@ -12,8 +12,9 @@ class ListViewTransactionSplits extends StatefulWidget {
     super.key,
     this.defaultSortingField = 0,
   });
-  final List<MoneySplit> Function() getList;
+
   final int defaultSortingField;
+  final List<MoneySplit> Function() getList;
 
   @override
   State<ListViewTransactionSplits> createState() => _ListViewTransactionSplitsState();
@@ -21,8 +22,9 @@ class ListViewTransactionSplits extends StatefulWidget {
 
 class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   List<MoneySplit> rows = [];
-  late int _sortBy = widget.defaultSortingField;
+
   bool _sortAscending = true;
+  late int _sortBy = widget.defaultSortingField;
 
   @override
   void initState() {

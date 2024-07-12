@@ -20,93 +20,13 @@ class Transactions extends MoneyObjects<Transaction> {
     collectionName = 'Transactions';
   }
 
-  List<Transaction> getListFlattenSplits({
-    final bool Function(Transaction)? whereClause,
-  }) {
-    List<Transaction> flattenList = [];
-    for (final t in iterableList()) {
-      if (whereClause == null || whereClause(t)) {
-        if (t.categoryId.value == Data().categories.splitCategoryId()) {
-          for (final s in t.splits) {
-            final fakeT = Transaction(status: t.status.value)
-              ..dateTime.value = t.dateTime.value
-              ..accountId.value = t.accountId.value
-              ..payee.value = s.payeeId.value == -1 ? t.payee.value : s.payeeId.value
-              ..categoryId.value = s.categoryId.value
-              ..memo.value = s.memo.value
-              ..amount.value = s.amount.value;
-
-            flattenList.add(fakeT);
-          }
-        } else {
-          flattenList.add(t);
-        }
-      }
-    }
-    return flattenList;
-  }
-
-  Iterable<Transaction> transactionInYearRange({
-    required final int minYear,
-    required final int maxYear,
-    required final bool? incomesOrExpenses,
-  }) {
-    return iterableList(includeDeleted: true).where(
-      (element) =>
-          isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
-          ((incomesOrExpenses == null ||
-              (incomesOrExpenses == true && element.amount.value.toDouble() > 0) ||
-              (incomesOrExpenses == false && element.amount.value.toDouble() < 0))),
-    );
-  }
-
-  static List<Transaction> flatTransactions(
-    final Iterable<Transaction> transactions,
-  ) {
-    List<Transaction> flatList = [];
-    for (final t in transactions) {
-      if (t.isSplit) {
-        for (final s in t.splits) {
-          final fakeTransaction = Transaction(status: t.status.value);
-          fakeTransaction.dateTime.value = t.dateTime.value;
-          fakeTransaction.categoryId.value = s.categoryId.value;
-          fakeTransaction.amount.value = s.amount.value;
-          flatList.add(fakeTransaction);
-        }
-      } else {
-        flatList.add(t);
-      }
-    }
-    return flatList;
-  }
-
-  static List<Pair<int, double>> transactionSumByTime(
-    List<Transaction> transactions,
-  ) {
-    List<Pair<int, double>> timeAndAmounts = [];
-    for (final t in transactions) {
-      int oneDaySlot = t.dateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
-      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.amount.value.toDouble()));
-    }
-    // sort by date time
-    timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
-    return timeAndAmounts;
-  }
-
-  DateRange dateRangeIncludingClosedAccount = DateRange();
   DateRange dateRangeActiveAccount = DateRange();
+  DateRange dateRangeIncludingClosedAccount = DateRange();
   double runningBalance = 0.00;
 
   @override
   void loadDemoData() {
     _loadDemoData();
-  }
-
-  @override
-  String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
   }
 
   @override
@@ -120,18 +40,6 @@ class Transactions extends MoneyObjects<Transaction> {
       runningBalance += t.balance;
       appendMoneyObject(t);
     }
-  }
-
-  int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
-    final transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
-      (item) =>
-          item.accountId.value == t.accountId.value &&
-          item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
-    );
-    if (transactionMatchingAccountPayeeAndHasCategory != null) {
-      return transactionMatchingAccountPayeeAndHasCategory.categoryId.value;
-    }
-    return -1;
   }
 
   /// Now that everything is loaded, adjust relation between MoneyObjects
@@ -257,12 +165,11 @@ class Transactions extends MoneyObjects<Transaction> {
     // debugLog('Find-----: ${watchFind.elapsedMilliseconds} ms');
   }
 
-  int getNextTransactionId() {
-    int maxIdFound = -1;
-    for (final item in iterableList(includeDeleted: true)) {
-      maxIdFound = max(maxIdFound, item.id.value);
-    }
-    return maxIdFound + 1;
+  @override
+  String toCSV() {
+    return MoneyObjects.getCsvFromList(
+      getListSortedById(),
+    );
   }
 
   /// match amount and date YYYY,MM,DD, optionally restric to a specific account by passing -1
@@ -282,11 +189,104 @@ class Transactions extends MoneyObjects<Transaction> {
     });
   }
 
+  int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
+    final transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
+      (item) =>
+          item.accountId.value == t.accountId.value &&
+          item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
+    );
+    if (transactionMatchingAccountPayeeAndHasCategory != null) {
+      return transactionMatchingAccountPayeeAndHasCategory.categoryId.value;
+    }
+    return -1;
+  }
+
+  static List<Transaction> flatTransactions(
+    final Iterable<Transaction> transactions,
+  ) {
+    List<Transaction> flatList = [];
+    for (final t in transactions) {
+      if (t.isSplit) {
+        for (final s in t.splits) {
+          final fakeTransaction = Transaction(status: t.status.value);
+          fakeTransaction.dateTime.value = t.dateTime.value;
+          fakeTransaction.categoryId.value = s.categoryId.value;
+          fakeTransaction.amount.value = s.amount.value;
+          flatList.add(fakeTransaction);
+        }
+      } else {
+        flatList.add(t);
+      }
+    }
+    return flatList;
+  }
+
   List<Transaction> getAllTransactionsByDate() {
     final List<Transaction> theListOfAllTransactionIncludingHiddenOne = iterableList().toList(growable: false);
     theListOfAllTransactionIncludingHiddenOne.sort(
       (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value, true),
     );
     return theListOfAllTransactionIncludingHiddenOne;
+  }
+
+  List<Transaction> getListFlattenSplits({
+    final bool Function(Transaction)? whereClause,
+  }) {
+    List<Transaction> flattenList = [];
+    for (final t in iterableList()) {
+      if (whereClause == null || whereClause(t)) {
+        if (t.categoryId.value == Data().categories.splitCategoryId()) {
+          for (final s in t.splits) {
+            final fakeT = Transaction(status: t.status.value)
+              ..dateTime.value = t.dateTime.value
+              ..accountId.value = t.accountId.value
+              ..payee.value = s.payeeId.value == -1 ? t.payee.value : s.payeeId.value
+              ..categoryId.value = s.categoryId.value
+              ..memo.value = s.memo.value
+              ..amount.value = s.amount.value;
+
+            flattenList.add(fakeT);
+          }
+        } else {
+          flattenList.add(t);
+        }
+      }
+    }
+    return flattenList;
+  }
+
+  int getNextTransactionId() {
+    int maxIdFound = -1;
+    for (final item in iterableList(includeDeleted: true)) {
+      maxIdFound = max(maxIdFound, item.id.value);
+    }
+    return maxIdFound + 1;
+  }
+
+  Iterable<Transaction> transactionInYearRange({
+    required final int minYear,
+    required final int maxYear,
+    required final bool? incomesOrExpenses,
+  }) {
+    return iterableList(includeDeleted: true).where(
+      (element) =>
+          isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
+          ((incomesOrExpenses == null ||
+              (incomesOrExpenses == true && element.amount.value.toDouble() > 0) ||
+              (incomesOrExpenses == false && element.amount.value.toDouble() < 0))),
+    );
+  }
+
+  static List<Pair<int, double>> transactionSumByTime(
+    List<Transaction> transactions,
+  ) {
+    List<Pair<int, double>> timeAndAmounts = [];
+    for (final t in transactions) {
+      int oneDaySlot = t.dateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
+      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.amount.value.toDouble()));
+    }
+    // sort by date time
+    timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
+    return timeAndAmounts;
   }
 }

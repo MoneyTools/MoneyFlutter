@@ -9,19 +9,20 @@ class FieldFilter {
       filterTextInLowerCase: json['filterTextInLowerCase'] as String,
     );
   }
+
   final String fieldName;
   late String filterTextInLowerCase;
+
+  @override
+  String toString() {
+    return '$fieldName=$filterTextInLowerCase';
+  }
 
   Map<String, dynamic> toJson() {
     return {
       'fieldName': fieldName,
       'filterTextInLowerCase': filterTextInLowerCase,
     };
-  }
-
-  @override
-  String toString() {
-    return '$fieldName=$filterTextInLowerCase';
   }
 }
 
@@ -48,16 +49,22 @@ class FieldFilters {
 
   List<FieldFilter> list = [];
 
-  bool get isEmpty => list.isEmpty;
-
-  int get length => list.length;
+  void add(final FieldFilter ff) {
+    list.add(ff);
+  }
 
   void clear() {
     list.clear();
   }
 
-  void add(final FieldFilter ff) {
-    list.add(ff);
+  bool get isEmpty => list.isEmpty;
+
+  int get length => list.length;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'list': list.map((filter) => filter.toJson()).toList(),
+    };
   }
 
   // @override
@@ -67,11 +74,5 @@ class FieldFilters {
 
   List<String> toStringList() {
     return list.map((filter) => filter.toString()).toList();
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'list': list.map((filter) => filter.toJson()).toList(),
-    };
   }
 }

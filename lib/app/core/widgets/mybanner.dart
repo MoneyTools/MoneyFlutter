@@ -8,6 +8,7 @@ class MyBanner extends StatelessWidget {
     required this.on,
     super.key,
   });
+
   final Widget child;
   final bool on;
 

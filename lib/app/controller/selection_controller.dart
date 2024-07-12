@@ -10,14 +10,19 @@ class SelectionController extends GetxController {
     }
   }
 
-  static SelectionController get to => Get.find();
-  RxSet<int> selectedItems = <int>{}.obs;
   String preferenceKeyForPersitingSelections = '';
+  RxSet<int> selectedItems = <int>{}.obs;
 
-  void save() {
-    if (preferenceKeyForPersitingSelections.isNotEmpty) {
-      PreferenceController.to.setInt(preferenceKeyForPersitingSelections, firstSelectedId);
+  int get firstSelectedId {
+    if (selectedItems.isEmpty) {
+      return -1;
     }
+    return selectedItems.first;
+  }
+
+  // Function to check if an item is selected
+  bool isSelected(int id) {
+    return selectedItems.contains(id);
   }
 
   void load() {
@@ -27,12 +32,9 @@ class SelectionController extends GetxController {
     }
   }
 
-  // Function to toggle selection
-  void toggleSelection(int id) {
-    if (selectedItems.contains(id)) {
-      selectedItems.remove(id);
-    } else {
-      selectedItems.add(id);
+  void save() {
+    if (preferenceKeyForPersitingSelections.isNotEmpty) {
+      PreferenceController.to.setInt(preferenceKeyForPersitingSelections, firstSelectedId);
     }
   }
 
@@ -44,15 +46,14 @@ class SelectionController extends GetxController {
     save();
   }
 
-  // Function to check if an item is selected
-  bool isSelected(int id) {
-    return selectedItems.contains(id);
-  }
+  static SelectionController get to => Get.find();
 
-  int get firstSelectedId {
-    if (selectedItems.isEmpty) {
-      return -1;
+  // Function to toggle selection
+  void toggleSelection(int id) {
+    if (selectedItems.contains(id)) {
+      selectedItems.remove(id);
+    } else {
+      selectedItems.add(id);
     }
-    return selectedItems.first;
   }
 }

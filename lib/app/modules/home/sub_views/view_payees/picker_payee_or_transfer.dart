@@ -20,11 +20,12 @@ class PickPayeeOrTransfer extends StatefulWidget {
     required this.onSelected,
     super.key,
   });
-  final TransactionFlavor choice;
-  final Payee? payee;
+
   final Account? account;
   final double amount;
+  final TransactionFlavor choice;
   final Function(TransactionFlavor choice, Payee? payee, Account? account) onSelected;
+  final Payee? payee;
 
   @override
   State<PickPayeeOrTransfer> createState() => _PickPayeeOrTransferState();
@@ -52,6 +53,30 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
           child: buildIInput(),
         ),
       ],
+    );
+  }
+
+  Widget buildChoice() {
+    return SegmentedButton<TransactionFlavor>(
+      style: const ButtonStyle(
+        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
+      ),
+      segments: const <ButtonSegment<TransactionFlavor>>[
+        ButtonSegment<TransactionFlavor>(
+          value: TransactionFlavor.payee,
+          label: Text('Payee'),
+        ),
+        ButtonSegment<TransactionFlavor>(
+          value: TransactionFlavor.transfer,
+          label: Text('Transfer'),
+        ),
+      ],
+      selected: <TransactionFlavor>{_choice},
+      onSelectionChanged: (final Set<TransactionFlavor> newSelection) {
+        setState(() {
+          _choice = newSelection.first;
+        });
+      },
     );
   }
 
@@ -103,30 +128,6 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
           child: widget,
         ),
       ],
-    );
-  }
-
-  Widget buildChoice() {
-    return SegmentedButton<TransactionFlavor>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: const <ButtonSegment<TransactionFlavor>>[
-        ButtonSegment<TransactionFlavor>(
-          value: TransactionFlavor.payee,
-          label: Text('Payee'),
-        ),
-        ButtonSegment<TransactionFlavor>(
-          value: TransactionFlavor.transfer,
-          label: Text('Transfer'),
-        ),
-      ],
-      selected: <TransactionFlavor>{_choice},
-      onSelectionChanged: (final Set<TransactionFlavor> newSelection) {
-        setState(() {
-          _choice = newSelection.first;
-        });
-      },
     );
   }
 }

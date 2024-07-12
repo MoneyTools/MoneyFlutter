@@ -14,13 +14,6 @@ class Aliases extends MoneyObjects<Alias> {
   }
 
   @override
-  void onAllDataLoaded() {
-    for (final Alias item in iterableList()) {
-      item.payeeInstance = Data().payees.get(item.payeeId.value);
-    }
-  }
-
-  @override
   void loadDemoData() {
     clear();
     appendNewMoneyObject(
@@ -37,6 +30,13 @@ class Aliases extends MoneyObjects<Alias> {
         flags: AliasType.regex.index,
       ),
     );
+  }
+
+  @override
+  void onAllDataLoaded() {
+    for (final Alias item in iterableList()) {
+      item.payeeInstance = Data().payees.get(item.payeeId.value);
+    }
   }
 
   @override

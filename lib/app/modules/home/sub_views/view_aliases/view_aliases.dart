@@ -38,24 +38,8 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getViewId() {
-    return Data().aliases.getTypeName();
-  }
-
-  @override
   Fields<Alias> getFieldsForTable() {
     return Alias.getFields();
-  }
-
-  @override
-  List<Alias> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data()
-        .aliases
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (instance) => applyFilter == false || isMatchingFilters(instance),
-        )
-        .toList();
   }
 
   @override
@@ -92,5 +76,21 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
       );
     }
     return CenterMessage.noTransaction();
+  }
+
+  @override
+  List<Alias> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    return Data()
+        .aliases
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (instance) => applyFilter == false || isMatchingFilters(instance),
+        )
+        .toList();
+  }
+
+  @override
+  String getViewId() {
+    return Data().aliases.getTypeName();
   }
 }

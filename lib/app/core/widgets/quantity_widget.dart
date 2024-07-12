@@ -11,9 +11,10 @@ class QuantifyWidget extends StatelessWidget {
     this.align = TextAlign.right,
   });
 
+  final TextAlign align;
+
   /// Amount to display
   final double quantity;
-  final TextAlign align;
 
   @override
   Widget build(final BuildContext context) {

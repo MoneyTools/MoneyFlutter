@@ -11,17 +11,19 @@ class Distribution {
     required this.amount,
     this.color = Colors.transparent,
   });
-  final String title;
-  final Color color;
+
   final double amount;
+  final Color color;
   double percentage = 0;
+  final String title;
 }
 
 class DistributionBar extends StatelessWidget {
   DistributionBar({required this.segments, super.key});
-  final List<Distribution> segments;
-  final List<Widget> segmentWidgets = [];
+
   final List<Widget> detailRowWidgets = [];
+  final List<Widget> segmentWidgets = [];
+  final List<Distribution> segments;
 
   @override
   Widget build(BuildContext context) {
@@ -89,38 +91,6 @@ class DistributionBar extends StatelessWidget {
     }
   }
 
-  Widget _buildHorizontalBar() {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(3), // Radius for rounded ends
-      child: SizedBox(
-        height: 20,
-        child: Row(
-          children: segmentWidgets,
-        ),
-      ),
-    );
-  }
-
-  Widget _builtSegmentOverlayText(final double percentage, final Color color) {
-    int value = (percentage * 100).toInt();
-    if (value <= 0) {
-      return const SizedBox();
-    }
-    return Text(
-      '$value%',
-      softWrap: false,
-      overflow: TextOverflow.clip,
-      style: TextStyle(color: color, fontSize: 9),
-    );
-  }
-
-  Widget _buildRowOfDetails() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: detailRowWidgets,
-    );
-  }
-
   Widget _buildDetailRow(
     final BuildContext context,
     final String label,
@@ -152,6 +122,38 @@ class DistributionBar extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildHorizontalBar() {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(3), // Radius for rounded ends
+      child: SizedBox(
+        height: 20,
+        child: Row(
+          children: segmentWidgets,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRowOfDetails() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: detailRowWidgets,
+    );
+  }
+
+  Widget _builtSegmentOverlayText(final double percentage, final Color color) {
+    int value = (percentage * 100).toInt();
+    if (value <= 0) {
+      return const SizedBox();
+    }
+    return Text(
+      '$value%',
+      softWrap: false,
+      overflow: TextOverflow.clip,
+      style: TextStyle(color: color, fontSize: 9),
     );
   }
 }
