@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/accumulator.dart';
+import 'package:money/app/core/helpers/chart_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/data/storage/data/data.dart';
@@ -66,14 +67,7 @@ class NetWorthChartState extends State<NetWorthChart> {
     return LineChart(
       LineChartData(
         lineBarsData: [
-          LineChartBarData(
-            spots: dataPoints,
-            isCurved: false,
-            color: Colors.blue,
-            barWidth: 1,
-            belowBarData: BarAreaData(show: false),
-            dotData: const FlDotData(show: false), // Hide dots at endpoints
-          ),
+          getLineChartBarData(dataPoints),
         ],
         gridData: const FlGridData(show: false),
         titlesData: FlTitlesData(

@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/helpers/chart_helper.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
@@ -60,18 +61,10 @@ class StockChartWidgetState extends State<StockChartWidget> {
     if (dataPoints.isEmpty) {
       return const Center(child: Text('loading...'));
     }
-
     return LineChart(
       LineChartData(
         lineBarsData: [
-          LineChartBarData(
-            spots: dataPoints,
-            isCurved: false,
-            color: Colors.blue,
-            barWidth: 1,
-            belowBarData: BarAreaData(show: false),
-            dotData: const FlDotData(show: false), // Hide dots at endpoints
-          ),
+          getLineChartBarData(dataPoints),
         ],
         gridData: const FlGridData(show: false),
         titlesData: FlTitlesData(

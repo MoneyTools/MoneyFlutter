@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.41] 2024-07-12
+
+### Update
+
+- Line Chart now renders in Green or Red base on value outcome of first and last values
+  
 ## [version 1.8.40] 2024-07-09
 
 ### Added
