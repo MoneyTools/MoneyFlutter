@@ -43,12 +43,13 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewAccounts;
   }
 
+  final List<Widget> _pivots = <Widget>[];
+
   // Footer related
   final DateRange _footerColumnDate = DateRange();
 
   int _footerCountTransactions = 0;
   double _footerSumBalance = 0.00;
-  final List<Widget> _pivots = <Widget>[];
   // Filter related
   final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
 

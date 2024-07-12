@@ -12,8 +12,9 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 /// in order to minimize capital gains taxes.
 /// </summary>
 class AccountHoldings {
-  Account? account;
   Map<Security, SecurityFifoQueue> queues = <Security, SecurityFifoQueue>{};
+
+  Account? account;
 
   /// <summary>
   /// Record an Add or Buy for a given security.

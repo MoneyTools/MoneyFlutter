@@ -13,10 +13,10 @@ class MoneyWidget extends StatelessWidget {
     this.asTile = false,
   });
 
+  final bool asTile;
+
   /// Amount to display
   final MoneyModel amountModel;
-
-  final bool asTile;
 
   @override
   Widget build(final BuildContext context) {

@@ -17,20 +17,20 @@ class InfoPanelHeader extends StatelessWidget {
     super.key,
   });
 
+  final int currencySelected;
+  final Function currentSelectionChanged;
+  final bool isExpanded;
+  final Function onExpanded;
+  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
+
   // Actions
   final List<Widget> Function(bool) actionButtons;
 
   // Currency
   final List<String> currencyChoices;
 
-  final int currencySelected;
-  final Function currentSelectionChanged;
-  final bool isExpanded;
-  final Function onExpanded;
   // SubView
   final InfoPanelSubViewEnum subViewSelected;
-
-  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
 
   @override
   Widget build(final BuildContext context) {

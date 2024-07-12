@@ -35,12 +35,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewCategories;
   }
 
-  // Footer related
-  int _footerCountTransactions = 0;
-
-  int _footerCountTransactionsRollUp = 0;
-  double _footerSumBalance = 0.00;
-  double _footerSumBalanceRollUp = 0.00;
   final List<Widget> _pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[
     false,
@@ -50,6 +44,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     false,
     true,
   ];
+
+  // Footer related
+  int _footerCountTransactions = 0;
+
+  int _footerCountTransactionsRollUp = 0;
+  double _footerSumBalance = 0.00;
+  double _footerSumBalanceRollUp = 0.00;
 
   @override
   Widget buildHeader([final Widget? child]) {

@@ -20,22 +20,22 @@ class InfoPanel extends StatelessWidget {
     super.key,
   });
 
-  // Currency selection
-  final int currencySelected;
-
   final Function(int) currencySelectionChanged;
-  // Actions
-  final List<Widget> Function(bool) getActionButtons;
-
   final List<String> Function(InfoPanelSubViewEnum, List<int>) getCurrencyChoices;
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
   final Widget Function(InfoPanelSubViewEnum, List<int>) subPanelContent;
+  final Function(InfoPanelSubViewEnum) subPanelSelectionChanged;
+
+  // Currency selection
+  final int currencySelected;
+
+  // Actions
+  final List<Widget> Function(bool) getActionButtons;
+
   // SubViews [Details] [Chart] [Transactions]
   final InfoPanelSubViewEnum subPanelSelected;
-
-  final Function(InfoPanelSubViewEnum) subPanelSelectionChanged;
 
   @override
   Widget build(final BuildContext context) {

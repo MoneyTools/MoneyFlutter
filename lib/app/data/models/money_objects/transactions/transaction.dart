@@ -107,8 +107,6 @@ class Transaction extends MoneyObject {
     setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).accountId.value = newValue,
   );
 
-  Account? accountInstance;
-
   /// Amount
   /// 14|Amount|money|1||0
   FieldMoney amount = FieldMoney(
@@ -322,8 +320,6 @@ class Transaction extends MoneyObject {
   FieldId id = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).uniqueId,
   );
-
-  Investment? investmentInstance;
 
   /// Memo
   /// 7|Memo|nvarchar(255)|0||0
@@ -555,6 +551,9 @@ class Transaction extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
   );
+
+  Account? accountInstance;
+  Investment? investmentInstance;
 
   String? _transferName;
 

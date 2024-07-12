@@ -21,8 +21,9 @@ class MergeCategoriesTransactionsDialog extends StatefulWidget {
 }
 
 class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTransactionsDialog> {
-  late Category _categoryPicked = widget.categoryToMove;
   final List<Transaction> _transactions = [];
+
+  late Category _categoryPicked = widget.categoryToMove;
 
   @override
   void initState() {

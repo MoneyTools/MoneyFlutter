@@ -16,10 +16,11 @@ import 'package:money/app/data/storage/data/data.dart';
 class PanelSanKey extends StatelessWidget {
   PanelSanKey({required this.minYear, required this.maxYear, super.key});
 
-  late Map<Category, double> mapOfExpenses = <Category, double>{};
-  late Map<Category, double> mapOfIncomes = <Category, double>{};
   final int maxYear;
   final int minYear;
+
+  late Map<Category, double> mapOfExpenses = <Category, double>{};
+  late Map<Category, double> mapOfIncomes = <Category, double>{};
   late double padding = 10.0;
   late List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
   late List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];

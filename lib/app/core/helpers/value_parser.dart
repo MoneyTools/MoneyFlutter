@@ -98,8 +98,9 @@ class ValuesQuality {
   final ValueQuality amount;
   final ValueQuality date;
   final ValueQuality description;
-  bool exist = false;
   final bool reverseAmountValue;
+
+  bool exist = false;
 
   bool checkIfExistAlready({required final int accountId}) {
     exist = isTransactionAlreadyInTheSystem(
@@ -157,8 +158,9 @@ class ValuesParser {
 
   final String currency; // USD, EUR
   final String dateFormat;
-  String errorMessage = '';
   final bool reverseAmountValue;
+
+  String errorMessage = '';
   List<Widget> rows = [];
 
   List<ValuesQuality> _values = [];

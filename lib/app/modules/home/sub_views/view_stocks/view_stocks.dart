@@ -29,13 +29,14 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   Security? lastSecuritySelected;
 
+  final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
+
   double _footerColumnBalance = 0.00;
   // Footer related
   final DateRange _footerColumnDate = DateRange();
 
   double _footerColumnShares = 0.00;
   int _footerColumnTrades = 0;
-  final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 
   @override
   String getClassNamePlural() {

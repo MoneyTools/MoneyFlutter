@@ -32,7 +32,6 @@ class ImportTransactionsPanel extends StatefulWidget {
 class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late String userChoiceOfDateFormat = _possibleDateFormats.first;
 
-  late Account _account;
   final _focusNode = FocusNode();
   final List<String> _possibleDateFormats = [
     // Dash
@@ -55,6 +54,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     'dd/MM/yy',
   ];
 
+  late Account _account;
   late String _textToParse;
   int _userChoiceDebitVsCredit = 0;
   int _userChoiceNativeVsUSD = 0;

@@ -27,6 +27,8 @@ class InputByColumns extends StatefulWidget {
 }
 
 class _InputByColumnsState extends State<InputByColumns> {
+  final Debouncer _debouncer = Debouncer();
+
   // Date
   final _controllerColumn1 = TextEditingController();
 
@@ -39,7 +41,6 @@ class _InputByColumnsState extends State<InputByColumns> {
   // Freestyle
   final _controllerSingleColumn = TextEditingController();
 
-  final Debouncer _debouncer = Debouncer();
   bool _freeStyleInput = false; // use 3 columns by default
   bool _pauseTextSync = false;
 

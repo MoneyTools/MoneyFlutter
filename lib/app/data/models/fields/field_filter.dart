@@ -11,6 +11,7 @@ class FieldFilter {
   }
 
   final String fieldName;
+
   late String filterTextInLowerCase;
 
   @override

@@ -34,16 +34,14 @@ class ViewForMoneyObjects extends StatefulWidget {
 }
 
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
+  late final ViewId viewId;
+
   bool firstLoadCompleted = false;
   // list management
   List<MoneyObject> list = <MoneyObject>[];
 
   List<String> listOfUniqueString = <String>[];
   List<ValueSelection> listOfValueSelected = [];
-  Function? onAddTransaction;
-  VoidCallback? onDeleteItems;
-  VoidCallback? onEditItems;
-  VoidCallback? onMultiSelect;
   PreferenceController preferenceController = Get.find();
   // detail panel
   Object? subViewSelectedItem;
@@ -51,7 +49,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   // Multi selection support
   bool supportsMultiSelection = false;
 
-  late final ViewId viewId;
+  Function? onAddTransaction;
+  VoidCallback? onDeleteItems;
+  VoidCallback? onEditItems;
+  VoidCallback? onMultiSelect;
+
+  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>([]);
 
   Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>();
   FieldFilters _filterByFieldsValue = FieldFilters();
@@ -62,7 +65,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   int _lastSelectedItemId = -1;
   InfoPanelSubViewEnum _selectedBottomTabId = InfoPanelSubViewEnum.details;
   int _selectedCurrency = 0;
-  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>([]);
   bool _sortAscending = true;
   int _sortByFieldIndex = 0;
 

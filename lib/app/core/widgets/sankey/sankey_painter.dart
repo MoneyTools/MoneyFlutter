@@ -20,14 +20,15 @@ class SankeyPainter extends CustomPainter {
     required this.compactView,
   });
 
+  final bool compactView;
+  final List<SanKeyEntry> listOfExpenses;
+  final List<SanKeyEntry> listOfIncomes;
+
   // double incomeHeight = Constants.targetHeight;
   SankeyColors colors;
 
   double columnWidth = 0;
-  final bool compactView;
   double gap = Constants.gapBetweenChannels;
-  final List<SanKeyEntry> listOfExpenses;
-  final List<SanKeyEntry> listOfIncomes;
   double topOfCenters = Constants.gapBetweenChannels * 2;
 
   @override

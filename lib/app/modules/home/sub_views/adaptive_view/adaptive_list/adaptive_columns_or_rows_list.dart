@@ -32,19 +32,19 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   final Function(BuildContext context, int itemId)? onItemTap;
   final Function(BuildContext context, int itemId)? onItemLongPress;
   final Color? backgoundColorForHeaderFooter;
-  // Display as Card vs Columns
-  final bool displayAsColumns;
-
   final FieldDefinitions fieldDefinitions;
   final FieldFilters filters;
   final bool isMultiSelectionOn;
   final List<MoneyObject> list;
   final Function? onContextMenu;
-  // Selections
-  final ValueNotifier<List<int>> selectedItemsByUniqueId;
-
   final bool sortAscending;
   final int sortByFieldIndex;
+
+  // Display as Card vs Columns
+  final bool displayAsColumns;
+
+  // Selections
+  final ValueNotifier<List<int>> selectedItemsByUniqueId;
 
   @override
   Widget build(BuildContext context) {

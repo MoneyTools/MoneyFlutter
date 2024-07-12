@@ -1,6 +1,8 @@
 #!/bin/sh
 echo --- Analyze
 
+sh/style.sh
+
 dart analyze 
 dart fix --apply
 
@@ -12,4 +14,4 @@ flutter test
 
 git@github.com:jpdup/glad.git --view layers --lines curve --align left -o layers.svg
 
-./graph.sh
+sh/graph.sh

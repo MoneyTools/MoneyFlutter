@@ -34,15 +34,17 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     supportsMultiSelection = true;
   }
 
-  bool balanceDone = false;
   final List<Widget> pivots = <Widget>[];
   final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+
+  bool balanceDone = false;
+
+  final List<bool> _selectedPivot = <bool>[false, false, true];
 
   // Footer related
   final DateRange _footerColumnDate = DateRange();
 
   double _footerRunningBalanceUSD = 0.0;
-  final List<bool> _selectedPivot = <bool>[false, false, true];
 
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {

@@ -22,10 +22,10 @@ class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
   });
 
   @override
-  State<MyAppBar> createState() => _MyAppBarState();
+  final Size preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
-  final Size preferredSize = const Size.fromHeight(kToolbarHeight);
+  State<MyAppBar> createState() => _MyAppBarState();
 }
 
 class _MyAppBarState extends State<MyAppBar> {

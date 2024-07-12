@@ -80,16 +80,17 @@ class RecurringPayment {
     );
   }
 
+  final bool forIncomeTransaction;
+  final int payeeId;
+  final List<Transaction> transactions;
+
   late List<Pair<int, double>> averagePerMonths;
   late List<Distribution> categoryDistribution;
   late List<Pair<int, double>> categoryIdsAndSums;
   late DateRange dateRangeFound;
-  final bool forIncomeTransaction;
   late int frequency;
-  final int payeeId;
   late List<double> sumPerMonths;
   late double total;
-  final List<Transaction> transactions;
 
   double averageTwoNumbers(final double a, final double b) {
     // (-10 - -20) = -30 / 2 = -15

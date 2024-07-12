@@ -21,10 +21,14 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final DataController dataController = Get.put(DataController());
+
   // Leave these declared in this order
   final PreferenceController preferenceController = Get.put(PreferenceController());
 
+  // Keyboard support
   final ShortcutController shortcutController = Get.put(ShortcutController());
+
+  // Theme Color and Font Size
   final ThemeController themeController = Get.put(ThemeController());
 
   @override

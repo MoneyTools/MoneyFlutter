@@ -15,8 +15,9 @@ class RentalPnL {
     this.distributions = distributions ?? {};
   }
 
-  String currency;
   final DateTime date;
+
+  String currency;
   late Map<String, double> distributions;
   double expenseInterest;
   double expenseMaintenance;

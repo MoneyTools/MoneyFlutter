@@ -32,18 +32,18 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
   final Function(BuildContext context, int itemId)? onItemTap;
   final Function(BuildContext context, int itemId)? onItemLongPress;
   final Color? backgoundColorForHeaderFooter;
-  // Display as Card vs Columns
-  final bool displayAsColumns;
-
   final FieldDefinitions fieldDefinitions;
   final FieldFilters filters;
   final List<MoneyObject> list;
   final Function? onContextMenu;
-  // Selections
-  final int selectedId;
-
   final bool sortAscending;
   final int sortByFieldIndex;
+
+  // Display as Card vs Columns
+  final bool displayAsColumns;
+
+  // Selections
+  final int selectedId;
 
   @override
   State<AdaptiveListColumnsOrRowsSingleSelection> createState() => _AdaptiveListColumnsOrRowsSingleSelectionState();

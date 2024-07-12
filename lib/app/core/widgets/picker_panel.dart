@@ -69,9 +69,10 @@ class PickerPanelState extends State<PickerPanel> {
   int indexToScrollTo = -1;
   List<String> uniqueLetters = [];
 
+  final ScrollController _scrollController = ScrollController();
+
   String _filterByTextAnywhere = '';
   String _filterStartWith = '';
-  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {

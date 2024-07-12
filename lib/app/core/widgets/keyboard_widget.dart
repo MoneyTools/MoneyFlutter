@@ -44,6 +44,11 @@ class KeyboardWidget extends StatefulWidget {
     this.callbackOnHide,
   }) : assert(columnCount > 0);
 
+  final VoidCallback? callbackOnHide;
+  final Widget child;
+  final bool hasFocus;
+  final bool showMap;
+
   ///The color of the surface of the card used to display a help screen.
   ///If null, the card color of the inherited [ThemeData.colorScheme] will be used
   final Color? backgroundColor;
@@ -51,17 +56,12 @@ class KeyboardWidget extends StatefulWidget {
   ///The list of keystrokes and methods called
   final List<KeyAction> bindings;
 
-  final VoidCallback? callbackOnHide;
-  final Widget child;
-
   ///The number of columns of text in the help screen
   final int columnCount;
 
   ///Have group the keybindings shown in the overlay grouped according to
   ///the (optional) headers associated with each shortcut
   final bool groupByCategory;
-
-  final bool hasFocus;
 
   ///Optional introductory/descriptive text to include above the table of
   ///keystroke shortcuts. It expects text in the
@@ -74,8 +74,6 @@ class KeyboardWidget extends StatefulWidget {
 
   ///Whether underlines should be shown between each help entry
   final bool showLines;
-
-  final bool showMap;
 
   ///The text style for the text used in the help screen. If null, the
   ///inherited [TextTheme.labelSmall] is used.

@@ -22,6 +22,13 @@ class Transfer extends MoneyObject {
     return Transfer(id: -1, source: Transaction(), isOrphan: true);
   }
 
+  final num id; // used when the transfer is part of a split
+  final bool isOrphan;
+  final Transaction? related; // the related transaction
+  final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
+  final Transaction source; // the source of the transfer.
+  final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
+
   /// Status
   FieldString accountStatusDestination = FieldString(
     importance: 12,
@@ -31,9 +38,6 @@ class Transfer extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) =>
         transactionStatusToLetter((instance as Transfer).related!.status.value),
   );
-
-  final num id; // used when the transfer is part of a split
-  final bool isOrphan;
 
   /// memo
   FieldString memoDestination = FieldString(
@@ -63,8 +67,6 @@ class Transfer extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getReceiverTransactionDate(),
   );
 
-  final Transaction? related; // the related transaction
-  final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
   /// Account
   Field<int> senderAccountId = Field<int>(
     importance: 2,
@@ -101,8 +103,6 @@ class Transfer extends MoneyObject {
         transactionStatusToLetter((instance as Transfer).source.status.value),
   );
 
-  final Transaction source; // the source of the transfer.
-  final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
   /// Transfer amount
   FieldMoney transactionAmount = FieldMoney(
     importance: 99,

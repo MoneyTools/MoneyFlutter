@@ -93,8 +93,6 @@ class RentBuilding extends MoneyObject {
     return instance;
   }
 
-  Account? account;
-
   /// Address
   // 2    Address                 nvarchar(255)  0                    0
   FieldString address = FieldString(
@@ -416,6 +414,8 @@ class RentBuilding extends MoneyObject {
   );
 
   List<RentUnit> units = <RentUnit>[];
+
+  Account? account;
 
   // Fields for this instance
   @override

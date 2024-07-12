@@ -8,6 +8,8 @@ import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceController extends GetxController {
+  final RxBool isReady = false.obs;
+
   ///---------------------------------
   //
   RxString apiKeyForStocks = ''.obs;
@@ -19,7 +21,6 @@ class PreferenceController extends GetxController {
   /// Observable enum
   Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
 
-  final RxBool isReady = false.obs;
   RxList<String> mru = <String>[].obs;
 
   ///---------------------------------
@@ -35,13 +36,14 @@ class PreferenceController extends GetxController {
   /// Hide/Show Info panel
   final RxBool _isDetailsPanelExpanded = false.obs;
 
-  SharedPreferences? _preferences;
   //////////////////////////////////////////////////////
   // Persistable user preference
 
   ///---------------------------------
   /// Text Font Size/Scale
   final RxDouble _textScale = 1.0.obs;
+
+  SharedPreferences? _preferences;
 
   @override
   void onInit() async {

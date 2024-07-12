@@ -37,12 +37,12 @@ class AdaptiveViewWithList extends StatelessWidget {
   final bool isMultiSelectionOn;
   final List<MoneyObject> list;
   final Function(int) onSelectionChanged;
-  // Selection
-  final ValueNotifier<List<int>> selectedItemsByUniqueId;
-
   final bool sortAscending;
   final int sortByFieldIndex;
   final Widget? top;
+
+  // Selection
+  final ValueNotifier<List<int>> selectedItemsByUniqueId;
 
   @override
   Widget build(BuildContext context) {

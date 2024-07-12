@@ -374,7 +374,6 @@ class Field<T> {
   /// override the value edited
   dynamic Function(MoneyObject, dynamic)? setValue;
 
-  int Function(MoneyObject, MoneyObject, bool)? sort;
   TextAlign align;
   ColumnWidth columnWidth;
   bool fixedFont = false;
@@ -394,6 +393,8 @@ class Field<T> {
   bool useAsColumn;
   // This properties are evaluated against the instnace of the object
   bool Function(MoneyObject) useAsDetailPanels;
+
+  int Function(MoneyObject, MoneyObject, bool)? sort;
 
   late T _value;
 

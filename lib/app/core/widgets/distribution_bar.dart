@@ -14,8 +14,9 @@ class Distribution {
 
   final double amount;
   final Color color;
-  double percentage = 0;
   final String title;
+
+  double percentage = 0;
 }
 
 class DistributionBar extends StatelessWidget {

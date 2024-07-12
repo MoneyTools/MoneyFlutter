@@ -37,15 +37,15 @@ class ViewHeader extends StatelessWidget {
   final String description;
   final String filterText;
   final num itemCount;
-  // Optional, used for multi-selection UX
-  final ViewHeaderMultipleSelection? multipleSelection;
-
   final VoidCallback? onAddMoneyObject;
   final VoidCallback? onDeleteMoneyObject;
   final VoidCallback? onEditMoneyObject;
   final VoidCallback? onMergeMoneyObject;
   final ValueNotifier<List<int>> selectedItems;
   final String title;
+
+  // Optional, used for multi-selection UX
+  final ViewHeaderMultipleSelection? multipleSelection;
 
   @override
   Widget build(final BuildContext context) {

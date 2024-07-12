@@ -29,8 +29,9 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewTransfers;
   }
 
-  double _footerColumnBalance = 0.00;
   final DateRange _footerColumnReceivedOn = DateRange();
+
+  double _footerColumnBalance = 0.00;
   // Footer related
   final DateRange _footerColumnSentOn = DateRange();
 

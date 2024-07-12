@@ -13,6 +13,7 @@ class TokenText extends StatelessWidget {
 
   late final TokenTextStyle style;
   final String text;
+
   List<String> tokens = [];
 
   @override
