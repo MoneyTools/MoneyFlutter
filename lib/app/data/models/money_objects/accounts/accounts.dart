@@ -6,8 +6,6 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
-import 'package:money/app/data/models/money_objects/investments/cost_basis.dart';
-import 'package:money/app/data/models/money_objects/investments/security_purchase.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
@@ -168,23 +166,24 @@ class Accounts extends MoneyObjects<Account> {
       }
     }
 
-    final investmentAccounts = Data()
-        .accounts
-        .iterableList()
-        .where(
-          (account) =>
-              account.type.value == AccountType.moneyMarket ||
-              account.type.value == AccountType.investment ||
-              account.type.value == AccountType.retirement,
-        )
-        .toList();
+    /// TODO
+    // final investmentAccounts = Data()
+    //     .accounts
+    //     .iterableList()
+    //     .where(
+    //       (account) =>
+    //           account.type.value == AccountType.moneyMarket ||
+    //           account.type.value == AccountType.investment ||
+    //           account.type.value == AccountType.retirement,
+    //     )
+    //     .toList();
 
-    CostBasisCalculator calculator = CostBasisCalculator(DateTime.now());
-    for (final account in investmentAccounts) {
-      for (SecurityPurchase sp in calculator.getHolding(account).getHoldings()) {
-        account.balance += sp.latestMarketValue!;
-      }
-    }
+    // CostBasisCalculator calculator = CostBasisCalculator(DateTime.now());
+    // for (final account in investmentAccounts) {
+    //   for (SecurityPurchase sp in calculator.getHolding(account).getHoldings()) {
+    //     account.balance += sp.latestMarketValue!;
+    //   }
+    // }
 
     // Loans
     final accountLoans =
