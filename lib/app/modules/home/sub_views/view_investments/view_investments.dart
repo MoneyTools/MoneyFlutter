@@ -102,7 +102,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
           (instance) => (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
-    Investments.calculateRunningBalance(list);
+    Investments.calculateRunningSharesAndBalance(list);
 
     for (final item in list) {
       _footerColumnDate.inflate(item.date);

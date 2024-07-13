@@ -71,13 +71,6 @@ class Investment extends MoneyObject {
     );
   }
 
-  FieldMoney amount = FieldMoney(
-    name: 'Amount',
-    getValueForDisplay: (final MoneyObject instance) {
-      return MoneyModel(amount: (instance as Investment).finalAmount.amount);
-    },
-  );
-
   /// 4    Commission      money   0                    0
   FieldMoney commission = FieldMoney(
     name: 'Commission',
@@ -94,6 +87,13 @@ class Investment extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value.toDouble(),
   );
 
+  FieldQuantity holdingShares = FieldQuantity(
+    name: 'Holding',
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as Investment).holdingShares.value;
+    },
+  );
+
   /// Id
   //// 0    Id              bigint  0                    1
   FieldId id = FieldId(
@@ -102,7 +102,7 @@ class Investment extends MoneyObject {
 
   /// 9    InvestmentType  INT     1                    0
   FieldInt investmentType = FieldInt(
-    name: 'Action',
+    name: 'Activity',
     serializeName: 'InvestmentType',
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
@@ -130,6 +130,12 @@ class Investment extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
   );
 
+  FieldMoney netTransactionAmount = FieldMoney(
+    name: 'ActivityAmount',
+    getValueForDisplay: (final MoneyObject instance) =>
+        (instance as Investment).transactionInstance!.amount.value.toDouble(),
+  );
+
   FieldMoney runningBalance = FieldMoney(
     name: 'Balance',
     getValueForDisplay: (final MoneyObject instance) {
@@ -150,7 +156,7 @@ class Investment extends MoneyObject {
   FieldString securitySymbol = FieldString(
     name: 'Symbol',
     useAsColumn: true,
-    columnWidth: ColumnWidth.small,
+    columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().securities.getSymbolFromId((instance as Investment).security.value),
   );
@@ -215,12 +221,12 @@ class Investment extends MoneyObject {
     ),
   );
 
+  /// The actual transaction date.
+  Transaction? transactionInstance;
+
   /// --------------------------------------------
   /// Not Persisted
   ///
-
-  /// The actual transaction date.
-  Transaction? transactionInstance;
 
   /// 2    UnitPrice       money   1                    0
   FieldMoney unitPrice = FieldMoney(
@@ -236,8 +242,15 @@ class Investment extends MoneyObject {
     importance: 2,
     name: 'Units',
     serializeName: 'Units',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).units.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).effectiveUnits,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).units.value,
+  );
+
+  FieldMoney valueOfHoldingShares = FieldMoney(
+    name: 'HoldingValue',
+    getValueForDisplay: (final MoneyObject instance) {
+      return MoneyModel(amount: (instance as Investment).holdingShares.value * 2.0);
+    },
   );
 
   /// 12   Withholding     money   0                    0
@@ -268,6 +281,17 @@ class Investment extends MoneyObject {
 
   DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
 
+  double get effectiveUnits {
+    if (this.units.value == 0) {
+      return 0;
+    }
+
+    if (getInvestmentTypeFromValue(this.investmentType.value) != InvestmentType.buy) {
+      return this.units.value * -1;
+    }
+    return this.units.value;
+  }
+
   static Fields<Investment> get fields {
     if (_fields.isEmpty) {
       final tmp = Investment.fromJson({});
@@ -288,7 +312,9 @@ class Investment extends MoneyObject {
         tmp.tradeType,
         tmp.taxExempt,
         tmp.withholding,
-        tmp.amount,
+        tmp.netTransactionAmount,
+        tmp.holdingShares,
+        tmp.valueOfHoldingShares,
         tmp.runningBalance,
       ]);
     }
@@ -298,24 +324,8 @@ class Investment extends MoneyObject {
 
   StockCumulative get finalAmount {
     StockCumulative cumulative = StockCumulative();
-    switch (InvestmentType.values[this.investmentType.value]) {
-      // case InvestmentType.add:
-      case InvestmentType.buy:
-        // Commission adds to the cost
-        cumulative.quantity += this.units.value;
-        cumulative.amount = this.units.value * this.unitPrice.value.toDouble();
-        cumulative.amount += this.commission.value.toDouble();
-
-      // case InvestmentType.remove:
-      case InvestmentType.sell:
-        // commission reduce the revenue
-        cumulative.quantity -= this.units.value;
-        cumulative.amount = this.units.value * this.unitPrice.value.toDouble();
-        cumulative.amount -= this.commission.value.toDouble();
-
-      default:
-      //
-    }
+    cumulative.quantity = -1 * effectiveUnits * this.unitPrice.value.toDouble();
+    cumulative.amount += this.commission.value.toDouble();
     return cumulative;
   }
 

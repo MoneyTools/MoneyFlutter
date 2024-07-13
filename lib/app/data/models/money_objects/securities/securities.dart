@@ -1,5 +1,6 @@
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
+import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/storage/data/data.dart';
@@ -23,11 +24,16 @@ class Securities extends MoneyObjects<Security> {
   @override
   void onAllDataLoaded() {
     for (final Security security in iterableList()) {
-      final List<Investment> list = Investments.getInvestmentsFromSecurity(security.uniqueId);
+      // if (security.uniqueId == 91) {
+      //   // DXD
+      //   print('');
+      // }
+      final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
       security.numberOfTrades.value = list.length;
-      final cumulative = Investments.getProfitAndShares(list);
-      security.outstandingShares.value = cumulative.quantity;
-      security.balance.value.setAmount(cumulative.amount);
+
+      final StockCumulative cumulative = Investments.getSharesAndProfit(list);
+      security.holdingShares.value = cumulative.quantity;
+      security.activityProfit.value.setAmount(cumulative.amount);
     }
   }
 

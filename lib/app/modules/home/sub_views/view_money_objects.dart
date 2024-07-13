@@ -749,15 +749,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     });
   }
 
-  void onSort() {
-    MoneyObjects.sortList(
-      list,
-      _fieldToDisplay.definitions,
-      _sortByFieldIndex,
-      _sortAscending,
-    );
-  }
-
   void onUserRequestToEdit(
     final BuildContext context,
     final List<MoneyObject> moneyObjects,

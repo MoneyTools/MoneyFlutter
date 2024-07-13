@@ -36,24 +36,28 @@ class Investments extends MoneyObjects<Investment> {
     );
   }
 
-  static void calculateRunningBalance(List<Investment> investments) {
+  static void calculateRunningSharesAndBalance(List<Investment> investments) {
     // first sort by date, TradeType, Amount
     investments.sort(
       (a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
     );
 
+    double runningShares = 0;
     double runningBalance = 0;
     for (final investment in investments) {
+      runningShares += investment.effectiveUnits;
       runningBalance += investment.finalAmount.amount;
+
+      investment.holdingShares.value = runningShares;
       investment.runningBalance.value.setAmount(runningBalance);
     }
   }
 
-  static List<Investment> getInvestmentsFromSecurity(final int securityId) {
+  static List<Investment> getInvestmentsForThisSecurity(final int securityId) {
     return Data().investments.iterableList().where((item) => item.security.value == securityId).toList();
   }
 
-  static StockCumulative getProfitAndShares(List<Investment> investments) {
+  static StockCumulative getSharesAndProfit(List<Investment> investments) {
     // StockCumulative sort by date, TradeType, Amount
     investments.sort(
       (a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
@@ -62,8 +66,8 @@ class Investments extends MoneyObjects<Investment> {
     StockCumulative cumulative = StockCumulative();
 
     for (final investment in investments) {
-      cumulative.quantity += investment.finalAmount.quantity;
-      cumulative.amount += investment.finalAmount.amount;
+      cumulative.quantity += investment.effectiveUnits;
+      cumulative.amount += investment.netTransactionAmount.getValueForDisplay(investment);
     }
     return cumulative;
   }

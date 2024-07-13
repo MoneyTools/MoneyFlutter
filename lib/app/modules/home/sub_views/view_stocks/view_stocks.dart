@@ -31,10 +31,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 
-  double _footerColumnBalance = 0.00;
   // Footer related
   final DateRange _footerColumnDate = DateRange();
 
+  double _footerColumnProfit = 0.00;
   double _footerColumnShares = 0.00;
   int _footerColumnTrades = 0;
 
@@ -58,7 +58,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       case 'Shares':
         return getFooterForInt(_footerColumnShares.toInt());
       case 'Balance':
-        return getFooterForAmount(_footerColumnBalance);
+        return getFooterForAmount(_footerColumnProfit);
       default:
         return null;
     }
@@ -101,10 +101,20 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     if (lastSecuritySelected == null) {
       return const CenterMessage(message: 'No security selected.');
     }
-    final exclude = ['Symbol', 'Load', 'Fees'];
+    final included = [
+      'Date',
+      'Account',
+      'Activity',
+      'Units',
+      'Price',
+      'Commission',
+      'ActivityAmount',
+      'Holding',
+      'HoldingValue',
+    ];
     final List<Field> fieldsToDisplay = Investment.fields.definitions
         .where(
-          (element) => element.useAsColumn && !exclude.contains(element.name),
+          (element) => element.useAsColumn && included.contains(element.name),
         )
         .toList();
 
@@ -156,11 +166,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
     _footerColumnDate.clear();
 
-    for (final item in list) {
-      _footerColumnDate.inflate(item.priceDate.value);
-      _footerColumnTrades += item.numberOfTrades.value;
-      _footerColumnShares += item.outstandingShares.value;
-      _footerColumnBalance += item.balance.getValueForDisplay(item).toDouble();
+    for (final Security security in list) {
+      _footerColumnDate.inflate(security.priceDate.value);
+      _footerColumnTrades += security.numberOfTrades.value;
+      _footerColumnShares += security.holdingShares.value;
+      _footerColumnProfit += security.profit.value.toDouble();
     }
 
     return list;
@@ -172,8 +182,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   List<Investment> getListOfInvestment(Security security) {
-    final List<Investment> list = Investments.getInvestmentsFromSecurity(security.uniqueId);
-    Investments.calculateRunningBalance(list);
+    final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
+    Investments.calculateRunningSharesAndBalance(list);
     return list;
   }
 }

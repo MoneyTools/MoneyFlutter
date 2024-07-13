@@ -64,9 +64,14 @@ class Security extends MoneyObject {
     );
   }
 
-  FieldMoney balance = FieldMoney(
-    name: 'Balance',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).balance.value,
+  final FieldMoney holdingValue = FieldMoney(
+    name: 'HoldingsValue',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security)._holdingValue,
+  );
+
+  FieldMoney activityProfit = FieldMoney(
+    name: 'ActivityProfit',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).activityProfit.value,
   );
 
   // 5
@@ -76,6 +81,12 @@ class Security extends MoneyObject {
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).cuspid.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
+  );
+
+  FieldQuantity holdingShares = FieldQuantity(
+    name: 'Holding',
+    defaultValue: 0,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).holdingShares.value,
   );
 
   // 0
@@ -108,12 +119,6 @@ class Security extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).numberOfTrades.value,
   );
 
-  FieldQuantity outstandingShares = FieldQuantity(
-    name: 'Shares',
-    defaultValue: 0,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).outstandingShares.value,
-  );
-
   // 3
   FieldMoney price = FieldMoney(
     name: 'Price',
@@ -128,6 +133,12 @@ class Security extends MoneyObject {
     serializeName: 'Date',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
+  );
+
+  FieldMoney profit = FieldMoney(
+    name: 'Profit',
+    getValueForDisplay: (final MoneyObject instance) =>
+        (instance as Security).activityProfit.value.toDouble() + instance._holdingValue,
   );
 
   // 6
@@ -180,10 +191,14 @@ class Security extends MoneyObject {
         tmp.securityType,
         tmp.priceDate,
         tmp.numberOfTrades,
-        tmp.outstandingShares,
-        tmp.balance,
+        tmp.holdingShares,
+        tmp.holdingValue,
+        tmp.activityProfit,
+        tmp.profit,
       ]);
     }
     return _fields;
   }
+
+  double get _holdingValue => this.holdingShares.value * this.price.value.toDouble();
 }

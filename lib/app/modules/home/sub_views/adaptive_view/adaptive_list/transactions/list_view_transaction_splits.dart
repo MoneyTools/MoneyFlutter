@@ -34,7 +34,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   @override
   Widget build(final BuildContext context) {
     rows = widget.getList();
-    onSort();
+
     return Column(
       children: <Widget>[
         // Table Header
@@ -51,7 +51,6 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
               } else {
                 _sortBy = index;
               }
-              onSort();
             });
           },
         ),
@@ -66,17 +65,6 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         ),
       ],
     );
-  }
-
-  void onSort() {
-    // final FieldDefinition<Split> fieldDefinition = _tableFields.definitions[_sortBy];
-    // if (fieldDefinition.sort != null) {
-    //   rows.sort(
-    //     (final Split a, final Split b) {
-    //       return fieldDefinition.sort!(a, b, _sortAscending);
-    //     },
-    //   );
-    // }
   }
 }
 

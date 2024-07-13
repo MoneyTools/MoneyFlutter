@@ -52,6 +52,7 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
 class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListColumnsOrRowsSingleSelection> {
   final AccumulatorSum<Field, double> fieldsForAmounts = AccumulatorSum<Field, double>();
   final AccumulatorDateRange<Field> fieldsForDates = AccumulatorDateRange<Field>();
+  final AccumulatorSum<Field, double> fieldsForNumbers = AccumulatorSum<Field, double>();
   final AccumulatorList<Field, String> fieldsForTexts = AccumulatorList<Field, String>();
   late final selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>([widget.selectedId]);
 
@@ -87,6 +88,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
   void cumulateSums() {
     fieldsForTexts.clear();
     fieldsForAmounts.clear();
+    fieldsForNumbers.clear();
     fieldsForDates.clear();
 
     for (final item in widget.list) {
@@ -102,10 +104,12 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
 
           case FieldType.amount:
             fieldsForAmounts.cumulate(field, value.toDouble());
+
           case FieldType.numeric:
           case FieldType.amountShorthand:
           case FieldType.numericShorthand:
-            fieldsForAmounts.cumulate(field, value);
+          case FieldType.quantity:
+            fieldsForNumbers.cumulate(field, value);
           default:
             break;
         }
@@ -115,13 +119,19 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
 
   Widget getColumnFooterWidget(final Field field) {
     // field considered Balance are excluded from Tallies since they are themself a running tally
-    if (field.name != 'Balance') {
+
+    // TODO replace these hardcoded exception case to class arguments
+    if (field.name != 'Balance' && field.name != 'Shares') {
       if (fieldsForTexts.containsKey(field)) {
         return getFooterForInt(fieldsForTexts.getList(field).length);
       }
 
       if (fieldsForAmounts.containsKey(field)) {
         return getFooterForAmount(fieldsForAmounts.getValue(field));
+      }
+
+      if (fieldsForNumbers.containsKey(field)) {
+        return getFooterForInt(fieldsForNumbers.getValue(field));
       }
 
       if (fieldsForDates.containsKey(field)) {
