@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/core/widgets/picker_letter.dart';
 import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -110,14 +111,8 @@ class PickerPanelState extends State<PickerPanel> {
   }
 
   Widget _buildFilterTextField() {
-    return TextField(
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.zero,
-        isDense: true,
-        prefixIcon: Icon(Icons.search),
-        labelText: 'Filter',
-        border: OutlineInputBorder(),
-      ),
+    return MyTextInput(
+      hintText: 'Filter',
       onChanged: (value) {
         setState(() {
           _filterByTextAnywhere = value;

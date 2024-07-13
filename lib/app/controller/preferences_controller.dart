@@ -10,10 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PreferenceController extends GetxController {
   final RxBool isReady = false.obs;
 
-  ///---------------------------------
-  //
-  RxString apiKeyForStocks = ''.obs;
-
   RxInt cashflowRecurringOccurrences = 12.obs;
   Rx<CashflowViewAs> cashflowViewAs = CashflowViewAs.sankey.obs;
 
@@ -23,9 +19,7 @@ class PreferenceController extends GetxController {
 
   RxList<String> mru = <String>[].obs;
 
-  ///---------------------------------
-  /// Show or Hide Account that are marked as Closed
-  /// Hide/Show Closed Accounts
+  final RxString _apiKeyForStocks = ''.obs;
   final RxBool _includeClosedAccounts = false.obs;
 
   ///---------------------------------
@@ -73,6 +67,16 @@ class PreferenceController extends GetxController {
         _preferences!.setStringList(settingKeyMRU, mru);
       }
     }
+  }
+
+  ///---------------------------------
+  /// Stock quote API Key
+  String get apiKeyForStocks => _apiKeyForStocks.value;
+
+  ///---------------------------------
+  set apiKeyForStocks(final String value) {
+    _apiKeyForStocks.value = value;
+    setString(settingKeyStockApiKey, value);
   }
 
   // Clear all values from preferences
@@ -130,6 +134,9 @@ class PreferenceController extends GetxController {
   String get getUniqueState =>
       'isReadry:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
 
+  ///---------------------------------
+  /// Show or Hide Account that are marked as Closed
+  /// Hide/Show Closed Accounts
   bool get includeClosedAccounts => _includeClosedAccounts.value;
 
   set includeClosedAccounts(bool value) {
@@ -181,10 +188,10 @@ class PreferenceController extends GetxController {
     _isDetailsPanelExpanded.value = getBool(settingKeyDetailsPanelExpanded, false);
     _includeClosedAccounts.value = getBool(settingKeyIncludeClosedAccounts, false);
     _includeRentalManagement.value = getBool(settingKeyRentalsSupport, false);
+    _apiKeyForStocks.value = getString(settingKeyStockApiKey, '');
 
     cashflowViewAs.value = CashflowViewAs.values[getInt(settingKeyCashflowView, CashflowViewAs.sankey.index)];
     cashflowRecurringOccurrences.value = getInt(settingKeyCashflowRecurringOccurrences, 12);
-    apiKeyForStocks.value = getString(settingKeyStockApiKey, '');
   }
 
   // Remove a value from preferences

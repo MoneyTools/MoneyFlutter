@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 
 class FilterInput extends StatelessWidget {
   FilterInput({
@@ -19,15 +20,11 @@ class FilterInput extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return TextFormField(
+    return MyTextInput(
       initialValue: initialValue,
-      decoration: InputDecoration(
-        contentPadding: EdgeInsets.zero,
-        isDense: true,
-        prefixIcon: const Icon(Icons.search),
-        labelText: hintText,
-        border: const OutlineInputBorder(),
-      ),
+      icon: Icons.search,
+      isDense: true,
+      hintText: hintText,
       onFieldSubmitted: (String text) {
         onChanged(text);
       },

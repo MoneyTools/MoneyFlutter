@@ -9,6 +9,7 @@ import 'package:money/app/core/widgets/circle.dart';
 import 'package:money/app/core/widgets/color_picker.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/core/widgets/rectangle.dart';
 import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/fields/fields.dart';
@@ -474,7 +475,7 @@ class _MutateFieldColorState extends State<MutateFieldColor> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-          child: TextField(
+          child: MyTextInput(
             controller: controllerForText,
             onChanged: (String colorText) {
               setState(() {

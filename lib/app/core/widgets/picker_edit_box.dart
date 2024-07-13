@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/core/widgets/picker_panel.dart';
 
 class PickerEditBox extends StatefulWidget {
@@ -43,13 +44,8 @@ class PickerEditBoxState extends State<PickerEditBox> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: TextField(
+            child: MyTextInput(
               controller: _textController,
-              decoration: const InputDecoration(
-                isCollapsed: true,
-                contentPadding: EdgeInsets.zero,
-                border: InputBorder.none,
-              ),
               onChanged: (final String value) {
                 setState(() {
                   widget.onChanged(value);

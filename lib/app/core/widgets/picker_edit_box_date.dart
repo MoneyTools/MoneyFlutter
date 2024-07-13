@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
 class PickerEditBoxDate extends StatefulWidget {
@@ -31,13 +32,8 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
-          child: TextField(
+          child: MyTextInput(
             controller: _textController,
-            decoration: const InputDecoration(
-              isCollapsed: true,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-            ),
             onChanged: (final String value) {
               setState(() {
                 widget.onChanged(value);
