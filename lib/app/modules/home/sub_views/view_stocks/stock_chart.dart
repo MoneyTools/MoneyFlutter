@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/chart_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
@@ -96,7 +97,21 @@ class StockChartWidgetState extends State<StockChartWidget> {
           ),
         ),
         borderData: getBorders(0, 0),
-        lineTouchData: const LineTouchData(enabled: false),
+        lineTouchData: LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+            // tooltipBgColor: Colors.blueAccent,
+            getTooltipItems: (List<LineBarSpot> touchedSpots) {
+              return touchedSpots.map((touchedSpot) {
+                return LineTooltipItem(
+                  doubleToCurrency(touchedSpot.y),
+                  const TextStyle(color: Colors.white),
+                );
+              }).toList();
+            },
+          ),
+          // touchCallback: (LineTouchResponse touchResponse) {},
+          handleBuiltInTouches: true,
+        ),
       ),
     );
   }

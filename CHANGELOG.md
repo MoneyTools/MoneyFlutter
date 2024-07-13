@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.42] 2024-07-13
+
+### Update
+
+- Add tooltips to Stock and Network LineCharts
+
 ## [version 1.8.41] 2024-07-12
 
 ### Update

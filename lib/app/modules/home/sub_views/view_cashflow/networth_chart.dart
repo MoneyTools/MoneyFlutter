@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/chart_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -99,7 +100,21 @@ class NetWorthChartState extends State<NetWorthChart> {
           ),
         ),
         borderData: getBorders(0, 0),
-        lineTouchData: const LineTouchData(enabled: false),
+        lineTouchData: LineTouchData(
+          touchTooltipData: LineTouchTooltipData(
+            // tooltipBgColor: Colors.blueAccent,
+            getTooltipItems: (List<LineBarSpot> touchedSpots) {
+              return touchedSpots.map((touchedSpot) {
+                return LineTooltipItem(
+                  doubleToCurrency(touchedSpot.y),
+                  const TextStyle(color: Colors.white),
+                );
+              }).toList();
+            },
+          ),
+          // touchCallback: (LineTouchResponse touchResponse) {},
+          handleBuiltInTouches: true,
+        ),
       ),
     );
   }
