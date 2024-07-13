@@ -9,9 +9,9 @@ import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
-class StockPrice {
+class StockDatePrice {
   /// Constructor
-  const StockPrice({required this.date, required this.price});
+  const StockDatePrice({required this.date, required this.price});
 
   final DateTime date;
   final double price;
@@ -19,30 +19,40 @@ class StockPrice {
 
 const flagAsInvalidSymbol = 'invalid-symbol';
 
-Future<StockLookupStatus> getFromCacheOrBackend(
+class StockPriceHistoryCache {
+  StockPriceHistoryCache(this.symbol, this.status, [this.lastDateTime]);
+
+  List<StockDatePrice> prices = [];
+  StockLookupStatus status = StockLookupStatus.notFoundInCache;
+  String symbol = '';
+
+  DateTime? lastDateTime;
+}
+
+Future<StockPriceHistoryCache> getFromCacheOrBackend(
   String symbol,
-  List<StockPrice> prices,
 ) async {
   symbol = symbol.toLowerCase();
 
-  prices.clear();
-  StockLookupStatus resultState = await loadFromCache(symbol, prices);
+  StockPriceHistoryCache result = await _loadFromCache(symbol);
 
-  if (resultState == StockLookupStatus.foundInCache) {
-    return StockLookupStatus.foundInCache;
-  } else {
-    StockLookupStatus status = await loadFromBackend(symbol, prices);
-    switch (status) {
-      case StockLookupStatus.validSymbol:
-        saveToCache(symbol, prices);
-        return StockLookupStatus.validSymbol;
-      case StockLookupStatus.invalidSymbol:
-        saveToCacheInvalidSymbol(symbol);
-        return StockLookupStatus.invalidSymbol;
-      default:
-        return status;
-    }
+  if (result.status != StockLookupStatus.foundInCache) {
+    result = await loadFomBackendAndSaveToCache(symbol);
   }
+  return result;
+}
+
+Future<StockPriceHistoryCache> loadFomBackendAndSaveToCache(String symbol) async {
+  StockPriceHistoryCache result = await _loadFromBackend(symbol);
+  switch (result.status) {
+    case StockLookupStatus.validSymbol:
+      _saveToCache(symbol, result.prices);
+      return await _loadFromCache(symbol);
+    case StockLookupStatus.invalidSymbol:
+      _saveToCacheInvalidSymbol(symbol);
+    default:
+  }
+  return result;
 }
 
 enum StockLookupStatus {
@@ -53,18 +63,21 @@ enum StockLookupStatus {
   invalidApiKey,
 }
 
-Future<StockLookupStatus> loadFromCache(
+Future<StockPriceHistoryCache> _loadFromCache(
   final String symbol,
-  List<StockPrice> prices,
 ) async {
-  final String mainFilenameStockSymbol = await fullPathToCacheStockFile(symbol);
+  final StockPriceHistoryCache stockPriceHistoryCache =
+      StockPriceHistoryCache(symbol, StockLookupStatus.foundInCache, null);
+
+  final String mainFilenameStockSymbol = await _fullPathToCacheStockFile(symbol);
 
   String? csvContent;
   try {
+    stockPriceHistoryCache.lastDateTime = await MyFileSystems.getFileModifiedTime(mainFilenameStockSymbol);
     csvContent = await MyFileSystems.readFile(mainFilenameStockSymbol);
     if (csvContent == flagAsInvalidSymbol) {
       // give up now
-      return StockLookupStatus.invalidSymbol;
+      stockPriceHistoryCache.status = StockLookupStatus.notFoundInCache;
     }
   } catch (_) {
     //
@@ -79,28 +92,27 @@ Future<StockLookupStatus> loadFromCache(
       } else {
         final List<String> twoColumns = csvLines[row].split(',');
         if (twoColumns.length == 2) {
-          final StockPrice sp = StockPrice(
+          final StockDatePrice sp = StockDatePrice(
             date: DateTime.parse(twoColumns[0]),
             price: double.parse(twoColumns[1]),
           );
-          prices.add(sp);
+          stockPriceHistoryCache.prices.add(sp);
         }
       }
     }
-    return StockLookupStatus.foundInCache;
+    return stockPriceHistoryCache;
   }
-  return StockLookupStatus.notFoundInCache;
+  return StockPriceHistoryCache(symbol, StockLookupStatus.notFoundInCache);
 }
 
-Future<StockLookupStatus> loadFromBackend(
+Future<StockPriceHistoryCache> _loadFromBackend(
   String symbol,
-  List<StockPrice> prices,
 ) async {
-  prices.clear();
+  final result = StockPriceHistoryCache(symbol, StockLookupStatus.validSymbol);
 
   if (PreferenceController.to.apiKeyForStocks.isEmpty) {
     // No API Key to make the backend request
-    return StockLookupStatus.invalidApiKey;
+    return StockPriceHistoryCache(symbol, StockLookupStatus.invalidApiKey);
   }
 
   DateTime tenYearsInThePast = DateTime.now().subtract(const Duration(days: 365 * 10));
@@ -116,23 +128,25 @@ Future<StockLookupStatus> loadFromBackend(
       final MyJson data = json.decode(response.body);
       if (data['code'] == 401) {
         //data['message'];
-        return StockLookupStatus.invalidApiKey;
+        result.status = StockLookupStatus.invalidApiKey;
+        return result;
       }
 
       if (data['code'] == 404) {
         // SYMBOL NOT FOUND
-        return StockLookupStatus.invalidSymbol;
+        result.status = StockLookupStatus.invalidSymbol;
+        return result;
       }
       final List<dynamic> values = data['values'];
 
-      // Unfortunately for now explanation the API may return two entries with the same date
+      // Unfortunately for now (sometimes) the API may returns two entries with the same date
       // for this ensure that we only have one date and price, last one wins
-      Map<String, StockPrice> mapByUniqueDate = {};
+      Map<String, StockDatePrice> mapByUniqueDate = {};
 
       for (final value in values) {
         final String dateAsText = value['datetime'];
 
-        StockPrice sp = StockPrice(
+        StockDatePrice sp = StockDatePrice(
           date: DateTime.parse(dateAsText),
           price: double.parse(value['close']),
         );
@@ -140,8 +154,8 @@ Future<StockLookupStatus> loadFromBackend(
       }
 
       // this will ensure that we only have one value per dates
-      for (final StockPrice sp in mapByUniqueDate.values) {
-        prices.add(sp);
+      for (final StockDatePrice sp in mapByUniqueDate.values) {
+        result.prices.add(sp);
       }
     } catch (error) {
       debugLog(error.toString());
@@ -149,11 +163,11 @@ Future<StockLookupStatus> loadFromBackend(
   } else {
     debugLog('Failed to fetch data: ${response.toString()}');
   }
-  return StockLookupStatus.validSymbol;
+  return result;
 }
 
-void saveToCache(final String symbol, List<StockPrice> prices) async {
-  final String mainFilenameStockSymbol = await fullPathToCacheStockFile(symbol);
+void _saveToCache(final String symbol, List<StockDatePrice> prices) async {
+  final String mainFilenameStockSymbol = await _fullPathToCacheStockFile(symbol);
 
   // CSV Header
   String csvContent = '"date","price"\n';
@@ -167,17 +181,17 @@ void saveToCache(final String symbol, List<StockPrice> prices) async {
   MyFileSystems.writeToFile(mainFilenameStockSymbol, csvContent);
 }
 
-void saveToCacheInvalidSymbol(final String symbol) async {
-  final String mainFilenameStockSymbol = await fullPathToCacheStockFile(symbol);
+void _saveToCacheInvalidSymbol(final String symbol) async {
+  final String mainFilenameStockSymbol = await _fullPathToCacheStockFile(symbol);
   MyFileSystems.writeToFile(mainFilenameStockSymbol, flagAsInvalidSymbol);
 }
 
-Future<String> fullPathToCacheStockFile(final String symbol) async {
-  final String cacheFolderForStockFiles = await pathToStockFiles();
+Future<String> _fullPathToCacheStockFile(final String symbol) async {
+  final String cacheFolderForStockFiles = await _pathToStockFiles();
   return MyFileSystems.append(cacheFolderForStockFiles, 'stock_$symbol.csv');
 }
 
-Future<String> pathToStockFiles() async {
+Future<String> _pathToStockFiles() async {
   String destinationFolder = await DataController.to.generateNextFolderToSaveTo();
   if (destinationFolder.isEmpty) {
     throw Exception('No container folder give for saving');

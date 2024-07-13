@@ -51,6 +51,19 @@ class MyFileSystems {
     return p.extension(filePath);
   }
 
+  static Future<DateTime?> getFileModifiedTime(String filePath) async {
+    try {
+      if (await MyFileSystems.doesFileExist(filePath)) {
+        final file = File(filePath);
+        final fileStat = await file.stat();
+        return fileStat.modified;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
   static String getFileName(final filePath) {
     return p.basename(filePath);
   }

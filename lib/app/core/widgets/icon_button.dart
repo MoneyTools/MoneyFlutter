@@ -4,12 +4,12 @@ class MyIconButton extends StatefulWidget {
   const MyIconButton({
     super.key,
     required this.icon,
-    required this.hoverColor,
-    required this.tooltip,
     required this.onPressed,
+    this.hoverColor,
+    this.tooltip = '',
   });
 
-  final Color hoverColor;
+  final Color? hoverColor;
   final IconData icon;
   final VoidCallback onPressed;
   final String tooltip;

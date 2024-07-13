@@ -4,6 +4,7 @@
 
 ### Update
 
+- StockChart now has a way to refresh fetching the price history
 - Add tooltips to Stock and Network LineCharts
 
 ## [version 1.8.41] 2024-07-12

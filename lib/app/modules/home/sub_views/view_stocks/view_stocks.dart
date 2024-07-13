@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
@@ -97,7 +96,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    lastSecuritySelected = getMoneyObjectFromFirstSelectedId<Security>(selectedIds, getList());
+    lastSecuritySelected = getFirstSelectedItem() as Security;
+
     if (lastSecuritySelected == null) {
       return const CenterMessage(message: 'No security selected.');
     }
@@ -133,15 +133,16 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           sortInstructions.column,
           sortInstructions.ascending,
         );
+
         return AdaptiveListColumnsOrRowsSingleSelection(
-          // list
+          // list related
           list: list,
           fieldDefinitions: fieldsToDisplay,
           filters: FieldFilters(),
           sortByFieldIndex: sortInstructions.column,
           sortAscending: sortInstructions.ascending,
           selectedId: -1,
-          // Field & Columns
+          // Field & Columns related
           displayAsColumns: true,
           backgoundColorForHeaderFooter: Colors.transparent,
           onColumnHeaderTap: (int columnHeaderIndex) {

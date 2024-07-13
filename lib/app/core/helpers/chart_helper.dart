@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 
 LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints) {
   dataPoints.sort((a, b) => a.x.compareTo(b.x));
-  Color color = dataPoints.last.y > dataPoints.first.y ? Colors.green : Colors.red;
+  Color color = Colors.grey;
+
+  if (dataPoints.length >= 2) {
+    color = dataPoints.last.y > dataPoints.first.y ? Colors.green : Colors.red;
+  }
 
   return LineChartBarData(
     spots: dataPoints,

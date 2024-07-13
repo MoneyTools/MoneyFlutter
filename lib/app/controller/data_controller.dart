@@ -49,19 +49,6 @@ class DataController extends GetxController {
     return await getDocumentDirectory();
   }
 
-  static Future<DateTime?> getFileModifiedTime(String filePath) async {
-    try {
-      if (await MyFileSystems.doesFileExist(filePath)) {
-        final file = File(filePath);
-        final fileStat = await file.stat();
-        return fileStat.modified;
-      }
-      return null;
-    } catch (e) {
-      return null;
-    }
-  }
-
   String get getUniqueState => '${trackMutations.lastDateTimeChanged}';
 
   bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
@@ -78,7 +65,7 @@ class DataController extends GetxController {
     await Data().loadFromPath(dataSource).then((final bool success) async {
       if (success) {
         setCurrentFileName(dataSource.filePath);
-        currentLoadedFileDateTime.value = await getFileModifiedTime(dataSource.filePath);
+        currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(dataSource.filePath);
         Future.delayed(Duration.zero, () {
           Get.offNamed(Constants.routeHomePage);
         });

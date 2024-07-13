@@ -253,7 +253,11 @@ DateTime? parseQfxDataFormat(final String qfxDate) {
   }
 }
 
-String getElapsedTime(DateTime dateTime) {
+String getElapsedTime(DateTime? dateTime) {
+  if (dateTime == null) {
+    return '';
+  }
+
   final now = DateTime.now();
   final difference = now.difference(dateTime);
 
