@@ -90,4 +90,6 @@
         ".firebase/": true,
         ".idea/": true,
     },
+    "editor.formatOnSave": true,
+    "workbench.editor.closeOnFileDelete": true,
 }
