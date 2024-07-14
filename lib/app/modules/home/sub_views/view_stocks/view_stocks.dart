@@ -96,7 +96,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    lastSecuritySelected = getFirstSelectedItem() as Security;
+    lastSecuritySelected = getFirstSelectedItem() as Security?;
 
     if (lastSecuritySelected == null) {
       return const CenterMessage(message: 'No security selected.');

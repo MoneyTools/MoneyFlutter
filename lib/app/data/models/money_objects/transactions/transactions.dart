@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_conditional_assignment
+
 import 'dart:math';
 
 import 'package:money/app/core/helpers/accumulator.dart';
@@ -132,7 +134,7 @@ class Transactions extends MoneyObjects<Transaction> {
         // hydrate the Transfer
         if (transactionSource.transferSplit.value == -1) {
           // Normal direct transfer
-          // ignore: prefer_conditional_assignment
+
           if (transactionSource.transferInstance == null) {
             // cache the transfer
             transactionSource.transferInstance = Transfer(
@@ -142,7 +144,7 @@ class Transactions extends MoneyObjects<Transaction> {
               isOrphan: false,
             );
           }
-          // ignore: prefer_conditional_assignment
+
           if (transactionRelated.transferInstance == null) {
             // cache the transfer
             transactionRelated.transferInstance = Transfer(

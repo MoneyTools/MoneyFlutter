@@ -73,6 +73,10 @@ class MoneyObjects<T> {
     _list.clear();
   }
 
+  bool containsKey(final int id) {
+    return _map.containsKey(id);
+  }
+
   /// Remove/tag a Transaction instance from the list in memory
   void deleteItem(final MoneyObject itemToDelete) {
     Data().notifyMutationChanged(
