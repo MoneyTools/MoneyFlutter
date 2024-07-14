@@ -51,23 +51,45 @@ class MoneyObject {
       return [Center(child: Text('No fields found for $this'))];
     }
     final List<Widget> widgets = <Widget>[];
-    final definitions = getFieldDefinitionsForPanel();
-    for (final fieldDefinition in definitions) {
-      final Widget widget = buildWidgetNameValueFromFieldDefinition(
-        objectInstance: this,
-        fieldDefinition: fieldDefinition,
-        singleLineNameValue: compact, // when passing true, the onEdit is ignored
-        onEdited: onEdit,
-        isFirstItem: fieldDefinition == definitions.first,
-        isLastItem: fieldDefinition == definitions.last,
-      );
-      widgets.add(
-        Padding(
-          padding: compact ? const EdgeInsets.all(0) : const EdgeInsets.all(SizeForPadding.normal),
-          child: widget,
-        ),
-      );
+
+    {
+      final definitions = getFieldDefinitionsForPanel();
+
+      for (final fieldDefinition in definitions) {
+        final Widget widget = buildWidgetNameValueFromFieldDefinition(
+          objectInstance: this,
+          fieldDefinition: fieldDefinition,
+          singleLineNameValue: compact, // when passing true, the onEdit is ignored
+          onEdited: onEdit,
+          isFirstItem: fieldDefinition == definitions.first,
+          isLastItem: fieldDefinition == definitions.last,
+        );
+        widgets.add(
+          Padding(
+            padding: compact ? const EdgeInsets.all(0) : const EdgeInsets.all(SizeForPadding.normal),
+            child: widget,
+          ),
+        );
+      }
     }
+
+    // Also add the MoneyObject ID
+    widgets.add(
+      Padding(
+        padding: const EdgeInsets.all(SizeForPadding.medium),
+        child: Opacity(
+          opacity: 0.5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('ID: '),
+              SelectableText(uniqueId.toString()),
+            ],
+          ),
+        ),
+      ),
+    );
+
     return widgets;
   }
 
