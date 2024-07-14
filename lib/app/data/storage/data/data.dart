@@ -135,12 +135,52 @@ class Data {
     Data().updateAll();
   }
 
+  void checkTransfers() {
+    Set<Transaction> dangling = getDanglingTransfers();
+    if (dangling.isNotEmpty) {
+      SnackBarService.displayWarning(
+        message: '$dangling Dangling transfers have been found',
+        title: 'Dangling Transfers',
+        autoDismiss: false,
+      );
+    }
+  }
+
   void clear() {
     DataController.to.trackMutations.reset();
 
     for (final element in _listOfTables) {
       element.clear();
     }
+  }
+
+  void clearTransferToAccount(Transaction t, Account a) {
+    // TODO
+    // if (t.isSplit) {
+    //   for (MoneySplit s in t.splits) {
+    //     if (s.Transfer != null && s.Transfer.Transaction.Account == a) {
+    //       ClearTransferToAccount(s.Transfer);
+    //       s.ClearTransfer();
+    //       s.Category =
+    //           s.Amount < 0 ? this.Categories.TransferToDeletedAccount : this.Categories.TransferFromDeletedAccount;
+    //       if (string.IsNullOrEmpty(s.Memo)) {
+    //         s.Memo = a.Name;
+    //       }
+    //     }
+    //   }
+    // }
+
+    // if (t.Transfer != null && t.Transfer.Transaction.Account == a) {
+    //   ClearTransferToAccount(t.Transfer);
+    //   t.Transfer = null;
+    //   if (!t.IsSplit) {
+    //     t.Category =
+    //         t.Amount < 0 ? this.Categories.TransferToDeletedAccount : this.Categories.TransferFromDeletedAccount;
+    //   }
+    //   if (string.IsNullOrEmpty(t.Memo)) {
+    //     t.Memo = a.Name;
+    //   }
+    // }
   }
 
   /// Close data source
@@ -162,6 +202,16 @@ class Data {
       );
     }
     Data().updateAll();
+  }
+
+  Set<Transaction> getDanglingTransfers() {
+    Set<Transaction> dangling = {};
+    List<Account> deletedaccounts = [];
+    transactions.checkTransfers(dangling, deletedaccounts);
+    for (Account a in deletedaccounts) {
+      accounts.removeAccount(a);
+    }
+    return dangling;
   }
 
   DateTime? getLastDateTimeModified(final String fullPathToFile) {
@@ -415,6 +465,36 @@ class Data {
     for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
       moneyObjects.onAllDataLoaded();
     }
+
+    // one last thing, Transfer are complex and we try to confirm or clean up any problem found
+    checkTransfers();
+  }
+
+  bool removeTransaction(Transaction t) {
+    if (t.status.value == TransactionStatus.reconciled && t.amount.value.toDouble() != 0) {
+      throw Exception('Cannot removed reconciled transaction');
+    }
+    // TODO
+    // this.removeTransfer(t);
+
+    // this.transactions.RemoveTransaction(t);
+    // if (t.Unaccepted) {
+    //   if (t.Account != null) {
+    //     t.Account.Unaccepted--;
+    //   }
+    //   if (t.Payee != null) {
+    //     t.Payee.UnacceptedTransactions--;
+    //   }
+    // }
+
+    // if (t.Category == null && t.Transfer == null && !t.IsSplit) {
+    //   if (t.Payee != null) {
+    //     t.Payee.UncategorizedTransactions--;
+    //   }
+    // }
+
+    // this.Rebalance(t);
+    return true;
   }
 
   void transferSplitTo(MoneySplit s, Account to) {

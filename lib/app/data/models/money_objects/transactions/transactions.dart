@@ -174,6 +174,12 @@ class Transactions extends MoneyObjects<Transaction> {
     );
   }
 
+  void checkTransfers(Set<Transaction> dangling, List<Account> deletedaccounts) {
+    for (Transaction t in iterableList()) {
+      t.checkTransfers(dangling, deletedaccounts);
+    }
+  }
+
   /// match amount and date YYYY,MM,DD, optionally restric to a specific account by passing -1
   Transaction? findExistingTransaction({
     required final int accountId,
@@ -201,6 +207,21 @@ class Transactions extends MoneyObjects<Transaction> {
       return transactionMatchingAccountPayeeAndHasCategory.categoryId.value;
     }
     return -1;
+  }
+
+  Iterable<Transaction> findTransfersToAccount(final Account a) {
+    List<Transaction> view = [];
+    for (Transaction t in iterableList()) {
+      if (t.isDeleted) {
+        continue;
+      }
+
+      if (t.containsTransferTo(a)) {
+        view.add(t);
+      }
+    }
+    // view.sort(SortByDate);
+    return view;
   }
 
   static List<Transaction> flatTransactions(

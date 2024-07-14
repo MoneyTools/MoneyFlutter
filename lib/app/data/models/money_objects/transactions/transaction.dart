@@ -593,59 +593,72 @@ class Transaction extends MoneyObject {
 
   String get amountAsText => amount.value.toString();
 
-  void checkTransfers(List dangling, List<Account> deletedAccounts) {
-    //   bool added = false;
-    //   if (this.to != null && this.Transfer == null) {
-    //     if (IsDeletedAccount(this.to, money, deletedAccounts)) {
-    //       this.Category =
-    //           this.Amount < 0 ? Data().categories.TransferToDeletedAccount : money.Categories.TransferFromDeletedAccount;
-    //       this.to = null;
-    //     } else {
-    //       added = true;
-    //       dangling.Add(this);
-    //     }
-    //   }
-    //
-    //   if (this.Transfer != null) {
-    //     Transaction other = this.transfer.Transaction;
-    //     if (other.IsSplit) {
-    //       int count = 0;
-    //       Split splitXfer = null;
-    //
-    //       for (Split s in other.splits.GetSplits()) {
-    //         if (s.transfer != null) {
-    //           if (splitXfer == null) {
-    //             splitXfer = s;
-    //           }
-    //           if (s.transfer.Transaction == this) {
-    //             count++;
-    //           }
-    //         }
-    //       }
-    //
-    //       if (count == 0) {
-    //         if (other.transfer != null && other.transfer.transaction == this) {
-    //           // Ok, well it could be that the transfer is the whole transaction, but then
-    //           // one side was itemized. For example, you transfer 500 from one account to
-    //           // another, then on the deposit side you want to record what that was for
-    //           // by itemizing the $500 in a split.  If this is the case then it is not dangling.
-    //         } else if (!this.AutoFixDandlingTransfer(splitXfer)) {
-    //           added = true;
-    //           dangling.add(this);
-    //         }
-    //       }
-    //     } else if ((other.transfer == null || other.transfer.Transaction != this) &&
-    //         !this.AutoFixDandlingTransfer(null)) {
-    //       added = true;
-    //       dangling.add(this);
-    //     }
-    //   }
-    //
-    //   if (this.splits != null) {
-    //     if (this.splits.CheckTransfers(money, dangling, deletedAccounts) && !added) {
-    //       dangling.add(this); // only add transaction once.
-    //     }
-    //   }
+  /// TODO - clean this up,
+  void checkTransfers(Set<Transaction> dangling, List<Account> deletedAccounts) {
+    if (transfer.value != -1 && this.transferInstance == null) {
+      // transferInstance?.getReceiverAccount();
+      // if (IsDeletedAccount(this.to, money, deletedAccounts)) {
+      //   this.Category =
+      //       this.Amount < 0 ? Data().categories.TransferToDeletedAccount : money.Categories.TransferFromDeletedAccount;
+      //   this.to = null;
+      // } else {
+      dangling.add(this);
+      // }
+    }
+
+    if (this.transferInstance != null) {
+      Transaction other = this.transferInstance!.related!;
+      if (other.isSplit) {
+        //       int count = 0;
+        //       Split splitXfer = null;
+        //
+        //       for (Split s in other.splits.GetSplits()) {
+        //         if (s.transfer != null) {
+        //           if (splitXfer == null) {
+        //             splitXfer = s;
+        //           }
+        //           if (s.transfer.Transaction == this) {
+        //             count++;
+        //           }
+        //         }
+        // }
+        //
+        //       if (count == 0) {
+        //         if (other.transfer != null && other.transfer.transaction == this) {
+        //           // Ok, well it could be that the transfer is the whole transaction, but then
+        //           // one side was itemized. For example, you transfer 500 from one account to
+        //           // another, then on the deposit side you want to record what that was for
+        //           // by itemizing the $500 in a split.  If this is the case then it is not dangling.
+        //         } else if (!this.AutoFixDandlingTransfer(splitXfer)) {
+        //           added = true;
+        //           dangling.add(this);
+        //         }
+        //       }
+      } else {
+        if ((other.transferInstance == null || other.transferInstance?.related != this)) {
+          dangling.add(this);
+        } else {
+          // one last check, the other side also needs to be correctly setup as a transafer
+          if (other.transfer.value != this.uniqueId) {
+            dangling.add(this);
+          }
+        }
+      }
+    }
+  }
+
+  bool containsTransferTo(Account a) {
+    if (this.isSplit) {
+      for (MoneySplit s in this.splits) {
+        if (s.transferId.value != -1 && s.getTransferTransaction()?.accountId.value == a.uniqueId) {
+          return true;
+        }
+      }
+    }
+    if (this.transferInstance != null && this.transferInstance?.related?.accountId.value == a.uniqueId) {
+      return true;
+    }
+    return false;
   }
 
   ///------------------------------------------------------

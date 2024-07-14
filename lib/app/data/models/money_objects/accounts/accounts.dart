@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'dart:math';
 
 import 'package:money/app/controller/preferences_controller.dart';
@@ -345,8 +347,35 @@ class Accounts extends MoneyObjects<Account> {
     return sum;
   }
 
+  Iterable<Transaction> getTransactions(final Account account) {
+    return Data().transactions.iterableList().where((t) => t.accountId.value == account.uniqueId);
+  }
+
   String getViewPreferenceIdAccountLastSelected() {
     return ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId);
+  }
+
+  bool removeAccount(Account a, [bool forceRemoveAfterSave = false]) {
+    if (a.isInserted || forceRemoveAfterSave) {
+      if (this.containsKey(a.uniqueId)) {
+        deleteItem(a);
+      }
+    }
+
+    // Fix up any transfers that are pointing to this account.
+    Iterable<Transaction> view = Data().transactions.findTransfersToAccount(a);
+    if (view.isNotEmpty) {
+      for (Transaction u in view) {
+        Data().clearTransferToAccount(u, a);
+      }
+    }
+
+    view = getTransactions(a);
+
+    for (Transaction t in view) {
+      Data().removeTransaction(t);
+    }
+    return true;
   }
 
   void setMostRecentUsedAccount(Account account) {
