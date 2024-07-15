@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 /*
@@ -109,6 +111,9 @@ class Security extends MoneyObject {
     serializeName: 'Name',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).name.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).name.value,
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Security).name.value = value as String;
+    },
   );
 
   // Not persisted fields
@@ -130,7 +135,7 @@ class Security extends MoneyObject {
   // 8
   FieldDate priceDate = FieldDate(
     name: 'Date',
-    serializeName: 'Date',
+    serializeName: 'PriceDate',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
   );
@@ -141,13 +146,27 @@ class Security extends MoneyObject {
         (instance as Security).activityProfit.value.toDouble() + instance._holdingValue,
   );
 
+  /* 
+    enum SecurityType {
+      none,
+      bond, // Bonds
+      mutualFund,
+      equity, // stocks
+      moneyMarket, // cash
+      etf, // electronically traded fund
+      reit, // Real estate investment trust
+      futures, // Futures (a type of commodity investment)
+      private, // Investment in a private company.
+    } 
+  */
   // 6
   FieldInt securityType = FieldInt(
     name: 'Type',
-    serializeName: 'Type',
+    serializeName: 'SECURITYTYPE',
     columnWidth: ColumnWidth.tiny,
     align: TextAlign.center,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).securityType.value,
+    getValueForDisplay: (final MoneyObject instance) =>
+        getSecurityTypeFromInt((instance as Security).securityType.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
   );
 
@@ -157,6 +176,9 @@ class Security extends MoneyObject {
     serializeName: 'Symbol',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).symbol.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).symbol.value,
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Security).symbol.value = value as String;
+    },
   );
 
   // 7
@@ -187,9 +209,10 @@ class Security extends MoneyObject {
         tmp.name,
         tmp.symbol,
         tmp.price,
+        tmp.lastPrice,
+        tmp.priceDate,
         tmp.cuspid,
         tmp.securityType,
-        tmp.priceDate,
         tmp.numberOfTrades,
         tmp.holdingShares,
         tmp.holdingValue,
@@ -198,6 +221,13 @@ class Security extends MoneyObject {
       ]);
     }
     return _fields;
+  }
+
+  static String getSecurityTypeFromInt(final int index) {
+    if (isIndexInRange(SecurityType.values, index)) {
+      return SecurityType.values[index].name;
+    }
+    return '';
   }
 
   double get _holdingValue => this.holdingShares.value * this.price.value.toDouble();

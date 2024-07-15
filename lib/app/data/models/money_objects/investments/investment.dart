@@ -159,6 +159,11 @@ class Investment extends MoneyObject {
     columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().securities.getSymbolFromId((instance as Investment).security.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).securitySymbol.value,
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Investment).stashValueBeforeEditing();
+      instance.securitySymbol.value = value as String;
+    },
   );
 
   /// 11   TaxExempt       bit     0                    0
