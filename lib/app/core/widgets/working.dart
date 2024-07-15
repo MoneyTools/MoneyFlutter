@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 
 class WorkingIndicator extends StatelessWidget {
   const WorkingIndicator({super.key});
@@ -9,7 +9,7 @@ class WorkingIndicator extends StatelessWidget {
       child: SizedBox(
         height: 40,
         width: 40,
-        child: CircularProgressIndicator(),
+        child: CupertinoActivityIndicator(radius: 30),
       ),
     );
   }

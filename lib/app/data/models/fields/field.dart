@@ -262,23 +262,23 @@ class Field<T> {
   Field({
     // Value related
     required final T defaultValue,
+    this.name = '',
+    this.serializeName = '',
     this.type = FieldType.text,
     this.align = TextAlign.left,
+    this.useAsDetailPanels = defaultCallbackValueTrue,
+    this.useAsColumn = true,
     this.columnWidth = ColumnWidth.normal,
     this.footer = FooterType.none,
     this.fixedFont = false,
-    this.name = '',
-    this.serializeName = '',
     this.getValueForDisplay = defaultCallbackValue,
     // ignore: avoid_init_to_null
     this.getValueForReading = null,
     this.getValueForSerialization = defaultCallbackValue,
     this.getEditWidget,
     this.setValue,
-    this.importance = -1,
-    this.useAsColumn = true,
-    this.useAsDetailPanels = defaultCallbackValueTrue,
     this.sort,
+    this.importance = -1,
   }) {
     ///----------------------------------------------
     /// default value for this field

@@ -91,12 +91,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         final key = Key(
           '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}',
         );
+
         if (firstLoadCompleted == false) {
-          return const WorkingIndicator();
+          return _buildLoadingScreen();
         }
+
         if (list.isEmpty) {
-          return centerEmptyList(key);
+          return _buildInforUserOfEmptyList(key);
         }
+
         return AdaptiveViewWithList(
           key: key,
           top: buildHeader(),
@@ -107,14 +110,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           sortByFieldIndex: _sortByFieldIndex,
           sortAscending: _sortAscending,
           isMultiSelectionOn: _isMultiSelectionOn,
-          onColumnHeaderTap: changeListSortOrder,
+          onColumnHeaderTap: _changeListSortOrder,
           onColumnHeaderLongPress: onCustomizeColumn,
           getColumnFooterWidget: getColumnFooterWidget,
           onSelectionChanged: (int _) {
             _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
             saveLastUserChoicesOfView();
           },
-          onItemTap: onItemTap,
+          onItemTap: _onItemTap,
           flexBottom: preferenceController.isDetailsPanelExpanded.value ? 1 : 0,
           bottom: InfoPanel(
             isExpanded: preferenceController.isDetailsPanelExpanded.value,
@@ -127,7 +130,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
             // SubView
             subPanelSelected: _selectedBottomTabId,
-            subPanelSelectionChanged: updateBottomContent,
+            subPanelSelectionChanged: _updateBottomContent,
             subPanelContent: getInfoPanelContent,
 
             // Currency
@@ -154,6 +157,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return true;
   }
 
+  /// Allowed to be overrided by derived classes
   Widget buildHeader([final Widget? child]) {
     ViewHeaderMultipleSelection? multipleSelectionOptions;
     if (supportsMultiSelection) {
@@ -182,12 +186,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       onEditMoneyObject: onEditItems,
       onDeleteMoneyObject: onDeleteItems,
       filterText: _filterByText,
-      onFilterChanged: onFilterTextChanged,
+      onFilterChanged: _onFilterTextChanged,
       onClearAllFilters: areFiltersOn()
           ? () {
               // remove any filters from the view
               setState(() {
-                resetFiltersAndGetList();
+                _resetFiltersAndGetList();
               });
             }
           : null,
@@ -195,52 +199,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
+  /// Allowed to be overrided by derived classes
   Widget buildViewContent(final Widget child) {
     return Container(
       color: getColorTheme(context).surface,
       child: child,
     );
-  }
-
-  Widget centerEmptyList(Key key) {
-    String message = 'No ${getClassNamePlural()}';
-    Widget? widgetForClearFilter;
-    if (areFiltersOn()) {
-      message += ' found';
-      widgetForClearFilter = OutlinedButton(
-        onPressed: () {
-          setState(() {
-            resetFiltersAndGetList();
-          });
-        },
-        child: Row(
-          children: [
-            const Text('Clear Filters'),
-            gapSmall(),
-            const Icon(Icons.filter_alt_off_outlined),
-          ],
-        ),
-      );
-    }
-    return CenterMessage(
-      key: key,
-      message: message,
-      child: widgetForClearFilter,
-    );
-  }
-
-  void changeListSortOrder(final int columnNumber) {
-    setState(() {
-      if (columnNumber == _sortByFieldIndex) {
-        // toggle order
-        _sortAscending = !_sortAscending;
-      } else {
-        _sortByFieldIndex = columnNumber;
-      }
-
-      // Persist users choice
-      saveLastUserChoicesOfView();
-    });
   }
 
   void clearSelection() {
@@ -340,6 +304,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
   }
 
+  /// Allowed to be overrided by derived classes
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     List<Widget> widgets = [];
 
@@ -377,7 +342,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         widgets.add(
           buildDeleteButton(
             () {
-              onUserRequestedToDelete(
+              _onUserRequestedToDelete(
                 context,
                 getSelectedItemsFromSelectedList(
                   _selectedItemsByUniqueId.value,
@@ -395,14 +360,17 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return widgets;
   }
 
+  /// Allowed to be overrided by derived classes
   String getClassNamePlural() {
     return 'Items';
   }
 
+  /// Allowed to be overrided by derived classes
   String getClassNameSingular() {
     return 'Item';
   }
 
+  /// Allowed to be overrided by derived classes
   /// to be overrident by derived class
   /// Use the field FooterType to decide how to render the bottom button of each columns
   Widget getColumnFooterWidget(final Field field) {
@@ -489,6 +457,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
   }
 
+  /// Allowed to be overrided by derived classes
   String getDescription() {
     return 'Default list of items';
   }
@@ -583,8 +552,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       child: MoneyObjectCard(
         title: getClassNameSingular(),
         moneyObject: moneyObject,
-        onEdit: onUserRequestToEdit,
-        onDelete: onUserRequestedToDelete,
+        onEdit: _onUserRequestToEdit,
+        onDelete: _onUserRequestedToDelete,
       ),
     );
   }
@@ -834,108 +803,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
-  void onFilterTextChanged(final String text) {
-    setState(() {
-      _filterByText = text.toLowerCase();
-      saveLastUserChoicesOfView();
-      list = getList();
-    });
-  }
-
-  void onItemTap(final BuildContext context, final int uniqueId) {
-    if (isMobile()) {
-      adaptiveScreenSizeDialog(
-        context: context,
-        title: '${getClassNameSingular()} #${uniqueId + 1}',
-        actionButtons: [],
-        child: getInfoPanelViewDetails(
-          selectedIds: <int>[uniqueId],
-          isReadOnly: true,
-        ),
-      );
-    }
-  }
-
-  void onSelectAll(final bool selectAll) {
-    setState(() {
-      _selectedItemsByUniqueId.value.clear();
-      if (selectAll) {
-        for (final item in list) {
-          _selectedItemsByUniqueId.value.add(item.uniqueId);
-        }
-      }
-    });
-  }
-
-  void onUserRequestToEdit(
-    final BuildContext context,
-    final List<MoneyObject> moneyObjects,
-  ) {
-    myShowDialogAndActionsForMoneyObjects(
-      context: context,
-      title: getSingularPluralText(
-        'Edit',
-        moneyObjects.length,
-        getClassNameSingular(),
-        getClassNamePlural(),
-      ),
-      moneyObjects: moneyObjects,
-    );
-  }
-
-  void onUserRequestedToDelete(
-    final BuildContext context,
-    final List<MoneyObject> moneyObjects,
-  ) {
-    if (moneyObjects.isEmpty) {
-      messageBox(context, 'No items to delete');
-      return;
-    }
-
-    final String nameSingular = getClassNameSingular();
-    final String namePlural = getClassNamePlural();
-
-    final String title = getSingularPluralText(
-      'Delete',
-      moneyObjects.length,
-      nameSingular,
-      namePlural,
-    );
-
-    final String question = moneyObjects.length == 1
-        ? 'Are you sure you want to delete this $nameSingular?'
-        : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
-    final content = moneyObjects.length == 1
-        ? Column(
-            children: moneyObjects.first.buildListOfNamesValuesWidgets(onEdit: null, compact: true),
-          )
-        : Center(
-            child: Text(
-              '${getIntAsText(moneyObjects.length)} $namePlural',
-              style: getTextTheme(context).displaySmall,
-            ),
-          );
-
-    showConfirmationDialog(
-      context: context,
-      title: title,
-      question: question,
-      content: content,
-      buttonText: 'Delete',
-      onConfirmation: () {
-        Data().deleteItems(moneyObjects);
-      },
-    );
-  }
-
-  void resetFiltersAndGetList() {
-    _filterByText = '';
-    _filterByFieldsValue.clear();
-
-    saveLastUserChoicesOfView();
-    list = getList();
-  }
-
   void saveLastUserChoicesOfView() {
     // Persist users choice
     preferenceController.setInt(
@@ -986,19 +853,170 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     });
   }
 
-  void updateBottomContent(final InfoPanelSubViewEnum tab) {
-    setState(() {
-      _selectedBottomTabId = tab;
-      saveLastUserChoicesOfView();
-    });
-  }
-
   void updateListAndSelect(final int uniqueId) {
     setState(() {
       clearSelection();
       list = getList();
       firstLoadCompleted = true;
       setSelectedItem(uniqueId);
+    });
+  }
+
+  Widget _buildInforUserOfEmptyList(Key key) {
+    String message = 'No ${getClassNamePlural()}';
+    Widget? widgetForClearFilter;
+    if (areFiltersOn()) {
+      message += ' found';
+      widgetForClearFilter = OutlinedButton(
+        onPressed: () {
+          setState(() {
+            _resetFiltersAndGetList();
+          });
+        },
+        child: Row(
+          children: [
+            const Text('Clear Filters'),
+            gapSmall(),
+            const Icon(Icons.filter_alt_off_outlined),
+          ],
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        buildHeader(),
+        Expanded(
+          child: CenterMessage(
+            key: key,
+            message: message,
+            child: widgetForClearFilter,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoadingScreen() {
+    return Column(
+      children: [
+        buildHeader(),
+        const Expanded(
+          child: WorkingIndicator(),
+        ),
+      ],
+    );
+  }
+
+  void _changeListSortOrder(final int columnNumber) {
+    setState(() {
+      if (columnNumber == _sortByFieldIndex) {
+        // toggle order
+        _sortAscending = !_sortAscending;
+      } else {
+        _sortByFieldIndex = columnNumber;
+      }
+
+      // Persist users choice
+      saveLastUserChoicesOfView();
+    });
+  }
+
+  void _onFilterTextChanged(final String text) {
+    setState(() {
+      _filterByText = text.toLowerCase();
+      saveLastUserChoicesOfView();
+      list = getList();
+    });
+  }
+
+  void _onItemTap(final BuildContext context, final int uniqueId) {
+    if (isMobile()) {
+      adaptiveScreenSizeDialog(
+        context: context,
+        title: '${getClassNameSingular()} #${uniqueId + 1}',
+        actionButtons: [],
+        child: getInfoPanelViewDetails(
+          selectedIds: <int>[uniqueId],
+          isReadOnly: true,
+        ),
+      );
+    }
+  }
+
+  void _onUserRequestToEdit(
+    final BuildContext context,
+    final List<MoneyObject> moneyObjects,
+  ) {
+    myShowDialogAndActionsForMoneyObjects(
+      context: context,
+      title: getSingularPluralText(
+        'Edit',
+        moneyObjects.length,
+        getClassNameSingular(),
+        getClassNamePlural(),
+      ),
+      moneyObjects: moneyObjects,
+    );
+  }
+
+  void _onUserRequestedToDelete(
+    final BuildContext context,
+    final List<MoneyObject> moneyObjects,
+  ) {
+    if (moneyObjects.isEmpty) {
+      messageBox(context, 'No items to delete');
+      return;
+    }
+
+    final String nameSingular = getClassNameSingular();
+    final String namePlural = getClassNamePlural();
+
+    final String title = getSingularPluralText(
+      'Delete',
+      moneyObjects.length,
+      nameSingular,
+      namePlural,
+    );
+
+    final String question = moneyObjects.length == 1
+        ? 'Are you sure you want to delete this $nameSingular?'
+        : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
+    final content = moneyObjects.length == 1
+        ? Column(
+            children: moneyObjects.first.buildListOfNamesValuesWidgets(onEdit: null, compact: true),
+          )
+        : Center(
+            child: Text(
+              '${getIntAsText(moneyObjects.length)} $namePlural',
+              style: getTextTheme(context).displaySmall,
+            ),
+          );
+
+    showConfirmationDialog(
+      context: context,
+      title: title,
+      question: question,
+      content: content,
+      buttonText: 'Delete',
+      onConfirmation: () {
+        Data().deleteItems(moneyObjects);
+      },
+    );
+  }
+
+  void _resetFiltersAndGetList() {
+    _filterByText = '';
+    _filterByFieldsValue.clear();
+
+    saveLastUserChoicesOfView();
+    list = getList();
+  }
+
+  void _updateBottomContent(final InfoPanelSubViewEnum tab) {
+    setState(() {
+      _selectedBottomTabId = tab;
+      saveLastUserChoicesOfView();
     });
   }
 }
