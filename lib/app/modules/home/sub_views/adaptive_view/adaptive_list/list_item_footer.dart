@@ -55,8 +55,11 @@ class MyListItemFooter<T> extends StatelessWidget {
       );
     }
     return Container(
-      color: backgoundColor,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        color: backgoundColor,
+        border: Border(top: BorderSide(color: Colors.grey.withAlpha(100), width: 1)), // Outer border
+      ),
       child: Row(children: footerWidgets),
     );
   }
