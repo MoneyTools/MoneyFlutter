@@ -140,6 +140,7 @@ class Investment extends MoneyObject {
 
   FieldMoney runningBalance = FieldMoney(
     name: 'Balance',
+    footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) {
       return (instance as Investment).runningBalance.value;
     },

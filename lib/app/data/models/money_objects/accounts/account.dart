@@ -96,6 +96,7 @@ class Account extends MoneyObject {
   FieldMoney balanceNative = FieldMoney(
     importance: 98,
     name: 'BalanceN',
+    footer: FooterType.none,
     getValueForDisplay: (final MoneyObject instance) {
       final accountInstance = instance as Account;
       return MoneyModel(

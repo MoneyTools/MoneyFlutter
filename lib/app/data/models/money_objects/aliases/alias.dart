@@ -38,13 +38,14 @@ class Alias extends MoneyObject {
   }
 
   /// 2    Flags    INT            1                 0
-  Field<int> flags = Field<int>(
+  FieldInt flags = FieldInt(
     type: FieldType.text,
     align: TextAlign.center,
     importance: 3,
     name: 'Flags',
     serializeName: 'Flags',
     defaultValue: 0,
+    footer: FooterType.count,
     getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
     getValueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
   );
@@ -57,20 +58,20 @@ class Alias extends MoneyObject {
 
   /// Pattern
   /// 1    Pattern  nvarchar(255)  1                 0
-  Field<String> pattern = Field<String>(
+  FieldString pattern = FieldString(
     type: FieldType.text,
     importance: 2,
     name: 'Pattern',
     serializeName: 'Pattern',
-    defaultValue: '',
     getValueForDisplay: (final MoneyObject instance) => (instance as Alias).pattern.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Alias).pattern.value,
   );
 
   /// Payee
   /// 3 Payee INT 1 0
-  Field<int> payeeId = Field<int>(
+  FieldInt payeeId = FieldInt(
     type: FieldType.text,
+    footer: FooterType.count,
     importance: 1,
     name: 'Payee',
     serializeName: 'Payee',

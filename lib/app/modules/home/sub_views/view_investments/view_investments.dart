@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
@@ -28,13 +26,6 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewInvestments;
   }
 
-  double _footerColumnCommission = 0.00;
-  // Footer related
-  final DateRange _footerColumnDate = DateRange();
-
-  double _footerColumnFees = 0.00;
-  int _footerColumnUnits = 0;
-
   @override
   String getClassNamePlural() {
     return 'Investment';
@@ -43,22 +34,6 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Investment';
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Date':
-        return getFooterForDateRange(_footerColumnDate);
-      case 'Units':
-        return getFooterForInt(_footerColumnUnits);
-      case 'Commission':
-        return getFooterForAmount(_footerColumnCommission);
-      case 'Fees':
-        return getFooterForAmount(_footerColumnFees);
-      default:
-        return null;
-    }
   }
 
   @override
@@ -104,12 +79,6 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
         .toList();
     Investments.calculateRunningSharesAndBalance(list);
 
-    for (final item in list) {
-      _footerColumnDate.inflate(item.date);
-      _footerColumnUnits += item.units.value.toInt();
-      _footerColumnCommission += item.commission.value.toDouble();
-      _footerColumnFees += item.fees.value.toDouble();
-    }
     return list;
   }
 

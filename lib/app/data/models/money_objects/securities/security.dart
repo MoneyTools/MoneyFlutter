@@ -164,6 +164,7 @@ class Security extends MoneyObject {
     name: 'Type',
     serializeName: 'SECURITYTYPE',
     columnWidth: ColumnWidth.tiny,
+    type: FieldType.text,
     align: TextAlign.center,
     getValueForDisplay: (final MoneyObject instance) =>
         getSecurityTypeFromInt((instance as Security).securityType.value),

@@ -59,7 +59,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
 
   @override
   Widget build(BuildContext context) {
-    cumulateSums();
+    footerAccumulators();
 
     return AdaptiveListColumnsOrRows(
       list: widget.list,
@@ -86,7 +86,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
     );
   }
 
-  void cumulateSums() {
+  void footerAccumulators() {
     accumulatorSumAmount.clear();
     accumulatorSumNumber.clear();
     accumulatorForAverage.clear();

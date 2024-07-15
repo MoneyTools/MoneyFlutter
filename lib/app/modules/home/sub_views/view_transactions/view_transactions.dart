@@ -5,7 +5,6 @@ import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -40,11 +39,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   bool balanceDone = false;
 
   final List<bool> _selectedPivot = <bool>[false, false, true];
-
-  // Footer related
-  final DateRange _footerColumnDate = DateRange();
-
-  double _footerRunningBalanceUSD = 0.0;
 
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
@@ -135,18 +129,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Transaction';
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Date':
-        return getFooterForDateRange(_footerColumnDate);
-      case 'Balance(USD)':
-        return getFooterForAmount(_footerRunningBalanceUSD);
-      default:
-        return null;
-    }
   }
 
   @override
@@ -258,18 +240,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       );
 
       double runningNativeBalance = 0.0;
-      _footerRunningBalanceUSD = 0.0;
-      _footerColumnDate.clear();
 
       for (Transaction transaction in list) {
-        _footerColumnDate.inflate(transaction.dateTime.value);
         runningNativeBalance += transaction.amount.value.toDouble();
-
         transaction.balance = runningNativeBalance;
-
-        // only the last item is used
-        _footerRunningBalanceUSD =
-            (transaction.balanceNormalized.getValueForDisplay(transaction) as MoneyModel).toDouble();
       }
 
       balanceDone = true;

@@ -2,9 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
-import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
@@ -29,12 +27,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewTransfers;
   }
 
-  final DateRange _footerColumnReceivedOn = DateRange();
-
-  double _footerColumnBalance = 0.00;
-  // Footer related
-  final DateRange _footerColumnSentOn = DateRange();
-
   @override
   String getClassNamePlural() {
     return 'Transfers';
@@ -43,20 +35,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Transfer';
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Sent on':
-        return getFooterForDateRange(_footerColumnSentOn);
-      case 'Date Received':
-        return getFooterForDateRange(_footerColumnReceivedOn);
-      case 'Amount':
-        return getFooterForAmount(_footerColumnBalance);
-      default:
-        return null;
-    }
   }
 
   @override
@@ -135,13 +113,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         }
       }
     }
-
-    for (final item in listOfTransfers) {
-      _footerColumnSentOn.inflate(item.senderTransactionDate.getValueForDisplay(item));
-      _footerColumnReceivedOn.inflate(item.receiverTransactionDate.getValueForDisplay(item));
-      _footerColumnBalance += item.transactionAmount.getValueForDisplay(item).toDouble();
-    }
-
     return listOfTransfers;
   }
 

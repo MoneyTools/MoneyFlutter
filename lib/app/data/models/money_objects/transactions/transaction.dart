@@ -265,6 +265,7 @@ class Transaction extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     footer: FooterType.count,
+    getValueForReading: (final MoneyObject instance) => (instance as Transaction).getCurrency(),
     getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget(
         (instance as Transaction).getCurrency(),

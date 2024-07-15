@@ -6,7 +6,6 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
@@ -48,8 +47,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   // Footer related
   final DateRange _footerColumnDate = DateRange();
 
-  int _footerCountTransactions = 0;
-  double _footerSumBalance = 0.00;
   // Filter related
   final List<bool> _selectedPivot = <bool>[false, false, false, false, true];
 
@@ -175,19 +172,19 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     return 'Account';
   }
 
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Transactions':
-        return getFooterForInt(_footerCountTransactions);
-      case 'Balance(USD)':
-        return getFooterForAmount(_footerSumBalance);
-      case 'Updated':
-        return getFooterForDateRange(_footerColumnDate);
-      default:
-        return null;
-    }
-  }
+  // @override
+  // Widget? getColumnFooterWidget(final Field field) {
+  //   switch (field.name) {
+  //     case 'Transactions':
+  //       return getFooterForInt(_footerCountTransactions);
+  //     case 'Balance(USD)':
+  //       return getFooterForAmount(_footerSumBalance);
+  //     case 'Updated':
+  //       return getFooterForDateRange(_footerColumnDate);
+  //     default:
+  //       return null;
+  //   }
+  // }
 
   // default currency for this view
   @override
@@ -281,13 +278,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       list = list.toList();
     }
 
-    _footerCountTransactions = 0;
-    _footerSumBalance = 0.00;
     _footerColumnDate.clear();
 
     for (final account in list) {
-      _footerCountTransactions += account.count.value.toInt();
-      _footerSumBalance += (account.balanceNormalized.getValueForDisplay(account) as MoneyModel).toDouble();
       _footerColumnDate.inflate(account.updatedOn.value);
     }
     return list;

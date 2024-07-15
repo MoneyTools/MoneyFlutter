@@ -179,6 +179,7 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     name: 'Level',
     columnWidth: ColumnWidth.nano,
+    footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) =>
         countOccurrences((instance as Category).name.value, ':').toDouble() + 1,
   );
@@ -258,6 +259,7 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     serializeName: 'Type',
     defaultValue: CategoryType.none,
+    footer: FooterType.count,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).getTypeAsText(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).type.value.index,
     setValue: (final MoneyObject instance, final dynamic value) {

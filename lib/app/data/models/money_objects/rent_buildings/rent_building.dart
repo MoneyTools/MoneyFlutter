@@ -188,13 +188,13 @@ class RentBuilding extends MoneyObject {
   List<int> categoryForTaxesTreeIds = <int>[];
 
   /// Currency
-  Field<String> currency = Field<String>(
+  FieldString currency = FieldString(
     importance: 5,
     name: 'Currency',
     type: FieldType.widget,
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
-    defaultValue: '',
+    getValueForReading: (final MoneyObject instance) => (instance as RentBuilding).getCurrencyOfAssociatedAccount(),
     getValueForDisplay: (final MoneyObject instance) => Currency.buildCurrencyWidget(
       (instance as RentBuilding).getCurrencyOfAssociatedAccount(),
     ),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
@@ -30,13 +28,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 
-  // Footer related
-  final DateRange _footerColumnDate = DateRange();
-
-  double _footerColumnProfit = 0.00;
-  double _footerColumnShares = 0.00;
-  int _footerColumnTrades = 0;
-
   @override
   String getClassNamePlural() {
     return 'Stocks';
@@ -45,22 +36,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   @override
   String getClassNameSingular() {
     return 'Stock';
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Date':
-        return getFooterForDateRange(_footerColumnDate);
-      case 'Trades':
-        return getFooterForInt(_footerColumnTrades);
-      case 'Shares':
-        return getFooterForInt(_footerColumnShares.toInt());
-      case 'Balance':
-        return getFooterForAmount(_footerColumnProfit);
-      default:
-        return null;
-    }
   }
 
   @override
@@ -165,14 +140,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     bool applyFilter = true,
   }) {
     final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
-    _footerColumnDate.clear();
-
-    for (final Security security in list) {
-      _footerColumnDate.inflate(security.priceDate.value);
-      _footerColumnTrades += security.numberOfTrades.value;
-      _footerColumnShares += security.holdingShares.value;
-      _footerColumnProfit += security.profit.value.toDouble();
-    }
 
     return list;
   }

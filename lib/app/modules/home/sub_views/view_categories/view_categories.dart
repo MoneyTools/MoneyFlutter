@@ -4,7 +4,6 @@ import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
@@ -44,13 +43,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     false,
     true,
   ];
-
-  // Footer related
-  int _footerCountTransactions = 0;
-
-  int _footerCountTransactionsRollUp = 0;
-  double _footerSumBalance = 0.00;
-  double _footerSumBalanceRollUp = 0.00;
 
   @override
   Widget buildHeader([final Widget? child]) {
@@ -158,22 +150,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case '#T':
-        return getFooterForInt(_footerCountTransactions);
-      case '#T~':
-        return getFooterForInt(_footerCountTransactionsRollUp);
-      case 'Sum':
-        return getFooterForAmount(_footerSumBalance);
-      case 'Sum~':
-        return getFooterForAmount(_footerSumBalanceRollUp);
-      default:
-        return null;
-    }
-  }
-
-  @override
   String getDescription() {
     return 'Classification of your money transactions.';
   }
@@ -217,20 +193,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
               (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
-
-    _footerCountTransactions = 0;
-    _footerCountTransactionsRollUp = 0;
-
-    _footerSumBalance = 0.00;
-    _footerSumBalanceRollUp = 0.00;
-
-    for (final item in list) {
-      _footerCountTransactions += item.transactionCount.value.toInt();
-      _footerCountTransactionsRollUp += item.transactionCountRollup.value.toInt();
-
-      _footerSumBalance += (item.sum.getValueForDisplay(item) as MoneyModel).toDouble();
-      _footerSumBalanceRollUp += (item.sumRollup.getValueForDisplay(item) as MoneyModel).toDouble();
-    }
     return list;
   }
 

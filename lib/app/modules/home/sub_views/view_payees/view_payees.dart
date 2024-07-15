@@ -9,7 +9,6 @@ import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/date_range_time_line.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/gaps.dart';
@@ -36,11 +35,6 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   ViewPayeesState() {
     viewId = ViewId.viewPayees;
   }
-
-  // Footer related
-  int _footerCountTransactions = 0;
-
-  double _footerSumBalance = 0.00;
 
   /// add more top leve action buttons
   @override
@@ -96,18 +90,6 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Transactions':
-        return getFooterForInt(_footerCountTransactions);
-      case 'Sum':
-        return getFooterForAmount(_footerSumBalance);
-      default:
-        return null;
-    }
-  }
-
-  @override
   String getDescription() {
     return 'Who is getting your money.';
   }
@@ -156,14 +138,6 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
           (instance) => (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
-
-    _footerCountTransactions = 0;
-    _footerSumBalance = 0.00;
-
-    for (final item in list) {
-      _footerCountTransactions += item.count.value.toInt();
-      _footerSumBalance += item.sum.value.toDouble();
-    }
 
     return list;
   }
