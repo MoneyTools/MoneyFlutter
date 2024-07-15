@@ -137,11 +137,11 @@ class DateRange {
 }
 
 /// Helper class to encapsulate a range of integers.
-class IntRange {
-  IntRange({required this.min, required this.max});
+class NumRange {
+  NumRange({this.min = 0, this.max = 0});
 
-  int max;
-  int min;
+  num max;
+  num min;
 
   /// Decrements the range by one, if possible.
   void decrement(int minLimit) {
@@ -151,6 +151,16 @@ class IntRange {
     }
   }
 
+  String get descriptionAsInt => _getDecription(
+        getIntAsText(min.toInt(), showPlusSign: true),
+        getIntAsText(max.toInt(), showPlusSign: true),
+      );
+
+  String get descriptionAsMoney => _getDecription(
+        doubleToCurrency(min.toDouble(), showPlusSign: true),
+        doubleToCurrency(max.toDouble(), showPlusSign: true),
+      );
+
   /// Increments the range by one, if possible.
   void increment(int maxLimit) {
     if (max + 1 <= maxLimit) {
@@ -159,15 +169,28 @@ class IntRange {
     }
   }
 
+  void inflate(num value) {
+    if (value < min) {
+      min = value;
+    }
+    if (value > max) {
+      max = value;
+    }
+  }
+
   /// Checks if the range is valid.
   bool isValid() => min > 0 && max > 0 && span > 0;
 
   /// Returns the span of the range, calculated as the difference between [max] and [min] plus one.
-  int get span => max - min + 1;
+  num get span => max - min + 1;
 
   /// Updates the range with new values.
   void update(int newMin, int newMax) {
     min = newMin;
     max = newMax;
+  }
+
+  String _getDecription(final String min, final String max) {
+    return '$min min, $max max';
   }
 }

@@ -160,7 +160,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
 // use this if total item count is known
-  IntRange indexOfItemsInView() {
+  NumRange indexOfItemsInView() {
     final int itemCount = widget.list.length;
     final double scrollOffset = scrollController.position.pixels;
     final double viewportHeight = scrollController.position.viewportDimension;
@@ -169,12 +169,12 @@ class MyListViewState<T> extends State<MyListView<T>> {
     final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
     final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
 
-    return IntRange(min: firstVisibleItemIndex, max: lastVisibleItemIndex);
+    return NumRange(min: firstVisibleItemIndex, max: lastVisibleItemIndex);
   }
 
   bool isIndexInView(final int index) {
     if (index != -1) {
-      final IntRange viewingIndexRange = indexOfItemsInView();
+      final NumRange viewingIndexRange = indexOfItemsInView();
       if (index.isBetween(viewingIndexRange.min, viewingIndexRange.max)) {
         return true;
       }

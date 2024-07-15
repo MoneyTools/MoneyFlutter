@@ -265,7 +265,7 @@ extension Range on num {
   }
 }
 
-bool isAlmostZero(double value, [double epsilon = 0.009]) {
+bool isAlmostZero(num value, [double epsilon = 0.009]) {
   return value.abs() <= epsilon;
 }
 

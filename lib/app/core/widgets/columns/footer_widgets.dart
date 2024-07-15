@@ -36,28 +36,28 @@ Widget getFooterForDateRange(final DateRange dateRange) {
   );
 }
 
-Widget getFooterForAmount(final double amount) {
+Widget getFooterForAmount(final double amount, {final String prefix = ''}) {
   TextStyle style = TextStyle(
     color: colorBasedOnValue(amount),
     fontFamily: 'RobotoMono',
   );
 
   if (isSmallValue(amount)) {
-    return Text(Currency.getAmountAsStringUsingCurrency(amount), style: style);
+    return Text(prefix + Currency.getAmountAsStringUsingCurrency(amount), style: style);
   }
-  return Text('\$${getAmountAsShorthandText(amount)}', style: style);
+  return Text('$prefix\$${getAmountAsShorthandText(amount)}', style: style);
 }
 
-Widget getFooterForInt(final num value) {
+Widget getFooterForInt(final num value, {final bool applyColorBasedOnValue = true, final String prefix = ''}) {
   TextStyle style = TextStyle(
-    color: colorBasedOnValue(value),
+    color: applyColorBasedOnValue ? colorBasedOnValue(value) : null,
     fontFamily: 'RobotoMono',
   );
 
   if (isSmallValue(value)) {
-    return Text(getIntAsText(value.toInt()), style: style);
+    return Text(prefix + getIntAsText(value.toInt()), style: style);
   }
-  return Text(getNumberShorthandText(value), style: style);
+  return Text(prefix + getNumberShorthandText(value), style: style);
 }
 
 bool isSmallValue(final num value) {

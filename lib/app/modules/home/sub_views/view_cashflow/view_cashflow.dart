@@ -150,14 +150,14 @@ class ViewCashFlowState extends ViewWidgetState {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: YearRangeSlider(
-              yearRange: IntRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
-              initialRange: IntRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
-              onChanged: (final IntRange updateRange) {
+              yearRange: NumRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
+              initialRange: NumRange(min: dateRangeTransactions.min!.year, max: dateRangeTransactions.max!.year),
+              onChanged: (final NumRange updateRange) {
                 _debouncer.run(() {
                   if (mounted) {
                     setState(() {
-                      this.selectedYearStart = updateRange.min;
-                      this.selectedYearEnd = updateRange.max;
+                      this.selectedYearStart = updateRange.min.toInt();
+                      this.selectedYearEnd = updateRange.max.toInt();
                     });
                   }
                 });

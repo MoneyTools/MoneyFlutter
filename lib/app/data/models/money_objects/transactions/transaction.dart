@@ -95,11 +95,13 @@ class Transaction extends MoneyObject {
 
   /// Account Id
   /// SQLite  1|Account|INT|1||0
-  Field<int> accountId = Field<int>(
+  FieldInt accountId = FieldInt(
     importance: 1,
     type: FieldType.text,
     name: 'Account',
     serializeName: 'Account',
+    align: TextAlign.left,
+    footer: FooterType.count,
     defaultValue: -1,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().accounts.getNameFromId((instance as Transaction).accountId.value),
@@ -156,6 +158,7 @@ class Transaction extends MoneyObject {
     importance: 99,
     name: columnIdBalance,
     columnWidth: ColumnWidth.small,
+    footer: FooterType.none,
     useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
@@ -169,6 +172,7 @@ class Transaction extends MoneyObject {
     importance: 99,
     name: 'Balance(USD)',
     columnWidth: ColumnWidth.small,
+    footer: FooterType.none,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).getNormalizedAmount((instance).balance),
@@ -198,10 +202,12 @@ class Transaction extends MoneyObject {
 
   /// Category Id
   /// SQLite 6|Category|INT|0||0
-  Field<int> categoryId = Field<int>(
+  FieldInt categoryId = FieldInt(
     importance: 10,
     type: FieldType.widget,
     columnWidth: ColumnWidth.large,
+    align: TextAlign.left,
+    footer: FooterType.count,
     name: 'Category',
     serializeName: 'Category',
     defaultValue: -1,
@@ -258,6 +264,7 @@ class Transaction extends MoneyObject {
     name: 'Currency',
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
+    footer: FooterType.count,
     getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget(
         (instance as Transaction).getCurrency(),
@@ -375,6 +382,7 @@ class Transaction extends MoneyObject {
     name: 'Paid On',
     align: TextAlign.right,
     columnWidth: ColumnWidth.tiny,
+    footer: FooterType.none,
     getValueForDisplay: (final MoneyObject instance) {
       return (instance as Transaction).paidOn.value;
     },
@@ -388,6 +396,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Payee',
     defaultValue: -1,
     type: FieldType.text,
+    footer: FooterType.count,
     align: TextAlign.left,
     columnWidth: ColumnWidth.largest,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(

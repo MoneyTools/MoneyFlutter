@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.43] 2024-07-15
+
+### Added
+
+- Footer for Average of MoneyAmount or Quantity, with tooltips
+  
 ## [version 1.8.42] 2024-07-13
 
 ### Update

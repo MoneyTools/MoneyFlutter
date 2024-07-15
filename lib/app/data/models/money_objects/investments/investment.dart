@@ -89,6 +89,7 @@ class Investment extends MoneyObject {
 
   FieldQuantity holdingShares = FieldQuantity(
     name: 'Holding',
+    footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) {
       return (instance as Investment).holdingShares.value;
     },
@@ -107,6 +108,7 @@ class Investment extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     type: FieldType.text,
+    footer: FooterType.count,
     getValueForDisplay: (final MoneyObject instance) => getInvestmentTypeTextFromValue(
       (instance as Investment).investmentType.value,
     ),
@@ -238,6 +240,7 @@ class Investment extends MoneyObject {
     importance: 3,
     name: 'Price',
     serializeName: 'UnitPrice',
+    footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value.toDouble(),
   );

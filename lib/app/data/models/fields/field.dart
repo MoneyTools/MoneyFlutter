@@ -249,6 +249,15 @@ enum ColumnWidth {
   largest, // 5
 }
 
+enum FooterType {
+  none,
+  count,
+  countNotEmpty, // TODO   12/50 (24%) - meaning 12 rows out of 50 have data, should this be shown in Percentage?
+  sum,
+  average,
+  range,
+}
+
 class Field<T> {
   Field({
     // Value related
@@ -256,6 +265,7 @@ class Field<T> {
     this.type = FieldType.text,
     this.align = TextAlign.left,
     this.columnWidth = ColumnWidth.normal,
+    this.footer = FooterType.none,
     this.fixedFont = false,
     this.name = '',
     this.serializeName = '',
@@ -377,6 +387,8 @@ class Field<T> {
   TextAlign align;
   ColumnWidth columnWidth;
   bool fixedFont = false;
+  // indicate how to handle the column footer
+  FooterType footer;
 
   /// Get the value of the instance
   dynamic Function(MoneyObject) getValueForDisplay;
@@ -480,6 +492,7 @@ class FieldDate extends Field<DateTime?> {
           defaultValue: null,
           align: TextAlign.left,
           type: FieldType.date,
+          footer: FooterType.range,
         );
 }
 
@@ -538,6 +551,7 @@ class FieldInt extends Field<int> {
     super.serializeName,
     super.getValueForDisplay,
     super.getValueForSerialization,
+    super.getValueForReading,
     super.useAsColumn,
     super.columnWidth,
     super.useAsDetailPanels,
@@ -547,6 +561,7 @@ class FieldInt extends Field<int> {
     super.sort,
     super.align = TextAlign.right,
     super.type = FieldType.numeric,
+    super.footer = FooterType.sum,
   });
 }
 
@@ -560,6 +575,7 @@ class FieldMoney extends Field<MoneyModel> {
     super.setValue,
     super.useAsColumn,
     super.columnWidth = ColumnWidth.small,
+    super.footer = FooterType.sum,
     super.useAsDetailPanels,
     super.sort,
   }) : super(
@@ -583,6 +599,7 @@ class FieldQuantity extends Field<double> {
     super.defaultValue = 0,
     super.align = TextAlign.right,
     super.type = FieldType.quantity,
+    super.footer = FooterType.sum,
     super.sort,
   });
 }
@@ -603,6 +620,7 @@ class FieldString extends Field<String> {
     super.getEditWidget,
     super.setValue,
     super.type = FieldType.text,
+    super.footer = FooterType.count,
     super.sort,
   }) : super(
           defaultValue: '',

@@ -50,10 +50,11 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
 }
 
 class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListColumnsOrRowsSingleSelection> {
-  final AccumulatorSum<Field, double> fieldsForAmounts = AccumulatorSum<Field, double>();
-  final AccumulatorDateRange<Field> fieldsForDates = AccumulatorDateRange<Field>();
-  final AccumulatorSum<Field, double> fieldsForNumbers = AccumulatorSum<Field, double>();
-  final AccumulatorList<Field, String> fieldsForTexts = AccumulatorList<Field, String>();
+  final AccumulatorList<Field, String> accumaltorListOfText = AccumulatorList<Field, String>();
+  final AccumulatorDateRange<Field> accumulatorDateRange = AccumulatorDateRange<Field>();
+  final AccumulatorAverage<Field> accumulatorForAverage = AccumulatorAverage<Field>();
+  final AccumulatorSum<Field, double> accumulatorSumAmount = AccumulatorSum<Field, double>();
+  final AccumulatorSum<Field, double> accumulatorSumNumber = AccumulatorSum<Field, double>();
   late final selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>([widget.selectedId]);
 
   @override
@@ -86,30 +87,42 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
   }
 
   void cumulateSums() {
-    fieldsForTexts.clear();
-    fieldsForAmounts.clear();
-    fieldsForNumbers.clear();
-    fieldsForDates.clear();
+    accumulatorSumAmount.clear();
+    accumulatorSumNumber.clear();
+    accumulatorForAverage.clear();
+    accumulatorDateRange.clear();
+    accumaltorListOfText.clear();
 
     for (final item in widget.list) {
       for (final field in widget.fieldDefinitions) {
-        final value = field.getValueForDisplay(item);
-
         switch (field.type) {
           case FieldType.text:
-            fieldsForTexts.cumulate(field, value);
+            accumaltorListOfText.cumulate(field, field.getValueForDisplay(item));
 
           case FieldType.date:
-            fieldsForDates.cumulate(field, value);
+            accumulatorDateRange.cumulate(field, field.getValueForDisplay(item));
 
           case FieldType.amount:
-            fieldsForAmounts.cumulate(field, value.toDouble());
+            final value = field.getValueForDisplay(item).toDouble();
+            accumulatorSumAmount.cumulate(field, value);
+            if (field.footer == FooterType.average) {
+              accumulatorForAverage.cumulate(field, value);
+            }
+
+          case FieldType.widget:
+            if (field.getValueForReading != null) {
+              accumaltorListOfText.cumulate(field, field.getValueForReading?.call(item)!.toString() ?? '');
+            }
 
           case FieldType.numeric:
           case FieldType.amountShorthand:
           case FieldType.numericShorthand:
           case FieldType.quantity:
-            fieldsForNumbers.cumulate(field, value);
+            final value = field.getValueForDisplay(item);
+            accumulatorSumNumber.cumulate(field, value);
+            if (field.footer == FooterType.average) {
+              accumulatorForAverage.cumulate(field, value);
+            }
           default:
             break;
         }
@@ -117,28 +130,69 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
     }
   }
 
+  /// Use the field FooterType to decide how to render the bottom button of each columns
   Widget getColumnFooterWidget(final Field field) {
-    // field considered Balance are excluded from Tallies since they are themself a running tally
+    switch (field.footer) {
+      case FooterType.range:
+        if (accumulatorDateRange.containsKey(field)) {
+          return getFooterForDateRange(accumulatorDateRange.getValue(field)!);
+        }
+      case FooterType.count:
+        List<String> list = [];
 
-    // TODO replace these hardcoded exception case to class arguments
-    if (field.name != 'Balance' && field.name != 'Shares') {
-      if (fieldsForTexts.containsKey(field)) {
-        return getFooterForInt(fieldsForTexts.getList(field).length);
-      }
+        if (accumaltorListOfText.containsKey(field)) {
+          list = accumaltorListOfText.getList(field);
+        } else {
+          if (accumulatorSumNumber.containsKey(field)) {
+            list = accumulatorSumNumber.getValue(field);
+          }
+        }
 
-      if (fieldsForAmounts.containsKey(field)) {
-        return getFooterForAmount(fieldsForAmounts.getValue(field));
-      }
+        final int count = list.length;
+        if (count > 0) {
+          String samples = '';
+          if (count > 10) {
+            samples = '${list.take(10).join('\n')}\n...';
+          } else {
+            samples = list.join('\n');
+          }
+          return Tooltip(
+            message: '$count items\n$samples',
+            child: getFooterForInt(count, applyColorBasedOnValue: false),
+          );
+        }
 
-      if (fieldsForNumbers.containsKey(field)) {
-        return getFooterForInt(fieldsForNumbers.getValue(field));
-      }
+      case FooterType.sum:
+        Widget? widget;
+        if (accumulatorSumAmount.containsKey(field)) {
+          widget = getFooterForAmount(accumulatorSumAmount.getValue(field));
+        } else {
+          if (accumulatorSumNumber.containsKey(field)) {
+            widget = getFooterForInt(accumulatorSumNumber.getValue(field));
+          }
+        }
+        return Tooltip(
+          message: 'Sum.',
+          child: widget,
+        );
 
-      if (fieldsForDates.containsKey(field)) {
-        return getFooterForDateRange(fieldsForDates.getValue(field)!);
-      }
+      case FooterType.average:
+        if (accumulatorForAverage.containsKey(field)) {
+          final RunningAverage range = accumulatorForAverage.getValue(field)!;
+          final double value = range.getAverage();
+          Widget widget = field.type == FieldType.amount
+              ? getFooterForAmount(value, prefix: 'Av ')
+              : getFooterForInt(value, prefix: 'Av ');
+          return Tooltip(
+            message: field.type == FieldType.amount ? range.descriptionAsMoney : range.descriptionAsInt,
+            child: widget,
+          );
+        }
+
+      case FooterType.none:
+      default:
+        return const SizedBox();
     }
-
     return const SizedBox();
   }
 }

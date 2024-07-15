@@ -20,13 +20,13 @@ class YearRangeSlider extends StatefulWidget {
   });
 
   /// The initial range of years.
-  final IntRange initialRange;
+  final NumRange initialRange;
 
   /// A callback that returns the selected range of years whenever it changes.
-  final void Function(IntRange range) onChanged;
+  final void Function(NumRange range) onChanged;
 
   /// The full range of years.
-  final IntRange yearRange;
+  final NumRange yearRange;
 
   @override
   YearRangeSliderState createState() => YearRangeSliderState();
@@ -41,7 +41,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
   double _leftMarginOfBottomText = 0;
 
   /// The currently selected year range.
-  late final IntRange _selectedYearRange = IntRange(min: widget.initialRange.min, max: widget.initialRange.max);
+  late final NumRange _selectedYearRange = NumRange(min: widget.initialRange.min, max: widget.initialRange.max);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
                 max: widget.yearRange.max.toDouble(),
                 values: RangeValues(_selectedYearRange.min.toDouble(), _selectedYearRange.max.toDouble()),
                 labels: RangeLabels(_selectedYearRange.min.toString(), _selectedYearRange.max.toString()),
-                divisions: widget.yearRange.span,
+                divisions: widget.yearRange.span.toInt(),
                 onChanged: (final RangeValues values) {
                   setState(() {
                     _selectedYearRange.update(values.start.round(), values.end.round());
@@ -100,7 +100,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
   /// [context] is the build context used to retrieve theme information.
   Widget _buildDragButton(final BuildContext context) {
     final String spanAsText =
-        getSingularPluralText(_selectedYearRange.span.toString(), _selectedYearRange.span, 'years', 'year');
+        getSingularPluralText(_selectedYearRange.span.toString(), _selectedYearRange.span.toInt(), 'years', 'year');
     final bool canBeDragged =
         _selectedYearRange.min != widget.yearRange.min || _selectedYearRange.max != widget.yearRange.max;
     final Color textColor = getColorTheme(context).primary;
@@ -143,10 +143,10 @@ class YearRangeSliderState extends State<YearRangeSlider> {
 
     if (_dragGesturePosition >= thresholdForMovingToNextPosition) {
       _dragGesturePosition = 0;
-      _selectedYearRange.increment(widget.yearRange.max);
+      _selectedYearRange.increment(widget.yearRange.max.toInt());
     } else if (_dragGesturePosition <= -thresholdForMovingToNextPosition) {
       _dragGesturePosition = 0;
-      _selectedYearRange.decrement(widget.yearRange.min);
+      _selectedYearRange.decrement(widget.yearRange.min.toInt());
     }
   }
 

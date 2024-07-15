@@ -20,10 +20,17 @@ int countOccurrences(String input, String char) {
   return count;
 }
 
-String doubleToCurrency(final double value, [final String symbol = '\$']) {
+String doubleToCurrency(final double value, {final String symbol = '\$', final bool showPlusSign = false}) {
   NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: symbol);
   // Format the double value as currency text
-  return currencyFormatter.format(value);
+  return (showPlusSign ? getPlusSignIfPositive(value) : '') + currencyFormatter.format(value);
+}
+
+String getPlusSignIfPositive(final num value) {
+  if (value > 0) {
+    return '+';
+  }
+  return '';
 }
 
 String escapeString(String input) {
@@ -79,8 +86,8 @@ String getInitials(String fullName) {
   return fullName.split(' ').map((word) => word[0].toUpperCase()).join('');
 }
 
-String getIntAsText(final int value) {
-  return NumberFormat.decimalPattern().format(value);
+String getIntAsText(final int value, {showPlusSign = false}) {
+  return (showPlusSign ? getPlusSignIfPositive(value) : '') + NumberFormat.decimalPattern().format(value);
 }
 
 /// Parses a raw text string and splits it into rows and columns based on a specified separator character.
