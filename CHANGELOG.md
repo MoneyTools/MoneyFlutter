@@ -4,6 +4,7 @@
 
 ### Added
 
+- Display purchase and sale activity on the stock line chart
 - Footer for Average of MoneyAmount or Quantity, with tooltips
   
 ## [version 1.8.42] 2024-07-13

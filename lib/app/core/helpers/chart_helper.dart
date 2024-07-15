@@ -1,8 +1,10 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+/// dataPoints will be sorted by date ascending
 LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints) {
   dataPoints.sort((a, b) => a.x.compareTo(b.x));
+
   Color color = Colors.grey;
 
   if (dataPoints.length >= 2) {

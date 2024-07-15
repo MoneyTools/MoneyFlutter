@@ -257,6 +257,7 @@ class Investment extends MoneyObject {
 
   FieldMoney valueOfHoldingShares = FieldMoney(
     name: 'HoldingValue',
+    footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) {
       return MoneyModel(amount: (instance as Investment).holdingShares.value * 2.0);
     },

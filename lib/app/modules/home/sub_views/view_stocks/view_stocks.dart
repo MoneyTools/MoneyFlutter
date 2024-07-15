@@ -56,10 +56,26 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     final Security? selected = getFirstSelectedItem() as Security?;
     if (selected != null) {
       final String symbol = selected.symbol.value;
+      List<Investment> list = getListOfInvestment(selected);
+
+      final List<HoldingActivity> events = [];
+      for (final Investment activity in list) {
+        if (activity.effectiveUnits != 0) {
+          events.add(
+            HoldingActivity(
+              activity.transactionInstance!.dateTime.value!,
+              activity.unitPrice.value.toDouble(),
+              activity.effectiveUnits,
+            ),
+          );
+        }
+      }
+
       if (symbol.isNotEmpty) {
         return StockChartWidget(
           key: Key('stock_symbol_$symbol'),
           symbol: symbol,
+          holdingsActivities: events,
         );
       }
     }
