@@ -360,7 +360,7 @@ class DataSimulator {
     _addInvestment(account, '2011-02-15', idStockFord, InvestmentType.buy, 1000, 5.62);
 
     // Sell Ford
-    _addInvestment(account, '2012-03-16', idStockFord, InvestmentType.buy, 1000, 6.78);
+    _addInvestment(account, '2012-03-16', idStockFord, InvestmentType.sell, 1000, 6.78);
   }
 
   void _generateLoans() {
