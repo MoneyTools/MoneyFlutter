@@ -108,7 +108,7 @@ Future<StockPriceHistoryCache> _loadFromCache(
 Future<StockPriceHistoryCache> _loadFromBackend(
   String symbol,
 ) async {
-  final result = StockPriceHistoryCache(symbol, StockLookupStatus.validSymbol);
+  final StockPriceHistoryCache result = StockPriceHistoryCache(symbol, StockLookupStatus.validSymbol);
 
   if (PreferenceController.to.apiKeyForStocks.isEmpty) {
     // No API Key to make the backend request
@@ -135,6 +135,13 @@ Future<StockPriceHistoryCache> _loadFromBackend(
       if (data['code'] == 404) {
         // SYMBOL NOT FOUND
         result.status = StockLookupStatus.invalidSymbol;
+        return result;
+      }
+
+      if (data['code'] == 409) {
+        // API error
+        // You have run out of API credits for the current minute. 9 API credits were used, with the current limit being 8. Wait for the new...
+        result.status = StockLookupStatus.invalidApiKey;
         return result;
       }
       final List<dynamic> values = data['values'];

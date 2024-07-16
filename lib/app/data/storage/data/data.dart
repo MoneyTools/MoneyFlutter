@@ -32,6 +32,7 @@ import 'package:money/app/data/models/money_objects/stock_splits/stock_splits.da
 import 'package:money/app/data/models/money_objects/transaction_extras/transaction_extras.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
+import 'package:money/app/data/storage/data/data_simulator.dart';
 import 'package:money/app/data/storage/database/database.dart';
 
 // Exports
@@ -57,11 +58,9 @@ class Data {
       aliases, // 3
       categories, // 4
       currencies, // 5
-      investments, // 6
       loanPayments, // 7
       onlineAccounts, // 8
       payees, // 9
-      securities, // 12
       stockSplits, // 14
       transactionExtras, // 15
       transactions, // 16
@@ -69,6 +68,8 @@ class Data {
       splits, // 13
       rentBuildings, // 10
       rentUnits, // 11
+      securities, // 12
+      investments, // 6
     ];
   }
 
@@ -154,6 +155,12 @@ class Data {
     }
   }
 
+  void clearExistingData() {
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.clear();
+    }
+  }
+
   void clearTransferToAccount(Transaction t, Account a) {
     // TODO
     // if (t.isSplit) {
@@ -185,9 +192,8 @@ class Data {
 
   /// Close data source
   void close() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.clear();
-    }
+    clearExistingData();
+
     DataController.to.dataFileIsClosed();
     DataController.to.trackMutations.reset();
   }
@@ -267,13 +273,12 @@ class Data {
         );
     // ignore: prefer_conditional_assignment
     if (relatedTransaction == null) {
-      relatedTransaction = Transaction()
+      relatedTransaction = Transaction(date: transactionSource.dateTime.value)
         ..accountId.value = destinationAccount.uniqueId
         ..amount.value.setAmount(
               (transactionSource.amount.value.toDouble() * -1),
             ) // flip the sign
         ..categoryId.value = transactionSource.categoryId.value
-        ..dateTime.value = transactionSource.dateTime.value
         ..fitid.value = transactionSource.fitid.value
         ..number.value = transactionSource.number.value
         ..memo.value = transactionSource.memo.value;

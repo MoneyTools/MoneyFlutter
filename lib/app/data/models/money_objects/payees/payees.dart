@@ -10,31 +10,6 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   @override
-  void loadDemoData() {
-    clear();
-
-    final List<String> names = <String>[
-      'Liberty Food',
-      'Central Perk',
-      'John',
-      'Paul',
-      'George',
-      'Ringo',
-      'JP Dev',
-      'Chris',
-      'Bill',
-      'Steve',
-    ];
-    for (int i = 0; i < names.length; i++) {
-      appendNewMoneyObject(
-        Payee()
-          ..id.value = -1
-          ..name.value = names[i],
-      );
-    }
-  }
-
-  @override
   void loadFromJson(final List<MyJson> rows) {
     clear();
     /*

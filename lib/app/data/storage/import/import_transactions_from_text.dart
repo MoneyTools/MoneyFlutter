@@ -92,10 +92,9 @@ Transaction createNewTransactionFromDateDescriptionAmount(
 ) {
   Payee? payee = Data().aliases.findOrCreateNewPayee(description, fireNotification: false);
 
-  final Transaction t = Transaction();
+  final Transaction t = Transaction(date: date);
   t.id.value = -1;
   t.accountId.value = account.id.value;
-  t.dateTime.value = date;
   t.payee.value = payee == null ? -1 : payee.id.value;
   t.memo.value = description;
   t.amount.value.setAmount(amount);

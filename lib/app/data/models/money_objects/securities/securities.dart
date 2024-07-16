@@ -24,10 +24,6 @@ class Securities extends MoneyObjects<Security> {
   @override
   void onAllDataLoaded() {
     for (final Security security in iterableList()) {
-      // if (security.uniqueId == 91) {
-      //   // DXD
-      //   print('');
-      // }
       final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
       security.numberOfTrades.value = list.length;
 

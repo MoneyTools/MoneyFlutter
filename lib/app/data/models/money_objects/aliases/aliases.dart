@@ -14,25 +14,6 @@ class Aliases extends MoneyObjects<Alias> {
   }
 
   @override
-  void loadDemoData() {
-    clear();
-    appendNewMoneyObject(
-      Alias(id: -1, payeeId: 2, pattern: 'ABC', flags: AliasType.none.index),
-    );
-    appendNewMoneyObject(
-      Alias(id: -1, payeeId: 2, pattern: 'abc', flags: AliasType.none.index),
-    );
-    appendNewMoneyObject(
-      Alias(
-        id: -1,
-        payeeId: 3,
-        pattern: '.*starbucks.*',
-        flags: AliasType.regex.index,
-      ),
-    );
-  }
-
-  @override
   void onAllDataLoaded() {
     for (final Alias item in iterableList()) {
       item.payeeInstance = Data().payees.get(item.payeeId.value);

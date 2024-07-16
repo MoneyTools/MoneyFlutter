@@ -80,10 +80,13 @@ class StockChartWidgetState extends State<StockChartWidget> {
     }
   }
 
-  void _getStockHistoricalData() async {
-    StockPriceHistoryCache priceCache = await getFromCacheOrBackend(widget.symbol);
-
-    _fromPriceHistoryToChartDataPoints(priceCache);
+  String getActivityQuantity(final int fromMillisecondsSinceEpoch) {
+    final activityFound =
+        widget.holdingsActivities.firstWhereOrNull((a) => a.date.millisecondsSinceEpoch == fromMillisecondsSinceEpoch);
+    if (activityFound == null) {
+      return '';
+    }
+    return '${getIntAsText(activityFound.quantity.toInt())} shares';
   }
 
   void _adjustMissingDataPointInthePast() {
@@ -184,15 +187,6 @@ class StockChartWidgetState extends State<StockChartWidget> {
     );
   }
 
-  String getActivityQuantity(final int fromMillisecondsSinceEpoch) {
-    final activityFound =
-        widget.holdingsActivities.firstWhereOrNull((a) => a.date.millisecondsSinceEpoch == fromMillisecondsSinceEpoch);
-    if (activityFound == null) {
-      return '';
-    }
-    return '${getIntAsText(activityFound.quantity.toInt())} shares';
-  }
-
   Widget _buildPriceRefreshButton() {
     if (dataPoints.isEmpty) {
       return CenterMessage(message: 'No history information about "${widget.symbol}"');
@@ -244,6 +238,12 @@ class StockChartWidgetState extends State<StockChartWidget> {
         });
       }
     }
+  }
+
+  void _getStockHistoricalData() async {
+    StockPriceHistoryCache priceCache = await getFromCacheOrBackend(widget.symbol);
+
+    _fromPriceHistoryToChartDataPoints(priceCache);
   }
 }
 

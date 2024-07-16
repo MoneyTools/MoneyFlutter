@@ -136,10 +136,9 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         icon: Icons.copy_outlined,
         text: 'Duplicate',
         onPressed: () {
-          _transaction = Transaction()
+          _transaction = Transaction(date: transaction.dateTime.value)
             ..id.value = -1
             ..accountId.value = transaction.accountId.value
-            ..dateTime.value = transaction.dateTime.value
             ..payee.value = transaction.payee.value
             ..categoryId.value = transaction.categoryId.value
             ..transfer = transaction.transfer

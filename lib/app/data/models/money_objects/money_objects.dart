@@ -231,10 +231,6 @@ class MoneyObjects<T> {
     return _list.length;
   }
 
-  void loadDemoData() {
-    clear();
-  }
-
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {

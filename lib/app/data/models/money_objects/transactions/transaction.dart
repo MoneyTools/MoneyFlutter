@@ -35,7 +35,10 @@ export 'package:money/app/data/models/money_objects/transactions/transaction_typ
 class Transaction extends MoneyObject {
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
+    required final DateTime? date,
   }) {
+    assert(date != null);
+    this.dateTime.value = date;
     this.status.value = status;
     this.flags.value = TransactionFlags.none.index;
     buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
@@ -47,14 +50,12 @@ class Transaction extends MoneyObject {
   }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
-    final Transaction t = Transaction();
+    final Transaction t = Transaction(date: json.getDate('Date'));
 // 0 ID
     t.id.value = json.getInt('Id', -1);
 // 1 Account ID
     t.accountId.value = json.getInt('Account', -1);
     t.accountInstance = Data().accounts.get(t.accountId.value);
-// 2 Date Time
-    t.dateTime.value = json.getDate('Date');
 // 3 Status
     t.status.value = TransactionStatus.values[json.getInt('Status')];
 // 4 Payee ID
@@ -579,7 +580,7 @@ class Transaction extends MoneyObject {
   @override
   MoneyObject rollup(List<MoneyObject> moneyObjectInstances) {
     if (moneyObjectInstances.isEmpty) {
-      return Transaction();
+      return Transaction(date: DateTime.now());
     }
     if (moneyObjectInstances.length == 1) {
       return moneyObjectInstances.first;
@@ -677,7 +678,7 @@ class Transaction extends MoneyObject {
 
   static Fields<Transaction> get fields {
     if (_fields.isEmpty) {
-      final tmp = Transaction.fromJSon({}, 0);
+      final tmp = Transaction(date: DateTime.now());
       _fields.setDefinitions(
         [
           tmp.id,

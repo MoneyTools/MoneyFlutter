@@ -10,17 +10,6 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
   }
 
   @override
-  void loadDemoData() {
-    clear();
-
-    final RentBuilding instance = RentBuilding();
-    instance.id.value = 0;
-    instance.name.value = 'AirBnB';
-    instance.address.value = 'One Washington DC';
-    appendMoneyObject(instance);
-  }
-
-  @override
   void loadFromJson(final List<MyJson> rows) {
     clear();
 

@@ -19,14 +19,14 @@ class Transfer extends MoneyObject {
   }
 
   factory Transfer.fromJson(final MyJson row) {
-    return Transfer(id: -1, source: Transaction(), isOrphan: true);
+    return Transfer(id: -1, source: null, isOrphan: true);
   }
 
   final num id; // used when the transfer is part of a split
   final bool isOrphan;
   final Transaction? related; // the related transaction
   final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
-  final Transaction source; // the source of the transfer.
+  final Transaction? source; // the source of the transfer.
   final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
 
   /// Status
@@ -100,7 +100,7 @@ class Transfer extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     getValueForDisplay: (final MoneyObject instance) =>
-        transactionStatusToLetter((instance as Transfer).source.status.value),
+        transactionStatusToLetter((instance as Transfer).source!.status.value),
   );
 
   /// Transfer amount
@@ -108,7 +108,7 @@ class Transfer extends MoneyObject {
     importance: 99,
     name: 'Amount',
     columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).source.amount.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).source!.amount.value,
   );
 
   ///
@@ -127,7 +127,7 @@ class Transfer extends MoneyObject {
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
   @override
-  int get uniqueId => source.uniqueId;
+  int get uniqueId => source!.uniqueId;
 
   static final _fields = Fields<Transfer>();
 
@@ -175,7 +175,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Amounts
   double geSenderTransactionAmount() {
-    return source.amount.value.toDouble();
+    return source!.amount.value.toDouble();
   }
 
   //---------------------------------------------
@@ -183,11 +183,11 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   /// Dates
   DateTime? geSenderTransactionDate() {
-    return source.dateTime.value;
+    return source!.dateTime.value;
   }
 
   String getMemoDestination() {
-    String memos = source.transferSplit.value == -1 ? '' : '[Split:${source.transferSplit.value}] ';
+    String memos = source!.transferSplit.value == -1 ? '' : '[Split:${source!.transferSplit.value}] ';
     if (related != null) {
       memos += related!.memo.value;
     }
@@ -195,7 +195,7 @@ class Transfer extends MoneyObject {
   }
 
   String getMemoSource() {
-    return source.memo.value;
+    return source!.memo.value;
   }
 
   DateTime getReceivedDateOrToday() {
@@ -233,7 +233,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Accounts
   Account? getSenderAccount() {
-    return getSenderTransaction().getAccount();
+    return getSenderTransaction()?.getAccount();
   }
 
   //---------------------------------------------
@@ -244,7 +244,7 @@ class Transfer extends MoneyObject {
 
   //---------------------------------------------
   // Transactions
-  Transaction getSenderTransaction() {
+  Transaction? getSenderTransaction() {
     return source;
   }
 

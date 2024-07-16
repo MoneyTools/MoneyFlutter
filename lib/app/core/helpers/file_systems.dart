@@ -77,8 +77,11 @@ class MyFileSystems {
   static Future<String> readFile(
     final String pathToFile,
   ) async {
-    final File file = File(pathToFile);
-    return await file.readAsString();
+    if (await MyFileSystems.doesFileExist(pathToFile)) {
+      final File file = File(pathToFile);
+      return await file.readAsString();
+    }
+    return '';
   }
 
   static Future<void> writeFileContentIntoFolder(

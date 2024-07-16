@@ -6,7 +6,6 @@ import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
-import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
@@ -15,7 +14,6 @@ import 'package:money/app/data/storage/data/data.dart';
 export 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 
 part 'transactions_csv.dart';
-part 'transactions_demo.dart';
 
 class Transactions extends MoneyObjects<Transaction> {
   Transactions() {
@@ -25,11 +23,6 @@ class Transactions extends MoneyObjects<Transaction> {
   DateRange dateRangeActiveAccount = DateRange();
   DateRange dateRangeIncludingClosedAccount = DateRange();
   double runningBalance = 0.00;
-
-  @override
-  void loadDemoData() {
-    _loadDemoData();
-  }
 
   @override
   void loadFromJson(final List<MyJson> rows) {
@@ -81,7 +74,7 @@ class Transactions extends MoneyObjects<Transaction> {
       }
 
       // Computer date range of all transactions
-      dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value!);
+      dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value);
       if (transactionSource.accountInstance?.isOpen == true) {
         dateRangeActiveAccount.inflate(transactionSource.dateTime.value!);
       }
@@ -231,8 +224,7 @@ class Transactions extends MoneyObjects<Transaction> {
     for (final t in transactions) {
       if (t.isSplit) {
         for (final s in t.splits) {
-          final fakeTransaction = Transaction(status: t.status.value);
-          fakeTransaction.dateTime.value = t.dateTime.value;
+          final fakeTransaction = Transaction(date: t.dateTime.value, status: t.status.value);
           fakeTransaction.categoryId.value = s.categoryId.value;
           fakeTransaction.amount.value = s.amount.value;
           flatList.add(fakeTransaction);
@@ -260,8 +252,7 @@ class Transactions extends MoneyObjects<Transaction> {
       if (whereClause == null || whereClause(t)) {
         if (t.categoryId.value == Data().categories.splitCategoryId()) {
           for (final s in t.splits) {
-            final fakeT = Transaction(status: t.status.value)
-              ..dateTime.value = t.dateTime.value
+            final fakeT = Transaction(date: t.dateTime.value, status: t.status.value)
               ..accountId.value = t.accountId.value
               ..payee.value = s.payeeId.value == -1 ? t.payee.value : s.payeeId.value
               ..categoryId.value = s.categoryId.value

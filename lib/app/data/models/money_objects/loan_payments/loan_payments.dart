@@ -1,7 +1,6 @@
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
-import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payment.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
@@ -13,28 +12,6 @@ export 'package:money/app/data/models/money_objects/loan_payments/loan_payment.d
 class LoanPayments extends MoneyObjects<LoanPayment> {
   LoanPayments() {
     collectionName = 'LoanPayments';
-  }
-
-  @override
-  void loadDemoData() {
-    clear();
-    final Account? accountForLoan = Data().accounts.iterableList().firstWhereOrNull(
-          (final Account element) => element.type.value == AccountType.loan,
-        );
-    if (accountForLoan != null) {
-      for (int i = 0; i < 12 * 20; i++) {
-        appendNewMoneyObject(
-          LoanPayment(
-            id: -1,
-            accountId: accountForLoan.id.value,
-            date: DateTime.now(),
-            principal: 100,
-            interest: 10,
-            memo: '',
-          ),
-        );
-      }
-    }
   }
 
   @override
@@ -77,7 +54,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
       .where((a) => a.accountId.value == account.uniqueId)
       .toList();
 
-  // include the bank transactions matching th Account Categories for Principal and Interest
+  // include the bank transactions matching the Account Categories for Principal and Interest
   final List<Transaction> listOfTransactions = Data().transactions.getListFlattenSplits(
         whereClause: (t) => t.isMatchingAnyOfTheseCategoris(categoriesToMatch),
       );

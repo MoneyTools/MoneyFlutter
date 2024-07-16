@@ -14,15 +14,15 @@ class Investment extends MoneyObject {
     required final int security, // 1
     required final double unitPrice, // 2
     required final double units, // 3
-    required final double commission, // 4
-    required final double markUpDown, // 5
-    required final double taxes, // 6
-    required final double fees, // 7
-    required final double load, // 8
+    final double commission = 0, // 4
+    final double markUpDown = 0, // 5
+    final double taxes = 0, // 6
+    final double fees = 0, // 7
+    final double load = 0, // 8
     required final int investmentType, // 9
     required final int tradeType, // 10
-    required final int taxExempt, // 11
-    required final double withholding, // 12
+    final int taxExempt = 0, // 11
+    final double withholding = 0, // 12
   }) {
     this.id.value = id;
     this.security.value = security;
@@ -134,8 +134,7 @@ class Investment extends MoneyObject {
 
   FieldMoney netTransactionAmount = FieldMoney(
     name: 'ActivityAmount',
-    getValueForDisplay: (final MoneyObject instance) =>
-        (instance as Investment).transactionInstance!.amount.value.toDouble(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).amount,
   );
 
   FieldMoney runningBalance = FieldMoney(
@@ -288,6 +287,8 @@ class Investment extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   static final Fields<Investment> _fields = Fields<Investment>();
+
+  double get amount => this.transactionInstance?.amount.value.toDouble() ?? 0.00;
 
   DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
 

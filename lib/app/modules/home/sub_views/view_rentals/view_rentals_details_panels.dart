@@ -23,10 +23,12 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
       // show PnL for the selected rental property, per year
       List<Widget> pnlCards = [];
 
-      for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
-        var pnl = rental.pnlOverYears[year];
-        pnl ??= RentalPnL(date: DateTime(year, 1, 1));
-        pnlCards.add(RentalPnLCard(pnl: pnl));
+      if (!rental.dateRangeOfOperation.hasNullDates) {
+        for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
+          var pnl = rental.pnlOverYears[year];
+          pnl ??= RentalPnL(date: DateTime(year, 1, 1));
+          pnlCards.add(RentalPnLCard(pnl: pnl));
+        }
       }
 
       pnlCards.add(

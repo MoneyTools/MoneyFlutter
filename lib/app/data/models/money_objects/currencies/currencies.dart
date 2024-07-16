@@ -17,61 +17,6 @@ class Currencies extends MoneyObjects<Currency> {
   }
 
   @override
-  void loadDemoData() {
-    clear();
-    final List<MyJson> demoCurrencies = <MyJson>[
-      // ignore: always_specify_types
-      {
-        'Id': -1,
-        'Name': 'USA',
-        'Symbol': 'USD',
-        'CultureCode': 'en-US',
-        'Ratio': 1.09,
-        'LastRatio': 1.12,
-      },
-      // ignore: always_specify_types
-      {
-        'Id': -1,
-        'Name': 'Canada',
-        'Symbol': 'CAD',
-        'CultureCode': 'en-CA',
-        'Ratio': 0.75,
-        'LastRatio': 0.85,
-      },
-      // ignore: always_specify_types
-      {
-        'Id': -1,
-        'Name': 'Euro',
-        'Symbol': 'EUR',
-        'CultureCode': 'en-ES',
-        'Ratio': 1.15,
-        'LastRatio': 1.11,
-      },
-      // ignore: always_specify_types
-      {
-        'Id': -1,
-        'Name': 'UK',
-        'Symbol': 'GBP',
-        'CultureCode': 'en-GB',
-        'Ratio': 1.25,
-        'LastRatio': 1.21,
-      },
-      // ignore: always_specify_types
-      {
-        'Id': -1,
-        'Name': 'Japan',
-        'Symbol': 'JPY',
-        'CultureCode': 'en-JP',
-        'Ratio': 1 / 147.72,
-        'LastRatio': 0,
-      },
-    ];
-    for (final MyJson demoCurrency in demoCurrencies) {
-      appendNewMoneyObject(Currency.fromJson(demoCurrency));
-    }
-  }
-
-  @override
   String toCSV() {
     return MoneyObjects.getCsvFromList(
       getListSortedById(),
