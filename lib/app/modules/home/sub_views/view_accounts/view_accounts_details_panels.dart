@@ -79,7 +79,8 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       Transaction.fields.getFieldByName(
         showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
       ),
-      Transaction.fields.getFieldByName(columnIdPaidOn),
+      // Creadit Card account has a PaidOn column to help with balancing Statements
+      if (account.type.value == AccountType.credit) Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
     DataController.to.trackMutations.lastDateTimeChanged;

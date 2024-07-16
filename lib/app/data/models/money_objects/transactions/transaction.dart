@@ -383,7 +383,8 @@ class Transaction extends MoneyObject {
   FieldString paidOn = FieldString(
     type: FieldType.text,
     importance: 80,
-    name: 'Paid On',
+    name: columnIdPaidOn,
+    useAsColumn: false, // By default this is not displayed, only used for Account of type=Credit
     align: TextAlign.right,
     columnWidth: ColumnWidth.tiny,
     footer: FooterType.none,
