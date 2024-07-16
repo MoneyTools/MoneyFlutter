@@ -155,7 +155,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
+    List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
+
+    if (applyFilter) {
+      list = list.where((final instance) => isMatchingFilters(instance)).toList();
+    }
 
     return list;
   }
