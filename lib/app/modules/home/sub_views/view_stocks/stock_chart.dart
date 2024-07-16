@@ -12,8 +12,8 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
-import 'package:money/app/core/widgets/gaps.dart';
-import 'package:money/app/core/widgets/icon_button.dart';
+import 'package:money/app/core/widgets/working.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
 
 class HoldingActivity {
@@ -76,7 +76,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
       case StockLookupStatus.invalidSymbol:
         return _buildChart();
       default:
-        return const Center(child: Text('loading...'));
+        return const WorkingIndicator();
     }
   }
 
@@ -182,7 +182,12 @@ class StockChartWidgetState extends State<StockChartWidget> {
             ),
           ),
         ),
-        _buildPriceRefreshButton(),
+
+        /// Price and Refresh button
+        Padding(
+          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          child: _buildPriceRefreshButton(),
+        ),
       ],
     );
   }
@@ -191,29 +196,36 @@ class StockChartWidgetState extends State<StockChartWidget> {
     if (dataPoints.isEmpty) {
       return CenterMessage(message: 'No history information about "${widget.symbol}"');
     }
-    return IntrinsicWidth(
-      child: Row(
-        children: [
-          Text(
-            'Price ${doubleToCurrency(dataPoints.last.y)}',
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: IntrinsicWidth(
+        child: TextButton(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+                child: Text(
+                  '${widget.symbol} ${doubleToCurrency(dataPoints.last.y)}',
+                  style: const TextStyle(fontSize: SizeForText.large),
+                ),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+                child: Icon(Icons.refresh_outlined),
+              ),
+              Text(getElapsedTime(latestPriceHistoryData.lastDateTime)),
+            ],
           ),
-          gapMedium(),
-          MyIconButton(
-            icon: Icons.refresh_outlined,
-            onPressed: () async {
-              final result = await loadFomBackendAndSaveToCache(widget.symbol);
-              _fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
+          onPressed: () async {
+            final result = await loadFomBackendAndSaveToCache(widget.symbol);
+            _fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
 
-              setState(() {
-                _fromPriceHistoryToChartDataPoints(result);
-              });
-            },
-          ),
-          gapMedium(),
-          Text(
-            getElapsedTime(latestPriceHistoryData.lastDateTime),
-          ),
-        ],
+            setState(() {
+              _fromPriceHistoryToChartDataPoints(result);
+            });
+          },
+        ),
       ),
     );
   }

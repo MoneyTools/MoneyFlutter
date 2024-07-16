@@ -77,7 +77,7 @@ class DataSimulator {
             security: stockId,
             unitPrice: tradePrice,
             units: quantity,
-            tradeType: -1,
+            tradeType: InvestmentTradeType.none.index,
           ),
         );
   }

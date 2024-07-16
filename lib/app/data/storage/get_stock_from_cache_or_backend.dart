@@ -2,10 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
-import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
@@ -37,8 +35,10 @@ Future<StockPriceHistoryCache> getFromCacheOrBackend(
   StockPriceHistoryCache result = await _loadFromCache(symbol);
 
   if (result.status != StockLookupStatus.foundInCache) {
+    // Try to load from the cloud service
     result = await loadFomBackendAndSaveToCache(symbol);
   }
+
   return result;
 }
 
@@ -69,15 +69,18 @@ Future<StockPriceHistoryCache> _loadFromCache(
   final StockPriceHistoryCache stockPriceHistoryCache =
       StockPriceHistoryCache(symbol, StockLookupStatus.foundInCache, null);
 
-  final String mainFilenameStockSymbol = await _fullPathToCacheStockFile(symbol);
-
   String? csvContent;
+
   try {
-    stockPriceHistoryCache.lastDateTime = await MyFileSystems.getFileModifiedTime(mainFilenameStockSymbol);
-    csvContent = await MyFileSystems.readFile(mainFilenameStockSymbol);
-    if (csvContent == flagAsInvalidSymbol) {
+    csvContent = PreferenceController.to.getString('stock-$symbol');
+    if (csvContent.isEmpty || csvContent == flagAsInvalidSymbol) {
       // give up now
       stockPriceHistoryCache.status = StockLookupStatus.notFoundInCache;
+    } else {
+      String stringtDateTime = PreferenceController.to.getString('stock-date-$symbol');
+      if (stringtDateTime.isNotEmpty) {
+        stockPriceHistoryCache.lastDateTime = DateTime.parse(stringtDateTime);
+      }
     }
   } catch (_) {
     //
@@ -174,8 +177,6 @@ Future<StockPriceHistoryCache> _loadFromBackend(
 }
 
 void _saveToCache(final String symbol, List<StockDatePrice> prices) async {
-  final String mainFilenameStockSymbol = await _fullPathToCacheStockFile(symbol);
-
   // CSV Header
   String csvContent = '"date","price"\n';
 
@@ -184,28 +185,10 @@ void _saveToCache(final String symbol, List<StockDatePrice> prices) async {
     csvContent += '${dateToString(item.date)},${item.price.toString()}\n';
   }
 
-  // Write CSV
-  MyFileSystems.writeToFile(mainFilenameStockSymbol, csvContent);
+  await PreferenceController.to.setString('stock-$symbol', csvContent);
+  await PreferenceController.to.setString('stock-date-$symbol', DateTime.now().toIso8601String());
 }
 
 void _saveToCacheInvalidSymbol(final String symbol) async {
-  final String mainFilenameStockSymbol = await _fullPathToCacheStockFile(symbol);
-  MyFileSystems.writeToFile(mainFilenameStockSymbol, flagAsInvalidSymbol);
-}
-
-Future<String> _fullPathToCacheStockFile(final String symbol) async {
-  final String cacheFolderForStockFiles = await _pathToStockFiles();
-  return MyFileSystems.append(cacheFolderForStockFiles, 'stock_$symbol.csv');
-}
-
-Future<String> _pathToStockFiles() async {
-  String destinationFolder = await DataController.to.generateNextFolderToSaveTo();
-  if (destinationFolder.isEmpty) {
-    throw Exception('No container folder give for saving');
-  }
-
-  final String cacheFolderForStockFiles = MyFileSystems.append(destinationFolder, 'stocks');
-  await MyFileSystems.ensureFolderExist(cacheFolderForStockFiles);
-
-  return cacheFolderForStockFiles;
+  await PreferenceController.to.setString('stock-$symbol', flagAsInvalidSymbol);
 }
