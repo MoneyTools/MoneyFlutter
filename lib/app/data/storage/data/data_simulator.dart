@@ -70,6 +70,12 @@ class DataSimulator {
   ) {
     DateTime date = DateTime.parse(dateAsString);
     var t = _addNewTransaction(account, date);
+    double transactionAmount = tradePrice * quantity;
+    if (activity == InvestmentType.buy) {
+      transactionAmount *= -1;
+    }
+    t.amount.value.setAmount(transactionAmount);
+
     Data().investments.appendMoneyObject(
           Investment(
             id: t.uniqueId,
@@ -83,7 +89,7 @@ class DataSimulator {
   }
 
   Transaction _addNewTransaction(Account account, DateTime date) {
-    Transaction t = Transaction(date: date);
+    Transaction t = Transaction(accountId: account.uniqueId, date: date);
     Data().transactions.appendNewMoneyObject(t);
     return t;
   }
@@ -357,10 +363,10 @@ class DataSimulator {
     _addInvestment(account, '2015-06-20', idStockApple, InvestmentType.buy, 100, 199.99);
 
     // Buy Ford
-    _addInvestment(account, '2011-02-15', idStockFord, InvestmentType.buy, 1000, 5.62);
+    _addInvestment(account, '2012-07-26', idStockFord, InvestmentType.buy, 1000, 8.86);
 
     // Sell Ford
-    _addInvestment(account, '2012-03-16', idStockFord, InvestmentType.sell, 1000, 6.78);
+    _addInvestment(account, '2013-01-15', idStockFord, InvestmentType.sell, 1000, 14.14);
   }
 
   void _generateLoans() {

@@ -66,7 +66,7 @@ class Investments extends MoneyObjects<Investment> {
 
     for (final investment in investments) {
       cumulative.quantity += investment.effectiveUnits;
-      cumulative.amount += investment.netTransactionAmount.getValueForDisplay(investment);
+      cumulative.amount += investment.activityAmount.getValueForDisplay(investment);
     }
     return cumulative;
   }

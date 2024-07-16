@@ -35,9 +35,11 @@ export 'package:money/app/data/models/money_objects/transactions/transaction_typ
 class Transaction extends MoneyObject {
   Transaction({
     final TransactionStatus status = TransactionStatus.none,
+    final int accountId = -1,
     required final DateTime? date,
   }) {
     assert(date != null);
+    this.accountId.value = accountId;
     this.dateTime.value = date;
     this.status.value = status;
     this.flags.value = TransactionFlags.none.index;

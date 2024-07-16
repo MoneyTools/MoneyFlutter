@@ -71,6 +71,11 @@ class Investment extends MoneyObject {
     );
   }
 
+  FieldMoney activityAmount = FieldMoney(
+    name: 'ActivityAmount',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).amount,
+  );
+
   /// 4    Commission      money   0                    0
   FieldMoney commission = FieldMoney(
     name: 'Commission',
@@ -130,11 +135,6 @@ class Investment extends MoneyObject {
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
-  );
-
-  FieldMoney netTransactionAmount = FieldMoney(
-    name: 'ActivityAmount',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).amount,
   );
 
   FieldMoney runningBalance = FieldMoney(
@@ -323,7 +323,7 @@ class Investment extends MoneyObject {
         tmp.tradeType,
         tmp.taxExempt,
         tmp.withholding,
-        tmp.netTransactionAmount,
+        tmp.activityAmount,
         tmp.holdingShares,
         tmp.valueOfHoldingShares,
         tmp.runningBalance,
