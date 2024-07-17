@@ -1,15 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/three_part_label.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/stock_chart.dart';
 
 class ViewStocks extends ViewForMoneyObjects {

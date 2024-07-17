@@ -1,18 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/core/widgets/dialog/dialog_button.dart';
-import 'package:money/app/core/widgets/widgets.dart';
-import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/app/modules/home/sub_views/view_transfers/transfer_sender_receiver.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
