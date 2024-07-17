@@ -68,6 +68,7 @@ class Constants {
   static const double sanKeyColumnWidth = 200.0;
   static const double targetHeight = 200.0;
   static String untitledFileName = 'Untitled';
+  static String viewStockFieldnameSymbol = 'Symbol';
   static String viewTransactionFieldnameAccount = 'Account';
   static String viewTransactionFieldnameCategory = 'Category';
   static String viewTransactionFieldnamePayee = 'Payee/Transfer';

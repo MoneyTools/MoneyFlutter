@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
+import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
+import 'package:money/app/data/models/money_objects/money_object.dart';
+import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
@@ -24,6 +27,75 @@ class ViewInvestments extends ViewForMoneyObjects {
 class ViewInvestmentsState extends ViewForMoneyObjectsState {
   ViewInvestmentsState() {
     viewId = ViewId.viewInvestments;
+  }
+
+  /// add more top leve action buttons
+  @override
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
+    if (!forInfoPanelTransactions) {
+      final Investment? selectedInvestment = getFirstSelectedItem() as Investment?;
+
+      // this can go last
+      if (selectedInvestment != null) {
+        final Transaction? relatedTransaction = Data().transactions.get(selectedInvestment.uniqueId);
+        list.add(
+          buildJumpToButton(
+            [
+              // Jump to Account view
+              InternalViewSwitching(
+                ViewId.viewAccounts.getIconData(),
+                'Switch to Account',
+                () {
+                  // Prepare the Account view to show only the selected account
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewAccounts,
+                    selectedId: relatedTransaction!.accountId.value,
+                    columnFilter: [],
+                    textFilter: '',
+                  );
+                },
+              ),
+              // Jump to Transaction view
+              InternalViewSwitching(
+                ViewId.viewTransactions.getIconData(),
+                'Switch to Transactions',
+                () {
+                  // Prepare the Transaction view to show only the selected account
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewTransactions,
+                    selectedId: relatedTransaction!.uniqueId,
+                    columnFilter: [],
+                    textFilter: '',
+                  );
+                },
+              ),
+              // Jump to Stock view
+              InternalViewSwitching(
+                ViewId.viewStocks.getIconData(),
+                'Switch to Stocks',
+                () {
+                  // Prepare the Stocks view
+                  // Filter by Stock Symbol
+                  String symbol =
+                      selectedInvestment.securitySymbol.getValueForDisplay(selectedInvestment).toLowerCase();
+                  final Security? securityFound = Data().securities.getBySymbol(symbol);
+                  if (securityFound != null) {
+                    PreferenceController.to.jumpToView(
+                      viewId: ViewId.viewStocks,
+                      selectedId: securityFound.uniqueId,
+                      columnFilter: [],
+                      textFilter: '',
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    return list;
   }
 
   @override

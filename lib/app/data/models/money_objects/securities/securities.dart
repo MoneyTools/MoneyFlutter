@@ -1,4 +1,5 @@
 import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
@@ -38,6 +39,10 @@ class Securities extends MoneyObjects<Security> {
     return MoneyObjects.getCsvFromList(
       getListSortedById(),
     );
+  }
+
+  Security? getBySymbol(final String symbolToFind) {
+    return iterableList().firstWhereOrNull((item) => stringCompareIgnoreCasing2(item.symbol.value, symbolToFind) == 0);
   }
 
   String getSymbolFromId(final int securityId) {
