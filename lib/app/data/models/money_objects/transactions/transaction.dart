@@ -341,6 +341,7 @@ class Transaction extends MoneyObject {
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).memo.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).memo.value,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).memo.value = newValue,
   );
 
   /// MergeDate
