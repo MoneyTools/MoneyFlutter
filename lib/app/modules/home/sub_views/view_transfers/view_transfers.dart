@@ -59,7 +59,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final List<Transfer> listOfTransfers = [];
+    List<Transfer> listOfTransfers = [];
 
     // get all transaction of type transfer where the money was sent from (debited)
     final List<Transaction> listOfTransactionsUseForTransfer = Data()
@@ -105,6 +105,11 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         }
       }
     }
+
+    if (applyFilter) {
+      listOfTransfers = listOfTransfers.where((final instance) => isMatchingFilters(instance)).toList();
+    }
+
     return listOfTransfers;
   }
 
