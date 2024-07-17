@@ -115,6 +115,7 @@ Widget buildWidgetFromTypeAndValue({
   String currency = Constants.defaultCurrency,
 }) {
   switch (type) {
+    // Numeric
     case FieldType.numeric:
       if (value is String) {
         return buildFieldWidgetForText(
@@ -129,6 +130,7 @@ Widget buildWidgetFromTypeAndValue({
         align: align,
       );
 
+    // Numeric shorthand  12K
     case FieldType.numericShorthand:
       return buildFieldWidgetForNumber(
         value: value as num,
@@ -136,6 +138,7 @@ Widget buildWidgetFromTypeAndValue({
         align: align,
       );
 
+    // Quantity
     case FieldType.quantity:
       return Row(
         children: [
@@ -151,6 +154,7 @@ Widget buildWidgetFromTypeAndValue({
     case FieldType.percentage:
       return buildFieldWidgetForPercentage(value: value);
 
+    // Amount
     case FieldType.amount:
       if (value is String) {
         return buildFieldWidgetForText(
@@ -173,14 +177,20 @@ Widget buildWidgetFromTypeAndValue({
         align: align,
         currency: currency,
       );
+
+    // Amount short hand
     case FieldType.amountShorthand:
       return buildFieldWidgetForAmount(
         value: value,
         shorthand: true,
         align: align,
       );
+
+    // Widget
     case FieldType.widget:
       return value as Widget;
+
+    // Date
     case FieldType.date:
       if (value is String) {
         return buildFieldWidgetForText(
@@ -189,7 +199,12 @@ Widget buildWidgetFromTypeAndValue({
           fixedFont: true,
         );
       }
-      return buildFieldWidgetForDate(date: value, align: align);
+      // Adapt to availabl space
+      return FittedBox(
+        fit: BoxFit.scaleDown,
+        child: buildFieldWidgetForDate(date: value, align: align),
+      );
+
     case FieldType.text:
     default:
       return buildFieldWidgetForText(

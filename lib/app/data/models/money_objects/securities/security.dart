@@ -87,7 +87,7 @@ class Security extends MoneyObject {
 
   FieldQuantity holdingShares = FieldQuantity(
     name: 'Holding',
-    defaultValue: 0,
+    columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).holdingShares.value,
   );
 
@@ -101,6 +101,7 @@ class Security extends MoneyObject {
   FieldMoney lastPrice = FieldMoney(
     name: 'Last Price',
     serializeName: 'LastPrice',
+    columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).lastPrice.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).lastPrice.value.toDouble(),
   );
@@ -109,6 +110,7 @@ class Security extends MoneyObject {
   FieldString name = FieldString(
     name: 'Name',
     serializeName: 'Name',
+    columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).name.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).name.value,
     setValue: (final MoneyObject instance, dynamic value) {
@@ -127,6 +129,7 @@ class Security extends MoneyObject {
   // 3
   FieldMoney price = FieldMoney(
     name: 'Price',
+    columnWidth: ColumnWidth.small,
     serializeName: 'Price',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).price.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value.toDouble(),
@@ -209,9 +212,9 @@ class Security extends MoneyObject {
         tmp.id,
         tmp.name,
         tmp.symbol,
+        tmp.priceDate,
         tmp.price,
         tmp.lastPrice,
-        tmp.priceDate,
         tmp.cuspid,
         tmp.securityType,
         tmp.numberOfTrades,
