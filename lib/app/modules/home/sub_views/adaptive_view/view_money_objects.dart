@@ -15,9 +15,7 @@ import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/message_box.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/core/widgets/working.dart';
-import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptable_view_with_list.dart';
@@ -33,6 +31,7 @@ export 'package:money/app/core/widgets/dialog/dialog_button.dart';
 export 'package:money/app/core/widgets/widgets.dart';
 export 'package:money/app/data/models/constants.dart';
 export 'package:money/app/data/models/fields/field_filter.dart';
+export 'package:money/app/data/models/money_objects/money_objects.dart';
 export 'package:money/app/data/storage/data/data.dart';
 export 'package:money/app/modules/home/sub_views/adaptive_view/switch_views.dart';
 

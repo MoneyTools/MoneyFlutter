@@ -5,7 +5,6 @@ import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/working.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class PendingChangesDialog extends StatefulWidget {

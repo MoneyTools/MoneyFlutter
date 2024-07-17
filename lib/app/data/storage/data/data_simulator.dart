@@ -8,7 +8,6 @@ import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investment.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payment.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
 import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';

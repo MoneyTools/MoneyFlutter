@@ -1,6 +1,5 @@
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/app/data/models/money_objects/splits/money_split.dart';

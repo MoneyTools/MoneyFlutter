@@ -37,6 +37,7 @@ import 'package:money/app/data/storage/database/database.dart';
 
 // Exports
 export 'package:money/app/core/helpers/json_helper.dart';
+export 'package:money/app/data/models/money_objects/money_objects.dart';
 
 part 'data_extension_csv.dart';
 part 'data_extension_demo.dart';

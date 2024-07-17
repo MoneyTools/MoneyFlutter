@@ -12,10 +12,8 @@ import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/core/widgets/rectangle.dart';
 import 'package:money/app/core/widgets/token_text.dart';
-import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/categories/category_types.dart';
 import 'package:money/app/data/models/money_objects/categories/picker_category_type.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 

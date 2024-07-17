@@ -1,10 +1,8 @@
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
-import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';

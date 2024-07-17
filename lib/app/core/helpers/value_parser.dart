@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
@@ -9,9 +8,7 @@ import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
-import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
 class ValueQuality {
   const ValueQuality(

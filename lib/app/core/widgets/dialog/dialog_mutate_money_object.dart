@@ -3,8 +3,6 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/message_box.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 void myShowDialogAndActionsForMoneyObject({

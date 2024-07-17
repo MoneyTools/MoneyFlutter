@@ -9,7 +9,6 @@ import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';

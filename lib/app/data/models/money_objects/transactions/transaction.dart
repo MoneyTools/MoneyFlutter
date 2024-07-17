@@ -11,8 +11,6 @@ import 'package:money/app/core/widgets/picker_edit_box_date.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/core/widgets/suggestion_approval.dart';
 import 'package:money/app/core/widgets/token_text.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investment.dart';

@@ -4,7 +4,6 @@ import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/quantity_widget.dart';
-import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 

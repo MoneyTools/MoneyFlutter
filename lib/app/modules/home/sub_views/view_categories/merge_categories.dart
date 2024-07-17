@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/info_banner.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_categories/picker_category.dart';

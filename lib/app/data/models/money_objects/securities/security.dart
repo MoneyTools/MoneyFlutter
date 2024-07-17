@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_this
 
+import 'dart:ui';
+
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';

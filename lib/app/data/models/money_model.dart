@@ -2,6 +2,8 @@ import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
+export 'package:money/app/data/models/constants.dart';
+
 /// Formatted text using the supplied currency code and optional the currency/country flag
 class MoneyModel {
   /// Constructor
