@@ -79,6 +79,44 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return super.buildHeader(_renderToggles());
   }
 
+  /// add more top leve action buttons
+  @override
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
+    if (!forInfoPanelTransactions) {
+      final Security? selectedSecurity = getFirstSelectedItem() as Security?;
+
+      // this can go last
+      if (selectedSecurity != null) {
+        list.add(
+          buildJumpToButton(
+            [
+              // Jump to Stock view
+              InternalViewSwitching(
+                icon: ViewId.viewInvestments.getIconData(),
+                title: 'Switch to Investments',
+                onPressed: () {
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewInvestments,
+                    selectedId: -1,
+                    columnFilter: FieldFilters([
+                      FieldFilter(
+                        fieldName: Constants.viewStockFieldnameSymbol,
+                        filterTextInLowerCase: selectedSecurity.symbol.value.toLowerCase(),
+                      ),
+                    ]).toStringList(),
+                    textFilter: '',
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    return list;
+  }
+
   @override
   String getClassNamePlural() {
     return 'Stocks';
