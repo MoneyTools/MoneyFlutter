@@ -43,38 +43,19 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               // Jump to Account view
-              InternalViewSwitching(
-                ViewId.viewAccounts.getIconData(),
-                'Switch to Account',
-                () {
-                  // Prepare the Account view to show only the selected account
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewAccounts,
-                    selectedId: relatedTransaction!.accountId.value,
-                    columnFilter: [],
-                    textFilter: '',
-                  );
-                },
-              ),
+              InternalViewSwitching.toAccounts(accountId: relatedTransaction!.accountId.value),
+
               // Jump to Transaction view
-              InternalViewSwitching(
-                ViewId.viewTransactions.getIconData(),
-                'Switch to Transactions',
-                () {
-                  // Prepare the Transaction view to show only the selected account
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewTransactions,
-                    selectedId: relatedTransaction!.uniqueId,
-                    columnFilter: [],
-                    textFilter: '',
-                  );
-                },
+              InternalViewSwitching.toTransactions(
+                transactionId: relatedTransaction.uniqueId,
+                filters: null,
               ),
+
               // Jump to Stock view
               InternalViewSwitching(
-                ViewId.viewStocks.getIconData(),
-                'Switch to Stocks',
-                () {
+                icon: ViewId.viewStocks.getIconData(),
+                title: 'Switch to Stocks',
+                onPressed: () {
                   // Prepare the Stocks view
                   // Filter by Stock Symbol
                   String symbol =

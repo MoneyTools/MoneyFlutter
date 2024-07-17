@@ -28,7 +28,9 @@ class FieldFilter {
 }
 
 class FieldFilters {
-  FieldFilters();
+  FieldFilters([List<FieldFilter>? list]) {
+    this.list = list ?? [];
+  }
 
   FieldFilters.fromJson(final Map<String, dynamic> json) {
     list = (json['list'] as List<dynamic>).map((item) => FieldFilter.fromJson(item as Map<String, dynamic>)).toList();

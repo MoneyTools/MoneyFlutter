@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/center_message.dart';
@@ -103,33 +102,21 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       }
 
       // this can go last
-      if (getFirstSelectedItem() != null) {
+      final Category? category = getFirstSelectedItem() as Category?;
+      if (category != null) {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching(
-                ViewId.viewTransactions.getIconData(),
-                'Switch to Transactions',
-                () {
-                  final Category? category = getFirstSelectedItem() as Category?;
-                  if (category != null) {
-                    // Prepare the Transaction view to show only the selected account
-                    FieldFilters columnFilters = FieldFilters();
-                    columnFilters.add(
-                      FieldFilter(
-                        fieldName: Constants.viewTransactionFieldnameCategory,
-                        filterTextInLowerCase: category.name.value.toLowerCase(),
-                      ),
-                    );
-
-                    PreferenceController.to.jumpToView(
-                      viewId: ViewId.viewTransactions,
-                      selectedId: -1,
-                      columnFilter: columnFilters.toStringList(),
-                      textFilter: '',
-                    );
-                  }
-                },
+              InternalViewSwitching.toTransactions(
+                transactionId: -1,
+                filters: FieldFilters(
+                  [
+                    FieldFilter(
+                      fieldName: Constants.viewTransactionFieldnameCategory,
+                      filterTextInLowerCase: category.uniqueId.toString().toLowerCase(),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

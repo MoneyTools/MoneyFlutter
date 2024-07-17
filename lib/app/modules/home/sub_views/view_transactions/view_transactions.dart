@@ -45,33 +45,20 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     final list = super.getActionsButtons(forInfoPanelTransactions);
 
     if (!forInfoPanelTransactions && getFirstSelectedItem() != null) {
+      final transaction = getFirstSelectedItem() as Transaction?;
+
       // this can go last
       list.add(
         buildJumpToButton(
           [
             // Account
-            InternalViewSwitching(
-              ViewId.viewAccounts.getIconData(),
-              'Switch to Accounts',
-              () {
-                final transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  // Preselect the Account of this Transaction
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewAccounts,
-                    selectedId: transaction.accountId.value,
-                    columnFilter: [],
-                    textFilter: '',
-                  );
-                }
-              },
-            ),
+            InternalViewSwitching.toAccounts(accountId: transaction?.accountId.value ?? -1),
 
             // Category
             InternalViewSwitching(
-              ViewId.viewCategories.getIconData(),
-              'Switch to Categories',
-              () {
+              icon: ViewId.viewCategories.getIconData(),
+              title: 'Switch to Categories',
+              onPressed: () {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Category of this Transactio
@@ -87,9 +74,9 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
             // Payee
             InternalViewSwitching(
-              ViewId.viewPayees.getIconData(),
-              'Switch to Payees',
-              () {
+              icon: ViewId.viewPayees.getIconData(),
+              title: 'Switch to Payees',
+              onPressed: () {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Payee of this Transaction
@@ -104,9 +91,9 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
             ),
             // Search Payee
             InternalViewSwitching(
-              Icons.person_search_outlined,
-              'Search for Payee',
-              () {
+              icon: Icons.person_search_outlined,
+              title: 'Search for Payee',
+              onPressed: () {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   launchGoogleSearch(transaction.getPayeeOrTransferCaption());

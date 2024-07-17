@@ -390,14 +390,14 @@ class Field<T> {
     }
   }
 
-  /// Only need for FieldType.widget
-  dynamic Function(MoneyObject)? getValueForReading;
-
   /// Customize/override the edit widget
   Widget Function(MoneyObject, Function(bool wasModified) onEdited)? getEditWidget;
 
   /// override the value edited
   dynamic Function(MoneyObject, dynamic)? setValue;
+
+  /// Only need for FieldType.widget
+  dynamic Function(MoneyObject)? getValueForReading;
 
   TextAlign align;
   ColumnWidth columnWidth;

@@ -73,9 +73,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         buildJumpToButton(
           [
             InternalViewSwitching(
-              ViewId.viewTransactions.getIconData(),
-              'Matching Transaction',
-              () {
+              icon: ViewId.viewTransactions.getIconData(),
+              title: 'Matching Transaction',
+              onPressed: () {
                 final selectedInfotransaction = getLastInfoPanelTransactionSelection();
 
                 if (selectedInfotransaction != null) {
@@ -124,34 +124,20 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       );
 
       // this can go last
-      if (getFirstSelectedItem() != null) {
+      final Account? account = getFirstSelectedItem() as Account?;
+      if (account != null) {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching(
-                ViewId.viewTransactions.getIconData(),
-                'Switch to Transactions',
-                () {
-                  final Account? account = getFirstSelectedItem() as Account?;
-                  if (account != null) {
-                    // Prepare the Transaction view Filter to show only the selected account
-                    FieldFilters columnFilters = FieldFilters();
-                    columnFilters.add(
-                      FieldFilter(
-                        fieldName: Constants.viewTransactionFieldnameAccount,
-                        filterTextInLowerCase: account.name.value.toLowerCase(),
-                      ),
-                    );
-
-                    // Switch view
-                    PreferenceController.to.jumpToView(
-                      viewId: ViewId.viewTransactions,
-                      selectedId: -1,
-                      columnFilter: columnFilters.toStringList(),
-                      textFilter: '',
-                    );
-                  }
-                },
+              InternalViewSwitching.toTransactions(
+                transactionId: -1,
+                // Prepare the Transaction view Filter to show only the selected account
+                filters: FieldFilters([
+                  FieldFilter(
+                    fieldName: Constants.viewTransactionFieldnameAccount,
+                    filterTextInLowerCase: account.name.value.toLowerCase(),
+                  ),
+                ]),
               ),
             ],
           ),

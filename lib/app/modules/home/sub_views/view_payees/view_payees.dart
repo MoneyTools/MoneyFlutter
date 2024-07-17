@@ -61,9 +61,9 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               InternalViewSwitching(
-                ViewId.viewTransactions.getIconData(),
-                'Switch to Transactions',
-                () {
+                icon: ViewId.viewTransactions.getIconData(),
+                title: 'Switch to Transactions',
+                onPressed: () {
                   final Payee? payee = getFirstSelectedItem() as Payee?;
                   if (payee != null) {
                     // Prepare the Transaction view to show only the selected account

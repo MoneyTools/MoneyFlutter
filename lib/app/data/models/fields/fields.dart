@@ -257,16 +257,20 @@ class Fields<T> {
     final MoneyObject objectInstance,
     Field<dynamic> fieldDefinition,
   ) {
-    final dynamic fieldValue = fieldDefinition.type == FieldType.widget
-        ? fieldDefinition.getValueForSerialization(objectInstance)
-        : fieldDefinition.getValueForDisplay(objectInstance);
-
     switch (fieldDefinition.type) {
+      case FieldType.widget:
+        return fieldDefinition.getValueForSerialization(objectInstance).toString().toLowerCase();
+
       case FieldType.date:
+        final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
         return dateToString(fieldValue);
+
       case FieldType.quantity:
+        final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
         return formatDoubleTrimZeros(fieldValue);
+
       default:
+        final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
         return fieldValue.toString().toLowerCase();
     }
   }
