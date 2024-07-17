@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.44] 2024-07-17
+
+### Added
+
+- Stock view now has Pivot for Toggles on holding: [Close | Active | All ]
+
 ## [version 1.8.43] 2024-07-15
 
 ### Added

@@ -54,7 +54,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
     }
   }
 
-  Widget renderToggles() {
+  Widget _renderToggles() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),

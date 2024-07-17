@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/three_part_label.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
+import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
@@ -26,7 +28,63 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   Security? lastSecuritySelected;
 
+  final List<Widget> _pivots = <Widget>[];
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
+
+  // Filter related
+  final List<bool> _selectedPivot = <bool>[false, false, true];
+
+  @override
+  Widget buildHeader([final Widget? child]) {
+    List<Security> list = getList(
+      includeDeleted: false,
+      applyFilter: false,
+    );
+
+    double sumActive = 0.00;
+    double sumClosed = 0.00;
+    double sumAll = 0.00;
+
+    for (final security in list) {
+      final profit = security.profit.getValueForDisplay(security).toDouble();
+      sumAll += profit;
+
+      if (isAlmostZero(security.holdingShares.value)) {
+        sumClosed += profit;
+      } else {
+        sumActive += profit;
+      }
+    }
+
+    _pivots.clear();
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Closed',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(sumClosed),
+      ),
+    );
+
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'Active',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(sumActive),
+      ),
+    );
+
+    _pivots.add(
+      ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(sumAll),
+      ),
+    );
+    return super.buildHeader(_renderToggles());
+  }
 
   @override
   String getClassNamePlural() {
@@ -158,7 +216,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
 
     if (applyFilter) {
-      list = list.where((final instance) => isMatchingFilters(instance)).toList();
+      list = list.where((final instance) => isMatchingFilters(instance) && isMatchingPivot(instance)).toList();
     }
 
     return list;
@@ -173,6 +231,48 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
     Investments.calculateRunningSharesAndBalance(list);
     return list;
+  }
+
+  bool isMatchingPivot(final Security instance) {
+    if (_selectedPivot[0]) {
+      // No holding of stock
+      return isAlmostZero(instance.holdingShares.value);
+    }
+    if (_selectedPivot[1]) {
+      // Still have holding
+      return !isAlmostZero(instance.holdingShares.value);
+    }
+    if (_selectedPivot[2]) {
+      // All, no filter needed
+    }
+    return true;
+  }
+
+  Widget _renderToggles() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+      child: ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (final int index) {
+          // ignore: invalid_use_of_protected_member
+          setState(() {
+            for (int i = 0; i < _selectedPivot.length; i++) {
+              _selectedPivot[i] = i == index;
+            }
+            list = getList();
+            clearSelection();
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 100.0,
+        ),
+        isSelected: _selectedPivot,
+        children: _pivots,
+      ),
+    );
   }
 }
 

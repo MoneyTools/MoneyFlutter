@@ -52,7 +52,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   @override
   Widget buildHeader([final Widget? child]) {
-    return super.buildHeader(renderToggles());
+    return super.buildHeader(_renderToggles());
   }
 
   @override
