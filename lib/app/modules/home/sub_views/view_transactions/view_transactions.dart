@@ -5,6 +5,7 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_transfers/transfer_sender_receiver.dart';
 
 class ViewTransactions extends ViewForMoneyObjects {
@@ -194,6 +195,17 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
       if (transaction.isTransfer()) {
         return TransferSenderReceiver(transfer: transaction.transferInstance!);
+      } else {
+        final investment = Data().investments.get(transaction.uniqueId);
+        if (investment != null) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: MoneyObjectCard(
+              title: 'Investent',
+              moneyObject: investment,
+            ),
+          );
+        }
       }
     }
     return const CenterMessage(message: 'No related transactions');
