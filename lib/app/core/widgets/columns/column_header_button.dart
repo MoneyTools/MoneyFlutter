@@ -105,9 +105,16 @@ Widget _buildAdorners(
 Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
   switch (sortIndicator) {
     case SortIndicator.sortAscending:
-      return const Icon(Icons.arrow_upward, size: 20.0);
+      return Transform(
+        alignment: Alignment.center,
+        transform: Matrix4.rotationX(3.14159), // Rotate 180 degrees on both X and Y axes
+        child: const Icon(
+          Icons.sort,
+          size: 20.0,
+        ), // Rotate 180 degrees for descending
+      );
     case SortIndicator.sortDescending:
-      return const Icon(Icons.arrow_downward, size: 20.0);
+      return const Icon(Icons.sort, size: 20.0);
     case SortIndicator.none:
     default:
       return const SizedBox();
