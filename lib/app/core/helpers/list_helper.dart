@@ -212,3 +212,7 @@ class SortedSet<T> {
     return low;
   }
 }
+
+List<String> enumToStringList<T>(List<T> enumValues) {
+  return enumValues.map((e) => e.toString().split('.').last).toList();
+}

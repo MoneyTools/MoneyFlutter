@@ -38,7 +38,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     double sumClosed = 0.00;
     double sumAll = 0.00;
 
-    for (final security in list) {
+    for (final Security security in list) {
       final profit = security.profit.getValueForDisplay(security).toDouble();
       sumAll += profit;
 

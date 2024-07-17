@@ -2,10 +2,10 @@
 
 import 'dart:ui';
 
-import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
+import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 /*
   cid  name          type          notnull  dflt_value  pk
@@ -142,7 +142,8 @@ class Security extends MoneyObject {
     name: 'Date',
     serializeName: 'PriceDate',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Security).priceDate.value,
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToSqliteFormat((instance as Security).priceDate.value),
   );
 
   FieldMoney profit = FieldMoney(
@@ -174,6 +175,22 @@ class Security extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) =>
         getSecurityTypeFromInt((instance as Security).securityType.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).securityType.value,
+    getEditWidget: (MoneyObject instance, Function(bool wasModified) onEdited) {
+      instance = (instance as Security);
+      return pickerSecurityType(
+        itemSelected: SecurityType.values[instance.securityType.value],
+        onSelected: (final SecurityType? newSecurityType) {
+          if (newSecurityType != null) {
+            (instance as Security).securityType.value = newSecurityType.index;
+            // notify container
+            onEdited(true);
+          }
+        },
+      );
+    },
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Security).securityType.value = value as int;
+    },
   );
 
   // 2
