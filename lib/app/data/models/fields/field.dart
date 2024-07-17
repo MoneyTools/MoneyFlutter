@@ -201,6 +201,7 @@ Widget buildWidgetFromTypeAndValue({
       // Adapt to availabl space
       return FittedBox(
         fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
         child: buildFieldWidgetForDate(date: value, align: align),
       );
 

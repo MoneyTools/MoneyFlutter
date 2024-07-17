@@ -3,6 +3,7 @@ import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/picker_edit_box.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 
+export 'package:flutter/material.dart';
 export 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 
 Widget pickerSecurityType({
