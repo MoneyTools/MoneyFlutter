@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.45] 2024-07-18
+
+### Added
+
+- Stock view:InfoPanel add JumpTo [Accounts | Transactions]
+  
 ## [version 1.8.44] 2024-07-17
 
 ### Added

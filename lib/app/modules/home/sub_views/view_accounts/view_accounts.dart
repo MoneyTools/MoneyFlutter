@@ -65,7 +65,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
               icon: ViewId.viewTransactions.getIconData(),
               title: 'Matching Transaction',
               onPressed: () {
-                final selectedInfotransaction = getLastInfoPanelTransactionSelection();
+                final selectedInfotransaction = getInfoPanelLastSelectedTransaction();
 
                 if (selectedInfotransaction != null) {
                   // Look for transaction matching -1 to +1 date from this transaction

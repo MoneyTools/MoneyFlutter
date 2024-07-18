@@ -205,10 +205,8 @@ class Investment extends MoneyObject {
     useAsColumn: true,
     columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) {
-      final investment = instance as Investment;
-      final Transaction? transaction = Data().transactions.get(investment.uniqueId);
-      if (transaction != null) {
-        return Data().accounts.getNameFromId(transaction.accountId.value);
+      if ((instance as Investment).matchingTransaction != null) {
+        return Data().accounts.getNameFromId(instance.matchingTransaction!.accountId.value);
       }
       return '?not found?';
     },
@@ -339,6 +337,8 @@ class Investment extends MoneyObject {
     cumulative.amount += this.commission.value.toDouble();
     return cumulative;
   }
+
+  Transaction? get matchingTransaction => Data().transactions.get(this.uniqueId);
 
   double get originalCostBasis {
     // looking for the original un-split cost basis at the date of this transaction.

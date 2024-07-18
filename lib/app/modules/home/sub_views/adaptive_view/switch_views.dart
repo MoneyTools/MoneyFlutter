@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 class InternalViewSwitching {
   InternalViewSwitching({required this.icon, required this.title, required this.onPressed});
@@ -12,12 +12,22 @@ class InternalViewSwitching {
       title: 'Switch to Account',
       onPressed: () {
         // Prepare the Account view to show only the selected account
-        PreferenceController.to.jumpToView(
-          viewId: ViewId.viewAccounts,
-          selectedId: accountId,
-          columnFilter: [],
-          textFilter: '',
-        );
+        final accountInstance = Data().accounts.get(accountId);
+        if (accountInstance != null) {
+          PreferenceController.to.jumpToView(
+            viewId: ViewId.viewAccounts,
+            selectedId: accountId,
+            columnFilter: [],
+            textFilter: '',
+          );
+
+          if (accountInstance.isClosed()) {
+            // we must show closed account in order to reveal this requested account selection
+            if (PreferenceController.to.includeClosedAccounts == false) {
+              PreferenceController.to.includeClosedAccounts = true;
+            }
+          }
+        }
       },
     );
   }

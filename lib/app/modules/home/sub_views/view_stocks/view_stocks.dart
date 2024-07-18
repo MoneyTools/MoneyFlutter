@@ -1,3 +1,4 @@
+import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
@@ -79,13 +80,24 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return super.buildHeader(_renderToggles());
   }
 
-  /// add more top leve action buttons
+  /// add more top menu or info panel action buttons
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
-    if (!forInfoPanelTransactions) {
+    final List<Widget> list = super.getActionsButtons(forInfoPanelTransactions);
+    if (forInfoPanelTransactions) {
+      final Investment? selectedInvestment = getInfoPanelLastSelectedItem<Investment>(Data().investments);
+      if (selectedInvestment != null) {
+        list.add(
+          buildJumpToButton(
+            [
+              InternalViewSwitching.toAccounts(accountId: selectedInvestment.matchingTransaction!.accountId.value),
+              InternalViewSwitching.toTransactions(transactionId: selectedInvestment.uniqueId),
+            ],
+          ),
+        );
+      }
+    } else {
       final Security? selectedSecurity = getFirstSelectedItem() as Security?;
-
       // this can go last
       if (selectedSecurity != null) {
         list.add(
@@ -221,7 +233,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           filters: FieldFilters(),
           sortByFieldIndex: sortInstructions.column,
           sortAscending: sortInstructions.ascending,
-          selectedId: -1,
+          selectedId: getInfoPanelLastSelectedItemId(),
           // Field & Columns related
           displayAsColumns: true,
           backgoundColorForHeaderFooter: Colors.transparent,
@@ -233,6 +245,24 @@ class ViewStocksState extends ViewForMoneyObjectsState {
               sortInstructions.column = columnHeaderIndex;
             }
             _sortingInstruction.value = sortInstructions.clone();
+          },
+          onSelectionChanged: (int uniqueId) {
+            setState(() {
+              PreferenceController.to.setInt(
+                getPreferenceKey('info_$settingKeySelectedListItemId'),
+                uniqueId,
+              );
+            });
+          },
+          onItemLongPress: (BuildContext context2, int itemId) {
+            final instance = Data().investments.get(itemId);
+            if (instance != null) {
+              myShowDialogAndActionsForMoneyObject(
+                title: 'Investment',
+                context: context2,
+                moneyObject: instance,
+              );
+            }
           },
         );
       },

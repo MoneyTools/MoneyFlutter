@@ -533,6 +533,26 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
+  T? getInfoPanelLastSelectedItem<T>(final MoneyObjects<T> list) {
+    int selectedItemId = getInfoPanelLastSelectedItemId();
+    if (selectedItemId == -1) {
+      return null;
+    }
+    return list.get(selectedItemId);
+  }
+
+  int getInfoPanelLastSelectedItemId() {
+    return PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
+  }
+
+  Transaction? getInfoPanelLastSelectedTransaction() {
+    int selectedItemId = getInfoPanelLastSelectedItemId();
+    if (selectedItemId == -1) {
+      return null;
+    }
+    return Data().transactions.get(selectedItemId);
+  }
+
   Widget getInfoPanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
@@ -576,14 +596,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   List<MoneyObject> getInfoTransactions() {
     return [];
-  }
-
-  Transaction? getLastInfoPanelTransactionSelection() {
-    int selectedItemId = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
-    if (selectedItemId == -1) {
-      return null;
-    }
-    return Data().transactions.get(selectedItemId);
   }
 
   List<MoneyObject> getList({
