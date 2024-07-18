@@ -128,7 +128,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
           padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
-            painter: VerticalBarsPainter(
+            painter: PaintActivities(
               activities: widget.holdingsActivities,
               minX: dataPoints.first.x,
               maxX: dataPoints.last.x,
@@ -264,8 +264,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
   }
 }
 
-class VerticalBarsPainter extends CustomPainter {
-  VerticalBarsPainter({
+class PaintActivities extends CustomPainter {
+  PaintActivities({
     required this.activities,
     required this.minX,
     required this.maxX,
@@ -275,18 +275,20 @@ class VerticalBarsPainter extends CustomPainter {
   final double maxX;
   final double minX;
 
+  /// A reusable Paint object for drawing filled rectangles.
+  final ui.Paint _paint = Paint()..style = PaintingStyle.fill;
+
   @override
   void paint(Canvas canvas, Size size) {
     final chartWidth = size.width;
     final chartHeight = size.height;
 
     double labelVerticalDistribution = chartHeight / activities.length;
-
-    double nextVerticalLabelPosition = 0;
+    double nextVerticalLabelPosition = chartHeight - labelVerticalDistribution;
 
     // lines are drawn lef to right sorted by time
-    // the labe are drawn top to bottom sorted by descending amount
-    activities.sort((b, a) => a.amount.compareTo(b.amount));
+    // the labe are drawn bottom to top sorted by ascending amount
+    activities.sort((a, b) => a.amount.compareTo(b.amount));
 
     for (final HoldingActivity activity in activities) {
       double left = 0;
@@ -294,40 +296,73 @@ class VerticalBarsPainter extends CustomPainter {
       if (activity.date.millisecondsSinceEpoch > minX) {
         left = ((activity.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
-      final rect = Rect.fromLTWH(left, 0, 1, chartHeight);
-      final paintShares = Paint()
-        ..color = activity.color.withOpacity(0.8)
-        ..style = PaintingStyle.fill;
+      _paintLine(canvas, activity, left, chartHeight);
+      _paintLabel(canvas, activity, left + 2, nextVerticalLabelPosition + (labelVerticalDistribution / 2));
 
-      canvas.drawRect(rect, paintShares);
-
-      // Draw the text
-      final textPainter = TextPainter(
-        text: TextSpan(
-          text: '${getIntAsText(activity.quantity.toInt().abs())} ${doubleToCurrency(activity.amount)}',
-          style: TextStyle(
-            color: activity.color,
-            fontSize: 9,
-          ),
-        ),
-        textDirection: ui.TextDirection.ltr,
-      );
-      textPainter.layout(
-        minWidth: 0,
-        maxWidth: size.width,
-      );
-      final offset = Offset(
-        left + 1,
-        nextVerticalLabelPosition,
-      );
-      textPainter.paint(canvas, offset);
-
-      nextVerticalLabelPosition += labelVerticalDistribution;
+      nextVerticalLabelPosition -= labelVerticalDistribution;
     }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return false;
+  }
+
+  /// Draws a filled rectangle on the given [canvas] with the specified [color],
+  /// [left], [top], [width], and [height].
+  ///
+  /// This function reuses a single [Paint] object for better performance.
+  void paintBox(
+    ui.Canvas canvas,
+    double left,
+    double top,
+    double width,
+    double height,
+    Color color,
+  ) {
+    final rect = Rect.fromLTWH(left, top, width, height);
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.fill;
+
+    canvas.drawRect(rect, paint);
+  }
+
+  void _paintLabel(
+    ui.Canvas canvas,
+    HoldingActivity activity,
+    double x,
+    double y,
+  ) {
+    // Draw the text
+    final textPainter = TextPainter(
+      text: TextSpan(
+        text: '${getIntAsText(activity.quantity.toInt().abs())} ${doubleToCurrency(activity.amount)}',
+        style: TextStyle(
+          color: activity.color,
+          fontSize: 9,
+        ),
+      ),
+      textDirection: ui.TextDirection.ltr,
+    );
+
+    textPainter.layout(
+      minWidth: 0,
+      maxWidth: 100,
+    );
+
+    textPainter.paint(canvas, Offset(x, y));
+  }
+
+  void _paintLine(
+    ui.Canvas canvas,
+    HoldingActivity activity,
+    double left,
+    double chartHeight,
+  ) {
+    final rect = Rect.fromLTWH(left, 0, 1, chartHeight);
+    _paint.color = activity.color.withOpacity(0.8);
+
+    canvas.drawRect(rect, _paint);
   }
 }
