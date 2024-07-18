@@ -1,5 +1,5 @@
 // ignore_for_file: unnecessary_this
-
+import 'dart:ui' as ui;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +7,6 @@ import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/chart_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
@@ -22,6 +21,12 @@ class HoldingActivity {
   final double amount;
   final DateTime date;
   final double quantity;
+
+  Color get color => quantity == 0 ? Colors.grey : (isBuy ? Colors.orange : Colors.blue);
+
+  bool get isBuy => quantity > 0;
+
+  bool get isSell => quantity < 0;
 }
 
 class StockChartWidget extends StatefulWidget {
@@ -272,25 +277,52 @@ class VerticalBarsPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paintSharesBought = Paint()
-      ..color = Colors.orange.withOpacity(0.8)
-      ..style = PaintingStyle.fill;
-
-    final paintSharesSold = Paint()
-      ..color = Colors.blue.withOpacity(0.8)
-      ..style = PaintingStyle.fill;
-
     final chartWidth = size.width;
     final chartHeight = size.height;
 
-    for (var activity in activities) {
+    double labelVerticalDistribution = chartHeight / activities.length;
+
+    double nextVerticalLabelPosition = 0;
+
+    // lines are drawn lef to right sorted by time
+    // the labe are drawn top to bottom sorted by descending amount
+    activities.sort((b, a) => a.amount.compareTo(b.amount));
+
+    for (final HoldingActivity activity in activities) {
       double left = 0;
-      debugLog('$activity $minX');
+
       if (activity.date.millisecondsSinceEpoch > minX) {
         left = ((activity.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
       final rect = Rect.fromLTWH(left, 0, 1, chartHeight);
-      canvas.drawRect(rect, activity.quantity > 0 ? paintSharesBought : paintSharesSold);
+      final paintShares = Paint()
+        ..color = activity.color.withOpacity(0.8)
+        ..style = PaintingStyle.fill;
+
+      canvas.drawRect(rect, paintShares);
+
+      // Draw the text
+      final textPainter = TextPainter(
+        text: TextSpan(
+          text: '${getIntAsText(activity.quantity.toInt().abs())} ${doubleToCurrency(activity.amount)}',
+          style: TextStyle(
+            color: activity.color,
+            fontSize: 9,
+          ),
+        ),
+        textDirection: ui.TextDirection.ltr,
+      );
+      textPainter.layout(
+        minWidth: 0,
+        maxWidth: size.width,
+      );
+      final offset = Offset(
+        left + 1,
+        nextVerticalLabelPosition,
+      );
+      textPainter.paint(canvas, offset);
+
+      nextVerticalLabelPosition += labelVerticalDistribution;
     }
   }
 
