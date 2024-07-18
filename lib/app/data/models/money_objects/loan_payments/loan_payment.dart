@@ -5,6 +5,7 @@ import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class LoanPayment extends MoneyObject {
   LoanPayment({
@@ -24,12 +25,6 @@ class LoanPayment extends MoneyObject {
     this.principal.value.setAmount(principal);
     this.interest.value.setAmount(interest);
     this.reference.value = reference;
-
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: Account.getName(accountInstance),
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(principal),
-          rightBottomAsString: Currency.getAmountAsStringUsingCurrency(interest),
-        );
   }
 
   /// Constructor from a SQLite row
@@ -135,6 +130,15 @@ class LoanPayment extends MoneyObject {
     columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).reference.value,
   );
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsString: Account.getName(accountInstance),
+      rightTopAsString: Currency.getAmountAsStringUsingCurrency(principal),
+      rightBottomAsString: Currency.getAmountAsStringUsingCurrency(interest),
+    );
+  }
 
   // Fields for this instance
   @override

@@ -205,10 +205,7 @@ class Investment extends MoneyObject {
     useAsColumn: true,
     columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) {
-      if ((instance as Investment).matchingTransaction != null) {
-        return Data().accounts.getNameFromId(instance.matchingTransaction!.accountId.value);
-      }
-      return '?not found?';
+      return (instance as Investment).transactionInstance?.getAccountName() ?? '<Account?>';
     },
   );
 
@@ -256,7 +253,7 @@ class Investment extends MoneyObject {
     name: 'HoldingValue',
     footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) {
-      return MoneyModel(amount: (instance as Investment).holdingShares.value * 2.0);
+      return MoneyModel(amount: (instance as Investment).holdingShares.value);
     },
   );
 
@@ -276,6 +273,11 @@ class Investment extends MoneyObject {
   @override
   String getRepresentation() {
     return security.value.toString();
+  }
+
+  @override
+  String toString() {
+    return '$uniqueId $date ${investmentType.getValueForDisplay(this)} ${securitySymbol.getValueForDisplay(this)} $effectiveUnits ${unitPrice.value} ${holdingShares.value}';
   }
 
   @override
@@ -338,8 +340,6 @@ class Investment extends MoneyObject {
     return cumulative;
   }
 
-  Transaction? get matchingTransaction => Data().transactions.get(this.uniqueId);
-
   double get originalCostBasis {
     // looking for the original un-split cost basis at the date of this transaction.
     double proceeds = this.unitPrice.value.toDouble() * this.units.value;
@@ -373,14 +373,14 @@ class Investment extends MoneyObject {
       );
     }
 
-    if (result == 0) {
-      // If on the same date sort so that "Buy" is before "Sell"
-      result = sortByValue(
-        a.finalAmount.amount.abs(),
-        b.finalAmount.amount.abs(),
-        !ascending,
-      );
-    }
+    // if (result == 0) {
+    //   // then if needed sort by amount
+    //   result = sortByValue(
+    //     a.finalAmount.amount.abs(),
+    //     b.finalAmount.amount.abs(),
+    //     !ascending,
+    //   );
+    // }
     return result;
   }
 }

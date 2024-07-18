@@ -1,7 +1,5 @@
 // ignore_for_file: unnecessary_this
 
-import 'dart:ui';
-
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
@@ -12,6 +10,7 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 import '../accounts/account.dart';
 
@@ -38,16 +37,7 @@ import '../accounts/account.dart';
     17|CategoryForManagement|INT|0||0
    */
 class RentBuilding extends MoneyObject {
-  RentBuilding() {
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: name.value,
-          leftBottomAsString: address.value,
-          rightTopAsWidget: MoneyWidget(
-            amountModel: MoneyModel(amount: lifeTimePnL.profit),
-            asTile: true,
-          ),
-        );
-  }
+  RentBuilding();
 
   factory RentBuilding.fromJson(final MyJson row) {
     final RentBuilding instance = RentBuilding();
@@ -416,6 +406,18 @@ class RentBuilding extends MoneyObject {
   List<RentUnit> units = <RentUnit>[];
 
   Account? account;
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsString: name.value,
+      leftBottomAsString: address.value,
+      rightTopAsWidget: MoneyWidget(
+        amountModel: MoneyModel(amount: lifeTimePnL.profit),
+        asTile: true,
+      ),
+    );
+  }
 
   // Fields for this instance
   @override

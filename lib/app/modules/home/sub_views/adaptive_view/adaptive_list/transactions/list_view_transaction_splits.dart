@@ -57,7 +57,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         // Table list of rows
         Expanded(
           child: MyListView<MoneySplit>(
-            fields: MoneySplit.fields,
+            fields: MoneySplit.fields.definitions,
             list: rows,
             selectedItemIds: ValueNotifier<List<int>>([]),
             onSelectionChanged: (int _) {},

@@ -78,7 +78,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         Expanded(
           flex: 1,
           child: MyListView<MoneyObject>(
-            fields: Fields<MoneyObject>()..setDefinitions(fieldDefinitions),
+            fields: fieldDefinitions,
             list: list,
             selectedItemIds: selectedItemsByUniqueId,
             isMultiSelectionOn: isMultiSelectionOn,

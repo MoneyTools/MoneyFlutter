@@ -20,13 +20,13 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewStocks;
   }
 
-  Security? lastSecuritySelected;
-
   final List<Widget> _pivots = <Widget>[];
   final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 
   // Filter related
   final List<bool> _selectedPivot = <bool>[false, false, true];
+
+  Security? _lastSecuritySelected;
 
   @override
   Widget buildHeader([final Widget? child]) {
@@ -90,7 +90,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching.toAccounts(accountId: selectedInvestment.matchingTransaction!.accountId.value),
+              InternalViewSwitching.toAccounts(accountId: selectedInvestment.transactionInstance!.accountId.value),
               InternalViewSwitching.toTransactions(transactionId: selectedInvestment.uniqueId),
             ],
           ),
@@ -188,27 +188,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    lastSecuritySelected = getFirstSelectedItem() as Security?;
+    _lastSecuritySelected = getFirstSelectedItem() as Security?;
 
-    if (lastSecuritySelected == null) {
+    if (_lastSecuritySelected == null) {
       return const CenterMessage(message: 'No security selected.');
     }
-    final included = [
-      'Date',
-      'Account',
-      'Activity',
-      'Units',
-      'Price',
-      'Commission',
-      'ActivityAmount',
-      'Holding',
-      'HoldingValue',
-    ];
-    final List<Field> fieldsToDisplay = Investment.fields.definitions
-        .where(
-          (element) => element.useAsColumn && included.contains(element.name),
-        )
-        .toList();
 
     return ValueListenableBuilder<SortingInstruction>(
       valueListenable: _sortingInstruction,
@@ -217,19 +201,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         final SortingInstruction sortInstructions,
         final Widget? _,
       ) {
-        List<Investment> list = getListOfInvestment(lastSecuritySelected!);
-
-        MoneyObjects.sortList(
-          list,
-          fieldsToDisplay,
-          sortInstructions.column,
-          sortInstructions.ascending,
-        );
-
         return AdaptiveListColumnsOrRowsSingleSelection(
           // list related
-          list: list,
-          fieldDefinitions: fieldsToDisplay,
+          list: getListOfInvestment(_lastSecuritySelected!),
+          fieldDefinitions: _getFieldsToDisplayForInfoPanelTransactions(),
           filters: FieldFilters(),
           sortByFieldIndex: sortInstructions.column,
           sortAscending: sortInstructions.ascending,
@@ -270,6 +245,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
+  List<MoneyObject> getInfoTransactions() {
+    return getListOfInvestment(_lastSecuritySelected!);
+  }
+
+  @override
   List<Security> getList({
     bool includeDeleted = false,
     bool applyFilter = true,
@@ -290,7 +270,9 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   List<Investment> getListOfInvestment(Security security) {
     final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
+    debugLog('--------------------');
     Investments.calculateRunningSharesAndBalance(list);
+    debugLog('^^^^^^^^^^^^^^^^^^^^');
     return list;
   }
 
@@ -307,6 +289,26 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       // All, no filter needed
     }
     return true;
+  }
+
+  List<Field<dynamic>> _getFieldsToDisplayForInfoPanelTransactions() {
+    final included = [
+      'Date',
+      'Account',
+      'Activity',
+      'Units',
+      'Price',
+      'Commission',
+      'ActivityAmount',
+      'Holding',
+      'HoldingValue',
+    ];
+    final List<Field> fieldsToDisplay = Investment.fields.definitions
+        .where(
+          (element) => element.useAsColumn && included.contains(element.name),
+        )
+        .toList();
+    return fieldsToDisplay;
   }
 
   Widget _renderToggles() {

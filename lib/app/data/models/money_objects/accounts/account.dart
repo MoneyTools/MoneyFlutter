@@ -18,39 +18,7 @@ export 'package:money/app/data/models/money_objects/accounts/account_types.dart'
 /// Accounts like Banks
 class Account extends MoneyObject {
   /// Constructor
-  Account() {
-    buildFieldsAsWidgetForSmallScreen = () {
-      Widget? originalCurrencyAndValue;
-
-      if (currency.value == Constants.defaultCurrency) {
-        originalCurrencyAndValue = Currency.buildCurrencyWidget(currency.value);
-      } else {
-        double ratioCurrency = getCurrencyRatio();
-        originalCurrencyAndValue = Tooltip(
-          message: ratioCurrency.toString(),
-          child: Row(
-            children: [
-              Text(
-                Currency.getAmountAsStringUsingCurrency(
-                  balance / ratioCurrency,
-                  iso4217code: currency.value,
-                ),
-              ),
-              const SizedBox(width: 4),
-              Currency.buildCurrencyWidget(currency.value),
-            ],
-          ),
-        );
-      }
-
-      return MyListItemAsCard(
-        leftTopAsString: name.value,
-        leftBottomAsString: getTypeAsText(type.value),
-        rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
-        rightBottomAsWidget: originalCurrencyAndValue,
-      );
-    };
-  }
+  Account();
 
   /// Constructor from a SQLite row
   factory Account.fromJson(final MyJson row) {
@@ -369,6 +337,39 @@ class Account extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).webSite.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).webSite.value,
   );
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    Widget? originalCurrencyAndValue;
+
+    if (currency.value == Constants.defaultCurrency) {
+      originalCurrencyAndValue = Currency.buildCurrencyWidget(currency.value);
+    } else {
+      double ratioCurrency = getCurrencyRatio();
+      originalCurrencyAndValue = Tooltip(
+        message: ratioCurrency.toString(),
+        child: Row(
+          children: [
+            Text(
+              Currency.getAmountAsStringUsingCurrency(
+                balance / ratioCurrency,
+                iso4217code: currency.value,
+              ),
+            ),
+            const SizedBox(width: 4),
+            Currency.buildCurrencyWidget(currency.value),
+          ],
+        ),
+      );
+    }
+
+    return MyListItemAsCard(
+      leftTopAsString: name.value,
+      leftBottomAsString: getTypeAsText(type.value),
+      rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
+      rightBottomAsWidget: originalCurrencyAndValue,
+    );
+  }
 
   // Fields for this instance
   @override

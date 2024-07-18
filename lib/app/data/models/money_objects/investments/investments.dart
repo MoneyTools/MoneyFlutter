@@ -36,18 +36,18 @@ class Investments extends MoneyObjects<Investment> {
 
   static void calculateRunningSharesAndBalance(List<Investment> investments) {
     // first sort by date, TradeType, Amount
-    investments.sort(
-      (a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
-    );
-
+    final Field fieldToSortBy = Investment.fields.getFieldByName('Date');
+    MoneyObjects.sortListFallbackOnIdforTieBreaker(investments, fieldToSortBy.sort!, true);
     double runningShares = 0;
     double runningBalance = 0;
-    for (final investment in investments) {
+    for (final Investment investment in investments) {
       runningShares += investment.effectiveUnits;
       runningBalance += investment.finalAmount.amount;
 
       investment.holdingShares.value = runningShares;
       investment.runningBalance.value.setAmount(runningBalance);
+
+      debugLog(investment.toString());
     }
   }
 

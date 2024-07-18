@@ -282,33 +282,36 @@ class MoneyObjects<T> {
     return true;
   }
 
+  /// If the field is found and has a sort function then use it, else default to sortByString
   static List<MoneyObject> sortList(
     List<MoneyObject> list,
     final FieldDefinitions fieldDefinitions,
     final int sortBy,
     final bool sortAscending,
   ) {
-    if (!isIndexInRange(fieldDefinitions, sortBy)) {
-      // requested sort is not in range of the available fields
-      return list;
-    }
+    final Field<dynamic>? fieldDefinition = isIndexInRange(fieldDefinitions, sortBy) ? fieldDefinitions[sortBy] : null;
 
-    final Field<dynamic> fieldDefinition = fieldDefinitions[sortBy];
-    if (fieldDefinition.sort == null) {
-      // No sorting function found, fallback to String sorting
-      list.sort((final MoneyObject a, final MoneyObject b) {
-        return sortByString(
-          fieldDefinition.getValueForDisplay(a).toString(),
-          fieldDefinition.getValueForDisplay(b).toString(),
-          sortAscending,
-        );
-      });
-    } else {
-      list.sort((final MoneyObject a, final MoneyObject b) {
-        return fieldDefinition.sort!(a, b, sortAscending);
-      });
-    }
+    sortListFallbackOnIdforTieBreaker(
+      list,
+      fieldDefinition?.sort ?? sortByString,
+      sortAscending,
+    );
+
     return list;
+  }
+
+  static void sortListFallbackOnIdforTieBreaker(
+    List<MoneyObject> list,
+    int Function(MoneyObject, MoneyObject, bool) sortWith,
+    bool ascending,
+  ) {
+    list.sort((final MoneyObject a, final MoneyObject b) {
+      int result = sortWith(a, b, ascending);
+      if (result == 0) {
+        result = a.uniqueId.compareTo(b.uniqueId);
+      }
+      return result;
+    });
   }
 
   String toCSV() {

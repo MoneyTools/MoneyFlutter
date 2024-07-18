@@ -32,7 +32,7 @@ class MyListView<T> extends StatefulWidget {
   final Function(BuildContext, int)? onLongPress;
   final Function(int /* uniqueId */)? onSelectionChanged;
   final bool displayAsColumn;
-  final Fields<T> fields;
+  final FieldDefinitions fields;
   final bool isMultiSelectionOn;
   final List<T> list;
   final ValueNotifier<List<int>> selectedItemIds;
@@ -271,10 +271,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
     final bool isLastItemOfTheList,
   ) {
     return widget.displayAsColumn
-        ? itemInstance.buildFieldsAsWidgetForLargeScreen!(
-            widget.fields,
-            itemInstance as T,
-          )
+        ? itemInstance.buildFieldsAsWidgetForLargeScreen(widget.fields)
         : Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
@@ -285,7 +282,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
                 ),
               ),
             ),
-            child: itemInstance.buildFieldsAsWidgetForSmallScreen!(),
+            child: itemInstance.buildFieldsAsWidgetForSmallScreen(),
           );
   }
 }

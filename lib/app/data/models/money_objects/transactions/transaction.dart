@@ -41,12 +41,6 @@ class Transaction extends MoneyObject {
     this.dateTime.value = date;
     this.status.value = status;
     this.flags.value = TransactionFlags.none.index;
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: payeeName,
-          leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
-          rightTopAsWidget: MoneyWidget(amountModel: amount.value, asTile: true),
-          rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
-        );
   }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
@@ -569,6 +563,16 @@ class Transaction extends MoneyObject {
   Investment? investmentInstance;
 
   String? _transferName;
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsString: payeeName,
+      leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
+      rightTopAsWidget: MoneyWidget(amountModel: amount.value, asTile: true),
+      rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
+    );
+  }
 
   // Fields for this instance
   @override

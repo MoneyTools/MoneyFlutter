@@ -144,7 +144,7 @@ class Fields<T> {
   }
 
   /// Used in table view
-  Widget getRowOfColumns(final MoneyObject objectInstance) {
+  static Widget getRowOfColumns(final FieldDefinitions definitions, final MoneyObject objectInstance) {
     final List<Widget> cells = <Widget>[];
 
     for (final Field fieldDefinition in definitions) {
@@ -166,6 +166,18 @@ class Fields<T> {
     }
 
     return Row(children: cells);
+  }
+
+  /// Used in table view
+  static String getRowOfColumnsForCSV(final FieldDefinitions definitions, final MoneyObject objectInstance) {
+    final List<String> strings = <String>[];
+
+    for (final Field fieldDefinition in definitions) {
+      final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
+      strings.add(value.toString());
+    }
+
+    return strings.join();
   }
 
   bool get isEmpty {

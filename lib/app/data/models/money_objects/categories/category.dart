@@ -43,32 +43,6 @@ class Category extends MoneyObject {
     this.budgetBalance.value.setAmount(budgetBalance);
     this.frequency.value = frequency;
     this.taxRefNum.value = taxRefNum;
-
-    buildFieldsAsWidgetForSmallScreen = () {
-      String top = '';
-      String bottom = '';
-
-      if (this.parentId.value == -1) {
-        top = this.name.value;
-        bottom = '';
-      } else {
-        top = this.leafName;
-        bottom = getName(parentCategory);
-      }
-
-      return MyListItemAsCard(
-        leftTopAsString: top,
-        leftBottomAsString: bottom,
-        rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
-        rightBottomAsWidget: Row(
-          children: <Widget>[
-            Text(getTypeAsText()),
-            gapMedium(),
-            getColorWidget(),
-          ],
-        ),
-      );
-    };
   }
 
   factory Category.fromJson(final MyJson row) {
@@ -274,6 +248,33 @@ class Category extends MoneyObject {
       );
     },
   );
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    String top = '';
+    String bottom = '';
+
+    if (this.parentId.value == -1) {
+      top = this.name.value;
+      bottom = '';
+    } else {
+      top = this.leafName;
+      bottom = getName(parentCategory);
+    }
+
+    return MyListItemAsCard(
+      leftTopAsString: top,
+      leftBottomAsString: bottom,
+      rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
+      rightBottomAsWidget: Row(
+        children: <Widget>[
+          Text(getTypeAsText()),
+          gapMedium(),
+          getColorWidget(),
+        ],
+      ),
+    );
+  }
 
   // Fields for this instance
   @override

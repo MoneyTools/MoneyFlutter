@@ -3,6 +3,7 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 export 'package:money/app/data/models/money_objects/money_object.dart';
 
@@ -13,13 +14,7 @@ export 'package:money/app/data/models/money_objects/money_object.dart';
   1|Name|nvarchar(255)|1||0
  */
 class Payee extends MoneyObject {
-  Payee() {
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: name.value,
-          rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
-          rightBottomAsString: getAmountAsShorthandText(count.value),
-        );
-  }
+  Payee();
 
   factory Payee.fromJson(final MyJson row) {
     return Payee();
@@ -59,6 +54,15 @@ class Payee extends MoneyObject {
     name: 'Sum',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).sum.value,
   );
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsString: name.value,
+      rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
+      rightBottomAsString: getAmountAsShorthandText(count.value),
+    );
+  }
 
   // Fields for this instance
   @override

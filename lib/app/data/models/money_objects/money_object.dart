@@ -16,13 +16,6 @@ class MoneyObject {
     return MoneyObject();
   }
 
-  ///
-  /// Column 1 | Column 2 | Column 3
-  ///
-  Widget Function(Fields, dynamic)? buildFieldsAsWidgetForLargeScreen = (final Fields fields, final dynamic instance) {
-    return fields.getRowOfColumns(instance);
-  };
-
   /// State of any and all object instances
   /// to indicated any alteration to the data set of the users
   /// to reflect on the customer CRUD actions [Create|Rename|Update|Delete]
@@ -31,11 +24,17 @@ class MoneyObject {
   MyJson? valueBeforeEdit;
 
   ///
+  /// Column 1 | Column 2 | Column 3
+  ///
+  Widget buildFieldsAsWidgetForLargeScreen(final FieldDefinitions fields) => Fields.getRowOfColumns(fields, this);
+
+  ///
   /// Title       |
   /// ------------+ Right
   /// SubTitle    |
   ///
-  Widget Function()? buildFieldsAsWidgetForSmallScreen = () => const Text('Small screen content goes here');
+  /// Expect this to be overrided by the derived domain classes
+  Widget buildFieldsAsWidgetForSmallScreen() => const Text('Small screen content goes here');
 
   ///
   /// Name: Bob
