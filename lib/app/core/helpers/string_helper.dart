@@ -37,9 +37,9 @@ String escapeString(String input) {
   return input.replaceAll("'", "''");
 }
 
-String formatDoubleTimeZeroFiveNine(double value) {
+String formatDoubleTimeZeroFiveNine(double value, {bool showPlusSign = false}) {
   final formatter = NumberFormat('#,##0.#####', 'en_US');
-  return formatter.format(value);
+  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + formatter.format(value);
 }
 
 String formatDoubleTrimZeros(double value) {
@@ -87,7 +87,11 @@ String getInitials(String fullName) {
 }
 
 String getIntAsText(final int value, {showPlusSign = false}) {
-  return (showPlusSign ? getPlusSignIfPositive(value) : '') + NumberFormat.decimalPattern().format(value);
+  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + NumberFormat.decimalPattern().format(value);
+}
+
+String getPrefixPlusSignIfNeeded(final num value, {showPlusSign = false}) {
+  return (showPlusSign ? getPlusSignIfPositive(value) : '');
 }
 
 /// Parses a raw text string and splits it into rows and columns based on a specified separator character.

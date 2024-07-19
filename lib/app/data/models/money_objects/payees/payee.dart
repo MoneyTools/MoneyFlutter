@@ -27,7 +27,7 @@ class Payee extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
   );
 
-  FieldQuantity count = FieldQuantity(
+  FieldInt count = FieldInt(
     importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.small,

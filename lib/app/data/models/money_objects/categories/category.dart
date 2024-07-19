@@ -146,14 +146,13 @@ class Category extends MoneyObject {
   // These properties are not persisted
 
   /// Level
-  FieldQuantity level = FieldQuantity(
+  FieldInt level = FieldInt(
     importance: 80,
     align: TextAlign.center,
     name: 'Level',
     columnWidth: ColumnWidth.nano,
     footer: FooterType.average,
-    getValueForDisplay: (final MoneyObject instance) =>
-        countOccurrences((instance as Category).name.value, ':').toDouble() + 1,
+    getValueForDisplay: (final MoneyObject instance) => countOccurrences((instance as Category).name.value, ':') + 1,
   );
 
   /// Name
@@ -208,7 +207,7 @@ class Category extends MoneyObject {
   );
 
   /// Count
-  FieldQuantity transactionCount = FieldQuantity(
+  FieldInt transactionCount = FieldInt(
     importance: 98,
     name: '#T',
     columnWidth: ColumnWidth.tiny,
@@ -216,7 +215,7 @@ class Category extends MoneyObject {
   );
 
   /// Count
-  FieldQuantity transactionCountRollup = FieldQuantity(
+  FieldInt transactionCountRollup = FieldInt(
     importance: 98,
     name: '#T~',
     columnWidth: ColumnWidth.tiny,

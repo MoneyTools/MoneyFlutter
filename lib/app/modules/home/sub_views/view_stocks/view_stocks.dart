@@ -297,11 +297,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       'Account',
       'Activity',
       'Units',
+      'Holding',
       'Price',
+      'HoldingValue',
       'Commission',
       'ActivityAmount',
-      'Holding',
-      'HoldingValue',
     ];
     final List<Field> fieldsToDisplay = Investment.fields.definitions
         .where(

@@ -19,11 +19,11 @@ class QuantifyWidget extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Text(
-      formatDoubleTimeZeroFiveNine(quantity),
+      formatDoubleTimeZeroFiveNine(quantity, showPlusSign: true),
       textAlign: align,
       style: TextStyle(
         fontFamily: 'RobotoMono',
-        color: trimToFiveDecimalPlaces(quantity) == 0 ? Colors.grey.withOpacity(0.8) : null,
+        color: isAlmostZero(quantity) ? Colors.grey.withOpacity(0.5) : null,
       ),
     );
   }

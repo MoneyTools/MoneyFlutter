@@ -393,12 +393,12 @@ class RentBuilding extends MoneyObject {
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.income),
   );
 
-  FieldQuantity transactionsForExpenses = FieldQuantity(
+  FieldInt transactionsForExpenses = FieldInt(
     name: 'E#',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).transactionsForExpenses.value,
   );
 
-  FieldQuantity transactionsForIncomes = FieldQuantity(
+  FieldInt transactionsForIncomes = FieldInt(
     name: 'I#',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).transactionsForIncomes.value,
   );

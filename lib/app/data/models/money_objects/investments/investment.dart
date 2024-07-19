@@ -95,9 +95,7 @@ class Investment extends MoneyObject {
   FieldQuantity holdingShares = FieldQuantity(
     name: 'Holding',
     footer: FooterType.average,
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as Investment).holdingShares.value;
-    },
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).holdingShares.value,
   );
 
   /// Id
@@ -314,6 +312,7 @@ class Investment extends MoneyObject {
         tmp.securitySymbol,
         tmp.investmentType,
         tmp.units,
+        tmp.holdingShares,
         tmp.unitPrice,
         tmp.commission,
         tmp.markUpDown,
@@ -324,7 +323,6 @@ class Investment extends MoneyObject {
         tmp.taxExempt,
         tmp.withholding,
         tmp.activityAmount,
-        tmp.holdingShares,
         tmp.valueOfHoldingShares,
         tmp.runningBalance,
       ]);

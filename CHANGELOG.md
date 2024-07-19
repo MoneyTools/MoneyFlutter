@@ -1,12 +1,18 @@
 # Change Log
 
-## [version 1.8.45] 2024-07-18
+## [version 1.8.44] 2024-07-19
+
+### Added
+
+- Improve FieldQuantity to show + sign on positive numbers
+
+## [version 1.8.43] 2024-07-18
 
 ### Added
 
 - Stock view:InfoPanel add JumpTo [Accounts | Transactions]
   
-## [version 1.8.44] 2024-07-17
+## [version 1.8.43] 2024-07-17
 
 ### Added
 
