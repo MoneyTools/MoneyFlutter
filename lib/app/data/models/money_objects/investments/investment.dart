@@ -73,7 +73,8 @@ class Investment extends MoneyObject {
 
   FieldMoney activityAmount = FieldMoney(
     name: 'ActivityAmount',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).amount,
+    getValueForDisplay: (final MoneyObject instance) =>
+        (instance as Investment).transactionInstance?.amount.value.toDouble() ?? 0.00,
   );
 
   /// 4    Commission      money   0                    0
@@ -285,8 +286,6 @@ class Investment extends MoneyObject {
   set uniqueId(value) => id.value = value;
 
   static final Fields<Investment> _fields = Fields<Investment>();
-
-  double get amount => this.transactionInstance?.amount.value.toDouble() ?? 0.00;
 
   DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
 

@@ -43,7 +43,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       final profit = security.profit.getValueForDisplay(security).toDouble();
       sumAll += profit;
 
-      if (isAlmostZero(security.holdingShares.value)) {
+      if (isConsideredZero(security.holdingShares.value)) {
         sumClosed += profit;
       } else {
         sumActive += profit;
@@ -279,11 +279,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   bool isMatchingPivot(final Security instance) {
     if (_selectedPivot[0]) {
       // No holding of stock
-      return isAlmostZero(instance.holdingShares.value);
+      return isConsideredZero(instance.holdingShares.value);
     }
     if (_selectedPivot[1]) {
       // Still have holding
-      return !isAlmostZero(instance.holdingShares.value);
+      return !isConsideredZero(instance.holdingShares.value);
     }
     if (_selectedPivot[2]) {
       // All, no filter needed

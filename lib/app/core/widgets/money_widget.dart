@@ -37,7 +37,7 @@ class MoneyWidget extends StatelessWidget {
     return SelectableText(
       maxLines: 1,
       Currency.getAmountAsStringUsingCurrency(
-        isAlmostZero((amountModel.toDouble())) ? 0.00 : amountModel.toDouble(),
+        isConsideredZero((amountModel.toDouble())) ? 0.00 : amountModel.toDouble(),
         iso4217code: amountModel.iso4217,
       ),
       textAlign: TextAlign.right,
@@ -48,21 +48,4 @@ class MoneyWidget extends StatelessWidget {
       ),
     );
   }
-}
-
-Color? getTextColorToUse(
-  final double amount,
-  final bool autoColor,
-) {
-  if (autoColor) {
-    if (isAlmostZero(amount)) {
-      return getColorFromState(ColorState.disabled);
-    }
-    if (amount < 0) {
-      return getColorFromState(ColorState.error);
-    } else {
-      return getColorFromState(ColorState.success);
-    }
-  }
-  return null;
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -28,7 +29,7 @@ Widget buildFieldWidgetForAmount({
       textAlign: align,
       style: TextStyle(
         fontFamily: 'RobotoMono',
-        color: getTextColorToUse(value, true),
+        color: getTextColorToUse(value),
       ),
     ),
   );
@@ -142,7 +143,7 @@ Widget buildWidgetFromTypeAndValue({
       return Row(
         children: [
           Expanded(
-            child: QuantifyWidget(
+            child: QuantityWidget(
               quantity: value,
               align: align,
             ),

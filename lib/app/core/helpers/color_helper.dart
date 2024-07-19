@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 
 Color addHintOfGreenToColor(Color color, [int hint = 50]) {
   // Calculate the new green value
@@ -110,6 +111,8 @@ enum ColorState {
   warning,
   error,
   disabled,
+  quantityPositve,
+  quantityNegative,
 }
 
 Color getColorFromState(final ColorState state) {
@@ -128,6 +131,10 @@ Color getColorFromState(final ColorState state) {
 
     case ColorState.disabled:
       return isDarkModeOne ? Colors.grey.shade500 : Colors.grey.shade600;
+    case ColorState.quantityNegative:
+      return isDarkModeOne ? Colors.orange.shade300 : Colors.orange.shade600;
+    case ColorState.quantityPositve:
+      return isDarkModeOne ? Colors.blue.shade300 : Colors.blue.shade600;
   }
 }
 
@@ -282,4 +289,32 @@ Color invertColor(final Color color) {
 
   // Return the inverted color
   return Color.fromRGBO(invertedRed, invertedGreen, invertedBlue, 1.0);
+}
+
+Color? getTextColorToUse(
+  final num value, [
+  final bool autoColor = true,
+]) {
+  if (autoColor) {
+    if (isConsideredZero(value)) {
+      return getColorFromState(ColorState.disabled);
+    }
+    if (value < 0) {
+      return getColorFromState(ColorState.error);
+    } else {
+      return getColorFromState(ColorState.success);
+    }
+  }
+  return null;
+}
+
+Color? getTextColorToUseQuantity(final num value) {
+  if (isConsideredZero(value)) {
+    return getColorFromState(ColorState.disabled);
+  }
+  if (value < 0) {
+    return getColorFromState(ColorState.quantityNegative);
+  } else {
+    return getColorFromState(ColorState.quantityPositve);
+  }
 }

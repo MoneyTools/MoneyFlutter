@@ -156,7 +156,7 @@ class Currency extends MoneyObject {
       name: iso4217code,
       decimalDigits: decimalDigits,
     );
-    return currencyFormat.format(isAlmostZero(amount) ? 0.00 : amount);
+    return currencyFormat.format(isConsideredZero(amount) ? 0.00 : amount);
   }
 
   static String getCurrencyAsText(final String threeLetterCurrencySymbol) {

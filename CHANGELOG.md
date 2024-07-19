@@ -4,6 +4,7 @@
 
 ### Added
 
+- Diplay FieldQuantity in Blue for positive and Orange for negative
 - Improve FieldQuantity to show + sign on positive numbers
 
 ## [version 1.8.43] 2024-07-18

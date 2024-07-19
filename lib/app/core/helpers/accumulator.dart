@@ -221,7 +221,7 @@ class RunningAverage {
   num _sum = 0.0;
 
   void addValue(num newValue) {
-    if (isAlmostZero(newValue)) {
+    if (isConsideredZero(newValue)) {
       _countZeros++;
     } else {
       _sum += newValue.abs();

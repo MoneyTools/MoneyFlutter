@@ -119,7 +119,7 @@ class Account extends MoneyObject {
   // Properties that are not persisted
 
   /// Transaction Count
-  FieldQuantity count = FieldQuantity(
+  FieldInt count = FieldInt(
     importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.tiny,
