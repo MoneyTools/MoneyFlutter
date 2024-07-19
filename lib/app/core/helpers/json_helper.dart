@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+export 'dart:convert';
 
 MyJson compareAndGenerateCommonJson(MyJson json1, MyJson json2) {
   MyJson commonJson = {};
