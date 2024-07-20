@@ -359,3 +359,15 @@ double? parseAmount(String amountAsText, final String currency) {
 String cleanString(String inputStr, String allowedChars) {
   return inputStr.split('').where((char) => allowedChars.contains(char)).join();
 }
+
+String validIntToCurrencu(final num value) {
+  return getIntAsText(isNumber(value) ? value.toInt() : 0, showPlusSign: true);
+}
+
+String validDoubleToCurrencu(final num value) {
+  return doubleToCurrency(isNumber(value) ? value.toDouble() : 0.0, showPlusSign: true);
+}
+
+bool isNumber(num value) {
+  return value.isFinite && !value.isNaN;
+}

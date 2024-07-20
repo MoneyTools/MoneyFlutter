@@ -151,15 +151,9 @@ class NumRange {
     }
   }
 
-  String get descriptionAsInt => _getDecription(
-        getIntAsText(min.toInt(), showPlusSign: true),
-        getIntAsText(max.toInt(), showPlusSign: true),
-      );
+  String get descriptionAsInt => _getDecription(validIntToCurrencu(min), validIntToCurrencu(max));
 
-  String get descriptionAsMoney => _getDecription(
-        doubleToCurrency(min.toDouble(), showPlusSign: true),
-        doubleToCurrency(max.toDouble(), showPlusSign: true),
-      );
+  String get descriptionAsMoney => _getDecription(validDoubleToCurrencu(min), validDoubleToCurrencu(max));
 
   /// Increments the range by one, if possible.
   void increment(int maxLimit) {
