@@ -165,7 +165,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           events.add(
             HoldingActivity(
               activity.transactionInstance!.dateTime.value!,
-              activity.unitPriceAdjusted.value.toDouble(),
+              activity.unitPriceAdjusted.getValueForDisplay(activity),
               activity.effectiveUnitsAdjusted,
             ),
           );
