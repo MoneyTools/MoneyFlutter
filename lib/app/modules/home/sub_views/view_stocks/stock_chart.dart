@@ -13,6 +13,7 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
@@ -273,20 +274,14 @@ class StockChartWidgetState extends State<StockChartWidget> {
     if (response.statusCode == 200) {
       try {
         final MyJson data = json.decode(response.body);
-        if (data['code'] == 401) {
+
+        int? subStatusCode = data['code'];
+        if ([401, 403, 404, 409].contains(subStatusCode)) {
           debugLog(data.toString());
+          SnackBarService.displayError(message: data['message']);
           return;
         }
 
-        if (data['code'] == 404) {
-          debugLog(data.toString());
-          return;
-        }
-
-        if (data['code'] == 409) {
-          debugLog(data.toString());
-          return;
-        }
         final List<dynamic> dataSplits = data['splits'];
 
         final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
@@ -308,6 +303,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
         }
       } catch (error) {
         debugLog(error.toString());
+        SnackBarService.displayError(message: error.toString());
       }
     } else {
       debugLog('Failed to fetch data: ${response.toString()}');
