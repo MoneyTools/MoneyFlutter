@@ -2,7 +2,9 @@
 import 'dart:ui' as ui;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/chart_helper.dart';
@@ -12,7 +14,8 @@ import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/core/widgets/working.dart';
-import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
 
 class HoldingActivity {
@@ -33,10 +36,12 @@ class StockChartWidget extends StatefulWidget {
   const StockChartWidget({
     super.key,
     required this.symbol,
+    required this.splits,
     required this.holdingsActivities,
   });
 
   final List<HoldingActivity> holdingsActivities;
+  final List<StockSplit> splits;
   final String symbol;
 
   @override
@@ -124,6 +129,20 @@ class StockChartWidgetState extends State<StockChartWidget> {
     return Stack(
       alignment: Alignment.topCenter,
       children: [
+        // Splits
+        Padding(
+          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          child: CustomPaint(
+            size: const Size(double.infinity, double.infinity),
+            painter: PaintSplits(
+              splits: widget.splits,
+              minX: dataPoints.first.x,
+              maxX: dataPoints.last.x,
+            ),
+          ),
+        ),
+
+        // Activities
         Padding(
           padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
           child: CustomPaint(
@@ -226,6 +245,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
             final result = await loadFomBackendAndSaveToCache(widget.symbol);
             _fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
 
+            _fetchSplitsFromBackend(widget.symbol);
+
             setState(() {
               _fromPriceHistoryToChartDataPoints(result);
             });
@@ -233,6 +254,65 @@ class StockChartWidgetState extends State<StockChartWidget> {
         ),
       ),
     );
+  }
+
+  void _fetchSplitsFromBackend(
+    String symbol,
+  ) async {
+    if (PreferenceController.to.apiKeyForStocks.isEmpty) {
+      // No API Key to make the backend request
+      return;
+    }
+
+    final Uri uri = Uri.parse(
+      'https://api.twelvedata.com/splits?symbol=$symbol&range=full&apikey=${PreferenceController.to.apiKeyForStocks}',
+    );
+
+    final http.Response response = await http.get(uri);
+
+    if (response.statusCode == 200) {
+      try {
+        final MyJson data = json.decode(response.body);
+        if (data['code'] == 401) {
+          debugLog(data.toString());
+          return;
+        }
+
+        if (data['code'] == 404) {
+          debugLog(data.toString());
+          return;
+        }
+
+        if (data['code'] == 409) {
+          debugLog(data.toString());
+          return;
+        }
+        final List<dynamic> dataSplits = data['splits'];
+
+        final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
+        for (final dataSplit in dataSplits) {
+          final dateOfSplit = DateTime.parse(dataSplit['date']);
+
+          if (!Data().stockSplits.isSplitFound(securityId, dateOfSplit.year, dateOfSplit.month, dateOfSplit.day)) {
+            StockSplit sp = StockSplit(
+              security: securityId,
+              date: dateOfSplit,
+              numerator: dataSplit['from_factor'],
+              denominator: dataSplit['to_factor'],
+            );
+            Data().stockSplits.appendNewMoneyObject(sp, fireNotification: false);
+          }
+        }
+        if (DataController.to.trackMutations.isMutated()) {
+          Data().updateAll();
+        }
+      } catch (error) {
+        debugLog(error.toString());
+      }
+    } else {
+      debugLog('Failed to fetch data: ${response.toString()}');
+    }
+    return;
   }
 
   void _fromPriceHistoryToChartDataPoints(StockPriceHistoryCache priceCache) {
@@ -264,6 +344,92 @@ class StockChartWidgetState extends State<StockChartWidget> {
   }
 }
 
+/// A reusable Paint object for drawing filled rectangles.
+final ui.Paint _paint = Paint()..style = PaintingStyle.fill;
+
+void _paintLine(
+  ui.Canvas canvas,
+  Color color,
+  double left,
+  double top,
+  double chartHeight,
+) {
+  final rect = Rect.fromLTWH(left, top, 1, chartHeight);
+  _paint.color = color;
+
+  canvas.drawRect(rect, _paint);
+}
+
+void _paintLabel(
+  ui.Canvas canvas,
+  String text,
+  Color color,
+  double x,
+  double y,
+) {
+  // Draw the text
+  final textPainter = TextPainter(
+    text: TextSpan(
+      text: text,
+      style: TextStyle(
+        color: color,
+        fontSize: 9,
+      ),
+    ),
+    textDirection: ui.TextDirection.ltr,
+  );
+
+  textPainter.layout(
+    minWidth: 0,
+    maxWidth: 100,
+  );
+
+  textPainter.paint(canvas, Offset(x, y));
+}
+
+class PaintSplits extends CustomPainter {
+  PaintSplits({
+    required this.splits,
+    required this.minX,
+    required this.maxX,
+  });
+
+  final double maxX;
+  final double minX;
+  final List<StockSplit> splits;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final chartWidth = size.width;
+    final chartHeight = size.height;
+
+    // lines are drawn lef to right sorted by time
+    // the labe are drawn bottom to top sorted by ascending amount
+    // splits.sort((a, b) => a.amount.compareTo(b.amount));
+
+    for (final split in splits) {
+      double left = 0;
+      if (split.date.value!.millisecondsSinceEpoch > minX) {
+        left = ((split.date.value!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+      }
+      _paintLine(canvas, Colors.grey, left, chartHeight - 5, 45);
+      _paintLabel(
+        canvas,
+        '${split.numerator.value} for ${split.denominator.value}',
+        Colors.blue,
+        left + 2,
+        chartHeight + 30,
+      );
+      left += 20;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
 class PaintActivities extends CustomPainter {
   PaintActivities({
     required this.activities,
@@ -275,9 +441,6 @@ class PaintActivities extends CustomPainter {
   final double maxX;
   final double minX;
 
-  /// A reusable Paint object for drawing filled rectangles.
-  final ui.Paint _paint = Paint()..style = PaintingStyle.fill;
-
   @override
   void paint(Canvas canvas, Size size) {
     final chartWidth = size.width;
@@ -286,8 +449,8 @@ class PaintActivities extends CustomPainter {
     double labelVerticalDistribution = chartHeight / activities.length;
     double nextVerticalLabelPosition = chartHeight - labelVerticalDistribution;
 
-    // lines are drawn lef to right sorted by time
-    // the labe are drawn bottom to top sorted by ascending amount
+    // lines are drawn let to right sorted by time
+    // the labels are drawn bottom to top sorted by ascending currentUnitPrice
     activities.sort((a, b) => a.amount.compareTo(b.amount));
 
     for (final HoldingActivity activity in activities) {
@@ -296,8 +459,10 @@ class PaintActivities extends CustomPainter {
       if (activity.date.millisecondsSinceEpoch > minX) {
         left = ((activity.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
-      _paintLine(canvas, activity, left, chartHeight);
-      _paintLabel(canvas, activity, left + 2, nextVerticalLabelPosition + (labelVerticalDistribution / 2));
+      _paintLine(canvas, activity.color.withOpacity(0.8), left, 0, chartHeight);
+
+      String text = '${getIntAsText(activity.quantity.toInt().abs())} ${doubleToCurrency(activity.amount)}';
+      _paintLabel(canvas, text, activity.color, left + 2, nextVerticalLabelPosition + (labelVerticalDistribution / 2));
 
       nextVerticalLabelPosition -= labelVerticalDistribution;
     }
@@ -326,43 +491,5 @@ class PaintActivities extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     canvas.drawRect(rect, paint);
-  }
-
-  void _paintLabel(
-    ui.Canvas canvas,
-    HoldingActivity activity,
-    double x,
-    double y,
-  ) {
-    // Draw the text
-    final textPainter = TextPainter(
-      text: TextSpan(
-        text: '${getIntAsText(activity.quantity.toInt().abs())} ${doubleToCurrency(activity.amount)}',
-        style: TextStyle(
-          color: activity.color,
-          fontSize: 9,
-        ),
-      ),
-      textDirection: ui.TextDirection.ltr,
-    );
-
-    textPainter.layout(
-      minWidth: 0,
-      maxWidth: 100,
-    );
-
-    textPainter.paint(canvas, Offset(x, y));
-  }
-
-  void _paintLine(
-    ui.Canvas canvas,
-    HoldingActivity activity,
-    double left,
-    double chartHeight,
-  ) {
-    final rect = Rect.fromLTWH(left, 0, 1, chartHeight);
-    _paint.color = activity.color.withOpacity(0.8);
-
-    canvas.drawRect(rect, _paint);
   }
 }

@@ -40,16 +40,16 @@ class CostBasisCalculator {
     for (AccountHoldings holding in this.byAccount.values) {
       double total = 0;
       for (SecurityPurchase purchase in holding.getPurchases(s)) {
-        purchase.unitsRemaining = purchase.unitsRemaining * split.numerator / split.denominator;
-        purchase.costBasisPerUnit = purchase.costBasisPerUnit * split.denominator / split.numerator;
+        purchase.unitsRemaining = purchase.unitsRemaining * split.numerator.value / split.denominator.value;
+        purchase.costBasisPerUnit = purchase.costBasisPerUnit * split.denominator.value / split.numerator.value;
         total += purchase.unitsRemaining;
       }
 
       // yikes also have to split the pending sales...?
       for (SecuritySale pending in holding.getPendingSalesForSecurity(s)) {
-        if (pending.dateSold!.millisecond < split.date!.millisecond) {
-          pending.unitsSold = pending.unitsSold * split.numerator / split.denominator;
-          pending.salePricePerUnit = pending.salePricePerUnit * split.denominator / split.numerator;
+        if (pending.dateSold!.millisecond < split.date.value!.millisecond) {
+          pending.unitsSold = pending.unitsSold * split.numerator.value / split.denominator.value;
+          pending.salePricePerUnit = pending.salePricePerUnit * split.denominator.value / split.numerator.value;
         }
       }
 
@@ -72,7 +72,7 @@ class CostBasisCalculator {
 
   void applySplits(Security s, List<StockSplit> splits, DateTime dateTime) {
     StockSplit? next = splits.firstOrNull;
-    while (next != null && next.date!.millisecond < dateTime.millisecond) {
+    while (next != null && next.date.value!.millisecond < dateTime.millisecond) {
       this.applySplit(s, next);
       splits.remove(next);
       next = splits.firstOrNull;
@@ -95,7 +95,7 @@ class CostBasisCalculator {
 
       List<StockSplit> splits = Data().stockSplits.getStockSplitsForSecurity(s);
       splits.sort((a, b) {
-        return sortByDate(a.date, b.date); // ascending
+        return sortByDate(a.date.value, b.date.value); // ascending
       });
 
       for (Investment i in list) {

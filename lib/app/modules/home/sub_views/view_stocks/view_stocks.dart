@@ -154,10 +154,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Security? selected = getFirstSelectedItem() as Security?;
-    if (selected != null) {
-      final String symbol = selected.symbol.value;
-      List<Investment> list = getListOfInvestment(selected);
+    final Security? security = getFirstSelectedItem() as Security?;
+    if (security != null) {
+      final String symbol = security.symbol.value;
+      List<Investment> list = getListOfInvestment(security);
 
       final List<HoldingActivity> events = [];
       for (final Investment activity in list) {
@@ -165,8 +165,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           events.add(
             HoldingActivity(
               activity.transactionInstance!.dateTime.value!,
-              activity.unitPrice.value.toDouble(),
-              activity.effectiveUnits,
+              activity.unitPriceAdjusted.value.toDouble(),
+              activity.effectiveUnitsAdjusted,
             ),
           );
         }
@@ -176,6 +176,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         return StockChartWidget(
           key: Key('stock_symbol_$symbol'),
           symbol: symbol,
+          splits: Data().stockSplits.getStockSplitsForSecurity(security),
           holdingsActivities: events,
         );
       }
@@ -204,7 +205,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         return AdaptiveListColumnsOrRowsSingleSelection(
           // list related
           list: getListOfInvestment(_lastSecuritySelected!),
-          fieldDefinitions: _getFieldsToDisplayForInfoPanelTransactions(),
+          fieldDefinitions:
+              _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
           filters: FieldFilters(),
           sortByFieldIndex: sortInstructions.column,
           sortAscending: sortInstructions.ascending,
@@ -270,9 +272,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   List<Investment> getListOfInvestment(Security security) {
     final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
-    debugLog('--------------------');
     Investments.calculateRunningSharesAndBalance(list);
-    debugLog('^^^^^^^^^^^^^^^^^^^^');
     return list;
   }
 
@@ -291,14 +291,17 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return true;
   }
 
-  List<Field<dynamic>> _getFieldsToDisplayForInfoPanelTransactions() {
+  List<Field<dynamic>> _getFieldsToDisplayForInfoPanelTransactions(bool includeSplitColumns) {
     final included = [
       'Date',
       'Account',
       'Activity',
       'Units',
+      if (includeSplitColumns) 'Split',
+      if (includeSplitColumns) 'Units A.S.',
       'Holding',
       'Price',
+      if (includeSplitColumns) 'Price A.S.',
       'HoldingValue',
       'Commission',
       'ActivityAmount',

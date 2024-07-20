@@ -1,5 +1,6 @@
 import 'package:money/app/data/models/money_objects/investments/investment.dart';
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
+import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 // Exports
@@ -20,10 +21,16 @@ class Investments extends MoneyObjects<Investment> {
 
   @override
   void onAllDataLoaded() {
-    for (final investment in iterableList()) {
+    for (final Investment investment in iterableList()) {
       // hydrate the transaction instance associated to the investments
       final transactionFound = Data().transactions.get(investment.uniqueId);
       investment.transactionInstance = transactionFound;
+
+      final Security? security = Data().securities.get(investment.security.value);
+      if (security != null) {
+        final splits = Data().stockSplits.getStockSplitsForSecurity(security);
+        investment.applySplits(splits);
+      }
     }
   }
 
@@ -39,15 +46,10 @@ class Investments extends MoneyObjects<Investment> {
     final Field fieldToSortBy = Investment.fields.getFieldByName('Date');
     MoneyObjects.sortListFallbackOnIdforTieBreaker(investments, fieldToSortBy.sort!, true);
     double runningShares = 0;
-    double runningBalance = 0;
+
     for (final Investment investment in investments) {
-      runningShares += investment.effectiveUnits;
-      runningBalance += investment.finalAmount.amount;
-
+      runningShares += investment.effectiveUnitsAdjusted;
       investment.holdingShares.value = runningShares;
-      investment.runningBalance.value.setAmount(runningBalance);
-
-      debugLog(investment.toString());
     }
   }
 

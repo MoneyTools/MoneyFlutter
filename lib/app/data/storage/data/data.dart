@@ -69,7 +69,7 @@ class Data {
       rentBuildings, // 10
       rentUnits, // 11
       securities, // 12
-      investments, // 6
+      investments, // 6 Must be locate after [securities]
     ];
   }
 

@@ -3,8 +3,10 @@
 import 'dart:ui';
 
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
+import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -73,8 +75,7 @@ class Investment extends MoneyObject {
 
   FieldMoney activityAmount = FieldMoney(
     name: 'ActivityAmount',
-    getValueForDisplay: (final MoneyObject instance) =>
-        (instance as Investment).transactionInstance?.amount.value.toDouble() ?? 0.00,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._activityAmount,
   );
 
   /// 4    Commission      money   0                    0
@@ -96,6 +97,7 @@ class Investment extends MoneyObject {
   FieldQuantity holdingShares = FieldQuantity(
     name: 'Holding',
     footer: FooterType.average,
+    // useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).holdingShares.value,
   );
 
@@ -136,14 +138,6 @@ class Investment extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
   );
 
-  FieldMoney runningBalance = FieldMoney(
-    name: 'Balance',
-    footer: FooterType.average,
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as Investment).runningBalance.value;
-    },
-  );
-
   /// 1    Security        INT     1                    0
   FieldInt security = FieldInt(
     importance: 1,
@@ -165,6 +159,17 @@ class Investment extends MoneyObject {
       (instance as Investment).stashValueBeforeEditing();
       instance.securitySymbol.value = value as String;
     },
+  );
+
+  FieldString splitRatioAsText = FieldString(
+    importance: 2,
+    name: 'Split',
+    serializeName: 'Split',
+    align: TextAlign.right,
+    columnWidth: ColumnWidth.tiny,
+    footer: FooterType.none,
+    getValueForDisplay: (final MoneyObject instance) =>
+        'x ${formatDoubleTrimZeros((instance as Investment)._splitRatio)}',
   );
 
   /// 11   TaxExempt       bit     0                    0
@@ -229,7 +234,7 @@ class Investment extends MoneyObject {
   /// Not Persisted
   ///
 
-  /// 2    UnitPrice       money   1                    0
+  /// 2    UnitPrice       money   1
   FieldMoney unitPrice = FieldMoney(
     importance: 3,
     name: 'Price',
@@ -237,6 +242,13 @@ class Investment extends MoneyObject {
     footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).unitPrice.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).unitPrice.value.toDouble(),
+  );
+
+  FieldMoney unitPriceAdjusted = FieldMoney(
+    importance: 3,
+    name: 'Price A.S.',
+    footer: FooterType.average,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._unitPriceAdjusted,
   );
 
   /// 3    Units           money   0                    0
@@ -248,11 +260,20 @@ class Investment extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).units.value,
   );
 
+  FieldQuantity unitsAdjusted = FieldQuantity(
+    importance: 2,
+    name: 'Units A.S.',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).effectiveUnitsAdjusted,
+  );
+
   FieldMoney valueOfHoldingShares = FieldMoney(
     name: 'HoldingValue',
     footer: FooterType.average,
+    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) {
-      return MoneyModel(amount: (instance as Investment).holdingShares.value);
+      return MoneyModel(
+        amount: (instance as Investment).holdingShares.value * instance._unitPriceAdjusted,
+      );
     },
   );
 
@@ -264,6 +285,8 @@ class Investment extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).withholding.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value.toDouble(),
   );
+
+  double _splitRatio = 1;
 
   // Fields for this instance
   @override
@@ -287,6 +310,12 @@ class Investment extends MoneyObject {
 
   static final Fields<Investment> _fields = Fields<Investment>();
 
+  void applySplits(List<StockSplit> splits) {
+    for (final StockSplit split in splits) {
+      this._applySplit(split);
+    }
+  }
+
   DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
 
   double get effectiveUnits {
@@ -294,10 +323,17 @@ class Investment extends MoneyObject {
       return 0;
     }
 
-    if (getInvestmentTypeFromValue(this.investmentType.value) != InvestmentType.buy) {
-      return this.units.value * -1;
+    return this.units.value * _signBasedOnActivity;
+  }
+
+  // Buy is a positive value
+  // Sell is negative value
+  double get effectiveUnitsAdjusted {
+    if (this.units.value == 0) {
+      return 0;
     }
-    return this.units.value;
+
+    return this.units.value * this._splitRatio * _signBasedOnActivity;
   }
 
   static Fields<Investment> get fields {
@@ -311,8 +347,11 @@ class Investment extends MoneyObject {
         tmp.securitySymbol,
         tmp.investmentType,
         tmp.units,
+        tmp.splitRatioAsText,
+        tmp.unitsAdjusted,
         tmp.holdingShares,
         tmp.unitPrice,
+        tmp.unitPriceAdjusted,
         tmp.commission,
         tmp.markUpDown,
         tmp.taxes,
@@ -323,7 +362,6 @@ class Investment extends MoneyObject {
         tmp.withholding,
         tmp.activityAmount,
         tmp.valueOfHoldingShares,
-        tmp.runningBalance,
       ]);
     }
 
@@ -380,4 +418,16 @@ class Investment extends MoneyObject {
     // }
     return result;
   }
+
+  double get _activityAmount => transactionInstance?.amount.value.toDouble() ?? 0.00;
+
+  void _applySplit(StockSplit s) {
+    if (this.date.isBefore(s.date.value!) && s.denominator.value != 0 && s.numerator.value != 0) {
+      _splitRatio += s.numerator.value / s.denominator.value;
+    }
+  }
+
+  int get _signBasedOnActivity => getInvestmentTypeFromValue(this.investmentType.value) != InvestmentType.buy ? -1 : 1;
+
+  double get _unitPriceAdjusted => this.unitPrice.value.toDouble() / this._splitRatio;
 }

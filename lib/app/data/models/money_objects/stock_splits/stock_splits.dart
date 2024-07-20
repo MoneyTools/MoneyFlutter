@@ -26,17 +26,28 @@ class StockSplits extends MoneyObjects<StockSplit> {
     );
   }
 
-  List<StockSplit> getStockSplitsForSecurity(Security s) {
+  List<StockSplit> getStockSplitsForSecurity(final Security s) {
     List<StockSplit> list = [];
     for (StockSplit split in iterableList()) {
-      if (!s.isDeleted && split.security == s.uniqueId) {
+      if (!s.isDeleted && split.security.value == s.uniqueId) {
         list.add(split);
       }
     }
     list.sort((final StockSplit a, final StockSplit b) {
-      return a.date!.compareTo(b.date!);
+      return a.date.value!.compareTo(b.date.value!);
     });
 
     return list;
+  }
+
+  bool isSplitFound(final int securityId, final int year, final int month, final int day) {
+    for (StockSplit split in iterableList()) {
+      if (split.security.value == securityId) {
+        if (split.date.value!.year == year && split.date.value!.month == month && split.date.value!.day == day) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 }

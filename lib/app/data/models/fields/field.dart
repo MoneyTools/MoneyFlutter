@@ -143,10 +143,15 @@ Widget buildWidgetFromTypeAndValue({
       return Row(
         children: [
           Expanded(
-            child: QuantityWidget(
-              quantity: value,
-              align: align,
-            ),
+            child: (value is num)
+                ? QuantityWidget(
+                    quantity: value.toDouble(),
+                    align: align,
+                  )
+                : Text(
+                    value.toString(),
+                    textAlign: align,
+                  ),
           ),
         ],
       );

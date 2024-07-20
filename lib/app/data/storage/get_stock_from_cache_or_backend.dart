@@ -117,10 +117,10 @@ Future<StockPriceHistoryCache> _loadFromBackend(
     return StockPriceHistoryCache(symbol, StockLookupStatus.invalidApiKey);
   }
 
-  DateTime tenYearsInThePast = DateTime.now().subtract(const Duration(days: 365 * 40));
+  DateTime numberOfDaysInThePast = DateTime.now().subtract(const Duration(days: 365 * 40));
 
   final Uri uri = Uri.parse(
-    'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${tenYearsInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks}',
+    'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${numberOfDaysInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks}',
   );
 
   final http.Response response = await http.get(uri);

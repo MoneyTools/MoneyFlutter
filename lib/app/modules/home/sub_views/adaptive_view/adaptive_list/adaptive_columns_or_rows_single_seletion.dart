@@ -118,10 +118,12 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
           case FieldType.amountShorthand:
           case FieldType.numericShorthand:
           case FieldType.quantity:
-            final value = field.getValueForDisplay(item);
-            accumulatorSumNumber.cumulate(field, value);
-            if (field.footer == FooterType.average) {
-              accumulatorForAverage.cumulate(field, value);
+            final dynamic value = field.getValueForDisplay(item);
+            if (value is num) {
+              accumulatorSumNumber.cumulate(field, value.toDouble());
+              if (field.footer == FooterType.average) {
+                accumulatorForAverage.cumulate(field, value);
+              }
             }
           default:
             break;

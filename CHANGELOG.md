@@ -4,6 +4,7 @@
 
 ### Added
 
+- Download and display StockSplits
 - Diplay FieldQuantity in Blue for positive and Orange for negative
 - Improve FieldQuantity to show + sign on positive numbers
 

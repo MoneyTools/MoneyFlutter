@@ -278,8 +278,12 @@ class Fields<T> {
         return dateToString(fieldValue);
 
       case FieldType.quantity:
-        final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
-        return formatDoubleTrimZeros(fieldValue);
+        final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+        if (fieldValue is num) {
+          return formatDoubleTrimZeros(fieldValue.toDouble());
+        } else {
+          return fieldValue.toString();
+        }
 
       default:
         final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);

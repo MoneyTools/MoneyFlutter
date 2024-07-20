@@ -23,6 +23,8 @@ class Securities extends MoneyObjects<Security> {
   @override
   void onAllDataLoaded() {
     for (final Security security in iterableList()) {
+      security.splitsHistory = Data().stockSplits.getStockSplitsForSecurity(security);
+
       final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
       security.numberOfTrades.value = list.length;
 

@@ -286,10 +286,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             }
 
           case FieldType.amount:
-            final value = field.getValueForDisplay(item).toDouble();
-            accumulatorSumAmount.cumulate(field, value);
-            if (field.footer == FooterType.average) {
-              accumulatorForAverage.cumulate(field, value);
+            final double value = field.getValueForDisplay(item).toDouble();
+            if (isNumber(value)) {
+              accumulatorSumAmount.cumulate(field, value);
+              if (field.footer == FooterType.average) {
+                accumulatorForAverage.cumulate(field, value);
+              }
             }
 
           case FieldType.widget:
@@ -301,8 +303,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           case FieldType.amountShorthand:
           case FieldType.numericShorthand:
           case FieldType.quantity:
-            final value = field.getValueForDisplay(item);
-            accumulatorSumNumber.cumulate(field, value.toDouble());
+            final dynamic value = field.getValueForDisplay(item);
+            if (value is num) {
+              accumulatorSumNumber.cumulate(field, value.toDouble());
+            }
             if (field.footer == FooterType.average) {
               accumulatorForAverage.cumulate(field, value);
             }
@@ -707,7 +711,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final listToCopy = getInfoTransactions();
     copyToClipboardAndInformUser(
       context,
-      MoneyObjects.getCsvFromList(listToCopy, forSerialization: true),
+      MoneyObjects.getCsvFromList(listToCopy, forSerialization: false),
     );
   }
 
