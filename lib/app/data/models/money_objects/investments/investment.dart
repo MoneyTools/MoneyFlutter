@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
+import 'package:money/app/data/models/money_objects/investments/picker_investment_type.dart';
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
@@ -115,11 +116,23 @@ class Investment extends MoneyObject {
     columnWidth: ColumnWidth.tiny,
     type: FieldType.text,
     footer: FooterType.count,
-    getValueForDisplay: (final MoneyObject instance) => getInvestmentTypeTextFromValue(
-      (instance as Investment).investmentType.value,
-    ),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._investmentTypeAsString,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).investmentType.value,
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      return pickerInvestmentType(
+        itemSelected: getInvestmentTypeFromValue((instance as Investment).investmentType.value),
+        onSelected: (final InvestmentType newSelection) {
+          instance.investmentType.value = newSelection.index;
+          onEdited(true); // notify container
+        },
+      );
+    },
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Investment).stashValueBeforeEditing();
+      instance.investmentType.value = getInvestmentTypeFromValue(value).index;
+    },
   );
+  String get _investmentTypeAsString => getInvestmentTypeTextFromValue(this.investmentType.value);
 
   /// 8    Load            money   0                    0
   FieldMoney load = FieldMoney(
@@ -164,7 +177,6 @@ class Investment extends MoneyObject {
   FieldString splitRatioAsText = FieldString(
     importance: 2,
     name: 'Split',
-    serializeName: 'Split',
     align: TextAlign.right,
     columnWidth: ColumnWidth.tiny,
     footer: FooterType.none,
