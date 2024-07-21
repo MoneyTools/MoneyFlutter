@@ -227,9 +227,6 @@ class Investment extends MoneyObject {
     ),
   );
 
-  /// The actual transaction date.
-  Transaction? transactionInstance;
-
   /// --------------------------------------------
   /// Not Persisted
   ///
@@ -287,6 +284,9 @@ class Investment extends MoneyObject {
   );
 
   double _splitRatio = 1;
+
+  /// The actual transaction date.
+  Transaction? _transactionInstance;
 
   // Fields for this instance
   @override
@@ -417,6 +417,17 @@ class Investment extends MoneyObject {
     //   );
     // }
     return result;
+  }
+
+  /// The actual transaction date.
+  Transaction? get transactionInstance {
+    _transactionInstance ??= Data().transactions.get(this.uniqueId);
+    return _transactionInstance;
+  }
+
+  /// The actual transaction date.
+  set transactionInstance(Transaction? value) {
+    _transactionInstance = value;
   }
 
   double get _activityAmount => transactionInstance?.amount.value.toDouble() ?? 0.00;
