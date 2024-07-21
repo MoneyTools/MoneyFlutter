@@ -79,6 +79,7 @@ class MoneyObjects<T> {
     Data().notifyMutationChanged(
       mutation: MutationType.deleted,
       moneyObject: itemToDelete,
+      recalculateBalances: false,
     );
   }
 

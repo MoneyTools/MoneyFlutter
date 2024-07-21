@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferenceController extends GetxController {
   final RxBool isReady = false.obs;
+  final RxBool useYahooStock = true.obs;
 
   RxInt cashflowRecurringOccurrences = 12.obs;
   Rx<CashflowViewAs> cashflowViewAs = CashflowViewAs.sankey.obs;

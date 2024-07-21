@@ -1,3 +1,4 @@
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
@@ -26,6 +27,13 @@ class StockSplits extends MoneyObjects<StockSplit> {
     );
   }
 
+  void clearSplitForSecurityl(final int securityId) {
+    final listOfSplitsFound = iterableList().where((split) => split.security.value == securityId);
+    for (final ss in listOfSplitsFound) {
+      deleteItem(ss);
+    }
+  }
+
   List<StockSplit> getStockSplitsForSecurity(final Security s) {
     List<StockSplit> list = [];
     for (StockSplit split in iterableList()) {
@@ -40,14 +48,16 @@ class StockSplits extends MoneyObjects<StockSplit> {
     return list;
   }
 
-  bool isSplitFound(final int securityId, final int year, final int month, final int day) {
-    for (StockSplit split in iterableList()) {
-      if (split.security.value == securityId) {
-        if (split.date.value!.year == year && split.date.value!.month == month && split.date.value!.day == day) {
-          return true;
-        }
+  /// Only add, no removal of existing splits
+  void setStockSplits(final int securityId, final List<StockSplit> values) {
+    final List<StockSplit> listOfSplitsFound =
+        iterableList().where((split) => split.security.value == securityId).toList();
+    for (final StockSplit ss in values) {
+      final StockSplit? foundMatch = listOfSplitsFound
+          .firstWhereOrNull((existingSplit) => isSameDateWithoutTime(existingSplit.date.value, ss.date.value));
+      if (foundMatch == null) {
+        appendNewMoneyObject(ss);
       }
     }
-    return false;
   }
 }

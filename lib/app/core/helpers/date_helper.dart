@@ -307,3 +307,16 @@ extension DateTimeExtension on DateTime {
   /// DateTime.now().endOfDay -> 2019-09-30 23:59:59.999
   DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999, 999);
 }
+
+bool isSameDateWithoutTime(final DateTime? a, final DateTime? b) {
+  if (a == null && b == null) {
+    return true;
+  }
+  if (a == null && b != null) {
+    return false;
+  }
+  if (b == null && a != null) {
+    return false;
+  }
+  return a!.year == b!.year && a.month == b.month && a.day == b.day;
+}

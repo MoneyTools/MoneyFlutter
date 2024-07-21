@@ -15,6 +15,7 @@ import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/core/widgets/working.dart';
+import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
@@ -53,6 +54,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
   List<FlSpot> dataPoints = [];
   StockPriceHistoryCache latestPriceHistoryData = StockPriceHistoryCache('', StockLookupStatus.notFoundInCache, null);
 
+  late Security? security = Data().securities.getBySymbol(widget.symbol);
+
   @override
   void initState() {
     super.initState();
@@ -61,6 +64,10 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   @override
   Widget build(BuildContext context) {
+    if (security == null) {
+      return CenterMessage(message: 'Security "${widget.symbol}" is not valid');
+    }
+
     if (PreferenceController.to.apiKeyForStocks.isEmpty ||
         latestPriceHistoryData.status == StockLookupStatus.invalidApiKey) {
       return Center(
@@ -88,6 +95,28 @@ class StockChartWidgetState extends State<StockChartWidget> {
         return _buildChart();
       default:
         return const WorkingIndicator();
+    }
+  }
+
+  void fromPriceHistoryToChartDataPoints(StockPriceHistoryCache priceCache) {
+    if (priceCache.status == StockLookupStatus.validSymbol || priceCache.status == StockLookupStatus.foundInCache) {
+      List<FlSpot> tmpDataPoints = [];
+      for (final sp in priceCache.prices) {
+        tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
+      }
+      if (mounted) {
+        setState(() {
+          this.latestPriceHistoryData = priceCache;
+          this.dataPoints = tmpDataPoints;
+        });
+      }
+    } else {
+      if (mounted) {
+        setState(() {
+          this.latestPriceHistoryData = priceCache;
+          this.dataPoints = [];
+        });
+      }
     }
   }
 
@@ -244,12 +273,20 @@ class StockChartWidgetState extends State<StockChartWidget> {
           ),
           onPressed: () async {
             final result = await loadFomBackendAndSaveToCache(widget.symbol);
-            _fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
-
-            _fetchSplitsFromBackend(widget.symbol);
+            fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
+            List<StockSplit> splits = [];
+            if (PreferenceController.to.useYahooStock.value) {
+              splits = await _fetchStockSplitsFromYahoo(widget.symbol);
+            } else {
+              splits = await _fetchSplitsFromTwelveData(widget.symbol);
+            }
 
             setState(() {
-              _fromPriceHistoryToChartDataPoints(result);
+              fromPriceHistoryToChartDataPoints(result);
+              Data().stockSplits.setStockSplits(security!.uniqueId, splits);
+              if (DataController.to.trackMutations.isMutated()) {
+                Data().updateAll();
+              }
             });
           },
         ),
@@ -257,86 +294,102 @@ class StockChartWidgetState extends State<StockChartWidget> {
     );
   }
 
-  void _fetchSplitsFromBackend(
+  Future<List<StockSplit>> _fetchSplitsFromTwelveData(
     String symbol,
   ) async {
-    if (PreferenceController.to.apiKeyForStocks.isEmpty) {
-      // No API Key to make the backend request
-      return;
-    }
+    List<StockSplit> splitsFound = [];
 
-    final Uri uri = Uri.parse(
-      'https://api.twelvedata.com/splits?symbol=$symbol&range=full&apikey=${PreferenceController.to.apiKeyForStocks}',
-    );
+    if (PreferenceController.to.apiKeyForStocks.isNotEmpty) {
+      final Uri uri = Uri.parse(
+        'https://api.twelvedata.com/splits?symbol=$symbol&range=full&apikey=${PreferenceController.to.apiKeyForStocks}',
+      );
 
-    final http.Response response = await http.get(uri);
+      final http.Response response = await http.get(uri);
 
-    if (response.statusCode == 200) {
-      try {
-        final MyJson data = json.decode(response.body);
+      if (response.statusCode == 200) {
+        try {
+          final MyJson data = json.decode(response.body);
 
-        int? subStatusCode = data['code'];
-        if ([401, 403, 404, 409].contains(subStatusCode)) {
-          debugLog(data.toString());
-          SnackBarService.displayError(message: data['message']);
-          return;
-        }
+          int? subStatusCode = data['code'];
+          if ([401, 403, 404, 409].contains(subStatusCode)) {
+            debugLog(data.toString());
+            SnackBarService.displayError(message: data['message']);
+          } else {
+            final List<dynamic> dataSplits = data['splits'];
 
-        final List<dynamic> dataSplits = data['splits'];
-
-        final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
-        for (final dataSplit in dataSplits) {
-          final dateOfSplit = DateTime.parse(dataSplit['date']);
-
-          if (!Data().stockSplits.isSplitFound(securityId, dateOfSplit.year, dateOfSplit.month, dateOfSplit.day)) {
-            StockSplit sp = StockSplit(
-              security: securityId,
-              date: dateOfSplit,
-              numerator: dataSplit['from_factor'],
-              denominator: dataSplit['to_factor'],
-            );
-            Data().stockSplits.appendNewMoneyObject(sp, fireNotification: false);
+            final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
+            for (final dataSplit in dataSplits) {
+              final dateOfSplit = DateTime.parse(dataSplit['date']);
+              StockSplit sp = StockSplit(
+                security: securityId,
+                date: dateOfSplit,
+                numerator: dataSplit['from_factor'],
+                denominator: dataSplit['to_factor'],
+              );
+              splitsFound.add(sp);
+            }
           }
+        } catch (error) {
+          debugLog(error.toString());
+          SnackBarService.displayError(message: error.toString());
         }
-        if (DataController.to.trackMutations.isMutated()) {
-          Data().updateAll();
-        }
-      } catch (error) {
-        debugLog(error.toString());
-        SnackBarService.displayError(message: error.toString());
+      } else {
+        debugLog('Failed to fetch data: ${response.toString()}');
       }
-    } else {
-      debugLog('Failed to fetch data: ${response.toString()}');
     }
-    return;
+    return splitsFound;
   }
 
-  void _fromPriceHistoryToChartDataPoints(StockPriceHistoryCache priceCache) {
-    if (priceCache.status == StockLookupStatus.validSymbol || priceCache.status == StockLookupStatus.foundInCache) {
-      List<FlSpot> tmpDataPoints = [];
-      for (final sp in priceCache.prices) {
-        tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
-      }
-      if (mounted) {
-        setState(() {
-          this.latestPriceHistoryData = priceCache;
-          this.dataPoints = tmpDataPoints;
-        });
-      }
-    } else {
-      if (mounted) {
-        setState(() {
-          this.latestPriceHistoryData = priceCache;
-          this.dataPoints = [];
-        });
+  Future<List<StockSplit>> _fetchStockSplitsFromYahoo(String symbol) async {
+    List<StockSplit> splitsFound = [];
+
+    // Base URL for Yahoo Finance API v8
+    final String baseUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/$symbol';
+
+    // Define the query parameters
+    final Map<String, String> queryParams = {
+      'interval': '1d', // Daily interval
+      'range': '5y', // Last 5 years range
+      'events': 'splits', // Fetch stock splits
+    };
+
+    // Construct the full URL with query parameters
+    final Uri uri = Uri.parse(baseUrl).replace(queryParameters: queryParams);
+
+    // Send the GET request to the Yahoo Finance API
+    final http.Response response = await http.get(uri);
+
+    // Check if the request was successful
+    if (response.statusCode == 200) {
+      // Parse the response body as JSON
+      final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      Security? security = Data().securities.getBySymbol(symbol);
+      if (security != null) {
+        // Extract the stock splits data
+        final Map<String, dynamic> splits = jsonResponse['chart']['result'][0]['events']['splits'];
+        for (var splitJson in splits.values) {
+          int dateInMiliseconds = splitJson['date'];
+          final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMiliseconds * 1000);
+          StockSplit sp = StockSplit(
+            security: security.uniqueId,
+            date: dateOSplit,
+            numerator: splitJson['numerator'].toInt(),
+            denominator: splitJson['denominator'].toInt(),
+          );
+          splitsFound.add(sp);
+        }
+      } else {
+        // Handle the error
+        debugLog('Failed to load stock splits for $symbol');
       }
     }
+    return splitsFound;
   }
 
   void _getStockHistoricalData() async {
     StockPriceHistoryCache priceCache = await getFromCacheOrBackend(widget.symbol);
 
-    _fromPriceHistoryToChartDataPoints(priceCache);
+    fromPriceHistoryToChartDataPoints(priceCache);
   }
 }
 

@@ -13,10 +13,10 @@ import 'package:money/app/data/storage/data/data.dart';
 
 class StockSplit extends MoneyObject {
   StockSplit({
-    required date,
-    required security,
-    required numerator,
-    required denominator,
+    required DateTime? date,
+    required int security,
+    required int numerator,
+    required int denominator,
   }) {
     this.date.value = date;
     this.security.value = security;

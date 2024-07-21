@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.45] 2024-07-21
+
+### Updated
+
+- Use Yahoo-V8 backedn to download the StockSplits data
+
 ## [version 1.8.44] 2024-07-19
 
 ### Added
