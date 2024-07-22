@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/widgets/icon_button.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class Box extends StatelessWidget {
@@ -13,6 +14,7 @@ class Box extends StatelessWidget {
     this.height,
     this.margin,
     this.padding = 8,
+    this.copyToClipboard,
     required this.child,
   }) {
     assert(title.isNotEmpty && header == null || title.isEmpty && header != null || title.isEmpty && header == null);
@@ -20,6 +22,7 @@ class Box extends StatelessWidget {
 
   final Widget child;
   final Color? color;
+  final Function? copyToClipboard;
   final Widget? header;
   final double? height;
   final double? margin;
@@ -63,12 +66,18 @@ class Box extends StatelessWidget {
           ),
           child: child,
         ),
-        if (title.isNotEmpty || header != null) _buildHeader(context),
+        if (title.isNotEmpty || header != null) _buildBoxHeader(context),
+        if (copyToClipboard != null)
+          Positioned(
+            top: -10,
+            right: 0,
+            child: _buildCopyToClipboardButton(),
+          ),
       ],
     );
   }
 
-  Widget _buildHeader(final BuildContext context) {
+  Widget _buildBoxHeader(final BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: SizeForPadding.normal,
@@ -90,6 +99,19 @@ class Box extends StatelessWidget {
                   ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildCopyToClipboardButton() {
+    return Card(
+      elevation: 1,
+      shadowColor: Colors.transparent,
+      child: MyIconButton(
+        icon: Icons.copy_all_outlined,
+        onPressed: () {
+          copyToClipboard?.call();
+        },
       ),
     );
   }

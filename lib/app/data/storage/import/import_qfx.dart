@@ -3,23 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/core/helpers/value_parser.dart';
-import 'package:money/app/core/widgets/confirmation_dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
-import 'package:money/app/core/widgets/import_transactions_list_preview.dart';
-import 'package:money/app/core/widgets/picker_panel.dart';
-import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
-import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
+import 'package:money/app/data/storage/import/import_data.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.dart';
 
 Future<bool> importQFX(
   final BuildContext context,
   final String filePath,
-  final Data data,
 ) async {
   final File file = File(filePath);
 
@@ -29,98 +22,14 @@ Future<bool> importQFX(
   final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofx);
 
   final AccountType? accountType = getAccountTypeFromText(bankInfo.accountType);
-  Account? account = data.accounts.findByIdAndType(bankInfo.accountId, accountType);
 
-  if (account == null) {
-    final List<String> activeAccountNames =
-        Data().accounts.getListSorted().map((element) => element.name.value).toList();
-
-    showPopupSelection(
-      title: 'Pick account to import to',
-      context: context,
-      items: activeAccountNames,
-      selectedItem: bankInfo.accountId,
-      onSelected: (final String text) {
-        final Account? accountSelected = Data().accounts.getByName(text);
-        if (accountSelected != null) {
-          _showAndConfirmTransactionToImport(context, ofx, accountSelected);
-        } else {
-          SnackBarService.displayWarning(
-            autoDismiss: false,
-            message: 'QFX Import - No matching "${bankInfo.accountType}" accounts with ID "${bankInfo.accountId}"',
-          );
-          return false;
-        }
-      },
-    );
-  } else {
-    _showAndConfirmTransactionToImport(context, ofx, account);
-  }
+  ImportData importData = ImportData();
+  importData.account = Data().accounts.findByIdAndType(bankInfo.accountId, accountType);
+  importData.entries = getTransactionFromOFX(ofx);
+  importData.fileType = 'QFX';
+  showAndConfirmTransactionToImport(context, importData);
 
   return true;
-}
-
-void _showAndConfirmTransactionToImport(
-  final BuildContext context,
-  final String ofx,
-  final Account account,
-) {
-  final List<QFXTransaction> list = getTransactionFromOFX(ofx);
-
-  final List<ValuesQuality> valuesQuality = [];
-
-  // attempt to find or add new transactions
-  for (final QFXTransaction item in list) {
-    // when there's no 'name' then fallback to 'memo'
-    final payeeText = item.name.isEmpty ? item.memo : item.name;
-    valuesQuality.add(
-      ValuesQuality(
-        date: ValueQuality(dateToString(item.date), dateFormat: 'yyyy-MM-dd'),
-        // final int payeeIdMatchingPayeeText = Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
-        description: ValueQuality(payeeText),
-        amount: ValueQuality(item.amount.toString()),
-      ),
-    );
-  }
-
-  String messageToUser = '${list.length} transactions found in QFX file, to be imported into "${account.name.value}"';
-
-  Widget questionContent = SizedBox(
-    height: 400,
-    width: 500,
-    child: Center(
-      child: ImportTransactionsListPreview(
-        accountId: account.uniqueId,
-        values: valuesQuality,
-      ),
-    ),
-  );
-
-  showConfirmationDialog(
-    context: context,
-    title: 'Import QFX',
-    question: messageToUser,
-    content: questionContent,
-    buttonText: 'Import',
-    onConfirmation: () {
-      final List<Transaction> transactionsToAdd = [];
-      for (final ValuesQuality singleTransactionInput in valuesQuality) {
-        if (!singleTransactionInput.exist) {
-          final t = createNewTransactionFromDateDescriptionAmount(
-            account,
-            singleTransactionInput.date.asDate() ?? DateTime.now(),
-            singleTransactionInput.description.asString(),
-            singleTransactionInput.amount.asAmount(),
-          );
-          transactionsToAdd.add(t);
-        }
-      }
-      addNewTransactions(
-        transactionsToAdd,
-        'QFX Imported - ${transactionsToAdd.length} transactions into "${account.name.value}"',
-      );
-    },
-  );
 }
 
 class OfxBankInfo {
@@ -147,7 +56,7 @@ class OfxBankInfo {
   }
 }
 
-int getInvestmentCategoryFromOfxType(final QFXTransaction ofxTransaction) {
+int getInvestmentCategoryFromOfxType(final ImporEntry ofxTransaction) {
   int categoryId = -1;
   switch (ofxTransaction.type) {
     case 'CREDIT':
@@ -189,7 +98,7 @@ int getInvestmentCategoryFromOfxType(final QFXTransaction ofxTransaction) {
   return categoryId;
 }
 
-List<QFXTransaction> getTransactionFromOFX(final String rawOfx) {
+List<ImporEntry> getTransactionFromOFX(final String rawOfx) {
   if (rawOfx.isNotEmpty) {
     // Remove all LN/CR
     String ofx = getNormalizedValue(rawOfx);
@@ -203,35 +112,15 @@ List<QFXTransaction> getTransactionFromOFX(final String rawOfx) {
     bankTransactionLit = bankTransactionLit.replaceAll('</STMTTRN>', '</STMTTRN>\n');
     final List<String> lines = LineSplitter.split(bankTransactionLit).toList();
 
-    final List<QFXTransaction> qfxTransactions = parseQFXTransactions(lines);
+    final List<ImporEntry> qfxTransactions = parseQFXTransactions(lines);
     return qfxTransactions;
   }
 
-  return <QFXTransaction>[];
+  return <ImporEntry>[];
 }
 
-class QFXTransaction {
-  QFXTransaction({
-    required this.type,
-    required this.date,
-    required this.amount,
-    required this.name,
-    required this.fitid,
-    this.memo = '',
-    this.number = '',
-  });
-
-  late double amount;
-  late DateTime date;
-  late String fitid;
-  late String memo;
-  late String name;
-  late String number;
-  late String type;
-}
-
-List<QFXTransaction> parseQFXTransactions(final List<String> lines) {
-  final List<QFXTransaction> transactions = <QFXTransaction>[];
+List<ImporEntry> parseQFXTransactions(final List<String> lines) {
+  final List<ImporEntry> transactions = <ImporEntry>[];
 
   for (String line in lines) {
     line = getNormalizedValue(line);
@@ -243,7 +132,7 @@ List<QFXTransaction> parseQFXTransactions(final List<String> lines) {
     );
 
     if (rawTransactionText.isNotEmpty) {
-      final QFXTransaction currentTransaction = QFXTransaction(
+      final ImporEntry currentTransaction = ImporEntry(
         type: findAndGetValueOf(rawTransactionText, '<TRNTYPE>', ''),
         date: parseQfxDataFormat(
               findAndGetValueOf(rawTransactionText, '<DTPOSTED>', ''),

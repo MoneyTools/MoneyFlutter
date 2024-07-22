@@ -58,6 +58,10 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
 
     return Box(
       header: buildHeaderTitleAndCounter(context, 'Preview', buildTallyOfItemsToImportOrSkip()),
+      copyToClipboard: () {
+        final String text = widget.values.toList().join('\n');
+        copyToClipboardAndInformUser(context, text);
+      },
       child: Column(
         children: [
           //

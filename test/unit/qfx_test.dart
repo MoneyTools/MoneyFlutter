@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/data/storage/import/import_data.dart';
 import 'package:money/app/data/storage/import/import_qfx.dart';
 
 void main() {
@@ -10,7 +11,7 @@ void main() {
       final String ofxString = getStringDelimitedStartEndTokens(qfxString, '<OFX>', '</OFX>');
       expect(ofxString.isEmpty, false);
 
-      final List<QFXTransaction> list = getTransactionFromOFX(ofxString);
+      final List<ImporEntry> list = getTransactionFromOFX(ofxString);
       expect(list.length, 2);
 
       expect(list[0].type, 'CREDIT');

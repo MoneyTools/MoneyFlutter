@@ -24,6 +24,11 @@ class ValueQuality {
   final String valueAsString;
   final String warningMessage = '';
 
+  @override
+  String toString() {
+    return asString();
+  }
+
   double asAmount() {
     return (parseAmount(valueAsString, currency) ?? 0.00) * (reverseAmountValue ? -1 : 1);
   }
@@ -98,6 +103,11 @@ class ValuesQuality {
   final bool reverseAmountValue;
 
   bool exist = false;
+
+  @override
+  String toString() {
+    return '$date; $description; $amount';
+  }
 
   bool checkIfExistAlready({required final int accountId}) {
     exist = isTransactionAlreadyInTheSystem(

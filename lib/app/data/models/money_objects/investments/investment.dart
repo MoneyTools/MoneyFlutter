@@ -132,7 +132,6 @@ class Investment extends MoneyObject {
       instance.investmentType.value = getInvestmentTypeFromValue(value).index;
     },
   );
-  String get _investmentTypeAsString => getInvestmentTypeTextFromValue(this.investmentType.value);
 
   /// 8    Load            money   0                    0
   FieldMoney load = FieldMoney(
@@ -449,6 +448,8 @@ class Investment extends MoneyObject {
       _splitRatio += s.numerator.value / s.denominator.value;
     }
   }
+
+  String get _investmentTypeAsString => getInvestmentTypeTextFromValue(this.investmentType.value);
 
   int get _signBasedOnActivity => getInvestmentTypeFromValue(this.investmentType.value) != InvestmentType.buy ? -1 : 1;
 
