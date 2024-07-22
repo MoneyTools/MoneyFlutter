@@ -92,6 +92,7 @@ bool doesDateFormatWorkOnThisString(String format, String dateString) {
 DateTime? attemptToGetDateFromText(final String text) {
   // Define a list of date formats to try
   List<String> dateFormats = [
+    'yyyy-MM-dd HH:mm:ss', // ISO8601
     'yyyy-MM-dd', // ISO8601
     'MM/dd/yyyy', // USA format 4 digit year
     'MM/dd/yy', // USA format 2 digit year
