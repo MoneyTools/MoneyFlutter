@@ -9,6 +9,7 @@ class Box extends StatelessWidget {
     super.key,
     this.title = '', // optional
     this.header, // optional
+    this.footer, // optional
     this.color,
     this.width,
     this.height,
@@ -23,6 +24,7 @@ class Box extends StatelessWidget {
   final Widget child;
   final Color? color;
   final Function? copyToClipboard;
+  final Widget? footer;
   final Widget? header;
   final double? height;
   final double? margin;
@@ -73,7 +75,26 @@ class Box extends StatelessWidget {
             right: 0,
             child: _buildCopyToClipboardButton(),
           ),
+        if (footer != null)
+          Positioned(
+            bottom: -5,
+            right: 10,
+            child: footer!,
+          ),
       ],
+    );
+  }
+
+  static Widget buildFooter(final String text) {
+    return Card(
+      elevation: 1,
+      shadowColor: Colors.transparent,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SizeForPadding.normal,
+        ),
+        child: SelectableText(text),
+      ),
     );
   }
 
@@ -92,7 +113,7 @@ class Box extends StatelessWidget {
             ),
             child: title.isEmpty
                 ? header
-                : Text(
+                : SelectableText(
                     title,
                     style: getTextTheme(context).titleSmall,
                     textAlign: TextAlign.center,

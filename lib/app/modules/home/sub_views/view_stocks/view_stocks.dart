@@ -326,30 +326,42 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return true;
   }
 
-  Widget _buildAdaptiveBox(final BuildContext context, final String title, final int count, final Widget content) {
+  Widget _buildAdaptiveBox({
+    required final BuildContext context,
+    required final String title,
+    required final int count,
+    required final Widget content,
+    final Widget? footer,
+  }) {
     return Box(
       height: 300,
       color: getColorTheme(context).primaryContainer,
       header: buildHeaderTitleAndCounter(context, title, count == 0 ? '' : getIntAsText(count)),
+      footer: footer,
       padding: SizeForPadding.huge,
       child: count == 0 ? CenterMessage(message: 'No $title found') : content,
     );
   }
 
   Widget _buildPanelForDividend(final BuildContext context, final Security security) {
-    final List<Investment> investmentOfDividend = security
+    final List<Investment> investments = security
         .getAssociatedInvestments()
         .where((Investment item) => item.investmentType.value == InvestmentType.dividend.index)
         .toList();
 
+    final double totalDividend = investments.fold(
+      0.0,
+      (sum, investment) => sum + investment.transactionInstance!.amount.value.toDouble(),
+    );
+
     return _buildAdaptiveBox(
-      context,
-      'Dividend',
-      investmentOfDividend.length,
-      ListView.separated(
-        itemCount: investmentOfDividend.length,
+      context: context,
+      title: 'Dividend',
+      count: investments.length,
+      content: ListView.separated(
+        itemCount: investments.length,
         itemBuilder: (context, index) {
-          final Investment investment = investmentOfDividend[index];
+          final Investment investment = investments[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -362,6 +374,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
         ),
       ),
+      footer: Box.buildFooter(Currency.getAmountAsStringUsingCurrency(totalDividend)),
     );
   }
 
@@ -369,10 +382,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     final List<StockSplit> splits = security.splitsHistory;
 
     return _buildAdaptiveBox(
-      context,
-      'Splits',
-      splits.length,
-      ListView.separated(
+      context: context,
+      title: 'Splits',
+      count: splits.length,
+      content: ListView.separated(
         itemCount: splits.length,
         itemBuilder: (context, index) {
           final StockSplit split = splits[index];
