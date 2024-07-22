@@ -446,7 +446,7 @@ class Investment extends MoneyObject {
 
   void _applySplit(StockSplit s) {
     if (this.date.isBefore(s.date.value!) && s.denominator.value != 0 && s.numerator.value != 0) {
-      _splitRatio += s.numerator.value / s.denominator.value;
+      _splitRatio *= s.numerator.value / s.denominator.value;
     }
   }
 

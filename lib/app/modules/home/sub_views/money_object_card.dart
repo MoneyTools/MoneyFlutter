@@ -42,7 +42,6 @@ class MoneyObjectCard extends StatelessWidget {
 
     return Box(
       color: getColorTheme(context).primaryContainer,
-      // padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widgets,

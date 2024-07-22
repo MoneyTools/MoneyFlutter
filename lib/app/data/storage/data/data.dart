@@ -61,15 +61,18 @@ class Data {
       loanPayments, // 7
       onlineAccounts, // 8
       payees, // 9
-      stockSplits, // 14
       transactionExtras, // 15
       transactions, // 16
-      // must come after Transactions
+      // Keep in this order - must come after Transactions
       splits, // 13
+      // Keep in this order
+      stockSplits, // 14
+      investments, // 6 Must be locate after [stockSplits]
+      securities, // 12 Must be locate after [investments]
+
+      // Can be last
       rentBuildings, // 10
       rentUnits, // 11
-      securities, // 12
-      investments, // 6 Must be locate after [securities]
     ];
   }
 

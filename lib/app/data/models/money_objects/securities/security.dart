@@ -192,12 +192,6 @@ class Security extends MoneyObject {
     },
   );
 
-  FieldInt splitsCount = FieldInt(
-    name: 'Splits',
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).splitsHistory.length,
-  );
-
   List<StockSplit> splitsHistory = [];
   // 2
   FieldString symbol = FieldString(
@@ -252,7 +246,6 @@ class Security extends MoneyObject {
         tmp.lastPrice,
         tmp.cuspid,
         tmp.securityType,
-        tmp.splitsCount,
         tmp.numberOfTrades,
         tmp.holdingShares,
         tmp.holdingValue,

@@ -1,9 +1,13 @@
+import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
+import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/stock_chart.dart';
 
 class ViewStocks extends ViewForMoneyObjects {
@@ -185,6 +189,34 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    final selectedSecurity = getFirstSelectedItem() as Security?;
+    if (selectedSecurity == null) {
+      return const CenterMessage(message: 'No item selected.');
+    }
+
+    return SingleChildScrollView(
+      child: Center(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          runSpacing: 30,
+          spacing: 30,
+          children: [
+            MoneyObjectCard(
+              title: getClassNameSingular(),
+              moneyObject: selectedSecurity,
+            ),
+            _buildPanelForSplits(context, selectedSecurity),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget getInfoPanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
@@ -289,6 +321,34 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       // All, no filter needed
     }
     return true;
+  }
+
+  Widget _buildPanelForSplits(final BuildContext context, final Security security) {
+    final List<StockSplit> splits = security.splitsHistory;
+    return Box(
+      height: 300,
+      color: getColorTheme(context).primaryContainer,
+      header: buildHeaderTitleAndCounter(context, 'Splits', splits.length.toString()),
+      padding: SizeForPadding.huge,
+      child: ListView.separated(
+        itemCount: splits.length,
+        itemBuilder: (context, index) {
+          final StockSplit split = splits[index];
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(split.date.getValueForDisplay(split).toString()),
+              Text(split.numerator.value.toString()),
+              const Text(' for '),
+              Text(split.denominator.value.toString()),
+            ],
+          );
+        },
+        separatorBuilder: (context, index) => Divider(
+          color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
+        ),
+      ),
+    );
   }
 
   List<Field<dynamic>> _getFieldsToDisplayForInfoPanelTransactions(bool includeSplitColumns) {
