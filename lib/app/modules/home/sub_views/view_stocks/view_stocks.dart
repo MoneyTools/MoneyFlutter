@@ -1,7 +1,9 @@
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
+import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
@@ -210,6 +212,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
               moneyObject: selectedSecurity,
             ),
             _buildPanelForSplits(context, selectedSecurity),
+            _buildPanelForDividend(context, selectedSecurity),
           ],
         ),
       ),
@@ -323,14 +326,53 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return true;
   }
 
-  Widget _buildPanelForSplits(final BuildContext context, final Security security) {
-    final List<StockSplit> splits = security.splitsHistory;
+  Widget _buildAdaptiveBox(final BuildContext context, final String title, final int count, final Widget content) {
     return Box(
       height: 300,
       color: getColorTheme(context).primaryContainer,
-      header: buildHeaderTitleAndCounter(context, 'Splits', splits.length.toString()),
+      header: buildHeaderTitleAndCounter(context, title, count == 0 ? '' : getIntAsText(count)),
       padding: SizeForPadding.huge,
-      child: ListView.separated(
+      child: count == 0 ? CenterMessage(message: 'No $title found') : content,
+    );
+  }
+
+  Widget _buildPanelForDividend(final BuildContext context, final Security security) {
+    final List<Investment> investmentOfDividend = security
+        .getAssociatedInvestments()
+        .where((Investment item) => item.investmentType.value == InvestmentType.dividend.index)
+        .toList();
+
+    return _buildAdaptiveBox(
+      context,
+      'Dividend',
+      investmentOfDividend.length,
+      ListView.separated(
+        itemCount: investmentOfDividend.length,
+        itemBuilder: (context, index) {
+          final Investment investment = investmentOfDividend[index];
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(investment.date.toString()),
+              Text(investment.transactionInstance!.amountAsText),
+            ],
+          );
+        },
+        separatorBuilder: (context, index) => Divider(
+          color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPanelForSplits(final BuildContext context, final Security security) {
+    final List<StockSplit> splits = security.splitsHistory;
+
+    return _buildAdaptiveBox(
+      context,
+      'Splits',
+      splits.length,
+      ListView.separated(
         itemCount: splits.length,
         itemBuilder: (context, index) {
           final StockSplit split = splits[index];

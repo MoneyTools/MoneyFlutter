@@ -2,6 +2,7 @@
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
+import 'package:money/app/data/models/money_objects/investments/investment.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
@@ -255,6 +256,9 @@ class Security extends MoneyObject {
     }
     return _fields;
   }
+
+  List<Investment> getAssociatedInvestments() =>
+      Data().investments.iterableList().where((item) => item.security.value == this.uniqueId).toList();
 
   static String getSecurityTypeFromInt(final int index) {
     if (isIndexInRange(SecurityType.values, index)) {

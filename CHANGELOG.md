@@ -4,6 +4,7 @@
 
 ### Updated
 
+- StockView:Details panel: Display Splits and Dividend panels
 - Add DateRange column to Stock view
   
 ## [version 1.8.45] 2024-07-21
