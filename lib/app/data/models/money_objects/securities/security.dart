@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_this
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
@@ -137,7 +138,7 @@ class Security extends MoneyObject {
 
   // 8
   FieldDate priceDate = FieldDate(
-    name: 'Date',
+    name: 'LatestPrice',
     serializeName: 'PriceDate',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
     getValueForSerialization: (final MoneyObject instance) =>
@@ -217,6 +218,16 @@ class Security extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).taxable.value,
   );
 
+  Field<DateRange> transactionDateRange = Field<DateRange>(
+    name: 'Dates',
+    defaultValue: DateRange(),
+    type: FieldType.dateRange,
+    footer: FooterType.range,
+    getValue: (final MoneyObject instance) => (instance as Security).transactionDateRange.value,
+    getValueForDisplay: (final MoneyObject instance) =>
+        (instance as Security).transactionDateRange.value.toStringYears(),
+  );
+
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
@@ -236,7 +247,7 @@ class Security extends MoneyObject {
         tmp.id,
         tmp.name,
         tmp.symbol,
-        tmp.priceDate,
+        tmp.transactionDateRange,
         tmp.price,
         tmp.lastPrice,
         tmp.cuspid,

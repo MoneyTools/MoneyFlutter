@@ -66,7 +66,8 @@ class Investments extends MoneyObjects<Investment> {
     StockCumulative cumulative = StockCumulative();
 
     for (final investment in investments) {
-      cumulative.quantity += investment.effectiveUnits;
+      cumulative.dateRange.inflate(investment.date);
+      cumulative.quantity += investment.effectiveUnitsAdjusted;
       cumulative.amount += investment.activityAmount.getValueForDisplay(investment);
     }
     return cumulative;

@@ -292,6 +292,7 @@ class Field<T> {
     this.columnWidth = ColumnWidth.normal,
     this.footer = FooterType.none,
     this.fixedFont = false,
+    this.getValue = defaultCallbackValue,
     this.getValueForDisplay = defaultCallbackValue,
     // ignore: avoid_init_to_null
     this.getValueForReading = null,
@@ -410,6 +411,9 @@ class Field<T> {
   bool fixedFont = false;
   // indicate how to handle the column footer
   FooterType footer;
+
+  /// Get the value
+  dynamic Function(MoneyObject) getValue;
 
   /// Get the value of the instance
   dynamic Function(MoneyObject) getValueForDisplay;
@@ -668,6 +672,7 @@ enum FieldType {
   amount,
   amountShorthand,
   date,
+  dateRange,
   toggle, // On/Off
   widget,
 }

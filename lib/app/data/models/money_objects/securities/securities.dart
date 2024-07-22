@@ -29,6 +29,7 @@ class Securities extends MoneyObjects<Security> {
       security.numberOfTrades.value = list.length;
 
       final StockCumulative cumulative = Investments.getSharesAndProfit(list);
+      security.transactionDateRange.value = cumulative.dateRange;
       security.holdingShares.value = cumulative.quantity;
       security.activityProfit.value.setAmount(cumulative.amount);
     }

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.46] 2024-07-22
+
+### Updated
+
+- Add DateRange column to Stock view
+  
 ## [version 1.8.45] 2024-07-21
 
 ### Updated

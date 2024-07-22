@@ -284,6 +284,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             if (dateTime != null) {
               accumulatorDateRange.cumulate(field, dateTime);
             }
+          case FieldType.dateRange:
+            final dateRangeValue = field.getValue(item);
+            if (dateRangeValue.min != null) {
+              accumulatorDateRange.cumulate(field, dateRangeValue.min);
+            }
+            if (dateRangeValue.max != null) {
+              accumulatorDateRange.cumulate(field, dateRangeValue.max);
+            }
 
           case FieldType.amount:
             final double value = field.getValueForDisplay(item).toDouble();

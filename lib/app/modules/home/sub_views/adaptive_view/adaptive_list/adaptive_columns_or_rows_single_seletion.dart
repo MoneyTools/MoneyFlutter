@@ -101,6 +101,13 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
 
           case FieldType.date:
             accumulatorDateRange.cumulate(field, field.getValueForDisplay(item));
+          case FieldType.dateRange:
+            if (field.value.min != null) {
+              accumulatorDateRange.cumulate(field, field.value.min);
+            }
+            if (field.value.max != null) {
+              accumulatorDateRange.cumulate(field, field.value.max);
+            }
 
           case FieldType.amount:
             final value = field.getValueForDisplay(item).toDouble();
