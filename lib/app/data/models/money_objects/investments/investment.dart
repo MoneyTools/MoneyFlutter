@@ -322,6 +322,7 @@ class Investment extends MoneyObject {
   static final Fields<Investment> _fields = Fields<Investment>();
 
   void applySplits(List<StockSplit> splits) {
+    _splitRatio = 1;
     for (final StockSplit split in splits) {
       this._applySplit(split);
     }
