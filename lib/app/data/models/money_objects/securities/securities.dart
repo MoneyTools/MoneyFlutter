@@ -25,13 +25,14 @@ class Securities extends MoneyObjects<Security> {
     for (final Security security in iterableList()) {
       security.splitsHistory = Data().stockSplits.getStockSplitsForSecurity(security);
 
-      final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
+      final List<Investment> list = security.getAssociatedInvestments();
       security.numberOfTrades.value = list.length;
 
       final StockCumulative cumulative = Investments.getSharesAndProfit(list);
       security.transactionDateRange.value = cumulative.dateRange;
       security.holdingShares.value = cumulative.quantity;
-      security.activityProfit.value.setAmount(cumulative.amount);
+      security.activityProfit.value.setAmount(cumulative.amount - cumulative.dividend);
+      security.activityDividend.value.setAmount(cumulative.dividend);
     }
   }
 

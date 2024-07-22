@@ -73,6 +73,11 @@ class Security extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Security)._holdingValue,
   );
 
+  FieldMoney activityDividend = FieldMoney(
+    name: 'Dividend',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).activityDividend.value,
+  );
+
   FieldMoney activityProfit = FieldMoney(
     name: 'ActivityProfit',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).activityProfit.value,
@@ -149,7 +154,9 @@ class Security extends MoneyObject {
   FieldMoney profit = FieldMoney(
     name: 'Profit',
     getValueForDisplay: (final MoneyObject instance) =>
-        (instance as Security).activityProfit.value.toDouble() + instance._holdingValue,
+        (instance as Security).activityProfit.value.toDouble() +
+        instance.activityDividend.value.toDouble() +
+        instance._holdingValue,
   );
 
   /* 
@@ -251,6 +258,7 @@ class Security extends MoneyObject {
         tmp.holdingShares,
         tmp.holdingValue,
         tmp.activityProfit,
+        tmp.activityDividend,
         tmp.profit,
       ]);
     }

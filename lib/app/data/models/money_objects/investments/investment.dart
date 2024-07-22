@@ -79,6 +79,11 @@ class Investment extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._activityAmount,
   );
 
+  FieldMoney activityDividend = FieldMoney(
+    name: 'ActivityDividend',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._activityDividend,
+  );
+
   /// 4    Commission      money   0                    0
   FieldMoney commission = FieldMoney(
     name: 'Commission',
@@ -310,7 +315,7 @@ class Investment extends MoneyObject {
 
   @override
   String toString() {
-    return '$uniqueId $date ${investmentType.getValueForDisplay(this)} ${securitySymbol.getValueForDisplay(this)} $effectiveUnits ${unitPrice.value} ${holdingShares.value}';
+    return '$uniqueId $date ${investmentType.getValueForDisplay(this)} ${securitySymbol.getValueForDisplay(this)} $effectiveUnits ${unitPrice.value} ${holdingShares.value} $_activityAmount';
   }
 
   @override
@@ -442,7 +447,21 @@ class Investment extends MoneyObject {
     _transactionInstance = value;
   }
 
-  double get _activityAmount => transactionInstance?.amount.value.toDouble() ?? 0.00;
+  double get _activityAmount {
+    // if (investmentType.value != InvestmentType.dividend.index) {
+    return transactionInstance?.amount.value.toDouble() ?? 0.00;
+    // }
+    // return 0.00;
+  }
+
+  double get _activityDividend {
+    debugLog(this.toString());
+
+    if (investmentType.value == InvestmentType.dividend.index) {
+      return transactionInstance?.amount.value.toDouble() ?? 0.00;
+    }
+    return 0.00;
+  }
 
   void _applySplit(StockSplit s) {
     if (this.date.isBefore(s.date.value!) && s.denominator.value != 0 && s.numerator.value != 0) {

@@ -69,6 +69,7 @@ class Investments extends MoneyObjects<Investment> {
       cumulative.dateRange.inflate(investment.date);
       cumulative.quantity += investment.effectiveUnitsAdjusted;
       cumulative.amount += investment.activityAmount.getValueForDisplay(investment);
+      cumulative.dividend += investment.activityDividend.getValueForDisplay(investment);
     }
     return cumulative;
   }
