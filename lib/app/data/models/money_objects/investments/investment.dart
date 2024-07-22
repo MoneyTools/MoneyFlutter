@@ -451,7 +451,8 @@ class Investment extends MoneyObject {
 
   String get _investmentTypeAsString => getInvestmentTypeTextFromValue(this.investmentType.value);
 
-  int get _signBasedOnActivity => getInvestmentTypeFromValue(this.investmentType.value) != InvestmentType.buy ? -1 : 1;
+  int get _signBasedOnActivity =>
+      [InvestmentType.buy, InvestmentType.add].contains(getInvestmentTypeFromValue(this.investmentType.value)) ? 1 : -1;
 
   double get _unitPriceAdjusted => this.unitPrice.value.toDouble() / this._splitRatio;
 }
