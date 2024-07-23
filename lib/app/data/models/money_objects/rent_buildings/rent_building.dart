@@ -86,7 +86,6 @@ class RentBuilding extends MoneyObject {
   /// Address
   // 2    Address                 nvarchar(255)  0                    0
   FieldString address = FieldString(
-    importance: 2,
     name: 'Address',
     serializeName: 'Address',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).address.value,
@@ -96,7 +95,6 @@ class RentBuilding extends MoneyObject {
   /// CategoryForIncome
   // 13    CategoryForIncome          money
   FieldInt categoryForIncome = FieldInt(
-    importance: 2,
     name: 'CategoryForIncome',
     serializeName: 'CategoryForIncome',
     useAsColumn: false,
@@ -110,7 +108,6 @@ class RentBuilding extends MoneyObject {
   /// CategoryForInterest
   // 14    CategoryForInterest          money
   FieldInt categoryForInterest = FieldInt(
-    importance: 2,
     name: 'CategoryForInterest',
     serializeName: 'CategoryForInterest',
     useAsColumn: false,
@@ -124,7 +121,6 @@ class RentBuilding extends MoneyObject {
   /// CategoryForMaintenance
   // 16    CategoryForMaintenance          money
   FieldInt categoryForMaintenance = FieldInt(
-    importance: 2,
     name: 'CategoryForMaintenance',
     serializeName: 'CategoryForMaintenance',
     useAsColumn: false,
@@ -138,7 +134,6 @@ class RentBuilding extends MoneyObject {
   /// CategoryForManagement
   // 17    CategoryForManagement          money
   FieldInt categoryForManagement = FieldInt(
-    importance: 2,
     name: 'CategoryForManagement',
     serializeName: 'CategoryForManagement',
     useAsColumn: false,
@@ -152,7 +147,6 @@ class RentBuilding extends MoneyObject {
   /// CategoryForRepairs
   // 15    CategoryForRepairs          money
   FieldInt categoryForRepairs = FieldInt(
-    importance: 2,
     name: 'CategoryForRepairs',
     serializeName: 'CategoryForRepairs',
     useAsColumn: false,
@@ -166,7 +160,6 @@ class RentBuilding extends MoneyObject {
   /// CategoryForTaxes
   // 12    CategoryForTaxes          money
   FieldInt categoryForTaxes = FieldInt(
-    importance: 2,
     name: 'CategoryForTaxes',
     serializeName: 'CategoryForTaxes',
     useAsColumn: false,
@@ -179,7 +172,6 @@ class RentBuilding extends MoneyObject {
 
   /// Currency
   FieldString currency = FieldString(
-    importance: 5,
     name: 'Currency',
     type: FieldType.widget,
     align: TextAlign.center,
@@ -195,7 +187,6 @@ class RentBuilding extends MoneyObject {
   /// EstimatedValue
   // 6    EstimatedValue          money
   FieldMoney estimatedValue = FieldMoney(
-    importance: 2,
     name: 'EstimatedValue',
     serializeName: 'EstimatedValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).estimatedValue.value,
@@ -207,7 +198,6 @@ class RentBuilding extends MoneyObject {
 
   /// Expenses
   FieldMoney expense = FieldMoney(
-    importance: 21,
     name: 'Expenses',
     getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenses),
@@ -222,7 +212,6 @@ class RentBuilding extends MoneyObject {
   /// LandValue
   // 5    LandValue          money
   FieldMoney landValue = FieldMoney(
-    importance: 2,
     name: 'LandValue',
     serializeName: 'LandValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).landValue.value,
@@ -233,7 +222,6 @@ class RentBuilding extends MoneyObject {
 
   /// Expenses-Interest
   FieldMoney lifeTimeExpenseInterest = FieldMoney(
-    importance: 21,
     name: '  Expense-Interest',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
@@ -243,7 +231,6 @@ class RentBuilding extends MoneyObject {
 
   /// Expenses-Maintenance
   FieldMoney lifeTimeExpenseMaintenance = FieldMoney(
-    importance: 21,
     name: '  Expense-Maintenance',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
@@ -253,7 +240,6 @@ class RentBuilding extends MoneyObject {
 
   /// Expenses-Management
   FieldMoney lifeTimeExpenseManagement = FieldMoney(
-    importance: 21,
     name: '  Expense-Management',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
@@ -263,7 +249,6 @@ class RentBuilding extends MoneyObject {
 
   /// Expenses-Repair
   FieldMoney lifeTimeExpenseRepair = FieldMoney(
-    importance: 21,
     name: '  Expense-Repair',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
@@ -273,7 +258,6 @@ class RentBuilding extends MoneyObject {
 
   /// Expenses-Taxes
   FieldMoney lifeTimeExpenseTaxes = FieldMoney(
-    importance: 21,
     name: '  Expense-Taxes',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
@@ -286,7 +270,6 @@ class RentBuilding extends MoneyObject {
   /// Name
   // 1    Name                    nvarchar(255)  1                    0
   FieldString name = FieldString(
-    importance: 1,
     name: 'Name',
     serializeName: 'Name',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).name.value,
@@ -296,7 +279,6 @@ class RentBuilding extends MoneyObject {
   /// Note
   // 11    Note          money
   FieldString note = FieldString(
-    importance: 2,
     name: 'Note',
     serializeName: 'Note',
     useAsColumn: false,
@@ -307,7 +289,6 @@ class RentBuilding extends MoneyObject {
   /// OwnershipName1
   // 7    OwnershipName1          money
   FieldString ownershipName1 = FieldString(
-    importance: 2,
     name: 'OwnershipName1',
     serializeName: 'OwnershipName1',
     useAsColumn: false,
@@ -318,7 +299,6 @@ class RentBuilding extends MoneyObject {
   /// OwnershipName2
   // 8    OwnershipName2          money
   FieldString ownershipName2 = FieldString(
-    importance: 2,
     name: 'OwnershipName2',
     serializeName: 'OwnershipName2',
     useAsColumn: false,
@@ -329,7 +309,6 @@ class RentBuilding extends MoneyObject {
   /// OwnershipPercentage1
   // 9    OwnershipPercentage1          money
   FieldDouble ownershipPercentage1 = FieldDouble(
-    importance: 2,
     name: 'OwnershipPercentage1',
     serializeName: 'OwnershipPercentage1',
     useAsColumn: false,
@@ -340,7 +319,6 @@ class RentBuilding extends MoneyObject {
   /// OwnershipPercentage2
   // 10    OwnershipPercentage2          money
   FieldDouble ownershipPercentage2 = FieldDouble(
-    importance: 2,
     name: 'OwnershipPercentage2',
     serializeName: 'OwnershipPercentage2',
     useAsColumn: false,
@@ -352,7 +330,6 @@ class RentBuilding extends MoneyObject {
 
   /// Profit
   FieldMoney profit = FieldMoney(
-    importance: 22,
     name: 'Profit',
     getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.profit),
@@ -361,7 +338,6 @@ class RentBuilding extends MoneyObject {
   /// PurchasedDate
   // 3    PurchasedDate           datetime       0                    0
   FieldDate purchasedDate = FieldDate(
-    importance: 2,
     name: 'Purchased Date',
     serializeName: 'PurchasedDate',
     useAsColumn: false,
@@ -376,7 +352,6 @@ class RentBuilding extends MoneyObject {
   /// PurchasedPrice
   // 4    PurchasedPrice          money
   FieldMoney purchasedPrice = FieldMoney(
-    importance: 2,
     name: 'Purchased Price',
     serializeName: 'PurchasedPrice',
     useAsColumn: false,
@@ -387,7 +362,6 @@ class RentBuilding extends MoneyObject {
 
   /// Revenue
   FieldMoney revenue = FieldMoney(
-    importance: 20,
     name: 'Revenue',
     getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.income),

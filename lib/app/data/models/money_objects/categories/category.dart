@@ -63,7 +63,6 @@ class Category extends MoneyObject {
   /// Budget
   /// 6|Budget|money|0||0
   FieldMoney budget = FieldMoney(
-    importance: 99,
     name: 'Budget',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budget.value,
@@ -73,7 +72,6 @@ class Category extends MoneyObject {
   /// Budget Balance
   /// 7|Balance|money|0||0
   FieldMoney budgetBalance = FieldMoney(
-    importance: 80,
     name: 'BudgetBalance',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
@@ -83,7 +81,6 @@ class Category extends MoneyObject {
   /// Color
   /// 5|Color|nchar(10)|0||0
   Field<String> color = Field<String>(
-    importance: 5,
     serializeName: 'Color',
     type: FieldType.widget,
     align: TextAlign.center,
@@ -118,7 +115,6 @@ class Category extends MoneyObject {
   /// Description
   /// 3|Description|nvarchar(255)|0||0
   FieldString description = FieldString(
-    importance: 3,
     columnWidth: ColumnWidth.large,
     name: 'Description',
     serializeName: 'Description',
@@ -129,7 +125,6 @@ class Category extends MoneyObject {
 
   /// 8|Frequency|INT|0||0
   FieldInt frequency = FieldInt(
-    importance: 80,
     serializeName: 'Frequency',
     useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
@@ -147,7 +142,6 @@ class Category extends MoneyObject {
 
   /// Level
   FieldInt level = FieldInt(
-    importance: 80,
     align: TextAlign.center,
     name: 'Level',
     columnWidth: ColumnWidth.nano,
@@ -158,7 +152,6 @@ class Category extends MoneyObject {
   /// Name
   /// 2|Name|nvarchar(80)|1||0
   FieldString name = FieldString(
-    importance: 2,
     columnWidth: ColumnWidth.largest,
     name: 'Name',
     serializeName: 'Name',
@@ -175,7 +168,6 @@ class Category extends MoneyObject {
 
   /// 1|ParentId|INT|0||0
   FieldInt parentId = FieldInt(
-    importance: 1,
     name: 'ParentId',
     serializeName: 'ParentId',
     useAsColumn: false,
@@ -185,21 +177,18 @@ class Category extends MoneyObject {
 
   /// Running Balance
   FieldMoney sum = FieldMoney(
-    importance: 99,
     name: 'Sum',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).sum.value,
   );
 
   /// Running Balance
   FieldMoney sumRollup = FieldMoney(
-    importance: 99,
     name: 'Sum~',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).sumRollup.value,
   );
 
   /// 9|TaxRefNum|INT|0||0
   FieldInt taxRefNum = FieldInt(
-    importance: 80,
     serializeName: 'TaxRefNum',
     useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
@@ -208,7 +197,6 @@ class Category extends MoneyObject {
 
   /// Count
   FieldInt transactionCount = FieldInt(
-    importance: 98,
     name: '#T',
     columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCount.value,
@@ -216,7 +204,6 @@ class Category extends MoneyObject {
 
   /// Count
   FieldInt transactionCountRollup = FieldInt(
-    importance: 98,
     name: '#T~',
     columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).transactionCountRollup.value,
@@ -225,7 +212,6 @@ class Category extends MoneyObject {
   /// Type
   /// 4|Type|INT|1||0
   Field<CategoryType> type = Field<CategoryType>(
-    importance: 4,
     type: FieldType.text,
     align: TextAlign.center,
     serializeName: 'Type',

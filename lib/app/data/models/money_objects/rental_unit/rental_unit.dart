@@ -27,7 +27,6 @@ class RentUnit extends MoneyObject {
   /// Building Id
   /// 1|Building|INT|1||0
   FieldInt building = FieldInt(
-    importance: 1,
     name: 'Building',
     serializeName: 'Building',
     useAsColumn: false,
@@ -46,7 +45,6 @@ class RentUnit extends MoneyObject {
   /// 2
   /// 2|Name|nvarchar(255)|1||0
   FieldString name = FieldString(
-    importance: 2,
     name: 'Name',
     serializeName: 'Name',
     getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).name.value,
@@ -55,7 +53,6 @@ class RentUnit extends MoneyObject {
   /// 4
   /// 4|Note|nvarchar(255)|0||0
   FieldString note = FieldString(
-    importance: 4,
     name: 'Note',
     serializeName: 'Note',
     getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).note.value,
@@ -64,7 +61,6 @@ class RentUnit extends MoneyObject {
   /// 3
   /// 3|Renter|nvarchar(255)|0||0
   FieldString renter = FieldString(
-    importance: 3,
     name: 'Renter',
     serializeName: 'Renter',
     getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).renter.value,

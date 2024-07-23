@@ -27,21 +27,18 @@ class AccountAlias extends MoneyObject {
 
   // 3
   Field<String> accountId = Field<String>(
-    importance: 3,
     serializeName: 'AccountId',
     defaultValue: '',
   );
 
   // 2
   Field<int> flags = Field<int>(
-    importance: 2,
     serializeName: 'Flags',
     defaultValue: 0,
   );
 
   // 0
   Field<int> id = Field<int>(
-    importance: 0,
     serializeName: 'Id',
     defaultValue: -1,
     useAsColumn: false,
@@ -50,7 +47,6 @@ class AccountAlias extends MoneyObject {
 
   // 1
   Field<String> pattern = Field<String>(
-    importance: 1,
     serializeName: 'Pattern',
     defaultValue: '',
   );

@@ -47,7 +47,6 @@ class LoanPayment extends MoneyObject {
 
   /// 1|AccountId|INT|1||0
   Field<int> accountId = Field<int>(
-    importance: 2,
     name: 'Account',
     serializeName: 'AccountId',
     defaultValue: -1,
@@ -63,13 +62,11 @@ class LoanPayment extends MoneyObject {
     name: 'Balance',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).balance.value.toDouble(),
     getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).balance.value.toDouble(),
-    importance: 99,
   );
 
   /// Date
   /// 2|Date|datetime|1||0
   FieldDate date = FieldDate(
-    importance: 1,
     serializeName: 'Date',
     useAsColumn: true,
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).date.value,
@@ -95,7 +92,6 @@ class LoanPayment extends MoneyObject {
   // 5
   // 5|Memo|nvarchar(255)|0||0
   Field<String> memo = Field<String>(
-    importance: 3,
     type: FieldType.text,
     name: 'Memo',
     serializeName: 'Memo',
@@ -122,7 +118,6 @@ class LoanPayment extends MoneyObject {
   FieldPercentage rate = FieldPercentage(
     name: 'Rate %',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).getRate(),
-    importance: 98,
   );
 
   FieldString reference = FieldString(

@@ -295,7 +295,6 @@ class Field<T> {
     this.getEditWidget,
     this.setValue,
     this.sort,
-    this.importance = -1,
   }) {
     ///----------------------------------------------
     /// default value for this field
@@ -416,7 +415,6 @@ class Field<T> {
   /// Get the value for storing the instance
   dynamic Function(MoneyObject) getValueForSerialization;
 
-  int importance;
   // Static properties
   String name;
 
@@ -497,7 +495,6 @@ class Field<T> {
 
 class FieldDate extends Field<DateTime?> {
   FieldDate({
-    super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
@@ -518,7 +515,6 @@ class FieldDate extends Field<DateTime?> {
 
 class FieldDouble extends Field<double> {
   FieldDouble({
-    super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
@@ -535,7 +531,6 @@ class FieldDouble extends Field<double> {
 
 class FieldPercentage extends Field<double> {
   FieldPercentage({
-    super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
@@ -553,7 +548,6 @@ class FieldPercentage extends Field<double> {
 
 class FieldId extends Field<int> {
   FieldId({
-    super.importance = 0,
     super.getValueForDisplay,
     super.getValueForSerialization,
   }) : super(
@@ -566,7 +560,6 @@ class FieldId extends Field<int> {
 
 class FieldInt extends Field<int> {
   FieldInt({
-    super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
@@ -587,7 +580,6 @@ class FieldInt extends Field<int> {
 
 class FieldMoney extends Field<MoneyModel> {
   FieldMoney({
-    super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
@@ -607,7 +599,6 @@ class FieldMoney extends Field<MoneyModel> {
 
 class FieldQuantity extends Field<double> {
   FieldQuantity({
-    super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,
@@ -626,7 +617,6 @@ class FieldQuantity extends Field<double> {
 
 class FieldString extends Field<String> {
   FieldString({
-    super.importance,
     super.name,
     super.serializeName,
     super.getValueForDisplay,

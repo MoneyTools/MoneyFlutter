@@ -36,7 +36,6 @@ class Alias extends MoneyObject {
   FieldInt flags = FieldInt(
     type: FieldType.text,
     align: TextAlign.center,
-    importance: 3,
     name: 'Flags',
     serializeName: 'Flags',
     defaultValue: 0,
@@ -55,7 +54,6 @@ class Alias extends MoneyObject {
   /// 1    Pattern  nvarchar(255)  1                 0
   FieldString pattern = FieldString(
     type: FieldType.text,
-    importance: 2,
     name: 'Pattern',
     serializeName: 'Pattern',
     getValueForDisplay: (final MoneyObject instance) => (instance as Alias).pattern.value,
@@ -67,7 +65,6 @@ class Alias extends MoneyObject {
   FieldInt payeeId = FieldInt(
     type: FieldType.text,
     footer: FooterType.count,
-    importance: 1,
     name: 'Payee',
     serializeName: 'Payee',
     defaultValue: 0,

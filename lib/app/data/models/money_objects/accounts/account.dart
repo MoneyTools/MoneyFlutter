@@ -45,7 +45,6 @@ class Account extends MoneyObject {
   // Account ID
   // 1|AccountId|nchar(20)|0||0
   FieldString accountId = FieldString(
-    importance: 90,
     name: 'Account ID',
     serializeName: 'AccountId',
     useAsColumn: true,
@@ -59,7 +58,6 @@ class Account extends MoneyObject {
 
   /// Balance in Native currency
   FieldMoney balanceNative = FieldMoney(
-    importance: 98,
     name: 'BalanceN',
     footer: FooterType.none,
     getValueForDisplay: (final MoneyObject instance) {
@@ -73,7 +71,6 @@ class Account extends MoneyObject {
 
   /// Balance Normalized use in the List view
   FieldMoney balanceNormalized = FieldMoney(
-    importance: 99,
     name: 'Balance(USD)',
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) {
@@ -88,7 +85,6 @@ class Account extends MoneyObject {
   /// categoryIdForInterest
   /// 16|CategoryIdForInterest|INT|0||0
   Field<int> categoryIdForInterest = Field<int>(
-    importance: -1,
     name: 'Catgory for Interest',
     serializeName: 'CategoryIdForInterest',
     type: FieldType.text,
@@ -103,7 +99,6 @@ class Account extends MoneyObject {
   /// categoryIdForPrincipal
   /// 15 | CategoryIdForPrincipal|INT|0||0
   Field<int> categoryIdForPrincipal = Field<int>(
-    importance: 98,
     name: 'Catgory for Principal',
     serializeName: 'CategoryIdForPrincipal',
     defaultValue: 0,
@@ -120,7 +115,6 @@ class Account extends MoneyObject {
 
   /// Transaction Count
   FieldInt count = FieldInt(
-    importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.tiny,
     useAsDetailPanels: defaultCallbackValueFalse,
@@ -130,7 +124,6 @@ class Account extends MoneyObject {
   /// Currency
   /// 7|Currency|nchar(3)|0||0
   FieldString currency = FieldString(
-    importance: 96,
     name: 'Currency',
     serializeName: 'Currency',
     align: TextAlign.center,
@@ -151,7 +144,6 @@ class Account extends MoneyObject {
   // Description
   // 4|Description|nvarchar(255)|0||0
   FieldString description = FieldString(
-    importance: 3,
     name: 'Description',
     serializeName: 'Description',
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).description.value = value as String,
@@ -194,7 +186,6 @@ class Account extends MoneyObject {
   /// Last Balance date
   /// 14|LastBalance|datetime|0||0
   FieldDate lastBalance = FieldDate(
-    importance: 98,
     serializeName: 'LastBalance',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
@@ -206,7 +197,6 @@ class Account extends MoneyObject {
   /// LastSync Date & Time
   /// 11|LastSync|datetime|0||0
   FieldDate lastSync = FieldDate(
-    importance: 90,
     serializeName: 'LastSync',
     useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).lastSync.value,
@@ -219,7 +209,6 @@ class Account extends MoneyObject {
   // Name
   // 3|Name|nvarchar(80)|1||0
   FieldString name = FieldString(
-    importance: 1,
     name: 'Name',
     serializeName: 'Name',
     columnWidth: ColumnWidth.large,
@@ -237,7 +226,6 @@ class Account extends MoneyObject {
   // OFX Account Id
   // 2|OfxAccountId|nvarchar(50)|0||0
   FieldString ofxAccountId = FieldString(
-    importance: 1,
     name: 'OfxAccountId',
     serializeName: 'OfxAccountId',
     useAsColumn: false,
@@ -298,7 +286,6 @@ class Account extends MoneyObject {
   // Type of account
   // 5|Type|INT|1||0
   Field<AccountType> type = Field<AccountType>(
-    importance: 2,
     type: FieldType.text,
     align: TextAlign.center,
     columnWidth: ColumnWidth.small,
@@ -322,7 +309,6 @@ class Account extends MoneyObject {
   );
 
   FieldDate updatedOn = FieldDate(
-    importance: 90,
     name: 'Updated',
     columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) {
@@ -336,7 +322,6 @@ class Account extends MoneyObject {
   /// WebSite
   /// 9|WebSite|nvarchar(512)|0||0
   FieldString webSite = FieldString(
-    importance: 4,
     name: 'WebSite',
     serializeName: 'WebSite',
     useAsColumn: false,

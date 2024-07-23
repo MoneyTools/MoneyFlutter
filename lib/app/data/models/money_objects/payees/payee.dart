@@ -22,13 +22,11 @@ class Payee extends MoneyObject {
 
   Set<String> categories = {};
   FieldString categoriesAsText = FieldString(
-    importance: 2,
     name: 'Categories',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
   );
 
   FieldInt count = FieldInt(
-    importance: 98,
     name: 'Transactions',
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).count.value,
@@ -41,7 +39,6 @@ class Payee extends MoneyObject {
 
   // 1
   FieldString name = FieldString(
-    importance: 1,
     name: 'Name',
     serializeName: 'Name',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).name.value,
@@ -50,7 +47,6 @@ class Payee extends MoneyObject {
   );
 
   FieldMoney sum = FieldMoney(
-    importance: 99,
     name: 'Sum',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).sum.value,
   );

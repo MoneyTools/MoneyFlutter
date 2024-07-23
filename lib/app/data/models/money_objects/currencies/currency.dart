@@ -65,7 +65,6 @@ class Currency extends MoneyObject {
 
   // 4
   FieldDouble lastRatio = FieldDouble(
-    importance: 4,
     name: 'LastRatio',
     serializeName: 'LastRatio',
     getValueForDisplay: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
@@ -75,7 +74,6 @@ class Currency extends MoneyObject {
   /// 2
   /// 2    name       nchar(20)     1                 0
   FieldString name = FieldString(
-    importance: 2,
     name: 'Name',
     serializeName: 'Name',
     getValueForDisplay: (final MoneyObject instance) => (instance as Currency).name.value,
@@ -85,7 +83,6 @@ class Currency extends MoneyObject {
   /// 3
   /// 3    Ratio        money         0                 0
   FieldDouble ratio = FieldDouble(
-    importance: 3,
     name: 'Ratio',
     serializeName: 'Ratio',
     getValueForDisplay: (final MoneyObject instance) => (instance as Currency).ratio.value,
@@ -95,7 +92,6 @@ class Currency extends MoneyObject {
   /// 1
   /// 1    Symbol       nchar(20)     1                 0
   FieldString symbol = FieldString(
-    importance: 1,
     name: 'Symbol',
     serializeName: 'Symbol',
     getValueForDisplay: (final MoneyObject instance) => (instance as Currency).symbol.value,

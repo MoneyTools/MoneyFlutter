@@ -168,7 +168,6 @@ class Investment extends MoneyObject {
 
   /// 1    Security        INT     1                    0
   FieldInt security = FieldInt(
-    importance: 1,
     name: 'Security',
     serializeName: 'Security',
     useAsColumn: false,
@@ -190,7 +189,6 @@ class Investment extends MoneyObject {
   );
 
   FieldString splitRatioAsText = FieldString(
-    importance: 2,
     name: 'Split',
     align: TextAlign.right,
     columnWidth: ColumnWidth.tiny,
@@ -242,7 +240,6 @@ class Investment extends MoneyObject {
 
   FieldDate transactionDate = FieldDate(
     name: 'Date',
-    importance: 0,
     useAsColumn: true,
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).date,
@@ -260,7 +257,6 @@ class Investment extends MoneyObject {
 
   /// 2    UnitPrice       money   1
   FieldMoney unitPrice = FieldMoney(
-    importance: 3,
     name: 'Price',
     serializeName: 'UnitPrice',
     footer: FooterType.average,
@@ -269,7 +265,6 @@ class Investment extends MoneyObject {
   );
 
   FieldMoney unitPriceAdjusted = FieldMoney(
-    importance: 3,
     name: 'Price A.S.',
     footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._unitPriceAdjusted,
@@ -277,7 +272,6 @@ class Investment extends MoneyObject {
 
   /// 3    Units           money   0                    0
   FieldQuantity units = FieldQuantity(
-    importance: 2,
     name: 'Units',
     serializeName: 'Units',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).effectiveUnits,
@@ -285,7 +279,6 @@ class Investment extends MoneyObject {
   );
 
   FieldQuantity unitsAdjusted = FieldQuantity(
-    importance: 2,
     name: 'Units A.S.',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).effectiveUnitsAdjusted,
   );

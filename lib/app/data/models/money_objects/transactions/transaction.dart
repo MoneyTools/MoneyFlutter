@@ -91,7 +91,6 @@ class Transaction extends MoneyObject {
   /// Account Id
   /// SQLite  1|Account|INT|1||0
   FieldInt accountId = FieldInt(
-    importance: 1,
     type: FieldType.text,
     name: 'Account',
     serializeName: 'Account',
@@ -107,7 +106,6 @@ class Transaction extends MoneyObject {
   /// Amount
   /// 14|Amount|money|1||0
   FieldMoney amount = FieldMoney(
-    importance: 97,
     name: columnIdAmount,
     serializeName: 'Amount',
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
@@ -130,7 +128,6 @@ class Transaction extends MoneyObject {
 
   /// Amount Normalized to USD
   FieldMoney amountAsTextNormalized = FieldMoney(
-    importance: 98,
     name: columnIdAmountNormalized,
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: defaultCallbackValueFalse,
@@ -150,7 +147,6 @@ class Transaction extends MoneyObject {
 
   /// Balance native
   FieldMoney balanceNative = FieldMoney(
-    importance: 99,
     name: columnIdBalance,
     columnWidth: ColumnWidth.small,
     footer: FooterType.none,
@@ -164,7 +160,6 @@ class Transaction extends MoneyObject {
 
   /// Balance Normalized to USD
   FieldMoney balanceNormalized = FieldMoney(
-    importance: 99,
     name: 'Balance(USD)',
     columnWidth: ColumnWidth.small,
     footer: FooterType.none,
@@ -183,7 +178,6 @@ class Transaction extends MoneyObject {
   /// Budget Balance Date
   /// 10|BudgetBalanceDate|datetime|0||0
   FieldDate budgetBalanceDate = FieldDate(
-    importance: 10,
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
@@ -198,7 +192,6 @@ class Transaction extends MoneyObject {
   /// Category Id
   /// SQLite 6|Category|INT|0||0
   FieldInt categoryId = FieldInt(
-    importance: 10,
     type: FieldType.widget,
     columnWidth: ColumnWidth.large,
     align: TextAlign.left,
@@ -255,7 +248,6 @@ class Transaction extends MoneyObject {
 
   FieldString currency = FieldString(
     type: FieldType.widget,
-    importance: 80,
     name: 'Currency',
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
@@ -271,7 +263,6 @@ class Transaction extends MoneyObject {
   /// Date
   /// SQLite 2|Date|datetime|1||0
   FieldDate dateTime = FieldDate(
-    importance: 2,
     name: 'Date',
     serializeName: 'Date',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).dateTime.value,
@@ -298,7 +289,6 @@ class Transaction extends MoneyObject {
   /// FITID
   /// 12|FITID|nchar(40)|0||0
   FieldString fitid = FieldString(
-    importance: 20,
     name: 'FITID',
     serializeName: 'FITID',
     useAsColumn: false,
@@ -309,7 +299,6 @@ class Transaction extends MoneyObject {
   /// Flags
   /// 13|Flags|INT|1||0
   FieldInt flags = FieldInt(
-    importance: 20,
     name: 'Flags',
     serializeName: 'Flags',
     useAsColumn: false,
@@ -327,7 +316,6 @@ class Transaction extends MoneyObject {
   /// Memo
   /// 7|Memo|nvarchar(255)|0||0
   FieldString memo = FieldString(
-    importance: 80,
     name: 'Memo',
     serializeName: 'Memo',
     useAsColumn: false,
@@ -339,7 +327,6 @@ class Transaction extends MoneyObject {
   /// MergeDate
   /// 17|MergeDate|datetime|0||0
   FieldDate mergeDate = FieldDate(
-    importance: 10,
     name: 'Merge Date',
     serializeName: 'MergeDate',
     useAsDetailPanels: defaultCallbackValueFalse,
@@ -353,7 +340,6 @@ class Transaction extends MoneyObject {
   /// Number
   /// 8|Number|nchar(10)|0||0
   FieldString number = FieldString(
-    importance: 10,
     name: 'Number',
     serializeName: 'Number',
     useAsColumn: false,
@@ -365,7 +351,6 @@ class Transaction extends MoneyObject {
   /// before auto-aliasing, helps with future merging.
   /// SQLite 5|OriginalPayee|nvarchar(255)|0||0
   FieldString originalPayee = FieldString(
-    importance: 10,
     name: 'Original Payee',
     serializeName: 'OriginalPayee',
     useAsColumn: false,
@@ -375,7 +360,6 @@ class Transaction extends MoneyObject {
 
   FieldString paidOn = FieldString(
     type: FieldType.text,
-    importance: 80,
     name: columnIdPaidOn,
     useAsColumn: false, // By default this is not displayed, only used for Account of type=Credit
     align: TextAlign.right,
@@ -389,7 +373,6 @@ class Transaction extends MoneyObject {
   /// Payee Id (displayed as Text name of the Payee)
   /// SQLite 4|Payee|INT|0||0
   FieldInt payee = FieldInt(
-    importance: 4,
     name: 'Payee/Transfer',
     serializeName: 'Payee',
     defaultValue: -1,
@@ -480,7 +463,6 @@ class Transaction extends MoneyObject {
   /// Reconciled Date
   /// 9|ReconciledDate|datetime|0||0
   FieldDate reconciledDate = FieldDate(
-    importance: 10,
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     useAsColumn: false,
@@ -495,7 +477,6 @@ class Transaction extends MoneyObject {
   /// Sales Tax
   /// 15|SalesTax|money|0||0
   FieldMoney salesTax = FieldMoney(
-    importance: 95,
     name: 'Sales Tax',
     serializeName: 'SalesTax',
     useAsColumn: false,
@@ -513,7 +494,6 @@ class Transaction extends MoneyObject {
   /// Status N | E | C | R
   /// SQLite 3|Status|INT|0||0
   Field<TransactionStatus> status = Field<TransactionStatus>(
-    importance: 20,
     type: FieldType.widget,
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
@@ -534,7 +514,6 @@ class Transaction extends MoneyObject {
   /// Transfer
   /// 11|Transfer|bigint|0||0
   Field<int> transfer = Field<int>(
-    importance: 10,
     name: 'Transfer',
     serializeName: 'Transfer',
     defaultValue: -1,
@@ -550,7 +529,6 @@ class Transaction extends MoneyObject {
   /// Transfer Split
   /// 16|TransferSplit|INT|0||0
   FieldInt transferSplit = FieldInt(
-    importance: 10,
     name: 'TransferSplit',
     serializeName: 'TransferSplit',
     useAsColumn: false,
