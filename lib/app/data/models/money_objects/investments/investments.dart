@@ -42,7 +42,7 @@ class Investments extends MoneyObjects<Investment> {
     );
   }
 
-  static void calculateRunningSharesAndBalance(List<Investment> investments) {
+  static double applyHoldingSharesAjustedForSplits(List<Investment> investments) {
     // first sort by date, TradeType, Amount
     final Field fieldToSortBy = Investment.fields.getFieldByName('Date');
     MoneyObjects.sortListFallbackOnIdforTieBreaker(investments, fieldToSortBy.sort!, true);
@@ -52,6 +52,8 @@ class Investments extends MoneyObjects<Investment> {
       runningShares += investment.effectiveUnitsAdjusted;
       investment.holdingShares.value = runningShares;
     }
+
+    return runningShares;
   }
 
   static List<Investment> getInvestmentsForThisSecurity(final int securityId) {

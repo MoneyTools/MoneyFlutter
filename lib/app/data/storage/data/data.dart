@@ -54,7 +54,6 @@ class Data {
   Data._internal() {
     _listOfTables = <MoneyObjects<dynamic>>[
       accountAliases, // 1
-      accounts, // 2
       aliases, // 3
       categories, // 4
       currencies, // 5
@@ -69,6 +68,8 @@ class Data {
       stockSplits, // 14
       investments, // 6 Must be locate after [stockSplits]
       securities, // 12 Must be locate after [investments]
+
+      accounts, // 2
 
       // Can be last
       rentBuildings, // 10

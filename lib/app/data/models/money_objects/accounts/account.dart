@@ -278,6 +278,12 @@ class Account extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).reconcileWarning.value,
   );
 
+  FieldMoney stockHoldingEstimation = FieldMoney(
+    name: 'StockValue',
+    useAsColumn: false,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).stockHoldingEstimation.value,
+  );
+
   /// SyncGuid
   /// 12|SyncGuid|uniqueidentifier|0||0
   FieldString syncGuid = FieldString(
@@ -409,6 +415,7 @@ class Account extends MoneyObject {
         tmp.categoryIdForPrincipal,
         tmp.categoryIdForInterest,
         tmp.count,
+        tmp.stockHoldingEstimation,
         tmp.balanceNative,
         tmp.currency,
         tmp.balanceNormalized,

@@ -121,7 +121,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
           (instance) => (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
-    Investments.calculateRunningSharesAndBalance(list);
+    Investments.applyHoldingSharesAjustedForSplits(list);
 
     return list;
   }

@@ -103,8 +103,19 @@ class Investment extends MoneyObject {
   FieldQuantity holdingShares = FieldQuantity(
     name: 'Holding',
     footer: FooterType.average,
-    // useAsColumn: false,
+    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).holdingShares.value,
+  );
+
+  FieldMoney holdingSharesValue = FieldMoney(
+    name: 'HoldingValue',
+    footer: FooterType.average,
+    useAsColumn: true,
+    getValueForDisplay: (final MoneyObject instance) {
+      return MoneyModel(
+        amount: (instance as Investment).holdingShares.value * instance._unitPriceAdjusted,
+      );
+    },
   );
 
   /// Id
@@ -279,17 +290,6 @@ class Investment extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).effectiveUnitsAdjusted,
   );
 
-  FieldMoney valueOfHoldingShares = FieldMoney(
-    name: 'HoldingValue',
-    footer: FooterType.average,
-    useAsColumn: false,
-    getValueForDisplay: (final MoneyObject instance) {
-      return MoneyModel(
-        amount: (instance as Investment).holdingShares.value * instance._unitPriceAdjusted,
-      );
-    },
-  );
-
   /// 12   Withholding     money   0                    0
   FieldMoney withholding = FieldMoney(
     name: 'Withholding',
@@ -380,7 +380,7 @@ class Investment extends MoneyObject {
         tmp.taxExempt,
         tmp.withholding,
         tmp.activityAmount,
-        tmp.valueOfHoldingShares,
+        tmp.holdingSharesValue,
       ]);
     }
 

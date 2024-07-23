@@ -308,7 +308,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   List<Investment> getListOfInvestment(Security security) {
     final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
-    Investments.calculateRunningSharesAndBalance(list);
+    Investments.applyHoldingSharesAjustedForSplits(list);
     return list;
   }
 

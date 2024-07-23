@@ -3,11 +3,14 @@
 import 'dart:math';
 
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
+import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
+import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 
 import 'package:money/app/data/storage/data/data.dart';
@@ -82,24 +85,52 @@ class Accounts extends MoneyObjects<Account> {
       }
     }
 
-    /// TODO
-    // final investmentAccounts = Data()
-    //     .accounts
-    //     .iterableList()
-    //     .where(
-    //       (account) =>
-    //           account.type.value == AccountType.moneyMarket ||
-    //           account.type.value == AccountType.investment ||
-    //           account.type.value == AccountType.retirement,
-    //     )
-    //     .toList();
+    // Increase the balance of any investment account with the current Stock value
+    final investmentAccounts = Data()
+        .accounts
+        .iterableList()
+        .where(
+          (account) =>
+              account.type.value == AccountType.moneyMarket ||
+              account.type.value == AccountType.investment ||
+              account.type.value == AccountType.retirement,
+        )
+        .toList();
 
-    // CostBasisCalculator calculator = CostBasisCalculator(DateTime.now());
-    // for (final account in investmentAccounts) {
-    //   for (SecurityPurchase sp in calculator.getHolding(account).getHoldings()) {
-    //     account.balance += sp.latestMarketValue!;
-    //   }
-    // }
+    AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
+
+    for (final account in investmentAccounts) {
+      final investments =
+          Data().investments.iterableList().where((i) => i.transactionInstance!.accountId.value == account.uniqueId);
+
+      for (final Investment investment in investments) {
+        final Security? security = Data().securities.get(investment.security.value);
+        if (security != null) {
+          final stockSymbol = security.symbol.value;
+          groupBySymbol.cumulate('${account.uniqueId}|$stockSymbol', investment);
+        }
+      }
+    }
+
+    groupBySymbol.values.forEach((keyAccountAndSymbol, valuesInvestments) {
+      double totalAdjustedShareForThisStockInThisAccount =
+          Investments.applyHoldingSharesAjustedForSplits(valuesInvestments.toList());
+      final tokens = keyAccountAndSymbol.split('|');
+      final accountId = tokens[0];
+      final symbol = tokens[1];
+      final account = Data().accounts.get(int.parse(accountId));
+      if (account != null) {
+        final security = Data().securities.getBySymbol(symbol);
+        if (security != null) {
+          account.stockHoldingEstimation.value
+              .setAmount(totalAdjustedShareForThisStockInThisAccount * security.lastPrice.value.toDouble());
+          if (account.stockHoldingEstimation.value.toDouble() != 0) {
+            account.balance += account.stockHoldingEstimation.value.toDouble();
+            debugLog('$keyAccountAndSymbol $account.stockHoldingValue');
+          }
+        }
+      }
+    });
 
     // Loans
     final accountLoans =
