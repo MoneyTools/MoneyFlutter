@@ -7,7 +7,7 @@ import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/columns/column_header_button.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
-import 'package:money/app/core/widgets/mybanner.dart';
+import 'package:money/app/core/widgets/my_banner.dart';
 import 'package:money/app/core/widgets/semantic_text.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
