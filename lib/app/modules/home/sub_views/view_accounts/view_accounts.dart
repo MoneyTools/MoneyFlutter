@@ -128,6 +128,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                   ),
                 ]),
               ),
+              InternalViewSwitching.toInvestments(accountName: account.name.value),
             ],
           ),
         );

@@ -2,8 +2,9 @@
 
 ## [version 1.8.47] 2024-07-23
 
-### Updated
+### Added
 
+- Jump from AccountView to InvestmentView
 - StockView:Chart Display Dividends
   
 ## [version 1.8.46] 2024-07-22

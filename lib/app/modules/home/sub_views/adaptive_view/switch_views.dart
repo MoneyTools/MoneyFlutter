@@ -32,6 +32,40 @@ class InternalViewSwitching {
     );
   }
 
+  factory InternalViewSwitching.toInvestments({
+    final String symbol = '',
+    final String accountName = '',
+  }) {
+    late FieldFilter fieldFilterToUse;
+    if (symbol.isNotEmpty) {
+      fieldFilterToUse = FieldFilter(
+        fieldName: Constants.viewStockFieldnameSymbol,
+        filterTextInLowerCase: symbol.toLowerCase(),
+      );
+    } else {
+      if (accountName.isNotEmpty) {
+        fieldFilterToUse = FieldFilter(
+          fieldName: Constants.viewStockFieldnameAccount,
+          filterTextInLowerCase: accountName.toLowerCase(),
+        );
+      }
+    }
+
+    // Jump to Stock view
+    return InternalViewSwitching(
+      icon: ViewId.viewInvestments.getIconData(),
+      title: 'Switch to Investments',
+      onPressed: () {
+        PreferenceController.to.jumpToView(
+          viewId: ViewId.viewInvestments,
+          selectedId: -1,
+          columnFilter: FieldFilters([fieldFilterToUse]).toStringList(),
+          textFilter: '',
+        );
+      },
+    );
+  }
+
   factory InternalViewSwitching.toTransactions({
     required final int transactionId,
     final FieldFilters? filters,

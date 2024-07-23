@@ -109,24 +109,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              // Jump to Stock view
-              InternalViewSwitching(
-                icon: ViewId.viewInvestments.getIconData(),
-                title: 'Switch to Investments',
-                onPressed: () {
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewInvestments,
-                    selectedId: -1,
-                    columnFilter: FieldFilters([
-                      FieldFilter(
-                        fieldName: Constants.viewStockFieldnameSymbol,
-                        filterTextInLowerCase: selectedSecurity.symbol.value.toLowerCase(),
-                      ),
-                    ]).toStringList(),
-                    textFilter: '',
-                  );
-                },
-              ),
+              // Jump to Investment view
+              InternalViewSwitching.toInvestments(symbol: selectedSecurity.symbol.value),
             ],
           ),
         );
