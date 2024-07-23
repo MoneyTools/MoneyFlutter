@@ -5,6 +5,7 @@ import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/quantity_widget.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 
@@ -16,10 +17,8 @@ Widget buildFieldWidgetForAmount({
   final bool shorthand = false,
   final TextAlign align = TextAlign.right,
 }) {
-  return FittedBox(
-    fit: BoxFit.scaleDown,
-    alignment: textAlignToAlignment(align),
-    child: Text(
+  return scaleDown(
+    Text(
       shorthand
           ? getAmountAsShorthandText(value as num)
           : Currency.getAmountAsStringUsingCurrency(
@@ -32,6 +31,7 @@ Widget buildFieldWidgetForAmount({
         color: getTextColorToUse(value),
       ),
     ),
+    textAlignToAlignment(align),
   );
 }
 
@@ -53,16 +53,15 @@ Widget buildFieldWidgetForNumber({
   final bool shorthand = false,
   final TextAlign align = TextAlign.right,
 }) {
-  return FittedBox(
-    fit: BoxFit.scaleDown,
-    alignment: textAlignToAlignment(align),
-    child: Text(
+  return scaleDown(
+    Text(
       shorthand
           ? (value is double ? getAmountAsShorthandText(value) : getNumberShorthandText(value))
           : value.toString(),
       textAlign: align,
       style: const TextStyle(fontFamily: 'RobotoMono'),
     ),
+    textAlignToAlignment(align),
   );
 }
 
@@ -204,12 +203,8 @@ Widget buildWidgetFromTypeAndValue({
           fixedFont: true,
         );
       }
-      // Adapt to availabl space
-      return FittedBox(
-        fit: BoxFit.scaleDown,
-        alignment: Alignment.centerLeft,
-        child: buildFieldWidgetForDate(date: value, align: align),
-      );
+      // Adapt to available space
+      return scaleDown(buildFieldWidgetForDate(date: value, align: align), Alignment.centerLeft);
 
     case FieldType.text:
     default:

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 
 class CurrencyLabel extends StatelessWidget {
   const CurrencyLabel({
@@ -18,9 +19,8 @@ class CurrencyLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Semantics(
+    return scaleDown(
+      Semantics(
         label: threeLetterCurrencySymbol,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,

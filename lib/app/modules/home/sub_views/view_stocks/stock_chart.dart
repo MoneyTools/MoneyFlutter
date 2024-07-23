@@ -10,10 +10,9 @@ import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/chart_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
@@ -267,9 +266,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
     if (dataPoints.isEmpty) {
       return CenterMessage(message: 'No history information about "${widget.symbol}"');
     }
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: IntrinsicWidth(
+    return scaleDown(
+      IntrinsicWidth(
         child: TextButton(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,

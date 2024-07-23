@@ -4,6 +4,7 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 Widget getFooterForDateRange(final DateRange dateRange) {
@@ -43,9 +44,9 @@ Widget getFooterForAmount(final double amount, {final String prefix = ''}) {
   );
 
   if (isSmallValue(amount)) {
-    return Text(prefix + Currency.getAmountAsStringUsingCurrency(amount), style: style);
+    return scaleDown(Text(prefix + Currency.getAmountAsStringUsingCurrency(amount), style: style));
   }
-  return Text('$prefix\$${getAmountAsShorthandText(amount)}', style: style);
+  return scaleDown(Text('$prefix\$${getAmountAsShorthandText(amount)}', style: style));
 }
 
 Widget getFooterForInt(final num value, {final bool applyColorBasedOnValue = true, final String prefix = ''}) {
@@ -55,9 +56,9 @@ Widget getFooterForInt(final num value, {final bool applyColorBasedOnValue = tru
   );
 
   if (isSmallValue(value)) {
-    return Text(prefix + getIntAsText(value.toInt()), style: style);
+    return scaleDown(Text(prefix + getIntAsText(value.toInt()), style: style));
   }
-  return Text(prefix + getNumberShorthandText(value), style: style);
+  return scaleDown(Text(prefix + getNumberShorthandText(value), style: style));
 }
 
 bool isSmallValue(final num value) {
