@@ -27,7 +27,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   final List<Widget> _pivots = <Widget>[];
-  final ValueNotifier<SortingInstruction> _sortingInstruction = ValueNotifier<SortingInstruction>(SortingInstruction());
 
   // Filter related
   final List<bool> _selectedPivot = <bool>[false, false, true];
@@ -215,53 +214,57 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       return const CenterMessage(message: 'No security selected.');
     }
 
-    return ValueListenableBuilder<SortingInstruction>(
-      valueListenable: _sortingInstruction,
-      builder: (
-        final BuildContext context,
-        final SortingInstruction sortInstructions,
-        final Widget? _,
-      ) {
-        return AdaptiveListColumnsOrRowsSingleSelection(
-          // list related
-          list: getListOfInvestment(_lastSecuritySelected!),
-          fieldDefinitions:
-              _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
-          filters: FieldFilters(),
-          sortByFieldIndex: sortInstructions.column,
-          sortAscending: sortInstructions.ascending,
-          selectedId: getInfoPanelLastSelectedItemId(),
-          // Field & Columns related
-          displayAsColumns: true,
-          backgoundColorForHeaderFooter: Colors.transparent,
-          onColumnHeaderTap: (int columnHeaderIndex) {
-            if (columnHeaderIndex == sortInstructions.column) {
-              // toggle order
-              sortInstructions.ascending = !sortInstructions.ascending;
-            } else {
-              sortInstructions.column = columnHeaderIndex;
-            }
-            _sortingInstruction.value = sortInstructions.clone();
-          },
-          onSelectionChanged: (int uniqueId) {
-            setState(() {
-              PreferenceController.to.setInt(
-                getPreferenceKey('info_$settingKeySelectedListItemId'),
-                uniqueId,
-              );
-            });
-          },
-          onItemLongPress: (BuildContext context2, int itemId) {
-            final instance = Data().investments.get(itemId);
-            if (instance != null) {
-              myShowDialogAndActionsForMoneyObject(
-                title: 'Investment',
-                context: context2,
-                moneyObject: instance,
-              );
-            }
-          },
-        );
+    final list = getListOfInvestment(_lastSecuritySelected!);
+
+    int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
+    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), false);
+
+    final fields = _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
+
+    MoneyObjects.sortList(
+      list,
+      fields,
+      sortByFieldIndex,
+      sortAscending,
+    );
+
+    return AdaptiveListColumnsOrRowsSingleSelection(
+      // list related
+      list: list,
+      fieldDefinitions: _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
+      filters: FieldFilters(),
+      sortByFieldIndex: sortByFieldIndex,
+      sortAscending: sortAscending,
+      selectedId: getInfoPanelLastSelectedItemId(),
+      // Field & Columns related
+      displayAsColumns: true,
+      backgoundColorForHeaderFooter: Colors.transparent,
+      onColumnHeaderTap: (int columnHeaderIndex) {
+        setState(() {
+          if (columnHeaderIndex == sortByFieldIndex) {
+            // toggle order
+            sortAscending = !sortAscending;
+            PreferenceController.to.setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          } else {
+            sortByFieldIndex = columnHeaderIndex;
+            PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
+          }
+        });
+      },
+      onSelectionChanged: (int uniqueId) {
+        setState(() {
+          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
+        });
+      },
+      onItemLongPress: (BuildContext context2, int itemId) {
+        final instance = Data().investments.get(itemId);
+        if (instance != null) {
+          myShowDialogAndActionsForMoneyObject(
+            title: 'Investment',
+            context: context2,
+            moneyObject: instance,
+          );
+        }
       },
     );
   }
@@ -431,19 +434,5 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         children: _pivots,
       ),
     );
-  }
-}
-
-class SortingInstruction {
-  bool ascending = false;
-  int column = 0;
-
-  SortingInstruction clone() {
-    // Create a new instance with the same properties
-    return SortingInstruction()
-      // ignore: unnecessary_this
-      ..column = this.column
-      // ignore: unnecessary_this
-      ..ascending = this.ascending;
   }
 }
