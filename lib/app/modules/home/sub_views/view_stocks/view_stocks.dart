@@ -3,8 +3,8 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
-import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
+import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
@@ -183,6 +183,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           key: Key('stock_symbol_$symbol'),
           symbol: symbol,
           splits: Data().stockSplits.getStockSplitsForSecurity(security),
+          dividends: security.dividends,
           holdingsActivities: events,
         );
       }
@@ -344,29 +345,21 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   Widget _buildPanelForDividend(final BuildContext context, final Security security) {
-    final List<Investment> investments = security
-        .getAssociatedInvestments()
-        .where((Investment item) => item.investmentType.value == InvestmentType.dividend.index)
-        .toList();
-
-    final double totalDividend = investments.fold(
-      0.0,
-      (sum, investment) => sum + investment.transactionInstance!.amount.value.toDouble(),
-    );
+    final double totalDividend = security.dividends.fold(0.0, (sum, dividend) => sum + dividend.amount);
 
     return _buildAdaptiveBox(
       context: context,
       title: 'Dividend',
-      count: investments.length,
+      count: security.dividends.length,
       content: ListView.separated(
-        itemCount: investments.length,
+        itemCount: security.dividends.length,
         itemBuilder: (context, index) {
-          final Investment investment = investments[index];
+          final Dividend dividend = security.dividends[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(investment.date.toString()),
-              Text(investment.transactionInstance!.amountAsText),
+              Text(dividend.date.toString()),
+              Text(Currency.getAmountAsStringUsingCurrency(dividend.amount)),
             ],
           );
         },

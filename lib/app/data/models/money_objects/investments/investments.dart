@@ -2,6 +2,7 @@ import 'package:money/app/data/models/money_objects/investments/investment.dart'
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 // Exports
 export 'package:money/app/data/models/money_objects/investments/investment.dart';
@@ -69,7 +70,12 @@ class Investments extends MoneyObjects<Investment> {
       cumulative.dateRange.inflate(investment.date);
       cumulative.quantity += investment.effectiveUnitsAdjusted;
       cumulative.amount += investment.activityAmount.getValueForDisplay(investment);
-      cumulative.dividend += investment.activityDividend.getValueForDisplay(investment);
+
+      if (investment.actionType == InvestmentType.dividend) {
+        final double amount = investment.activityDividend.getValueForDisplay(investment);
+        cumulative.dividends.add(Dividend(investment.date, amount));
+        cumulative.dividendsSum += amount;
+      }
     }
     return cumulative;
   }

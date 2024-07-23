@@ -326,6 +326,8 @@ class Investment extends MoneyObject {
 
   static final Fields<Investment> _fields = Fields<Investment>();
 
+  InvestmentType get actionType => getInvestmentTypeFromValue(this.investmentType.value);
+
   void applySplits(List<StockSplit> splits) {
     _splitRatio = 1;
     for (final StockSplit split in splits) {
@@ -455,8 +457,6 @@ class Investment extends MoneyObject {
   }
 
   double get _activityDividend {
-    debugLog(this.toString());
-
     if (investmentType.value == InvestmentType.dividend.index) {
       return transactionInstance?.amount.value.toDouble() ?? 0.00;
     }

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.47] 2024-07-23
+
+### Updated
+
+- StockView:Chart Display Dividends
+  
 ## [version 1.8.46] 2024-07-22
 
 ### Updated

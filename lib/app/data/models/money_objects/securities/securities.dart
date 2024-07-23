@@ -31,8 +31,9 @@ class Securities extends MoneyObjects<Security> {
       final StockCumulative cumulative = Investments.getSharesAndProfit(list);
       security.transactionDateRange.value = cumulative.dateRange;
       security.holdingShares.value = cumulative.quantity;
-      security.activityProfit.value.setAmount(cumulative.amount - cumulative.dividend);
-      security.activityDividend.value.setAmount(cumulative.dividend);
+      security.activityProfit.value.setAmount(cumulative.amount - cumulative.dividendsSum);
+      security.activityDividend.value.setAmount(cumulative.dividendsSum);
+      security.dividends = cumulative.dividends;
     }
   }
 

@@ -15,6 +15,8 @@ import 'package:money/app/core/widgets/chart.dart';
 import 'package:money/app/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/core/widgets/working.dart';
+import 'package:money/app/data/models/money_objects/currencies/currency.dart';
+import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
@@ -39,9 +41,11 @@ class StockChartWidget extends StatefulWidget {
     super.key,
     required this.symbol,
     required this.splits,
+    required this.dividends,
     required this.holdingsActivities,
   });
 
+  final List<Dividend> dividends;
   final List<HoldingActivity> holdingsActivities;
   final List<StockSplit> splits;
   final String symbol;
@@ -172,13 +176,26 @@ class StockChartWidgetState extends State<StockChartWidget> {
           ),
         ),
 
-        // Activities
+        // Activities Buy & Sell
         Padding(
           padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: PaintActivities(
               activities: widget.holdingsActivities,
+              minX: dataPoints.first.x,
+              maxX: dataPoints.last.x,
+            ),
+          ),
+        ),
+
+        // Dividends
+        Padding(
+          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          child: CustomPaint(
+            size: const Size(double.infinity, double.infinity),
+            painter: PaintDividends(
+              list: widget.dividends,
               minX: dataPoints.first.x,
               maxX: dataPoints.last.x,
             ),
@@ -540,5 +557,48 @@ class PaintActivities extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     canvas.drawRect(rect, paint);
+  }
+}
+
+class PaintDividends extends CustomPainter {
+  PaintDividends({
+    required this.list,
+    required this.minX,
+    required this.maxX,
+  });
+
+  final List<Dividend> list;
+  final double maxX;
+  final double minX;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final chartWidth = size.width;
+    final chartHeight = size.height;
+
+    // lines are drawn lef to right sorted by time
+    // the labe are drawn bottom to top sorted by ascending amount
+    // splits.sort((a, b) => a.amount.compareTo(b.amount));
+
+    for (final item in list) {
+      double left = 0;
+      if (item.date.millisecondsSinceEpoch > minX) {
+        left = ((item.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+      }
+      _paintLine(canvas, Colors.grey, left, chartHeight - 5, 45);
+      _paintLabel(
+        canvas,
+        Currency.getAmountAsStringUsingCurrency(item.amount),
+        Colors.green,
+        left + 2,
+        chartHeight + 30,
+      );
+      left += 20;
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

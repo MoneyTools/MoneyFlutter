@@ -3,6 +3,7 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/money_objects/investments/investment.dart';
+import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
@@ -92,6 +93,7 @@ class Security extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
   );
 
+  List<Dividend> dividends = [];
   FieldQuantity holdingShares = FieldQuantity(
     name: 'Holding',
     columnWidth: ColumnWidth.small,
