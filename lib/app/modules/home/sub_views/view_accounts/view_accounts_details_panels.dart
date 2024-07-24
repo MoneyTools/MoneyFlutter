@@ -72,6 +72,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       Transaction.fields.getFieldByName(columnIdDate),
       Transaction.fields.getFieldByName(columnIdPayee),
       Transaction.fields.getFieldByName(columnIdCategory),
+      Transaction.fields.getFieldByName(columnIdMemo),
       Transaction.fields.getFieldByName(columnIdStatus),
       Transaction.fields.getFieldByName(
         showAsNativeCurrency ? columnIdAmount : columnIdAmountNormalized,
