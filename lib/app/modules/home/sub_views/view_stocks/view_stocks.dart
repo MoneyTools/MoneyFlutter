@@ -403,7 +403,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     ];
     final List<Field> fieldsToDisplay = Investment.fields.definitions
         .where(
-          (element) => element.useAsColumn && included.contains(element.name),
+          (element) => included.contains(element.name),
         )
         .toList();
     return fieldsToDisplay;
