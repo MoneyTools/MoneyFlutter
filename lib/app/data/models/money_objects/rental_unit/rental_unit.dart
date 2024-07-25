@@ -29,7 +29,6 @@ class RentUnit extends MoneyObject {
   FieldInt building = FieldInt(
     name: 'Building',
     serializeName: 'Building',
-    useAsColumn: false,
     getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).building.value,
   );
 

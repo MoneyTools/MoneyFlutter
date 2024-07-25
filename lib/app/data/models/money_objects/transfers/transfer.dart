@@ -154,6 +154,24 @@ class Transfer extends MoneyObject {
     return _fields;
   }
 
+  static Fields<Transfer> get fieldsForColumnView {
+    final tmp = Transfer.fromJson({});
+
+    return Fields<Transfer>()
+      ..setDefinitions([
+        tmp.senderTransactionDate,
+        tmp.senderAccountId,
+        tmp.senderTransactionStatus,
+        tmp.senderTransactionMemo,
+        tmp.receiverTransactionDate,
+        tmp.receiverAccountId,
+        tmp.accountStatusDestination,
+        tmp.memoDestination,
+        tmp.troubleshoot,
+        tmp.transactionAmount,
+      ]);
+  }
+
   double geReceiverTransactionAmount() {
     if (related != null) {
       return related!.amount.value.toDouble();

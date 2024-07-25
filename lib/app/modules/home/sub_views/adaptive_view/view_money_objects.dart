@@ -222,12 +222,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void firstLoad() async {
-    var all = getFieldsForTable();
-
-    _fieldToDisplay = Fields<MoneyObject>();
-    _fieldToDisplay.setDefinitions(
-      all.definitions.where((element) => element.useAsColumn).toList(),
-    );
+    _fieldToDisplay = getFieldsForTable();
 
     // restore last user choices for this view
     _sortByFieldIndex = preferenceController.getInt(getPreferenceKey(settingKeySortBy), 0);
@@ -706,7 +701,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   bool isMatchingFilters(final MoneyObject instance) {
     if (areFiltersOn()) {
       // apply filtering
-      return getFieldsForTable().applyFilters(
+      return _fieldToDisplay.applyFilters(
         instance,
         _filterByText,
         _filterByFieldsValue,

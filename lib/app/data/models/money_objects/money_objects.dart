@@ -327,11 +327,11 @@ class MoneyObjects<T> {
   ]) {
     final List<String> listValues = <String>[];
     for (final Field field in fieldDefinitions) {
-      if (isFieldMatchingCondition(field, forSerialization)) {
-        final dynamic value = forSerialization ? field.getValueForSerialization(item) : item.toReadableString(field);
-        final String valueAsString = '"$value"';
-        listValues.add(valueAsString);
-      }
+      final dynamic value = field.getValueForSerialization == defaultCallbackValue
+          ? item.toReadableString(field)
+          : field.getValueForSerialization(item);
+      final String valueAsString = '"$value"';
+      listValues.add(valueAsString);
     }
     return listValues.join(valueSeparator);
   }

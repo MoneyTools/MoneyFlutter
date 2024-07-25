@@ -42,7 +42,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   @override
   Fields<RentBuilding> getFieldsForTable() {
-    return RentBuilding.fields;
+    return RentBuilding.fieldsForColumnView;
   }
 
   @override

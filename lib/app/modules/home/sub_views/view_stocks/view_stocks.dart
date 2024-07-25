@@ -135,7 +135,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Security> getFieldsForTable() {
-    return Security.fields;
+    return Security.fieldsForColumnView;
   }
 
   @override

@@ -41,7 +41,6 @@ class AccountAlias extends MoneyObject {
   Field<int> id = Field<int>(
     serializeName: 'Id',
     defaultValue: -1,
-    useAsColumn: false,
     getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
   );
 
@@ -70,6 +69,20 @@ class AccountAlias extends MoneyObject {
       _fields.setDefinitions(
         [
           tmp.id,
+          tmp.pattern,
+          tmp.flags,
+          tmp.accountId,
+        ],
+      );
+    }
+    return _fields;
+  }
+
+  static Fields<AccountAlias> get fieldsForColumnView {
+    if (_fields.isEmpty) {
+      final tmp = AccountAlias.fromJson({});
+      _fields.setDefinitions(
+        [
           tmp.pattern,
           tmp.flags,
           tmp.accountId,

@@ -47,7 +47,6 @@ class Account extends MoneyObject {
   FieldString accountId = FieldString(
     name: 'Account ID',
     serializeName: 'AccountId',
-    useAsColumn: true,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).accountId.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).accountId.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).accountId.value = value as String,
@@ -89,7 +88,6 @@ class Account extends MoneyObject {
     serializeName: 'CategoryIdForInterest',
     type: FieldType.text,
     defaultValue: 0,
-    useAsColumn: false,
     useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().categories.getNameFromId((instance as Account).categoryIdForInterest.value),
@@ -102,7 +100,6 @@ class Account extends MoneyObject {
     name: 'Catgory for Principal',
     serializeName: 'CategoryIdForPrincipal',
     defaultValue: 0,
-    useAsColumn: false,
     useAsDetailPanels: (final MoneyObject instance) => (instance as Account).type.value == AccountType.loan,
     type: FieldType.text,
     getValueForDisplay: (final MoneyObject instance) =>
@@ -155,7 +152,6 @@ class Account extends MoneyObject {
   /// 13|Flags|INT|0||0
   FieldInt flags = FieldInt(
     serializeName: 'Flags',
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).flags.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).flags.value,
@@ -170,7 +166,6 @@ class Account extends MoneyObject {
   Field<bool> isAccountOpen = Field<bool>(
     name: 'Account is open',
     defaultValue: false,
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueTrue,
     type: FieldType.toggle,
     getValueForDisplay: (final MoneyObject instance) => !(instance as Account).isClosed(),
@@ -187,7 +182,6 @@ class Account extends MoneyObject {
   /// 14|LastBalance|datetime|0||0
   FieldDate lastBalance = FieldDate(
     serializeName: 'LastBalance',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as Account).lastBalance.value),
     getValueForSerialization: (final MoneyObject instance) =>
@@ -198,7 +192,6 @@ class Account extends MoneyObject {
   /// 11|LastSync|datetime|0||0
   FieldDate lastSync = FieldDate(
     serializeName: 'LastSync',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).lastSync.value,
     getValueForSerialization: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as Account).lastSync.value),
@@ -228,7 +221,6 @@ class Account extends MoneyObject {
   FieldString ofxAccountId = FieldString(
     name: 'OfxAccountId',
     serializeName: 'OfxAccountId',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).ofxAccountId.value,
     setValue: (final MoneyObject instance, dynamic value) => (instance as Account).ofxAccountId.value = value as String,
@@ -239,7 +231,6 @@ class Account extends MoneyObject {
   FieldInt onlineAccount = FieldInt(
     name: 'OnlineAccount',
     serializeName: 'OnlineAccount',
-    useAsColumn: false,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).onlineAccount.value,
   );
 
@@ -249,7 +240,6 @@ class Account extends MoneyObject {
     name: 'Opening Balance',
     serializeName: 'OpeningBalance',
     defaultValue: 0,
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).openingBalance.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).openingBalance.value,
   );
@@ -261,14 +251,12 @@ class Account extends MoneyObject {
   /// 10|ReconcileWarning|INT|0||0
   FieldInt reconcileWarning = FieldInt(
     serializeName: 'ReconcileWarning',
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).reconcileWarning.value,
   );
 
   FieldMoney stockHoldingEstimation = FieldMoney(
     name: 'StockValue',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).stockHoldingEstimation.value,
   );
 
@@ -276,7 +264,6 @@ class Account extends MoneyObject {
   /// 12|SyncGuid|uniqueidentifier|0||0
   FieldString syncGuid = FieldString(
     serializeName: 'SyncGuid',
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) =>
         // this field can not be blank, it needs to be a valid GUID or Null
@@ -324,7 +311,6 @@ class Account extends MoneyObject {
   FieldString webSite = FieldString(
     name: 'WebSite',
     serializeName: 'WebSite',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).webSite.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).webSite.value,
   );
@@ -405,6 +391,23 @@ class Account extends MoneyObject {
         tmp.currency,
         tmp.balanceNormalized,
         tmp.isAccountOpen,
+      ]);
+    }
+    return _fields;
+  }
+
+  static Fields<Account> get fieldsForColumnView {
+    if (_fields.isEmpty) {
+      final tmp = Account.fromJson({});
+      _fields.setDefinitions([
+        tmp.name,
+        tmp.description,
+        tmp.type,
+        tmp.updatedOn,
+        tmp.count,
+        tmp.balanceNative,
+        tmp.currency,
+        tmp.balanceNormalized,
       ]);
     }
     return _fields;

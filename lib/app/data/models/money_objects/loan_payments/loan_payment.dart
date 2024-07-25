@@ -68,7 +68,6 @@ class LoanPayment extends MoneyObject {
   /// 2|Date|datetime|1||0
   FieldDate date = FieldDate(
     serializeName: 'Date',
-    useAsColumn: true,
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).date.value,
     getValueForSerialization: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as LoanPayment).date.value),
@@ -95,7 +94,6 @@ class LoanPayment extends MoneyObject {
     type: FieldType.text,
     name: 'Memo',
     serializeName: 'Memo',
-    useAsColumn: false,
     defaultValue: '',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
@@ -158,6 +156,23 @@ class LoanPayment extends MoneyObject {
       final tmpInstance = LoanPayment.fromJson({});
       _fields.setDefinitions([
         tmpInstance.id,
+        tmpInstance.date,
+        tmpInstance.accountId,
+        tmpInstance.memo,
+        tmpInstance.reference,
+        tmpInstance.rate,
+        tmpInstance.interest,
+        tmpInstance.principal,
+        tmpInstance.balance,
+      ]);
+    }
+    return _fields;
+  }
+
+  static Fields<LoanPayment> get fieldsForColumnView {
+    if (_fields.isEmpty) {
+      final tmpInstance = LoanPayment.fromJson({});
+      _fields.setDefinitions([
         tmpInstance.date,
         tmpInstance.accountId,
         tmpInstance.memo,

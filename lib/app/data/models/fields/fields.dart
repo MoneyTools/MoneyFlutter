@@ -59,7 +59,7 @@ class Fields<T> {
     bool wasFoundFreeStyleTextSearch = false;
     bool wasFoundColumnFilters = false;
 
-    for (final fieldDefinition in fieldDefinitionsForColumns) {
+    for (final fieldDefinition in definitions) {
       String fieldValueAsString = _getFieldValueAsStringForFiltering(
         objectInstance,
         fieldDefinition,
@@ -88,10 +88,6 @@ class Fields<T> {
     return wasFoundFreeStyleTextSearch && wasFoundColumnFilters;
   }
 
-  Iterable<Field> get fieldDefinitionsForColumns {
-    return definitions.where((element) => element.useAsColumn == true);
-  }
-
   String getCsvRowValues(final MoneyObject item) {
     final List<dynamic> listOfValues = <dynamic>[];
     for (final Field<dynamic> field in definitions) {
@@ -106,21 +102,6 @@ class Fields<T> {
 
   FieldDefinitions getFieldsForClass<C>() {
     return definitions;
-  }
-
-  List<String> getListOfFieldValueAsString(
-    final MoneyObject objectInstance, [
-    final bool includeHiddenFields = false,
-  ]) {
-    final List<String> strings = <String>[];
-    for (int fieldIndex = 0; fieldIndex < definitions.length; fieldIndex++) {
-      final Field<dynamic> fieldDefinition = definitions[fieldIndex];
-      if (includeHiddenFields == true || fieldDefinition.useAsColumn == true) {
-        final dynamic rawValue = fieldDefinition.getValueForDisplay(objectInstance);
-        strings.add(fieldDefinition.getString(rawValue));
-      }
-    }
-    return strings;
   }
 
   /// Used in table view
@@ -193,7 +174,7 @@ class Fields<T> {
     final MoneyObject objectInstance,
     final FieldFilters filterByFieldsValue,
   ) {
-    for (final Field fieldDefinition in fieldDefinitionsForColumns) {
+    for (final Field fieldDefinition in definitions) {
       String fieldValueAsString = _getFieldValueAsStringForFiltering(
         objectInstance,
         fieldDefinition,
@@ -215,7 +196,7 @@ class Fields<T> {
     MoneyObject objectInstance,
     String filterBytFreeStyleLowerCaseText,
   ) {
-    for (final fieldDefinition in fieldDefinitionsForColumns) {
+    for (final fieldDefinition in definitions) {
       final fieldValueAsString = _getFieldValueAsStringForFiltering(
         objectInstance,
         fieldDefinition,

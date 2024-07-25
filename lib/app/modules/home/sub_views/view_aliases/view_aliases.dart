@@ -34,7 +34,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Alias> getFieldsForTable() {
-    return Alias.getFields();
+    return Alias.fieldsForColumnView;
   }
 
   @override

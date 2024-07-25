@@ -148,20 +148,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     return 'Account';
   }
 
-  // @override
-  // Widget? getColumnFooterWidget(final Field field) {
-  //   switch (field.name) {
-  //     case 'Transactions':
-  //       return getFooterForInt(_footerCountTransactions);
-  //     case 'Balance(USD)':
-  //       return getFooterForAmount(_footerSumBalance);
-  //     case 'Updated':
-  //       return getFooterForDateRange(_footerColumnDate);
-  //     default:
-  //       return null;
-  //   }
-  // }
-
   // default currency for this view
   @override
   List<String> getCurrencyChoices(
@@ -192,7 +178,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Account> getFieldsForTable() {
-    return Account.fields;
+    return Account.fieldsForColumnView;
   }
 
   @override

@@ -87,7 +87,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Investment> getFieldsForTable() {
-    return Investment.fields;
+    return Investment.fieldsForColumnView;
   }
 
   @override

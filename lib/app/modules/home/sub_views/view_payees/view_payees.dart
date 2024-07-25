@@ -88,7 +88,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Payee> getFieldsForTable() {
-    return Payee.fields;
+    return Payee.fieldsForColumnView;
   }
 
   @override

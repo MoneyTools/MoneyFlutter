@@ -91,6 +91,17 @@ class Payee extends MoneyObject {
     return _fields;
   }
 
+  static Fields<Payee> get fieldsForColumnView {
+    final tmp = Payee.fromJson({});
+    return Fields<Payee>()
+      ..setDefinitions([
+        tmp.name,
+        tmp.categoriesAsText,
+        tmp.count,
+        tmp.sum,
+      ]);
+  }
+
   String getCategoriesAsString() {
     if (categories.isEmpty) {
       return '';

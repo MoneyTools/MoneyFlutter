@@ -88,7 +88,6 @@ class Security extends MoneyObject {
   FieldString cuspid = FieldString(
     name: 'CUSPID',
     serializeName: 'CUSPID',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).cuspid.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).cuspid.value,
   );
@@ -265,6 +264,25 @@ class Security extends MoneyObject {
       ]);
     }
     return _fields;
+  }
+
+  static Fields<Security> get fieldsForColumnView {
+    final tmp = Security.fromJson({});
+    return Fields<Security>()
+      ..setDefinitions([
+        tmp.name,
+        tmp.symbol,
+        tmp.transactionDateRange,
+        tmp.price,
+        tmp.lastPrice,
+        tmp.securityType,
+        tmp.numberOfTrades,
+        tmp.holdingShares,
+        tmp.holdingValue,
+        tmp.activityProfit,
+        tmp.activityDividend,
+        tmp.profit,
+      ]);
   }
 
   List<Investment> getAssociatedInvestments() =>

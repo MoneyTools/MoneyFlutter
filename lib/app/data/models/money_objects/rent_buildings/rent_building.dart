@@ -97,7 +97,6 @@ class RentBuilding extends MoneyObject {
   FieldInt categoryForIncome = FieldInt(
     name: 'CategoryForIncome',
     serializeName: 'CategoryForIncome',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForIncome.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForIncome.value,
@@ -110,7 +109,6 @@ class RentBuilding extends MoneyObject {
   FieldInt categoryForInterest = FieldInt(
     name: 'CategoryForInterest',
     serializeName: 'CategoryForInterest',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForInterest.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForInterest.value,
@@ -123,7 +121,6 @@ class RentBuilding extends MoneyObject {
   FieldInt categoryForMaintenance = FieldInt(
     name: 'CategoryForMaintenance',
     serializeName: 'CategoryForMaintenance',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForMaintenance.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForMaintenance.value,
@@ -136,7 +133,6 @@ class RentBuilding extends MoneyObject {
   FieldInt categoryForManagement = FieldInt(
     name: 'CategoryForManagement',
     serializeName: 'CategoryForManagement',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForManagement.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForManagement.value,
@@ -149,7 +145,6 @@ class RentBuilding extends MoneyObject {
   FieldInt categoryForRepairs = FieldInt(
     name: 'CategoryForRepairs',
     serializeName: 'CategoryForRepairs',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForRepairs.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForRepairs.value,
@@ -162,7 +157,6 @@ class RentBuilding extends MoneyObject {
   FieldInt categoryForTaxes = FieldInt(
     name: 'CategoryForTaxes',
     serializeName: 'CategoryForTaxes',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         (instance as RentBuilding).getCategoryName(instance.categoryForTaxes.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).categoryForTaxes.value,
@@ -223,7 +217,6 @@ class RentBuilding extends MoneyObject {
   /// Expenses-Interest
   FieldMoney lifeTimeExpenseInterest = FieldMoney(
     name: '  Expense-Interest',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as RentBuilding).lifeTimePnL.expenseInterest,
     ),
@@ -232,7 +225,6 @@ class RentBuilding extends MoneyObject {
   /// Expenses-Maintenance
   FieldMoney lifeTimeExpenseMaintenance = FieldMoney(
     name: '  Expense-Maintenance',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as RentBuilding).lifeTimePnL.expenseMaintenance,
     ),
@@ -241,7 +233,6 @@ class RentBuilding extends MoneyObject {
   /// Expenses-Management
   FieldMoney lifeTimeExpenseManagement = FieldMoney(
     name: '  Expense-Management',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as RentBuilding).lifeTimePnL.expenseManagement,
     ),
@@ -250,7 +241,6 @@ class RentBuilding extends MoneyObject {
   /// Expenses-Repair
   FieldMoney lifeTimeExpenseRepair = FieldMoney(
     name: '  Expense-Repair',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as RentBuilding).lifeTimePnL.expenseRepairs,
     ),
@@ -259,7 +249,6 @@ class RentBuilding extends MoneyObject {
   /// Expenses-Taxes
   FieldMoney lifeTimeExpenseTaxes = FieldMoney(
     name: '  Expense-Taxes',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         MoneyModel(amount: (instance as RentBuilding).lifeTimePnL.expenseTaxes),
   );
@@ -281,7 +270,6 @@ class RentBuilding extends MoneyObject {
   FieldString note = FieldString(
     name: 'Note',
     serializeName: 'Note',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).note.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).note.value,
   );
@@ -291,7 +279,6 @@ class RentBuilding extends MoneyObject {
   FieldString ownershipName1 = FieldString(
     name: 'OwnershipName1',
     serializeName: 'OwnershipName1',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName1.value,
   );
@@ -301,7 +288,6 @@ class RentBuilding extends MoneyObject {
   FieldString ownershipName2 = FieldString(
     name: 'OwnershipName2',
     serializeName: 'OwnershipName2',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipName2.value,
   );
@@ -311,7 +297,6 @@ class RentBuilding extends MoneyObject {
   FieldDouble ownershipPercentage1 = FieldDouble(
     name: 'OwnershipPercentage1',
     serializeName: 'OwnershipPercentage1',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage1.value,
   );
@@ -321,7 +306,6 @@ class RentBuilding extends MoneyObject {
   FieldDouble ownershipPercentage2 = FieldDouble(
     name: 'OwnershipPercentage2',
     serializeName: 'OwnershipPercentage2',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).ownershipPercentage2.value,
   );
@@ -340,7 +324,6 @@ class RentBuilding extends MoneyObject {
   FieldDate purchasedDate = FieldDate(
     name: 'Purchased Date',
     serializeName: 'PurchasedDate',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
       (instance as RentBuilding).purchasedDate.value,
     ),
@@ -354,7 +337,6 @@ class RentBuilding extends MoneyObject {
   FieldMoney purchasedPrice = FieldMoney(
     name: 'Purchased Price',
     serializeName: 'PurchasedPrice',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).purchasedPrice.value,
     getValueForSerialization: (final MoneyObject instance) =>
         (instance as RentBuilding).purchasedPrice.value.toDouble(),
@@ -524,6 +506,28 @@ class RentBuilding extends MoneyObject {
       ]);
     }
     return _fields;
+  }
+
+  static Fields<RentBuilding> get fieldsForColumnView {
+    final tmp = RentBuilding.fromJson({});
+    return Fields<RentBuilding>()
+      ..setDefinitions([
+        tmp.name,
+        tmp.address,
+        tmp.currency,
+        tmp.landValue,
+        tmp.estimatedValue,
+        tmp.transactionsForIncomes,
+        tmp.revenue,
+        tmp.transactionsForExpenses,
+        tmp.expense,
+        tmp.lifeTimeExpenseInterest,
+        tmp.lifeTimeExpenseMaintenance,
+        tmp.lifeTimeExpenseManagement,
+        tmp.lifeTimeExpenseRepair,
+        tmp.lifeTimeExpenseTaxes,
+        tmp.profit,
+      ]);
   }
 
   String getCategoryName(final int id) {

@@ -150,7 +150,6 @@ class Transaction extends MoneyObject {
     name: columnIdBalance,
     columnWidth: ColumnWidth.small,
     footer: FooterType.none,
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).balance,
@@ -180,7 +179,6 @@ class Transaction extends MoneyObject {
   FieldDate budgetBalanceDate = FieldDate(
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
       (instance as Transaction).budgetBalanceDate.value,
     ),
@@ -291,7 +289,6 @@ class Transaction extends MoneyObject {
   FieldString fitid = FieldString(
     name: 'FITID',
     serializeName: 'FITID',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fitid.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fitid.value,
   );
@@ -301,7 +298,6 @@ class Transaction extends MoneyObject {
   FieldInt flags = FieldInt(
     name: 'Flags',
     serializeName: 'Flags',
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).flags.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).flags.value,
@@ -318,7 +314,6 @@ class Transaction extends MoneyObject {
   FieldString memo = FieldString(
     name: 'Memo',
     serializeName: 'Memo',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).memo.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).memo.value,
     setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).memo.value = newValue,
@@ -330,7 +325,6 @@ class Transaction extends MoneyObject {
     name: 'Merge Date',
     serializeName: 'MergeDate',
     useAsDetailPanels: defaultCallbackValueFalse,
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as Transaction).mergeDate.value),
     getValueForSerialization: (final MoneyObject instance) =>
@@ -342,7 +336,6 @@ class Transaction extends MoneyObject {
   FieldString number = FieldString(
     name: 'Number',
     serializeName: 'Number',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).number.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).number.value,
   );
@@ -353,7 +346,6 @@ class Transaction extends MoneyObject {
   FieldString originalPayee = FieldString(
     name: 'Original Payee',
     serializeName: 'OriginalPayee',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
   );
@@ -361,7 +353,6 @@ class Transaction extends MoneyObject {
   FieldString paidOn = FieldString(
     type: FieldType.text,
     name: columnIdPaidOn,
-    useAsColumn: false, // By default this is not displayed, only used for Account of type=Credit
     align: TextAlign.right,
     columnWidth: ColumnWidth.tiny,
     footer: FooterType.none,
@@ -465,7 +456,6 @@ class Transaction extends MoneyObject {
   FieldDate reconciledDate = FieldDate(
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
       (instance as Transaction).reconciledDate.value,
     ),
@@ -479,7 +469,6 @@ class Transaction extends MoneyObject {
   FieldMoney salesTax = FieldMoney(
     name: 'Sales Tax',
     serializeName: 'SalesTax',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.toDouble(),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
@@ -517,7 +506,6 @@ class Transaction extends MoneyObject {
     name: 'Transfer',
     serializeName: 'Transfer',
     defaultValue: -1,
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transfer.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transfer.value,
@@ -531,7 +519,6 @@ class Transaction extends MoneyObject {
   FieldInt transferSplit = FieldInt(
     name: 'TransferSplit',
     serializeName: 'TransferSplit',
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
@@ -692,6 +679,25 @@ class Transaction extends MoneyObject {
       );
     }
     return _fields;
+  }
+
+  static Fields<Transaction> get fieldsForColumnView {
+    final tmp = Transaction(date: DateTime.now());
+    return Fields<Transaction>()
+      ..setDefinitions(
+        [
+          tmp.dateTime,
+          tmp.accountId,
+          tmp.payee,
+          tmp.categoryId,
+          tmp.number,
+          tmp.status,
+          tmp.currency,
+          tmp.amount,
+          tmp.amountAsTextNormalized,
+          tmp.balanceNormalized,
+        ],
+      );
   }
 
   Account? getAccount() {

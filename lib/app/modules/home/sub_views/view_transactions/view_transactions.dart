@@ -118,7 +118,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Transaction> getFieldsForTable() {
-    return Transaction.fields;
+    return Transaction.fieldsForColumnView;
   }
 
   @override

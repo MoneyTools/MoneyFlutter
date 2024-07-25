@@ -36,7 +36,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Transfer> getFieldsForTable() {
-    return Transfer.fields;
+    return Transfer.fieldsForColumnView;
   }
 
   @override

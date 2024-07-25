@@ -130,14 +130,14 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
     MoneyObjects.sortList(
       agregatedList,
-      LoanPayment.fields.fieldDefinitionsForColumns.toList(),
+      LoanPayment.fieldsForColumnView.definitions,
       sortFieldIndex,
       sortAscending,
     );
 
     return AdaptiveListColumnsOrRows(
       list: agregatedList,
-      fieldDefinitions: LoanPayment.fields.fieldDefinitionsForColumns.toList(),
+      fieldDefinitions: LoanPayment.fieldsForColumnView.definitions,
       filters: FieldFilters(),
       sortByFieldIndex: sortFieldIndex,
       sortAscending: sortAscending,

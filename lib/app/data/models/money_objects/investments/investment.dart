@@ -103,14 +103,12 @@ class Investment extends MoneyObject {
   FieldQuantity holdingShares = FieldQuantity(
     name: 'Holding',
     footer: FooterType.average,
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).holdingShares.value,
   );
 
   FieldMoney holdingSharesValue = FieldMoney(
     name: 'HoldingValue',
     footer: FooterType.average,
-    useAsColumn: true,
     getValueForDisplay: (final MoneyObject instance) {
       return MoneyModel(
         amount: (instance as Investment).holdingShares.value * instance._unitPriceAdjusted,
@@ -161,7 +159,6 @@ class Investment extends MoneyObject {
   FieldMoney markUpDown = FieldMoney(
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).markUpDown.value.toDouble(),
   );
@@ -170,14 +167,12 @@ class Investment extends MoneyObject {
   FieldInt security = FieldInt(
     name: 'Security',
     serializeName: 'Security',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).security.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).security.value,
   );
 
   FieldString securitySymbol = FieldString(
     name: 'Symbol',
-    useAsColumn: true,
     columnWidth: ColumnWidth.tiny,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().securities.getSymbolFromId((instance as Investment).security.value),
@@ -203,7 +198,6 @@ class Investment extends MoneyObject {
     serializeName: 'TaxExempt',
     columnWidth: ColumnWidth.nano,
     align: TextAlign.center,
-    useAsColumn: false,
     type: FieldType.text,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxExempt.value == 1 ? 'No' : 'Yes',
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxExempt.value,
@@ -213,7 +207,6 @@ class Investment extends MoneyObject {
   FieldMoney taxes = FieldMoney(
     name: 'Taxes',
     serializeName: 'Taxes',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).taxes.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).taxes.value.toDouble(),
   );
@@ -223,7 +216,6 @@ class Investment extends MoneyObject {
     name: 'TradeType',
     serializeName: 'TradeType',
     type: FieldType.text,
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) =>
         InvestmentTradeType.values[(instance as Investment).tradeType.value].name.toUpperCase(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).tradeType.value,
@@ -231,7 +223,6 @@ class Investment extends MoneyObject {
 
   FieldString transactionAccountName = FieldString(
     name: 'Account',
-    useAsColumn: true,
     columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) {
       return (instance as Investment).transactionInstance?.getAccountName() ?? '<Account?>';
@@ -240,7 +231,6 @@ class Investment extends MoneyObject {
 
   FieldDate transactionDate = FieldDate(
     name: 'Date',
-    useAsColumn: true,
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).date,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByDateAndInvestmentType(
@@ -287,7 +277,6 @@ class Investment extends MoneyObject {
   FieldMoney withholding = FieldMoney(
     name: 'Withholding',
     serializeName: 'Withholding',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).withholding.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).withholding.value.toDouble(),
   );
@@ -378,6 +367,28 @@ class Investment extends MoneyObject {
     }
 
     return _fields;
+  }
+
+  static Fields<Investment> get fieldsForColumnView {
+    final tmp = Investment.fromJson({});
+    return Fields<Investment>()
+      ..setDefinitions([
+        tmp.transactionDate,
+        tmp.transactionAccountName,
+        tmp.securitySymbol,
+        tmp.investmentType,
+        tmp.tradeType,
+        tmp.units,
+        tmp.splitRatioAsText,
+        tmp.unitsAdjusted,
+        tmp.unitPrice,
+        tmp.unitPriceAdjusted,
+        tmp.commission,
+        tmp.fees,
+        tmp.load,
+        tmp.activityAmount,
+        tmp.holdingSharesValue,
+      ]);
   }
 
   StockCumulative get finalAmount {

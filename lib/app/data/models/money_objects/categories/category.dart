@@ -64,7 +64,6 @@ class Category extends MoneyObject {
   /// 6|Budget|money|0||0
   FieldMoney budget = FieldMoney(
     name: 'Budget',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budget.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).budget.value.toDouble(),
   );
@@ -73,7 +72,6 @@ class Category extends MoneyObject {
   /// 7|Balance|money|0||0
   FieldMoney budgetBalance = FieldMoney(
     name: 'BudgetBalance',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).budgetBalance.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).budgetBalance.value.toDouble(),
   );
@@ -126,7 +124,6 @@ class Category extends MoneyObject {
   /// 8|Frequency|INT|0||0
   FieldInt frequency = FieldInt(
     serializeName: 'Frequency',
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).frequency.value,
   );
@@ -170,7 +167,6 @@ class Category extends MoneyObject {
   FieldInt parentId = FieldInt(
     name: 'ParentId',
     serializeName: 'ParentId',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).parentId.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).parentId.value,
   );
@@ -190,7 +186,6 @@ class Category extends MoneyObject {
   /// 9|TaxRefNum|INT|0||0
   FieldInt taxRefNum = FieldInt(
     serializeName: 'TaxRefNum',
-    useAsColumn: false,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).taxRefNum.value,
   );
@@ -300,6 +295,23 @@ class Category extends MoneyObject {
       ]);
     }
     return _fields;
+  }
+
+  static Fields<Category> get fieldsForColumnView {
+    final tmp = Category.fromJson({});
+    return Fields<Category>()
+      ..setDefinitions([
+        tmp.color,
+        tmp.level,
+        tmp.name,
+        tmp.description,
+        tmp.type,
+        tmp.budgetBalance,
+        tmp.transactionCount,
+        tmp.sum,
+        tmp.transactionCountRollup,
+        tmp.sumRollup,
+      ]);
   }
 
   void getAncestors(List<Category> list) {

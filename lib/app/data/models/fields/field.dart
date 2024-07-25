@@ -283,7 +283,6 @@ class Field<T> {
     this.type = FieldType.text,
     this.align = TextAlign.left,
     this.useAsDetailPanels = defaultCallbackValueTrue,
-    this.useAsColumn = true,
     this.columnWidth = ColumnWidth.normal,
     this.footer = FooterType.none,
     this.fixedFont = false,
@@ -420,7 +419,6 @@ class Field<T> {
 
   String serializeName;
   FieldType type;
-  bool useAsColumn;
   // This properties are evaluated against the instnace of the object
   bool Function(MoneyObject) useAsDetailPanels;
 
@@ -500,7 +498,6 @@ class FieldDate extends Field<DateTime?> {
     super.getValueForDisplay,
     super.getValueForSerialization,
     super.setValue,
-    super.useAsColumn,
     super.useAsDetailPanels,
     super.sort,
     super.columnWidth = ColumnWidth.tiny,
@@ -519,7 +516,6 @@ class FieldDouble extends Field<double> {
     super.serializeName,
     super.getValueForDisplay,
     super.getValueForSerialization,
-    super.useAsColumn,
     super.defaultValue = 0.00,
     super.useAsDetailPanels,
     super.sort,
@@ -535,7 +531,6 @@ class FieldPercentage extends Field<double> {
     super.serializeName,
     super.getValueForDisplay,
     super.getValueForSerialization,
-    super.useAsColumn,
     super.defaultValue = 0.000,
     super.useAsDetailPanels,
     super.sort,
@@ -552,7 +547,6 @@ class FieldId extends Field<int> {
     super.getValueForSerialization,
   }) : super(
           serializeName: 'Id',
-          useAsColumn: false,
           useAsDetailPanels: defaultCallbackValueFalse,
           defaultValue: -1,
         );
@@ -565,7 +559,6 @@ class FieldInt extends Field<int> {
     super.getValueForDisplay,
     super.getValueForSerialization,
     super.getValueForReading,
-    super.useAsColumn,
     super.columnWidth,
     super.useAsDetailPanels,
     super.defaultValue = -1,
@@ -585,7 +578,6 @@ class FieldMoney extends Field<MoneyModel> {
     super.getValueForDisplay,
     super.getValueForSerialization,
     super.setValue,
-    super.useAsColumn,
     super.columnWidth = ColumnWidth.small,
     super.footer = FooterType.sum,
     super.useAsDetailPanels,
@@ -604,7 +596,6 @@ class FieldQuantity extends Field<double> {
     super.getValueForDisplay,
     super.getValueForSerialization,
     super.setValue,
-    super.useAsColumn,
     super.columnWidth = ColumnWidth.small,
     super.useAsDetailPanels,
     super.defaultValue = 0,
@@ -622,7 +613,6 @@ class FieldString extends Field<String> {
     super.getValueForDisplay,
     super.getValueForReading,
     super.getValueForSerialization,
-    super.useAsColumn = true,
     super.columnWidth,
     super.useAsDetailPanels = defaultCallbackValueTrue,
     super.align = TextAlign.left,

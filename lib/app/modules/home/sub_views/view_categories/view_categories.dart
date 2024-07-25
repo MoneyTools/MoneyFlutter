@@ -132,7 +132,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   @override
   Fields<Category> getFieldsForTable() {
-    return Category.fields;
+    return Category.fieldsForColumnView;
   }
 
   @override

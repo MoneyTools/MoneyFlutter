@@ -116,6 +116,17 @@ class Alias extends MoneyObject {
     return _fields;
   }
 
+  static Fields<Alias> get fieldsForColumnView {
+    final tmp = Alias.fromJson({});
+    _fields.setDefinitions([
+      tmp.pattern,
+      tmp.flags,
+      tmp.payeeId,
+    ]);
+
+    return _fields;
+  }
+
   static dynamic getFields() {
     return fields;
   }

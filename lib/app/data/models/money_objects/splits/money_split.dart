@@ -127,14 +127,12 @@ class MoneySplit extends MoneyObject {
   // 0
   FieldInt transactionId = FieldInt(
     name: 'Transaction',
-    useAsColumn: false,
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).transactionId.value,
   );
 
   // 5
   FieldInt transferId = FieldInt(
     name: 'Transfer',
-    useAsColumn: false,
   );
 
   // Fields for this instance
