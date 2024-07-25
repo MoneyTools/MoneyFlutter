@@ -61,7 +61,7 @@ class Security extends MoneyObject {
       // 5
       cuspid: row.getString('CUSPID'),
       // 6
-      securityType: row.getInt('SecurityType'),
+      securityType: row.getInt('SECURITYTYPE'),
       // 7
       taxable: row.getInt('Taxable'),
       // 8
@@ -141,6 +141,7 @@ class Security extends MoneyObject {
     serializeName: 'Price',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).price.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).price.value.toDouble(),
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Security).price.value.setAmount(value),
   );
 
   // 8
