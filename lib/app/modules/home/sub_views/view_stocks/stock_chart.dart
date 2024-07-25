@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_this
 import 'dart:ui' as ui;
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -58,6 +59,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
   StockPriceHistoryCache latestPriceHistoryData = StockPriceHistoryCache('', StockLookupStatus.notFoundInCache, null);
 
   late Security? security = Data().securities.getBySymbol(widget.symbol);
+
+  bool _refreshing = false;
 
   @override
   void initState() {
@@ -237,7 +240,6 @@ class StockChartWidgetState extends State<StockChartWidget> {
             borderData: getBorders(0, 0),
             lineTouchData: LineTouchData(
               touchTooltipData: LineTouchTooltipData(
-                // tooltipBgColor: Colors.blueAccent,
                 getTooltipItems: (List<LineBarSpot> touchedSpots) {
                   return touchedSpots.map((touchedSpot) {
                     return LineTooltipItem(
@@ -279,29 +281,34 @@ class StockChartWidgetState extends State<StockChartWidget> {
                   style: const TextStyle(fontSize: SizeForText.large),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
-                child: Icon(Icons.refresh_outlined),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+                child: _refreshing ? const CupertinoActivityIndicator() : const Icon(Icons.refresh_outlined),
               ),
               Text(getElapsedTime(latestPriceHistoryData.lastDateTime)),
             ],
           ),
           onPressed: () async {
-            final result = await loadFomBackendAndSaveToCache(widget.symbol);
-            fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
-            List<StockSplit> splits = [];
-            if (PreferenceController.to.useYahooStock.value) {
-              splits = await _fetchStockSplitsFromYahoo(widget.symbol);
-            } else {
-              splits = await _fetchSplitsFromTwelveData(widget.symbol);
-            }
-
             setState(() {
-              fromPriceHistoryToChartDataPoints(result);
-              Data().stockSplits.setStockSplits(security!.uniqueId, splits);
-              if (DataController.to.trackMutations.isMutated()) {
-                Data().updateAll();
+              _refreshing = true;
+            });
+            loadFomBackendAndSaveToCache(widget.symbol).then((result) async {
+              fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
+              List<StockSplit> splits = [];
+              if (PreferenceController.to.useYahooStock.value) {
+                splits = await _fetchStockSplitsFromYahoo(widget.symbol);
+              } else {
+                splits = await _fetchSplitsFromTwelveData(widget.symbol);
               }
+
+              setState(() {
+                _refreshing = false;
+                fromPriceHistoryToChartDataPoints(result);
+                Data().stockSplits.setStockSplits(security!.uniqueId, splits);
+                if (DataController.to.trackMutations.isMutated()) {
+                  Data().updateAll();
+                }
+              });
             });
           },
         ),
@@ -381,17 +388,31 @@ class StockChartWidgetState extends State<StockChartWidget> {
       Security? security = Data().securities.getBySymbol(symbol);
       if (security != null) {
         // Extract the stock splits data
-        final Map<String, dynamic> splits = jsonResponse['chart']['result'][0]['events']['splits'];
-        for (var splitJson in splits.values) {
-          int dateInMiliseconds = splitJson['date'];
-          final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMiliseconds * 1000);
-          StockSplit sp = StockSplit(
-            security: security.uniqueId,
-            date: dateOSplit,
-            numerator: splitJson['numerator'].toInt(),
-            denominator: splitJson['denominator'].toInt(),
-          );
-          splitsFound.add(sp);
+        final responseChart = jsonResponse['chart'];
+        if (responseChart != null) {
+          final responseChartResult = responseChart['result'];
+          if (responseChartResult != null) {
+            if ((responseChartResult is List) && responseChartResult.isNotEmpty) {
+              final firstEntry = responseChartResult.firstOrNull;
+              if (firstEntry != null) {
+                final events = firstEntry['events'];
+                if (events != null) {
+                  final Map<String, dynamic> splits = events['splits'] ?? {};
+                  for (var splitJson in splits.values) {
+                    int dateInMiliseconds = splitJson['date'];
+                    final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMiliseconds * 1000);
+                    StockSplit sp = StockSplit(
+                      security: security.uniqueId,
+                      date: dateOSplit,
+                      numerator: splitJson['numerator'].toInt(),
+                      denominator: splitJson['denominator'].toInt(),
+                    );
+                    splitsFound.add(sp);
+                  }
+                }
+              }
+            }
+          }
         }
       } else {
         // Handle the error
@@ -403,7 +424,6 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   void _getStockHistoricalData() async {
     StockPriceHistoryCache priceCache = await getFromCacheOrBackend(widget.symbol);
-
     fromPriceHistoryToChartDataPoints(priceCache);
   }
 }

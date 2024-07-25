@@ -5,6 +5,7 @@ import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 
 class StockDatePrice {
   /// Constructor
@@ -19,6 +20,7 @@ const flagAsInvalidSymbol = 'invalid-symbol';
 class StockPriceHistoryCache {
   StockPriceHistoryCache(this.symbol, this.status, [this.lastDateTime]);
 
+  String lastError = '';
   List<StockDatePrice> prices = [];
   StockLookupStatus status = StockLookupStatus.notFoundInCache;
   String symbol = '';
@@ -43,6 +45,9 @@ Future<StockPriceHistoryCache> getFromCacheOrBackend(
 
 Future<StockPriceHistoryCache> loadFomBackendAndSaveToCache(String symbol) async {
   StockPriceHistoryCache result = await _loadFromBackend(symbol);
+  if (result.lastError.isNotEmpty) {
+    SnackBarService.displayError(message: result.lastError, autoDismiss: false);
+  }
   switch (result.status) {
     case StockLookupStatus.validSymbol:
       _saveToCache(symbol, result.prices);
@@ -134,7 +139,7 @@ Future<StockPriceHistoryCache> _loadFromBackend(
         return result;
       }
 
-      if (data['code'] == 404) {
+      if (data['code'] == 403 || data['code'] == 404) {
         // SYMBOL NOT FOUND
         result.status = StockLookupStatus.invalidSymbol;
         return result;
@@ -170,7 +175,8 @@ Future<StockPriceHistoryCache> _loadFromBackend(
       debugLog(error.toString());
     }
   } else {
-    debugLog('Failed to fetch data: ${response.toString()}');
+    result.lastError = response.body.toString();
+    debugLog('Failed to fetch data: ${response.body.toString()}');
   }
   return result;
 }

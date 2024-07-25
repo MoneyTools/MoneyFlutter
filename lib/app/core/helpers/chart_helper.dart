@@ -8,7 +8,7 @@ LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints) {
   Color color = Colors.grey;
 
   if (dataPoints.length >= 2) {
-    color = dataPoints.last.y > dataPoints.first.y ? Colors.green : Colors.red;
+    color = dataPoints.last.y >= dataPoints.first.y ? Colors.green : Colors.red;
   }
 
   return LineChartBarData(
