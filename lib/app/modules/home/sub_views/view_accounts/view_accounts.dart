@@ -124,7 +124,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                 filters: FieldFilters([
                   FieldFilter(
                     fieldName: Constants.viewTransactionFieldnameAccount,
-                    filterTextInLowerCase: account.name.value.toLowerCase(),
+                    strings: [account.name.value],
                   ),
                 ]),
               ),

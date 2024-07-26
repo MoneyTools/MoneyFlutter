@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.47] 2024-07-24
+
+### Added
+
+- Multiple Column Filtering
+  
 ## [version 1.8.47] 2024-07-23
 
 ### Added

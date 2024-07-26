@@ -40,13 +40,13 @@ class InternalViewSwitching {
     if (symbol.isNotEmpty) {
       fieldFilterToUse = FieldFilter(
         fieldName: Constants.viewStockFieldnameSymbol,
-        filterTextInLowerCase: symbol.toLowerCase(),
+        strings: [symbol],
       );
     } else {
       if (accountName.isNotEmpty) {
         fieldFilterToUse = FieldFilter(
           fieldName: Constants.viewStockFieldnameAccount,
-          filterTextInLowerCase: accountName.toLowerCase(),
+          strings: [accountName],
         );
       }
     }

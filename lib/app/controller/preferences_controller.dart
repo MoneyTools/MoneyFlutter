@@ -271,7 +271,7 @@ void switchViewTransacionnForPayee(final String payeeName) {
   fieldFilters.add(
     FieldFilter(
       fieldName: Constants.viewTransactionFieldnamePayee,
-      filterTextInLowerCase: payeeName.toLowerCase(),
+      strings: [payeeName],
     ),
   );
 

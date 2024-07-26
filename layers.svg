@@ -787,7 +787,7 @@ url_launcher</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.8.44</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.8.48</text>
   </g>
   <g id='Labels_clipboard'>
     <text class="nodeName" x="1350" y="375" font-size="120%">clipboard</text>
@@ -815,7 +815,7 @@ url_launcher</title>
   </g>
   <g id='Labels_http'>
     <text class="nodeName" x="1650" y="225" font-size="120%">http</text>
-    <text class="nodeName" x="1650" y="245" font-size="80%">1.2.1</text>
+    <text class="nodeName" x="1650" y="245" font-size="80%">1.2.2</text>
   </g>
   <g id='Labels_pasteboard'>
     <text class="nodeName" x="3150" y="225" font-size="120%">pasteboard</text>

@@ -6,6 +6,7 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
@@ -13,6 +14,7 @@ import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/message_box.dart';
+import 'package:money/app/core/widgets/text_title.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
@@ -804,21 +806,25 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           onPressed: () {
             Navigator.of(context).pop(false);
             setState(() {
-              _filterByFieldsValue.clear();
+              List<String> selectedValues = [];
 
-              for (final value in listOfValueSelected) {
-                if (value.isSelected) {
-                  FieldFilter fieldFilter = FieldFilter(
-                    fieldName: fieldDefinition.name,
-                    filterTextInLowerCase: value.name,
-                  );
-                  _filterByFieldsValue.add(fieldFilter);
+              for (final ValueSelection checkbox in listOfValueSelected) {
+                if (checkbox.isSelected) {
+                  selectedValues.add(checkbox.name);
                 }
               }
 
-              if (_filterByFieldsValue.length == listOfValueSelected.length) {
+              if (selectedValues.length == listOfValueSelected.length) {
                 // all unique values are selected so clear the column filter;
                 _filterByFieldsValue.clear();
+              } else {
+                // apply filter
+                _filterByFieldsValue.add(
+                  FieldFilter(
+                    fieldName: fieldDefinition.name,
+                    strings: selectedValues,
+                  ),
+                );
               }
 
               saveLastUserChoicesOfView();
@@ -890,36 +896,69 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     });
   }
 
-  Widget _buildInforUserOfEmptyList(Key key) {
-    String message = 'No ${getClassNamePlural()}';
-    Widget? widgetForClearFilter;
-    if (areFiltersOn()) {
-      message += ' found';
-      widgetForClearFilter = OutlinedButton(
-        onPressed: () {
-          setState(() {
-            _resetFiltersAndGetList();
-          });
-        },
-        child: Row(
-          children: [
-            const Text('Clear Filters'),
-            gapSmall(),
-            const Icon(Icons.filter_alt_off_outlined),
-          ],
-        ),
-      );
+  Widget _buildCenterMessageForEmptyList(final key) {
+    return CenterMessage(
+      key: key,
+      message: 'No ${getClassNamePlural()}',
+    );
+  }
+
+  Widget _buildCenterMessageForEmptyListDueToFilters(final key) {
+    List<String> activeFilterValues = [];
+    if (_filterByText.isNotEmpty) {
+      activeFilterValues.add('"$_filterByText"');
+    }
+    if (_filterByFieldsValue.isNotEmpty) {
+      activeFilterValues.addAll(_filterByFieldsValue.list.map((filter) => filter.toString()));
     }
 
+    return Center(
+      child: Box(
+        key: key,
+        padding: SizeForPadding.large,
+        child: IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextTitle('No ${getClassNamePlural()} found with the filters:'),
+              gapLarge(),
+              SelectableText(activeFilterValues.join('\n')),
+              gapHuge(),
+              Row(
+                children: [
+                  const Spacer(),
+                  IntrinsicWidth(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        setState(() {
+                          _resetFiltersAndGetList();
+                        });
+                      },
+                      child: Row(
+                        children: [
+                          const Text('Clear Filters'),
+                          gapSmall(),
+                          const Icon(Icons.filter_alt_off_outlined),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInforUserOfEmptyList(Key key) {
     return Column(
       children: [
         buildHeader(),
         Expanded(
-          child: CenterMessage(
-            key: key,
-            message: message,
-            child: widgetForClearFilter,
-          ),
+          child:
+              areFiltersOn() ? _buildCenterMessageForEmptyListDueToFilters(key) : _buildCenterMessageForEmptyList(key),
         ),
       ],
     );

@@ -102,7 +102,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                   [
                     FieldFilter(
                       fieldName: Constants.viewTransactionFieldnameCategory,
-                      filterTextInLowerCase: category.uniqueId.toString().toLowerCase(),
+                      strings: [category.uniqueId.toString()],
                     ),
                   ],
                 ),

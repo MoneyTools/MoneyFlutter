@@ -4,7 +4,6 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
-import 'package:money/app/data/models/money_objects/payees/payee.dart';
 
 // Exports
 export 'package:money/app/data/models/fields/field.dart';
@@ -56,36 +55,8 @@ class Fields<T> {
     }
 
     // Looking for Both freestyle text and column fitlering, both condition needs to be met
-    bool wasFoundFreeStyleTextSearch = false;
-    bool wasFoundColumnFilters = false;
-
-    for (final fieldDefinition in definitions) {
-      String fieldValueAsString = _getFieldValueAsStringForFiltering(
-        objectInstance,
-        fieldDefinition,
-      );
-
-      if (wasFoundColumnFilters == false) {
-        // continue to search for a column match
-        if (isFieldMatching(
-          fieldDefinition,
-          fieldValueAsString,
-          filterByFieldsValue,
-        )) {
-          wasFoundColumnFilters = true;
-        }
-      }
-
-      // check to see if at least one field contains the free style filter text
-      if (wasFoundFreeStyleTextSearch == false) {
-        if (fieldValueAsString.contains(filterBytFreeStyleLowerCaseText)) {
-          wasFoundFreeStyleTextSearch = true;
-        }
-      }
-    }
-
-    // both filter mode are requested, thus we need both to have been matched
-    return wasFoundFreeStyleTextSearch && wasFoundColumnFilters;
+    return isMatchingFreeStyleText(objectInstance, filterBytFreeStyleLowerCaseText) &&
+        isMatchingColumnFiltering(objectInstance, filterByFieldsValue);
   }
 
   String getCsvRowValues(final MoneyObject item) {
@@ -141,12 +112,20 @@ class Fields<T> {
     return strings.join();
   }
 
+  String getStringValueUsingFieldName(final MoneyObject objectInstance, final String fieldName) {
+    final fieldFound = definitions.firstWhereOrNull((f) => f.name == fieldName);
+    if (fieldFound != null) {
+      return _getFieldValueAsStringForFiltering(objectInstance, fieldFound);
+    }
+    return '';
+  }
+
   bool get isEmpty {
     return definitions.isEmpty;
   }
 
-  /// Checks if a given field definition matches the provided filters.
-  ///
+  /// Checks if a given field definition matches the provided filterByFieldsValue.
+  /// to match we need both the name and value of a instance to mathc all of the "name, values[], of each filters in filterByFieldsValue"
   /// This function is used to determine whether a field definition matches the
   /// specified filters in the filtering process.
   ///
@@ -160,35 +139,33 @@ class Fields<T> {
     String fieldValueAsStringInLowerCase,
     FieldFilters filterByFieldsValue,
   ) {
-    for (final FieldFilter filter in filterByFieldsValue.list) {
-      if (fieldDefinition.name == filter.fieldName) {
-        if (fieldValueAsStringInLowerCase == filter.filterTextInLowerCase) {
-          return true;
-        }
-      }
-    }
-    return false;
+    int numberOfMatch = 0;
+
+    // for (final FieldFilter filter in filterByFieldsValue.listOfFilters) {
+    //   if (fieldDefinition.name == filter.fieldName) {
+    //     if (fieldValueAsStringInLowerCase == filter.filterTextInLowerCase) {
+    //       numberOfMatch++;
+    //     }
+    //   }
+    // }
+    return numberOfMatch == filterByFieldsValue.list.length;
   }
 
   bool isMatchingColumnFiltering(
     final MoneyObject objectInstance,
     final FieldFilters filterByFieldsValue,
   ) {
-    for (final Field fieldDefinition in definitions) {
-      String fieldValueAsString = _getFieldValueAsStringForFiltering(
+    for (final FieldFilter filter in filterByFieldsValue.list) {
+      final Field fieldDefinition = getFieldByName(filter.fieldName);
+      final String fieldValueAsString = _getFieldValueAsStringForFiltering(
         objectInstance,
         fieldDefinition,
       );
-
-      if (isFieldMatching(
-        fieldDefinition,
-        fieldValueAsString,
-        filterByFieldsValue,
-      )) {
-        return true;
+      if (!filter.contains(fieldValueAsString)) {
+        return false;
       }
     }
-    return false;
+    return true;
   }
 
   // check if the lowerCaseTextToFind matches any of the fields text value

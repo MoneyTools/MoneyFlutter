@@ -1,35 +1,50 @@
+// ignore_for_file: unnecessary_this
+
+import 'package:money/app/controller/selection_controller.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
+
+/// List of string values in lower case associated to a fieldName
+/// e.g.  'Color', ['blue', 'red']
 class FieldFilter {
-  FieldFilter({required this.fieldName, required this.filterTextInLowerCase}) {
-    filterTextInLowerCase = filterTextInLowerCase.toLowerCase();
+  FieldFilter({required this.fieldName, required this.strings}) {
+    this.strings = strings;
   }
 
   factory FieldFilter.fromJson(Map<String, dynamic> json) {
     return FieldFilter(
       fieldName: json['fieldName'] as String,
-      filterTextInLowerCase: json['filterTextInLowerCase'] as String,
+      strings: json['filterTextInLowerCase'].split('|'),
     );
   }
 
   final String fieldName;
 
-  late String filterTextInLowerCase;
+  List<String> strings = [];
 
   @override
   String toString() {
-    return '$fieldName=$filterTextInLowerCase';
+    return '$fieldName=${strings.join("|")}';
+  }
+
+  bool contains(final String textToMatch) {
+    final found = this.strings.firstWhereOrNull((text) {
+      return stringCompareIgnoreCasing2(text, textToMatch) == 0;
+    });
+    return found != null;
   }
 
   Map<String, dynamic> toJson() {
     return {
       'fieldName': fieldName,
-      'filterTextInLowerCase': filterTextInLowerCase,
+      'filterTextInLowerCase': strings,
     };
   }
 }
 
+/// Group a lists of filters
 class FieldFilters {
-  FieldFilters([List<FieldFilter>? list]) {
-    this.list = list ?? [];
+  FieldFilters([List<FieldFilter>? inputList]) {
+    this.list = inputList ?? [];
   }
 
   FieldFilters.fromJson(final Map<String, dynamic> json) {
@@ -43,7 +58,7 @@ class FieldFilters {
         list.add(
           FieldFilter(
             fieldName: tokens[0],
-            filterTextInLowerCase: tokens[1].toLowerCase(),
+            strings: tokens[1].split('|'),
           ),
         );
       }
@@ -51,6 +66,11 @@ class FieldFilters {
   }
 
   List<FieldFilter> list = [];
+
+  @override
+  String toString() {
+    return toStringList().join(', ');
+  }
 
   void add(final FieldFilter ff) {
     list.add(ff);
@@ -62,6 +82,8 @@ class FieldFilters {
 
   bool get isEmpty => list.isEmpty;
 
+  bool get isNotEmpty => !isEmpty;
+
   int get length => list.length;
 
   Map<String, dynamic> toJson() {
@@ -69,11 +91,6 @@ class FieldFilters {
       'list': list.map((filter) => filter.toJson()).toList(),
     };
   }
-
-  // @override
-  // String toString() {
-  //   return list.join(';');
-  // }
 
   List<String> toStringList() {
     return list.map((filter) => filter.toString()).toList();

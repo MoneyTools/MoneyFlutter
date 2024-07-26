@@ -72,7 +72,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
 
   @override
   String getClassNamePlural() {
-    return 'Investment';
+    return 'Investments';
   }
 
   @override
