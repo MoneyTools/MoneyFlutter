@@ -7,23 +7,24 @@ class MyListItemFooter<T> extends StatelessWidget {
   const MyListItemFooter({
     required this.columns,
     required this.multiSelectionOn,
+    required this.getColumnFooterWidget,
     required this.onTap,
     super.key,
     this.backgoundColor = Colors.transparent,
     this.onLongPress,
-    this.getColumnFooterWidget,
   });
 
   final Function(Field<dynamic>)? onLongPress;
-  final Widget? Function(Field field)? getColumnFooterWidget;
   final Color backgoundColor;
   final FieldDefinitions columns;
+  final Widget? Function(Field field) getColumnFooterWidget;
   final bool multiSelectionOn;
   final Function(int columnIndex) onTap;
 
   @override
   Widget build(final BuildContext context) {
     final List<Widget> footerWidgets = <Widget>[];
+
     if (multiSelectionOn) {
       footerWidgets.add(
         Opacity(
@@ -50,7 +51,7 @@ class MyListItemFooter<T> extends StatelessWidget {
           onLongPress: () {
             onLongPress?.call(columnDefinition);
           },
-          child: getColumnFooterWidget?.call(columnDefinition),
+          child: getColumnFooterWidget(columnDefinition),
         ),
       );
     }

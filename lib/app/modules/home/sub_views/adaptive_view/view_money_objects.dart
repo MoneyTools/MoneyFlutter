@@ -1,13 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/core/widgets/gaps.dart';
@@ -22,6 +19,7 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptable_view_with_list.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/column_filter_panel.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/footer_accumulators.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_header.dart';
@@ -47,11 +45,6 @@ class ViewForMoneyObjects extends StatefulWidget {
 }
 
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
-  final AccumulatorList<Field, String> accumaltorListOfText = AccumulatorList<Field, String>();
-  final AccumulatorDateRange<Field> accumulatorDateRange = AccumulatorDateRange<Field>();
-  final AccumulatorAverage<Field> accumulatorForAverage = AccumulatorAverage<Field>();
-  final AccumulatorSum<Field, double> accumulatorSumAmount = AccumulatorSum<Field, double>();
-  final AccumulatorSum<Field, double> accumulatorSumNumber = AccumulatorSum<Field, double>();
   late final ViewId viewId;
 
   bool firstLoadCompleted = false;
@@ -72,6 +65,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   VoidCallback? onEditItems;
   VoidCallback? onMultiSelect;
 
+  final FooterAccumulators _footerAccumulators = FooterAccumulators();
   final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>([]);
 
   Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>();
@@ -264,44 +258,41 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void footerAccumulators() {
-    accumulatorSumAmount.clear();
-    accumulatorSumNumber.clear();
-    accumulatorForAverage.clear();
-    accumulatorDateRange.clear();
-    accumaltorListOfText.clear();
+    _footerAccumulators.clear();
 
     for (final item in list) {
       for (final field in _fieldToDisplay.definitions) {
         switch (field.type) {
           case FieldType.text:
-            accumaltorListOfText.cumulate(field, field.getValueForDisplay(item));
+            _footerAccumulators.accumaltorListOfText.cumulate(field, field.getValueForDisplay(item));
 
           case FieldType.date:
             final dateTime = field.getValueForDisplay(item);
             if (dateTime != null) {
-              accumulatorDateRange.cumulate(field, dateTime);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, dateTime);
             }
           case FieldType.dateRange:
             final dateRangeValue = field.getValue(item);
             if (dateRangeValue.min != null) {
-              accumulatorDateRange.cumulate(field, dateRangeValue.min);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, dateRangeValue.min);
             }
             if (dateRangeValue.max != null) {
-              accumulatorDateRange.cumulate(field, dateRangeValue.max);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, dateRangeValue.max);
             }
 
           case FieldType.amount:
             final double value = field.getValueForDisplay(item).toDouble();
             if (isNumber(value)) {
-              accumulatorSumAmount.cumulate(field, value);
+              _footerAccumulators.accumulatorSumAmount.cumulate(field, value);
               if (field.footer == FooterType.average) {
-                accumulatorForAverage.cumulate(field, value);
+                _footerAccumulators.accumulatorForAverage.cumulate(field, value);
               }
             }
 
           case FieldType.widget:
             if (field.getValueForReading != null) {
-              accumaltorListOfText.cumulate(field, field.getValueForReading?.call(item)!.toString() ?? '');
+              _footerAccumulators.accumaltorListOfText
+                  .cumulate(field, field.getValueForReading?.call(item)!.toString() ?? '');
             }
 
           case FieldType.numeric:
@@ -310,10 +301,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           case FieldType.quantity:
             final dynamic value = field.getValueForDisplay(item);
             if (value is num) {
-              accumulatorSumNumber.cumulate(field, value.toDouble());
+              _footerAccumulators.accumulatorSumNumber.cumulate(field, value.toDouble());
             }
             if (field.footer == FooterType.average) {
-              accumulatorForAverage.cumulate(field, value);
+              _footerAccumulators.accumulatorForAverage.cumulate(field, value);
             }
           default:
             break;
@@ -392,68 +383,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   /// to be overrident by derived class
   /// Use the field FooterType to decide how to render the bottom button of each columns
   Widget getColumnFooterWidget(final Field field) {
-    switch (field.footer) {
-      case FooterType.range:
-        if (accumulatorDateRange.containsKey(field)) {
-          return getFooterForDateRange(accumulatorDateRange.getValue(field)!);
-        }
-      case FooterType.count:
-        List<String> list = [];
-
-        if (accumaltorListOfText.containsKey(field)) {
-          list = accumaltorListOfText.getList(field);
-        } else {
-          if (accumulatorSumNumber.containsKey(field)) {
-            list = accumulatorSumNumber.getValue(field);
-          }
-        }
-
-        final int count = list.length;
-        if (count > 0) {
-          String samples = '';
-          if (count > 10) {
-            samples = '${list.take(10).join('\n')}\n...';
-          } else {
-            samples = list.join('\n');
-          }
-          return Tooltip(
-            message: '$count items\n$samples',
-            child: getFooterForInt(count, applyColorBasedOnValue: false),
-          );
-        }
-
-      case FooterType.sum:
-        Widget? widget;
-        if (accumulatorSumAmount.containsKey(field)) {
-          widget = getFooterForAmount(accumulatorSumAmount.getValue(field));
-        } else {
-          if (accumulatorSumNumber.containsKey(field)) {
-            widget = getFooterForInt(accumulatorSumNumber.getValue(field));
-          }
-        }
-        return Tooltip(
-          message: 'Sum.',
-          child: widget,
-        );
-
-      case FooterType.average:
-        if (accumulatorForAverage.containsKey(field)) {
-          final RunningAverage range = accumulatorForAverage.getValue(field)!;
-          final double value = range.getAverage();
-          Widget widget = field.type == FieldType.amount
-              ? getFooterForAmount(value, prefix: 'Av ')
-              : getFooterForInt(value, prefix: 'Av ');
-          return Tooltip(
-            message: field.type == FieldType.amount ? range.descriptionAsMoney : range.descriptionAsInt,
-            child: widget,
-          );
-        }
-
-      case FooterType.none:
-      default:
-        return const SizedBox();
-    }
-    return const SizedBox();
+    return _footerAccumulators.buildWidget(field);
   }
 
   String getCurrency() {

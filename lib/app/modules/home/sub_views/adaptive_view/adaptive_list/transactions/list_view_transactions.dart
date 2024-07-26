@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';

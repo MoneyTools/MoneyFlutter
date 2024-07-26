@@ -4,6 +4,8 @@ import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_footer.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
+export 'package:flutter/material.dart';
+
 class AdaptiveListColumnsOrRows extends StatelessWidget {
   const AdaptiveListColumnsOrRows({
     super.key,
@@ -95,7 +97,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
             backgoundColor: backgoundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             multiSelectionOn: isMultiSelectionOn,
-            getColumnFooterWidget: getColumnFooterWidget,
+            getColumnFooterWidget: getColumnFooterWidget!,
             onTap: (int index) => () {},
             onLongPress: (Field<dynamic> field) => () {},
           ),
