@@ -397,17 +397,19 @@ class StockChartWidgetState extends State<StockChartWidget> {
               if (firstEntry != null) {
                 final events = firstEntry['events'];
                 if (events != null) {
-                  final Map<String, dynamic> splits = events['splits'] ?? {};
-                  for (var splitJson in splits.values) {
-                    int dateInMiliseconds = splitJson['date'];
-                    final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMiliseconds * 1000);
-                    StockSplit sp = StockSplit(
-                      security: security.uniqueId,
-                      date: dateOSplit,
-                      numerator: splitJson['numerator'].toInt(),
-                      denominator: splitJson['denominator'].toInt(),
-                    );
-                    splitsFound.add(sp);
+                  final splits = events['splits'];
+                  if (splits != null) {
+                    for (var splitJson in splits.values) {
+                      int dateInMiliseconds = splitJson['date'];
+                      final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMiliseconds * 1000);
+                      StockSplit sp = StockSplit(
+                        security: security.uniqueId,
+                        date: dateOSplit,
+                        numerator: splitJson['numerator'].toInt(),
+                        denominator: splitJson['denominator'].toInt(),
+                      );
+                      splitsFound.add(sp);
+                    }
                   }
                 }
               }
