@@ -216,8 +216,7 @@ class MoneyObjects<T> {
   }
 
   static bool isFieldMatchingCondition(final field, bool forSerialization) {
-    return ((forSerialization == true && field.serializeName.isNotEmpty) ||
-        (forSerialization == false && field.useAsColumn));
+    return ((forSerialization == true && field.serializeName.isNotEmpty) || (forSerialization == false));
   }
 
   /// Recast list as type <T>
