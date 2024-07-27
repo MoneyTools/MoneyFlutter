@@ -209,7 +209,11 @@ class Fields<T> {
   ) {
     switch (fieldDefinition.type) {
       case FieldType.widget:
-        return fieldDefinition.getValueForSerialization(objectInstance).toString().toLowerCase();
+        if (fieldDefinition.getValueForReading == null) {
+          return fieldDefinition.getValueForSerialization(objectInstance).toString().toLowerCase();
+        } else {
+          return fieldDefinition.getValueForReading!(objectInstance);
+        }
 
       case FieldType.date:
         final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);

@@ -617,7 +617,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
-      final String fieldValue = columnToCustomerFilterOn.getValueForSerialization(moneyObject).toString();
+      final String fieldValue = columnToCustomerFilterOn.getValueForReading?.call(moneyObject) ?? ''.toString();
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
