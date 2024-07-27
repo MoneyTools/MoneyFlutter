@@ -56,7 +56,7 @@ class StockSplits extends MoneyObjects<StockSplit> {
       final StockSplit? foundMatch = listOfSplitsFound
           .firstWhereOrNull((existingSplit) => isSameDateWithoutTime(existingSplit.date.value, ss.date.value));
       if (foundMatch == null) {
-        appendNewMoneyObject(ss);
+        appendNewMoneyObject(ss, fireNotification: false);
       }
     }
   }

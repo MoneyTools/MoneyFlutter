@@ -294,6 +294,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
             });
             loadFomBackendAndSaveToCache(widget.symbol).then((result) async {
               fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
+
+              // Fetch Historical Stock Splits
               List<StockSplit> splits = [];
               if (PreferenceController.to.useYahooStock.value) {
                 splits = await _fetchStockSplitsFromYahoo(widget.symbol);
@@ -303,8 +305,13 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
               setState(() {
                 _refreshing = false;
+
                 fromPriceHistoryToChartDataPoints(result);
+
+                // update the data model
                 Data().stockSplits.setStockSplits(security!.uniqueId, splits);
+
+                // refresh all of the UI part since if needed
                 if (DataController.to.trackMutations.isMutated()) {
                   Data().updateAll();
                 }

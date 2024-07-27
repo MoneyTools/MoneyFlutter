@@ -78,7 +78,7 @@ class StockSplit extends MoneyObject {
 
   @override
   String toString() {
-    return '${date.value} ${security.value} ${numerator.value} ${denominator.value}';
+    return '${date.value}|${security.value}|${numerator.value} for ${denominator.value}';
   }
 
   @override
