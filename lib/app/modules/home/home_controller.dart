@@ -5,7 +5,7 @@ class HomeController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    debugLog('Closed!');
+    logger.i('Closed!');
   }
 
   //TODO: Implement HomeController.
@@ -13,12 +13,12 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    debugLog('Load Data');
+    logger.i('Load Data');
   }
 
   @override
   void onReady() {
     super.onReady();
-    debugLog('Ready!');
+    logger.i('Ready!');
   }
 }

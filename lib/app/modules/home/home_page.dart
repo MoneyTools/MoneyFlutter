@@ -95,7 +95,6 @@ class HomePage extends GetView<HomeController> {
   }
 
   Widget _getSubView() {
-    debugLog('RENDER _getSubView');
     switch (PreferenceController.to.currentView.value) {
       case ViewId.viewAccounts:
         return ViewAccounts(

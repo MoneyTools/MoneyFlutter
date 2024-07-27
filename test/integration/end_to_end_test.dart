@@ -45,7 +45,7 @@ Future<void> takeScreenshot(WidgetTester tester, String screenshotName) async {
   final File file = File('${directory.path}/$screenshotName.png');
   await file.writeAsBytes(bytes);
 
-  debugLog('Screenshot saved to ${file.path}');
+  logger.e('Screenshot saved to ${file.path}');
 }
 
 Future<void> writeElementsWithTextToFile(WidgetTester tester) async {
@@ -94,7 +94,7 @@ Future<void> writeElementsWithTextToFile(WidgetTester tester) async {
   final rootElement = tester.binding.rootElement;
   traverseElement(rootElement);
 
-  debugLog('**********************************************************');
-  debugLog(widgetInfoList.join('\n'));
-  debugLog('**********************************************************');
+  logger.e('**********************************************************');
+  logger.e(widgetInfoList.join('\n'));
+  logger.e('**********************************************************');
 }

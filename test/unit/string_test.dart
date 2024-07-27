@@ -46,7 +46,7 @@ void main() {
 
     stopwatch.stop(); // Stop the stopwatch after the operation
     time1 = stopwatch.elapsedMilliseconds;
-    debugLog('Elapsed time stringCompareIgnoreCasing1: $time1 milliseconds');
+    logger.i('Elapsed time stringCompareIgnoreCasing1: $time1 milliseconds');
 
 ///////////////////////// stringCompareIgnoreCasing2
     final Stopwatch stopwatch2 = Stopwatch()..start(); // Start the stopwatch
@@ -65,7 +65,7 @@ void main() {
     }
     stopwatch2.stop(); // Stop the stopwatch after the operation
     time2 = stopwatch2.elapsedMilliseconds;
-    debugLog('Elapsed time stringCompareIgnoreCasing2: $time2 milliseconds');
+    logger.e('Elapsed time stringCompareIgnoreCasing2: $time2 milliseconds');
 
     expect(time2 < time1, true);
   });

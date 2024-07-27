@@ -56,6 +56,7 @@ dependencies:
   universal_io:
   url_launcher: ^6.2.4
   uuid: ^4.3.3
+  logger: ^2.4.0
   
 dev_dependencies:
   flutter_lints: ^4.0.0

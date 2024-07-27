@@ -56,7 +56,6 @@ class MyListItemState extends State<MyListItem> {
     return Focus(
       autofocus: widget.autoFocus,
       onFocusChange: (final bool value) {
-        // debugLog('focus lost $value index $currentIndex');
         if (value) {}
       },
       onKeyEvent: widget.onListViewKeyEvent,

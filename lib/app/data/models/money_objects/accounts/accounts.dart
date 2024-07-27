@@ -112,6 +112,7 @@ class Accounts extends MoneyObjects<Account> {
       }
     }
 
+    // apply the investment running banalnce amount
     groupBySymbol.values.forEach((keyAccountAndSymbol, valuesInvestments) {
       double totalAdjustedShareForThisStockInThisAccount =
           Investments.applyHoldingSharesAjustedForSplits(valuesInvestments.toList());
@@ -126,7 +127,6 @@ class Accounts extends MoneyObjects<Account> {
               .setAmount(totalAdjustedShareForThisStockInThisAccount * security.lastPrice.value.toDouble());
           if (account.stockHoldingEstimation.value.toDouble() != 0) {
             account.balance += account.stockHoldingEstimation.value.toDouble();
-            debugLog('$keyAccountAndSymbol $account.stockHoldingValue');
           }
         }
       }
@@ -328,10 +328,6 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   void _updateCreditCardPaidOn(final Account account) {
-    // if (account.uniqueId == 184) {
-    //   debugLog('${t.getPayeeOrTransferCaption()} ${t.amountAsText}');
-    // }
-
     final transactionForAccountSortedByDateAscending =
         Data().transactions.iterableList().where((t) => t.accountId.value == account.uniqueId).toList();
     // sort date as string to match the ListView sorting logic

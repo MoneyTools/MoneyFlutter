@@ -5,8 +5,14 @@ import 'dart:math';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+final Logger logger = Logger(
+  filter: null, // Use the default LogFilter (-> only log in debug mode)
+  output: null, // Use the default LogOutput (-> send everything to console)
+);
 
 /// Remove non-numeric characters from the currency text
 double? attemptToGetDoubleFromText(String text) {
@@ -71,12 +77,6 @@ DateTime dateValueOrDefault(
     return defaultValueIfNull ?? DateTime.now();
   }
   return value;
-}
-
-void debugLog(final String message) {
-  if (kDebugMode) {
-    print(message);
-  }
 }
 
 double doubleValueOrDefault(

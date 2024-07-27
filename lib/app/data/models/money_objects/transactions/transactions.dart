@@ -53,7 +53,7 @@ class Transactions extends MoneyObjects<Transaction> {
     }
 
     // watchInit.stop();
-    // debugLog('getListFlattenSplits: ${watchInit.elapsedMilliseconds} ms');
+    // debugInfo('getListFlattenSplits: ${watchInit.elapsedMilliseconds} ms');
 
     // Stopwatch watchFind = Stopwatch();
     dateRangeActiveAccount.clear();
@@ -88,7 +88,7 @@ class Transactions extends MoneyObjects<Transaction> {
         // if (transactionSource.transferSplit.value != -1) {
         //   final Split? s = Data().splits.get(transactionSource.transferSplit.value);
         //   if (s == null) {
-        //     debugLog('Transaction contains a split marked as a transfer, but other side of transfer was not found');
+        //     debugInfo('Transaction contains a split marked as a transfer, but other side of transfer was not found');
         //     continue;
         //   }
         //
@@ -97,7 +97,7 @@ class Transactions extends MoneyObjects<Transaction> {
         //         Transfer(id: transferId, source: transactionSource, related: transactionRelated, relatedSplit: s);
         //     continue;
         //   }
-        // debugLog('Already have a transfer for this split');
+        // debugInfo('Already have a transfer for this split');
         // }
         continue;
       }
@@ -117,7 +117,7 @@ class Transactions extends MoneyObjects<Transaction> {
 
         // check for error
         if (transactionRelated == null) {
-          debugLog(
+          logger.e(
             'Transaction.transferID of ${transactionSource.uniqueId} missing related transaction id $transferId',
           );
           continue;
@@ -154,9 +154,6 @@ class Transactions extends MoneyObjects<Transaction> {
     // make sure that we have valid min max dates
     dateRangeIncludingClosedAccount.ensureNoNullDates();
     dateRangeActiveAccount.ensureNoNullDates();
-
-    // debugLog('DONE-----: ${watchAll.elapsedMilliseconds} ms');
-    // debugLog('Find-----: ${watchFind.elapsedMilliseconds} ms');
   }
 
   @override

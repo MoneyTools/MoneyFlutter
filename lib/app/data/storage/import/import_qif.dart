@@ -22,7 +22,7 @@ void importQIF(
     importData.fileType = 'QIF';
     showAndConfirmTransactionToImport(context, importData);
   }).catchError((final dynamic e) {
-    debugLog('Error reading file: $e');
+    logger.e('Error reading file: $e');
     SnackBarService.displayError(message: e.toString(), autoDismiss: false);
   });
 }

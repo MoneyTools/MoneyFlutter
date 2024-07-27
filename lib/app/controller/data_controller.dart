@@ -98,7 +98,7 @@ class DataController extends GetxController {
       }
     } catch (e) {
       // Handle error
-      debugLog('Error fetching data: $e');
+      logger.e('Error fetching data: $e');
     }
   }
 
@@ -146,7 +146,7 @@ class DataController extends GetxController {
         );
       }
     } catch (e) {
-      debugLog(e.toString());
+      logger.e(e.toString());
       SnackBarService.displayError(message: e.toString());
       return false;
     }
@@ -168,7 +168,7 @@ class DataController extends GetxController {
           return true;
         }
       } catch (e) {
-        debugLog(e.toString());
+        logger.e(e.toString());
         SnackBarService.displayError(message: e.toString());
       }
     }

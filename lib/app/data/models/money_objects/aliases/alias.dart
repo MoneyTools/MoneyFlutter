@@ -137,7 +137,6 @@ class Alias extends MoneyObject {
       regex ??= RegExp(pattern.value);
       final Match? matched = regex?.firstMatch(text);
       if (matched != null) {
-        //debugLog('First email found: ${matched.group(0)}');
         return true;
       }
     } else {

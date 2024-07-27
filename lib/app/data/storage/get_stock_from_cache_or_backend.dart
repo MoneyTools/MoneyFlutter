@@ -172,11 +172,11 @@ Future<StockPriceHistoryCache> _loadFromBackend(
         result.prices.add(sp);
       }
     } catch (error) {
-      debugLog(error.toString());
+      logger.e(error.toString());
     }
   } else {
     result.lastError = response.body.toString();
-    debugLog('Failed to fetch data: ${response.body.toString()}');
+    logger.e('Failed to fetch data: ${response.body.toString()}');
   }
   return result;
 }

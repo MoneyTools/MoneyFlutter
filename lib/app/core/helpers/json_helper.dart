@@ -175,7 +175,7 @@ List<MyJson> converFromRawCsvTextToListOfJSonObject(String fileContent) {
         final rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
         rows.add(rowValues);
       } catch (e) {
-        debugLog(e.toString());
+        logger.e(e.toString());
       }
     }
   }

@@ -23,9 +23,6 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
   int _getAccountIdForInvestment(final int investmentTransactionId) {
     final Transaction? transactionFound = Data().transactions.get(investmentTransactionId);
     if (transactionFound != null) {
-      debugLog(
-        '${transactionFound.accountId.value} ${transactionFound.amountAsText}',
-      );
       return transactionFound.accountId.value;
     }
     return -1;

@@ -263,7 +263,7 @@ class Data {
     Account destinationAccount,
   ) {
     if (transactionSource.accountId.value == destinationAccount.uniqueId) {
-      debugLog('Cannot transfer to same account');
+      logger.e('Cannot transfer to same account');
       return null;
     }
 
@@ -369,7 +369,7 @@ class Data {
           return false;
       }
     } catch (e) {
-      debugLog(e.toString());
+      logger.e(e.toString());
       SnackBarService.displayError(autoDismiss: false, message: e.toString());
       return false;
     }

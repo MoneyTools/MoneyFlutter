@@ -91,9 +91,9 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         final Transaction? transactionOfSender = Data().transactions.get(transactionOfReceiver.transfer.value);
         if (transactionOfSender == null) {
           if (transactionOfReceiver.transferSplit.value != -1) {
-            debugLog('This is a split');
+            logger.i('This is a split');
           }
-          debugLog(
+          logger.e(
             'related account not found ${transactionOfReceiver.uniqueId} ${transactionOfReceiver.amount.value}',
           );
           keepThisTransfer(

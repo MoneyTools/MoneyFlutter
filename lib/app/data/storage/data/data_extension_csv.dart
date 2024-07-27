@@ -23,11 +23,8 @@ extension DataFromCsv on Data {
       if (file.isFile) {
         String fileContent = getZipSingleFileContent(file);
 
-        // debugLog(file.name);
         final String fileNameInLowercase = MyFileSystems.getFileName(file.name).toLowerCase();
-        // debugLog(fileNameInLowercase);
 
-        // debugLog(fileContent);
         switch (fileNameInLowercase) {
           case 'account_aliases.csv':
             accountAliases.loadFromJson(
@@ -102,7 +99,7 @@ extension DataFromCsv on Data {
       fileContent = removeUtf8Bom(fileContent);
       return fileContent;
     } catch (e) {
-      debugLog(e.toString());
+      logger.e(e.toString());
       return '';
     }
   }

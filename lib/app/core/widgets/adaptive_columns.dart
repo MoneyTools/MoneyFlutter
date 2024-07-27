@@ -31,8 +31,6 @@ class AdaptiveColumns extends StatelessWidget {
         // if theres only 1 column then just use the entire width
         double? optimalColumnWidth = quantity <= 1 ? null : constraints.maxWidth / quantity;
 
-        // debugLog('${constraints.maxWidth} QC:$quantity cw:$optimalColumnWidth');
-
         List<Widget> sizedWidgets = children
             .map(
               (widget) => Container(

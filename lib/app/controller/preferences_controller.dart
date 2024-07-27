@@ -43,13 +43,11 @@ class PreferenceController extends GetxController {
     super.onInit();
     await initPrefs();
     if (mru.isNotEmpty) {
-      // debugLog('PrefereceContoller.loadLastFile');
       DataController dataController = Get.find();
       dataController.loadLastFileSaved();
     } else {
       // queue changing screen after app loaded
       Future.delayed(const Duration(milliseconds: 100), () {
-        // debugLog('PrefereceContoller.routeWelcomePage');
         Get.offNamed(Constants.routeWelcomePage);
       });
     }

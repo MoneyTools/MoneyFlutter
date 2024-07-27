@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
       () {
         final String k = preferenceController.getUniqueState;
 
-        // debugLog('Obx-GetMaterialApp');
         return GetMaterialApp(
           key: Key(k),
           debugShowCheckedModeBanner: false,

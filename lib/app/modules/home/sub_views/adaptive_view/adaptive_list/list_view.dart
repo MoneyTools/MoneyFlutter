@@ -223,7 +223,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
         });
         return KeyEventResult.handled;
       } else {
-        debugLog(event.logicalKey.toString());
+        logger.e(event.logicalKey.toString());
       }
     }
     return KeyEventResult.ignored;

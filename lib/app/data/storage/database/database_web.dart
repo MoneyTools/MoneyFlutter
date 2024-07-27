@@ -17,7 +17,6 @@ class MyDatabaseImplementation {
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     _db = await sqliteLoadFromMemory(fileBytes);
-    // debugLog(_db.toString());
   }
 
   List<MyJson> select(final String query) {

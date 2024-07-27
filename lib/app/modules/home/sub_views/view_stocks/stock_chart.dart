@@ -334,7 +334,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
           int? subStatusCode = data['code'];
           if ([401, 403, 404, 409].contains(subStatusCode)) {
-            debugLog(data.toString());
+            logger.e(data.toString());
             SnackBarService.displayError(message: data['message']);
           } else {
             final List<dynamic> dataSplits = data['splits'];
@@ -352,11 +352,11 @@ class StockChartWidgetState extends State<StockChartWidget> {
             }
           }
         } catch (error) {
-          debugLog(error.toString());
+          logger.e(error.toString());
           SnackBarService.displayError(message: error.toString());
         }
       } else {
-        debugLog('Failed to fetch data: ${response.toString()}');
+        logger.e('Failed to fetch data: ${response.toString()}');
       }
     }
     return splitsFound;
@@ -418,7 +418,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
         }
       } else {
         // Handle the error
-        debugLog('Failed to load stock splits for $symbol');
+        logger.e('Failed to load stock splits for $symbol');
       }
     }
     return splitsFound;
