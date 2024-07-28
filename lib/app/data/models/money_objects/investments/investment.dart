@@ -381,6 +381,7 @@ class Investment extends MoneyObject {
         tmp.units,
         tmp.splitRatioAsText,
         tmp.unitsAdjusted,
+        tmp.holdingShares,
         tmp.unitPrice,
         tmp.unitPriceAdjusted,
         tmp.commission,
