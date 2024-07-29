@@ -1,19 +1,29 @@
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/selection_controller.dart';
+import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
+import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
+import 'package:money/app/core/widgets/label_and_amount.dart';
+import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
+import 'package:money/app/core/widgets/text_title.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
+import 'package:money/app/data/models/money_objects/accounts/accounts.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
+import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
+import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 
 part 'view_accounts_details_panels.dart';
 part 'view_accounts_helpers.dart';
@@ -190,6 +200,14 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       selectedIds: selectedIds,
       showAsNativeCurrency: showAsNativeCurrency,
     );
+  }
+
+  @override
+  Widget getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    return _getInfoPanelViewDetails(selectedIds: selectedIds, isReadOnly: isReadOnly);
   }
 
   @override

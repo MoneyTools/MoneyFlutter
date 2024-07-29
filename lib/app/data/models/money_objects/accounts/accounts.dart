@@ -100,16 +100,7 @@ class Accounts extends MoneyObjects<Account> {
     AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
 
     for (final account in investmentAccounts) {
-      final investments =
-          Data().investments.iterableList().where((i) => i.transactionInstance!.accountId.value == account.uniqueId);
-
-      for (final Investment investment in investments) {
-        final Security? security = Data().securities.get(investment.security.value);
-        if (security != null) {
-          final stockSymbol = security.symbol.value;
-          groupBySymbol.cumulate('${account.uniqueId}|$stockSymbol', investment);
-        }
-      }
+      groupAccountStockSymbols(account, groupBySymbol);
     }
 
     // apply the investment running banalnce amount
@@ -298,6 +289,19 @@ class Accounts extends MoneyObjects<Account> {
 
   String getViewPreferenceIdAccountLastSelected() {
     return ViewId.viewAccounts.getViewPreferenceId(settingKeySelectedListItemId);
+  }
+
+  static void groupAccountStockSymbols(Account account, AccumulatorList<String, Investment> groupBySymbol) {
+    final investments =
+        Data().investments.iterableList().where((i) => i.transactionInstance!.accountId.value == account.uniqueId);
+
+    for (final Investment investment in investments) {
+      final Security? security = Data().securities.get(investment.security.value);
+      if (security != null) {
+        final stockSymbol = security.symbol.value;
+        groupBySymbol.cumulate('${account.uniqueId}|$stockSymbol', investment);
+      }
+    }
   }
 
   bool removeAccount(Account a, [bool forceRemoveAfterSave = false]) {

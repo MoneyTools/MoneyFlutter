@@ -214,7 +214,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       return const CenterMessage(message: 'No security selected.');
     }
 
-    final list = getListOfInvestment(_lastSecuritySelected!);
+    final listOfInvestmentsForThisStock = getListOfInvestment(_lastSecuritySelected!);
 
     int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
     bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), false);
@@ -222,7 +222,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     final fields = _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
 
     MoneyObjects.sortList(
-      list,
+      listOfInvestmentsForThisStock,
       fields,
       sortByFieldIndex,
       sortAscending,
@@ -230,7 +230,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
     return AdaptiveListColumnsOrRowsSingleSelection(
       // list related
-      list: list,
+      list: listOfInvestmentsForThisStock,
       fieldDefinitions: _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
       filters: FieldFilters(),
       sortByFieldIndex: sortByFieldIndex,

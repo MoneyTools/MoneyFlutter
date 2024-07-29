@@ -449,6 +449,12 @@ class Account extends MoneyObject {
     return type.value == AccountType.notUsed_7 || type.value == AccountType.categoryFund;
   }
 
+  bool isInvestmentAccount() {
+    return type.value == AccountType.investment ||
+        type.value == AccountType.retirement ||
+        type.value == AccountType.moneyMarket;
+  }
+
   bool get isMatchingUserChoiceIncludingClosedAccount {
     if (PreferenceController.to.includeClosedAccounts) {
       return true;

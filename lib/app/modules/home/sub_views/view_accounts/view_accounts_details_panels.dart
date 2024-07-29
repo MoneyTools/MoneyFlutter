@@ -1,6 +1,176 @@
 part of 'view_accounts.dart';
 
 extension ViewAccountsDetailsPanels on ViewAccountsState {
+  Widget _getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    final Account? selectedAccount = getFirstSelectedItem() as Account?;
+    if (selectedAccount == null) {
+      return const CenterMessage(message: 'No item selected.');
+    }
+
+    if (selectedAccount.isInvestmentAccount()) {
+      return SingleChildScrollView(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(SizeForPadding.large),
+              child: MoneyObjectCard(
+                title: getClassNameSingular(),
+                moneyObject: selectedAccount,
+              ),
+            ),
+            Expanded(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                runSpacing: 10,
+                spacing: 10,
+                children: _buildStockHoldingCards(selectedAccount),
+              ),
+            ),
+          ],
+        ),
+      );
+    } else {
+      return SingleChildScrollView(
+        child: Center(
+          child: MoneyObjectCard(
+            title: getClassNameSingular(),
+            moneyObject: selectedAccount,
+          ),
+        ),
+      );
+    }
+  }
+
+  List<Widget> _buildStockHoldingCards(final Account account) {
+    AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
+    Accounts.groupAccountStockSymbols(account, groupBySymbol);
+
+    if (groupBySymbol.getKeys().isEmpty) {
+      return [];
+    }
+
+    List<StockSummary> stockSummeries = [];
+
+    groupBySymbol.values.forEach((String key, dynamic listOfInvestmentsForAccount) {
+      final double sharesForThisStock = Investments.applyHoldingSharesAjustedForSplits(
+        listOfInvestmentsForAccount.toList(),
+      );
+
+      if (isConsideredZero(sharesForThisStock) == false) {
+        //  "123|MSFT" >> "MSFT"
+        final symbol = key.split('|')[1];
+
+        final Security? stock = Data().securities.getBySymbol(symbol);
+        double stockPrice = 1.00;
+
+        if (stock != null) {
+          stockPrice = stock.price.value.toDouble();
+        }
+
+        stockSummeries.add(StockSummary(symbol: symbol, shares: sharesForThisStock, sharePrice: stockPrice));
+      }
+    });
+
+    // sort by decending holding-value
+    stockSummeries.sort((a, b) => b.holdingValue.compareTo(a.holdingValue));
+
+    const cardHeight = 150.0;
+    final List<Widget> stockPanels = stockSummeries
+        .map(
+          (summary) => BoxWithScrollingCotent(
+            height: cardHeight,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TextTitle(summary.symbol),
+                  ),
+                  buildJumpToButton([
+                    InternalViewSwitching.toInvestments(symbol: summary.symbol, accountName: account.name.value),
+                    InternalViewSwitching.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
+                  ]),
+                ],
+              ),
+              gapMedium(),
+
+              // number of shares
+              LabelAndQuantity(
+                caption: 'Shares',
+                quantity: summary.shares,
+              ),
+
+              // Price per share
+              LabelAndAmount(
+                caption: 'Share price',
+                amount: summary.sharePrice,
+              ),
+              const Divider(),
+              // Hold value
+              LabelAndAmount(
+                caption: 'Value',
+                amount: summary.holdingValue,
+              ),
+            ],
+          ),
+        )
+        .toList();
+
+    // also add Summary Cash and Stock
+    double totalInvestment = 0.0;
+    stockSummeries.forEach((element) => totalInvestment += element.holdingValue);
+
+    double totalCash = account.balance - totalInvestment;
+
+    stockPanels.insert(
+      0,
+      BoxWithScrollingCotent(
+        height: cardHeight,
+        children: [
+          gapMedium(),
+          // Cash
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const TextTitle('Cash'),
+              MoneyWidget(
+                amountModel: MoneyModel(
+                  amount: totalCash,
+                  iso4217: account.getAccountCurrencyAsText(),
+                  autoColor: true,
+                ),
+              ),
+            ],
+          ),
+          gapMedium(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const TextTitle('Investments'),
+              MoneyWidget(
+                amountModel: MoneyModel(
+                  amount: totalInvestment,
+                  iso4217: account.getAccountCurrencyAsText(),
+                  autoColor: true,
+                ),
+              ),
+            ],
+          ),
+          const Divider(),
+          LabelAndAmount(
+            caption: 'Value',
+            amount: account.balance,
+          ),
+        ],
+      ),
+    );
+
+    return stockPanels;
+  }
+
   /// Details panels Chart panel for Accounts
   Widget _getSubViewContentForChart({
     required final List<int> selectedIds,
@@ -203,4 +373,14 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       },
     );
   }
+}
+
+class StockSummary {
+  StockSummary({required this.symbol, required this.shares, required this.sharePrice});
+
+  final double sharePrice;
+  final double shares;
+  final String symbol;
+
+  double get holdingValue => shares * sharePrice;
 }

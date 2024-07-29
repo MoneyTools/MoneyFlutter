@@ -2,20 +2,20 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - '**/*.g.dart'
-    - '**/*.freezed.dart'
-    - '**/*.graphql.dart'
-    - '**/*.mocks.dart'
-    - '**/generated/**'
-  
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "**/*.graphql.dart"
+    - "**/*.mocks.dart"
+    - "**/generated/**"
+
   errors:
     todo: ignore
     unnecessary_this: error
     avoid_empty_else: error
-
+    avoid_function_literals_in_foreach_calls: ignore
 
 linter:
-  rules:    
+  rules:
     prefer_single_quotes: true
     require_trailing_commas: true
     always_declare_return_types: true
@@ -34,5 +34,5 @@ linter:
     #   - required
     #   - positional
     # always_put_required_named_parameters_first: false
-    # sort_unnamed_constructors_first: true    
+    # sort_unnamed_constructors_first: true
     # no_leading_underscores_for_local_identifiers: false

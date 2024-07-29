@@ -159,3 +159,27 @@ Widget getBadgeText(final String text) {
     child: Text(text, style: const TextStyle(fontSize: SizeForText.small)),
   );
 }
+
+class BoxWithScrollingCotent extends StatelessWidget {
+  const BoxWithScrollingCotent({super.key, required this.children, this.height});
+
+  final List<Widget> children;
+  final double? height;
+
+  @override
+  Widget build(final BuildContext context) {
+    return Box(
+      color: getColorTheme(context).surface,
+      width: 300,
+      height: height,
+      // height: 300,
+      margin: 10,
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: children,
+        ),
+      ),
+    );
+  }
+}

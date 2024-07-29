@@ -1,6 +1,12 @@
 # Change Log
 
-## [version 1.8.47] 2024-07-24
+## [version 1.8.49] 2024-07-29
+
+### Added
+
+- ViewAccount:Detail - show Distribution of Cash and Investment
+  
+## [version 1.8.48] 2024-07-24
 
 ### Added
 

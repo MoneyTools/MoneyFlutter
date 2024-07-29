@@ -1,7 +1,9 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class InternalViewSwitching {
   InternalViewSwitching({required this.icon, required this.title, required this.onPressed});
@@ -82,6 +84,23 @@ class InternalViewSwitching {
           columnFilter: filters?.toStringList() ?? [],
           textFilter: filterText,
         );
+      },
+    );
+  }
+
+  factory InternalViewSwitching.toWeb({
+    required final String url,
+  }) {
+    return InternalViewSwitching(
+      icon: Icons.web_asset_outlined,
+      title: 'Yahoo finance',
+      onPressed: () async {
+        final urlWebSite = Uri.parse(url);
+        if (await canLaunchUrl(urlWebSite)) {
+          await launchUrl(urlWebSite);
+        } else {
+          SnackBarService.displayError(message: 'Could not launch $urlWebSite');
+        }
       },
     );
   }

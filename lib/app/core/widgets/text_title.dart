@@ -8,7 +8,7 @@ class TextTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
+    return SelectableText(
       title,
       style: getTextTheme(context).headlineSmall!.copyWith(color: getColorTheme(context).onSurface),
     );
