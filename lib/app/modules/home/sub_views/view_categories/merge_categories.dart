@@ -28,7 +28,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
     super.initState();
 
     for (final t in Data().transactions.iterableList(includeDeleted: true)) {
-      if (t.categoryId.value == widget.categoryToMove.uniqueId) {
+      if (t.fieldCategoryId.value == widget.categoryToMove.uniqueId) {
         _transactions.add(t);
       }
     }
@@ -46,7 +46,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
           children: [
             const SizedBox(width: 100, child: Text('From category')),
             Expanded(
-              child: Box(child: Text(widget.categoryToMove.name.value)),
+              child: Box(child: Text(widget.categoryToMove.fieldName.value)),
             ),
           ],
         ),
@@ -99,8 +99,8 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
   }
 
   Widget _buildActionPanel() {
-    final from = widget.categoryToMove.name.value;
-    final to = _categoryPicked.name.value;
+    final from = widget.categoryToMove.fieldName.value;
+    final to = _categoryPicked.fieldName.value;
 
     if (from == to) {
       return Center(
@@ -178,7 +178,7 @@ void moveTransactionsToCategory(
 ) {
   for (final t in transactions) {
     t.stashValueBeforeEditing();
-    t.categoryId.value = moveToCategory.uniqueId;
+    t.fieldCategoryId.value = moveToCategory.uniqueId;
 
     Data().notifyMutationChanged(
       mutation: MutationType.changed,

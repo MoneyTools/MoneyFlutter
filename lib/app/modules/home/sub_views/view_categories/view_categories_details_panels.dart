@@ -9,12 +9,12 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
     final Map<String, num> map = <String, num>{};
 
     for (final Category item in getList()) {
-      if (item.name.value != 'Split' && item.name.value != 'Xfer to Deleted Account') {
+      if (item.fieldName.value != 'Split' && item.fieldName.value != 'Xfer to Deleted Account') {
         final Category topCategory = Data().categories.getTopAncestor(item);
-        if (map[topCategory.name.value] == null) {
-          map[topCategory.name.value] = 0;
+        if (map[topCategory.fieldName.value] == null) {
+          map[topCategory.fieldName.value] = 0;
         }
-        map[topCategory.name.value] = map[topCategory.name.value]! + item.sum.value.toDouble();
+        map[topCategory.fieldName.value] = map[topCategory.fieldName.value]! + item.fieldSum.value.toDouble();
       }
     }
     final List<PairXY> list = <PairXY>[];
@@ -53,7 +53,8 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
-          filter: (final Transaction transaction) => listOfDescendentCategories.contains(transaction.categoryId.value),
+          filter: (final Transaction transaction) =>
+              listOfDescendentCategories.contains(transaction.fieldCategoryId.value),
         ),
         selectionController: selectionController,
       );

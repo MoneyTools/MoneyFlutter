@@ -87,7 +87,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   String getUnitsAsString(final List<RentUnit> listOfUnits) {
     final List<String> listAsText = <String>[];
     for (RentUnit unit in listOfUnits) {
-      listAsText.add('${unit.name}:${unit.renter}');
+      listAsText.add('${unit.fieldName}:${unit.fieldRenter}');
     }
 
     return listAsText.join('\n');

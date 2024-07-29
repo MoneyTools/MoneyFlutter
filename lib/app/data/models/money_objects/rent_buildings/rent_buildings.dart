@@ -24,7 +24,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
       cumulateTransactions(rental);
 
       for (final RentUnit unit in Data().rentUnits.iterableList()) {
-        if (unit.building.value == rental.id.value) {
+        if (unit.fieldBuilding.value == rental.fieldId.value) {
           rental.units.add(unit);
         }
       }
@@ -49,6 +49,6 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     if (found == null) {
       return id.toString();
     }
-    return found.name.value;
+    return found.fieldName.value;
   }
 }

@@ -35,7 +35,7 @@ class BarChartWidget extends StatelessWidget {
       if (category != null) {
         bars.add(
           _buildBar(
-            category.name.value,
+            category.fieldName.value,
             category.getColorWidget(),
             listCategoryNameToAmount[top].value,
           ),

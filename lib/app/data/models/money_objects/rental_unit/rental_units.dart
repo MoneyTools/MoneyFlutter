@@ -19,6 +19,6 @@ class RentUnits extends MoneyObjects<RentUnit> {
     if (found == null) {
       return '';
     }
-    return found.name.value;
+    return found.fieldName.value;
   }
 }

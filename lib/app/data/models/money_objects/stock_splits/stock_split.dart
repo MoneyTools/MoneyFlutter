@@ -18,10 +18,10 @@ class StockSplit extends MoneyObject {
     required int numerator,
     required int denominator,
   }) {
-    this.date.value = date;
-    this.security.value = security;
-    this.numerator.value = numerator;
-    this.denominator.value = denominator;
+    this.fieldDate.value = date;
+    this.fieldSecurity.value = security;
+    this.fieldNumerator.value = numerator;
+    this.fieldDenominator.value = denominator;
   }
 
   /// Constructor from a SQLite row
@@ -31,40 +31,41 @@ class StockSplit extends MoneyObject {
       security: row.getInt('Security'),
       numerator: row.getInt('Numerator'),
       denominator: row.getInt('Denominator'),
-    )..id.value = row.getInt('Id', -1);
+    )..fieldId.value = row.getInt('Id', -1);
   }
 
-  FieldDate date = FieldDate(
+  FieldDate fieldDate = FieldDate(
     name: 'Date',
     serializeName: 'Date',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).date.value,
-    getValueForSerialization: (final MoneyObject instance) => dateToSqliteFormat((instance as StockSplit).date.value),
+    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldDate.value,
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToSqliteFormat((instance as StockSplit).fieldDate.value),
   );
 
-  FieldInt denominator = FieldInt(
+  FieldInt fieldDenominator = FieldInt(
     name: 'Denominator',
     serializeName: 'Denominator',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).denominator.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).denominator.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldDenominator.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).fieldDenominator.value,
   );
 
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).uniqueId,
     getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
-  FieldInt numerator = FieldInt(
+  FieldInt fieldNumerator = FieldInt(
     name: 'Numerator',
     serializeName: 'Numerator',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).numerator.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).numerator.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldNumerator.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).fieldNumerator.value,
   );
 
-  FieldInt security = FieldInt(
+  FieldInt fieldSecurity = FieldInt(
     name: 'Security',
     serializeName: 'Security',
-    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).security.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).security.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as StockSplit).fieldSecurity.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as StockSplit).fieldSecurity.value,
   );
 
   // Fields for this instance
@@ -73,19 +74,19 @@ class StockSplit extends MoneyObject {
 
   @override
   String getRepresentation() {
-    return Data().securities.getSymbolFromId(security.value);
+    return Data().securities.getSymbolFromId(fieldSecurity.value);
   }
 
   @override
   String toString() {
-    return '${date.value}|${security.value}|${numerator.value} for ${denominator.value}';
+    return '${fieldDate.value}|${fieldSecurity.value}|${fieldNumerator.value} for ${fieldDenominator.value}';
   }
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 
   static final Fields<StockSplit> _fields = Fields<StockSplit>();
 
@@ -93,11 +94,11 @@ class StockSplit extends MoneyObject {
     if (_fields.isEmpty) {
       final tmp = StockSplit.fromJson({});
       _fields.setDefinitions([
-        tmp.id,
-        tmp.date,
-        tmp.security,
-        tmp.numerator,
-        tmp.denominator,
+        tmp.fieldId,
+        tmp.fieldDate,
+        tmp.fieldSecurity,
+        tmp.fieldNumerator,
+        tmp.fieldDenominator,
       ]);
     }
     return _fields;

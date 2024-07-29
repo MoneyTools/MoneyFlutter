@@ -66,15 +66,15 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         .transactions
         .getListFlattenSplits()
         .where(
-          (final Transaction transaction) => transaction.transfer.value != -1,
+          (final Transaction transaction) => transaction.fieldTransfer.value != -1,
         )
         .toList();
 
     // Add the Senders
     for (final transactionOfSender in listOfTransactionsUseForTransfer) {
       // Display only the Sender/From Transaction you know that its the sender because the amount id negative (deducted)
-      if (transactionOfSender.amount.value.toDouble() <= 0) {
-        final Transaction? transactionOfReceiver = Data().transactions.get(transactionOfSender.transfer.value);
+      if (transactionOfSender.fieldAmount.value.toDouble() <= 0) {
+        final Transaction? transactionOfReceiver = Data().transactions.get(transactionOfSender.fieldTransfer.value);
         keepThisTransfer(
           list: listOfTransfers,
           transactionSender: transactionOfSender,
@@ -87,14 +87,14 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     // Add the Receivers only it they are not already part of the Senders
     for (final transactionOfReceiver in listOfTransactionsUseForTransfer) {
       // the amount is positive, so this is the receiver transaction
-      if (transactionOfReceiver.amount.value.toDouble() > 0) {
-        final Transaction? transactionOfSender = Data().transactions.get(transactionOfReceiver.transfer.value);
+      if (transactionOfReceiver.fieldAmount.value.toDouble() > 0) {
+        final Transaction? transactionOfSender = Data().transactions.get(transactionOfReceiver.fieldTransfer.value);
         if (transactionOfSender == null) {
-          if (transactionOfReceiver.transferSplit.value != -1) {
+          if (transactionOfReceiver.fieldTransferSplit.value != -1) {
             logger.i('This is a split');
           }
           logger.e(
-            'related account not found ${transactionOfReceiver.uniqueId} ${transactionOfReceiver.amount.value}',
+            'related account not found ${transactionOfReceiver.uniqueId} ${transactionOfReceiver.fieldAmount.value}',
           );
           keepThisTransfer(
             list: listOfTransfers,

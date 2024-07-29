@@ -24,10 +24,10 @@ class Account extends MoneyObject {
   factory Account.fromJson(final MyJson row) {
     return Account()
       ..id.value = row.getInt('Id')
-      ..accountId.value = row.getString('AccountId')
+      ..fieldAccountId.value = row.getString('AccountId')
       ..ofxAccountId.value = row.getString('OfxAccountId')
-      ..name.value = row.getString('Name')
-      ..description.value = row.getString('Description')
+      ..fieldName.value = row.getString('Name')
+      ..fieldDescription.value = row.getString('Description')
       ..type.value = AccountType.values[row.getInt('Type')]
       ..openingBalance.value = row.getDouble('OpeningBalance')
       ..currency.value = row.getString('Currency', Constants.defaultCurrency)
@@ -41,16 +41,6 @@ class Account extends MoneyObject {
       ..categoryIdForPrincipal.value = row.getInt('CategoryIdForPrincipal', -1)
       ..categoryIdForInterest.value = row.getInt('CategoryIdForInterest', -1);
   }
-
-  // Account ID
-  // 1|AccountId|nchar(20)|0||0
-  FieldString accountId = FieldString(
-    name: 'Account ID',
-    serializeName: 'AccountId',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).accountId.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).accountId.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).accountId.value = value as String,
-  );
 
   /// Balance
   double balance = 0.00;
@@ -138,14 +128,43 @@ class Account extends MoneyObject {
     ),
   );
 
+  // Account ID
+  // 1|AccountId|nchar(20)|0||0
+  FieldString fieldAccountId = FieldString(
+    name: 'Account ID',
+    serializeName: 'AccountId',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).fieldAccountId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).fieldAccountId.value,
+    setValue: (final MoneyObject instance, dynamic value) =>
+        (instance as Account).fieldAccountId.value = value as String,
+  );
+
   // Description
   // 4|Description|nvarchar(255)|0||0
-  FieldString description = FieldString(
+  FieldString fieldDescription = FieldString(
     name: 'Description',
     serializeName: 'Description',
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).description.value = value as String,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Account).description.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).description.value,
+    setValue: (final MoneyObject instance, dynamic value) =>
+        (instance as Account).fieldDescription.value = value as String,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Account).fieldDescription.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).fieldDescription.value,
+  );
+
+  // Name
+  // 3|Name|nvarchar(80)|1||0
+  FieldString fieldName = FieldString(
+    name: 'Name',
+    serializeName: 'Name',
+    columnWidth: ColumnWidth.large,
+    type: FieldType.widget,
+    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Account).fieldName.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Account).fieldName.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).fieldName.value = value as String,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
+      (a as Account).fieldName.value,
+      (b as Account).fieldName.value,
+      ascending,
+    ),
   );
 
   /// Flags
@@ -199,23 +218,6 @@ class Account extends MoneyObject {
 
   Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
   Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
-  // Name
-  // 3|Name|nvarchar(80)|1||0
-  FieldString name = FieldString(
-    name: 'Name',
-    serializeName: 'Name',
-    columnWidth: ColumnWidth.large,
-    type: FieldType.widget,
-    getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Account).name.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Account).name.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Account).name.value = value as String,
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-      (a as Account).name.value,
-      (b as Account).name.value,
-      ascending,
-    ),
-  );
-
   // OFX Account Id
   // 2|OfxAccountId|nvarchar(50)|0||0
   FieldString ofxAccountId = FieldString(
@@ -341,7 +343,7 @@ class Account extends MoneyObject {
     }
 
     return MyListItemAsCard(
-      leftTopAsString: name.value,
+      leftTopAsString: fieldName.value,
       leftBottomAsString: getTypeAsText(type.value),
       rightTopAsString: Currency.getAmountAsStringUsingCurrency(balance),
       rightBottomAsWidget: originalCurrencyAndValue,
@@ -354,7 +356,7 @@ class Account extends MoneyObject {
 
   @override
   String getRepresentation() {
-    return name.value;
+    return fieldName.value;
   }
 
   @override
@@ -370,9 +372,9 @@ class Account extends MoneyObject {
       final tmp = Account.fromJson({});
       _fields.setDefinitions([
         tmp.id,
-        tmp.name,
-        tmp.accountId,
-        tmp.description,
+        tmp.fieldName,
+        tmp.fieldAccountId,
+        tmp.fieldDescription,
         tmp.type,
         tmp.openingBalance,
         tmp.onlineAccount,
@@ -400,9 +402,9 @@ class Account extends MoneyObject {
     if (_fields.isEmpty) {
       final tmp = Account.fromJson({});
       _fields.setDefinitions([
-        tmp.name,
-        tmp.accountId,
-        tmp.description,
+        tmp.fieldName,
+        tmp.fieldAccountId,
+        tmp.fieldDescription,
         tmp.type,
         tmp.updatedOn,
         tmp.count,
@@ -427,7 +429,7 @@ class Account extends MoneyObject {
   }
 
   static String getName(final Account? instance) {
-    return instance == null ? '' : (instance).name.value;
+    return instance == null ? '' : (instance).fieldName.value;
   }
 
   bool isActiveBankAccount() {

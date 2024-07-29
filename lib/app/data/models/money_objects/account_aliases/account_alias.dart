@@ -20,39 +20,32 @@ class AccountAlias extends MoneyObject {
   factory AccountAlias.fromJson(final MyJson row) {
     return AccountAlias()
       ..id.value = row.getInt('Id', -1)
-      ..pattern.value = row.getString('Pattern')
-      ..flags.value = row.getInt('Flag', 0)
-      ..accountId.value = row.getString('AccountId');
+      ..fieldPattern.value = row.getString('Pattern')
+      ..fieldFlags.value = row.getInt('Flag', 0)
+      ..fieldAccountId.value = row.getString('AccountId');
   }
 
-  // 3
-  Field<String> accountId = Field<String>(
+  FieldString fieldAccountId = FieldString(
     serializeName: 'AccountId',
-    defaultValue: '',
   );
 
-  // 2
-  Field<int> flags = Field<int>(
+  FieldInt fieldFlags = FieldInt(
     serializeName: 'Flags',
     defaultValue: 0,
   );
 
-  // 0
-  Field<int> id = Field<int>(
-    serializeName: 'Id',
-    defaultValue: -1,
-    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
+  FieldString fieldPattern = FieldString(
+    serializeName: 'Pattern',
   );
 
-  // 1
-  Field<String> pattern = Field<String>(
-    serializeName: 'Pattern',
-    defaultValue: '',
+  FieldInt id = FieldInt(
+    serializeName: 'Id',
+    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
   );
 
   @override
   String getRepresentation() {
-    return '${pattern.value} ${accountId.value}';
+    return '${fieldPattern.value} ${fieldAccountId.value}';
   }
 
   @override
@@ -63,29 +56,14 @@ class AccountAlias extends MoneyObject {
 
   static final _fields = Fields<AccountAlias>();
 
-  static Fields<AccountAlias> get fields {
-    if (_fields.isEmpty) {
-      final tmp = AccountAlias.fromJson({});
-      _fields.setDefinitions(
-        [
-          tmp.id,
-          tmp.pattern,
-          tmp.flags,
-          tmp.accountId,
-        ],
-      );
-    }
-    return _fields;
-  }
-
   static Fields<AccountAlias> get fieldsForColumnView {
     if (_fields.isEmpty) {
       final tmp = AccountAlias.fromJson({});
       _fields.setDefinitions(
         [
-          tmp.pattern,
-          tmp.flags,
-          tmp.accountId,
+          tmp.fieldPattern,
+          tmp.fieldFlags,
+          tmp.fieldAccountId,
         ],
       );
     }

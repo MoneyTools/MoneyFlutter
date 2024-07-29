@@ -20,39 +20,39 @@ class TransactionExtra extends MoneyObject {
     // 3
     required DateTime? taxDate,
   }) {
-    this.id.value = id;
-    this.transaction.value = transaction;
-    this.taxYear.value = taxYear;
-    this.taxDate.value = taxDate;
+    this.fieldId.value = id;
+    this.fieldTransaction.value = transaction;
+    this.fieldTaxYear.value = taxYear;
+    this.fieldTaxDate.value = taxDate;
   }
 
   /// ID
   /// SQLite  0|Id|bigint|0||1
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).uniqueId,
   );
 
   // 4
-  FieldDate taxDate = FieldDate(
+  FieldDate fieldTaxDate = FieldDate(
     serializeName: 'TaxDate',
-    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxDate.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).fieldTaxDate.value,
   );
 
   // 2
-  FieldInt taxYear = FieldInt(
+  FieldInt fieldTaxYear = FieldInt(
     serializeName: 'TaxYear',
-    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).taxYear.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).fieldTaxYear.value,
   );
 
   // 1
-  FieldInt transaction = FieldInt(
+  FieldInt fieldTransaction = FieldInt(
     serializeName: 'Transaction',
-    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).transaction.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).fieldTransaction.value,
   );
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 }

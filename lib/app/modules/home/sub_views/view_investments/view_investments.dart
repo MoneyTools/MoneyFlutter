@@ -36,7 +36,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               // Jump to Account view
-              InternalViewSwitching.toAccounts(accountId: relatedTransaction!.accountId.value),
+              InternalViewSwitching.toAccounts(accountId: relatedTransaction!.fieldAccountId.value),
 
               // Jump to Transaction view
               InternalViewSwitching.toTransactions(
@@ -52,7 +52,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
                   // Prepare the Stocks view
                   // Filter by Stock Symbol
                   String symbol =
-                      selectedInvestment.securitySymbol.getValueForDisplay(selectedInvestment).toLowerCase();
+                      selectedInvestment.fieldSecuritySymbol.getValueForDisplay(selectedInvestment).toLowerCase();
                   final Security? securityFound = Data().securities.getBySymbol(symbol);
                   if (securityFound != null) {
                     PreferenceController.to.jumpToView(

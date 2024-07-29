@@ -15,59 +15,58 @@ class RentUnit extends MoneyObject {
 
   factory RentUnit.fromJson(final MyJson row) {
     return RentUnit()
-      ..id.value = row.getInt('Id', -1)
-      ..name.value = row.getString('Name')
-      ..building.value = row.getInt('Building', -1)
-      ..renter.value = row.getString('Renter')
-      ..note.value = row.getString('Note');
+      ..fieldId.value = row.getInt('Id', -1)
+      ..fieldName.value = row.getString('Name')
+      ..fieldBuilding.value = row.getInt('Building', -1)
+      ..fieldRenter.value = row.getString('Renter')
+      ..fieldNote.value = row.getString('Note');
   }
 
   double balance = 0.00;
-
-  /// Building Id
-  /// 1|Building|INT|1||0
-  FieldInt building = FieldInt(
-    name: 'Building',
-    serializeName: 'Building',
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).building.value,
-  );
-
   // not persisted field
   int count = 0;
 
+  /// Building Id
+  /// 1|Building|INT|1||0
+  FieldInt fieldBuilding = FieldInt(
+    name: 'Building',
+    serializeName: 'Building',
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldBuilding.value,
+  );
+
   /// Id
   /// 0|Id|INT|0||1
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   /// 2
   /// 2|Name|nvarchar(255)|1||0
-  FieldString name = FieldString(
+  FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).name.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldName.value,
   );
 
   /// 4
   /// 4|Note|nvarchar(255)|0||0
-  FieldString note = FieldString(
+  FieldString fieldNote = FieldString(
     name: 'Note',
     serializeName: 'Note',
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).note.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldNote.value,
   );
 
   /// 3
   /// 3|Renter|nvarchar(255)|0||0
-  FieldString renter = FieldString(
+  FieldString fieldRenter = FieldString(
     name: 'Renter',
     serializeName: 'Renter',
-    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).renter.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as RentUnit).fieldRenter.value,
   );
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 }

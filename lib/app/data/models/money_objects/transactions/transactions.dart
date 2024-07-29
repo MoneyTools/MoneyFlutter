@@ -47,8 +47,12 @@ class Transactions extends MoneyObjects<Transaction> {
 
     final transactionsWithCategories = getListFlattenSplits();
     for (var t in transactionsWithCategories) {
-      if (t.categoryId.value != -1) {
-        accountsToPayeeNameToCategories.cumulate(t.accountId.value, t.getPayeeOrTransferCaption(), t.categoryId.value);
+      if (t.fieldCategoryId.value != -1) {
+        accountsToPayeeNameToCategories.cumulate(
+          t.fieldAccountId.value,
+          t.getPayeeOrTransferCaption(),
+          t.fieldCategoryId.value,
+        );
       }
     }
 
@@ -61,10 +65,10 @@ class Transactions extends MoneyObjects<Transaction> {
 
     for (final Transaction transactionSource in iterableList()) {
       // Pre computer possible category matching for Transaction that have no associated categories
-      if (transactionSource.categoryId.value == -1) {
+      if (transactionSource.fieldCategoryId.value == -1) {
         // watchFind.start();
         final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories.find(
-          transactionSource.accountId.value,
+          transactionSource.fieldAccountId.value,
           transactionSource.getPayeeOrTransferCaption(),
         );
         transactionSource.possibleMatchingCategoryId =
@@ -74,15 +78,15 @@ class Transactions extends MoneyObjects<Transaction> {
 
       // Computer date range of all transactions
       dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value);
-      if (transactionSource.accountInstance?.isOpen == true) {
+      if (transactionSource.fieldAccountInstance?.isOpen == true) {
         dateRangeActiveAccount.inflate(transactionSource.dateTime.value!);
       }
 
       // Resolve the Transfers
-      final int transferId = transactionSource.transfer.value;
+      final int transferId = transactionSource.fieldTransfer.value;
       transactionSource.transferInstance = null;
 
-      if (transactionSource.transferSplit.value > 0) {
+      if (transactionSource.fieldTransferSplit.value > 0) {
         // deal with transfer of split
         // Split transfer
         // if (transactionSource.transferSplit.value != -1) {
@@ -124,7 +128,7 @@ class Transactions extends MoneyObjects<Transaction> {
         }
 
         // hydrate the Transfer
-        if (transactionSource.transferSplit.value == -1) {
+        if (transactionSource.fieldTransferSplit.value == -1) {
           // Normal direct transfer
 
           if (transactionSource.transferInstance == null) {
@@ -176,8 +180,8 @@ class Transactions extends MoneyObjects<Transaction> {
     required final double amount,
   }) {
     return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
-      if ((accountId == -1 || transaction.accountId.value == accountId) &&
-          transaction.amount.value.toDouble() == amount &&
+      if ((accountId == -1 || transaction.fieldAccountId.value == accountId) &&
+          transaction.fieldAmount.value.toDouble() == amount &&
           dateRange.isBetweenEqual(transaction.dateTime.value)) {
         return true;
       }
@@ -189,11 +193,11 @@ class Transactions extends MoneyObjects<Transaction> {
   int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
     final transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
       (item) =>
-          item.accountId.value == t.accountId.value &&
+          item.fieldAccountId.value == t.fieldAccountId.value &&
           item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
     );
     if (transactionMatchingAccountPayeeAndHasCategory != null) {
-      return transactionMatchingAccountPayeeAndHasCategory.categoryId.value;
+      return transactionMatchingAccountPayeeAndHasCategory.fieldCategoryId.value;
     }
     return -1;
   }
@@ -220,9 +224,9 @@ class Transactions extends MoneyObjects<Transaction> {
     for (final t in transactions) {
       if (t.isSplit) {
         for (final s in t.splits) {
-          final fakeTransaction = Transaction(date: t.dateTime.value, status: t.status.value);
-          fakeTransaction.categoryId.value = s.categoryId.value;
-          fakeTransaction.amount.value = s.amount.value;
+          final fakeTransaction = Transaction(date: t.dateTime.value, status: t.fieldStatus.value);
+          fakeTransaction.fieldCategoryId.value = s.fieldCategoryId.value;
+          fakeTransaction.fieldAmount.value = s.fieldAmount.value;
           flatList.add(fakeTransaction);
         }
       } else {
@@ -246,14 +250,14 @@ class Transactions extends MoneyObjects<Transaction> {
     List<Transaction> flattenList = [];
     for (final t in iterableList()) {
       if (whereClause == null || whereClause(t)) {
-        if (t.categoryId.value == Data().categories.splitCategoryId()) {
+        if (t.fieldCategoryId.value == Data().categories.splitCategoryId()) {
           for (final s in t.splits) {
-            final fakeT = Transaction(date: t.dateTime.value, status: t.status.value)
-              ..accountId.value = t.accountId.value
-              ..payee.value = s.payeeId.value == -1 ? t.payee.value : s.payeeId.value
-              ..categoryId.value = s.categoryId.value
-              ..memo.value = s.memo.value
-              ..amount.value = s.amount.value;
+            final fakeT = Transaction(date: t.dateTime.value, status: t.fieldStatus.value)
+              ..fieldAccountId.value = t.fieldAccountId.value
+              ..fieldPayee.value = s.fieldPayeeId.value == -1 ? t.fieldPayee.value : s.fieldPayeeId.value
+              ..fieldCategoryId.value = s.fieldCategoryId.value
+              ..fieldMemo.value = s.fieldMemo.value
+              ..fieldAmount.value = s.fieldAmount.value;
 
             flattenList.add(fakeT);
           }
@@ -268,7 +272,7 @@ class Transactions extends MoneyObjects<Transaction> {
   int getNextTransactionId() {
     int maxIdFound = -1;
     for (final item in iterableList(includeDeleted: true)) {
-      maxIdFound = max(maxIdFound, item.id.value);
+      maxIdFound = max(maxIdFound, item.fieldId.value);
     }
     return maxIdFound + 1;
   }
@@ -282,8 +286,8 @@ class Transactions extends MoneyObjects<Transaction> {
       (element) =>
           isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
           ((incomesOrExpenses == null ||
-              (incomesOrExpenses == true && element.amount.value.toDouble() > 0) ||
-              (incomesOrExpenses == false && element.amount.value.toDouble() < 0))),
+              (incomesOrExpenses == true && element.fieldAmount.value.toDouble() > 0) ||
+              (incomesOrExpenses == false && element.fieldAmount.value.toDouble() < 0))),
     );
   }
 
@@ -293,7 +297,7 @@ class Transactions extends MoneyObjects<Transaction> {
     List<Pair<int, double>> timeAndAmounts = [];
     for (final t in transactions) {
       int oneDaySlot = t.dateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
-      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.amount.value.toDouble()));
+      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.fieldAmount.value.toDouble()));
     }
     // sort by date time
     timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));

@@ -40,20 +40,22 @@ class CostBasisCalculator {
     for (AccountHoldings holding in this.byAccount.values) {
       double total = 0;
       for (SecurityPurchase purchase in holding.getPurchases(s)) {
-        purchase.unitsRemaining = purchase.unitsRemaining * split.numerator.value / split.denominator.value;
-        purchase.costBasisPerUnit = purchase.costBasisPerUnit * split.denominator.value / split.numerator.value;
+        purchase.unitsRemaining = purchase.unitsRemaining * split.fieldNumerator.value / split.fieldDenominator.value;
+        purchase.costBasisPerUnit =
+            purchase.costBasisPerUnit * split.fieldDenominator.value / split.fieldNumerator.value;
         total += purchase.unitsRemaining;
       }
 
       // yikes also have to split the pending sales...?
       for (SecuritySale pending in holding.getPendingSalesForSecurity(s)) {
-        if (pending.dateSold!.millisecond < split.date.value!.millisecond) {
-          pending.unitsSold = pending.unitsSold * split.numerator.value / split.denominator.value;
-          pending.salePricePerUnit = pending.salePricePerUnit * split.denominator.value / split.numerator.value;
+        if (pending.dateSold!.millisecond < split.fieldDate.value!.millisecond) {
+          pending.unitsSold = pending.unitsSold * split.fieldNumerator.value / split.fieldDenominator.value;
+          pending.salePricePerUnit =
+              pending.salePricePerUnit * split.fieldDenominator.value / split.fieldNumerator.value;
         }
       }
 
-      if (s.securityType.value == SecurityType.equity.index) {
+      if (s.fieldSecurityType.value == SecurityType.equity.index) {
         // companies don't want to deal with fractional stocks, they usually distribute a "cash in lieu"
         // transaction in this case to compensate you for the rounding error.
         double floor = total.floor().toDouble();
@@ -72,7 +74,7 @@ class CostBasisCalculator {
 
   void applySplits(Security s, List<StockSplit> splits, DateTime dateTime) {
     StockSplit? next = splits.firstOrNull;
-    while (next != null && next.date.value!.millisecond < dateTime.millisecond) {
+    while (next != null && next.fieldDate.value!.millisecond < dateTime.millisecond) {
       this.applySplit(s, next);
       splits.remove(next);
       next = splits.firstOrNull;
@@ -95,7 +97,7 @@ class CostBasisCalculator {
 
       List<StockSplit> splits = Data().stockSplits.getStockSplitsForSecurity(s);
       splits.sort((a, b) {
-        return sortByDate(a.date.value, b.date.value); // ascending
+        return sortByDate(a.fieldDate.value, b.fieldDate.value); // ascending
       });
 
       for (Investment i in list) {
@@ -103,23 +105,24 @@ class CostBasisCalculator {
         // computed for any future transactions.  Question is, if someone buys the stock on the very same day that it
         // was split, do they get the split or not?  This assumes not.
         this.applySplits(s, splits, i.date);
-        var holdings = this.getHolding(i.transactionInstance!.accountInstance!);
+        var holdings = this.getHolding(i.transactionInstance!.fieldAccountInstance!);
 
-        if (i.investmentType.value == InvestmentType.add.index || i.investmentType.value == InvestmentType.buy.index) {
+        if (i.fieldInvestmentType.value == InvestmentType.add.index ||
+            i.fieldInvestmentType.value == InvestmentType.buy.index) {
           // transfer "adds" will be handled on the "remove" side below so we get the right cost basis.
-          if (i.transactionInstance!.transferInstance == null && i.units.value > 0) {
-            holdings.buy(s, i.date, i.units.value, i.originalCostBasis);
+          if (i.transactionInstance!.transferInstance == null && i.fieldUnits.value > 0) {
+            holdings.buy(s, i.date, i.fieldUnits.value, i.originalCostBasis);
             for (SecuritySale pending in holdings.processPendingSales(s)) {
               this.sales.add(pending);
             }
-          } else if ((i.investmentType.value == InvestmentType.remove.index ||
-                  i.investmentType.value == InvestmentType.sell.index) &&
-              i.units.value > 0) {
+          } else if ((i.fieldInvestmentType.value == InvestmentType.remove.index ||
+                  i.fieldInvestmentType.value == InvestmentType.sell.index) &&
+              i.fieldUnits.value > 0) {
             if (i.transactionInstance!.transferInstance == null) {
               for (SecuritySale sale in holdings.sell(
-                Data().securities.get(i.security.value)!,
+                Data().securities.get(i.fieldSecurity.value)!,
                 i.date,
-                i.units.value,
+                i.fieldUnits.value,
                 i.originalCostBasis,
               )) {
                 this.sales.add(sale);
@@ -135,7 +138,7 @@ class CostBasisCalculator {
                 'Other side of the Transfer needs to be an Investment transaction',
               );
               if (add != null) {
-                if (add.investmentType.value == InvestmentType.add.index) {
+                if (add.fieldInvestmentType.value == InvestmentType.add.index) {
                   // assert(add.investmentType.value == InvestmentType.add.index,
                   // "Other side of transfer should be an Add transaction");
                   continue;
@@ -143,15 +146,15 @@ class CostBasisCalculator {
 
                 // now instead of doing a simple Add on the other side, we need to remember the cost basis of each purchase
                 // used to cover the remove
-                var securityInstance = Data().securities.get(i.security.value);
+                var securityInstance = Data().securities.get(i.fieldSecurity.value);
                 if (securityInstance != null) {
                   for (SecuritySale sale in holdings.sell(
                     securityInstance,
                     i.date,
-                    i.units.value,
+                    i.fieldUnits.value,
                     0,
                   )) {
-                    var targetHoldings = this.getHolding(add.transactionInstance!.accountInstance!);
+                    var targetHoldings = this.getHolding(add.transactionInstance!.fieldAccountInstance!);
                     if (sale.dateAcquired != null) {
                       // now transfer the cost basis over to the target account.
                       targetHoldings.buy(
@@ -261,7 +264,7 @@ class CostBasisCalculator {
           group = SecurityGroup();
           group.date = this.toDate;
           group.security = s;
-          group.type = SecurityType.values[s.securityType.value];
+          group.type = SecurityType.values[s.fieldSecurityType.value];
           group.purchases = [];
           holdingsBySecurity[s] = group;
         }

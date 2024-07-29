@@ -31,23 +31,23 @@ class Transfer extends MoneyObject {
   final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
 
   /// Status
-  FieldString accountStatusDestination = FieldString(
+  FieldString fieldAccountStatusDestination = FieldString(
     name: 'RS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     getValueForDisplay: (final MoneyObject instance) =>
-        transactionStatusToLetter((instance as Transfer).related!.status.value),
+        transactionStatusToLetter((instance as Transfer).related!.fieldStatus.value),
   );
 
   /// memo
-  FieldString memoDestination = FieldString(
+  FieldString fieldMemoDestination = FieldString(
     name: 'Recipient memo',
     columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getMemoDestination(),
   );
 
   /// Account
-  Field<int> receiverAccountId = Field<int>(
+  Field<int> fieldReceiverAccountId = Field<int>(
     type: FieldType.text,
     name: 'Recipient account',
     defaultValue: -1,
@@ -59,13 +59,13 @@ class Transfer extends MoneyObject {
   //
 
   /// Date received
-  FieldDate receiverTransactionDate = FieldDate(
+  FieldDate fieldReceiverTransactionDate = FieldDate(
     name: 'Date Received',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getReceiverTransactionDate(),
   );
 
   /// Account
-  Field<int> senderAccountId = Field<int>(
+  Field<int> fieldSenderAccountId = Field<int>(
     type: FieldType.text,
     name: 'Sender',
     defaultValue: -1,
@@ -75,32 +75,32 @@ class Transfer extends MoneyObject {
   //
   // SENDER
   //
-  FieldDate senderTransactionDate = FieldDate(
+  FieldDate fieldSenderTransactionDate = FieldDate(
     name: 'Sent on',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).geSenderTransactionDate(),
   );
 
   /// memo
-  FieldString senderTransactionMemo = FieldString(
+  FieldString fieldSenderTransactionMemo = FieldString(
     name: 'Sender memo',
     columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getMemoSource(),
   );
 
   /// Status
-  FieldString senderTransactionStatus = FieldString(
+  FieldString fieldSenderTransactionStatus = FieldString(
     name: 'SS',
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     getValueForDisplay: (final MoneyObject instance) =>
-        transactionStatusToLetter((instance as Transfer).source!.status.value),
+        transactionStatusToLetter((instance as Transfer).source!.fieldStatus.value),
   );
 
   /// Transfer amount
-  FieldMoney transactionAmount = FieldMoney(
+  FieldMoney fieldTransactionAmount = FieldMoney(
     name: 'Amount',
     columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).source!.amount.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).source!.fieldAmount.value,
   );
 
   ///
@@ -108,7 +108,7 @@ class Transfer extends MoneyObject {
   ///
 
   /// Troubleshoot
-  FieldString troubleshoot = FieldString(
+  FieldString fieldTroubleshoot = FieldString(
     name: 'Troubleshoot',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getTroubleshoot(),
   );
@@ -139,16 +139,16 @@ class Transfer extends MoneyObject {
       final tmp = Transfer.fromJson({});
 
       _fields.setDefinitions([
-        tmp.senderTransactionDate,
-        tmp.senderAccountId,
-        tmp.senderTransactionStatus,
-        tmp.senderTransactionMemo,
-        tmp.receiverTransactionDate,
-        tmp.receiverAccountId,
-        tmp.accountStatusDestination,
-        tmp.memoDestination,
-        tmp.troubleshoot,
-        tmp.transactionAmount,
+        tmp.fieldSenderTransactionDate,
+        tmp.fieldSenderAccountId,
+        tmp.fieldSenderTransactionStatus,
+        tmp.fieldSenderTransactionMemo,
+        tmp.fieldReceiverTransactionDate,
+        tmp.fieldReceiverAccountId,
+        tmp.fieldAccountStatusDestination,
+        tmp.fieldMemoDestination,
+        tmp.fieldTroubleshoot,
+        tmp.fieldTransactionAmount,
       ]);
     }
     return _fields;
@@ -159,22 +159,22 @@ class Transfer extends MoneyObject {
 
     return Fields<Transfer>()
       ..setDefinitions([
-        tmp.senderTransactionDate,
-        tmp.senderAccountId,
-        tmp.senderTransactionStatus,
-        tmp.senderTransactionMemo,
-        tmp.receiverTransactionDate,
-        tmp.receiverAccountId,
-        tmp.accountStatusDestination,
-        tmp.memoDestination,
-        tmp.troubleshoot,
-        tmp.transactionAmount,
+        tmp.fieldSenderTransactionDate,
+        tmp.fieldSenderAccountId,
+        tmp.fieldSenderTransactionStatus,
+        tmp.fieldSenderTransactionMemo,
+        tmp.fieldReceiverTransactionDate,
+        tmp.fieldReceiverAccountId,
+        tmp.fieldAccountStatusDestination,
+        tmp.fieldMemoDestination,
+        tmp.fieldTroubleshoot,
+        tmp.fieldTransactionAmount,
       ]);
   }
 
   double geReceiverTransactionAmount() {
     if (related != null) {
-      return related!.amount.value.toDouble();
+      return related!.fieldAmount.value.toDouble();
     }
     return 0.00;
   }
@@ -184,7 +184,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Amounts
   double geSenderTransactionAmount() {
-    return source!.amount.value.toDouble();
+    return source!.fieldAmount.value.toDouble();
   }
 
   //---------------------------------------------
@@ -196,15 +196,15 @@ class Transfer extends MoneyObject {
   }
 
   String getMemoDestination() {
-    String memos = source!.transferSplit.value == -1 ? '' : '[Split:${source!.transferSplit.value}] ';
+    String memos = source!.fieldTransferSplit.value == -1 ? '' : '[Split:${source!.fieldTransferSplit.value}] ';
     if (related != null) {
-      memos += related!.memo.value;
+      memos += related!.fieldMemo.value;
     }
     return memos;
   }
 
   String getMemoSource() {
-    return source!.memo.value;
+    return source!.fieldMemo.value;
   }
 
   DateTime getReceivedDateOrToday() {
@@ -219,7 +219,7 @@ class Transfer extends MoneyObject {
   }
 
   String getReceiverAccountName() {
-    return (getReceiverAccount()?.name.value) ?? '<account not found>';
+    return (getReceiverAccount()?.fieldName.value) ?? '<account not found>';
   }
 
   Transaction? getReceiverTransaction() {
@@ -248,7 +248,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Account Names
   String getSenderAccountName() {
-    return (getSenderAccount()?.name.value) ?? '<account not found>';
+    return (getSenderAccount()?.fieldName.value) ?? '<account not found>';
   }
 
   //---------------------------------------------

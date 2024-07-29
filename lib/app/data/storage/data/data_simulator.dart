@@ -73,7 +73,7 @@ class DataSimulator {
     if (activity == InvestmentType.buy) {
       transactionAmount *= -1;
     }
-    t.amount.value.setAmount(transactionAmount);
+    t.fieldAmount.value.setAmount(transactionAmount);
 
     Data().investments.appendMoneyObject(
           Investment(
@@ -404,8 +404,8 @@ class DataSimulator {
     for (int i = 0; i < names.length; i++) {
       Data().payees.appendNewMoneyObject(
             Payee()
-              ..id.value = -1
-              ..name.value = names[i],
+              ..fieldId.value = -1
+              ..fieldName.value = names[i],
           );
     }
   }
@@ -426,9 +426,9 @@ class DataSimulator {
 
   void _generateRentals() {
     final RentBuilding instance = RentBuilding();
-    instance.id.value = 0;
-    instance.name.value = 'AirBnB';
-    instance.address.value = 'One Washington DC';
+    instance.fieldId.value = 0;
+    instance.fieldName.value = 'AirBnB';
+    instance.fieldAddress.value = 'One Washington DC';
     Data().rentBuildings.appendMoneyObject(instance);
   }
 

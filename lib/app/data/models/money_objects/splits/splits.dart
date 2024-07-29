@@ -15,7 +15,7 @@ class Splits extends MoneyObjects<MoneySplit> {
 
     // Attach the split back to the their  container Transaction
     final splitAdded = (moneyObject as MoneySplit);
-    final containerTransaction = Data().transactions.get(splitAdded.transactionId.value);
+    final containerTransaction = Data().transactions.get(splitAdded.fieldTransactionId.value);
     if (containerTransaction != null) {
       containerTransaction.splits.add(moneyObject);
     }

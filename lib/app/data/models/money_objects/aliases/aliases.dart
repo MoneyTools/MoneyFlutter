@@ -15,7 +15,7 @@ class Aliases extends MoneyObjects<Alias> {
   @override
   void onAllDataLoaded() {
     for (final Alias item in iterableList()) {
-      item.payeeInstance = Data().payees.get(item.payeeId.value);
+      item.payeeInstance = Data().payees.get(item.fieldPayeeId.value);
     }
   }
 

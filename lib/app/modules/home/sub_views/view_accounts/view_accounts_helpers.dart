@@ -10,7 +10,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
   }
 
   bool filterByAccountId(final Transaction t, final num accountId) {
-    return t.accountId.value == accountId;
+    return t.fieldAccountId.value == accountId;
   }
 
   List<AccountType> getSelectedAccountType() {

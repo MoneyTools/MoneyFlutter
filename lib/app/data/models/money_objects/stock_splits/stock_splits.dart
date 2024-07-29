@@ -28,7 +28,7 @@ class StockSplits extends MoneyObjects<StockSplit> {
   }
 
   void clearSplitForSecurityl(final int securityId) {
-    final listOfSplitsFound = iterableList().where((split) => split.security.value == securityId);
+    final listOfSplitsFound = iterableList().where((split) => split.fieldSecurity.value == securityId);
     for (final ss in listOfSplitsFound) {
       deleteItem(ss);
     }
@@ -37,12 +37,12 @@ class StockSplits extends MoneyObjects<StockSplit> {
   List<StockSplit> getStockSplitsForSecurity(final Security s) {
     List<StockSplit> list = [];
     for (StockSplit split in iterableList()) {
-      if (!s.isDeleted && split.security.value == s.uniqueId) {
+      if (!s.isDeleted && split.fieldSecurity.value == s.uniqueId) {
         list.add(split);
       }
     }
     list.sort((final StockSplit a, final StockSplit b) {
-      return a.date.value!.compareTo(b.date.value!);
+      return a.fieldDate.value!.compareTo(b.fieldDate.value!);
     });
 
     return list;
@@ -51,10 +51,11 @@ class StockSplits extends MoneyObjects<StockSplit> {
   /// Only add, no removal of existing splits
   void setStockSplits(final int securityId, final List<StockSplit> values) {
     final List<StockSplit> listOfSplitsFound =
-        iterableList().where((split) => split.security.value == securityId).toList();
+        iterableList().where((split) => split.fieldSecurity.value == securityId).toList();
     for (final StockSplit ss in values) {
-      final StockSplit? foundMatch = listOfSplitsFound
-          .firstWhereOrNull((existingSplit) => isSameDateWithoutTime(existingSplit.date.value, ss.date.value));
+      final StockSplit? foundMatch = listOfSplitsFound.firstWhereOrNull(
+        (existingSplit) => isSameDateWithoutTime(existingSplit.fieldDate.value, ss.fieldDate.value),
+      );
       if (foundMatch == null) {
         appendNewMoneyObject(ss, fireNotification: false);
       }

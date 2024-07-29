@@ -59,7 +59,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
                   final Payee? payee = getFirstSelectedItem() as Payee?;
                   if (payee != null) {
                     // Prepare the Transaction view to show only the selected account
-                    switchViewTransacionnForPayee(payee.name.value);
+                    switchViewTransacionnForPayee(payee.fieldName.value);
                   }
                 },
               ),
@@ -113,9 +113,9 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   @override
   List<MoneyObject> getInfoTransactions() {
     final Payee? payee = getFirstSelectedItem() as Payee?;
-    if (payee != null && payee.id.value > -1) {
+    if (payee != null && payee.fieldId.value > -1) {
       return getTransactions(
-        filter: (final Transaction transaction) => transaction.payee.value == payee.id.value,
+        filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
       );
     }
     return [];

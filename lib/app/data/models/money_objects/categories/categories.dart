@@ -17,27 +17,27 @@ class Categories extends MoneyObjects<Category> {
   void onAllDataLoaded() {
     // reset to zero all counters and sums
     for (final Category category in iterableList()) {
-      category.transactionCount.value = 0;
-      category.sum.value.setAmount(0);
+      category.fieldTransactionCount.value = 0;
+      category.fieldSum.value.setAmount(0);
 
-      category.transactionCountRollup.value = 0;
-      category.sumRollup.value.setAmount(0);
+      category.fieldTransactionCountRollup.value = 0;
+      category.fieldSumRollup.value.setAmount(0);
     }
 
     // first tally the direct category transactions
     for (final Transaction t in Data().transactions.iterableList()) {
-      final Category? item = get(t.categoryId.value);
+      final Category? item = get(t.fieldCategoryId.value);
       if (item != null) {
-        item.transactionCount.value++;
-        item.sum.value += t.amount.value.toDouble();
-        item.transactionCountRollup.value++;
-        item.sumRollup.value += t.amount.value.toDouble();
+        item.fieldTransactionCount.value++;
+        item.fieldSum.value += t.fieldAmount.value.toDouble();
+        item.fieldTransactionCountRollup.value++;
+        item.fieldSumRollup.value += t.fieldAmount.value.toDouble();
 
         List<Category> ancestors = [];
         item.getAncestors(ancestors);
         for (final ancestorCategory in ancestors) {
-          ancestorCategory.transactionCountRollup.value++;
-          ancestorCategory.sumRollup.value += t.amount.value;
+          ancestorCategory.fieldTransactionCountRollup.value++;
+          ancestorCategory.fieldSumRollup.value += t.fieldAmount.value;
         }
       }
     }
@@ -56,7 +56,7 @@ class Categories extends MoneyObjects<Category> {
   Category addNewCategory({final int parentId = -1, final String name = 'New Cagtegory'}) {
     Category? parent = Data().categories.get(parentId);
     // find next available name
-    String prefixName = parent == null ? name : '${parent.name.value}:$name';
+    String prefixName = parent == null ? name : '${parent.fieldName.value}:$name';
     String nextAvailableName = prefixName;
     int next = 1;
     while ((getByName(nextAvailableName) != null)) {
@@ -69,7 +69,7 @@ class Categories extends MoneyObjects<Category> {
     CategoryType typeToUse = CategoryType.expense;
 
     if (parent != null) {
-      typeToUse = parent.type.value;
+      typeToUse = parent.fieldType.value;
     }
 
     // add a new Category
@@ -86,13 +86,13 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category? getByName(final String name) {
-    return iterableList().firstWhereOrNull((final Category category) => category.name.value == name);
+    return iterableList().firstWhereOrNull((final Category category) => category.fieldName.value == name);
   }
 
   List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
     for (final Category item in iterableList()) {
-      if (item.parentId.value == parentId) {
+      if (item.fieldParentId.value == parentId) {
         list.add(item);
       }
     }
@@ -101,7 +101,7 @@ class Categories extends MoneyObjects<Category> {
 
   List<Category> getListSorted() {
     final list = iterableList().toList();
-    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
+    list.sort((a, b) => sortByString(a.fieldName.value, b.fieldName.value, true));
     return list;
   }
 
@@ -140,10 +140,10 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category getTopAncestor(final Category category) {
-    if (category.parentId.value == -1) {
+    if (category.fieldParentId.value == -1) {
       return category; // this is the top
     }
-    final Category? parent = get(category.parentId.value);
+    final Category? parent = get(category.fieldParentId.value);
     if (parent == null) {
       return category;
     }
@@ -169,7 +169,7 @@ class Categories extends MoneyObjects<Category> {
       list.add(categoryId);
       final List<Category> descendants = getCategoriesWithThisParent(categoryId);
       for (final Category c in descendants) {
-        getTreeIdsRecursive(c.id.value, list);
+        getTreeIdsRecursive(c.fieldId.value, list);
       }
     }
   }
@@ -251,12 +251,13 @@ class Categories extends MoneyObjects<Category> {
     if (category == null) {
       return false;
     }
-    return category.type.value == CategoryType.expense || category.type.value == CategoryType.recurringExpense;
+    return category.fieldType.value == CategoryType.expense ||
+        category.fieldType.value == CategoryType.recurringExpense;
   }
 
   void reparentCategory(final Category categoryToReparent, final Category newParentCategory) {
     categoryToReparent.stashValueBeforeEditing();
-    categoryToReparent.parentId.value = newParentCategory.uniqueId;
+    categoryToReparent.fieldParentId.value = newParentCategory.uniqueId;
 
     final descendants = getTreeIds(categoryToReparent.uniqueId);
     for (final id in descendants) {
@@ -285,7 +286,7 @@ class Categories extends MoneyObjects<Category> {
     if (idOfSplitCategory == -1) {
       final Category? cat = getByName('Split');
       if (cat != null) {
-        idOfSplitCategory = cat.id.value;
+        idOfSplitCategory = cat.fieldId.value;
       }
     }
     return idOfSplitCategory;

@@ -30,7 +30,7 @@ class NetWorthChartState extends State<NetWorthChart> {
 
     for (final t in transactions) {
       String dateKey = '${t.dateTime.value!.year},${t.dateTime.value!.month.toString().padLeft(2, '0')}';
-      cumulateYearMonthBalance.cumulate(dateKey, t.amount.value.toDouble());
+      cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
     }
 
     List<FlSpot> tmpDataPoints = [];

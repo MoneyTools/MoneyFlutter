@@ -262,7 +262,7 @@ class Data {
     Transaction transactionSource,
     Account destinationAccount,
   ) {
-    if (transactionSource.accountId.value == destinationAccount.uniqueId) {
+    if (transactionSource.fieldAccountId.value == destinationAccount.uniqueId) {
       logger.e('Cannot transfer to same account');
       return null;
     }
@@ -273,19 +273,19 @@ class Data {
             min: transactionSource.dateTime.value!.startOfDay,
             max: transactionSource.dateTime.value!.endOfDay,
           ),
-          amount: -transactionSource.amount.value.toDouble(),
+          amount: -transactionSource.fieldAmount.value.toDouble(),
         );
     // ignore: prefer_conditional_assignment
     if (relatedTransaction == null) {
       relatedTransaction = Transaction(date: transactionSource.dateTime.value)
-        ..accountId.value = destinationAccount.uniqueId
-        ..amount.value.setAmount(
-              (transactionSource.amount.value.toDouble() * -1),
+        ..fieldAccountId.value = destinationAccount.uniqueId
+        ..fieldAmount.value.setAmount(
+              (transactionSource.fieldAmount.value.toDouble() * -1),
             ) // flip the sign
-        ..categoryId.value = transactionSource.categoryId.value
-        ..fitid.value = transactionSource.fitid.value
-        ..number.value = transactionSource.number.value
-        ..memo.value = transactionSource.memo.value;
+        ..fieldCategoryId.value = transactionSource.fieldCategoryId.value
+        ..fieldFitid.value = transactionSource.fieldFitid.value
+        ..fieldNumber.value = transactionSource.fieldNumber.value
+        ..fieldMemo.value = transactionSource.fieldMemo.value;
       //u.Status = t.Status; no !!!
     }
     // Investment? i = relatedTransaction.investmentInstance;
@@ -330,11 +330,11 @@ class Data {
     // Sort all add, remove, buy, sell transactions by date and by security.
     for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
       if (t.dateTime.value!.millisecond < toDate.millisecond &&
-          (filter == null || filter(t.accountInstance!)) &&
+          (filter == null || filter(t.fieldAccountInstance!)) &&
           t.investmentInstance != null &&
-          t.investmentInstance!.investmentType.value != InvestmentType.none.index) {
+          t.investmentInstance!.fieldInvestmentType.value != InvestmentType.none.index) {
         Investment i = t.investmentInstance!;
-        Security? s = Data().securities.get(i.security.value);
+        Security? s = Data().securities.get(i.fieldSecurity.value);
         if (s != null) {
           List<Investment> list = transactionsBySecurity[s] ?? [];
           transactionsBySecurity[s] = list;
@@ -390,7 +390,7 @@ class Data {
     if (relatedTransaction != null) {
       final Transfer transfer;
 
-      if (transactionSource.amount.value.toDouble() < 0) {
+      if (transactionSource.fieldAmount.value.toDouble() < 0) {
         // transfer TO
         transfer = Transfer(
           id: 0,
@@ -410,8 +410,8 @@ class Data {
 
       // Keep track changes done
       relatedTransaction.stashValueBeforeEditing();
-      relatedTransaction.payee.value = -1;
-      relatedTransaction.transfer.value = transactionSource.id.value;
+      relatedTransaction.fieldPayee.value = -1;
+      relatedTransaction.fieldTransfer.value = transactionSource.fieldId.value;
       relatedTransaction.transferInstance = transfer;
 
       if (relatedTransaction.uniqueId == -1) {
@@ -427,8 +427,8 @@ class Data {
 
       // this needs to happen last since the ID for a new Relation Transaction will be establish in the above
       // transactions.appendNewMoneyObject(relatedTransaction)
-      transactionSource.payee.value = -1;
-      transactionSource.transfer.value = relatedTransaction.id.value;
+      transactionSource.fieldPayee.value = -1;
+      transactionSource.fieldTransfer.value = relatedTransaction.fieldId.value;
       transactionSource.transferInstance = transfer;
     }
 
@@ -480,7 +480,7 @@ class Data {
   }
 
   bool removeTransaction(Transaction t) {
-    if (t.status.value == TransactionStatus.reconciled && t.amount.value.toDouble() != 0) {
+    if (t.fieldStatus.value == TransactionStatus.reconciled && t.fieldAmount.value.toDouble() != 0) {
       throw Exception('Cannot removed reconciled transaction');
     }
     // TODO

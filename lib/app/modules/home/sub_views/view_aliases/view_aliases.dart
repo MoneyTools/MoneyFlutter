@@ -54,7 +54,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
         Get.put(SelectionController(getPreferenceKey('info_$settingKeySelectedListItemId')));
 
     final Alias? alias = getMoneyObjectFromFirstSelectedId<Alias>(selectedIds, list);
-    if (alias != null && alias.id.value > -1) {
+    if (alias != null && alias.fieldId.value > -1) {
       return ListViewTransactions(
         key: Key(alias.uniqueId.toString()),
         columnsToInclude: <Field>[
@@ -65,7 +65,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
-          filter: (final Transaction transaction) => transaction.payee.value == alias.payeeId.value,
+          filter: (final Transaction transaction) => transaction.fieldPayee.value == alias.fieldPayeeId.value,
         ),
         selectionController: selectionController,
       );

@@ -41,15 +41,15 @@ class MoneySplit extends MoneyObject {
     // 8
     required DateTime? budgetBalanceDate,
   }) {
-    this.id.value = id;
-    this.transactionId.value = transactionId;
-    this.categoryId.value = categoryId;
-    this.payeeId.value = payeeId;
-    this.amount.value.setAmount(amount);
-    this.transferId.value = transferId;
-    this.memo.value = memo;
-    this.flags.value = flags;
-    this.budgetBalanceDate.value = budgetBalanceDate;
+    this.fieldId.value = id;
+    this.fieldTransactionId.value = transactionId;
+    this.fieldCategoryId.value = categoryId;
+    this.fieldPayeeId.value = payeeId;
+    this.fieldAmount.value.setAmount(amount);
+    this.fieldTransferId.value = transferId;
+    this.fieldMemo.value = memo;
+    this.fieldFlags.value = flags;
+    this.fieldBudgetBalanceDate.value = budgetBalanceDate;
   }
 
   factory MoneySplit.fromJson(final MyJson row) {
@@ -76,62 +76,62 @@ class MoneySplit extends MoneyObject {
   }
 
   // 4
-  FieldMoney amount = FieldMoney(
+  FieldMoney fieldAmount = FieldMoney(
     name: 'Amount',
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).amount.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value,
   );
 
   // 8
-  FieldDate budgetBalanceDate = FieldDate(
+  FieldDate fieldBudgetBalanceDate = FieldDate(
     name: 'Budgeted Date',
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).budgetBalanceDate.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldBudgetBalanceDate.value,
   );
 
   // 2
-  FieldInt categoryId = FieldInt(
+  FieldInt fieldCategoryId = FieldInt(
     name: 'Category',
     type: FieldType.text,
     align: TextAlign.left,
     getValueForDisplay: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as MoneySplit).categoryId.value),
+        Data().categories.getNameFromId((instance as MoneySplit).fieldCategoryId.value),
   );
 
   // 7
-  FieldInt flags = FieldInt(
+  FieldInt fieldFlags = FieldInt(
     name: 'Flags',
     columnWidth: ColumnWidth.nano,
     align: TextAlign.center,
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).flags.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldFlags.value,
   );
 
   // 1
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).uniqueId,
   );
 
   // 6
-  FieldString memo = FieldString(
+  FieldString fieldMemo = FieldString(
     name: 'Memo',
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).memo.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
   );
 
   // 3
-  FieldInt payeeId = FieldInt(
+  FieldInt fieldPayeeId = FieldInt(
     name: 'Payee',
     type: FieldType.text,
     align: TextAlign.left,
     getValueForDisplay: (final MoneyObject instance) =>
-        Data().payees.getNameFromId((instance as MoneySplit).payeeId.value),
+        Data().payees.getNameFromId((instance as MoneySplit).fieldPayeeId.value),
   );
 
   // 0
-  FieldInt transactionId = FieldInt(
+  FieldInt fieldTransactionId = FieldInt(
     name: 'Transaction',
-    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).transactionId.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldTransactionId.value,
   );
 
   // 5
-  FieldInt transferId = FieldInt(
+  FieldInt fieldTransferId = FieldInt(
     name: 'Transfer',
   );
 
@@ -140,10 +140,10 @@ class MoneySplit extends MoneyObject {
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 
   static final _fields = Fields<MoneySplit>();
 
@@ -151,16 +151,16 @@ class MoneySplit extends MoneyObject {
     if (_fields.isEmpty) {
       final tmp = MoneySplit.fromJson({});
       _fields.setDefinitions([
-        tmp.payeeId,
-        tmp.categoryId,
-        tmp.memo,
-        tmp.amount,
+        tmp.fieldPayeeId,
+        tmp.fieldCategoryId,
+        tmp.fieldMemo,
+        tmp.fieldAmount,
       ]);
     }
     return _fields;
   }
 
   Transaction? getTransferTransaction() {
-    return Data().transactions.get(this.transactionId.value);
+    return Data().transactions.get(this.fieldTransactionId.value);
   }
 }

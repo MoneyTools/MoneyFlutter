@@ -68,7 +68,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         double stockPrice = 1.00;
 
         if (stock != null) {
-          stockPrice = stock.price.value.toDouble();
+          stockPrice = stock.fieldPrice.value.toDouble();
         }
 
         stockSummeries.add(StockSummary(symbol: symbol, shares: sharesForThisStock, sharePrice: stockPrice));
@@ -90,7 +90,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
                     child: TextTitle(summary.symbol),
                   ),
                   buildJumpToButton([
-                    InternalViewSwitching.toInvestments(symbol: summary.symbol, accountName: account.name.value),
+                    InternalViewSwitching.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
                     InternalViewSwitching.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
                   ]),
                 ],
@@ -205,7 +205,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         if (account.isOpen) {
           listOfPairXY.add(
             PairXY(
-              account.name.value,
+              account.fieldName.value,
               showAsNativeCurrency ? account.balance : account.balanceNormalized.getValueForDisplay(account),
             ),
           );

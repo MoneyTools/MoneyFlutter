@@ -120,9 +120,7 @@ class Fields<T> {
     return '';
   }
 
-  bool get isEmpty {
-    return definitions.isEmpty;
-  }
+  bool get isEmpty => definitions.isEmpty;
 
   /// Checks if a given field definition matches the provided filterByFieldsValue.
   /// to match we need both the name and value of a instance to mathc all of the "name, values[], of each filters in filterByFieldsValue"

@@ -79,7 +79,7 @@ void showAndConfirmTransactionToImport(
 ) {
   if (importData.account == null) {
     final List<String> activeAccountNames =
-        Data().accounts.getListSorted().map((element) => element.name.value).toList();
+        Data().accounts.getListSorted().map((element) => element.fieldName.value).toList();
 
     showPopupSelection(
       title: 'Pick account to import to',
@@ -126,7 +126,7 @@ void _showAndConfirmTransactionToImport(
   }
 
   String messageToUser =
-      '${list.length} transactions found in $fileType file, to be imported into "${account.name.value}"';
+      '${list.length} transactions found in $fileType file, to be imported into "${account.fieldName.value}"';
 
   Widget questionContent = SizedBox(
     height: 400,
@@ -159,7 +159,7 @@ void _showAndConfirmTransactionToImport(
       }
       addNewTransactions(
         transactionsToAdd,
-        'Imported - ${transactionsToAdd.length} transactions into "${account.name.value}"',
+        'Imported - ${transactionsToAdd.length} transactions into "${account.fieldName.value}"',
       );
     },
   );

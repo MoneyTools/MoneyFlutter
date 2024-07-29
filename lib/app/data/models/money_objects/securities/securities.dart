@@ -26,13 +26,13 @@ class Securities extends MoneyObjects<Security> {
       security.splitsHistory = Data().stockSplits.getStockSplitsForSecurity(security);
 
       final List<Investment> list = security.getAssociatedInvestments();
-      security.numberOfTrades.value = list.length;
+      security.fieldNumberOfTrades.value = list.length;
 
       final StockCumulative cumulative = Investments.getSharesAndProfit(list);
-      security.transactionDateRange.value = cumulative.dateRange;
-      security.holdingShares.value = cumulative.quantity;
-      security.activityProfit.value.setAmount(cumulative.amount - cumulative.dividendsSum);
-      security.activityDividend.value.setAmount(cumulative.dividendsSum);
+      security.fieldTransactionDateRange.value = cumulative.dateRange;
+      security.fieldHoldingShares.value = cumulative.quantity;
+      security.fieldActivityProfit.value.setAmount(cumulative.amount - cumulative.dividendsSum);
+      security.fieldActivityDividend.value.setAmount(cumulative.dividendsSum);
       security.dividends = cumulative.dividends;
     }
   }
@@ -45,7 +45,8 @@ class Securities extends MoneyObjects<Security> {
   }
 
   Security? getBySymbol(final String symbolToFind) {
-    return iterableList().firstWhereOrNull((item) => stringCompareIgnoreCasing2(item.symbol.value, symbolToFind) == 0);
+    return iterableList()
+        .firstWhereOrNull((item) => stringCompareIgnoreCasing2(item.fieldSymbol.value, symbolToFind) == 0);
   }
 
   String getSymbolFromId(final int securityId) {
@@ -53,6 +54,6 @@ class Securities extends MoneyObjects<Security> {
     if (security == null) {
       return '?$security?';
     }
-    return security.symbol.value;
+    return security.fieldSymbol.value;
   }
 }

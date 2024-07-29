@@ -27,7 +27,7 @@ class Investments extends MoneyObjects<Investment> {
       final transactionFound = Data().transactions.get(investment.uniqueId);
       investment.transactionInstance = transactionFound;
 
-      final Security? security = Data().securities.get(investment.security.value);
+      final Security? security = Data().securities.get(investment.fieldSecurity.value);
       if (security != null) {
         final splits = Data().stockSplits.getStockSplitsForSecurity(security);
         investment.applySplits(splits);
@@ -50,14 +50,14 @@ class Investments extends MoneyObjects<Investment> {
 
     for (final Investment investment in investments) {
       runningShares += investment.effectiveUnitsAdjusted;
-      investment.holdingShares.value = runningShares;
+      investment.fieldHoldingShares.value = runningShares;
     }
 
     return runningShares;
   }
 
   static List<Investment> getInvestmentsForThisSecurity(final int securityId) {
-    return Data().investments.iterableList().where((item) => item.security.value == securityId).toList();
+    return Data().investments.iterableList().where((item) => item.fieldSecurity.value == securityId).toList();
   }
 
   static StockCumulative getSharesAndProfit(List<Investment> investments) {

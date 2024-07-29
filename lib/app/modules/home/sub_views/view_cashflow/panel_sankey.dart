@@ -64,29 +64,29 @@ class PanelSanKey extends StatelessWidget {
         );
 
     for (Transaction element in transactions) {
-      final Category? category = Data().categories.get(element.categoryId.value);
+      final Category? category = Data().categories.get(element.fieldCategoryId.value);
       if (category != null) {
-        switch (category.type.value) {
+        switch (category.fieldType.value) {
           case CategoryType.income:
           case CategoryType.saving:
           case CategoryType.investment:
-            totalIncomes += element.amount.value.toDouble();
+            totalIncomes += element.fieldAmount.value.toDouble();
 
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfIncomes[topCategory];
             mapValue ??= 0;
-            mapOfIncomes[topCategory] = mapValue + element.amount.value.toDouble();
+            mapOfIncomes[topCategory] = mapValue + element.fieldAmount.value.toDouble();
             break;
           case CategoryType.expense:
           case CategoryType.recurringExpense:
-            totalExpenses += element.amount.value.toDouble();
+            totalExpenses += element.fieldAmount.value.toDouble();
             final Category topCategory = Data().categories.getTopAncestor(category);
             double? mapValue = mapOfExpenses[topCategory];
             mapValue ??= 0;
-            mapOfExpenses[topCategory] = mapValue + element.amount.value.toDouble();
+            mapOfExpenses[topCategory] = mapValue + element.fieldAmount.value.toDouble();
             break;
           default:
-            totalNones += element.amount.value.toDouble();
+            totalNones += element.fieldAmount.value.toDouble();
             break;
         }
       }
@@ -109,7 +109,7 @@ class PanelSanKey extends StatelessWidget {
     mapOfIncomes.forEach((final Category key, final double value) {
       sanKeyListOfIncomes.add(
         SanKeyEntry()
-          ..name = key.name.value
+          ..name = key.fieldName.value
           ..value = value,
       );
     });
@@ -132,7 +132,7 @@ class PanelSanKey extends StatelessWidget {
     mapOfExpenses.forEach((final Category key, final double value) {
       sanKeyListOfExpenses.add(
         SanKeyEntry()
-          ..name = key.name.value
+          ..name = key.fieldName.value
           ..value = value,
       );
     });

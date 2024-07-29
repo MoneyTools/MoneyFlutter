@@ -75,15 +75,15 @@ class SettingsPage extends GetView<GetxController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(currency.name.value),
-                  Currency.buildCurrencyWidget(currency.symbol.value),
+                  Text(currency.fieldName.value),
+                  Currency.buildCurrencyWidget(currency.fieldSymbol.value),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(currency.ratio.value.toString()),
-                  Text(currency.cultureCode.value),
+                  Text(currency.fieldRatio.value.toString()),
+                  Text(currency.fieldCultureCode.value),
                 ],
               ),
             ],

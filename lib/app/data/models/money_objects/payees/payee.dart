@@ -21,42 +21,42 @@ class Payee extends MoneyObject {
   }
 
   Set<String> categories = {};
-  FieldString categoriesAsText = FieldString(
+  FieldString fieldCategoriesAsText = FieldString(
     name: 'Categories',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
   );
 
-  FieldInt count = FieldInt(
+  FieldInt fieldCount = FieldInt(
     name: 'Transactions',
     columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).count.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).fieldCount.value,
   );
 
   // 0
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as Payee).uniqueId,
   );
 
   // 1
-  FieldString name = FieldString(
+  FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).name.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Payee).name.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Payee).name.value = value as String,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).fieldName.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Payee).fieldName.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Payee).fieldName.value = value as String,
   );
 
-  FieldMoney sum = FieldMoney(
+  FieldMoney fieldSum = FieldMoney(
     name: 'Sum',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).sum.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Payee).fieldSum.value,
   );
 
   @override
   Widget buildFieldsAsWidgetForSmallScreen() {
     return MyListItemAsCard(
-      leftTopAsString: name.value,
-      rightTopAsWidget: MoneyWidget(amountModel: sum.value, asTile: true),
-      rightBottomAsString: getAmountAsShorthandText(count.value),
+      leftTopAsString: fieldName.value,
+      rightTopAsWidget: MoneyWidget(amountModel: fieldSum.value, asTile: true),
+      rightBottomAsString: getAmountAsShorthandText(fieldCount.value),
     );
   }
 
@@ -66,14 +66,14 @@ class Payee extends MoneyObject {
 
   @override
   String getRepresentation() {
-    return name.value;
+    return fieldName.value;
   }
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 
   static final _fields = Fields<Payee>();
 
@@ -81,11 +81,11 @@ class Payee extends MoneyObject {
     if (_fields.isEmpty) {
       final tmp = Payee.fromJson({});
       _fields.setDefinitions([
-        tmp.id,
-        tmp.name,
-        tmp.categoriesAsText,
-        tmp.count,
-        tmp.sum,
+        tmp.fieldId,
+        tmp.fieldName,
+        tmp.fieldCategoriesAsText,
+        tmp.fieldCount,
+        tmp.fieldSum,
       ]);
     }
     return _fields;
@@ -95,10 +95,10 @@ class Payee extends MoneyObject {
     final tmp = Payee.fromJson({});
     return Fields<Payee>()
       ..setDefinitions([
-        tmp.name,
-        tmp.categoriesAsText,
-        tmp.count,
-        tmp.sum,
+        tmp.fieldName,
+        tmp.fieldCategoriesAsText,
+        tmp.fieldCount,
+        tmp.fieldSum,
       ]);
   }
 
@@ -117,6 +117,6 @@ class Payee extends MoneyObject {
   }
 
   static String getName(final Payee? payee) {
-    return payee == null ? '' : payee.name.value;
+    return payee == null ? '' : payee.fieldName.value;
   }
 }

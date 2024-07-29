@@ -27,14 +27,14 @@ class RecurringPayment {
     averagePerMonths = List.generate(12, (index) => Pair<int, double>(0, 0));
 
     for (final transaction in transactions) {
-      total += transaction.amount.value.toDouble();
+      total += transaction.fieldAmount.value.toDouble();
       dateRangeFound.inflate(transaction.dateTime.value);
 
       /// Cumulate by [PayeeId].[month].[Sum]
       payeeIdMonthAndSums.cumulate(
         payeeId,
         transaction.dateTime.value!.month,
-        transaction.amount.value.toDouble(),
+        transaction.fieldAmount.value.toDouble(),
       );
 
       /// Rolling average per Month
@@ -42,13 +42,13 @@ class RecurringPayment {
       final Pair<int, double> pair = averagePerMonths[transactionMonth];
       if (pair.first == 0) {
         // first time
-        averagePerMonths[transactionMonth] = Pair<int, double>(1, transaction.amount.value.toDouble());
+        averagePerMonths[transactionMonth] = Pair<int, double>(1, transaction.fieldAmount.value.toDouble());
       } else {
         averagePerMonths[transactionMonth] = Pair<int, double>(
           pair.first + 1,
           averageTwoNumbers(
             pair.second,
-            transaction.amount.value.toDouble(),
+            transaction.fieldAmount.value.toDouble(),
           ),
         );
       }
@@ -57,8 +57,8 @@ class RecurringPayment {
         payeeIdCategoryIdsAndSums[payeeId] = AccumulatorSum<int, double>();
       }
       payeeIdCategoryIdsAndSums[payeeId]!.cumulate(
-        transaction.categoryId.value,
-        transaction.amount.value.toDouble(),
+        transaction.fieldCategoryId.value,
+        transaction.fieldAmount.value.toDouble(),
       );
     }
 
@@ -136,7 +136,7 @@ class RecurringPayment {
       } else {
         listForDistributionBar.add(
           Distribution(
-            title: category.name.value,
+            title: category.fieldName.value,
             color: category.getColorOrAncestorsColor(),
             amount: categoryIdAndSum.second,
           ),

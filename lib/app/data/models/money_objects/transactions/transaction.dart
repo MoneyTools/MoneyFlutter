@@ -36,91 +36,57 @@ class Transaction extends MoneyObject {
     final int accountId = -1,
     required final DateTime? date,
   }) {
-    assert(date != null);
-    this.accountId.value = accountId;
+    // assert(date != null);
+    this.fieldAccountId.value = accountId;
     this.dateTime.value = date;
-    this.status.value = status;
-    this.flags.value = TransactionFlags.none.index;
+    this.fieldStatus.value = status;
+    this.fieldFlags.value = TransactionFlags.none.index;
   }
 
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction(date: json.getDate('Date'));
 // 0 ID
-    t.id.value = json.getInt('Id', -1);
+    t.fieldId.value = json.getInt('Id', -1);
 // 1 Account ID
-    t.accountId.value = json.getInt('Account', -1);
-    t.accountInstance = Data().accounts.get(t.accountId.value);
+    t.fieldAccountId.value = json.getInt('Account', -1);
+    t.fieldAccountInstance = Data().accounts.get(t.fieldAccountId.value);
 // 3 Status
-    t.status.value = TransactionStatus.values[json.getInt('Status')];
+    t.fieldStatus.value = TransactionStatus.values[json.getInt('Status')];
 // 4 Payee ID
-    t.payee.value = json.getInt('Payee', -1);
+    t.fieldPayee.value = json.getInt('Payee', -1);
 // 5 Original Payee
-    t.originalPayee.value = json.getString('OriginalPayee');
+    t.fieldOriginalPayee.value = json.getString('OriginalPayee');
 // 6 Category Id
-    t.categoryId.value = json.getInt('Category', -1);
+    t.fieldCategoryId.value = json.getInt('Category', -1);
 // 7 Memo
-    t.memo.value = json.getString('Memo');
+    t.fieldMemo.value = json.getString('Memo');
 // 8 Number
-    t.number.value = json.getString('Number');
+    t.fieldNumber.value = json.getString('Number');
 // 9 Reconciled Date
-    t.reconciledDate.value = json.getDate('ReconciledDate');
+    t.fieldReconciledDate.value = json.getDate('ReconciledDate');
 // 10 BudgetBalanceDate
-    t.budgetBalanceDate.value = json.getDate('BudgetBalanceDate');
+    t.fieldBudgetBalanceDate.value = json.getDate('BudgetBalanceDate');
 // 11 Transfer
-    t.transfer.value = json.getInt('Transfer', -1);
+    t.fieldTransfer.value = json.getInt('Transfer', -1);
 // 12 FITID
-    t.fitid.value = json.getString('FITID');
+    t.fieldFitid.value = json.getString('FITID');
 // 13 Flags
-    t.flags.value = json.getInt('Flags');
+    t.fieldFlags.value = json.getInt('Flags');
 
 // 14 Amount
-    t.amount.value.setAmount(json.getDouble('Amount'));
+    t.fieldAmount.value.setAmount(json.getDouble('Amount'));
 // 15 Sales Tax
-    t.salesTax.value.setAmount(json.getDouble('SalesTax'));
+    t.fieldSalesTax.value.setAmount(json.getDouble('SalesTax'));
 // 16 Transfer Split
-    t.transferSplit.value = json.getInt('TransferSplit', -1);
+    t.fieldTransferSplit.value = json.getInt('TransferSplit', -1);
 // 17 Merge Date
-    t.mergeDate.value = json.getDate('MergeDate');
+    t.fieldMergeDate.value = json.getDate('MergeDate');
 
 // not serialized
     t.balance = runningBalance;
 
     return t;
   }
-
-  /// Account Id
-  /// SQLite  1|Account|INT|1||0
-  FieldInt accountId = FieldInt(
-    type: FieldType.text,
-    name: 'Account',
-    serializeName: 'Account',
-    align: TextAlign.left,
-    footer: FooterType.count,
-    defaultValue: -1,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().accounts.getNameFromId((instance as Transaction).accountId.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).accountId.value,
-    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).accountId.value = newValue,
-  );
-
-  /// Amount
-  /// 14|Amount|money|1||0
-  FieldMoney amount = FieldMoney(
-    name: columnIdAmount,
-    serializeName: 'Amount',
-    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-      amount: (instance as Transaction).amount.value.toDouble(),
-      iso4217: instance.getCurrency(),
-    ),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).amount.value.toDouble(),
-    setValue: (final MoneyObject instance, dynamic newValue) =>
-        (instance as Transaction).amount.value.setAmount(newValue),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).amount.value.toDouble(),
-      (b as Transaction).amount.value.toDouble(),
-      ascending,
-    ),
-  );
 
   //------------------------------------------------------------------------
   // Not serialized
@@ -132,12 +98,12 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-      amount: (instance as Transaction).getNormalizedAmount(instance.amount.value.toDouble()),
+      amount: (instance as Transaction).getNormalizedAmount(instance.fieldAmount.value.toDouble()),
       iso4217: Constants.defaultCurrency,
     ),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).amount.value.toDouble(),
-      (b as Transaction).amount.value.toDouble(),
+      (a as Transaction).fieldAmount.value.toDouble(),
+      (b as Transaction).fieldAmount.value.toDouble(),
       ascending,
     ),
   );
@@ -172,76 +138,6 @@ class Transaction extends MoneyObject {
       (b as Transaction).balance,
       ascending,
     ),
-  );
-
-  /// Budget Balance Date
-  /// 10|BudgetBalanceDate|datetime|0||0
-  FieldDate budgetBalanceDate = FieldDate(
-    name: 'ReconciledDate',
-    serializeName: 'ReconciledDate',
-    getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
-      (instance as Transaction).budgetBalanceDate.value,
-    ),
-    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
-      (instance as Transaction).budgetBalanceDate.value,
-    ),
-  );
-
-  /// Category Id
-  /// SQLite 6|Category|INT|0||0
-  FieldInt categoryId = FieldInt(
-    type: FieldType.widget,
-    columnWidth: ColumnWidth.large,
-    align: TextAlign.left,
-    footer: FooterType.count,
-    name: 'Category',
-    serializeName: 'Category',
-    defaultValue: -1,
-    getValueForDisplay: (final MoneyObject instance) {
-      final t = (instance as Transaction);
-      if (t.categoryId.value == -1 && t.possibleMatchingCategoryId != -1) {
-        return SuggestionApproval(
-          child: TokenText(Data().categories.getNameFromId(t.possibleMatchingCategoryId)),
-          onApproved: () {
-            // record the change
-            t.stashValueBeforeEditing();
-
-            // Make change
-            t.categoryId.value = t.possibleMatchingCategoryId;
-            t.possibleMatchingCategoryId = -1;
-
-            // inform of changes
-            Data().notifyMutationChanged(
-              mutation: MutationType.changed,
-              moneyObject: t,
-              recalculateBalances: false,
-            );
-          },
-          onRejected: () {
-            t.possibleMatchingCategoryId = -1;
-          },
-        );
-      } else {
-        return TokenText(Data().categories.getNameFromId(t.categoryId.value));
-      }
-    },
-    getValueForReading: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as Transaction).categoryId.value),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).categoryId.value,
-    setValue: (final MoneyObject instance, dynamic newValue) =>
-        (instance as Transaction).categoryId.value = newValue as int,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
-      return pickerCategory(
-        itemSelected: Data().categories.get((instance as Transaction).categoryId.value),
-        onSelected: (Category? newCategory) {
-          if (newCategory != null) {
-            instance.categoryId.value = newCategory.uniqueId;
-            // notify container
-            onEdited(true);
-          }
-        },
-      );
-    },
   );
 
   FieldString currency = FieldString(
@@ -284,86 +180,179 @@ class Transaction extends MoneyObject {
         sortByDateTime(a as Transaction, b as Transaction, ascending),
   );
 
+  /// Account Id
+  /// SQLite  1|Account|INT|1||0
+  FieldInt fieldAccountId = FieldInt(
+    type: FieldType.text,
+    name: 'Account',
+    serializeName: 'Account',
+    align: TextAlign.left,
+    footer: FooterType.count,
+    defaultValue: -1,
+    getValueForDisplay: (final MoneyObject instance) =>
+        Data().accounts.getNameFromId((instance as Transaction).fieldAccountId.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAccountId.value,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldAccountId.value = newValue,
+  );
+
+  /// Amount
+  /// 14|Amount|money|1||0
+  FieldMoney fieldAmount = FieldMoney(
+    name: columnIdAmount,
+    serializeName: 'Amount',
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).fieldAmount.value.toDouble(),
+      iso4217: instance.getCurrency(),
+    ),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAmount.value.toDouble(),
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldAmount.value.setAmount(newValue),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).fieldAmount.value.toDouble(),
+      (b as Transaction).fieldAmount.value.toDouble(),
+      ascending,
+    ),
+  );
+
+  /// Budget Balance Date
+  /// 10|BudgetBalanceDate|datetime|0||0
+  FieldDate fieldBudgetBalanceDate = FieldDate(
+    name: 'ReconciledDate',
+    serializeName: 'ReconciledDate',
+    getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).fieldBudgetBalanceDate.value,
+    ),
+    getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
+      (instance as Transaction).fieldBudgetBalanceDate.value,
+    ),
+  );
+
+  /// Category Id
+  /// SQLite 6|Category|INT|0||0
+  FieldInt fieldCategoryId = FieldInt(
+    type: FieldType.widget,
+    columnWidth: ColumnWidth.large,
+    align: TextAlign.left,
+    footer: FooterType.count,
+    name: 'Category',
+    serializeName: 'Category',
+    defaultValue: -1,
+    getValueForDisplay: (final MoneyObject instance) {
+      final t = (instance as Transaction);
+      if (t.fieldCategoryId.value == -1 && t.possibleMatchingCategoryId != -1) {
+        return SuggestionApproval(
+          child: TokenText(Data().categories.getNameFromId(t.possibleMatchingCategoryId)),
+          onApproved: () {
+            // record the change
+            t.stashValueBeforeEditing();
+
+            // Make change
+            t.fieldCategoryId.value = t.possibleMatchingCategoryId;
+            t.possibleMatchingCategoryId = -1;
+
+            // inform of changes
+            Data().notifyMutationChanged(
+              mutation: MutationType.changed,
+              moneyObject: t,
+              recalculateBalances: false,
+            );
+          },
+          onRejected: () {
+            t.possibleMatchingCategoryId = -1;
+          },
+        );
+      } else {
+        return TokenText(Data().categories.getNameFromId(t.fieldCategoryId.value));
+      }
+    },
+    getValueForReading: (final MoneyObject instance) =>
+        Data().categories.getNameFromId((instance as Transaction).fieldCategoryId.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldCategoryId.value,
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldCategoryId.value = newValue as int,
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      return pickerCategory(
+        itemSelected: Data().categories.get((instance as Transaction).fieldCategoryId.value),
+        onSelected: (Category? newCategory) {
+          if (newCategory != null) {
+            instance.fieldCategoryId.value = newCategory.uniqueId;
+            // notify container
+            onEdited(true);
+          }
+        },
+      );
+    },
+  );
+
   /// FITID
   /// 12|FITID|nchar(40)|0||0
-  FieldString fitid = FieldString(
+  FieldString fieldFitid = FieldString(
     name: 'FITID',
     serializeName: 'FITID',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fitid.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fitid.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldFitid.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldFitid.value,
   );
 
   /// Flags
   /// 13|Flags|INT|1||0
-  FieldInt flags = FieldInt(
+  FieldInt fieldFlags = FieldInt(
     name: 'Flags',
     serializeName: 'Flags',
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).flags.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).flags.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldFlags.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldFlags.value,
   );
 
   /// ID
   /// SQLite  0|Id|bigint|0||1
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).uniqueId,
   );
 
   /// Memo
   /// 7|Memo|nvarchar(255)|0||0
-  FieldString memo = FieldString(
+  FieldString fieldMemo = FieldString(
     name: 'Memo',
     serializeName: 'Memo',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).memo.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).memo.value,
-    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).memo.value = newValue,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldMemo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldMemo.value,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldMemo.value = newValue,
   );
 
   /// MergeDate
   /// 17|MergeDate|datetime|0||0
-  FieldDate mergeDate = FieldDate(
+  FieldDate fieldMergeDate = FieldDate(
     name: 'Merge Date',
     serializeName: 'MergeDate',
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).mergeDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).fieldMergeDate.value),
     getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).mergeDate.value),
+        dateToIso8601OrDefaultString((instance as Transaction).fieldMergeDate.value),
   );
 
   /// Number
   /// 8|Number|nchar(10)|0||0
-  FieldString number = FieldString(
+  FieldString fieldNumber = FieldString(
     name: 'Number',
     serializeName: 'Number',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).number.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).number.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldNumber.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldNumber.value,
   );
 
   /// OriginalPayee
   /// before auto-aliasing, helps with future merging.
   /// SQLite 5|OriginalPayee|nvarchar(255)|0||0
-  FieldString originalPayee = FieldString(
+  FieldString fieldOriginalPayee = FieldString(
     name: 'Original Payee',
     serializeName: 'OriginalPayee',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).originalPayee.value,
-  );
-
-  FieldString paidOn = FieldString(
-    type: FieldType.text,
-    name: columnIdPaidOn,
-    align: TextAlign.right,
-    columnWidth: ColumnWidth.tiny,
-    footer: FooterType.none,
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as Transaction).paidOn.value;
-    },
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldOriginalPayee.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldOriginalPayee.value,
   );
 
   /// Payee Id (displayed as Text name of the Payee)
   /// SQLite 4|Payee|INT|0||0
-  FieldInt payee = FieldInt(
+  FieldInt fieldPayee = FieldInt(
     name: 'Payee/Transfer',
     serializeName: 'Payee',
     defaultValue: -1,
@@ -379,7 +368,7 @@ class Transaction extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) {
       return (instance as Transaction).getPayeeOrTransferCaption();
     },
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).payee.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldPayee.value,
     setValue: (MoneyObject instance, dynamic newValue) {
       instance = instance as Transaction;
       instance.stashOriginalPayee();
@@ -388,8 +377,8 @@ class Transaction extends MoneyObject {
         // TODO - implement was solution given that the call back here only has one value use for the Payee ID
       } else {
         // Payee
-        instance.payee.value = (newValue as int); // Payee Id
-        instance.transfer.value = -1;
+        instance.fieldPayee.value = (newValue as int); // Payee Id
+        instance.fieldTransfer.value = -1;
         instance.transferInstance = null;
       }
     },
@@ -398,10 +387,12 @@ class Transaction extends MoneyObject {
         width: 300,
         height: 80,
         child: PickPayeeOrTransfer(
-          choice: (instance as Transaction).transfer.value == -1 ? TransactionFlavor.payee : TransactionFlavor.transfer,
-          payee: Data().payees.get(instance.payee.value),
+          choice: (instance as Transaction).fieldTransfer.value == -1
+              ? TransactionFlavor.payee
+              : TransactionFlavor.transfer,
+          payee: Data().payees.get(instance.fieldPayee.value),
           account: instance.transferInstance?.getReceiverAccount(),
-          amount: instance.amount.value.toDouble(),
+          amount: instance.fieldAmount.value.toDouble(),
           onSelected: (
             TransactionFlavor choice,
             Payee? selectedPayee,
@@ -412,8 +403,8 @@ class Transaction extends MoneyObject {
             switch (choice) {
               case TransactionFlavor.payee:
                 if (selectedPayee != null) {
-                  instance.payee.value = selectedPayee.uniqueId;
-                  instance.transfer.value = -1;
+                  instance.fieldPayee.value = selectedPayee.uniqueId;
+                  instance.fieldTransfer.value = -1;
                   instance.transferInstance = null;
                   wasModified = true;
                 }
@@ -426,7 +417,7 @@ class Transaction extends MoneyObject {
                     } else {
                       // use the new account destination
                       Transaction relatedTransaction = instance.transferInstance!.related!;
-                      instance.transferInstance!.related!.accountInstance = Data().accounts.get(
+                      instance.transferInstance!.related!.fieldAccountInstance = Data().accounts.get(
                             account.uniqueId,
                           );
                       relatedTransaction.mutateField(
@@ -437,7 +428,7 @@ class Transaction extends MoneyObject {
                       wasModified = true;
                     }
                   } else {
-                    instance.payee.value = Data().categories.transfer.uniqueId;
+                    instance.fieldPayee.value = Data().categories.transfer.uniqueId;
                     Data().makeTransferLinkage(instance, account);
                   }
                 }
@@ -449,40 +440,36 @@ class Transaction extends MoneyObject {
     },
   );
 
-  int possibleMatchingCategoryId = -1;
-
   /// Reconciled Date
   /// 9|ReconciledDate|datetime|0||0
-  FieldDate reconciledDate = FieldDate(
+  FieldDate fieldReconciledDate = FieldDate(
     name: 'ReconciledDate',
     serializeName: 'ReconciledDate',
     getValueForDisplay: (final MoneyObject instance) => dateToIso8601OrDefaultString(
-      (instance as Transaction).reconciledDate.value,
+      (instance as Transaction).fieldReconciledDate.value,
     ),
     getValueForSerialization: (final MoneyObject instance) => dateToIso8601OrDefaultString(
-      (instance as Transaction).reconciledDate.value,
+      (instance as Transaction).fieldReconciledDate.value,
     ),
   );
 
   /// Sales Tax
   /// 15|SalesTax|money|0||0
-  FieldMoney salesTax = FieldMoney(
+  FieldMoney fieldSalesTax = FieldMoney(
     name: 'Sales Tax',
     serializeName: 'SalesTax',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).salesTax.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).salesTax.value.toDouble(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldSalesTax.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldSalesTax.value.toDouble(),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).salesTax.value.toDouble(),
-      (b as Transaction).salesTax.value.toDouble(),
+      (a as Transaction).fieldSalesTax.value.toDouble(),
+      (b as Transaction).fieldSalesTax.value.toDouble(),
       ascending,
     ),
   );
 
-  List<MoneySplit> splits = [];
-
   /// Status N | E | C | R
   /// SQLite 3|Status|INT|0||0
-  Field<TransactionStatus> status = Field<TransactionStatus>(
+  Field<TransactionStatus> fieldStatus = Field<TransactionStatus>(
     type: FieldType.widget,
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
@@ -491,40 +478,54 @@ class Transaction extends MoneyObject {
     name: columnIdStatus,
     serializeName: 'Status',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction)._buildStatusButtonToggle(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).status.value.index,
-    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).status.value = newValue,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldStatus.value.index,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldStatus.value = newValue,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
-      transactionStatusToLetter((a as Transaction).status.value),
-      transactionStatusToLetter((b as Transaction).status.value),
+      transactionStatusToLetter((a as Transaction).fieldStatus.value),
+      transactionStatusToLetter((b as Transaction).fieldStatus.value),
       ascending,
     ),
   );
 
   /// Transfer
   /// 11|Transfer|bigint|0||0
-  Field<int> transfer = Field<int>(
+  Field<int> fieldTransfer = Field<int>(
     name: 'Transfer',
     serializeName: 'Transfer',
     defaultValue: -1,
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transfer.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transfer.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldTransfer.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldTransfer.value,
   );
+
+  /// Transfer Split
+  /// 16|TransferSplit|INT|0||0
+  FieldInt fieldTransferSplit = FieldInt(
+    name: 'TransferSplit',
+    serializeName: 'TransferSplit',
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldTransferSplit.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldTransferSplit.value,
+  );
+
+  FieldString paidOn = FieldString(
+    type: FieldType.text,
+    name: columnIdPaidOn,
+    align: TextAlign.right,
+    columnWidth: ColumnWidth.tiny,
+    footer: FooterType.none,
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as Transaction).paidOn.value;
+    },
+  );
+
+  int possibleMatchingCategoryId = -1;
+  List<MoneySplit> splits = [];
 
   /// Used for establishing relation between two transactions
   Transfer? transferInstance;
 
-  /// Transfer Split
-  /// 16|TransferSplit|INT|0||0
-  FieldInt transferSplit = FieldInt(
-    name: 'TransferSplit',
-    serializeName: 'TransferSplit',
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).transferSplit.value,
-  );
-
-  Account? accountInstance;
+  Account? fieldAccountInstance;
   Investment? investmentInstance;
 
   String? _transferName;
@@ -533,9 +534,9 @@ class Transaction extends MoneyObject {
   Widget buildFieldsAsWidgetForSmallScreen() {
     return MyListItemAsCard(
       leftTopAsString: payeeName,
-      leftBottomAsString: '${Data().categories.getNameFromId(categoryId.value)}\n${memo.value}',
-      rightTopAsWidget: MoneyWidget(amountModel: amount.value, asTile: true),
-      rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
+      leftBottomAsString: '${Data().categories.getNameFromId(fieldCategoryId.value)}\n${fieldMemo.value}',
+      rightTopAsWidget: MoneyWidget(amountModel: fieldAmount.value, asTile: true),
+      rightBottomAsString: '$dateTimeAsText\n${Account.getName(fieldAccountInstance)}',
     );
   }
 
@@ -566,18 +567,18 @@ class Transaction extends MoneyObject {
   }
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
-  String get amountAsText => amount.value.toString();
+  String get amountAsText => fieldAmount.value.toString();
 
   /// TODO - clean this up,
   void checkTransfers(Set<Transaction> dangling, List<Account> deletedAccounts) {
-    if (transfer.value != -1 && this.transferInstance == null) {
+    if (fieldTransfer.value != -1 && this.transferInstance == null) {
       // transferInstance?.getReceiverAccount();
       // if (IsDeletedAccount(this.to, money, deletedAccounts)) {
       //   this.Category =
@@ -621,7 +622,7 @@ class Transaction extends MoneyObject {
           dangling.add(this);
         } else {
           // one last check, the other side also needs to be correctly setup as a transafer
-          if (other.transfer.value != this.uniqueId) {
+          if (other.fieldTransfer.value != this.uniqueId) {
             dangling.add(this);
           }
         }
@@ -632,12 +633,12 @@ class Transaction extends MoneyObject {
   bool containsTransferTo(Account a) {
     if (this.isSplit) {
       for (MoneySplit s in this.splits) {
-        if (s.transferId.value != -1 && s.getTransferTransaction()?.accountId.value == a.uniqueId) {
+        if (s.fieldTransferId.value != -1 && s.getTransferTransaction()?.fieldAccountId.value == a.uniqueId) {
           return true;
         }
       }
     }
-    if (this.transferInstance != null && this.transferInstance?.related?.accountId.value == a.uniqueId) {
+    if (this.transferInstance != null && this.transferInstance?.related?.fieldAccountId.value == a.uniqueId) {
       return true;
     }
     return false;
@@ -652,25 +653,25 @@ class Transaction extends MoneyObject {
       final tmp = Transaction(date: DateTime.now());
       _fields.setDefinitions(
         [
-          tmp.id,
+          tmp.fieldId,
           tmp.dateTime,
-          tmp.accountId,
-          tmp.payee,
-          tmp.originalPayee,
-          tmp.categoryId,
-          tmp.memo,
-          tmp.number,
-          tmp.reconciledDate,
-          tmp.budgetBalanceDate,
-          tmp.transfer,
-          tmp.status,
-          tmp.fitid,
-          tmp.flags,
+          tmp.fieldAccountId,
+          tmp.fieldPayee,
+          tmp.fieldOriginalPayee,
+          tmp.fieldCategoryId,
+          tmp.fieldMemo,
+          tmp.fieldNumber,
+          tmp.fieldReconciledDate,
+          tmp.fieldBudgetBalanceDate,
+          tmp.fieldTransfer,
+          tmp.fieldStatus,
+          tmp.fieldFitid,
+          tmp.fieldFlags,
           tmp.currency,
-          tmp.salesTax,
-          tmp.transferSplit,
-          tmp.mergeDate,
-          tmp.amount,
+          tmp.fieldSalesTax,
+          tmp.fieldTransferSplit,
+          tmp.fieldMergeDate,
+          tmp.fieldAmount,
           tmp.amountAsTextNormalized,
           tmp.balanceNative,
           tmp.balanceNormalized,
@@ -687,13 +688,13 @@ class Transaction extends MoneyObject {
       ..setDefinitions(
         [
           tmp.dateTime,
-          tmp.accountId,
-          tmp.payee,
-          tmp.categoryId,
-          tmp.number,
-          tmp.status,
+          tmp.fieldAccountId,
+          tmp.fieldPayee,
+          tmp.fieldCategoryId,
+          tmp.fieldNumber,
+          tmp.fieldStatus,
           tmp.currency,
-          tmp.amount,
+          tmp.fieldAmount,
           tmp.amountAsTextNormalized,
           tmp.balanceNormalized,
         ],
@@ -701,25 +702,25 @@ class Transaction extends MoneyObject {
   }
 
   Account? getAccount() {
-    if (accountInstance != null) {
-      return accountInstance;
+    if (fieldAccountInstance != null) {
+      return fieldAccountInstance;
     }
-    return Data().accounts.get(accountId.value);
+    return Data().accounts.get(fieldAccountId.value);
   }
 
   String getAccountName() {
     if (getAccount() != null) {
-      return getAccount()!.name.value;
+      return getAccount()!.fieldName.value;
     }
     return '???';
   }
 
   String getCurrency() {
-    if (this.accountInstance == null || this.accountInstance!.currency.value.isEmpty) {
+    if (this.fieldAccountInstance == null || this.fieldAccountInstance!.currency.value.isEmpty) {
       return Constants.defaultCurrency;
     }
 
-    return this.accountInstance!.currency.value;
+    return this.fieldAccountInstance!.currency.value;
   }
 
   static String getDefaultCurrency(final Account? accountInstance) {
@@ -732,10 +733,10 @@ class Transaction extends MoneyObject {
 
   double getNormalizedAmount(double nativeValue) {
     // Convert the value to USD
-    if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
+    if (fieldAccountInstance == null || fieldAccountInstance?.getCurrencyRatio() == 0) {
       return nativeValue;
     }
-    return nativeValue * accountInstance!.getCurrencyRatio();
+    return nativeValue * fieldAccountInstance!.getCurrencyRatio();
   }
 
   Investment? getOrCreateInvestment() {
@@ -750,12 +751,12 @@ class Transaction extends MoneyObject {
 
   String getPayeeOrTransferCaption() {
     Investment? investment = investmentInstance;
-    double amount = this.amount.value.toDouble();
+    double amount = this.fieldAmount.value.toDouble();
 
     bool isFrom = false;
     if (transferInstance != null) {
       if (investment != null) {
-        if (investment.investmentType.value == InvestmentType.add.index) {
+        if (investment.fieldInvestmentType.value == InvestmentType.add.index) {
           isFrom = true;
         }
       } else if (amount > 0) {
@@ -769,7 +770,7 @@ class Transaction extends MoneyObject {
       }
       return '';
     }
-    final String displayName = Data().payees.getNameFromId(payee.value);
+    final String displayName = Data().payees.getNameFromId(fieldPayee.value);
     return displayName;
   }
 
@@ -792,18 +793,18 @@ class Transaction extends MoneyObject {
     if (account.isClosed()) {
       caption += 'Closed-Account: ';
     }
-    caption += account.name.value;
+    caption += account.fieldName.value;
     return caption;
   }
 
   bool isMatchingAnyOfTheseCategoris(List<int> cateogoriesToMatch) {
-    if (cateogoriesToMatch.contains(categoryId.value)) {
+    if (cateogoriesToMatch.contains(fieldCategoryId.value)) {
       return true;
     }
 
     if (this.isSplit) {
       for (var s in this.splits) {
-        if (cateogoriesToMatch.contains(s.categoryId.value)) {
+        if (cateogoriesToMatch.contains(s.fieldCategoryId.value)) {
           return true;
         }
       }
@@ -814,10 +815,10 @@ class Transaction extends MoneyObject {
   bool get isSplit => this.splits.isNotEmpty;
 
   bool isTransfer() {
-    return transfer.value != -1;
+    return fieldTransfer.value != -1;
   }
 
-  String get payeeName => Data().payees.getNameFromId(payee.value);
+  String get payeeName => Data().payees.getNameFromId(fieldPayee.value);
 
   /// <summary>
   /// Find all the objects referenced by this Transaction and wire them back up
@@ -923,8 +924,8 @@ class Transaction extends MoneyObject {
 
   /// keep track of the original Payee information, only do this if the originalPayee info is empty
   void stashOriginalPayee() {
-    if (this.originalPayee.value.isEmpty) {
-      this.originalPayee.value = this.getPayeeOrTransferCaption();
+    if (this.fieldOriginalPayee.value.isEmpty) {
+      this.fieldOriginalPayee.value = this.getPayeeOrTransferCaption();
     }
   }
 
@@ -945,19 +946,19 @@ class Transaction extends MoneyObject {
       style: OutlinedButton.styleFrom(
         padding: EdgeInsets.zero, // Remove all padding
       ),
-      child: Text(transactionStatusToLetter(this.status.value)),
+      child: Text(transactionStatusToLetter(this.fieldStatus.value)),
       onPressed: () {
-        if (this.status.value == TransactionStatus.reconciled) {
+        if (this.fieldStatus.value == TransactionStatus.reconciled) {
           // do nothing, its not allowed to change a reconciled transaction
           SnackBarService.displayWarning(message: 'Reconcile Transaction Status are prevented from changed.');
           return;
         }
-        if (this.status.value == TransactionStatus.cleared) {
+        if (this.fieldStatus.value == TransactionStatus.cleared) {
           // Attempt to restore/undo
           if (valueBeforeEdit != null) {
             // bring back the previous value
-            int oldValue = valueBeforeEdit![this.status.name] ?? 0;
-            this.status.value = TransactionStatus.values[oldValue];
+            int oldValue = valueBeforeEdit![this.fieldStatus.name] ?? 0;
+            this.fieldStatus.value = TransactionStatus.values[oldValue];
 
             // if this was the only change to this instance we can undo the mutation state
             if (mutation == MutationType.changed && MoneyObject.isDataModified(this) == false) {
@@ -968,7 +969,7 @@ class Transaction extends MoneyObject {
             }
           }
         } else {
-          mutateField(this.status.name, TransactionStatus.cleared, false);
+          mutateField(this.fieldStatus.name, TransactionStatus.cleared, false);
         }
         SelectionController.to.select(this.uniqueId);
       },

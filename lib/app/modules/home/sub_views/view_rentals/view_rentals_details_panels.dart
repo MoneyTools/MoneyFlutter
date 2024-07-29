@@ -9,7 +9,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     if (selectedIds.isEmpty) {
       final List<PairXY> list = <PairXY>[];
       for (final RentBuilding entry in getList()) {
-        list.add(PairXY(entry.name.value, entry.profit.value.toDouble()));
+        list.add(PairXY(entry.fieldName.value, entry.fieldProfit.value.toDouble()));
       }
       return Chart(
         list: list,
@@ -51,7 +51,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
 
   void getPnLOverYears(RentBuilding rental) {
     for (final transaction in Data().transactions.iterableList()) {
-      if (rental.categoryForIncomeTreeIds.contains(transaction.categoryId.value)) {}
+      if (rental.categoryForIncomeTreeIds.contains(transaction.fieldCategoryId.value)) {}
     }
   }
 
@@ -89,11 +89,11 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     final Transaction t,
     final RentBuilding rental,
   ) {
-    final num categoryIdToMatch = t.categoryId.value;
+    final num categoryIdToMatch = t.fieldCategoryId.value;
 
     if (t.isSplit) {
       for (final MoneySplit split in t.splits) {
-        if (isMatchingCategories(split.categoryId.value, rental)) {
+        if (isMatchingCategories(split.fieldCategoryId.value, rental)) {
           return true;
         }
       }

@@ -136,13 +136,13 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         text: 'Duplicate',
         onPressed: () {
           _transaction = Transaction(date: transaction.dateTime.value)
-            ..id.value = -1
-            ..accountId.value = transaction.accountId.value
-            ..payee.value = transaction.payee.value
-            ..categoryId.value = transaction.categoryId.value
-            ..transfer = transaction.transfer
-            ..amount.value = transaction.amount.value
-            ..memo.value = transaction.memo.value;
+            ..fieldId.value = -1
+            ..fieldAccountId.value = transaction.fieldAccountId.value
+            ..fieldPayee.value = transaction.fieldPayee.value
+            ..fieldCategoryId.value = transaction.fieldCategoryId.value
+            ..fieldTransfer = transaction.fieldTransfer
+            ..fieldAmount.value = transaction.fieldAmount.value
+            ..fieldMemo.value = transaction.fieldMemo.value;
 
           setState(() {
             // append to the list of transactions

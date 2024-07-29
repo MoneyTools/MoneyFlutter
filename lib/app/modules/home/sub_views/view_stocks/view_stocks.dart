@@ -45,10 +45,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     double sumAll = 0.00;
 
     for (final Security security in list) {
-      final profit = security.profit.getValueForDisplay(security).toDouble();
+      final profit = security.fieldProfit.getValueForDisplay(security).toDouble();
       sumAll += profit;
 
-      if (isConsideredZero(security.holdingShares.value)) {
+      if (isConsideredZero(security.fieldHoldingShares.value)) {
         sumClosed += profit;
       } else {
         sumActive += profit;
@@ -95,7 +95,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching.toAccounts(accountId: selectedInvestment.transactionInstance!.accountId.value),
+              InternalViewSwitching.toAccounts(accountId: selectedInvestment.transactionInstance!.fieldAccountId.value),
               InternalViewSwitching.toTransactions(transactionId: selectedInvestment.uniqueId),
             ],
           ),
@@ -109,7 +109,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               // Jump to Investment view
-              InternalViewSwitching.toInvestments(symbol: selectedSecurity.symbol.value),
+              InternalViewSwitching.toInvestments(symbol: selectedSecurity.fieldSymbol.value),
             ],
           ),
         );
@@ -145,7 +145,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }) {
     final Security? security = getFirstSelectedItem() as Security?;
     if (security != null) {
-      final String symbol = security.symbol.value;
+      final String symbol = security.fieldSymbol.value;
       List<Investment> list = getListOfInvestment(security);
 
       final List<HoldingActivity> events = [];
@@ -154,7 +154,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           events.add(
             HoldingActivity(
               activity.transactionInstance!.dateTime.value!,
-              activity.unitPriceAdjusted.getValueForDisplay(activity),
+              activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
               activity.effectiveUnitsAdjusted,
             ),
           );
@@ -302,11 +302,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   bool isMatchingPivot(final Security instance) {
     if (_selectedPivot[0]) {
       // No holding of stock
-      return isConsideredZero(instance.holdingShares.value);
+      return isConsideredZero(instance.fieldHoldingShares.value);
     }
     if (_selectedPivot[1]) {
       // Still have holding
-      return !isConsideredZero(instance.holdingShares.value);
+      return !isConsideredZero(instance.fieldHoldingShares.value);
     }
     if (_selectedPivot[2]) {
       // All, no filter needed
@@ -372,10 +372,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(split.date.getValueForDisplay(split).toString()),
-              Text(split.numerator.value.toString()),
+              Text(split.fieldDate.getValueForDisplay(split).toString()),
+              Text(split.fieldNumerator.value.toString()),
               const Text(' for '),
-              Text(split.denominator.value.toString()),
+              Text(split.fieldDenominator.value.toString()),
             ],
           );
         },

@@ -50,7 +50,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   List<LoanPayment> aggregatedList = Data()
       .loanPayments
       .iterableList(includeDeleted: false)
-      .where((a) => a.accountId.value == account.uniqueId)
+      .where((a) => a.fieldAccountId.value == account.uniqueId)
       .toList();
 
   // include the bank transactions matching the Account Categories for Principal and Interest
@@ -69,7 +69,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     bool isFromSplit = false;
     if (pr == null) {
       pr = PaymentRollup();
-      pr.accountId = t.accountId.value;
+      pr.accountId = t.fieldAccountId.value;
       payments[key] = pr;
     } else {
       isFromSplit = true;
@@ -79,20 +79,20 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     pr.date = t.dateTime.value!;
 
     // Reference (combination of Memo and Payee)
-    pr.reference = concat(pr.reference, t.memo.value, ';', true);
+    pr.reference = concat(pr.reference, t.fieldMemo.value, ';', true);
     if (isFromSplit) {
       pr.reference = concat(pr.reference, '<Split>', ';', true);
     }
     pr.reference = concat(pr.reference, t.getPayeeOrTransferCaption(), ';', true);
 
     // Principal
-    if (t.categoryId.value == account.categoryIdForPrincipal.value) {
-      pr.principal = t.amount.value.toDouble();
+    if (t.fieldCategoryId.value == account.categoryIdForPrincipal.value) {
+      pr.principal = t.fieldAmount.value.toDouble();
     }
 
     // Interest
-    if (t.categoryId.value == account.categoryIdForInterest.value) {
-      pr.interest = t.amount.value.toDouble();
+    if (t.fieldCategoryId.value == account.categoryIdForInterest.value) {
+      pr.interest = t.fieldAmount.value.toDouble();
     }
   }
 
@@ -112,16 +112,16 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     );
   }
 
-  aggregatedList.sort((a, b) => sortByDate(a.date.value, b.date.value, true));
+  aggregatedList.sort((a, b) => sortByDate(a.fieldDate.value, b.fieldDate.value, true));
 
   double runningBalance = 0.00;
 
   for (final p in aggregatedList) {
-    runningBalance += p.principal.value.toDouble();
-    p.balance.value.setAmount(runningBalance);
+    runningBalance += p.fieldPrincipal.value.toDouble();
+    p.fieldBalance.value.setAmount(runningBalance);
 
     // Special hack to include the Manual LoanPayment memo into th reference text
-    p.reference.value = concat(p.memo.value, p.reference.value);
+    p.fieldReference.value = concat(p.fieldMemo.value, p.fieldReference.value);
   }
   return aggregatedList;
 }

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 // Imports
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
@@ -16,10 +18,10 @@ class Alias extends MoneyObject {
     required final int flags,
     required final int payeeId,
   }) {
-    this.id.value = id;
-    this.pattern.value = pattern;
-    this.flags.value = flags;
-    this.payeeId.value = payeeId;
+    this.fieldId.value = id;
+    this.fieldPattern.value = pattern;
+    this.fieldFlags.value = flags;
+    this.fieldPayeeId.value = payeeId;
   }
 
   /// Constructor from a SQLite row
@@ -33,7 +35,7 @@ class Alias extends MoneyObject {
   }
 
   /// 2    Flags    INT            1                 0
-  FieldInt flags = FieldInt(
+  FieldInt fieldFlags = FieldInt(
     type: FieldType.text,
     align: TextAlign.center,
     name: 'Flags',
@@ -41,35 +43,35 @@ class Alias extends MoneyObject {
     defaultValue: 0,
     footer: FooterType.count,
     getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldFlags.value,
   );
 
   /// ID
   /// 0    Id       INT            0                 1
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as Alias).uniqueId,
   );
 
   /// Pattern
   /// 1    Pattern  nvarchar(255)  1                 0
-  FieldString pattern = FieldString(
+  FieldString fieldPattern = FieldString(
     type: FieldType.text,
     name: 'Pattern',
     serializeName: 'Pattern',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Alias).pattern.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).pattern.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
   );
 
   /// Payee
   /// 3 Payee INT 1 0
-  FieldInt payeeId = FieldInt(
+  FieldInt fieldPayeeId = FieldInt(
     type: FieldType.text,
     footer: FooterType.count,
     name: 'Payee',
     serializeName: 'Payee',
     defaultValue: 0,
     getValueForDisplay: (final MoneyObject instance) => Payee.getName((instance as Alias).payeeInstance),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).payeeId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPayeeId.value,
   );
 
   // Not persisted
@@ -81,66 +83,66 @@ class Alias extends MoneyObject {
   Widget buildFieldsAsWidgetForSmallScreen() {
     return MyListItemAsCard(
       leftTopAsString: Payee.getName(payeeInstance),
-      leftBottomAsString: pattern.value,
+      leftBottomAsString: fieldPattern.value,
       rightBottomAsString: '${getAliasTypeAsString(type)}\n',
     );
   }
 
   // Fields for this instance
   @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
+  FieldDefinitions get fieldDefinitions => fieldsForColumnView.definitions;
 
   @override
   String getRepresentation() {
-    return pattern.value;
+    return fieldPattern.value;
   }
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 
-  static final _fields = Fields<Alias>();
+  // static Fields<Alias> get fields {
+  //   if (_fields.isEmpty) {
+  //     final tmp = Alias.fromJson({});
+  //     _fields.setDefinitions([
+  //       tmp.fieldId,
+  //       tmp.fieldPattern,
+  //       tmp.fieldFlags,
+  //       tmp.fieldPayeeId,
+  //     ]);
+  //   }
+  //   return _fields;
+  // }
 
-  static Fields<Alias> get fields {
-    if (_fields.isEmpty) {
-      final tmp = Alias.fromJson({});
-      _fields.setDefinitions([
-        tmp.id,
-        tmp.pattern,
-        tmp.flags,
-        tmp.payeeId,
-      ]);
-    }
-    return _fields;
-  }
+  static final _fieldsForColumns = Fields<Alias>();
 
   static Fields<Alias> get fieldsForColumnView {
-    final tmp = Alias.fromJson({});
-    _fields.setDefinitions([
-      tmp.pattern,
-      tmp.flags,
-      tmp.payeeId,
-    ]);
+    if (_fieldsForColumns.isEmpty) {
+      // used for the first time
+      final tmp = Alias.fromJson({});
+      _fieldsForColumns.setDefinitions([
+        tmp.fieldPattern,
+        tmp.fieldFlags,
+        tmp.fieldPayeeId,
+      ]);
+    }
 
-    return _fields;
-  }
-
-  static dynamic getFields() {
-    return fields;
+    // return the cached singleton
+    return _fieldsForColumns;
   }
 
   bool isMatch(final String text) {
     if (type == AliasType.regex) {
       // just in time creation of RegEx property
-      regex ??= RegExp(pattern.value);
+      regex ??= RegExp(fieldPattern.value);
       final Match? matched = regex?.firstMatch(text);
       if (matched != null) {
         return true;
       }
     } else {
-      if (stringCompareIgnoreCasing2(pattern.value, text) == 0) {
+      if (stringCompareIgnoreCasing2(fieldPattern.value, text) == 0) {
         return true;
       }
     }
@@ -148,6 +150,6 @@ class Alias extends MoneyObject {
   }
 
   AliasType get type {
-    return flags.value == 0 ? AliasType.none : AliasType.regex;
+    return fieldFlags.value == 0 ? AliasType.none : AliasType.regex;
   }
 }

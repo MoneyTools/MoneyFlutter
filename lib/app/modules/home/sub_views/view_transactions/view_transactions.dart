@@ -45,7 +45,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         buildJumpToButton(
           [
             // Account
-            InternalViewSwitching.toAccounts(accountId: transaction?.accountId.value ?? -1),
+            InternalViewSwitching.toAccounts(accountId: transaction?.fieldAccountId.value ?? -1),
 
             // Category
             InternalViewSwitching(
@@ -57,7 +57,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                   // Preselect the Category of this Transactio
                   PreferenceController.to.jumpToView(
                     viewId: ViewId.viewCategories,
-                    selectedId: transaction.categoryId.value,
+                    selectedId: transaction.fieldCategoryId.value,
                     columnFilter: [],
                     textFilter: '',
                   );
@@ -75,7 +75,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                   // Preselect the Payee of this Transaction
                   PreferenceController.to.jumpToView(
                     viewId: ViewId.viewPayees,
-                    selectedId: transaction.payee.value,
+                    selectedId: transaction.fieldPayee.value,
                     columnFilter: [],
                     textFilter: '',
                   );
@@ -137,7 +137,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       transaction;
 
       if (timePeriod.isBetweenEqual(transaction.dateTime.value)) {
-        final num value = transaction.amount.value.toDouble();
+        final num value = transaction.fieldAmount.value.toDouble();
 
         final DateTime date = transaction.dateTime.value!;
         // Format the date as year-month string (e.g., '2023-11')
@@ -186,7 +186,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                 .splits
                 .iterableList()
                 .where(
-                  (final MoneySplit s) => s.transactionId.value == transaction.id.value,
+                  (final MoneySplit s) => s.fieldTransactionId.value == transaction.fieldId.value,
                 )
                 .toList();
           },
@@ -233,7 +233,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       double runningNativeBalance = 0.0;
 
       for (Transaction transaction in list) {
-        runningNativeBalance += transaction.amount.value.toDouble();
+        runningNativeBalance += transaction.fieldAmount.value.toDouble();
         transaction.balance = runningNativeBalance;
       }
 
@@ -261,7 +261,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               .transactions
               .iterableList()
               .where(
-                (final Transaction element) => element.amount.value.toDouble() > 0,
+                (final Transaction element) => element.fieldAmount.value.toDouble() > 0,
               )
               .length,
         ),
@@ -277,7 +277,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               .transactions
               .iterableList()
               .where(
-                (final Transaction element) => element.amount.value.toDouble() < 0,
+                (final Transaction element) => element.fieldAmount.value.toDouble() < 0,
               )
               .length,
         ),
@@ -300,12 +300,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
     // Expenses
     if (_selectedPivot[1]) {
-      return transaction.amount.value.toDouble() < 0;
+      return transaction.fieldAmount.value.toDouble() < 0;
     }
 
     // Incomes
     if (_selectedPivot[0]) {
-      return transaction.amount.value.toDouble() > 0;
+      return transaction.fieldAmount.value.toDouble() > 0;
     }
     return false;
   }

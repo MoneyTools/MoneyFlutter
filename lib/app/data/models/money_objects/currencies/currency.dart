@@ -23,12 +23,12 @@ class Currency extends MoneyObject {
     required final String cultureCode, // 4
     required final double lastRatio, // 5
   }) {
-    this.id.value = id;
-    this.name.value = name;
-    this.symbol.value = symbol;
-    this.ratio.value = ratio;
-    this.cultureCode.value = cultureCode;
-    this.lastRatio.value = lastRatio;
+    this.fieldId.value = id;
+    this.fieldName.value = name;
+    this.fieldSymbol.value = symbol;
+    this.fieldRatio.value = ratio;
+    this.fieldCultureCode.value = cultureCode;
+    this.fieldLastRatio.value = lastRatio;
   }
 
   /// Constructor from a SQLite row
@@ -51,63 +51,63 @@ class Currency extends MoneyObject {
 
   /// 5
   /// 5    CultureCode  nvarchar(80)  0                 0
-  FieldString cultureCode = FieldString(
+  FieldString fieldCultureCode = FieldString(
     name: 'Culture Code',
     serializeName: 'CultureCode',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldCultureCode.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldCultureCode.value,
   );
 
   // 0
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
   // 4
-  FieldDouble lastRatio = FieldDouble(
+  FieldDouble fieldLastRatio = FieldDouble(
     name: 'LastRatio',
     serializeName: 'LastRatio',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldLastRatio.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldLastRatio.value,
   );
 
   /// 2
   /// 2    name       nchar(20)     1                 0
-  FieldString name = FieldString(
+  FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).name.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).name.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldName.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldName.value,
   );
 
   /// 3
   /// 3    Ratio        money         0                 0
-  FieldDouble ratio = FieldDouble(
+  FieldDouble fieldRatio = FieldDouble(
     name: 'Ratio',
     serializeName: 'Ratio',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).ratio.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).ratio.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
   );
 
   /// 1
   /// 1    Symbol       nchar(20)     1                 0
-  FieldString symbol = FieldString(
+  FieldString fieldSymbol = FieldString(
     name: 'Symbol',
     serializeName: 'Symbol',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).symbol.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).symbol.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
   );
 
   @override
   String getRepresentation() {
-    return name.value;
+    return fieldName.value;
   }
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 
   static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
     String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);

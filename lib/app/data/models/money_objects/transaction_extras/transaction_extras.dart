@@ -32,7 +32,7 @@ class TransactionExtras extends MoneyObjects<TransactionExtra> {
   }
 
   void add(final TransactionExtra transaction) {
-    transaction.id.value = iterableList().length;
+    transaction.fieldId.value = iterableList().length;
     appendMoneyObject(transaction);
   }
 }

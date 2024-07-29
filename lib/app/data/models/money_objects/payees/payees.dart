@@ -18,8 +18,8 @@ class Payees extends MoneyObjects<Payee> {
       final String name = row['Name'].toString();
       appendMoneyObject(
         Payee()
-          ..id.value = id
-          ..name.value = name,
+          ..fieldId.value = id
+          ..fieldName.value = name,
       );
     }
   }
@@ -27,18 +27,18 @@ class Payees extends MoneyObjects<Payee> {
   @override
   void onAllDataLoaded() {
     for (final Payee payee in iterableList()) {
-      payee.count.value = 0;
-      payee.sum.value.setAmount(0);
+      payee.fieldCount.value = 0;
+      payee.fieldSum.value.setAmount(0);
     }
 
     for (Transaction t in Data().transactions.iterableList()) {
-      final Payee? item = get(t.payee.value);
+      final Payee? item = get(t.fieldPayee.value);
       if (item != null) {
-        item.count.value++;
-        item.sum.value += t.amount.value;
-        final categoryName = Data().categories.getNameFromId(t.categoryId.value).trim();
+        item.fieldCount.value++;
+        item.fieldSum.value += t.fieldAmount.value;
+        final categoryName = Data().categories.getNameFromId(t.fieldCategoryId.value).trim();
         if (categoryName.isNotEmpty) {
-          item.categories.add(Data().categories.getNameFromId(t.categoryId.value));
+          item.categories.add(Data().categories.getNameFromId(t.fieldCategoryId.value));
         }
       }
     }
@@ -60,8 +60,8 @@ class Payees extends MoneyObjects<Payee> {
     // if not found add new payee
     if (payee == null) {
       payee = Payee();
-      payee.id.value = -1;
-      payee.name.value = name;
+      payee.fieldId.value = -1;
+      payee.fieldName.value = name;
       Data().payees.appendNewMoneyObject(payee, fireNotification: fireNotification);
     }
     return payee;
@@ -71,12 +71,12 @@ class Payees extends MoneyObjects<Payee> {
     if (name.isEmpty) {
       return null;
     }
-    return iterableList().firstWhereOrNull((final Payee payee) => payee.name.value == name);
+    return iterableList().firstWhereOrNull((final Payee payee) => payee.fieldName.value == name);
   }
 
   List<Payee> getListSorted() {
     final list = iterableList().toList();
-    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
+    list.sort((a, b) => sortByString(a.fieldName.value, b.fieldName.value, true));
     return list;
   }
 
@@ -85,7 +85,7 @@ class Payees extends MoneyObjects<Payee> {
     if (payee == null) {
       return '<no name> $id';
     }
-    return payee.name.value;
+    return payee.fieldName.value;
   }
 
   /// if not found returns -1
@@ -102,7 +102,7 @@ class Payees extends MoneyObjects<Payee> {
       final Payee? payeeToCheck = Data().payees.get(payeeId);
       if (payeeToCheck != null) {
         if (Data().transactions.iterableList().firstWhereOrNull(
-                  (element) => element.payee.value == payeeToCheck.uniqueId,
+                  (element) => element.fieldPayee.value == payeeToCheck.uniqueId,
                 ) ==
             null) {
           // No transactions for this payee, we can delete it

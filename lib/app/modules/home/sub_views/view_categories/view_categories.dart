@@ -165,7 +165,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
         .iterableList(includeDeleted: includeDeleted)
         .where(
           (final Category instance) =>
-              (filterType.isEmpty || filterType.contains(instance.type.value)) &&
+              (filterType.isEmpty || filterType.contains(instance.fieldType.value)) &&
               (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
@@ -295,8 +295,8 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
     double total = 0.0;
     getList().forEach((final Category category) {
-      if (types.isEmpty || (category).type.value == types.first) {
-        total += category.sum.value.toDouble();
+      if (types.isEmpty || (category).fieldType.value == types.first) {
+        total += category.fieldSum.value.toDouble();
       }
     });
     return total;

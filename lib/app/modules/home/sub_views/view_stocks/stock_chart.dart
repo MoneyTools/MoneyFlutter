@@ -451,13 +451,13 @@ class PaintSplits extends CustomPainter {
 
     for (final split in splits) {
       double left = 0;
-      if (split.date.value!.millisecondsSinceEpoch > minX) {
-        left = ((split.date.value!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+      if (split.fieldDate.value!.millisecondsSinceEpoch > minX) {
+        left = ((split.fieldDate.value!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
       _paintLine(canvas, Colors.grey, left, chartHeight - 5, 45);
       _paintLabel(
         canvas,
-        '${split.numerator.value} for ${split.denominator.value}',
+        '${split.fieldNumerator.value} for ${split.fieldDenominator.value}',
         Colors.blue,
         left + 2,
         chartHeight + 30,

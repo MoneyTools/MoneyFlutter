@@ -35,13 +35,13 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
   int _getAccountIdForInvestment(final int investmentTransactionId) {
     final Transaction? transactionFound = Data().transactions.get(investmentTransactionId);
     if (transactionFound != null) {
-      return transactionFound.accountId.value;
+      return transactionFound.fieldAccountId.value;
     }
     return -1;
   }
 
   bool _isSameSecurityFromTheSameAccount(final Investment investment, final int securityId, int accountId) {
-    if (investment.security.value != securityId) {
+    if (investment.fieldSecurity.value != securityId) {
       return false;
     }
     if (_getAccountIdForInvestment(investment.uniqueId) != accountId) {
@@ -65,7 +65,7 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
         .where(
           (i) => _isSameSecurityFromTheSameAccount(
             i,
-            instance.security.value,
+            instance.fieldSecurity.value,
             _getAccountIdForInvestment(instance.uniqueId),
           ),
         )

@@ -28,11 +28,11 @@ class Currencies extends MoneyObjects<Currency> {
     if (currency == null) {
       return 'US';
     }
-    return currency.cultureCode.value;
+    return currency.fieldCultureCode.value;
   }
 
   Currency? getCurrencyFromSymbol(final String symbolToMatch) {
-    return iterableList().firstWhereOrNull((currency) => currency.symbol.value == symbolToMatch);
+    return iterableList().firstWhereOrNull((currency) => currency.fieldSymbol.value == symbolToMatch);
   }
 
   double getRatioFromSymbol(final String symbol) {
@@ -40,6 +40,6 @@ class Currencies extends MoneyObjects<Currency> {
     if (currency == null) {
       return 1;
     }
-    return currency.ratio.value;
+    return currency.fieldRatio.value;
   }
 }
