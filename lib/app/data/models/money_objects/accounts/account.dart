@@ -401,6 +401,7 @@ class Account extends MoneyObject {
       final tmp = Account.fromJson({});
       _fields.setDefinitions([
         tmp.name,
+        tmp.accountId,
         tmp.description,
         tmp.type,
         tmp.updatedOn,
