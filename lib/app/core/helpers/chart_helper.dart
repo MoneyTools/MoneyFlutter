@@ -2,12 +2,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 /// dataPoints will be sorted by date ascending
-LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints) {
+LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints, {bool showDots = false}) {
   dataPoints.sort((a, b) => a.x.compareTo(b.x));
 
   Color color = Colors.grey;
-
-  if (dataPoints.length >= 2) {
+  if (dataPoints.last.y.isNegative) {
+    color = Colors.orange;
+  } else if (dataPoints.length >= 2) {
     color = dataPoints.last.y >= dataPoints.first.y ? Colors.green : Colors.red;
   }
 
@@ -28,6 +29,6 @@ LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints) {
       ),
     ),
 
-    dotData: const FlDotData(show: false), // Hide dots at endpoints
+    dotData: FlDotData(show: showDots), // Hide dots at endpoints
   );
 }

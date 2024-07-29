@@ -6,17 +6,29 @@ extension ViewInvestmentsDetailsPanels on ViewInvestmentsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final List<PairXY> list = <PairXY>[];
-    for (final Investment entry in getList()) {
-      list.add(
-        PairXY(entry.security.value.toString(), entry.originalCostBasis),
+    double balance = 0.00;
+
+    var investments = getList();
+    investments.sort((a, b) => sortByDate(a.date, b.date, true));
+
+    List<FlSpot> dataPoints = [];
+    if (investments.isEmpty) {
+      return const CenterMessage(message: 'No data');
+    }
+
+    for (final Investment investment in investments) {
+      balance += investment.activityAmount;
+      dataPoints.add(
+        FlSpot(
+          investment.date.millisecondsSinceEpoch.toDouble(),
+          balance,
+        ),
       );
     }
 
-    return Chart(
-      list: list,
-      variableNameHorizontal: 'Stock',
-      variableNameVertical: 'value',
+    return MyLineChart(
+      dataPoints: dataPoints,
+      showDots: true,
     );
   }
 

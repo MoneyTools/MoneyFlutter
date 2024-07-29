@@ -74,11 +74,6 @@ class Investment extends MoneyObject {
     );
   }
 
-  FieldMoney activityAmount = FieldMoney(
-    name: 'ActivityAmount',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._activityAmount,
-  );
-
   FieldMoney activityDividend = FieldMoney(
     name: 'ActivityDividend',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._activityDividend,
@@ -100,13 +95,12 @@ class Investment extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fees.value.toDouble(),
   );
 
-  FieldQuantity holdingShares = FieldQuantity(
-    name: 'Holding',
-    footer: FooterType.average,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).holdingShares.value,
+  FieldMoney fieldActivityAmount = FieldMoney(
+    name: 'ActivityAmount',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).activityAmount,
   );
 
-  FieldMoney holdingSharesValue = FieldMoney(
+  FieldMoney fieldHoldingSharesValue = FieldMoney(
     name: 'HoldingValue',
     footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) {
@@ -114,6 +108,22 @@ class Investment extends MoneyObject {
         amount: (instance as Investment).holdingShares.value * instance._unitPriceAdjusted,
       );
     },
+  );
+
+  FieldMoney fieldNetValueOfEvent = FieldMoney(
+    name: 'NetValue',
+    footer: FooterType.average,
+    getValueForDisplay: (final MoneyObject instance) {
+      return MoneyModel(
+        amount: (instance as Investment).transactionNetValue,
+      );
+    },
+  );
+
+  FieldQuantity holdingShares = FieldQuantity(
+    name: 'Holding',
+    footer: FooterType.average,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).holdingShares.value,
   );
 
   /// Id
@@ -174,8 +184,7 @@ class Investment extends MoneyObject {
   FieldString securitySymbol = FieldString(
     name: 'Symbol',
     columnWidth: ColumnWidth.tiny,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().securities.getSymbolFromId((instance as Investment).security.value),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).symbol,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).securitySymbol.value,
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Investment).stashValueBeforeEditing();
@@ -297,7 +306,7 @@ class Investment extends MoneyObject {
 
   @override
   String toString() {
-    return '$uniqueId $date ${investmentType.getValueForDisplay(this)} ${securitySymbol.getValueForDisplay(this)} $effectiveUnits ${unitPrice.value} ${holdingShares.value} $_activityAmount';
+    return '$uniqueId $date ${investmentType.getValueForDisplay(this)} ${securitySymbol.getValueForDisplay(this)} $effectiveUnits ${unitPrice.value} ${holdingShares.value} $activityAmount';
   }
 
   @override
@@ -309,6 +318,15 @@ class Investment extends MoneyObject {
   static final Fields<Investment> _fields = Fields<Investment>();
 
   InvestmentType get actionType => getInvestmentTypeFromValue(this.investmentType.value);
+
+  double get activityAmount {
+    // if (investmentType.value != InvestmentType.dividend.index &&
+    //     investmentType.value != InvestmentType.add.index &&
+    //     investmentType.value != InvestmentType.remove.index) {
+    return transactionInstance?.amount.value.toDouble() ?? 0.00;
+    // }
+    // return 0.00;
+  }
 
   void applySplits(List<StockSplit> splits) {
     _splitRatio = 1;
@@ -361,8 +379,8 @@ class Investment extends MoneyObject {
         tmp.tradeType,
         tmp.taxExempt,
         tmp.withholding,
-        tmp.activityAmount,
-        tmp.holdingSharesValue,
+        tmp.fieldActivityAmount,
+        tmp.fieldHoldingSharesValue,
       ]);
     }
 
@@ -387,8 +405,9 @@ class Investment extends MoneyObject {
         tmp.commission,
         tmp.fees,
         tmp.load,
-        tmp.activityAmount,
-        tmp.holdingSharesValue,
+        tmp.fieldActivityAmount,
+        tmp.fieldHoldingSharesValue,
+        tmp.fieldNetValueOfEvent,
       ]);
   }
 
@@ -443,6 +462,10 @@ class Investment extends MoneyObject {
     return result;
   }
 
+  String get symbol => Data().securities.getSymbolFromId(security.value);
+
+  double get transactionHoldingValue => this.holdingShares.value * this._unitPriceAdjusted;
+
   /// The actual transaction date.
   Transaction? get transactionInstance {
     _transactionInstance ??= Data().transactions.get(this.uniqueId);
@@ -454,12 +477,7 @@ class Investment extends MoneyObject {
     _transactionInstance = value;
   }
 
-  double get _activityAmount {
-    // if (investmentType.value != InvestmentType.dividend.index) {
-    return transactionInstance?.amount.value.toDouble() ?? 0.00;
-    // }
-    // return 0.00;
-  }
+  double get transactionNetValue => transactionHoldingValue + this.activityAmount;
 
   double get _activityDividend {
     if (investmentType.value == InvestmentType.dividend.index) {
