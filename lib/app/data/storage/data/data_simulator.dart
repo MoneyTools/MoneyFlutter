@@ -32,33 +32,6 @@ class DataSimulator {
     _generateTransactions();
   }
 
-  void transactionForDemoData(final DateTime date, final Account account) {
-    int categoryId = Random().nextInt(10);
-
-    int payeeId = Random().nextInt(10);
-
-    if (payeeId == 0 || payeeId == 1) {
-      // The first tow payees are "Food related" so assign the "Food" category
-      categoryId = Data().categories.getByName('Food')!.uniqueId;
-    }
-
-    // generate an amount
-    // Expenses should be a negative value;
-    final double amount = _getRandomAmount() * (Data().categories.isCategoryAnExpense(categoryId) ? -1 : 1);
-
-    final MyJson demoJson = <String, dynamic>{
-      'Id': -1,
-      'Account': account.id.value,
-      'Date': date,
-      'Payee': payeeId,
-      'Category': categoryId,
-      'Amount': amount,
-    };
-
-    final Transaction t = Transaction.fromJSon(demoJson, 0);
-    Data().transactions.appendNewMoneyObject(t, fireNotification: false);
-  }
-
   void _addInvestment(
     final Account account,
     final dateAsString,
@@ -466,7 +439,7 @@ class DataSimulator {
       final numberOfDatesNeeded = _getQuantityOfTransactionBasedOnAccountType(account.type.value);
       final dates = _generateRandomDates(numberOfDatesNeeded);
       for (final date in dates) {
-        transactionForDemoData(date, account);
+        _transactionForDemoData(date, account);
       }
     }
   }
@@ -500,9 +473,39 @@ class DataSimulator {
     }
   }
 
-  double _getRandomAmount() {
-    final bool isExpense = (Random().nextInt(5) < 4); // Generate more expense transaction than income once
-    final double amount = Random().nextDouble() * (isExpense ? -500 : 2500);
+  double _getRandomAmount(final int maxValue) {
+    final double amount = Random().nextDouble() * maxValue;
     return roundDouble(amount, 2);
+  }
+
+  void _transactionForDemoData(final DateTime date, final Account account) {
+    int categoryId = Random().nextInt(10);
+
+    int payeeId = Random().nextInt(10);
+
+    if (payeeId == 0 || payeeId == 1) {
+      // The first tow payees are "Food related" so assign the "Food" category
+      categoryId = Data().categories.getByName('Food')!.uniqueId;
+    }
+
+    // generate an amount
+    // Expenses should be a negative value and smaller range than Revenue;
+    int maxValue = 2500;
+    if (Data().categories.isCategoryAnExpense(categoryId)) {
+      maxValue = -500;
+    }
+    final double amount = _getRandomAmount(maxValue);
+
+    final MyJson demoJson = <String, dynamic>{
+      'Id': -1,
+      'Account': account.id.value,
+      'Date': date,
+      'Payee': payeeId,
+      'Category': categoryId,
+      'Amount': amount,
+    };
+
+    final Transaction t = Transaction.fromJSon(demoJson, 0);
+    Data().transactions.appendNewMoneyObject(t, fireNotification: false);
   }
 }
