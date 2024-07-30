@@ -28,17 +28,17 @@ class RecurringPayment {
 
     for (final transaction in transactions) {
       total += transaction.fieldAmount.value.toDouble();
-      dateRangeFound.inflate(transaction.dateTime.value);
+      dateRangeFound.inflate(transaction.fieldDateTime.value);
 
       /// Cumulate by [PayeeId].[month].[Sum]
       payeeIdMonthAndSums.cumulate(
         payeeId,
-        transaction.dateTime.value!.month,
+        transaction.fieldDateTime.value!.month,
         transaction.fieldAmount.value.toDouble(),
       );
 
       /// Rolling average per Month
-      int transactionMonth = transaction.dateTime.value!.month - 1;
+      int transactionMonth = transaction.fieldDateTime.value!.month - 1;
       final Pair<int, double> pair = averagePerMonths[transactionMonth];
       if (pair.first == 0) {
         // first time

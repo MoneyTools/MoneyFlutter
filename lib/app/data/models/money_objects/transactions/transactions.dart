@@ -77,9 +77,9 @@ class Transactions extends MoneyObjects<Transaction> {
       }
 
       // Computer date range of all transactions
-      dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value);
+      dateRangeIncludingClosedAccount.inflate(transactionSource.fieldDateTime.value);
       if (transactionSource.fieldAccountInstance?.isOpen == true) {
-        dateRangeActiveAccount.inflate(transactionSource.dateTime.value!);
+        dateRangeActiveAccount.inflate(transactionSource.fieldDateTime.value!);
       }
 
       // Resolve the Transfers
@@ -182,7 +182,7 @@ class Transactions extends MoneyObjects<Transaction> {
     return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
       if ((accountId == -1 || transaction.fieldAccountId.value == accountId) &&
           transaction.fieldAmount.value.toDouble() == amount &&
-          dateRange.isBetweenEqual(transaction.dateTime.value)) {
+          dateRange.isBetweenEqual(transaction.fieldDateTime.value)) {
         return true;
       }
 
@@ -224,7 +224,7 @@ class Transactions extends MoneyObjects<Transaction> {
     for (final t in transactions) {
       if (t.isSplit) {
         for (final s in t.splits) {
-          final fakeTransaction = Transaction(date: t.dateTime.value, status: t.fieldStatus.value);
+          final fakeTransaction = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value);
           fakeTransaction.fieldCategoryId.value = s.fieldCategoryId.value;
           fakeTransaction.fieldAmount.value = s.fieldAmount.value;
           flatList.add(fakeTransaction);
@@ -239,7 +239,7 @@ class Transactions extends MoneyObjects<Transaction> {
   List<Transaction> getAllTransactionsByDate() {
     final List<Transaction> theListOfAllTransactionIncludingHiddenOne = iterableList().toList(growable: false);
     theListOfAllTransactionIncludingHiddenOne.sort(
-      (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value, true),
+      (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true),
     );
     return theListOfAllTransactionIncludingHiddenOne;
   }
@@ -252,7 +252,7 @@ class Transactions extends MoneyObjects<Transaction> {
       if (whereClause == null || whereClause(t)) {
         if (t.fieldCategoryId.value == Data().categories.splitCategoryId()) {
           for (final s in t.splits) {
-            final fakeT = Transaction(date: t.dateTime.value, status: t.fieldStatus.value)
+            final fakeT = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value)
               ..fieldAccountId.value = t.fieldAccountId.value
               ..fieldPayee.value = s.fieldPayeeId.value == -1 ? t.fieldPayee.value : s.fieldPayeeId.value
               ..fieldCategoryId.value = s.fieldCategoryId.value
@@ -284,7 +284,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     return iterableList(includeDeleted: true).where(
       (element) =>
-          isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
+          isBetweenOrEqual(element.fieldDateTime.value!.year, minYear, maxYear) &&
           ((incomesOrExpenses == null ||
               (incomesOrExpenses == true && element.fieldAmount.value.toDouble() > 0) ||
               (incomesOrExpenses == false && element.fieldAmount.value.toDouble() < 0))),
@@ -296,7 +296,7 @@ class Transactions extends MoneyObjects<Transaction> {
   ) {
     List<Pair<int, double>> timeAndAmounts = [];
     for (final t in transactions) {
-      int oneDaySlot = t.dateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
+      int oneDaySlot = t.fieldDateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
       timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.fieldAmount.value.toDouble()));
     }
     // sort by date time

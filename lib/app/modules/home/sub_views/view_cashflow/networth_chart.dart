@@ -29,7 +29,7 @@ class NetWorthChartState extends State<NetWorthChart> {
     final transactions = Data().transactions.iterableList(includeDeleted: true);
 
     for (final t in transactions) {
-      String dateKey = '${t.dateTime.value!.year},${t.dateTime.value!.month.toString().padLeft(2, '0')}';
+      String dateKey = '${t.fieldDateTime.value!.year},${t.fieldDateTime.value!.month.toString().padLeft(2, '0')}';
       cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
     }
 

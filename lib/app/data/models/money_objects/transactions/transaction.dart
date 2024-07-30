@@ -38,7 +38,7 @@ class Transaction extends MoneyObject {
   }) {
     // assert(date != null);
     this.fieldAccountId.value = accountId;
-    this.dateTime.value = date;
+    this.fieldDateTime.value = date;
     this.fieldStatus.value = status;
     this.fieldFlags.value = TransactionFlags.none.index;
   }
@@ -88,97 +88,8 @@ class Transaction extends MoneyObject {
     return t;
   }
 
-  //------------------------------------------------------------------------
-  // Not serialized
-  // derived property used for display
-
-  /// Amount Normalized to USD
-  FieldMoney amountAsTextNormalized = FieldMoney(
-    name: columnIdAmountNormalized,
-    columnWidth: ColumnWidth.small,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-      amount: (instance as Transaction).getNormalizedAmount(instance.fieldAmount.value.toDouble()),
-      iso4217: Constants.defaultCurrency,
-    ),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).fieldAmount.value.toDouble(),
-      (b as Transaction).fieldAmount.value.toDouble(),
-      ascending,
-    ),
-  );
-
   /// Balance native
   double balance = 0;
-
-  /// Balance native
-  FieldMoney balanceNative = FieldMoney(
-    name: columnIdBalance,
-    columnWidth: ColumnWidth.small,
-    footer: FooterType.none,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-      amount: (instance as Transaction).balance,
-      iso4217: instance.getCurrency(),
-    ),
-  );
-
-  /// Balance Normalized to USD
-  FieldMoney balanceNormalized = FieldMoney(
-    name: 'Balance(USD)',
-    columnWidth: ColumnWidth.small,
-    footer: FooterType.none,
-    useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-      amount: (instance as Transaction).getNormalizedAmount((instance).balance),
-      iso4217: Constants.defaultCurrency,
-    ),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).balance,
-      (b as Transaction).balance,
-      ascending,
-    ),
-  );
-
-  FieldString currency = FieldString(
-    type: FieldType.widget,
-    name: 'Currency',
-    align: TextAlign.center,
-    columnWidth: ColumnWidth.tiny,
-    footer: FooterType.count,
-    getValueForReading: (final MoneyObject instance) => (instance as Transaction).getCurrency(),
-    getValueForDisplay: (final MoneyObject instance) {
-      return Currency.buildCurrencyWidget(
-        (instance as Transaction).getCurrency(),
-      );
-    },
-  );
-
-  /// Date
-  /// SQLite 2|Date|datetime|1||0
-  FieldDate dateTime = FieldDate(
-    name: 'Date',
-    serializeName: 'Date',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).dateTime.value,
-    getValueForSerialization: (final MoneyObject instance) => dateToSqliteFormat(
-      (instance as Transaction).dateTime.value,
-    ),
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
-      return PickerEditBoxDate(
-        initialValue: (instance as Transaction).dateTimeAsText,
-        onChanged: (String? newDateSelected) {
-          if (newDateSelected != null) {
-            instance.dateTime.value = attemptToGetDateFromText(newDateSelected);
-            onEdited(true);
-          }
-        },
-      );
-    },
-    setValue: (MoneyObject instance, dynamic newValue) =>
-        (instance as Transaction).dateTime.value = attemptToGetDateFromText(newValue),
-    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
-        sortByDateTime(a as Transaction, b as Transaction, ascending),
-  );
 
   /// Account Id
   /// SQLite  1|Account|INT|1||0
@@ -210,6 +121,55 @@ class Transaction extends MoneyObject {
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
       (a as Transaction).fieldAmount.value.toDouble(),
       (b as Transaction).fieldAmount.value.toDouble(),
+      ascending,
+    ),
+  );
+
+  //------------------------------------------------------------------------
+  // Not serialized
+  // derived property used for display
+
+  /// Amount Normalized to USD
+  FieldMoney fieldAmountAsTextNormalized = FieldMoney(
+    name: columnIdAmountNormalized,
+    columnWidth: ColumnWidth.small,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).getNormalizedAmount(instance.fieldAmount.value.toDouble()),
+      iso4217: Constants.defaultCurrency,
+    ),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).fieldAmount.value.toDouble(),
+      (b as Transaction).fieldAmount.value.toDouble(),
+      ascending,
+    ),
+  );
+
+  /// Balance native
+  FieldMoney fieldBalanceNative = FieldMoney(
+    name: columnIdBalance,
+    columnWidth: ColumnWidth.small,
+    footer: FooterType.none,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).balance,
+      iso4217: instance.getCurrency(),
+    ),
+  );
+
+  /// Balance Normalized to USD
+  FieldMoney fieldBalanceNormalized = FieldMoney(
+    name: 'Balance(USD)',
+    columnWidth: ColumnWidth.small,
+    footer: FooterType.none,
+    useAsDetailPanels: defaultCallbackValueFalse,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(
+      amount: (instance as Transaction).getNormalizedAmount((instance).balance),
+      iso4217: Constants.defaultCurrency,
+    ),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Transaction).balance,
+      (b as Transaction).balance,
       ascending,
     ),
   );
@@ -284,6 +244,46 @@ class Transaction extends MoneyObject {
     },
   );
 
+  FieldString fieldCurrency = FieldString(
+    type: FieldType.widget,
+    name: 'Currency',
+    align: TextAlign.center,
+    columnWidth: ColumnWidth.tiny,
+    footer: FooterType.count,
+    getValueForReading: (final MoneyObject instance) => (instance as Transaction).getCurrency(),
+    getValueForDisplay: (final MoneyObject instance) {
+      return Currency.buildCurrencyWidget(
+        (instance as Transaction).getCurrency(),
+      );
+    },
+  );
+
+  /// Date
+  /// SQLite 2|Date|datetime|1||0
+  FieldDate fieldDateTime = FieldDate(
+    name: 'Date',
+    serializeName: 'Date',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldDateTime.value,
+    getValueForSerialization: (final MoneyObject instance) => dateToSqliteFormat(
+      (instance as Transaction).fieldDateTime.value,
+    ),
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      return PickerEditBoxDate(
+        initialValue: (instance as Transaction).dateTimeAsText,
+        onChanged: (String? newDateSelected) {
+          if (newDateSelected != null) {
+            instance.fieldDateTime.value = attemptToGetDateFromText(newDateSelected);
+            onEdited(true);
+          }
+        },
+      );
+    },
+    setValue: (MoneyObject instance, dynamic newValue) =>
+        (instance as Transaction).fieldDateTime.value = attemptToGetDateFromText(newValue),
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByDateTime(a as Transaction, b as Transaction, ascending),
+  );
+
   /// FITID
   /// 12|FITID|nchar(40)|0||0
   FieldString fieldFitid = FieldString(
@@ -348,6 +348,17 @@ class Transaction extends MoneyObject {
     serializeName: 'OriginalPayee',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldOriginalPayee.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldOriginalPayee.value,
+  );
+
+  FieldString fieldPaidOn = FieldString(
+    type: FieldType.text,
+    name: columnIdPaidOn,
+    align: TextAlign.right,
+    columnWidth: ColumnWidth.tiny,
+    footer: FooterType.none,
+    getValueForDisplay: (final MoneyObject instance) {
+      return (instance as Transaction).fieldPaidOn.value;
+    },
   );
 
   /// Payee Id (displayed as Text name of the Payee)
@@ -508,17 +519,6 @@ class Transaction extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldTransferSplit.value,
   );
 
-  FieldString paidOn = FieldString(
-    type: FieldType.text,
-    name: columnIdPaidOn,
-    align: TextAlign.right,
-    columnWidth: ColumnWidth.tiny,
-    footer: FooterType.none,
-    getValueForDisplay: (final MoneyObject instance) {
-      return (instance as Transaction).paidOn.value;
-    },
-  );
-
   int possibleMatchingCategoryId = -1;
   List<MoneySplit> splits = [];
 
@@ -646,7 +646,7 @@ class Transaction extends MoneyObject {
 
   ///------------------------------------------------------
   /// Non persisted fields
-  String get dateTimeAsText => dateToString(dateTime.value);
+  String get dateTimeAsText => dateToString(fieldDateTime.value);
 
   static Fields<Transaction> get fields {
     if (_fields.isEmpty) {
@@ -654,7 +654,7 @@ class Transaction extends MoneyObject {
       _fields.setDefinitions(
         [
           tmp.fieldId,
-          tmp.dateTime,
+          tmp.fieldDateTime,
           tmp.fieldAccountId,
           tmp.fieldPayee,
           tmp.fieldOriginalPayee,
@@ -667,15 +667,15 @@ class Transaction extends MoneyObject {
           tmp.fieldStatus,
           tmp.fieldFitid,
           tmp.fieldFlags,
-          tmp.currency,
+          tmp.fieldCurrency,
           tmp.fieldSalesTax,
           tmp.fieldTransferSplit,
           tmp.fieldMergeDate,
           tmp.fieldAmount,
-          tmp.amountAsTextNormalized,
-          tmp.balanceNative,
-          tmp.balanceNormalized,
-          tmp.paidOn,
+          tmp.fieldAmountAsTextNormalized,
+          tmp.fieldBalanceNative,
+          tmp.fieldBalanceNormalized,
+          tmp.fieldPaidOn,
         ],
       );
     }
@@ -687,16 +687,16 @@ class Transaction extends MoneyObject {
     return Fields<Transaction>()
       ..setDefinitions(
         [
-          tmp.dateTime,
+          tmp.fieldDateTime,
           tmp.fieldAccountId,
           tmp.fieldPayee,
           tmp.fieldCategoryId,
           tmp.fieldNumber,
           tmp.fieldStatus,
-          tmp.currency,
+          tmp.fieldCurrency,
           tmp.fieldAmount,
-          tmp.amountAsTextNormalized,
-          tmp.balanceNormalized,
+          tmp.fieldAmountAsTextNormalized,
+          tmp.fieldBalanceNormalized,
         ],
       );
   }
@@ -911,8 +911,8 @@ class Transaction extends MoneyObject {
 
   static int sortByDateTime(final Transaction a, final Transaction b, final bool ascending) {
     int result = sortByDate(
-      a.dateTime.value,
-      b.dateTime.value!,
+      a.fieldDateTime.value,
+      b.fieldDateTime.value!,
       ascending,
     );
     // To ensure a predictable sort order, always include a tie-breaker

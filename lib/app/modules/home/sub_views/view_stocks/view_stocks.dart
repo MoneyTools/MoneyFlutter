@@ -153,7 +153,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         if (activity.effectiveUnits != 0) {
           events.add(
             HoldingActivity(
-              activity.transactionInstance!.dateTime.value!,
+              activity.transactionInstance!.fieldDateTime.value!,
               activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
               activity.effectiveUnitsAdjusted,
             ),

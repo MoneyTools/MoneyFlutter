@@ -76,7 +76,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     }
 
     // Date
-    pr.date = t.dateTime.value!;
+    pr.date = t.fieldDateTime.value!;
 
     // Reference (combination of Memo and Payee)
     pr.reference = concat(pr.reference, t.fieldMemo.value, ';', true);

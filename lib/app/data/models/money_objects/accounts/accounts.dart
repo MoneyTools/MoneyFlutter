@@ -52,7 +52,7 @@ class Accounts extends MoneyObjects<Account> {
 
     // Cumulate
     final transactionsSortedByDate =
-        Data().transactions.iterableList().sorted((a, b) => sortByDate(a.dateTime.value, b.dateTime.value));
+        Data().transactions.iterableList().sorted((a, b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value));
 
     for (final Transaction t in transactionsSortedByDate) {
       final Account? account = get(t.fieldAccountId.value);
@@ -64,7 +64,7 @@ class Accounts extends MoneyObjects<Account> {
         account.fieldCount.value++;
         account.balance += t.fieldAmount.value.toDouble();
 
-        final int yearOfTheTransaction = t.dateTime.value!.year;
+        final int yearOfTheTransaction = t.fieldDateTime.value!.year;
 
         // Min Balance of the year
         final double currentMinBalanceValue =
@@ -77,9 +77,10 @@ class Accounts extends MoneyObjects<Account> {
         account.maxBalancePerYears[yearOfTheTransaction] = max(currentMaxBalanceValue, account.balance);
 
         // keep track of the most recent record transaction for the account
-        if (t.dateTime.value != null) {
-          if (account.fieldUpdatedOn.value == null || account.fieldUpdatedOn.value!.compareTo(t.dateTime.value!) < 0) {
-            account.fieldUpdatedOn.value = t.dateTime.value;
+        if (t.fieldDateTime.value != null) {
+          if (account.fieldUpdatedOn.value == null ||
+              account.fieldUpdatedOn.value!.compareTo(t.fieldDateTime.value!) < 0) {
+            account.fieldUpdatedOn.value = t.fieldDateTime.value;
           }
         }
       }
@@ -202,7 +203,7 @@ class Accounts extends MoneyObjects<Account> {
     for (int i = indexStartingFrom; i >= 0; i--) {
       final Transaction t = transactionForAccountSortedByDateAscending[i];
 
-      if (t.dateTime.value!.isBefore(validDateInThePast)) {
+      if (t.fieldDateTime.value!.isBefore(validDateInThePast)) {
         return null; // out of range break early
       }
 
@@ -343,7 +344,7 @@ class Accounts extends MoneyObjects<Account> {
     for (final t in transactionForAccountSortedByDateAscending) {
       runningBalanceForThisAccount += t.fieldAmount.value.toDouble();
       t.balance = runningBalanceForThisAccount;
-      t.paidOn.value = '';
+      t.fieldPaidOn.value = '';
     }
 
     final int length = transactionForAccountSortedByDateAscending.length - 1;
@@ -353,7 +354,7 @@ class Accounts extends MoneyObjects<Account> {
       if (t.fieldAmount.value.toDouble() > 0) {
         // a paymenent or reibursement was made
 
-        final DateTime maxDateToLookAt = t.dateTime.value!.subtract(const Duration(days: 60));
+        final DateTime maxDateToLookAt = t.fieldDateTime.value!.subtract(const Duration(days: 60));
         final transactionWithMatchingBalance = findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
           transactionForAccountSortedByDateAscending,
           i - 1,
@@ -364,8 +365,9 @@ class Accounts extends MoneyObjects<Account> {
         if (transactionWithMatchingBalance == null) {
           // t.paidOn.value = doubleToCurrency(statementBalance, '');
         } else {
-          transactionWithMatchingBalance.paidOn.value = '${t.dateTimeAsText} ⤵';
-          t.paidOn.value = '${transactionWithMatchingBalance.dateTimeAsText} ⤴${t.paidOn.value.isNotEmpty ? '⤵' : ''}';
+          transactionWithMatchingBalance.fieldPaidOn.value = '${t.dateTimeAsText} ⤵';
+          t.fieldPaidOn.value =
+              '${transactionWithMatchingBalance.dateTimeAsText} ⤴${t.fieldPaidOn.value.isNotEmpty ? '⤵' : ''}';
         }
       }
     }

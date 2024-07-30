@@ -192,7 +192,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   /// Dates
   DateTime? geSenderTransactionDate() {
-    return source!.dateTime.value;
+    return source!.fieldDateTime.value;
   }
 
   String getMemoDestination() {
@@ -232,7 +232,7 @@ class Transfer extends MoneyObject {
 
   DateTime? getReceiverTransactionDate() {
     if (related != null) {
-      return related!.dateTime.value;
+      return related!.fieldDateTime.value;
     }
     return null;
   }

@@ -270,14 +270,14 @@ class Data {
     Transaction? relatedTransaction = Data().transactions.findExistingTransaction(
           accountId: destinationAccount.uniqueId,
           dateRange: DateRange(
-            min: transactionSource.dateTime.value!.startOfDay,
-            max: transactionSource.dateTime.value!.endOfDay,
+            min: transactionSource.fieldDateTime.value!.startOfDay,
+            max: transactionSource.fieldDateTime.value!.endOfDay,
           ),
           amount: -transactionSource.fieldAmount.value.toDouble(),
         );
     // ignore: prefer_conditional_assignment
     if (relatedTransaction == null) {
-      relatedTransaction = Transaction(date: transactionSource.dateTime.value)
+      relatedTransaction = Transaction(date: transactionSource.fieldDateTime.value)
         ..fieldAccountId.value = destinationAccount.uniqueId
         ..fieldAmount.value.setAmount(
               (transactionSource.fieldAmount.value.toDouble() * -1),
@@ -329,7 +329,7 @@ class Data {
 
     // Sort all add, remove, buy, sell transactions by date and by security.
     for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
-      if (t.dateTime.value!.millisecond < toDate.millisecond &&
+      if (t.fieldDateTime.value!.millisecond < toDate.millisecond &&
           (filter == null || filter(t.fieldAccountInstance!)) &&
           t.investmentInstance != null &&
           t.investmentInstance!.fieldInvestmentType.value != InvestmentType.none.index) {

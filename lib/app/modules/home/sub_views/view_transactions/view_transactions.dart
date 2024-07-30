@@ -136,10 +136,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     getList().forEach((final Transaction transaction) {
       transaction;
 
-      if (timePeriod.isBetweenEqual(transaction.dateTime.value)) {
+      if (timePeriod.isBetweenEqual(transaction.fieldDateTime.value)) {
         final num value = transaction.fieldAmount.value.toDouble();
 
-        final DateTime date = transaction.dateTime.value!;
+        final DateTime date = transaction.fieldDateTime.value!;
         // Format the date as year-month string (e.g., '2023-11')
         final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
 
@@ -227,7 +227,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
     if (!balanceDone) {
       list.sort(
-        (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
+        (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
       );
 
       double runningNativeBalance = 0.0;

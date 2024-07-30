@@ -80,8 +80,8 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                 if (selectedInfotransaction != null) {
                   // Look for transaction matching -1 to +1 date from this transaction
                   final DateRange approximationDates = DateRange(
-                    min: selectedInfotransaction.dateTime.value!.add(const Duration(days: -1)).startOfDay,
-                    max: selectedInfotransaction.dateTime.value!.add(const Duration(days: 1)).endOfDay,
+                    min: selectedInfotransaction.fieldDateTime.value!.add(const Duration(days: -1)).startOfDay,
+                    max: selectedInfotransaction.fieldDateTime.value!.add(const Duration(days: 1)).endOfDay,
                   );
                   // we are looking for the reverse transaction
                   final double amountToFind = selectedInfotransaction.fieldAmount.value.toDouble() * -1;

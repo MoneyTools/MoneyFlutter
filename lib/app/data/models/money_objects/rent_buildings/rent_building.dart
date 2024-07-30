@@ -402,12 +402,12 @@ class RentBuilding extends MoneyObject {
     int transactionCategoryId = t.fieldCategoryId.value;
 
     if (this.isTransactionOrSplitAssociatedWithThisRental(t)) {
-      int year = t.dateTime.value!.year;
+      int year = t.fieldDateTime.value!.year;
 
       RentalPnL? pnl = pnlOverYears[year];
       if (pnl == null) {
         pnl = RentalPnL(
-          date: t.dateTime.value!,
+          date: t.fieldDateTime.value!,
           currency: getCurrencyOfAssociatedAccount(),
         );
 

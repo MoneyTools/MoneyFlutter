@@ -337,7 +337,7 @@ class Investment extends MoneyObject {
     }
   }
 
-  DateTime get date => this.transactionInstance?.dateTime.value ?? DateTime.now();
+  DateTime get date => this.transactionInstance?.fieldDateTime.value ?? DateTime.now();
 
   double get effectiveUnits {
     if (this.fieldUnits.value == 0) {

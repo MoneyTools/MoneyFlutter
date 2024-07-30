@@ -82,7 +82,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
       groupTransactionsByPayeeId.cumulate(payeeId, transaction);
       groupMonthsListByPayeeId.cumulate(
         payeeId,
-        transaction.dateTime.value!.month,
+        transaction.fieldDateTime.value!.month,
       );
     }
 
@@ -117,7 +117,7 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
   void initRecurringTransactions({required final bool forIncome}) {
     // get all transactions meeting the request of date and type
     bool whereClause(Transaction t) {
-      return isBetweenOrEqual(t.dateTime.value!.year, widget.minYear, widget.maxYear) &&
+      return isBetweenOrEqual(t.fieldDateTime.value!.year, widget.minYear, widget.maxYear) &&
           (((forIncome == true && t.fieldAmount.value.toDouble() > 0) ||
               (forIncome == false && t.fieldAmount.value.toDouble() < 0)));
     }

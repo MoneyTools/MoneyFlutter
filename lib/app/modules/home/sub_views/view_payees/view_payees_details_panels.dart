@@ -36,7 +36,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
 
     final DateRange dateRange = DateRange();
     for (final t in flatTransactions) {
-      dateRange.inflate(t.dateTime.value);
+      dateRange.inflate(t.fieldDateTime.value);
     }
 
     double maxValue = 0;
