@@ -29,8 +29,8 @@ class Accounts extends MoneyObjects<Account> {
   void onAllDataLoaded() {
     // reset balances
     for (final Account account in iterableList()) {
-      account.count.value = 0;
-      account.balance = account.openingBalance.value;
+      account.fieldCount.value = 0;
+      account.balance = account.fieldOpeningBalance.value;
       account.minBalancePerYears.clear();
       account.maxBalancePerYears.clear();
 
@@ -57,11 +57,11 @@ class Accounts extends MoneyObjects<Account> {
     for (final Transaction t in transactionsSortedByDate) {
       final Account? account = get(t.fieldAccountId.value);
       if (account != null) {
-        if (account.type.value == AccountType.moneyMarket || account.type.value == AccountType.investment) {
+        if (account.fieldType.value == AccountType.moneyMarket || account.fieldType.value == AccountType.investment) {
           t.getOrCreateInvestment();
         }
 
-        account.count.value++;
+        account.fieldCount.value++;
         account.balance += t.fieldAmount.value.toDouble();
 
         final int yearOfTheTransaction = t.dateTime.value!.year;
@@ -78,8 +78,8 @@ class Accounts extends MoneyObjects<Account> {
 
         // keep track of the most recent record transaction for the account
         if (t.dateTime.value != null) {
-          if (account.updatedOn.value == null || account.updatedOn.value!.compareTo(t.dateTime.value!) < 0) {
-            account.updatedOn.value = t.dateTime.value;
+          if (account.fieldUpdatedOn.value == null || account.fieldUpdatedOn.value!.compareTo(t.dateTime.value!) < 0) {
+            account.fieldUpdatedOn.value = t.dateTime.value;
           }
         }
       }
@@ -91,9 +91,9 @@ class Accounts extends MoneyObjects<Account> {
         .iterableList()
         .where(
           (account) =>
-              account.type.value == AccountType.moneyMarket ||
-              account.type.value == AccountType.investment ||
-              account.type.value == AccountType.retirement,
+              account.fieldType.value == AccountType.moneyMarket ||
+              account.fieldType.value == AccountType.investment ||
+              account.fieldType.value == AccountType.retirement,
         )
         .toList();
 
@@ -114,10 +114,10 @@ class Accounts extends MoneyObjects<Account> {
       if (account != null) {
         final security = Data().securities.getBySymbol(symbol);
         if (security != null) {
-          account.stockHoldingEstimation.value
+          account.fieldStockHoldingEstimation.value
               .setAmount(totalAdjustedShareForThisStockInThisAccount * security.fieldLastPrice.value.toDouble());
-          if (account.stockHoldingEstimation.value.toDouble() != 0) {
-            account.balance += account.stockHoldingEstimation.value.toDouble();
+          if (account.fieldStockHoldingEstimation.value.toDouble() != 0) {
+            account.balance += account.fieldStockHoldingEstimation.value.toDouble();
           }
         }
       }
@@ -125,18 +125,18 @@ class Accounts extends MoneyObjects<Account> {
 
     // Loans
     final accountLoans =
-        Data().accounts.iterableList().where((account) => account.type.value == AccountType.loan).toList();
+        Data().accounts.iterableList().where((account) => account.fieldType.value == AccountType.loan).toList();
     for (final account in accountLoans) {
       final LoanPayment? latestPayment = getAccountLoanPayments(account).lastOrNull;
       if (latestPayment != null) {
-        account.updatedOn.value = latestPayment.fieldDate.value;
+        account.fieldUpdatedOn.value = latestPayment.fieldDate.value;
         account.balance = latestPayment.fieldBalance.value.toDouble() * -1;
       }
     }
 
     // Credit Card "Paid On" date
     // attempt to match Statement balance to a payment
-    for (final Account account in iterableList().where((a) => a.type.value == AccountType.credit)) {
+    for (final Account account in iterableList().where((a) => a.fieldType.value == AccountType.credit)) {
       _updateCreditCardPaidOn(account);
     }
   }
@@ -219,7 +219,8 @@ class Accounts extends MoneyObjects<Account> {
     final AccountType? accountType,
   ) {
     return iterableList().firstWhereOrNull((final Account account) {
-      return account.fieldAccountId.value == accountId && (accountType == null || account.type.value == accountType);
+      return account.fieldAccountId.value == accountId &&
+          (accountType == null || account.fieldType.value == accountType);
     });
   }
 
@@ -233,7 +234,7 @@ class Accounts extends MoneyObjects<Account> {
     final list = iterableList()
         .where(
           (account) =>
-              account.isMatchingUserChoiceIncludingClosedAccount && account.type.value != AccountType.categoryFund,
+              account.isMatchingUserChoiceIncludingClosedAccount && account.fieldType.value != AccountType.categoryFund,
         )
         .toList();
     list.sort((a, b) => sortByString(a.fieldName.value, b.fieldName.value, true));
@@ -277,7 +278,7 @@ class Accounts extends MoneyObjects<Account> {
 
     for (final account in iterableList()) {
       if (account.isMatchingUserChoiceIncludingClosedAccount) {
-        sum += account.balanceNormalized.getValueForDisplay(account).toDouble();
+        sum += account.fieldBalanceNormalized.getValueForDisplay(account).toDouble();
       }
     }
     return sum;
@@ -328,7 +329,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   void setMostRecentUsedAccount(Account account) {
-    PreferenceController.to.setInt(getViewPreferenceIdAccountLastSelected(), account.id.value);
+    PreferenceController.to.setInt(getViewPreferenceIdAccountLastSelected(), account.fieldId.value);
   }
 
   void _updateCreditCardPaidOn(final Account account) {

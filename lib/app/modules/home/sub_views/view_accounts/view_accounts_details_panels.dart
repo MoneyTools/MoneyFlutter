@@ -197,7 +197,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         list: listOfPairXY.take(100).toList(),
         variableNameHorizontal: 'Year',
         variableNameVertical: 'FBar',
-        currency: showAsNativeCurrency ? account.currency.value : Constants.defaultCurrency,
+        currency: showAsNativeCurrency ? account.fieldCurrency.value : Constants.defaultCurrency,
       );
     } else {
       for (final MoneyObject item in getList()) {
@@ -206,7 +206,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           listOfPairXY.add(
             PairXY(
               account.fieldName.value,
-              showAsNativeCurrency ? account.balance : account.balanceNormalized.getValueForDisplay(account),
+              showAsNativeCurrency ? account.balance : account.fieldBalanceNormalized.getValueForDisplay(account),
             ),
           );
         }
@@ -251,7 +251,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
       ),
       // Creadit Card account has a PaidOn column to help with balancing Statements
-      if (account.type.value == AccountType.credit) Transaction.fields.getFieldByName(columnIdPaidOn),
+      if (account.fieldType.value == AccountType.credit) Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
     DataController.to.trackMutations.lastDateTimeChanged;

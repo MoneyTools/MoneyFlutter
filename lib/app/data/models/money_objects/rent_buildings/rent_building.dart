@@ -539,7 +539,7 @@ class RentBuilding extends MoneyObject {
     if (this.account == null) {
       return Constants.defaultCurrency;
     } else {
-      return account!.currency.value;
+      return account!.fieldCurrency.value;
     }
   }
 

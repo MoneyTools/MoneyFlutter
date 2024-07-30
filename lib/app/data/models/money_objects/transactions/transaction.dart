@@ -716,11 +716,11 @@ class Transaction extends MoneyObject {
   }
 
   String getCurrency() {
-    if (this.fieldAccountInstance == null || this.fieldAccountInstance!.currency.value.isEmpty) {
+    if (this.fieldAccountInstance == null || this.fieldAccountInstance!.fieldCurrency.value.isEmpty) {
       return Constants.defaultCurrency;
     }
 
-    return this.fieldAccountInstance!.currency.value;
+    return this.fieldAccountInstance!.fieldCurrency.value;
   }
 
   static String getDefaultCurrency(final Account? accountInstance) {
@@ -728,7 +728,7 @@ class Transaction extends MoneyObject {
     if (accountInstance == null || accountInstance.getCurrencyRatio() == 0) {
       return Constants.defaultCurrency;
     }
-    return accountInstance.currency.value;
+    return accountInstance.fieldCurrency.value;
   }
 
   double getNormalizedAmount(double nativeValue) {

@@ -169,9 +169,9 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       case InfoPanelSubViewEnum.transactions: // Transactions
         final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
         if (account != null) {
-          if (account.currency.value != Constants.defaultCurrency) {
+          if (account.fieldCurrency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based
-            return [account.currency.value, Constants.defaultCurrency];
+            return [account.fieldCurrency.value, Constants.defaultCurrency];
           }
         }
 
@@ -219,7 +219,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     if (account == null) {
       return const CenterMessage(message: 'No account selected.');
     } else {
-      if (account.type.value == AccountType.loan) {
+      if (account.fieldType.value == AccountType.loan) {
         return _getSubViewContentForTransactionsForLoans(
           account: account,
           showAsNativeCurrency: showAsNativeCurrency,
@@ -261,7 +261,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     _footerColumnDate.clear();
 
     for (final account in list) {
-      _footerColumnDate.inflate(account.updatedOn.value);
+      _footerColumnDate.inflate(account.fieldUpdatedOn.value);
     }
     return list;
   }

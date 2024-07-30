@@ -343,14 +343,14 @@ class DataSimulator {
 
   void _generateLoans() {
     final Account? accountForLoan = Data().accounts.iterableList().firstWhereOrNull(
-          (final Account element) => element.type.value == AccountType.loan,
+          (final Account element) => element.fieldType.value == AccountType.loan,
         );
     if (accountForLoan != null) {
       for (int i = 0; i < 12 * 20; i++) {
         Data().loanPayments.appendNewMoneyObject(
               LoanPayment(
                 id: -1,
-                accountId: accountForLoan.id.value,
+                accountId: accountForLoan.fieldId.value,
                 date: DateTime.now(),
                 principal: 100,
                 interest: 10,
@@ -436,7 +436,7 @@ class DataSimulator {
 
   void _generateTransactions() {
     for (final Account account in Data().accounts.iterableList()) {
-      final numberOfDatesNeeded = _getQuantityOfTransactionBasedOnAccountType(account.type.value);
+      final numberOfDatesNeeded = _getQuantityOfTransactionBasedOnAccountType(account.fieldType.value);
       final dates = _generateRandomDates(numberOfDatesNeeded);
       for (final date in dates) {
         _transactionForDemoData(date, account);
@@ -498,7 +498,7 @@ class DataSimulator {
 
     final MyJson demoJson = <String, dynamic>{
       'Id': -1,
-      'Account': account.id.value,
+      'Account': account.fieldId.value,
       'Date': date,
       'Payee': payeeId,
       'Category': categoryId,

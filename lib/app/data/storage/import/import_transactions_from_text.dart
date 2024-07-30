@@ -94,7 +94,7 @@ Transaction createNewTransactionFromDateDescriptionAmount(
 
   final Transaction t = Transaction(date: date);
   t.fieldId.value = -1;
-  t.fieldAccountId.value = account.id.value;
+  t.fieldAccountId.value = account.fieldId.value;
   t.fieldPayee.value = payee == null ? -1 : payee.fieldId.value;
   t.fieldMemo.value = description;
   t.fieldAmount.value.setAmount(amount);

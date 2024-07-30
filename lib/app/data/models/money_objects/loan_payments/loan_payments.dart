@@ -42,8 +42,8 @@ class PaymentRollup {
 
 List<LoanPayment> getAccountLoanPayments(Account account) {
   final List<int> categoriesToMatch = [
-    account.categoryIdForInterest.value,
-    account.categoryIdForPrincipal.value,
+    account.fieldCategoryIdForInterest.value,
+    account.fieldCategoryIdForPrincipal.value,
   ];
 
   // include the manual entries done in the LoanPayments table
@@ -86,12 +86,12 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     pr.reference = concat(pr.reference, t.getPayeeOrTransferCaption(), ';', true);
 
     // Principal
-    if (t.fieldCategoryId.value == account.categoryIdForPrincipal.value) {
+    if (t.fieldCategoryId.value == account.fieldCategoryIdForPrincipal.value) {
       pr.principal = t.fieldAmount.value.toDouble();
     }
 
     // Interest
-    if (t.fieldCategoryId.value == account.categoryIdForInterest.value) {
+    if (t.fieldCategoryId.value == account.fieldCategoryIdForInterest.value) {
       pr.interest = t.fieldAmount.value.toDouble();
     }
   }
