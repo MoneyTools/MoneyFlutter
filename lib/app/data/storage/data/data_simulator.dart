@@ -21,7 +21,8 @@ class DataSimulator {
   int idStockApple = 0;
   int idStockFord = 1;
 
-  late final Account _accountBankOfAmerica;
+  late final Account _accountBankCanada;
+  late final Account _accountBankUSA;
   late final Account _accountCreditCardUSD;
   late final Account _accountForInvestments;
   late final Account _accountStartupLoan;
@@ -41,11 +42,172 @@ class DataSimulator {
   final int _numberOFYearInThePast = 20;
   final double _startingYearlySalaryFirstJob = 15000.00;
   final double _startingYearlySalarySecondJob = 50000.00;
+  final _today = DateTime.now();
   final double _yearlyInflation = 3.00;
 
   late DateTime _dateOfFirstBigJob;
 
-  Account addNewAccount(int id, name, accountId, type, currency) {
+  void generateData() {
+    Data().clearExistingData();
+    _generateCurrencies();
+    _generateAccounts();
+    _generateAliases();
+    _generateCategories();
+    _generateInvestments();
+    _generateLoans();
+    _generateRentals();
+    _generateTransactionsSalary();
+    _generateTransfersToRentAndMortgage();
+
+    _generateSubscriptionsOnCheckingAccount();
+    _generateSubscriptionsOnCreditCard();
+
+    // generateTransactionsForCreditCard();
+    _generateTransfersToCreditCardPayment();
+  }
+
+  // ignore: unused_element
+  List<DateTime> generateRandomDates(int count) {
+    final tenYearsAgo = _today.subtract(
+      Duration(days: 365 * _numberOFYearInThePast),
+    ); // Adjust for leap years if needed
+
+    final random = Random();
+    final dates = List<DateTime>.generate(count, (index) {
+      final randomDaysSinceTenYearsAgo = random.nextInt(365 * _numberOFYearInThePast);
+      return tenYearsAgo.add(Duration(days: randomDaysSinceTenYearsAgo));
+    });
+    return dates;
+  }
+
+  void generateTransactionsForCreditCard() {
+    final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
+
+    for (final date in dates) {
+      final selectedCategory = [
+        [
+          _categoryTransport,
+          [
+            ['City Bus', 3],
+            ['Taxi', 20],
+            ['Uber', 30],
+          ],
+        ],
+        [
+          _categoryFoodGrocery,
+          [
+            ['TheFoodStore', 50],
+            ['SafeWay', 80],
+            ['WholeFood', 200],
+          ],
+        ],
+        [
+          _categoryFoodRestaurant,
+          [
+            ['Starbucks', 10],
+            ['AppleBees', 100],
+            ['PizzaHut', 20],
+          ],
+        ],
+      ].getRandomItem();
+
+      Category category = selectedCategory[0] as Category;
+
+      final payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
+      double maxSpendingOnCreditCard = payeeAndMaxAmount[1].toDouble();
+
+      final Transaction source = _addTransactionAccountDatePayeeCategory(
+        account: _accountCreditCardUSD,
+        date: date,
+        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0]).uniqueId,
+        categoryId: category.uniqueId,
+      );
+      if (date.isAfter(_dateOfFirstBigJob)) {
+        // big job and spends more
+        maxSpendingOnCreditCard = maxSpendingOnCreditCard * 3;
+      }
+      source.fieldAmount.setAmount(-getRandomAmount(maxSpendingOnCreditCard.toInt()));
+    }
+  }
+
+  void generateTransactionsMontlyExpenses({
+    required Account account,
+    required String payeeName,
+    required Category category,
+    required double amount,
+    required int yearMin,
+    required int yearMax,
+    required int dayOfTheMonth,
+  }) {
+    final payee = Data().payees.getOrCreate(payeeName);
+
+    for (int year = yearMin; year <= yearMax; year++) {
+      for (int month = 1; month <= 12; month++) {
+        _addTransactionAccountDatePayeeCategory(
+          account: account,
+          date: DateTime(year, month, dayOfTheMonth),
+          payeeId: payee.uniqueId,
+          categoryId: category.uniqueId,
+          amount: amount,
+        );
+      }
+    }
+  }
+
+  double getAmount(final int minValue, final int maxValue) {
+    final double amount = minValue + Random().nextDouble() * (maxValue - minValue);
+    return roundDouble(amount, 2);
+  }
+
+  DateTime getLastDayOfPreviousMonth(DateTime date) {
+    final previousMonth = DateTime(date.year, date.month - 1);
+    final daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
+    return DateTime(previousMonth.year, previousMonth.month, daysInPreviousMonth).endOfDay;
+  }
+
+  void _addInvestment(
+    final Account account,
+    final dateAsString,
+    final int stockId,
+    final InvestmentType activity,
+    final double quantity,
+    final double tradePrice,
+  ) {
+    DateTime date = DateTime.parse(dateAsString);
+    double transactionAmount = tradePrice * quantity;
+    String action = 'sold';
+    final stock = Data().securities.get(stockId);
+
+    if (activity == InvestmentType.buy) {
+      action = 'bought';
+      transactionAmount *= -1;
+    }
+    final payee = Data().payees.getOrCreate('Broker');
+    final category = Data().categories.getOrCreate('Trades', CategoryType.investment);
+
+    var t = _addTransactionAccountDatePayeeCategory(
+      account: account,
+      date: date,
+      amount: transactionAmount,
+      payeeId: payee.uniqueId,
+      categoryId: category.uniqueId,
+    );
+    t.fieldMemo.value =
+        'You $action ${formatDoubleTrimZeros(quantity)} shares of "${stock!.fieldName.value} (${stock.fieldSymbol.value})"';
+
+    Data().investments.appendMoneyObject(
+          Investment(
+            id: t.uniqueId,
+            investmentType: activity.index,
+            security: stockId,
+            unitPrice: tradePrice,
+            units: quantity,
+            tradeType: InvestmentTradeType.none.index,
+          ),
+        );
+  }
+
+  Account _addNewAccount(int id, name, accountId, type, currency) {
     final account = Account.fromJson({
       'Id': id,
       'Name': name,
@@ -62,66 +224,34 @@ class DataSimulator {
     return account;
   }
 
-  static Transaction addTransactionAccountDatePayeeCategory({
-    required Account account,
-    required DateTime date,
-    int payeeId = -1,
-    int categoryId = -1,
-    double amount = 0.00,
-  }) {
-    // generate an amount
-    // Expenses should be a negative value and smaller range than Revenue;
-    int maxValue = 2500;
-    if (Data().categories.isCategoryAnExpense(categoryId)) {
-      maxValue = -500;
-    }
-
-    if (amount == 0) {
-      amount = getRandomAmount(maxValue);
-    }
-
-    final MyJson demoJson = <String, dynamic>{
-      'Id': -1,
-      'Account': account.fieldId.value,
-      'Date': date,
-      'Payee': payeeId,
-      'Category': categoryId,
-      'Amount': amount,
-    };
-
-    final Transaction t = Transaction.fromJSon(demoJson, 0);
-
-    Data().transactions.appendNewMoneyObject(t, fireNotification: false);
-    return t;
-  }
-
-  static void createTransferTransaction({
-    required final Account accountSource,
-    required final Account accountDestination,
-    required final DateTime dateOfPayment,
-    required final double paymentAmount,
-    required final String memo,
-  }) {
-    final Transaction source = addTransactionAccountDatePayeeCategory(
-      account: accountSource,
-      date: dateOfPayment,
-      amount: paymentAmount,
-    );
-    source.fieldMemo.value = memo;
-
-    Data().makeTransferLinkage(source, accountDestination);
-  }
-
-  void generateAccounts() {
-    _accountBankOfAmerica = addNewAccount(
+  void _generateAccounts() {
+    _accountBankUSA = _addNewAccount(
       -1,
       'Bank Of America',
-      '0001',
+      'B0001',
       AccountType.checking.index,
       'USD',
     );
 
-    _accountCreditCardUSD = addNewAccount(
+    // Canadin Bank Account
+    _accountBankCanada = _addNewAccount(
+      -1,
+      'Bank Of Montreal',
+      'B0002',
+      AccountType.savings.index,
+      'CAD',
+    );
+
+    // Fund that account
+    _addTransactionAccountDatePayeeCategory(
+      account: _accountBankCanada,
+      date: getDateShiftedByYears(-21, 1, 1),
+      amount: 100000,
+      payeeId: Data().payees.getOrCreate('Lottery Win').uniqueId,
+      memo: 'Initial openeing of account',
+    );
+
+    _accountCreditCardUSD = _addNewAccount(
       -1,
       'VisaCard',
       '0002',
@@ -129,14 +259,14 @@ class DataSimulator {
       'USD',
     );
 
-    _accountForInvestments = addNewAccount(
+    _accountForInvestments = _addNewAccount(
       -1,
       'Fidelity',
       '0003',
       AccountType.investment.index,
       'USD',
     );
-    _accountStartupLoan = addNewAccount(
+    _accountStartupLoan = _addNewAccount(
       -1,
       'Startup',
       '0004',
@@ -156,11 +286,11 @@ class DataSimulator {
         );
     _accountStartupLoan.fieldCategoryIdForInterest.value =
         Data().categories.getOrCreate('Loans:Interest:Startup', CategoryType.expense).uniqueId;
-    _accountStartupLoan.fieldCategoryIdForInterest.value =
+    _accountStartupLoan.fieldCategoryIdForPrincipal.value =
         Data().categories.getOrCreate('Loans:Principal:Startup', CategoryType.expense).uniqueId;
   }
 
-  void generateAliases() {
+  void _generateAliases() {
     Data().aliases.appendNewMoneyObject(
           Alias(
             id: -1,
@@ -187,7 +317,7 @@ class DataSimulator {
         );
   }
 
-  void generateCategories() {
+  void _generateCategories() {
     // Expenses
     _categoryBills = Category(
       id: -1,
@@ -366,7 +496,7 @@ class DataSimulator {
         );
   }
 
-  void generateCurrencies() {
+  void _generateCurrencies() {
     final List<MyJson> demoCurrencies = <MyJson>[
       {
         'Id': -1,
@@ -414,29 +544,8 @@ class DataSimulator {
     }
   }
 
-  void generateData() {
-    final today = DateTime.now();
-
-    Data().clearExistingData();
-    generateCurrencies();
-    generateAccounts();
-    generateAliases();
-    generateCategories();
-    generateInvestments();
-    generateLoans();
-    generateRentals();
-    generateTransactionsSalary();
-    generateTransfersToRentAndMortgage();
-
-    generateSubscriptionsOnCheckingAccount(today);
-    generateSubscriptionsOnCreditCard(today);
-
-    // generateTransactionsForCreditCard();
-    generateTransfersToCreditCardPayment();
-  }
-
-  void generateInvestments() {
-    generateStocks();
+  void _generateInvestments() {
+    _generateStocks();
 
     // Buy Apple
     _addInvestment(_accountForInvestments, '2015-06-20', idStockApple, InvestmentType.buy, 100, 199.99);
@@ -448,39 +557,68 @@ class DataSimulator {
     _addInvestment(_accountForInvestments, '2013-01-15', idStockFord, InvestmentType.sell, 1000, 14.14);
   }
 
-  void generateLoans() {
+  void _generateLoans() {
+    double loanAmount = 20000; // 20K
+    double loanRate = 4 / 100; // 4%
+    double monthlyPayment = 500;
+
+    //
+    // First lend the initial loan of 20K
+    //
+    final receivingTransaction = _createTransferTransaction(
+      accountSource: _accountBankCanada,
+      accountDestination: _accountStartupLoan,
+      dateOfPayment: getDateShiftedByYears(-6, 11, 11),
+      paymentAmount: -loanAmount,
+      memo: 'Invest in projet goto Mars',
+    );
+
+    // ensure that we have the correct category for this injection of Principale funds
+    receivingTransaction.fieldCategoryId.value = _accountStartupLoan.fieldCategoryIdForPrincipal.value;
+
     final dates = generateListOfDates(yearInThePast: 5, howManyPerYear: 12, dayOfTheMonth: 9);
 
     for (final date in dates) {
+      if (loanAmount < 0) {
+        break; // done paying back the loan
+      }
+
+      final annuallyInterest = loanAmount * loanRate;
+      var monthlyInterest = annuallyInterest / 12;
+      var principaleForThisMonday = (monthlyPayment - monthlyInterest);
+      if (isConsideredZero(monthlyInterest)) {
+        monthlyInterest = 0;
+        principaleForThisMonday = loanAmount;
+        monthlyPayment = principaleForThisMonday;
+        loanAmount = 0;
+      }
+
+      // reduce the remaining balance
+      loanAmount -= principaleForThisMonday;
+
       Data().loanPayments.appendNewMoneyObject(
             LoanPayment(
               id: -1,
               accountId: _accountStartupLoan.uniqueId,
               date: date,
-              principal: 100,
-              interest: 10,
+              principal: -principaleForThisMonday,
+              interest: monthlyInterest,
               memo: '',
             ),
           );
+
+      // Show the payment to the lender
+      _addTransactionAccountDatePayeeCategory(
+        account: _accountBankCanada,
+        date: date,
+        payeeId: Data().payees.getOrCreate('MarsProject').uniqueId,
+        amount: monthlyPayment,
+        memo: 'Pay back investment',
+      );
     }
   }
 
-  // ignore: unused_element
-  List<DateTime> generateRandomDates(int count) {
-    final now = DateTime.now();
-    final tenYearsAgo = now.subtract(
-      Duration(days: 365 * _numberOFYearInThePast),
-    ); // Adjust for leap years if needed
-
-    final random = Random();
-    final dates = List<DateTime>.generate(count, (index) {
-      final randomDaysSinceTenYearsAgo = random.nextInt(365 * _numberOFYearInThePast);
-      return tenYearsAgo.add(Duration(days: randomDaysSinceTenYearsAgo));
-    });
-    return dates;
-  }
-
-  void generateRentals() {
+  void _generateRentals() {
     final RentBuilding instance = RentBuilding();
     instance.fieldId.value = 0;
     instance.fieldName.value = 'AirBnB';
@@ -488,7 +626,7 @@ class DataSimulator {
     Data().rentBuildings.appendMoneyObject(instance);
   }
 
-  void generateStocks() {
+  void _generateStocks() {
     Data().securities.appendMoneyObject(
           Security(
             id: 0,
@@ -518,57 +656,57 @@ class DataSimulator {
   }
 
   /// 4 years of GYM and Netflix
-  void generateSubscriptionsOnCheckingAccount(DateTime today) {
-    final startDate = today.subtract(Duration(days: (365.25 * _numberOFYearInThePast).toInt()));
+  void _generateSubscriptionsOnCheckingAccount() {
+    final startDate = _today.subtract(Duration(days: (365.25 * _numberOFYearInThePast).toInt()));
 
     // Electricity
     generateTransactionsMontlyExpenses(
-      account: _accountBankOfAmerica,
+      account: _accountBankUSA,
       payeeName: 'ElectricCity',
       category: _categoryBillsElectricity,
       amount: -getAmount(40, 100), //
       yearMin: startDate.year,
-      yearMax: today.year,
+      yearMax: _today.year,
       dayOfTheMonth: 11,
     );
 
     // Phone
     generateTransactionsMontlyExpenses(
-      account: _accountBankOfAmerica,
+      account: _accountBankUSA,
       payeeName: 'TMobile',
       category: _categoryBillsPhone,
       amount: -getAmount(40, 55), //
       yearMin: startDate.year,
-      yearMax: today.year,
+      yearMax: _today.year,
       dayOfTheMonth: 12,
     );
 
     // Internet
     generateTransactionsMontlyExpenses(
-      account: _accountBankOfAmerica,
+      account: _accountBankUSA,
       payeeName: 'FastISP',
       category: _categoryBillsInternet,
       amount: -40,
       yearMin: startDate.year,
-      yearMax: today.year,
+      yearMax: _today.year,
       dayOfTheMonth: 13,
     );
 
     // TV
     generateTransactionsMontlyExpenses(
-      account: _accountBankOfAmerica,
+      account: _accountBankUSA,
       payeeName: 'Comcast',
       category: _categoryBillsTV,
       amount: -80,
       yearMin: startDate.year,
-      yearMax: today.year,
+      yearMax: _today.year,
       dayOfTheMonth: 13,
     );
   }
 
   /// 4 years of GYM and Netflix
-  void generateSubscriptionsOnCreditCard(DateTime today) {
-    final dateForGym = DateTime.now().subtract(const Duration(days: 365 * 8));
+  void _generateSubscriptionsOnCreditCard() {
+    final dateForGym = _today.subtract(const Duration(days: 365 * 8));
     generateTransactionsMontlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Gold Gym',
@@ -580,93 +718,19 @@ class DataSimulator {
     );
 
     // 5 years of netflix
-    final dateForNetflix = DateTime.now().subtract(const Duration(days: 365 * 5));
+    final dateForNetflix = _today.subtract(const Duration(days: 365 * 5));
     generateTransactionsMontlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Netflix',
       category: Data().categories.getOrCreate('Streaming Subscription', CategoryType.expense),
       amount: -8.99,
       yearMin: dateForNetflix.year,
-      yearMax: today.year,
+      yearMax: _today.year,
       dayOfTheMonth: 19,
     );
   }
 
-  void generateTransactionsForCreditCard() {
-    final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
-
-    for (final date in dates) {
-      final selectedCategory = [
-        [
-          _categoryTransport,
-          [
-            ['City Bus', 3],
-            ['Taxi', 20],
-            ['Uber', 30],
-          ],
-        ],
-        [
-          _categoryFoodGrocery,
-          [
-            ['TheFoodStore', 50],
-            ['SafeWay', 80],
-            ['WholeFood', 200],
-          ],
-        ],
-        [
-          _categoryFoodRestaurant,
-          [
-            ['Starbucks', 10],
-            ['AppleBees', 100],
-            ['PizzaHut', 20],
-          ],
-        ],
-      ].getRandomItem();
-
-      Category category = selectedCategory[0] as Category;
-
-      final payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
-      double maxSpendingOnCreditCard = payeeAndMaxAmount[1].toDouble();
-
-      final Transaction source = addTransactionAccountDatePayeeCategory(
-        account: _accountCreditCardUSD,
-        date: date,
-        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0]).uniqueId,
-        categoryId: category.uniqueId,
-      );
-      if (date.isAfter(_dateOfFirstBigJob)) {
-        // big job and spends more
-        maxSpendingOnCreditCard = maxSpendingOnCreditCard * 3;
-      }
-      source.fieldAmount.setAmount(-getRandomAmount(maxSpendingOnCreditCard.toInt()));
-    }
-  }
-
-  void generateTransactionsMontlyExpenses({
-    required Account account,
-    required String payeeName,
-    required Category category,
-    required double amount,
-    required int yearMin,
-    required int yearMax,
-    required int dayOfTheMonth,
-  }) {
-    final payee = Data().payees.getOrCreate(payeeName);
-
-    for (int year = yearMin; year <= yearMax; year++) {
-      for (int month = 1; month <= 12; month++) {
-        addTransactionAccountDatePayeeCategory(
-          account: account,
-          date: DateTime(year, month, dayOfTheMonth),
-          payeeId: payee.uniqueId,
-          categoryId: category.uniqueId,
-          amount: amount,
-        );
-      }
-    }
-  }
-
-  void generateTransactionsSalary() {
+  void _generateTransactionsSalary() {
     final dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 5);
     _dateOfFirstBigJob = dates[dates.length ~/ 2];
 
@@ -692,8 +756,8 @@ class DataSimulator {
 
       if (date.isBefore(_dateOfFirstBigJob)) {
         // Add Paycheck for BurgerKing
-        addTransactionAccountDatePayeeCategory(
-          account: _accountBankOfAmerica,
+        _addTransactionAccountDatePayeeCategory(
+          account: _accountBankUSA,
           date: date,
           payeeId: employer1.uniqueId,
           categoryId: _categorySalaryPaycheck.uniqueId,
@@ -704,8 +768,8 @@ class DataSimulator {
           switchedJob = true;
           yearlySalary = _startingYearlySalarySecondJob;
           // one time signing bonus
-          addTransactionAccountDatePayeeCategory(
-            account: _accountBankOfAmerica,
+          _addTransactionAccountDatePayeeCategory(
+            account: _accountBankUSA,
             date: date,
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
@@ -713,8 +777,8 @@ class DataSimulator {
           ).fieldMemo.value = 'Singing Bonnus';
         }
         // Add Paycheck for NASA
-        addTransactionAccountDatePayeeCategory(
-          account: _accountBankOfAmerica,
+        _addTransactionAccountDatePayeeCategory(
+          account: _accountBankUSA,
           date: date,
           payeeId: employer2.uniqueId,
           categoryId: _categorySalaryPaycheck.uniqueId,
@@ -723,8 +787,8 @@ class DataSimulator {
 
         // special holiday bonus to all employees
         if (date.month == 12) {
-          addTransactionAccountDatePayeeCategory(
-            account: _accountBankOfAmerica,
+          _addTransactionAccountDatePayeeCategory(
+            account: _accountBankUSA,
             date: date.add(const Duration(days: 10)),
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
@@ -736,7 +800,7 @@ class DataSimulator {
   }
 
   // Transfer 100 USD  Bank to CreditCard Account
-  void generateTransfersToCreditCardPayment() {
+  void _generateTransfersToCreditCardPayment() {
     double rollingBalance = 0.00;
 
     final list = _accountCreditCardUSD.getTransaction();
@@ -746,8 +810,8 @@ class DataSimulator {
 
     for (final t in list) {
       if (t.fieldDateTime.value!.month != lastMonth && rollingBalance != 0) {
-        createTransferTransaction(
-          accountSource: _accountBankOfAmerica,
+        _createTransferTransaction(
+          accountSource: _accountBankUSA,
           accountDestination: _accountCreditCardUSD,
           dateOfPayment: getLastDayOfPreviousMonth(t.fieldDateTime.value!),
           paymentAmount: rollingBalance,
@@ -761,7 +825,7 @@ class DataSimulator {
   }
 
   /// The demo data tries to demonstrat a person that had a rent for the first part of their jouney and a house on the second half
-  void generateTransfersToRentAndMortgage() {
+  void _generateTransfersToRentAndMortgage() {
     final payeeLandLord = Data().payees.getOrCreate('TheLandlord');
     final payeeForMortgage = Data().payees.getOrCreate('HomeLoanBank');
     // Iterate over the last 'n' years of loan paid each month
@@ -770,16 +834,16 @@ class DataSimulator {
 
     for (final date in dates) {
       if (date.isBefore(midPointInTime)) {
-        addTransactionAccountDatePayeeCategory(
-          account: _accountBankOfAmerica,
+        _addTransactionAccountDatePayeeCategory(
+          account: _accountBankUSA,
           date: date,
           payeeId: payeeLandLord.uniqueId,
           categoryId: Data().categories.getOrCreate('Rent', CategoryType.expense).uniqueId,
           amount: _monthlyRent,
         ).fieldMemo.value = 'Pay Rent';
       } else {
-        final Transaction source = addTransactionAccountDatePayeeCategory(
-          account: _accountBankOfAmerica,
+        final Transaction source = _addTransactionAccountDatePayeeCategory(
+          account: _accountBankUSA,
           date: date,
           payeeId: payeeForMortgage.uniqueId,
           categoryId: Data().categories.getByName('Mortgage')!.uniqueId,
@@ -790,59 +854,41 @@ class DataSimulator {
       }
     }
   }
+}
 
-  double getAmount(final int minValue, final int maxValue) {
-    final double amount = minValue + Random().nextDouble() * (maxValue - minValue);
-    return roundDouble(amount, 2);
+Transaction _addTransactionAccountDatePayeeCategory({
+  required Account account,
+  required DateTime date,
+  int payeeId = -1,
+  int categoryId = -1,
+  double amount = 0.00,
+  String memo = '',
+}) {
+  // generate an amount
+  // Expenses should be a negative value and smaller range than Revenue;
+  int maxValue = 2500;
+  if (Data().categories.isCategoryAnExpense(categoryId)) {
+    maxValue = -500;
   }
 
-  DateTime getLastDayOfPreviousMonth(DateTime date) {
-    final previousMonth = DateTime(date.year, date.month - 1);
-    final daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
-    return DateTime(previousMonth.year, previousMonth.month, daysInPreviousMonth).endOfDay;
+  if (amount == 0) {
+    amount = getRandomAmount(maxValue);
   }
 
-  void _addInvestment(
-    final Account account,
-    final dateAsString,
-    final int stockId,
-    final InvestmentType activity,
-    final double quantity,
-    final double tradePrice,
-  ) {
-    DateTime date = DateTime.parse(dateAsString);
-    double transactionAmount = tradePrice * quantity;
-    String action = 'sold';
-    final stock = Data().securities.get(stockId);
+  final MyJson demoJson = <String, dynamic>{
+    'Id': -1,
+    'Account': account.fieldId.value,
+    'Date': date,
+    'Payee': payeeId,
+    'Category': categoryId,
+    'Amount': amount,
+    'Memo': memo,
+  };
 
-    if (activity == InvestmentType.buy) {
-      action = 'bought';
-      transactionAmount *= -1;
-    }
-    final payee = Data().payees.getOrCreate('Broker');
-    final category = Data().categories.getOrCreate('Trades', CategoryType.investment);
+  final Transaction t = Transaction.fromJSon(demoJson, 0);
 
-    var t = addTransactionAccountDatePayeeCategory(
-      account: account,
-      date: date,
-      amount: transactionAmount,
-      payeeId: payee.uniqueId,
-      categoryId: category.uniqueId,
-    );
-    t.fieldMemo.value =
-        'You $action ${formatDoubleTrimZeros(quantity)} shares of "${stock!.fieldName.value} (${stock.fieldSymbol.value})"';
-
-    Data().investments.appendMoneyObject(
-          Investment(
-            id: t.uniqueId,
-            investmentType: activity.index,
-            security: stockId,
-            unitPrice: tradePrice,
-            units: quantity,
-            tradeType: InvestmentTradeType.none.index,
-          ),
-        );
-  }
+  Data().transactions.appendNewMoneyObject(t, fireNotification: false);
+  return t;
 }
 
 double getRandomAmount(final int maxValue) {
@@ -885,7 +931,29 @@ List<DateTime> generateListOfDatesRandom({required int year, required int howMan
   return dates;
 }
 
-int getYearInThePast(int numberOfYearFromToday) {
+int getShiftedYearFromNow(int numberOfYearFromToday) {
   final today = DateTime.now();
-  return DateTime(today.year - numberOfYearFromToday, today.month, today.day).year;
+  return DateTime(today.year + numberOfYearFromToday, today.month, today.day).year;
+}
+
+DateTime getDateShiftedByYears(int yearsToShift, int month, int day) {
+  int yearShifted = getShiftedYearFromNow(yearsToShift);
+  return DateTime(yearShifted, month, day);
+}
+
+Transaction _createTransferTransaction({
+  required final Account accountSource,
+  required final Account accountDestination,
+  required final DateTime dateOfPayment,
+  required final double paymentAmount,
+  required final String memo,
+}) {
+  final Transaction source = _addTransactionAccountDatePayeeCategory(
+    account: accountSource,
+    date: dateOfPayment,
+    amount: paymentAmount,
+  );
+  source.fieldMemo.value = memo;
+
+  return Data().makeTransferLinkage(source, accountDestination);
 }

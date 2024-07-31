@@ -381,7 +381,7 @@ class Data {
     return true;
   }
 
-  bool makeTransferLinkage(
+  Transaction makeTransferLinkage(
     Transaction transactionSource,
     Account destinationAccount,
   ) {
@@ -432,7 +432,7 @@ class Data {
       transactionSource.transferInstance = transfer;
     }
 
-    return true;
+    return relatedTransaction!;
   }
 
   /// let the app know that something has changed

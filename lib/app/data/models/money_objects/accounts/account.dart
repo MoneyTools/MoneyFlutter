@@ -30,7 +30,7 @@ class Account extends MoneyObject {
       ..fieldName.value = row.getString('Name')
       ..fieldDescription.value = row.getString('Description')
       ..fieldType.value = AccountType.values[row.getInt('Type')]
-      ..fieldOpeningBalance.value = row.getDouble('OpeningBalance')
+      ..fieldOpeningBalance.value.setAmount(row.getDouble('OpeningBalance'))
       ..fieldCurrency.value = row.getString('Currency', Constants.defaultCurrency)
       ..fieldOnlineAccount.value = row.getInt('OnlineAccount')
       ..fieldWebSite.value = row.getString('WebSite')
@@ -85,7 +85,7 @@ class Account extends MoneyObject {
 
   /// categoryIdForInterest
   /// 16|CategoryIdForInterest|INT|0||0
-  Field<int> fieldCategoryIdForInterest = Field<int>(
+  FieldInt fieldCategoryIdForInterest = FieldInt(
     name: 'Catgory for Interest',
     serializeName: 'CategoryIdForInterest',
     type: FieldType.text,
@@ -98,12 +98,12 @@ class Account extends MoneyObject {
 
   /// categoryIdForPrincipal
   /// 15 | CategoryIdForPrincipal|INT|0||0
-  Field<int> fieldCategoryIdForPrincipal = Field<int>(
+  FieldInt fieldCategoryIdForPrincipal = FieldInt(
     name: 'Catgory for Principal',
     serializeName: 'CategoryIdForPrincipal',
+    type: FieldType.text,
     defaultValue: 0,
     useAsDetailPanels: (final MoneyObject instance) => (instance as Account).fieldType.value == AccountType.loan,
-    type: FieldType.text,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().categories.getNameFromId((instance as Account).fieldCategoryIdForPrincipal.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).fieldCategoryIdForPrincipal.value,
@@ -239,10 +239,9 @@ class Account extends MoneyObject {
 
   // 6 Open Balance
   // 6|OpeningBalance|money|0||0
-  Field<double> fieldOpeningBalance = Field<double>(
+  FieldMoney fieldOpeningBalance = FieldMoney(
     name: 'Opening Balance',
     serializeName: 'OpeningBalance',
-    defaultValue: 0,
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).fieldOpeningBalance.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).fieldOpeningBalance.value,
   );
@@ -369,6 +368,7 @@ class Account extends MoneyObject {
   set uniqueId(value) => fieldId.value = value;
 
   static final Fields<Account> _fields = Fields<Account>();
+  static final Fields<Account> _fieldsForColumns = Fields<Account>();
 
   static Fields<Account> get fields {
     if (_fields.isEmpty) {
@@ -402,9 +402,9 @@ class Account extends MoneyObject {
   }
 
   static Fields<Account> get fieldsForColumnView {
-    if (_fields.isEmpty) {
+    if (_fieldsForColumns.isEmpty) {
       final tmp = Account.fromJson({});
-      _fields.setDefinitions([
+      _fieldsForColumns.setDefinitions([
         tmp.fieldName,
         tmp.fieldAccountId,
         tmp.fieldDescription,
@@ -416,7 +416,7 @@ class Account extends MoneyObject {
         tmp.fieldBalanceNormalized,
       ]);
     }
-    return _fields;
+    return _fieldsForColumns;
   }
 
   String getAccountCurrencyAsText() {

@@ -30,7 +30,7 @@ class Accounts extends MoneyObjects<Account> {
     // reset balances
     for (final Account account in iterableList()) {
       account.fieldCount.value = 0;
-      account.balance = account.fieldOpeningBalance.value;
+      account.balance = account.fieldOpeningBalance.value.toDouble();
       account.minBalancePerYears.clear();
       account.maxBalancePerYears.clear();
 
