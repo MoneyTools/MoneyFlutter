@@ -4,6 +4,7 @@
 
 ### Update
 
+- User can now set missing Transaction:Category direclty from any Transaction List
 - Rebuild the Demo data
 
 ## [version 1.8.49] 2024-07-29

@@ -8,9 +8,9 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
 import 'package:money/app/core/widgets/picker_edit_box_date.dart';
+import 'package:money/app/core/widgets/picker_panel.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/core/widgets/suggestion_approval.dart';
-import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investment.dart';
@@ -199,30 +199,35 @@ class Transaction extends MoneyObject {
     defaultValue: -1,
     getValueForDisplay: (final MoneyObject instance) {
       final t = (instance as Transaction);
-      if (t.fieldCategoryId.value == -1 && t.possibleMatchingCategoryId != -1) {
+      if (t.fieldCategoryId.value == -1) {
         return SuggestionApproval(
-          child: TokenText(Data().categories.getNameFromId(t.possibleMatchingCategoryId)),
-          onApproved: () {
-            // record the change
-            t.stashValueBeforeEditing();
-
-            // Make change
-            t.fieldCategoryId.value = t.possibleMatchingCategoryId;
+          onApproved: t.possibleMatchingCategoryId == -1
+              ? null
+              : () {
+                  // record the change
+                  changeCategory(t, t.possibleMatchingCategoryId);
+                },
+          onChooseCategory: (final BuildContext context) {
             t.possibleMatchingCategoryId = -1;
-
-            // inform of changes
-            Data().notifyMutationChanged(
-              mutation: MutationType.changed,
-              moneyObject: t,
-              recalculateBalances: false,
+            showPopupSelection(
+              title: 'Category',
+              context: context,
+              items: Data().categories.getCategoriesAsStrings(),
+              selectedItem: '',
+              onSelected: (final String text) {
+                final selectedCategory = Data().categories.getByName(text);
+                if (selectedCategory != null) {
+                  changeCategory(t, selectedCategory.uniqueId);
+                }
+              },
             );
           },
-          onRejected: () {
-            t.possibleMatchingCategoryId = -1;
-          },
+          child: Data().categories.getCategoryWidget(
+                t.possibleMatchingCategoryId,
+              ),
         );
       } else {
-        return TokenText(Data().categories.getNameFromId(t.fieldCategoryId.value));
+        return Data().categories.getCategoryWidget(t.fieldCategoryId.value);
       }
     },
     getValueForReading: (final MoneyObject instance) =>
@@ -575,6 +580,22 @@ class Transaction extends MoneyObject {
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
   String get amountAsText => fieldAmount.value.toString();
+
+  static void changeCategory(Transaction t, final int categoryId) {
+    // record the change
+    t.stashValueBeforeEditing();
+
+    // Make change
+    t.fieldCategoryId.value = categoryId;
+    t.possibleMatchingCategoryId = -1;
+
+    // inform of changes
+    Data().notifyMutationChanged(
+      mutation: MutationType.changed,
+      moneyObject: t,
+      recalculateBalances: false,
+    );
+  }
 
   /// TODO - clean this up,
   void checkTransfers(Set<Transaction> dangling, List<Account> deletedAccounts) {
