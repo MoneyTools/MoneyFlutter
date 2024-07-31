@@ -3,6 +3,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/accumulator.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/widgets/charts/my_line_chart.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -29,15 +30,16 @@ class NetWorthChartState extends State<NetWorthChart> {
     final transactions = Data().transactions.iterableList(includeDeleted: true);
 
     for (final t in transactions) {
-      String dateKey = '${t.fieldDateTime.value!.year},${t.fieldDateTime.value!.month.toString().padLeft(2, '0')}';
+      String dateKey = dateToString(t.fieldDateTime.value);
+
       cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
     }
 
     List<FlSpot> tmpDataPoints = [];
     cumulateYearMonthBalance.getEntries().forEach(
       (entry) {
-        final tokens = entry.key.split(',');
-        DateTime dateForYearMonth = DateTime(int.parse(tokens[0]), int.parse(tokens[1]));
+        final tokens = entry.key.split('-');
+        DateTime dateForYearMonth = DateTime(int.parse(tokens[0]), int.parse(tokens[1]), int.parse(tokens[2]));
         tmpDataPoints.add(FlSpot(dateForYearMonth.millisecondsSinceEpoch.toDouble(), entry.value));
       },
     );

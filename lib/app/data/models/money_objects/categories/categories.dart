@@ -85,6 +85,45 @@ class Categories extends MoneyObjects<Category> {
     return category;
   }
 
+  Category appenNewCategory({
+    required int parentId,
+    required String name,
+    required final CategoryType type,
+  }) {
+    final category = Category(
+      id: -1,
+      parentId: parentId,
+      name: name,
+      type: type,
+    );
+
+    appendNewMoneyObject(category);
+    return category;
+  }
+
+  Category ensureAncestorExist(
+    final String categoryName,
+    final CategoryType typeToUseIfMissing,
+  ) {
+    final List<String> categoryNameParts = categoryName.split(':');
+
+    int parentCategoryId = -1;
+    String cumulativeCategoryName = '';
+
+    for (final String part in categoryNameParts) {
+      cumulativeCategoryName = cumulativeCategoryName.isEmpty ? part : '$cumulativeCategoryName:$part';
+
+      Category category = getByName(cumulativeCategoryName) ??
+          appenNewCategory(
+            parentId: parentCategoryId,
+            name: cumulativeCategoryName,
+            type: typeToUseIfMissing,
+          );
+      parentCategoryId = category.uniqueId;
+    }
+    return getByName(categoryName)!;
+  }
+
   Category? getByName(final String name) {
     return iterableList().firstWhereOrNull((final Category category) => category.fieldName.value == name);
   }
@@ -116,23 +155,17 @@ class Categories extends MoneyObjects<Category> {
     return Category.getName(get(id));
   }
 
-  Category getOrCreateCategory(
+  Category getOrCreate(
     final String name,
     final CategoryType type,
   ) {
     Category? category = getByName(name);
 
     if (category == null) {
-      category = Category(
-        id: -1,
-        name: name,
-        type: type,
-      );
-
-      appendNewMoneyObject(category);
+      category = ensureAncestorExist(name, type);
     } else {
       if (category.isDeleted) {
-        category.mutation = MutationType.none;
+        category.mutation = MutationType.none; // Bring it back to life
       }
     }
 
@@ -183,67 +216,67 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category get interestEarned {
-    return getOrCreateCategory('Savings:Interest', CategoryType.income);
+    return getOrCreate('Savings:Interest', CategoryType.income);
   }
 
   Category get investmentBonds {
-    return getOrCreateCategory('Investments:Bonds', CategoryType.expense);
+    return getOrCreate('Investments:Bonds', CategoryType.expense);
   }
 
   Category get investmentCredit {
-    return getOrCreateCategory('Investments:Credit', CategoryType.income);
+    return getOrCreate('Investments:Credit', CategoryType.income);
   }
 
   Category get investmentDebit {
-    return getOrCreateCategory('Investments:Debit', CategoryType.expense);
+    return getOrCreate('Investments:Debit', CategoryType.expense);
   }
 
   Category get investmentDividends {
-    return getOrCreateCategory('Investments:Dividends', CategoryType.income);
+    return getOrCreate('Investments:Dividends', CategoryType.income);
   }
 
   Category get investmentFees {
-    return getOrCreateCategory('Investments:Fees', CategoryType.expense);
+    return getOrCreate('Investments:Fees', CategoryType.expense);
   }
 
   Category get investmentInterest {
-    return getOrCreateCategory('Investments:Interest', CategoryType.income);
+    return getOrCreate('Investments:Interest', CategoryType.income);
   }
 
   Category get investmentLongTermCapitalGainsDistribution {
-    return getOrCreateCategory('Investments:Long Term Capital Gains Distribution', CategoryType.income);
+    return getOrCreate('Investments:Long Term Capital Gains Distribution', CategoryType.income);
   }
 
   Category get investmentMiscellaneous {
-    return getOrCreateCategory('Investments:Miscellaneous', CategoryType.expense);
+    return getOrCreate('Investments:Miscellaneous', CategoryType.expense);
   }
 
   Category get investmentMutualFunds {
-    return getOrCreateCategory('Investments:Mutual Funds', CategoryType.expense);
+    return getOrCreate('Investments:Mutual Funds', CategoryType.expense);
   }
 
   Category get investmentOptions {
-    return getOrCreateCategory('Investments:Options', CategoryType.expense);
+    return getOrCreate('Investments:Options', CategoryType.expense);
   }
 
   Category get investmentOther {
-    return getOrCreateCategory('Investments:Other', CategoryType.expense);
+    return getOrCreate('Investments:Other', CategoryType.expense);
   }
 
   Category get investmentReinvest {
-    return getOrCreateCategory('Investments:Reinvest', CategoryType.none);
+    return getOrCreate('Investments:Reinvest', CategoryType.none);
   }
 
   Category get investmentShortTermCapitalGainsDistribution {
-    return getOrCreateCategory('Investments:Short Term Capital Gains Distribution', CategoryType.income);
+    return getOrCreate('Investments:Short Term Capital Gains Distribution', CategoryType.income);
   }
 
   Category get investmentStocks {
-    return getOrCreateCategory('Investments:Stocks', CategoryType.expense);
+    return getOrCreate('Investments:Stocks', CategoryType.expense);
   }
 
   Category get investmentTransfer {
-    return getOrCreateCategory('Investments:Transfer', CategoryType.none);
+    return getOrCreate('Investments:Transfer', CategoryType.none);
   }
 
   bool isCategoryAnExpense(final int categoryId) {
@@ -271,15 +304,15 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category get salesTax {
-    return getOrCreateCategory('Taxes:Sales Tax', CategoryType.expense);
+    return getOrCreate('Taxes:Sales Tax', CategoryType.expense);
   }
 
   Category get savings {
-    return getOrCreateCategory('Savings', CategoryType.income);
+    return getOrCreate('Savings', CategoryType.income);
   }
 
   Category get split {
-    return getOrCreateCategory('Split', CategoryType.none);
+    return getOrCreate('Split', CategoryType.none);
   }
 
   int splitCategoryId() {
@@ -293,22 +326,22 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category get transfer {
-    return getOrCreateCategory('Transfer', CategoryType.none);
+    return getOrCreate('Transfer', CategoryType.none);
   }
 
   Category get transferFromDeletedAccount {
-    return getOrCreateCategory('Xfer from Deleted Account', CategoryType.none);
+    return getOrCreate('Xfer from Deleted Account', CategoryType.none);
   }
 
   Category get transferToDeletedAccount {
-    return getOrCreateCategory('Xfer to Deleted Account', CategoryType.none);
+    return getOrCreate('Xfer to Deleted Account', CategoryType.none);
   }
 
   Category get unassignedSplit {
-    return getOrCreateCategory('UnassignedSplit', CategoryType.none);
+    return getOrCreate('UnassignedSplit', CategoryType.none);
   }
 
   Category get unknown {
-    return getOrCreateCategory('Unknown', CategoryType.none);
+    return getOrCreate('Unknown', CategoryType.none);
   }
 }

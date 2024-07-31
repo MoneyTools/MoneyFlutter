@@ -416,7 +416,7 @@ class Data {
 
       if (relatedTransaction.uniqueId == -1) {
         // This is a new related transaction Append and get a new UniqueID
-        transactions.appendNewMoneyObject(relatedTransaction);
+        transactions.appendNewMoneyObject(relatedTransaction, fireNotification: false);
       } else {
         Data().notifyMutationChanged(
           mutation: MutationType.changed,
@@ -428,7 +428,7 @@ class Data {
       // this needs to happen last since the ID for a new Relation Transaction will be establish in the above
       // transactions.appendNewMoneyObject(relatedTransaction)
       transactionSource.fieldPayee.value = -1;
-      transactionSource.fieldTransfer.value = relatedTransaction.fieldId.value;
+      transactionSource.fieldTransfer.value = relatedTransaction.uniqueId;
       transactionSource.transferInstance = transfer;
     }
 

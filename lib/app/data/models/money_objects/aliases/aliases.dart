@@ -39,7 +39,7 @@ class Aliases extends MoneyObjects<Alias> {
     bool fireNotification = true,
   }) {
     Payee? payee = findByMatch(text);
-    payee ??= Data().payees.findOrAddPayee(text, fireNotification: fireNotification);
+    payee ??= Data().payees.getOrCreate(text, fireNotification: fireNotification);
     return payee;
   }
 
@@ -59,7 +59,7 @@ class Aliases extends MoneyObjects<Alias> {
   }) {
     int id = getPayeeIdFromTextMatching(text);
     if (id == -1) {
-      id = Data().payees.findOrAddPayee(text, fireNotification: fireNotification).uniqueId;
+      id = Data().payees.getOrCreate(text, fireNotification: fireNotification).uniqueId;
     }
     return id;
   }

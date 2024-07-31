@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.50] 2024-07-31
+
+### Update
+
+- Rebuild the Demo data
+
 ## [version 1.8.49] 2024-07-29
 
 ### Added

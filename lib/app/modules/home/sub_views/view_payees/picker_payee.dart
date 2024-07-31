@@ -24,7 +24,7 @@ Widget pickerPayee({
       }
     },
     onAddNew: (String newPayeeText) {
-      final Payee found = Data().payees.findOrAddPayee(newPayeeText);
+      final Payee found = Data().payees.getOrCreate(newPayeeText);
       onSelected(found);
     },
   );

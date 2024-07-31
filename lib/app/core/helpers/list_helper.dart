@@ -216,3 +216,13 @@ class SortedSet<T> {
 List<String> enumToStringList<T>(List<T> enumValues) {
   return enumValues.map((e) => e.toString().split('.').last).toList();
 }
+
+extension RandomItemExtension<T> on List<T> {
+  T getRandomItem() {
+    final random = Random();
+    if (isEmpty) {
+      throw Exception('Cannot get random item from an empty list');
+    }
+    return this[random.nextInt(length)];
+  }
+}

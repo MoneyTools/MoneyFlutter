@@ -51,22 +51,6 @@ class Payees extends MoneyObjects<Payee> {
     );
   }
 
-  /// Attempts to find payee wih the given name
-  /// if not found create a new payee and return that instance
-  Payee findOrAddPayee(final String name, {bool fireNotification = true}) {
-    // find or add account of given name
-    Payee? payee = getByName(name);
-
-    // if not found add new payee
-    if (payee == null) {
-      payee = Payee();
-      payee.fieldId.value = -1;
-      payee.fieldName.value = name;
-      Data().payees.appendNewMoneyObject(payee, fireNotification: fireNotification);
-    }
-    return payee;
-  }
-
   Payee? getByName(final String name) {
     if (name.isEmpty) {
       return null;
@@ -86,6 +70,22 @@ class Payees extends MoneyObjects<Payee> {
       return '<no name> $id';
     }
     return payee.fieldName.value;
+  }
+
+  /// Attempts to find payee wih the given name
+  /// if not found create a new payee and return that instance
+  Payee getOrCreate(final String name, {bool fireNotification = true}) {
+    // find or add account of given name
+    Payee? payee = getByName(name);
+
+    // if not found add new payee
+    if (payee == null) {
+      payee = Payee();
+      payee.fieldId.value = -1;
+      payee.fieldName.value = name;
+      Data().payees.appendNewMoneyObject(payee, fireNotification: fireNotification);
+    }
+    return payee;
   }
 
   /// if not found returns -1

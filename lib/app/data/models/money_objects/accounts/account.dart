@@ -7,6 +7,7 @@ import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types.dart';
 import 'package:money/app/data/models/money_objects/accounts/picker_account_type.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
+import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
@@ -432,6 +433,10 @@ class Account extends MoneyObject {
 
   static String getName(final Account? instance) {
     return instance == null ? '' : (instance).fieldName.value;
+  }
+
+  List<Transaction> getTransaction() {
+    return Data().transactions.iterableList().where((t) => t.fieldAccountId.value == this.uniqueId).toList();
   }
 
   bool isActiveBankAccount() {
