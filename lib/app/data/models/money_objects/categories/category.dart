@@ -281,8 +281,8 @@ class Category extends MoneyObject {
       _fields.setDefinitions([
         tmp.fieldId,
         tmp.fieldParentId,
-        tmp.fieldColor,
         tmp.fieldLevel,
+        tmp.fieldColor,
         tmp.fieldName,
         tmp.fieldDescription,
         tmp.fieldType,
@@ -303,8 +303,8 @@ class Category extends MoneyObject {
     final tmp = Category.fromJson({});
     return Fields<Category>()
       ..setDefinitions([
-        tmp.fieldColor,
         tmp.fieldLevel,
+        tmp.fieldColor,
         tmp.fieldName,
         tmp.fieldDescription,
         tmp.fieldType,
@@ -357,6 +357,18 @@ class Category extends MoneyObject {
     return Pair<Color, int>(Colors.transparent, 0);
   }
 
+  Widget getColorAndNameWidget() {
+    return Row(
+      children: [
+        getColorWidget(),
+        gapMedium(),
+        Expanded(
+          child: getNameAsWidget(),
+        ),
+      ],
+    );
+  }
+
   Color getColorOrAncestorsColor() {
     final pair = getColorAndLevel(0);
     return pair.first;
@@ -378,6 +390,10 @@ class Category extends MoneyObject {
 
   static String getName(final Category? instance) {
     return instance == null ? '' : (instance).fieldName.value;
+  }
+
+  Widget getNameAsWidget() {
+    return TokenText(this.fieldName.value);
   }
 
   Widget getRectangleWidget() {

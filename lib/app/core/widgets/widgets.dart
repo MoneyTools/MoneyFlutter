@@ -1,5 +1,7 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:money/app/data/models/constants.dart';
 
 // Exports
 export 'package:money/app/core/widgets/center_message.dart';
@@ -19,6 +21,22 @@ Widget scaleDown(final Widget child, [AlignmentGeometry alignment = Alignment.ce
   return FittedBox(
     fit: BoxFit.scaleDown,
     alignment: alignment,
+    child: child,
+  );
+}
+
+///
+///                                       ------
+/// Display a border and a question mark | ?    |
+///                                       ------
+///
+Widget widgetUnknown = buildDashboardWidget(const Text('?'));
+
+Widget buildDashboardWidget(final Widget child) {
+  return DottedBorder(
+    color: Colors.grey.shade600,
+    padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+    radius: const Radius.circular(3),
     child: child,
   );
 }

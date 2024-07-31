@@ -9,12 +9,11 @@ Widget pickerCategory({
   required final Category? itemSelected,
   required final Function(Category?) onSelected,
 }) {
-  final List<String> options = Data().categories.getListSorted().map((element) => element.fieldName.value).toList();
   String selectedName = itemSelected == null ? '' : itemSelected.fieldName.value;
 
   return PickerEditBox(
     title: 'Category',
-    items: options,
+    items: Data().categories.getCategoriesAsStrings(),
     initialValue: selectedName,
     onChanged: (String newSelection) {
       final Category? found = Data().categories.getByName(newSelection);

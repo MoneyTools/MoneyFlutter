@@ -1,7 +1,9 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class Categories extends MoneyObjects<Category> {
   Categories() {
@@ -49,6 +51,13 @@ class Categories extends MoneyObjects<Category> {
       getListSortedById(),
     );
   }
+
+  static Widget categoryWidgetForSplit = DottedBorder(
+    color: Colors.grey.shade600,
+    padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+    radius: const Radius.circular(3),
+    child: const Text('Split'),
+  );
 
   static int idOfSplitCategory = -1;
 
@@ -128,6 +137,10 @@ class Categories extends MoneyObjects<Category> {
     return iterableList().firstWhereOrNull((final Category category) => category.fieldName.value == name);
   }
 
+  List<String> getCategoriesAsStrings() {
+    return this.getListSorted().map((element) => element.fieldName.value).toList();
+  }
+
   List<Category> getCategoriesWithThisParent(final int parentId) {
     final List<Category> list = <Category>[];
     for (final Category item in iterableList()) {
@@ -136,6 +149,18 @@ class Categories extends MoneyObjects<Category> {
       }
     }
     return list;
+  }
+
+  Widget getCategoryWidget(final int id) {
+    if (id == -1) {
+      return const Text('?');
+    }
+
+    if (id == splitCategoryId()) {
+      return categoryWidgetForSplit;
+    }
+
+    return get(id)!.getColorAndNameWidget();
   }
 
   List<Category> getListSorted() {

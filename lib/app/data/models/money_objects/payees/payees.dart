@@ -65,9 +65,14 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   String getNameFromId(final int id) {
+    if (id == -1) {
+      return '';
+    }
+
     final Payee? payee = get(id);
+
     if (payee == null) {
-      return '<no name> $id';
+      return '<unkown payee $id>';
     }
     return payee.fieldName.value;
   }

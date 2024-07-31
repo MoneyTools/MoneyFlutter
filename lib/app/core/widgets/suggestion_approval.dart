@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/icon_button.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class SuggestionApproval extends StatefulWidget {
   const SuggestionApproval({
     super.key,
     required this.onApproved,
-    required this.onRejected,
+    required this.onChooseCategory,
     required this.child,
   });
 
   final Widget child;
-  final Function onApproved;
-  final Function onRejected;
+
+  /// Optional - Approval button will show if there's a callback function
+  final Function? onApproved;
+
+  // Optional - Dropdown button
+  final Function? onChooseCategory;
 
   @override
   SuggestionApprovalState createState() => SuggestionApprovalState();
@@ -21,8 +26,6 @@ class SuggestionApproval extends StatefulWidget {
 class SuggestionApprovalState extends State<SuggestionApproval> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _iconOpacityAnimation;
-  bool _isApproved = false;
-  bool _isRejected = false;
 
   @override
   void dispose() {
@@ -48,55 +51,50 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
 
   @override
   Widget build(BuildContext context) {
-    if (!shouldShowButton) {
-      return _isRejected ? const SizedBox() : widget.child;
-    }
     return FadeTransition(
       opacity: _iconOpacityAnimation,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Opacity(opacity: 0.5, child: widget.child),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: SizeForPadding.normal),
-            child: MyIconButton(
-              icon: Icons.thumb_up,
-              tooltip: 'Approve category',
-              hoverColor: Colors.green,
-              onPressed: _approved,
+      child: buildDashboardWidget(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Opacity(opacity: 0.5, child: widget.child),
             ),
-          ),
-          MyIconButton(
-            icon: Icons.thumb_down,
-            tooltip: 'It is not the right category',
-            hoverColor: Colors.red,
-            onPressed: _reject,
-          ),
-        ],
+
+            /// Optional Accept Suggestion
+            if (widget.onApproved != null)
+              Padding(
+                padding: const EdgeInsets.only(left: SizeForPadding.normal),
+                child: MyIconButton(
+                  icon: Icons.thumb_up,
+                  tooltip: 'Approve category',
+                  hoverColor: Colors.green,
+                  onPressed: _fadeOutAndApproved,
+                ),
+              ),
+
+            // Optional Dropdown button
+            if (widget.onChooseCategory != null)
+              MyIconButton(
+                icon: Icons.arrow_drop_down,
+                tooltip: 'Select a category',
+                hoverColor: Colors.blue,
+                onPressed: () {
+                  if (context.mounted) {
+                    widget.onChooseCategory?.call(context);
+                  }
+                },
+              ),
+          ],
+        ),
       ),
     );
   }
 
-  bool get shouldShowButton => _isApproved == false && _isRejected == false;
-
-  void _approved() {
+  void _fadeOutAndApproved() {
     _animationController.forward().then((_) {
       setState(() {
-        _isApproved = true;
-        _isRejected = false;
-        widget.onApproved();
-      });
-    });
-  }
-
-  void _reject() {
-    _animationController.forward().then((_) {
-      setState(() {
-        _isRejected = true;
-        _isApproved = false;
-        widget.onRejected();
+        widget.onApproved?.call();
       });
     });
   }
