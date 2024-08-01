@@ -2,6 +2,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
@@ -275,6 +276,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
         : Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
+              color: isSelected ? getColorTheme(context).primaryContainer : getColorTheme(context).surface,
               border: Border(
                 bottom: BorderSide(
                   width: 1,

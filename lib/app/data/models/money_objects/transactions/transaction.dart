@@ -339,8 +339,9 @@ class Transaction extends MoneyObject {
   /// Number
   /// 8|Number|nchar(10)|0||0
   FieldString fieldNumber = FieldString(
-    name: 'Number',
+    name: 'Ref',
     serializeName: 'Number',
+    columnWidth: ColumnWidth.nano,
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldNumber.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldNumber.value,
   );
@@ -710,9 +711,9 @@ class Transaction extends MoneyObject {
         [
           tmp.fieldDateTime,
           tmp.fieldAccountId,
+          tmp.fieldNumber,
           tmp.fieldPayee,
           tmp.fieldCategoryId,
-          tmp.fieldNumber,
           tmp.fieldStatus,
           tmp.fieldCurrency,
           tmp.fieldAmount,
