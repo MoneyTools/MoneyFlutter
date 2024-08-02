@@ -1,7 +1,5 @@
 // ignore_for_file: unnecessary_this
 
-import 'dart:ui';
-
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
@@ -10,6 +8,7 @@ import 'package:money/app/data/models/money_objects/investments/stock_cumulative
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 class Investment extends MoneyObject {
   Investment({
@@ -296,6 +295,16 @@ class Investment extends MoneyObject {
 
   /// The actual transaction date.
   Transaction? _transactionInstance;
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsWidget: fieldTransactionDate.getValueAsWidget(this),
+      leftBottomAsWidget: fieldTransactionAccountName.getValueAsWidget(this),
+      rightTopAsWidget: fieldSecuritySymbol.getValueAsWidget(this),
+      rightBottomAsWidget: fieldActivityAmount.getValueAsWidget(this),
+    );
+  }
 
   // Fields for this instance
   @override

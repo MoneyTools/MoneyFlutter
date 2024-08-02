@@ -10,7 +10,6 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
-import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 import '../accounts/account.dart';
 

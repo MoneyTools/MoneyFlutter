@@ -168,12 +168,7 @@ Widget buildWidgetFromTypeAndValue({
         );
       }
       if (value is MoneyModel) {
-        return Row(
-          children: [
-            const Spacer(), // align right
-            MoneyWidget(amountModel: value),
-          ],
-        );
+        return MoneyWidget(amountModel: value);
       }
       return buildFieldWidgetForAmount(
         value: value,
@@ -461,6 +456,20 @@ class Field<T> {
       default:
         return value.toString();
     }
+  }
+
+  Widget getValueAsWidget(dynamic instance) {
+    dynamic value = this.getValueForDisplay(instance);
+    if (value is Widget) {
+      return value;
+    }
+
+    return buildWidgetFromTypeAndValue(
+      value: value,
+      type: type,
+      align: align,
+      fixedFont: fixedFont,
+    );
   }
 
   Widget getValueWidgetForDetailView(final dynamic value) {

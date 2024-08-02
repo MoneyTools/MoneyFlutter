@@ -2,10 +2,12 @@
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
+import 'package:money/app/core/widgets/quantity_widget.dart';
 import 'package:money/app/data/models/money_objects/investments/investment.dart';
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 /*
@@ -231,6 +233,19 @@ class Security extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).taxable.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).taxable.value,
   );
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsString: fieldSymbol.value,
+      leftBottomAsWidget: QuantityWidget(
+        quantity: fieldHoldingShares.value.toDouble(),
+        align: TextAlign.left,
+      ),
+      rightTopAsWidget: fieldProfit.getValueAsWidget(this),
+      rightBottomAsWidget: fieldhHoldingValue.getValueAsWidget(this),
+    );
+  }
 
   // Fields for this instance
   @override

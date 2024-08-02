@@ -52,7 +52,7 @@ class Securities extends MoneyObjects<Security> {
   String getSymbolFromId(final int securityId) {
     final Security? security = get(securityId);
     if (security == null) {
-      return '?$security?';
+      return '(?)';
     }
     return security.fieldSymbol.value;
   }

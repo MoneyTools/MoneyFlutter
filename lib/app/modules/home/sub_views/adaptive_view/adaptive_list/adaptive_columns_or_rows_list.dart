@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_footer.dart';

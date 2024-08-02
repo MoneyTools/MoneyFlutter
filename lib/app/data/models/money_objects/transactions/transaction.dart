@@ -1,7 +1,6 @@
 // Imports
 // ignore_for_file: unnecessary_this
 
-import 'package:flutter/material.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';

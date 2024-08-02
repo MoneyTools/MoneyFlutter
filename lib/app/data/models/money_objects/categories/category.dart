@@ -1,7 +1,6 @@
 // Imports
 // ignore_for_file: unnecessary_this
 
-import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
