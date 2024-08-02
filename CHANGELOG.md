@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.51] 2024-08-01
+
+### Added
+
+- Info panel List can now scroll horizontally, when they are rendered on small devices
+  
 ## [version 1.8.50] 2024-07-31
 
 ### Update
