@@ -56,48 +56,28 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (final BuildContext context, final BoxConstraints constraints) {
-        if (widget.displayAsColumns) {
-          // only collect footer data if we are displaying columns
-          footerAccumulators();
-        }
-        final theList = AdaptiveListColumnsOrRows(
-          list: widget.list,
-          fieldDefinitions: widget.fieldDefinitions,
-          filters: widget.filters,
-          sortByFieldIndex: widget.sortByFieldIndex,
-          sortAscending: widget.sortAscending,
-          isMultiSelectionOn: false,
-          selectedItemsByUniqueId: selectionCollectionOfOnlyOneItem,
-          onSelectionChanged: (final int selectedId) {
-            setState(() {
-              selectionCollectionOfOnlyOneItem.value = [selectedId];
-              widget.onSelectionChanged?.call(selectedId);
-            });
-          },
-          onContextMenu: widget.onContextMenu,
-          displayAsColumns: widget.displayAsColumns,
-          onColumnHeaderTap: widget.onColumnHeaderTap,
-          onColumnHeaderLongPress: widget.onColumnHeaderLongPress,
-          onItemTap: widget.onItemTap,
-          onItemLongPress: widget.onItemLongPress,
-          getColumnFooterWidget: getColumnFooterWidget,
-          backgoundColorForHeaderFooter: widget.backgoundColorForHeaderFooter,
-        );
-
-        if (widget.displayAsColumns && constraints.maxWidth < 900) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: SizedBox(
-              width: 1200,
-              child: theList,
-            ),
-          );
-        } else {
-          return theList;
-        }
+    return AdaptiveListColumnsOrRows(
+      list: widget.list,
+      fieldDefinitions: widget.fieldDefinitions,
+      filters: widget.filters,
+      sortByFieldIndex: widget.sortByFieldIndex,
+      sortAscending: widget.sortAscending,
+      isMultiSelectionOn: false,
+      selectedItemsByUniqueId: selectionCollectionOfOnlyOneItem,
+      onSelectionChanged: (final int selectedId) {
+        setState(() {
+          selectionCollectionOfOnlyOneItem.value = [selectedId];
+          widget.onSelectionChanged?.call(selectedId);
+        });
       },
+      onContextMenu: widget.onContextMenu,
+      displayAsColumns: widget.displayAsColumns,
+      onColumnHeaderTap: widget.onColumnHeaderTap,
+      onColumnHeaderLongPress: widget.onColumnHeaderLongPress,
+      onItemTap: widget.onItemTap,
+      onItemLongPress: widget.onItemLongPress,
+      getColumnFooterWidget: getColumnFooterWidget,
+      backgoundColorForHeaderFooter: widget.backgoundColorForHeaderFooter,
     );
   }
 

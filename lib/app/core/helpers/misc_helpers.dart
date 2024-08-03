@@ -6,7 +6,6 @@ import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
-import 'package:money/app/data/models/constants.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final Logger logger = Logger(
@@ -106,24 +105,6 @@ bool isBetweenOrEqual(final num value, final num min, final num max) {
 
 bool isPlatformMobile() {
   return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
-}
-
-bool isSmallDevice(final BuildContext context) {
-  // Get the screen size
-  final screenSize = MediaQuery.of(context).size;
-
-  // Determine if the screen width is smaller than a certain threshold
-  return screenSize.width < 600;
-}
-
-bool isSmallWidth(
-  final BoxConstraints constraints, {
-  final num minWidth = Constants.narrowScreenWidthThreshold,
-}) {
-  if (constraints.maxWidth < minWidth) {
-    return true;
-  }
-  return false;
 }
 
 num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {

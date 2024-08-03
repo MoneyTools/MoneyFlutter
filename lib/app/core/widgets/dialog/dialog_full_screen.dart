@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
 ///
@@ -40,7 +40,7 @@ class AutoSizeDialog extends StatelessWidget {
     ShapeBorder? dialogShape;
     EdgeInsets? insetPadding;
 
-    if (isSmallDevice(context)) {
+    if (context.isWidthSmall) {
       insetPadding = EdgeInsets.zero;
     } else {
       dialogShape = RoundedRectangleBorder(

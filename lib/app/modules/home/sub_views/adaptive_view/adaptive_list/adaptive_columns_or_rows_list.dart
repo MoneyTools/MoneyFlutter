@@ -1,4 +1,5 @@
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_footer.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
@@ -49,7 +50,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final theContent = Column(
       children: <Widget>[
         // Header
         if (displayAsColumns)
@@ -102,5 +103,17 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
           ),
       ],
     );
+
+    if (displayAsColumns && !context.isWidthLarge) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          width: 1500,
+          child: theContent,
+        ),
+      );
+    } else {
+      return theContent;
+    }
   }
 }

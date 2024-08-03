@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 
 class MyAlertDialog extends StatelessWidget {
   const MyAlertDialog({
@@ -54,7 +54,7 @@ void adaptiveScreenSizeDialog({
   final String? captionForClose = 'Close',
 }) {
   actionButtons ??= [];
-  if (isSmallDevice(context)) {
+  if (context.isWidthSmall) {
     // Full screen also comes with a Close (X) button
     Navigator.of(context).push(
       MaterialPageRoute<Null>(

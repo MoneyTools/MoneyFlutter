@@ -29,10 +29,7 @@ export 'package:get/get.dart';
 export 'package:money/app/controller/preferences_controller.dart';
 export 'package:money/app/core/widgets/dialog/dialog_button.dart';
 export 'package:money/app/core/widgets/widgets.dart';
-export 'package:money/app/data/models/constants.dart';
 export 'package:money/app/data/models/fields/field_filter.dart';
-export 'package:money/app/data/models/money_objects/money_objects.dart';
-export 'package:money/app/data/storage/data/data.dart';
 export 'package:money/app/modules/home/sub_views/adaptive_view/switch_views.dart';
 
 class ViewForMoneyObjects extends StatefulWidget {

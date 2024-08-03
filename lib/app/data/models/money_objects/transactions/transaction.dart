@@ -25,6 +25,7 @@ import 'package:money/app/modules/home/sub_views/view_categories/picker_category
 import 'package:money/app/modules/home/sub_views/view_payees/picker_payee_or_transfer.dart';
 
 // Exports
+export 'package:money/app/data/models/fields/fields.dart';
 export 'package:money/app/data/models/money_objects/transactions/transaction_types.dart';
 
 /// Main source of information for this App

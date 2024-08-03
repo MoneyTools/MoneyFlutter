@@ -1,6 +1,7 @@
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/columns/footer_widgets.dart';
+import 'package:money/app/data/models/fields/field.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 
 class FooterAccumulators {

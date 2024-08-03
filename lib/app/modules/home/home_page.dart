@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/modules/home/sub_views/app_bar.dart';
@@ -45,7 +45,7 @@ class HomePage extends GetView<HomeController> {
 
   Widget _buildAdativeContent(BuildContext context) {
     return Obx(() {
-      if (isSmallDevice(context)) {
+      if (context.isWidthSmall) {
         // small screens
         return _buildContentForSmallSurface(context);
       } else {

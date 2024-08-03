@@ -7,7 +7,7 @@ import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/color_palette.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
-import 'package:money/app/core/widgets/three_part_label.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/core/widgets/zoom.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
@@ -43,7 +43,7 @@ class _MyAppBarState extends State<MyAppBar> {
       // Button on the right side
       actions: <Widget>[
         // Hide/Show closed accounts
-        if (!isSmallDevice(context)) _buildButtonToggleViewClosedAccounts(),
+        if (!context.isWidthSmall) _buildButtonToggleViewClosedAccounts(),
 
         // Dark / Light mode
         IconButton(

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 
 class AdaptiveColumns extends StatelessWidget {
   /// Constructor
@@ -14,11 +14,7 @@ class AdaptiveColumns extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    if (isSmallDevice(context)) {
-      return singleColumn();
-    } else {
-      return multiColumns();
-    }
+    return context.isWidthSmall ? singleColumn() : multiColumns();
   }
 
   // optimize for larger screen into multiple columns

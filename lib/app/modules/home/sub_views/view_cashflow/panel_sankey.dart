@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/widgets/sankey/sankey.dart';
 import 'package:money/app/core/widgets/sankey/sankey_colors.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
@@ -46,7 +47,7 @@ class PanelSanKey extends StatelessWidget {
               painter: SankeyPainter(
                 listOfIncomes: sanKeyListOfIncomes,
                 listOfExpenses: sanKeyListOfExpenses,
-                compactView: isSmallDevice(context),
+                compactView: context.isWidthSmall,
                 colors: SankeyColors(darkTheme: themeController.isDarkTheme.value),
               ),
             ),

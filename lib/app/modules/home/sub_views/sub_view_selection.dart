@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/constants.dart';
 
 List<NavigationDestination> getAppBarDestinations() {
@@ -163,7 +164,6 @@ class SubViewSelectionVerticalState extends State<SubViewSelectionVertical> {
 
   @override
   Widget build(final BuildContext context) {
-    bool isVeryLargeDevice = MediaQuery.of(context).size.width > 1000;
     final List<NavigationRailDestination> destinations = getNavRailDestination();
     return Container(
       color: getColorTheme(context).secondaryContainer,
@@ -174,7 +174,7 @@ class SubViewSelectionVerticalState extends State<SubViewSelectionVertical> {
             destinations: destinations,
             selectedIndex: _selectedView.index,
             useIndicator: widget.useIndicator,
-            labelType: isVeryLargeDevice ? NavigationRailLabelType.all : NavigationRailLabelType.none,
+            labelType: context.isWidthLarge ? NavigationRailLabelType.all : NavigationRailLabelType.none,
             indicatorColor: getColorTheme(context).onSecondary,
             backgroundColor: getColorTheme(context).secondaryContainer,
             onDestinationSelected: (final int index) {

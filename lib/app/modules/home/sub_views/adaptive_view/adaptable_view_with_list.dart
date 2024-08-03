@@ -1,3 +1,4 @@
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
@@ -56,7 +57,9 @@ class AdaptiveViewWithList extends StatelessWidget {
     }
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        final bool displayAsColumns = !isSmallWidth(constraints);
+        // dispay as column for Medium & Large devices
+        final bool displayAsColumns = context.isWidthSmall == false;
+
         return ValueListenableBuilder<List<int>>(
           valueListenable: selectedItemsByUniqueId,
           builder: (

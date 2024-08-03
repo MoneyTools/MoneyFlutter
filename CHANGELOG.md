@@ -4,7 +4,7 @@
 
 ### Added
 
-- Info panel List can now scroll horizontally, when they are rendered on small devices
+- Lists are now 'adaptive' they will enable horizontal scrolling if the devices are not "large enough".
   
 ## [version 1.8.50] 2024-07-31
 
