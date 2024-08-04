@@ -3,6 +3,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
@@ -44,25 +45,15 @@ class MyListView<T> extends StatefulWidget {
 
 class MyListViewState<T> extends State<MyListView<T>> {
   double padding = 0;
-  double rowHeight = 30;
-  ScrollController scrollController = ScrollController();
+
+  double _rowHeight = 30;
+  ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
     super.initState();
-
     // render the list with the first selected item in view
-    double initialScrollOffset = 0;
-
-    if (widget.selectedItemIds.value.isNotEmpty) {
-      final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
-      if (firstSelectedIndex != -1) {
-        initialScrollOffset = (firstSelectedIndex * rowHeight);
-        // don't make it flush to the top, we do this in order to give some clue that there's other item above,
-        initialScrollOffset += rowHeight * -1.5;
-      }
-    }
-    scrollController = ScrollController(initialScrollOffset: initialScrollOffset);
+    scrollFirstItemIntoView();
   }
 
   @override
@@ -70,19 +61,19 @@ class MyListViewState<T> extends State<MyListView<T>> {
     final TextScaler textScaler = MediaQuery.textScalerOf(context);
 
     if (widget.displayAsColumn) {
-      rowHeight = 30;
+      _rowHeight = 30;
       padding = 8.0;
     } else {
-      rowHeight = 85;
+      _rowHeight = 85;
       padding = 0;
     }
 
     return ListView.builder(
       primary: false,
       scrollDirection: Axis.vertical,
-      controller: scrollController,
+      controller: _scrollController,
       itemCount: widget.list.length,
-      itemExtent: textScaler.scale(rowHeight),
+      itemExtent: textScaler.scale(_rowHeight),
       itemBuilder: (final BuildContext context, final int index) {
         final MoneyObject itemInstance = getMoneyObjectFromIndex(index);
         final isLastItemOfTheList = (index == widget.list.length - 1);
@@ -151,6 +142,9 @@ class MyListViewState<T> extends State<MyListView<T>> {
     return widget.list.indexWhere((element) => (element as MoneyObject).uniqueId == uniqueId);
   }
 
+  /// don't make it flush to the top, we do this in order to give some clue that there's other item above,
+  double getListOffsetOfItemIndex(final int index) => (index * _rowHeight); // * -1.5;
+
   MoneyObject getMoneyObjectFromIndex(int index) {
     return widget.list[index] as MoneyObject;
   }
@@ -162,12 +156,12 @@ class MyListViewState<T> extends State<MyListView<T>> {
 // use this if total item count is known
   NumRange indexOfItemsInView() {
     final int itemCount = widget.list.length;
-    final double scrollOffset = scrollController.position.pixels;
-    final double viewportHeight = scrollController.position.viewportDimension;
-    final double scrollRange = scrollController.position.maxScrollExtent - scrollController.position.minScrollExtent;
+    final double scrollOffset = _scrollController.position.pixels;
+    final double viewportHeight = _scrollController.position.viewportDimension;
+    final double scrollRange = _scrollController.position.maxScrollExtent - _scrollController.position.minScrollExtent;
 
-    final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).floor();
-    final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort();
+    final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).ceil();
+    final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort() - 1;
 
     return NumRange(min: firstVisibleItemIndex, max: lastVisibleItemIndex);
   }
@@ -182,9 +176,26 @@ class MyListViewState<T> extends State<MyListView<T>> {
     return false;
   }
 
+  int moveCurrentSelection(final int incrementBy) {
+    int itemIdToSelect = -1;
+    final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
+    if (firstSelectedIndex != -1) {
+      int newIndedToSelect = firstSelectedIndex + incrementBy; // go up
+      if (isIndexInRange(widget.list, newIndedToSelect)) {
+        final itemFoundAtNewIndexPosition = widget.list[newIndedToSelect];
+        itemIdToSelect = (itemFoundAtNewIndexPosition as MoneyObject).uniqueId;
+      }
+    } else {
+      itemIdToSelect = (widget.list.first as MoneyObject).uniqueId;
+    }
+
+    scrollToId(itemIdToSelect);
+    return itemIdToSelect;
+  }
+
   int numberOfItemOnViewPort() {
-    final double viewportHeight = scrollController.position.viewportDimension;
-    final int numberOfItemDisplayed = (viewportHeight / rowHeight).ceil();
+    final double viewportHeight = _scrollController.position.viewportDimension;
+    final int numberOfItemDisplayed = (viewportHeight / _rowHeight).floor();
     return numberOfItemDisplayed;
   }
 
@@ -192,69 +203,114 @@ class MyListViewState<T> extends State<MyListView<T>> {
     final FocusNode node,
     final KeyEvent event,
   ) {
-    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      setState(() {
-        selectedItemOffset(-1);
-      });
-      return KeyEventResult.handled;
-    } else {
-      if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-        setState(() {
-          selectedItemOffset(1);
-        });
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.home) {
-        setState(() {
-          selectedItem(0);
-        });
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.end) {
-        setState(() {
-          selectedItem(widget.list.length - 1);
-        });
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.pageUp) {
-        setState(() {
-          selectedItemOffset(-numberOfItemOnViewPort());
-        });
-        return KeyEventResult.handled;
-      } else if (event.logicalKey == LogicalKeyboardKey.pageDown) {
-        setState(() {
-          selectedItemOffset(numberOfItemOnViewPort());
-        });
-        return KeyEventResult.handled;
-      } else {
-        logger.e(event.logicalKey.toString());
+    if (event is KeyDownEvent || event is KeyRepeatEvent) {
+      switch (event.logicalKey) {
+        case LogicalKeyboardKey.arrowUp:
+          if (widget.selectedItemIds.value.isNotEmpty) {
+            int itemIdToSelect = moveCurrentSelection(-1);
+            if (itemIdToSelect != -1) {
+              selectedItem(itemIdToSelect);
+            }
+          }
+          return KeyEventResult.handled;
+
+        case LogicalKeyboardKey.arrowDown:
+          if (widget.selectedItemIds.value.isNotEmpty) {
+            int itemIdToSelect = moveCurrentSelection(1);
+            if (itemIdToSelect != -1) {
+              selectedItem(itemIdToSelect);
+            }
+          }
+          return KeyEventResult.handled;
+
+        case LogicalKeyboardKey.home:
+          final idToSelect = (widget.list.first as MoneyObject).uniqueId;
+          selectedItem(idToSelect);
+          _scrollController.jumpTo(getListOffsetOfItemIndex(0));
+          return KeyEventResult.handled;
+
+        case LogicalKeyboardKey.end:
+          final idToSelect = (widget.list.last as MoneyObject).uniqueId;
+          selectedItem(idToSelect);
+          _scrollController.jumpTo(getListOffsetOfItemIndex(widget.list.length - 1));
+          return KeyEventResult.handled;
+
+        case LogicalKeyboardKey.pageUp:
+        case LogicalKeyboardKey.pageDown:
+          // TODO
+          return KeyEventResult.handled;
       }
     }
+
     return KeyEventResult.ignored;
   }
 
+  void scrollFirstItemIntoView() {
+    double initialScrollOffset = 0;
+
+    if (widget.selectedItemIds.value.isNotEmpty) {
+      final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
+      if (firstSelectedIndex != -1) {
+        initialScrollOffset = getListOffsetOfItemIndex(firstSelectedIndex);
+      }
+    }
+    _scrollController = ScrollController(initialScrollOffset: initialScrollOffset);
+  }
+
+  /// if the uniqueID is valid,
+  /// if the index of this ID is valid
+  /// if the item is not in view
+  /// then and only then we scroll the item into view
   void scrollToId(final int uniqueId) {
-    final int index = getListIndexFromUniqueId(uniqueId);
-    scrollToIndex(index);
+    if (-1 != uniqueId) {
+      final int index = getListIndexFromUniqueId(uniqueId);
+      scrollToIndex(index);
+    }
   }
 
   void scrollToIndex(final int index) {
-    if (!isIndexInView(index)) {
-      final double desiredNewPosition = rowHeight * index;
-      scrollController.jumpTo(desiredNewPosition);
+    if (isIndexInRange(widget.list, index)) {
+      final NumRange viewingIndexRange = indexOfItemsInView();
+      if (isBetweenOrEqual(index, viewingIndexRange.min, viewingIndexRange.max)) {
+        // item is already on the screen
+        // print('$index is range $viewingIndexRange');
+      } else {
+        // item is outside the view port list
+
+        //print('$index is Out of range $viewingIndexRange -----------');
+
+        // make the default scroll near the top
+        late double desiredNewPosition;
+        if (index == viewingIndexRange.min - 1) {
+          // scroll up by one
+          desiredNewPosition = (_scrollController.offset - _rowHeight);
+        } else {
+          if (index == viewingIndexRange.max + 1) {
+            desiredNewPosition = (_scrollController.offset + (_rowHeight));
+          } else {
+            desiredNewPosition = _rowHeight * index;
+          }
+        }
+        int numberOfItems = (desiredNewPosition / _rowHeight).floor();
+        desiredNewPosition = numberOfItems * _rowHeight;
+
+        //print('current offset ${_scrollController.offset}, requesting $desiredNewPosition for index $index');
+        _scrollController.jumpTo(desiredNewPosition);
+      }
     }
   }
 
   void selectedItem(final int uniqueId) {
-    setState(() {
-      if (widget.isMultiSelectionOn == false) {
-        // single selection so remove any other selection before selecting an item
-        widget.selectedItemIds.value.clear();
-      }
+    if (widget.isMultiSelectionOn == false) {
+      // single selection so remove any other selection before selecting an item
+      widget.selectedItemIds.value.clear();
+    }
 
-      // only add it if its not already there
-      if (!widget.selectedItemIds.value.contains(uniqueId)) {
-        widget.selectedItemIds.value.add(uniqueId);
-        widget.onSelectionChanged?.call(uniqueId);
-      }
-    });
+    // only add if not already there
+    if (!widget.selectedItemIds.value.contains(uniqueId)) {
+      widget.selectedItemIds.value.add(uniqueId);
+      widget.onSelectionChanged?.call(uniqueId);
+    }
   }
 
   void selectedItemOffset(final int delta) {

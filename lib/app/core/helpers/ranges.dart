@@ -143,6 +143,11 @@ class NumRange {
   num max;
   num min;
 
+  @override
+  String toString() {
+    return descriptionAsInt;
+  }
+
   /// Decrements the range by one, if possible.
   void decrement(int minLimit) {
     if (min - 1 >= minLimit) {

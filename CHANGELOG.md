@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.52] 2024-08-04
+
+### Added
+
+- Fix keyboard handling of list view navigation Home/End Up/Down keys
+  
 ## [version 1.8.51] 2024-08-01
 
 ### Added
