@@ -13,8 +13,10 @@ import 'package:money/app/data/models/money_objects/loan_payments/loan_payment.d
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
 import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
+import 'package:money/app/data/models/money_objects/splits/money_split.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class DataSimulator {
   int idAccountForLoan = 9;
@@ -34,10 +36,19 @@ class DataSimulator {
   late final Category _categoryFood;
   late final Category _categoryFoodGrocery;
   late final Category _categoryFoodRestaurant;
+  late final Category _categoryHomeLoanDownPayment;
+  late final Category _categoryHomeLoanMorgageInterest;
+  late final Category _categoryHomeLoanMorgagePrincipal;
+  late final Category _categoryInvestmentTrades;
+  late final Category _categorySalary;
   late final Category _categorySalaryBonus;
   late final Category _categorySalaryPaycheck;
-  late final Category _categoryTransport;
-  final double _monthlyMortgage = -2000;
+  late final Category _categorySplit;
+  late final Category _categorySubscriptionTransport;
+  late final Category _categorySubsriptions;
+  late final Category _categorySubsriptionsGym;
+  late final Category _categorySubsriptionsStreaming;
+  final double _monthlyHomeLoan = -2000;
   final double _monthlyRent = -600;
   final int _numberOFYearInThePast = 20;
   final double _startingYearlySalaryFirstJob = 15000.00;
@@ -54,15 +65,16 @@ class DataSimulator {
     _generateAliases();
     _generateCategories();
     _generateInvestments();
-    _generateLoans();
+
     _generateRentals();
     _generateTransactionsSalary();
-    _generateTransfersToRentAndMortgage();
+    _generateLoans();
+    _generateTransfersToRentAndHomeLoan();
 
     _generateSubscriptionsOnCheckingAccount();
     _generateSubscriptionsOnCreditCard();
 
-    // generateTransactionsForCreditCard();
+    generateTransactionsForCreditCard();
     _generateTransfersToCreditCardPayment();
   }
 
@@ -86,7 +98,7 @@ class DataSimulator {
     for (final date in dates) {
       final selectedCategory = [
         [
-          _categoryTransport,
+          _categorySubscriptionTransport,
           [
             ['City Bus', 3],
             ['Taxi', 20],
@@ -183,14 +195,13 @@ class DataSimulator {
       transactionAmount *= -1;
     }
     final payee = Data().payees.getOrCreate('Broker');
-    final category = Data().categories.getOrCreate('Trades', CategoryType.investment);
 
     var t = _addTransactionAccountDatePayeeCategory(
       account: account,
       date: date,
       amount: transactionAmount,
       payeeId: payee.uniqueId,
-      categoryId: category.uniqueId,
+      categoryId: _categoryInvestmentTrades.uniqueId,
     );
     t.fieldMemo.value =
         'You $action ${formatDoubleTrimZeros(quantity)} shares of "${stock!.fieldName.value} (${stock.fieldSymbol.value})"';
@@ -224,6 +235,34 @@ class DataSimulator {
     return account;
   }
 
+  void _buyHome(final Payee payeeForHomeLoan, final DateTime date) {
+    final accountAssetHome = _addNewAccount(
+      -1,
+      'Main Home',
+      'A0001',
+      AccountType.asset.index,
+      'USD',
+    );
+
+    _addTransactionAccountDatePayeeCategory(
+      account: accountAssetHome,
+      date: date,
+      amount: 250000,
+      categoryId:
+          Data().categories.addNewCategory(name: 'Investment:PropertyValue', type: CategoryType.investment).uniqueId,
+      memo: 'Purchase house valued at 250K',
+    );
+
+    _addTransactionAccountDatePayeeCategory(
+      account: _accountBankUSA,
+      date: date,
+      payeeId: payeeForHomeLoan.uniqueId,
+      categoryId: _categoryHomeLoanDownPayment.uniqueId,
+      amount: -30000,
+      memo: 'Down payment',
+    );
+  }
+
   void _generateAccounts() {
     _accountBankUSA = _addNewAccount(
       -1,
@@ -248,7 +287,15 @@ class DataSimulator {
       date: getDateShiftedByYears(-21, 1, 1),
       amount: 100000,
       payeeId: Data().payees.getOrCreate('Lottery Win').uniqueId,
-      memo: 'Initial openeing of account',
+      categoryId: Data()
+          .categories
+          .addNewCategory(
+            name: 'Misc Incomes',
+            type: CategoryType.income,
+            color: '#004400',
+          )
+          .uniqueId,
+      memo: 'Initial openening of account',
     );
 
     _accountCreditCardUSD = _addNewAccount(
@@ -285,9 +332,9 @@ class DataSimulator {
           ),
         );
     _accountStartupLoan.fieldCategoryIdForInterest.value =
-        Data().categories.getOrCreate('Loans:Interest:Startup', CategoryType.expense).uniqueId;
+        Data().categories.getOrCreate('Loans:Interest:Startup', CategoryType.investment).uniqueId;
     _accountStartupLoan.fieldCategoryIdForPrincipal.value =
-        Data().categories.getOrCreate('Loans:Principal:Startup', CategoryType.expense).uniqueId;
+        Data().categories.getOrCreate('Loans:Principal:Startup', CategoryType.investment).uniqueId;
   }
 
   void _generateAliases() {
@@ -319,181 +366,189 @@ class DataSimulator {
 
   void _generateCategories() {
     // Expenses
-    _categoryBills = Category(
-      id: -1,
-      name: 'Bills',
-      description: '',
-      type: CategoryType.expense,
-      color: '#FFFF0000',
-    );
-    Data().categories.appendNewMoneyObject(_categoryBills);
-
-    _categoryBillsElectricity = Category(
-      id: -1,
-      parentId: _categoryBills.uniqueId,
-      name: 'Bills:Electricity',
-      description: '',
-      type: CategoryType.expense,
-    );
-    Data().categories.appendNewMoneyObject(_categoryBillsElectricity);
-
-    _categoryBillsPhone = Category(
-      id: -1,
-      parentId: _categoryBills.uniqueId,
-      name: 'Bills:Phone',
-      description: '',
-      type: CategoryType.expense,
-    );
-    Data().categories.appendNewMoneyObject(_categoryBillsPhone);
-
-    _categoryBillsTV = Category(
-      id: -1,
-      parentId: _categoryBills.uniqueId,
-      name: 'Bills:TV',
-      description: '',
-      type: CategoryType.expense,
-    );
-    Data().categories.appendNewMoneyObject(_categoryBillsTV);
-
-    _categoryBillsInternet = Category(
-      id: -1,
-      parentId: _categoryBills.uniqueId,
-      name: 'Bills:Internet',
-      description: '',
-      type: CategoryType.expense,
-    );
-    Data().categories.appendNewMoneyObject(_categoryBillsInternet);
-
-    _categoryTransport = Category(
-      id: -1,
-      name: 'Transportaion',
-      description: '',
-      type: CategoryType.expense,
-      color: '#FFFF88FF',
-    );
-    Data().categories.appendNewMoneyObject(_categoryTransport);
-
-    _categoryFood = Category(
-      id: -1,
-      name: 'Food',
-      description: '',
-      type: CategoryType.expense,
-      color: '#FFFF22FF',
-    );
-    Data().categories.appendNewMoneyObject(_categoryFood);
-
-    _categoryFoodGrocery = Category(
-      id: -1,
-      parentId: _categoryFood.uniqueId,
-      name: 'Food:Grocery',
-      description: '',
-      type: CategoryType.expense,
-    );
-    Data().categories.appendNewMoneyObject(_categoryFoodGrocery);
-
-    _categoryFoodRestaurant = Category(
-      id: -1,
-      parentId: _categoryFood.uniqueId,
-      name: 'Food:Restaurant',
-      description: '',
-      type: CategoryType.expense,
-    );
-    Data().categories.appendNewMoneyObject(_categoryFoodRestaurant);
-
-    // Salary
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Salary',
-            description: 'Main income',
-            type: CategoryType.income,
-            color: '#FF00FF00',
-          ),
+    _categorySplit = Data().categories.addNewCategory(
+          name: 'Split',
+          type: CategoryType.expense,
         );
 
-    _categorySalaryPaycheck = Category(
-      id: -1,
-      parentId: Data().categories.getByName('Salary')!.uniqueId,
-      name: 'Salary:Paycheck',
-      description: '',
-      type: CategoryType.income,
-    );
-
-    Data().categories.appendNewMoneyObject(_categorySalaryPaycheck);
-
-    _categorySalaryBonus = Category(
-      id: -1,
-      parentId: Data().categories.getByName('Salary')!.uniqueId,
-      name: 'Salary:Bonus',
-      description: '',
-      type: CategoryType.income,
-    );
-
-    Data().categories.appendNewMoneyObject(_categorySalaryBonus);
-
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Investment',
-            description: '',
-            type: CategoryType.investment,
-            color: '#FFA1A2A3',
-          ),
-        );
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Interests',
-            description: '',
-            type: CategoryType.income,
-            color: '#FFFF2233',
-          ),
-        );
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Rental',
-            description: '',
-            type: CategoryType.income,
-            color: '#FF11FF33',
-          ),
-        );
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Mortgage',
-            description: '',
+    // Bills
+    {
+      _categoryBills = Data().categories.addNewCategory(
+            name: 'Bills',
             type: CategoryType.expense,
-            color: '#FFBB2233',
-          ),
-        );
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Saving',
-            description: '',
-            type: CategoryType.income,
-            color: '#FFBB2233',
-          ),
-        );
-
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
-            name: 'Taxes',
-            description: '',
+            color: '#FFFF0000',
+          );
+      _categoryBillsElectricity = Data().categories.addNewCategory(
+            parentId: _categoryBills.uniqueId,
+            name: 'Electricity',
             type: CategoryType.expense,
-            color: '#FF1122DD',
-          ),
-        );
-    Data().categories.appendNewMoneyObject(
-          Category(
-            id: -1,
+          );
+
+      Data().categories.addNewCategory(
+            parentId: _categoryBills.uniqueId,
             name: 'School',
             description: '',
             type: CategoryType.expense,
-          ),
+          );
+
+      _categoryBillsPhone = Data().categories.addNewCategory(
+            parentId: _categoryBills.uniqueId,
+            name: 'Phone',
+            type: CategoryType.expense,
+          );
+
+      _categoryBillsTV = Data().categories.addNewCategory(
+            parentId: _categoryBills.uniqueId,
+            name: 'TV',
+            type: CategoryType.expense,
+          );
+
+      _categoryBillsInternet = Data().categories.addNewCategory(
+            parentId: _categoryBills.uniqueId,
+            name: 'Internet',
+            type: CategoryType.expense,
+          );
+    }
+
+    // Food
+    {
+      _categoryFood = Data().categories.addNewCategory(
+            name: 'Food',
+            type: CategoryType.expense,
+            color: '#FFFF22FF',
+          );
+
+      _categoryFoodGrocery = Data().categories.addNewCategory(
+            parentId: _categoryFood.uniqueId,
+            name: 'Grocery',
+            type: CategoryType.expense,
+          );
+
+      _categoryFoodRestaurant = Data().categories.addNewCategory(
+            parentId: _categoryFood.uniqueId,
+            name: 'Restaurant',
+            type: CategoryType.expense,
+          );
+    }
+
+    // Subscriptions
+    {
+      _categorySubsriptions = Data().categories.addNewCategory(
+            name: 'Subscriptions',
+            type: CategoryType.expense,
+            color: '#FFFFaaaa',
+          );
+
+      _categorySubsriptionsGym = Data().categories.addNewCategory(
+            parentId: _categorySubsriptions.uniqueId,
+            name: 'Gym',
+            type: CategoryType.expense,
+          );
+
+      _categorySubsriptionsStreaming = Data().categories.addNewCategory(
+            parentId: _categorySubsriptions.uniqueId,
+            name: 'Streaming',
+            type: CategoryType.expense,
+          );
+
+      _categorySubscriptionTransport = Data().categories.addNewCategory(
+            parentId: _categorySubsriptions.uniqueId,
+            name: 'Transportaion',
+            type: CategoryType.expense,
+          );
+    }
+
+    // Salary
+    {
+      _categorySalary = Data().categories.addNewCategory(
+            parentId: _categoryFood.uniqueId,
+            name: 'Salary',
+            type: CategoryType.income,
+            color: '#FF00FF00',
+            description: 'Main income',
+          );
+
+      _categorySalaryPaycheck = Data().categories.addNewCategory(
+            parentId: _categorySalary.uniqueId,
+            name: 'Paycheck',
+          );
+
+      _categorySalaryBonus = Data().categories.addNewCategory(
+            parentId: _categorySalary.uniqueId,
+            name: 'Bonus',
+          );
+    }
+
+    // Investment
+    {
+      Data().categories.addNewCategory(
+            name: 'Investment',
+            description: '',
+            type: CategoryType.investment,
+            color: '#FF1122DD',
+          );
+
+      _categoryInvestmentTrades = Data().categories.addNewCategory(
+            name: 'Investment:Trades',
+          );
+    }
+
+    Data().categories.addNewCategory(
+          name: 'Rental',
+          description: '',
+          type: CategoryType.income,
+          color: '#FF11FF33',
         );
+
+    // Loans
+    {
+      final homeLoan = Data().categories.addNewCategory(
+            name: 'HomeLoans',
+            description: '',
+            type: CategoryType.expense,
+            color: '#FFBB2233',
+          );
+
+      _categoryHomeLoanDownPayment = Data().categories.addNewCategory(
+            parentId: homeLoan.uniqueId,
+            name: 'DownPayment',
+            type: CategoryType.investment,
+          );
+
+      _categoryHomeLoanMorgagePrincipal = Data().categories.addNewCategory(
+            name: 'HomeLoans:Morgage:Principal',
+            type: CategoryType.investment,
+          );
+
+      _categoryHomeLoanMorgageInterest = Data().categories.addNewCategory(
+            name: 'HomeLoans:Morgage:Interest',
+            type: CategoryType.expense,
+          );
+    }
+
+    Data().categories.addNewCategory(
+          name: 'Saving',
+          description: '',
+          type: CategoryType.income,
+          color: '#FFBB2233',
+        );
+
+    {
+      Data().categories.addNewCategory(
+            name: 'Taxes',
+            type: CategoryType.expense,
+            color: '#FFA1A2A3',
+          );
+      Data().categories.addNewCategory(
+            name: 'Taxes:IRS',
+          );
+      Data().categories.addNewCategory(
+            name: 'Taxes:Property',
+          );
+      Data().categories.addNewCategory(
+            name: 'Taxes:School',
+          );
+    }
   }
 
   void _generateCurrencies() {
@@ -568,8 +623,8 @@ class DataSimulator {
     final receivingTransaction = _createTransferTransaction(
       accountSource: _accountBankCanada,
       accountDestination: _accountStartupLoan,
-      dateOfPayment: getDateShiftedByYears(-6, 11, 11),
-      paymentAmount: -loanAmount,
+      date: getDateShiftedByYears(-6, 11, 11),
+      amount: -loanAmount,
       memo: 'Invest in projet goto Mars',
     );
 
@@ -710,7 +765,7 @@ class DataSimulator {
     generateTransactionsMontlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Gold Gym',
-      category: Data().categories.getOrCreate('Gym', CategoryType.expense),
+      category: _categorySubsriptionsGym,
       amount: -50,
       yearMin: dateForGym.year,
       yearMax: dateForGym.add(const Duration(days: 365 * 4)).year,
@@ -722,7 +777,7 @@ class DataSimulator {
     generateTransactionsMontlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Netflix',
-      category: Data().categories.getOrCreate('Streaming Subscription', CategoryType.expense),
+      category: _categorySubsriptionsStreaming,
       amount: -8.99,
       yearMin: dateForNetflix.year,
       yearMax: _today.year,
@@ -813,8 +868,8 @@ class DataSimulator {
         _createTransferTransaction(
           accountSource: _accountBankUSA,
           accountDestination: _accountCreditCardUSD,
-          dateOfPayment: getLastDayOfPreviousMonth(t.fieldDateTime.value!),
-          paymentAmount: rollingBalance,
+          date: getLastDayOfPreviousMonth(t.fieldDateTime.value!),
+          amount: rollingBalance,
           memo: 'PAY CREDIT CARD',
         );
         rollingBalance = 0;
@@ -825,12 +880,16 @@ class DataSimulator {
   }
 
   /// The demo data tries to demonstrat a person that had a rent for the first part of their jouney and a house on the second half
-  void _generateTransfersToRentAndMortgage() {
+  void _generateTransfersToRentAndHomeLoan() {
     final payeeLandLord = Data().payees.getOrCreate('TheLandlord');
-    final payeeForMortgage = Data().payees.getOrCreate('HomeLoanBank');
+    final payeeForHomeLoan = Data().payees.getOrCreate('HomeLoanBank');
     // Iterate over the last 'n' years of loan paid each month
     final dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 10);
     final midPointInTime = dates[dates.length ~/ 2];
+
+    bool boughtHome = false;
+    int numberOfRentPayement = 0;
+    int numberOfMorgagePayement = 0;
 
     for (final date in dates) {
       if (date.isBefore(midPointInTime)) {
@@ -838,19 +897,49 @@ class DataSimulator {
           account: _accountBankUSA,
           date: date,
           payeeId: payeeLandLord.uniqueId,
-          categoryId: Data().categories.getOrCreate('Rent', CategoryType.expense).uniqueId,
+          categoryId: Data().categories.getOrCreate('Bills:Rent', CategoryType.expense).uniqueId,
           amount: _monthlyRent,
-        ).fieldMemo.value = 'Pay Rent';
+        ).fieldMemo.value = 'Pay Rent #${++numberOfRentPayement}';
       } else {
-        final Transaction source = _addTransactionAccountDatePayeeCategory(
+        if (boughtHome == false) {
+          boughtHome = true;
+          _buyHome(payeeForHomeLoan, date);
+        }
+
+        final transaction = _addTransactionAccountDatePayeeCategory(
           account: _accountBankUSA,
           date: date,
-          payeeId: payeeForMortgage.uniqueId,
-          categoryId: Data().categories.getByName('Mortgage')!.uniqueId,
-          amount: _monthlyMortgage,
+          payeeId: payeeForHomeLoan.uniqueId,
+          categoryId: _categorySplit.uniqueId,
+          amount: _monthlyHomeLoan,
+          memo: 'Mortgage Payement #${++numberOfMorgagePayement}',
         );
-        source.fieldMemo.value = 'PAY LOAN';
-        // Data().makeTransferLinkage(source, accountDestination!);
+
+        final splitMorgagePayementPrincipale = MoneySplit(
+          id: -1,
+          amount: _monthlyHomeLoan - 200,
+          transactionId: transaction.uniqueId,
+          categoryId: _categoryHomeLoanMorgagePrincipal.uniqueId,
+          payeeId: payeeForHomeLoan.uniqueId,
+          transferId: -1,
+          memo: '',
+          flags: 0,
+          budgetBalanceDate: null,
+        );
+        Data().splits.appendNewMoneyObject(splitMorgagePayementPrincipale);
+
+        final splitMorgagePayementInterest = MoneySplit(
+          id: -1,
+          amount: 200,
+          transactionId: transaction.uniqueId,
+          categoryId: _categoryHomeLoanMorgageInterest.uniqueId,
+          payeeId: payeeForHomeLoan.uniqueId,
+          transferId: -1,
+          memo: '',
+          flags: 0,
+          budgetBalanceDate: null,
+        );
+        Data().splits.appendNewMoneyObject(splitMorgagePayementInterest);
       }
     }
   }
@@ -944,14 +1033,14 @@ DateTime getDateShiftedByYears(int yearsToShift, int month, int day) {
 Transaction _createTransferTransaction({
   required final Account accountSource,
   required final Account accountDestination,
-  required final DateTime dateOfPayment,
-  required final double paymentAmount,
+  required final DateTime date,
+  required final double amount,
   required final String memo,
 }) {
   final Transaction source = _addTransactionAccountDatePayeeCategory(
     account: accountSource,
-    date: dateOfPayment,
-    amount: paymentAmount,
+    date: date,
+    amount: amount,
   );
   source.fieldMemo.value = memo;
 

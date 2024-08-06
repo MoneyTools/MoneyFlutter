@@ -142,9 +142,10 @@ class Category extends MoneyObject {
     align: TextAlign.center,
     name: 'Level',
     columnWidth: ColumnWidth.nano,
-    footer: FooterType.average,
+    type: FieldType.text,
+    footer: FooterType.count,
     getValueForDisplay: (final MoneyObject instance) =>
-        countOccurrences((instance as Category).fieldName.value, ':') + 1,
+        (countOccurrences((instance as Category).fieldName.value, ':') + 1).toString(),
   );
 
   /// Name
@@ -381,7 +382,7 @@ class Category extends MoneyObject {
       alignment: Alignment.center,
       children: [
         MyCircle(colorFill: fillColor, size: 12),
-        if (this.fieldColor.value.isNotEmpty && this.fieldLevel.getValueForDisplay(this) > 1)
+        if (this.fieldColor.value.isNotEmpty && this.fieldLevel.getValueForDisplay(this) != '1')
           Text('#', style: TextStyle(fontSize: 10, color: textColor)),
       ],
     );

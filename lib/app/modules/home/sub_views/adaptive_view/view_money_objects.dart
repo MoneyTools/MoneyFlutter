@@ -261,7 +261,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       for (final field in _fieldToDisplay.definitions) {
         switch (field.type) {
           case FieldType.text:
-            _footerAccumulators.accumaltorListOfText.cumulate(field, field.getValueForDisplay(item));
+            _footerAccumulators.accumaltorListOfText.cumulate(field, field.getValueForDisplay(item).toString());
 
           case FieldType.date:
             final dateTime = field.getValueForDisplay(item);
@@ -297,11 +297,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           case FieldType.numericShorthand:
           case FieldType.quantity:
             final dynamic value = field.getValueForDisplay(item);
-            if (value is num) {
-              _footerAccumulators.accumulatorSumNumber.cumulate(field, value.toDouble());
-            }
-            if (field.footer == FooterType.average) {
-              _footerAccumulators.accumulatorForAverage.cumulate(field, value);
+            if (field.footer == FooterType.count) {
+              _footerAccumulators.accumaltorListOfText.cumulate(field, getIntAsText(value));
+            } else {
+              if (value is num) {
+                _footerAccumulators.accumulatorSumNumber.cumulate(field, value.toDouble());
+              }
+              if (field.footer == FooterType.average) {
+                _footerAccumulators.accumulatorForAverage.cumulate(field, value);
+              }
             }
           default:
             break;

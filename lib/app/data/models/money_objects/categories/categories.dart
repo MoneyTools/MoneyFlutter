@@ -10,6 +10,8 @@ class Categories extends MoneyObjects<Category> {
     collectionName = 'Categories';
   }
 
+  Category? _split;
+
   @override
   Category instanceFromSqlite(final MyJson row) {
     return Category.fromJson(row);
@@ -62,8 +64,24 @@ class Categories extends MoneyObjects<Category> {
   static int idOfSplitCategory = -1;
 
   /// Add a new Category ensure that the name is unique under the parent or root
-  Category addNewCategory({final int parentId = -1, final String name = 'New Cagtegory'}) {
+  Category addNewCategory({
+    final int parentId = -1,
+    final String name = 'New Cagtegory',
+    final CategoryType? type,
+    final String color = '',
+    final String description = '',
+  }) {
+    assert(
+      name.contains(':') && parentId == -1 || !name.contains(':'),
+      'Supply a parent ID or hierarchy names but not both',
+    );
+
     Category? parent = Data().categories.get(parentId);
+
+    if (parent == null && name.contains(':')) {
+      return ensureAncestorExist(name: name, overrideTypeOfParent: type);
+    }
+
     // find next available name
     String prefixName = parent == null ? name : '${parent.fieldName.value}:$name';
     String nextAvailableName = prefixName;
@@ -75,9 +93,9 @@ class Categories extends MoneyObjects<Category> {
       next++;
     }
 
-    CategoryType typeToUse = CategoryType.expense;
+    CategoryType typeToUse = type ?? CategoryType.none;
 
-    if (parent != null) {
+    if (type == null && parent != null) {
       typeToUse = parent.fieldType.value;
     }
 
@@ -87,6 +105,8 @@ class Categories extends MoneyObjects<Category> {
       parentId: parentId,
       name: nextAvailableName,
       type: typeToUse,
+      color: color,
+      description: description,
     );
 
     Data().categories.appendNewMoneyObject(category);
@@ -98,6 +118,7 @@ class Categories extends MoneyObjects<Category> {
     required int parentId,
     required String name,
     required final CategoryType type,
+    bool fireNotification = false,
   }) {
     final category = Category(
       id: -1,
@@ -106,15 +127,15 @@ class Categories extends MoneyObjects<Category> {
       type: type,
     );
 
-    appendNewMoneyObject(category);
+    appendNewMoneyObject(category, fireNotification: fireNotification);
     return category;
   }
 
-  Category ensureAncestorExist(
-    final String categoryName,
-    final CategoryType typeToUseIfMissing,
-  ) {
-    final List<String> categoryNameParts = categoryName.split(':');
+  Category ensureAncestorExist({
+    required final String name,
+    final CategoryType? overrideTypeOfParent,
+  }) {
+    final List<String> categoryNameParts = name.split(':');
 
     int parentCategoryId = -1;
     String cumulativeCategoryName = '';
@@ -122,15 +143,24 @@ class Categories extends MoneyObjects<Category> {
     for (final String part in categoryNameParts) {
       cumulativeCategoryName = cumulativeCategoryName.isEmpty ? part : '$cumulativeCategoryName:$part';
 
-      Category category = getByName(cumulativeCategoryName) ??
-          appenNewCategory(
-            parentId: parentCategoryId,
-            name: cumulativeCategoryName,
-            type: typeToUseIfMissing,
-          );
+      CategoryType typeToUse = CategoryType.none;
+      if (overrideTypeOfParent == null) {
+        if (parentCategoryId != -1) {
+          // try to get the parent type
+          typeToUse = get(parentCategoryId)!.fieldType.value;
+        }
+      } else {
+        typeToUse = overrideTypeOfParent;
+      }
+      Category? category = getByName(cumulativeCategoryName);
+      category ??= appenNewCategory(
+        parentId: parentCategoryId,
+        name: cumulativeCategoryName,
+        type: typeToUse,
+      );
       parentCategoryId = category.uniqueId;
     }
-    return getByName(categoryName)!;
+    return getByName(name)!;
   }
 
   Category? getByName(final String name) {
@@ -187,7 +217,7 @@ class Categories extends MoneyObjects<Category> {
     Category? category = getByName(name);
 
     if (category == null) {
-      category = ensureAncestorExist(name, type);
+      category = ensureAncestorExist(name: name, overrideTypeOfParent: type);
     } else {
       if (category.isDeleted) {
         category.mutation = MutationType.none; // Bring it back to life
@@ -337,17 +367,15 @@ class Categories extends MoneyObjects<Category> {
   }
 
   Category get split {
-    return getOrCreate('Split', CategoryType.none);
+    // ignore: prefer_conditional_assignment
+    if (_split == null) {
+      _split = getByName('Split');
+    }
+    return _split!;
   }
 
   int splitCategoryId() {
-    if (idOfSplitCategory == -1) {
-      final Category? cat = getByName('Split');
-      if (cat != null) {
-        idOfSplitCategory = cat.fieldId.value;
-      }
-    }
-    return idOfSplitCategory;
+    return split.uniqueId;
   }
 
   Category get transfer {
