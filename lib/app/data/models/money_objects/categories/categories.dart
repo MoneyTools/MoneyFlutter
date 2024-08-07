@@ -369,7 +369,7 @@ class Categories extends MoneyObjects<Category> {
   Category get split {
     // ignore: prefer_conditional_assignment
     if (_split == null) {
-      _split = getByName('Split');
+      _split = getOrCreate('Split', CategoryType.none);
     }
     return _split!;
   }
