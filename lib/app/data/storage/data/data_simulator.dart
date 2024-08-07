@@ -202,9 +202,9 @@ class DataSimulator {
       amount: transactionAmount,
       payeeId: payee.uniqueId,
       categoryId: _categoryInvestmentTrades.uniqueId,
+      memo:
+          'You $action ${formatDoubleTrimZeros(quantity)} shares of "${stock!.fieldName.value} (${stock.fieldSymbol.value})"',
     );
-    t.fieldMemo.value =
-        'You $action ${formatDoubleTrimZeros(quantity)} shares of "${stock!.fieldName.value} (${stock.fieldSymbol.value})"';
 
     Data().investments.appendMoneyObject(
           Investment(
@@ -829,7 +829,7 @@ class DataSimulator {
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
             amount: 20000,
-          ).fieldMemo.value = 'Singing Bonnus';
+          ).fieldMemo.value = 'Signing Bonnus';
         }
         // Add Paycheck for NASA
         _addTransactionAccountDatePayeeCategory(
@@ -903,7 +903,7 @@ class DataSimulator {
       } else {
         if (boughtHome == false) {
           boughtHome = true;
-          _buyHome(payeeForHomeLoan, date);
+          _buyHome(payeeForHomeLoan, date.add(const Duration(days: 180)));
         }
 
         final transaction = _addTransactionAccountDatePayeeCategory(

@@ -11,9 +11,13 @@ class MyLineChart extends StatelessWidget {
     super.key,
     required this.dataPoints,
     required this.showDots,
+    this.marginLeft = 80,
+    this.marginBottom = 50,
   });
 
   final List<FlSpot> dataPoints;
+  final double marginBottom;
+  final double marginLeft;
   final bool showDots;
 
   @override
@@ -27,17 +31,17 @@ class MyLineChart extends StatelessWidget {
         titlesData: FlTitlesData(
           topTitles: const AxisTitles(), // hide
           rightTitles: const AxisTitles(), // hide
-          leftTitles: const AxisTitles(
+          leftTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 80,
+              reservedSize: marginLeft,
               getTitlesWidget: getWidgetChartAmount,
             ),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 50,
+              reservedSize: marginBottom,
               getTitlesWidget: (double value, TitleMeta meta) {
                 if (value == meta.min || value == meta.max) {
                   return const SizedBox();

@@ -230,8 +230,7 @@ class Transaction extends MoneyObject {
         return Data().categories.getCategoryWidget(t.fieldCategoryId.value);
       }
     },
-    getValueForReading: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as Transaction).fieldCategoryId.value),
+    getValueForReading: (final MoneyObject instance) => (instance as Transaction).categoryAsString,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldCategoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).fieldCategoryId.value = newValue as int,
@@ -581,6 +580,8 @@ class Transaction extends MoneyObject {
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
   String get amountAsText => fieldAmount.value.toString();
+
+  String get categoryAsString => Data().categories.getNameFromId(this.fieldCategoryId.value);
 
   static void changeCategory(Transaction t, final int categoryId) {
     // record the change

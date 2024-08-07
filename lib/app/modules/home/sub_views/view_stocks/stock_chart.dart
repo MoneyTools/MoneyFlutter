@@ -20,15 +20,27 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
-class HoldingActivity {
-  HoldingActivity(this.date, this.amount, this.quantity);
+class ChartEvent {
+  ChartEvent({
+    required this.date,
+    required this.amount,
+    required this.quantity,
+    required this.description,
+    required this.colorBasedOnQuantity,
+  });
 
   final double amount;
+  final bool colorBasedOnQuantity;
   final DateTime date;
+  final String description;
   final double quantity;
 
-  Color get color => quantity == 0 ? Colors.grey : (isBuy ? Colors.orange : Colors.blue);
+  Color get color => colorBasedOnQuantity
+      ? (quantity == 0 ? Colors.grey : (isBuy ? Colors.orange : Colors.blue))
+      : (amount == 0 ? Colors.grey : (amount.isNegative ? Colors.orange : Colors.blue));
 
   bool get isBuy => quantity > 0;
 
@@ -45,7 +57,7 @@ class StockChartWidget extends StatefulWidget {
   });
 
   final List<Dividend> dividends;
-  final List<HoldingActivity> holdingsActivities;
+  final List<ChartEvent> holdingsActivities;
   final List<StockSplit> splits;
   final String symbol;
 
@@ -160,6 +172,10 @@ class StockChartWidgetState extends State<StockChartWidget> {
     if (dataPoints.isEmpty) {
       return const CenterMessage(message: 'No data points');
     }
+
+    // lines are drawn let to right sorted by time
+    // the labels are drawn bottom to top sorted by ascending currentUnitPrice
+    widget.holdingsActivities.sort((a, b) => a.amount.compareTo(b.amount));
 
     return Stack(
       alignment: Alignment.topCenter,
@@ -416,6 +432,7 @@ void _paintLabel(
       style: TextStyle(
         color: color,
         fontSize: 9,
+        fontWeight: FontWeight.w900,
       ),
     ),
     textDirection: ui.TextDirection.ltr,
@@ -423,7 +440,7 @@ void _paintLabel(
 
   textPainter.layout(
     minWidth: 0,
-    maxWidth: 100,
+    maxWidth: 400,
   );
 
   textPainter.paint(canvas, Offset(x, y));
@@ -446,9 +463,7 @@ class PaintSplits extends CustomPainter {
     final chartHeight = size.height;
 
     // lines are drawn lef to right sorted by time
-    // the labe are drawn bottom to top sorted by ascending amount
-    // splits.sort((a, b) => a.amount.compareTo(b.amount));
-
+    // the label are drawn bottom to top sorted by ascending amount
     for (final split in splits) {
       double left = 0;
       if (split.fieldDate.value!.millisecondsSinceEpoch > minX) {
@@ -477,9 +492,11 @@ class PaintActivities extends CustomPainter {
     required this.activities,
     required this.minX,
     required this.maxX,
+    this.lineColor,
   });
 
-  final List<HoldingActivity> activities;
+  final List<ChartEvent> activities;
+  final Color? lineColor;
   final double maxX;
   final double minX;
 
@@ -491,20 +508,30 @@ class PaintActivities extends CustomPainter {
     double labelVerticalDistribution = chartHeight / activities.length;
     double nextVerticalLabelPosition = chartHeight - labelVerticalDistribution;
 
-    // lines are drawn let to right sorted by time
-    // the labels are drawn bottom to top sorted by ascending currentUnitPrice
-    activities.sort((a, b) => a.amount.compareTo(b.amount));
-
-    for (final HoldingActivity activity in activities) {
+    for (final ChartEvent activity in activities) {
       double left = 0;
 
       if (activity.date.millisecondsSinceEpoch > minX) {
         left = ((activity.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
-      _paintLine(canvas, activity.color.withOpacity(0.8), left, 0, chartHeight);
+      _paintLine(canvas, lineColor?.withAlpha(150) ?? activity.color.withOpacity(0.8), left, 0, chartHeight);
 
-      String text = '${getIntAsText(activity.quantity.toInt().abs())} ${doubleToCurrency(activity.amount)}';
-      _paintLabel(canvas, text, activity.color, left + 2, nextVerticalLabelPosition + (labelVerticalDistribution / 2));
+      String text = '';
+      if (activity.quantity.toInt().abs() != 1) {
+        text = '${getIntAsText(activity.quantity.toInt().abs())} ';
+      }
+      text += doubleToCurrency(activity.amount, showPlusSign: true);
+      if (activity.description.isNotEmpty) {
+        text += '\n${activity.description}';
+      }
+
+      _paintLabel(
+        canvas,
+        text,
+        lineColor ?? activity.color,
+        left + 2,
+        nextVerticalLabelPosition + (labelVerticalDistribution / 2),
+      );
 
       nextVerticalLabelPosition -= labelVerticalDistribution;
     }
@@ -553,9 +580,7 @@ class PaintDividends extends CustomPainter {
     final chartHeight = size.height;
 
     // lines are drawn lef to right sorted by time
-    // the labe are drawn bottom to top sorted by ascending amount
-    // splits.sort((a, b) => a.amount.compareTo(b.amount));
-
+    // the label are drawn at bottom
     for (final item in list) {
       double left = 0;
       if (item.date.millisecondsSinceEpoch > minX) {

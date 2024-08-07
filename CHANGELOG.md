@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.53] 2024-08-07
+
+### Added
+
+- Networth chart - display major events
+  
 ## [version 1.8.52] 2024-08-04
 
 ### Added

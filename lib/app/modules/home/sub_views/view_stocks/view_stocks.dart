@@ -149,14 +149,16 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       final String symbol = security.fieldSymbol.value;
       List<Investment> list = getListOfInvestment(security);
 
-      final List<HoldingActivity> events = [];
+      final List<ChartEvent> events = [];
       for (final Investment activity in list) {
         if (activity.effectiveUnits != 0) {
           events.add(
-            HoldingActivity(
-              activity.transactionInstance!.fieldDateTime.value!,
-              activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
-              activity.effectiveUnitsAdjusted,
+            ChartEvent(
+              date: activity.transactionInstance!.fieldDateTime.value!,
+              amount: activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
+              quantity: activity.effectiveUnitsAdjusted,
+              colorBasedOnQuantity: true,
+              description: activity.fieldInvestmentType.getValueForDisplay(activity),
             ),
           );
         }
