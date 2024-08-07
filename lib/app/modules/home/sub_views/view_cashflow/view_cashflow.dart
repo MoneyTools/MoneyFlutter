@@ -5,6 +5,7 @@ import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
+import 'package:money/app/core/widgets/my_segment.dart';
 import 'package:money/app/core/widgets/pick_number.dart';
 import 'package:money/app/core/widgets/sankey/sankey.dart';
 import 'package:money/app/core/widgets/years_range_selector.dart';
@@ -167,32 +168,29 @@ class ViewCashFlowState extends ViewWidgetState {
   }
 
   Widget _buildSelectView() {
-    return SegmentedButton<CashflowViewAs>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: const <ButtonSegment<CashflowViewAs>>[
-        ButtonSegment<CashflowViewAs>(
-          value: CashflowViewAs.sankey,
-          label: Text('Sankey'),
+    return mySegmentSelector(
+      segments: [
+        ButtonSegment<int>(
+          value: CashflowViewAs.sankey.index,
+          label: const Text('Sankey'),
         ),
-        ButtonSegment<CashflowViewAs>(
-          value: CashflowViewAs.netWorthOverTime,
-          label: Text('Networth'),
+        ButtonSegment<int>(
+          value: CashflowViewAs.netWorthOverTime.index,
+          label: const Text('Networth'),
         ),
-        ButtonSegment<CashflowViewAs>(
-          value: CashflowViewAs.recurringIncomes,
-          label: Text('Incomes'),
+        ButtonSegment<int>(
+          value: CashflowViewAs.recurringIncomes.index,
+          label: const Text('Incomes'),
         ),
-        ButtonSegment<CashflowViewAs>(
-          value: CashflowViewAs.recurringExpenses,
-          label: Text('Expenses'),
+        ButtonSegment<int>(
+          value: CashflowViewAs.recurringExpenses.index,
+          label: const Text('Expenses'),
         ),
       ],
-      selected: <CashflowViewAs>{PreferenceController.to.cashflowViewAs.value},
-      onSelectionChanged: (final Set<CashflowViewAs> newSelection) {
+      selectedId: PreferenceController.to.cashflowViewAs.value.index,
+      onSelectionChanged: (final int newSelection) {
         setState(() {
-          PreferenceController.to.cashflowViewAs.value = newSelection.first;
+          PreferenceController.to.cashflowViewAs.value = CashflowViewAs.values[newSelection];
         });
       },
     );

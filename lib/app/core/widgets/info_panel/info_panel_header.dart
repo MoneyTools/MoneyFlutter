@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/theme_controler.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
+import 'package:money/app/core/widgets/my_segment.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class InfoPanelHeader extends StatelessWidget {
@@ -74,12 +76,8 @@ class InfoPanelHeader extends StatelessWidget {
       return Currency.buildCurrencyWidget(currencyChoices[0]);
     }
 
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      showSelectedIcon: !smallDevice,
-      segments: <ButtonSegment<int>>[
+    return mySegmentSelector(
+      segments: [
         ButtonSegment<int>(
           value: 0,
           label: smallDevice ? Text(currencyChoices[0]) : Currency.buildCurrencyWidget(currencyChoices[0]),
@@ -89,9 +87,9 @@ class InfoPanelHeader extends StatelessWidget {
           label: smallDevice ? Text(currencyChoices[1]) : Currency.buildCurrencyWidget(currencyChoices[1]),
         ),
       ],
-      selected: <int>{currencySelected},
-      onSelectionChanged: (final Set<int> newSelection) {
-        currentSelectionChanged(newSelection.first);
+      selectedId: currencySelected,
+      onSelectionChanged: (final int newSelection) {
+        currentSelectionChanged(newSelection);
       },
     );
   }
@@ -107,14 +105,10 @@ class InfoPanelHeader extends StatelessWidget {
   }
 
   Widget _buildViewSelections(final BoxConstraints constraints) {
-    final bool smallDevice = constraints.maxWidth < 700;
+    final bool smallDevice = ThemeController.to.isDeviceWidthSmall.value;
 
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      showSelectedIcon: constraints.maxWidth > 1000,
-      segments: <ButtonSegment<int>>[
+    return mySegmentSelector(
+      segments: [
         ButtonSegment<int>(
           value: 0,
           label: smallDevice ? null : const Text('Details'),
@@ -131,13 +125,13 @@ class InfoPanelHeader extends StatelessWidget {
           icon: const Icon(Icons.calendar_view_day),
         ),
       ],
-      selected: <int>{subViewSelected.index},
-      onSelectionChanged: (final Set<int> newSelection) {
+      selectedId: subViewSelected.index,
+      onSelectionChanged: (final int newSelection) {
         if (!isExpanded) {
           onExpanded(true);
         }
         subViewSelectionChanged(
-          InfoPanelSubViewEnum.values[newSelection.first],
+          InfoPanelSubViewEnum.values[newSelection],
         );
       },
     );

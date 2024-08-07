@@ -5,6 +5,7 @@ import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/columns_input.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/import_transactions_list_preview.dart';
+import 'package:money/app/core/widgets/my_segment.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
@@ -164,11 +165,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       return Currency.buildCurrencyWidget(Constants.defaultCurrency);
     }
 
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: <ButtonSegment<int>>[
+    return mySegmentSelector(
+      segments: [
         ButtonSegment<int>(
           value: 0,
           label: _account.getAccountCurrencyAsWidget(),
@@ -178,10 +176,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           label: Currency.buildCurrencyWidget(Constants.defaultCurrency),
         ),
       ],
-      selected: <int>{_userChoiceNativeVsUSD},
-      onSelectionChanged: (final Set<int> newSelection) {
+      selectedId: _userChoiceNativeVsUSD,
+      onSelectionChanged: (final int newSelection) {
         setState(() {
-          _userChoiceNativeVsUSD = newSelection.first;
+          _userChoiceNativeVsUSD = newSelection;
           convertAndNotify(context, _textToParse);
         });
       },
@@ -227,11 +225,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   }
 
   Widget _buildChoiceOfDebitVsCredit() {
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: const <ButtonSegment<int>>[
+    return mySegmentSelector(
+      segments: const [
         ButtonSegment<int>(
           value: 0,
           label: Text('Credit'),
@@ -241,10 +236,10 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           label: Text('Debit'),
         ),
       ],
-      selected: <int>{_userChoiceDebitVsCredit},
-      onSelectionChanged: (final Set<int> newSelection) {
+      selectedId: _userChoiceDebitVsCredit,
+      onSelectionChanged: (final int newSelection) {
         setState(() {
-          _userChoiceDebitVsCredit = newSelection.first;
+          _userChoiceDebitVsCredit = newSelection;
           convertAndNotify(context, _textToParse);
         });
       },

@@ -8,6 +8,9 @@ import 'package:money/app/data/models/constants.dart';
 class ThemeController extends GetxController {
   RxInt colorSelected = 0.obs;
   RxBool isDarkTheme = false.obs;
+  RxBool isDeviceWidthLarge = false.obs;
+  RxBool isDeviceWidthMedium = true.obs;
+  RxBool isDeviceWidthSmall = false.obs;
   Color primaryColor = Colors.grey;
 
   @override

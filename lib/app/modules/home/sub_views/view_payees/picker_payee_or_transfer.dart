@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/my_segment.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/picker_account.dart';
@@ -57,24 +58,21 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
   }
 
   Widget buildChoice() {
-    return SegmentedButton<TransactionFlavor>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: const <ButtonSegment<TransactionFlavor>>[
-        ButtonSegment<TransactionFlavor>(
-          value: TransactionFlavor.payee,
-          label: Text('Payee'),
+    return mySegmentSelector(
+      segments: [
+        ButtonSegment<int>(
+          value: TransactionFlavor.payee.index,
+          label: const Text('Payee'),
         ),
-        ButtonSegment<TransactionFlavor>(
-          value: TransactionFlavor.transfer,
-          label: Text('Transfer'),
+        ButtonSegment<int>(
+          value: TransactionFlavor.transfer.index,
+          label: const Text('Transfer'),
         ),
       ],
-      selected: <TransactionFlavor>{_choice},
-      onSelectionChanged: (final Set<TransactionFlavor> newSelection) {
+      selectedId: _choice.index,
+      onSelectionChanged: (final int newSelection) {
         setState(() {
-          _choice = newSelection.first;
+          _choice = TransactionFlavor.values[newSelection];
         });
       },
     );

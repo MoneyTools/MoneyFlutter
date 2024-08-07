@@ -4,6 +4,7 @@ import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/my_segment.dart';
 import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -94,17 +95,16 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
 
   Widget _buildColumnSelection() {
     return Center(
-      child: SegmentedButton<int>(
-        // style: const ButtonStyle(visualDensity: VisualDensity(horizontal: -4, vertical: -4)),
-        segments: <ButtonSegment<int>>[
+      child: mySegmentSelector(
+        segments: [
           _buildSegment(0, _data[0]),
           _buildSegment(1, _data[1]),
           _buildSegment(2, _data[2]),
         ],
-        selected: {_displayMutationType},
-        onSelectionChanged: (final Set<int> newSelection) {
+        selectedId: _displayMutationType,
+        onSelectionChanged: (final int newSelection) {
           setState(() {
-            _displayMutationType = newSelection.first;
+            _displayMutationType = newSelection;
           });
         },
       ),
