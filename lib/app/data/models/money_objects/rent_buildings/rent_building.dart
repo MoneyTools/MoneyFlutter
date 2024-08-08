@@ -393,7 +393,7 @@ class RentBuilding extends MoneyObject {
               (t) => this.categoryForIncomeTreeIds.contains(t.fieldCategoryId.value),
             );
     if (firstTransactionForThisBuilding != null) {
-      this.account = firstTransactionForThisBuilding.fieldAccountInstance;
+      this.account = firstTransactionForThisBuilding.accountInstance;
     }
   }
 

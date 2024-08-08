@@ -330,7 +330,7 @@ class Data {
     // Sort all add, remove, buy, sell transactions by date and by security.
     for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
       if (t.fieldDateTime.value!.millisecond < toDate.millisecond &&
-          (filter == null || filter(t.fieldAccountInstance!)) &&
+          (filter == null || filter(t.accountInstance!)) &&
           t.investmentInstance != null &&
           t.investmentInstance!.fieldInvestmentType.value != InvestmentType.none.index) {
         Investment i = t.investmentInstance!;

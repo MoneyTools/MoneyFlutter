@@ -49,7 +49,7 @@ class Transaction extends MoneyObject {
     t.fieldId.value = json.getInt('Id', -1);
 // 1 Account ID
     t.fieldAccountId.value = json.getInt('Account', -1);
-    t.fieldAccountInstance = Data().accounts.get(t.fieldAccountId.value);
+    t.accountInstance = Data().accounts.get(t.fieldAccountId.value);
 // 3 Status
     t.fieldStatus.value = TransactionStatus.values[json.getInt('Status')];
 // 4 Payee ID
@@ -433,7 +433,7 @@ class Transaction extends MoneyObject {
                     } else {
                       // use the new account destination
                       Transaction relatedTransaction = instance.transferInstance!.related!;
-                      instance.transferInstance!.related!.fieldAccountInstance = Data().accounts.get(
+                      instance.transferInstance!.related!.accountInstance = Data().accounts.get(
                             account.uniqueId,
                           );
                       relatedTransaction.mutateField(
@@ -529,8 +529,7 @@ class Transaction extends MoneyObject {
 
   /// Used for establishing relation between two transactions
   Transfer? transferInstance;
-
-  Account? fieldAccountInstance;
+  Account? accountInstance;
   Investment? investmentInstance;
 
   String? _transferName;
@@ -541,7 +540,7 @@ class Transaction extends MoneyObject {
       leftTopAsString: payeeName,
       leftBottomAsString: '${Data().categories.getNameFromId(fieldCategoryId.value)}\n${fieldMemo.value}',
       rightTopAsWidget: MoneyWidget(amountModel: fieldAmount.value, asTile: true),
-      rightBottomAsString: '$dateTimeAsText\n${Account.getName(fieldAccountInstance)}',
+      rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
     );
   }
 
@@ -580,8 +579,8 @@ class Transaction extends MoneyObject {
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
   Account? get account {
-    if (fieldAccountInstance != null) {
-      return fieldAccountInstance;
+    if (accountInstance != null) {
+      return accountInstance;
     }
     return Data().accounts.get(fieldAccountId.value);
   }
@@ -677,11 +676,11 @@ class Transaction extends MoneyObject {
   }
 
   String get currency {
-    if (this.fieldAccountInstance == null || this.fieldAccountInstance!.fieldCurrency.value.isEmpty) {
+    if (this.accountInstance == null || this.accountInstance!.fieldCurrency.value.isEmpty) {
       return Constants.defaultCurrency;
     }
 
-    return this.fieldAccountInstance!.fieldCurrency.value;
+    return this.accountInstance!.fieldCurrency.value;
   }
 
   ///------------------------------------------------------
@@ -751,10 +750,10 @@ class Transaction extends MoneyObject {
 
   double getNormalizedAmount(double nativeValue) {
     // Convert the value to USD
-    if (fieldAccountInstance == null || fieldAccountInstance?.getCurrencyRatio() == 0) {
+    if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
       return nativeValue;
     }
-    return nativeValue * fieldAccountInstance!.getCurrencyRatio();
+    return nativeValue * accountInstance!.getCurrencyRatio();
   }
 
   Investment? getOrCreateInvestment() {

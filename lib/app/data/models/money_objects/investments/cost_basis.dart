@@ -105,7 +105,7 @@ class CostBasisCalculator {
         // computed for any future transactions.  Question is, if someone buys the stock on the very same day that it
         // was split, do they get the split or not?  This assumes not.
         this.applySplits(s, splits, i.date);
-        var holdings = this.getHolding(i.transactionInstance!.fieldAccountInstance!);
+        var holdings = this.getHolding(i.transactionInstance!.accountInstance!);
 
         if (i.fieldInvestmentType.value == InvestmentType.add.index ||
             i.fieldInvestmentType.value == InvestmentType.buy.index) {
@@ -154,7 +154,7 @@ class CostBasisCalculator {
                     i.fieldUnits.value,
                     0,
                   )) {
-                    var targetHoldings = this.getHolding(add.transactionInstance!.fieldAccountInstance!);
+                    var targetHoldings = this.getHolding(add.transactionInstance!.accountInstance!);
                     if (sale.dateAcquired != null) {
                       // now transfer the cost basis over to the target account.
                       targetHoldings.buy(

@@ -78,7 +78,7 @@ class Transactions extends MoneyObjects<Transaction> {
 
       // Computer date range of all transactions
       dateRangeIncludingClosedAccount.inflate(transactionSource.fieldDateTime.value);
-      if (transactionSource.fieldAccountInstance?.isOpen == true) {
+      if (transactionSource.accountInstance?.isOpen == true) {
         dateRangeActiveAccount.inflate(transactionSource.fieldDateTime.value!);
       }
 
