@@ -35,7 +35,8 @@ class NetWorthChartState extends State<NetWorthChart> {
 
     final AccumulatorSum<String, double> cumulateYearMonthBalance = AccumulatorSum<String, double>();
 
-    _transactions = Data().transactions.iterableList(includeDeleted: true).toList();
+    _transactions =
+        Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer() == false).toList();
 
     for (final t in _transactions) {
       String dateKey = dateToString(t.fieldDateTime.value);
