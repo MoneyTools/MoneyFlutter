@@ -829,7 +829,8 @@ class DataSimulator {
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
             amount: 20000,
-          ).fieldMemo.value = 'Signing Bonus';
+            memo: 'Sign-On Bonus',
+          );
         }
         // Add Paycheck for NASA
         _addTransactionAccountDatePayeeCategory(
@@ -848,7 +849,8 @@ class DataSimulator {
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
             amount: 3500,
-          ).fieldMemo.value = 'Holiday Bonus';
+            memo: 'Holiday Bonus',
+          );
         }
       }
     }
@@ -899,7 +901,8 @@ class DataSimulator {
           payeeId: payeeLandLord.uniqueId,
           categoryId: Data().categories.getOrCreate('Bills:Rent', CategoryType.expense).uniqueId,
           amount: _monthlyRent,
-        ).fieldMemo.value = 'Pay Rent #${++numberOfRentPayment}';
+          memo: 'Pay Rent #${++numberOfRentPayment}',
+        );
       } else {
         if (boughtHome == false) {
           boughtHome = true;

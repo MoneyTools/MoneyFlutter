@@ -408,7 +408,7 @@ class Field<T> {
 
   String serializeName;
   FieldType type;
-  // This properties are evaluated against the instnace of the object
+  // This properties are evaluated against the instance of the object
   bool Function(MoneyObject) useAsDetailPanels;
 
   int Function(MoneyObject, MoneyObject, bool)? sort;
