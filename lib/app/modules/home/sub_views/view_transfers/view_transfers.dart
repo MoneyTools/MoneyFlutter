@@ -125,8 +125,8 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     required Transaction? transactionReceiver,
     required bool isOrphan,
   }) {
-    final Account? accountSender = transactionSender.accountInstance;
-    final Account? accountReceiver = transactionReceiver?.accountInstance;
+    final Account? accountSender = transactionSender.instanceOfAccount;
+    final Account? accountReceiver = transactionReceiver?.instanceOfAccount;
     if (accountSender != null && accountReceiver != null) {
       // Are the accounts available?
 

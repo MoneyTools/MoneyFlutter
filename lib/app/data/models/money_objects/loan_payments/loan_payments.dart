@@ -63,7 +63,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
 
   for (final t in listOfTransactions) {
     // Key is based on date
-    String key = '${t.dateTimeAsText} ${t.uniqueId}';
+    String key = '${t.dateTimeAsString} ${t.uniqueId}';
     PaymentRollup? pr = payments[key];
 
     bool isFromSplit = false;

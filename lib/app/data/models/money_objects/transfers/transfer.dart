@@ -229,7 +229,7 @@ class Transfer extends MoneyObject {
 
   Account? get receiverAccount {
     if (related != null) {
-      return related!.accountInstance;
+      return related!.instanceOfAccount;
     }
     return null;
   }
@@ -256,7 +256,7 @@ class Transfer extends MoneyObject {
   //---------------------------------------------
   // Sender Account
   Account? get senderAccount {
-    return senderTransaction?.accountInstance;
+    return senderTransaction?.instanceOfAccount;
   }
 
   //---------------------------------------------

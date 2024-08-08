@@ -49,7 +49,7 @@ class Transaction extends MoneyObject {
     t.fieldId.value = json.getInt('Id', -1);
 // 1 Account ID
     t.fieldAccountId.value = json.getInt('Account', -1);
-    t.accountInstance = Data().accounts.get(t.fieldAccountId.value);
+    t.instanceOfAccount = Data().accounts.get(t.fieldAccountId.value);
 // 3 Status
     t.fieldStatus.value = TransactionStatus.values[json.getInt('Status')];
 // 4 Payee ID
@@ -87,9 +87,6 @@ class Transaction extends MoneyObject {
 
     return t;
   }
-
-  /// cache instances of related MoneyObjects
-  Account? accountInstance;
 
   /// Balance native
   double balance = 0;
@@ -233,7 +230,7 @@ class Transaction extends MoneyObject {
         return Data().categories.getCategoryWidget(t.fieldCategoryId.value);
       }
     },
-    getValueForReading: (final MoneyObject instance) => (instance as Transaction).categoryAsString,
+    getValueForReading: (final MoneyObject instance) => (instance as Transaction).categoryName,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldCategoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).fieldCategoryId.value = newValue as int,
@@ -276,7 +273,7 @@ class Transaction extends MoneyObject {
     ),
     getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return PickerEditBoxDate(
-        initialValue: (instance as Transaction).dateTimeAsText,
+        initialValue: (instance as Transaction).dateTimeAsString,
         onChanged: (String? newDateSelected) {
           if (newDateSelected != null) {
             instance.fieldDateTime.value = attemptToGetDateFromText(newDateSelected);
@@ -398,7 +395,7 @@ class Transaction extends MoneyObject {
         // Payee
         instance.fieldPayee.value = (newValue as int); // Payee Id
         instance.fieldTransfer.value = -1;
-        instance.transferInstance = null;
+        instance.instanceOfTransfer = null;
       }
     },
     getEditWidget: (MoneyObject instance, Function(bool wasModified) onEdited) {
@@ -410,7 +407,7 @@ class Transaction extends MoneyObject {
               ? TransactionFlavor.payee
               : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.fieldPayee.value),
-          account: instance.transferInstance?.receiverAccount,
+          account: instance.instanceOfTransfer?.receiverAccount,
           amount: instance.fieldAmount.value.toDouble(),
           onSelected: (
             TransactionFlavor choice,
@@ -424,19 +421,19 @@ class Transaction extends MoneyObject {
                 if (selectedPayee != null) {
                   instance.fieldPayee.value = selectedPayee.uniqueId;
                   instance.fieldTransfer.value = -1;
-                  instance.transferInstance = null;
+                  instance.instanceOfTransfer = null;
                   wasModified = true;
                 }
               case TransactionFlavor.transfer:
                 if (account != null) {
-                  if (instance.transferInstance != null) {
+                  if (instance.instanceOfTransfer != null) {
                     // this was already a transfer, lets see if the destination account has changed
-                    if (instance.transferInstance?.receiverAccount?.uniqueId == account.uniqueId) {
+                    if (instance.instanceOfTransfer?.receiverAccount?.uniqueId == account.uniqueId) {
                       // same account do noting
                     } else {
                       // use the new account destination
-                      Transaction relatedTransaction = instance.transferInstance!.related!;
-                      instance.transferInstance!.related!.accountInstance = Data().accounts.get(
+                      Transaction relatedTransaction = instance.instanceOfTransfer!.related!;
+                      instance.instanceOfTransfer!.related!.instanceOfAccount = Data().accounts.get(
                             account.uniqueId,
                           );
                       relatedTransaction.mutateField(
@@ -527,11 +524,14 @@ class Transaction extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldTransferSplit.value,
   );
 
+  /// cache instances of related MoneyObjects
+  Account? instanceOfAccount;
+
   int possibleMatchingCategoryId = -1;
   List<MoneySplit> splits = [];
 
-  Investment? investmentInstance;
-  Transfer? transferInstance;
+  Investment? instanceOfInvestment;
+  Transfer? instanceOfTransfer;
 
   @override
   Widget buildFieldsAsWidgetForSmallScreen() {
@@ -539,7 +539,7 @@ class Transaction extends MoneyObject {
       leftTopAsString: payeeName,
       leftBottomAsString: '${Data().categories.getNameFromId(fieldCategoryId.value)}\n${fieldMemo.value}',
       rightTopAsWidget: MoneyWidget(amountModel: fieldAmount.value, asTile: true),
-      rightBottomAsString: '$dateTimeAsText\n${Account.getName(accountInstance)}',
+      rightBottomAsString: '$dateTimeAsString\n${Account.getName(instanceOfAccount)}',
     );
   }
 
@@ -577,11 +577,11 @@ class Transaction extends MoneyObject {
 
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
-  String get accountName => accountInstance?.fieldName.value ?? '???';
+  String get accountName => instanceOfAccount?.fieldName.value ?? '???';
 
-  String get amountAsText => fieldAmount.value.toString();
+  String get amountAsString => fieldAmount.value.toString();
 
-  String get categoryAsString => Data().categories.getNameFromId(this.fieldCategoryId.value);
+  String get categoryName => Data().categories.getNameFromId(this.fieldCategoryId.value);
 
   static void changeCategory(Transaction t, final int categoryId) {
     // record the change
@@ -601,7 +601,7 @@ class Transaction extends MoneyObject {
 
   /// TODO - clean this up,
   void checkTransfers(Set<Transaction> dangling, List<Account> deletedAccounts) {
-    if (fieldTransfer.value != -1 && this.transferInstance == null) {
+    if (fieldTransfer.value != -1 && this.instanceOfTransfer == null) {
       // transferInstance?.getReceiverAccount();
       // if (IsDeletedAccount(this.to, money, deletedAccounts)) {
       //   this.Category =
@@ -612,8 +612,8 @@ class Transaction extends MoneyObject {
       // }
     }
 
-    if (this.transferInstance != null) {
-      Transaction other = this.transferInstance!.related!;
+    if (this.instanceOfTransfer != null) {
+      Transaction other = this.instanceOfTransfer!.related!;
       if (other.isSplit) {
         //       int count = 0;
         //       Split splitXfer = null;
@@ -641,7 +641,7 @@ class Transaction extends MoneyObject {
         //         }
         //       }
       } else {
-        if ((other.transferInstance == null || other.transferInstance?.related != this)) {
+        if ((other.instanceOfTransfer == null || other.instanceOfTransfer?.related != this)) {
           dangling.add(this);
         } else {
           // one last check, the other side also needs to be correctly setup as a transafer
@@ -661,23 +661,21 @@ class Transaction extends MoneyObject {
         }
       }
     }
-    if (this.transferInstance != null && this.transferInstance?.related?.fieldAccountId.value == a.uniqueId) {
+    if (this.instanceOfTransfer != null && this.instanceOfTransfer?.related?.fieldAccountId.value == a.uniqueId) {
       return true;
     }
     return false;
   }
 
   String get currency {
-    if (this.accountInstance == null || this.accountInstance!.fieldCurrency.value.isEmpty) {
+    if (this.instanceOfAccount == null || this.instanceOfAccount!.fieldCurrency.value.isEmpty) {
       return Constants.defaultCurrency;
     }
 
-    return this.accountInstance!.fieldCurrency.value;
+    return this.instanceOfAccount!.fieldCurrency.value;
   }
 
-  ///------------------------------------------------------
-  /// Non persisted fields
-  String get dateTimeAsText => dateToString(fieldDateTime.value);
+  String get dateTimeAsString => dateToString(fieldDateTime.value);
 
   static Fields<Transaction> get fields {
     if (_fields.isEmpty) {
@@ -732,39 +730,39 @@ class Transaction extends MoneyObject {
       );
   }
 
-  static String getDefaultCurrency(final Account? accountInstance) {
+  static String getDefaultCurrency(final Account? account) {
 // Convert the value to USD
-    if (accountInstance == null || accountInstance.getCurrencyRatio() == 0) {
+    if (account == null || account.getCurrencyRatio() == 0) {
       return Constants.defaultCurrency;
     }
-    return accountInstance.fieldCurrency.value;
+    return account.fieldCurrency.value;
   }
 
   double getNormalizedAmount(double nativeValue) {
     // Convert the value to USD
-    if (accountInstance == null || accountInstance?.getCurrencyRatio() == 0) {
+    if (instanceOfAccount == null || instanceOfAccount?.getCurrencyRatio() == 0) {
       return nativeValue;
     }
-    return nativeValue * accountInstance!.getCurrencyRatio();
+    return nativeValue * instanceOfAccount!.getCurrencyRatio();
   }
 
   Investment? getOrCreateInvestment() {
-    if (this.investmentInstance == null) {
-      this.investmentInstance = Data().investments.get(this.uniqueId);
-      if (this.investmentInstance != null) {
-        this.investmentInstance!.transactionInstance = this;
+    if (this.instanceOfInvestment == null) {
+      this.instanceOfInvestment = Data().investments.get(this.uniqueId);
+      if (this.instanceOfInvestment != null) {
+        this.instanceOfInvestment!.transactionInstance = this;
       }
     }
-    return this.investmentInstance;
+    return this.instanceOfInvestment;
   }
 
   String getPayeeOrTransferCaption({final bool showAccount = false}) {
-    Investment? investment = investmentInstance;
+    Investment? investment = instanceOfInvestment;
     double amount = this.fieldAmount.value.toDouble();
 
     bool isFrom = false;
     String displayName = '';
-    if (transferInstance != null) {
+    if (instanceOfTransfer != null) {
       if (investment != null) {
         if (investment.fieldInvestmentType.value == InvestmentType.add.index) {
           isFrom = true;
@@ -772,9 +770,9 @@ class Transaction extends MoneyObject {
       } else if (amount > 0) {
         isFrom = true;
       }
-      if (transferInstance!.related != null) {
+      if (instanceOfTransfer!.related != null) {
         return getTransferCaption(
-          transferInstance!.receiverAccount,
+          instanceOfTransfer!.receiverAccount,
           isFrom,
           showAccount: showAccount,
         );
@@ -821,8 +819,8 @@ class Transaction extends MoneyObject {
   String get oneLinePayeeAndDescription {
     String description = this.getPayeeOrTransferCaption(showAccount: true);
 
-    if (this.categoryAsString.isNotEmpty) {
-      description += ' | ${this.categoryAsString}';
+    if (this.categoryName.isNotEmpty) {
+      description += ' | ${this.categoryName}';
     }
 
     return description;
@@ -919,14 +917,7 @@ class Transaction extends MoneyObject {
     // }
   }
 
-  Account? get relatedAccount {
-    if (transferInstance != null) {
-      if (transferInstance!.related != null) {
-        return transferInstance!.related!.accountInstance;
-      }
-    }
-    return null;
-  }
+  Account? get relatedAccount => instanceOfTransfer?.related?.instanceOfAccount;
 
   static int sortByDateTime(final Transaction a, final Transaction b, final bool ascending) {
     int result = sortByDate(

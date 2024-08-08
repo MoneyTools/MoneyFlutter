@@ -365,9 +365,9 @@ class Accounts extends MoneyObjects<Account> {
         if (transactionWithMatchingBalance == null) {
           // t.paidOn.value = doubleToCurrency(statementBalance, '');
         } else {
-          transactionWithMatchingBalance.fieldPaidOn.value = '${t.dateTimeAsText} ⤵';
+          transactionWithMatchingBalance.fieldPaidOn.value = '${t.dateTimeAsString} ⤵';
           t.fieldPaidOn.value =
-              '${transactionWithMatchingBalance.dateTimeAsText} ⤴${t.fieldPaidOn.value.isNotEmpty ? '⤵' : ''}';
+              '${transactionWithMatchingBalance.dateTimeAsString} ⤴${t.fieldPaidOn.value.isNotEmpty ? '⤵' : ''}';
         }
       }
     }

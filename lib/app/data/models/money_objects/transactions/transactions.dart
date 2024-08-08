@@ -78,13 +78,13 @@ class Transactions extends MoneyObjects<Transaction> {
 
       // Computer date range of all transactions
       dateRangeIncludingClosedAccount.inflate(transactionSource.fieldDateTime.value);
-      if (transactionSource.accountInstance?.isOpen == true) {
+      if (transactionSource.instanceOfAccount?.isOpen == true) {
         dateRangeActiveAccount.inflate(transactionSource.fieldDateTime.value!);
       }
 
       // Resolve the Transfers
       final int transferId = transactionSource.fieldTransfer.value;
-      transactionSource.transferInstance = null;
+      transactionSource.instanceOfTransfer = null;
 
       if (transactionSource.fieldTransferSplit.value > 0) {
         // deal with transfer of split
@@ -108,12 +108,12 @@ class Transactions extends MoneyObjects<Transaction> {
 
       // Simple Transfer
       if (transferId == -1) {
-        if (transactionSource.transferInstance == null) {
+        if (transactionSource.instanceOfTransfer == null) {
           // this is correct
         } else {
           // this needs to be cleared
           // TODO - should the other side transaction be cleared too?
-          transactionSource.transferInstance = null;
+          transactionSource.instanceOfTransfer = null;
         }
       } else {
         // hook up the transfer relation
@@ -131,9 +131,9 @@ class Transactions extends MoneyObjects<Transaction> {
         if (transactionSource.fieldTransferSplit.value == -1) {
           // Normal direct transfer
 
-          if (transactionSource.transferInstance == null) {
+          if (transactionSource.instanceOfTransfer == null) {
             // cache the transfer
-            transactionSource.transferInstance = Transfer(
+            transactionSource.instanceOfTransfer = Transfer(
               id: 0,
               source: transactionSource,
               related: transactionRelated,
@@ -141,9 +141,9 @@ class Transactions extends MoneyObjects<Transaction> {
             );
           }
 
-          if (transactionRelated.transferInstance == null) {
+          if (transactionRelated.instanceOfTransfer == null) {
             // cache the transfer
-            transactionRelated.transferInstance = Transfer(
+            transactionRelated.instanceOfTransfer = Transfer(
               id: 0,
               source: transactionRelated,
               related: transactionSource,

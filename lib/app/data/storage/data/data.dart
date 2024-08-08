@@ -330,10 +330,10 @@ class Data {
     // Sort all add, remove, buy, sell transactions by date and by security.
     for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
       if (t.fieldDateTime.value!.millisecond < toDate.millisecond &&
-          (filter == null || filter(t.accountInstance!)) &&
-          t.investmentInstance != null &&
-          t.investmentInstance!.fieldInvestmentType.value != InvestmentType.none.index) {
-        Investment i = t.investmentInstance!;
+          (filter == null || filter(t.instanceOfAccount!)) &&
+          t.instanceOfInvestment != null &&
+          t.instanceOfInvestment!.fieldInvestmentType.value != InvestmentType.none.index) {
+        Investment i = t.instanceOfInvestment!;
         Security? s = Data().securities.get(i.fieldSecurity.value);
         if (s != null) {
           List<Investment> list = transactionsBySecurity[s] ?? [];
@@ -412,7 +412,7 @@ class Data {
       relatedTransaction.stashValueBeforeEditing();
       relatedTransaction.fieldPayee.value = -1;
       relatedTransaction.fieldTransfer.value = transactionSource.fieldId.value;
-      relatedTransaction.transferInstance = transfer;
+      relatedTransaction.instanceOfTransfer = transfer;
 
       if (relatedTransaction.uniqueId == -1) {
         // This is a new related transaction Append and get a new UniqueID
@@ -429,7 +429,7 @@ class Data {
       // transactions.appendNewMoneyObject(relatedTransaction)
       transactionSource.fieldPayee.value = -1;
       transactionSource.fieldTransfer.value = relatedTransaction.uniqueId;
-      transactionSource.transferInstance = transfer;
+      transactionSource.instanceOfTransfer = transfer;
     }
 
     return relatedTransaction!;

@@ -105,12 +105,12 @@ class CostBasisCalculator {
         // computed for any future transactions.  Question is, if someone buys the stock on the very same day that it
         // was split, do they get the split or not?  This assumes not.
         this.applySplits(s, splits, i.date);
-        var holdings = this.getHolding(i.transactionInstance!.accountInstance!);
+        var holdings = this.getHolding(i.transactionInstance!.instanceOfAccount!);
 
         if (i.fieldInvestmentType.value == InvestmentType.add.index ||
             i.fieldInvestmentType.value == InvestmentType.buy.index) {
           // transfer "adds" will be handled on the "remove" side below so we get the right cost basis.
-          if (i.transactionInstance!.transferInstance == null && i.fieldUnits.value > 0) {
+          if (i.transactionInstance!.instanceOfTransfer == null && i.fieldUnits.value > 0) {
             holdings.buy(s, i.date, i.fieldUnits.value, i.originalCostBasis);
             for (SecuritySale pending in holdings.processPendingSales(s)) {
               this.sales.add(pending);
@@ -118,7 +118,7 @@ class CostBasisCalculator {
           } else if ((i.fieldInvestmentType.value == InvestmentType.remove.index ||
                   i.fieldInvestmentType.value == InvestmentType.sell.index) &&
               i.fieldUnits.value > 0) {
-            if (i.transactionInstance!.transferInstance == null) {
+            if (i.transactionInstance!.instanceOfTransfer == null) {
               for (SecuritySale sale in holdings.sell(
                 Data().securities.get(i.fieldSecurity.value)!,
                 i.date,
@@ -131,8 +131,8 @@ class CostBasisCalculator {
           } else {
             // track cost basis of securities transferred across accounts.
             // bugbug; could this ever be a split? Don't think so...
-            if (i.transactionInstance?.transferInstance != null) {
-              Investment? add = i.transactionInstance!.transferInstance!.receiverTransaction?.investmentInstance;
+            if (i.transactionInstance?.instanceOfTransfer != null) {
+              Investment? add = i.transactionInstance!.instanceOfTransfer!.receiverTransaction?.instanceOfInvestment;
               assert(
                 add != null,
                 'Other side of the Transfer needs to be an Investment transaction',
@@ -154,7 +154,7 @@ class CostBasisCalculator {
                     i.fieldUnits.value,
                     0,
                   )) {
-                    var targetHoldings = this.getHolding(add.transactionInstance!.accountInstance!);
+                    var targetHoldings = this.getHolding(add.transactionInstance!.instanceOfAccount!);
                     if (sale.dateAcquired != null) {
                       // now transfer the cost basis over to the target account.
                       targetHoldings.buy(

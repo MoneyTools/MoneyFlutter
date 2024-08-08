@@ -195,7 +195,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       }
 
       if (transaction.isTransfer) {
-        return TransferSenderReceiver(transfer: transaction.transferInstance!);
+        return TransferSenderReceiver(transfer: transaction.instanceOfTransfer!);
       } else {
         final investment = Data().investments.get(transaction.uniqueId);
         if (investment != null) {
