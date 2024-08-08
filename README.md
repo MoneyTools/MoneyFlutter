@@ -1,21 +1,33 @@
 # myMoney - Flutter edition
 
-From the MoneyTools team. The readonly flutter edition of the MyMoney.net app
+From the MoneyTools vTeam, we bring you the flutter edition of the MyMoney.net app
 
 ## Getting Started
 
-This is the Flutter version of MoneyTools
+This is the Flutter app, you will need to install the Flutter/Dart frameWork and an IDE, we suggest VSCode.
 
-Build, Run the app and when stared tap/click "Use Demo Data"
+## Install tools
 
-This app builds and run on all platforms
+- ### VSCode
 
-* iOS
-* Android
-* MacOS
-* Windows
-* Web
-* Linux - (Not tested but should work)
+  - <https://code.visualstudio.com/download>
+
+- ### Flutter * Dart
+
+  - <https://docs.flutter.dev/get-started/install>
+
+### Build, Run the app and when stared tap/click "Use Demo Data"
+
+1. Open the root folder in VSCode
+  
+2. Select a client, the app can builds and run on these Flutter supported platforms
+
+   - iOS
+   - Android
+   - MacOS
+   - Windows
+   - Web
+   - Linux
 
 ## Data
 
@@ -328,21 +340,21 @@ run
 
 ### to Web
 
-* Install Firebase tool
+- Install Firebase tool
   ```npm install -g firebase-tools```
 
-* Enable firebase experiments
+- Enable firebase experiments
   ```firebase experiments:enable webframeworks```
 
-* Deploy to your account
+- Deploy to your account
   ```firebase deploy```
 
 ### To Android Google Play
 
-* Build the bundle
+- Build the bundle
   
   ```flutter build appbundle```
 
-* Google App Console
-  * <https://play.google.com/console>
-  * Upload the bundle
+- Google App Console
+  - <https://play.google.com/console>
+  - Upload the bundle
