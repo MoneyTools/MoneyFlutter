@@ -33,7 +33,7 @@ class MoneyObject {
   /// ------------+ Right
   /// SubTitle    |
   ///
-  /// Expect this to be overrided by the derived domain classes
+  /// Expect this to be override by the derived domain classes
   Widget buildFieldsAsWidgetForSmallScreen() => const Text('Small screen content goes here');
 
   ///

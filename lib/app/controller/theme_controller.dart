@@ -40,7 +40,7 @@ class ThemeController extends GetxController {
 
   void loadThemeFromPreferences() async {
     if (!PreferenceController.to.isReady.value) {
-      await PreferenceController.to.initPrefs();
+      await PreferenceController.to.init();
     }
     isDarkTheme.value = PreferenceController.to.getBool(settingKeyDarkMode, false);
     colorSelected.value = PreferenceController.to.getInt(settingKeyTheme, 0);

@@ -274,7 +274,7 @@ String concat(
   final String existingValue,
   final String valueToConcat, [
   final String separatorIfNeeded = '; ',
-  bool doNotConcactIfPresent = false,
+  bool doNotConcatIfPresent = false,
 ]) {
   if (valueToConcat.isEmpty) {
     // Nothing to concat
@@ -284,7 +284,7 @@ String concat(
   if (existingValue.isEmpty) {
     return valueToConcat;
   } else {
-    if (doNotConcactIfPresent && existingValue.contains(separatorIfNeeded)) {
+    if (doNotConcatIfPresent && existingValue.contains(separatorIfNeeded)) {
       return existingValue;
     }
     return existingValue + separatorIfNeeded + valueToConcat;
@@ -333,7 +333,7 @@ double? parseEuroAmount(String input) {
   return null;
 }
 
-String convertParateseToNegativeString(String amountText) {
+String convertParenthesesToNegativeString(String amountText) {
   amountText = amountText.trim();
   if (amountText.contains('(') && amountText.contains(')')) {
     amountText = amountText.replaceAll('(', '');
@@ -344,7 +344,7 @@ String convertParateseToNegativeString(String amountText) {
 }
 
 double? parseAmount(String amountAsText, final String currency) {
-  amountAsText = convertParateseToNegativeString(amountAsText);
+  amountAsText = convertParenthesesToNegativeString(amountAsText);
   switch (currency.toLowerCase()) {
     case 'eur':
       return parseEuroAmount(amountAsText);
@@ -355,16 +355,16 @@ double? parseAmount(String amountAsText, final String currency) {
   }
 }
 
-/// Remove any characters not in the alloedChars argument
+/// Remove any characters not in the allowedChars argument
 String cleanString(String inputStr, String allowedChars) {
   return inputStr.split('').where((char) => allowedChars.contains(char)).join();
 }
 
-String validIntToCurrencu(final num value) {
+String validIntToCurrency(final num value) {
   return getIntAsText(isNumber(value) ? value.toInt() : 0, showPlusSign: true);
 }
 
-String validDoubleToCurrencu(final num value) {
+String validDoubleToCurrency(final num value) {
   return doubleToCurrency(isNumber(value) ? value.toDouble() : 0.0, showPlusSign: true);
 }
 

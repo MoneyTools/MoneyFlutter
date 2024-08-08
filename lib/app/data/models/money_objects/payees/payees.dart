@@ -72,7 +72,7 @@ class Payees extends MoneyObjects<Payee> {
     final Payee? payee = get(id);
 
     if (payee == null) {
-      return '<unkown payee $id>';
+      return '<unknown payee $id>';
     }
     return payee.fieldName.value;
   }

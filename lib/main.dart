@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/keyboard_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/modules/home/home_routes.dart';
 import 'package:money/app/modules/policies/policy_routes.dart';

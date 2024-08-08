@@ -57,7 +57,7 @@ class AdaptiveViewWithList extends StatelessWidget {
     }
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        // dispay as column for Medium & Large devices
+        // display as column for Medium & Large devices
         final bool displayAsColumns = context.isWidthSmall == false;
 
         return ValueListenableBuilder<List<int>>(

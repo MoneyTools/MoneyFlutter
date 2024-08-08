@@ -53,10 +53,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       return [];
     }
 
-    List<StockSummary> stockSummeries = [];
+    List<StockSummary> stockSummaries = [];
 
     groupBySymbol.values.forEach((String key, dynamic listOfInvestmentsForAccount) {
-      final double sharesForThisStock = Investments.applyHoldingSharesAjustedForSplits(
+      final double sharesForThisStock = Investments.applyHoldingSharesAdjustedForSplits(
         listOfInvestmentsForAccount.toList(),
       );
 
@@ -71,17 +71,17 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           stockPrice = stock.fieldPrice.value.toDouble();
         }
 
-        stockSummeries.add(StockSummary(symbol: symbol, shares: sharesForThisStock, sharePrice: stockPrice));
+        stockSummaries.add(StockSummary(symbol: symbol, shares: sharesForThisStock, sharePrice: stockPrice));
       }
     });
 
-    // sort by decending holding-value
-    stockSummeries.sort((a, b) => b.holdingValue.compareTo(a.holdingValue));
+    // sort by descending holding-value
+    stockSummaries.sort((a, b) => b.holdingValue.compareTo(a.holdingValue));
 
     const cardHeight = 150.0;
-    final List<Widget> stockPanels = stockSummeries
+    final List<Widget> stockPanels = stockSummaries
         .map(
-          (summary) => BoxWithScrollingCotent(
+          (summary) => BoxWithScrollingContent(
             height: cardHeight,
             children: [
               Row(
@@ -121,13 +121,13 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
     // also add Summary Cash and Stock
     double totalInvestment = 0.0;
-    stockSummeries.forEach((element) => totalInvestment += element.holdingValue);
+    stockSummaries.forEach((element) => totalInvestment += element.holdingValue);
 
     double totalCash = account.balance - totalInvestment;
 
     stockPanels.insert(
       0,
-      BoxWithScrollingCotent(
+      BoxWithScrollingContent(
         height: cardHeight,
         children: [
           gapMedium(),
@@ -250,7 +250,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       Transaction.fields.getFieldByName(
         showAsNativeCurrency ? columnIdBalance : columnIdBalanceNormalized,
       ),
-      // Creadit Card account has a PaidOn column to help with balancing Statements
+      // Credit Card account has a PaidOn column to help with balancing Statements
       if (account.fieldType.value == AccountType.credit) Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
@@ -296,17 +296,17 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
     int selectedItemId = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
 
-    List<LoanPayment> agregatedList = getAccountLoanPayments(account);
+    List<LoanPayment> aggregatedList = getAccountLoanPayments(account);
 
     MoneyObjects.sortList(
-      agregatedList,
+      aggregatedList,
       LoanPayment.fieldsForColumnView.definitions,
       sortFieldIndex,
       sortAscending,
     );
 
     return AdaptiveListColumnsOrRows(
-      list: agregatedList,
+      list: aggregatedList,
       fieldDefinitions: LoanPayment.fieldsForColumnView.definitions,
       filters: FieldFilters(),
       sortByFieldIndex: sortFieldIndex,
@@ -315,7 +315,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       // Display as Cards or Columns
       // On small device you can display rows a Cards instead of Columns
       displayAsColumns: true,
-      backgoundColorForHeaderFooter: Colors.transparent,
+      backgroundColorForHeaderFooter: Colors.transparent,
       onColumnHeaderTap: (int columnHeaderIndex) {
         // ignore: invalid_use_of_protected_member
         setState(() {
@@ -348,9 +348,9 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {
-        final LoanPayment instance = findObjectById(itemId, agregatedList) as LoanPayment;
+        final LoanPayment instance = findObjectById(itemId, aggregatedList) as LoanPayment;
         myShowDialogAndActionsForMoneyObject(
-          title: 'Loan Payement',
+          title: 'Loan Payment',
           context: context2,
           moneyObject: instance,
         );

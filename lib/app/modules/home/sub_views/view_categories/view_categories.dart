@@ -38,7 +38,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     return super.buildHeader(_buildToggles());
   }
 
-  /// add more top leve action buttons
+  /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     final list = super.getActionsButtons(forInfoPanelTransactions);
@@ -102,7 +102,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
                 filters: FieldFilters(
                   [
                     FieldFilter(
-                      fieldName: Constants.viewTransactionFieldnameCategory,
+                      fieldName: Constants.viewTransactionFieldNameCategory,
                       strings: [category.uniqueId.toString()],
                     ),
                   ],

@@ -20,7 +20,7 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class ChartEvent {
@@ -146,14 +146,14 @@ class StockChartWidgetState extends State<StockChartWidget> {
     return '${getIntAsText(activityFound.quantity.toInt())} shares';
   }
 
-  void _adjustMissingDataPointInthePast() {
-    for (final activiy in widget.holdingsActivities.reversed) {
-      if (dataPoints.isEmpty || activiy.date.millisecondsSinceEpoch < dataPoints.first.x) {
+  void _adjustMissingDataPointInThePast() {
+    for (final activity in widget.holdingsActivities.reversed) {
+      if (dataPoints.isEmpty || activity.date.millisecondsSinceEpoch < dataPoints.first.x) {
         dataPoints.insert(
           0,
           FlSpot(
-            activiy.date.millisecondsSinceEpoch.toDouble(),
-            activiy.amount,
+            activity.date.millisecondsSinceEpoch.toDouble(),
+            activity.amount,
           ),
         );
       }
@@ -167,7 +167,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
     // Date ascending
     dataPoints.sort((a, b) => a.x.compareTo(b.x));
 
-    _adjustMissingDataPointInthePast();
+    _adjustMissingDataPointInThePast();
 
     if (dataPoints.isEmpty) {
       return const CenterMessage(message: 'No data points');
@@ -372,8 +372,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
                   final splits = events['splits'];
                   if (splits != null) {
                     for (var splitJson in splits.values) {
-                      int dateInMiliseconds = splitJson['date'];
-                      final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMiliseconds * 1000);
+                      int dateInMilliseconds = splitJson['date'];
+                      final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
                       StockSplit sp = StockSplit(
                         security: security.uniqueId,
                         date: dateOSplit,

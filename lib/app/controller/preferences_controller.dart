@@ -17,13 +17,13 @@ class PreferenceController extends GetxController {
   Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
 
   RxList<String> mru = <String>[].obs;
-  RxInt networthEventTreshold = 5.obs;
+  RxInt netWorthEventThreshold = 5.obs;
 
   final RxString _apiKeyForStocks = ''.obs;
   final RxBool _includeClosedAccounts = false.obs;
 
   ///---------------------------------
-  /// Incude Rental feature
+  /// Include Rental feature
   final RxBool _includeRentalManagement = false.obs;
 
   ///---------------------------------
@@ -42,7 +42,7 @@ class PreferenceController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-    await initPrefs();
+    await init();
     if (mru.isNotEmpty) {
       DataController dataController = Get.find();
       dataController.loadLastFileSaved();
@@ -130,7 +130,7 @@ class PreferenceController extends GetxController {
   }
 
   String get getUniqueState =>
-      'isReadry:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
+      'isReady:${isReady.value} Rental:$includeRentalManagement IncludeClosedAccounts:$includeClosedAccounts TextScale:$textScale';
 
   ///---------------------------------
   /// Show or Hide Account that are marked as Closed
@@ -149,7 +149,7 @@ class PreferenceController extends GetxController {
     setBool(settingKeyRentalsSupport, value);
   }
 
-  Future<void> initPrefs() async {
+  Future<void> init() async {
     _preferences = await SharedPreferences.getInstance();
     await loadDefaults();
     isReady.value = true;
@@ -265,11 +265,11 @@ class PreferenceController extends GetxController {
 
 /// Navigation helpers
 
-void switchViewTransacionnForPayee(final String payeeName) {
+void switchViewTransactionForPayee(final String payeeName) {
   FieldFilters fieldFilters = FieldFilters();
   fieldFilters.add(
     FieldFilter(
-      fieldName: Constants.viewTransactionFieldnamePayee,
+      fieldName: Constants.viewTransactionFieldNamePayee,
       strings: [payeeName],
     ),
   );

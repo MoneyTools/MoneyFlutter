@@ -11,7 +11,7 @@ void main() {
       final String ofxString = getStringDelimitedStartEndTokens(qfxString, '<OFX>', '</OFX>');
       expect(ofxString.isEmpty, false);
 
-      final List<ImporEntry> list = getTransactionFromOFX(ofxString);
+      final List<ImportEntry> list = getTransactionFromOFX(ofxString);
       expect(list.length, 2);
 
       expect(list[0].type, 'CREDIT');

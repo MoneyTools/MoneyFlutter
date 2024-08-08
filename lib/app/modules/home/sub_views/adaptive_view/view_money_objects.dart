@@ -99,7 +99,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         }
 
         if (list.isEmpty) {
-          return _buildInforUserOfEmptyList(key);
+          return _buildInformUserOfEmptyList(key);
         }
 
         return AdaptiveViewWithList(
@@ -159,7 +159,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return true;
   }
 
-  /// Allowed to be overrided by derived classes
+  /// Allowed to be override by derived classes
   Widget buildHeader([final Widget? child]) {
     ViewHeaderMultipleSelection? multipleSelectionOptions;
     if (supportsMultiSelection) {
@@ -201,7 +201,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
-  /// Allowed to be overrided by derived classes
+  /// Allowed to be override by derived classes
   Widget buildViewContent(final Widget child) {
     return Container(
       color: getColorTheme(context).surface,
@@ -261,7 +261,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       for (final field in _fieldToDisplay.definitions) {
         switch (field.type) {
           case FieldType.text:
-            _footerAccumulators.accumaltorListOfText.cumulate(field, field.getValueForDisplay(item).toString());
+            _footerAccumulators.accumulatorListOfText.cumulate(field, field.getValueForDisplay(item).toString());
 
           case FieldType.date:
             final dateTime = field.getValueForDisplay(item);
@@ -288,7 +288,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
           case FieldType.widget:
             if (field.getValueForReading != null) {
-              _footerAccumulators.accumaltorListOfText
+              _footerAccumulators.accumulatorListOfText
                   .cumulate(field, field.getValueForReading?.call(item)!.toString() ?? '');
             }
 
@@ -298,7 +298,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           case FieldType.quantity:
             final dynamic value = field.getValueForDisplay(item);
             if (field.footer == FooterType.count) {
-              _footerAccumulators.accumaltorListOfText.cumulate(field, getIntAsText(value));
+              _footerAccumulators.accumulatorListOfText.cumulate(field, getIntAsText(value));
             } else {
               if (value is num) {
                 _footerAccumulators.accumulatorSumNumber.cumulate(field, value.toDouble());
@@ -314,7 +314,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
   }
 
-  /// Allowed to be overrided by derived classes
+  /// Allowed to be override by derived classes
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     List<Widget> widgets = [];
 
@@ -370,18 +370,18 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return widgets;
   }
 
-  /// Allowed to be overrided by derived classes
+  /// Allowed to be override by derived classes
   String getClassNamePlural() {
     return 'Items';
   }
 
-  /// Allowed to be overrided by derived classes
+  /// Allowed to be override by derived classes
   String getClassNameSingular() {
     return 'Item';
   }
 
-  /// Allowed to be overrided by derived classes
-  /// to be overrident by derived class
+  /// Allowed to be override by derived classes
+  /// to be overridden by derived class
   /// Use the field FooterType to decide how to render the bottom button of each columns
   Widget getColumnFooterWidget(final Field field) {
     return _footerAccumulators.buildWidget(field);
@@ -406,7 +406,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
   }
 
-  /// Allowed to be overrided by derived classes
+  /// Allowed to be override by derived classes
   String getDescription() {
     return 'Default list of items';
   }
@@ -883,7 +883,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
-  Widget _buildInforUserOfEmptyList(Key key) {
+  Widget _buildInformUserOfEmptyList(Key key) {
     return Column(
       children: [
         buildHeader(),

@@ -76,16 +76,16 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
               icon: ViewId.viewTransactions.getIconData(),
               title: 'Matching Transaction',
               onPressed: () {
-                final selectedInfotransaction = getInfoPanelLastSelectedTransaction();
+                final selectedInfoTransaction = getInfoPanelLastSelectedTransaction();
 
-                if (selectedInfotransaction != null) {
+                if (selectedInfoTransaction != null) {
                   // Look for transaction matching -1 to +1 date from this transaction
                   final DateRange approximationDates = DateRange(
-                    min: selectedInfotransaction.fieldDateTime.value!.add(const Duration(days: -1)).startOfDay,
-                    max: selectedInfotransaction.fieldDateTime.value!.add(const Duration(days: 1)).endOfDay,
+                    min: selectedInfoTransaction.fieldDateTime.value!.add(const Duration(days: -1)).startOfDay,
+                    max: selectedInfoTransaction.fieldDateTime.value!.add(const Duration(days: 1)).endOfDay,
                   );
                   // we are looking for the reverse transaction
-                  final double amountToFind = selectedInfotransaction.fieldAmount.value.toDouble() * -1;
+                  final double amountToFind = selectedInfoTransaction.fieldAmount.value.toDouble() * -1;
 
                   final matchingTransaction = Data().transactions.findExistingTransaction(
                         accountId: -1,
@@ -103,7 +103,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                     return;
                   }
                 }
-                SnackBarService.displayWarning(message: 'No matching transactons');
+                SnackBarService.displayWarning(message: 'No matching transactions');
               },
             ),
           ],
@@ -134,7 +134,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                 // Prepare the Transaction view Filter to show only the selected account
                 filters: FieldFilters([
                   FieldFilter(
-                    fieldName: Constants.viewTransactionFieldnameAccount,
+                    fieldName: Constants.viewTransactionFieldNameAccount,
                     strings: [account.fieldName.value],
                   ),
                 ]),

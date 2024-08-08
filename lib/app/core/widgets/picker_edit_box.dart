@@ -53,14 +53,14 @@ class PickerEditBoxState extends State<PickerEditBox> {
               },
             ),
           ),
-          _buildrDropDownButton(),
-          _buildrAddNew(),
+          _buildDropDownButton(),
+          _buildAddNew(),
         ],
       ),
     );
   }
 
-  Widget _buildrAddNew() {
+  Widget _buildAddNew() {
     // Only show the Add New button if there's text not in the existing list of items
     if (widget.onAddNew == null || _textController.text.trim().isEmpty || widget.items.contains(_textController.text)) {
       return const SizedBox();
@@ -74,7 +74,7 @@ class PickerEditBoxState extends State<PickerEditBox> {
     );
   }
 
-  Widget _buildrDropDownButton() {
+  Widget _buildDropDownButton() {
     return IconButton(
       onPressed: () {
         showPopupSelection(

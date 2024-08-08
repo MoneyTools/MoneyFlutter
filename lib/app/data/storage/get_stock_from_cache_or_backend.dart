@@ -81,9 +81,9 @@ Future<StockPriceHistoryCache> _loadFromCache(
       // give up now
       stockPriceHistoryCache.status = StockLookupStatus.notFoundInCache;
     } else {
-      String stringtDateTime = PreferenceController.to.getString('stock-date-$symbol');
-      if (stringtDateTime.isNotEmpty) {
-        stockPriceHistoryCache.lastDateTime = DateTime.parse(stringtDateTime);
+      String dateTimeAsString = PreferenceController.to.getString('stock-date-$symbol');
+      if (dateTimeAsString.isNotEmpty) {
+        stockPriceHistoryCache.lastDateTime = DateTime.parse(dateTimeAsString);
       }
     }
   } catch (_) {

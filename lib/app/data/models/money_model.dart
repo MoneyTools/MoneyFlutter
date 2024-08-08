@@ -24,7 +24,7 @@ class MoneyModel {
   /// Amount to display
   double _amount;
 
-  /// amount formated with currency and separators
+  /// amount formatted with currency and separators
   @override
   String toString() {
     return Currency.getAmountAsStringUsingCurrency(

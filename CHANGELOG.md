@@ -4,7 +4,7 @@
 
 ### Added
 
-- Networth chart - display major events
+- NetWorth chart - display major events
   
 ## [version 1.8.52] 2024-08-04
 
@@ -22,7 +22,7 @@
 
 ### Update
 
-- User can now set missing Transaction:Category direclty from any Transaction List
+- User can now set missing Transaction:Category directly from any Transaction List
 - Rebuild the Demo data
 
 ## [version 1.8.49] 2024-07-29
@@ -56,14 +56,14 @@
 
 ### Updated
 
-- Use Yahoo-V8 backedn to download the StockSplits data
+- Use Yahoo-V8 backend to download the StockSplits data
 
 ## [version 1.8.44] 2024-07-19
 
 ### Added
 
 - Download and display StockSplits
-- Diplay FieldQuantity in Blue for positive and Orange for negative
+- Display FieldQuantity in Blue for positive and Orange for negative
 - Improve FieldQuantity to show + sign on positive numbers
 
 ## [version 1.8.43] 2024-07-18
@@ -102,7 +102,7 @@
 
 ### Added
 
-- New column [Paid On] to help with Credit Card statments
+- New column [Paid On] to help with Credit Card statement
 
 ## [version 1.8.39] 2024-07-06
 
@@ -114,7 +114,7 @@
 
 ### Added
 
-- Use OCR for Import from text, tested on macOS using Tessara-OCR
+- Use OCR for Import from text, tested on macOS using Tesseract-OCR
   
 ## [version 1.8.37] 2024-07-04
 
@@ -187,7 +187,7 @@
 
 ### Added
 
-- You can now merge Payee from Transactio Edit dialog
+- You can now merge Payee from Transaction Edit dialog
 - Auto Footer-Tally on the InfoPanel-List
 - Long Press on InfoPanel of Loans to show the Detail dialog
   
@@ -269,7 +269,7 @@
 
 ### Updated
 
-- Show a filter-icon if a column is using fitlering
+- Show a filter-icon if a column is using filtering
 - Performance: using CompareIgnoreCase2
 
 ### Fixed
@@ -280,8 +280,8 @@
 
 ### Added
 
-- Payee Merge can now choose the categeory to use
-- Payee View: new column for Catgories
+- Payee Merge can now choose the category to use
+- Payee View: new column for Categories
   
 ## [version 1.8.14] 2024-05-28
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/switch_views.dart';

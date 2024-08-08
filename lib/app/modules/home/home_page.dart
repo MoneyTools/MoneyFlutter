@@ -38,12 +38,12 @@ class HomePage extends GetView<HomeController> {
           ? const WorkingIndicator()
           : Container(
               color: getColorTheme(context).secondaryContainer,
-              child: _buildAdativeContent(context),
+              child: _buildAdaptiveContent(context),
             ),
     );
   }
 
-  Widget _buildAdativeContent(BuildContext context) {
+  Widget _buildAdaptiveContent(BuildContext context) {
     return Obx(() {
       if (context.isWidthSmall) {
         // small screens

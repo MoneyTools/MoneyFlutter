@@ -130,7 +130,7 @@ class CostBasisCalculator {
             }
           } else {
             // track cost basis of securities transferred across accounts.
-            // bugbug; could this ever be a split? Don't think so...
+            // BugBug; could this ever be a split? Don't think so...
             if (i.transactionInstance?.instanceOfTransfer != null) {
               Investment? add = i.transactionInstance!.instanceOfTransfer!.receiverTransaction?.instanceOfInvestment;
               assert(
@@ -219,7 +219,7 @@ class CostBasisCalculator {
     // // }
     // // else if (group.Security != sp.Security)
     // // {
-    // // group.Security = null; // is a multisecurity group.
+    // // group.Security = null; // is a multiSecurity group.
     // // }
     // // group.Purchases.add(sp);
     // // }

@@ -291,7 +291,7 @@ class MoneyObjects<T> {
   ) {
     final Field<dynamic>? fieldDefinition = isIndexInRange(fieldDefinitions, sortBy) ? fieldDefinitions[sortBy] : null;
 
-    sortListFallbackOnIdforTieBreaker(
+    sortListFallbackOnIdForTieBreaker(
       list,
       fieldDefinition?.sort ?? sortByString,
       sortAscending,
@@ -300,7 +300,7 @@ class MoneyObjects<T> {
     return list;
   }
 
-  static void sortListFallbackOnIdforTieBreaker(
+  static void sortListFallbackOnIdForTieBreaker(
     List<MoneyObject> list,
     int Function(MoneyObject, MoneyObject, bool) sortWith,
     bool ascending,

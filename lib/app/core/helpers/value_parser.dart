@@ -320,7 +320,7 @@ class ValuesParser {
       }
     } else {
       //
-      // CSV like text but use space as seperator ' ', instead of ',' this is necesary because some currency use comma in the Amount value
+      // CSV like text but use space as separator ' ', instead of ',' this is necessary because some currency use comma in the Amount value
       //
       List<List<String>> lines = getLinesFromRawTextWithSeparator(inputString, ' ');
       if (lines.isNotEmpty) {

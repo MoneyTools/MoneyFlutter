@@ -104,10 +104,10 @@ class Accounts extends MoneyObjects<Account> {
       groupAccountStockSymbols(account, groupBySymbol);
     }
 
-    // apply the investment running banalnce amount
+    // apply the investment running balance amount
     groupBySymbol.values.forEach((keyAccountAndSymbol, valuesInvestments) {
       double totalAdjustedShareForThisStockInThisAccount =
-          Investments.applyHoldingSharesAjustedForSplits(valuesInvestments.toList());
+          Investments.applyHoldingSharesAdjustedForSplits(valuesInvestments.toList());
       final tokens = keyAccountAndSymbol.split('|');
       final accountId = tokens[0];
       final symbol = tokens[1];
@@ -193,7 +193,7 @@ class Accounts extends MoneyObjects<Account> {
     return (a - b).abs() < threshold;
   }
 
-  /// Find a transaction that has a date in the futurebut not more than 2 months and has inverse amount
+  /// Find a transaction that has a date in the future but not more than 2 months and has inverse amount
   Transaction? findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
     final List<Transaction> transactionForAccountSortedByDateAscending,
     final indexStartingFrom,
@@ -352,7 +352,7 @@ class Accounts extends MoneyObjects<Account> {
     for (int i = length; i >= 0; i--) {
       final Transaction t = transactionForAccountSortedByDateAscending[i];
       if (t.fieldAmount.value.toDouble() > 0) {
-        // a paymenent or reibursement was made
+        // a payment or reimbursement was made
 
         final DateTime maxDateToLookAt = t.fieldDateTime.value!.subtract(const Duration(days: 60));
         final transactionWithMatchingBalance = findBackwardInTimeForTransactionBalanceThatMatchThisAmount(

@@ -27,7 +27,7 @@ class StockSplits extends MoneyObjects<StockSplit> {
     );
   }
 
-  void clearSplitForSecurityl(final int securityId) {
+  void clearSplitForSecurity(final int securityId) {
     final listOfSplitsFound = iterableList().where((split) => split.fieldSecurity.value == securityId);
     for (final ss in listOfSplitsFound) {
       deleteItem(ss);

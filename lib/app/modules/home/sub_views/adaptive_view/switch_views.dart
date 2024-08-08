@@ -41,13 +41,13 @@ class InternalViewSwitching {
     late FieldFilter fieldFilterToUse;
     if (symbol.isNotEmpty) {
       fieldFilterToUse = FieldFilter(
-        fieldName: Constants.viewStockFieldnameSymbol,
+        fieldName: Constants.viewStockFieldNameSymbol,
         strings: [symbol],
       );
     } else {
       if (accountName.isNotEmpty) {
         fieldFilterToUse = FieldFilter(
-          fieldName: Constants.viewStockFieldnameAccount,
+          fieldName: Constants.viewStockFieldNameAccount,
           strings: [accountName],
         );
       }

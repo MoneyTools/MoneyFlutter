@@ -30,7 +30,7 @@ void importQIF(
 ImportData loadQIF(final List<String> lines) {
   ImportData importData = ImportData();
 
-  ImporEntry currentEntry = ImporEntry.blank();
+  ImportEntry currentEntry = ImportEntry.blank();
 
   for (final String line in lines) {
     if (line == '^') {
@@ -38,7 +38,7 @@ ImportData loadQIF(final List<String> lines) {
       // add this entry
       importData.entries.add(currentEntry);
       // started new transaction object
-      currentEntry = ImporEntry.blank();
+      currentEntry = ImportEntry.blank();
       continue;
     }
     if (line.length >= 2) {
@@ -73,7 +73,7 @@ ImportData loadQIF(final List<String> lines) {
           currentEntry.stockAction = getNormalizedValue(fieldData);
 
         case 'Q':
-          // Quantity - We use Amount parser because quanity can have fraction
+          // Quantity - We use Amount parser because quantity can have fraction
           currentEntry.stockQuantity = parseUSDAmount(fieldData) ?? 0.0;
 
         case 'Y':

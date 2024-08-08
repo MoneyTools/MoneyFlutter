@@ -24,7 +24,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     this.onItemTap,
     this.onItemLongPress,
     this.getColumnFooterWidget,
-    this.backgoundColorForHeaderFooter,
+    this.backgroundColorForHeaderFooter,
   });
 
   final Widget? Function(Field field)? getColumnFooterWidget;
@@ -33,7 +33,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   final Function(Field field)? onColumnHeaderLongPress;
   final Function(BuildContext context, int itemId)? onItemTap;
   final Function(BuildContext context, int itemId)? onItemLongPress;
-  final Color? backgoundColorForHeaderFooter;
+  final Color? backgroundColorForHeaderFooter;
   final FieldDefinitions fieldDefinitions;
   final FieldFilters filters;
   final bool isMultiSelectionOn;
@@ -55,7 +55,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         // Header
         if (displayAsColumns)
           MyListItemHeader<MoneyObject>(
-            backgoundColor: backgoundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
+            backgroundColor: backgroundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             filterOn: filters,
             sortByColumn: sortByFieldIndex,
@@ -94,7 +94,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         // Footer
         if (displayAsColumns && getColumnFooterWidget != null)
           MyListItemFooter<MoneyObject>(
-            backgoundColor: backgoundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
+            backgroundColor: backgroundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             multiSelectionOn: isMultiSelectionOn,
             getColumnFooterWidget: getColumnFooterWidget!,

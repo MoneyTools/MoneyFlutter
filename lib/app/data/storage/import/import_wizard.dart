@@ -21,7 +21,7 @@ void showImportTransactionsWizard(
       children: [
         WizardChoice(
           title: 'From QFX/QIF file',
-          description: 'Use existing or dowloaded files from local device.',
+          description: 'Use existing or downloaded files from local device.',
           onPressed: () {
             Navigator.of(context).pop(true);
             onImportFromFile(context);
@@ -31,7 +31,7 @@ void showImportTransactionsWizard(
         WizardChoice(
           title: 'Manual bulk text input',
           description:
-              'Refere to your online statements, then Copy & Paste text or use OCR to extract the [Dates | Memos | Amounts].',
+              'Refer to your online statements, then Copy & Paste text or use OCR to extract the [Dates | Memos | Amounts].',
           onPressed: () {
             Navigator.of(context).pop(true);
             showImportTransactionsFromTextInput(context);

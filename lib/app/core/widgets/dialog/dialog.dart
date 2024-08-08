@@ -73,7 +73,7 @@ void adaptiveScreenSizeDialog({
     return;
   }
 
-  // Large screen use some space but restric to not be full screen
+  // Large screen use some space but restrict to not be full screen
 
   // in modal always offer a close button
   if (captionForClose != null) {

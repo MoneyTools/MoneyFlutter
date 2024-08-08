@@ -18,7 +18,7 @@ class RentalPnLCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BoxWithScrollingCotent(
+    return BoxWithScrollingContent(
       children: [
         Row(
           children: [
@@ -41,50 +41,50 @@ class RentalPnLCard extends StatelessWidget {
         LabelAndAmount(
           caption: 'Income',
           amount: pnl.income,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
         ),
         gapLarge(),
         LabelAndAmount(
           caption: 'Expense',
           amount: pnl.expenses,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
         ),
         gapMedium(),
         LabelAndAmount(
           caption: '  Interest',
           amount: pnl.expenseInterest,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
           small: true,
         ),
         LabelAndAmount(
           caption: '  Maintenance',
           amount: pnl.expenseMaintenance,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
           small: true,
         ),
         LabelAndAmount(
           caption: '  Management',
           amount: pnl.expenseManagement,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
           small: true,
         ),
         LabelAndAmount(
           caption: '  Repairs',
           amount: pnl.expenseRepairs,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
           small: true,
         ),
         LabelAndAmount(
           caption: '  Taxes',
           amount: pnl.expenseTaxes,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
           small: true,
         ),
         gapLarge(),
         LabelAndAmount(
           caption: 'Profit',
           amount: pnl.profit,
-          currentyIso4217: pnl.currency,
+          currencyIso4217: pnl.currency,
         ),
         gapMedium(),
         distribution(context: context),
@@ -103,7 +103,7 @@ class RentalPnLCard extends StatelessWidget {
           LabelAndAmount(
             caption: '  $name',
             amount: pnl.profit * (percentage / 100),
-            currentyIso4217: pnl.currency,
+            currencyIso4217: pnl.currency,
             small: true,
           ),
         );

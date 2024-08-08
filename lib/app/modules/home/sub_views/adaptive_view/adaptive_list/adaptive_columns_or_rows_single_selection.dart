@@ -22,7 +22,7 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
     this.onItemTap,
     this.onItemLongPress,
     this.getColumnFooterWidget,
-    this.backgoundColorForHeaderFooter,
+    this.backgroundColorForHeaderFooter,
   });
 
   final Widget? Function(Field field)? getColumnFooterWidget;
@@ -31,7 +31,7 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
   final Function(Field field)? onColumnHeaderLongPress;
   final Function(BuildContext context, int itemId)? onItemTap;
   final Function(BuildContext context, int itemId)? onItemLongPress;
-  final Color? backgoundColorForHeaderFooter;
+  final Color? backgroundColorForHeaderFooter;
   final FieldDefinitions fieldDefinitions;
   final FieldFilters filters;
   final List<MoneyObject> list;
@@ -77,7 +77,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       onItemTap: widget.onItemTap,
       onItemLongPress: widget.onItemLongPress,
       getColumnFooterWidget: getColumnFooterWidget,
-      backgoundColorForHeaderFooter: widget.backgoundColorForHeaderFooter,
+      backgroundColorForHeaderFooter: widget.backgroundColorForHeaderFooter,
     );
   }
 
@@ -88,7 +88,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       for (final field in widget.fieldDefinitions) {
         switch (field.type) {
           case FieldType.text:
-            _footerAccumulators.accumaltorListOfText.cumulate(field, field.getValueForDisplay(item));
+            _footerAccumulators.accumulatorListOfText.cumulate(field, field.getValueForDisplay(item));
 
           case FieldType.date:
             _footerAccumulators.accumulatorDateRange.cumulate(field, field.getValueForDisplay(item));
@@ -109,7 +109,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
 
           case FieldType.widget:
             if (field.getValueForReading != null) {
-              _footerAccumulators.accumaltorListOfText
+              _footerAccumulators.accumulatorListOfText
                   .cumulate(field, field.getValueForReading?.call(item)!.toString() ?? '');
             }
 

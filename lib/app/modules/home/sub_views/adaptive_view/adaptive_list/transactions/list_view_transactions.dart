@@ -2,7 +2,7 @@ import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
 import 'package:money/app/modules/home/sub_views/view_transactions/dialog_mutate_transaction.dart';
 
 class ListViewTransactions extends StatefulWidget {
@@ -55,7 +55,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       selectedId: widget.selectionController.firstSelectedId,
       // Field & Columns
       displayAsColumns: true,
-      backgoundColorForHeaderFooter: Colors.transparent,
+      backgroundColorForHeaderFooter: Colors.transparent,
       onSelectionChanged: (int uniqueId) {
         widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, uniqueId);
         widget.selectionController.select(uniqueId);

@@ -12,7 +12,7 @@ class MyListItemHeader<T> extends StatelessWidget {
     required this.sortAscending,
     required this.onTap,
     super.key,
-    this.backgoundColor = Colors.transparent,
+    this.backgroundColor = Colors.transparent,
     this.itemsAreAllSelected = false,
     this.onSelectAll,
     this.onLongPress,
@@ -20,7 +20,7 @@ class MyListItemHeader<T> extends StatelessWidget {
 
   final Function(bool)? onSelectAll;
   final Function(Field<dynamic>)? onLongPress;
-  final Color backgoundColor;
+  final Color backgroundColor;
   final FieldDefinitions columns;
   final FieldFilters filterOn;
   final bool itemsAreAllSelected;
@@ -64,7 +64,7 @@ class MyListItemHeader<T> extends StatelessWidget {
       );
     }
     return Container(
-      color: backgoundColor,
+      color: backgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(children: headers),
     );

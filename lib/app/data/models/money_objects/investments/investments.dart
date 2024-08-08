@@ -42,10 +42,10 @@ class Investments extends MoneyObjects<Investment> {
     );
   }
 
-  static double applyHoldingSharesAjustedForSplits(List<Investment> investments) {
+  static double applyHoldingSharesAdjustedForSplits(List<Investment> investments) {
     // first sort by date, TradeType, Amount
     final Field fieldToSortBy = Investment.fields.getFieldByName('Date');
-    MoneyObjects.sortListFallbackOnIdforTieBreaker(investments, fieldToSortBy.sort!, true);
+    MoneyObjects.sortListFallbackOnIdForTieBreaker(investments, fieldToSortBy.sort!, true);
     double runningShares = 0;
 
     for (final Investment investment in investments) {

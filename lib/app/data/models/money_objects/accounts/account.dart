@@ -85,7 +85,7 @@ class Account extends MoneyObject {
   /// categoryIdForInterest
   /// 16|CategoryIdForInterest|INT|0||0
   FieldInt fieldCategoryIdForInterest = FieldInt(
-    name: 'Catgory for Interest',
+    name: 'Category for Interest',
     serializeName: 'CategoryIdForInterest',
     type: FieldType.text,
     defaultValue: 0,
@@ -98,7 +98,7 @@ class Account extends MoneyObject {
   /// categoryIdForPrincipal
   /// 15 | CategoryIdForPrincipal|INT|0||0
   FieldInt fieldCategoryIdForPrincipal = FieldInt(
-    name: 'Catgory for Principal',
+    name: 'Category for Principal',
     serializeName: 'CategoryIdForPrincipal',
     type: FieldType.text,
     defaultValue: 0,

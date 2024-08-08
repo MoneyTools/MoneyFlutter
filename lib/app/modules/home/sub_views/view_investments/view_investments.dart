@@ -23,7 +23,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewInvestments;
   }
 
-  /// add more top leve action buttons
+  /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     final list = super.getActionsButtons(forInfoPanelTransactions);
@@ -124,7 +124,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
           (instance) => (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
-    Investments.applyHoldingSharesAjustedForSplits(list);
+    Investments.applyHoldingSharesAdjustedForSplits(list);
 
     return list;
   }

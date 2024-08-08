@@ -10,12 +10,12 @@ class MyListItemFooter<T> extends StatelessWidget {
     required this.getColumnFooterWidget,
     required this.onTap,
     super.key,
-    this.backgoundColor = Colors.transparent,
+    this.backgroundColor = Colors.transparent,
     this.onLongPress,
   });
 
   final Function(Field<dynamic>)? onLongPress;
-  final Color backgoundColor;
+  final Color backgroundColor;
   final FieldDefinitions columns;
   final Widget? Function(Field field) getColumnFooterWidget;
   final bool multiSelectionOn;
@@ -58,7 +58,7 @@ class MyListItemFooter<T> extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       decoration: BoxDecoration(
-        color: backgoundColor,
+        color: backgroundColor,
         border: Border(top: BorderSide(color: Colors.grey.withAlpha(100), width: 1)), // Outer border
       ),
       child: Row(children: footerWidgets),

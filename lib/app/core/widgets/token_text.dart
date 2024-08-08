@@ -25,7 +25,7 @@ class TokenText extends StatelessWidget {
   Widget build(BuildContext context) {
     const TextStyle ancestors = TextStyle(fontSize: SizeForText.small);
 
-    final Widget separetor = Padding(
+    final Widget separator = Padding(
       padding: EdgeInsets.only(
         left: style.separatorPaddingLeft,
         right: style.separatorPaddingRight,
@@ -48,7 +48,7 @@ class TokenText extends StatelessWidget {
         );
       } else {
         widgets.add(Opacity(opacity: 0.8, child: Text(token, style: ancestors)));
-        widgets.add(Opacity(opacity: 0.6, child: separetor));
+        widgets.add(Opacity(opacity: 0.6, child: separator));
       }
     }
 
@@ -66,10 +66,10 @@ class TokenTextStyle {
     this.separator = ':',
     this.separatorPaddingLeft = 0,
     this.separatorPaddingRight = SizeForPadding.small,
-    this.rigthAlign = false,
+    this.rightAlign = false,
   });
 
-  final bool rigthAlign;
+  final bool rightAlign;
   final String separator;
   final double separatorPaddingLeft;
   final double separatorPaddingRight;

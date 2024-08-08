@@ -180,9 +180,9 @@ class MyListViewState<T> extends State<MyListView<T>> {
     int itemIdToSelect = -1;
     final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
     if (firstSelectedIndex != -1) {
-      int newIndedToSelect = firstSelectedIndex + incrementBy; // go up
-      if (isIndexInRange(widget.list, newIndedToSelect)) {
-        final itemFoundAtNewIndexPosition = widget.list[newIndedToSelect];
+      int newIndexToSelect = firstSelectedIndex + incrementBy; // go up
+      if (isIndexInRange(widget.list, newIndexToSelect)) {
+        final itemFoundAtNewIndexPosition = widget.list[newIndexToSelect];
         itemIdToSelect = (itemFoundAtNewIndexPosition as MoneyObject).uniqueId;
       }
     } else {

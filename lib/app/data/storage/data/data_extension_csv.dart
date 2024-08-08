@@ -28,63 +28,63 @@ extension DataFromCsv on Data {
         switch (fileNameInLowercase) {
           case 'account_aliases.csv':
             accountAliases.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'accounts.csv':
             accounts.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'aliases.csv':
             aliases.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'categories.csv':
             categories.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'investments.csv':
             investments.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'loan_payments.csv':
             loanPayments.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'online_accounts.csv':
             onlineAccounts.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'payees.csv':
             payees.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'rent_buildings.csv':
             rentBuildings.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'rent_units.csv':
             rentUnits.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'securities.csv':
             securities.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'splits.csv':
             splits.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'stock_splits.csv':
             stockSplits.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'transactions.csv':
             transactions.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
           case 'transaction_extras.csv':
             transactionExtras.loadFromJson(
-              converFromRawCsvTextToListOfJSonObject(fileContent),
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
         }
       }

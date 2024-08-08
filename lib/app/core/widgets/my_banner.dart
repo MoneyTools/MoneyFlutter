@@ -14,7 +14,6 @@ class MyBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final Color strikethroughColor = getColorFromState(ColorState.warning);
     return Stack(
       alignment: Alignment.center,
       children: [

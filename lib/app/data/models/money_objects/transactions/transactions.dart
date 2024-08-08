@@ -167,13 +167,13 @@ class Transactions extends MoneyObjects<Transaction> {
     );
   }
 
-  void checkTransfers(Set<Transaction> dangling, List<Account> deletedaccounts) {
+  void checkTransfers(Set<Transaction> dangling, List<Account> deletedAccounts) {
     for (Transaction t in iterableList()) {
-      t.checkTransfers(dangling, deletedaccounts);
+      t.checkTransfers(dangling, deletedAccounts);
     }
   }
 
-  /// match amount and date YYYY,MM,DD, optionally restric to a specific account by passing -1
+  /// match amount and date YYYY,MM,DD, optionally restrict to a specific account by passing -1
   Transaction? findExistingTransaction({
     required final int accountId,
     required final DateRange dateRange,

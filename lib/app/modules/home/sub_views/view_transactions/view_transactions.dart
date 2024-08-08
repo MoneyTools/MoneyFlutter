@@ -55,7 +55,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               onPressed: () {
                 final transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
-                  // Preselect the Category of this Transactio
+                  // Preselect the Category of this Transaction
                   PreferenceController.to.jumpToView(
                     viewId: ViewId.viewCategories,
                     selectedId: transaction.fieldCategoryId.value,
@@ -202,7 +202,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,
             child: MoneyObjectCard(
-              title: 'Investent',
+              title: 'Investment',
               moneyObject: investment,
             ),
           );

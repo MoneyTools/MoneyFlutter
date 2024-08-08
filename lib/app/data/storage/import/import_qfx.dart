@@ -56,7 +56,7 @@ class OfxBankInfo {
   }
 }
 
-int getInvestmentCategoryFromOfxType(final ImporEntry ofxTransaction) {
+int getInvestmentCategoryFromOfxType(final ImportEntry ofxTransaction) {
   int categoryId = -1;
   switch (ofxTransaction.type) {
     case 'CREDIT':
@@ -98,7 +98,7 @@ int getInvestmentCategoryFromOfxType(final ImporEntry ofxTransaction) {
   return categoryId;
 }
 
-List<ImporEntry> getTransactionFromOFX(final String rawOfx) {
+List<ImportEntry> getTransactionFromOFX(final String rawOfx) {
   if (rawOfx.isNotEmpty) {
     // Remove all LN/CR
     String ofx = getNormalizedValue(rawOfx);
@@ -112,15 +112,15 @@ List<ImporEntry> getTransactionFromOFX(final String rawOfx) {
     bankTransactionLit = bankTransactionLit.replaceAll('</STMTTRN>', '</STMTTRN>\n');
     final List<String> lines = LineSplitter.split(bankTransactionLit).toList();
 
-    final List<ImporEntry> qfxTransactions = parseQFXTransactions(lines);
+    final List<ImportEntry> qfxTransactions = parseQFXTransactions(lines);
     return qfxTransactions;
   }
 
-  return <ImporEntry>[];
+  return <ImportEntry>[];
 }
 
-List<ImporEntry> parseQFXTransactions(final List<String> lines) {
-  final List<ImporEntry> transactions = <ImporEntry>[];
+List<ImportEntry> parseQFXTransactions(final List<String> lines) {
+  final List<ImportEntry> transactions = <ImportEntry>[];
 
   for (String line in lines) {
     line = getNormalizedValue(line);
@@ -132,7 +132,7 @@ List<ImporEntry> parseQFXTransactions(final List<String> lines) {
     );
 
     if (rawTransactionText.isNotEmpty) {
-      final ImporEntry currentTransaction = ImporEntry(
+      final ImportEntry currentTransaction = ImportEntry(
         type: findAndGetValueOf(rawTransactionText, '<TRNTYPE>', ''),
         date: parseQfxDataFormat(
               findAndGetValueOf(rawTransactionText, '<DTPOSTED>', ''),

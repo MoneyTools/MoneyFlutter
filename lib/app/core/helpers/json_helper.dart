@@ -165,7 +165,7 @@ extension MyJsonExtensions on MyJson {
   }
 }
 
-List<MyJson> converFromRawCsvTextToListOfJSonObject(String fileContent) {
+List<MyJson> convertFromRawCsvTextToListOfJSonObject(String fileContent) {
   List<MyJson> rows = [];
   List<List<String>> lines = getLinesFromRawTextWithSeparator(fileContent);
   if (lines.length > 1) {

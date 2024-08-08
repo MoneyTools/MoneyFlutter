@@ -169,7 +169,7 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
 
   Widget _buildTransactionRow(ValuesQuality value) {
     final dateAsWidget = value.date.valueAsDateWidget(context);
-    final payeAsWidget = _buildDescriptionOrPayee(context, value.description);
+    final payeeAsWidget = _buildDescriptionOrPayee(context, value.description);
     final amountAsWidget = value.amount.valueAsAmountWidget(context);
 
     return MyBanner(
@@ -178,7 +178,7 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Expanded(flex: 1, child: dateAsWidget),
-          Expanded(flex: 2, child: payeAsWidget),
+          Expanded(flex: 2, child: payeeAsWidget),
           Expanded(flex: 1, child: amountAsWidget),
         ],
       ),

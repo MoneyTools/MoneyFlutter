@@ -156,9 +156,9 @@ class NumRange {
     }
   }
 
-  String get descriptionAsInt => _getDecription(validIntToCurrencu(min), validIntToCurrencu(max));
+  String get descriptionAsInt => _getDescription(validIntToCurrency(min), validIntToCurrency(max));
 
-  String get descriptionAsMoney => _getDecription(validDoubleToCurrencu(min), validDoubleToCurrencu(max));
+  String get descriptionAsMoney => _getDescription(validDoubleToCurrency(min), validDoubleToCurrency(max));
 
   /// Increments the range by one, if possible.
   void increment(int maxLimit) {
@@ -189,7 +189,7 @@ class NumRange {
     max = newMax;
   }
 
-  String _getDecription(final String min, final String max) {
+  String _getDescription(final String min, final String max) {
     return '$min min, $max max';
   }
 }

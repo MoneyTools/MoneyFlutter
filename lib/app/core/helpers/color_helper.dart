@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 
@@ -111,7 +111,7 @@ enum ColorState {
   warning,
   error,
   disabled,
-  quantityPositve,
+  quantityPositive,
   quantityNegative,
 }
 
@@ -133,7 +133,7 @@ Color getColorFromState(final ColorState state) {
       return isDarkModeOne ? Colors.grey.shade500 : Colors.grey.shade600;
     case ColorState.quantityNegative:
       return isDarkModeOne ? Colors.orange.shade300 : Colors.orange.shade600;
-    case ColorState.quantityPositve:
+    case ColorState.quantityPositive:
       return isDarkModeOne ? Colors.blue.shade300 : Colors.blue.shade600;
   }
 }
@@ -315,6 +315,6 @@ Color? getTextColorToUseQuantity(final num value) {
   if (value < 0) {
     return getColorFromState(ColorState.quantityNegative);
   } else {
-    return getColorFromState(ColorState.quantityPositve);
+    return getColorFromState(ColorState.quantityPositive);
   }
 }

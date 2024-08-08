@@ -2,7 +2,7 @@
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 class ShortcutController extends GetxController {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/icon_button.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -160,8 +160,8 @@ Widget getBadgeText(final String text) {
   );
 }
 
-class BoxWithScrollingCotent extends StatelessWidget {
-  const BoxWithScrollingCotent({super.key, required this.children, this.height});
+class BoxWithScrollingContent extends StatelessWidget {
+  const BoxWithScrollingContent({super.key, required this.children, this.height});
 
   final List<Widget> children;
   final double? height;

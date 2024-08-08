@@ -10,8 +10,8 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_card.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
 
-class PanelRecurrings extends StatefulWidget {
-  const PanelRecurrings({
+class PanelRecurring extends StatefulWidget {
+  const PanelRecurring({
     super.key,
     required this.dateRangeSearch,
     required this.minYear,
@@ -25,10 +25,10 @@ class PanelRecurrings extends StatefulWidget {
   final CashflowViewAs viewRecurringAs;
 
   @override
-  State<PanelRecurrings> createState() => _PanelRecurringsState();
+  State<PanelRecurring> createState() => _PanelRecurringState();
 }
 
-class _PanelRecurringsState extends State<PanelRecurrings> {
+class _PanelRecurringState extends State<PanelRecurring> {
   late bool forIncomeTransaction;
   List<RecurringPayment> recurringPayments = [];
 

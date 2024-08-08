@@ -102,7 +102,7 @@ Transaction createNewTransactionFromDateDescriptionAmount(
 }
 
 /// Add the list of transactions "as is", then notify the user when completed
-/// Note that this does not check for duplicated transaction or resolvs the Payee names
+/// Note that this does not check for duplicated transaction or resolves the Payee names
 void addNewTransactions(
   List<Transaction> transactionsNew,
   String messageToUserAfterAdding,

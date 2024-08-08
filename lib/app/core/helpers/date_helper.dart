@@ -175,7 +175,7 @@ String dateToString(final DateTime? date) {
 /// - `dateTime`: The nullable DateTime object to be converted to a year string.
 ///
 /// Returns:
-/// - If `dateTime` is not null, a string represe
+/// - If `dateTime` is not null, a string representing a date
 String dateToYearString(final DateTime? dateTime) {
   if (dateTime == null) {
     return '____';

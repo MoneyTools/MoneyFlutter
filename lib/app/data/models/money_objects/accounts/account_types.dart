@@ -9,29 +9,29 @@ enum AccountFlags {
 
 /// Convert a text into a AccountType
 AccountType? getAccountTypeFromText(final String text) {
-  switch (text.toLowerCase()) {
-    case 'savings':
+  switch (text) {
+    case 'Savings':
       return AccountType.savings;
-    case 'checking':
+    case 'Checking':
       return AccountType.checking;
-    case 'moneymarket':
+    case 'MoneyMarket':
       return AccountType.moneyMarket;
-    case 'cash':
+    case 'Cash':
       return AccountType.cash;
-    case 'credit':
-    case 'creditcard': // as seen in OFX <ACCTTYPE>
+    case 'Credit':
+    case 'CreditCard': // as seen in OFX <ACCTTYPE>
       return AccountType.credit;
-    case 'creditline':
+    case 'CreditLine':
       return AccountType.creditLine;
-    case 'investment':
+    case 'Investment':
       return AccountType.investment;
-    case 'retirement':
+    case 'Retirement':
       return AccountType.retirement;
-    case 'asset':
+    case 'Asset':
       return AccountType.asset;
-    case 'categoryfund':
+    case 'Fund':
       return AccountType.categoryFund;
-    case 'loan':
+    case 'Loan':
       return AccountType.loan;
     default:
       return null;
@@ -58,7 +58,7 @@ String getTypeAsText(final AccountType type) {
     case AccountType.asset:
       return 'Asset';
     case AccountType.categoryFund:
-      return 'CategoryFund';
+      return 'Fund';
     case AccountType.loan:
       return 'Loan';
     case AccountType.creditLine:

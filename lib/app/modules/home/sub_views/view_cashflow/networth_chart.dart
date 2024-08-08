@@ -128,7 +128,7 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
 
   for (int i = 0; i < transactions.length; i++) {
     double zScore = zScores[i];
-    if (zScore.abs() >= PreferenceController.to.networthEventTreshold.value) {
+    if (zScore.abs() >= PreferenceController.to.netWorthEventThreshold.value) {
       final t = transactions[i];
       milestoneTransactions.add(
         ChartEvent(

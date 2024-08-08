@@ -186,15 +186,15 @@ class LoanPayment extends MoneyObject {
   }
 
   double getRate() {
-    double previouseBalance = this.fieldBalance.value.toDouble() - this.fieldPrincipal.value.toDouble();
-    if (previouseBalance == 0) {
+    double previousBalance = this.fieldBalance.value.toDouble() - this.fieldPrincipal.value.toDouble();
+    if (previousBalance == 0) {
       return 0.00;
     }
 
     // Calculate the monthly interest rate
     double annualInterestRate = (this.fieldInterest.value.toDouble() * 12) // Convert to annual interest rate
         /
-        previouseBalance;
+        previousBalance;
 
     return annualInterestRate.abs();
   }

@@ -4,7 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/widgets/sankey/sankey.dart';
 import 'package:money/app/core/widgets/sankey/sankey_colors.dart';
 import 'package:money/app/core/widgets/widgets.dart';

@@ -2,15 +2,15 @@ import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 export 'package:get/get.dart';
 
-// List the selected item IDs, optionally can be persisted and loaded in Preferrences
+// List the selected item IDs, optionally can be persisted and loaded in Preferences
 class SelectionController extends GetxController {
-  SelectionController([this.preferenceKeyForPersitingSelections = '']) {
-    if (preferenceKeyForPersitingSelections.isNotEmpty) {
+  SelectionController([this.preferenceKeyForPersistingSelections = '']) {
+    if (preferenceKeyForPersistingSelections.isNotEmpty) {
       load();
     }
   }
 
-  String preferenceKeyForPersitingSelections = '';
+  String preferenceKeyForPersistingSelections = '';
   RxSet<int> selectedItems = <int>{}.obs;
 
   int get firstSelectedId {
@@ -26,15 +26,15 @@ class SelectionController extends GetxController {
   }
 
   void load() {
-    if (preferenceKeyForPersitingSelections.isNotEmpty) {
-      final lastSelectionId = PreferenceController.to.getInt(preferenceKeyForPersitingSelections, -1);
+    if (preferenceKeyForPersistingSelections.isNotEmpty) {
+      final lastSelectionId = PreferenceController.to.getInt(preferenceKeyForPersistingSelections, -1);
       select(lastSelectionId);
     }
   }
 
   void save() {
-    if (preferenceKeyForPersitingSelections.isNotEmpty) {
-      PreferenceController.to.setInt(preferenceKeyForPersitingSelections, firstSelectedId);
+    if (preferenceKeyForPersistingSelections.isNotEmpty) {
+      PreferenceController.to.setInt(preferenceKeyForPersistingSelections, firstSelectedId);
     }
   }
 

@@ -183,7 +183,7 @@ class RecurringCard extends StatelessWidget {
               ),
               IconButton(
                 onPressed: () {
-                  switchViewTransacionnForPayee(payeeName);
+                  switchViewTransactionForPayee(payeeName);
                 },
                 icon: const Icon(Icons.open_in_new),
               ),

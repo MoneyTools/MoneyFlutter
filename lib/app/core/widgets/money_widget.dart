@@ -43,7 +43,7 @@ class MoneyWidget extends StatelessWidget {
       fontWeight: FontWeight.w900,
     );
 
-    final valueAsTring = Currency.getAmountAsStringUsingCurrency(
+    final valueAsString = Currency.getAmountAsStringUsingCurrency(
       isConsideredZero((value)) ? 0.00 : value,
       iso4217code: amountModel.iso4217,
     );
@@ -55,7 +55,7 @@ class MoneyWidget extends StatelessWidget {
       decimalDigits: 0,
     );
 
-    final rightOfDecimalPoint = valueAsTring.substring(leftSideOfDecimalPointAsString.length);
+    final rightOfDecimalPoint = valueAsString.substring(leftSideOfDecimalPointAsString.length);
 
     return SelectableText.rich(
       maxLines: 1,

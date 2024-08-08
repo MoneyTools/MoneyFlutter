@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 
-/// A keymap widget allowing easy addition of shortcut keys to any widget tree
+/// A keyMap widget allowing easy addition of shortcut keys to any widget tree
 /// with an optional help screen overlay
 class KeyboardWidget extends StatefulWidget {
   /// Creates a new KeyboardWidget with a list of Keystrokes and associated
@@ -19,7 +19,7 @@ class KeyboardWidget extends StatefulWidget {
   /// Otherwise they default to the inherited theme's card and primary text
   /// colors.
   ///
-  /// By default the F1 keyboard key is used to show and dismiss the keymap
+  /// By default the F1 keyboard key is used to show and dismiss the keyMap
   /// display. If another key is preferred, set the [showDismissKey] to another
   /// [LogicalKeyboardKey].
   ///

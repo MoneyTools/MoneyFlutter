@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 
 SegmentedButton<int> mySegmentSelector({
   required List<ButtonSegment<int>> segments,
@@ -13,7 +13,7 @@ SegmentedButton<int> mySegmentSelector({
       visualDensity: VisualDensity(horizontal: -4, vertical: -4),
     ),
 
-    // only show the checkmark for larger devices
+    // only show the checkMark for larger devices
     showSelectedIcon: ThemeController.to.isDeviceWidthLarge.value,
     segments: segments,
     selected: <int>{selectedId},

@@ -5,14 +5,14 @@ import 'package:money/app/data/models/fields/field.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 
 class FooterAccumulators {
-  final AccumulatorList<Field, String> accumaltorListOfText = AccumulatorList<Field, String>();
   final AccumulatorDateRange<Field> accumulatorDateRange = AccumulatorDateRange<Field>();
   final AccumulatorAverage<Field> accumulatorForAverage = AccumulatorAverage<Field>();
+  final AccumulatorList<Field, String> accumulatorListOfText = AccumulatorList<Field, String>();
   final AccumulatorSum<Field, double> accumulatorSumAmount = AccumulatorSum<Field, double>();
   final AccumulatorSum<Field, double> accumulatorSumNumber = AccumulatorSum<Field, double>();
 
-  /// Allowed to be overrided by derived classes
-  /// to be overrident by derived class
+  /// Allowed to be override by derived classes
+  /// to be overridden by derived class
   /// Use the field FooterType to decide how to render the bottom button of each columns
   Widget buildWidget(final Field field) {
     switch (field.footer) {
@@ -24,8 +24,8 @@ class FooterAccumulators {
       case FooterType.count:
         List<String> list = [];
 
-        if (accumaltorListOfText.containsKey(field)) {
-          list = accumaltorListOfText.getList(field);
+        if (accumulatorListOfText.containsKey(field)) {
+          list = accumulatorListOfText.getList(field);
         } else {
           if (accumulatorSumNumber.containsKey(field)) {
             list = accumulatorSumNumber.getValue(field);
@@ -85,6 +85,6 @@ class FooterAccumulators {
     accumulatorSumNumber.clear();
     accumulatorForAverage.clear();
     accumulatorDateRange.clear();
-    accumaltorListOfText.clear();
+    accumulatorListOfText.clear();
   }
 }

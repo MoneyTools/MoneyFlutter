@@ -29,7 +29,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewPayees;
   }
 
-  /// add more top leve action buttons
+  /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     final list = super.getActionsButtons(forInfoPanelTransactions);
@@ -60,7 +60,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
                   final Payee? payee = getFirstSelectedItem() as Payee?;
                   if (payee != null) {
                     // Prepare the Transaction view to show only the selected account
-                    switchViewTransacionnForPayee(payee.fieldName.value);
+                    switchViewTransactionForPayee(payee.fieldName.value);
                   }
                 },
               ),

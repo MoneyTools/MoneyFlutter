@@ -88,7 +88,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
             ],
           ),
           gapLarge(),
-          _buildCatetgoryChoices(),
+          _buildCategoryChoices(),
           const Spacer(),
           dialogActionButtons(
             [
@@ -126,16 +126,16 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
     }
   }
 
-  Widget _buildCatetgoryChoices() {
+  Widget _buildCategoryChoices() {
     if (categoryIdsFound.values.isEmpty) {
       return const SizedBox();
     }
 
     List<Widget> radioButtonChoices = [];
-    final sortedDecendingListOfCategories = categoryIdsFound.getEntries();
-    sortedDecendingListOfCategories.sort((a, b) => sortByValue(a.value, b.value, false));
+    final sortedDescendingListOfCategories = categoryIdsFound.getEntries();
+    sortedDescendingListOfCategories.sort((a, b) => sortByValue(a.value, b.value, false));
 
-    for (final entry in sortedDecendingListOfCategories) {
+    for (final entry in sortedDescendingListOfCategories) {
       final categoryId = entry.key;
       final categoryCounts = entry.value;
 

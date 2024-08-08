@@ -8,7 +8,7 @@ import 'package:money/app/data/models/money_objects/investments/stock_cumulative
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/stock_chart.dart';
@@ -241,7 +241,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       selectedId: getInfoPanelLastSelectedItemId(),
       // Field & Columns related
       displayAsColumns: true,
-      backgoundColorForHeaderFooter: Colors.transparent,
+      backgroundColorForHeaderFooter: Colors.transparent,
       onColumnHeaderTap: (int columnHeaderIndex) {
         setState(() {
           if (columnHeaderIndex == sortByFieldIndex) {
@@ -298,7 +298,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   List<Investment> getListOfInvestment(Security security) {
     final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
-    Investments.applyHoldingSharesAjustedForSplits(list);
+    Investments.applyHoldingSharesAdjustedForSplits(list);
     return list;
   }
 

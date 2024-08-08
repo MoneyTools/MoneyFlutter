@@ -25,8 +25,9 @@ class BarChartWidget extends StatelessWidget {
     // Extract top 3 values and calculate total value of others
     int topCategoryToShow = min(3, listCategoryNameToAmount.length);
 
-    final double otherSumValues =
-        listCategoryNameToAmount.skip(topCategoryToShow).fold(0.0, (double prev, KeyValue curr) => prev + curr.value);
+    final double otherSumValues = listCategoryNameToAmount
+        .skip(topCategoryToShow)
+        .fold(0.0, (double prev, KeyValue current) => prev + current.value);
 
     List<Widget> bars = [];
 

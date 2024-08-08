@@ -66,7 +66,7 @@ class Categories extends MoneyObjects<Category> {
   /// Add a new Category ensure that the name is unique under the parent or root
   Category addNewCategory({
     final int parentId = -1,
-    final String name = 'New Cagtegory',
+    final String name = 'New Category',
     final CategoryType? type,
     final String color = '',
     final String description = '',
@@ -114,7 +114,7 @@ class Categories extends MoneyObjects<Category> {
     return category;
   }
 
-  Category appenNewCategory({
+  Category appendNewCategory({
     required int parentId,
     required String name,
     required final CategoryType type,
@@ -153,7 +153,7 @@ class Categories extends MoneyObjects<Category> {
         typeToUse = overrideTypeOfParent;
       }
       Category? category = getByName(cumulativeCategoryName);
-      category ??= appenNewCategory(
+      category ??= appendNewCategory(
         parentId: parentCategoryId,
         name: cumulativeCategoryName,
         type: typeToUse,

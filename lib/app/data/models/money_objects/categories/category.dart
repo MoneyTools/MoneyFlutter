@@ -323,9 +323,9 @@ class Category extends MoneyObject {
     }
   }
 
-  static CategoryType getCategoryTypeFromName(final String categoyTypeName) {
+  static CategoryType getCategoryTypeFromName(final String categoryTypeName) {
     try {
-      return CategoryType.values.byName(categoyTypeName.toLowerCase());
+      return CategoryType.values.byName(categoryTypeName.toLowerCase());
     } catch (_) {
       return CategoryType.none;
     }

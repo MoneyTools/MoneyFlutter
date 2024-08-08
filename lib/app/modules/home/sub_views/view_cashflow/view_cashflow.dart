@@ -14,7 +14,7 @@ import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view.dart';
-import 'package:money/app/modules/home/sub_views/view_cashflow/networth_chart.dart';
+import 'package:money/app/modules/home/sub_views/view_cashflow/netWorth_chart.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/panel_sankey.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/app/modules/home/sub_views/view_header.dart';
@@ -121,14 +121,14 @@ class ViewCashFlowState extends ViewWidgetState {
               ),
 
             //
-            // Optional settings for Networth
+            // Optional settings for NetWorth
             //
             if (CashflowViewAs.netWorthOverTime == PreferenceController.to.cashflowViewAs.value)
               NumberPicker(
                 title: 'Event Tolerances',
-                selectedNumber: PreferenceController.to.networthEventTreshold.value,
+                selectedNumber: PreferenceController.to.netWorthEventThreshold.value,
                 onChanged: (int value) {
-                  PreferenceController.to.networthEventTreshold.value = value;
+                  PreferenceController.to.netWorthEventThreshold.value = value;
                 },
               ),
           ],
@@ -164,7 +164,7 @@ class ViewCashFlowState extends ViewWidgetState {
         ),
         ButtonSegment<int>(
           value: CashflowViewAs.netWorthOverTime.index,
-          label: const Text('Networth'),
+          label: const Text('NetWorth'),
         ),
         ButtonSegment<int>(
           value: CashflowViewAs.recurringIncomes.index,
@@ -201,7 +201,7 @@ class ViewCashFlowState extends ViewWidgetState {
         );
 
       case CashflowViewAs.recurringIncomes:
-        return PanelRecurrings(
+        return PanelRecurring(
           dateRangeSearch: dateRangeTransactions,
           minYear: this.selectedYearStart,
           maxYear: this.selectedYearEnd,
@@ -209,7 +209,7 @@ class ViewCashFlowState extends ViewWidgetState {
         );
 
       case CashflowViewAs.recurringExpenses:
-        return PanelRecurrings(
+        return PanelRecurring(
           dateRangeSearch: dateRangeTransactions,
           minYear: this.selectedYearStart,
           maxYear: this.selectedYearEnd,

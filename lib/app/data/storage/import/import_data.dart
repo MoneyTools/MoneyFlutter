@@ -13,15 +13,15 @@ import 'package:money/app/data/storage/import/import_transactions_from_text.dart
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class ImportData {
-  List<ImporEntry> entries = [];
+  List<ImportEntry> entries = [];
   String fileType = '';
 
   Account? account;
   AccountType? accountType;
 }
 
-class ImporEntry {
-  ImporEntry({
+class ImportEntry {
+  ImportEntry({
     required this.type,
     required this.date,
     required this.amount,
@@ -33,11 +33,11 @@ class ImporEntry {
     this.stockSymbol = '',
     this.stockQuantity = 0.00,
     this.stockPrice = 0.00,
-    this.stockCommision = 0.00,
+    this.stockCommission = 0.00,
   });
 
-  factory ImporEntry.blank() {
-    return ImporEntry(
+  factory ImportEntry.blank() {
+    return ImportEntry(
       type: '',
       date: DateTime.now(),
       amount: 0.00,
@@ -55,7 +55,7 @@ class ImporEntry {
   late String name;
   late String number;
   late String stockAction;
-  late double stockCommision;
+  late double stockCommission;
   late double stockPrice;
   late double stockQuantity;
   late String stockSymbol;
@@ -108,13 +108,13 @@ void showAndConfirmTransactionToImport(
 void _showAndConfirmTransactionToImport(
   final BuildContext context,
   final String fileType,
-  final List<ImporEntry> list,
+  final List<ImportEntry> list,
   final Account account,
 ) {
   final List<ValuesQuality> valuesQuality = [];
 
   // attempt to find or add new transactions
-  for (final ImporEntry item in list) {
+  for (final ImportEntry item in list) {
     valuesQuality.add(
       ValuesQuality(
         date: ValueQuality(dateToString(item.date), dateFormat: 'yyyy-MM-dd'),

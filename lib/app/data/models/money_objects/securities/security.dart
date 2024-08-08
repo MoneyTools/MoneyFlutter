@@ -71,7 +71,7 @@ class Security extends MoneyObject {
     );
   }
 
-  final FieldMoney fieldhHoldingValue = FieldMoney(
+  final FieldMoney fieldHoldingValue = FieldMoney(
     name: 'HoldingsValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security)._holdingValue,
   );
@@ -243,7 +243,7 @@ class Security extends MoneyObject {
         align: TextAlign.left,
       ),
       rightTopAsWidget: fieldProfit.getValueAsWidget(this),
-      rightBottomAsWidget: fieldhHoldingValue.getValueAsWidget(this),
+      rightBottomAsWidget: fieldHoldingValue.getValueAsWidget(this),
     );
   }
 
@@ -273,7 +273,7 @@ class Security extends MoneyObject {
         tmp.fieldSecurityType,
         tmp.fieldNumberOfTrades,
         tmp.fieldHoldingShares,
-        tmp.fieldhHoldingValue,
+        tmp.fieldHoldingValue,
         tmp.fieldActivityProfit,
         tmp.fieldActivityDividend,
         tmp.fieldProfit,
@@ -294,7 +294,7 @@ class Security extends MoneyObject {
         tmp.fieldSecurityType,
         tmp.fieldNumberOfTrades,
         tmp.fieldHoldingShares,
-        tmp.fieldhHoldingValue,
+        tmp.fieldHoldingValue,
         tmp.fieldActivityProfit,
         tmp.fieldActivityDividend,
         tmp.fieldProfit,

@@ -66,7 +66,7 @@ void main() {
     test('parses empty CSV', () {
       const input = 'header1,header2';
       final expected = <Map<String, dynamic>>[];
-      expect(converFromRawCsvTextToListOfJSonObject(input), expected);
+      expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('parses CSV with one row', () {
@@ -74,7 +74,7 @@ void main() {
       final expected = [
         {'name': 'John', 'age': '30'},
       ];
-      expect(converFromRawCsvTextToListOfJSonObject(input), expected);
+      expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('parses CSV with multiple rows', () {
@@ -84,15 +84,15 @@ void main() {
         {'name': 'Jane', 'age': '25'},
         {'name': 'Bob', 'age': '40'},
       ];
-      expect(converFromRawCsvTextToListOfJSonObject(input), expected);
+      expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles quoted fields with commas', () {
-      const input = 'name,address\nJohn,"123 Main St, Anytown, USA"';
+      const input = 'name,address\nJohn,"123 Main St, AnyTown, USA"';
       final expected = [
-        {'name': 'John', 'address': '123 Main St, Anytown, USA'},
+        {'name': 'John', 'address': '123 Main St, AnyTown, USA'},
       ];
-      expect(converFromRawCsvTextToListOfJSonObject(input), expected);
+      expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles missing fields', () {
@@ -101,7 +101,7 @@ void main() {
         {'name': 'John', 'age': '30', 'email': ''},
         {'name': 'Jane', 'age': '25', 'email': 'jane@example.com'},
       ];
-      expect(converFromRawCsvTextToListOfJSonObject(input), expected);
+      expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles extra fields', () {
@@ -109,7 +109,7 @@ void main() {
       final expected = [
         {'name': 'John', 'age': '30'},
       ];
-      expect(converFromRawCsvTextToListOfJSonObject(input), expected);
+      expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles exceptions during parsing', () {
@@ -117,7 +117,7 @@ void main() {
       final expected = [
         {'name': 'John', 'age': '30'},
       ];
-      expect(converFromRawCsvTextToListOfJSonObject(input), expected);
+      expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
   });
 }

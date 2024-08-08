@@ -40,7 +40,7 @@ class Fields<T> {
     final String filterBytFreeStyleLowerCaseText, // Optional empty string
     final FieldFilters filterByFieldsValue, // Optional empty array
   ) {
-    // Optimize - Simple case of using partial text search in all fields, no Column field fitering
+    // Optimize - Simple case of using partial text search in all fields, no Column field filtering
     if (filterByFieldsValue.isEmpty) {
       // If no field filters are provided, check if the lowerCaseTextToFind matches
       return isMatchingFreeStyleText(
@@ -54,7 +54,7 @@ class Fields<T> {
       return isMatchingColumnFiltering(objectInstance, filterByFieldsValue);
     }
 
-    // Looking for Both freestyle text and column fitlering, both condition needs to be met
+    // Looking for Both freestyle text and column filtering, both condition needs to be met
     return isMatchingFreeStyleText(objectInstance, filterBytFreeStyleLowerCaseText) &&
         isMatchingColumnFiltering(objectInstance, filterByFieldsValue);
   }
@@ -123,7 +123,7 @@ class Fields<T> {
   bool get isEmpty => definitions.isEmpty;
 
   /// Checks if a given field definition matches the provided filterByFieldsValue.
-  /// to match we need both the name and value of a instance to mathc all of the "name, values[], of each filters in filterByFieldsValue"
+  /// to match we need both the name and value of a instance to match all of the "name, values[], of each filters in filterByFieldsValue"
   /// This function is used to determine whether a field definition matches the
   /// specified filters in the filtering process.
   ///
