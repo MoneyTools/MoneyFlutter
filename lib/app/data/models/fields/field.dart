@@ -170,13 +170,7 @@ Widget buildWidgetFromTypeAndValue({
       if (value is MoneyModel) {
         return MoneyWidget(amountModel: value);
       }
-      return buildFieldWidgetForAmount(
-        value: value,
-        shorthand: false,
-        align: align,
-        currency: currency,
-      );
-
+      return MoneyWidget(amountModel: MoneyModel(amount: value));
     // Amount short hand
     case FieldType.amountShorthand:
       return buildFieldWidgetForAmount(
