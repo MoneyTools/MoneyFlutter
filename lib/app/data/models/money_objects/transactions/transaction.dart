@@ -529,6 +529,7 @@ class Transaction extends MoneyObject {
 
   /// Used for establishing relation between two transactions
   Transfer? transferInstance;
+
   Account? accountInstance;
   Investment? investmentInstance;
 
@@ -578,14 +579,7 @@ class Transaction extends MoneyObject {
 
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
-  Account? get account {
-    if (accountInstance != null) {
-      return accountInstance;
-    }
-    return Data().accounts.get(fieldAccountId.value);
-  }
-
-  String get accountName => account?.fieldName.value ?? '???';
+  String get accountName => accountInstance?.fieldName.value ?? '???';
 
   String get amountAsText => fieldAmount.value.toString();
 
@@ -930,7 +924,7 @@ class Transaction extends MoneyObject {
   Account? get relatedAccount {
     if (transferInstance != null) {
       if (transferInstance!.related != null) {
-        return transferInstance!.related!.account;
+        return transferInstance!.related!.accountInstance;
       }
     }
     return null;
