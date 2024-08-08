@@ -132,7 +132,7 @@ class CostBasisCalculator {
             // track cost basis of securities transferred across accounts.
             // bugbug; could this ever be a split? Don't think so...
             if (i.transactionInstance?.transferInstance != null) {
-              Investment? add = i.transactionInstance!.transferInstance!.getReceiverTransaction()?.investmentInstance;
+              Investment? add = i.transactionInstance!.transferInstance!.receiverTransaction?.investmentInstance;
               assert(
                 add != null,
                 'Other side of the Transfer needs to be an Investment transaction',

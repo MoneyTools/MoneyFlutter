@@ -51,7 +51,7 @@ class Transfer extends MoneyObject {
     type: FieldType.text,
     name: 'Recipient account',
     defaultValue: -1,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getReceiverAccountName(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).receiverAccountName,
   );
 
   //
@@ -61,7 +61,7 @@ class Transfer extends MoneyObject {
   /// Date received
   FieldDate fieldReceiverTransactionDate = FieldDate(
     name: 'Date Received',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getReceiverTransactionDate(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).receiverTransactionDate,
   );
 
   /// Account
@@ -69,7 +69,7 @@ class Transfer extends MoneyObject {
     type: FieldType.text,
     name: 'Sender',
     defaultValue: -1,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getSenderAccountName(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).senderAccountName,
   );
 
   //
@@ -208,53 +208,7 @@ class Transfer extends MoneyObject {
   }
 
   DateTime getReceivedDateOrToday() {
-    return getReceiverTransactionDate() ?? DateTime.now();
-  }
-
-  Account? getReceiverAccount() {
-    if (related != null) {
-      return related!.getAccount();
-    }
-    return null;
-  }
-
-  String getReceiverAccountName() {
-    return (getReceiverAccount()?.fieldName.value) ?? '<account not found>';
-  }
-
-  Transaction? getReceiverTransaction() {
-    if (related != null) {
-      return related!;
-    }
-
-    return null;
-  }
-
-  DateTime? getReceiverTransactionDate() {
-    if (related != null) {
-      return related!.fieldDateTime.value;
-    }
-    return null;
-  }
-
-  //---------------------------------------------
-
-  //---------------------------------------------
-  // Accounts
-  Account? getSenderAccount() {
-    return getSenderTransaction()?.getAccount();
-  }
-
-  //---------------------------------------------
-  // Account Names
-  String getSenderAccountName() {
-    return (getSenderAccount()?.fieldName.value) ?? '<account not found>';
-  }
-
-  //---------------------------------------------
-  // Transactions
-  Transaction? getSenderTransaction() {
-    return source;
+    return receiverTransactionDate ?? DateTime.now();
   }
 
   String getTroubleshoot() {
@@ -271,6 +225,50 @@ class Transfer extends MoneyObject {
       status += '$dateSpread days';
     }
     return status;
+  }
+
+  Account? get receiverAccount {
+    if (related != null) {
+      return related!.account;
+    }
+    return null;
+  }
+
+  String get receiverAccountName => receiverAccount?.fieldName.value ?? '<account not found>';
+
+  Transaction? get receiverTransaction {
+    if (related != null) {
+      return related!;
+    }
+
+    return null;
+  }
+
+  DateTime? get receiverTransactionDate {
+    if (related != null) {
+      return related!.fieldDateTime.value;
+    }
+    return null;
+  }
+
+  //---------------------------------------------
+
+  //---------------------------------------------
+  // Sender Account
+  Account? get senderAccount {
+    return senderTransaction?.account;
+  }
+
+  //---------------------------------------------
+  // Account Names
+  String get senderAccountName {
+    return (senderAccount?.fieldName.value) ?? '<account not found>';
+  }
+
+  //---------------------------------------------
+  // Transactions
+  Transaction? get senderTransaction {
+    return source;
   }
 
 // NOTE: we do not support a transfer from one split to another split, this is a pretty unlikely scenario,

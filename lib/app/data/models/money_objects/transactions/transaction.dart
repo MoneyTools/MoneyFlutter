@@ -113,7 +113,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Amount',
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).fieldAmount.value.toDouble(),
-      iso4217: instance.getCurrency(),
+      iso4217: instance.currency,
     ),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAmount.value.toDouble(),
     setValue: (final MoneyObject instance, dynamic newValue) =>
@@ -153,7 +153,7 @@ class Transaction extends MoneyObject {
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
       amount: (instance as Transaction).balance,
-      iso4217: instance.getCurrency(),
+      iso4217: instance.currency,
     ),
   );
 
@@ -254,10 +254,10 @@ class Transaction extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.tiny,
     footer: FooterType.count,
-    getValueForReading: (final MoneyObject instance) => (instance as Transaction).getCurrency(),
+    getValueForReading: (final MoneyObject instance) => (instance as Transaction).currency,
     getValueForDisplay: (final MoneyObject instance) {
       return Currency.buildCurrencyWidget(
-        (instance as Transaction).getCurrency(),
+        (instance as Transaction).currency,
       );
     },
   );
@@ -407,7 +407,7 @@ class Transaction extends MoneyObject {
               ? TransactionFlavor.payee
               : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.fieldPayee.value),
-          account: instance.transferInstance?.getReceiverAccount(),
+          account: instance.transferInstance?.receiverAccount,
           amount: instance.fieldAmount.value.toDouble(),
           onSelected: (
             TransactionFlavor choice,
@@ -428,7 +428,7 @@ class Transaction extends MoneyObject {
                 if (account != null) {
                   if (instance.transferInstance != null) {
                     // this was already a transfer, lets see if the destination account has changed
-                    if (instance.transferInstance?.getReceiverAccount()?.uniqueId == account.uniqueId) {
+                    if (instance.transferInstance?.receiverAccount?.uniqueId == account.uniqueId) {
                       // same account do noting
                     } else {
                       // use the new account destination
@@ -551,7 +551,7 @@ class Transaction extends MoneyObject {
 
   @override
   String getRepresentation() {
-    return getAccountName();
+    return accountName;
   }
 
   @override
@@ -578,6 +578,15 @@ class Transaction extends MoneyObject {
   set uniqueId(value) => fieldId.value = value;
 
   static final Fields<Transaction> _fields = Fields<Transaction>();
+
+  Account? get account {
+    if (fieldAccountInstance != null) {
+      return fieldAccountInstance;
+    }
+    return Data().accounts.get(fieldAccountId.value);
+  }
+
+  String get accountName => account?.fieldName.value ?? '???';
 
   String get amountAsText => fieldAmount.value.toString();
 
@@ -667,6 +676,14 @@ class Transaction extends MoneyObject {
     return false;
   }
 
+  String get currency {
+    if (this.fieldAccountInstance == null || this.fieldAccountInstance!.fieldCurrency.value.isEmpty) {
+      return Constants.defaultCurrency;
+    }
+
+    return this.fieldAccountInstance!.fieldCurrency.value;
+  }
+
   ///------------------------------------------------------
   /// Non persisted fields
   String get dateTimeAsText => dateToString(fieldDateTime.value);
@@ -724,28 +741,6 @@ class Transaction extends MoneyObject {
       );
   }
 
-  Account? getAccount() {
-    if (fieldAccountInstance != null) {
-      return fieldAccountInstance;
-    }
-    return Data().accounts.get(fieldAccountId.value);
-  }
-
-  String getAccountName() {
-    if (getAccount() != null) {
-      return getAccount()!.fieldName.value;
-    }
-    return '???';
-  }
-
-  String getCurrency() {
-    if (this.fieldAccountInstance == null || this.fieldAccountInstance!.fieldCurrency.value.isEmpty) {
-      return Constants.defaultCurrency;
-    }
-
-    return this.fieldAccountInstance!.fieldCurrency.value;
-  }
-
   static String getDefaultCurrency(final Account? accountInstance) {
 // Convert the value to USD
     if (accountInstance == null || accountInstance.getCurrencyRatio() == 0) {
@@ -788,7 +783,7 @@ class Transaction extends MoneyObject {
       }
       if (transferInstance!.related != null) {
         return getTransferCaption(
-          transferInstance!.getReceiverAccount(),
+          transferInstance!.receiverAccount,
           isFrom,
           showAccount: showAccount,
         );
@@ -799,17 +794,8 @@ class Transaction extends MoneyObject {
     return displayName.isEmpty ? 'Payee???' : displayName;
   }
 
-  Account? getRelatedAccount() {
-    if (transferInstance != null) {
-      if (transferInstance!.related != null) {
-        return transferInstance!.related!.getAccount();
-      }
-    }
-    return null;
-  }
-
   String getTransferCaption(final Account? relatedAccount, final bool isFrom, {final bool showAccount = false}) {
-    String caption = showAccount ? getAccountName() : 'Transfer';
+    String caption = showAccount ? accountName : 'Transfer';
     String arrowDirection = isFrom ? ' ← ' : ' → ';
     caption += arrowDirection;
     if (relatedAccount == null) {
@@ -839,9 +825,7 @@ class Transaction extends MoneyObject {
 
   bool get isSplit => this.splits.isNotEmpty;
 
-  bool isTransfer() {
-    return fieldTransfer.value != -1;
-  }
+  bool get isTransfer => fieldTransfer.value != -1;
 
   String get oneLinePayeeAndDescription {
     String description = this.getPayeeOrTransferCaption(showAccount: true);
@@ -944,6 +928,15 @@ class Transaction extends MoneyObject {
     // }
   }
 
+  Account? get relatedAccount {
+    if (transferInstance != null) {
+      if (transferInstance!.related != null) {
+        return transferInstance!.related!.account;
+      }
+    }
+    return null;
+  }
+
   static int sortByDateTime(final Transaction a, final Transaction b, final bool ascending) {
     int result = sortByDate(
       a.fieldDateTime.value,
@@ -968,7 +961,7 @@ class Transaction extends MoneyObject {
     if (transferInstance == null) {
       return _transferName ?? '';
     } else {
-      return transferInstance!.getReceiverAccountName();
+      return transferInstance!.receiverAccountName;
     }
   }
 

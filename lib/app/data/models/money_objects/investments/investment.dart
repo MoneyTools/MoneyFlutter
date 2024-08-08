@@ -234,7 +234,7 @@ class Investment extends MoneyObject {
     name: 'Account',
     columnWidth: ColumnWidth.largest,
     getValueForDisplay: (final MoneyObject instance) {
-      return (instance as Investment).transactionInstance?.getAccountName() ?? '<Account?>';
+      return (instance as Investment).transactionInstance?.accountName ?? '<Account?>';
     },
   );
 

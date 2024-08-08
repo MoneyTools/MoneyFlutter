@@ -22,13 +22,13 @@ class TransferSenderReceiver extends StatelessWidget {
             IntrinsicWidth(
               child: TransactionCard(
                 title: 'Sender',
-                transaction: transfer.getSenderTransaction(),
+                transaction: transfer.senderTransaction,
               ),
             ),
             IntrinsicWidth(
               child: TransactionCard(
                 title: 'Receiver',
-                transaction: transfer.getReceiverTransaction(),
+                transaction: transfer.receiverTransaction,
               ),
             ),
           ],
