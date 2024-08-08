@@ -88,6 +88,9 @@ class Transaction extends MoneyObject {
     return t;
   }
 
+  /// cache instances of related MoneyObjects
+  Account? accountInstance;
+
   /// Balance native
   double balance = 0;
 
@@ -527,13 +530,8 @@ class Transaction extends MoneyObject {
   int possibleMatchingCategoryId = -1;
   List<MoneySplit> splits = [];
 
-  /// Used for establishing relation between two transactions
-  Transfer? transferInstance;
-
-  Account? accountInstance;
   Investment? investmentInstance;
-
-  String? _transferName;
+  Transfer? transferInstance;
 
   @override
   Widget buildFieldsAsWidgetForSmallScreen() {
@@ -948,18 +946,6 @@ class Transaction extends MoneyObject {
     if (this.fieldOriginalPayee.value.isEmpty) {
       this.fieldOriginalPayee.value = this.getPayeeOrTransferCaption();
     }
-  }
-
-  String get transferName {
-    if (transferInstance == null) {
-      return _transferName ?? '';
-    } else {
-      return transferInstance!.receiverAccountName;
-    }
-  }
-
-  set transferName(final String? accountName) {
-    _transferName = accountName;
   }
 
   Widget _buildStatusButtonToggle() {
