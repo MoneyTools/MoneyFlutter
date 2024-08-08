@@ -34,17 +34,45 @@ class MoneyWidget extends StatelessWidget {
   }
 
   Widget _amountAsText(final BuildContext context) {
-    return SelectableText(
+    final double value = amountModel.toDouble();
+
+    final style = TextStyle(
+      fontFamily: 'RobotoMono',
+      color: getTextColorToUse(value, amountModel.autoColor),
+      fontSize: asTile ? getTextTheme(context).titleMedium!.fontSize : null,
+      fontWeight: FontWeight.w900,
+    );
+
+    final valueAsTring = Currency.getAmountAsStringUsingCurrency(
+      isConsideredZero((value)) ? 0.00 : value,
+      iso4217code: amountModel.iso4217,
+    );
+
+    final leftSideOfDecimalPoint = value.truncate();
+    final leftSideOfDecimalPointAsString = Currency.getAmountAsStringUsingCurrency(
+      leftSideOfDecimalPoint,
+      iso4217code: amountModel.iso4217,
+      decimalDigits: 0,
+    );
+
+    final rightOfDecimalPoint = valueAsTring.substring(leftSideOfDecimalPointAsString.length);
+
+    return SelectableText.rich(
       maxLines: 1,
-      Currency.getAmountAsStringUsingCurrency(
-        isConsideredZero((amountModel.toDouble())) ? 0.00 : amountModel.toDouble(),
-        iso4217code: amountModel.iso4217,
-      ),
       textAlign: TextAlign.right,
-      style: TextStyle(
-        fontFamily: 'RobotoMono',
-        color: getTextColorToUse(amountModel.toDouble(), amountModel.autoColor),
-        fontSize: asTile ? getTextTheme(context).titleMedium!.fontSize : null,
+      TextSpan(
+        style: style,
+        children: [
+          TextSpan(
+            text: leftSideOfDecimalPointAsString,
+          ),
+          TextSpan(
+            text: rightOfDecimalPoint,
+            style: const TextStyle(
+              fontSize: 11,
+            ),
+          ),
+        ],
       ),
     );
   }

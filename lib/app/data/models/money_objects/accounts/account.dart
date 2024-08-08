@@ -420,7 +420,7 @@ class Account extends MoneyObject {
   }
 
   String getAccountCurrencyAsText() {
-    return Currency.getCurrencyAsText(fieldCurrency.value);
+    return Currency.getCurrencyAsString(fieldCurrency.value);
   }
 
   Widget getAccountCurrencyAsWidget() {

@@ -18,12 +18,36 @@ class QuantityWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    return Text(
-      formatDoubleTimeZeroFiveNine(quantity, showPlusSign: true),
+    final style = TextStyle(
+      fontFamily: 'RobotoMono',
+      color: getTextColorToUseQuantity(quantity),
+      fontWeight: FontWeight.w900,
+    );
+
+    final originalString = formatDoubleUpToFiveZero(quantity, showPlusSign: true);
+
+    final leftSideOfDecimalPoint = quantity.truncate();
+    final leftSideOfDecimalPointAsString =
+        formatDoubleUpToFiveZero(leftSideOfDecimalPoint.toDouble(), showPlusSign: true);
+    final rightOfDecimalPoint = originalString.substring(leftSideOfDecimalPointAsString.length);
+
+    return SelectableText.rich(
+      maxLines: 1,
       textAlign: align,
-      style: TextStyle(
-        fontFamily: 'RobotoMono',
-        color: getTextColorToUseQuantity(quantity),
+      TextSpan(
+        style: style,
+        children: [
+          TextSpan(
+            text: leftSideOfDecimalPointAsString,
+          ),
+          if (rightOfDecimalPoint.isNotEmpty)
+            TextSpan(
+              text: rightOfDecimalPoint,
+              style: const TextStyle(
+                fontSize: 11,
+              ),
+            ),
+        ],
       ),
     );
   }

@@ -113,7 +113,7 @@ class Currency extends MoneyObject {
     String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
 
     return CurrencyLabel(
-      threeLetterCurrencySymbol: getCurrencyAsText(threeLetterCurrencySymbol),
+      threeLetterCurrencySymbol: getCurrencyAsString(threeLetterCurrencySymbol),
       flagId: getCountryFromLocale(locale).toLowerCase(),
     );
   }
@@ -142,20 +142,28 @@ class Currency extends MoneyObject {
     if (amount is String) {
       return amount; // its already a string
     }
+
     // determining the locale to be used when formatting the currency amount
     String localeToUse = iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
         ? 'en_US'
         : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
 
-    final currencyFormat = NumberFormat.simpleCurrency(
+    // Use NumberFormat.simpleCurrency to get the symbol for the locale
+    var tempFormat = NumberFormat.simpleCurrency(locale: localeToUse);
+    String currencySymbol = tempFormat.currencySymbol;
+
+    // Create a NumberFormat instance with a custom pattern using the currency constructor
+    var currencyFormat = NumberFormat.currency(
       locale: localeToUse,
-      name: iso4217code,
-      decimalDigits: decimalDigits,
+      symbol: currencySymbol, // Euro symbol
+      decimalDigits: decimalDigits, // Number of decimal places
+      customPattern: '¤#,##0.00', // Pattern to place the symbol on the left
     );
+
     return currencyFormat.format(isConsideredZero(amount) ? 0.00 : amount);
   }
 
-  static String getCurrencyAsText(final String threeLetterCurrencySymbol) {
+  static String getCurrencyAsString(final String threeLetterCurrencySymbol) {
     if (threeLetterCurrencySymbol.isEmpty) {
       return Constants.defaultCurrency;
     }

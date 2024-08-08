@@ -439,7 +439,7 @@ class Field<T> {
         return getAmountAsShorthandText(value as num);
       case FieldType.quantity:
       case FieldType.percentage:
-        return formatDoubleTimeZeroFiveNine(value);
+        return formatDoubleUpToFiveZero(value);
       case FieldType.amount:
         if (type is MoneyModel) {
           return (value as MoneyModel).toString();

@@ -37,7 +37,7 @@ String escapeString(String input) {
   return input.replaceAll("'", "''");
 }
 
-String formatDoubleTimeZeroFiveNine(double value, {bool showPlusSign = false}) {
+String formatDoubleUpToFiveZero(double value, {bool showPlusSign = false}) {
   final formatter = NumberFormat('#,##0.#####', 'en_US');
   return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + formatter.format(value);
 }
