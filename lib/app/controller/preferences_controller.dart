@@ -17,6 +17,7 @@ class PreferenceController extends GetxController {
   Rx<ViewId> currentView = ViewId.viewCashFlow.obs;
 
   RxList<String> mru = <String>[].obs;
+  RxInt networthEventTreshold = 5.obs;
 
   final RxString _apiKeyForStocks = ''.obs;
   final RxBool _includeClosedAccounts = false.obs;

@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
@@ -60,62 +61,30 @@ class ViewCashFlowState extends ViewWidgetState {
 
   @override
   Widget build(final BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: <Widget>[
-        // Header
-        ViewHeader.buildViewHeaderContainer(context, _buildHeaderContent()),
-        // View
-        Expanded(
-          child: Container(
-            key: Key(
-              PreferenceController.to.cashflowViewAs.value.toString() +
-                  selectedYearStart.toString() +
-                  selectedYearEnd.toString(),
+    return Obx(
+      () {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            // Header
+            ViewHeader.buildViewHeaderContainer(context, _buildHeaderContent()),
+            // View
+            Expanded(
+              child: Container(
+                key: Key(
+                  PreferenceController.to.cashflowViewAs.value.toString() +
+                      selectedYearStart.toString() +
+                      selectedYearEnd.toString(),
+                ),
+                // rebuild if the date changes
+                color: getColorTheme(context).surface,
+                child: _buildView(),
+              ),
             ),
-            // rebuild if the date changes
-            color: getColorTheme(context).surface,
-            child: getView(),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
-  }
-
-  Widget getView() {
-    if (Data().transactions.isEmpty) {
-      return CenterMessage.noTransaction();
-    }
-
-    switch (PreferenceController.to.cashflowViewAs.value) {
-      case CashflowViewAs.sankey:
-        return PanelSanKey(
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-        );
-
-      case CashflowViewAs.netWorthOverTime:
-        return NetWorthChart(
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-        );
-
-      case CashflowViewAs.recurringIncomes:
-        return PanelRecurrings(
-          dateRangeSearch: dateRangeTransactions,
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
-        );
-
-      case CashflowViewAs.recurringExpenses:
-        return PanelRecurrings(
-          dateRangeSearch: dateRangeTransactions,
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
-        );
-    }
   }
 
   Widget _buildHeaderContent() {
@@ -126,14 +95,21 @@ class ViewCashFlowState extends ViewWidgetState {
           crossAxisAlignment: WrapCrossAlignment.center,
           runSpacing: SizeForPadding.medium,
           spacing: SizeForPadding.large,
-          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               'Cash Flow',
               style: getTextTheme(context).titleLarge,
               textAlign: TextAlign.start,
             ),
+
+            //
+            // Select a view
+            //
             _buildSelectView(),
+
+            //
+            // Optional settings for Recurrence
+            //
             if ([CashflowViewAs.recurringExpenses, CashflowViewAs.recurringIncomes]
                 .contains(PreferenceController.to.cashflowViewAs.value))
               NumberPicker(
@@ -141,6 +117,18 @@ class ViewCashFlowState extends ViewWidgetState {
                 selectedNumber: PreferenceController.to.cashflowRecurringOccurrences.value,
                 onChanged: (int value) {
                   PreferenceController.to.cashflowRecurringOccurrences.value = value;
+                },
+              ),
+
+            //
+            // Optional settings for Networth
+            //
+            if (CashflowViewAs.netWorthOverTime == PreferenceController.to.cashflowViewAs.value)
+              NumberPicker(
+                title: 'Event Tolerances',
+                selectedNumber: PreferenceController.to.networthEventTreshold.value,
+                onChanged: (int value) {
+                  PreferenceController.to.networthEventTreshold.value = value;
                 },
               ),
           ],
@@ -189,10 +177,44 @@ class ViewCashFlowState extends ViewWidgetState {
       ],
       selectedId: PreferenceController.to.cashflowViewAs.value.index,
       onSelectionChanged: (final int newSelection) {
-        setState(() {
-          PreferenceController.to.cashflowViewAs.value = CashflowViewAs.values[newSelection];
-        });
+        PreferenceController.to.cashflowViewAs.value = CashflowViewAs.values[newSelection];
       },
     );
+  }
+
+  Widget _buildView() {
+    if (Data().transactions.isEmpty) {
+      return CenterMessage.noTransaction();
+    }
+
+    switch (PreferenceController.to.cashflowViewAs.value) {
+      case CashflowViewAs.sankey:
+        return PanelSanKey(
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
+        );
+
+      case CashflowViewAs.netWorthOverTime:
+        return NetWorthChart(
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
+        );
+
+      case CashflowViewAs.recurringIncomes:
+        return PanelRecurrings(
+          dateRangeSearch: dateRangeTransactions,
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
+          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
+        );
+
+      case CashflowViewAs.recurringExpenses:
+        return PanelRecurrings(
+          dateRangeSearch: dateRangeTransactions,
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
+          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
+        );
+    }
   }
 }

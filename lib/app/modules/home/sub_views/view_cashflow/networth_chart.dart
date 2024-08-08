@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
@@ -25,7 +26,8 @@ class NetWorthChart extends StatefulWidget {
 class NetWorthChartState extends State<NetWorthChart> {
   final List<FlSpot> _dataPoints = [];
 
-  List<ChartEvent> _outliers = [];
+  List<ChartEvent> _milestoneTransactions = [];
+  List<Transaction> _transactions = [];
 
   @override
   void initState() {
@@ -33,41 +35,13 @@ class NetWorthChartState extends State<NetWorthChart> {
 
     final AccumulatorSum<String, double> cumulateYearMonthBalance = AccumulatorSum<String, double>();
 
-    final List<Transaction> transactions = Data().transactions.iterableList(includeDeleted: true).toList();
-    List<double> amounts = [];
-    for (final t in transactions) {
+    _transactions = Data().transactions.iterableList(includeDeleted: true).toList();
+
+    for (final t in _transactions) {
       String dateKey = dateToString(t.fieldDateTime.value);
 
       cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
     }
-    // Calculate Z-scores for outlier detection based on amount
-    amounts = transactions.map((t) => t.fieldAmount.value.toDouble()).toList();
-
-    // Find outlier events
-    double mean = amounts.reduce((a, b) => a + b) / amounts.length;
-    double variance =
-        amounts.map((amount) => (amount - mean) * (amount - mean)).reduce((a, b) => a + b) / amounts.length;
-    double stdDev = sqrt(variance);
-
-    List<double> zScores = amounts.map((amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
-
-    _outliers = [];
-
-    for (int i = 0; i < transactions.length; i++) {
-      double zScore = zScores[i];
-      if (zScore.abs() > 10) {
-        _outliers.add(
-          ChartEvent(
-            date: transactions[i].fieldDateTime.value!,
-            amount: transactions[i].fieldAmount.value.toDouble(),
-            quantity: 1,
-            colorBasedOnQuantity: false, // use Amount
-            description: '${transactions[i].getPayeeOrTransferCaption()}\n${transactions[i].categoryAsString}',
-          ),
-        );
-      }
-    }
-    _outliers.sort((a, b) => sortByDate(a.date, b.date, true));
 
     List<FlSpot> tmpDataPoints = [];
     cumulateYearMonthBalance.getEntries().forEach(
@@ -100,6 +74,8 @@ class NetWorthChartState extends State<NetWorthChart> {
     const marginLeft = 80.0;
     const marginBottom = 50.0;
 
+    _findMilestoneTransactions();
+
     return Stack(
       alignment: Alignment.topCenter,
       children: [
@@ -108,7 +84,7 @@ class NetWorthChartState extends State<NetWorthChart> {
           child: CustomPaint(
             size: const Size(double.infinity, double.infinity),
             painter: PaintActivities(
-              activities: _outliers,
+              activities: _milestoneTransactions,
               minX: _dataPoints.first.x,
               maxX: _dataPoints.last.x,
             ),
@@ -120,5 +96,39 @@ class NetWorthChartState extends State<NetWorthChart> {
         ),
       ],
     );
+  }
+
+  void _findMilestoneTransactions() {
+    _milestoneTransactions = [];
+
+    // Calculate Z-scores for outlier detection based on amount
+    List<double> amounts = _transactions.map((t) => t.fieldAmount.value.toDouble()).toList();
+    if (amounts.isEmpty) {
+      // nothing to work on;
+    }
+
+    // Find outlier events
+    double mean = amounts.reduce((a, b) => a + b) / amounts.length;
+    double variance =
+        amounts.map((amount) => (amount - mean) * (amount - mean)).reduce((a, b) => a + b) / amounts.length;
+    double stdDev = sqrt(variance);
+
+    List<double> zScores = amounts.map((amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
+
+    for (int i = 0; i < _transactions.length; i++) {
+      double zScore = zScores[i];
+      if (zScore.abs() >= PreferenceController.to.networthEventTreshold.value) {
+        _milestoneTransactions.add(
+          ChartEvent(
+            date: _transactions[i].fieldDateTime.value!,
+            amount: _transactions[i].fieldAmount.value.toDouble(),
+            quantity: 1,
+            colorBasedOnQuantity: false, // use Amount
+            description: '${_transactions[i].getPayeeOrTransferCaption()}\n${_transactions[i].categoryAsString}',
+          ),
+        );
+      }
+    }
+    _milestoneTransactions.sort((a, b) => sortByDate(a.date, b.date, true));
   }
 }
