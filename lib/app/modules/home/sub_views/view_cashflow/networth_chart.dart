@@ -24,7 +24,7 @@ class NetWorthChart extends StatefulWidget {
 }
 
 class NetWorthChartState extends State<NetWorthChart> {
-  final List<FlSpot> _dataPoints = [];
+  final List<FlSpot> _yearMonthDataPoints = [];
 
   List<ChartEvent> _milestoneTransactions = [];
   List<Transaction> _transactions = [];
@@ -55,14 +55,14 @@ class NetWorthChartState extends State<NetWorthChart> {
     tmpDataPoints.sort((a, b) => a.x.compareTo(b.x));
 
     double netWorth = 0;
-    List<FlSpot> tmpDataPointsWithNetWorht = [];
+    List<FlSpot> tmpDataPointsWithNetWorth = [];
     for (final dp in tmpDataPoints) {
       netWorth += dp.y;
-      tmpDataPointsWithNetWorht.add(FlSpot(dp.x, netWorth));
+      tmpDataPointsWithNetWorth.add(FlSpot(dp.x, netWorth));
     }
 
-    _dataPoints.addAll(
-      tmpDataPointsWithNetWorht.where(
+    _yearMonthDataPoints.addAll(
+      tmpDataPointsWithNetWorth.where(
         (entry) =>
             isBetweenOrEqual(DateTime.fromMillisecondsSinceEpoch(entry.x.toInt()).year, widget.minYear, widget.maxYear),
       ),
@@ -74,7 +74,17 @@ class NetWorthChartState extends State<NetWorthChart> {
     const marginLeft = 80.0;
     const marginBottom = 50.0;
 
-    _findMilestoneTransactions();
+    final transactionSubSet = _transactions
+        .where(
+          (Transaction t) => isBetweenOrEqual(
+            t.fieldDateTime.value!.year,
+            widget.minYear,
+            widget.maxYear,
+          ),
+        )
+        .toList();
+
+    _milestoneTransactions = getMilestonesEvents(transactionSubSet);
 
     return Stack(
       alignment: Alignment.topCenter,
@@ -85,50 +95,52 @@ class NetWorthChartState extends State<NetWorthChart> {
             size: const Size(double.infinity, double.infinity),
             painter: PaintActivities(
               activities: _milestoneTransactions,
-              minX: _dataPoints.first.x,
-              maxX: _dataPoints.last.x,
+              minX: _yearMonthDataPoints.first.x,
+              maxX: _yearMonthDataPoints.last.x,
             ),
           ),
         ),
         MyLineChart(
-          dataPoints: _dataPoints,
+          dataPoints: _yearMonthDataPoints,
           showDots: false,
         ),
       ],
     );
   }
+}
 
-  void _findMilestoneTransactions() {
-    _milestoneTransactions = [];
+List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
+  List<ChartEvent> milestoneTransactions = [];
 
-    // Calculate Z-scores for outlier detection based on amount
-    List<double> amounts = _transactions.map((t) => t.fieldAmount.value.toDouble()).toList();
-    if (amounts.isEmpty) {
-      // nothing to work on;
-    }
-
-    // Find outlier events
-    double mean = amounts.reduce((a, b) => a + b) / amounts.length;
-    double variance =
-        amounts.map((amount) => (amount - mean) * (amount - mean)).reduce((a, b) => a + b) / amounts.length;
-    double stdDev = sqrt(variance);
-
-    List<double> zScores = amounts.map((amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
-
-    for (int i = 0; i < _transactions.length; i++) {
-      double zScore = zScores[i];
-      if (zScore.abs() >= PreferenceController.to.networthEventTreshold.value) {
-        _milestoneTransactions.add(
-          ChartEvent(
-            date: _transactions[i].fieldDateTime.value!,
-            amount: _transactions[i].fieldAmount.value.toDouble(),
-            quantity: 1,
-            colorBasedOnQuantity: false, // use Amount
-            description: '${_transactions[i].getPayeeOrTransferCaption()}\n${_transactions[i].categoryAsString}',
-          ),
-        );
-      }
-    }
-    _milestoneTransactions.sort((a, b) => sortByDate(a.date, b.date, true));
+  // Calculate Z-scores for outlier detection based on amount
+  List<double> amounts = transactions.map((t) => t.fieldAmount.value.toDouble()).toList();
+  if (amounts.isEmpty) {
+    // nothing to work on;
+    return [];
   }
+
+  // Find outlier events
+  double mean = amounts.reduce((a, b) => a + b) / amounts.length;
+  double variance = amounts.map((amount) => (amount - mean) * (amount - mean)).reduce((a, b) => a + b) / amounts.length;
+  double stdDev = sqrt(variance);
+
+  List<double> zScores = amounts.map((amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
+
+  for (int i = 0; i < transactions.length; i++) {
+    double zScore = zScores[i];
+    if (zScore.abs() >= PreferenceController.to.networthEventTreshold.value) {
+      final t = transactions[i];
+      milestoneTransactions.add(
+        ChartEvent(
+          date: t.fieldDateTime.value!,
+          amount: t.fieldAmount.value.toDouble(),
+          quantity: 1,
+          colorBasedOnQuantity: false, // use Amount
+          description: t.oneLinePayeeAndDescription,
+        ),
+      );
+    }
+  }
+  milestoneTransactions.sort((a, b) => sortByDate(a.date, b.date, true));
+  return milestoneTransactions;
 }

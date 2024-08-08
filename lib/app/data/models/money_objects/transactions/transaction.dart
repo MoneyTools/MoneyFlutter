@@ -772,11 +772,12 @@ class Transaction extends MoneyObject {
     return this.investmentInstance;
   }
 
-  String getPayeeOrTransferCaption() {
+  String getPayeeOrTransferCaption({final bool showAccount = false}) {
     Investment? investment = investmentInstance;
     double amount = this.fieldAmount.value.toDouble();
 
     bool isFrom = false;
+    String displayName = '';
     if (transferInstance != null) {
       if (investment != null) {
         if (investment.fieldInvestmentType.value == InvestmentType.add.index) {
@@ -789,12 +790,13 @@ class Transaction extends MoneyObject {
         return getTransferCaption(
           transferInstance!.getReceiverAccount(),
           isFrom,
+          showAccount: showAccount,
         );
       }
-      return '';
+    } else {
+      displayName = Data().payees.getNameFromId(fieldPayee.value);
     }
-    final String displayName = Data().payees.getNameFromId(fieldPayee.value);
-    return displayName;
+    return displayName.isEmpty ? 'Payee???' : displayName;
   }
 
   Account? getRelatedAccount() {
@@ -806,17 +808,17 @@ class Transaction extends MoneyObject {
     return null;
   }
 
-  String getTransferCaption(final Account? account, final bool isFrom) {
+  String getTransferCaption(final Account? relatedAccount, final bool isFrom, {final bool showAccount = false}) {
+    String caption = showAccount ? getAccountName() : 'Transfer';
     String arrowDirection = isFrom ? ' ← ' : ' → ';
-
-    String caption = 'Transfer$arrowDirection';
-    if (account == null) {
+    caption += arrowDirection;
+    if (relatedAccount == null) {
       return '???';
     }
-    if (account.isClosed()) {
+    if (relatedAccount.isClosed()) {
       caption += 'Closed-Account: ';
     }
-    caption += account.fieldName.value;
+    caption += relatedAccount.fieldName.value;
     return caption;
   }
 
@@ -839,6 +841,16 @@ class Transaction extends MoneyObject {
 
   bool isTransfer() {
     return fieldTransfer.value != -1;
+  }
+
+  String get oneLinePayeeAndDescription {
+    String description = this.getPayeeOrTransferCaption(showAccount: true);
+
+    if (this.categoryAsString.isNotEmpty) {
+      description += ' | ${this.categoryAsString}';
+    }
+
+    return description;
   }
 
   String get payeeName => Data().payees.getNameFromId(fieldPayee.value);

@@ -412,7 +412,7 @@ void _paintLine(
   double top,
   double chartHeight,
 ) {
-  final rect = Rect.fromLTWH(left, top, 1, chartHeight);
+  final rect = Rect.fromLTWH(left, top, 0.5, chartHeight);
   _paint.color = color;
 
   canvas.drawRect(rect, _paint);
@@ -432,6 +432,7 @@ void _paintLabel(
       style: TextStyle(
         color: color,
         fontSize: 9,
+        height: 0.9, // Tight lines spacing
         fontWeight: FontWeight.w900,
       ),
     ),
@@ -530,7 +531,7 @@ class PaintActivities extends CustomPainter {
         text,
         lineColor ?? activity.color,
         left + 2,
-        nextVerticalLabelPosition + (labelVerticalDistribution / 2),
+        nextVerticalLabelPosition,
       );
 
       nextVerticalLabelPosition -= labelVerticalDistribution;
