@@ -37,17 +37,17 @@ class DataSimulator {
   late final Category _categoryFoodGrocery;
   late final Category _categoryFoodRestaurant;
   late final Category _categoryHomeLoanDownPayment;
-  late final Category _categoryHomeLoanMorgageInterest;
-  late final Category _categoryHomeLoanMorgagePrincipal;
+  late final Category _categoryHomeLoanMortgageInterest;
+  late final Category _categoryHomeLoanMortgagePrincipal;
   late final Category _categoryInvestmentTrades;
   late final Category _categorySalary;
   late final Category _categorySalaryBonus;
   late final Category _categorySalaryPaycheck;
   late final Category _categorySplit;
   late final Category _categorySubscriptionTransport;
-  late final Category _categorySubsriptions;
-  late final Category _categorySubsriptionsGym;
-  late final Category _categorySubsriptionsStreaming;
+  late final Category _categorySubscriptions;
+  late final Category _categorySubscriptionsGym;
+  late final Category _categorySubscriptionsStreaming;
   final double _monthlyHomeLoan = -2000;
   final double _monthlyRent = -600;
   final int _numberOFYearInThePast = 20;
@@ -142,7 +142,7 @@ class DataSimulator {
     }
   }
 
-  void generateTransactionsMontlyExpenses({
+  void generateTransactionsMonthlyExpenses({
     required Account account,
     required String payeeName,
     required Category category,
@@ -272,7 +272,7 @@ class DataSimulator {
       'USD',
     );
 
-    // Canadin Bank Account
+    // Canadian Bank Account
     _accountBankCanada = _addNewAccount(
       -1,
       'Bank Of Montreal',
@@ -295,7 +295,7 @@ class DataSimulator {
             color: '#004400',
           )
           .uniqueId,
-      memo: 'Initial openening of account',
+      memo: 'Initial opening of account',
     );
 
     _accountCreditCardUSD = _addNewAccount(
@@ -433,27 +433,27 @@ class DataSimulator {
 
     // Subscriptions
     {
-      _categorySubsriptions = Data().categories.addNewCategory(
+      _categorySubscriptions = Data().categories.addNewCategory(
             name: 'Subscriptions',
             type: CategoryType.expense,
             color: '#FFFFaaaa',
           );
 
-      _categorySubsriptionsGym = Data().categories.addNewCategory(
-            parentId: _categorySubsriptions.uniqueId,
+      _categorySubscriptionsGym = Data().categories.addNewCategory(
+            parentId: _categorySubscriptions.uniqueId,
             name: 'Gym',
             type: CategoryType.expense,
           );
 
-      _categorySubsriptionsStreaming = Data().categories.addNewCategory(
-            parentId: _categorySubsriptions.uniqueId,
+      _categorySubscriptionsStreaming = Data().categories.addNewCategory(
+            parentId: _categorySubscriptions.uniqueId,
             name: 'Streaming',
             type: CategoryType.expense,
           );
 
       _categorySubscriptionTransport = Data().categories.addNewCategory(
-            parentId: _categorySubsriptions.uniqueId,
-            name: 'Transportaion',
+            parentId: _categorySubscriptions.uniqueId,
+            name: 'Transportation',
             type: CategoryType.expense,
           );
     }
@@ -515,13 +515,13 @@ class DataSimulator {
             type: CategoryType.investment,
           );
 
-      _categoryHomeLoanMorgagePrincipal = Data().categories.addNewCategory(
-            name: 'HomeLoans:Morgage:Principal',
+      _categoryHomeLoanMortgagePrincipal = Data().categories.addNewCategory(
+            name: 'HomeLoans:Mortgage:Principal',
             type: CategoryType.investment,
           );
 
-      _categoryHomeLoanMorgageInterest = Data().categories.addNewCategory(
-            name: 'HomeLoans:Morgage:Interest',
+      _categoryHomeLoanMortgageInterest = Data().categories.addNewCategory(
+            name: 'HomeLoans:Mortgage:Interest',
             type: CategoryType.expense,
           );
     }
@@ -625,10 +625,10 @@ class DataSimulator {
       accountDestination: _accountStartupLoan,
       date: getDateShiftedByYears(-6, 11, 11),
       amount: -loanAmount,
-      memo: 'Invest in projet goto Mars',
+      memo: 'Invest in project goto Mars',
     );
 
-    // ensure that we have the correct category for this injection of Principale funds
+    // ensure that we have the correct category for this injection of Principal funds
     receivingTransaction.fieldCategoryId.value = _accountStartupLoan.fieldCategoryIdForPrincipal.value;
 
     final dates = generateListOfDates(yearInThePast: 5, howManyPerYear: 12, dayOfTheMonth: 9);
@@ -640,23 +640,23 @@ class DataSimulator {
 
       final annuallyInterest = loanAmount * loanRate;
       var monthlyInterest = annuallyInterest / 12;
-      var principaleForThisMonday = (monthlyPayment - monthlyInterest);
+      var principalForThisMonday = (monthlyPayment - monthlyInterest);
       if (isConsideredZero(monthlyInterest)) {
         monthlyInterest = 0;
-        principaleForThisMonday = loanAmount;
-        monthlyPayment = principaleForThisMonday;
+        principalForThisMonday = loanAmount;
+        monthlyPayment = principalForThisMonday;
         loanAmount = 0;
       }
 
       // reduce the remaining balance
-      loanAmount -= principaleForThisMonday;
+      loanAmount -= principalForThisMonday;
 
       Data().loanPayments.appendNewMoneyObject(
             LoanPayment(
               id: -1,
               accountId: _accountStartupLoan.uniqueId,
               date: date,
-              principal: -principaleForThisMonday,
+              principal: -principalForThisMonday,
               interest: monthlyInterest,
               memo: '',
             ),
@@ -715,7 +715,7 @@ class DataSimulator {
     final startDate = _today.subtract(Duration(days: (365.25 * _numberOFYearInThePast).toInt()));
 
     // Electricity
-    generateTransactionsMontlyExpenses(
+    generateTransactionsMonthlyExpenses(
       account: _accountBankUSA,
       payeeName: 'ElectricCity',
       category: _categoryBillsElectricity,
@@ -726,7 +726,7 @@ class DataSimulator {
     );
 
     // Phone
-    generateTransactionsMontlyExpenses(
+    generateTransactionsMonthlyExpenses(
       account: _accountBankUSA,
       payeeName: 'TMobile',
       category: _categoryBillsPhone,
@@ -737,7 +737,7 @@ class DataSimulator {
     );
 
     // Internet
-    generateTransactionsMontlyExpenses(
+    generateTransactionsMonthlyExpenses(
       account: _accountBankUSA,
       payeeName: 'FastISP',
       category: _categoryBillsInternet,
@@ -748,7 +748,7 @@ class DataSimulator {
     );
 
     // TV
-    generateTransactionsMontlyExpenses(
+    generateTransactionsMonthlyExpenses(
       account: _accountBankUSA,
       payeeName: 'Comcast',
       category: _categoryBillsTV,
@@ -762,10 +762,10 @@ class DataSimulator {
   /// 4 years of GYM and Netflix
   void _generateSubscriptionsOnCreditCard() {
     final dateForGym = _today.subtract(const Duration(days: 365 * 8));
-    generateTransactionsMontlyExpenses(
+    generateTransactionsMonthlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Gold Gym',
-      category: _categorySubsriptionsGym,
+      category: _categorySubscriptionsGym,
       amount: -50,
       yearMin: dateForGym.year,
       yearMax: dateForGym.add(const Duration(days: 365 * 4)).year,
@@ -774,10 +774,10 @@ class DataSimulator {
 
     // 5 years of netflix
     final dateForNetflix = _today.subtract(const Duration(days: 365 * 5));
-    generateTransactionsMontlyExpenses(
+    generateTransactionsMonthlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Netflix',
-      category: _categorySubsriptionsStreaming,
+      category: _categorySubscriptionsStreaming,
       amount: -8.99,
       yearMin: dateForNetflix.year,
       yearMax: _today.year,
@@ -829,7 +829,7 @@ class DataSimulator {
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
             amount: 20000,
-          ).fieldMemo.value = 'Signing Bonnus';
+          ).fieldMemo.value = 'Signing Bonus';
         }
         // Add Paycheck for NASA
         _addTransactionAccountDatePayeeCategory(
@@ -848,7 +848,7 @@ class DataSimulator {
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
             amount: 3500,
-          ).fieldMemo.value = 'Holiday Bonnus';
+          ).fieldMemo.value = 'Holiday Bonus';
         }
       }
     }
@@ -879,7 +879,7 @@ class DataSimulator {
     }
   }
 
-  /// The demo data tries to demonstrat a person that had a rent for the first part of their jouney and a house on the second half
+  /// The demo data tries to demonstrate a person that had a rent for the first part of their journey and a house on the second half
   void _generateTransfersToRentAndHomeLoan() {
     final payeeLandLord = Data().payees.getOrCreate('TheLandlord');
     final payeeForHomeLoan = Data().payees.getOrCreate('HomeLoanBank');
@@ -888,8 +888,8 @@ class DataSimulator {
     final midPointInTime = dates[dates.length ~/ 2];
 
     bool boughtHome = false;
-    int numberOfRentPayement = 0;
-    int numberOfMorgagePayement = 0;
+    int numberOfRentPayment = 0;
+    int numberOfMortgagePayment = 0;
 
     for (final date in dates) {
       if (date.isBefore(midPointInTime)) {
@@ -899,7 +899,7 @@ class DataSimulator {
           payeeId: payeeLandLord.uniqueId,
           categoryId: Data().categories.getOrCreate('Bills:Rent', CategoryType.expense).uniqueId,
           amount: _monthlyRent,
-        ).fieldMemo.value = 'Pay Rent #${++numberOfRentPayement}';
+        ).fieldMemo.value = 'Pay Rent #${++numberOfRentPayment}';
       } else {
         if (boughtHome == false) {
           boughtHome = true;
@@ -912,34 +912,34 @@ class DataSimulator {
           payeeId: payeeForHomeLoan.uniqueId,
           categoryId: _categorySplit.uniqueId,
           amount: _monthlyHomeLoan,
-          memo: 'Mortgage Payement #${++numberOfMorgagePayement}',
+          memo: 'Mortgage Payment #${++numberOfMortgagePayment}',
         );
 
-        final splitMorgagePayementPrincipale = MoneySplit(
+        final splitMortgagePaymentPrincipal = MoneySplit(
           id: -1,
           amount: _monthlyHomeLoan - 200,
           transactionId: transaction.uniqueId,
-          categoryId: _categoryHomeLoanMorgagePrincipal.uniqueId,
+          categoryId: _categoryHomeLoanMortgagePrincipal.uniqueId,
           payeeId: payeeForHomeLoan.uniqueId,
           transferId: -1,
           memo: '',
           flags: 0,
           budgetBalanceDate: null,
         );
-        Data().splits.appendNewMoneyObject(splitMorgagePayementPrincipale);
+        Data().splits.appendNewMoneyObject(splitMortgagePaymentPrincipal);
 
-        final splitMorgagePayementInterest = MoneySplit(
+        final splitMortgagePaymentInterest = MoneySplit(
           id: -1,
           amount: 200,
           transactionId: transaction.uniqueId,
-          categoryId: _categoryHomeLoanMorgageInterest.uniqueId,
+          categoryId: _categoryHomeLoanMortgageInterest.uniqueId,
           payeeId: payeeForHomeLoan.uniqueId,
           transferId: -1,
           memo: '',
           flags: 0,
           budgetBalanceDate: null,
         );
-        Data().splits.appendNewMoneyObject(splitMorgagePayementInterest);
+        Data().splits.appendNewMoneyObject(splitMortgagePaymentInterest);
       }
     }
   }
@@ -1010,7 +1010,7 @@ List<DateTime> generateListOfDatesRandom({required int year, required int howMan
     // Subtract the current month index from today's date
     DateTime date = DateTime(today.year, today.month - i, 1);
     // Now we have a Year and Month
-    // generate on rendom date of the month
+    // generate on random date of the month
     for (int event = 0; event < howManyPerMonths; event++) {
       int day = Random().nextInt(31);
       date = date.add(Duration(days: day));

@@ -10,6 +10,7 @@
         "BANKTRANLIST",
         "BECU",
         "CHECKNUM",
+        "concat",
         "datetime",
         "dflt",
         "DIRECTDEBIT",

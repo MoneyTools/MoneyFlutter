@@ -55,7 +55,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
 
   // include the bank transactions matching the Account Categories for Principal and Interest
   final List<Transaction> listOfTransactions = Data().transactions.getListFlattenSplits(
-        whereClause: (t) => t.isMatchingAnyOfTheseCategoris(categoriesToMatch),
+        whereClause: (t) => t.isMatchingAnyOfTheseCategories(categoriesToMatch),
       );
 
   // Rollup into a single Payment based on Date to match Principal and Interest payment

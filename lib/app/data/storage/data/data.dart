@@ -216,9 +216,9 @@ class Data {
 
   Set<Transaction> getDanglingTransfers() {
     Set<Transaction> dangling = {};
-    List<Account> deletedaccounts = [];
-    transactions.checkTransfers(dangling, deletedaccounts);
-    for (Account a in deletedaccounts) {
+    List<Account> deletedAccounts = [];
+    transactions.checkTransfers(dangling, deletedAccounts);
+    for (Account a in deletedAccounts) {
       accounts.removeAccount(a);
     }
     return dangling;
@@ -455,7 +455,7 @@ class Data {
         }
       case MutationType.deleted:
         if (moneyObject.mutation == MutationType.inserted) {
-          // in case the delete item was a revcently added item, we need to deduct it from the sum
+          // in case the delete item was a recently added item, we need to deduct it from the sum
           DataController.to.trackMutations.increaseNumber(increaseAdded: -1);
         }
         moneyObject.mutation = MutationType.deleted;
@@ -498,7 +498,7 @@ class Data {
 
     // if (t.Category == null && t.Transfer == null && !t.IsSplit) {
     //   if (t.Payee != null) {
-    //     t.Payee.UncategorizedTransactions--;
+    //     t.Payee.UnCategorizedTransactions--;
     //   }
     // }
 

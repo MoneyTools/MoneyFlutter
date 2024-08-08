@@ -644,7 +644,7 @@ class Transaction extends MoneyObject {
         if ((other.instanceOfTransfer == null || other.instanceOfTransfer?.related != this)) {
           dangling.add(this);
         } else {
-          // one last check, the other side also needs to be correctly setup as a transafer
+          // one last check, the other side also needs to be correctly setup as a transfer
           if (other.fieldTransfer.value != this.uniqueId) {
             dangling.add(this);
           }
@@ -797,14 +797,14 @@ class Transaction extends MoneyObject {
     return caption;
   }
 
-  bool isMatchingAnyOfTheseCategoris(List<int> cateogoriesToMatch) {
-    if (cateogoriesToMatch.contains(fieldCategoryId.value)) {
+  bool isMatchingAnyOfTheseCategories(List<int> categoriesToMatch) {
+    if (categoriesToMatch.contains(fieldCategoryId.value)) {
       return true;
     }
 
     if (this.isSplit) {
       for (var s in this.splits) {
-        if (cateogoriesToMatch.contains(s.fieldCategoryId.value)) {
+        if (categoriesToMatch.contains(s.fieldCategoryId.value)) {
           return true;
         }
       }
