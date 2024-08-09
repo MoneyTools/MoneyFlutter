@@ -19,7 +19,6 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class DataSimulator {
-  int idAccountForLoan = 9;
   int idStockApple = 0;
   int idStockFord = 1;
 
@@ -684,7 +683,7 @@ class DataSimulator {
   void _generateStocks() {
     Data().securities.appendMoneyObject(
           Security(
-            id: 0,
+            id: idStockApple,
             name: 'Apple Inc',
             symbol: 'AAPL',
             price: 200.0,
@@ -697,7 +696,7 @@ class DataSimulator {
         );
     Data().securities.appendMoneyObject(
           Security(
-            id: 1,
+            id: idStockFord,
             name: 'Ford',
             symbol: 'F',
             price: 7.0,
