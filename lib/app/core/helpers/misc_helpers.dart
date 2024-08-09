@@ -64,7 +64,11 @@ void copyToClipboardAndInformUser(
   final String textToCopy,
 ) {
   FlutterClipboard.copy(textToCopy).then(
-    (_) => showSnackBar(context, 'Copied to clipboard'),
+    (_) {
+      if (context.mounted) {
+        showSnackBar(context, 'Copied to clipboard');
+      }
+    },
   );
 }
 

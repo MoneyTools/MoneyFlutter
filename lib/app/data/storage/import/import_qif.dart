@@ -20,7 +20,9 @@ void importQIF(
   file.readAsLines().then((final List<String> lines) {
     final ImportData importData = loadQIF(lines);
     importData.fileType = 'QIF';
-    showAndConfirmTransactionToImport(context, importData);
+    if (context.mounted) {
+      showAndConfirmTransactionToImport(context, importData);
+    }
   }).catchError((final dynamic e) {
     logger.e('Error reading file: $e');
     SnackBarService.displayError(message: e.toString(), autoDismiss: false);

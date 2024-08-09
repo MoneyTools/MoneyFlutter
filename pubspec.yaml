@@ -1,5 +1,5 @@
 name: money
-description: Money budgeting tools that runs on all known platforms Windows, MacOS, Linux, iOS, Android, Web
+description: Money budgeting tools that runs on all known platforms; Windows, MacOS, Linux, iOS, Android, Web.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
@@ -17,13 +17,13 @@ publish_to: none # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.8.53
+version: 1.8.54
 
 environment:
   # This is the dart constraint
-  sdk: ">=3.4.0"
+  sdk: ">=3.5.0"
   # This is the Flutter SDK
-  flutter: ">=3.22.0"
+  flutter: ">=3.24.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
