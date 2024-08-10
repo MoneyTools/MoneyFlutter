@@ -7,6 +7,8 @@ import 'package:money/app/data/models/constants.dart';
 import 'package:money/main.dart' as app;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'test_helpers.dart';
+
 void main() {
   group('App Test', () {
     IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -23,35 +25,7 @@ void main() {
 
       //------------------------------------------------------------------------
       // Welcome screen - Policy
-      await tapOnText(tester, 'Privacy Policy');
-      await tapBackButton(tester);
-
-      //------------------------------------------------------------------------
-      // Welcome screen - Licenses
-      await tapOnText(tester, 'Licenses');
-      await tapBackButton(tester);
-
-      //------------------------------------------------------------------------
-      // Welcome screen - MRU
-      await tapOnKey(tester, Constants.keyMruButton);
-      await tapOnText(tester, 'Close');
-
-      //------------------------------------------------------------------------
-      // Tap the "New File"
-      await tapOnText(tester, 'New File ...');
-      await tester.pumpAndSettle(const Duration(seconds: 1));
-
-      //------------------------------------------------------------------------
-      // Toggle Theme Mode
-      {
-        // Turn Dark-Mode on
-        await tapOnKeyString(tester, 'key_toggle_mode');
-        await Future.delayed(const Duration(seconds: 1));
-
-        // Turn back Light-Mode
-        await tapOnKeyString(tester, 'key_toggle_mode');
-        await Future.delayed(const Duration(seconds: 1));
-      }
+      await testWelcomeScreen(tester);
 
       //------------------------------------------------------------------------
       // Close the file
@@ -63,119 +37,170 @@ void main() {
       await tapOnText(tester, 'Use Demo Data');
 
       //------------------------------------------------------------------------
-      // Bring up the Settings dialog
-      await tapOnKey(tester, Constants.keySettingsButton);
-      await tapOnKeyString(tester, 'key_settings');
+      // Themes
+      await testTheme(tester);
 
-      // Turn on Rentals
-      {
-        // Find the SwitchListTile using the text label provided in the Semantics
-        final Finder switchTileFinder = find.byWidgetPredicate(
-          (Widget widget) =>
-              widget is SwitchListTile && widget.title is Text && (widget.title as Text).data == 'Rental',
-        );
-
-        // Verify initial state is OFF (false)
-        SwitchListTile switchTile = tester.widget(switchTileFinder);
-        expect(switchTile.value, isFalse);
-
-        // Toggle the switch to "On"
-        await tester.tap(switchTileFinder);
-        await tester.pumpAndSettle(); // Wait for the state to update
-        await Future.delayed(const Duration(seconds: 1));
-      }
-      await tapBackButton(tester);
+      //------------------------------------------------------------------------
+      // The Settings dialog
+      await testSettings(tester);
 
       //------------------------------------------------------------------------
       // Cash Flow
-      {
-        await tapOnText(tester, 'Cashflow');
-        await Future.delayed(const Duration(seconds: 1));
-
-        await tapOnText(tester, 'NetWorth');
-        await Future.delayed(const Duration(seconds: 1));
-
-        await tapOnText(tester, 'Incomes');
-        await Future.delayed(const Duration(seconds: 1));
-
-        await tapOnText(tester, 'Expenses');
-        await Future.delayed(const Duration(seconds: 1));
-      }
+      await testCashFlow(tester);
 
       //------------------------------------------------------------------------
       // Accounts
-      await _testAccounts(tester);
+      await testAccounts(tester);
 
+      //------------------------------------------------------------------------
       // Categories
-      await _testCategories(tester);
+      await testCategories(tester);
 
+      //------------------------------------------------------------------------
       // Payees
-      {
-        await tapOnText(tester, 'Payees');
-        await infoTabs(tester);
-      }
+      await testPayees(tester);
 
+      //------------------------------------------------------------------------
       // Aliases
-      {
-        await tapOnText(tester, 'Aliases');
-        await infoTabs(tester);
-      }
+      await tapOnText(tester, 'Aliases');
+      await infoTabs(tester);
 
+      //------------------------------------------------------------------------
       // Transactions
-      await _testTransactions(tester);
+      await testTransactions(tester);
 
+      //------------------------------------------------------------------------
       // Transfers
-      {
-        await tapOnText(tester, 'Transfers');
-        await infoTabs(tester);
-      }
+      await tapOnText(tester, 'Transfers');
+      await infoTabs(tester);
 
+      //------------------------------------------------------------------------
       // Investments
-      {
-        await tapOnText(tester, 'Investments');
+      await tapOnText(tester, 'Investments');
+      await tapOnTextFromParentType(tester, ListView, 'Fidelity');
+      await infoTabs(tester);
 
-        await tapOnTextFromParentType(tester, ListView, 'Fidelity');
-
-        await infoTabs(tester);
-      }
-
+      //------------------------------------------------------------------------
       // Stocks
-      {
-        await tapOnText(tester, 'Stocks');
-        await infoTabs(tester);
-      }
+      await testStocks(tester);
 
+      //------------------------------------------------------------------------
       // Rentals
-      {
-        await tapOnText(tester, 'Rentals');
-        await infoTabs(tester);
-      }
+      await tapOnText(tester, 'Rentals');
+      await infoTabs(tester);
 
+      //------------------------------------------------------------------------
       // Pending Changes
-      {
-        await tapOnKey(tester, Constants.keyPendingChanges);
-
-        await tapOnTextFromParentType(tester, Wrap, 'Aliases');
-        await tapOnTextFromParentType(tester, Wrap, 'Categories');
-        await tapOnTextFromParentType(tester, Wrap, 'Currencies');
-        await tapOnTextFromParentType(tester, Wrap, 'LoanPayments');
-        await tapOnTextFromParentType(tester, Wrap, 'Payees');
-        await tapOnTextFromParentType(tester, Wrap, 'Transactions');
-        await tapOnTextFromParentType(tester, Wrap, 'Splits');
-        await tapOnTextFromParentType(tester, Wrap, 'Accounts');
-
-        await tapOnText(tester, 'None modified');
-
-        await tapOnText(tester, '1 deleted');
-
-        // close the panel
-        await tapOnText(tester, 'Save to CSV');
-      }
+      await testPendingChanges(tester);
     });
   });
 }
 
-Future<void> _testAccounts(WidgetTester tester) async {
+Future<void> testPayees(WidgetTester tester) async {
+  await tapOnText(tester, 'Payees');
+  await infoTabs(tester);
+}
+
+Future<void> testSettings(WidgetTester tester) async {
+  await tapOnKey(tester, Constants.keySettingsButton);
+  await tapOnKeyString(tester, 'key_settings');
+
+  // Turn on Rentals
+  {
+    // Find the SwitchListTile using the text label provided in the Semantics
+    final Finder switchTileFinder = find.byWidgetPredicate(
+      (Widget widget) => widget is SwitchListTile && widget.title is Text && (widget.title as Text).data == 'Rental',
+    );
+
+    // Verify initial state is OFF (false)
+    SwitchListTile switchTile = tester.widget(switchTileFinder);
+    expect(switchTile.value, isFalse);
+
+    // Toggle the switch to "On"
+    await tester.tap(switchTileFinder);
+    await tester.pumpAndSettle(); // Wait for the state to update
+    await Future.delayed(const Duration(seconds: 1));
+  }
+  await tapBackButton(tester);
+}
+
+Future<void> testTheme(WidgetTester tester) async {
+  // Turn Dark-Mode on
+  await tapOnKeyString(tester, 'key_toggle_mode');
+  await Future.delayed(const Duration(seconds: 1));
+
+  // Turn back Light-Mode
+  await tapOnKeyString(tester, 'key_toggle_mode');
+  await Future.delayed(const Duration(seconds: 1));
+}
+
+Future<void> testWelcomeScreen(WidgetTester tester) async {
+  //------------------------------------------------------------------------
+  // Welcome screen - Policy
+  await tapOnText(tester, 'Privacy Policy');
+  await tapBackButton(tester);
+
+  //------------------------------------------------------------------------
+  // Welcome screen - Licenses
+  await tapOnText(tester, 'Licenses');
+  await tapBackButton(tester);
+
+  //------------------------------------------------------------------------
+  // Welcome screen - MRU
+  await tapOnKey(tester, Constants.keyMruButton);
+  await tapOnText(tester, 'Close');
+
+  //------------------------------------------------------------------------
+  // Tap the "New File"
+  await tapOnText(tester, 'New File ...');
+  await tester.pumpAndSettle(const Duration(seconds: 1));
+}
+
+Future<void> testPendingChanges(WidgetTester tester) async {
+  await tapOnKey(tester, Constants.keyPendingChanges);
+
+  await tapOnTextFromParentType(tester, Wrap, 'Aliases');
+  await tapOnTextFromParentType(tester, Wrap, 'Categories');
+  await tapOnTextFromParentType(tester, Wrap, 'Currencies');
+  await tapOnTextFromParentType(tester, Wrap, 'LoanPayments');
+  await tapOnTextFromParentType(tester, Wrap, 'Payees');
+  await tapOnTextFromParentType(tester, Wrap, 'Transactions');
+  await tapOnTextFromParentType(tester, Wrap, 'Splits');
+  await tapOnTextFromParentType(tester, Wrap, 'Accounts');
+
+  await tapOnText(tester, 'None modified');
+
+  await tapOnText(tester, '1 deleted');
+
+  // close the panel
+  await tapOnText(tester, 'Save to CSV');
+}
+
+Future<void> testStocks(WidgetTester tester) async {
+  await tapOnText(tester, 'Stocks');
+  await tapOnTextFromParentType(tester, ListView, 'AAPL');
+  await infoTabs(tester);
+
+  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
+  await tapOnText(tester, 'Set API Key');
+  await tapOnText(tester, 'Cancel');
+}
+
+Future<void> testCashFlow(WidgetTester tester) async {
+  await tapOnText(tester, 'Cashflow');
+  await Future.delayed(const Duration(seconds: 1));
+
+  await tapOnText(tester, 'NetWorth');
+  await Future.delayed(const Duration(seconds: 1));
+
+  await tapOnText(tester, 'Incomes');
+  await Future.delayed(const Duration(seconds: 1));
+
+  await tapOnText(tester, 'Expenses');
+  await Future.delayed(const Duration(seconds: 1));
+}
+
+Future<void> testAccounts(WidgetTester tester) async {
   await tapOnText(tester, 'Accounts');
 
   await tapOnKey(tester, Constants.keyInfoPanelExpando);
@@ -202,7 +227,7 @@ Future<void> _testAccounts(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderMain);
 }
 
-Future<void> _testCategories(WidgetTester tester) async {
+Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Categories');
   await infoTabs(tester);
 
@@ -211,7 +236,7 @@ Future<void> _testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Close');
 }
 
-Future<void> _testTransactions(WidgetTester tester) async {
+Future<void> testTransactions(WidgetTester tester) async {
   await tapOnText(tester, 'Transactions');
 
   // Select one of the rows
@@ -286,43 +311,9 @@ Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type,
   await tester.pumpAndSettle();
 }
 
-Future<void> tapBackButton(WidgetTester tester) async {
-  final backButton = find.byTooltip('Back');
-  await tester.tap(backButton);
-  await tester.pumpAndSettle();
-}
-
 Future<void> filterBy(WidgetTester tester, final String textToFilterBy) async {
   final filterInput = find.byType(TextField).first;
   await tester.enterText(filterInput, textToFilterBy);
   await tester.testTextInput.receiveAction(TextInputAction.done);
   await tester.pumpAndSettle(Durations.long4);
-}
-
-Future<void> tapOnText(final WidgetTester tester, final String textToFind) async {
-  final firstMatchingElement = find.text(textToFind).first;
-  expect(firstMatchingElement, findsOneWidget);
-  await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.pumpAndSettle();
-}
-
-Future<void> tapOnKeyString(final WidgetTester tester, final String keyString) async {
-  final firstMatchingElement = find.byKey(Key(keyString)).first;
-  expect(firstMatchingElement, findsOneWidget);
-  await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.pumpAndSettle();
-}
-
-Future<void> tapOnKey(final WidgetTester tester, final Key key) async {
-  final firstMatchingElement = find.byKey(key).first;
-  expect(firstMatchingElement, findsOneWidget, reason: key.toString());
-  await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.pumpAndSettle();
-}
-
-Future<void> tapOnWidgetType(final WidgetTester tester, final Type type) async {
-  final firstMatchingElement = find.byElementType(type).first;
-  expect(firstMatchingElement, findsOneWidget);
-  await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.pumpAndSettle();
 }
