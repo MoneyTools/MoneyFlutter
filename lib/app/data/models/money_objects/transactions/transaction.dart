@@ -432,8 +432,8 @@ class Transaction extends MoneyObject {
                       // same account do noting
                     } else {
                       // use the new account destination
-                      Transaction relatedTransaction = instance.instanceOfTransfer!.related!;
-                      instance.instanceOfTransfer!.related!.instanceOfAccount = Data().accounts.get(
+                      Transaction relatedTransaction = instance.instanceOfTransfer!.relatedTransaction!;
+                      instance.instanceOfTransfer!.relatedTransaction!.instanceOfAccount = Data().accounts.get(
                             account.uniqueId,
                           );
                       relatedTransaction.mutateField(
@@ -525,13 +525,16 @@ class Transaction extends MoneyObject {
   );
 
   /// cache instances of related MoneyObjects
-  Account? instanceOfAccount;
+  Investment? instanceOfInvestment;
 
   int possibleMatchingCategoryId = -1;
   List<MoneySplit> splits = [];
 
-  Investment? instanceOfInvestment;
-  Transfer? instanceOfTransfer;
+  /// Instances of related MoneyObjects
+  Account? _instanceOfAccount;
+
+  // Instance of Transfer
+  Transfer? _instanceOfTransfer;
 
   @override
   Widget buildFieldsAsWidgetForSmallScreen() {
@@ -577,7 +580,7 @@ class Transaction extends MoneyObject {
 
   static final Fields<Transaction> _fields = Fields<Transaction>();
 
-  String get accountName => instanceOfAccount?.fieldName.value ?? '???';
+  String get accountName => instanceOfAccount?.fieldName.value ?? '<Account???>';
 
   String get amountAsString => fieldAmount.value.toString();
 
@@ -613,7 +616,7 @@ class Transaction extends MoneyObject {
     }
 
     if (this.instanceOfTransfer != null) {
-      Transaction other = this.instanceOfTransfer!.related!;
+      Transaction other = this.instanceOfTransfer!.relatedTransaction!;
       if (other.isSplit) {
         //       int count = 0;
         //       Split splitXfer = null;
@@ -641,7 +644,7 @@ class Transaction extends MoneyObject {
         //         }
         //       }
       } else {
-        if ((other.instanceOfTransfer == null || other.instanceOfTransfer?.related != this)) {
+        if ((other.instanceOfTransfer == null || other.instanceOfTransfer?.relatedTransaction != this)) {
           dangling.add(this);
         } else {
           // one last check, the other side also needs to be correctly setup as a transfer
@@ -661,7 +664,8 @@ class Transaction extends MoneyObject {
         }
       }
     }
-    if (this.instanceOfTransfer != null && this.instanceOfTransfer?.related?.fieldAccountId.value == a.uniqueId) {
+    if (this.instanceOfTransfer != null &&
+        this.instanceOfTransfer?.relatedTransaction?.fieldAccountId.value == a.uniqueId) {
       return true;
     }
     return false;
@@ -762,7 +766,7 @@ class Transaction extends MoneyObject {
 
     bool isFrom = false;
     String displayName = '';
-    if (instanceOfTransfer != null) {
+    if (isTransfer) {
       if (investment != null) {
         if (investment.fieldInvestmentType.value == InvestmentType.add.index) {
           isFrom = true;
@@ -770,31 +774,46 @@ class Transaction extends MoneyObject {
       } else if (amount > 0) {
         isFrom = true;
       }
-      if (instanceOfTransfer!.related != null) {
-        return getTransferCaption(
-          instanceOfTransfer!.receiverAccount,
-          isFrom,
-          showAccount: showAccount,
-        );
-      }
+
+      return getTransferCaption(
+        instanceOfTransfer!.receiverAccount,
+        isFrom,
+        showAccount: showAccount,
+      );
     } else {
       displayName = Data().payees.getNameFromId(fieldPayee.value);
     }
-    return displayName.isEmpty ? 'Payee???' : displayName;
+    return displayName.isEmpty ? '<Payee???>' : displayName;
   }
 
   String getTransferCaption(final Account? relatedAccount, final bool isFrom, {final bool showAccount = false}) {
     String caption = showAccount ? accountName : 'Transfer';
     String arrowDirection = isFrom ? ' ← ' : ' → ';
     caption += arrowDirection;
-    if (relatedAccount == null) {
-      return '???';
-    }
-    if (relatedAccount.isClosed()) {
-      caption += 'Closed-Account: ';
-    }
-    caption += relatedAccount.fieldName.value;
+    caption += relatedAccountName(relatedAccount);
     return caption;
+  }
+
+  Account? get instanceOfAccount {
+    /// cache instances of related MoneyObjects
+    _instanceOfAccount ??= Data().accounts.get(this.fieldAccountId.value);
+    return _instanceOfAccount;
+  }
+
+  set instanceOfAccount(Account? value) {
+    _instanceOfAccount = value;
+  }
+
+  Transfer? get instanceOfTransfer {
+    if (_instanceOfTransfer == null && isTransfer) {
+      final relatedTransaction = Data().transactions.get(this.fieldTransfer.value);
+      linkTransfer(this, relatedTransaction!);
+    }
+    return _instanceOfTransfer;
+  }
+
+  set instanceOfTransfer(Transfer? value) {
+    _instanceOfTransfer = value;
   }
 
   bool isMatchingAnyOfTheseCategories(List<int> categoriesToMatch) {
@@ -917,7 +936,19 @@ class Transaction extends MoneyObject {
     // }
   }
 
-  Account? get relatedAccount => instanceOfTransfer?.related?.instanceOfAccount;
+  Account? get relatedAccount => instanceOfTransfer?.relatedTransaction?.instanceOfAccount;
+
+  String relatedAccountName(Account? relatedAccount) {
+    if (relatedAccount == null) {
+      return '<Account???>';
+    }
+    String name = '';
+
+    if (relatedAccount.isClosed()) {
+      name += 'Closed-Account: ';
+    }
+    return name + relatedAccount.fieldName.value;
+  }
 
   static int sortByDateTime(final Transaction a, final Transaction b, final bool ascending) {
     int result = sortByDate(

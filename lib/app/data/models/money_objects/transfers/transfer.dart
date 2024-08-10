@@ -12,7 +12,7 @@ class Transfer extends MoneyObject {
     required this.id,
     required this.source,
     required this.isOrphan,
-    this.related,
+    this.relatedTransaction,
     this.sourceSplit,
     this.relatedSplit,
   }) {
@@ -25,8 +25,8 @@ class Transfer extends MoneyObject {
 
   final num id; // used when the transfer is part of a split
   final bool isOrphan;
-  final Transaction? related; // the related transaction
   final MoneySplit? relatedSplit; // the related split, if it is a transfer in a split.
+  final Transaction? relatedTransaction; // the related transaction
   final Transaction? source; // the source of the transfer.
   final MoneySplit? sourceSplit; // the source split, if it is a transfer in a split.
 
@@ -36,7 +36,7 @@ class Transfer extends MoneyObject {
     align: TextAlign.center,
     columnWidth: ColumnWidth.nano,
     getValueForDisplay: (final MoneyObject instance) =>
-        transactionStatusToLetter((instance as Transfer).related!.fieldStatus.value),
+        transactionStatusToLetter((instance as Transfer).relatedTransaction!.fieldStatus.value),
   );
 
   /// memo
@@ -173,8 +173,8 @@ class Transfer extends MoneyObject {
   }
 
   double geReceiverTransactionAmount() {
-    if (related != null) {
-      return related!.fieldAmount.value.toDouble();
+    if (relatedTransaction != null) {
+      return relatedTransaction!.fieldAmount.value.toDouble();
     }
     return 0.00;
   }
@@ -197,8 +197,8 @@ class Transfer extends MoneyObject {
 
   String getMemoDestination() {
     String memos = source!.fieldTransferSplit.value == -1 ? '' : '[Split:${source!.fieldTransferSplit.value}] ';
-    if (related != null) {
-      memos += related!.fieldMemo.value;
+    if (relatedTransaction != null) {
+      memos += relatedTransaction!.fieldMemo.value;
     }
     return memos;
   }
@@ -227,26 +227,15 @@ class Transfer extends MoneyObject {
     return status;
   }
 
-  Account? get receiverAccount {
-    if (related != null) {
-      return related!.instanceOfAccount;
-    }
-    return null;
-  }
+  Account? get receiverAccount => relatedTransaction?.instanceOfAccount;
 
   String get receiverAccountName => receiverAccount?.fieldName.value ?? '<account not found>';
 
-  Transaction? get receiverTransaction {
-    if (related != null) {
-      return related!;
-    }
-
-    return null;
-  }
+  Transaction? get receiverTransaction => relatedTransaction;
 
   DateTime? get receiverTransactionDate {
-    if (related != null) {
-      return related!.fieldDateTime.value;
+    if (relatedTransaction != null) {
+      return relatedTransaction!.fieldDateTime.value;
     }
     return null;
   }
@@ -270,9 +259,24 @@ class Transfer extends MoneyObject {
   Transaction? get senderTransaction {
     return source;
   }
+}
 
 // NOTE: we do not support a transfer from one split to another split, this is a pretty unlikely scenario,
 // although it would be possible, if you withdraw 500 cash from one account, then combine $100 of that with
 // a check for $200 in a single deposit, then the $100 is split on the source as a "transfer" to the
 // deposited account, and the $300 deposit is split between the cash and the check.  Like I said, pretty unlikely.
+void linkTransfer(Transaction transactionSource, Transaction transactionRelated) {
+  transactionSource.instanceOfTransfer = Transfer(
+    id: 0,
+    source: transactionSource,
+    relatedTransaction: transactionRelated,
+    isOrphan: false,
+  );
+
+  transactionRelated.instanceOfTransfer = Transfer(
+    id: 0,
+    source: transactionRelated,
+    relatedTransaction: transactionSource,
+    isOrphan: false,
+  );
 }

@@ -275,19 +275,22 @@ class Data {
           ),
           amount: -transactionSource.fieldAmount.value.toDouble(),
         );
-    // ignore: prefer_conditional_assignment
+
     if (relatedTransaction == null) {
-      relatedTransaction = Transaction(date: transactionSource.fieldDateTime.value)
-        ..fieldAccountId.value = destinationAccount.uniqueId
-        ..fieldAmount.value.setAmount(
-              (transactionSource.fieldAmount.value.toDouble() * -1),
-            ) // flip the sign
-        ..fieldCategoryId.value = transactionSource.fieldCategoryId.value
-        ..fieldFitid.value = transactionSource.fieldFitid.value
-        ..fieldNumber.value = transactionSource.fieldNumber.value
-        ..fieldMemo.value = transactionSource.fieldMemo.value;
+      relatedTransaction = Transaction(
+        accountId: destinationAccount.uniqueId,
+        date: transactionSource.fieldDateTime.value,
+      );
+
+      // flip the sign on the amount
+      relatedTransaction.fieldAmount.value.setAmount(transactionSource.fieldAmount.value.toDouble() * -1);
+      relatedTransaction.fieldCategoryId.value = transactionSource.fieldCategoryId.value;
+      relatedTransaction.fieldFitid.value = transactionSource.fieldFitid.value;
+      relatedTransaction.fieldNumber.value = transactionSource.fieldNumber.value;
+      relatedTransaction.fieldMemo.value = transactionSource.fieldMemo.value;
       //u.Status = t.Status; no !!!
     }
+
     // Investment? i = relatedTransaction.investmentInstance;
     // if (i != null) {
     //   Investment j = transactionSource.getOrCreateInvestment();
@@ -395,7 +398,7 @@ class Data {
         transfer = Transfer(
           id: 0,
           source: transactionSource,
-          related: relatedTransaction,
+          relatedTransaction: relatedTransaction,
           isOrphan: false,
         );
       } else {
@@ -403,14 +406,15 @@ class Data {
         transfer = Transfer(
           id: 0,
           source: relatedTransaction,
-          related: transactionSource,
+          relatedTransaction: transactionSource,
           isOrphan: false,
         );
       }
 
       // Keep track changes done
       relatedTransaction.stashValueBeforeEditing();
-      relatedTransaction.fieldPayee.value = -1;
+
+      relatedTransaction.fieldPayee.value = Data().categories.transfer.uniqueId;
       relatedTransaction.fieldTransfer.value = transactionSource.fieldId.value;
       relatedTransaction.instanceOfTransfer = transfer;
 
@@ -426,8 +430,7 @@ class Data {
       }
 
       // this needs to happen last since the ID for a new Relation Transaction will be establish in the above
-      // transactions.appendNewMoneyObject(relatedTransaction)
-      transactionSource.fieldPayee.value = -1;
+      transactionSource.fieldPayee.value = Data().categories.transfer.uniqueId;
       transactionSource.fieldTransfer.value = relatedTransaction.uniqueId;
       transactionSource.instanceOfTransfer = transfer;
     }

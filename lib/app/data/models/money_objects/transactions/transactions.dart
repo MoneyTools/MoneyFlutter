@@ -40,9 +40,7 @@ class Transactions extends MoneyObjects<Transaction> {
   @override
   void onAllDataLoaded() {
     // Pre computer possible category matching for Transaction that have no associated categories
-    // Stopwatch watchAll = Stopwatch()..start();
-
-    // Stopwatch watchInit = Stopwatch()..start();
+    // We use this to give a Hint to the user about the best category to pick for a transaction
     MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
 
     final transactionsWithCategories = getListFlattenSplits();
@@ -130,26 +128,7 @@ class Transactions extends MoneyObjects<Transaction> {
         // hydrate the Transfer
         if (transactionSource.fieldTransferSplit.value == -1) {
           // Normal direct transfer
-
-          if (transactionSource.instanceOfTransfer == null) {
-            // cache the transfer
-            transactionSource.instanceOfTransfer = Transfer(
-              id: 0,
-              source: transactionSource,
-              related: transactionRelated,
-              isOrphan: false,
-            );
-          }
-
-          if (transactionRelated.instanceOfTransfer == null) {
-            // cache the transfer
-            transactionRelated.instanceOfTransfer = Transfer(
-              id: 0,
-              source: transactionRelated,
-              related: transactionSource,
-              isOrphan: false,
-            );
-          }
+          linkTransfer(transactionSource, transactionRelated);
           continue;
         }
       }

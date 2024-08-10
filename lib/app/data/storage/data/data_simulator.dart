@@ -15,6 +15,7 @@ import 'package:money/app/data/models/money_objects/rent_buildings/rent_building
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/splits/money_split.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
@@ -619,16 +620,14 @@ class DataSimulator {
     //
     // First lend the initial loan of 20K
     //
-    final receivingTransaction = _createTransferTransaction(
+    _createTransferTransaction(
       accountSource: _accountBankCanada,
       accountDestination: _accountStartupLoan,
       date: getDateShiftedByYears(-6, 11, 11),
+      categoryId: _accountStartupLoan.fieldCategoryIdForPrincipal.value,
       amount: -loanAmount,
       memo: 'Invest in project goto Mars',
     );
-
-    // ensure that we have the correct category for this injection of Principal funds
-    receivingTransaction.fieldCategoryId.value = _accountStartupLoan.fieldCategoryIdForPrincipal.value;
 
     final dates = generateListOfDates(yearInThePast: 5, howManyPerYear: 12, dayOfTheMonth: 9);
 
@@ -827,7 +826,7 @@ class DataSimulator {
             date: date,
             payeeId: employer2.uniqueId,
             categoryId: _categorySalaryBonus.uniqueId,
-            amount: 20000,
+            amount: 22000,
             memo: 'Sign-On Bonus',
           );
         }
@@ -1038,13 +1037,19 @@ Transaction _createTransferTransaction({
   required final DateTime date,
   required final double amount,
   required final String memo,
+  int categoryId = -1,
 }) {
   final Transaction source = _addTransactionAccountDatePayeeCategory(
     account: accountSource,
     date: date,
+    categoryId: categoryId,
     amount: amount,
+    memo: memo,
   );
-  source.fieldMemo.value = memo;
 
-  return Data().makeTransferLinkage(source, accountDestination);
+  final relatedTransaction = Data().makeTransferLinkage(source, accountDestination);
+
+  linkTransfer(source, relatedTransaction);
+
+  return relatedTransaction;
 }

@@ -141,7 +141,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
       final Transfer transfer = Transfer(
         id: 0,
         source: transactionSender,
-        related: transactionReceiver,
+        relatedTransaction: transactionReceiver,
         isOrphan: isOrphan,
       );
       // transfer.transactionAmount.value = t.amount.value;

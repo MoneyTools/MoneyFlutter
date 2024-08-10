@@ -119,70 +119,91 @@ void main() {
         await tapOnText(tester, 'Delete');
 
         await tapOnKey(tester, Constants.keyInfoPanelExpando);
-        await tapOnTextFromParentType(tester, InfoPanelHeader, 'Details');
-        await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
-        await tapOnTextFromParentType(tester, InfoPanelHeader, 'Transactions');
+        await infoTabs(tester);
       }
 
       // Categories
-      await tapOnText(tester, 'Categories');
+      {
+        await tapOnText(tester, 'Categories');
+        await infoTabs(tester);
+      }
 
       // Payees
-      await tapOnText(tester, 'Payees');
+      {
+        await tapOnText(tester, 'Payees');
+        await infoTabs(tester);
+      }
 
       // Aliases
-      await tapOnText(tester, 'Aliases');
+      {
+        await tapOnText(tester, 'Aliases');
+        await infoTabs(tester);
+      }
 
-      // // Transactions
-      await tapOnText(tester, 'Transactions');
+      // Transactions
+      {
+        await tapOnText(tester, 'Transactions');
+        await infoTabs(tester);
 
-      // trigger sort by Date
-      await tapOnText(tester, 'Date');
+        // trigger sort by Date
+        await tapOnText(tester, 'Date');
 
-      // trigger sort by  Account
-      await tapOnText(tester, 'Account');
+        // trigger sort by  Account
+        await tapOnText(tester, 'Account');
 
-      // trigger sort by  Account
-      await tapOnText(tester, 'Payee/Transfer');
+        // trigger sort by  Account
+        await tapOnText(tester, 'Payee/Transfer');
 
-      // trigger sort by  Category
-      await tapOnText(tester, 'Category');
+        // trigger sort by  Category
+        await tapOnText(tester, 'Category');
 
-      // trigger sort by  Status
-      await tapOnText(tester, 'Status');
+        // trigger sort by  Status
+        await tapOnText(tester, 'Status');
 
-      // trigger sort by  Currency
-      await tapOnText(tester, 'Currency');
+        // trigger sort by  Currency
+        await tapOnText(tester, 'Currency');
 
-      // trigger sort by  Amount
-      await tapOnText(tester, 'Amount');
+        // trigger sort by  Amount
+        await tapOnText(tester, 'Amount');
 
-      // trigger sort by  Amount(USD)
-      await tapOnText(tester, 'Amount(USD)');
+        // trigger sort by  Amount(USD)
+        await tapOnText(tester, 'Amount(USD)');
 
-      // trigger sort by  Balance(USD)
-      await tapOnText(tester, 'Balance(USD)');
+        // trigger sort by  Balance(USD)
+        await tapOnText(tester, 'Balance(USD)');
 
-      // input a filter text that will return no match
-      await filterBy(tester, 'some text that will not return any match');
+        // input a filter text that will return no match
+        await filterBy(tester, 'some text that will not return any match');
 
-      // Not expecting to fnd any match, look for and tap the "reset the filters" button
-      await tapOnText(tester, 'Clear Filters');
+        // Not expecting to fnd any match, look for and tap the "reset the filters" button
+        await tapOnText(tester, 'Clear Filters');
 
-      await filterBy(tester, '12');
+        await filterBy(tester, '12');
+      }
 
       // Transfers
-      await tapOnText(tester, 'Transfers');
-      await tester.pumpAndSettle();
+      {
+        await tapOnText(tester, 'Transfers');
+        await infoTabs(tester);
+      }
 
       // Investments
-      await tapOnText(tester, 'Investments');
+      {
+        await tapOnText(tester, 'Investments');
+        await infoTabs(tester);
+      }
 
       // Stocks
-      await tapOnText(tester, 'Stocks');
+      {
+        await tapOnText(tester, 'Stocks');
+        await infoTabs(tester);
+      }
 
       // Rentals
-      await tapOnText(tester, 'Rentals');
+      {
+        await tapOnText(tester, 'Rentals');
+        await infoTabs(tester);
+      }
 
       // Pending Changes
       {
@@ -206,6 +227,12 @@ void main() {
       }
     });
   });
+}
+
+Future<void> infoTabs(WidgetTester tester) async {
+  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Details');
+  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
+  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Transactions');
 }
 
 Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type, final String textToFind) async {
