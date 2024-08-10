@@ -130,3 +130,4 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 graph.dot
 /.firebase
+!**/converage/cc.txt

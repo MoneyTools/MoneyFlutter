@@ -58,6 +58,8 @@ class Constants {
   static const double gapBetweenChannels = 14.0;
   static const Key keyAddNewAccount = Key('key_add_new_account');
   static const Key keyCancelButton = Key('key_cancel_button');
+  static const Key keyCopyListToClipboardHeaderInfoPanel = Key('keyCopyListToClipboardHeaderInfoPanel');
+  static const Key keyCopyListToClipboardHeaderMain = Key('keyCopyListToClipboardHeaderMain');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
   static const Key keyEditSelectedItems = Key('key_edit_item');
   static const Key keyInfoPanelExpando = Key('key_info_panel_expando');

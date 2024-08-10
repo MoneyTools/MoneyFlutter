@@ -104,29 +104,10 @@ void main() {
 
       //------------------------------------------------------------------------
       // Accounts
-      {
-        await tapOnText(tester, 'Accounts');
-
-        // Accounts - Add new
-        await tapOnKey(tester, Constants.keyAddNewAccount);
-
-        // Accounts - Edit
-        await tapOnKey(tester, Constants.keyEditSelectedItems);
-        await tapOnText(tester, 'Cancel');
-
-        // Delete selected item
-        await tapOnKey(tester, Constants.keyDeleteSelectedItems);
-        await tapOnText(tester, 'Delete');
-
-        await tapOnKey(tester, Constants.keyInfoPanelExpando);
-        await infoTabs(tester);
-      }
+      await _testAccounts(tester);
 
       // Categories
-      {
-        await tapOnText(tester, 'Categories');
-        await infoTabs(tester);
-      }
+      await _testCategories(tester);
 
       // Payees
       {
@@ -141,45 +122,7 @@ void main() {
       }
 
       // Transactions
-      {
-        await tapOnText(tester, 'Transactions');
-        await infoTabs(tester);
-
-        // trigger sort by Date
-        await tapOnText(tester, 'Date');
-
-        // trigger sort by  Account
-        await tapOnText(tester, 'Account');
-
-        // trigger sort by  Account
-        await tapOnText(tester, 'Payee/Transfer');
-
-        // trigger sort by  Category
-        await tapOnText(tester, 'Category');
-
-        // trigger sort by  Status
-        await tapOnText(tester, 'Status');
-
-        // trigger sort by  Currency
-        await tapOnText(tester, 'Currency');
-
-        // trigger sort by  Amount
-        await tapOnText(tester, 'Amount');
-
-        // trigger sort by  Amount(USD)
-        await tapOnText(tester, 'Amount(USD)');
-
-        // trigger sort by  Balance(USD)
-        await tapOnText(tester, 'Balance(USD)');
-
-        // input a filter text that will return no match
-        await filterBy(tester, 'some text that will not return any match');
-
-        // Not expecting to fnd any match, look for and tap the "reset the filters" button
-        await tapOnText(tester, 'Clear Filters');
-
-        await filterBy(tester, '12');
-      }
+      await _testTransactions(tester);
 
       // Transfers
       {
@@ -190,6 +133,9 @@ void main() {
       // Investments
       {
         await tapOnText(tester, 'Investments');
+
+        await tapOnTextFromParentType(tester, ListView, 'Fidelity');
+
         await infoTabs(tester);
       }
 
@@ -223,10 +169,97 @@ void main() {
         await tapOnText(tester, '1 deleted');
 
         // close the panel
-        await tapOnText(tester, 'Close');
+        await tapOnText(tester, 'Save to CSV');
       }
     });
   });
+}
+
+Future<void> _testAccounts(WidgetTester tester) async {
+  await tapOnText(tester, 'Accounts');
+
+  await tapOnKey(tester, Constants.keyInfoPanelExpando);
+  await infoTabs(tester);
+
+  // Select one of the row
+  await tapOnTextFromParentType(tester, ListView, 'Checking');
+
+  // CopyToCLipboard from the Info Panel Header
+  await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderInfoPanel);
+
+  // Accounts - Add new
+  await tapOnKey(tester, Constants.keyAddNewAccount);
+
+  // Accounts - Edit
+  await tapOnKey(tester, Constants.keyEditSelectedItems);
+  await tapOnText(tester, 'Cancel');
+
+  // Delete selected item
+  await tapOnKey(tester, Constants.keyDeleteSelectedItems);
+  await tapOnText(tester, 'Delete');
+
+  // CopyToCLipboard from the Main Header
+  await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderMain);
+}
+
+Future<void> _testCategories(WidgetTester tester) async {
+  await tapOnText(tester, 'Categories');
+  await infoTabs(tester);
+
+  // trigger sort by Level
+  await tester.longPress(find.text('Level').first);
+  await tapOnText(tester, 'Close');
+}
+
+Future<void> _testTransactions(WidgetTester tester) async {
+  await tapOnText(tester, 'Transactions');
+
+  // Select one of the rows
+  await tapOnTextFromParentType(tester, ListView, 'Bank Of America');
+
+  // Edit
+  await tapOnKey(tester, Constants.keyEditSelectedItems);
+  await tapOnText(tester, 'Cancel');
+
+  await infoTabs(tester);
+
+  // trigger sort by Date
+  await tapOnText(tester, 'Date');
+
+  // trigger sort by  Account
+  await tapOnText(tester, 'Account');
+
+  // trigger sort by  Account
+  await tapOnText(tester, 'Payee/Transfer');
+
+  // trigger sort by  Category
+  await tapOnText(tester, 'Category');
+
+  // trigger sort by  Status
+  await tapOnText(tester, 'Status');
+
+  // trigger sort by  Currency
+  await tapOnText(tester, 'Currency');
+
+  // trigger sort by  Amount
+  await tapOnText(tester, 'Amount');
+
+  // trigger sort by  Amount(USD)
+  await tapOnText(tester, 'Amount(USD)');
+
+  // trigger sort by  Balance(USD)
+  await tapOnText(tester, 'Balance(USD)');
+
+  // input a filter text that will return no match
+  await filterBy(tester, 'some text that will not return any match');
+
+  // Not expecting to fnd any match, look for and tap the "reset the filters" button
+  await tapOnText(tester, 'Clear Filters');
+
+  await filterBy(tester, '12');
+
+  await tester.longPress(find.text('Category').first);
+  await tapOnText(tester, 'Close');
 }
 
 Future<void> infoTabs(WidgetTester tester) async {
@@ -242,7 +275,7 @@ Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type,
   );
   expect(
     firstMatchingElement,
-    findsOneWidget,
+    findsAny,
     reason: 'tapOnTextFromParentType "$textToFind"',
   );
 

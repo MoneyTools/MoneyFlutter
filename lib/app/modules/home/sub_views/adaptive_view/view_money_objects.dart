@@ -327,7 +327,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         }
 
         /// Copy Info List
-        widgets.add(buildCopyButton(onCopyListFromInfoPanel));
+        widgets.add(buildCopyButton(onCopyListFromInfoPanel, Constants.keyCopyListToClipboardHeaderInfoPanel));
       }
     }
 

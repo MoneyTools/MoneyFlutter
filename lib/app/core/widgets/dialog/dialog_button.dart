@@ -102,8 +102,9 @@ Widget buildDeleteButton(final Function callback) {
   );
 }
 
-Widget buildCopyButton(final Function callback) {
+Widget buildCopyButton(final Function callback, [final key = Constants.keyCopyListToClipboardHeaderMain]) {
   return IconButton(
+    key: key,
     onPressed: () {
       callback.call();
     },
