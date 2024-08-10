@@ -1,4 +1,4 @@
+#!/bin/sh
 flutter clean
 flutter pub get
-
-./test_integration.sh
+sh/test_integration.sh
