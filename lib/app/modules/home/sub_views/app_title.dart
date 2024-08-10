@@ -32,6 +32,7 @@ class AppTitle extends StatelessWidget {
                 gapSmall(),
                 Obx(() {
                   return BadgePendingChanges(
+                    key: Constants.keyPendingChanges,
                     itemsAdded: dataController.trackMutations.added.value,
                     itemsChanged: dataController.trackMutations.changed.value,
                     itemsDeleted: dataController.trackMutations.deleted.value,

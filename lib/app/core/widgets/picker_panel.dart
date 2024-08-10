@@ -112,6 +112,7 @@ class PickerPanelState extends State<PickerPanel> {
 
   Widget _buildFilterTextField() {
     return MyTextInput(
+      key: MyKeys.keyHeaderFilterTextInput,
       hintText: 'Filter',
       onChanged: (value) {
         setState(() {

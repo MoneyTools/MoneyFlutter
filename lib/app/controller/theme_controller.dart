@@ -4,6 +4,7 @@ import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/data/models/constants.dart';
+import 'package:window_manager/window_manager.dart';
 
 class ThemeController extends GetxController {
   RxInt colorSelected = 0.obs;
@@ -50,6 +51,26 @@ class ThemeController extends GetxController {
   void saveThemeToPreferences() async {
     PreferenceController.to.setBool(settingKeyDarkMode, isDarkTheme.value);
     PreferenceController.to.setInt(settingKeyTheme, colorSelected.value);
+  }
+
+  void setAppSizeToLarge() {
+    windowManager.ensureInitialized().then(
+      (value) {
+        WindowOptions windowOptions = const WindowOptions(
+          size: Size(1800, 900),
+          minimumSize: Size(Constants.screenWithSmall, 800),
+          center: true,
+          backgroundColor: Colors.transparent,
+          skipTaskbar: false,
+          titleBarStyle: TitleBarStyle.normal,
+          title: 'MyMoney by vTeam',
+        );
+        windowManager.waitUntilReadyToShow(windowOptions, () async {
+          await windowManager.show();
+          await windowManager.focus();
+        });
+      },
+    );
   }
 
   bool setFontScaleTo(final double newScale) {

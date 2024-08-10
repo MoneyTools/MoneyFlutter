@@ -114,6 +114,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       list.insert(
         0,
         buildAddItemButton(
+          key: Constants.keyAddNewAccount,
           () {
             // add a new Account
             final newItem = Data().accounts.addNewAccount('New Bank Account');

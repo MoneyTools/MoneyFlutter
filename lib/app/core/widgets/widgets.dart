@@ -41,11 +41,8 @@ Widget buildDashboardWidget(final Widget child) {
   );
 }
 
-const double widthThresholdSmall = 600;
-const double widthThresholdMedium = 1200;
-
 extension ViewExtension on BuildContext {
-  bool get isWidthSmall => (MediaQuery.of(this).size.width <= widthThresholdSmall);
-  bool get isWidthMedium => (MediaQuery.of(this).size.width <= widthThresholdMedium);
-  bool get isWidthLarge => (MediaQuery.of(this).size.width > widthThresholdMedium);
+  bool get isWidthSmall => (MediaQuery.of(this).size.width <= Constants.screenWithSmall);
+  bool get isWidthMedium => (MediaQuery.of(this).size.width <= Constants.screenWidthMedium);
+  bool get isWidthLarge => (MediaQuery.of(this).size.width > Constants.screenWidthMedium);
 }

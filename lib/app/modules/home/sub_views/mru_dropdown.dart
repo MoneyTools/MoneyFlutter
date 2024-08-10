@@ -29,6 +29,7 @@ class MruDropdown extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
+              key: Constants.keyMruButton,
               onTap: () {
                 showPopupSelection(
                   context: context,

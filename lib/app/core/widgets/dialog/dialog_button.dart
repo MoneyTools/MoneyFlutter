@@ -55,8 +55,13 @@ Widget buildMergeButton(final Function callback) {
   );
 }
 
-Widget buildAddItemButton(final Function callback, final String tooltip) {
+Widget buildAddItemButton(
+  final Function callback,
+  final String tooltip, {
+  final Key? key,
+}) {
   return IconButton(
+    key: key,
     onPressed: () {
       callback();
     },
@@ -77,6 +82,7 @@ Widget buildAddTransactionsButton(final Function callback) {
 
 Widget buildEditButton(final Function callback) {
   return IconButton(
+    key: Constants.keyEditSelectedItems,
     onPressed: () {
       callback.call();
     },
@@ -87,6 +93,7 @@ Widget buildEditButton(final Function callback) {
 
 Widget buildDeleteButton(final Function callback) {
   return IconButton(
+    key: Constants.keyDeleteSelectedItems,
     onPressed: () {
       callback.call();
     },
@@ -133,12 +140,14 @@ Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
 }
 
 PopupMenuButton<int> myPopupMenuIconButton({
+  final Key? key,
   required final IconData icon,
   required final String tooltip,
   required final List<PopupMenuItem<int>> list,
   required final Function(int) onSelected,
 }) {
   return PopupMenuButton<int>(
+    key: key,
     icon: Icon(icon),
     tooltip: tooltip,
     position: PopupMenuPosition.under,

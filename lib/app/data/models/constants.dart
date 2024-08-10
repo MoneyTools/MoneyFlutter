@@ -56,16 +56,22 @@ class Constants {
   static const int commandTextZoom = 1000;
   static const String defaultCurrency = 'USD';
   static const double gapBetweenChannels = 14.0;
+  static const Key keyAddNewAccount = Key('key_add_new_account');
+  static const Key keyCancelButton = Key('key_cancel_button');
+  static const Key keyDeleteSelectedItems = Key('key_delete_button');
+  static const Key keyEditSelectedItems = Key('key_edit_item');
+  static const Key keyInfoPanelExpando = Key('key_info_panel_expando');
+  static const Key keyMruButton = Key('key_mru_button');
+  static const Key keyPendingChanges = Key('key_pending_changes');
+  static const Key keySettingsButton = Key('key_settings_button');
   static const double minBlockHeight = 3.0;
-  // NavigationRail shows if the screen width is greater or equal to
-  // screenWidthThreshold; otherwise, NavigationBar is used for navigation.
-  static const double narrowScreenWidthThreshold = 600;
-
   static String routeHomePage = '/home';
   static String routePolicyPage = '/policy';
   static String routeSettingsPage = '/settings';
   static String routeWelcomePage = '/welcome';
   static const double sanKeyColumnWidth = 200.0;
+  static const double screenWidthMedium = 1200;
+  static const double screenWithSmall = 600;
   static const double targetHeight = 200.0;
   static String untitledFileName = 'Untitled';
   static String viewStockFieldNameAccount = 'Account';
@@ -185,4 +191,8 @@ extension ViewExtension on ViewId {
   Icon getIcon() {
     return Icon(getIconData());
   }
+}
+
+class MyKeys {
+  static const keyHeaderFilterTextInput = Key('key_header_filter_input');
 }

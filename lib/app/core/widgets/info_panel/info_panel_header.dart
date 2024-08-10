@@ -3,6 +3,7 @@ import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/app/core/widgets/my_segment.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
 class InfoPanelHeader extends StatelessWidget {
@@ -96,6 +97,7 @@ class InfoPanelHeader extends StatelessWidget {
 
   Widget _buildExpando() {
     return IconButton(
+      key: Constants.keyInfoPanelExpando,
       onPressed: () {
         onExpanded(!isExpanded);
       },

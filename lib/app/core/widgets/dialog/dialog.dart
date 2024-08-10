@@ -3,6 +3,7 @@ import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
 import 'package:money/app/core/widgets/widgets.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class MyAlertDialog extends StatelessWidget {
   const MyAlertDialog({
@@ -82,6 +83,7 @@ void adaptiveScreenSizeDialog({
     actionButtons.insert(
       0,
       DialogActionButton(
+        key: Constants.keyCancelButton,
         text: captionForClose,
         onPressed: () {
           Navigator.of(context).pop(false);

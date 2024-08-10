@@ -27,6 +27,7 @@ class DataController extends GetxController {
     Data().close();
     dataFileIsClosed();
     trackMutations.reset();
+    isLoading.value = false;
   }
 
   void dataFileIsClosed() {

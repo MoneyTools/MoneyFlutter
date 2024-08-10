@@ -47,6 +47,7 @@ class _MyAppBarState extends State<MyAppBar> {
 
         // Dark / Light mode
         IconButton(
+          key: const Key('key_toggle_mode'),
           icon: themeController.isDarkTheme.value ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: () {
             ThemeController.to.toggleThemeMode();
@@ -185,6 +186,7 @@ class _MyAppBarState extends State<MyAppBar> {
     addMenuItem(list, Constants.commandFileClose, 'Close file', Icons.close);
 
     return myPopupMenuIconButton(
+      key: const Key('key_menu_button'),
       icon: Icons.menu,
       tooltip: 'File menu',
       list: list,
@@ -243,6 +245,7 @@ class _MyAppBarState extends State<MyAppBar> {
       const PopupMenuItem<int>(
         value: Constants.commandSettings,
         child: ThreePartLabel(
+          key: Key('key_settings'),
           text1: 'Settings...',
           icon: Icon(Icons.settings, color: Colors.grey),
           small: true,
@@ -294,6 +297,7 @@ class _MyAppBarState extends State<MyAppBar> {
     }
 
     return myPopupMenuIconButton(
+      key: Constants.keySettingsButton,
       icon: Icons.settings_outlined,
       tooltip: 'Settings',
       list: actionList,

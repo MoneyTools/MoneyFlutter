@@ -7,8 +7,8 @@ import 'package:money/app/data/models/constants.dart';
 List<NavigationDestination> getAppBarDestinations() {
   final List<NavigationDestination> appBarDestinations = <NavigationDestination>[
     NavigationDestination(
-      label: 'Cash Flow',
-      tooltip: 'Cash Flow',
+      label: 'Cashflow',
+      tooltip: 'Show your Cash Flow',
       icon: ViewId.viewCashFlow.getIcon(),
       selectedIcon: ViewId.viewCashFlow.getIcon(),
     ),

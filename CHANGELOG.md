@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.8.54] 2024-08-10
+
+### Added
+
+- Integration test with 50% code-coverage
+  
 ## [version 1.8.53] 2024-08-07
 
 ### Added
