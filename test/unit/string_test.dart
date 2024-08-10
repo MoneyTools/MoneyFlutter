@@ -27,7 +27,7 @@ void main() {
     int time1 = 0;
     int time2 = 0;
 
-///////////////////////// stringCompareIgnoreCasing1
+    ///////////////////////// stringCompareIgnoreCasing1
 
     final Stopwatch stopwatch = Stopwatch()..start(); // Start the stopwatch
 
@@ -46,9 +46,10 @@ void main() {
 
     stopwatch.stop(); // Stop the stopwatch after the operation
     time1 = stopwatch.elapsedMilliseconds;
-    logger.i('Elapsed time stringCompareIgnoreCasing1: $time1 milliseconds');
+    // ignore: avoid_print
+    print('Elapsed time stringCompareIgnoreCasing1: $time1 milliseconds');
 
-///////////////////////// stringCompareIgnoreCasing2
+    ///////////////////////// stringCompareIgnoreCasing2
     final Stopwatch stopwatch2 = Stopwatch()..start(); // Start the stopwatch
 
     for (int i = 0; i < 200000; i++) {
@@ -63,9 +64,11 @@ void main() {
         -1,
       );
     }
+
     stopwatch2.stop(); // Stop the stopwatch after the operation
     time2 = stopwatch2.elapsedMilliseconds;
-    logger.e('Elapsed time stringCompareIgnoreCasing2: $time2 milliseconds');
+    // ignore: avoid_print
+    print('Elapsed time stringCompareIgnoreCasing2: $time2 milliseconds');
 
     expect(time2 < time1, true);
   });
