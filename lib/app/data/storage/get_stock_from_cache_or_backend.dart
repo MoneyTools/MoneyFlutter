@@ -6,6 +6,7 @@ import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class StockDatePrice {
   /// Constructor
@@ -20,7 +21,7 @@ const flagAsInvalidSymbol = 'invalid-symbol';
 class StockPriceHistoryCache {
   StockPriceHistoryCache(this.symbol, this.status, [this.lastDateTime]);
 
-  String lastError = '';
+  String errorMessage = '';
   List<StockDatePrice> prices = [];
   StockLookupStatus status = StockLookupStatus.notFoundInCache;
   String symbol = '';
@@ -45,8 +46,8 @@ Future<StockPriceHistoryCache> getFromCacheOrBackend(
 
 Future<StockPriceHistoryCache> loadFomBackendAndSaveToCache(String symbol) async {
   StockPriceHistoryCache result = await _loadFromBackend(symbol);
-  if (result.lastError.isNotEmpty) {
-    SnackBarService.displayError(message: result.lastError, autoDismiss: false);
+  if (result.errorMessage.isNotEmpty) {
+    SnackBarService.displayError(message: result.errorMessage, autoDismiss: false);
   }
   switch (result.status) {
     case StockLookupStatus.validSymbol:
@@ -65,6 +66,7 @@ enum StockLookupStatus {
   foundInCache,
   notFoundInCache,
   invalidApiKey,
+  error,
 }
 
 Future<StockPriceHistoryCache> _loadFromCache(
@@ -124,11 +126,17 @@ Future<StockPriceHistoryCache> _loadFromBackend(
 
   DateTime numberOfDaysInThePast = DateTime.now().subtract(const Duration(days: 365 * 40));
 
-  final Uri uri = Uri.parse(
-    'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${numberOfDaysInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks}',
-  );
+  final String url =
+      'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${numberOfDaysInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks}';
 
-  final http.Response response = await http.get(uri);
+  final Uri uri = Uri.parse(url);
+
+  if (symbol == Constants.mockStockSymbol) {
+    result.prices = [];
+    return result;
+  }
+
+  http.Response response = await http.get(uri);
 
   if (response.statusCode == 200) {
     try {
@@ -175,7 +183,7 @@ Future<StockPriceHistoryCache> _loadFromBackend(
       logger.e(error.toString());
     }
   } else {
-    result.lastError = response.body.toString();
+    result.errorMessage = response.body.toString();
     logger.e('Failed to fetch data: ${response.body.toString()}');
   }
   return result;

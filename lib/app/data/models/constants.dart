@@ -62,12 +62,13 @@ class Constants {
   static const Key keyCopyListToClipboardHeaderMain = Key('keyCopyListToClipboardHeaderMain');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
   static const Key keyEditSelectedItems = Key('key_edit_item');
-  static const Key keyMergeButton = Key('key_merge_button');
   static const Key keyInfoPanelExpando = Key('key_info_panel_expando');
+  static const Key keyMergeButton = Key('key_merge_button');
   static const Key keyMruButton = Key('key_mru_button');
   static const Key keyPendingChanges = Key('key_pending_changes');
   static const Key keySettingsButton = Key('key_settings_button');
   static const double minBlockHeight = 3.0;
+  static String mockStockSymbol = '<not real>';
   static String routeHomePage = '/home';
   static String routePolicyPage = '/policy';
   static String routeSettingsPage = '/settings';
