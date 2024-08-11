@@ -29,6 +29,41 @@ Future<void> tapOnWidgetType(final WidgetTester tester, final Type type) async {
   await tester.pumpAndSettle();
 }
 
+Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type, final String textToFind) async {
+  Finder firstMatchingElement = find.descendant(
+    of: find.byType(type),
+    matching: find.text(textToFind),
+  );
+  expect(
+    firstMatchingElement,
+    findsAny,
+    reason: 'tapOnTextFromParentType "$textToFind"',
+  );
+
+  firstMatchingElement = firstMatchingElement.first;
+
+  expect(firstMatchingElement, findsOneWidget);
+  await tester.tap(firstMatchingElement, warnIfMissed: false);
+  await tester.pumpAndSettle();
+}
+
+Future<void> tapOnFirstRowOfListView(final WidgetTester tester) async {
+  Finder firstMatchingElement = find.descendant(
+    of: find.byType(ListView),
+    matching: find.byType(Row),
+  );
+  expect(
+    firstMatchingElement,
+    findsAny,
+  );
+
+  firstMatchingElement = firstMatchingElement.first;
+
+  expect(firstMatchingElement, findsOneWidget);
+  await tester.tap(firstMatchingElement, warnIfMissed: false);
+  await tester.pumpAndSettle();
+}
+
 Future<void> tapBackButton(WidgetTester tester) async {
   final backButton = find.byTooltip('Back');
   await tester.tap(backButton);

@@ -62,8 +62,7 @@ void main() {
 
       //------------------------------------------------------------------------
       // Aliases
-      await tapOnText(tester, 'Aliases');
-      await infoTabs(tester);
+      await testAliases(tester);
 
       //------------------------------------------------------------------------
       // Transactions
@@ -87,6 +86,7 @@ void main() {
       //------------------------------------------------------------------------
       // Rentals
       await tapOnText(tester, 'Rentals');
+      await tapOnTextFromParentType(tester, ListView, 'AirBnB');
       await infoTabs(tester);
 
       //------------------------------------------------------------------------
@@ -94,6 +94,12 @@ void main() {
       await testPendingChanges(tester);
     });
   });
+}
+
+Future<void> testAliases(WidgetTester tester) async {
+  await tapOnText(tester, 'Aliases');
+  await tapOnTextFromParentType(tester, ListView, 'ABC');
+  await infoTabs(tester);
 }
 
 Future<void> testPayees(WidgetTester tester) async {
@@ -229,6 +235,9 @@ Future<void> testAccounts(WidgetTester tester) async {
 
 Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Categories');
+  await tapOnFirstRowOfListView(tester);
+  await tapOnKey(tester, Constants.keyMergeButton);
+  await tapOnText(tester, 'Cancel');
   await infoTabs(tester);
 
   // trigger sort by Level
@@ -291,24 +300,6 @@ Future<void> infoTabs(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Details');
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Transactions');
-}
-
-Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type, final String textToFind) async {
-  Finder firstMatchingElement = find.descendant(
-    of: find.byType(type),
-    matching: find.text(textToFind),
-  );
-  expect(
-    firstMatchingElement,
-    findsAny,
-    reason: 'tapOnTextFromParentType "$textToFind"',
-  );
-
-  firstMatchingElement = firstMatchingElement.first;
-
-  expect(firstMatchingElement, findsOneWidget);
-  await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.pumpAndSettle();
 }
 
 Future<void> filterBy(WidgetTester tester, final String textToFilterBy) async {

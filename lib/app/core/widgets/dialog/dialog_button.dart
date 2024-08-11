@@ -47,6 +47,7 @@ Widget dialogActionButtons(final List<Widget> actionsButtons) {
 
 Widget buildMergeButton(final Function callback) {
   return IconButton(
+    key: Constants.keyMergeButton,
     onPressed: () {
       callback();
     },
