@@ -672,11 +672,29 @@ class DataSimulator {
   }
 
   void _generateRentals() {
-    final RentBuilding instance = RentBuilding();
-    instance.fieldId.value = 0;
-    instance.fieldName.value = 'AirBnB';
-    instance.fieldAddress.value = 'One Washington DC';
-    Data().rentBuildings.appendMoneyObject(instance);
+    final RentBuilding instanceBuilding = RentBuilding();
+    instanceBuilding.fieldId.value = 0;
+    instanceBuilding.fieldName.value = 'AirBnB';
+    instanceBuilding.fieldAddress.value = 'One Washington DC';
+    Data().rentBuildings.appendMoneyObject(instanceBuilding);
+
+    // Rent Units
+    Data().rentUnits.loadFromJson([
+      {
+        'Id': 0,
+        'Name': 'roomA',
+        'Building': 0,
+        'Renter': 'Bob Smith',
+        'Note': 'Renting for 1 year',
+      },
+      {
+        'Id': 0,
+        'Name': 'roomB',
+        'Building': 0,
+        'Renter': 'Sue Richard',
+        'Note': 'Renting for 6 months',
+      }
+    ]);
   }
 
   void _generateStocks() {
