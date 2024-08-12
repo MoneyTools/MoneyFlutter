@@ -201,6 +201,12 @@ Future<void> testAccounts(WidgetTester tester) async {
 Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Categories');
   await tapOnFirstRowOfListView(tester);
+
+  // Edit
+  await tapOnKey(tester, Constants.keyEditSelectedItems);
+  await tapOnText(tester, 'Cancel');
+
+  // Merge
   await tapOnKey(tester, Constants.keyMergeButton);
   await tapOnText(tester, 'Cancel');
   await infoTabs(tester);
