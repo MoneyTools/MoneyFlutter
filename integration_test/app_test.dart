@@ -104,6 +104,10 @@ Future<void> testAliases(WidgetTester tester) async {
 
 Future<void> testPayees(WidgetTester tester) async {
   await tapOnText(tester, 'Payees');
+  await tapOnFirstRowOfListView(tester);
+  await tapOnKey(tester, Constants.keyMergeButton);
+  await tapOnText(tester, 'Cancel');
+
   await infoTabs(tester);
 }
 
