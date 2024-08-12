@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -35,7 +34,7 @@ class MockPreferenceController extends GetxController with Mock implements Prefe
 }
 
 // Generate a MockClient class
-@GenerateMocks([http.Client])
+// @GenerateMocks([http.Client])
 class MockHttpClient extends Mock implements http.Client {
   @override
   Future<http.Response> get(Uri url, {Map<String, String>? headers}) {

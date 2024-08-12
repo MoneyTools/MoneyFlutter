@@ -16,7 +16,12 @@ Future<bool> importQFX(
 ) async {
   final File file = File(filePath);
 
-  final String text = file.readAsStringSync();
+  importQfxFromString(context, file.readAsStringSync());
+
+  return true;
+}
+
+void importQfxFromString(final BuildContext? context, final String text) {
   final String ofx = getStringDelimitedStartEndTokens(text, '<OFX>', '</OFX>');
 
   final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofx);
@@ -27,9 +32,9 @@ Future<bool> importQFX(
   importData.account = Data().accounts.findByIdAndType(bankInfo.accountId, accountType);
   importData.entries = getTransactionFromOFX(ofx);
   importData.fileType = 'QFX';
-  showAndConfirmTransactionToImport(context, importData);
-
-  return true;
+  if (context != null) {
+    showAndConfirmTransactionToImport(context, importData);
+  }
 }
 
 class OfxBankInfo {
