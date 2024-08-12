@@ -96,21 +96,6 @@ void main() {
   });
 }
 
-Future<void> testAliases(WidgetTester tester) async {
-  await tapOnText(tester, 'Aliases');
-  await tapOnTextFromParentType(tester, ListView, 'ABC');
-  await infoTabs(tester);
-}
-
-Future<void> testPayees(WidgetTester tester) async {
-  await tapOnText(tester, 'Payees');
-  await tapOnFirstRowOfListView(tester);
-  await tapOnKey(tester, Constants.keyMergeButton);
-  await tapOnText(tester, 'Cancel');
-
-  await infoTabs(tester);
-}
-
 Future<void> testSettings(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keySettingsButton);
   await tapOnKeyString(tester, 'key_settings');
@@ -166,36 +151,6 @@ Future<void> testWelcomeScreen(WidgetTester tester) async {
   await tester.pumpAndSettle(const Duration(seconds: 1));
 }
 
-Future<void> testPendingChanges(WidgetTester tester) async {
-  await tapOnKey(tester, Constants.keyPendingChanges);
-
-  await tapOnTextFromParentType(tester, Wrap, 'Aliases');
-  await tapOnTextFromParentType(tester, Wrap, 'Categories');
-  await tapOnTextFromParentType(tester, Wrap, 'Currencies');
-  await tapOnTextFromParentType(tester, Wrap, 'LoanPayments');
-  await tapOnTextFromParentType(tester, Wrap, 'Payees');
-  await tapOnTextFromParentType(tester, Wrap, 'Transactions');
-  await tapOnTextFromParentType(tester, Wrap, 'Splits');
-  await tapOnTextFromParentType(tester, Wrap, 'Accounts');
-
-  await tapOnText(tester, 'None modified');
-
-  await tapOnText(tester, '1 deleted');
-
-  // close the panel
-  await tapOnText(tester, 'Save to CSV');
-}
-
-Future<void> testStocks(WidgetTester tester) async {
-  await tapOnText(tester, 'Stocks');
-  await tapOnTextFromParentType(tester, ListView, 'AAPL');
-  await infoTabs(tester);
-
-  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
-  await tapOnText(tester, 'Set API Key');
-  await tapOnText(tester, 'Cancel');
-}
-
 Future<void> testCashFlow(WidgetTester tester) async {
   await tapOnText(tester, 'Cashflow');
   await Future.delayed(const Duration(seconds: 1));
@@ -208,6 +163,12 @@ Future<void> testCashFlow(WidgetTester tester) async {
 
   await tapOnText(tester, 'Expenses');
   await Future.delayed(const Duration(seconds: 1));
+}
+
+Future<void> testAliases(WidgetTester tester) async {
+  await tapOnText(tester, 'Aliases');
+  await tapOnTextFromParentType(tester, ListView, 'ABC');
+  await infoTabs(tester);
 }
 
 Future<void> testAccounts(WidgetTester tester) async {
@@ -247,6 +208,25 @@ Future<void> testCategories(WidgetTester tester) async {
   // trigger sort by Level
   await tester.longPress(find.text('Level').first);
   await tapOnText(tester, 'Close');
+}
+
+Future<void> testPayees(WidgetTester tester) async {
+  await tapOnText(tester, 'Payees');
+  await tapOnFirstRowOfListView(tester);
+  await tapOnKey(tester, Constants.keyMergeButton);
+  await tapOnText(tester, 'Cancel');
+
+  await infoTabs(tester);
+}
+
+Future<void> testStocks(WidgetTester tester) async {
+  await tapOnText(tester, 'Stocks');
+  await tapOnTextFromParentType(tester, ListView, 'AAPL');
+  await infoTabs(tester);
+
+  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
+  await tapOnText(tester, 'Set API Key');
+  await tapOnText(tester, 'Cancel');
 }
 
 Future<void> testTransactions(WidgetTester tester) async {
@@ -311,4 +291,24 @@ Future<void> filterBy(WidgetTester tester, final String textToFilterBy) async {
   await tester.enterText(filterInput, textToFilterBy);
   await tester.testTextInput.receiveAction(TextInputAction.done);
   await tester.pumpAndSettle(Durations.long4);
+}
+
+Future<void> testPendingChanges(WidgetTester tester) async {
+  await tapOnKey(tester, Constants.keyPendingChanges);
+
+  await tapOnTextFromParentType(tester, Wrap, 'Aliases');
+  await tapOnTextFromParentType(tester, Wrap, 'Categories');
+  await tapOnTextFromParentType(tester, Wrap, 'Currencies');
+  await tapOnTextFromParentType(tester, Wrap, 'LoanPayments');
+  await tapOnTextFromParentType(tester, Wrap, 'Payees');
+  await tapOnTextFromParentType(tester, Wrap, 'Transactions');
+  await tapOnTextFromParentType(tester, Wrap, 'Splits');
+  await tapOnTextFromParentType(tester, Wrap, 'Accounts');
+
+  await tapOnText(tester, 'None modified');
+
+  await tapOnText(tester, '1 deleted');
+
+  // close the panel
+  await tapOnText(tester, 'Save to CSV');
 }
