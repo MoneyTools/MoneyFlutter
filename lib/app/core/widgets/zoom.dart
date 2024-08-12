@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 
 import 'package:money/app/controller/theme_controller.dart';
+import 'package:money/app/data/models/constants.dart';
 
 /// ( - )  100% ( + )
 class ZoomIncreaseDecrease extends StatefulWidget {
@@ -38,6 +39,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
       children: <Widget>[
         Text(widget.title),
         IconButton(
+          key: Constants.keyZoomDecrease,
           tooltip: 'Cmd/Ctrl -',
           icon: const Icon(Icons.text_decrease),
           onPressed: () {
@@ -48,6 +50,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
           },
         ),
         Tooltip(
+          key: Constants.keyZoomNormal,
           message: 'Cmd/Ctrl 0',
           child: TextButton(
             onPressed: () {
@@ -60,6 +63,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
           ),
         ),
         IconButton(
+          key: Constants.keyZoomIncrease,
           tooltip: 'Cmd/Ctrl +',
           icon: const Icon(Icons.text_increase),
           onPressed: () {

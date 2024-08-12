@@ -98,6 +98,19 @@ void main() {
 
 Future<void> testSettings(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keySettingsButton);
+
+  await tapOnKey(tester, Constants.keyZoomIncrease);
+  await Future.delayed(const Duration(seconds: 1));
+
+  await tapOnKey(tester, Constants.keyZoomIncrease);
+  await Future.delayed(const Duration(seconds: 1));
+
+  await tapOnKey(tester, Constants.keyZoomNormal);
+  await Future.delayed(const Duration(seconds: 1));
+
+  await tapOnKey(tester, Constants.keyZoomDecrease);
+  await Future.delayed(const Duration(seconds: 1));
+
   await tapOnKeyString(tester, 'key_settings');
 
   // Turn on Rentals

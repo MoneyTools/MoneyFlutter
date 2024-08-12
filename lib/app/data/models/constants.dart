@@ -56,6 +56,8 @@ class Constants {
   static const int commandTextZoom = 1000;
   static const String defaultCurrency = 'USD';
   static const double gapBetweenChannels = 14.0;
+
+  // Keys
   static const Key keyAddNewAccount = Key('key_add_new_account');
   static const Key keyCancelButton = Key('key_cancel_button');
   static const Key keyCopyListToClipboardHeaderInfoPanel = Key('keyCopyListToClipboardHeaderInfoPanel');
@@ -67,6 +69,10 @@ class Constants {
   static const Key keyMruButton = Key('key_mru_button');
   static const Key keyPendingChanges = Key('key_pending_changes');
   static const Key keySettingsButton = Key('key_settings_button');
+  static const Key keyZoomDecrease = Key('keyZoomDecrease');
+  static const Key keyZoomIncrease = Key('keyZoomIncrease');
+  static const Key keyZoomNormal = Key('keyZoomNormal');
+
   static const double minBlockHeight = 3.0;
   static String mockStockSymbol = '<not real>';
   static String routeHomePage = '/home';
