@@ -29,30 +29,26 @@ void showImportTransactionsFromTextInput(
         if (parser.isEmpty) {
           messageBox(context, 'Nothing to import');
         } else {
-          if (parser.containsErrors()) {
-            messageBox(context, 'Contains errors');
-          } else {
-            // Import
-            final List<Transaction> transactionsToAdd = [];
+          // Import
+          final List<Transaction> transactionsToAdd = [];
 
-            for (final ValuesQuality singleTransactionInput in parser.lines) {
-              if (!singleTransactionInput.exist) {
-                final t = createNewTransactionFromDateDescriptionAmount(
-                  account,
-                  singleTransactionInput.date.asDate() ?? DateTime.now(),
-                  singleTransactionInput.description.asString(),
-                  singleTransactionInput.amount.asAmount(),
-                );
-                transactionsToAdd.add(t);
-              }
+          for (final ValuesQuality singleTransactionInput in parser.lines) {
+            if (!singleTransactionInput.exist) {
+              final t = createNewTransactionFromDateDescriptionAmount(
+                account,
+                singleTransactionInput.date.asDate() ?? DateTime.now(),
+                singleTransactionInput.description.asString(),
+                singleTransactionInput.amount.asAmount(),
+              );
+              transactionsToAdd.add(t);
             }
-            addNewTransactions(
-              transactionsToAdd,
-              '${transactionsToAdd.length} transactions added',
-            );
-
-            Navigator.of(context).pop(false);
           }
+          addNewTransactions(
+            transactionsToAdd,
+            '${transactionsToAdd.length} transactions added',
+          );
+
+          Navigator.of(context).pop(false);
         }
       },
     ),

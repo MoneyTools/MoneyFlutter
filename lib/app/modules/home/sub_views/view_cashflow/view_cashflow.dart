@@ -14,7 +14,7 @@ import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view.dart';
-import 'package:money/app/modules/home/sub_views/view_cashflow/netWorth_chart.dart';
+import 'package:money/app/modules/home/sub_views/view_cashflow/net_worth_chart.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/panel_sankey.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/app/modules/home/sub_views/view_header.dart';

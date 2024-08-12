@@ -35,10 +35,6 @@ class ThemeController extends GetxController {
     fontScaleDelta(0.10);
   }
 
-  void fontScaleMultiplyBy(final double factor) {
-    setFontScaleTo(PreferenceController.to.textScale * factor);
-  }
-
   void loadThemeFromPreferences() async {
     if (!PreferenceController.to.isReady.value) {
       await PreferenceController.to.init();
@@ -96,12 +92,12 @@ class ThemeController extends GetxController {
 
   ThemeData get themeDataDark {
     // Validate color range
-    if (!isIndexInRange(colorOptions, colorSelected.value)) {
+    if (!isIndexInRange(themeAsColors, colorSelected.value)) {
       colorSelected = 0.obs;
     }
 
     final ThemeData themeData = ThemeData(
-      colorSchemeSeed: colorOptions[colorSelected.value],
+      colorSchemeSeed: themeAsColors[colorSelected.value],
       brightness: Brightness.dark,
     );
     return themeData;
@@ -109,11 +105,11 @@ class ThemeController extends GetxController {
 
   ThemeData get themeDataLight {
     // Validate color range
-    if (!isIndexInRange(colorOptions, colorSelected.value)) {
+    if (!isIndexInRange(themeAsColors, colorSelected.value)) {
       colorSelected = 0.obs;
     }
     final ThemeData themeData = ThemeData(
-      colorSchemeSeed: colorOptions[colorSelected.value],
+      colorSchemeSeed: themeAsColors[colorSelected.value],
       brightness: Brightness.light,
     );
     return themeData;

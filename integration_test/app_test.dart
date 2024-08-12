@@ -120,10 +120,26 @@ void main() {
 }
 
 Future<void> testSettings(WidgetTester tester) async {
-  await tapOnKey(tester, Constants.keySettingsButton);
+  // await tapOnKey(tester, Constants.keySettingsButton);
+
+  // Change Colors
+  {
+    for (final String themeColorName in themeColorNames) {
+      await tapOnKey(tester, Constants.keySettingsButton);
+      await tapOnKeyString(tester, 'key_theme_$themeColorName');
+      await Future.delayed(const Duration(seconds: 1));
+    }
+
+    // Finish on 'Green' color, it looks good
+    await tapOnKey(tester, Constants.keySettingsButton);
+    await tapOnText(tester, 'Green');
+    await Future.delayed(const Duration(seconds: 1));
+  }
 
   // Test Font Scaling
   {
+    await tapOnKey(tester, Constants.keySettingsButton);
+
     await tapOnKey(tester, Constants.keyZoomIncrease);
     await Future.delayed(const Duration(seconds: 1));
 
@@ -218,6 +234,8 @@ Future<void> testAccounts(WidgetTester tester) async {
 
   // Select one of the row
   await tapOnTextFromParentType(tester, ListView, 'Checking');
+  await tapOnTextFromParentType(tester, ListView, 'Investment');
+  await tapOnTextFromParentType(tester, ListView, 'Loan');
 
   // CopyToCLipboard from the Info Panel Header
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderInfoPanel);

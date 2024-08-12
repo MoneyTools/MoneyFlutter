@@ -253,8 +253,10 @@ class _MyAppBarState extends State<MyAppBar> {
       ),
     );
 
-    final colorPallette = List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
+    final colorPallette = List<PopupMenuItem<int>>.generate(themeAsColors.length, (final int index) {
       final bool isSelected = index == themeController.colorSelected.value;
+      final themeColorName = themeColorNames[index];
+
       return PopupMenuItem<int>(
         value: index,
         child: Container(
@@ -264,11 +266,12 @@ class _MyAppBarState extends State<MyAppBar> {
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
           child: ThreePartLabel(
+            key: Key('key_theme_$themeColorName'),
             icon: Icon(
               index == themeController.colorSelected.value ? Icons.color_lens : Icons.color_lens_outlined,
-              color: colorOptions[index],
+              color: themeAsColors[index],
             ),
-            text1: colorText[index],
+            text1: themeColorName,
             small: true,
           ),
         ),

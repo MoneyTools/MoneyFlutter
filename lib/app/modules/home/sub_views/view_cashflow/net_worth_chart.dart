@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_this
-
 import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';

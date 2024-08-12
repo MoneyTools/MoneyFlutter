@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const List<Color> colorOptions = <Color>[
+const List<Color> themeAsColors = <Color>[
   Colors.deepPurple,
   Colors.blue,
   Colors.teal,
@@ -10,7 +10,7 @@ const List<Color> colorOptions = <Color>[
   Colors.pink,
 ];
 
-const List<String> colorText = <String>[
+const List<String> themeColorNames = <String>[
   'Purple',
   'Blue',
   'Teal',

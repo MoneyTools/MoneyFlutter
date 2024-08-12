@@ -22,7 +22,6 @@ class ValueQuality {
   final String dateFormat;
   final bool reverseAmountValue;
   final String valueAsString;
-  final String warningMessage = '';
 
   @override
   String toString() {
@@ -41,11 +40,7 @@ class ValueQuality {
     return valueAsString;
   }
 
-  bool get hasError {
-    return warningMessage.isNotEmpty;
-  }
-
-  Widget valueAsAmountWidget(final BuildContext context) {
+  Widget valueAsAmountWidget(final BuildContext? context) {
     if (valueAsString.isEmpty) {
       return buildWarning(context, '< no amount >');
     }
@@ -59,7 +54,7 @@ class ValueQuality {
     return MoneyWidget(amountModel: mm);
   }
 
-  Widget valueAsDateWidget(final BuildContext context) {
+  Widget valueAsDateWidget(final BuildContext? context) {
     if (valueAsString.isEmpty) {
       return buildWarning(context, '< no date >');
     }
@@ -73,7 +68,7 @@ class ValueQuality {
     return SelectableText(dateText);
   }
 
-  Widget valueAsTextWidget(final BuildContext context) {
+  Widget valueAsTextWidget(final BuildContext? context) {
     if (valueAsString.isEmpty) {
       return buildWarning(context, '< no description >');
     }
@@ -116,10 +111,6 @@ class ValuesQuality {
       amount: amount.asAmount(),
     );
     return exist;
-  }
-
-  bool containsErrors() {
-    return date.hasError || description.hasError || amount.hasError;
   }
 
   static DateRange getDateRange(final List<ValuesQuality> list) {
@@ -288,12 +279,8 @@ class ValuesParser {
         : Column(mainAxisAlignment: MainAxisAlignment.start, children: rows);
   }
 
-  bool containsErrors() {
-    return null != _values.firstWhereOrNull((element) => element.containsErrors());
-  }
-
   void convertInputTextToTransactionList(
-    BuildContext context,
+    final BuildContext? context,
     String inputString,
   ) {
     // start by fresh
@@ -387,14 +374,6 @@ class ValuesParser {
 
   List<ValuesQuality> get onlyNewTransactions {
     return _values.where((item) => !item.exist).toList();
-  }
-
-  DateTime? parseForDate(final String input) {
-    return DateFormat(dateFormat).tryParse(input);
-  }
-
-  String removeUnneededChart(final String input, final String validCharacters) {
-    return input.replaceAll('\$', ''); // clean up
   }
 }
 
