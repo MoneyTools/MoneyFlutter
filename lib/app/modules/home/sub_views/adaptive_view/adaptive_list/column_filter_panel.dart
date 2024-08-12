@@ -55,6 +55,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
         // Clear All / Select  All
         TextButton(
+          key: const Key('key_select_unselect_all'),
           onPressed: () {
             setState(() {
               bool setAs = !areAllItemSelected();

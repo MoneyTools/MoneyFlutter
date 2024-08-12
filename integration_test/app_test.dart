@@ -120,20 +120,13 @@ void main() {
 }
 
 Future<void> testSettings(WidgetTester tester) async {
-  // await tapOnKey(tester, Constants.keySettingsButton);
-
-  // Change Colors
+  // Change Colors, Purple is the default, and we use "Teal" as the last color.
   {
-    for (final String themeColorName in themeColorNames) {
+    for (final String themeColorName in ['Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Teal']) {
       await tapOnKey(tester, Constants.keySettingsButton);
       await tapOnKeyString(tester, 'key_theme_$themeColorName');
       await Future.delayed(const Duration(seconds: 1));
     }
-
-    // Finish on 'Green' color, it looks good
-    await tapOnKey(tester, Constants.keySettingsButton);
-    await tapOnText(tester, 'Green');
-    await Future.delayed(const Duration(seconds: 1));
   }
 
   // Test Font Scaling
@@ -179,9 +172,9 @@ Future<void> testTheme(WidgetTester tester) async {
   await tapOnKeyString(tester, 'key_toggle_mode');
   await Future.delayed(const Duration(seconds: 1));
 
-  // Turn back Light-Mode
-  await tapOnKeyString(tester, 'key_toggle_mode');
-  await Future.delayed(const Duration(seconds: 1));
+  // // Turn back Light-Mode
+  // await tapOnKeyString(tester, 'key_toggle_mode');
+  // await Future.delayed(const Duration(seconds: 1));
 }
 
 Future<void> testWelcomeScreen(WidgetTester tester) async {
@@ -319,30 +312,39 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   // trigger sort by Date
   await tapOnText(tester, 'Date');
+  await tapOnText(tester, 'Date'); // Descending
 
   // trigger sort by  Account
   await tapOnText(tester, 'Account');
+  await tapOnText(tester, 'Account'); // Descending
 
   // trigger sort by  Account
   await tapOnText(tester, 'Payee/Transfer');
+  await tapOnText(tester, 'Payee/Transfer'); // Descending
 
   // trigger sort by  Category
   await tapOnText(tester, 'Category');
+  await tapOnText(tester, 'Category'); // Descending
 
   // trigger sort by  Status
   await tapOnText(tester, 'Status');
+  await tapOnText(tester, 'Status'); // Descending
 
   // trigger sort by  Currency
   await tapOnText(tester, 'Currency');
+  await tapOnText(tester, 'Currency'); // Descending
 
   // trigger sort by  Amount
   await tapOnText(tester, 'Amount');
+  await tapOnText(tester, 'Amount'); // Descending
 
   // trigger sort by  Amount(USD)
   await tapOnText(tester, 'Amount(USD)');
+  await tapOnText(tester, 'Amount(USD)'); // Descending
 
   // trigger sort by  Balance(USD)
   await tapOnText(tester, 'Balance(USD)');
+  await tapOnText(tester, 'Balance(USD)'); // Descending
 
   // input a filter text that will return no match
   await inputText(tester, 'some text that will not return any match');
