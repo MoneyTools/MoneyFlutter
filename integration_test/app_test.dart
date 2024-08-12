@@ -28,6 +28,17 @@ void main() {
       await testWelcomeScreen(tester);
 
       //------------------------------------------------------------------------
+      // Import Wizard
+      {
+        await tapOnKeyString(tester, 'key_menu_button');
+        await tapOnText(tester, 'Add transactions...');
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        await tapOnText(tester, 'Manual bulk text input');
+        await tester.pumpAndSettle(const Duration(seconds: 1));
+        await tapOnText(tester, 'Cancel');
+      }
+      //------------------------------------------------------------------------
       // Close the file
       await tapOnKeyString(tester, 'key_menu_button');
       await tapOnText(tester, 'Close file');
@@ -99,17 +110,20 @@ void main() {
 Future<void> testSettings(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keySettingsButton);
 
-  await tapOnKey(tester, Constants.keyZoomIncrease);
-  await Future.delayed(const Duration(seconds: 1));
+  // Test Font Scaling
+  {
+    await tapOnKey(tester, Constants.keyZoomIncrease);
+    await Future.delayed(const Duration(seconds: 1));
 
-  await tapOnKey(tester, Constants.keyZoomIncrease);
-  await Future.delayed(const Duration(seconds: 1));
+    await tapOnKey(tester, Constants.keyZoomIncrease);
+    await Future.delayed(const Duration(seconds: 1));
 
-  await tapOnKey(tester, Constants.keyZoomNormal);
-  await Future.delayed(const Duration(seconds: 1));
+    await tapOnKey(tester, Constants.keyZoomNormal);
+    await Future.delayed(const Duration(seconds: 1));
 
-  await tapOnKey(tester, Constants.keyZoomDecrease);
-  await Future.delayed(const Duration(seconds: 1));
+    await tapOnKey(tester, Constants.keyZoomDecrease);
+    await Future.delayed(const Duration(seconds: 1));
+  }
 
   await tapOnKeyString(tester, 'key_settings');
 

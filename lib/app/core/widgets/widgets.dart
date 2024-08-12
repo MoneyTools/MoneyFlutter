@@ -30,8 +30,6 @@ Widget scaleDown(final Widget child, [AlignmentGeometry alignment = Alignment.ce
 /// Display a border and a question mark | ?    |
 ///                                       ------
 ///
-Widget widgetUnknown = buildDashboardWidget(const Text('?'));
-
 Widget buildDashboardWidget(final Widget child) {
   return DottedBorder(
     color: Colors.grey.shade600,
