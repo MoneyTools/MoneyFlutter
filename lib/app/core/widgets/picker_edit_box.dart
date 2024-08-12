@@ -76,6 +76,7 @@ class PickerEditBoxState extends State<PickerEditBox> {
 
   Widget _buildDropDownButton() {
     return IconButton(
+      key: const Key('key_dropdown'),
       onPressed: () {
         showPopupSelection(
           title: widget.title,

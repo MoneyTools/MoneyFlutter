@@ -73,9 +73,11 @@ class _InputByColumnsState extends State<InputByColumns> {
           TabBar(
             tabs: const [
               Tab(
+                key: Key('key_import_tab_three_columns'),
                 child: Text('3 columns'),
               ),
               Tab(
+                key: Key('key_import_tab_free_style'),
                 child: Text('Free style'),
               ),
             ],
@@ -111,6 +113,7 @@ class _InputByColumnsState extends State<InputByColumns> {
   Widget _buildInputFor1Column() {
     return Center(
       child: InputValues(
+        key: const Key('key_input_value'),
         title: 'Date; Description; Amount',
         controller: _controllerSingleColumn,
         allowedCharacters: '0123456789/_.\\',

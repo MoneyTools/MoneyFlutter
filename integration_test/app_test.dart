@@ -36,8 +36,20 @@ void main() {
 
         await tapOnText(tester, 'Manual bulk text input');
         await tester.pumpAndSettle(const Duration(seconds: 1));
+
+        // Drop down
+        await tapOnKeyString(tester, 'key_dropdown');
+        await tapOnText(tester, 'Close');
+
+        await tapOnKeyString(tester, 'key_import_tab_free_style');
+
+        final textFieldInput = find.byKey(const Key('key_input_text_field_value')).first;
+        await inputTextToElement(tester, textFieldInput, '2001-12-25;Banana;123.45');
+
+        // Close ImportDialog
         await tapOnText(tester, 'Cancel');
       }
+
       //------------------------------------------------------------------------
       // Close the file
       await tapOnKeyString(tester, 'key_menu_button');
@@ -214,9 +226,16 @@ Future<void> testAccounts(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyAddNewAccount);
 
   // Accounts - Edit
-  await tapOnKey(tester, Constants.keyEditSelectedItems);
-  await tapOnText(tester, 'Cancel');
+  {
+    await tapOnKey(tester, Constants.keyEditSelectedItems);
 
+    // Drop down
+    await tapOnKeyString(tester, 'key_dropdown');
+    await tapOnText(tester, 'Close');
+
+    // Close the dialog
+    await tapOnText(tester, 'Cancel');
+  }
   // Delete selected item
   await tapOnKey(tester, Constants.keyDeleteSelectedItems);
   await tapOnText(tester, 'Delete');
@@ -231,6 +250,12 @@ Future<void> testCategories(WidgetTester tester) async {
 
   // Edit
   await tapOnKey(tester, Constants.keyEditSelectedItems);
+
+  // Drop down
+  await tapOnKeyString(tester, 'key_dropdown');
+  await tapOnText(tester, 'Close');
+
+  // Close Edit box
   await tapOnText(tester, 'Cancel');
 
   // Merge
@@ -302,12 +327,12 @@ Future<void> testTransactions(WidgetTester tester) async {
   await tapOnText(tester, 'Balance(USD)');
 
   // input a filter text that will return no match
-  await filterBy(tester, 'some text that will not return any match');
+  await inputText(tester, 'some text that will not return any match');
 
   // Not expecting to fnd any match, look for and tap the "reset the filters" button
   await tapOnText(tester, 'Clear Filters');
 
-  await filterBy(tester, '12');
+  await inputText(tester, '12');
 
   await tester.longPress(find.text('Category').first);
   await tapOnText(tester, 'Close');
@@ -319,8 +344,12 @@ Future<void> infoTabs(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Transactions');
 }
 
-Future<void> filterBy(WidgetTester tester, final String textToFilterBy) async {
-  final filterInput = find.byType(TextField).first;
+Future<void> inputText(WidgetTester tester, final String textToFilterBy) async {
+  final Finder filterInput = find.byType(TextField).first;
+  await inputTextToElement(tester, filterInput, textToFilterBy);
+}
+
+Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String textToFilterBy) async {
   await tester.enterText(filterInput, textToFilterBy);
   await tester.testTextInput.receiveAction(TextInputAction.done);
   await tester.pumpAndSettle(Durations.long4);
