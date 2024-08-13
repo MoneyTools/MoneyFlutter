@@ -147,7 +147,6 @@ Future<void> testSettings(WidgetTester tester) async {
     for (final String themeColorName in ['Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Teal']) {
       await tapOnKey(tester, Constants.keySettingsButton);
       await tapOnKeyString(tester, 'key_theme_$themeColorName');
-      await Future.delayed(const Duration(seconds: 1));
     }
   }
 
@@ -280,14 +279,15 @@ Future<void> testCategories(WidgetTester tester) async {
   await tapOnFirstRowOfListView(tester);
 
   // Edit
-  await tapOnKey(tester, Constants.keyEditSelectedItems);
+  {
+    await tapOnKey(tester, Constants.keyEditSelectedItems);
 
-  // Drop down
-  await tapOnKeyString(tester, 'key_dropdown');
-  await tapOnText(tester, 'Close');
-
-  // Close Edit box
-  await tapOnText(tester, 'Cancel');
+    // Drop down
+    await tapOnKeyString(tester, 'key_dropdown');
+    await tapOnText(tester, 'Close');
+    // Close Edit box
+    await tapOnText(tester, 'Cancel');
+  }
 
   // Merge
   await tapOnKey(tester, Constants.keyMergeButton);
@@ -311,6 +311,19 @@ Future<void> testPayees(WidgetTester tester) async {
 Future<void> testStocks(WidgetTester tester) async {
   await tapOnText(tester, 'Stocks');
   await tapOnTextFromParentType(tester, ListView, 'AAPL');
+
+  // Edit
+  {
+    await tapOnKey(tester, Constants.keyEditSelectedItems);
+
+    // Drop down
+    await tapOnKeyString(tester, 'key_dropdown');
+    await tapOnText(tester, 'Close');
+
+    // Close the dialog
+    await tapOnText(tester, 'Cancel');
+  }
+
   await infoTabs(tester);
 
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
@@ -400,6 +413,8 @@ Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String 
 
 Future<void> testPendingChanges(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyPendingChanges);
+
+  await Future.delayed(const Duration(seconds: 5));
 
   await tapOnTextFromParentType(tester, Wrap, 'Aliases');
   await tapOnTextFromParentType(tester, Wrap, 'Categories');

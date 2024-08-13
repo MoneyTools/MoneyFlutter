@@ -313,7 +313,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
             final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
             for (final dataSplit in dataSplits) {
-              final dateOfSplit = DateTime.parse(dataSplit['date']);
+              final DateTime dateOfSplit = DateTime.parse(dataSplit['date']);
               StockSplit sp = StockSplit(
                 security: securityId,
                 date: dateOfSplit,
@@ -373,7 +373,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
                   if (splits != null) {
                     for (var splitJson in splits.values) {
                       int dateInMilliseconds = splitJson['date'];
-                      final dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
+                      final DateTime dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
                       StockSplit sp = StockSplit(
                         security: security.uniqueId,
                         date: dateOSplit,

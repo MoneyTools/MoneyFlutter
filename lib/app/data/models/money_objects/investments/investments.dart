@@ -1,6 +1,7 @@
 import 'package:money/app/data/models/money_objects/investments/investment.dart';
 import 'package:money/app/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
+import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
@@ -29,7 +30,7 @@ class Investments extends MoneyObjects<Investment> {
 
       final Security? security = Data().securities.get(investment.fieldSecurity.value);
       if (security != null) {
-        final splits = Data().stockSplits.getStockSplitsForSecurity(security);
+        final List<StockSplit> splits = Data().stockSplits.getStockSplitsForSecurity(security);
         investment.applySplits(splits);
       }
     }

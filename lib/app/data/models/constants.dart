@@ -64,10 +64,10 @@ class Constants {
   static const Key keyCopyListToClipboardHeaderMain = Key('keyCopyListToClipboardHeaderMain');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
   static const Key keyEditSelectedItems = Key('key_edit_item');
-  static const Key keyMultiSelectionToggle = Key('key_multi_selection_toggle');
   static const Key keyInfoPanelExpando = Key('key_info_panel_expando');
   static const Key keyMergeButton = Key('key_merge_button');
   static const Key keyMruButton = Key('key_mru_button');
+  static const Key keyMultiSelectionToggle = Key('key_multi_selection_toggle');
   static const Key keyPendingChanges = Key('key_pending_changes');
   static const Key keySettingsButton = Key('key_settings_button');
   static const Key keyZoomDecrease = Key('keyZoomDecrease');

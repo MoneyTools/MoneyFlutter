@@ -14,6 +14,7 @@ import 'package:money/app/data/models/money_objects/payees/payee.dart';
 import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/splits/money_split.dart';
+import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/app/data/storage/data/data.dart';
@@ -723,6 +724,15 @@ class DataSimulator {
             taxable: 0,
             priceDate: DateTime(2020, 1, 1),
           ),
+        );
+
+    Data().stockSplits.appendNewMoneyObject(
+          StockSplit.fromJson({
+            'Date': '2005-05-05',
+            'Security': 0,
+            'Numerator': 2,
+            'Denominator': 1,
+          }),
         );
   }
 
