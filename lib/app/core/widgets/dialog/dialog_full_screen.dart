@@ -8,8 +8,10 @@ class FullScreenDialog extends StatefulWidget {
     required this.title,
     required this.content,
     super.key,
+    this.actionButtons = const [],
   });
 
+  final List<Widget> actionButtons;
   final Widget content;
   final String title;
 
@@ -25,7 +27,22 @@ class FullScreenDialogState extends State<FullScreenDialog> {
       AppBar(
         title: Text(widget.title),
       ),
-      widget.content,
+      Column(
+        children: [
+          Expanded(
+            child: widget.content,
+          ),
+          if (widget.actionButtons.isNotEmpty)
+            OverflowBar(
+              alignment: MainAxisAlignment.end,
+              spacing: 8,
+              overflowAlignment: OverflowBarAlignment.end,
+              overflowDirection: VerticalDirection.down,
+              overflowSpacing: 0,
+              children: widget.actionButtons,
+            ),
+        ],
+      ),
     );
   }
 }

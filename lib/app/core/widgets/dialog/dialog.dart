@@ -55,26 +55,6 @@ void adaptiveScreenSizeDialog({
   final String? captionForClose = 'Close',
 }) {
   actionButtons ??= [];
-  if (context.isWidthSmall) {
-    // Full screen also comes with a Close (X) button
-    Navigator.of(context).push(
-      MaterialPageRoute<Null>(
-        builder: (BuildContext context) {
-          return FullScreenDialog(
-            title: title,
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: child,
-            ),
-          );
-        },
-        fullscreenDialog: true,
-      ),
-    );
-    return;
-  }
-
-  // Large screen use some space but restrict to not be full screen
 
   // in modal always offer a close button
   if (captionForClose != null) {
@@ -92,6 +72,25 @@ void adaptiveScreenSizeDialog({
     );
   }
 
+  if (context.isWidthSmall) {
+    // Full screen also comes with a Close (X) button
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FullScreenDialog(
+          title: title,
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: child,
+          ),
+          actionButtons: actionButtons ?? [],
+        );
+      },
+    );
+    return;
+  }
+
+  // Large screen
   showDialog(
     context: context,
     barrierDismissible: false,

@@ -126,6 +126,7 @@ void main() {
       await switchToSmall(tester);
       await tapOnKeyString(tester, 'key_menu_cashflow');
       await tapOnKeyString(tester, 'key_menu_accounts');
+      await testAccountEdit(tester);
     });
   });
 }
@@ -254,22 +255,24 @@ Future<void> testAccounts(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyAddNewAccount);
 
   // Accounts - Edit
-  {
-    await tapOnKey(tester, Constants.keyEditSelectedItems);
-
-    // Drop down
-    await tapOnKeyString(tester, 'key_dropdown');
-    await tapOnText(tester, 'Close');
-
-    // Close the dialog
-    await tapOnText(tester, 'Cancel');
-  }
+  await testAccountEdit(tester);
   // Delete selected item
   await tapOnKey(tester, Constants.keyDeleteSelectedItems);
   await tapOnText(tester, 'Delete');
 
   // CopyToCLipboard from the Main Header
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderMain);
+}
+
+Future<void> testAccountEdit(WidgetTester tester) async {
+  await tapOnKey(tester, Constants.keyEditSelectedItems);
+
+  // Drop down
+  await tapOnKeyString(tester, 'key_dropdown');
+  await tapOnText(tester, 'Close');
+
+  // Close the dialog
+  await tapOnText(tester, 'Cancel');
 }
 
 Future<void> testCategories(WidgetTester tester) async {
