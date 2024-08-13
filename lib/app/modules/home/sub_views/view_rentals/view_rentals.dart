@@ -1,5 +1,7 @@
 import 'package:money/app/controller/selection_controller.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/app/data/models/money_objects/splits/money_split.dart';
@@ -7,6 +9,7 @@ import 'package:money/app/data/models/money_objects/transactions/transaction.dar
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl.dart';
 import 'package:money/app/modules/home/sub_views/view_rentals/rental_pnl_card.dart';
 
@@ -92,5 +95,70 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     }
 
     return listAsText.join('\n');
+  }
+
+  @override
+  Widget getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    final selectedItem = getFirstSelectedItem() as RentBuilding?;
+    if (selectedItem == null) {
+      return const CenterMessage(message: 'No item selected.');
+    }
+
+    return SingleChildScrollView(
+      child: Center(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          runSpacing: 30,
+          spacing: 30,
+          children: [
+            MoneyObjectCard(
+              title: getClassNameSingular(),
+              moneyObject: selectedItem,
+            ),
+            _buildRenters(context, selectedItem),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRenters(final BuildContext context, final RentBuilding building) {
+    final rentersInThisBuilding = Data()
+        .rentUnits
+        .iterableList()
+        .where(
+          (item) => item.fieldBuilding.value == building.uniqueId,
+        )
+        .toList();
+
+    return buildAdaptiveBox(
+      context: context,
+      title: 'Renters',
+      content: ListView.separated(
+        itemCount: rentersInThisBuilding.length,
+        itemBuilder: (context, index) {
+          final renter = rentersInThisBuilding[index];
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(renter.fieldName.value),
+              gapLarge(),
+              Expanded(
+                child: Text(renter.fieldRenter.value),
+              ),
+              gapLarge(),
+              Text(renter.fieldNote.value),
+            ],
+          );
+        },
+        separatorBuilder: (context, index) => Divider(
+          color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
+        ),
+      ),
+      count: rentersInThisBuilding.length,
+    );
   }
 }

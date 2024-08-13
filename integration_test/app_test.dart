@@ -414,8 +414,6 @@ Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String 
 Future<void> testPendingChanges(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyPendingChanges);
 
-  await Future.delayed(const Duration(seconds: 5));
-
   await tapOnTextFromParentType(tester, Wrap, 'Aliases');
   await tapOnTextFromParentType(tester, Wrap, 'Categories');
   await tapOnTextFromParentType(tester, Wrap, 'Currencies');
@@ -423,6 +421,7 @@ Future<void> testPendingChanges(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, Wrap, 'Payees');
   await tapOnTextFromParentType(tester, Wrap, 'Transactions');
   await tapOnTextFromParentType(tester, Wrap, 'Splits');
+  await tapOnTextFromParentType(tester, Wrap, 'Stock Splits');
   await tapOnTextFromParentType(tester, Wrap, 'Accounts');
 
   await tapOnText(tester, 'None modified');

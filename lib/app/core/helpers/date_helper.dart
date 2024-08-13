@@ -30,15 +30,10 @@ List<String> getPossibleDateFormats(String dateString) {
 }
 
 List<String> getPossibleDateFormatsForAllValues(List<String> dateStrings) {
-  if (dateStrings.isEmpty) {
-    return [];
-  }
-
-  final List<String> possibleFormats = generateAllDateFormats();
-
   final List<String> validFormats = [];
 
-  for (String format in possibleFormats) {
+  final List<String> possibleFormats = generateAllDateFormats();
+  for (final String format in possibleFormats) {
     bool supportedByAll = true;
     for (final dateString in dateStrings) {
       if (!doesDateFormatWorkOnThisString(format, dateString)) {
@@ -254,12 +249,12 @@ DateTime? parseQfxDataFormat(final String qfxDate) {
   }
 }
 
-String getElapsedTime(DateTime? dateTime) {
+String getElapsedTime(DateTime? dateTime, {DateTime? relativeTo}) {
   if (dateTime == null) {
     return '';
   }
 
-  final now = DateTime.now();
+  final now = relativeTo ?? DateTime.now();
   final difference = now.difference(dateTime);
 
   if (difference.inDays >= 365) {

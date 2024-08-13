@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
+import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
@@ -126,4 +128,21 @@ class TransactionCard extends StatelessWidget {
       moneyObject: transaction,
     );
   }
+}
+
+Widget buildAdaptiveBox({
+  required final BuildContext context,
+  required final String title,
+  required final int count,
+  required final Widget content,
+  final Widget? footer,
+}) {
+  return Box(
+    height: 300,
+    color: getColorTheme(context).primaryContainer,
+    header: buildHeaderTitleAndCounter(context, title, count == 0 ? '' : getIntAsText(count)),
+    footer: footer,
+    padding: SizeForPadding.huge,
+    child: count == 0 ? CenterMessage(message: 'No $title found') : content,
+  );
 }

@@ -1,5 +1,4 @@
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
@@ -317,27 +316,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return true;
   }
 
-  Widget _buildAdaptiveBox({
-    required final BuildContext context,
-    required final String title,
-    required final int count,
-    required final Widget content,
-    final Widget? footer,
-  }) {
-    return Box(
-      height: 300,
-      color: getColorTheme(context).primaryContainer,
-      header: buildHeaderTitleAndCounter(context, title, count == 0 ? '' : getIntAsText(count)),
-      footer: footer,
-      padding: SizeForPadding.huge,
-      child: count == 0 ? CenterMessage(message: 'No $title found') : content,
-    );
-  }
-
   Widget _buildPanelForDividend(final BuildContext context, final Security security) {
     final double totalDividend = security.dividends.fold(0.0, (sum, dividend) => sum + dividend.amount);
 
-    return _buildAdaptiveBox(
+    return buildAdaptiveBox(
       context: context,
       title: 'Dividend',
       count: security.dividends.length,
@@ -364,7 +346,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   Widget _buildPanelForSplits(final BuildContext context, final Security security) {
     final List<StockSplit> splits = security.splitsHistory;
 
-    return _buildAdaptiveBox(
+    return buildAdaptiveBox(
       context: context,
       title: 'Splits',
       count: splits.length,

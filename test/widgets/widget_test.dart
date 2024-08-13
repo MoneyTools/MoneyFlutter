@@ -42,6 +42,10 @@ class DummyHostingAppState extends State<DummyHostingApp> {
 }
 
 void main() {
+  testWidgets('Is Mobile', (final WidgetTester tester) async {
+    expect(isPlatformMobile(), false);
+  });
+
   testWidgets('Cash Flow widget', (final WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const DummyHostingApp());
