@@ -8,7 +8,7 @@ import 'package:money/app/core/widgets/working.dart';
 import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/modules/home/sub_views/app_bar.dart';
 import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
-import 'package:money/app/modules/home/sub_views/sub_view_selection.dart';
+import 'package:money/app/modules/home/sub_views/my_nav_bar.dart';
 import 'package:money/app/modules/home/sub_views/view_accounts/view_accounts.dart';
 import 'package:money/app/modules/home/sub_views/view_aliases/view_aliases.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/view_cashflow.dart';
@@ -62,11 +62,11 @@ class HomePage extends GetView<HomeController> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
-          SubViewSelectionVertical(
+          MyNavigationBar(
+            orientation: Axis.vertical,
             key: Key(PreferenceController.to.currentView.value.toString()),
-            onSelectItem: _handleSubViewSelectionChanged,
-            selectedView: PreferenceController.to.currentView.value,
-            useIndicator: true,
+            onSelected: _handleSubViewSelectionChanged,
+            selectedIndex: PreferenceController.to.currentView.value.index,
           ),
           Expanded(
             child: Container(
@@ -85,10 +85,11 @@ class HomePage extends GetView<HomeController> {
         Expanded(
           child: _getSubView(),
         ),
-        SubViewSelectionHorizontal(
+        MyNavigationBar(
+          orientation: Axis.horizontal,
           key: Key(PreferenceController.to.currentView.value.toString()),
           onSelected: _handleSubViewSelectionChanged,
-          selectedView: PreferenceController.to.currentView.value,
+          selectedIndex: PreferenceController.to.currentView.value.index,
         ),
       ],
     );
@@ -134,7 +135,7 @@ class HomePage extends GetView<HomeController> {
     }
   }
 
-  void _handleSubViewSelectionChanged(final ViewId selectedView) {
-    PreferenceController.to.setView(selectedView);
+  void _handleSubViewSelectionChanged(final int selectedIndex) {
+    PreferenceController.to.setView(ViewId.values[selectedIndex]);
   }
 }

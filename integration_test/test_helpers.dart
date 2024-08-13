@@ -75,7 +75,7 @@ Future<void> pump(final WidgetTester tester, [int milliseconds = 300]) async {
 }
 
 extension WidgetTesterExtension on WidgetTester {
-  Future<void> myPump([int milliseconds = 300]) async {
+  Future<void> myPump([int milliseconds = 50]) async {
     await pump(this, milliseconds);
   }
 }

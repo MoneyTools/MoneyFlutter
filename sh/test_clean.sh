@@ -1,4 +1,3 @@
 #!/bin/sh
-flutter clean
-flutter pub get
+sh/clean.sh
 sh/test_integration.sh

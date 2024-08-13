@@ -69,6 +69,26 @@ class ThemeController extends GetxController {
     );
   }
 
+  void setAppSizeToSmall() {
+    windowManager.ensureInitialized().then(
+      (value) {
+        WindowOptions windowOptions = const WindowOptions(
+          size: Size(Constants.screenWithSmall, 900),
+          maximumSize: Size(Constants.screenWithSmall, 800),
+          center: true,
+          backgroundColor: Colors.transparent,
+          skipTaskbar: false,
+          titleBarStyle: TitleBarStyle.normal,
+          title: 'MyMoney by vTeam',
+        );
+        windowManager.waitUntilReadyToShow(windowOptions, () async {
+          await windowManager.show();
+          await windowManager.focus();
+        });
+      },
+    );
+  }
+
   bool setFontScaleTo(final double newScale) {
     final int cleanValue = (newScale * 100).round();
     if (isBetweenOrEqual(cleanValue, 40, 400)) {

@@ -20,8 +20,7 @@ void main() {
       app.main();
       await tester.pumpAndSettle();
 
-      ThemeController.to.setAppSizeToLarge();
-      await tester.pumpAndSettle();
+      await switchToLarge(tester);
 
       //------------------------------------------------------------------------
       // Welcome screen - Policy
@@ -122,8 +121,23 @@ void main() {
       //------------------------------------------------------------------------
       // Pending Changes
       await testPendingChanges(tester);
+
+      //------------------------------------------------------------------------
+      await switchToSmall(tester);
+      await tapOnKeyString(tester, 'key_menu_cashflow');
+      await tapOnKeyString(tester, 'key_menu_accounts');
     });
   });
+}
+
+Future<void> switchToSmall(tester) async {
+  ThemeController.to.setAppSizeToSmall();
+  await tester.pumpAndSettle();
+}
+
+Future<void> switchToLarge(tester) async {
+  ThemeController.to.setAppSizeToLarge();
+  await tester.pumpAndSettle();
 }
 
 Future<void> testSettings(WidgetTester tester) async {
@@ -208,16 +222,12 @@ Future<void> testWelcomeScreen(WidgetTester tester) async {
 
 Future<void> testCashFlow(WidgetTester tester) async {
   await tapOnText(tester, 'Cashflow');
-  await Future.delayed(const Duration(seconds: 1));
 
   await tapOnText(tester, 'NetWorth');
-  await Future.delayed(const Duration(seconds: 1));
 
   await tapOnText(tester, 'Incomes');
-  await Future.delayed(const Duration(seconds: 1));
 
   await tapOnText(tester, 'Expenses');
-  await Future.delayed(const Duration(seconds: 1));
 }
 
 Future<void> testAliases(WidgetTester tester) async {
@@ -227,7 +237,7 @@ Future<void> testAliases(WidgetTester tester) async {
 }
 
 Future<void> testAccounts(WidgetTester tester) async {
-  await tapOnText(tester, 'Accounts');
+  await tapOnKeyString(tester, 'key_menu_accounts');
 
   await tapOnKey(tester, Constants.keyInfoPanelExpando);
   await infoTabs(tester);
