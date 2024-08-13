@@ -32,10 +32,10 @@ void main() {
       {
         await tapOnKeyString(tester, 'key_menu_button');
         await tapOnText(tester, 'Add transactions...');
-        await tester.pumpAndSettle(const Duration(seconds: 1));
+        await tester.myPump();
 
         await tapOnText(tester, 'Manual bulk text input');
-        await tester.pumpAndSettle(const Duration(seconds: 1));
+        await tester.myPump();
 
         // Drop down
         await tapOnKeyString(tester, 'key_dropdown');
@@ -44,7 +44,14 @@ void main() {
         await tapOnKeyString(tester, 'key_import_tab_free_style');
 
         final textFieldInput = find.byKey(const Key('key_input_text_field_value')).first;
-        await inputTextToElement(tester, textFieldInput, '2001-12-25;Banana;123.45');
+        await inputTextToElement(
+          tester,
+          textFieldInput,
+          '2001-12-25;Hawaii;123.45\n2002-12-25;Bahamas;-123.45\n2003-01-01;Ibiza;(77.99)',
+        );
+
+        await tapOnKeyString(tester, 'key_import_tab_three_columns');
+        await tapOnKeyString(tester, 'key_import_tab_free_style');
 
         // Close ImportDialog
         await tapOnText(tester, 'Cancel');
@@ -161,7 +168,7 @@ Future<void> testSettings(WidgetTester tester) async {
 
     // Toggle the switch to "On"
     await tester.tap(switchTileFinder);
-    await tester.pumpAndSettle(); // Wait for the state to update
+    await tester.myPump(); // Wait for the state to update
     await Future.delayed(const Duration(seconds: 1));
   }
   await tapBackButton(tester);
@@ -196,7 +203,7 @@ Future<void> testWelcomeScreen(WidgetTester tester) async {
   //------------------------------------------------------------------------
   // Tap the "New File"
   await tapOnText(tester, 'New File ...');
-  await tester.pumpAndSettle(const Duration(seconds: 1));
+  await tester.myPump();
 }
 
 Future<void> testCashFlow(WidgetTester tester) async {

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 
 void main() {
-  test('geDateAndTimeAsText returns empty string for null DateTime', () {
+  test('getDateAndTimeAsText returns empty string for null DateTime', () {
     // Arrange
     const DateTime? dateTime = null;
 
@@ -14,7 +14,7 @@ void main() {
     expect(result, isEmpty);
   });
 
-  test('geDateAndTimeAsText formats non-null DateTime correctly', () {
+  test('getDateAndTimeAsText formats non-null DateTime correctly', () {
     // Arrange
     final dateTime = DateTime(2023, 04, 15, 10, 30, 00);
 
