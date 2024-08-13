@@ -8,8 +8,13 @@ Future<void> tapOnText(final WidgetTester tester, final String textToFind) async
   await tester.myPump();
 }
 
+Finder finByKeyString(final String keyString) {
+  final Finder firstMatchingElement = find.byKey(Key(keyString)).first;
+  return firstMatchingElement;
+}
+
 Future<void> tapOnKeyString(final WidgetTester tester, final String keyString) async {
-  final firstMatchingElement = find.byKey(Key(keyString)).first;
+  final firstMatchingElement = finByKeyString(keyString);
   expect(firstMatchingElement, findsOneWidget);
   await tester.tap(firstMatchingElement, warnIfMissed: false);
   await tester.myPump();

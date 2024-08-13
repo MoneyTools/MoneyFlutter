@@ -28,7 +28,6 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    // Apply filter
     list = widget.listOfUniqueInstances
         .where(
           (element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()),
@@ -40,6 +39,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
       children: [
         // Filter input box
         TextField(
+          key: const Key('key_picker_input_filter'),
           onChanged: (value) {
             setState(() {
               filterText = value;

@@ -155,16 +155,16 @@ Future<void> testSettings(WidgetTester tester) async {
     await tapOnKey(tester, Constants.keySettingsButton);
 
     await tapOnKey(tester, Constants.keyZoomIncrease);
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(microseconds: 300));
 
     await tapOnKey(tester, Constants.keyZoomIncrease);
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(microseconds: 300));
 
     await tapOnKey(tester, Constants.keyZoomNormal);
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(microseconds: 300));
 
     await tapOnKey(tester, Constants.keyZoomDecrease);
-    await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(microseconds: 300));
   }
 
   await tapOnKeyString(tester, 'key_settings');
@@ -391,7 +391,19 @@ Future<void> testTransactions(WidgetTester tester) async {
   await inputText(tester, '12');
 
   await tester.longPress(find.text('Category').first);
-  await tapOnText(tester, 'Close');
+  // await Future.delayed(const Duration(microseconds: 50000));
+
+  await tapOnKeyString(tester, 'key_select_unselect_all');
+  // await Future.delayed(const Duration(microseconds: 50000));
+
+  await inputTextToElement(tester, finByKeyString('key_picker_input_filter'), 'Bill');
+  // await Future.delayed(const Duration(microseconds: 50000));
+
+  await tapOnKeyString(tester, 'key_select_unselect_all');
+
+  // await Future.delayed(const Duration(microseconds: 50000));
+
+  await tapOnText(tester, 'Apply');
 }
 
 Future<void> infoTabs(WidgetTester tester) async {
