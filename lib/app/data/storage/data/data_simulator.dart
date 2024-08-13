@@ -44,7 +44,6 @@ class DataSimulator {
   late final Category _categorySalary;
   late final Category _categorySalaryBonus;
   late final Category _categorySalaryPaycheck;
-  late final Category _categorySplit;
   late final Category _categorySubscriptionTransport;
   late final Category _categorySubscriptions;
   late final Category _categorySubscriptionsGym;
@@ -366,12 +365,6 @@ class DataSimulator {
   }
 
   void _generateCategories() {
-    // Expenses
-    _categorySplit = Data().categories.addNewCategory(
-          name: 'Split',
-          type: CategoryType.expense,
-        );
-
     // Bills
     {
       _categoryBills = Data().categories.addNewCategory(
@@ -939,7 +932,7 @@ class DataSimulator {
           account: _accountBankUSA,
           date: date,
           payeeId: payeeForHomeLoan.uniqueId,
-          categoryId: _categorySplit.uniqueId,
+          categoryId: Data().categories.split.uniqueId,
           amount: _monthlyHomeLoan,
           memo: 'Mortgage Payment #${++numberOfMortgagePayment}',
         );

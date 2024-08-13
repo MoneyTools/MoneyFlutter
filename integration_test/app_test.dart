@@ -390,20 +390,16 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   await inputText(tester, '12');
 
-  await tester.longPress(find.text('Category').first);
-  // await Future.delayed(const Duration(microseconds: 50000));
-
-  await tapOnKeyString(tester, 'key_select_unselect_all');
-  // await Future.delayed(const Duration(microseconds: 50000));
-
-  await inputTextToElement(tester, finByKeyString('key_picker_input_filter'), 'Bill');
-  // await Future.delayed(const Duration(microseconds: 50000));
-
-  await tapOnKeyString(tester, 'key_select_unselect_all');
-
-  // await Future.delayed(const Duration(microseconds: 50000));
-
-  await tapOnText(tester, 'Apply');
+// Flitter by Category "Split"
+  {
+    await tester.longPress(find.text('Category').first);
+    await tapOnKeyString(tester, 'key_select_unselect_all');
+    await inputTextToElement(tester, finByKeyString('key_picker_input_filter'), 'Split');
+    await tapOnKeyString(tester, 'key_select_unselect_all');
+    await tapOnText(tester, 'Apply');
+  }
+  // By selecting the first Transaction in the list that is a s 'split' we end up showing on the info-panel the sub-transactions of that Split
+  await tapOnFirstRowOfListView(tester);
 }
 
 Future<void> infoTabs(WidgetTester tester) async {

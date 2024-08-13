@@ -61,6 +61,34 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  Widget getInfoPanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    final selectedItem = getFirstSelectedItem() as RentBuilding?;
+    if (selectedItem == null) {
+      return const CenterMessage(message: 'No item selected.');
+    }
+
+    return SingleChildScrollView(
+      child: Center(
+        child: Wrap(
+          alignment: WrapAlignment.center,
+          runSpacing: 30,
+          spacing: 30,
+          children: [
+            MoneyObjectCard(
+              title: getClassNameSingular(),
+              moneyObject: selectedItem,
+            ),
+            _buildRenters(context, selectedItem),
+          ],
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget getInfoPanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
@@ -95,34 +123,6 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     }
 
     return listAsText.join('\n');
-  }
-
-  @override
-  Widget getInfoPanelViewDetails({
-    required final List<int> selectedIds,
-    required final bool isReadOnly,
-  }) {
-    final selectedItem = getFirstSelectedItem() as RentBuilding?;
-    if (selectedItem == null) {
-      return const CenterMessage(message: 'No item selected.');
-    }
-
-    return SingleChildScrollView(
-      child: Center(
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          runSpacing: 30,
-          spacing: 30,
-          children: [
-            MoneyObjectCard(
-              title: getClassNameSingular(),
-              moneyObject: selectedItem,
-            ),
-            _buildRenters(context, selectedItem),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildRenters(final BuildContext context, final RentBuilding building) {
