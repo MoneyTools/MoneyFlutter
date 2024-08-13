@@ -321,9 +321,12 @@ Future<void> testStocks(WidgetTester tester) async {
 Future<void> testTransactions(WidgetTester tester) async {
   await tapOnText(tester, 'Transactions');
 
+  // Toggle Multi-Selection on and off
+  await tapOnKey(tester, Constants.keyMultiSelectionToggle);
+  await tapOnKey(tester, Constants.keyMultiSelectionToggle);
+
   // Select one of the rows
   await tapOnTextFromParentType(tester, ListView, 'Bank Of America');
-
   // Edit
   await tapOnKey(tester, Constants.keyEditSelectedItems);
   await tapOnText(tester, 'Cancel');
