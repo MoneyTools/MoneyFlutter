@@ -251,7 +251,7 @@ Future<void> testAccounts(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderInfoPanel);
 
   // Accounts - Add new
-  await tapOnKey(tester, Constants.keyAddNewAccount);
+  await tapOnKey(tester, Constants.keyAddNewItem);
 
   // Accounts - Edit
   await testAccountEdit(tester);
@@ -294,6 +294,11 @@ Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Cancel');
   await infoTabs(tester);
 
+  // Add New Item
+  {
+    await tapOnKey(tester, Constants.keyAddNewItem);
+    await tapOnText(tester, 'Cancel');
+  }
   // trigger sort by Level
   await tester.longPress(find.text('Level').first);
   await tapOnText(tester, 'Close');

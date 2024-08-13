@@ -57,7 +57,7 @@ class Constants {
   static const String defaultCurrency = 'USD';
   static const double gapBetweenChannels = 14.0;
   // Keys
-  static const Key keyAddNewAccount = Key('key_add_new_account');
+  static const Key keyAddNewItem = Key('key_add_new_item');
 
   static const Key keyCancelButton = Key('key_cancel_button');
   static const Key keyCopyListToClipboardHeaderInfoPanel = Key('keyCopyListToClipboardHeaderInfoPanel');

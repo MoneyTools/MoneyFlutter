@@ -58,11 +58,10 @@ Widget buildMergeButton(final Function callback) {
 
 Widget buildAddItemButton(
   final Function callback,
-  final String tooltip, {
-  final Key? key,
-}) {
+  final String tooltip,
+) {
   return IconButton(
-    key: key,
+    key: Constants.keyAddNewItem,
     onPressed: () {
       callback();
     },
