@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/widgets.dart';

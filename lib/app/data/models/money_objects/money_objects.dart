@@ -142,31 +142,6 @@ class MoneyObjects<T> {
     return headerList.join(',');
   }
 
-  List<String> getListOfValueAsStrings(
-    FieldDefinitions fieldDefinitions,
-    MoneyObject item,
-  ) {
-    final List<String> listValues = <String>[];
-    for (final Field field in fieldDefinitions) {
-      if (field.serializeName != '') {
-        final dynamic value = field.getValueForSerialization(item);
-        listValues.add(value.toString());
-      }
-    }
-    return listValues;
-  }
-
-  List<List<String>> getListOfValueList(List<MoneyObject> moneyObjects) {
-    List<List<String>> list = [];
-    if (moneyObjects.isNotEmpty) {
-      final FieldDefinitions declarations = moneyObjects.first.fieldDefinitions;
-      for (final MoneyObject item in moneyObjects) {
-        list.add(getListOfValueAsStrings(declarations, item));
-      }
-    }
-    return list;
-  }
-
   List<MoneyObject> getListSortedById() {
     _list.sort((final MoneyObject a, final MoneyObject b) {
       return sortByValue(
@@ -188,17 +163,6 @@ class MoneyObjects<T> {
       nextId = max(nextId, moneyObject.uniqueId);
     }
     return nextId + 1;
-  }
-
-  List<String> getSerializableFieldNames(final List<Object> declarations) {
-    final List<String> fieldNames = <String>[];
-
-    for (final dynamic field in declarations) {
-      if (field.serializeName != '') {
-        fieldNames.add(field.serializeName);
-      }
-    }
-    return fieldNames;
   }
 
   String getTypeName() {

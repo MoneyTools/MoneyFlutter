@@ -2,7 +2,6 @@
 import 'dart:ui' as ui;
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
@@ -20,8 +19,6 @@ import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/get_stock_from_cache_or_backend.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
-import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class ChartEvent {
   ChartEvent({

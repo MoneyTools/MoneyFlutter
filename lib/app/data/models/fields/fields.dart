@@ -1,7 +1,7 @@
 // Imports
-import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 
