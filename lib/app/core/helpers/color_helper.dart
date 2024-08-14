@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
@@ -139,8 +138,7 @@ enum ColorState {
 }
 
 Color getColorFromState(final ColorState state) {
-  final ThemeController themeController = Get.find();
-  final bool isDarkModeOne = themeController.isDarkTheme.value;
+  final bool isDarkModeOne = ThemeController.to.isDarkTheme.value;
 
   switch (state) {
     case ColorState.success:

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_header.dart';
-import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/main.dart' as app;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -305,6 +305,8 @@ Future<void> testCategories(WidgetTester tester) async {
 }
 
 Future<void> testPayees(WidgetTester tester) async {
+  Data().payees.getPayeeIdFromName('NASA');
+
   await tapOnText(tester, 'Payees');
   await tapOnFirstRowOfListView(tester);
   await tapOnKey(tester, Constants.keyMergeButton);

@@ -109,6 +109,7 @@ bool isBetweenOrEqual(final num value, final num min, final num max) {
 
 bool isPlatformMobile() {
   return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
+//  return defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android;
 }
 
 num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {

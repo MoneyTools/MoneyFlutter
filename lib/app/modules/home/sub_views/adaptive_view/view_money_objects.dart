@@ -929,7 +929,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void _onItemTap(final BuildContext context, final int uniqueId) {
-    if (isMobile()) {
+    if (isPlatformMobile()) {
       adaptiveScreenSizeDialog(
         context: context,
         title: '${getClassNameSingular()} #${uniqueId + 1}',

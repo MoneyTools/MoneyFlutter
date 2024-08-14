@@ -813,8 +813,14 @@ class DataSimulator {
 
     int iterationYear = -1;
 
-    Payee employer1 = Data().payees.getOrCreate('BurgerKing');
-    Payee employer2 = Data().payees.getOrCreate('NASA');
+    Data().payees.loadFromJson([
+      {'Id': 0, 'Name': 'Job At BurgerKing'},
+      {'Id': 1, 'Name': 'NASA'},
+    ]);
+
+    Payee employer1 = Data().payees.get(0)!;
+    Payee employer2 = Data().payees.get(1)!;
+
     bool switchedJob = false;
 
     for (final date in dates) {
