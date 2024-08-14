@@ -117,6 +117,10 @@ void main() {
       await tapOnText(tester, 'Rentals');
       await tapOnTextFromParentType(tester, ListView, 'AirBnB');
       await infoTabs(tester);
+      // Go back to Chart where there's a PNL panel
+      // we want to test the copy PnL data to clipboard
+      await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
+      await tapOnKeyString(tester, 'key_card_copy_to_clipboard');
 
       //------------------------------------------------------------------------
       // Pending Changes
@@ -255,9 +259,6 @@ Future<void> testAccounts(WidgetTester tester) async {
 
   // Accounts - Edit
   await testAccountEdit(tester);
-  // Delete selected item
-  await tapOnKey(tester, Constants.keyDeleteSelectedItems);
-  await tapOnText(tester, 'Delete');
 
   // CopyToCLipboard from the Main Header
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderMain);
@@ -291,6 +292,11 @@ Future<void> testCategories(WidgetTester tester) async {
 
   // Merge
   await tapOnKey(tester, Constants.keyMergeButton);
+
+  // Drop down pretend to pick a category
+  await tapOnKeyString(tester, 'key_dropdown');
+  await tapOnText(tester, 'Close');
+
   await tapOnText(tester, 'Cancel');
   await infoTabs(tester);
 
@@ -347,11 +353,16 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   // Select one of the rows
   await tapOnTextFromParentType(tester, ListView, 'Bank Of America');
+
   // Edit
   await tapOnKey(tester, Constants.keyEditSelectedItems);
   await tapOnText(tester, 'Cancel');
 
   await infoTabs(tester);
+
+  // Delete selected item
+  await tapOnKey(tester, Constants.keyDeleteSelectedItems);
+  await tapOnText(tester, 'Delete');
 
   // trigger sort by Date
   await tapOnText(tester, 'Date');

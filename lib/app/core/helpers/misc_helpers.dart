@@ -49,16 +49,6 @@ double? attemptToGetDoubleFromText(String text) {
   return amount;
 }
 
-bool boolValueOrDefault(
-  final bool? value, {
-  final bool defaultValueIfNull = false,
-}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
-}
-
 void copyToClipboardAndInformUser(
   final BuildContext context,
   final String textToCopy,
@@ -72,33 +62,6 @@ void copyToClipboardAndInformUser(
   );
 }
 
-DateTime dateValueOrDefault(
-  final DateTime? value, {
-  final DateTime? defaultValueIfNull,
-}) {
-  if (value == null) {
-    return defaultValueIfNull ?? DateTime.now();
-  }
-  return value;
-}
-
-double doubleValueOrDefault(
-  final double? value, {
-  final double defaultValueIfNull = 0,
-}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
-}
-
-int intValueOrDefault(final int? value, {final int defaultValueIfNull = 0}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
-}
-
 bool isBetween(final num value, final num min, final num max) {
   return value > min && value < max;
 }
@@ -110,13 +73,6 @@ bool isBetweenOrEqual(final num value, final num min, final num max) {
 bool isPlatformMobile() {
   return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 //  return defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android;
-}
-
-num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
 }
 
 double roundDouble(final double value, final int places) {
@@ -194,16 +150,6 @@ void showSnackBar(final BuildContext context, final String message) {
       duration: const Duration(seconds: 1),
     ),
   );
-}
-
-String stringValueOrDefault(
-  final String? value, {
-  final String defaultValueIfNull = '',
-}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
 }
 
 double trimToFiveDecimalPlaces(double value) {

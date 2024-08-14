@@ -30,6 +30,7 @@ class RentalPnLCard extends StatelessWidget {
               ),
             ),
             IconButton(
+              key: const Key('key_card_copy_to_clipboard'),
               onPressed: () {
                 copyToClipboardAndInformUser(context, pnl.toString());
               },

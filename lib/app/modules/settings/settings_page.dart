@@ -97,6 +97,4 @@ class SettingsPage extends GetView<GetxController> {
       children: widgets,
     );
   }
-
-  static SettingsPage get to => Get.find();
 }

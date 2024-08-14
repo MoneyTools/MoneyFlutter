@@ -104,16 +104,6 @@ class _PanelRecurringState extends State<PanelRecurring> {
     }
   }
 
-  Widget header(final BuildContext context, final String title) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      child: Text(
-        title,
-        style: getTextTheme(context).titleLarge!,
-      ),
-    );
-  }
-
   void initRecurringTransactions({required final bool forIncome}) {
     // get all transactions meeting the request of date and type
     bool whereClause(Transaction t) {

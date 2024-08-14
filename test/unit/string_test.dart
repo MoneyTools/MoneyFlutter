@@ -138,6 +138,10 @@ void main() {
       expect(attemptToGetDoubleFromText('123'), equals(123));
     });
 
+    test('Extract negative amount from string simple case', () {
+      expect(attemptToGetDoubleFromText('-123'), equals(-123));
+    });
+
     test('Extract amount from string simple case', () {
       expect(attemptToGetDoubleFromText('123.45'), equals(123.45));
     });

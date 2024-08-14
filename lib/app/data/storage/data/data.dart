@@ -130,16 +130,6 @@ class Data {
   /// singleton
   static final Data _instance = Data._internal();
 
-  void assessMutationsCountOfAllModels() {
-    DataController.to.trackMutations.reset();
-
-    for (final element in _listOfTables) {
-      element.resetMutationStateOfObjects();
-      element.assessMutationsCounts();
-    }
-    Data().updateAll();
-  }
-
   void checkTransfers() {
     Set<Transaction> dangling = getDanglingTransfers();
     if (dangling.isNotEmpty) {

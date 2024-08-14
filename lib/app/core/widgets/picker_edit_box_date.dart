@@ -1,4 +1,5 @@
 import 'package:money/app/core/helpers/date_helper.dart';
+import 'package:money/app/core/helpers/default_values.dart';
 import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 
@@ -42,7 +43,7 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
         ),
         IconButton(
           onPressed: () async {
-            DateTime dateSelected = dateValueOrDefault(
+            DateTime dateSelected = valueOrDefaultDate(
               attemptToGetDateFromText(widget.initialValue ?? ''),
               defaultValueIfNull: DateTime.now(),
             );

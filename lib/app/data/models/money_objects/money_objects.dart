@@ -2,7 +2,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/diff.dart';
 import 'package:money/app/core/widgets/gaps.dart';
@@ -48,22 +47,6 @@ class MoneyObjects<T> {
       recalculateBalances: fireNotification,
     );
     return moneyObject;
-  }
-
-  void assessMutationsCounts() {
-    DataController.to.trackMutations.reset();
-    for (final item in _iterableListOfMoneyObject(true)) {
-      switch (item.mutation) {
-        case MutationType.inserted:
-          DataController.to.trackMutations.added++;
-        case MutationType.changed:
-          DataController.to.trackMutations.changed++;
-        case MutationType.deleted:
-          DataController.to.trackMutations.deleted++;
-        default:
-          break;
-      }
-    }
   }
 
   void clear() {
@@ -212,16 +195,6 @@ class MoneyObjects<T> {
   /// Override in derived classes
   void onAllDataLoaded() {
     // implement in the override derived classes
-  }
-
-  /// Resets the mutation state of all MoneyObjects by setting their `valueBeforeEdit` to null
-  /// and `mutation` to `MutationType.none`.
-  ///
-  void resetMutationStateOfObjects() {
-    for (final item in _iterableListOfMoneyObject(true)) {
-      item.valueBeforeEdit = null;
-      item.mutation = MutationType.none;
-    }
   }
 
   bool saveSql(final MyDatabase db, final String tableName) {
