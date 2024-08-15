@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/data/models/money_objects/account_aliases/account_alias.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/app/data/models/money_objects/aliases/alias.dart';
@@ -62,6 +63,7 @@ class DataSimulator {
     Data().clearExistingData();
     _generateCurrencies();
     _generateAccounts();
+    _generateAccountAliases();
     _generateAliases();
     _generateCategories();
     _generateInvestments();
@@ -261,6 +263,25 @@ class DataSimulator {
       amount: -30000,
       memo: 'Down payment',
     );
+  }
+
+  void _generateAccountAliases() {
+    Data().accountAliases.appendNewMoneyObject(
+          AccountAlias.fromJson({
+            'Pattern': '*foo*',
+            'Flag': 0,
+            'AccountId': 'A12345',
+          }),
+          fireNotification: false,
+        );
+    Data().accountAliases.appendNewMoneyObject(
+          AccountAlias.fromJson({
+            'Pattern': '*bar*',
+            'Flag': 0,
+            'AccountId': 'B987654',
+          }),
+          fireNotification: false,
+        );
   }
 
   void _generateAccounts() {

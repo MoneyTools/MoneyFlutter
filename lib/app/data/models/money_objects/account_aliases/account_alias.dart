@@ -19,7 +19,7 @@ class AccountAlias extends MoneyObject {
   @override
   factory AccountAlias.fromJson(final MyJson row) {
     return AccountAlias()
-      ..id.value = row.getInt('Id', -1)
+      ..fieldId.value = row.getInt('Id', -1)
       ..fieldPattern.value = row.getString('Pattern')
       ..fieldFlags.value = row.getInt('Flag', 0)
       ..fieldAccountId.value = row.getString('AccountId');
@@ -34,14 +34,27 @@ class AccountAlias extends MoneyObject {
     defaultValue: 0,
   );
 
+  FieldId fieldId = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
+  );
+
   FieldString fieldPattern = FieldString(
     serializeName: 'Pattern',
   );
 
-  FieldInt id = FieldInt(
-    serializeName: 'Id',
-    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
-  );
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions {
+    final tmp = AccountAlias.fromJson({});
+    final f = Fields<AccountAlias>()
+      ..setDefinitions([
+        tmp.fieldId,
+        tmp.fieldPattern,
+        tmp.fieldFlags,
+        tmp.fieldAccountId,
+      ]);
+    return f.definitions;
+  }
 
   @override
   String getRepresentation() {
@@ -49,10 +62,10 @@ class AccountAlias extends MoneyObject {
   }
 
   @override
-  int get uniqueId => id.value;
+  int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => id.value = value;
+  set uniqueId(value) => fieldId.value = value;
 
   static final _fields = Fields<AccountAlias>();
 

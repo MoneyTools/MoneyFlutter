@@ -131,4 +131,4 @@ app.*.symbols
 graph.dot
 /.firebase
 !**/converage/cc.txt
-data_sqlite.db
+test_output_sqlite.db

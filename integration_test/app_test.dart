@@ -461,14 +461,14 @@ Future<void> testPendingChanges(WidgetTester tester) async {
 
   // Save and Load to SQL
   await Data().saveToSql(
-    filePath: './data_sqlite.db',
+    filePath: './test_output_sqlite.db',
     onSaveCompleted: (_, __) {
       // save completed
     },
   );
 
   await Data().loadFromSql(
-    filePath: './data_sqlite.db',
+    filePath: './test_output_sqlite.db',
     fileBytes: Uint8List(0),
   );
 }
