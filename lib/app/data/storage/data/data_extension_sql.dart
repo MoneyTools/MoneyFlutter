@@ -1,18 +1,18 @@
 part of 'data.dart';
 
 extension DataFromSql on Data {
-  Future<bool> loadFromSql(
-    final String filePathToLoad,
-    final Uint8List fileBytes,
-  ) async {
+  Future<bool> loadFromSql({
+    required final String filePath,
+    required final Uint8List fileBytes,
+  }) async {
     // Load from SQLite
-    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePathToLoad, fileBytes);
+    final String? pathToDatabaseFile = await validateDataBasePathIsValidAndExist(filePath, fileBytes);
 
     if (pathToDatabaseFile != null || fileBytes.isNotEmpty) {
       // Open or create the database
       final MyDatabase db = MyDatabase();
 
-      await db.load(filePathToLoad, fileBytes);
+      await db.load(filePath, fileBytes);
       // Load
       accountAliases.loadFromJson(db.select('SELECT * FROM AccountAliases'));
       accounts.loadFromJson(db.select('SELECT * FROM Accounts'));
@@ -41,12 +41,12 @@ extension DataFromSql on Data {
   }
 
   Future<bool> saveToSql({
-    required final String filePathToLoad,
-    required final Function(bool, String) callbackWhenLoaded,
+    required final String filePath,
+    required final Function(bool, String) onSaveCompleted,
   }) async {
     try {
       final MyDatabase db = MyDatabase();
-      db.load(filePathToLoad, Uint8List(0));
+      db.load(filePath, Uint8List(0));
 
       // Save transaction first
       accountAliases.saveSql(db, 'AccountAliases');
@@ -69,11 +69,11 @@ extension DataFromSql on Data {
 
       db.dispose();
     } catch (e) {
-      callbackWhenLoaded(false, e.toString());
+      onSaveCompleted(false, e.toString());
       return false;
     }
 
-    callbackWhenLoaded(true, '');
+    onSaveCompleted(true, '');
     return true;
   }
 }

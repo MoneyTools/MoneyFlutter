@@ -89,7 +89,7 @@ class Alias extends MoneyObject {
 
   // Fields for this instance
   @override
-  FieldDefinitions get fieldDefinitions => fieldsForColumnView.definitions;
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   @override
   String getRepresentation() {
@@ -102,20 +102,21 @@ class Alias extends MoneyObject {
   @override
   set uniqueId(value) => fieldId.value = value;
 
-  // static Fields<Alias> get fields {
-  //   if (_fields.isEmpty) {
-  //     final tmp = Alias.fromJson({});
-  //     _fields.setDefinitions([
-  //       tmp.fieldId,
-  //       tmp.fieldPattern,
-  //       tmp.fieldFlags,
-  //       tmp.fieldPayeeId,
-  //     ]);
-  //   }
-  //   return _fields;
-  // }
-
+  static final _fields = Fields<Alias>();
   static final _fieldsForColumns = Fields<Alias>();
+
+  static Fields<Alias> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Alias.fromJson({});
+      _fields.setDefinitions([
+        tmp.fieldId,
+        tmp.fieldPattern,
+        tmp.fieldFlags,
+        tmp.fieldPayeeId,
+      ]);
+    }
+    return _fields;
+  }
 
   static Fields<Alias> get fieldsForColumnView {
     if (_fieldsForColumns.isEmpty) {

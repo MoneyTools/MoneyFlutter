@@ -184,7 +184,6 @@ Future<StockPriceHistoryCache> _loadFromBackend(
     }
   } else {
     result.errorMessage = response.body.toString();
-    logger.e('Failed to fetch data: ${response.body.toString()}');
   }
   return result;
 }

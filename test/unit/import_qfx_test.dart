@@ -8,10 +8,10 @@ import 'package:money/app/data/storage/import/import_qfx.dart';
 // Mock classes for dependencies
 
 void main() {
-  // ignore: unused_local_variable
-  final DataController dataController = Get.put(DataController());
-
-  setUp(() {});
+  setUp(() {
+    // ignore: unused_local_variable
+    final DataController dataController = Get.put(DataController());
+  });
 
   test('importQFX reads file and parses OFX correctly', () async {
     const String fileContent =

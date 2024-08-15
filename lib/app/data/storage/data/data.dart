@@ -346,7 +346,7 @@ class Data {
         // Sqlite
         case '.mmdb':
           // Load from SQLite
-          if (await loadFromSql(dateSource.filePath, dateSource.fileBytes)) {
+          if (await loadFromSql(filePath: dateSource.filePath, fileBytes: dateSource.fileBytes)) {
             PreferenceController.to.addToMRU(dateSource.filePath);
           }
         case '.mmcsv':

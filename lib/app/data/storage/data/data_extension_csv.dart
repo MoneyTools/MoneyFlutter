@@ -17,7 +17,10 @@ extension DataFromCsv on Data {
       List<int> bytes = await file.readAsBytes();
       archive = ZipDecoder().decodeBytes(bytes);
     }
+    loadFromArchive(archive);
+  }
 
+  void loadFromArchive(final Archive archive) {
     // Extract the files and read the content
     for (ArchiveFile file in archive) {
       if (file.isFile) {
@@ -110,22 +113,26 @@ extension DataFromCsv on Data {
       throw Exception('No container folder give for saving');
     }
 
+    // Define the path to the ZIP file
+    final String zipFileName = MyFileSystems.append(destinationFolder, mainFileName);
+    File zipFile = File(zipFileName);
+
+    // Create the ZIP archive
+    List<int> zipBytes = getCsvZipAchieveListOfInt();
+    // Write the ZIP file
+    await zipFile.writeAsBytes(zipBytes);
+    return zipFileName;
+  }
+
+  List<int> getCsvZipAchieveListOfInt() {
     // Create the ZIP archive
     Archive archive = Archive();
 
     // Add files to the archive
     writeEachFiles(archive);
-
     // Encode the archive to a byte array
     List<int> zipBytes = ZipEncoder().encode(archive)!;
-
-    // Define the path to the ZIP file
-    final String zipFileName = MyFileSystems.append(destinationFolder, mainFileName);
-    File zipFile = File(zipFileName);
-
-    // Write the ZIP file
-    await zipFile.writeAsBytes(zipBytes);
-    return zipFileName;
+    return zipBytes;
   }
 
   void writeEachFiles(Archive archive) {

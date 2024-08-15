@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -456,4 +458,17 @@ Future<void> testPendingChanges(WidgetTester tester) async {
 
   // close the panel
   await tapOnText(tester, 'Save to CSV');
+
+  // Save and Load to SQL
+  await Data().saveToSql(
+    filePath: './data_sqlite.db',
+    onSaveCompleted: (_, __) {
+      // save completed
+    },
+  );
+
+  await Data().loadFromSql(
+    filePath: './data_sqlite.db',
+    fileBytes: Uint8List(0),
+  );
 }

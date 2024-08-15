@@ -345,6 +345,7 @@ class DataSimulator {
             pattern: 'ABC',
             flags: AliasType.none.index,
           ),
+          fireNotification: false,
         );
     Data().aliases.appendNewMoneyObject(
           Alias(
@@ -353,6 +354,7 @@ class DataSimulator {
             pattern: 'abc',
             flags: AliasType.none.index,
           ),
+          fireNotification: false,
         );
     Data().aliases.appendNewMoneyObject(
           Alias(
@@ -361,6 +363,7 @@ class DataSimulator {
             pattern: '.*starbucks.*',
             flags: AliasType.regex.index,
           ),
+          fireNotification: false,
         );
   }
 

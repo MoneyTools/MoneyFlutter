@@ -193,8 +193,8 @@ class DataController extends GetxController {
     }
 
     Data().saveToSql(
-      filePathToLoad: fileNameAndPath,
-      callbackWhenLoaded: (final bool success, final String message) {
+      filePath: fileNameAndPath,
+      onSaveCompleted: (final bool success, final String message) {
         if (success) {
           trackMutations.reset();
         } else {
