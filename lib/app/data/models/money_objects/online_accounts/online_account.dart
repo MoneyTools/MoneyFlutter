@@ -27,7 +27,7 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 class OnlineAccount extends MoneyObject {
   OnlineAccount({
-    required this.name,
+    required String name,
     required this.institution,
     required this.ofx,
     required this.ofxVersion,
@@ -39,7 +39,9 @@ class OnlineAccount extends MoneyObject {
     required this.authToken,
     required this.bankId,
     required this.branchId,
-  });
+  }) {
+    this.fieldName.value = name;
+  }
 
   /// Constructor from a SQLite row
   factory OnlineAccount.fromJson(final MyJson row) {
@@ -68,7 +70,7 @@ class OnlineAccount extends MoneyObject {
       bankId: row.getString('BankId'),
       // 12
       branchId: row.getString('BranchId'),
-    )..id.value = row.getInt('Id', -1);
+    )..fieldId.value = row.getInt('Id', -1);
   }
 
   // 10
@@ -84,15 +86,18 @@ class OnlineAccount extends MoneyObject {
   final String fdic;
 
   // 0
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
+  );
+
+  // 1
+  FieldString fieldName = FieldString(
+    serializeName: 'Name',
+    getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).fieldName.value,
   );
 
   // 2
   final String institution;
-
-  // 1
-  final String name;
 
   // 3
   final String ofx;
@@ -112,9 +117,21 @@ class OnlineAccount extends MoneyObject {
   // 6
   final String userId;
 
+  // Fields for this instance
   @override
-  int get uniqueId => id.value;
+  FieldDefinitions get fieldDefinitions {
+    final tmp = OnlineAccount.fromJson({});
+    final f = Fields<Fields>()
+      ..setDefinitions([
+        tmp.fieldId,
+        tmp.fieldName,
+      ]);
+    return f.definitions;
+  }
 
   @override
-  set uniqueId(value) => id.value = value;
+  int get uniqueId => fieldId.value;
+
+  @override
+  set uniqueId(value) => fieldId.value = value;
 }

@@ -11,6 +11,7 @@ import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 import 'package:money/app/data/models/money_objects/investments/investment.dart';
 import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payment.dart';
+import 'package:money/app/data/models/money_objects/online_accounts/online_account.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
 import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
@@ -63,6 +64,7 @@ class DataSimulator {
     Data().clearExistingData();
     _generateCurrencies();
     _generateAccounts();
+    _generateOnlineAccounts();
     _generateAccountAliases();
     _generateAliases();
     _generateCategories();
@@ -687,6 +689,28 @@ class DataSimulator {
         memo: 'Pay back investment',
       );
     }
+  }
+
+  void _generateOnlineAccounts() {
+    // Pretend to load
+    Data().onlineAccounts.loadFromJson([
+      {
+        'Id': 0,
+        'Name': 'test1',
+      },
+      {
+        'Id': 1,
+        'Name': 'test2',
+      },
+    ]);
+
+    // Also add a new one
+    Data().onlineAccounts.appendNewMoneyObject(
+          OnlineAccount.fromJson({
+            'Name': 'test3',
+          }),
+          fireNotification: false,
+        );
   }
 
   void _generateRentals() {

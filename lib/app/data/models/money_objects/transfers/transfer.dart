@@ -1,6 +1,4 @@
 import 'dart:ui';
-
-import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
@@ -113,45 +111,13 @@ class Transfer extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Transfer).getTroubleshoot(),
   );
 
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
-
   @override
   int get uniqueId => source!.uniqueId;
-
-  static final _fields = Fields<Transfer>();
 
   int dateSpreadBetweenSendingAndReceiving() {
     DateTime dateSent = geSenderTransactionDate() ?? DateTime.now();
     DateTime dateReceived = getReceivedDateOrToday();
     return dateReceived.difference(dateSent).inDays;
-  }
-
-  //---------------------------------------------
-
-  String evaluatedReceivedDate() {
-    return dateToString(getReceivedDateOrToday());
-  }
-
-  static Fields<Transfer> get fields {
-    if (_fields.isEmpty) {
-      final tmp = Transfer.fromJson({});
-
-      _fields.setDefinitions([
-        tmp.fieldSenderTransactionDate,
-        tmp.fieldSenderAccountId,
-        tmp.fieldSenderTransactionStatus,
-        tmp.fieldSenderTransactionMemo,
-        tmp.fieldReceiverTransactionDate,
-        tmp.fieldReceiverAccountId,
-        tmp.fieldAccountStatusDestination,
-        tmp.fieldMemoDestination,
-        tmp.fieldTroubleshoot,
-        tmp.fieldTransactionAmount,
-      ]);
-    }
-    return _fields;
   }
 
   static Fields<Transfer> get fieldsForColumnView {
@@ -171,23 +137,6 @@ class Transfer extends MoneyObject {
         tmp.fieldTransactionAmount,
       ]);
   }
-
-  double geReceiverTransactionAmount() {
-    if (relatedTransaction != null) {
-      return relatedTransaction!.fieldAmount.value.toDouble();
-    }
-    return 0.00;
-  }
-
-  //---------------------------------------------
-
-  //---------------------------------------------
-  // Amounts
-  double geSenderTransactionAmount() {
-    return source!.fieldAmount.value.toDouble();
-  }
-
-  //---------------------------------------------
 
   //---------------------------------------------
   /// Dates
