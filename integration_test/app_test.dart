@@ -252,8 +252,11 @@ Future<void> testAccounts(WidgetTester tester) async {
 
   // Select one of the row
   await tapOnTextFromParentType(tester, ListView, 'Checking');
+  await infoTabs(tester);
   await tapOnTextFromParentType(tester, ListView, 'Investment');
+  await infoTabs(tester);
   await tapOnTextFromParentType(tester, ListView, 'Loan');
+  await infoTabs(tester);
 
   // CopyToCLipboard from the Info Panel Header
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderInfoPanel);
