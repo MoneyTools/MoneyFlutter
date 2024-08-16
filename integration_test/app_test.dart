@@ -1,10 +1,8 @@
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:integration_test/integration_test.dart';
-import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/widgets/info_panel/info_panel_header.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/main.dart' as app;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,139 +10,150 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'test_helpers.dart';
 
 void main() {
-  group('App Test', () {
-    IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  group(
+    'App Test',
+    () {
+      testWidgets(
+        'Full app test',
+        (WidgetTester tester) async {
+          // Use an empty SharedPreferences to get the same results each time
+          SharedPreferences.setMockInitialValues(<String, Object>{});
 
-    testWidgets('Full app test', (WidgetTester tester) async {
-      // Use an empty SharedPreferences to get the same results each time
-      SharedPreferences.setMockInitialValues(<String, Object>{});
+          app.main();
+          await tester.pumpAndSettle();
 
-      app.main();
-      await tester.pumpAndSettle();
+          //*************************************************************************
+          await switchToSmall(tester);
+          await stepWelcomeSettingAndTheme(tester);
 
-      await switchToLarge(tester);
+          //*************************************************************************
+          await switchToMedium(tester);
+          await stepImport(tester);
 
-      //------------------------------------------------------------------------
-      // Welcome screen - Policy
-      await testWelcomeScreen(tester);
+          //*************************************************************************
+          await switchToLarge(tester);
+          await stepDemoDataViews(tester);
 
-      //------------------------------------------------------------------------
-      // Import Wizard
-      {
-        await tapOnKeyString(tester, 'key_menu_button');
-        await tapOnText(tester, 'Add transactions...');
-        await tester.myPump();
-
-        await tapOnText(tester, 'Manual bulk text input');
-        await tester.myPump();
-
-        // Drop down
-        await tapOnKeyString(tester, 'key_dropdown');
-        await tapOnText(tester, 'Close');
-
-        await tapOnKeyString(tester, 'key_import_tab_free_style');
-
-        final textFieldInput = find.byKey(const Key('key_input_text_field_value')).first;
-        await inputTextToElement(
-          tester,
-          textFieldInput,
-          '2001-12-25;Hawaii;123.45\n2002-12-25;Bahamas;-123.45\n2003-01-01;Ibiza;(77.99)',
-        );
-
-        await tapOnKeyString(tester, 'key_import_tab_three_columns');
-        await tapOnKeyString(tester, 'key_import_tab_free_style');
-
-        // Close ImportDialog
-        await tapOnText(tester, 'Cancel');
-      }
-
-      //------------------------------------------------------------------------
-      // Close the file
-      await tapOnKeyString(tester, 'key_menu_button');
-      await tapOnText(tester, 'Close file');
-
-      //------------------------------------------------------------------------
-      // Open a Demo Data
-      await tapOnText(tester, 'Use Demo Data');
-
-      //------------------------------------------------------------------------
-      // Themes
-      await testTheme(tester);
-
-      //------------------------------------------------------------------------
-      // The Settings dialog
-      await testSettings(tester);
-
-      //------------------------------------------------------------------------
-      // Cash Flow
-      await testCashFlow(tester);
-
-      //------------------------------------------------------------------------
-      // Accounts
-      await testAccounts(tester);
-
-      //------------------------------------------------------------------------
-      // Categories
-      await testCategories(tester);
-
-      //------------------------------------------------------------------------
-      // Payees
-      await testPayees(tester);
-
-      //------------------------------------------------------------------------
-      // Aliases
-      await testAliases(tester);
-
-      //------------------------------------------------------------------------
-      // Transactions
-      await testTransactions(tester);
-
-      //------------------------------------------------------------------------
-      // Transfers
-      await tapOnText(tester, 'Transfers');
-      await infoTabs(tester);
-
-      //------------------------------------------------------------------------
-      // Investments
-      await tapOnText(tester, 'Investments');
-      await tapOnTextFromParentType(tester, ListView, 'Fidelity');
-      await infoTabs(tester);
-
-      //------------------------------------------------------------------------
-      // Stocks
-      await testStocks(tester);
-
-      //------------------------------------------------------------------------
-      // Rentals
-      await tapOnText(tester, 'Rentals');
-      await tapOnTextFromParentType(tester, ListView, 'AirBnB');
-      await infoTabs(tester);
-      // Go back to Chart where there's a PNL panel
-      // we want to test the copy PnL data to clipboard
-      await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
-      await tapOnKeyString(tester, 'key_card_copy_to_clipboard');
-
-      //------------------------------------------------------------------------
-      // Pending Changes
-      await testPendingChanges(tester);
-
-      //------------------------------------------------------------------------
-      await switchToSmall(tester);
-      await tapOnKeyString(tester, 'key_menu_cashflow');
-      await tapOnKeyString(tester, 'key_menu_accounts');
-      await testAccountEdit(tester);
-    });
-  });
+          //*************************************************************************
+          await switchToSmall(tester);
+          await stepDemoDataViewInSmallScreen(tester);
+        },
+      );
+    },
+  );
 }
 
-Future<void> switchToSmall(tester) async {
-  ThemeController.to.setAppSizeToSmall();
-  await tester.pumpAndSettle();
+Future<void> stepWelcomeSettingAndTheme(WidgetTester tester) async {
+  //------------------------------------------------------------------------
+  // Welcome screen - Policy
+  await testWelcomeScreen(tester);
+
+  //------------------------------------------------------------------------
+  // Themes
+  await testTheme(tester);
+
+  //------------------------------------------------------------------------
+  // The Settings dialog
+  await testSettings(tester);
 }
 
-Future<void> switchToLarge(tester) async {
-  ThemeController.to.setAppSizeToLarge();
-  await tester.pumpAndSettle();
+Future<void> stepDemoDataViewInSmallScreen(WidgetTester tester) async {
+  await tapOnKeyString(tester, 'key_menu_cashflow');
+  await tapOnKeyString(tester, 'key_menu_accounts');
+  await testAccountEdit(tester);
+}
+
+Future<void> stepDemoDataViews(WidgetTester tester) async {
+  //------------------------------------------------------------------------
+  // Close the file
+  await tapOnKeyString(tester, 'key_menu_button');
+  await tapOnText(tester, 'Close file');
+
+  //------------------------------------------------------------------------
+  // Open a Demo Data
+  await tapOnText(tester, 'Use Demo Data');
+
+  //------------------------------------------------------------------------
+  // Cash Flow
+  await testCashFlow(tester);
+
+  //------------------------------------------------------------------------
+  // Accounts
+  await testAccounts(tester);
+
+  //------------------------------------------------------------------------
+  // Categories
+  await testCategories(tester);
+
+  //------------------------------------------------------------------------
+  // Payees
+  await testPayees(tester);
+
+  //------------------------------------------------------------------------
+  // Aliases
+  await testAliases(tester);
+
+  //------------------------------------------------------------------------
+  // Transactions
+  await testTransactions(tester);
+
+  //------------------------------------------------------------------------
+  // Transfers
+  await tapOnText(tester, 'Transfers');
+  await infoTabs(tester);
+
+  //------------------------------------------------------------------------
+  // Investments
+  await tapOnText(tester, 'Investments');
+  await tapOnTextFromParentType(tester, ListView, 'Fidelity');
+  await infoTabs(tester);
+
+  //------------------------------------------------------------------------
+  // Stocks
+  await testStocks(tester);
+
+  //------------------------------------------------------------------------
+  // Rentals
+  await tapOnText(tester, 'Rentals');
+  await tapOnTextFromParentType(tester, ListView, 'AirBnB');
+  await infoTabs(tester);
+  // Go back to Chart where there's a PNL panel
+  // we want to test the copy PnL data to clipboard
+  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
+  await tapOnKeyString(tester, 'key_card_copy_to_clipboard');
+
+  //------------------------------------------------------------------------
+  // Pending Changes
+  await testPendingChanges(tester);
+}
+
+Future<void> stepImport(WidgetTester tester) async {
+  // Import Wizard
+  await tapOnKeyString(tester, 'key_menu_button');
+  await tapOnText(tester, 'Add transactions...');
+  await tester.myPump();
+
+  await tapOnText(tester, 'Manual bulk text input');
+  await tester.myPump();
+
+  // Drop down
+  await tapOnKeyString(tester, 'key_dropdown');
+  await tapOnText(tester, 'Close');
+
+  await tapOnKeyString(tester, 'key_import_tab_free_style');
+
+  final textFieldInput = find.byKey(const Key('key_input_text_field_value')).first;
+  await inputTextToElement(
+    tester,
+    textFieldInput,
+    '2001-12-25;Hawaii;123.45\n2002-12-25;Bahamas;-123.45\n2003-01-01;Ibiza;(77.99)',
+  );
+
+  await tapOnKeyString(tester, 'key_import_tab_three_columns');
+  await tapOnKeyString(tester, 'key_import_tab_free_style');
+
+  // Close ImportDialog
+  await tapOnText(tester, 'Cancel');
 }
 
 Future<void> testSettings(WidgetTester tester) async {
@@ -161,16 +170,9 @@ Future<void> testSettings(WidgetTester tester) async {
     await tapOnKey(tester, Constants.keySettingsButton);
 
     await tapOnKey(tester, Constants.keyZoomIncrease);
-    await Future.delayed(const Duration(microseconds: 300));
-
     await tapOnKey(tester, Constants.keyZoomIncrease);
-    await Future.delayed(const Duration(microseconds: 300));
-
     await tapOnKey(tester, Constants.keyZoomNormal);
-    await Future.delayed(const Duration(microseconds: 300));
-
     await tapOnKey(tester, Constants.keyZoomDecrease);
-    await Future.delayed(const Duration(microseconds: 300));
   }
 
   await tapOnKeyString(tester, 'key_settings');
@@ -197,11 +199,6 @@ Future<void> testSettings(WidgetTester tester) async {
 Future<void> testTheme(WidgetTester tester) async {
   // Turn Dark-Mode on
   await tapOnKeyString(tester, 'key_toggle_mode');
-  await Future.delayed(const Duration(seconds: 1));
-
-  // // Turn back Light-Mode
-  // await tapOnKeyString(tester, 'key_toggle_mode');
-  // await Future.delayed(const Duration(seconds: 1));
 }
 
 Future<void> testWelcomeScreen(WidgetTester tester) async {

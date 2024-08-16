@@ -10,6 +10,7 @@ class SnackBarService {
     required String message,
     bool autoDismiss = true,
     Color backgroundColor = Colors.black,
+    int duration = 5,
   }) {
     Color textColor = contrastColor(backgroundColor);
     Get.snackbar(
@@ -19,7 +20,7 @@ class SnackBarService {
       snackPosition: SnackPosition.BOTTOM, // Position of the Snackbar
       backgroundColor: backgroundColor, // Background color of the Snackbar
       colorText: textColor, // Text color of the Snackbar
-      duration: autoDismiss ? const Duration(seconds: 5) : null, // Duration for which the Snackbar is displayed
+      duration: autoDismiss ? Duration(seconds: duration) : null, // Duration for which the Snackbar is displayed
       mainButton: TextButton(
         onPressed: () {
           // Dismiss the Snackbar when the close button is pressed

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:money/app/controller/theme_controller.dart';
+import 'package:money/app/core/widgets/snack_bar.dart';
 
 Future<void> tapOnText(final WidgetTester tester, final String textToFind) async {
   final firstMatchingElement = find.text(textToFind).first;
@@ -70,8 +72,9 @@ Future<void> tapOnFirstRowOfListView(final WidgetTester tester) async {
 }
 
 Future<void> tapBackButton(WidgetTester tester) async {
-  final backButton = find.byTooltip('Back');
-  await tester.tap(backButton);
+  final firstMatchingElement = find.byTooltip('Back');
+  expect(firstMatchingElement, findsOneWidget, reason: 'No Back button found');
+  await tester.tap(firstMatchingElement);
   await tester.myPump();
 }
 
@@ -83,4 +86,30 @@ extension WidgetTesterExtension on WidgetTester {
   Future<void> myPump([int milliseconds = 100]) async {
     await pump(this, milliseconds);
   }
+}
+
+Future<void> switchToSmall(tester) async {
+  ThemeController.to.setAppSizeToSmall();
+  await tester.pumpAndSettle();
+  await showInstruction(tester, 'Small Screen - Phone');
+}
+
+Future<void> switchToMedium(tester) async {
+  ThemeController.to.setAppSizeToMedium();
+  await tester.pumpAndSettle();
+  await showInstruction(tester, 'Medium Screen - iPad');
+}
+
+Future<void> switchToLarge(tester) async {
+  ThemeController.to.setAppSizeToLarge();
+  await tester.pumpAndSettle();
+  await showInstruction(tester, 'Medium Screen - Desktop');
+}
+
+Future<void> showInstruction(tester, text) async {
+  SnackBarService.display(message: text, autoDismiss: true, title: 'MyMoney flutter integration test', duration: 1);
+  await tester.pumpAndSettle();
+
+  // Keep the message on screen for a few seconds
+  await Future.delayed(const Duration(milliseconds: 3000));
 }

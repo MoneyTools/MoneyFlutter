@@ -69,6 +69,26 @@ class ThemeController extends GetxController {
     );
   }
 
+  void setAppSizeToMedium() {
+    windowManager.ensureInitialized().then(
+      (value) {
+        WindowOptions windowOptions = const WindowOptions(
+          size: Size(Constants.screenWidthMedium, 900),
+          minimumSize: Size(Constants.screenWidthMedium, 800),
+          center: true,
+          backgroundColor: Colors.transparent,
+          skipTaskbar: false,
+          titleBarStyle: TitleBarStyle.normal,
+          title: 'MyMoney by vTeam',
+        );
+        windowManager.waitUntilReadyToShow(windowOptions, () async {
+          await windowManager.show();
+          await windowManager.focus();
+        });
+      },
+    );
+  }
+
   void setAppSizeToSmall() {
     windowManager.ensureInitialized().then(
       (value) {
