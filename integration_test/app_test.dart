@@ -54,7 +54,7 @@ Future<void> stepWelcomeSettingAndTheme(WidgetTester tester) async {
 
   //------------------------------------------------------------------------
   // The Settings dialog
-  await testSettings(tester);
+  await testThemeColors(tester);
 }
 
 Future<void> stepDemoDataViewInSmallScreen(WidgetTester tester) async {
@@ -72,6 +72,10 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   //------------------------------------------------------------------------
   // Open a Demo Data
   await tapOnText(tester, 'Use Demo Data');
+
+  //------------------------------------------------------------------------
+  // Show the Settings dialog in Larger screen size
+  await testSettingsFontsAndRental(tester);
 
   //------------------------------------------------------------------------
   // Cash Flow
@@ -156,7 +160,7 @@ Future<void> stepImport(WidgetTester tester) async {
   await tapOnText(tester, 'Cancel');
 }
 
-Future<void> testSettings(WidgetTester tester) async {
+Future<void> testThemeColors(WidgetTester tester) async {
   // Change Colors, Purple is the default, and we use "Teal" as the last color.
   {
     for (final String themeColorName in ['Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Teal']) {
@@ -164,11 +168,12 @@ Future<void> testSettings(WidgetTester tester) async {
       await tapOnKeyString(tester, 'key_theme_$themeColorName');
     }
   }
+}
 
+Future<void> testSettingsFontsAndRental(WidgetTester tester) async {
+  await tapOnKey(tester, Constants.keySettingsButton);
   // Test Font Scaling
   {
-    await tapOnKey(tester, Constants.keySettingsButton);
-
     await tapOnKey(tester, Constants.keyZoomIncrease);
     await tapOnKey(tester, Constants.keyZoomIncrease);
     await tapOnKey(tester, Constants.keyZoomNormal);
