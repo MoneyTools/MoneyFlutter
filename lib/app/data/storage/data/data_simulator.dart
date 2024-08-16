@@ -13,7 +13,6 @@ import 'package:money/app/data/models/money_objects/investments/investment_types
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payment.dart';
 import 'package:money/app/data/models/money_objects/online_accounts/online_account.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
-import 'package:money/app/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/splits/money_split.dart';
 import 'package:money/app/data/models/money_objects/stock_splits/stock_split.dart';
@@ -714,11 +713,18 @@ class DataSimulator {
   }
 
   void _generateRentals() {
-    final RentBuilding instanceBuilding = RentBuilding();
-    instanceBuilding.fieldId.value = 0;
-    instanceBuilding.fieldName.value = 'AirBnB';
-    instanceBuilding.fieldAddress.value = 'One Washington DC';
-    Data().rentBuildings.appendMoneyObject(instanceBuilding);
+    Data().rentBuildings.loadFromJson([
+      {
+        'Id': 0,
+        'Name': 'AirBnB',
+        'Address': 'One Washington DC',
+        'CategoryForIncome': Data().categories.getOrCreate('RentalIncome', CategoryType.income),
+        'CategoryForInterest': Data().categories.getOrCreate('RentalInterest', CategoryType.expense),
+        'CategoryForTaxes': Data().categories.getOrCreate('RentalTaxes', CategoryType.expense),
+        'CategoryForMaintenance': Data().categories.getOrCreate('RentalMaintenance', CategoryType.expense),
+        'CategoryForManagement': Data().categories.getOrCreate('RentalManagement', CategoryType.expense),
+      }
+    ]);
 
     // Rent Units
     Data().rentUnits.loadFromJson([

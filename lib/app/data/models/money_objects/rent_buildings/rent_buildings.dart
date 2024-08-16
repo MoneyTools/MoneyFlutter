@@ -43,12 +43,4 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
       rental.cumulatePnL(t);
     }
   }
-
-  String getNameFromId(final int id) {
-    final RentBuilding? found = get(id);
-    if (found == null) {
-      return id.toString();
-    }
-    return found.fieldName.value;
-  }
 }

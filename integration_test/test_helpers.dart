@@ -107,9 +107,11 @@ Future<void> switchToLarge(tester) async {
 }
 
 Future<void> showInstruction(tester, text) async {
-  SnackBarService.display(message: text, autoDismiss: true, title: 'MyMoney flutter integration test', duration: 1);
+  SnackBarService.display(message: text, autoDismiss: true, title: 'MyMoney flutter integration test', duration: 5);
   await tester.pumpAndSettle();
 
   // Keep the message on screen for a few seconds
-  await Future.delayed(const Duration(milliseconds: 3000));
+  // await Future.delayed(const Duration(milliseconds: 000));
+  await tapOnKeyString(tester, 'key_snackbar_close_button');
+  // await tester.pumpAndSettle(Durations.long1);
 }
