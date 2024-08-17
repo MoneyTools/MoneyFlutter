@@ -155,3 +155,9 @@ Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String 
   await tester.testTextInput.receiveAction(TextInputAction.done);
   await tester.myPump();
 }
+
+Future<void> tapAllToggleButtons(final WidgetTester tester, final List<String> keys) async {
+  for (final key in keys) {
+    await tapOnKeyString(tester, key);
+  }
+}

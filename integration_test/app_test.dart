@@ -314,6 +314,16 @@ Future<void> testAccountEdit(WidgetTester tester) async {
 
 Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Categories');
+
+// Iterate over all found ToggleButtons and click on each child button
+  await tapAllToggleButtons(tester, [
+    'key_toggle_show_none',
+    'key_toggle_show_expenses',
+    'key_toggle_show_saving',
+    'key_toggle_show_investments',
+    'key_toggle_show_all',
+  ]);
+
   await tapOnFirstRowOfListView(tester);
 
   // Edit
@@ -528,10 +538,4 @@ Future<void> testPendingChanges(WidgetTester tester) async {
     filePath: './test_output_sqlite.db',
     fileBytes: Uint8List(0),
   );
-}
-
-Future<void> tapAllToggleButtons(final WidgetTester tester, final List<String> keys) async {
-  for (final key in keys) {
-    await tapOnKeyString(tester, key);
-  }
 }
