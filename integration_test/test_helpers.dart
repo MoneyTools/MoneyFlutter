@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/app/controller/theme_controller.dart';
+import 'package:money/app/core/widgets/info_panel/info_panel.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
 
 Future<void> tapOnText(final WidgetTester tester, final String textToFind) async {
   final firstMatchingElement = find.text(textToFind).first;
@@ -114,4 +116,35 @@ Future<void> showInstruction(tester, text) async {
   // await Future.delayed(const Duration(milliseconds: 000));
   await tapOnKeyString(tester, 'key_snackbar_close_button');
   // await tester.pumpAndSettle(Durations.long1);
+}
+
+// Select first element of the Info-Panel-Transaction-List
+Future<void> selectFirstItemOfInfoPanelTransactionLIst(WidgetTester tester) async {
+  final element = await getFirstRowOfInfoPanelTransactionList(tester);
+  await tester.tap(element, warnIfMissed: false);
+  await tester.myPump();
+}
+
+// Long Press first element of the Info-Panel-Transaction-List
+Future<void> longPressFirstItemOfInfoPanelTransactionLIst(WidgetTester tester) async {
+  final element = await getFirstRowOfInfoPanelTransactionList(tester);
+  await tester.longPress(element, warnIfMissed: false);
+  await tester.myPump();
+}
+
+Future<Finder> getFirstRowOfInfoPanelTransactionList(WidgetTester tester) async {
+  // Select first element of the Info-Panel-Transaction-List
+  Finder firstMatchingElement = find.descendant(
+    of: find.byType(InfoPanel),
+    matching: find.byType(MyListItem),
+  );
+  expect(
+    firstMatchingElement,
+    findsAny,
+  );
+
+  firstMatchingElement = firstMatchingElement.first;
+
+  expect(firstMatchingElement, findsOneWidget);
+  return firstMatchingElement;
 }

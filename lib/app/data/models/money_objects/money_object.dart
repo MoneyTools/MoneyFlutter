@@ -204,11 +204,6 @@ class MoneyObject {
     return fieldDefinitions.where((element) => element.useAsDetailPanels(this)).toList();
   }
 
-  String getMutatedChangeAsSingleString<T>() {
-    final myJson = getMutatedDiff<T>();
-    return myJson.toString();
-  }
-
   MyJson getMutatedDiff<T>() {
     MyJson afterEditing = getPersistableJSon();
     return myJsonDiff(

@@ -107,42 +107,6 @@ double getHeightNeededToRender(final List<SanKeyEntry> list) {
   return verticalPosition;
 }
 
-void drawText(
-  final Canvas context,
-  final String name,
-  final double x,
-  final double y, {
-  final Color color = Colors.black,
-  final double fontSize = 12.0,
-  final double angleRotationInRadians = 0.0,
-}) {
-  context.save();
-  context.translate(x, y);
-  context.rotate(angleRotationInRadians);
-  final TextSpan span = TextSpan(
-    style: TextStyle(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: FontWeight.w500,
-      // shadows: [
-      //   Shadow(
-      //     color: color,
-      //     offset: const Offset(0, 0),
-      //     blurRadius: 2,
-      //   ),
-      // ],
-    ),
-    text: name,
-  );
-  final TextPainter tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
-
-  tp.layout();
-
-  tp.paint(context, const Offset(0.0, 0.0));
-
-  context.restore();
-}
-
 void drawTextInRect(
   final Canvas context,
   final String name,

@@ -65,11 +65,6 @@ Future<void> stepDemoDataViewInSmallScreen(WidgetTester tester) async {
 
 Future<void> stepDemoDataViews(WidgetTester tester) async {
   //------------------------------------------------------------------------
-  // Close the file
-  await tapOnKeyString(tester, 'key_menu_button');
-  await tapOnText(tester, 'Close file');
-
-  //------------------------------------------------------------------------
   // Open a Demo Data
   await tapOnText(tester, 'Use Demo Data');
 
@@ -159,6 +154,11 @@ Future<void> stepImport(WidgetTester tester) async {
 
   // Close ImportDialog
   await tapOnText(tester, 'Cancel');
+
+  //------------------------------------------------------------------------
+  // Close the file
+  await tapOnKeyString(tester, 'key_menu_button');
+  await tapOnText(tester, 'Close file');
 }
 
 Future<void> testThemeColors(WidgetTester tester) async {
@@ -273,8 +273,19 @@ Future<void> testAccounts(WidgetTester tester) async {
   // Accounts - Edit
   await testAccountEdit(tester);
 
+  // Back to Checking Account
+  await tapOnTextFromParentType(tester, ListView, 'Checking');
+
   // CopyToCLipboard from the Main Header
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderMain);
+
+  // Select first element of the Info-Panel-Transaction-List
+  await selectFirstItemOfInfoPanelTransactionLIst(tester);
+
+  // Bring upt the Mutate Transaction Dialog
+  await longPressFirstItemOfInfoPanelTransactionLIst(tester);
+
+  await tapOnText(tester, 'Close');
 }
 
 Future<void> testAccountEdit(WidgetTester tester) async {
@@ -366,15 +377,24 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   // Toggle Multi-Selection on and off
   await tapOnKey(tester, Constants.keyMultiSelectionToggle);
+
+  // Select All
+  await tapOnKey(tester, Constants.keyCheckboxToggleSelectAll);
+
+  // Edit
+  await tapOnKey(tester, Constants.keyEditSelectedItems);
+
+  await tapOnText(tester, 'Transfer');
+  await tapOnText(tester, 'Cancel');
+
+  // Unselect All
+  await tapOnKey(tester, Constants.keyCheckboxToggleSelectAll);
+
+  // out of multi-selection mode
   await tapOnKey(tester, Constants.keyMultiSelectionToggle);
 
   // Select one of the rows
   await tapOnTextFromParentType(tester, ListView, 'Bank Of America');
-
-  // Edit
-  await tapOnKey(tester, Constants.keyEditSelectedItems);
-  await tapOnText(tester, 'Transfer');
-  await tapOnText(tester, 'Cancel');
 
   await infoTabs(tester);
 

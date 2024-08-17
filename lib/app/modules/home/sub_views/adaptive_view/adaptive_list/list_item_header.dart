@@ -34,6 +34,7 @@ class MyListItemHeader<T> extends StatelessWidget {
     if (onSelectAll != null) {
       headers.add(
         Checkbox(
+          key: Constants.keyCheckboxToggleSelectAll,
           value: itemsAreAllSelected,
           onChanged: (bool? selected) {
             onSelectAll!(selected == true);

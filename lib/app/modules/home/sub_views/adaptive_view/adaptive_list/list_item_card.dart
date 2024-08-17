@@ -119,11 +119,3 @@ class MyListItemAsCard extends StatelessWidget {
     return const Text('');
   }
 }
-
-Widget rowTile(final BuildContext context, final String text) {
-  return Text(
-    text,
-    textAlign: TextAlign.left,
-    style: Theme.of(context).textTheme.bodyLarge,
-  );
-}

@@ -60,6 +60,7 @@ class Constants {
   static const Key keyAddNewItem = Key('key_add_new_item');
 
   static const Key keyCancelButton = Key('key_cancel_button');
+  static const Key keyCheckboxToggleSelectAll = Key('key_checkbox_toggle_select_all');
   static const Key keyCopyListToClipboardHeaderInfoPanel = Key('keyCopyListToClipboardHeaderInfoPanel');
   static const Key keyCopyListToClipboardHeaderMain = Key('keyCopyListToClipboardHeaderMain');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
