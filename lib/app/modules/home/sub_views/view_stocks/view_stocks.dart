@@ -290,11 +290,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return list;
   }
 
-  @override
-  String getViewId() {
-    return Data().securities.getTypeName();
-  }
-
   List<Investment> getListOfInvestment(Security security) {
     final List<Investment> list = Investments.getInvestmentsForThisSecurity(security.uniqueId);
     Investments.applyHoldingSharesAdjustedForSplits(list);

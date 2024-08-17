@@ -626,11 +626,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return uniqueValues;
   }
 
-  /// must override this in each view
-  String getViewId() {
-    return '_id_';
-  }
-
   bool isMatchingFilters(final MoneyObject instance) {
     if (areFiltersOn()) {
       // apply filtering

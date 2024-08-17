@@ -15,6 +15,7 @@ class SnackBarService {
     Color textColor = contrastColor(backgroundColor);
     Get.snackbar(
       title, message,
+      margin: const EdgeInsets.all(10),
       messageText: SelectableText(message, style: TextStyle(color: textColor)),
       isDismissible: true,
       snackPosition: SnackPosition.BOTTOM, // Position of the Snackbar

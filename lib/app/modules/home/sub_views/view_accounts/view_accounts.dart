@@ -268,11 +268,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getViewId() {
-    return Data().accounts.getTypeName();
-  }
-
-  @override
   void initState() {
     super.initState();
 

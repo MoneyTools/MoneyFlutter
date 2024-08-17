@@ -244,11 +244,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getViewId() {
-    return Data().transactions.getTypeName();
-  }
-
-  @override
   void initState() {
     super.initState();
 

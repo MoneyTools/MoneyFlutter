@@ -134,9 +134,4 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
     return list;
   }
-
-  @override
-  String getViewId() {
-    return Data().payees.getTypeName();
-  }
 }

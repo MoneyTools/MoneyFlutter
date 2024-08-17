@@ -174,11 +174,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getViewId() {
-    return Data().categories.getTypeName();
-  }
-
-  @override
   void initState() {
     super.initState();
 

@@ -294,7 +294,19 @@ Future<void> testAccounts(WidgetTester tester) async {
   // Bring upt the Mutate Transaction Dialog
   await longPressFirstItemOfInfoPanelTransactionLIst(tester);
 
-  await tapOnText(tester, 'Close');
+  // Delete
+  {
+    await tapOnText(tester, 'Delete');
+    // Cancel the Delete
+    await tapOnText(tester, 'Cancel');
+  }
+
+  // Duplicate
+  {
+    await tapOnText(tester, 'Duplicate');
+    // pressing Done also will close the dialog
+    await tapOnText(tester, 'Done');
+  }
 }
 
 Future<void> testAccountEdit(WidgetTester tester) async {
@@ -513,6 +525,7 @@ Future<void> testPendingChanges(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, Wrap, 'Categories');
   await tapOnTextFromParentType(tester, Wrap, 'Currencies');
   await tapOnTextFromParentType(tester, Wrap, 'LoanPayments');
+  await tapOnTextFromParentType(tester, Wrap, 'Online Accounts');
   await tapOnTextFromParentType(tester, Wrap, 'Payees');
   await tapOnTextFromParentType(tester, Wrap, 'Transactions');
   await tapOnTextFromParentType(tester, Wrap, 'Splits');

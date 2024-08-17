@@ -114,11 +114,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     return listOfTransfers;
   }
 
-  @override
-  String getViewId() {
-    return 'transfer';
-  }
-
   void keepThisTransfer({
     required final List<Transfer> list,
     required Transaction transactionSender,

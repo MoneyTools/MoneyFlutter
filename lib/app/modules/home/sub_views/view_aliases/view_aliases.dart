@@ -84,9 +84,4 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
         )
         .toList();
   }
-
-  @override
-  String getViewId() {
-    return Data().aliases.getTypeName();
-  }
 }

@@ -111,11 +111,6 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     return list;
   }
 
-  @override
-  String getViewId() {
-    return Data().rentBuildings.getTypeName();
-  }
-
   String getUnitsAsString(final List<RentUnit> listOfUnits) {
     final List<String> listAsText = <String>[];
     for (RentUnit unit in listOfUnits) {
