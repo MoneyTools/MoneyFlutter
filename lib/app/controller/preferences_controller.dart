@@ -97,28 +97,6 @@ class PreferenceController extends GetxController {
     return _preferences?.getInt(key) ?? defaultValueIfNotFound;
   }
 
-  // Retrieve a MyJson object value from preferences
-  Future<Map<String, MyJson>> getMapOfMyJson(final String key) async {
-    try {
-      final String? serializedMap = _preferences?.getString(key);
-      if (serializedMap != null) {
-        // first deserialize
-        final MyJson parsedMap = json.decode(serializedMap) as MyJson;
-
-        // second to JSon map
-        final Map<String, MyJson> resultMap = parsedMap.map(
-          (final String key, final dynamic value) => MapEntry<String, MyJson>(key, value as MyJson),
-        );
-
-        return resultMap;
-      }
-    } catch (_) {
-      //
-    }
-
-    return <String, MyJson>{};
-  }
-
   // Retrieve a string value from preferences
   String getString(String key, [String defaultValueIfNotFound = '']) {
     return _preferences?.getString(key) ?? defaultValueIfNotFound;

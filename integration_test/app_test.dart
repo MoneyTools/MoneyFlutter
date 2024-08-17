@@ -142,6 +142,7 @@ Future<void> stepImport(WidgetTester tester) async {
 
   // Drop down
   await tapOnKeyString(tester, 'key_dropdown');
+  await tapOnText(tester, 'New Bank Account');
   await tapOnText(tester, 'Close');
 
   await tapOnKeyString(tester, 'key_import_tab_free_style');
@@ -251,8 +252,13 @@ Future<void> testAccounts(WidgetTester tester) async {
   await infoTabs(tester);
 
   // Select one of the row
-  await tapOnTextFromParentType(tester, ListView, 'Checking');
+  await tapOnTextFromParentType(tester, ListView, 'Savings');
   await infoTabs(tester);
+
+  // await tester.myPump();
+  // toggle sorting
+  await tapOnText(tester, 'Memo');
+
   await tapOnTextFromParentType(tester, ListView, 'Investment');
   await infoTabs(tester);
   await tapOnTextFromParentType(tester, ListView, 'Loan');
@@ -274,11 +280,15 @@ Future<void> testAccounts(WidgetTester tester) async {
 Future<void> testAccountEdit(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyEditSelectedItems);
 
-  // Drop down
+  // Drop down on Account Type
   await tapOnKeyString(tester, 'key_dropdown');
-  await tapOnText(tester, 'Close');
+  await tapOnText(tester, 'Savings');
 
-  // Close the dialog
+  await tapOnKey(tester, Constants.keyEditSelectedItems);
+  await tapOnKeyString(tester, 'key_dropdown');
+  await tapOnText(tester, 'Checking');
+
+  // Apply Change and close the dialog
   await tapOnText(tester, 'Cancel');
 }
 
@@ -323,8 +333,8 @@ Future<void> testPayees(WidgetTester tester) async {
   await tapOnText(tester, 'Payees');
   await tapOnFirstRowOfListView(tester);
   await tapOnKey(tester, Constants.keyMergeButton);
+  await tapOnText(tester, 'Comcast');
   await tapOnText(tester, 'Cancel');
-
   await infoTabs(tester);
 }
 
@@ -363,6 +373,7 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   // Edit
   await tapOnKey(tester, Constants.keyEditSelectedItems);
+  await tapOnText(tester, 'Transfer');
   await tapOnText(tester, 'Cancel');
 
   await infoTabs(tester);
@@ -415,7 +426,7 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   await inputText(tester, '12');
 
-// Flitter by Category "Split"
+  // Flitter by Category "Split"
   {
     await tester.longPress(find.text('Category').first);
     await tapOnKeyString(tester, 'key_select_unselect_all');

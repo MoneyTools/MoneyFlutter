@@ -1,7 +1,5 @@
 // ignore_for_file: prefer_conditional_assignment
 
-import 'dart:math';
-
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
@@ -215,14 +213,6 @@ class Transactions extends MoneyObjects<Transaction> {
     return flatList;
   }
 
-  List<Transaction> getAllTransactionsByDate() {
-    final List<Transaction> theListOfAllTransactionIncludingHiddenOne = iterableList().toList(growable: false);
-    theListOfAllTransactionIncludingHiddenOne.sort(
-      (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true),
-    );
-    return theListOfAllTransactionIncludingHiddenOne;
-  }
-
   List<Transaction> getListFlattenSplits({
     final bool Function(Transaction)? whereClause,
   }) {
@@ -246,14 +236,6 @@ class Transactions extends MoneyObjects<Transaction> {
       }
     }
     return flattenList;
-  }
-
-  int getNextTransactionId() {
-    int maxIdFound = -1;
-    for (final item in iterableList(includeDeleted: true)) {
-      maxIdFound = max(maxIdFound, item.fieldId.value);
-    }
-    return maxIdFound + 1;
   }
 
   Iterable<Transaction> transactionInYearRange({

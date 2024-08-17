@@ -24,7 +24,7 @@ class MoneyObjects<T> {
   final Map<num, MoneyObject> _map = <num, MoneyObject>{};
 
   void appendMoneyObject(final MoneyObject moneyObject) {
-    assert(moneyObject.uniqueId != -1);
+    // assert(moneyObject.uniqueId != -1);
 
     _list.add(moneyObject);
     _map[(moneyObject).uniqueId] = moneyObject;

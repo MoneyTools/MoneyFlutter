@@ -1,5 +1,3 @@
-// ignore_for_file: unnecessary_this
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
@@ -24,6 +22,15 @@ class ViewCashFlow extends ViewWidget {
 
   @override
   State<ViewWidget> createState() => ViewCashFlowState();
+
+  @override
+  String getClassNamePlural() => '';
+
+  @override
+  String getClassNameSingular() => '';
+
+  @override
+  String getDescription() => '';
 }
 
 class ViewCashFlowState extends ViewWidgetState {
@@ -46,6 +53,14 @@ class ViewCashFlowState extends ViewWidgetState {
   double totalSavings = 0.00;
 
   final Debouncer _debouncer = Debouncer();
+
+  @override
+  Widget buildHeader([final Widget? child]) {
+    return const SizedBox();
+  }
+
+  @override
+  Widget buildViewContent(final Widget child) => const SizedBox();
 
   @override
   void initState() {

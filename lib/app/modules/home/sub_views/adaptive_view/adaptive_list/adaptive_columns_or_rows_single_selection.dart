@@ -56,6 +56,8 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
 
   @override
   Widget build(BuildContext context) {
+    footerAccumulators();
+
     return AdaptiveListColumnsOrRows(
       list: widget.list,
       fieldDefinitions: widget.fieldDefinitions,

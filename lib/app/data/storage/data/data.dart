@@ -17,7 +17,6 @@ import 'package:money/app/data/models/money_objects/accounts/accounts.dart';
 import 'package:money/app/data/models/money_objects/aliases/aliases.dart';
 import 'package:money/app/data/models/money_objects/categories/categories.dart';
 import 'package:money/app/data/models/money_objects/currencies/currencies.dart';
-import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
@@ -306,36 +305,6 @@ class Data {
     // }
 
     return relatedTransaction;
-  }
-
-  /// <summary>
-  /// Get a list of all Investment transactions grouped by security
-  /// </summary>
-  /// <param name="filter">The account filter or null if you want them all</param>
-  /// <param name="toDate">Get all transactions up to but not including this date</param>
-  /// <returns></returns>
-  Map<Security, List<Investment>> getTransactionsGroupedBySecurity(
-    Function(Account)? filter,
-    DateTime toDate,
-  ) {
-    Map<Security, List<Investment>> transactionsBySecurity = {};
-
-    // Sort all add, remove, buy, sell transactions by date and by security.
-    for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
-      if (t.fieldDateTime.value!.millisecond < toDate.millisecond &&
-          (filter == null || filter(t.instanceOfAccount!)) &&
-          t.instanceOfInvestment != null &&
-          t.instanceOfInvestment!.fieldInvestmentType.value != InvestmentType.none.index) {
-        Investment i = t.instanceOfInvestment!;
-        Security? s = Data().securities.get(i.fieldSecurity.value);
-        if (s != null) {
-          List<Investment> list = transactionsBySecurity[s] ?? [];
-          transactionsBySecurity[s] = list;
-          list.add(i);
-        }
-      }
-    }
-    return transactionsBySecurity;
   }
 
   /// Automated detection of what type of storage to load the data from

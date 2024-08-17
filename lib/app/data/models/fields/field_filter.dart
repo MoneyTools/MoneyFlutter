@@ -47,10 +47,6 @@ class FieldFilters {
     this.list = inputList ?? [];
   }
 
-  FieldFilters.fromJson(final Map<String, dynamic> json) {
-    list = (json['list'] as List<dynamic>).map((item) => FieldFilter.fromJson(item as Map<String, dynamic>)).toList();
-  }
-
   FieldFilters.fromList(final List<String> inputList) {
     for (final pair in inputList) {
       final tokens = pair.split('=');

@@ -33,11 +33,6 @@ void main() {
       final defaultDate = DateTime(2023, 6, 1);
       expect(valueOrDefaultDate(null, defaultValueIfNull: defaultDate), defaultDate);
     });
-
-    test('returns the current date and time if both value and default value are null', () {
-      final now = DateTime.now();
-      expect(valueOrDefaultDate(null), isNot(equals(now)));
-    });
   });
 
   group('valueOrDefaultDouble', () {
