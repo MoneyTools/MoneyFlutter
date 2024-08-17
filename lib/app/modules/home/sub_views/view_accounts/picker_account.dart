@@ -12,6 +12,7 @@ Widget pickerAccount({
   String selectedName = selected == null ? '' : selected.fieldName.value;
 
   return PickerEditBox(
+    key: Constants.keyAccountPicker,
     title: 'Account',
     items: options,
     initialValue: selectedName,

@@ -56,6 +56,7 @@ class Constants {
   static const int commandTextZoom = 1000;
   static const String defaultCurrency = 'USD';
   static const double gapBetweenChannels = 14.0;
+  static const Key keyAccountPicker = Key('key_account_picker');
   // Keys
   static const Key keyAddNewItem = Key('key_add_new_item');
 

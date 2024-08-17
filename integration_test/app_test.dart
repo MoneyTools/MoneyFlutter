@@ -248,6 +248,15 @@ Future<void> testAliases(WidgetTester tester) async {
 Future<void> testAccounts(WidgetTester tester) async {
   await tapOnKeyString(tester, 'key_menu_accounts');
 
+  // Iterate over all found ToggleButtons and click on each child button
+  await tapAllToggleButtons(tester, [
+    'key_toggle_show_bank',
+    'key_toggle_show_investment',
+    'key_toggle_show_credit',
+    'key_toggle_show_assets',
+    'key_toggle_show_all',
+  ]);
+
   await tapOnKey(tester, Constants.keyInfoPanelExpando);
   await infoTabs(tester);
 
@@ -519,4 +528,10 @@ Future<void> testPendingChanges(WidgetTester tester) async {
     filePath: './test_output_sqlite.db',
     fileBytes: Uint8List(0),
   );
+}
+
+Future<void> tapAllToggleButtons(final WidgetTester tester, final List<String> keys) async {
+  for (final key in keys) {
+    await tapOnKeyString(tester, key);
+  }
 }

@@ -282,6 +282,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
     _pivots.add(
       ThreePartLabel(
+        key: const Key('key_toggle_show_bank'),
         text1: 'Banks',
         small: true,
         isVertical: true,
@@ -292,6 +293,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     );
     _pivots.add(
       ThreePartLabel(
+        key: const Key('key_toggle_show_investment'),
         text1: 'Investments',
         small: true,
         isVertical: true,
@@ -302,6 +304,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     );
     _pivots.add(
       ThreePartLabel(
+        key: const Key('key_toggle_show_credit'),
         text1: 'Credit',
         small: true,
         isVertical: true,
@@ -312,6 +315,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     );
     _pivots.add(
       ThreePartLabel(
+        key: const Key('key_toggle_show_assets'),
         text1: 'Assets',
         small: true,
         isVertical: true,
@@ -322,6 +326,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     );
     _pivots.add(
       ThreePartLabel(
+        key: const Key('key_toggle_show_all'),
         text1: 'All',
         small: true,
         isVertical: true,

@@ -29,6 +29,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
     if (_selectedPivot[3]) {
       return getSelectedAccountTypesByIndex(3);
     }
+
     return getSelectedAccountTypesByIndex(-1);
   }
 
@@ -44,11 +45,8 @@ extension ViewAccountsHelpers on ViewAccountsState {
         return <AccountType>[AccountType.credit, AccountType.creditLine];
 
       case 3:
-        return <AccountType>[
-          AccountType.asset,
-          AccountType.cash,
-          AccountType.loan,
-        ];
+        return <AccountType>[AccountType.asset, AccountType.cash, AccountType.loan];
+
       default: // all
         return <AccountType>[];
     }
@@ -59,6 +57,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
       child: ToggleButtons(
+        key: const Key('view_accounts_pivots'),
         direction: Axis.horizontal,
         onPressed: (final int index) {
           // ignore: invalid_use_of_protected_member
