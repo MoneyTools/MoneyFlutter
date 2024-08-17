@@ -4,11 +4,12 @@
 OUTPUT_VIDEO="test_run_$(date +%Y-%m-%d_%H-%M-%S).mp4"
 
 # Start recording with ffmpeg (adjust the screen dimensions as needed)
-ffmpeg -video_size 1280x720 -framerate 30 -f avfoundation -i "1" -r 30 "$OUTPUT_VIDEO" &
+ffmpeg -f avfoundation -video_size 2000x800 -framerate 24 -i "Capture screen 0" "$OUTPUT_VIDEO" &
 FFMPEG_PID=$!
 
 # Run the Flutter integration test
-flutter drive --target=integration_test/app_test.dart -d macos
+# sh/test_clean.sh
+flutter test integration_test -d macos
 
 # Stop the ffmpeg recording
 kill $FFMPEG_PID
