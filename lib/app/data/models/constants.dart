@@ -63,6 +63,7 @@ class Constants {
   static const Key keyCheckboxToggleSelectAll = Key('key_checkbox_toggle_select_all');
   static const Key keyCopyListToClipboardHeaderInfoPanel = Key('keyCopyListToClipboardHeaderInfoPanel');
   static const Key keyCopyListToClipboardHeaderMain = Key('keyCopyListToClipboardHeaderMain');
+  static const Key keyDatePicker = Key('key_date_picker');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
   static const Key keyEditSelectedItems = Key('key_edit_item');
   static const Key keyInfoPanelExpando = Key('key_info_panel_expando');

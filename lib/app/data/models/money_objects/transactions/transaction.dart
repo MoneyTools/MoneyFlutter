@@ -236,6 +236,7 @@ class Transaction extends MoneyObject {
         (instance as Transaction).fieldCategoryId.value = newValue as int,
     getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return pickerCategory(
+        key: const Key('key_pick_category'),
         itemSelected: Data().categories.get((instance as Transaction).fieldCategoryId.value),
         onSelected: (Category? newCategory) {
           if (newCategory != null) {
@@ -273,6 +274,7 @@ class Transaction extends MoneyObject {
     ),
     getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return PickerEditBoxDate(
+        key: Constants.keyDatePicker,
         initialValue: (instance as Transaction).dateTimeAsString,
         onChanged: (String? newDateSelected) {
           if (newDateSelected != null) {
@@ -329,8 +331,6 @@ class Transaction extends MoneyObject {
     name: 'Merge Date',
     serializeName: 'MergeDate',
     useAsDetailPanels: defaultCallbackValueFalse,
-    getValueForDisplay: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Transaction).fieldMergeDate.value),
     getValueForSerialization: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as Transaction).fieldMergeDate.value),
   );

@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/charts/my_line_chart.dart';
@@ -132,15 +131,6 @@ class StockChartWidgetState extends State<StockChartWidget> {
         });
       }
     }
-  }
-
-  String getActivityQuantity(final int fromMillisecondsSinceEpoch) {
-    final activityFound =
-        widget.holdingsActivities.firstWhereOrNull((a) => a.date.millisecondsSinceEpoch == fromMillisecondsSinceEpoch);
-    if (activityFound == null) {
-      return '';
-    }
-    return '${getIntAsText(activityFound.quantity.toInt())} shares';
   }
 
   void _adjustMissingDataPointInThePast() {

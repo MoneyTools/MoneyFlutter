@@ -359,10 +359,12 @@ Future<void> testStocks(WidgetTester tester) async {
 
     // Drop down
     await tapOnKeyString(tester, 'key_dropdown');
-    await tapOnText(tester, 'Close');
 
-    // Close the dialog
-    await tapOnText(tester, 'Cancel');
+    // Make a change
+    await tapOnText(tester, 'private');
+
+    // Apply will close the dialog
+    await tapOnText(tester, 'Apply');
   }
 
   await infoTabs(tester);
@@ -383,7 +385,6 @@ Future<void> testTransactions(WidgetTester tester) async {
 
   // Edit
   await tapOnKey(tester, Constants.keyEditSelectedItems);
-
   await tapOnText(tester, 'Transfer');
   await tapOnText(tester, 'Cancel');
 
@@ -396,6 +397,28 @@ Future<void> testTransactions(WidgetTester tester) async {
   // Select one of the rows
   await tapOnTextFromParentType(tester, ListView, 'Bank Of America');
 
+  // Single Transaction Edit
+  {
+    await tapOnKey(tester, Constants.keyEditSelectedItems);
+
+    // Edit  the Date
+    {
+      await inputTextToElement(tester, find.byKey(Constants.keyDatePicker), '2021-01-01');
+    }
+
+    // Edit the Category of a single transaction
+    {
+      await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
+    }
+    // Edit  the Amount
+    {
+      final textFieldFinder = find.byWidgetPredicate(
+        (widget) => widget is TextField && widget.decoration?.labelText == 'Amount',
+      );
+      await inputTextToElement(tester, textFieldFinder, '66.99');
+    }
+    await tapOnText(tester, 'Apply');
+  }
   await infoTabs(tester);
 
   // Delete selected item
@@ -450,7 +473,7 @@ Future<void> testTransactions(WidgetTester tester) async {
   {
     await tester.longPress(find.text('Category').first);
     await tapOnKeyString(tester, 'key_select_unselect_all');
-    await inputTextToElement(tester, finByKeyString('key_picker_input_filter'), 'Split');
+    await inputTextToElement(tester, findByKeyString('key_picker_input_filter'), 'Split');
     await tapOnKeyString(tester, 'key_select_unselect_all');
     await tapOnText(tester, 'Apply');
   }
@@ -462,17 +485,6 @@ Future<void> infoTabs(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Details');
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
   await tapOnTextFromParentType(tester, InfoPanelHeader, 'Transactions');
-}
-
-Future<void> inputText(WidgetTester tester, final String textToFilterBy) async {
-  final Finder filterInput = find.byType(TextField).first;
-  await inputTextToElement(tester, filterInput, textToFilterBy);
-}
-
-Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String textToFilterBy) async {
-  await tester.enterText(filterInput, textToFilterBy);
-  await tester.testTextInput.receiveAction(TextInputAction.done);
-  await tester.pumpAndSettle(Durations.long4);
 }
 
 Future<void> testPendingChanges(WidgetTester tester) async {
@@ -488,7 +500,7 @@ Future<void> testPendingChanges(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, Wrap, 'Stock Splits');
   await tapOnTextFromParentType(tester, Wrap, 'Accounts');
 
-  await tapOnText(tester, 'None modified');
+  await tapOnText(tester, '1 modified');
 
   await tapOnText(tester, '1 deleted');
 

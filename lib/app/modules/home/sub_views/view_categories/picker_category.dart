@@ -6,12 +6,14 @@ import 'package:money/app/data/storage/data/data.dart';
 export 'package:money/app/data/models/money_objects/categories/category.dart';
 
 Widget pickerCategory({
+  Key? key,
   required final Category? itemSelected,
   required final Function(Category?) onSelected,
 }) {
   String selectedName = itemSelected == null ? '' : itemSelected.fieldName.value;
 
   return PickerEditBox(
+    key: key,
     title: 'Category',
     items: Data().categories.getCategoriesAsStrings(),
     initialValue: selectedName,

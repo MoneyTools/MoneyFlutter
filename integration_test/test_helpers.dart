@@ -12,14 +12,14 @@ Future<void> tapOnText(final WidgetTester tester, final String textToFind) async
   await tester.myPump();
 }
 
-Finder finByKeyString(final String keyString) {
+Finder findByKeyString(final String keyString) {
   final Finder firstMatchingElement = find.byKey(Key(keyString)).first;
+  expect(firstMatchingElement, findsOneWidget);
   return firstMatchingElement;
 }
 
 Future<void> tapOnKeyString(final WidgetTester tester, final String keyString) async {
-  final firstMatchingElement = finByKeyString(keyString);
-  expect(firstMatchingElement, findsOneWidget);
+  final firstMatchingElement = findByKeyString(keyString);
   await tester.tap(firstMatchingElement, warnIfMissed: false);
   await tester.myPump();
 }
@@ -111,11 +111,7 @@ Future<void> switchToLarge(tester) async {
 Future<void> showInstruction(tester, text) async {
   SnackBarService.display(message: text, autoDismiss: true, title: 'MyMoney flutter integration test', duration: 5);
   await tester.pumpAndSettle();
-
-  // Keep the message on screen for a few seconds
-  // await Future.delayed(const Duration(milliseconds: 000));
   await tapOnKeyString(tester, 'key_snackbar_close_button');
-  // await tester.pumpAndSettle(Durations.long1);
 }
 
 // Select first element of the Info-Panel-Transaction-List
@@ -147,4 +143,15 @@ Future<Finder> getFirstRowOfInfoPanelTransactionList(WidgetTester tester) async 
 
   expect(firstMatchingElement, findsOneWidget);
   return firstMatchingElement;
+}
+
+Future<void> inputText(WidgetTester tester, final String textToEnter) async {
+  final Finder filterInput = find.byType(TextField).first;
+  await inputTextToElement(tester, filterInput, textToEnter);
+}
+
+Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String textToEnter) async {
+  await tester.enterText(filterInput, textToEnter);
+  await tester.testTextInput.receiveAction(TextInputAction.done);
+  await tester.myPump();
 }
