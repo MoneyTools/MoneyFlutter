@@ -1,10 +1,10 @@
 // ignore_for_file: unnecessary_this
 
 // Imports
-import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/data/models/money_objects/aliases/alias_types.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 // Export
@@ -74,10 +74,9 @@ class Alias extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPayeeId.value,
   );
 
-  // Not persisted
-  Payee? payeeInstance;
-
   RegExp? regex;
+
+  Payee? _payeeInstance;
 
   @override
   Widget buildFieldsAsWidgetForSmallScreen() {
@@ -148,6 +147,14 @@ class Alias extends MoneyObject {
       }
     }
     return false;
+  }
+
+  Payee? get payeeInstance {
+    // cache the instance
+    if (_payeeInstance == null && fieldPayeeId.value != -1) {
+      _payeeInstance = Data().payees.get(fieldPayeeId.value);
+    }
+    return _payeeInstance;
   }
 
   AliasType get type {

@@ -25,6 +25,7 @@ void main() {
           //*************************************************************************
           await switchToSmall(tester);
           await stepWelcomeSettingAndTheme(tester);
+          await stepVisitAllViewSmall(tester);
 
           //*************************************************************************
           await switchToMedium(tester);
@@ -61,6 +62,12 @@ Future<void> stepDemoDataViewInSmallScreen(WidgetTester tester) async {
   await tapOnKeyString(tester, 'key_menu_cashflow');
   await tapOnKeyString(tester, 'key_menu_accounts');
   await testAccountEdit(tester);
+}
+
+Future<void> stepVisitAllViewSmall(WidgetTester tester) async {
+  // await tapOnText(tester, 'Cashflow');
+  // await tapOnText(tester, 'Accounts');
+  // await tapOnText(tester, 'Categories');
 }
 
 Future<void> stepDemoDataViews(WidgetTester tester) async {
@@ -146,14 +153,14 @@ Future<void> stepImport(WidgetTester tester) async {
   await inputTextToElement(
     tester,
     textFieldInput,
-    '2001-12-25;Hawaii;123.45\n2002-12-25;Bahamas;-123.45\n2003-01-01;Ibiza;(77.99)',
+    '2001-12-25;Hawaii;123.45\n2002-12-25;ABC;-123.45\n2003-01-01;Ibiza;(77.99)\nabc;+123.45\nHawaii;99.99',
   );
 
   await tapOnKeyString(tester, 'key_import_tab_three_columns');
   await tapOnKeyString(tester, 'key_import_tab_free_style');
 
   // Close ImportDialog
-  await tapOnText(tester, 'Cancel');
+  await tapOnText(tester, 'Import');
 
   //------------------------------------------------------------------------
   // Close the file
@@ -242,6 +249,12 @@ Future<void> testCashFlow(WidgetTester tester) async {
 Future<void> testAliases(WidgetTester tester) async {
   await tapOnText(tester, 'Aliases');
   await tapOnTextFromParentType(tester, ListView, 'ABC');
+
+  // Edit field "Pattern"
+  await tapOnKey(tester, Constants.keyEditSelectedItems);
+  await inputTextToTextFieldWithThisLabel(tester, 'Pattern', 'ABC_XYZ');
+  await tapOnText(tester, 'Apply');
+
   await infoTabs(tester);
 }
 
@@ -433,21 +446,14 @@ Future<void> testTransactions(WidgetTester tester) async {
     await tapOnKey(tester, Constants.keyEditSelectedItems);
 
     // Edit  the Date
-    {
-      await inputTextToElement(tester, find.byKey(Constants.keyDatePicker), '2021-01-01');
-    }
+    await inputTextToElement(tester, find.byKey(Constants.keyDatePicker), '2021-01-01');
 
     // Edit the Category of a single transaction
-    {
-      await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
-    }
+    await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
+
     // Edit  the Amount
-    {
-      final textFieldFinder = find.byWidgetPredicate(
-        (widget) => widget is TextField && widget.decoration?.labelText == 'Amount',
-      );
-      await inputTextToElement(tester, textFieldFinder, '66.99');
-    }
+    await inputTextToTextFieldWithThisLabel(tester, 'Amount', '66.99');
+
     await tapOnText(tester, 'Apply');
   }
   await infoTabs(tester);

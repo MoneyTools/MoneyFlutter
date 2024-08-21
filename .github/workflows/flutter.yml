@@ -16,15 +16,15 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.1'
+          flutter-version: "3.24.0"
 
       - name: Disable CLI animations
         run: flutter config --no-cli-animations
-        
+
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Analyse
+      - name: Analyze
         run: flutter analyze
 
       - name: Build and test
