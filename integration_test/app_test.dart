@@ -25,7 +25,6 @@ void main() {
           //*************************************************************************
           await switchToSmall(tester);
           await stepWelcomeSettingAndTheme(tester);
-          await stepVisitAllViewSmall(tester);
 
           //*************************************************************************
           await switchToMedium(tester);
@@ -61,13 +60,15 @@ Future<void> stepWelcomeSettingAndTheme(WidgetTester tester) async {
 Future<void> stepDemoDataViewInSmallScreen(WidgetTester tester) async {
   await tapOnKeyString(tester, 'key_menu_cashflow');
   await tapOnKeyString(tester, 'key_menu_accounts');
-  await testAccountEdit(tester);
-}
-
-Future<void> stepVisitAllViewSmall(WidgetTester tester) async {
-  // await tapOnText(tester, 'Cashflow');
-  // await tapOnText(tester, 'Accounts');
-  // await tapOnText(tester, 'Categories');
+  // await testAccountEdit(tester);
+  await tapOnKeyString(tester, 'key_menu_categories');
+  await tapOnKeyString(tester, 'key_menu_payees');
+  await tapOnKeyString(tester, 'key_menu_aliases');
+  await tapOnKeyString(tester, 'key_menu_transactions');
+  await tapOnKeyString(tester, 'key_menu_transfers');
+  await tapOnKeyString(tester, 'key_menu_investments');
+  await tapOnKeyString(tester, 'key_menu_stocks');
+  await tapOnKeyString(tester, 'key_menu_rentals');
 }
 
 Future<void> stepDemoDataViews(WidgetTester tester) async {
