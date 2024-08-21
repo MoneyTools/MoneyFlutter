@@ -33,7 +33,7 @@ class Alias extends MoneyObject {
     );
   }
 
-  /// 2    Flags    INT            1                 0
+  /// SQL [2] 'Flags' INT
   FieldInt fieldFlags = FieldInt(
     type: FieldType.text,
     align: TextAlign.center,
@@ -52,13 +52,14 @@ class Alias extends MoneyObject {
   );
 
   /// Pattern
-  /// 1    Pattern  nvarchar(255)  1                 0
+  /// SQL[1] "Pattern"  nvarchar(255)
   FieldString fieldPattern = FieldString(
     type: FieldType.text,
     name: 'Pattern',
     serializeName: 'Pattern',
     getValueForDisplay: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Alias).fieldPattern.value = value as String,
   );
 
   /// Payee
