@@ -2,16 +2,15 @@
 import 'dart:math';
 import 'package:get/get.dart';
 import 'package:money/app/controller/theme_controller.dart';
-import 'package:money/app/core/widgets/sankey/sankey.dart';
-import 'package:money/app/core/widgets/sankey/sankey_colors.dart';
+import 'package:money/app/core/widgets/sankey/sankey_painter.dart';
 import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 // ignore: must_be_immutable
-class PanelSanKey extends StatelessWidget {
-  PanelSanKey({required this.minYear, required this.maxYear, super.key});
+class SankeyPanel extends StatelessWidget {
+  SankeyPanel({required this.minYear, required this.maxYear, super.key});
 
   final int maxYear;
   final int minYear;
@@ -40,13 +39,11 @@ class PanelSanKey extends StatelessWidget {
             width: constraints.maxWidth,
             height: max(constraints.maxHeight, 1000),
             padding: const EdgeInsets.all(8),
-            child: CustomPaint(
-              painter: SankeyPainter(
-                listOfIncomes: sanKeyListOfIncomes,
-                listOfExpenses: sanKeyListOfExpenses,
-                compactView: context.isWidthSmall,
-                colors: SankeyColors(darkTheme: themeController.isDarkTheme.value),
-              ),
+            child: SankeyWidget(
+              leftEntries: sanKeyListOfIncomes,
+              rightEntries: sanKeyListOfExpenses,
+              compactView: context.isWidthSmall,
+              colors: SankeyColors(darkTheme: themeController.isDarkTheme.value),
             ),
           ),
         );

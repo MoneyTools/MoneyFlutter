@@ -5,28 +5,57 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/sankey/sankey_colors.dart';
+import 'package:money/app/core/widgets/sankey/sankey_entry.dart';
 import 'package:money/app/core/widgets/sankey/sankey_helper.dart';
 import 'package:money/app/data/models/constants.dart';
 
 // Exports
+export 'package:money/app/core/widgets/sankey/sankey_colors.dart';
+export 'package:money/app/core/widgets/sankey/sankey_entry.dart';
 export 'package:money/app/core/widgets/sankey/sankey_helper.dart';
+
+class SankeyWidget extends StatelessWidget {
+  /// Constructor
+  const SankeyWidget({
+    super.key,
+    required this.leftEntries,
+    required this.rightEntries,
+    required this.colors,
+    required this.compactView,
+  });
+
+  final SankeyColors colors;
+  final bool compactView;
+  final List<SanKeyEntry> leftEntries;
+  final List<SanKeyEntry> rightEntries;
+
+  @override
+  Widget build(Object context) {
+    return CustomPaint(
+      painter: SankeyPainter(
+        leftEntries: leftEntries,
+        rightEntries: rightEntries,
+        compactView: compactView,
+        colors: colors,
+      ),
+    );
+  }
+}
 
 class SankeyPainter extends CustomPainter {
   /// Constructor
   SankeyPainter({
-    required this.listOfIncomes,
-    required this.listOfExpenses,
+    required this.leftEntries,
+    required this.rightEntries,
     required this.colors,
     required this.compactView,
   });
 
   final bool compactView;
-  final List<SanKeyEntry> listOfExpenses;
-  final List<SanKeyEntry> listOfIncomes;
+  final List<SanKeyEntry> leftEntries;
+  final List<SanKeyEntry> rightEntries;
 
-  // double incomeHeight = Constants.targetHeight;
   SankeyColors colors;
-
   double columnWidth = 0;
   double gap = Constants.gapBetweenChannels;
   double topOfCenters = Constants.gapBetweenChannels * 2;
@@ -40,11 +69,11 @@ class SankeyPainter extends CustomPainter {
 
     double verticalStackOfTargets = topOfCenters;
 
-    final double totalIncome = listOfIncomes.fold(
+    final double totalIncome = leftEntries.fold(
       0.00,
       (final double sum, final SanKeyEntry item) => sum + item.value,
     );
-    final double totalExpense = listOfExpenses
+    final double totalExpense = rightEntries
         .fold(
           0.00,
           (final double sum, final SanKeyEntry item) => sum + item.value,
@@ -79,7 +108,7 @@ class SankeyPainter extends CustomPainter {
     final Block targetExpenses = Block(
       'Expenses\n-${getAmountAsShorthandText(totalExpense)}',
       ui.Rect.fromLTWH(
-        horizontalCenter + columnWidth * 0.1,
+        horizontalCenter + gap,
         topOfCenters,
         columnWidth,
         lastHeight,
@@ -95,7 +124,7 @@ class SankeyPainter extends CustomPainter {
 
     stackVerticalPosition += renderSourcesToTarget(
       canvas,
-      listOfIncomes,
+      leftEntries,
       0,
       stackVerticalPosition,
       targetRevenues,
@@ -108,7 +137,7 @@ class SankeyPainter extends CustomPainter {
     // Right Side - "Source of Expenses"
     stackVerticalPosition += renderSourcesToTarget(
       canvas,
-      listOfExpenses,
+      rightEntries,
       maxWidth - columnWidth,
       0,
       targetExpenses,
@@ -174,26 +203,30 @@ class SankeyPainter extends CustomPainter {
     lastHeight = max(Block.minBlockHeight, lastHeight);
 
     String text = 'Net ';
+
     late Rect rect;
+    late double netRectLeft;
+    late double netRectTop;
+
     if (netAmount < 0) {
       // Net Lost
       text += 'Lost\n';
-      rect = ui.Rect.fromLTWH(
-        horizontalCenter - (columnWidth + gap),
-        targetRevenues.rect.bottom + (gap),
-        columnWidth,
-        lastHeight,
-      );
+      netRectLeft = horizontalCenter - (columnWidth + gap);
+      netRectTop = targetRevenues.rect.bottom + (gap);
     } else {
       // Net Profit
       text += 'Profit\n';
-      rect = ui.Rect.fromLTWH(
-        horizontalCenter + (columnWidth * 0.1),
-        targetExpenses.rect.bottom + (gap),
-        columnWidth,
-        lastHeight,
-      );
+      netRectLeft = horizontalCenter + gap;
+      netRectTop = targetExpenses.rect.bottom + (gap);
     }
+
+    rect = ui.Rect.fromLTWH(
+      netRectLeft,
+      netRectTop,
+      columnWidth,
+      lastHeight,
+    );
+
     text += getAmountAsShorthandText(netAmount);
 
     final Block targetNet = Block(

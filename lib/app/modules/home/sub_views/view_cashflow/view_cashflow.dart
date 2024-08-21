@@ -6,15 +6,14 @@ import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/my_segment.dart';
 import 'package:money/app/core/widgets/pick_number.dart';
-import 'package:money/app/core/widgets/sankey/sankey.dart';
 import 'package:money/app/core/widgets/years_range_selector.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/net_worth_chart.dart';
-import 'package:money/app/modules/home/sub_views/view_cashflow/panel_sankey.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
+import 'package:money/app/modules/home/sub_views/view_cashflow/sankey_panel.dart';
 import 'package:money/app/modules/home/sub_views/view_header.dart';
 
 class ViewCashFlow extends ViewWidget {
@@ -41,8 +40,6 @@ class ViewCashFlowState extends ViewWidgetState {
   Map<Category, double> mapOfExpenses = <Category, double>{};
   Map<Category, double> mapOfIncomes = <Category, double>{};
   double padding = 10.0;
-  List<SanKeyEntry> sanKeyListOfExpenses = <SanKeyEntry>[];
-  List<SanKeyEntry> sanKeyListOfIncomes = <SanKeyEntry>[];
   late int selectedYearEnd;
   late int selectedYearStart;
   double totalExpenses = 0.00;
@@ -204,7 +201,7 @@ class ViewCashFlowState extends ViewWidgetState {
 
     switch (PreferenceController.to.cashflowViewAs.value) {
       case CashflowViewAs.sankey:
-        return PanelSanKey(
+        return SankeyPanel(
           minYear: this.selectedYearStart,
           maxYear: this.selectedYearEnd,
         );

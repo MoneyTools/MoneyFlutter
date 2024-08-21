@@ -1,11 +1,7 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:money/app/core/widgets/sankey/sankey_entry.dart';
 import 'package:money/app/data/models/constants.dart';
-
-class SanKeyEntry {
-  String name = '';
-  double value = 0.00;
-}
 
 class ChannelPoint {
   ChannelPoint(this.x, this.top, this.bottom) {
