@@ -118,7 +118,6 @@ void _showAndConfirmTransactionToImport(
     valuesQuality.add(
       ValuesQuality(
         date: ValueQuality(dateToString(item.date), dateFormat: 'yyyy-MM-dd'),
-        // final int payeeIdMatchingPayeeText = Data().aliases.getPayeeIdFromTextMatchingOrAdd(payeeText, fireNotification: false);
         description: ValueQuality(item.getDescription()),
         amount: ValueQuality(item.amount.toString()),
       ),

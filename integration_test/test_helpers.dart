@@ -161,3 +161,20 @@ Future<void> tapAllToggleButtons(final WidgetTester tester, final List<String> k
     await tapOnKeyString(tester, key);
   }
 }
+
+Future<void> inputTextToTextFieldWithThisLabel(
+  WidgetTester tester,
+  final String labelToFind,
+  final String textToInput,
+) async {
+  Finder textFieldFinder = findTextFieldByLabel(labelToFind).first;
+  expect(textFieldFinder, findsOneWidget, reason: 'searching for label $labelToFind');
+  await inputTextToElement(tester, textFieldFinder, textToInput);
+}
+
+Finder findTextFieldByLabel(final String labelToFind) {
+  final textFieldFinder = find.byWidgetPredicate(
+    (widget) => widget is TextField && widget.decoration?.labelText == labelToFind,
+  );
+  return textFieldFinder;
+}

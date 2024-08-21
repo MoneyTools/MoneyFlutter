@@ -575,7 +575,6 @@
 ## Added
 
 - Letter Picker
-- Payee helper getPayeeIdFromTextMatchingOrAdd()
 
 ## Updated
 
