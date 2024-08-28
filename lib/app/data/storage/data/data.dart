@@ -1,4 +1,5 @@
 // Imports
+// The following lines import necessary libraries and packages for the file.
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -34,9 +35,12 @@ import 'package:money/app/data/storage/data/data_simulator.dart';
 import 'package:money/app/data/storage/database/database.dart';
 
 // Exports
+// The following lines export necessary classes and functions for other files.
 export 'package:money/app/core/helpers/json_helper.dart';
 export 'package:money/app/data/models/money_objects/money_objects.dart';
 
+// Part files
+// The following lines import part files that are used in this file.
 part 'data_extension_csv.dart';
 part 'data_extension_demo.dart';
 part 'data_extension_sql.dart';

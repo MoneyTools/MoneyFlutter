@@ -4,6 +4,9 @@ From the MoneyTools vTeam, we bring you the flutter edition of the MyMoney.net a
 
 ## Getting Started
 
+### GitHub
+
+- <https://github.com/MoneyTools/MoneyFlutter>
 This is the Flutter app, you will need to install the Flutter/Dart frameWork and an IDE, we suggest VSCode.
 
 ## Install tools

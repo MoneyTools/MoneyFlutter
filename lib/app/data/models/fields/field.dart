@@ -66,6 +66,23 @@ enum FooterType {
   range,
 }
 
+/// A generic class representing a field in a data model.
+///
+/// This class is designed to be flexible and can handle various types of fields
+/// commonly found in financial and data management applications. It provides
+/// properties and methods for managing field values, display, serialization,
+/// and UI representation.
+///
+/// Type parameter:
+/// - T: The type of the field's value.
+///
+/// Key features:
+/// - Supports various field types through the [FieldType] enum.
+/// - Customizable display and serialization methods.
+/// - Configurable UI properties like alignment and column width.
+/// - Support for footer calculations in list views.
+/// - Flexible value getting and setting mechanisms.
+
 class Field<T> {
   Field({
     // Value related

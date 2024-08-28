@@ -103,7 +103,7 @@ class Transaction extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) =>
         Data().accounts.getNameFromId((instance as Transaction).fieldAccountId.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAccountId.value,
-    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldAccountId.value = newValue,
+    // setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldAccountId.value = newValue,
   );
 
   /// Amount

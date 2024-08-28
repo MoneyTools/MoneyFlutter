@@ -13,10 +13,14 @@ import 'package:money/app/modules/welcome/welcome_routes.dart';
 
 import 'app/core/bindings/application_bindings.dart';
 
+/// The main entry point for the MoneyFlutter application.
+/// Sets up the app structure, theming, and initial routes.
 void main() {
   runApp(MyApp());
 }
 
+/// Root widget of the application.
+/// Configures the overall app theme and initial route.
 class MyApp extends StatelessWidget {
   MyApp({super.key});
 

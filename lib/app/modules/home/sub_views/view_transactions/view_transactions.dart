@@ -9,6 +9,22 @@ import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_object
 import 'package:money/app/modules/home/sub_views/money_object_card.dart';
 import 'package:money/app/modules/home/sub_views/view_transfers/transfer_sender_receiver.dart';
 
+/// ViewTransactions is a widget that displays a list of financial transactions.
+///
+/// This widget extends [ViewForMoneyObjects] and is responsible for rendering
+/// a view of transactions with various features such as filtering, sorting,
+/// and displaying transaction details.
+///
+/// Key features:
+/// - Displays a list of transactions with customizable views
+/// - Supports multi-selection of transactions
+/// - Provides pivot options for filtering transactions (Incomes, Expenses, All)
+/// - Calculates and displays running balances for transactions
+/// - Allows navigation to related views (e.g., Accounts, Categories)
+///
+/// The [startingBalance] parameter can be used to set an initial balance
+/// for the transaction list.
+
 class ViewTransactions extends ViewForMoneyObjects {
   const ViewTransactions({
     super.key,

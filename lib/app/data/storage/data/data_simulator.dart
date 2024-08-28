@@ -21,6 +21,7 @@ import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
+/// Generates sample data for the MoneyFlutter app.
 class DataSimulator {
   int idStockApple = 0;
   int idStockFord = 1;
@@ -59,6 +60,7 @@ class DataSimulator {
 
   late DateTime _dateOfFirstBigJob;
 
+  /// Generates sample data for the MoneyFlutter app.
   void generateData() {
     Data().clearExistingData();
     _generateCurrencies();
@@ -95,6 +97,7 @@ class DataSimulator {
     return dates;
   }
 
+  /// Generates credit card transactions for the past 20 years.
   void generateTransactionsForCreditCard() {
     final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
 
@@ -145,6 +148,7 @@ class DataSimulator {
     }
   }
 
+  /// Generates monthly expenses for a given account, payee, category, and amount.
   void generateTransactionsMonthlyExpenses({
     required Account account,
     required String payeeName,
@@ -169,17 +173,20 @@ class DataSimulator {
     }
   }
 
+  /// Generates a random amount between a minimum and maximum value.
   double getAmount(final int minValue, final int maxValue) {
     final double amount = minValue + Random().nextDouble() * (maxValue - minValue);
     return roundDouble(amount, 2);
   }
 
+  /// Returns the last day of the previous month for a given date.
   DateTime getLastDayOfPreviousMonth(DateTime date) {
     final previousMonth = DateTime(date.year, date.month - 1);
     final daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
     return DateTime(previousMonth.year, previousMonth.month, daysInPreviousMonth).endOfDay;
   }
 
+  /// Adds an investment transaction to the account.
   void _addInvestment(
     final Account account,
     final dateAsString,
@@ -221,6 +228,7 @@ class DataSimulator {
         );
   }
 
+  /// Adds a new account to the data.
   Account _addNewAccount(int id, name, accountId, type, currency) {
     final account = Account.fromJson({
       'Id': id,
@@ -238,6 +246,7 @@ class DataSimulator {
     return account;
   }
 
+  /// Buys a home and adds related transactions.
   void _buyHome(final Payee payeeForHomeLoan, final DateTime date) {
     final accountAssetHome = _addNewAccount(
       -1,
@@ -266,6 +275,7 @@ class DataSimulator {
     );
   }
 
+  /// Generates sample account aliases.
   void _generateAccountAliases() {
     Data().accountAliases.appendNewMoneyObject(
           AccountAlias.fromJson({
@@ -285,6 +295,7 @@ class DataSimulator {
         );
   }
 
+  /// Generates sample accounts.
   void _generateAccounts() {
     _accountBankUSA = _addNewAccount(
       -1,
@@ -359,6 +370,7 @@ class DataSimulator {
         Data().categories.getOrCreate('Loans:Principal:Startup', CategoryType.investment).uniqueId;
   }
 
+  /// Generates sample aliases.
   void _generateAliases() {
     Data().aliases.appendNewMoneyObject(
           Alias(
@@ -389,6 +401,7 @@ class DataSimulator {
         );
   }
 
+  /// Generates sample categories.
   void _generateCategories() {
     // Bills
     {
@@ -570,6 +583,7 @@ class DataSimulator {
     }
   }
 
+  /// Generates sample currencies.
   void _generateCurrencies() {
     final List<MyJson> demoCurrencies = <MyJson>[
       {
@@ -618,6 +632,7 @@ class DataSimulator {
     }
   }
 
+  /// Generates sample investments.
   void _generateInvestments() {
     _generateStocks();
 
@@ -631,6 +646,7 @@ class DataSimulator {
     _addInvestment(_accountForInvestments, '2013-01-15', idStockFord, InvestmentType.sell, 1000, 14.14);
   }
 
+  /// Generates sample loan payments.
   void _generateLoans() {
     double loanAmount = 20000; // 20K
     double loanRate = 4 / 100; // 4%
@@ -690,6 +706,7 @@ class DataSimulator {
     }
   }
 
+  /// Generates sample online accounts.
   void _generateOnlineAccounts() {
     // Pretend to load
     Data().onlineAccounts.loadFromJson([
@@ -712,6 +729,7 @@ class DataSimulator {
         );
   }
 
+  /// Generates sample rental data.
   void _generateRentals() {
     Data().rentBuildings.loadFromJson([
       {
@@ -745,6 +763,7 @@ class DataSimulator {
     ]);
   }
 
+  /// Generates sample stock data.
   void _generateStocks() {
     Data().securities.appendMoneyObject(
           Security(
