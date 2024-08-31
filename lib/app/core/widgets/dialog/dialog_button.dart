@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/switch_views.dart';
 
 class DialogActionButton extends StatelessWidget {
   const DialogActionButton({
@@ -10,9 +11,10 @@ class DialogActionButton extends StatelessWidget {
     required this.onPressed,
     this.icon,
   });
+
   final IconData? icon;
-  final String text;
   final VoidCallback onPressed;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ Widget dialogActionButtons(final List<Widget> actionsButtons) {
 
 Widget buildMergeButton(final Function callback) {
   return IconButton(
+    key: Constants.keyMergeButton,
     onPressed: () {
       callback();
     },
@@ -53,8 +56,12 @@ Widget buildMergeButton(final Function callback) {
   );
 }
 
-Widget buildAddItemButton(final Function callback, final String tooltip) {
+Widget buildAddItemButton(
+  final Function callback,
+  final String tooltip,
+) {
   return IconButton(
+    key: Constants.keyAddNewItem,
     onPressed: () {
       callback();
     },
@@ -75,6 +82,7 @@ Widget buildAddTransactionsButton(final Function callback) {
 
 Widget buildEditButton(final Function callback) {
   return IconButton(
+    key: Constants.keyEditSelectedItems,
     onPressed: () {
       callback.call();
     },
@@ -85,6 +93,7 @@ Widget buildEditButton(final Function callback) {
 
 Widget buildDeleteButton(final Function callback) {
   return IconButton(
+    key: Constants.keyDeleteSelectedItems,
     onPressed: () {
       callback.call();
     },
@@ -93,21 +102,15 @@ Widget buildDeleteButton(final Function callback) {
   );
 }
 
-Widget buildCopyButton(final Function callback) {
+Widget buildCopyButton(final Function callback, [final key = Constants.keyCopyListToClipboardHeaderMain]) {
   return IconButton(
+    key: key,
     onPressed: () {
       callback.call();
     },
     icon: const Icon(Icons.copy_all),
     tooltip: 'Copy list to clipboard',
   );
-}
-
-class InternalViewSwitching {
-  InternalViewSwitching(this.icon, this.title, this.callback);
-  final IconData? icon;
-  final String title;
-  final Function callback;
 }
 
 Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
@@ -132,18 +135,20 @@ Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
     tooltip: 'Switch view',
     list: list,
     onSelected: (final index) {
-      listOfViewToJumpTo[index].callback();
+      listOfViewToJumpTo[index].onPressed();
     },
   );
 }
 
 PopupMenuButton<int> myPopupMenuIconButton({
+  final Key? key,
   required final IconData icon,
   required final String tooltip,
   required final List<PopupMenuItem<int>> list,
   required final Function(int) onSelected,
 }) {
   return PopupMenuButton<int>(
+    key: key,
     icon: Icon(icon),
     tooltip: tooltip,
     position: PopupMenuPosition.under,

@@ -1,13 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/helpers/value_parser.dart';
 import 'package:money/app/core/widgets/columns/input_values.dart';
-import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class InputByColumns extends StatefulWidget {
@@ -19,10 +15,11 @@ class InputByColumns extends StatefulWidget {
     required this.onChange,
     required this.reverseAmountValue,
   });
+
+  final String currency;
+  final String dateFormat;
   final String inputText;
   final Function(String) onChange;
-  final String dateFormat;
-  final String currency;
   final bool reverseAmountValue;
 
   @override
@@ -30,17 +27,7 @@ class InputByColumns extends StatefulWidget {
 }
 
 class _InputByColumnsState extends State<InputByColumns> {
-  bool _singleColumn = true;
-  final _focusNode = FocusNode();
-  final _focusNode1 = FocusNode();
-  final _focusNode2 = FocusNode();
-  final _focusNode3 = FocusNode();
-
   final Debouncer _debouncer = Debouncer();
-  bool _pauseTextSync = false;
-
-  // Freestyle
-  final _controllerSingleColumn = TextEditingController();
 
   // Date
   final _controllerColumn1 = TextEditingController();
@@ -51,76 +38,125 @@ class _InputByColumnsState extends State<InputByColumns> {
   // Amount
   final _controllerColumn3 = TextEditingController();
 
-  @override
-  void initState() {
-    updateAllTextControllerContentFromRawText(widget.inputText);
+  // Freestyle
+  final _controllerSingleColumn = TextEditingController();
 
-    startListening();
-
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    // fromTextInputTextControl(widget.inputText);
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // ( 1 column | 3 columns )
-        _buildColumnSelection(),
-
-        gapLarge(),
-
-        // Input text controls
-        Expanded(
-          child: _buildInputAsSingleOr3Columns(),
-        ),
-      ],
-    );
-  }
-
-  void startListening() {
-    _controllerColumn1.addListener(_syncText);
-    _controllerColumn2.addListener(_syncText);
-    _controllerColumn3.addListener(_syncText);
-  }
-
-  void stopListening() {
-    _controllerColumn1.removeListener(_syncText);
-    _controllerColumn2.removeListener(_syncText);
-    _controllerColumn3.removeListener(_syncText);
-  }
+  bool _freeStyleInput = false; // use 3 columns by default
+  bool _pauseTextSync = false;
 
   @override
   void dispose() {
     _controllerSingleColumn.dispose();
-    stopListening();
+    _stopListening();
     _controllerColumn1.dispose();
     _controllerColumn2.dispose();
     _controllerColumn3.dispose();
     super.dispose();
   }
 
-  void updateAllTextControllerContentFromRawText(final String inputText) {
-    _controllerSingleColumn.text = inputText;
+  @override
+  void initState() {
+    _updateAllTextControllerContentFromRawText(widget.inputText);
 
-    ValuesParser parser = ValuesParser(
-      dateFormat: widget.dateFormat,
-      currency: widget.currency,
-      reverseAmountValue: widget.reverseAmountValue,
-    );
-    parser.convertInputTextToTransactionList(
-      context,
-      widget.inputText,
-    );
+    _startListening();
 
-    _controllerColumn1.text = parser.getListOfDatesString().join('\n');
-    _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
-    _controllerColumn3.text = parser.getListOfAmountString().join('\n');
+    super.initState();
   }
 
-  void fromOneToThreeColumn() {
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      initialIndex: _freeStyleInput ? 1 : 0,
+      child: Column(
+        children: [
+          TabBar(
+            tabs: const [
+              Tab(
+                key: Key('key_import_tab_three_columns'),
+                child: Text('3 columns'),
+              ),
+              Tab(
+                key: Key('key_import_tab_free_style'),
+                child: Text('Free style'),
+              ),
+            ],
+            onTap: (index) {
+              _freeStyleInput = index == 1;
+              if (_freeStyleInput) {
+                _fromThreeToOneColumn();
+              } else {
+                _fromOneToThreeColumn();
+              }
+              _notifyChanged();
+            },
+          ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: SizeForPadding.normal),
+              child: TabBarView(
+                children: [
+                  // Content for 3 columns
+                  _buildInputFor3Columns(),
+                  // Content for 1 column
+                  _buildInputFor1Column(),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 1 column
+  Widget _buildInputFor1Column() {
+    return Center(
+      child: InputValues(
+        key: const Key('key_input_value'),
+        title: 'Date; Description; Amount',
+        controller: _controllerSingleColumn,
+        allowedCharacters: '0123456789/_.\\',
+      ),
+    );
+  }
+
+  // 3 columns
+  Widget _buildInputFor3Columns() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Expanded(
+          flex: 1,
+          child: InputValues(
+            title: 'Date',
+            controller: _controllerColumn1,
+            allowedCharacters: '0123456789/_.\\',
+          ),
+        ),
+        Expanded(
+          flex: 2,
+          child: InputValues(
+            title: 'Description',
+            controller: _controllerColumn2,
+            allowedCharacters: '',
+          ),
+        ),
+        Expanded(
+          flex: 1,
+          child: InputValues(
+            title: 'Amount',
+            controller: _controllerColumn3,
+            allowedCharacters:
+                '0123456789,.()-+', // amounts like 12.34 12,34 1,234.56 1.234,56 +1.234,56 -1,234.56 (1,234.56)
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _fromOneToThreeColumn() {
     ValuesParser parser = ValuesParser(
       dateFormat: widget.dateFormat,
       currency: widget.currency,
@@ -138,7 +174,12 @@ class _InputByColumnsState extends State<InputByColumns> {
     _pauseTextSync = false;
   }
 
-  String getSingleBufferWithLatest3ColumnsText() {
+  String _fromThreeToOneColumn() {
+    _controllerSingleColumn.text = _getSingleBufferWithLatest3ColumnsText();
+    return _controllerSingleColumn.text;
+  }
+
+  String _getSingleBufferWithLatest3ColumnsText() {
     return ValuesParser.assembleIntoSingleTextBuffer(
       _controllerColumn1.text,
       _controllerColumn2.text,
@@ -146,23 +187,20 @@ class _InputByColumnsState extends State<InputByColumns> {
     );
   }
 
-  String fromThreeToOneColumn() {
-    _controllerSingleColumn.text = getSingleBufferWithLatest3ColumnsText();
-    return _controllerSingleColumn.text;
+  void _notifyChanged() {
+    widget.onChange(_controllerSingleColumn.text);
   }
 
-  int getMaxLineOfAllColumns() {
-    int maxLines = 0;
-    if (_focusNode1.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn1.text));
-    }
-    if (_focusNode2.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn2.text));
-    }
-    if (_focusNode3.hasFocus) {
-      maxLines = max(maxLines, getLineCount(_controllerColumn3.text));
-    }
-    return maxLines;
+  void _startListening() {
+    _controllerColumn1.addListener(_syncText);
+    _controllerColumn2.addListener(_syncText);
+    _controllerColumn3.addListener(_syncText);
+  }
+
+  void _stopListening() {
+    _controllerColumn1.removeListener(_syncText);
+    _controllerColumn2.removeListener(_syncText);
+    _controllerColumn3.removeListener(_syncText);
   }
 
   void _syncText() {
@@ -173,108 +211,28 @@ class _InputByColumnsState extends State<InputByColumns> {
       // suspend sync in to avoid re-entrance
       _pauseTextSync = true;
 
-      // Get the number of lines of text in the first column
-      int linesCount = getMaxLineOfAllColumns();
-
-      // Update the text in the other columns to match the number of lines
-      if (getLineCount(_controllerColumn1.text) != linesCount) {
-        _controllerColumn1.text = adjustLineCount(_controllerColumn1.text, linesCount);
-      }
-      if (getLineCount(_controllerColumn2.text) != linesCount) {
-        _controllerColumn2.text = adjustLineCount(_controllerColumn2.text, linesCount);
-      }
-      if (getLineCount(_controllerColumn3.text) != linesCount) {
-        _controllerColumn3.text = adjustLineCount(_controllerColumn3.text, linesCount);
-      }
-      fromThreeToOneColumn();
+      _fromThreeToOneColumn();
       _pauseTextSync = false;
-      notifyChanged();
+      _notifyChanged();
     });
   }
 
-  String adjustLineCount(final String multiLineText, final lineCountNeeded) {
-    var lines = multiLineText.split('\n');
+  void _updateAllTextControllerContentFromRawText(final String inputText) {
+    _controllerSingleColumn.text = inputText;
 
-    if (lines.length > lineCountNeeded) {
-      // remove trailing empty lines
-      if (lines.last.trim() == '') {
-        lines.removeLast();
-      }
-    }
-    return padList(lines, lineCountNeeded, '').join('\n');
-  }
-
-  Widget _buildColumnSelection() {
-    return SegmentedButton<int>(
-      style: const ButtonStyle(
-        visualDensity: VisualDensity(horizontal: -4, vertical: -4),
-      ),
-      segments: const <ButtonSegment<int>>[
-        ButtonSegment<int>(
-          value: 0,
-          label: Text('1 column'),
-        ),
-        ButtonSegment<int>(
-          value: 1,
-          label: Text('3 columns'),
-        ),
-      ],
-      selected: {_singleColumn ? 0 : 1},
-      onSelectionChanged: (final Set<int> newSelection) {
-        _singleColumn = newSelection.contains(0);
-        if (_singleColumn) {
-          fromThreeToOneColumn();
-        } else {
-          fromOneToThreeColumn();
-        }
-        notifyChanged();
-        // setState(() {});
-      },
+    ValuesParser parser = ValuesParser(
+      dateFormat: widget.dateFormat,
+      currency: widget.currency,
+      reverseAmountValue: widget.reverseAmountValue,
     );
-  }
-
-  void notifyChanged() {
-    widget.onChange(_controllerSingleColumn.text);
-  }
-
-  Widget _buildInputAsSingleOr3Columns() {
-    if (_singleColumn) {
-      return TextField(
-        controller: _controllerSingleColumn,
-        focusNode: _focusNode,
-        autofocus: true,
-        maxLines: null,
-        // Set maxLines to null for multiline TextField
-        style: const TextStyle(
-          fontSize: SizeForText.small,
-          overflow: TextOverflow.fade,
-        ),
-        decoration: getDecoration(context, 'Date; Description; Amount', getLineCount(_controllerSingleColumn.text)),
-        onChanged: (final String _) {
-          notifyChanged();
-        },
-      );
-    }
-
-    // 3 columns
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          flex: 1,
-          child: InputValues(title: 'Date', controller: _controllerColumn1),
-        ),
-        Expanded(
-          flex: 2,
-          child: InputValues(title: 'Description', controller: _controllerColumn2),
-        ),
-        Expanded(
-          flex: 1,
-          child: InputValues(title: 'Amount', controller: _controllerColumn3),
-        ),
-      ],
+    parser.convertInputTextToTransactionList(
+      context,
+      widget.inputText,
     );
+
+    _controllerColumn1.text = parser.getListOfDatesString().join('\n');
+    _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
+    _controllerColumn3.text = parser.getListOfAmountString().join('\n');
   }
 }
 

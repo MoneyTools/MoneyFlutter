@@ -2,8 +2,6 @@ import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/currency_label.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
 /*
@@ -25,12 +23,12 @@ class Currency extends MoneyObject {
     required final String cultureCode, // 4
     required final double lastRatio, // 5
   }) {
-    this.id.value = id;
-    this.name.value = name;
-    this.symbol.value = symbol;
-    this.ratio.value = ratio;
-    this.cultureCode.value = cultureCode;
-    this.lastRatio.value = lastRatio;
+    this.fieldId.value = id;
+    this.fieldName.value = name;
+    this.fieldSymbol.value = symbol;
+    this.fieldRatio.value = ratio;
+    this.fieldCultureCode.value = cultureCode;
+    this.fieldLastRatio.value = lastRatio;
   }
 
   /// Constructor from a SQLite row
@@ -50,84 +48,134 @@ class Currency extends MoneyObject {
       cultureCode: row.getString('CultureCode'),
     );
   }
-  @override
-  int get uniqueId => id.value;
 
-  @override
-  set uniqueId(value) => id.value = value;
-
-  @override
-  String getRepresentation() {
-    return name.value;
-  }
+  /// 5
+  /// 5    CultureCode  nvarchar(80)  0                 0
+  FieldString fieldCultureCode = FieldString(
+    name: 'Culture Code',
+    serializeName: 'CultureCode',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldCultureCode.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldCultureCode.value,
+  );
 
   // 0
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => instance.uniqueId,
   );
 
-  /// 1
-  /// 1    Symbol       nchar(20)     1                 0
-  FieldString symbol = FieldString(
-    importance: 1,
-    name: 'Symbol',
-    serializeName: 'Symbol',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).symbol.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).symbol.value,
+  // 4
+  FieldDouble fieldLastRatio = FieldDouble(
+    name: 'LastRatio',
+    serializeName: 'LastRatio',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldLastRatio.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldLastRatio.value,
   );
 
   /// 2
   /// 2    name       nchar(20)     1                 0
-  FieldString name = FieldString(
-    importance: 2,
+  FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).name.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).name.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldName.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldName.value,
   );
 
   /// 3
   /// 3    Ratio        money         0                 0
-  FieldDouble ratio = FieldDouble(
-    importance: 3,
+  FieldDouble fieldRatio = FieldDouble(
     name: 'Ratio',
     serializeName: 'Ratio',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).ratio.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).ratio.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
   );
 
-  // 4
-  FieldDouble lastRatio = FieldDouble(
-    importance: 4,
-    name: 'LastRatio',
-    serializeName: 'LastRatio',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).lastRatio.value,
+  /// 1
+  /// 1    Symbol       nchar(20)     1                 0
+  FieldString fieldSymbol = FieldString(
+    name: 'Symbol',
+    serializeName: 'Symbol',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
   );
 
-  /// 5
-  /// 5    CultureCode  nvarchar(80)  0                 0
-  FieldString cultureCode = FieldString(
-    name: 'Culture Code',
-    serializeName: 'CultureCode',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Currency).cultureCode.value,
-  );
+  @override
+  String getRepresentation() {
+    return fieldName.value;
+  }
 
-  static String getCurrencyAsText(final String threeLetterCurrencySymbol) {
+  @override
+  int get uniqueId => fieldId.value;
+
+  @override
+  set uniqueId(value) => fieldId.value = value;
+
+  static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
+    String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
+
+    return CurrencyLabel(
+      threeLetterCurrencySymbol: getCurrencyAsString(threeLetterCurrencySymbol),
+      flagId: getCountryFromLocale(locale).toLowerCase(),
+    );
+  }
+
+  /// Return a formatted string from the given amount using the supplied ISO4217 code
+  static String getAmountAsShortHandStringUsingCurrency(
+    dynamic amount, {
+    String iso4217code = Constants.defaultCurrency,
+  }) {
+    if (amount is String) {
+      return amount; // its already a string
+    }
+
+    return getAmountAsShorthandText(
+      amount,
+      symbol: getCurrencySymbol(iso4217code),
+    );
+  }
+
+  /// Return a formatted string from the given amount using the supplied ISO4217 code
+  static String getAmountAsStringUsingCurrency(
+    dynamic amount, {
+    String iso4217code = Constants.defaultCurrency,
+    int? decimalDigits,
+  }) {
+    if (amount is String) {
+      return amount; // its already a string
+    }
+
+    // determining the locale to be used when formatting the currency amount
+    String localeToUse = iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
+        ? 'en_US'
+        : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
+
+    // Use NumberFormat.simpleCurrency to get the symbol for the locale
+    var tempFormat = NumberFormat.simpleCurrency(locale: localeToUse);
+    String currencySymbol = tempFormat.currencySymbol;
+
+    // Create a NumberFormat instance with a custom pattern using the currency constructor
+    var currencyFormat = NumberFormat.currency(
+      locale: localeToUse,
+      symbol: currencySymbol, // Euro symbol
+      decimalDigits: decimalDigits, // Number of decimal places
+      customPattern: '¤#,##0.00', // Pattern to place the symbol on the left
+    );
+
+    return currencyFormat.format(isConsideredZero(amount) ? 0.00 : amount);
+  }
+
+  static String getCurrencyAsString(final String threeLetterCurrencySymbol) {
     if (threeLetterCurrencySymbol.isEmpty) {
       return Constants.defaultCurrency;
     }
     return threeLetterCurrencySymbol;
   }
 
-  static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
-    String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
-
-    return CurrencyLabel(
-      threeLetterCurrencySymbol: getCurrencyAsText(threeLetterCurrencySymbol),
-      flagId: getCountryFromLocale(locale).toLowerCase(),
-    );
+  // Define a function to get the currency symbol from ISO 4217 code
+  static String getCurrencySymbol(String isoCode) {
+    // Create a NumberFormat instance with the currency name and locale
+    var format = NumberFormat.simpleCurrency(name: isoCode);
+    // Return the currency symbol
+    return format.currencySymbol;
   }
 
   /// Convert from ISO 4217 to a locale
@@ -308,50 +356,5 @@ class Currency extends MoneyObject {
 
     // Default to 'en_US' if the currency code is not found
     return currencyLocales[iso4217code];
-  }
-
-  // Define a function to get the currency symbol from ISO 4217 code
-  static String getCurrencySymbol(String isoCode) {
-    // Create a NumberFormat instance with the currency name and locale
-    var format = NumberFormat.simpleCurrency(name: isoCode);
-    // Return the currency symbol
-    return format.currencySymbol;
-  }
-
-  /// Return a formatted string from the given amount using the supplied ISO4217 code
-  static String getAmountAsStringUsingCurrency(
-    dynamic amount, {
-    String iso4217code = Constants.defaultCurrency,
-    int? decimalDigits,
-  }) {
-    if (amount is String) {
-      return amount; // its already a string
-    }
-    // determining the locale to be used when formatting the currency amount
-    String localeToUse = iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
-        ? 'en_US'
-        : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
-
-    final currencyFormat = NumberFormat.simpleCurrency(
-      locale: localeToUse,
-      name: iso4217code,
-      decimalDigits: decimalDigits,
-    );
-    return currencyFormat.format(isAlmostZero(amount) ? 0.00 : amount);
-  }
-
-  /// Return a formatted string from the given amount using the supplied ISO4217 code
-  static String getAmountAsShortHandStringUsingCurrency(
-    dynamic amount, {
-    String iso4217code = Constants.defaultCurrency,
-  }) {
-    if (amount is String) {
-      return amount; // its already a string
-    }
-
-    return getAmountAsShorthandText(
-      amount,
-      symbol: getCurrencySymbol(iso4217code),
-    );
   }
 }

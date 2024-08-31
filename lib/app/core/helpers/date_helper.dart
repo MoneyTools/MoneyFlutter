@@ -26,25 +26,36 @@ List<String> generateAllDateFormats() {
 }
 
 List<String> getPossibleDateFormats(String dateString) {
-  if (dateString.trim().isEmpty) {
-    return [];
-  }
+  return getPossibleDateFormatsForAllValues([dateString]);
+}
 
-  final List<String> possibleFormats = generateAllDateFormats();
-
+List<String> getPossibleDateFormatsForAllValues(List<String> dateStrings) {
   final List<String> validFormats = [];
 
-  for (String format in possibleFormats) {
-    final DateTime? parsedDate = DateFormat(format).tryParse(dateString);
-    if (parsedDate != null) {
-      final String formattedDate = DateFormat(format).format(parsedDate);
-      if (formattedDate == dateString) {
-        validFormats.add(format);
+  final List<String> possibleFormats = generateAllDateFormats();
+  for (final String format in possibleFormats) {
+    bool supportedByAll = true;
+    for (final dateString in dateStrings) {
+      if (!doesDateFormatWorkOnThisString(format, dateString)) {
+        supportedByAll = false;
+        break;
       }
+    }
+    if (supportedByAll) {
+      validFormats.add(format);
     }
   }
 
   return validFormats;
+}
+
+bool doesDateFormatWorkOnThisString(String format, String dateString) {
+  final DateTime? parsedDate = DateFormat(format).tryParse(dateString);
+  if (parsedDate != null) {
+    final String formattedDate = DateFormat(format).format(parsedDate);
+    return formattedDate == dateString;
+  }
+  return false;
 }
 
 /// Attempts to parse a date string using a list of common date formats.
@@ -76,6 +87,7 @@ List<String> getPossibleDateFormats(String dateString) {
 DateTime? attemptToGetDateFromText(final String text) {
   // Define a list of date formats to try
   List<String> dateFormats = [
+    'yyyy-MM-dd HH:mm:ss', // ISO8601
     'yyyy-MM-dd', // ISO8601
     'MM/dd/yyyy', // USA format 4 digit year
     'MM/dd/yy', // USA format 2 digit year
@@ -134,6 +146,13 @@ String dateToIso8601OrDefaultString(
   return value.toIso8601String();
 }
 
+String dateToSqliteFormat(DateTime? dateTime) {
+  if (dateTime != null) {
+    return DateFormat('yyyy-MM-dd HH:mm:ss').format(dateTime);
+  }
+  return '';
+}
+
 String dateToString(final DateTime? date) {
   if (date == null) {
     return '____-__-__';
@@ -151,7 +170,7 @@ String dateToString(final DateTime? date) {
 /// - `dateTime`: The nullable DateTime object to be converted to a year string.
 ///
 /// Returns:
-/// - If `dateTime` is not null, a string represe
+/// - If `dateTime` is not null, a string representing a date
 String dateToYearString(final DateTime? dateTime) {
   if (dateTime == null) {
     return '____';
@@ -230,8 +249,12 @@ DateTime? parseQfxDataFormat(final String qfxDate) {
   }
 }
 
-String getElapsedTime(DateTime dateTime) {
-  final now = DateTime.now();
+String getElapsedTime(DateTime? dateTime, {DateTime? relativeTo}) {
+  if (dateTime == null) {
+    return '';
+  }
+
+  final now = relativeTo ?? DateTime.now();
   final difference = now.difference(dateTime);
 
   if (difference.inDays >= 365) {
@@ -279,4 +302,17 @@ extension DateTimeExtension on DateTime {
   /// DateTime.now() -> 2019-09-30 17:15:20.294
   /// DateTime.now().endOfDay -> 2019-09-30 23:59:59.999
   DateTime get endOfDay => DateTime(year, month, day, 23, 59, 59, 999, 999);
+}
+
+bool isSameDateWithoutTime(final DateTime? a, final DateTime? b) {
+  if (a == null && b == null) {
+    return true;
+  }
+  if (a == null && b != null) {
+    return false;
+  }
+  if (b == null && a != null) {
+    return false;
+  }
+  return a!.year == b!.year && a.month == b.month && a.day == b.day;
 }

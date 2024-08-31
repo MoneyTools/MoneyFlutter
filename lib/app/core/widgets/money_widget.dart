@@ -13,9 +13,10 @@ class MoneyWidget extends StatelessWidget {
     this.asTile = false,
   });
 
+  final bool asTile;
+
   /// Amount to display
   final MoneyModel amountModel;
-  final bool asTile;
 
   @override
   Widget build(final BuildContext context) {
@@ -33,35 +34,46 @@ class MoneyWidget extends StatelessWidget {
   }
 
   Widget _amountAsText(final BuildContext context) {
-    return SelectableText(
+    final double value = amountModel.toDouble();
+
+    final style = TextStyle(
+      fontFamily: 'RobotoMono',
+      color: getTextColorToUse(value, amountModel.autoColor),
+      fontSize: asTile ? getTextTheme(context).titleMedium!.fontSize : null,
+      fontWeight: FontWeight.w900,
+    );
+
+    final valueAsString = Currency.getAmountAsStringUsingCurrency(
+      isConsideredZero((value)) ? 0.00 : value,
+      iso4217code: amountModel.iso4217,
+    );
+
+    final leftSideOfDecimalPoint = value.truncate();
+    final leftSideOfDecimalPointAsString = Currency.getAmountAsStringUsingCurrency(
+      leftSideOfDecimalPoint,
+      iso4217code: amountModel.iso4217,
+      decimalDigits: 0,
+    );
+
+    final rightOfDecimalPoint = valueAsString.substring(leftSideOfDecimalPointAsString.length);
+
+    return SelectableText.rich(
       maxLines: 1,
-      Currency.getAmountAsStringUsingCurrency(
-        isAlmostZero((amountModel.toDouble())) ? 0.00 : amountModel.toDouble(),
-        iso4217code: amountModel.iso4217,
-      ),
       textAlign: TextAlign.right,
-      style: TextStyle(
-        fontFamily: 'RobotoMono',
-        color: getTextColorToUse(amountModel.toDouble(), amountModel.autoColor),
-        fontSize: asTile ? getTextTheme(context).titleMedium!.fontSize : null,
+      TextSpan(
+        style: style,
+        children: [
+          TextSpan(
+            text: leftSideOfDecimalPointAsString,
+          ),
+          TextSpan(
+            text: rightOfDecimalPoint,
+            style: const TextStyle(
+              fontSize: 11,
+            ),
+          ),
+        ],
       ),
     );
   }
-}
-
-Color? getTextColorToUse(
-  final double amount,
-  final bool autoColor,
-) {
-  if (autoColor) {
-    if (isAlmostZero(amount)) {
-      return getColorFromState(ColorState.disabled);
-    }
-    if (amount < 0) {
-      return getColorFromState(ColorState.error);
-    } else {
-      return getColorFromState(ColorState.success);
-    }
-  }
-  return null;
 }

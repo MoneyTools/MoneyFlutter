@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/data/models/money_model.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 void main() {
   test('test_should_round_positive_decimal_value', () {
@@ -43,5 +43,13 @@ void main() {
     test('returns null for invalid formats', () {
       expect(parseAmount('hello', 'USD'), isNull);
     });
+  });
+
+  test('TransactionExtra', () {
+    Data().transactionExtras.loadFromJson([
+      {'Id': 0, 'Transaction': 0},
+      {'Id': 1, 'Transaction': 1},
+    ]);
+    expect(Data().transactionExtras.isEmpty, false);
   });
 }

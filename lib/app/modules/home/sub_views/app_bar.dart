@@ -1,16 +1,14 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/color_palette.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
-import 'package:money/app/core/widgets/three_part_label.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/core/widgets/zoom.dart';
-import 'package:money/app/data/models/constants.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/modules/home/sub_views/app_title.dart';
@@ -44,10 +42,11 @@ class _MyAppBarState extends State<MyAppBar> {
       // Button on the right side
       actions: <Widget>[
         // Hide/Show closed accounts
-        if (!isSmallDevice(context)) _buildButtonToggleViewClosedAccounts(),
+        if (!context.isWidthSmall) _buildButtonToggleViewClosedAccounts(),
 
         // Dark / Light mode
         IconButton(
+          key: const Key('key_toggle_mode'),
           icon: themeController.isDarkTheme.value ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
           onPressed: () {
             ThemeController.to.toggleThemeMode();
@@ -57,6 +56,55 @@ class _MyAppBarState extends State<MyAppBar> {
         _buildSettingsMenu(),
       ],
     );
+  }
+
+  void addColorPalette(List<PopupMenuItem<int>> actionList) {
+    actionList.add(
+      const PopupMenuItem<int>(
+        value: -1,
+        child: SizedBox(
+          height: 300,
+          child: SingleChildScrollView(
+            child: ColorPalette(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  void addMenuItem(
+    final list,
+    final int id,
+    final String caption,
+    final IconData iconData,
+  ) {
+    list.add(
+      PopupMenuItem<int>(
+        value: id,
+        child: ThreePartLabel(
+          icon: Icon(iconData),
+          text1: caption,
+          small: true,
+        ),
+      ),
+    );
+  }
+
+  void onAppBarAction(
+    final int value,
+  ) {
+    switch (value) {
+      case Constants.commandAddTransactions:
+        showImportTransactionsFromTextInput(context);
+      case Constants.commandSettings:
+        Get.toNamed(Constants.routeSettingsPage);
+      case Constants.commandIncludeClosedAccount:
+        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
+      default:
+        final ThemeController themeController = Get.find();
+        themeController.setThemeColor(value);
+    }
+    DataController.to.update();
   }
 
   Widget _buildButtonToggleViewClosedAccounts() {
@@ -100,6 +148,13 @@ class _MyAppBarState extends State<MyAppBar> {
       Icons.post_add_outlined,
     );
 
+    addMenuItem(
+      list,
+      Constants.commandRebalance,
+      'Rebalance...',
+      Icons.refresh_outlined,
+    );
+
     if (!kIsWeb) {
       // File Location
       addMenuItem(
@@ -130,6 +185,7 @@ class _MyAppBarState extends State<MyAppBar> {
     addMenuItem(list, Constants.commandFileClose, 'Close file', Icons.close);
 
     return myPopupMenuIconButton(
+      key: const Key('key_menu_button'),
       icon: Icons.menu,
       tooltip: 'File menu',
       list: list,
@@ -150,6 +206,9 @@ class _MyAppBarState extends State<MyAppBar> {
           case Constants.commandAddTransactions:
             showImportTransactionsWizard(context);
 
+          case Constants.commandRebalance:
+            Data().recalculateBalances();
+
           case Constants.commandFileSaveCsv:
             DataController.to.onSaveToCsv();
 
@@ -164,24 +223,6 @@ class _MyAppBarState extends State<MyAppBar> {
             debugPrint('unhandled $index');
         }
       },
-    );
-  }
-
-  void addMenuItem(
-    final list,
-    final int id,
-    final String caption,
-    final IconData iconData,
-  ) {
-    list.add(
-      PopupMenuItem<int>(
-        value: id,
-        child: ThreePartLabel(
-          icon: Icon(iconData),
-          text1: caption,
-          small: true,
-        ),
-      ),
     );
   }
 
@@ -203,6 +244,7 @@ class _MyAppBarState extends State<MyAppBar> {
       const PopupMenuItem<int>(
         value: Constants.commandSettings,
         child: ThreePartLabel(
+          key: Key('key_settings'),
           text1: 'Settings...',
           icon: Icon(Icons.settings, color: Colors.grey),
           small: true,
@@ -210,8 +252,10 @@ class _MyAppBarState extends State<MyAppBar> {
       ),
     );
 
-    final colorPallette = List<PopupMenuItem<int>>.generate(colorOptions.length, (final int index) {
+    final colorPallette = List<PopupMenuItem<int>>.generate(themeAsColors.length, (final int index) {
       final bool isSelected = index == themeController.colorSelected.value;
+      final themeColorName = themeColorNames[index];
+
       return PopupMenuItem<int>(
         value: index,
         child: Container(
@@ -221,11 +265,12 @@ class _MyAppBarState extends State<MyAppBar> {
             borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
           child: ThreePartLabel(
+            key: Key('key_theme_$themeColorName'),
             icon: Icon(
               index == themeController.colorSelected.value ? Icons.color_lens : Icons.color_lens_outlined,
-              color: colorOptions[index],
+              color: themeAsColors[index],
             ),
-            text1: colorText[index],
+            text1: themeColorName,
             small: true,
           ),
         ),
@@ -254,6 +299,7 @@ class _MyAppBarState extends State<MyAppBar> {
     }
 
     return myPopupMenuIconButton(
+      key: Constants.keySettingsButton,
       icon: Icons.settings_outlined,
       tooltip: 'Settings',
       list: actionList,
@@ -261,36 +307,5 @@ class _MyAppBarState extends State<MyAppBar> {
         onAppBarAction(value);
       },
     );
-  }
-
-  void addColorPalette(List<PopupMenuItem<int>> actionList) {
-    actionList.add(
-      const PopupMenuItem<int>(
-        value: -1,
-        child: SizedBox(
-          height: 300,
-          child: SingleChildScrollView(
-            child: ColorPalette(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void onAppBarAction(
-    final int value,
-  ) {
-    switch (value) {
-      case Constants.commandAddTransactions:
-        showImportTransactionsFromTextInput(context);
-      case Constants.commandSettings:
-        Get.toNamed(Constants.routeSettingsPage);
-      case Constants.commandIncludeClosedAccount:
-        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
-      default:
-        final ThemeController themeController = Get.find();
-        themeController.setThemeColor(value);
-    }
-    DataController.to.update();
   }
 }

@@ -18,7 +18,7 @@ void showMergePayee(
   Payee payee,
 ) {
   final transactions =
-      Data().transactions.iterableList(includeDeleted: true).where((t) => t.payee.value == payee.uniqueId);
+      Data().transactions.iterableList(includeDeleted: true).where((t) => t.fieldPayee.value == payee.uniqueId);
 
   adaptiveScreenSizeDialog(
     context: context,
@@ -46,10 +46,10 @@ class MergeTransactionsDialog extends StatefulWidget {
 }
 
 class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
-  Payee? _selectedPayee;
+  AccumulatorSum<int, int> categoryIdsFound = AccumulatorSum<int, int>();
 
   int? _estimatedCategory;
-  AccumulatorSum<int, int> categoryIdsFound = AccumulatorSum<int, int>();
+  Payee? _selectedPayee;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +63,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
             children: [
               const SizedBox(width: 100, child: Text('From payee')),
               Expanded(
-                child: Box(child: Text(widget.currentPayee.name.value)),
+                child: Box(child: Text(widget.currentPayee.fieldName.value)),
               ),
             ],
           ),
@@ -88,7 +88,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
             ],
           ),
           gapLarge(),
-          _buildCatetgoryChoices(),
+          _buildCategoryChoices(),
           const Spacer(),
           dialogActionButtons(
             [
@@ -119,23 +119,23 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
     if (_selectedPayee != null) {
       categoryIdsFound.clear();
       for (final t in Data().transactions.iterableList(includeDeleted: true)) {
-        if (t.payee.value == _selectedPayee!.uniqueId) {
-          categoryIdsFound.cumulate(t.categoryId.value, 1);
+        if (t.fieldPayee.value == _selectedPayee!.uniqueId) {
+          categoryIdsFound.cumulate(t.fieldCategoryId.value, 1);
         }
       }
     }
   }
 
-  Widget _buildCatetgoryChoices() {
+  Widget _buildCategoryChoices() {
     if (categoryIdsFound.values.isEmpty) {
       return const SizedBox();
     }
 
     List<Widget> radioButtonChoices = [];
-    final sortedDecendingListOfCategories = categoryIdsFound.getEntries();
-    sortedDecendingListOfCategories.sort((a, b) => sortByValue(a.value, b.value, false));
+    final sortedDescendingListOfCategories = categoryIdsFound.getEntries();
+    sortedDescendingListOfCategories.sort((a, b) => sortByValue(a.value, b.value, false));
 
-    for (final entry in sortedDecendingListOfCategories) {
+    for (final entry in sortedDescendingListOfCategories) {
       final categoryId = entry.key;
       final categoryCounts = entry.value;
 
@@ -223,20 +223,20 @@ void mutateTransactionsToPayee(
 
   for (final t in transactions) {
     // keep track of the payeeIds that we remove transactions from
-    fromPayeeIds.add(t.payee.value);
+    fromPayeeIds.add(t.fieldPayee.value);
 
     t.stashValueBeforeEditing();
     t.stashOriginalPayee();
 
-    t.payee.value = toPayeeId;
+    t.fieldPayee.value = toPayeeId;
     if (categoryId != null) {
-      t.categoryId.value = categoryId;
+      t.fieldCategoryId.value = categoryId;
     }
 
     Data().notifyMutationChanged(
       mutation: MutationType.changed,
       moneyObject: t,
-      fireNotification: false,
+      recalculateBalances: false,
     );
   }
   Payees.removePayeesThatHaveNoTransactions(fromPayeeIds.toList());

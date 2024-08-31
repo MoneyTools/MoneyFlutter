@@ -9,6 +9,7 @@ class ColumnFilterPanel extends StatefulWidget {
     super.key,
     this.textAlign = TextAlign.left,
   });
+
   final List<ValueSelection> listOfUniqueInstances;
   final TextAlign textAlign;
 
@@ -17,8 +18,8 @@ class ColumnFilterPanel extends StatefulWidget {
 }
 
 class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
-  late List<ValueSelection> list;
   String filterText = '';
+  late List<ValueSelection> list;
 
   @override
   void initState() {
@@ -27,7 +28,6 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
   @override
   Widget build(BuildContext context) {
-    // Apply filter
     list = widget.listOfUniqueInstances
         .where(
           (element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()),
@@ -39,6 +39,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
       children: [
         // Filter input box
         TextField(
+          key: const Key('key_picker_input_filter'),
           onChanged: (value) {
             setState(() {
               filterText = value;
@@ -54,6 +55,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
         // Clear All / Select  All
         TextButton(
+          key: const Key('key_select_unselect_all'),
           onPressed: () {
             setState(() {
               bool setAs = !areAllItemSelected();
@@ -94,8 +96,9 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
     );
   }
 
-  int getSelectedCount() {
-    return widget.listOfUniqueInstances.where((item) => item.isSelected).length;
+  /// true if all items are selected
+  bool areAllItemSelected() {
+    return list.firstWhereOrNull((element) => element.isSelected == false) == null;
   }
 
   String getItemCounts() {
@@ -106,14 +109,14 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
     }
   }
 
-  /// true if all items are selected
-  bool areAllItemSelected() {
-    return list.firstWhereOrNull((element) => element.isSelected == false) == null;
+  int getSelectedCount() {
+    return widget.listOfUniqueInstances.where((item) => item.isSelected).length;
   }
 }
 
 class ValueSelection {
   ValueSelection({required this.name, required this.isSelected});
-  String name;
+
   bool isSelected;
+  String name;
 }

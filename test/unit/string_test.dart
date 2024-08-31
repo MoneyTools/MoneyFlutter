@@ -27,7 +27,7 @@ void main() {
     int time1 = 0;
     int time2 = 0;
 
-///////////////////////// stringCompareIgnoreCasing1
+    ///////////////////////// stringCompareIgnoreCasing1
 
     final Stopwatch stopwatch = Stopwatch()..start(); // Start the stopwatch
 
@@ -46,9 +46,10 @@ void main() {
 
     stopwatch.stop(); // Stop the stopwatch after the operation
     time1 = stopwatch.elapsedMilliseconds;
-    debugLog('Elapsed time stringCompareIgnoreCasing1: $time1 milliseconds');
+    // ignore: avoid_print
+    print('Elapsed time stringCompareIgnoreCasing1: $time1 milliseconds');
 
-///////////////////////// stringCompareIgnoreCasing2
+    ///////////////////////// stringCompareIgnoreCasing2
     final Stopwatch stopwatch2 = Stopwatch()..start(); // Start the stopwatch
 
     for (int i = 0; i < 200000; i++) {
@@ -63,9 +64,11 @@ void main() {
         -1,
       );
     }
+
     stopwatch2.stop(); // Stop the stopwatch after the operation
     time2 = stopwatch2.elapsedMilliseconds;
-    debugLog('Elapsed time stringCompareIgnoreCasing2: $time2 milliseconds');
+    // ignore: avoid_print
+    print('Elapsed time stringCompareIgnoreCasing2: $time2 milliseconds');
 
     expect(time2 < time1, true);
   });
@@ -135,6 +138,10 @@ void main() {
       expect(attemptToGetDoubleFromText('123'), equals(123));
     });
 
+    test('Extract negative amount from string simple case', () {
+      expect(attemptToGetDoubleFromText('-123'), equals(-123));
+    });
+
     test('Extract amount from string simple case', () {
       expect(attemptToGetDoubleFromText('123.45'), equals(123.45));
     });
@@ -193,8 +200,8 @@ void main() {
   });
 
   test('Extract amount from currency text long decimals', () {
-    expect(formatDoubleTimeZeroFiveNine(0.12345), equals('0.12345'));
-    expect(formatDoubleTimeZeroFiveNine(0.0000000123), equals('0'));
-    expect(formatDoubleTimeZeroFiveNine(0.0000123), equals('0.00001'));
+    expect(formatDoubleUpToFiveZero(0.12345), equals('0.12345'));
+    expect(formatDoubleUpToFiveZero(0.0000000123), equals('0'));
+    expect(formatDoubleUpToFiveZero(0.0000123), equals('0.00001'));
   });
 }

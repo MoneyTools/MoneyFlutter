@@ -9,7 +9,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     if (selectedIds.isEmpty) {
       final List<PairXY> list = <PairXY>[];
       for (final RentBuilding entry in getList()) {
-        list.add(PairXY(entry.name.value, entry.profit.value.toDouble()));
+        list.add(PairXY(entry.fieldName.value, entry.fieldProfit.value.toDouble()));
       }
       return Chart(
         list: list,
@@ -23,10 +23,12 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
       // show PnL for the selected rental property, per year
       List<Widget> pnlCards = [];
 
-      for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
-        var pnl = rental.pnlOverYears[year];
-        pnl ??= RentalPnL(date: DateTime(year, 1, 1));
-        pnlCards.add(RentalPnLCard(pnl: pnl));
+      if (!rental.dateRangeOfOperation.hasNullDates) {
+        for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
+          var pnl = rental.pnlOverYears[year];
+          pnl ??= RentalPnL(date: DateTime(year, 1, 1));
+          pnlCards.add(RentalPnLCard(pnl: pnl));
+        }
       }
 
       pnlCards.add(
@@ -49,7 +51,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
 
   void getPnLOverYears(RentBuilding rental) {
     for (final transaction in Data().transactions.iterableList()) {
-      if (rental.categoryForIncomeTreeIds.contains(transaction.categoryId.value)) {}
+      if (rental.categoryForIncomeTreeIds.contains(transaction.fieldCategoryId.value)) {}
     }
   }
 
@@ -68,7 +70,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     lastSelectedRental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
-
+    final SelectionController selectionController = Get.put(SelectionController());
     return ListViewTransactions(
       columnsToInclude: <Field>[
         Transaction.fields.getFieldByName(columnIdDate),
@@ -79,6 +81,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
         Transaction.fields.getFieldByName(columnIdAmount),
       ],
       getList: () => getTransactionLastSelectedItem(),
+      selectionController: selectionController,
     );
   }
 
@@ -86,11 +89,11 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     final Transaction t,
     final RentBuilding rental,
   ) {
-    final num categoryIdToMatch = t.categoryId.value;
+    final num categoryIdToMatch = t.fieldCategoryId.value;
 
     if (t.isSplit) {
       for (final MoneySplit split in t.splits) {
-        if (isMatchingCategories(split.categoryId.value, rental)) {
+        if (isMatchingCategories(split.fieldCategoryId.value, rental)) {
           return true;
         }
       }

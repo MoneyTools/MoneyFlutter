@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 
 void main() {
-  test('geDateAndTimeAsText returns empty string for null DateTime', () {
+  test('getDateAndTimeAsText returns empty string for null DateTime', () {
     // Arrange
     const DateTime? dateTime = null;
 
@@ -14,7 +14,7 @@ void main() {
     expect(result, isEmpty);
   });
 
-  test('geDateAndTimeAsText formats non-null DateTime correctly', () {
+  test('getDateAndTimeAsText formats non-null DateTime correctly', () {
     // Arrange
     final dateTime = DateTime(2023, 04, 15, 10, 30, 00);
 
@@ -97,6 +97,82 @@ void main() {
       expect(getPossibleDateFormats(''), isEmpty);
       expect(getPossibleDateFormats('hello'), isEmpty);
       expect(getPossibleDateFormats('1111/1111/1111'), isEmpty);
+    });
+
+    test('Relative dates', () {
+      final dateOld = DateTime(1999, 1, 1, 23, 59, 59);
+      final dateRecent = DateTime(2020, 1, 1);
+
+      expect(oldestDate(dateOld, dateRecent), dateOld);
+      expect(newestDate(dateOld, dateRecent), dateRecent);
+
+      expect(isSameDateWithoutTime(dateOld, dateRecent), false);
+      expect(isSameDateWithoutTime(dateOld, dateOld), true);
+
+      expect(dateOld.dropTime.hour, 0);
+    });
+
+    test('Elsapse time', () {
+      {
+        final String result = getElapsedTime(DateTime.now().subtract(const Duration(seconds: 10)));
+        expect(result, 'Just now');
+      }
+
+      DateTime now = DateTime(2000, 1, 1);
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(seconds: 61)));
+        expect(result, '1 minute ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(minutes: 5)));
+        expect(result, '5 minutes ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(minutes: 59)));
+        expect(result, '59 minutes ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(minutes: 60)));
+        expect(result, '1 hour ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(hours: 23, minutes: 59)));
+        expect(result, '23 hours ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 1)));
+        expect(result, '1 day ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 30)));
+        expect(result, '1 month ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 45)));
+        expect(result, '1 month, 15 days ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 365)));
+        expect(result, '1 year ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 395)));
+        expect(result, '1 year, 1 month ago');
+      }
+
+      {
+        final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(days: 400)));
+        expect(result, '1 year, 1 month, 5 days ago');
+      }
     });
   });
 }

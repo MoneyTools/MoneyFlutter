@@ -21,6 +21,7 @@ class WelcomeScreen extends StatelessWidget {
             alignment: WrapAlignment.center,
             runAlignment: WrapAlignment.center,
             spacing: 10,
+            runSpacing: 10,
             children: <Widget>[
               OutlinedButton(
                 onPressed: () {

@@ -14,5 +14,16 @@ void main() {
       // Assert
       expect(result, equals(3.14));
     });
+
+    test('trimToFiveDecimalPlaces', () {
+      // Arrange
+      double value = 3.14159265359;
+
+      // Act
+      double result = trimToFiveDecimalPlaces(value);
+
+      // Assert
+      expect(result, equals(3.14159));
+    });
   });
 }

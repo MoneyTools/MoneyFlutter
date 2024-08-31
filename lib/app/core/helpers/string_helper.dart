@@ -20,19 +20,26 @@ int countOccurrences(String input, String char) {
   return count;
 }
 
-String doubleToCurrency(final double value) {
-  NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: '\$');
+String doubleToCurrency(final double value, {final String symbol = '\$', final bool showPlusSign = false}) {
+  NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: symbol);
   // Format the double value as currency text
-  return currencyFormatter.format(value);
+  return (showPlusSign ? getPlusSignIfPositive(value) : '') + currencyFormatter.format(value);
+}
+
+String getPlusSignIfPositive(final num value) {
+  if (value > 0) {
+    return '+';
+  }
+  return '';
 }
 
 String escapeString(String input) {
   return input.replaceAll("'", "''");
 }
 
-String formatDoubleTimeZeroFiveNine(double value) {
+String formatDoubleUpToFiveZero(double value, {bool showPlusSign = false}) {
   final formatter = NumberFormat('#,##0.#####', 'en_US');
-  return formatter.format(value);
+  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + formatter.format(value);
 }
 
 String formatDoubleTrimZeros(double value) {
@@ -79,18 +86,31 @@ String getInitials(String fullName) {
   return fullName.split(' ').map((word) => word[0].toUpperCase()).join('');
 }
 
-String getIntAsText(final int value) {
-  return NumberFormat.decimalPattern().format(value);
+String getIntAsText(final int value, {showPlusSign = false}) {
+  return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + NumberFormat.decimalPattern().format(value);
 }
 
-List<List<String>> getLinesFromRawTextCommaSeparated(final String content) {
+String getPrefixPlusSignIfNeeded(final num value, {showPlusSign = false}) {
+  return (showPlusSign ? getPlusSignIfPositive(value) : '');
+}
+
+/// Parses a raw text string and splits it into rows and columns based on a specified separator character.
+///
+/// The function handles quoted fields and escaped quotes within the text. It returns a list of rows,
+/// where each row is represented as a list of strings (fields).
+///
+/// [content] The raw text string to be parsed.
+/// [separator] The character used to separate fields within a row. Defaults to a comma `,`.
+///
+/// Returns a `List<List<String>>` representing the parsed rows and fields.
+List<List<String>> getLinesFromRawTextWithSeparator(final String content, [final String separator = ',']) {
   List<List<String>> rows = [];
   List<String> currentRow = [];
   StringBuffer currentField = StringBuffer();
   bool inQuotes = false;
 
   for (int i = 0; i < content.length; i++) {
-    var char = content[i];
+    String char = content[i];
 
     if (char == '"' && (i + 1 < content.length && content[i + 1] == '"')) {
       // Handle escaped quotes
@@ -98,7 +118,7 @@ List<List<String>> getLinesFromRawTextCommaSeparated(final String content) {
       i++; // Skip the next quote
     } else if (char == '"') {
       inQuotes = !inQuotes; // Toggle the inQuotes state
-    } else if (char == ',' && !inQuotes) {
+    } else if ((char == separator) && !inQuotes) {
       // End of a field
       currentRow.add(currentField.toString());
       currentField = StringBuffer();
@@ -254,7 +274,7 @@ String concat(
   final String existingValue,
   final String valueToConcat, [
   final String separatorIfNeeded = '; ',
-  bool doNotConcactIfPresent = false,
+  bool doNotConcatIfPresent = false,
 ]) {
   if (valueToConcat.isEmpty) {
     // Nothing to concat
@@ -264,7 +284,7 @@ String concat(
   if (existingValue.isEmpty) {
     return valueToConcat;
   } else {
-    if (doNotConcactIfPresent && existingValue.contains(separatorIfNeeded)) {
+    if (doNotConcatIfPresent && existingValue.contains(separatorIfNeeded)) {
       return existingValue;
     }
     return existingValue + separatorIfNeeded + valueToConcat;
@@ -280,6 +300,8 @@ String removeUtf8Bom(String text) {
 }
 
 double? parseUSDAmount(String input) {
+  input = input.replaceAll('\$', '');
+  input = input.replaceAll('USD', '');
   final usdPattern = RegExp(r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\.\d+)(\s*USD)?$');
   final match = usdPattern.firstMatch(input);
 
@@ -311,7 +333,7 @@ double? parseEuroAmount(String input) {
   return null;
 }
 
-String convertParateseToNegativeString(String amountText) {
+String convertParenthesesToNegativeString(String amountText) {
   amountText = amountText.trim();
   if (amountText.contains('(') && amountText.contains(')')) {
     amountText = amountText.replaceAll('(', '');
@@ -322,7 +344,7 @@ String convertParateseToNegativeString(String amountText) {
 }
 
 double? parseAmount(String amountAsText, final String currency) {
-  amountAsText = convertParateseToNegativeString(amountAsText);
+  amountAsText = convertParenthesesToNegativeString(amountAsText);
   switch (currency.toLowerCase()) {
     case 'eur':
       return parseEuroAmount(amountAsText);
@@ -331,4 +353,21 @@ double? parseAmount(String amountAsText, final String currency) {
     default:
       return parseUSDAmount(amountAsText);
   }
+}
+
+/// Remove any characters not in the allowedChars argument
+String cleanString(String inputStr, String allowedChars) {
+  return inputStr.split('').where((char) => allowedChars.contains(char)).join();
+}
+
+String validIntToCurrency(final num value) {
+  return getIntAsText(isNumber(value) ? value.toInt() : 0, showPlusSign: true);
+}
+
+String validDoubleToCurrency(final num value) {
+  return doubleToCurrency(isNumber(value) ? value.toDouble() : 0.0, showPlusSign: true);
+}
+
+bool isNumber(num value) {
+  return value.isFinite && !value.isNaN;
 }

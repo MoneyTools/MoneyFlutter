@@ -9,9 +9,10 @@ class WizardChoice extends StatelessWidget {
     required this.description,
     required this.onPressed,
   });
-  final String title;
+
   final String description;
   final Function onPressed;
+  final String title;
 
   @override
   Widget build(BuildContext context) {

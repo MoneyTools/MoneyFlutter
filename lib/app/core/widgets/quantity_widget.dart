@@ -1,28 +1,53 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
-class QuantifyWidget extends StatelessWidget {
+class QuantityWidget extends StatelessWidget {
   /// Constructor
-  const QuantifyWidget({
+  const QuantityWidget({
     required this.quantity,
     super.key,
     this.align = TextAlign.right,
   });
 
+  final TextAlign align;
+
   /// Amount to display
   final double quantity;
-  final TextAlign align;
 
   @override
   Widget build(final BuildContext context) {
-    return Text(
-      formatDoubleTimeZeroFiveNine(quantity),
+    final style = TextStyle(
+      fontFamily: 'RobotoMono',
+      color: getTextColorToUseQuantity(quantity),
+      fontWeight: FontWeight.w900,
+    );
+
+    final originalString = formatDoubleUpToFiveZero(quantity, showPlusSign: true);
+
+    final leftSideOfDecimalPoint = quantity.truncate();
+    final leftSideOfDecimalPointAsString =
+        formatDoubleUpToFiveZero(leftSideOfDecimalPoint.toDouble(), showPlusSign: true);
+    final rightOfDecimalPoint = originalString.substring(leftSideOfDecimalPointAsString.length);
+
+    return SelectableText.rich(
+      maxLines: 1,
       textAlign: align,
-      style: TextStyle(
-        fontFamily: 'RobotoMono',
-        color: trimToFiveDecimalPlaces(quantity) == 0 ? Colors.grey.withOpacity(0.8) : null,
+      TextSpan(
+        style: style,
+        children: [
+          TextSpan(
+            text: leftSideOfDecimalPointAsString,
+          ),
+          if (rightOfDecimalPoint.isNotEmpty)
+            TextSpan(
+              text: rightOfDecimalPoint,
+              style: const TextStyle(
+                fontSize: 11,
+              ),
+            ),
+        ],
       ),
     );
   }

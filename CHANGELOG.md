@@ -1,5 +1,115 @@
 # Change Log
 
+## [version 1.8.54] 2024-08-10
+
+### Added
+
+- Integration test with 50% code-coverage
+  
+## [version 1.8.53] 2024-08-07
+
+### Added
+
+- NetWorth chart - display major events
+  
+## [version 1.8.52] 2024-08-04
+
+### Added
+
+- Fix keyboard handling of list view navigation Home/End Up/Down keys
+  
+## [version 1.8.51] 2024-08-01
+
+### Added
+
+- Lists are now 'adaptive' they will enable horizontal scrolling if the devices are not "large enough".
+  
+## [version 1.8.50] 2024-07-31
+
+### Update
+
+- User can now set missing Transaction:Category directly from any Transaction List
+- Rebuild the Demo data
+
+## [version 1.8.49] 2024-07-29
+
+### Added
+
+- ViewAccount:Detail - show Distribution of Cash and Investment
+  
+## [version 1.8.48] 2024-07-24
+
+### Added
+
+- Multiple Column Filtering
+  
+## [version 1.8.47] 2024-07-23
+
+### Added
+
+- Jump from AccountView to InvestmentView
+- StockView:Chart Display Dividends
+  
+## [version 1.8.46] 2024-07-22
+
+### Updated
+
+- StockView: new column for Dividend
+- StockView:Details panel: Display Splits and Dividend panels
+- Add DateRange column to Stock view
+  
+## [version 1.8.45] 2024-07-21
+
+### Updated
+
+- Use Yahoo-V8 backend to download the StockSplits data
+
+## [version 1.8.44] 2024-07-19
+
+### Added
+
+- Download and display StockSplits
+- Display FieldQuantity in Blue for positive and Orange for negative
+- Improve FieldQuantity to show + sign on positive numbers
+
+## [version 1.8.43] 2024-07-18
+
+### Added
+
+- Stock view:InfoPanel add JumpTo [Accounts | Transactions]
+  
+## [version 1.8.43] 2024-07-17
+
+### Added
+
+- Stock view now has Pivot for Toggles on holding: [Close | Active | All ]
+
+## [version 1.8.43] 2024-07-15
+
+### Added
+
+- Display purchase and sale activity on the stock line chart
+- Footer for Average of MoneyAmount or Quantity, with tooltips
+  
+## [version 1.8.42] 2024-07-13
+
+### Update
+
+- StockChart now has a way to refresh fetching the price history
+- Add tooltips to Stock and Network LineCharts
+
+## [version 1.8.41] 2024-07-12
+
+### Update
+
+- Line Chart now renders in Green or Red base on value outcome of first and last values
+  
+## [version 1.8.40] 2024-07-09
+
+### Added
+
+- New column [Paid On] to help with Credit Card statement
+
 ## [version 1.8.39] 2024-07-06
 
 ### Added
@@ -10,7 +120,7 @@
 
 ### Added
 
-- Use OCR for Import from text, tested on macOS using Tessara-OCR
+- Use OCR for Import from text, tested on macOS using Tesseract-OCR
   
 ## [version 1.8.37] 2024-07-04
 
@@ -83,7 +193,7 @@
 
 ### Added
 
-- You can now merge Payee from Transactio Edit dialog
+- You can now merge Payee from Transaction Edit dialog
 - Auto Footer-Tally on the InfoPanel-List
 - Long Press on InfoPanel of Loans to show the Detail dialog
   
@@ -165,7 +275,7 @@
 
 ### Updated
 
-- Show a filter-icon if a column is using fitlering
+- Show a filter-icon if a column is using filtering
 - Performance: using CompareIgnoreCase2
 
 ### Fixed
@@ -176,8 +286,8 @@
 
 ### Added
 
-- Payee Merge can now choose the categeory to use
-- Payee View: new column for Catgories
+- Payee Merge can now choose the category to use
+- Payee View: new column for Categories
   
 ## [version 1.8.14] 2024-05-28
 
@@ -465,7 +575,6 @@
 ## Added
 
 - Letter Picker
-- Payee helper getPayeeIdFromTextMatchingOrAdd()
 
 ## Updated
 

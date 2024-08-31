@@ -1,24 +1,201 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/app/modules/home/sub_views/view_stocks/picker_security_type.dart';
 
 class Categories extends MoneyObjects<Category> {
   Categories() {
     collectionName = 'Categories';
   }
 
+  Category? _split;
+
   @override
   Category instanceFromSqlite(final MyJson row) {
     return Category.fromJson(row);
   }
 
+  @override
+  void onAllDataLoaded() {
+    // reset to zero all counters and sums
+    for (final Category category in iterableList()) {
+      category.fieldTransactionCount.value = 0;
+      category.fieldSum.value.setAmount(0);
+
+      category.fieldTransactionCountRollup.value = 0;
+      category.fieldSumRollup.value.setAmount(0);
+    }
+
+    // first tally the direct category transactions
+    for (final Transaction t in Data().transactions.iterableList()) {
+      final Category? item = get(t.fieldCategoryId.value);
+      if (item != null) {
+        item.fieldTransactionCount.value++;
+        item.fieldSum.value += t.fieldAmount.value.toDouble();
+        item.fieldTransactionCountRollup.value++;
+        item.fieldSumRollup.value += t.fieldAmount.value.toDouble();
+
+        List<Category> ancestors = [];
+        item.getAncestors(ancestors);
+        for (final ancestorCategory in ancestors) {
+          ancestorCategory.fieldTransactionCountRollup.value++;
+          ancestorCategory.fieldSumRollup.value += t.fieldAmount.value;
+        }
+      }
+    }
+  }
+
+  @override
+  String toCSV() {
+    return MoneyObjects.getCsvFromList(
+      getListSortedById(),
+    );
+  }
+
+  static Widget categoryWidgetForSplit = DottedBorder(
+    color: Colors.grey.shade600,
+    padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
+    radius: const Radius.circular(3),
+    child: const Text('Split'),
+  );
+
   static int idOfSplitCategory = -1;
+
+  /// Add a new Category ensure that the name is unique under the parent or root
+  Category addNewCategory({
+    final int parentId = -1,
+    final String name = 'New Category',
+    final CategoryType? type,
+    final String color = '',
+    final String description = '',
+  }) {
+    assert(
+      name.contains(':') && parentId == -1 || !name.contains(':'),
+      'Supply a parent ID or hierarchy names but not both',
+    );
+
+    Category? parent = Data().categories.get(parentId);
+
+    if (parent == null && name.contains(':')) {
+      return ensureAncestorExist(name: name, overrideTypeOfParent: type);
+    }
+
+    // find next available name
+    String prefixName = parent == null ? name : '${parent.fieldName.value}:$name';
+    String nextAvailableName = prefixName;
+    int next = 1;
+    while ((getByName(nextAvailableName) != null)) {
+      // already taken
+      nextAvailableName = '$name $next';
+      // the the next one
+      next++;
+    }
+
+    CategoryType typeToUse = type ?? CategoryType.none;
+
+    if (type == null && parent != null) {
+      typeToUse = parent.fieldType.value;
+    }
+
+    // add a new Category
+    final Category category = Category(
+      id: -1,
+      parentId: parentId,
+      name: nextAvailableName,
+      type: typeToUse,
+      color: color,
+      description: description,
+    );
+
+    Data().categories.appendNewMoneyObject(category);
+
+    return category;
+  }
+
+  Category appendNewCategory({
+    required int parentId,
+    required String name,
+    required final CategoryType type,
+    bool fireNotification = false,
+  }) {
+    final category = Category(
+      id: -1,
+      parentId: parentId,
+      name: name,
+      type: type,
+    );
+
+    appendNewMoneyObject(category, fireNotification: fireNotification);
+    return category;
+  }
+
+  Category ensureAncestorExist({
+    required final String name,
+    final CategoryType? overrideTypeOfParent,
+  }) {
+    final List<String> categoryNameParts = name.split(':');
+
+    int parentCategoryId = -1;
+    String cumulativeCategoryName = '';
+
+    for (final String part in categoryNameParts) {
+      cumulativeCategoryName = cumulativeCategoryName.isEmpty ? part : '$cumulativeCategoryName:$part';
+
+      CategoryType typeToUse = CategoryType.none;
+      if (overrideTypeOfParent == null) {
+        if (parentCategoryId != -1) {
+          // try to get the parent type
+          typeToUse = get(parentCategoryId)!.fieldType.value;
+        }
+      } else {
+        typeToUse = overrideTypeOfParent;
+      }
+      Category? category = getByName(cumulativeCategoryName);
+      category ??= appendNewCategory(
+        parentId: parentCategoryId,
+        name: cumulativeCategoryName,
+        type: typeToUse,
+      );
+      parentCategoryId = category.uniqueId;
+    }
+    return getByName(name)!;
+  }
+
+  Category? getByName(final String name) {
+    return iterableList().firstWhereOrNull((final Category category) => category.fieldName.value == name);
+  }
+
+  List<String> getCategoriesAsStrings() {
+    return this.getListSorted().map((element) => element.fieldName.value).toList();
+  }
+
+  List<Category> getCategoriesWithThisParent(final int parentId) {
+    final List<Category> list = <Category>[];
+    for (final Category item in iterableList()) {
+      if (item.fieldParentId.value == parentId) {
+        list.add(item);
+      }
+    }
+    return list;
+  }
+
+  Widget getCategoryWidget(final int id) {
+    if (id == -1) {
+      return const Text('?');
+    }
+
+    if (id == splitCategoryId()) {
+      return categoryWidgetForSplit;
+    }
+
+    return get(id)!.getColorAndNameWidget();
+  }
 
   List<Category> getListSorted() {
     final list = iterableList().toList();
-    list.sort((a, b) => sortByString(a.name.value, b.name.value, true));
+    list.sort((a, b) => sortByString(a.fieldName.value, b.fieldName.value, true));
     return list;
   }
 
@@ -33,37 +210,38 @@ class Categories extends MoneyObjects<Category> {
     return Category.getName(get(id));
   }
 
-  int splitCategoryId() {
-    if (idOfSplitCategory == -1) {
-      final Category? cat = getByName('Split');
-      if (cat != null) {
-        idOfSplitCategory = cat.id.value;
+  Category getOrCreate(
+    final String name,
+    final CategoryType type,
+  ) {
+    Category? category = getByName(name);
+
+    if (category == null) {
+      category = ensureAncestorExist(name: name, overrideTypeOfParent: type);
+    } else {
+      if (category.isDeleted) {
+        category.mutation = MutationType.none; // Bring it back to life
       }
     }
-    return idOfSplitCategory;
-  }
 
-  Category? getByName(final String name) {
-    return iterableList().firstWhereOrNull((final Category category) => category.name.value == name);
-  }
-
-  bool isCategoryAnExpense(final int categoryId) {
-    final Category? category = get(categoryId);
-    if (category == null) {
-      return false;
-    }
-    return category.type.value == CategoryType.expense || category.type.value == CategoryType.recurringExpense;
+    return category;
   }
 
   Category getTopAncestor(final Category category) {
-    if (category.parentId.value == -1) {
+    if (category.fieldParentId.value == -1) {
       return category; // this is the top
     }
-    final Category? parent = get(category.parentId.value);
+    final Category? parent = get(category.fieldParentId.value);
     if (parent == null) {
       return category;
     }
     return getTopAncestor(parent);
+  }
+
+  List<Category> getTree(final Category rootCategoryToStartFrom) {
+    final List<Category> list = <Category>[];
+    getTreeRecursive(rootCategoryToStartFrom, list);
+    return list;
   }
 
   List<int> getTreeIds(final int rootIdToStartFrom) {
@@ -79,15 +257,9 @@ class Categories extends MoneyObjects<Category> {
       list.add(categoryId);
       final List<Category> descendants = getCategoriesWithThisParent(categoryId);
       for (final Category c in descendants) {
-        getTreeIdsRecursive(c.id.value, list);
+        getTreeIdsRecursive(c.fieldId.value, list);
       }
     }
-  }
-
-  List<Category> getTree(final Category rootCategoryToStartFrom) {
-    final List<Category> list = <Category>[];
-    getTreeRecursive(rootCategoryToStartFrom, list);
-    return list;
   }
 
   void getTreeRecursive(final Category category, final List<Category> list) {
@@ -98,302 +270,82 @@ class Categories extends MoneyObjects<Category> {
     }
   }
 
-  List<Category> getCategoriesWithThisParent(final int parentId) {
-    final List<Category> list = <Category>[];
-    for (final Category item in iterableList()) {
-      if (item.parentId.value == parentId) {
-        list.add(item);
-      }
-    }
-    return list;
-  }
-
-  Category getOrCreateCategory(
-    final String name,
-    final CategoryType type,
-  ) {
-    Category? category = getByName(name);
-
-    if (category == null) {
-      category = Category(
-        id: -1,
-        name: name,
-        type: type,
-      );
-
-      appendNewMoneyObject(category);
-    } else {
-      if (category.isDeleted) {
-        category.mutation = MutationType.none;
-      }
-    }
-
-    return category;
-  }
-
-  Category get split {
-    return getOrCreateCategory('Split', CategoryType.none);
-  }
-
-  Category get salesTax {
-    return getOrCreateCategory('Taxes:Sales Tax', CategoryType.expense);
-  }
-
   Category get interestEarned {
-    return getOrCreateCategory('Savings:Interest', CategoryType.income);
-  }
-
-  Category get savings {
-    return getOrCreateCategory('Savings', CategoryType.income);
-  }
-
-  Category get investmentCredit {
-    return getOrCreateCategory('Investments:Credit', CategoryType.income);
-  }
-
-  Category get investmentDebit {
-    return getOrCreateCategory('Investments:Debit', CategoryType.expense);
-  }
-
-  Category get investmentInterest {
-    return getOrCreateCategory('Investments:Interest', CategoryType.income);
-  }
-
-  Category get investmentDividends {
-    return getOrCreateCategory('Investments:Dividends', CategoryType.income);
-  }
-
-  Category get investmentTransfer {
-    return getOrCreateCategory('Investments:Transfer', CategoryType.none);
-  }
-
-  Category get investmentFees {
-    return getOrCreateCategory('Investments:Fees', CategoryType.expense);
-  }
-
-  Category get investmentMutualFunds {
-    return getOrCreateCategory('Investments:Mutual Funds', CategoryType.expense);
-  }
-
-  Category get investmentStocks {
-    return getOrCreateCategory('Investments:Stocks', CategoryType.expense);
-  }
-
-  Category get investmentOther {
-    return getOrCreateCategory('Investments:Other', CategoryType.expense);
+    return getOrCreate('Savings:Interest', CategoryType.income);
   }
 
   Category get investmentBonds {
-    return getOrCreateCategory('Investments:Bonds', CategoryType.expense);
+    return getOrCreate('Investments:Bonds', CategoryType.expense);
   }
 
-  Category get investmentOptions {
-    return getOrCreateCategory('Investments:Options', CategoryType.expense);
+  Category get investmentCredit {
+    return getOrCreate('Investments:Credit', CategoryType.income);
   }
 
-  Category get investmentReinvest {
-    return getOrCreateCategory('Investments:Reinvest', CategoryType.none);
+  Category get investmentDebit {
+    return getOrCreate('Investments:Debit', CategoryType.expense);
+  }
+
+  Category get investmentDividends {
+    return getOrCreate('Investments:Dividends', CategoryType.income);
+  }
+
+  Category get investmentFees {
+    return getOrCreate('Investments:Fees', CategoryType.expense);
+  }
+
+  Category get investmentInterest {
+    return getOrCreate('Investments:Interest', CategoryType.income);
   }
 
   Category get investmentLongTermCapitalGainsDistribution {
-    return getOrCreateCategory('Investments:Long Term Capital Gains Distribution', CategoryType.income);
-  }
-
-  Category get investmentShortTermCapitalGainsDistribution {
-    return getOrCreateCategory('Investments:Short Term Capital Gains Distribution', CategoryType.income);
+    return getOrCreate('Investments:Long Term Capital Gains Distribution', CategoryType.income);
   }
 
   Category get investmentMiscellaneous {
-    return getOrCreateCategory('Investments:Miscellaneous', CategoryType.expense);
+    return getOrCreate('Investments:Miscellaneous', CategoryType.expense);
   }
 
-  Category get transferToDeletedAccount {
-    return getOrCreateCategory('Xfer to Deleted Account', CategoryType.none);
+  Category get investmentMutualFunds {
+    return getOrCreate('Investments:Mutual Funds', CategoryType.expense);
   }
 
-  Category get transferFromDeletedAccount {
-    return getOrCreateCategory('Xfer from Deleted Account', CategoryType.none);
+  Category get investmentOptions {
+    return getOrCreate('Investments:Options', CategoryType.expense);
   }
 
-  Category get transfer {
-    return getOrCreateCategory('Transfer', CategoryType.none);
+  Category get investmentOther {
+    return getOrCreate('Investments:Other', CategoryType.expense);
   }
 
-  Category get unknown {
-    return getOrCreateCategory('Unknown', CategoryType.none);
+  Category get investmentReinvest {
+    return getOrCreate('Investments:Reinvest', CategoryType.none);
   }
 
-  Category get unassignedSplit {
-    return getOrCreateCategory('UnassignedSplit', CategoryType.none);
+  Category get investmentShortTermCapitalGainsDistribution {
+    return getOrCreate('Investments:Short Term Capital Gains Distribution', CategoryType.income);
   }
 
-  @override
-  void loadDemoData() {
-    clear();
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Food',
-        description: '',
-        type: CategoryType.expense,
-        color: '#FF1122FF',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Paychecks',
-        description: '',
-        type: CategoryType.income,
-        color: '#FFAAFFBB',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Investment',
-        description: '',
-        type: CategoryType.investment,
-        color: '#FFA1A2A3',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Interests',
-        description: '',
-        type: CategoryType.income,
-        color: '#FFFF2233',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Rental',
-        description: '',
-        type: CategoryType.income,
-        color: '#FF11FF33',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Mortgage',
-        description: '',
-        type: CategoryType.expense,
-        color: '#FFBB2233',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Saving',
-        description: '',
-        type: CategoryType.income,
-        color: '#FFBB2233',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Bills',
-        description: '',
-        type: CategoryType.expense,
-        color: '#FF11DD33',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'Taxes',
-        description: '',
-        type: CategoryType.expense,
-        color: '#FF1122DD',
-      ),
-    );
-    appendNewMoneyObject(
-      Category(
-        id: -1,
-        name: 'School',
-        description: '',
-        type: CategoryType.expense,
-      ),
-    );
+  Category get investmentStocks {
+    return getOrCreate('Investments:Stocks', CategoryType.expense);
   }
 
-  @override
-  void onAllDataLoaded() {
-    // reset to zero all counters and sums
-    for (final Category category in iterableList()) {
-      category.transactionCount.value = 0;
-      category.sum.value.setAmount(0);
+  Category get investmentTransfer {
+    return getOrCreate('Investments:Transfer', CategoryType.none);
+  }
 
-      category.transactionCountRollup.value = 0;
-      category.sumRollup.value.setAmount(0);
+  bool isCategoryAnExpense(final int categoryId) {
+    final Category? category = get(categoryId);
+    if (category == null) {
+      return false;
     }
-
-    // first tally the direct category transactions
-    for (final Transaction t in Data().transactions.iterableList()) {
-      final Category? item = get(t.categoryId.value);
-      if (item != null) {
-        item.transactionCount.value++;
-        item.sum.value += t.amount.value.toDouble();
-        item.transactionCountRollup.value++;
-        item.sumRollup.value += t.amount.value.toDouble();
-
-        List<Category> ancestors = [];
-        item.getAncestors(ancestors);
-        for (final ancestorCategory in ancestors) {
-          ancestorCategory.transactionCountRollup.value++;
-          ancestorCategory.sumRollup.value += t.amount.value;
-        }
-      }
-    }
-  }
-
-  @override
-  String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
-  }
-
-  /// Add a new Category ensure that the name is unique under the parent or root
-  Category addNewCategory({final int parentId = -1, final String name = 'New Cagtegory'}) {
-    Category? parent = Data().categories.get(parentId);
-    // find next available name
-    String prefixName = parent == null ? name : '${parent.name.value}:$name';
-    String nextAvailableName = prefixName;
-    int next = 1;
-    while ((getByName(nextAvailableName) != null)) {
-      // already taken
-      nextAvailableName = '$name $next';
-      // the the next one
-      next++;
-    }
-
-    CategoryType typeToUse = CategoryType.expense;
-
-    if (parent != null) {
-      typeToUse = parent.type.value;
-    }
-
-    // add a new Category
-    final Category category = Category(
-      id: -1,
-      parentId: parentId,
-      name: nextAvailableName,
-      type: typeToUse,
-    );
-
-    Data().categories.appendNewMoneyObject(category);
-
-    return category;
+    return category.fieldType.value == CategoryType.expense ||
+        category.fieldType.value == CategoryType.recurringExpense;
   }
 
   void reparentCategory(final Category categoryToReparent, final Category newParentCategory) {
     categoryToReparent.stashValueBeforeEditing();
-    categoryToReparent.parentId.value = newParentCategory.uniqueId;
+    categoryToReparent.fieldParentId.value = newParentCategory.uniqueId;
 
     final descendants = getTreeIds(categoryToReparent.uniqueId);
     for (final id in descendants) {
@@ -404,5 +356,45 @@ class Categories extends MoneyObjects<Category> {
     }
 
     Data().updateAll();
+  }
+
+  Category get salesTax {
+    return getOrCreate('Taxes:Sales Tax', CategoryType.expense);
+  }
+
+  Category get savings {
+    return getOrCreate('Savings', CategoryType.income);
+  }
+
+  Category get split {
+    // ignore: prefer_conditional_assignment
+    if (_split == null) {
+      _split = getOrCreate('Split', CategoryType.none);
+    }
+    return _split!;
+  }
+
+  int splitCategoryId() {
+    return split.uniqueId;
+  }
+
+  Category get transfer {
+    return getOrCreate('Transfer', CategoryType.none);
+  }
+
+  Category get transferFromDeletedAccount {
+    return getOrCreate('Xfer from Deleted Account', CategoryType.none);
+  }
+
+  Category get transferToDeletedAccount {
+    return getOrCreate('Xfer to Deleted Account', CategoryType.none);
+  }
+
+  Category get unassignedSplit {
+    return getOrCreate('UnassignedSplit', CategoryType.none);
+  }
+
+  Category get unknown {
+    return getOrCreate('Unknown', CategoryType.none);
   }
 }

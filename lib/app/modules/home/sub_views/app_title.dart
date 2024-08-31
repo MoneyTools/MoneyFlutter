@@ -4,8 +4,6 @@ import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/reveal_content.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/mru_dropdown.dart';
 import 'package:money/app/modules/pending_changes/badge_pending_changes.dart';
@@ -34,6 +32,7 @@ class AppTitle extends StatelessWidget {
                 gapSmall(),
                 Obx(() {
                   return BadgePendingChanges(
+                    key: Constants.keyPendingChanges,
                     itemsAdded: dataController.trackMutations.added.value,
                     itemsChanged: dataController.trackMutations.changed.value,
                     itemsDeleted: dataController.trackMutations.deleted.value,

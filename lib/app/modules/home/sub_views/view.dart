@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/modules/home/sub_views/view_header.dart';
 
-class ViewWidget extends StatefulWidget {
+abstract class ViewWidget extends StatefulWidget {
   const ViewWidget({super.key});
 
   @override
-  State<ViewWidget> createState() => ViewWidgetState();
+  State<ViewWidget> createState();
+
+  String getClassNamePlural();
+
+  String getClassNameSingular();
+
+  String getDescription();
 }
 
-class ViewWidgetState extends State<ViewWidget> {
+abstract class ViewWidgetState<T extends ViewWidget> extends State<T> {
   @override
   Widget build(final BuildContext context) {
     return LayoutBuilder(
@@ -19,34 +23,7 @@ class ViewWidgetState extends State<ViewWidget> {
     );
   }
 
-  Widget buildHeader([final Widget? child]) {
-    return ViewHeader(
-      title: getClassNamePlural(),
-      itemCount: 0,
-      selectedItems: ValueNotifier<List<int>>([]),
-      description: getDescription(),
-      onFilterChanged: null,
-      child: child,
-    );
-  }
+  Widget buildHeader([final Widget? child]);
 
-  /// To be overridden by the derived view
-  Widget buildViewContent(final Widget child) {
-    return Container(
-      color: getColorTheme(context).surface,
-      child: child,
-    );
-  }
-
-  String getClassNamePlural() {
-    return 'Items';
-  }
-
-  String getClassNameSingular() {
-    return 'Item';
-  }
-
-  String getDescription() {
-    return 'Default list of items';
-  }
+  Widget buildViewContent(final Widget child);
 }

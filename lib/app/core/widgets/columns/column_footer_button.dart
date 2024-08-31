@@ -10,55 +10,54 @@ Widget buildColumnFooterButton({
 }) {
   return Expanded(
     flex: flex,
-    child: Tooltip(
-      message: '',
-      child: TextButton(
-        style: ButtonStyle(
-          shape: WidgetStateProperty.all<OutlinedBorder>(
-            const RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero, // Remove rounded corners
-            ),
-          ),
-          padding: WidgetStateProperty.all(
-            const EdgeInsets.symmetric(
-              horizontal: 3.0, // Left and right padding
-            ),
+    child: TextButton(
+      style: ButtonStyle(
+        shape: WidgetStateProperty.all<OutlinedBorder>(
+          const RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // Remove rounded corners
           ),
         ),
-        onPressed: onPressed,
-        onLongPress: onLongPress,
-        // clipBehavior: Clip.hardEdge,
-        child: _buildText(context, textAlign, child ?? const SizedBox()),
+        padding: WidgetStateProperty.all(
+          const EdgeInsets.symmetric(
+            horizontal: 3.0, // Left and right padding
+          ),
+        ),
       ),
+      onPressed: onPressed,
+      onLongPress: onLongPress,
+      // clipBehavior: Clip.hardEdge,
+      child: _alignChild(context, textAlign, child ?? const SizedBox()),
     ),
   );
 }
 
-Widget _buildText(
+Widget _alignChild(
   BuildContext context,
   TextAlign align,
   Widget content,
 ) {
-  MainAxisAlignment rowAlign = MainAxisAlignment.center;
+  Alignment alignment = Alignment.center;
 
   switch (align) {
     case TextAlign.center:
-      rowAlign = MainAxisAlignment.center;
+      alignment = Alignment.center;
 
     case TextAlign.right:
     case TextAlign.end:
-      rowAlign = MainAxisAlignment.end;
+      alignment = Alignment.centerRight;
 
     case TextAlign.left:
     case TextAlign.start:
     default:
-      rowAlign = MainAxisAlignment.start;
+      alignment = Alignment.centerLeft;
   }
 
-  return Row(
-    mainAxisAlignment: rowAlign,
+  return Stack(
     children: [
-      content,
+      Align(
+        alignment: alignment,
+        child: content,
+      ),
     ],
   );
 }

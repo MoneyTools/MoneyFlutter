@@ -17,17 +17,11 @@ class ColorPicker extends StatefulWidget {
 }
 
 class _ColorPickerState extends State<ColorPicker> {
-  /// From 0 to 360
-  late double hue;
-
   /// From 0.0% to 1.0% 0%=Black 100%=White
   late double brightness;
 
-  @override
-  void initState() {
-    super.initState();
-    fromInputColorToHueAndBrightness();
-  }
+  /// From 0 to 360
+  late double hue;
 
   @override
   void didUpdateWidget(covariant ColorPicker oldWidget) {
@@ -35,10 +29,10 @@ class _ColorPickerState extends State<ColorPicker> {
     fromInputColorToHueAndBrightness();
   }
 
-  void fromInputColorToHueAndBrightness() {
-    final bothValues = getHueAndBrightnessFromColor(widget.color);
-    hue = bothValues.first;
-    brightness = bothValues.second;
+  @override
+  void initState() {
+    super.initState();
+    fromInputColorToHueAndBrightness();
   }
 
   @override
@@ -108,6 +102,12 @@ class _ColorPickerState extends State<ColorPicker> {
       ),
     );
   }
+
+  void fromInputColorToHueAndBrightness() {
+    final bothValues = getHueAndBrightnessFromColor(widget.color);
+    hue = bothValues.first;
+    brightness = bothValues.second;
+  }
 }
 
 class HueGradientPainter extends CustomPainter {
@@ -143,6 +143,7 @@ class HueGradientPainter extends CustomPainter {
 
 class BrightnessGradientPainter extends CustomPainter {
   BrightnessGradientPainter({required this.hue});
+
   final double hue;
 
   @override

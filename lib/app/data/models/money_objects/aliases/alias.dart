@@ -1,9 +1,10 @@
+// ignore_for_file: unnecessary_this
+
 // Imports
-import 'package:money/app/core/helpers/json_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/aliases/alias_types.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
+import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
 // Export
@@ -16,15 +17,10 @@ class Alias extends MoneyObject {
     required final int flags,
     required final int payeeId,
   }) {
-    this.id.value = id;
-    this.pattern.value = pattern;
-    this.flags.value = flags;
-    this.payeeId.value = payeeId;
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: Payee.getName(payeeInstance),
-          leftBottomAsString: this.pattern.value,
-          rightBottomAsString: '${getAliasTypeAsString(type)}\n',
-        );
+    this.fieldId.value = id;
+    this.fieldPattern.value = pattern;
+    this.fieldFlags.value = flags;
+    this.fieldPayeeId.value = payeeId;
   }
 
   /// Constructor from a SQLite row
@@ -36,104 +32,132 @@ class Alias extends MoneyObject {
       payeeId: row.getInt('Payee', -1),
     );
   }
-  static final _fields = Fields<Alias>();
 
-  static Fields<Alias> get fields {
-    if (_fields.isEmpty) {
-      final tmp = Alias.fromJson({});
-      _fields.setDefinitions([
-        tmp.id,
-        tmp.pattern,
-        tmp.flags,
-        tmp.payeeId,
-      ]);
-    }
-    return _fields;
-  }
-
-  static dynamic getFields() {
-    return fields;
-  }
-
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
-
-  @override
-  String getRepresentation() {
-    return pattern.value;
-  }
+  /// SQL [2] 'Flags' INT
+  FieldInt fieldFlags = FieldInt(
+    type: FieldType.text,
+    align: TextAlign.center,
+    name: 'Flags',
+    serializeName: 'Flags',
+    defaultValue: 0,
+    footer: FooterType.count,
+    getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldFlags.value,
+  );
 
   /// ID
   /// 0    Id       INT            0                 1
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as Alias).uniqueId,
   );
 
   /// Pattern
-  /// 1    Pattern  nvarchar(255)  1                 0
-  Field<String> pattern = Field<String>(
+  /// SQL[1] "Pattern"  nvarchar(255)
+  FieldString fieldPattern = FieldString(
     type: FieldType.text,
-    importance: 2,
     name: 'Pattern',
     serializeName: 'Pattern',
-    defaultValue: '',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Alias).pattern.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).pattern.value,
-  );
-
-  /// 2    Flags    INT            1                 0
-  Field<int> flags = Field<int>(
-    type: FieldType.text,
-    align: TextAlign.center,
-    importance: 3,
-    name: 'Flags',
-    serializeName: 'Flags',
-    defaultValue: 0,
-    getValueForDisplay: (final MoneyObject instance) => getAliasTypeAsString((instance as Alias).type),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).flags.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPattern.value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Alias).fieldPattern.value = value as String,
   );
 
   /// Payee
   /// 3 Payee INT 1 0
-  Field<int> payeeId = Field<int>(
+  FieldInt fieldPayeeId = FieldInt(
     type: FieldType.text,
-    importance: 1,
+    footer: FooterType.count,
     name: 'Payee',
     serializeName: 'Payee',
     defaultValue: 0,
     getValueForDisplay: (final MoneyObject instance) => Payee.getName((instance as Alias).payeeInstance),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).payeeId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as Alias).fieldPayeeId.value,
   );
 
-  // Not persisted
-  Payee? payeeInstance;
   RegExp? regex;
+
+  Payee? _payeeInstance;
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsString: Payee.getName(payeeInstance),
+      leftBottomAsString: fieldPattern.value,
+      rightBottomAsString: '${getAliasTypeAsString(type)}\n',
+    );
+  }
 
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
-  AliasType get type {
-    return flags.value == 0 ? AliasType.none : AliasType.regex;
+  @override
+  String getRepresentation() {
+    return fieldPattern.value;
+  }
+
+  @override
+  int get uniqueId => fieldId.value;
+
+  @override
+  set uniqueId(value) => fieldId.value = value;
+
+  static final _fields = Fields<Alias>();
+  static final _fieldsForColumns = Fields<Alias>();
+
+  static Fields<Alias> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Alias.fromJson({});
+      _fields.setDefinitions([
+        tmp.fieldId,
+        tmp.fieldPattern,
+        tmp.fieldFlags,
+        tmp.fieldPayeeId,
+      ]);
+    }
+    return _fields;
+  }
+
+  static Fields<Alias> get fieldsForColumnView {
+    if (_fieldsForColumns.isEmpty) {
+      // used for the first time
+      final tmp = Alias.fromJson({});
+      _fieldsForColumns.setDefinitions([
+        tmp.fieldPattern,
+        tmp.fieldFlags,
+        tmp.fieldPayeeId,
+      ]);
+    }
+
+    // return the cached singleton
+    return _fieldsForColumns;
   }
 
   bool isMatch(final String text) {
     if (type == AliasType.regex) {
       // just in time creation of RegEx property
-      regex ??= RegExp(pattern.value);
+      regex ??= RegExp(fieldPattern.value);
       final Match? matched = regex?.firstMatch(text);
       if (matched != null) {
-        //debugLog('First email found: ${matched.group(0)}');
         return true;
       }
     } else {
-      if (stringCompareIgnoreCasing2(pattern.value, text) == 0) {
+      if (stringCompareIgnoreCasing2(fieldPattern.value, text) == 0) {
         return true;
       }
     }
     return false;
+  }
+
+  Payee? get payeeInstance {
+    // cache the instance
+    if (_payeeInstance == null && fieldPayeeId.value != -1) {
+      _payeeInstance = Data().payees.get(fieldPayeeId.value);
+    }
+    return _payeeInstance;
+  }
+
+  AliasType get type {
+    return fieldFlags.value == 0 ? AliasType.none : AliasType.regex;
   }
 }

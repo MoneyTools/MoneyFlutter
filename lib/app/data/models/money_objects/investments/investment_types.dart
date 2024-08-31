@@ -41,3 +41,11 @@ String getInvestmentTypeTextFromValue(final int value) {
 InvestmentType getInvestmentTypeFromValue(final int value) {
   return InvestmentType.values[value];
 }
+
+InvestmentType getInvestmentTypeFromText(final String name) {
+  return InvestmentType.values.byName(name);
+}
+
+List<String> getInvestmentTypeNames() {
+  return InvestmentType.values.map((item) => item.toString().split('.').last).toList();
+}

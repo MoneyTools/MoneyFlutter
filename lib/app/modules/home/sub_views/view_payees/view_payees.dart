@@ -1,25 +1,18 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
 import 'package:money/app/core/widgets/date_range_time_line.dart';
-import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/mini_timeline_daily.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/payees/payee.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/app/modules/home/sub_views/view_payees/merge_payees.dart';
 
 part 'view_payees_details_panels.dart';
@@ -36,11 +29,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewPayees;
   }
 
-  // Footer related
-  int _footerCountTransactions = 0;
-  double _footerSumBalance = 0.00;
-
-  /// add more top leve action buttons
+  /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     final list = super.getActionsButtons(forInfoPanelTransactions);
@@ -65,13 +54,13 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               InternalViewSwitching(
-                ViewId.viewTransactions.getIconData(),
-                'Switch to Transactions',
-                () {
+                icon: ViewId.viewTransactions.getIconData(),
+                title: 'Switch to Transactions',
+                onPressed: () {
                   final Payee? payee = getFirstSelectedItem() as Payee?;
                   if (payee != null) {
                     // Prepare the Transaction view to show only the selected account
-                    switchViewTransacionnForPayee(payee.name.value);
+                    switchViewTransactionForPayee(payee.fieldName.value);
                   }
                 },
               ),
@@ -99,41 +88,8 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getViewId() {
-    return Data().payees.getTypeName();
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Transactions':
-        return getFooterForInt(_footerCountTransactions);
-      case 'Sum':
-        return getFooterForAmount(_footerSumBalance);
-      default:
-        return null;
-    }
-  }
-
-  @override
-  List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    var list = Data()
-        .payees
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (instance) => (applyFilter == false || isMatchingFilters(instance)),
-        )
-        .toList();
-
-    _footerCountTransactions = 0;
-    _footerSumBalance = 0.00;
-
-    for (final item in list) {
-      _footerCountTransactions += item.count.value.toInt();
-      _footerSumBalance += item.sum.value.toDouble();
-    }
-
-    return list;
+  Fields<Payee> getFieldsForTable() {
+    return Payee.fieldsForColumnView;
   }
 
   @override
@@ -158,16 +114,24 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   @override
   List<MoneyObject> getInfoTransactions() {
     final Payee? payee = getFirstSelectedItem() as Payee?;
-    if (payee != null && payee.id.value > -1) {
+    if (payee != null && payee.fieldId.value > -1) {
       return getTransactions(
-        filter: (final Transaction transaction) => transaction.payee.value == payee.id.value,
+        filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
       );
     }
     return [];
   }
 
   @override
-  Fields<Payee> getFieldsForTable() {
-    return Payee.fields;
+  List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    var list = Data()
+        .payees
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (instance) => (applyFilter == false || isMatchingFilters(instance)),
+        )
+        .toList();
+
+    return list;
   }
 }

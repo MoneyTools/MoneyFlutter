@@ -1,8 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_footer.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
+
+export 'package:flutter/material.dart';
 
 class AdaptiveListColumnsOrRows extends StatelessWidget {
   const AdaptiveListColumnsOrRows({
@@ -22,38 +24,38 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     this.onItemTap,
     this.onItemLongPress,
     this.getColumnFooterWidget,
-    this.backgoundColorForHeaderFooter,
+    this.backgroundColorForHeaderFooter,
   });
 
-  final List<MoneyObject> list;
-  final FieldDefinitions fieldDefinitions;
-  final FieldFilters filters;
-  final int sortByFieldIndex;
-  final bool sortAscending;
   final Widget? Function(Field field)? getColumnFooterWidget;
-
-  // Selections
-  final ValueNotifier<List<int>> selectedItemsByUniqueId;
-  final bool isMultiSelectionOn;
   final Function(int uniqueId)? onSelectionChanged;
-  final Function? onContextMenu;
-
-  // Display as Card vs Columns
-  final bool displayAsColumns;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field field)? onColumnHeaderLongPress;
   final Function(BuildContext context, int itemId)? onItemTap;
   final Function(BuildContext context, int itemId)? onItemLongPress;
-  final Color? backgoundColorForHeaderFooter;
+  final Color? backgroundColorForHeaderFooter;
+  final FieldDefinitions fieldDefinitions;
+  final FieldFilters filters;
+  final bool isMultiSelectionOn;
+  final List<MoneyObject> list;
+  final Function? onContextMenu;
+  final bool sortAscending;
+  final int sortByFieldIndex;
+
+  // Display as Card vs Columns
+  final bool displayAsColumns;
+
+  // Selections
+  final ValueNotifier<List<int>> selectedItemsByUniqueId;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    final theContent = Column(
       children: <Widget>[
         // Header
         if (displayAsColumns)
           MyListItemHeader<MoneyObject>(
-            backgoundColor: backgoundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
+            backgroundColor: backgroundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             filterOn: filters,
             sortByColumn: sortByFieldIndex,
@@ -78,7 +80,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         Expanded(
           flex: 1,
           child: MyListView<MoneyObject>(
-            fields: Fields<MoneyObject>()..setDefinitions(fieldDefinitions),
+            fields: fieldDefinitions,
             list: list,
             selectedItemIds: selectedItemsByUniqueId,
             isMultiSelectionOn: isMultiSelectionOn,
@@ -92,14 +94,26 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
         // Footer
         if (displayAsColumns && getColumnFooterWidget != null)
           MyListItemFooter<MoneyObject>(
-            backgoundColor: backgoundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
+            backgroundColor: backgroundColorForHeaderFooter ?? getColorTheme(context).surfaceContainerLow,
             columns: fieldDefinitions,
             multiSelectionOn: isMultiSelectionOn,
-            getColumnFooterWidget: getColumnFooterWidget,
+            getColumnFooterWidget: getColumnFooterWidget!,
             onTap: (int index) => () {},
             onLongPress: (Field<dynamic> field) => () {},
           ),
       ],
     );
+
+    if (displayAsColumns && !context.isWidthLarge) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: SizedBox(
+          width: 1500,
+          child: theContent,
+        ),
+      );
+    } else {
+      return theContent;
+    }
   }
 }

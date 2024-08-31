@@ -1,24 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
-import 'package:money/app/core/widgets/dialog/dialog.dart';
-import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_mutate_money_object.dart';
-import 'package:money/app/core/widgets/three_part_label.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/fields/field_filter.dart';
-import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/app/modules/home/sub_views/view_categories/merge_categories.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
 
 part 'view_categories_details_panels.dart';
 
@@ -34,6 +23,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewCategories;
   }
 
+  final List<Widget> _pivots = <Widget>[];
   final List<bool> _selectedPivot = <bool>[
     false,
     false,
@@ -42,109 +32,13 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     false,
     true,
   ];
-  final List<Widget> _pivots = <Widget>[];
-
-  // Footer related
-  int _footerCountTransactions = 0;
-  int _footerCountTransactionsRollUp = 0;
-  double _footerSumBalance = 0.00;
-  double _footerSumBalanceRollUp = 0.00;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'None',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Expense',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[
-            CategoryType.expense,
-            CategoryType.recurringExpense,
-          ]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Income',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Saving',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'Investment',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]),
-        ),
-      ),
-    );
-    _pivots.add(
-      ThreePartLabel(
-        text1: 'All',
-        small: true,
-        isVertical: true,
-        text2: Currency.getAmountAsStringUsingCurrency(
-          _getTotalBalanceOfAccounts(<CategoryType>[]),
-        ),
-      ),
-    );
-  }
-
-  @override
-  String getClassNamePlural() {
-    return 'Categories';
-  }
-
-  @override
-  String getClassNameSingular() {
-    return 'Category';
-  }
-
-  @override
-  String getDescription() {
-    return 'Classification of your money transactions.';
-  }
-
-  @override
-  String getViewId() {
-    return Data().categories.getTypeName();
-  }
 
   @override
   Widget buildHeader([final Widget? child]) {
     return super.buildHeader(_buildToggles());
   }
 
-  /// add more top leve action buttons
+  /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
     final list = super.getActionsButtons(forInfoPanelTransactions);
@@ -198,33 +92,21 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       }
 
       // this can go last
-      if (getFirstSelectedItem() != null) {
+      final Category? category = getFirstSelectedItem() as Category?;
+      if (category != null) {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching(
-                ViewId.viewTransactions.getIconData(),
-                'Switch to Transactions',
-                () {
-                  final Category? category = getFirstSelectedItem() as Category?;
-                  if (category != null) {
-                    // Prepare the Transaction view to show only the selected account
-                    FieldFilters columnFilters = FieldFilters();
-                    columnFilters.add(
-                      FieldFilter(
-                        fieldName: Constants.viewTransactionFieldnameCategory,
-                        filterTextInLowerCase: category.name.value.toLowerCase(),
-                      ),
-                    );
-
-                    PreferenceController.to.jumpToView(
-                      viewId: ViewId.viewTransactions,
-                      selectedId: -1,
-                      columnFilter: columnFilters.toStringList(),
-                      textFilter: '',
-                    );
-                  }
-                },
+              InternalViewSwitching.toTransactions(
+                transactionId: -1,
+                filters: FieldFilters(
+                  [
+                    FieldFilter(
+                      fieldName: Constants.viewTransactionFieldNameCategory,
+                      strings: [category.uniqueId.toString()],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -235,56 +117,23 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  String getClassNamePlural() {
+    return 'Categories';
+  }
+
+  @override
+  String getClassNameSingular() {
+    return 'Category';
+  }
+
+  @override
+  String getDescription() {
+    return 'Classification of your money transactions.';
+  }
+
+  @override
   Fields<Category> getFieldsForTable() {
-    return Category.fields;
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case '#T':
-        return getFooterForInt(_footerCountTransactions);
-      case '#T~':
-        return getFooterForInt(_footerCountTransactionsRollUp);
-      case 'Sum':
-        return getFooterForAmount(_footerSumBalance);
-      case 'Sum~':
-        return getFooterForAmount(_footerSumBalanceRollUp);
-      default:
-        return null;
-    }
-  }
-
-  @override
-  List<Category> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final List<CategoryType> filterType = _getSelectedCategoryType();
-    final list = Data()
-        .categories
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (final Category instance) =>
-              (filterType.isEmpty || filterType.contains(instance.type.value)) &&
-              (applyFilter == false || isMatchingFilters(instance)),
-        )
-        .toList();
-
-    _footerCountTransactions = 0;
-    _footerCountTransactionsRollUp = 0;
-
-    _footerSumBalance = 0.00;
-    _footerSumBalanceRollUp = 0.00;
-
-    for (final item in list) {
-      _footerCountTransactions += item.transactionCount.value.toInt();
-      _footerCountTransactionsRollUp += item.transactionCountRollup.value.toInt();
-
-      _footerSumBalance += (item.sum.getValueForDisplay(item) as MoneyModel).toDouble();
-      _footerSumBalanceRollUp += (item.sumRollup.getValueForDisplay(item) as MoneyModel).toDouble();
-    }
-    return list;
+    return Category.fieldsForColumnView;
   }
 
   @override
@@ -306,14 +155,97 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     return _getSubViewContentForTransactions(selectedIds);
   }
 
-  double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
-    double total = 0.0;
-    getList().forEach((final Category category) {
-      if (types.isEmpty || (category).type.value == types.first) {
-        total += category.sum.value.toDouble();
-      }
-    });
-    return total;
+  @override
+  List<Category> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final List<CategoryType> filterType = _getSelectedCategoryType();
+    final list = Data()
+        .categories
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (final Category instance) =>
+              (filterType.isEmpty || filterType.contains(instance.fieldType.value)) &&
+              (applyFilter == false || isMatchingFilters(instance)),
+        )
+        .toList();
+    return list;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _pivots.add(
+      ThreePartLabel(
+        key: const Key('key_toggle_show_none'),
+        text1: 'None',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.none]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        key: const Key('key_toggle_show_expenses'),
+        text1: 'Expense',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[
+            CategoryType.expense,
+            CategoryType.recurringExpense,
+          ]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        key: const Key('key_toggle_show_income'),
+        text1: 'Income',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.income]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        key: const Key('key_toggle_show_saving'),
+        text1: 'Saving',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.saving]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        key: const Key('key_toggle_show_investments'),
+        text1: 'Investment',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[CategoryType.investment]),
+        ),
+      ),
+    );
+    _pivots.add(
+      ThreePartLabel(
+        key: const Key('key_toggle_show_all'),
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: Currency.getAmountAsStringUsingCurrency(
+          _getTotalBalanceOfAccounts(<CategoryType>[]),
+        ),
+      ),
+    );
   }
 
   Widget _buildToggles() {
@@ -360,5 +292,15 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     }
 
     return []; // all
+  }
+
+  double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
+    double total = 0.0;
+    getList().forEach((final Category category) {
+      if (types.isEmpty || (category).fieldType.value == types.first) {
+        total += category.fieldSum.value.toDouble();
+      }
+    });
+    return total;
   }
 }

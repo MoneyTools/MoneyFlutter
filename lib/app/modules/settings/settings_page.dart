@@ -4,6 +4,7 @@ import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/core/widgets/text_title.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
 
@@ -12,7 +13,6 @@ import 'package:money/app/modules/home/sub_views/app_scaffold.dart';
 
 class SettingsPage extends GetView<GetxController> {
   const SettingsPage({super.key});
-  static SettingsPage get to => Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -40,17 +40,13 @@ class SettingsPage extends GetView<GetxController> {
                 },
               ),
               gapLarge(),
-              TextField(
-                decoration: const InputDecoration(
-                  labelText: 'Stock service API key',
-                ),
-                controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks.value,
+              MyTextInput(
+                hintText: 'Stock service API key',
+                controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks,
               ),
               gapLarge(),
-              const TextField(
-                decoration: InputDecoration(
-                  labelText: 'Currencies',
-                ),
+              MyTextInput(
+                hintText: 'Currencies',
               ),
               gapMedium(),
               buildCurrenciesPanel(context),
@@ -79,15 +75,15 @@ class SettingsPage extends GetView<GetxController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(currency.name.value),
-                  Currency.buildCurrencyWidget(currency.symbol.value),
+                  Text(currency.fieldName.value),
+                  Currency.buildCurrencyWidget(currency.fieldSymbol.value),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  Text(currency.ratio.value.toString()),
-                  Text(currency.cultureCode.value),
+                  Text(currency.fieldRatio.value.toString()),
+                  Text(currency.fieldCultureCode.value),
                 ],
               ),
             ],

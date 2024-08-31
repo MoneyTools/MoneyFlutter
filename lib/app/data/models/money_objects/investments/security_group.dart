@@ -4,12 +4,13 @@ import 'package:money/app/data/models/money_objects/investments/security_purchas
 import 'package:money/app/data/models/money_objects/securities/security.dart';
 
 class SecurityGroup {
-  DateTime? date;
-  Security? security;
-  SecurityType? type;
   List<SecurityPurchase> purchases = [];
   TaxStatus taxStatus = TaxStatus.any;
+
+  DateTime? date;
   Account? filter;
+  Security? security;
+  SecurityType? type;
 }
 
 enum TaxStatus {

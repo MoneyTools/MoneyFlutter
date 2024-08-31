@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
+import 'package:money/app/core/widgets/widgets.dart';
+import 'package:money/app/data/models/constants.dart';
 
 class MyAlertDialog extends StatelessWidget {
   const MyAlertDialog({
@@ -13,11 +13,12 @@ class MyAlertDialog extends StatelessWidget {
     this.actions,
     this.scrollable = false,
   });
-  final String title;
-  final IconData? icon;
-  final Widget child;
+
   final List<Widget>? actions;
+  final Widget child;
+  final IconData? icon;
   final bool scrollable;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +35,9 @@ class MyAlertDialog extends StatelessWidget {
       content: Container(
         constraints: const BoxConstraints(
           minHeight: 500,
-          maxHeight: 700,
-          minWidth: 400,
-          maxWidth: 800,
+          maxHeight: 1000,
+          minWidth: 500,
+          maxWidth: 1000,
         ),
         child: child,
       ),
@@ -53,49 +54,52 @@ void adaptiveScreenSizeDialog({
   final String? captionForClose = 'Close',
 }) {
   actionButtons ??= [];
-  if (isSmallDevice(context)) {
-    // Full screen also comes with a Close (X) button
-    Navigator.of(context).push(
-      MaterialPageRoute<Null>(
-        builder: (BuildContext context) {
-          return FullScreenDialog(
-            title: title,
-            content: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: child,
-            ),
-          );
+
+  // in modal always offer a close button
+  if (captionForClose != null) {
+    // Cancel and close are inserted on the left side of other buttons
+    // so place it first on the list
+    actionButtons.insert(
+      0,
+      DialogActionButton(
+        key: Constants.keyCancelButton,
+        text: captionForClose,
+        onPressed: () {
+          Navigator.of(context).pop(false);
         },
-        fullscreenDialog: true,
       ),
     );
-  } else {
-    // in modal always offer a close button
-    if (captionForClose != null) {
-      // Cancel and close are inserted on the left side of other buttons
-      // so place it first on the list
-      actionButtons.insert(
-        0,
-        DialogActionButton(
-          text: captionForClose,
-          onPressed: () {
-            Navigator.of(context).pop(false);
-          },
-        ),
-      );
-    }
+  }
 
+  if (context.isWidthSmall) {
+    // Full screen also comes with a Close (X) button
     showDialog(
       context: context,
-      barrierDismissible: false,
-      builder: (final BuildContext context) {
-        return MyAlertDialog(
+      builder: (BuildContext context) {
+        return FullScreenDialog(
           title: title,
-          scrollable: true,
-          actions: actionButtons,
-          child: child,
+          content: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: child,
+          ),
+          actionButtons: actionButtons ?? [],
         );
       },
     );
+    return;
   }
+
+  // Large screen
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (final BuildContext context) {
+      return MyAlertDialog(
+        title: title,
+        scrollable: true,
+        actions: actionButtons,
+        child: child,
+      );
+    },
+  );
 }

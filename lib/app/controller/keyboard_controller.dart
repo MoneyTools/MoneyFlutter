@@ -2,10 +2,16 @@
 
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
+import 'package:money/app/data/storage/data/data.dart';
 
 class ShortcutController extends GetxController {
-  static ShortcutController get to => Get.find();
+  @override
+  void onClose() {
+    // Clean up listeners when controller is closed
+    RawKeyboard.instance.removeListener(_handleKeyEvent);
+    super.onClose();
+  }
 
   @override
   void onInit() {
@@ -16,8 +22,10 @@ class ShortcutController extends GetxController {
 
   void initShortcuts() {
     // Example: Registering a keyboard shortcut
-    RawKeyboard.instance.addListener(_handleKeyEvent);
+    // RawKeyboard.instance.addListener(_handleKeyEvent);
   }
+
+  static ShortcutController get to => Get.find();
 
   void _handleKeyEvent(RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
@@ -36,15 +44,14 @@ class ShortcutController extends GetxController {
         if (event.logicalKey == LogicalKeyboardKey.minus) {
           ThemeController.to.fontScaleDecrease();
         }
+
+        //  Ctrl - R  Command - R
+        // rebalance
+        if (event.logicalKey == LogicalKeyboardKey.keyR) {
+          Data().recalculateBalances();
+        }
       }
     }
-  }
-
-  @override
-  void onClose() {
-    // Clean up listeners when controller is closed
-    RawKeyboard.instance.removeListener(_handleKeyEvent);
-    super.onClose();
   }
 }
 

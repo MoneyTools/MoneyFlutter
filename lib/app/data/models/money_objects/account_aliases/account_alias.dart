@@ -19,66 +19,67 @@ class AccountAlias extends MoneyObject {
   @override
   factory AccountAlias.fromJson(final MyJson row) {
     return AccountAlias()
-      ..id.value = row.getInt('Id', -1)
-      ..pattern.value = row.getString('Pattern')
-      ..flags.value = row.getInt('Flag', 0)
-      ..accountId.value = row.getString('AccountId');
+      ..fieldId.value = row.getInt('Id', -1)
+      ..fieldPattern.value = row.getString('Pattern')
+      ..fieldFlags.value = row.getInt('Flag', 0)
+      ..fieldAccountId.value = row.getString('AccountId');
   }
+
+  FieldString fieldAccountId = FieldString(
+    serializeName: 'AccountId',
+  );
+
+  FieldInt fieldFlags = FieldInt(
+    serializeName: 'Flags',
+    defaultValue: 0,
+  );
+
+  FieldId fieldId = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
+  );
+
+  FieldString fieldPattern = FieldString(
+    serializeName: 'Pattern',
+  );
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions {
+    final tmp = AccountAlias.fromJson({});
+    final f = Fields<AccountAlias>()
+      ..setDefinitions([
+        tmp.fieldId,
+        tmp.fieldPattern,
+        tmp.fieldFlags,
+        tmp.fieldAccountId,
+      ]);
+    return f.definitions;
+  }
+
+  @override
+  String getRepresentation() {
+    return '${fieldPattern.value} ${fieldAccountId.value}';
+  }
+
+  @override
+  int get uniqueId => fieldId.value;
+
+  @override
+  set uniqueId(value) => fieldId.value = value;
+
   static final _fields = Fields<AccountAlias>();
 
-  static Fields<AccountAlias> get fields {
+  static Fields<AccountAlias> get fieldsForColumnView {
     if (_fields.isEmpty) {
       final tmp = AccountAlias.fromJson({});
       _fields.setDefinitions(
         [
-          tmp.id,
-          tmp.pattern,
-          tmp.flags,
-          tmp.accountId,
+          tmp.fieldPattern,
+          tmp.fieldFlags,
+          tmp.fieldAccountId,
         ],
       );
     }
     return _fields;
   }
-
-  @override
-  String getRepresentation() {
-    return '${pattern.value} ${accountId.value}';
-  }
-
-  // 0
-  Field<int> id = Field<int>(
-    importance: 0,
-    serializeName: 'Id',
-    defaultValue: -1,
-    useAsColumn: false,
-    getValueForSerialization: (final MoneyObject instance) => (instance as AccountAlias).uniqueId,
-  );
-
-  // 1
-  Field<String> pattern = Field<String>(
-    importance: 1,
-    serializeName: 'Pattern',
-    defaultValue: '',
-  );
-
-  // 2
-  Field<int> flags = Field<int>(
-    importance: 2,
-    serializeName: 'Flags',
-    defaultValue: 0,
-  );
-
-  // 3
-  Field<String> accountId = Field<String>(
-    importance: 3,
-    serializeName: 'AccountId',
-    defaultValue: '',
-  );
-
-  @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
 }

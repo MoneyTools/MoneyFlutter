@@ -11,12 +11,13 @@ class MyRectangle extends StatelessWidget {
     this.showBorder = false,
     this.borderSize = 2,
   });
-  final Color colorFill;
-  final Color colorBorder;
-  final double size;
+
   final double borderSize;
-  final bool showBorder;
+  final Color colorBorder;
+  final Color colorFill;
   final BoxShape shape;
+  final bool showBorder;
+  final double size;
 
   @override
   Widget build(final BuildContext context) {

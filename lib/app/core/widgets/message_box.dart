@@ -25,11 +25,13 @@ void messageBox(
 
 class DialogService {
   factory DialogService() => _instance;
+
   DialogService._internal();
-  // singleton
-  static final DialogService _instance = DialogService._internal();
 
   final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  // singleton
+  static final DialogService _instance = DialogService._internal();
 
   Future<void> showMessageBox(String title, String message) async {
     await showDialog(

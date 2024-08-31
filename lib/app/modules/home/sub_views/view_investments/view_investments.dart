@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:fl_chart/fl_chart.dart';
+import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/core/helpers/ranges.dart';
-import 'package:money/app/core/widgets/center_message.dart';
-import 'package:money/app/core/widgets/chart.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/fields/fields.dart';
+import 'package:money/app/core/widgets/charts/my_line_chart.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
+import 'package:money/app/data/models/money_objects/securities/security.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
 
 part 'view_investments_details_panels.dart';
 
@@ -26,15 +23,59 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewInvestments;
   }
 
-  // Footer related
-  final DateRange _footerColumnDate = DateRange();
-  int _footerColumnUnits = 0;
-  double _footerColumnCommission = 0.00;
-  double _footerColumnFees = 0.00;
+  /// add more top level action buttons
+  @override
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
+    if (!forInfoPanelTransactions) {
+      final Investment? selectedInvestment = getFirstSelectedItem() as Investment?;
+
+      // this can go last
+      if (selectedInvestment != null) {
+        final Transaction? relatedTransaction = Data().transactions.get(selectedInvestment.uniqueId);
+        list.add(
+          buildJumpToButton(
+            [
+              // Jump to Account view
+              InternalViewSwitching.toAccounts(accountId: relatedTransaction!.fieldAccountId.value),
+
+              // Jump to Transaction view
+              InternalViewSwitching.toTransactions(
+                transactionId: relatedTransaction.uniqueId,
+                filters: null,
+              ),
+
+              // Jump to Stock view
+              InternalViewSwitching(
+                icon: ViewId.viewStocks.getIconData(),
+                title: 'Switch to Stocks',
+                onPressed: () {
+                  // Prepare the Stocks view
+                  // Filter by Stock Symbol
+                  String symbol =
+                      selectedInvestment.fieldSecuritySymbol.getValueForDisplay(selectedInvestment).toLowerCase();
+                  final Security? securityFound = Data().securities.getBySymbol(symbol);
+                  if (securityFound != null) {
+                    PreferenceController.to.jumpToView(
+                      viewId: ViewId.viewStocks,
+                      selectedId: securityFound.uniqueId,
+                      columnFilter: [],
+                      textFilter: '',
+                    );
+                  }
+                },
+              ),
+            ],
+          ),
+        );
+      }
+    }
+    return list;
+  }
 
   @override
   String getClassNamePlural() {
-    return 'Investment';
+    return 'Investments';
   }
 
   @override
@@ -48,47 +89,8 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getViewId() {
-    return Data().investments.getTypeName();
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Date':
-        return getFooterForDateRange(_footerColumnDate);
-      case 'Units':
-        return getFooterForInt(_footerColumnUnits);
-      case 'Commission':
-        return getFooterForAmount(_footerColumnCommission);
-      case 'Fees':
-        return getFooterForAmount(_footerColumnFees);
-      default:
-        return null;
-    }
-  }
-
-  @override
-  List<Investment> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final list = Data()
-        .investments
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (instance) => (applyFilter == false || isMatchingFilters(instance)),
-        )
-        .toList();
-    Investments.calculateRunningBalance(list);
-
-    for (final item in list) {
-      _footerColumnDate.inflate(item.date);
-      _footerColumnUnits += item.units.value.toInt();
-      _footerColumnCommission += item.commission.value.toDouble();
-      _footerColumnFees += item.fees.value.toDouble();
-    }
-    return list;
+  Fields<Investment> getFieldsForTable() {
+    return Investment.fieldsForColumnView;
   }
 
   @override
@@ -111,7 +113,19 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Fields<Investment> getFieldsForTable() {
-    return Investment.fields;
+  List<Investment> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final list = Data()
+        .investments
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (instance) => (applyFilter == false || isMatchingFilters(instance)),
+        )
+        .toList();
+    Investments.applyHoldingSharesAdjustedForSplits(list);
+
+    return list;
   }
 }

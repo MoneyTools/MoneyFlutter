@@ -9,8 +9,8 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
     if (selectedIds.isEmpty) {
       final List<PairXY> list = <PairXY>[];
       for (final Payee item in getList()) {
-        if (item.name.value != 'Transfer') {
-          list.add(PairXY(item.name.value, item.count.value));
+        if (item.fieldName.value != 'Transfer') {
+          list.add(PairXY(item.fieldName.value, item.fieldCount.value));
         }
       }
 
@@ -27,7 +27,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
     }
 
     final List<Transaction> flatTransactions = Transactions.flatTransactions(
-      Data().transactions.iterableList().where((t) => t.payee.value == selectedIds.first),
+      Data().transactions.iterableList().where((t) => t.fieldPayee.value == selectedIds.first),
     );
 
     if (flatTransactions.isEmpty) {
@@ -36,7 +36,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
 
     final DateRange dateRange = DateRange();
     for (final t in flatTransactions) {
-      dateRange.inflate(t.dateTime.value);
+      dateRange.inflate(t.fieldDateTime.value);
     }
 
     double maxValue = 0;
@@ -116,7 +116,8 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
   // Details Panel for Transactions Payees
   Widget _getSubViewContentForTransactions(final List<int> indices) {
     final Payee? payee = getMoneyObjectFromFirstSelectedId<Payee>(indices, list);
-    if (payee != null && payee.id.value > -1) {
+    if (payee != null && payee.fieldId.value > -1) {
+      final SelectionController selectionController = Get.put(SelectionController());
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
         columnsToInclude: <Field>[
@@ -127,8 +128,9 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
-          filter: (final Transaction transaction) => transaction.payee.value == payee.id.value,
+          filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
         ),
+        selectionController: selectionController,
       );
     }
     return CenterMessage.noTransaction();

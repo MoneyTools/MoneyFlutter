@@ -8,10 +8,10 @@ Widget pickerPayee({
   required final Payee? itemSelected,
   required final Function(Payee?) onSelected,
 }) {
-  final List<String> options = Data().payees.getListSorted().map((element) => element.name.value).toList();
+  final List<String> options = Data().payees.getListSorted().map((element) => element.fieldName.value).toList();
   options.sort((a, b) => sortByString(a, b, true));
 
-  String selectedName = itemSelected == null ? '' : itemSelected.name.value;
+  String selectedName = itemSelected == null ? '' : itemSelected.fieldName.value;
 
   return PickerEditBox(
     title: 'Payee',
@@ -22,6 +22,10 @@ Widget pickerPayee({
       if (found != null) {
         onSelected(found);
       }
+    },
+    onAddNew: (String newPayeeText) {
+      final Payee found = Data().payees.getOrCreate(newPayeeText);
+      onSelected(found);
     },
   );
 }

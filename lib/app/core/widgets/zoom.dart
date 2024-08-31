@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
+import 'package:money/app/data/models/constants.dart';
 
 /// ( - )  100% ( + )
 class ZoomIncreaseDecrease extends StatefulWidget {
@@ -12,17 +13,19 @@ class ZoomIncreaseDecrease extends StatefulWidget {
     required this.onDecrease,
     required this.onIncrease,
   });
-  final String title;
+
   final VoidCallback onDecrease;
   final VoidCallback onIncrease;
+  final String title;
 
   @override
   State<ZoomIncreaseDecrease> createState() => _ZoomIncreaseDecreaseState();
 }
 
 class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
-  String zoomValueAsText = '';
   PreferenceController preferenceController = Get.find();
+  String zoomValueAsText = '';
+
   @override
   void initState() {
     super.initState();
@@ -36,6 +39,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
       children: <Widget>[
         Text(widget.title),
         IconButton(
+          key: Constants.keyZoomDecrease,
           tooltip: 'Cmd/Ctrl -',
           icon: const Icon(Icons.text_decrease),
           onPressed: () {
@@ -46,6 +50,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
           },
         ),
         Tooltip(
+          key: Constants.keyZoomNormal,
           message: 'Cmd/Ctrl 0',
           child: TextButton(
             onPressed: () {
@@ -58,6 +63,7 @@ class _ZoomIncreaseDecreaseState extends State<ZoomIncreaseDecrease> {
           ),
         ),
         IconButton(
+          key: Constants.keyZoomIncrease,
           tooltip: 'Cmd/Ctrl +',
           icon: const Icon(Icons.text_increase),
           onPressed: () {

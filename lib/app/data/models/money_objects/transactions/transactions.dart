@@ -1,11 +1,9 @@
-import 'dart:math';
+// ignore_for_file: prefer_conditional_assignment
 
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
-import 'package:money/app/data/models/money_objects/accounts/account_types_enum.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/app/data/storage/data/data.dart';
@@ -13,11 +11,206 @@ import 'package:money/app/data/storage/data/data.dart';
 export 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 
 part 'transactions_csv.dart';
-part 'transactions_demo.dart';
 
 class Transactions extends MoneyObjects<Transaction> {
   Transactions() {
     collectionName = 'Transactions';
+  }
+
+  DateRange dateRangeActiveAccount = DateRange();
+  DateRange dateRangeIncludingClosedAccount = DateRange();
+  double runningBalance = 0.00;
+
+  @override
+  void loadFromJson(final List<MyJson> rows) {
+    clear();
+
+    runningBalance = 0.00;
+
+    for (final MyJson row in rows) {
+      final Transaction t = Transaction.fromJSon(row, runningBalance);
+      runningBalance += t.balance;
+      appendMoneyObject(t);
+    }
+  }
+
+  /// Now that everything is loaded, adjust relation between MoneyObjects
+  @override
+  void onAllDataLoaded() {
+    // Pre computer possible category matching for Transaction that have no associated categories
+    // We use this to give a Hint to the user about the best category to pick for a transaction
+    MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
+
+    final transactionsWithCategories = getListFlattenSplits();
+    for (var t in transactionsWithCategories) {
+      if (t.fieldCategoryId.value != -1) {
+        accountsToPayeeNameToCategories.cumulate(
+          t.fieldAccountId.value,
+          t.getPayeeOrTransferCaption(),
+          t.fieldCategoryId.value,
+        );
+      }
+    }
+
+    // watchInit.stop();
+    // debugInfo('getListFlattenSplits: ${watchInit.elapsedMilliseconds} ms');
+
+    // Stopwatch watchFind = Stopwatch();
+    dateRangeActiveAccount.clear();
+    dateRangeIncludingClosedAccount.clear();
+
+    for (final Transaction transactionSource in iterableList()) {
+      // Pre computer possible category matching for Transaction that have no associated categories
+      if (transactionSource.fieldCategoryId.value == -1) {
+        // watchFind.start();
+        final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories.find(
+          transactionSource.fieldAccountId.value,
+          transactionSource.getPayeeOrTransferCaption(),
+        );
+        transactionSource.possibleMatchingCategoryId =
+            setOfPossibleCategoryId.isEmpty ? -1 : setOfPossibleCategoryId.first;
+        // watchFind.stop();
+      }
+
+      // Computer date range of all transactions
+      dateRangeIncludingClosedAccount.inflate(transactionSource.fieldDateTime.value);
+      if (transactionSource.instanceOfAccount?.isOpen == true) {
+        dateRangeActiveAccount.inflate(transactionSource.fieldDateTime.value!);
+      }
+
+      // Resolve the Transfers
+      final int transferId = transactionSource.fieldTransfer.value;
+      transactionSource.instanceOfTransfer = null;
+
+      if (transactionSource.fieldTransferSplit.value > 0) {
+        // deal with transfer of split
+        // Split transfer
+        // if (transactionSource.transferSplit.value != -1) {
+        //   final Split? s = Data().splits.get(transactionSource.transferSplit.value);
+        //   if (s == null) {
+        //     debugInfo('Transaction contains a split marked as a transfer, but other side of transfer was not found');
+        //     continue;
+        //   }
+        //
+        //   if (transactionSource.transferInstance == null) {
+        //     transactionSource.transferInstance =
+        //         Transfer(id: transferId, source: transactionSource, related: transactionRelated, relatedSplit: s);
+        //     continue;
+        //   }
+        // debugInfo('Already have a transfer for this split');
+        // }
+        continue;
+      }
+
+      // Simple Transfer
+      if (transferId == -1) {
+        if (transactionSource.instanceOfTransfer == null) {
+          // this is correct
+        } else {
+          // this needs to be cleared
+          // TODO - should the other side transaction be cleared too?
+          transactionSource.instanceOfTransfer = null;
+        }
+      } else {
+        // hook up the transfer relation
+        final Transaction? transactionRelated = get(transferId);
+
+        // check for error
+        if (transactionRelated == null) {
+          logger.e(
+            'Transaction.transferID of ${transactionSource.uniqueId} missing related transaction id $transferId',
+          );
+          continue;
+        }
+
+        // hydrate the Transfer
+        if (transactionSource.fieldTransferSplit.value == -1) {
+          // Normal direct transfer
+          linkTransfer(transactionSource, transactionRelated);
+          continue;
+        }
+      }
+    }
+
+    // make sure that we have valid min max dates
+    dateRangeIncludingClosedAccount.ensureNoNullDates();
+    dateRangeActiveAccount.ensureNoNullDates();
+  }
+
+  @override
+  String toCSV() {
+    return MoneyObjects.getCsvFromList(
+      getListSortedById(),
+    );
+  }
+
+  void checkTransfers(Set<Transaction> dangling, List<Account> deletedAccounts) {
+    for (Transaction t in iterableList()) {
+      t.checkTransfers(dangling, deletedAccounts);
+    }
+  }
+
+  /// match amount and date YYYY,MM,DD, optionally restrict to a specific account by passing -1
+  Transaction? findExistingTransaction({
+    required final int accountId,
+    required final DateRange dateRange,
+    required final double amount,
+  }) {
+    return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
+      if ((accountId == -1 || transaction.fieldAccountId.value == accountId) &&
+          transaction.fieldAmount.value.toDouble() == amount &&
+          dateRange.isBetweenEqual(transaction.fieldDateTime.value)) {
+        return true;
+      }
+
+      return false;
+    });
+  }
+
+  int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
+    final transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
+      (item) =>
+          item.fieldAccountId.value == t.fieldAccountId.value &&
+          item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
+    );
+    if (transactionMatchingAccountPayeeAndHasCategory != null) {
+      return transactionMatchingAccountPayeeAndHasCategory.fieldCategoryId.value;
+    }
+    return -1;
+  }
+
+  Iterable<Transaction> findTransfersToAccount(final Account a) {
+    List<Transaction> view = [];
+    for (Transaction t in iterableList()) {
+      if (t.isDeleted) {
+        continue;
+      }
+
+      if (t.containsTransferTo(a)) {
+        view.add(t);
+      }
+    }
+    // view.sort(SortByDate);
+    return view;
+  }
+
+  static List<Transaction> flatTransactions(
+    final Iterable<Transaction> transactions,
+  ) {
+    List<Transaction> flatList = [];
+    for (final t in transactions) {
+      if (t.isSplit) {
+        for (final s in t.splits) {
+          final fakeTransaction = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value);
+          fakeTransaction.fieldCategoryId.value = s.fieldCategoryId.value;
+          fakeTransaction.fieldAmount.value = s.fieldAmount.value;
+          flatList.add(fakeTransaction);
+        }
+      } else {
+        flatList.add(t);
+      }
+    }
+    return flatList;
   }
 
   List<Transaction> getListFlattenSplits({
@@ -26,15 +219,14 @@ class Transactions extends MoneyObjects<Transaction> {
     List<Transaction> flattenList = [];
     for (final t in iterableList()) {
       if (whereClause == null || whereClause(t)) {
-        if (t.categoryId.value == Data().categories.splitCategoryId()) {
+        if (t.fieldCategoryId.value == Data().categories.splitCategoryId()) {
           for (final s in t.splits) {
-            final fakeT = Transaction(status: t.status.value)
-              ..dateTime.value = t.dateTime.value
-              ..accountId.value = t.accountId.value
-              ..payee.value = s.payeeId.value == -1 ? t.payee.value : s.payeeId.value
-              ..categoryId.value = s.categoryId.value
-              ..memo.value = s.memo.value
-              ..amount.value = s.amount.value;
+            final fakeT = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value)
+              ..fieldAccountId.value = t.fieldAccountId.value
+              ..fieldPayee.value = s.fieldPayeeId.value == -1 ? t.fieldPayee.value : s.fieldPayeeId.value
+              ..fieldCategoryId.value = s.fieldCategoryId.value
+              ..fieldMemo.value = s.fieldMemo.value
+              ..fieldAmount.value = s.fieldAmount.value;
 
             flattenList.add(fakeT);
           }
@@ -53,31 +245,11 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     return iterableList(includeDeleted: true).where(
       (element) =>
-          isBetweenOrEqual(element.dateTime.value!.year, minYear, maxYear) &&
+          isBetweenOrEqual(element.fieldDateTime.value!.year, minYear, maxYear) &&
           ((incomesOrExpenses == null ||
-              (incomesOrExpenses == true && element.amount.value.toDouble() > 0) ||
-              (incomesOrExpenses == false && element.amount.value.toDouble() < 0))),
+              (incomesOrExpenses == true && element.fieldAmount.value.toDouble() > 0) ||
+              (incomesOrExpenses == false && element.fieldAmount.value.toDouble() < 0))),
     );
-  }
-
-  static List<Transaction> flatTransactions(
-    final Iterable<Transaction> transactions,
-  ) {
-    List<Transaction> flatList = [];
-    for (final t in transactions) {
-      if (t.isSplit) {
-        for (final s in t.splits) {
-          final fakeTransaction = Transaction(status: t.status.value);
-          fakeTransaction.dateTime.value = t.dateTime.value;
-          fakeTransaction.categoryId.value = s.categoryId.value;
-          fakeTransaction.amount.value = s.amount.value;
-          flatList.add(fakeTransaction);
-        }
-      } else {
-        flatList.add(t);
-      }
-    }
-    return flatList;
   }
 
   static List<Pair<int, double>> transactionSumByTime(
@@ -85,224 +257,11 @@ class Transactions extends MoneyObjects<Transaction> {
   ) {
     List<Pair<int, double>> timeAndAmounts = [];
     for (final t in transactions) {
-      int oneDaySlot = t.dateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
-      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.amount.value.toDouble()));
+      int oneDaySlot = t.fieldDateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
+      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.fieldAmount.value.toDouble()));
     }
     // sort by date time
     timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
     return timeAndAmounts;
-  }
-
-  DateRange dateRangeIncludingClosedAccount = DateRange();
-  DateRange dateRangeActiveAccount = DateRange();
-  double runningBalance = 0.00;
-
-  @override
-  void loadDemoData() {
-    _loadDemoData();
-  }
-
-  @override
-  String toCSV() {
-    return MoneyObjects.getCsvFromList(
-      getListSortedById(),
-    );
-  }
-
-  @override
-  void loadFromJson(final List<MyJson> rows) {
-    clear();
-
-    runningBalance = 0.00;
-
-    for (final MyJson row in rows) {
-      final Transaction t = Transaction.fromJSon(row, runningBalance);
-      runningBalance += t.balance;
-      appendMoneyObject(t);
-    }
-  }
-
-  int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
-    final transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
-      (item) =>
-          item.accountId.value == t.accountId.value &&
-          item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
-    );
-    if (transactionMatchingAccountPayeeAndHasCategory != null) {
-      return transactionMatchingAccountPayeeAndHasCategory.categoryId.value;
-    }
-    return -1;
-  }
-
-  /// Now that everything is loaded, adjust relation between MoneyObjects
-  @override
-  void onAllDataLoaded() {
-    // Pre computer possible category matching for Transaction that have no associated categories
-    // Stopwatch watchAll = Stopwatch()..start();
-
-    // Stopwatch watchInit = Stopwatch()..start();
-    MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
-
-    final transactionsWithCategories = getListFlattenSplits();
-    for (var t in transactionsWithCategories) {
-      if (t.categoryId.value != -1) {
-        accountsToPayeeNameToCategories.cumulate(t.accountId.value, t.getPayeeOrTransferCaption(), t.categoryId.value);
-      }
-    }
-
-    // watchInit.stop();
-    // debugLog('getListFlattenSplits: ${watchInit.elapsedMilliseconds} ms');
-
-    // Stopwatch watchFind = Stopwatch();
-    dateRangeActiveAccount.clear();
-    dateRangeIncludingClosedAccount.clear();
-
-    for (final Transaction transactionSource in iterableList()) {
-      // Pre computer possible category matching for Transaction that have no associated categories
-      if (transactionSource.categoryId.value == -1) {
-        // watchFind.start();
-        final Set<int> setOfPossibleCategoryId = accountsToPayeeNameToCategories.find(
-          transactionSource.accountId.value,
-          transactionSource.getPayeeOrTransferCaption(),
-        );
-        transactionSource.possibleMatchingCategoryId =
-            setOfPossibleCategoryId.isEmpty ? -1 : setOfPossibleCategoryId.first;
-        // watchFind.stop();
-      }
-
-      // Computer date range of all transactions
-      dateRangeIncludingClosedAccount.inflate(transactionSource.dateTime.value!);
-      if (transactionSource.accountInstance?.isOpen == true) {
-        dateRangeActiveAccount.inflate(transactionSource.dateTime.value!);
-      }
-
-      // Resolve the Transfers
-      final int transferId = transactionSource.transfer.value;
-      transactionSource.transferInstance = null;
-
-      if (transactionSource.transferSplit.value > 0) {
-        // deal with transfer of split
-        // Split transfer
-        // if (transactionSource.transferSplit.value != -1) {
-        //   final Split? s = Data().splits.get(transactionSource.transferSplit.value);
-        //   if (s == null) {
-        //     debugLog('Transaction contains a split marked as a transfer, but other side of transfer was not found');
-        //     continue;
-        //   }
-        //
-        //   if (transactionSource.transferInstance == null) {
-        //     transactionSource.transferInstance =
-        //         Transfer(id: transferId, source: transactionSource, related: transactionRelated, relatedSplit: s);
-        //     continue;
-        //   }
-        // debugLog('Already have a transfer for this split');
-        // }
-        continue;
-      }
-
-      // Simple Transfer
-      if (transferId == -1) {
-        if (transactionSource.transferInstance == null) {
-          // this is correct
-        } else {
-          // this needs to be cleared
-          // TODO - should the other side transaction be cleared too?
-          transactionSource.transferInstance = null;
-        }
-      } else {
-        // hook up the transfer relation
-        final Transaction? transactionRelated = get(transferId);
-
-        // check for error
-        if (transactionRelated == null) {
-          debugLog(
-            'Transaction.transferID of ${transactionSource.uniqueId} missing related transaction id $transferId',
-          );
-          continue;
-        }
-
-        // hydrate the Transfer
-        if (transactionSource.transferSplit.value == -1) {
-          // Normal direct transfer
-          // ignore: prefer_conditional_assignment
-          if (transactionSource.transferInstance == null) {
-            // cache the transfer
-            transactionSource.transferInstance = Transfer(
-              id: 0,
-              source: transactionSource,
-              related: transactionRelated,
-              isOrphan: false,
-            );
-          }
-          // ignore: prefer_conditional_assignment
-          if (transactionRelated.transferInstance == null) {
-            // cache the transfer
-            transactionRelated.transferInstance = Transfer(
-              id: 0,
-              source: transactionRelated,
-              related: transactionSource,
-              isOrphan: false,
-            );
-          }
-          continue;
-        }
-      }
-    }
-
-    // make sure that we have valid min max dates
-    dateRangeIncludingClosedAccount.ensureNoNullDates();
-    dateRangeActiveAccount.ensureNoNullDates();
-
-    // debugLog('DONE-----: ${watchAll.elapsedMilliseconds} ms');
-    // debugLog('Find-----: ${watchFind.elapsedMilliseconds} ms');
-  }
-
-  int getNextTransactionId() {
-    int maxIdFound = -1;
-    for (final item in iterableList(includeDeleted: true)) {
-      maxIdFound = max(maxIdFound, item.id.value);
-    }
-    return maxIdFound + 1;
-  }
-
-  Transaction? findExistingTransaction({
-    required final DateRange dateRange,
-    required final double amount,
-  }) {
-    // TODO make this more precises, at the moment we only match amount and date YYYY,MM,DD
-    return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
-      if (transaction.amount.value.toDouble() == amount) {
-        if (dateRange.isBetweenEqual(transaction.dateTime.value)) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-
-  Transaction? findExistingTransactionForAccount({
-    required final int accountId,
-    required final DateTime dateTime,
-    required final double amount,
-  }) {
-    // TODO - make this more precises, at the moment we only match amount and date YYYY,MM,DD
-    return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
-      if (transaction.accountId.value == accountId && transaction.amount.value.toDouble() == amount) {
-        if (transaction.dateTime.value?.year == dateTime.year &&
-            transaction.dateTime.value?.month == dateTime.month &&
-            transaction.dateTime.value?.day == dateTime.day) {
-          return true;
-        }
-      }
-      return false;
-    });
-  }
-
-  List<Transaction> getAllTransactionsByDate() {
-    final List<Transaction> theListOfAllTransactionIncludingHiddenOne = iterableList().toList(growable: false);
-    theListOfAllTransactionIncludingHiddenOne.sort(
-      (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value, true),
-    );
-    return theListOfAllTransactionIncludingHiddenOne;
   }
 }

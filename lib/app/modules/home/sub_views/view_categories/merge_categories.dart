@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/info_banner.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_categories/picker_category.dart';
@@ -21,15 +19,16 @@ class MergeCategoriesTransactionsDialog extends StatefulWidget {
 }
 
 class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTransactionsDialog> {
-  late Category _categoryPicked = widget.categoryToMove;
   final List<Transaction> _transactions = [];
+
+  late Category _categoryPicked = widget.categoryToMove;
 
   @override
   void initState() {
     super.initState();
 
     for (final t in Data().transactions.iterableList(includeDeleted: true)) {
-      if (t.categoryId.value == widget.categoryToMove.uniqueId) {
+      if (t.fieldCategoryId.value == widget.categoryToMove.uniqueId) {
         _transactions.add(t);
       }
     }
@@ -47,7 +46,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
           children: [
             const SizedBox(width: 100, child: Text('From category')),
             Expanded(
-              child: Box(child: Text(widget.categoryToMove.name.value)),
+              child: Box(child: Text(widget.categoryToMove.fieldName.value)),
             ),
           ],
         ),
@@ -81,9 +80,27 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
     );
   }
 
+  Widget _buildActionOffering(final String text, Widget action) {
+    return SizedBox(
+      width: 250,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8),
+            child: action,
+          ),
+          gapMedium(),
+          Text(text),
+          gapMedium(),
+        ],
+      ),
+    );
+  }
+
   Widget _buildActionPanel() {
-    final from = widget.categoryToMove.name.value;
-    final to = _categoryPicked.name.value;
+    final from = widget.categoryToMove.fieldName.value;
+    final to = _categoryPicked.fieldName.value;
 
     if (from == to) {
       return Center(
@@ -138,7 +155,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
                   Data().notifyMutationChanged(
                     mutation: MutationType.deleted,
                     moneyObject: widget.categoryToMove,
-                    fireNotification: false,
+                    recalculateBalances: false,
                   );
 
                   Data().updateAll();
@@ -153,24 +170,6 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
       ),
     );
   }
-
-  Widget _buildActionOffering(final String text, Widget action) {
-    return SizedBox(
-      width: 250,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: action,
-          ),
-          gapMedium(),
-          Text(text),
-          gapMedium(),
-        ],
-      ),
-    );
-  }
 }
 
 void moveTransactionsToCategory(
@@ -179,12 +178,12 @@ void moveTransactionsToCategory(
 ) {
   for (final t in transactions) {
     t.stashValueBeforeEditing();
-    t.categoryId.value = moveToCategory.uniqueId;
+    t.fieldCategoryId.value = moveToCategory.uniqueId;
 
     Data().notifyMutationChanged(
       mutation: MutationType.changed,
       moneyObject: t,
-      fireNotification: false,
+      recalculateBalances: false,
     );
   }
 }

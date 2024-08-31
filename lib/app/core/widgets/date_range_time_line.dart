@@ -8,9 +8,10 @@ class DateRangeTimeline extends StatelessWidget {
     super.key,
     this.showTicks = true,
   });
-  final DateTime startDate;
+
   final DateTime endDate;
   final bool showTicks;
+  final DateTime startDate;
 
   @override
   Widget build(BuildContext context) {

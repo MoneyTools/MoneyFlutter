@@ -7,8 +7,9 @@ class RevealContent extends StatefulWidget {
     super.key,
     this.textForClipboard = '',
   });
-  final List<Widget> widgets;
+
   final String textForClipboard;
+  final List<Widget> widgets;
 
   @override
   RevealContentState createState() => RevealContentState();
@@ -16,15 +17,6 @@ class RevealContent extends StatefulWidget {
 
 class RevealContentState extends State<RevealContent> {
   int _showItem = 0;
-
-  void _toggleReveal() {
-    setState(() {
-      _showItem++;
-      if (_showItem >= widget.widgets.length) {
-        _showItem = 0;
-      }
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,5 +29,14 @@ class RevealContentState extends State<RevealContent> {
       },
       child: widget.widgets[_showItem],
     );
+  }
+
+  void _toggleReveal() {
+    setState(() {
+      _showItem++;
+      if (_showItem >= widget.widgets.length) {
+        _showItem = 0;
+      }
+    });
   }
 }

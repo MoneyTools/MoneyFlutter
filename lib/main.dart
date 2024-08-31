@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/keyboard_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/modules/home/home_routes.dart';
 import 'package:money/app/modules/policies/policy_routes.dart';
 import 'package:money/app/modules/settings/settings_routes.dart';
@@ -13,27 +13,41 @@ import 'package:money/app/modules/welcome/welcome_routes.dart';
 
 import 'app/core/bindings/application_bindings.dart';
 
+/// The main entry point for the MoneyFlutter application.
+/// Sets up the app structure, theming, and initial routes.
 void main() {
   runApp(MyApp());
 }
 
+/// Root widget of the application.
+/// Configures the overall app theme and initial route.
 class MyApp extends StatelessWidget {
   MyApp({super.key});
+
+  final DataController dataController = Get.put(DataController());
+
   // Leave these declared in this order
   final PreferenceController preferenceController = Get.put(PreferenceController());
-  final ThemeController themeController = Get.put(ThemeController());
-  final DataController dataController = Get.put(DataController());
+
+  // Keyboard support
   final ShortcutController shortcutController = Get.put(ShortcutController());
+
+  // Theme Color and Font Size
+  final ThemeController themeController = Get.put(ThemeController());
 
   @override
   Widget build(BuildContext context) {
     // Get.updateLocale(const Locale('en', 'US'));
 
+    // Cache the S/M/L width for Widget that do not have access to BuildContext
+    themeController.isDeviceWidthSmall.value = context.isWidthSmall;
+    themeController.isDeviceWidthMedium.value = context.isWidthMedium;
+    themeController.isDeviceWidthLarge.value = context.isWidthLarge;
+
     return Obx(
       () {
-        final String k = '${preferenceController.getUniqueState}|${dataController.getUniqueState}';
+        final String k = preferenceController.getUniqueState;
 
-        // debugLog('Obx-GetMaterialApp');
         return GetMaterialApp(
           key: Key(k),
           debugShowCheckedModeBanner: false,

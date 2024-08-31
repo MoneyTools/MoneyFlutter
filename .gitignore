@@ -130,3 +130,5 @@ app.*.symbols
 !/dev/ci/**/Gemfile.lock
 graph.dot
 /.firebase
+!**/converage/cc.txt
+test_output_sqlite.db

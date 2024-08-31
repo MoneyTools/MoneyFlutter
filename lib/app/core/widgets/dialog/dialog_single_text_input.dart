@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showTextInputDialog({
@@ -35,9 +36,9 @@ Future<void> showTextInputDialog({
               ),
               gapLarge(),
               Expanded(
-                child: TextField(
+                child: MyTextInput(
                   controller: textEditingController,
-                  decoration: InputDecoration(hintText: 'Enter $title'),
+                  hintText: 'Enter $title',
                 ),
               ),
             ],

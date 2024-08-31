@@ -1,3 +1,4 @@
+import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 
 /// A generic class that accumulates values of type `V` associated with keys of type `T`.
@@ -7,6 +8,20 @@ class AccumulatorList<K, V> {
 
   void clear() {
     values.clear();
+  }
+
+  bool containsKey(K key) {
+    return values.containsKey(key);
+  }
+
+  bool containsKeyValue(K key, V value) {
+    var setFound = values[key];
+    if (setFound == null) {
+      // the key is not a match
+      return false;
+    }
+
+    return setFound.contains(value);
   }
 
   /// Adds a value of type `V` to the set associated with the provided `key` of type `K`.
@@ -22,10 +37,6 @@ class AccumulatorList<K, V> {
       // first time setting the set
       values[key] = <V>{value}; // Ensure type safety for the set
     }
-  }
-
-  bool containsKey(K key) {
-    return values.containsKey(key);
   }
 
   /// Returns a list of all the keys present in the `values` map.
@@ -44,16 +55,6 @@ class AccumulatorList<K, V> {
   Set<V>? getValue(K key) {
     return values[key];
   }
-
-  bool containsKeyValue(K key, V value) {
-    var setFound = values[key];
-    if (setFound == null) {
-      // the key is not a match
-      return false;
-    }
-
-    return setFound.contains(value);
-  }
 }
 
 /// Tally values
@@ -62,6 +63,10 @@ class AccumulatorSum<K, V> {
 
   void clear() {
     values.clear();
+  }
+
+  bool containsKey(K key) {
+    return values.containsKey(key);
   }
 
   void cumulate(K key, V value) {
@@ -74,8 +79,8 @@ class AccumulatorSum<K, V> {
     }
   }
 
-  bool containsKey(K key) {
-    return values.containsKey(key);
+  List<MapEntry<K, V>> getEntries() {
+    return values.entries.toList();
   }
 
   K? getKeyWithLargestSum() {
@@ -106,18 +111,18 @@ class AccumulatorSum<K, V> {
   dynamic _accumulate(V existingValue, V value) {
     return (existingValue as num) + (value as num);
   }
-
-  List<MapEntry<K, V>> getEntries() {
-    return values.entries.toList();
-  }
 }
 
-/// Tally values
+/// Keep track of oldest and newest date range
 class AccumulatorDateRange<K> {
   final Map<K, DateRange> values = {};
 
   void clear() {
     values.clear();
+  }
+
+  bool containsKey(K key) {
+    return values.containsKey(key);
   }
 
   void cumulate(K key, DateTime value) {
@@ -128,16 +133,34 @@ class AccumulatorDateRange<K> {
     }
   }
 
-  bool containsKey(K key) {
-    return values.containsKey(key);
+  List<MapEntry<K, DateRange>> getEntries() {
+    return values.entries.toList();
   }
 
   DateRange? getValue(K key) {
     return values[key];
   }
+}
 
-  List<MapEntry<K, DateRange>> getEntries() {
-    return values.entries.toList();
+/// Keep track of oldest and newest date range
+class AccumulatorAverage<K> {
+  final Map<K, RunningAverage> values = {};
+
+  void clear() {
+    values.clear();
+  }
+
+  bool containsKey(K key) {
+    return values.containsKey(key);
+  }
+
+  void cumulate(K key, num value) {
+    RunningAverage average = values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
+    average.addValue(value);
+  }
+
+  RunningAverage? getValue(K key) {
+    return values[key];
   }
 }
 
@@ -170,10 +193,6 @@ class MapAccumulatorSet<K, I, V> {
     map[k]!.cumulate(i, v);
   }
 
-  AccumulatorList<I, V>? getLevel1(K key1) {
-    return map[key1];
-  }
-
   /// for example
   /// cumulating 'species', 'number of Legs', 'name'
   /// MapAccumulatorSet<String, int, String>
@@ -184,5 +203,51 @@ class MapAccumulatorSet<K, I, V> {
   Set<V> find(K key1, I key2) {
     final foundInLevel1 = map[key1];
     return foundInLevel1?.getValue(key2) ?? <V>{};
+  }
+
+  AccumulatorList<I, V>? getLevel1(K key1) {
+    return map[key1];
+  }
+}
+
+class RunningAverage {
+  NumRange range = NumRange(
+    min: double.infinity,
+    max: -double.infinity,
+  );
+
+  int _count = 0;
+  int _countZeros = 0;
+  num _sum = 0.0;
+
+  void addValue(num newValue) {
+    if (isConsideredZero(newValue)) {
+      _countZeros++;
+    } else {
+      _sum += newValue.abs();
+      _count++;
+      range.inflate(newValue);
+    }
+  }
+
+  String get descriptionAsInt => 'Average\n${range.descriptionAsInt}\n$descriptionCount';
+
+  String get descriptionAsMoney => 'Average\n${range.descriptionAsMoney}\n$descriptionCount';
+
+  String get descriptionCount {
+    if (_countZeros == 0) {
+      return '$_count entries.';
+    }
+    return '$_count of ${_count + _countZeros} non zero entries.';
+  }
+
+  double getAverage({includingZeros = false}) {
+    if (_count == 0) {
+      return 0.0; // Handle case where no values have been added yet
+    }
+    if (includingZeros) {
+      return _sum / (_count + _countZeros);
+    }
+    return _sum / _count;
   }
 }

@@ -1,8 +1,9 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
+
+export 'package:flutter/material.dart';
 
 class AdaptiveViewWithList extends StatelessWidget {
   const AdaptiveViewWithList({
@@ -24,25 +25,25 @@ class AdaptiveViewWithList extends StatelessWidget {
     this.onColumnHeaderLongPress,
     this.getColumnFooterWidget,
   });
-  final Widget? top;
-  final FieldDefinitions fieldDefinitions;
-  final FieldFilters filters;
-  final List<MoneyObject> list;
-  final Widget? bottom;
-  final int flexBottom;
-  final int sortByFieldIndex;
-  final bool sortAscending;
-  final bool applySorting;
-
-  // Selection
-  final ValueNotifier<List<int>> selectedItemsByUniqueId;
-  final Function(int) onSelectionChanged;
-  final bool isMultiSelectionOn;
 
   final Function(BuildContext, int)? onItemTap;
   final Function(int columnHeaderIndex)? onColumnHeaderTap;
   final Function(Field<dynamic> field)? onColumnHeaderLongPress;
   final Widget? Function(Field field)? getColumnFooterWidget;
+  final bool applySorting;
+  final Widget? bottom;
+  final FieldDefinitions fieldDefinitions;
+  final FieldFilters filters;
+  final int flexBottom;
+  final bool isMultiSelectionOn;
+  final List<MoneyObject> list;
+  final Function(int) onSelectionChanged;
+  final bool sortAscending;
+  final int sortByFieldIndex;
+  final Widget? top;
+
+  // Selection
+  final ValueNotifier<List<int>> selectedItemsByUniqueId;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +57,9 @@ class AdaptiveViewWithList extends StatelessWidget {
     }
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        final bool displayAsColumns = !isSmallWidth(constraints);
+        // display as column for Medium & Large devices
+        final bool displayAsColumns = context.isWidthSmall == false;
+
         return ValueListenableBuilder<List<int>>(
           valueListenable: selectedItemsByUniqueId,
           builder: (

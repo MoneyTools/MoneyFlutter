@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+import 'package:money/app/data/models/constants.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 
 class MultipleSelectionToggle extends StatelessWidget {
@@ -24,6 +25,7 @@ class MultipleSelectionToggle extends StatelessWidget {
         return Tooltip(
           message: 'Toggle multi-selection',
           child: TextButton.icon(
+            key: Constants.keyMultiSelectionToggle,
             icon: const Icon(Icons.checklist),
             label: Text(
               getIntAsText(multipleSelection!.selectedItems.value.length),

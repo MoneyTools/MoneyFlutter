@@ -8,43 +8,9 @@ import 'package:sqlite3/sqlite3.dart';
 class MyDatabaseImplementation {
   late final Database _db;
 
-  Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
-    if (File(fileToOpen).existsSync()) {
-      _db = sqlite3.open(fileToOpen);
-    } else {
-      _db = sqlite3.open(fileToOpen);
-      initDatabase(_db);
-      // // commit to disk
-      // _db.dispose();
-      //
-      // // open again
-      // _db = sqlite3.open(fileToOpen);
-    }
-  }
-
-  List<MyJson> select(final String query) {
-    return _db.select(query);
-  }
-
-  /// SQL Insert
-  void insert(final String tableName, final MyJson data) {
-    final columnNames = data.keys.join(', ');
-    final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
-    _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
-  }
-
   /// SQL Delete
   void delete(final String tableName, final int id) {
     _db.execute('DELETE FROM $tableName WHERE Id=$id;');
-  }
-
-  /// SQL Update
-  void update(final String tableName, final int id, final MyJson jsonMap) {
-    final List<String> setStatements =
-        jsonMap.keys.map((key) => '$key = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
-
-    String fieldNamesAndValues = setStatements.join(', ');
-    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE Id=$id;');
   }
 
   void dispose() {
@@ -235,5 +201,39 @@ CREATE TABLE IF NOT EXISTS "Currencies" (
 , [CultureCode] nvarchar(80));
   ''');
     // Add more tables or alter the schema as needed
+  }
+
+  /// SQL Insert
+  void insert(final String tableName, final MyJson data) {
+    final columnNames = data.keys.join(', ');
+    final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
+    _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
+  }
+
+  Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
+    if (File(fileToOpen).existsSync()) {
+      _db = sqlite3.open(fileToOpen);
+    } else {
+      _db = sqlite3.open(fileToOpen);
+      initDatabase(_db);
+      // // commit to disk
+      // _db.dispose();
+      //
+      // // open again
+      // _db = sqlite3.open(fileToOpen);
+    }
+  }
+
+  List<MyJson> select(final String query) {
+    return _db.select(query);
+  }
+
+  /// SQL Update
+  void update(final String tableName, final int id, final MyJson jsonMap) {
+    final List<String> setStatements =
+        jsonMap.keys.map((key) => '$key = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
+
+    String fieldNamesAndValues = setStatements.join(', ');
+    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE Id=$id;');
   }
 }

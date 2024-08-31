@@ -1,7 +1,8 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
+import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
+import 'package:money/app/core/widgets/center_message.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
@@ -15,11 +16,12 @@ class MoneyObjectCard extends StatelessWidget {
     this.onMergeWith,
     this.onDelete,
   });
-  final String title;
+
   final MoneyObject? moneyObject;
-  final Function? onMergeWith;
-  final Function? onEdit;
   final Function? onDelete;
+  final Function? onEdit;
+  final Function? onMergeWith;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +44,6 @@ class MoneyObjectCard extends StatelessWidget {
 
     return Box(
       color: getColorTheme(context).primaryContainer,
-      // padding: const EdgeInsets.fromLTRB(8, 0, 8, 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: widgets,
@@ -60,8 +61,6 @@ class MoneyObjectCard extends StatelessWidget {
           title,
           style: getTextTheme(context).headlineSmall,
         ),
-        // Unique Id of the Object
-        _buildMoneyObjectId(),
 
         // Header Action buttons
         Row(
@@ -110,19 +109,6 @@ class MoneyObjectCard extends StatelessWidget {
       ],
     );
   }
-
-  Widget _buildMoneyObjectId() {
-    if (kDebugMode) {
-      return Opacity(
-        opacity: 0.5,
-        child: Padding(
-          padding: const EdgeInsets.all(4.0),
-          child: SelectableText('ID:${moneyObject!.uniqueId}'),
-        ),
-      );
-    }
-    return const SizedBox();
-  }
 }
 
 class TransactionCard extends StatelessWidget {
@@ -131,6 +117,7 @@ class TransactionCard extends StatelessWidget {
     super.key,
     this.transaction,
   });
+
   final String title;
   final Transaction? transaction;
 
@@ -141,4 +128,21 @@ class TransactionCard extends StatelessWidget {
       moneyObject: transaction,
     );
   }
+}
+
+Widget buildAdaptiveBox({
+  required final BuildContext context,
+  required final String title,
+  required final int count,
+  required final Widget content,
+  final Widget? footer,
+}) {
+  return Box(
+    height: 300,
+    color: getColorTheme(context).primaryContainer,
+    header: buildHeaderTitleAndCounter(context, title, count == 0 ? '' : getIntAsText(count)),
+    footer: footer,
+    padding: SizeForPadding.huge,
+    child: count == 0 ? CenterMessage(message: 'No $title found') : content,
+  );
 }

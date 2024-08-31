@@ -9,10 +9,11 @@ class MyCircle extends StatelessWidget {
     this.colorBorder = Colors.grey,
     this.showBorder = false,
   });
-  final Color colorFill;
+
   final Color colorBorder;
-  final double size;
+  final Color colorFill;
   final bool showBorder;
+  final double size;
 
   @override
   Widget build(final BuildContext context) {

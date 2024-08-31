@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:money/app/controller/data_controller.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/modules/pending_changes/pending_changes_dialog.dart';
 
@@ -12,6 +13,7 @@ class BadgePendingChanges extends StatelessWidget {
     required this.itemsChanged,
     required this.itemsDeleted,
   });
+
   final int itemsAdded;
   final int itemsChanged;
   final int itemsDeleted;
@@ -38,6 +40,20 @@ class BadgePendingChanges extends StatelessWidget {
           PendingChangesDialog.show(context);
         },
         child: getChangeLabel(context),
+      ),
+    );
+  }
+
+  Widget buildCounter(
+    final String prefix,
+    final int value,
+    final TextStyle textStyle,
+  ) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 3),
+      child: Text(
+        prefix + getIntAsText(value),
+        style: textStyle,
       ),
     );
   }
@@ -81,21 +97,8 @@ class BadgePendingChanges extends StatelessWidget {
     );
   }
 
-  Widget buildCounter(
-    final String prefix,
-    final int value,
-    final TextStyle textStyle,
-  ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 3),
-      child: Text(
-        prefix + getIntAsText(value),
-        style: textStyle,
-      ),
-    );
-  }
-
   String getTooltipText() {
-    return 'Added: ${DataController.to.trackMutations.added}\nModified: ${DataController.to.trackMutations.changed}\nDeleted: ${DataController.to.trackMutations.deleted}';
+    final String lastChangedOn = getElapsedTime(DataController.to.trackMutations.lastDateTimeChanged.value);
+    return 'Added: ${DataController.to.trackMutations.added}\nModified: ${DataController.to.trackMutations.changed}\nDeleted: ${DataController.to.trackMutations.deleted}\n\nEdited $lastChangedOn';
   }
 }

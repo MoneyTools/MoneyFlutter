@@ -1,19 +1,16 @@
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
+import 'package:money/app/core/widgets/sankey/sankey_entry.dart';
 import 'package:money/app/data/models/constants.dart';
-
-class SanKeyEntry {
-  String name = '';
-  double value = 0.00;
-}
 
 class ChannelPoint {
   ChannelPoint(this.x, this.top, this.bottom) {
     //
   }
-  double x = 0.0;
-  double top = 0.0;
+
   double bottom = 0 / 0;
+  double top = 0.0;
+  double x = 0.0;
 }
 
 class Block {
@@ -26,15 +23,16 @@ class Block {
     this.alignHorizontal,
     this.alignVertical,
   );
-  String name = '';
-  Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
-  Color color;
-  Color textColor = Colors.black;
+
   TextAlign alignHorizontal = TextAlign.start;
   TextAlign alignVertical = TextAlign.start;
+  Color color;
+  String name = '';
+  Rect rect = const Rect.fromLTWH(0, 0, 10, 20);
+  Color textColor = Colors.black;
 
-  static const double minBlockHeight = 20.0;
   static const double blockWidth = 50.0;
+  static const double minBlockHeight = 20.0;
 
   void draw(final Canvas canvas) {
     if (!rect.hasNaN) {
@@ -103,42 +101,6 @@ double getHeightNeededToRender(final List<SanKeyEntry> list) {
 
   // how much vertical space was needed to render this
   return verticalPosition;
-}
-
-void drawText(
-  final Canvas context,
-  final String name,
-  final double x,
-  final double y, {
-  final Color color = Colors.black,
-  final double fontSize = 12.0,
-  final double angleRotationInRadians = 0.0,
-}) {
-  context.save();
-  context.translate(x, y);
-  context.rotate(angleRotationInRadians);
-  final TextSpan span = TextSpan(
-    style: TextStyle(
-      color: color,
-      fontSize: fontSize,
-      fontWeight: FontWeight.w500,
-      // shadows: [
-      //   Shadow(
-      //     color: color,
-      //     offset: const Offset(0, 0),
-      //     blurRadius: 2,
-      //   ),
-      // ],
-    ),
-    text: name,
-  );
-  final TextPainter tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
-
-  tp.layout();
-
-  tp.paint(context, const Offset(0.0, 0.0));
-
-  context.restore();
 }
 
 void drawTextInRect(

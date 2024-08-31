@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/confirmation_dialog.dart';
 import 'package:money/app/core/widgets/dialog/dialog_button.dart';
 import 'package:money/app/core/widgets/dialog/dialog_full_screen.dart';
-import 'package:money/app/data/models/money_objects/money_object.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -24,6 +23,7 @@ class DialogMutateTransaction extends StatefulWidget {
     required this.transaction,
     super.key,
   });
+
   final Transaction transaction;
 
   @override
@@ -31,8 +31,9 @@ class DialogMutateTransaction extends StatefulWidget {
 }
 
 class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
-  bool isInEditingMode = false;
   bool dataWasModified = false;
+  bool isInEditingMode = false;
+
   late Transaction _transaction;
 
   @override
@@ -53,9 +54,9 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: _transaction.buildListOfNamesValuesWidgets(
                   onEdit: isInEditingMode
-                      ? () {
+                      ? (bool wasModified) {
                           setState(() {
-                            dataWasModified = isDataModified();
+                            dataWasModified = wasModified || isDataModified();
                           });
                         }
                       : null,
@@ -134,15 +135,14 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
         icon: Icons.copy_outlined,
         text: 'Duplicate',
         onPressed: () {
-          _transaction = Transaction()
-            ..id.value = -1
-            ..accountId.value = transaction.accountId.value
-            ..dateTime.value = transaction.dateTime.value
-            ..payee.value = transaction.payee.value
-            ..categoryId.value = transaction.categoryId.value
-            ..transfer = transaction.transfer
-            ..amount.value = transaction.amount.value
-            ..memo.value = transaction.memo.value;
+          _transaction = Transaction(date: transaction.fieldDateTime.value)
+            ..fieldId.value = -1
+            ..fieldAccountId.value = transaction.fieldAccountId.value
+            ..fieldPayee.value = transaction.fieldPayee.value
+            ..fieldCategoryId.value = transaction.fieldCategoryId.value
+            ..fieldTransfer = transaction.fieldTransfer
+            ..fieldAmount.value = transaction.fieldAmount.value
+            ..fieldMemo.value = transaction.fieldMemo.value;
 
           setState(() {
             // append to the list of transactions

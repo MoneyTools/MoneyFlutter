@@ -1,25 +1,36 @@
-import 'package:flutter/material.dart';
-import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/core/widgets/columns/footer_widgets.dart';
-import 'package:money/app/core/widgets/dialog/dialog_button.dart';
-import 'package:money/app/core/widgets/widgets.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/fields/fields.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
-import 'package:money/app/modules/home/sub_views/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/view_money_objects.dart';
+import 'package:money/app/modules/home/sub_views/money_object_card.dart';
+import 'package:money/app/modules/home/sub_views/view_transfers/transfer_sender_receiver.dart';
+
+/// ViewTransactions is a widget that displays a list of financial transactions.
+///
+/// This widget extends [ViewForMoneyObjects] and is responsible for rendering
+/// a view of transactions with various features such as filtering, sorting,
+/// and displaying transaction details.
+///
+/// Key features:
+/// - Displays a list of transactions with customizable views
+/// - Supports multi-selection of transactions
+/// - Provides pivot options for filtering transactions (Incomes, Expenses, All)
+/// - Calculates and displays running balances for transactions
+/// - Allows navigation to related views (e.g., Accounts, Categories)
+///
+/// The [startingBalance] parameter can be used to set an initial balance
+/// for the transaction list.
 
 class ViewTransactions extends ViewForMoneyObjects {
   const ViewTransactions({
     super.key,
     this.startingBalance = 0.00,
   });
+
   final double startingBalance;
 
   @override
@@ -31,59 +42,80 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewTransactions;
     supportsMultiSelection = true;
   }
-  final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+
   final List<Widget> pivots = <Widget>[];
-  final List<bool> _selectedPivot = <bool>[false, false, true];
+  final TextStyle styleHeader = const TextStyle(fontWeight: FontWeight.w600, fontSize: 20);
+
   bool balanceDone = false;
 
-  // Footer related
-  final DateRange _footerColumnDate = DateRange();
-  double _footerRunningBalanceUSD = 0.0;
+  final List<bool> _selectedPivot = <bool>[false, false, true];
 
   @override
-  void initState() {
-    super.initState();
+  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+    final list = super.getActionsButtons(forInfoPanelTransactions);
 
-    pivots.add(
-      ThreePartLabel(
-        text1: 'Incomes',
-        small: true,
-        isVertical: true,
-        text2: getIntAsText(
-          Data()
-              .transactions
-              .iterableList()
-              .where(
-                (final Transaction element) => element.amount.value.toDouble() > 0,
-              )
-              .length,
+    if (!forInfoPanelTransactions && getFirstSelectedItem() != null) {
+      final transaction = getFirstSelectedItem() as Transaction?;
+
+      // this can go last
+      list.add(
+        buildJumpToButton(
+          [
+            // Account
+            InternalViewSwitching.toAccounts(accountId: transaction?.fieldAccountId.value ?? -1),
+
+            // Category
+            InternalViewSwitching(
+              icon: ViewId.viewCategories.getIconData(),
+              title: 'Switch to Categories',
+              onPressed: () {
+                final transaction = getFirstSelectedItem() as Transaction?;
+                if (transaction != null) {
+                  // Preselect the Category of this Transaction
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewCategories,
+                    selectedId: transaction.fieldCategoryId.value,
+                    columnFilter: [],
+                    textFilter: '',
+                  );
+                }
+              },
+            ),
+
+            // Payee
+            InternalViewSwitching(
+              icon: ViewId.viewPayees.getIconData(),
+              title: 'Switch to Payees',
+              onPressed: () {
+                final transaction = getFirstSelectedItem() as Transaction?;
+                if (transaction != null) {
+                  // Preselect the Payee of this Transaction
+                  PreferenceController.to.jumpToView(
+                    viewId: ViewId.viewPayees,
+                    selectedId: transaction.fieldPayee.value,
+                    columnFilter: [],
+                    textFilter: '',
+                  );
+                }
+              },
+            ),
+            // Search Payee
+            InternalViewSwitching(
+              icon: Icons.person_search_outlined,
+              title: 'Search for Payee',
+              onPressed: () {
+                final transaction = getFirstSelectedItem() as Transaction?;
+                if (transaction != null) {
+                  launchGoogleSearch(transaction.getPayeeOrTransferCaption());
+                }
+              },
+            ),
+          ],
         ),
-      ),
-    );
-    pivots.add(
-      ThreePartLabel(
-        text1: 'Expenses',
-        small: true,
-        isVertical: true,
-        text2: getIntAsText(
-          Data()
-              .transactions
-              .iterableList()
-              .where(
-                (final Transaction element) => element.amount.value.toDouble() < 0,
-              )
-              .length,
-        ),
-      ),
-    );
-    pivots.add(
-      ThreePartLabel(
-        text1: 'All',
-        small: true,
-        isVertical: true,
-        text2: getIntAsText(Data().transactions.iterableList().length),
-      ),
-    );
+      );
+    }
+
+    return list;
   }
 
   @override
@@ -102,187 +134,8 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  String getViewId() {
-    return Data().transactions.getTypeName();
-  }
-
-  @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
-
-    if (!forInfoPanelTransactions && getFirstSelectedItem() != null) {
-      // this can go last
-      list.add(
-        buildJumpToButton(
-          [
-            // Account
-            InternalViewSwitching(
-              ViewId.viewAccounts.getIconData(),
-              'Switch to Accounts',
-              () {
-                final transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  // Preselect the Account of this Transaction
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewAccounts,
-                    selectedId: transaction.accountId.value,
-                    columnFilter: [],
-                    textFilter: '',
-                  );
-                }
-              },
-            ),
-
-            // Category
-            InternalViewSwitching(
-              ViewId.viewCategories.getIconData(),
-              'Switch to Categories',
-              () {
-                final transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  // Preselect the Category of this Transactio
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewCategories,
-                    selectedId: transaction.categoryId.value,
-                    columnFilter: [],
-                    textFilter: '',
-                  );
-                }
-              },
-            ),
-
-            // Payee
-            InternalViewSwitching(
-              ViewId.viewPayees.getIconData(),
-              'Switch to Payees',
-              () {
-                final transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  // Preselect the Payee of this Transaction
-                  PreferenceController.to.jumpToView(
-                    viewId: ViewId.viewPayees,
-                    selectedId: transaction.payee.value,
-                    columnFilter: [],
-                    textFilter: '',
-                  );
-                }
-              },
-            ),
-            // Search Payee
-            InternalViewSwitching(
-              Icons.person_search_outlined,
-              'Search for Payee',
-              () {
-                final transaction = getFirstSelectedItem() as Transaction?;
-                if (transaction != null) {
-                  launchGoogleSearch(transaction.getPayeeOrTransferCaption());
-                }
-              },
-            ),
-          ],
-        ),
-      );
-    }
-
-    return list;
-  }
-
-  @override
   Fields<Transaction> getFieldsForTable() {
-    return Transaction.fields;
-  }
-
-  @override
-  Widget? getColumnFooterWidget(final Field field) {
-    switch (field.name) {
-      case 'Date':
-        return getFooterForDateRange(_footerColumnDate);
-      case 'Balance(USD)':
-        return getFooterForAmount(_footerRunningBalanceUSD);
-      default:
-        return null;
-    }
-  }
-
-  @override
-  List<Transaction> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final List<Transaction> list = Data()
-        .transactions
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (final Transaction transaction) =>
-              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
-        )
-        .toList();
-
-    if (!balanceDone) {
-      list.sort(
-        (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
-      );
-
-      double runningNativeBalance = 0.0;
-      _footerRunningBalanceUSD = 0.0;
-      _footerColumnDate.clear();
-
-      for (Transaction transaction in list) {
-        _footerColumnDate.inflate(transaction.dateTime.value);
-        runningNativeBalance += transaction.amount.value.toDouble();
-
-        transaction.balance = runningNativeBalance;
-
-        // only the last item is used
-        _footerRunningBalanceUSD =
-            (transaction.balanceNormalized.getValueForDisplay(transaction) as MoneyModel).toDouble();
-      }
-
-      balanceDone = true;
-    }
-    return list;
-  }
-
-  bool isMatchingIncomeExpense(final Transaction transaction) {
-    if (_selectedPivot[2]) {
-      return true;
-    }
-
-    // Expenses
-    if (_selectedPivot[1]) {
-      return transaction.amount.value.toDouble() < 0;
-    }
-
-    // Incomes
-    if (_selectedPivot[0]) {
-      return transaction.amount.value.toDouble() > 0;
-    }
-    return false;
-  }
-
-  Widget renderToggles() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
-      child: ToggleButtons(
-        direction: Axis.horizontal,
-        onPressed: (final int index) {
-          setState(() {
-            for (int i = 0; i < _selectedPivot.length; i++) {
-              _selectedPivot[i] = i == index;
-            }
-            list = getList();
-          });
-        },
-        borderRadius: const BorderRadius.all(Radius.circular(8)),
-        constraints: const BoxConstraints(
-          minHeight: 40.0,
-          minWidth: 100.0,
-        ),
-        isSelected: _selectedPivot,
-        children: pivots,
-      ),
-    );
+    return Transaction.fieldsForColumnView;
   }
 
   @override
@@ -300,10 +153,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     getList().forEach((final Transaction transaction) {
       transaction;
 
-      if (timePeriod.isBetweenEqual(transaction.dateTime.value)) {
-        final num value = transaction.amount.value.toDouble();
+      if (timePeriod.isBetweenEqual(transaction.fieldDateTime.value)) {
+        final num value = transaction.fieldAmount.value.toDouble();
 
-        final DateTime date = transaction.dateTime.value!;
+        final DateTime date = transaction.fieldDateTime.value!;
         // Format the date as year-month string (e.g., '2023-11')
         final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
 
@@ -335,25 +188,162 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Transaction? transaction = getMoneyObjectFromFirstSelectedId<Transaction>(selectedIds, list);
+    final Transaction? transaction = getFirstSelectedItem() as Transaction?;
+
     //
     // If the category of this transaction is a Split then list the details of the Split
     //
-    if (transaction != null && transaction.categoryId.value == Data().categories.splitCategoryId()) {
-      // this is Split get the split transactions
-      return ListViewTransactionSplits(
-        key: Key('split_transactions ${transaction.uniqueId}'),
-        getList: () {
-          return Data()
-              .splits
-              .iterableList()
-              .where(
-                (final MoneySplit s) => s.transactionId.value == transaction.id.value,
-              )
-              .toList();
-        },
-      );
+    if (transaction != null) {
+      if (transaction.isSplit) {
+        // this is Split get the split transactions
+        return ListViewTransactionSplits(
+          key: Key('split_transactions ${transaction.uniqueId}'),
+          getList: () {
+            return Data()
+                .splits
+                .iterableList()
+                .where(
+                  (final MoneySplit s) => s.fieldTransactionId.value == transaction.fieldId.value,
+                )
+                .toList();
+          },
+        );
+      }
+
+      if (transaction.isTransfer) {
+        return TransferSenderReceiver(transfer: transaction.instanceOfTransfer!);
+      } else {
+        final investment = Data().investments.get(transaction.uniqueId);
+        if (investment != null) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: MoneyObjectCard(
+              title: 'Investment',
+              moneyObject: investment,
+            ),
+          );
+        }
+      }
     }
     return const CenterMessage(message: 'No related transactions');
+  }
+
+  @override
+  List<Transaction> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final List<Transaction> list = Data()
+        .transactions
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (final Transaction transaction) =>
+              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
+        )
+        .toList();
+
+    if (!balanceDone) {
+      list.sort(
+        (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
+      );
+
+      double runningNativeBalance = 0.0;
+
+      for (Transaction transaction in list) {
+        runningNativeBalance += transaction.fieldAmount.value.toDouble();
+        transaction.balance = runningNativeBalance;
+      }
+
+      balanceDone = true;
+    }
+    return list;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    pivots.add(
+      ThreePartLabel(
+        text1: 'Incomes',
+        small: true,
+        isVertical: true,
+        text2: getIntAsText(
+          Data()
+              .transactions
+              .iterableList()
+              .where(
+                (final Transaction element) => element.fieldAmount.value.toDouble() > 0,
+              )
+              .length,
+        ),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
+        text1: 'Expenses',
+        small: true,
+        isVertical: true,
+        text2: getIntAsText(
+          Data()
+              .transactions
+              .iterableList()
+              .where(
+                (final Transaction element) => element.fieldAmount.value.toDouble() < 0,
+              )
+              .length,
+        ),
+      ),
+    );
+    pivots.add(
+      ThreePartLabel(
+        text1: 'All',
+        small: true,
+        isVertical: true,
+        text2: getIntAsText(Data().transactions.iterableList().length),
+      ),
+    );
+  }
+
+  bool isMatchingIncomeExpense(final Transaction transaction) {
+    if (_selectedPivot[2]) {
+      return true;
+    }
+
+    // Expenses
+    if (_selectedPivot[1]) {
+      return transaction.fieldAmount.value.toDouble() < 0;
+    }
+
+    // Incomes
+    if (_selectedPivot[0]) {
+      return transaction.fieldAmount.value.toDouble() > 0;
+    }
+    return false;
+  }
+
+  Widget renderToggles() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
+      child: ToggleButtons(
+        direction: Axis.horizontal,
+        onPressed: (final int index) {
+          setState(() {
+            for (int i = 0; i < _selectedPivot.length; i++) {
+              _selectedPivot[i] = i == index;
+            }
+            list = getList();
+          });
+        },
+        borderRadius: const BorderRadius.all(Radius.circular(8)),
+        constraints: const BoxConstraints(
+          minHeight: 40.0,
+          minWidth: 100.0,
+        ),
+        isSelected: _selectedPivot,
+        children: pivots,
+      ),
+    );
   }
 }

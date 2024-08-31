@@ -54,6 +54,7 @@ const String columnIdDate = 'Date';
 const String columnIdPayee = 'Payee/Transfer';
 const String columnIdCategory = 'Category';
 const String columnIdStatus = 'Status';
+const String columnIdPaidOn = 'Paid On';
 const String columnIdMemo = 'Memo';
 const String columnIdAmount = 'Amount';
 const String columnIdAmountNormalized = 'Amount(USD)';

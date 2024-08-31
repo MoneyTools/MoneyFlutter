@@ -1,13 +1,15 @@
 // Imports
-import 'dart:convert';
+// The following lines import necessary libraries and packages for the file.
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:archive/archive.dart';
 import 'package:money/app/controller/data_controller.dart';
 import 'package:money/app/controller/preferences_controller.dart';
+import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/core/helpers/file_systems.dart';
 import 'package:money/app/core/helpers/json_helper.dart';
+import 'package:money/app/core/helpers/ranges.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:money/app/data/models/money_objects/account_aliases/account_aliases.dart';
@@ -16,7 +18,6 @@ import 'package:money/app/data/models/money_objects/accounts/accounts.dart';
 import 'package:money/app/data/models/money_objects/aliases/aliases.dart';
 import 'package:money/app/data/models/money_objects/categories/categories.dart';
 import 'package:money/app/data/models/money_objects/currencies/currencies.dart';
-import 'package:money/app/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/app/data/models/money_objects/investments/investments.dart';
 import 'package:money/app/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/app/data/models/money_objects/money_objects.dart';
@@ -30,11 +31,16 @@ import 'package:money/app/data/models/money_objects/stock_splits/stock_splits.da
 import 'package:money/app/data/models/money_objects/transaction_extras/transaction_extras.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/models/money_objects/transfers/transfer.dart';
+import 'package:money/app/data/storage/data/data_simulator.dart';
 import 'package:money/app/data/storage/database/database.dart';
 
 // Exports
+// The following lines export necessary classes and functions for other files.
 export 'package:money/app/core/helpers/json_helper.dart';
+export 'package:money/app/data/models/money_objects/money_objects.dart';
 
+// Part files
+// The following lines import part files that are used in this file.
 part 'data_extension_csv.dart';
 part 'data_extension_demo.dart';
 part 'data_extension_sql.dart';
@@ -51,28 +57,28 @@ class Data {
   Data._internal() {
     _listOfTables = <MoneyObjects<dynamic>>[
       accountAliases, // 1
-      accounts, // 2
       aliases, // 3
       categories, // 4
       currencies, // 5
-      investments, // 6
       loanPayments, // 7
       onlineAccounts, // 8
       payees, // 9
-      securities, // 12
-      stockSplits, // 14
       transactionExtras, // 15
       transactions, // 16
-      // must come after Transactions
+      // Keep in this order - must come after Transactions
       splits, // 13
+      // Keep in this order
+      stockSplits, // 14
+      investments, // 6 Must be locate after [stockSplits]
+      securities, // 12 Must be locate after [investments]
+
+      accounts, // 2
+
+      // Can be last
       rentBuildings, // 10
       rentUnits, // 11
     ];
   }
-  int version = 0;
-
-  /// singleton
-  static final Data _instance = Data._internal();
 
   /// 1 Account Aliases
   AccountAliases accountAliases = AccountAliases();
@@ -124,8 +130,21 @@ class Data {
 
   late final List<MoneyObjects<dynamic>> _listOfTables;
 
+  /// singleton
+  static final Data _instance = Data._internal();
+
+  void checkTransfers() {
+    Set<Transaction> dangling = getDanglingTransfers();
+    if (dangling.isNotEmpty) {
+      SnackBarService.displayWarning(
+        message: '$dangling Dangling transfers have been found',
+        title: 'Dangling Transfers',
+        autoDismiss: false,
+      );
+    }
+  }
+
   void clear() {
-    version = -1;
     DataController.to.trackMutations.reset();
 
     for (final element in _listOfTables) {
@@ -133,45 +152,47 @@ class Data {
     }
   }
 
-  void notifyMutationChanged({
-    required MutationType mutation,
-    required MoneyObject moneyObject,
-    bool fireNotification = true,
-  }) {
-    // let the app know that something has changed
-    version++;
-
-    switch (mutation) {
-      case MutationType.inserted:
-        moneyObject.mutation = MutationType.inserted;
-        DataController.to.trackMutations.increaseNumber(increaseAdded: 1);
-      case MutationType.changed:
-        // this if is to ensure that we only count editing once and discard if this was edited on a new inserted items
-        if (moneyObject.mutation == MutationType.none) {
-          moneyObject.mutation = MutationType.changed;
-          DataController.to.trackMutations.increaseNumber(increaseChanged: 1);
-        }
-      case MutationType.deleted:
-        if (moneyObject.mutation == MutationType.inserted) {
-          // in case the delete item was a revcently added item, we need to deduct it from the sum
-          DataController.to.trackMutations.increaseNumber(increaseAdded: -1);
-        }
-        moneyObject.mutation = MutationType.deleted;
-        DataController.to.trackMutations.increaseNumber(increaseDeleted: 1);
-      default:
-        break;
-    }
-
-    if (fireNotification) {
-      updateAll();
+  void clearExistingData() {
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.clear();
     }
   }
 
-  /// ReBalance all objects values
-  /// and Rebuild the UI
-  void updateAll() {
-    recalculateBalances();
-    DataController.to.update();
+  void clearTransferToAccount(Transaction t, Account a) {
+    // TODO
+    // if (t.isSplit) {
+    //   for (MoneySplit s in t.splits) {
+    //     if (s.Transfer != null && s.Transfer.Transaction.Account == a) {
+    //       ClearTransferToAccount(s.Transfer);
+    //       s.ClearTransfer();
+    //       s.Category =
+    //           s.Amount < 0 ? this.Categories.TransferToDeletedAccount : this.Categories.TransferFromDeletedAccount;
+    //       if (string.IsNullOrEmpty(s.Memo)) {
+    //         s.Memo = a.Name;
+    //       }
+    //     }
+    //   }
+    // }
+
+    // if (t.Transfer != null && t.Transfer.Transaction.Account == a) {
+    //   ClearTransferToAccount(t.Transfer);
+    //   t.Transfer = null;
+    //   if (!t.IsSplit) {
+    //     t.Category =
+    //         t.Amount < 0 ? this.Categories.TransferToDeletedAccount : this.Categories.TransferFromDeletedAccount;
+    //   }
+    //   if (string.IsNullOrEmpty(t.Memo)) {
+    //     t.Memo = a.Name;
+    //   }
+    // }
+  }
+
+  /// Close data source
+  void close() {
+    clearExistingData();
+
+    DataController.to.dataFileIsClosed();
+    DataController.to.trackMutations.reset();
   }
 
   /// Bulk Delete
@@ -180,21 +201,26 @@ class Data {
       Data().notifyMutationChanged(
         mutation: MutationType.deleted,
         moneyObject: item,
-        fireNotification: false,
+        recalculateBalances: false,
       );
     }
     Data().updateAll();
   }
 
-  void assessMutationsCountOfAllModels() {
-    DataController.to.trackMutations.reset();
-
-    for (final element in _listOfTables) {
-      element.resetMutationStateOfObjects();
-      element.assessMutationsCounts();
+  Set<Transaction> getDanglingTransfers() {
+    Set<Transaction> dangling = {};
+    List<Account> deletedAccounts = [];
+    transactions.checkTransfers(dangling, deletedAccounts);
+    for (Account a in deletedAccounts) {
+      accounts.removeAccount(a);
     }
-    Data().version++;
-    Data().updateAll();
+    return dangling;
+  }
+
+  DateTime? getLastDateTimeModified(final String fullPathToFile) {
+    File file = File(fullPathToFile);
+    // Get the last modified date and time of the file
+    return file.lastModifiedSync();
   }
 
   List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {
@@ -220,95 +246,44 @@ class Data {
     return allMutationGroups;
   }
 
-  Future<String?> validateDataBasePathIsValidAndExist(
-    final String? filePath,
-    final Uint8List fileBytes,
-  ) async {
-    try {
-      if (filePath != null) {
-        if (fileBytes.isNotEmpty) {
-          return filePath;
-        }
-        if (File(filePath).existsSync()) {
-          return filePath;
-        }
-      }
-    } catch (e) {
-      // next line will handle things
-    }
-    return null;
-  }
-
-  DateTime? getLastDateTimeModified(final String fullPathToFile) {
-    File file = File(fullPathToFile);
-    // Get the last modified date and time of the file
-    return file.lastModifiedSync();
-  }
-
-  /// Automated detection of what type of storage to load the data from
-  Future<bool> loadFromPath(final DataSource dateSource) async {
-    try {
-      final String fileExtension = MyFileSystems.getFileExtension(dateSource.filePath);
-      switch (fileExtension.toLowerCase()) {
-        // Sqlite
-        case '.mmdb':
-          // Load from SQLite
-          if (await loadFromSql(dateSource.filePath, dateSource.fileBytes)) {
-            PreferenceController.to.addToMRU(dateSource.filePath);
-          }
-        case '.mmcsv':
-          // Zip CSV files
-          await loadFromZippedCsv(dateSource.filePath, dateSource.fileBytes);
-          PreferenceController.to.addToMRU(dateSource.filePath);
-
-        default:
-          SnackBarService.displayWarning(
-            autoDismiss: false,
-            message: 'Unsupported file type $fileExtension',
-          );
-          return false;
-      }
-    } catch (e) {
-      debugLog(e.toString());
-      SnackBarService.displayError(autoDismiss: false, message: e.toString());
-      return false;
-    }
-
-    // All individual table were loaded, now let the cross reference money object create linked to other tables
-    recalculateBalances();
-
-    // Notify that loading is completed
-    return true;
+  MoneyModel getNetWorth() {
+    final double sum = accounts.getSumOfAccountBalances();
+    return MoneyModel(amount: sum);
   }
 
   Transaction? getOrCreateRelatedTransaction(
     Transaction transactionSource,
     Account destinationAccount,
   ) {
-    if (transactionSource.accountId.value == destinationAccount.uniqueId) {
-      debugLog('Cannot transfer to same account');
+    if (transactionSource.fieldAccountId.value == destinationAccount.uniqueId) {
+      logger.e('Cannot transfer to same account');
       return null;
     }
 
-    Transaction? relatedTransaction = Data().transactions.findExistingTransactionForAccount(
+    Transaction? relatedTransaction = Data().transactions.findExistingTransaction(
           accountId: destinationAccount.uniqueId,
-          dateTime: transactionSource.dateTime.value!,
-          amount: -transactionSource.amount.value.toDouble(),
+          dateRange: DateRange(
+            min: transactionSource.fieldDateTime.value!.startOfDay,
+            max: transactionSource.fieldDateTime.value!.endOfDay,
+          ),
+          amount: -transactionSource.fieldAmount.value.toDouble(),
         );
-    // ignore: prefer_conditional_assignment
+
     if (relatedTransaction == null) {
-      relatedTransaction = Transaction()
-        ..accountId.value = destinationAccount.uniqueId
-        ..amount.value.setAmount(
-              (transactionSource.amount.value.toDouble() * -1),
-            ) // flip the sign
-        ..categoryId.value = transactionSource.categoryId.value
-        ..dateTime.value = transactionSource.dateTime.value
-        ..fitid.value = transactionSource.fitid.value
-        ..number.value = transactionSource.number.value
-        ..memo.value = transactionSource.memo.value;
+      relatedTransaction = Transaction(
+        accountId: destinationAccount.uniqueId,
+        date: transactionSource.fieldDateTime.value,
+      );
+
+      // flip the sign on the amount
+      relatedTransaction.fieldAmount.value.setAmount(transactionSource.fieldAmount.value.toDouble() * -1);
+      relatedTransaction.fieldCategoryId.value = transactionSource.fieldCategoryId.value;
+      relatedTransaction.fieldFitid.value = transactionSource.fieldFitid.value;
+      relatedTransaction.fieldNumber.value = transactionSource.fieldNumber.value;
+      relatedTransaction.fieldMemo.value = transactionSource.fieldMemo.value;
       //u.Status = t.Status; no !!!
     }
+
     // Investment? i = relatedTransaction.investmentInstance;
     // if (i != null) {
     //   Investment j = transactionSource.getOrCreateInvestment();
@@ -336,7 +311,43 @@ class Data {
     return relatedTransaction;
   }
 
-  bool makeTransferLinkage(
+  /// Automated detection of what type of storage to load the data from
+  Future<bool> loadFromPath(final DataSource dateSource) async {
+    try {
+      final String fileExtension = MyFileSystems.getFileExtension(dateSource.filePath);
+      switch (fileExtension.toLowerCase()) {
+        // Sqlite
+        case '.mmdb':
+          // Load from SQLite
+          if (await loadFromSql(filePath: dateSource.filePath, fileBytes: dateSource.fileBytes)) {
+            PreferenceController.to.addToMRU(dateSource.filePath);
+          }
+        case '.mmcsv':
+          // Zip CSV files
+          await loadFromZippedCsv(dateSource.filePath, dateSource.fileBytes);
+          PreferenceController.to.addToMRU(dateSource.filePath);
+
+        default:
+          SnackBarService.displayWarning(
+            autoDismiss: false,
+            message: 'Unsupported file type $fileExtension',
+          );
+          return false;
+      }
+    } catch (e) {
+      logger.e(e.toString());
+      SnackBarService.displayError(autoDismiss: false, message: e.toString());
+      return false;
+    }
+
+    // All individual table were loaded, now let the cross reference money object create linked to other tables
+    recalculateBalances();
+
+    // Notify that loading is completed
+    return true;
+  }
+
+  Transaction makeTransferLinkage(
     Transaction transactionSource,
     Account destinationAccount,
   ) {
@@ -345,12 +356,12 @@ class Data {
     if (relatedTransaction != null) {
       final Transfer transfer;
 
-      if (transactionSource.amount.value.toDouble() < 0) {
+      if (transactionSource.fieldAmount.value.toDouble() < 0) {
         // transfer TO
         transfer = Transfer(
           id: 0,
           source: transactionSource,
-          related: relatedTransaction,
+          relatedTransaction: relatedTransaction,
           isOrphan: false,
         );
       } else {
@@ -358,34 +369,106 @@ class Data {
         transfer = Transfer(
           id: 0,
           source: relatedTransaction,
-          related: transactionSource,
+          relatedTransaction: transactionSource,
           isOrphan: false,
         );
       }
 
       // Keep track changes done
       relatedTransaction.stashValueBeforeEditing();
-      relatedTransaction.payee.value = -1;
-      relatedTransaction.transfer.value = transactionSource.id.value;
-      relatedTransaction.transferInstance = transfer;
+
+      relatedTransaction.fieldPayee.value = Data().categories.transfer.uniqueId;
+      relatedTransaction.fieldTransfer.value = transactionSource.fieldId.value;
+      relatedTransaction.instanceOfTransfer = transfer;
 
       if (relatedTransaction.uniqueId == -1) {
         // This is a new related transaction Append and get a new UniqueID
-        transactions.appendNewMoneyObject(relatedTransaction);
+        transactions.appendNewMoneyObject(relatedTransaction, fireNotification: false);
       } else {
         Data().notifyMutationChanged(
           mutation: MutationType.changed,
           moneyObject: relatedTransaction,
+          recalculateBalances: false,
         );
       }
 
       // this needs to happen last since the ID for a new Relation Transaction will be establish in the above
-      // transactions.appendNewMoneyObject(relatedTransaction)
-      transactionSource.payee.value = -1;
-      transactionSource.transfer.value = relatedTransaction.id.value;
-      transactionSource.transferInstance = transfer;
+      transactionSource.fieldPayee.value = Data().categories.transfer.uniqueId;
+      transactionSource.fieldTransfer.value = relatedTransaction.uniqueId;
+      transactionSource.instanceOfTransfer = transfer;
     }
 
+    return relatedTransaction!;
+  }
+
+  /// let the app know that something has changed
+  void notifyMutationChanged({
+    required MutationType mutation,
+    required MoneyObject moneyObject,
+    bool recalculateBalances = true,
+  }) {
+    switch (mutation) {
+      case MutationType.inserted:
+        moneyObject.mutation = MutationType.inserted;
+        DataController.to.trackMutations.increaseNumber(increaseAdded: 1);
+      case MutationType.changed:
+        // ensure that we only count editing once and discard if this was edited on a new inserted items
+        if (moneyObject.mutation == MutationType.none) {
+          moneyObject.mutation = MutationType.changed;
+          DataController.to.trackMutations.increaseNumber(increaseChanged: 1);
+        } else {
+          DataController.to.trackMutations.setLastEditToNow();
+        }
+      case MutationType.deleted:
+        if (moneyObject.mutation == MutationType.inserted) {
+          // in case the delete item was a recently added item, we need to deduct it from the sum
+          DataController.to.trackMutations.increaseNumber(increaseAdded: -1);
+        }
+        moneyObject.mutation = MutationType.deleted;
+        DataController.to.trackMutations.increaseNumber(increaseDeleted: 1);
+      default:
+        break;
+    }
+
+    if (recalculateBalances) {
+      updateAll();
+    }
+  }
+
+  /// When Changes are done we can force a reevaluation of the balances
+  void recalculateBalances() {
+    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+      moneyObjects.onAllDataLoaded();
+    }
+
+    // one last thing, Transfer are complex and we try to confirm or clean up any problem found
+    checkTransfers();
+  }
+
+  bool removeTransaction(Transaction t) {
+    if (t.fieldStatus.value == TransactionStatus.reconciled && t.fieldAmount.value.toDouble() != 0) {
+      throw Exception('Cannot removed reconciled transaction');
+    }
+    // TODO
+    // this.removeTransfer(t);
+
+    // this.transactions.RemoveTransaction(t);
+    // if (t.Unaccepted) {
+    //   if (t.Account != null) {
+    //     t.Account.Unaccepted--;
+    //   }
+    //   if (t.Payee != null) {
+    //     t.Payee.UnacceptedTransactions--;
+    //   }
+    // }
+
+    // if (t.Category == null && t.Transfer == null && !t.IsSplit) {
+    //   if (t.Payee != null) {
+    //     t.Payee.UnCategorizedTransactions--;
+    //   }
+    // }
+
+    // this.Rebalance(t);
     return true;
   }
 
@@ -424,56 +507,29 @@ class Data {
     // this.Rebalance(to);
   }
 
-  /// When Changes are done we can force a reevaluation of the balances
-  void recalculateBalances() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.onAllDataLoaded();
-    }
+  /// ReBalance all objects values
+  /// and Rebuild the UI
+  void updateAll() {
+    recalculateBalances();
+    DataController.to.update();
   }
 
-  /// Close data source
-  void close() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
-      moneyObjects.clear();
-    }
-    version = -1;
-    DataController.to.dataFileIsClosed();
-
-    DataController.to.trackMutations.reset();
-  }
-
-  /// <summary>
-  /// Get a list of all Investment transactions grouped by security
-  /// </summary>
-  /// <param name="filter">The account filter or null if you want them all</param>
-  /// <param name="toDate">Get all transactions up to but not including this date</param>
-  /// <returns></returns>
-  Map<Security, List<Investment>> getTransactionsGroupedBySecurity(
-    Function(Account)? filter,
-    DateTime toDate,
-  ) {
-    Map<Security, List<Investment>> transactionsBySecurity = {};
-
-    // Sort all add, remove, buy, sell transactions by date and by security.
-    for (Transaction t in Data().transactions.getAllTransactionsByDate()) {
-      if (t.dateTime.value!.millisecond < toDate.millisecond &&
-          (filter == null || filter(t.accountInstance!)) &&
-          t.investmentInstance != null &&
-          t.investmentInstance!.investmentType.value != InvestmentType.none.index) {
-        Investment i = t.investmentInstance!;
-        Security? s = Data().securities.get(i.security.value);
-        if (s != null) {
-          List<Investment> list = transactionsBySecurity[s] ?? [];
-          transactionsBySecurity[s] = list;
-          list.add(i);
+  Future<String?> validateDataBasePathIsValidAndExist(
+    final String? filePath,
+    final Uint8List fileBytes,
+  ) async {
+    try {
+      if (filePath != null) {
+        if (fileBytes.isNotEmpty) {
+          return filePath;
+        }
+        if (File(filePath).existsSync()) {
+          return filePath;
         }
       }
+    } catch (e) {
+      // next line will handle things
     }
-    return transactionsBySecurity;
-  }
-
-  MoneyModel getNetWorth() {
-    final double sum = accounts.getSumOfAccountBalances();
-    return MoneyModel(amount: sum);
+    return null;
   }
 }

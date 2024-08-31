@@ -11,8 +11,6 @@ import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/mini_timeline_daily.dart';
 import 'package:money/app/core/widgets/mini_timeline_twelve_months.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
-import 'package:money/app/data/models/constants.dart';
-import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
@@ -26,12 +24,12 @@ class RecurringCard extends StatelessWidget {
     required this.forIncomeTransaction,
     super.key,
   });
+
+  final DateRange dateRangeSearch;
+  final DateRange dateRangeSelected;
+  final bool forIncomeTransaction;
   final int index;
   final RecurringPayment payment;
-  final DateRange dateRangeSelected;
-  final DateRange dateRangeSearch;
-
-  final bool forIncomeTransaction;
 
   @override
   Widget build(BuildContext context) {
@@ -69,34 +67,50 @@ class RecurringCard extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader(final BuildContext context) {
-    TextTheme textTheme = getTextTheme(context);
-    final String payeeName = Data().payees.getNameFromId(payment.payeeId);
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Opacity(opacity: 0.5, child: Text('#$index ')),
-        Expanded(
-          child: Row(
-            children: [
-              SelectableText(
-                payeeName,
-                maxLines: 1,
-                style: textTheme.titleMedium,
-              ),
-              IconButton(
-                onPressed: () {
-                  switchViewTransacionnForPayee(payeeName);
-                },
-                icon: const Icon(Icons.open_in_new),
-              ),
-            ],
+  Widget _buildBoxAverages(final BuildContext context) {
+    return Box(
+      title: 'Averages',
+      padding: 21,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 55,
+            margin: const EdgeInsets.symmetric(vertical: SizeForPadding.medium),
+            child: MiniTimelineTwelveMonths(
+              values: payment.averagePerMonths,
+              color: getColorTheme(context).primary,
+            ),
           ),
-        ),
-        gapLarge(),
-        MoneyWidget(amountModel: MoneyModel(amount: payment.total)),
-      ],
+
+          // Average per yearS
+          _buildTextAmountRow(
+            context,
+            'Year',
+            payment.total / (payment.dateRangeFound.durationInYears),
+          ),
+          // Average per month
+          _buildTextAmountRow(
+            context,
+            'Month',
+            payment.total / (payment.dateRangeFound.durationInMonths),
+          ),
+          // Average per day
+          _buildTextAmountRow(
+            context,
+            'Day',
+            payment.total / (payment.dateRangeFound.durationInDays),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBoxDistribution(final BuildContext context) {
+    return Box(
+      title: 'Categories',
+      padding: 21,
+      child: DistributionBar(segments: payment.categoryDistribution),
     );
   }
 
@@ -151,50 +165,34 @@ class RecurringCard extends StatelessWidget {
     );
   }
 
-  Widget _buildBoxAverages(final BuildContext context) {
-    return Box(
-      title: 'Averages',
-      padding: 21,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Container(
-            height: 55,
-            margin: const EdgeInsets.symmetric(vertical: SizeForPadding.medium),
-            child: MiniTimelineTwelveMonths(
-              values: payment.averagePerMonths,
-              color: getColorTheme(context).primary,
-            ),
+  Widget _buildHeader(final BuildContext context) {
+    TextTheme textTheme = getTextTheme(context);
+    final String payeeName = Data().payees.getNameFromId(payment.payeeId);
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Opacity(opacity: 0.5, child: Text('#$index ')),
+        Expanded(
+          child: Row(
+            children: [
+              SelectableText(
+                payeeName,
+                maxLines: 1,
+                style: textTheme.titleMedium,
+              ),
+              IconButton(
+                onPressed: () {
+                  switchViewTransactionForPayee(payeeName);
+                },
+                icon: const Icon(Icons.open_in_new),
+              ),
+            ],
           ),
-
-          // Average per yearS
-          _buildTextAmountRow(
-            context,
-            'Year',
-            payment.total / (payment.dateRangeFound.durationInYears),
-          ),
-          // Average per month
-          _buildTextAmountRow(
-            context,
-            'Month',
-            payment.total / (payment.dateRangeFound.durationInMonths),
-          ),
-          // Average per day
-          _buildTextAmountRow(
-            context,
-            'Day',
-            payment.total / (payment.dateRangeFound.durationInDays),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBoxDistribution(final BuildContext context) {
-    return Box(
-      title: 'Categories',
-      padding: 21,
-      child: DistributionBar(segments: payment.categoryDistribution),
+        ),
+        gapLarge(),
+        MoneyWidget(amountModel: MoneyModel(amount: payment.total)),
+      ],
     );
   }
 }

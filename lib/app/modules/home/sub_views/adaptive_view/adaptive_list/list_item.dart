@@ -14,14 +14,15 @@ class MyListItem extends StatefulWidget {
     this.onLongPress,
     this.adornmentColor = Colors.transparent,
   });
-  final KeyEventResult Function(FocusNode, KeyEvent) onListViewKeyEvent;
-  final GestureTapCallback? onTap;
-  final GestureTapCallback? onDoubleTap;
-  final GestureTapCallback? onLongPress;
-  final bool isSelected;
+
+  final Color adornmentColor;
   final bool autoFocus;
   final Widget child;
-  final Color adornmentColor;
+  final bool isSelected;
+  final GestureTapCallback? onDoubleTap;
+  final KeyEventResult Function(FocusNode, KeyEvent) onListViewKeyEvent;
+  final GestureTapCallback? onLongPress;
+  final GestureTapCallback? onTap;
 
   @override
   State<MyListItem> createState() => MyListItemState();
@@ -29,13 +30,8 @@ class MyListItem extends StatefulWidget {
 
 class MyListItemState extends State<MyListItem> {
   bool isSelected = false;
-  bool _hovering = false;
 
-  @override
-  void initState() {
-    super.initState();
-    isSelected = widget.isSelected;
-  }
+  bool _hovering = false;
 
   @override
   void didUpdateWidget(final MyListItem oldWidget) {
@@ -44,17 +40,22 @@ class MyListItemState extends State<MyListItem> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    isSelected = widget.isSelected;
+  }
+
+  @override
   Widget build(final BuildContext context) {
     final Color backgroundColor = isSelected
-        ? getColorTheme(context).inversePrimary
+        ? getColorTheme(context).primaryContainer
         : _hovering
-            ? getColorTheme(context).inversePrimary.withOpacity(0.5)
+            ? getColorTheme(context).inversePrimary.withOpacity(0.3)
             : Colors.transparent;
 
     return Focus(
       autofocus: widget.autoFocus,
       onFocusChange: (final bool value) {
-        // debugLog('focus lost $value index $currentIndex');
         if (value) {}
       },
       onKeyEvent: widget.onListViewKeyEvent,

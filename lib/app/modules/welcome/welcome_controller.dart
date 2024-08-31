@@ -3,20 +3,20 @@
 import 'package:get/get.dart';
 
 class WelcomeController extends GetxController {
-  //TODO: Implement WelcomeController.
+  // @override
+  // void onClose() {
+  //   super.onClose();
+  // }
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  // //TODO: Implement WelcomeController.
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  // }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  // }
 }

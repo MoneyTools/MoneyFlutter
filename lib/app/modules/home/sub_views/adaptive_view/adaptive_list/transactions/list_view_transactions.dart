@@ -1,37 +1,35 @@
-import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/controller/selection_controller.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/app/data/storage/data/data.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_seletion.dart';
+import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
 import 'package:money/app/modules/home/sub_views/view_transactions/dialog_mutate_transaction.dart';
 
 class ListViewTransactions extends StatefulWidget {
   const ListViewTransactions({
+    super.key,
     required this.columnsToInclude,
     required this.getList,
-    super.key,
+    required this.selectionController,
     this.sortFieldIndex = 0,
     this.sortAscending = true,
     this.onUserChoiceChanged,
-    this.selectedItemIndex = 0,
   });
+
+  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
   final List<Field> columnsToInclude;
   final List<Transaction> Function() getList;
-  final int sortFieldIndex;
+  final SelectionController selectionController;
   final bool sortAscending;
-  final int selectedItemIndex;
-  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
+  final int sortFieldIndex;
 
   @override
   State<ListViewTransactions> createState() => _ListViewTransactionsState();
 }
 
 class _ListViewTransactionsState extends State<ListViewTransactions> {
-  late int _sortBy = widget.sortFieldIndex;
   late bool _sortAscending = widget.sortAscending;
-  late int _selectedItemIndex = widget.selectedItemIndex;
+  late int _sortBy = widget.sortFieldIndex;
 
   @override
   Widget build(final BuildContext context) {
@@ -54,12 +52,13 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       filters: FieldFilters(),
       sortByFieldIndex: _sortBy,
       sortAscending: _sortAscending,
-      selectedId: -1,
+      selectedId: widget.selectionController.firstSelectedId,
       // Field & Columns
       displayAsColumns: true,
-      backgoundColorForHeaderFooter: Colors.transparent,
+      backgroundColorForHeaderFooter: Colors.transparent,
       onSelectionChanged: (int uniqueId) {
         widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, uniqueId);
+        widget.selectionController.select(uniqueId);
       },
       onColumnHeaderTap: (final int index) {
         setState(() {
@@ -69,7 +68,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           } else {
             _sortBy = index;
           }
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedItemIndex);
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, widget.selectionController.firstSelectedId);
         });
       },
       onItemLongPress: (final BuildContext context2, final int uniqueId) {
@@ -78,8 +77,8 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
           context: context2,
           transaction: instance,
         ).then((value) {
-          _selectedItemIndex = uniqueId;
-          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, _selectedItemIndex);
+          widget.selectionController.select(uniqueId);
+          widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, widget.selectionController.firstSelectedId);
         });
       },
     );
@@ -87,19 +86,16 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
 }
 
 List<Transaction> getTransactions({bool Function(Transaction)? filter}) {
-  // default to 'accept all'
   filter ??= (Transaction transaction) => true;
 
   final List<Transaction> list =
       Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
 
-  list.sort(
-    (final Transaction a, final Transaction b) => sortByDate(a.dateTime.value, b.dateTime.value),
-  );
+  list.sort((a, b) => Transaction.sortByDateTime(a, b, true));
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {
-    runningBalance += transaction.amount.value.toDouble();
+    runningBalance += transaction.fieldAmount.value.toDouble();
     transaction.balance = runningBalance;
   }
   return list;

@@ -12,20 +12,21 @@ class MyListItemHeader<T> extends StatelessWidget {
     required this.sortAscending,
     required this.onTap,
     super.key,
-    this.backgoundColor = Colors.transparent,
+    this.backgroundColor = Colors.transparent,
     this.itemsAreAllSelected = false,
     this.onSelectAll,
     this.onLongPress,
   });
-  final Color backgoundColor;
+
+  final Function(bool)? onSelectAll;
+  final Function(Field<dynamic>)? onLongPress;
+  final Color backgroundColor;
   final FieldDefinitions columns;
   final FieldFilters filterOn;
-  final int sortByColumn;
-  final bool sortAscending;
   final bool itemsAreAllSelected;
-  final Function(bool)? onSelectAll;
   final Function(int columnIndex) onTap;
-  final Function(Field<dynamic>)? onLongPress;
+  final bool sortAscending;
+  final int sortByColumn;
 
   @override
   Widget build(final BuildContext context) {
@@ -33,6 +34,7 @@ class MyListItemHeader<T> extends StatelessWidget {
     if (onSelectAll != null) {
       headers.add(
         Checkbox(
+          key: Constants.keyCheckboxToggleSelectAll,
           value: itemsAreAllSelected,
           onChanged: (bool? selected) {
             onSelectAll!(selected == true);
@@ -63,7 +65,7 @@ class MyListItemHeader<T> extends StatelessWidget {
       );
     }
     return Container(
-      color: backgoundColor,
+      color: backgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(children: headers),
     );

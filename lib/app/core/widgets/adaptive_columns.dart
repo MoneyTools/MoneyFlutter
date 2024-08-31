@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 
 class AdaptiveColumns extends StatelessWidget {
   /// Constructor
@@ -8,24 +7,13 @@ class AdaptiveColumns extends StatelessWidget {
     required this.columnWidth,
     required this.children,
   });
+
   final List<Widget> children;
   final int columnWidth;
 
   @override
   Widget build(final BuildContext context) {
-    if (isSmallDevice(context)) {
-      return singleColumn();
-    } else {
-      return multiColumns();
-    }
-  }
-
-  /// For small device list a phone simply use a single list of fields
-  Widget singleColumn() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: children,
-    );
+    return context.isWidthSmall ? singleColumn() : multiColumns();
   }
 
   // optimize for larger screen into multiple columns
@@ -37,8 +25,6 @@ class AdaptiveColumns extends StatelessWidget {
 
         // if theres only 1 column then just use the entire width
         double? optimalColumnWidth = quantity <= 1 ? null : constraints.maxWidth / quantity;
-
-        // debugLog('${constraints.maxWidth} QC:$quantity cw:$optimalColumnWidth');
 
         List<Widget> sizedWidgets = children
             .map(
@@ -66,6 +52,14 @@ class AdaptiveColumns extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  /// For small device list a phone simply use a single list of fields
+  Widget singleColumn() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
     );
   }
 }

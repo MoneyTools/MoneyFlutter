@@ -5,8 +5,13 @@ import 'dart:math';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:money/app/data/models/constants.dart';
+import 'package:logger/logger.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+final Logger logger = Logger(
+  filter: null, // Use the default LogFilter (-> only log in debug mode)
+  output: null, // Use the default LogOutput (-> send everything to console)
+);
 
 /// Remove non-numeric characters from the currency text
 double? attemptToGetDoubleFromText(String text) {
@@ -44,56 +49,17 @@ double? attemptToGetDoubleFromText(String text) {
   return amount;
 }
 
-bool boolValueOrDefault(
-  final bool? value, {
-  final bool defaultValueIfNull = false,
-}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
-}
-
 void copyToClipboardAndInformUser(
   final BuildContext context,
   final String textToCopy,
 ) {
   FlutterClipboard.copy(textToCopy).then(
-    (_) => showSnackBar(context, 'Copied to clipboard'),
+    (_) {
+      if (context.mounted) {
+        showSnackBar(context, 'Copied to clipboard');
+      }
+    },
   );
-}
-
-DateTime dateValueOrDefault(
-  final DateTime? value, {
-  final DateTime? defaultValueIfNull,
-}) {
-  if (value == null) {
-    return defaultValueIfNull ?? DateTime.now();
-  }
-  return value;
-}
-
-void debugLog(final String message) {
-  if (kDebugMode) {
-    print(message);
-  }
-}
-
-double doubleValueOrDefault(
-  final double? value, {
-  final double defaultValueIfNull = 0,
-}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
-}
-
-int intValueOrDefault(final int? value, {final int defaultValueIfNull = 0}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
 }
 
 bool isBetween(final num value, final num min, final num max) {
@@ -106,31 +72,7 @@ bool isBetweenOrEqual(final num value, final num min, final num max) {
 
 bool isPlatformMobile() {
   return !kIsWeb && (Platform.isAndroid || Platform.isIOS);
-}
-
-bool isSmallDevice(final BuildContext context) {
-  // Get the screen size
-  final screenSize = MediaQuery.of(context).size;
-
-  // Determine if the screen width is smaller than a certain threshold
-  return screenSize.width < 600;
-}
-
-bool isSmallWidth(
-  final BoxConstraints constraints, {
-  final num minWidth = Constants.narrowScreenWidthThreshold,
-}) {
-  if (constraints.maxWidth < minWidth) {
-    return true;
-  }
-  return false;
-}
-
-num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
+//  return defaultTargetPlatform == TargetPlatform.iOS || defaultTargetPlatform == TargetPlatform.android;
 }
 
 double roundDouble(final double value, final int places) {
@@ -210,16 +152,6 @@ void showSnackBar(final BuildContext context, final String message) {
   );
 }
 
-String stringValueOrDefault(
-  final String? value, {
-  final String defaultValueIfNull = '',
-}) {
-  if (value == null) {
-    return defaultValueIfNull;
-  }
-  return value;
-}
-
 double trimToFiveDecimalPlaces(double value) {
   // Multiply the value by 100,000 to move the decimal point 5 places to the right
   double multipliedValue = value * 100000;
@@ -231,7 +163,9 @@ double trimToFiveDecimalPlaces(double value) {
 
 class Debouncer {
   Debouncer([this.duration = const Duration(seconds: 1)]);
+
   final Duration duration;
+
   Timer? _timer;
 
   void run(VoidCallback callback) {
@@ -244,6 +178,7 @@ class TimeLapse {
   TimeLapse() {
     stopwatch = Stopwatch()..start();
   }
+
   Stopwatch? stopwatch;
 
   // End stopwatch and print time spent
@@ -262,7 +197,7 @@ extension Range on num {
   }
 }
 
-bool isAlmostZero(double value, [double epsilon = 0.009]) {
+bool isConsideredZero(num value, [double epsilon = 0.009]) {
   return value.abs() <= epsilon;
 }
 

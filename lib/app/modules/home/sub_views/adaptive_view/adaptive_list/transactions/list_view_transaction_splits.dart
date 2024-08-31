@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:money/app/data/models/fields/field_filter.dart';
 import 'package:money/app/data/models/money_objects/splits/money_split.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
@@ -12,8 +11,9 @@ class ListViewTransactionSplits extends StatefulWidget {
     super.key,
     this.defaultSortingField = 0,
   });
-  final List<MoneySplit> Function() getList;
+
   final int defaultSortingField;
+  final List<MoneySplit> Function() getList;
 
   @override
   State<ListViewTransactionSplits> createState() => _ListViewTransactionSplitsState();
@@ -21,8 +21,9 @@ class ListViewTransactionSplits extends StatefulWidget {
 
 class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   List<MoneySplit> rows = [];
-  late int _sortBy = widget.defaultSortingField;
+
   bool _sortAscending = true;
+  late int _sortBy = widget.defaultSortingField;
 
   @override
   void initState() {
@@ -32,7 +33,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   @override
   Widget build(final BuildContext context) {
     rows = widget.getList();
-    onSort();
+
     return Column(
       children: <Widget>[
         // Table Header
@@ -49,14 +50,13 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
               } else {
                 _sortBy = index;
               }
-              onSort();
             });
           },
         ),
         // Table list of rows
         Expanded(
           child: MyListView<MoneySplit>(
-            fields: MoneySplit.fields,
+            fields: MoneySplit.fields.definitions,
             list: rows,
             selectedItemIds: ValueNotifier<List<int>>([]),
             onSelectionChanged: (int _) {},
@@ -64,17 +64,6 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         ),
       ],
     );
-  }
-
-  void onSort() {
-    // final FieldDefinition<Split> fieldDefinition = _tableFields.definitions[_sortBy];
-    // if (fieldDefinition.sort != null) {
-    //   rows.sort(
-    //     (final Split a, final Split b) {
-    //       return fieldDefinition.sort!(a, b, _sortAscending);
-    //     },
-    //   );
-    // }
   }
 }
 

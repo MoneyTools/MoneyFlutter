@@ -7,23 +7,24 @@ class MyListItemFooter<T> extends StatelessWidget {
   const MyListItemFooter({
     required this.columns,
     required this.multiSelectionOn,
+    required this.getColumnFooterWidget,
     required this.onTap,
     super.key,
-    this.backgoundColor = Colors.transparent,
+    this.backgroundColor = Colors.transparent,
     this.onLongPress,
-    this.getColumnFooterWidget,
   });
-  final FieldDefinitions columns;
-  final bool multiSelectionOn;
-  final Color backgoundColor;
 
-  final Function(int columnIndex) onTap;
   final Function(Field<dynamic>)? onLongPress;
-  final Widget? Function(Field field)? getColumnFooterWidget;
+  final Color backgroundColor;
+  final FieldDefinitions columns;
+  final Widget? Function(Field field) getColumnFooterWidget;
+  final bool multiSelectionOn;
+  final Function(int columnIndex) onTap;
 
   @override
   Widget build(final BuildContext context) {
     final List<Widget> footerWidgets = <Widget>[];
+
     if (multiSelectionOn) {
       footerWidgets.add(
         Opacity(
@@ -50,13 +51,16 @@ class MyListItemFooter<T> extends StatelessWidget {
           onLongPress: () {
             onLongPress?.call(columnDefinition);
           },
-          child: getColumnFooterWidget?.call(columnDefinition),
+          child: getColumnFooterWidget(columnDefinition),
         ),
       );
     }
     return Container(
-      color: backgoundColor,
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        border: Border(top: BorderSide(color: Colors.grey.withAlpha(100), width: 1)), // Outer border
+      ),
       child: Row(children: footerWidgets),
     );
   }

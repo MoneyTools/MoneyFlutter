@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
 import 'package:money/app/core/widgets/circle.dart';
 import 'package:money/app/core/widgets/money_widget.dart';
-import 'package:money/app/data/models/money_model.dart';
 import 'package:money/app/data/models/money_objects/categories/category.dart';
 import 'package:money/app/data/storage/data/data.dart';
 
@@ -14,8 +13,9 @@ class BarChartWidget extends StatelessWidget {
     required this.asIncome,
     super.key,
   });
-  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
+
   final bool asIncome;
+  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +25,9 @@ class BarChartWidget extends StatelessWidget {
     // Extract top 3 values and calculate total value of others
     int topCategoryToShow = min(3, listCategoryNameToAmount.length);
 
-    final double otherSumValues =
-        listCategoryNameToAmount.skip(topCategoryToShow).fold(0.0, (double prev, KeyValue curr) => prev + curr.value);
+    final double otherSumValues = listCategoryNameToAmount
+        .skip(topCategoryToShow)
+        .fold(0.0, (double prev, KeyValue current) => prev + current.value);
 
     List<Widget> bars = [];
 
@@ -35,7 +36,7 @@ class BarChartWidget extends StatelessWidget {
       if (category != null) {
         bars.add(
           _buildBar(
-            category.name.value,
+            category.fieldName.value,
             category.getColorWidget(),
             listCategoryNameToAmount[top].value,
           ),

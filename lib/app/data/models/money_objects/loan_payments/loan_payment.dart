@@ -3,7 +3,6 @@
 import 'package:money/app/core/helpers/date_helper.dart';
 import 'package:money/app/data/models/money_objects/accounts/account.dart';
 import 'package:money/app/data/models/money_objects/currencies/currency.dart';
-import 'package:money/app/data/models/money_objects/money_objects.dart';
 import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
 
@@ -17,20 +16,14 @@ class LoanPayment extends MoneyObject {
     required final double interest,
     final String reference = '',
   }) {
-    this.id.value = id;
-    this.accountId.value = accountId;
-    accountInstance = Data().accounts.get(this.accountId.value);
-    this.date.value = date;
-    this.memo.value = memo;
-    this.principal.value.setAmount(principal);
-    this.interest.value.setAmount(interest);
-    this.reference.value = reference;
-
-    buildFieldsAsWidgetForSmallScreen = () => MyListItemAsCard(
-          leftTopAsString: Account.getName(accountInstance),
-          rightTopAsString: Currency.getAmountAsStringUsingCurrency(principal),
-          rightBottomAsString: Currency.getAmountAsStringUsingCurrency(interest),
-        );
+    this.fieldId.value = id;
+    this.fieldAccountId.value = accountId;
+    accountInstance = Data().accounts.get(this.fieldAccountId.value);
+    this.fieldDate.value = date;
+    this.fieldMemo.value = memo;
+    this.fieldPrincipal.value.setAmount(principal);
+    this.fieldInterest.value.setAmount(interest);
+    this.fieldReference.value = reference;
   }
 
   /// Constructor from a SQLite row
@@ -50,31 +43,98 @@ class LoanPayment extends MoneyObject {
       memo: row.getString('Memo'),
     );
   }
-  static final Fields<LoanPayment> _fields = Fields<LoanPayment>();
 
-  static Fields<LoanPayment> get fields {
-    if (_fields.isEmpty) {
-      final tmpInstance = LoanPayment.fromJson({});
-      _fields.setDefinitions([
-        tmpInstance.id,
-        tmpInstance.date,
-        tmpInstance.accountId,
-        tmpInstance.memo,
-        tmpInstance.reference,
-        tmpInstance.rate,
-        tmpInstance.interest,
-        tmpInstance.principal,
-        tmpInstance.balance,
-      ]);
-    }
-    return _fields;
+  // Not persisted
+  Account? accountInstance;
+
+  /// 1|AccountId|INT|1||0
+  Field<int> fieldAccountId = Field<int>(
+    name: 'Account',
+    serializeName: 'AccountId',
+    defaultValue: -1,
+    type: FieldType.text,
+    getValueForDisplay: (final MoneyObject instance) => Account.getName((instance as LoanPayment).accountInstance),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldAccountId.value,
+  );
+
+  FieldMoney fieldBalance = FieldMoney(
+    name: 'Balance',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.toDouble(),
+  );
+
+  /// Date
+  /// 2|Date|datetime|1||0
+  FieldDate fieldDate = FieldDate(
+    serializeName: 'Date',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldDate.value,
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToIso8601OrDefaultString((instance as LoanPayment).fieldDate.value),
+  );
+
+  /// ID
+  /// 0|Id|INT|1||0
+  FieldId fieldId = FieldId(
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).uniqueId,
+  );
+
+  /// Interest
+  /// 4|Interest|money|0||0
+  FieldMoney fieldInterest = FieldMoney(
+    name: 'Interest',
+    serializeName: 'Interest',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldInterest.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldInterest.value.toDouble(),
+  );
+
+  // 5
+  // 5|Memo|nvarchar(255)|0||0
+  Field<String> fieldMemo = Field<String>(
+    type: FieldType.text,
+    name: 'Memo',
+    serializeName: 'Memo',
+    defaultValue: '',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldMemo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldMemo.value,
+  );
+
+  /// 3
+  /// 3|Principal|money|0||0
+  FieldMoney fieldPrincipal = FieldMoney(
+    name: 'Principal',
+    serializeName: 'Principal',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldPrincipal.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldPrincipal.value.toDouble(),
+  );
+
+  FieldPercentage fieldRate = FieldPercentage(
+    name: 'Rate %',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).getRate(),
+  );
+
+  FieldString fieldReference = FieldString(
+    name: 'Reference',
+    columnWidth: ColumnWidth.largest,
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldReference.value,
+  );
+
+  FieldMoney payment = FieldMoney(
+    name: 'Payment',
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment)._totalPrincipalAndInterest,
+  );
+
+  @override
+  Widget buildFieldsAsWidgetForSmallScreen() {
+    return MyListItemAsCard(
+      leftTopAsString: Account.getName(accountInstance),
+      rightTopAsString: Currency.getAmountAsStringUsingCurrency(fieldPrincipal),
+      rightBottomAsString: Currency.getAmountAsStringUsingCurrency(fieldInterest),
+    );
   }
 
+  // Fields for this instance
   @override
-  int get uniqueId => id.value;
-
-  @override
-  set uniqueId(value) => id.value = value;
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   @override
   String getRepresentation() {
@@ -82,109 +142,62 @@ class LoanPayment extends MoneyObject {
     return 'Loan $uniqueId';
   }
 
-  /// ID
-  /// 0|Id|INT|1||0
-  FieldId id = FieldId(
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).uniqueId,
-  );
+  @override
+  int get uniqueId => fieldId.value;
 
-  /// 1|AccountId|INT|1||0
-  Field<int> accountId = Field<int>(
-    importance: 2,
-    name: 'Account',
-    serializeName: 'AccountId',
-    defaultValue: -1,
-    type: FieldType.text,
-    getValueForDisplay: (final MoneyObject instance) => Account.getName((instance as LoanPayment).accountInstance),
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).accountId.value,
-  );
+  @override
+  set uniqueId(value) => fieldId.value = value;
 
-  /// Date
-  /// 2|Date|datetime|1||0
-  FieldDate date = FieldDate(
-    importance: 1,
-    serializeName: 'Date',
-    useAsColumn: true,
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).date.value,
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as LoanPayment).date.value),
-  );
+  static final Fields<LoanPayment> _fields = Fields<LoanPayment>();
 
-  /// 3
-  /// 3|Principal|money|0||0
-  FieldMoney principal = FieldMoney(
-    name: 'Principal',
-    serializeName: 'Principal',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).principal.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).principal.value.toDouble(),
-  );
+  static Fields<LoanPayment> get fields {
+    if (_fields.isEmpty) {
+      final tmpInstance = LoanPayment.fromJson({});
+      _fields.setDefinitions([
+        tmpInstance.fieldId,
+        tmpInstance.fieldDate,
+        tmpInstance.fieldAccountId,
+        tmpInstance.fieldMemo,
+        tmpInstance.fieldReference,
+        tmpInstance.fieldRate,
+        tmpInstance.fieldInterest,
+        tmpInstance.fieldPrincipal,
+        tmpInstance.fieldBalance,
+      ]);
+    }
+    return _fields;
+  }
 
-  /// Interest
-  /// 4|Interest|money|0||0
-  FieldMoney interest = FieldMoney(
-    name: 'Interest',
-    serializeName: 'Interest',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).interest.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).interest.value.toDouble(),
-  );
-
-  // 5
-  // 5|Memo|nvarchar(255)|0||0
-  Field<String> memo = Field<String>(
-    importance: 3,
-    type: FieldType.text,
-    name: 'Memo',
-    serializeName: 'Memo',
-    useAsColumn: false,
-    defaultValue: '',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).memo.value,
-  );
-
-  // Not persisted
-  Account? accountInstance;
-
-  FieldMoney payment = FieldMoney(
-    name: 'Payment',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment)._totalPrincipalAndInterest,
-  );
-
-  FieldString reference = FieldString(
-    name: 'Reference',
-    columnWidth: ColumnWidth.largest,
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).reference.value,
-  );
-
-  double get _totalPrincipalAndInterest => this.principal.value.toDouble() + this.interest.value.toDouble();
-
-  FieldPercentage rate = FieldPercentage(
-    name: 'Rate %',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).getRate(),
-    importance: 98,
-  );
+  static Fields<LoanPayment> get fieldsForColumnView {
+    if (_fields.isEmpty) {
+      final tmpInstance = LoanPayment.fromJson({});
+      _fields.setDefinitions([
+        tmpInstance.fieldDate,
+        tmpInstance.fieldAccountId,
+        tmpInstance.fieldMemo,
+        tmpInstance.fieldReference,
+        tmpInstance.fieldRate,
+        tmpInstance.fieldInterest,
+        tmpInstance.fieldPrincipal,
+        tmpInstance.fieldBalance,
+      ]);
+    }
+    return _fields;
+  }
 
   double getRate() {
-    double previouseBalance = this.balance.value.toDouble() - this.principal.value.toDouble();
-    if (previouseBalance == 0) {
+    double previousBalance = this.fieldBalance.value.toDouble() - this.fieldPrincipal.value.toDouble();
+    if (previousBalance == 0) {
       return 0.00;
     }
 
     // Calculate the monthly interest rate
-    double annualInterestRate = (this.interest.value.toDouble() * 12) // Convert to annual interest rate
+    double annualInterestRate = (this.fieldInterest.value.toDouble() * 12) // Convert to annual interest rate
         /
-        previouseBalance;
+        previousBalance;
 
     return annualInterestRate.abs();
   }
 
-  FieldMoney balance = FieldMoney(
-    name: 'Balance',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).balance.value.toDouble(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).balance.value.toDouble(),
-    importance: 99,
-  );
-
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
+  double get _totalPrincipalAndInterest => this.fieldPrincipal.value.toDouble() + this.fieldInterest.value.toDouble();
 }

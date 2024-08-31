@@ -9,6 +9,14 @@ class InfoBanner extends StatelessWidget {
     super.key,
   });
 
+  factory InfoBanner.error(String message) {
+    return InfoBanner(
+      type: ColorState.error,
+      message: message,
+      icon: Icons.error,
+    );
+  }
+
   factory InfoBanner.success(String message) {
     return InfoBanner(
       type: ColorState.success,
@@ -25,16 +33,9 @@ class InfoBanner extends StatelessWidget {
     );
   }
 
-  factory InfoBanner.error(String message) {
-    return InfoBanner(
-      type: ColorState.error,
-      message: message,
-      icon: Icons.error,
-    );
-  }
-  final ColorState type;
-  final String message;
   final IconData icon;
+  final String message;
+  final ColorState type;
 
   @override
   Widget build(BuildContext context) {

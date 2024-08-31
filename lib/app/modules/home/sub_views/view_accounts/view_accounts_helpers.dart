@@ -4,13 +4,13 @@ extension ViewAccountsHelpers on ViewAccountsState {
   double getTotalBalanceOfAccounts(final List<AccountType> types) {
     double total = 0.0;
     Data().accounts.activeAccount(types).forEach(
-          (final Account x) => total += x.balanceNormalized.getValueForDisplay(x).toDouble(),
+          (final Account x) => total += x.fieldBalanceNormalized.getValueForDisplay(x).toDouble(),
         );
     return total;
   }
 
   bool filterByAccountId(final Transaction t, final num accountId) {
-    return t.accountId.value == accountId;
+    return t.fieldAccountId.value == accountId;
   }
 
   List<AccountType> getSelectedAccountType() {
@@ -29,6 +29,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
     if (_selectedPivot[3]) {
       return getSelectedAccountTypesByIndex(3);
     }
+
     return getSelectedAccountTypesByIndex(-1);
   }
 
@@ -44,21 +45,19 @@ extension ViewAccountsHelpers on ViewAccountsState {
         return <AccountType>[AccountType.credit, AccountType.creditLine];
 
       case 3:
-        return <AccountType>[
-          AccountType.asset,
-          AccountType.cash,
-          AccountType.loan,
-        ];
+        return <AccountType>[AccountType.asset, AccountType.cash, AccountType.loan];
+
       default: // all
         return <AccountType>[];
     }
   }
 
-  Widget renderToggles() {
+  Widget _renderToggles() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.fromLTRB(0, 0, 0, 5),
       child: ToggleButtons(
+        key: const Key('view_accounts_pivots'),
         direction: Axis.horizontal,
         onPressed: (final int index) {
           // ignore: invalid_use_of_protected_member

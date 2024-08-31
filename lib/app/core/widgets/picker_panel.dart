@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/my_text_input.dart';
 import 'package:money/app/core/widgets/picker_letter.dart';
 import 'package:money/app/core/widgets/token_text.dart';
 import 'package:money/app/data/models/constants.dart';
@@ -50,13 +51,14 @@ class PickerPanel extends StatefulWidget {
     this.tokenTextStyle = const TokenTextStyle(),
     this.rightAligned = false,
   });
-  final List<String> options;
-  final String selectedItem;
-  final Function(String selectedValue) onSelected;
+
   final double itemHeight;
+  final Function(String selectedValue) onSelected;
+  final List<String> options;
+  final bool rightAligned;
+  final String selectedItem;
   final bool showLetterPicker;
   final TokenTextStyle tokenTextStyle;
-  final bool rightAligned;
   final double? width;
 
   @override
@@ -64,12 +66,14 @@ class PickerPanel extends StatefulWidget {
 }
 
 class PickerPanelState extends State<PickerPanel> {
+  List<String> filteredList = [];
+  int indexToScrollTo = -1;
+  List<String> uniqueLetters = [];
+
+  final ScrollController _scrollController = ScrollController();
+
   String _filterByTextAnywhere = '';
   String _filterStartWith = '';
-  List<String> filteredList = [];
-  List<String> uniqueLetters = [];
-  final ScrollController _scrollController = ScrollController();
-  int indexToScrollTo = -1;
 
   @override
   void initState() {
@@ -106,6 +110,19 @@ class PickerPanelState extends State<PickerPanel> {
     });
   }
 
+  Widget _buildFilterTextField() {
+    return MyTextInput(
+      key: MyKeys.keyHeaderFilterTextInput,
+      hintText: 'Filter',
+      onChanged: (value) {
+        setState(() {
+          _filterByTextAnywhere = value;
+          _applyFilters();
+        });
+      },
+    );
+  }
+
   Widget _buildFilteredList(BuildContext context) {
     return ListView.builder(
       itemCount: filteredList.length,
@@ -115,24 +132,6 @@ class PickerPanelState extends State<PickerPanel> {
         final label = filteredList[index];
         final isSelected = label == widget.selectedItem;
         return _buildPickerItem(context, label, isSelected, index);
-      },
-    );
-  }
-
-  Widget _buildFilterTextField() {
-    return TextField(
-      decoration: const InputDecoration(
-        contentPadding: EdgeInsets.zero,
-        isDense: true,
-        prefixIcon: Icon(Icons.search),
-        labelText: 'Filter',
-        border: OutlineInputBorder(),
-      ),
-      onChanged: (value) {
-        setState(() {
-          _filterByTextAnywhere = value;
-          _applyFilters();
-        });
       },
     );
   }

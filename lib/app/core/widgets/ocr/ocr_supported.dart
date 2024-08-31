@@ -11,8 +11,13 @@ import 'package:pasteboard/pasteboard.dart';
 // import 'package:path_provider/path_provider.dart';
 
 class PasteImageOcr extends StatefulWidget {
-  const PasteImageOcr({super.key, required this.textController});
+  const PasteImageOcr({
+    super.key,
+    required this.textController,
+    required this.allowedCharacters,
+  });
 
+  final String allowedCharacters;
   final TextEditingController textController;
 
   @override
@@ -52,7 +57,7 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
         // });
       } on Exception catch (e) {
         // Handle potential errors
-        debugLog('Error recognizing text: $e');
+        logger.e('Error recognizing text: $e');
         SnackBarService.displayError(
           message: 'Failed to extract text from image.',
         );
@@ -72,7 +77,7 @@ Future<String> loadTesseractData() async {
     final bytes = data.buffer.asUint8List();
     return String.fromCharCodes(bytes); // Convert bytes to string
   } on Exception catch (e) {
-    debugLog('Error loading Tesseract data: $e');
+    logger.e('Error loading Tesseract data: $e');
     return ''; // Handle errors gracefully (e.g., display an error message)
   }
 }

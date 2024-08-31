@@ -27,7 +27,7 @@ import 'package:money/app/data/models/money_objects/money_objects.dart';
 
 class OnlineAccount extends MoneyObject {
   OnlineAccount({
-    required this.name,
+    required String name,
     required this.institution,
     required this.ofx,
     required this.ofxVersion,
@@ -39,7 +39,9 @@ class OnlineAccount extends MoneyObject {
     required this.authToken,
     required this.bankId,
     required this.branchId,
-  });
+  }) {
+    this.fieldName.value = name;
+  }
 
   /// Constructor from a SQLite row
   factory OnlineAccount.fromJson(final MyJson row) {
@@ -68,20 +70,31 @@ class OnlineAccount extends MoneyObject {
       bankId: row.getString('BankId'),
       // 12
       branchId: row.getString('BranchId'),
-    )..id.value = row.getInt('Id', -1);
+    )..fieldId.value = row.getInt('Id', -1);
   }
-  @override
-  int get uniqueId => id.value;
-  @override
-  set uniqueId(value) => id.value = value;
+
+  // 10
+  final String authToken;
+
+  // 11
+  final String bankId;
+
+  // 12
+  final String branchId;
+
+  // 5
+  final String fdic;
 
   // 0
-  FieldId id = FieldId(
+  FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).uniqueId,
   );
 
   // 1
-  final String name;
+  FieldString fieldName = FieldString(
+    serializeName: 'Name',
+    getValueForSerialization: (final MoneyObject instance) => (instance as OnlineAccount).fieldName.value,
+  );
 
   // 2
   final String institution;
@@ -92,12 +105,6 @@ class OnlineAccount extends MoneyObject {
   // 4
   final String ofxVersion;
 
-  // 5
-  final String fdic;
-
-  // 6
-  final String userId;
-
   // 7
   final String password;
 
@@ -107,12 +114,24 @@ class OnlineAccount extends MoneyObject {
   // 9
   final String userCred2;
 
-  // 10
-  final String authToken;
+  // 6
+  final String userId;
 
-  // 11
-  final String bankId;
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions {
+    final tmp = OnlineAccount.fromJson({});
+    final f = Fields<Fields>()
+      ..setDefinitions([
+        tmp.fieldId,
+        tmp.fieldName,
+      ]);
+    return f.definitions;
+  }
 
-  // 12
-  final String branchId;
+  @override
+  int get uniqueId => fieldId.value;
+
+  @override
+  set uniqueId(value) => fieldId.value = value;
 }

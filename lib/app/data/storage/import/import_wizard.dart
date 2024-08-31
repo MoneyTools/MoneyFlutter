@@ -4,7 +4,6 @@ import 'package:flutter/widgets.dart';
 import 'package:money/app/core/widgets/dialog/dialog.dart';
 import 'package:money/app/core/widgets/gaps.dart';
 import 'package:money/app/core/widgets/wizard_choice.dart';
-import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/data/storage/import/import_qfx.dart';
 import 'package:money/app/data/storage/import/import_qif.dart';
 import 'package:money/app/data/storage/import/import_transactions_from_text.dart';
@@ -16,13 +15,13 @@ void showImportTransactionsWizard(
   adaptiveScreenSizeDialog(
     context: context,
     captionForClose: 'Cancel',
-    title: 'Import transactons',
+    title: 'Import transactions',
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         WizardChoice(
-          title: 'From QFX file',
-          description: 'Locate the file on your device.',
+          title: 'From QFX/QIF file',
+          description: 'Use existing or downloaded files from local device.',
           onPressed: () {
             Navigator.of(context).pop(true);
             onImportFromFile(context);
@@ -31,7 +30,8 @@ void showImportTransactionsWizard(
         gapHuge(),
         WizardChoice(
           title: 'Manual bulk text input',
-          description: 'Copy paste text from online statements in the form of [Date | Memo | Amount].',
+          description:
+              'Refer to your online statements, then Copy & Paste text or use OCR to extract the [Dates | Memos | Amounts].',
           onPressed: () {
             Navigator.of(context).pop(true);
             showImportTransactionsFromTextInput(context);
@@ -47,13 +47,13 @@ void onImportFromFile(
 ) async {
   final FilePickerResult? pickerResult = await FilePicker.platform.pickFiles(type: FileType.any);
   if (pickerResult != null) {
-    switch (pickerResult.files.single.extension?.toLowerCase()) {
-      case 'qif':
-        importQIF(pickerResult.files.single.path.toString());
-      case 'qfx':
-        if (context.mounted) {
-          importQFX(context, pickerResult.files.single.path.toString(), Data());
-        }
+    if (context.mounted) {
+      switch (pickerResult.files.single.extension?.toLowerCase()) {
+        case 'qif':
+          importQIF(context, pickerResult.files.single.path.toString());
+        case 'qfx':
+          importQFX(context, pickerResult.files.single.path.toString());
+      }
     }
   }
 }

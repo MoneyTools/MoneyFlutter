@@ -29,6 +29,7 @@ class MruDropdown extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             InkWell(
+              key: Constants.keyMruButton,
               onTap: () {
                 showPopupSelection(
                   context: context,
@@ -39,8 +40,8 @@ class MruDropdown extends StatelessWidget {
                   width: 600,
                   items: preferenceController.mru,
                   selectedItem: '',
-                  onSelected: (final String selectedTextReprentingFileNamePath) {
-                    DataSource dataSource = DataSource(filePath: selectedTextReprentingFileNamePath);
+                  onSelected: (final String selectedTextRepresentingFileNamePath) {
+                    DataSource dataSource = DataSource(filePath: selectedTextRepresentingFileNamePath);
                     DataController.to.loadFileFromPath(dataSource);
                     Get.offAllNamed(Constants.routeHomePage);
                   },

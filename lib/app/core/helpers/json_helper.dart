@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
+export 'dart:convert';
 
 MyJson compareAndGenerateCommonJson(MyJson json1, MyJson json2) {
   MyJson commonJson = {};
@@ -164,18 +165,14 @@ extension MyJsonExtensions on MyJson {
   }
 }
 
-List<MyJson> converFromRawCsvTextToListOfJSonObject(String fileContent) {
+List<MyJson> convertFromRawCsvTextToListOfJSonObject(String fileContent) {
   List<MyJson> rows = [];
-  List<List<String>> lines = getLinesFromRawTextCommaSeparated(fileContent);
+  List<List<String>> lines = getLinesFromRawTextWithSeparator(fileContent);
   if (lines.length > 1) {
     final List<String> csvHeaderColumns = lines.first;
     for (final List<String> csvRowValues in lines.skip(1)) {
-      try {
-        final rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
-        rows.add(rowValues);
-      } catch (e) {
-        debugLog(e.toString());
-      }
+      final rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
+      rows.add(rowValues);
     }
   }
   return rows;

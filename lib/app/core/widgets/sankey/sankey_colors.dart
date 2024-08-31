@@ -10,10 +10,10 @@ class SankeyColors {
       colorNet = const Color(0xff214f72);
     }
   }
+
+  Color colorExpense = const Color(0xffC08282);
+  Color colorIncome = const Color(0xff8ba16a);
+  Color colorNet = const Color(0xff869AAD);
   // default light theme color
   Color textColor = const Color(0xff000000);
-
-  Color colorIncome = const Color(0xff8ba16a);
-  Color colorExpense = const Color(0xffC08282);
-  Color colorNet = const Color(0xff869AAD);
 }

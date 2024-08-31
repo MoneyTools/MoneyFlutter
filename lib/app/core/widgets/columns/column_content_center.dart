@@ -3,6 +3,7 @@ import 'package:money/app/core/helpers/color_helper.dart';
 
 class HeaderContentCenter extends StatelessWidget {
   const HeaderContentCenter({required this.text, required this.trailingWidget, super.key});
+
   final String text;
   final Widget? trailingWidget;
 

@@ -29,30 +29,26 @@ void showImportTransactionsFromTextInput(
         if (parser.isEmpty) {
           messageBox(context, 'Nothing to import');
         } else {
-          if (parser.containsErrors()) {
-            messageBox(context, 'Contains errors');
-          } else {
-            // Import
-            final List<Transaction> transactionsToAdd = [];
+          // Import
+          final List<Transaction> transactionsToAdd = [];
 
-            for (final ValuesQuality singleTransactionInput in parser.lines) {
-              if (!singleTransactionInput.exist) {
-                final t = createNewTransactionFromDateDescriptionAmount(
-                  account,
-                  singleTransactionInput.date.asDate() ?? DateTime.now(),
-                  singleTransactionInput.description.asString(),
-                  singleTransactionInput.amount.asAmount(),
-                );
-                transactionsToAdd.add(t);
-              }
+          for (final ValuesQuality singleTransactionInput in parser.lines) {
+            if (!singleTransactionInput.exist) {
+              final t = createNewTransactionFromDateDescriptionAmount(
+                account,
+                singleTransactionInput.date.asDate() ?? DateTime.now(),
+                singleTransactionInput.description.asString(),
+                singleTransactionInput.amount.asAmount(),
+              );
+              transactionsToAdd.add(t);
             }
-            addNewTransactions(
-              transactionsToAdd,
-              '${transactionsToAdd.length} transactions added',
-            );
-
-            Navigator.of(context).pop(false);
           }
+          addNewTransactions(
+            transactionsToAdd,
+            '${transactionsToAdd.length} transactions added',
+          );
+
+          Navigator.of(context).pop(false);
         }
       },
     ),
@@ -63,6 +59,7 @@ void showImportTransactionsFromTextInput(
     captionForClose: 'Cancel',
     actionButtons: actionButtons,
     child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         gapLarge(),
         Expanded(
@@ -91,18 +88,17 @@ Transaction createNewTransactionFromDateDescriptionAmount(
 ) {
   Payee? payee = Data().aliases.findOrCreateNewPayee(description, fireNotification: false);
 
-  final Transaction t = Transaction();
-  t.id.value = -1;
-  t.accountId.value = account.id.value;
-  t.dateTime.value = date;
-  t.payee.value = payee == null ? -1 : payee.id.value;
-  t.memo.value = description;
-  t.amount.value.setAmount(amount);
+  final Transaction t = Transaction(date: date);
+  t.fieldId.value = -1;
+  t.fieldAccountId.value = account.fieldId.value;
+  t.fieldPayee.value = payee == null ? -1 : payee.fieldId.value;
+  t.fieldMemo.value = description;
+  t.fieldAmount.value.setAmount(amount);
   return t;
 }
 
 /// Add the list of transactions "as is", then notify the user when completed
-/// Note that this does not check for duplicated transaction or resolvs the Payee names
+/// Note that this does not check for duplicated transaction or resolves the Payee names
 void addNewTransactions(
   List<Transaction> transactionsNew,
   String messageToUserAfterAdding,

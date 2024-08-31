@@ -49,10 +49,11 @@ class Chart extends StatelessWidget {
     this.variableNameHorizontal = 'X',
     this.currency = Constants.defaultCurrency,
   });
+
+  final String currency;
   final List<PairXY> list;
   final String variableNameHorizontal;
   final String variableNameVertical;
-  final String currency;
 
   @override
   Widget build(final BuildContext context) {
@@ -178,6 +179,7 @@ class Chart extends StatelessWidget {
 
 class PairXY {
   PairXY(this.xText, this.yValue);
+
   String xText = '';
   num yValue = 0.0;
 }

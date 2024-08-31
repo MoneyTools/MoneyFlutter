@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:money/app/core/widgets/gaps.dart';
+import 'package:money/app/core/widgets/widgets.dart';
 
 class CurrencyLabel extends StatelessWidget {
   const CurrencyLabel({
@@ -7,14 +7,19 @@ class CurrencyLabel extends StatelessWidget {
     required this.flagId,
     super.key,
   });
-  final String threeLetterCurrencySymbol;
+
   final String flagId;
+  final String threeLetterCurrencySymbol;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
+    return '$threeLetterCurrencySymbol:$flagId';
+  }
 
   @override
   Widget build(BuildContext context) {
-    return FittedBox(
-      fit: BoxFit.scaleDown,
-      child: Semantics(
+    return scaleDown(
+      Semantics(
         label: threeLetterCurrencySymbol,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -26,10 +31,5 @@ class CurrencyLabel extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.debug}) {
-    return '$threeLetterCurrencySymbol:$flagId';
   }
 }

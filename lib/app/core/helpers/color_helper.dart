@@ -1,22 +1,48 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:money/app/controller/theme_controler.dart';
+import 'package:money/app/controller/theme_controller.dart';
 import 'package:money/app/core/helpers/list_helper.dart';
+import 'package:money/app/core/helpers/misc_helpers.dart';
 
-Color addHintOfGreenToColor(Color color, [int hint = 50]) {
-  // Calculate the new green value
-  int newGreen = (color.green + hint).clamp(0, 255);
+/// Adds a tint of red to a given color.
+///
+/// This function takes a `Color` object and an integer value representing the
+/// strength of the red tint to be added. It returns a new `Color` object with
+/// the red component adjusted by the specified tint strength.
+///
+/// The green and blue components of the original color remain unchanged. The
+/// alpha component (opacity) of the new color is set to the same value as the
+/// original color.
+///
+/// If the resulting red value exceeds the valid range (0 to 255), it is clamped
+/// to the nearest valid value (0 or 255).
+///
+/// Example usage:
+///
+/// ```dart
+/// Color originalColor = const Color(0xFF00FF00); // Green color
+/// Color tintedColor = addTintOfRed(originalColor, 50); // Adds a tint of 50 to the red component
+/// print(tintedColor.value.toRadixString(16)); // Output: 0xFF7FFF00 (Greenish-yellow color)
+/// ```
+///
+/// Parameters:
+///   originalColor (Color): The original color to which the red tint will be added.
+///   tintStrength (int): The strength of the red tint to be added (0 to 255).
+///
+/// Returns:
+///   A new `Color` object with the red component adjusted by the specified tint strength.
+Color addTintOfRed(Color originalColor, int tintStrength) {
+  // Add the tint strength to the red component
+  int red = originalColor.red + tintStrength;
 
-  // Return the new color with added green
-  return Color.fromRGBO(color.red, newGreen, color.blue, color.opacity);
-}
+  // Keep the green and blue components unchanged
+  int green = originalColor.green;
+  int blue = originalColor.blue;
 
-Color addHintOfRedToColor(Color color, [int hint = 50]) {
-  // Calculate the new red value
-  int newRed = (color.red + hint).clamp(0, 255);
+  // Ensure red value stays within the valid range (0 to 255)
+  red = red.clamp(0, 255);
 
-  // Return the new color with added red
-  return Color.fromRGBO(newRed, color.green, color.blue, color.opacity);
+  // Create a new Color object with the adjusted red component
+  return Color.fromARGB(originalColor.alpha, red, green, blue);
 }
 
 /// Adds a tint of blue to the original color.
@@ -32,30 +58,27 @@ Color addTintOfBlue(Color originalColor, int tintStrength) {
   int green = originalColor.green;
   int blue = originalColor.blue + tintStrength;
 
-  // Ensure red value stays within the valid range (0 to 255)
+  // Ensure blue value stays within the valid range (0 to 255)
   blue = blue.clamp(0, 255);
 
   return Color.fromARGB(originalColor.alpha, red, green, blue);
 }
 
+/// Adds a tint of green to the original color.
+///
+/// The [originalColor] parameter represents the original color to which the tint of green will be added.
+/// The [tintStrength] parameter determines the strength of the tint of blue to be added. It should be an integer value.
+///
+/// Returns a new [Color] object with the tint of green added to the original color. The red and blue values of the original color remain unchanged, while the blue value is increased by the [tintStrength] amount.
+/// If the resulting green value exceeds 255, it will be clamped to 255 to ensure it stays within the valid range (0 to 255).
+///
 Color addTintOfGreen(Color originalColor, int tintStrength) {
   int red = originalColor.red;
   int green = originalColor.green + tintStrength;
   int blue = originalColor.blue;
 
-  // Ensure red value stays within the valid range (0 to 255)
+  // Ensure green value stays within the valid range (0 to 255)
   green = green.clamp(0, 255);
-
-  return Color.fromARGB(originalColor.alpha, red, green, blue);
-}
-
-Color addTintOfRed(Color originalColor, int tintStrength) {
-  int red = originalColor.red + tintStrength;
-  int green = originalColor.green;
-  int blue = originalColor.blue;
-
-  // Ensure red value stays within the valid range (0 to 255)
-  red = red.clamp(0, 255);
 
   return Color.fromARGB(originalColor.alpha, red, green, blue);
 }
@@ -110,11 +133,12 @@ enum ColorState {
   warning,
   error,
   disabled,
+  quantityPositive,
+  quantityNegative,
 }
 
 Color getColorFromState(final ColorState state) {
-  final ThemeController themeController = Get.find();
-  final bool isDarkModeOne = themeController.isDarkTheme.value;
+  final bool isDarkModeOne = ThemeController.to.isDarkTheme.value;
 
   switch (state) {
     case ColorState.success:
@@ -128,6 +152,10 @@ Color getColorFromState(final ColorState state) {
 
     case ColorState.disabled:
       return isDarkModeOne ? Colors.grey.shade500 : Colors.grey.shade600;
+    case ColorState.quantityNegative:
+      return isDarkModeOne ? Colors.orange.shade300 : Colors.orange.shade600;
+    case ColorState.quantityPositive:
+      return isDarkModeOne ? Colors.blue.shade300 : Colors.blue.shade600;
   }
 }
 
@@ -282,4 +310,32 @@ Color invertColor(final Color color) {
 
   // Return the inverted color
   return Color.fromRGBO(invertedRed, invertedGreen, invertedBlue, 1.0);
+}
+
+Color? getTextColorToUse(
+  final num value, [
+  final bool autoColor = true,
+]) {
+  if (autoColor) {
+    if (isConsideredZero(value)) {
+      return getColorFromState(ColorState.disabled);
+    }
+    if (value < 0) {
+      return getColorFromState(ColorState.error);
+    } else {
+      return getColorFromState(ColorState.success);
+    }
+  }
+  return null;
+}
+
+Color? getTextColorToUseQuantity(final num value) {
+  if (isConsideredZero(value)) {
+    return getColorFromState(ColorState.disabled);
+  }
+  if (value < 0) {
+    return getColorFromState(ColorState.quantityNegative);
+  } else {
+    return getColorFromState(ColorState.quantityPositive);
+  }
 }

@@ -10,11 +10,12 @@ class ThreePartLabel extends StatelessWidget {
     this.small = false,
     this.isVertical = false,
   });
+
   final Widget? icon;
+  final bool isVertical;
+  final bool small;
   final String text1;
   final String text2;
-  final bool small;
-  final bool isVertical;
 
   @override
   Widget build(final BuildContext context) {

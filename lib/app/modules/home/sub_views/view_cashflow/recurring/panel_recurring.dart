@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:money/app/controller/preferences_controller.dart';
 import 'package:money/app/core/helpers/accumulator.dart';
 import 'package:money/app/core/helpers/color_helper.dart';
-import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/helpers/ranges.dart';
 
 import 'package:money/app/data/models/money_objects/transactions/transactions.dart';
@@ -11,26 +10,27 @@ import 'package:money/app/data/storage/data/data.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_card.dart';
 import 'package:money/app/modules/home/sub_views/view_cashflow/recurring/recurring_payment.dart';
 
-class PanelRecurrings extends StatefulWidget {
-  const PanelRecurrings({
+class PanelRecurring extends StatefulWidget {
+  const PanelRecurring({
     super.key,
     required this.dateRangeSearch,
     required this.minYear,
     required this.maxYear,
     required this.viewRecurringAs,
   });
-  final CashflowViewAs viewRecurringAs;
+
   final DateRange dateRangeSearch;
-  final int minYear;
   final int maxYear;
+  final int minYear;
+  final CashflowViewAs viewRecurringAs;
 
   @override
-  State<PanelRecurrings> createState() => _PanelRecurringsState();
+  State<PanelRecurring> createState() => _PanelRecurringState();
 }
 
-class _PanelRecurringsState extends State<PanelRecurrings> {
-  List<RecurringPayment> recurringPayments = [];
+class _PanelRecurringState extends State<PanelRecurring> {
   late bool forIncomeTransaction;
+  List<RecurringPayment> recurringPayments = [];
 
   @override
   void initState() {
@@ -61,38 +61,6 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     );
   }
 
-  void initRecurringTransactions({required final bool forIncome}) {
-    // get all transactions meeting the request of date and type
-    bool whereClause(Transaction t) {
-      return isBetweenOrEqual(t.dateTime.value!.year, widget.minYear, widget.maxYear) &&
-          (((forIncome == true && t.amount.value.toDouble() > 0) ||
-              (forIncome == false && t.amount.value.toDouble() < 0)));
-    }
-
-    final flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
-
-    // get all transaction Income | Expenses
-    findMonthlyRecurringPayments(flatTransactions, forIncome);
-
-    // Sort descending - biggest amount first
-    if (widget.viewRecurringAs == CashflowViewAs.recurringIncomes) {
-      recurringPayments.sort((a, b) => b.total.compareTo(a.total));
-    }
-    if (widget.viewRecurringAs == CashflowViewAs.recurringExpenses) {
-      recurringPayments.sort((a, b) => a.total.compareTo(b.total));
-    }
-  }
-
-  Widget header(final BuildContext context, final String title) {
-    return Container(
-      margin: const EdgeInsets.all(8),
-      child: Text(
-        title,
-        style: getTextTheme(context).titleLarge!,
-      ),
-    );
-  }
-
   void findMonthlyRecurringPayments(
     List<Transaction> transactions,
     bool isIncomeTransaction,
@@ -106,15 +74,15 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
     // Step 1: Group transactions by payeeId and record transaction months
     for (final transaction in transactions.where(
       (final t) =>
-          (isIncomeTransaction && t.amount.value.toDouble() > 0) ||
-          (isIncomeTransaction == false && t.amount.value.toDouble() <= 0),
+          (isIncomeTransaction && t.fieldAmount.value.toDouble() > 0) ||
+          (isIncomeTransaction == false && t.fieldAmount.value.toDouble() <= 0),
     )) {
-      int payeeId = transaction.payee.value;
+      int payeeId = transaction.fieldPayee.value;
 
       groupTransactionsByPayeeId.cumulate(payeeId, transaction);
       groupMonthsListByPayeeId.cumulate(
         payeeId,
-        transaction.dateTime.value!.month,
+        transaction.fieldDateTime.value!.month,
       );
     }
 
@@ -133,6 +101,28 @@ class _PanelRecurringsState extends State<PanelRecurrings> {
           ),
         );
       }
+    }
+  }
+
+  void initRecurringTransactions({required final bool forIncome}) {
+    // get all transactions meeting the request of date and type
+    bool whereClause(Transaction t) {
+      return isBetweenOrEqual(t.fieldDateTime.value!.year, widget.minYear, widget.maxYear) &&
+          (((forIncome == true && t.fieldAmount.value.toDouble() > 0) ||
+              (forIncome == false && t.fieldAmount.value.toDouble() < 0)));
+    }
+
+    final flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
+
+    // get all transaction Income | Expenses
+    findMonthlyRecurringPayments(flatTransactions, forIncome);
+
+    // Sort descending - biggest amount first
+    if (widget.viewRecurringAs == CashflowViewAs.recurringIncomes) {
+      recurringPayments.sort((a, b) => b.total.compareTo(a.total));
+    }
+    if (widget.viewRecurringAs == CashflowViewAs.recurringExpenses) {
+      recurringPayments.sort((a, b) => a.total.compareTo(b.total));
     }
   }
 

@@ -16,8 +16,13 @@ const String initialAssetFile = 'assets/initial.json';
 const String localFilename = 'myMoney.json';
 
 class MyFileSystems {
-  static Future<Directory> ensureFolderExist(final String fullPath) async {
-    return await Directory(fullPath).create(recursive: true);
+  static String append(final String folderPath, final String toAppend) {
+    return '$folderPath${p.separator}$toAppend';
+  }
+
+  static Future<bool> doesFileExist(final String pathToFile) async {
+    final File file = File(pathToFile);
+    return await file.exists();
   }
 
   /// Initially check if there is already a local file.
@@ -38,16 +43,54 @@ class MyFileSystems {
     return file;
   }
 
-  static Future<bool> doesFileExist(final String pathToFile) async {
-    final File file = File(pathToFile);
-    return await file.exists();
+  static Future<Directory> ensureFolderExist(final String fullPath) async {
+    return await Directory(fullPath).create(recursive: true);
   }
+
+  static String getFileExtension(final filePath) {
+    return p.extension(filePath);
+  }
+
+  static Future<DateTime?> getFileModifiedTime(String filePath) async {
+    try {
+      if (await MyFileSystems.doesFileExist(filePath)) {
+        final file = File(filePath);
+        final fileStat = await file.stat();
+        return fileStat.modified;
+      }
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  static String getFileName(final filePath) {
+    return p.basename(filePath);
+  }
+
+  static String getFolderFromFilePath(final filePath) {
+    return p.dirname(filePath);
+  }
+
+  static String get pathSeparator => p.separator;
 
   static Future<String> readFile(
     final String pathToFile,
   ) async {
-    final File file = File(pathToFile);
-    return await file.readAsString();
+    if (await MyFileSystems.doesFileExist(pathToFile)) {
+      final File file = File(pathToFile);
+      return await file.readAsString();
+    }
+    return '';
+  }
+
+  static Future<void> writeFileContentIntoFolder(
+    final String folder,
+    final String fileName,
+    final String content,
+  ) {
+    final String fullPathToFile = MyFileSystems.append(folder, fileName);
+    return MyFileSystems.writeToFile(fullPathToFile, content);
   }
 
   /// Generic text file write
@@ -63,31 +106,4 @@ class MyFileSystems {
 
     await file.writeAsString(data, flush: true);
   }
-
-  static String append(final String folderPath, final String toAppend) {
-    return '$folderPath${p.separator}$toAppend';
-  }
-
-  static String getFolderFromFilePath(final filePath) {
-    return p.dirname(filePath);
-  }
-
-  static String getFileName(final filePath) {
-    return p.basename(filePath);
-  }
-
-  static String getFileExtension(final filePath) {
-    return p.extension(filePath);
-  }
-
-  static Future<void> writeFileContentIntoFolder(
-    final String folder,
-    final String fileName,
-    final String content,
-  ) {
-    final String fullPathToFile = MyFileSystems.append(folder, fileName);
-    return MyFileSystems.writeToFile(fullPathToFile, content);
-  }
-
-  static String get pathSeparator => p.separator;
 }
