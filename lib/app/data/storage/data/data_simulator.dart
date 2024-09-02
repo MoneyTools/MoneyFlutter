@@ -63,7 +63,9 @@ class DataSimulator {
   /// Generates sample data for the MoneyFlutter app.
   void generateData() {
     Data().clearExistingData();
+
     _generateCurrencies();
+    _generatePayees();
     _generateAccounts();
     _generateOnlineAccounts();
     _generateAccountAliases();
@@ -81,6 +83,15 @@ class DataSimulator {
 
     generateTransactionsForCreditCard();
     _generateTransfersToCreditCardPayment();
+  }
+
+  void _generatePayees() {
+    Data().payees.loadFromJson([
+      {'Id': 0, 'Name': 'Job At BurgerKing'},
+      {'Id': 1, 'Name': 'NASA'},
+      {'Id': 2, 'Name': 'Lottery Win'},
+      {'Id': 3, 'Name': 'Broker'},
+    ]);
   }
 
   // ignore: unused_element
@@ -319,7 +330,7 @@ class DataSimulator {
       account: _accountBankCanada,
       date: getDateShiftedByYears(-21, 1, 1),
       amount: 100000,
-      payeeId: Data().payees.getOrCreate('Lottery Win').uniqueId,
+      payeeId: Data().payees.getByName('Lottery Win')!.uniqueId,
       categoryId: Data()
           .categories
           .addNewCategory(
@@ -885,11 +896,6 @@ class DataSimulator {
     double increaseRatePerYear = _yearlyInflation / 100;
 
     int iterationYear = -1;
-
-    Data().payees.loadFromJson([
-      {'Id': 0, 'Name': 'Job At BurgerKing'},
-      {'Id': 1, 'Name': 'NASA'},
-    ]);
 
     Payee employer1 = Data().payees.get(0)!;
     Payee employer2 = Data().payees.get(1)!;
