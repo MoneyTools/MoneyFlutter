@@ -85,15 +85,6 @@ class DataSimulator {
     _generateTransfersToCreditCardPayment();
   }
 
-  void _generatePayees() {
-    Data().payees.loadFromJson([
-      {'Id': 0, 'Name': 'Job At BurgerKing'},
-      {'Id': 1, 'Name': 'NASA'},
-      {'Id': 2, 'Name': 'Lottery Win'},
-      {'Id': 3, 'Name': 'Broker'},
-    ]);
-  }
-
   // ignore: unused_element
   List<DateTime> generateRandomDates(int count) {
     final tenYearsAgo = _today.subtract(
@@ -738,6 +729,15 @@ class DataSimulator {
           }),
           fireNotification: false,
         );
+  }
+
+  void _generatePayees() {
+    Data().payees.loadFromJson([
+      {'Id': 0, 'Name': 'Job At BurgerKing'},
+      {'Id': 1, 'Name': 'NASA'},
+      {'Id': 2, 'Name': 'Lottery Win'},
+      {'Id': 3, 'Name': 'Broker'},
+    ]);
   }
 
   /// Generates sample rental data.
