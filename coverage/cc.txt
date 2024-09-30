@@ -1,5 +1,5 @@
 Overall coverage rate:
-  source files: 218
-  lines.......: 80.9% (9307 of 11498 lines)
+  source files: 217
+  lines.......: 81.0% (9306 of 11495 lines)
 Message summary:
   no messages were reported

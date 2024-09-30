@@ -105,9 +105,7 @@
         "STMTTRN",
         "sublist",
         "subosito",
-        "tessconfig",
-        "tessdata",
-        "Tesseract",
+        "textify",
         "tinyint",
         "traineddata",
         "TRNAMT",
@@ -117,6 +115,7 @@
         "unfocus",
         "uniqueidentifier",
         "vsync",
+        "vteam",
         "webframeworks",
         "writeln",
         "Xfer"

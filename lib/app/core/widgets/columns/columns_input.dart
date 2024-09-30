@@ -116,7 +116,7 @@ class _InputByColumnsState extends State<InputByColumns> {
         key: const Key('key_input_value'),
         title: 'Date; Description; Amount',
         controller: _controllerSingleColumn,
-        allowedCharacters: '0123456789/_.\\',
+        allowedCharacters: '0123456789/-.\\',
       ),
     );
   }
@@ -132,7 +132,7 @@ class _InputByColumnsState extends State<InputByColumns> {
           child: InputValues(
             title: 'Date',
             controller: _controllerColumn1,
-            allowedCharacters: '0123456789/_.\\',
+            allowedCharacters: '0123456789/-.\\',
           ),
         ),
         Expanded(

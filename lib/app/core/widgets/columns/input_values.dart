@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
 import 'package:money/app/core/widgets/columns/columns_input.dart';
-import 'package:money/app/core/widgets/ocr/ocr.dart';
+import 'package:money/app/core/widgets/ocr.dart';
 import 'package:money/app/data/models/constants.dart';
 
 class InputValues extends StatelessWidget {
@@ -51,7 +51,7 @@ class InputValues extends StatelessWidget {
         if (!kIsWeb && !io.Platform.isWindows)
           Align(
             alignment: Alignment.bottomCenter,
-            child: PasteOcr(
+            child: PasteImageOcr(
               textController: controller,
               allowedCharacters: allowedCharacters,
             ),
