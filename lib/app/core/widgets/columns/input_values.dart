@@ -1,6 +1,3 @@
-import 'dart:io' as io;
-
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:money/app/core/helpers/string_helper.dart';
 import 'package:money/app/core/widgets/box.dart';
@@ -48,14 +45,13 @@ class InputValues extends StatelessWidget {
             ],
           ),
         ),
-        if (!kIsWeb && !io.Platform.isWindows)
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: PasteImageOcr(
-              textController: controller,
-              allowedCharacters: allowedCharacters,
-            ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: PasteImageOcr(
+            textController: controller,
+            allowedCharacters: allowedCharacters,
           ),
+        ),
       ],
     );
   }
