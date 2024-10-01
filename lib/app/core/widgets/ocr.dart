@@ -5,7 +5,6 @@ import 'package:flutter/services.dart';
 import 'package:money/app/core/helpers/misc_helpers.dart';
 import 'package:money/app/core/widgets/snack_bar.dart';
 import 'package:pasteboard/pasteboard.dart';
-import 'package:textify/image_pipeline.dart';
 import 'package:textify/textify.dart';
 
 class PasteImageOcr extends StatefulWidget {
@@ -38,7 +37,7 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
 
   Future<ui.Image> fromBytesToImage(Uint8List list) async {
     // Decode the image
-    final codec = await ui.instantiateImageCodec(list);
+    final ui.Codec codec = await ui.instantiateImageCodec(list);
     final FrameInfo frameInfo = await codec.getNextFrame();
 
     return frameInfo.image;
@@ -51,10 +50,11 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
         final Textify textify = Textify();
         await textify.init();
 
-        final inputImage = await fromBytesToImage(bytes);
-        final ImagePipeline interimImages = await ImagePipeline.apply(inputImage);
-        widget.textController.text = textify.getTextFromBinaryImage(
-          imageAsBinary: interimImages.imageBinary,
+        final ui.Image inputImage = await fromBytesToImage(bytes);
+
+        // extract text from the image
+        widget.textController.text = await textify.getTextFromImage(
+          image: inputImage,
           supportedCharacters: widget.allowedCharacters,
         );
       } on Exception catch (e) {
