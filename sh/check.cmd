@@ -1,12 +1,12 @@
 @echo off
 
+echo --- Analyze
+call dart analyze
+
 echo --- Fix
-dart fix --apply
+call dart fix --apply
 
 echo --- Formatting
-dart format . -l 120
+call dart format . -l 120
 
-echo --- Analyze
-flutter analyze
-
-flutter test
+call flutter test
