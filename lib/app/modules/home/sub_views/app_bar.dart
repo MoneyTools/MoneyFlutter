@@ -13,289 +13,112 @@ import 'package:money/app/data/storage/import/import_transactions_from_text.dart
 import 'package:money/app/data/storage/import/import_wizard.dart';
 import 'package:money/app/modules/home/sub_views/app_title.dart';
 
-class MyAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const MyAppBar({
-    super.key,
-  });
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar({super.key});
 
   @override
   final Size preferredSize = const Size.fromHeight(kToolbarHeight);
 
   @override
-  State<MyAppBar> createState() => _MyAppBarState();
-}
+  Widget build(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
+    final preferencesController = Get.find<PreferenceController>();
 
-class _MyAppBarState extends State<MyAppBar> {
-  final ThemeController themeController = Get.find();
-
-  @override
-  Widget build(final BuildContext context) {
     return AppBar(
       backgroundColor: getColorTheme(context).secondaryContainer,
-
-      // Menu
       leading: _buildPopupMenu(),
-
-      // Center Title
       title: AppTitle(),
-
-      // Button on the right side
       actions: <Widget>[
-        // Hide/Show closed accounts
-        if (!context.isWidthSmall) _buildButtonToggleViewClosedAccounts(),
-
-        // Dark / Light mode
-        IconButton(
-          key: const Key('key_toggle_mode'),
-          icon: themeController.isDarkTheme.value ? const Icon(Icons.wb_sunny) : const Icon(Icons.mode_night),
-          onPressed: () {
-            ThemeController.to.toggleThemeMode();
-          },
-          tooltip: 'Toggle brightness',
-        ),
-        _buildSettingsMenu(),
+        if (!context.isWidthSmall) _buildToggleClosedAccountsButton(preferencesController),
+        _buildToggleThemeButton(themeController),
+        _buildSettingsMenu(themeController, preferencesController),
       ],
     );
   }
 
-  void addColorPalette(List<PopupMenuItem<int>> actionList) {
-    actionList.add(
-      const PopupMenuItem<int>(
-        value: -1,
-        child: SizedBox(
-          height: 300,
-          child: SingleChildScrollView(
-            child: ColorPalette(),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void addMenuItem(
-    final list,
-    final int id,
-    final String caption,
-    final IconData iconData,
-  ) {
-    list.add(
-      PopupMenuItem<int>(
-        value: id,
-        child: ThreePartLabel(
-          icon: Icon(iconData),
-          text1: caption,
-          small: true,
-        ),
-      ),
-    );
-  }
-
-  void onAppBarAction(
-    final int value,
-  ) {
+  void onAppBarAction(int value) {
     switch (value) {
       case Constants.commandAddTransactions:
-        showImportTransactionsFromTextInput(context);
+        showImportTransactionsFromTextInput(Get.context!);
+        break;
       case Constants.commandSettings:
         Get.toNamed(Constants.routeSettingsPage);
+        break;
       case Constants.commandIncludeClosedAccount:
         PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
+        break;
       default:
-        final ThemeController themeController = Get.find();
-        themeController.setThemeColor(value);
+        ThemeController.to.setThemeColor(value);
     }
     DataController.to.update();
   }
 
-  Widget _buildButtonToggleViewClosedAccounts() {
-    return IconButton(
-      icon: _buildButtonToggleViewClosedAccountsIcon(),
-      onPressed: () {
-        PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
-      },
-      tooltip: PreferenceController.to.includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
-    );
-  }
-
-  Widget _buildButtonToggleViewClosedAccountsIcon() {
-    return Opacity(
-      opacity: PreferenceController.to.includeClosedAccounts ? 1.0 : 0.5,
-      child: const Icon(
-        Icons.inventory,
-        size: 18,
+  PopupMenuItem<int> _buildMenuItem(int value, String caption, IconData iconData) {
+    return PopupMenuItem<int>(
+      value: value,
+      child: ThreePartLabel(
+        icon: Icon(iconData),
+        text1: caption,
+        small: true,
       ),
     );
   }
 
   Widget _buildPopupMenu() {
-    final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
-    // New
-    addMenuItem(list, Constants.commandFileNew, 'New', Icons.note_add_outlined);
-
-    // Open
-    addMenuItem(
-      list,
-      Constants.commandFileOpen,
-      'Open...',
-      Icons.file_open_outlined,
-    );
-
-    // Add Transactions
-    addMenuItem(
-      list,
-      Constants.commandAddTransactions,
-      'Add transactions...',
-      Icons.post_add_outlined,
-    );
-
-    addMenuItem(
-      list,
-      Constants.commandRebalance,
-      'Rebalance...',
-      Icons.refresh_outlined,
-    );
-
-    if (!kIsWeb) {
-      // File Location
-      addMenuItem(
-        list,
-        Constants.commandFileLocation,
-        'File location...',
-        Icons.folder_open_outlined,
-      );
-
-      // Save CSV
-      addMenuItem(
-        list,
-        Constants.commandFileSaveCsv,
-        'Save to CSV',
-        Icons.save,
-      );
-
-      // Save SQL
-      addMenuItem(
-        list,
-        Constants.commandFileSaveSql,
-        'Save to SQL',
-        Icons.save,
-      );
-    }
-
-    // Close
-    addMenuItem(list, Constants.commandFileClose, 'Close file', Icons.close);
+    final List<PopupMenuItem<int>> menuItems = [
+      _buildMenuItem(Constants.commandFileNew, 'New', Icons.note_add_outlined),
+      _buildMenuItem(Constants.commandFileOpen, 'Open...', Icons.file_open_outlined),
+      _buildMenuItem(Constants.commandAddTransactions, 'Add transactions...', Icons.post_add_outlined),
+      _buildMenuItem(Constants.commandRebalance, 'Rebalance...', Icons.refresh_outlined),
+      if (!kIsWeb) ...[
+        _buildMenuItem(Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined),
+        _buildMenuItem(Constants.commandFileSaveCsv, 'Save to CSV', Icons.save),
+        _buildMenuItem(Constants.commandFileSaveSql, 'Save to SQL', Icons.save),
+      ],
+      _buildMenuItem(Constants.commandFileClose, 'Close file', Icons.close),
+    ];
 
     return myPopupMenuIconButton(
       key: const Key('key_menu_button'),
       icon: Icons.menu,
       tooltip: 'File menu',
-      list: list,
-      onSelected: (final int index) {
-        switch (index) {
-          case Constants.commandFileNew:
-            Get.offAllNamed(Constants.routeHomePage);
-            DataController.to.onFileNew();
-
-          case Constants.commandFileOpen:
-            DataController.to.onFileOpen().then((_) {
-              Get.offAllNamed(Constants.routeHomePage);
-            });
-
-          case Constants.commandFileLocation:
-            DataController.to.onShowFileLocation();
-
-          case Constants.commandAddTransactions:
-            showImportTransactionsWizard(context);
-
-          case Constants.commandRebalance:
-            Data().recalculateBalances();
-
-          case Constants.commandFileSaveCsv:
-            DataController.to.onSaveToCsv();
-
-          case Constants.commandFileSaveSql:
-            DataController.to.onSaveToSql();
-
-          case Constants.commandFileClose:
-            DataController.to.closeFile();
-            Get.offAllNamed(Constants.routeWelcomePage);
-
-          default:
-            debugPrint('unhandled $index');
-        }
-      },
+      list: menuItems,
+      onSelected: _handleMenuSelection,
     );
   }
 
-  Widget _buildSettingsMenu() {
-    final List<PopupMenuItem<int>> actionList = [];
-
-    actionList.add(
-      PopupMenuItem<int>(
-        value: Constants.commandIncludeClosedAccount,
-        child: ThreePartLabel(
-          text1: PreferenceController.to.includeClosedAccounts ? 'Hide "Closed Accounts"' : 'Show "Closed Account"',
-          icon: _buildButtonToggleViewClosedAccountsIcon(),
-          small: true,
-        ),
+  Widget _buildSettingsMenu(ThemeController themeController, PreferenceController preferencesController) {
+    final List<PopupMenuItem<int>> actionList = [
+      _buildSettingsMenuItem(
+        Constants.commandIncludeClosedAccount,
+        preferencesController.includeClosedAccounts ? 'Hide "Closed Accounts"' : 'Show "Closed Account"',
+        Icons.inventory,
+        opacity: preferencesController.includeClosedAccounts ? 1.0 : 0.5,
       ),
-    );
-
-    actionList.add(
-      const PopupMenuItem<int>(
-        value: Constants.commandSettings,
-        child: ThreePartLabel(
-          key: Key('key_settings'),
-          text1: 'Settings...',
-          icon: Icon(Icons.settings, color: Colors.grey),
-          small: true,
-        ),
-      ),
-    );
-
-    final colorPallette = List<PopupMenuItem<int>>.generate(themeAsColors.length, (final int index) {
-      final bool isSelected = index == themeController.colorSelected.value;
-      final themeColorName = themeColorNames[index];
-
-      return PopupMenuItem<int>(
-        value: index,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-            color: isSelected ? getColorTheme(context).secondaryContainer : null,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-          ),
-          child: ThreePartLabel(
-            key: Key('key_theme_$themeColorName'),
-            icon: Icon(
-              index == themeController.colorSelected.value ? Icons.color_lens : Icons.color_lens_outlined,
-              color: themeAsColors[index],
-            ),
-            text1: themeColorName,
-            small: true,
-          ),
-        ),
-      );
-    });
-
-    actionList.addAll(colorPallette);
-
-    actionList.add(
+      _buildSettingsMenuItem(Constants.commandSettings, 'Settings...', Icons.settings, key: const Key('key_settings')),
+      ..._buildThemeColorMenuItems(themeController),
       PopupMenuItem<int>(
         value: Constants.commandTextZoom,
         child: ZoomIncreaseDecrease(
           title: 'Zoom',
-          onDecrease: () {
-            ThemeController.to.fontScaleDecrease();
-          },
-          onIncrease: () {
-            ThemeController.to.fontScaleIncrease();
-          },
+          onDecrease: ThemeController.to.fontScaleDecrease,
+          onIncrease: ThemeController.to.fontScaleIncrease,
         ),
       ),
-    );
+    ];
 
     if (kDebugMode) {
-      addColorPalette(actionList);
+      actionList.add(
+        const PopupMenuItem<int>(
+          value: -1,
+          child: SizedBox(
+            height: 300,
+            child: SingleChildScrollView(
+              child: ColorPalette(),
+            ),
+          ),
+        ),
+      );
     }
 
     return myPopupMenuIconButton(
@@ -303,9 +126,110 @@ class _MyAppBarState extends State<MyAppBar> {
       icon: Icons.settings_outlined,
       tooltip: 'Settings',
       list: actionList,
-      onSelected: (final int value) {
-        onAppBarAction(value);
+      onSelected: onAppBarAction,
+    );
+  }
+
+  PopupMenuItem<int> _buildSettingsMenuItem(
+    int value,
+    String text,
+    IconData iconData, {
+    Key? key,
+    double opacity = 1.0,
+  }) {
+    return PopupMenuItem<int>(
+      value: value,
+      child: ThreePartLabel(
+        key: key,
+        text1: text,
+        icon: Opacity(opacity: opacity, child: Icon(iconData, color: Colors.grey)),
+        small: true,
+      ),
+    );
+  }
+
+  List<PopupMenuItem<int>> _buildThemeColorMenuItems(ThemeController themeController) {
+    return List<PopupMenuItem<int>>.generate(
+      themeAsColors.length,
+      (int index) {
+        final bool isSelected = index == themeController.colorSelected.value;
+        final themeColorName = themeColorNames[index];
+
+        return PopupMenuItem<int>(
+          value: index,
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            decoration: BoxDecoration(
+              color: isSelected ? getColorTheme(Get.context!).secondaryContainer : null,
+              borderRadius: const BorderRadius.all(Radius.circular(4)),
+            ),
+            child: ThreePartLabel(
+              key: Key('key_theme_$themeColorName'),
+              icon: Icon(
+                isSelected ? Icons.color_lens : Icons.color_lens_outlined,
+                color: themeAsColors[index],
+              ),
+              text1: themeColorName,
+              small: true,
+            ),
+          ),
+        );
       },
     );
+  }
+
+  Widget _buildToggleClosedAccountsButton(PreferenceController preferencesController) {
+    return IconButton(
+      icon: Opacity(
+        opacity: preferencesController.includeClosedAccounts ? 1.0 : 0.5,
+        child: const Icon(Icons.inventory, size: 18),
+      ),
+      onPressed: () => preferencesController.includeClosedAccounts = !preferencesController.includeClosedAccounts,
+      tooltip: preferencesController.includeClosedAccounts ? 'Hide closed accounts' : 'View closed accounts',
+    );
+  }
+
+  Widget _buildToggleThemeButton(ThemeController themeController) {
+    return IconButton(
+      key: const Key('key_toggle_mode'),
+      icon: Icon(themeController.isDarkTheme.value ? Icons.wb_sunny : Icons.mode_night),
+      onPressed: ThemeController.to.toggleThemeMode,
+      tooltip: 'Toggle brightness',
+    );
+  }
+
+  void _handleMenuSelection(int index) {
+    switch (index) {
+      case Constants.commandFileNew:
+        Get.offAllNamed(Constants.routeHomePage);
+        DataController.to.onFileNew();
+        break;
+      case Constants.commandFileOpen:
+        DataController.to.onFileOpen().then((_) {
+          Get.offAllNamed(Constants.routeHomePage);
+        });
+        break;
+      case Constants.commandFileLocation:
+        DataController.to.onShowFileLocation();
+        break;
+      case Constants.commandAddTransactions:
+        showImportTransactionsWizard(Get.context!);
+        break;
+      case Constants.commandRebalance:
+        Data().recalculateBalances();
+        break;
+      case Constants.commandFileSaveCsv:
+        DataController.to.onSaveToCsv();
+        break;
+      case Constants.commandFileSaveSql:
+        DataController.to.onSaveToSql();
+        break;
+      case Constants.commandFileClose:
+        DataController.to.closeFile();
+        Get.offAllNamed(Constants.routeWelcomePage);
+        break;
+      default:
+        debugPrint('Unhandled menu item: $index');
+    }
   }
 }

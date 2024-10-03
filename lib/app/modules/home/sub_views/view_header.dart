@@ -6,43 +6,46 @@ import 'package:money/app/core/widgets/three_part_label.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
 
+/// A widget that displays a header for a view.
+///
+/// This widget can display a title, description, item count, filter input,
+/// clear filters button, and action buttons. It also supports multiple selection
+/// and provides callbacks for various actions such as adding, merging, editing,
+/// and deleting money objects.
 class ViewHeader extends StatelessWidget {
   const ViewHeader({
-    required this.title,
-    required this.itemCount,
-    required this.selectedItems,
-    required this.description,
     super.key,
-
-    // filter text
-    this.filterText = '',
-    this.onFilterChanged,
-    // ignore: avoid_init_to_null
-    this.onClearAllFilters = null,
-
-    // optionals
-    this.multipleSelection,
-    this.getActionButtons,
-    this.onAddMoneyObject,
-    this.onMergeMoneyObject,
-    this.onEditMoneyObject,
-    this.onDeleteMoneyObject,
-    this.child,
+    required this.title, // The title of the view.
+    required this.itemCount, // The number of items in the view.
+    required this.selectedItems, // A list of selected item indices.
+    required this.description, // A description of the view.
+    this.textFilter = '', // The initial text for the filter input.
+    this.onTextFilterChanged, // A callback for when the filter text changes.
+    this.onClearAllFilters, // A callback for when the clear filters button is pressed.
+    this.multipleSelection, // A flag indicating whether multiple selection is enabled.
+    this.getActionButtons, // A callback that returns a list of action buttons.
+    this.onAddMoneyObject, // A callback for when the add money object button is pressed.
+    this.onMergeMoneyObject, // A callback for when the merge money object button is pressed.
+    this.onEditMoneyObject, // A callback for when the edit money object button is pressed.
+    this.onDeleteMoneyObject, // A callback for when the delete money object button is pressed.
+    this.child, // An optional child widget to display in the header.
   });
 
-  final List<Widget> Function(bool)? getActionButtons;
-  final void Function(String)? onFilterChanged;
+  final void Function(String)? onTextFilterChanged;
   final void Function()? onClearAllFilters;
   final Widget? child;
   final String description;
-  final String filterText;
   final num itemCount;
   final VoidCallback? onAddMoneyObject;
   final VoidCallback? onDeleteMoneyObject;
   final VoidCallback? onEditMoneyObject;
   final VoidCallback? onMergeMoneyObject;
   final ValueNotifier<List<int>> selectedItems;
+  final String textFilter;
   final String title;
+
+  /// Creates a new instance of [ViewHeader].
+  final List<Widget> Function(bool)? getActionButtons;
 
   // Optional, used for multi-selection UX
   final ViewHeaderMultipleSelection? multipleSelection;
@@ -65,16 +68,12 @@ class ViewHeader extends StatelessWidget {
     );
   }
 
-  static Container buildViewHeaderContainer(
-    final BuildContext context,
-    final Widget child,
-  ) {
+  /// Builds the container for the view header.
+  static Widget buildViewHeaderContainer(BuildContext context, Widget child) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: getColorTheme(context).surfaceContainer,
-        // border: Border.all(color: getColorTheme(context).primary),
-        // borderRadius: const BorderRadius.all(Radius.circular(8)),
       ),
       child: child,
     );
@@ -137,16 +136,16 @@ class ViewHeader extends StatelessWidget {
       widgets.add(child!);
     }
 
-    if (onFilterChanged != null) {
+    if (onTextFilterChanged != null) {
       widgets.add(
         SizedBox(
           width: 200,
           child: FilterInput(
             hintText: 'Filter',
-            initialValue: filterText,
+            initialValue: textFilter,
             autoSubmitAfterSeconds: -1, // -1 do not auto submit, user has to press Enter
             onChanged: (final String text) {
-              onFilterChanged!(text);
+              onTextFilterChanged!(text);
             },
           ),
         ),

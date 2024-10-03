@@ -187,8 +187,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       getActionButtons: getActionsButtons,
       onEditMoneyObject: onEditItems,
       onDeleteMoneyObject: onDeleteItems,
-      filterText: _filterByText,
-      onFilterChanged: _onFilterTextChanged,
+      textFilter: _filterByText,
+      onTextFilterChanged: _onFilterTextChanged,
       onClearAllFilters: areFiltersOn()
           ? () {
               // remove any filters from the view
