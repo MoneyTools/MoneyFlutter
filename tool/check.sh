@@ -12,6 +12,9 @@ dart format . -l 120
 
 flutter test
 
+# layers dependencies
 git@github.com:jpdup/glad.git --view layers --lines curve --align left -o layers.svg
 
-sh/graph.sh
+# call graph
+tool/graph.sh
+
