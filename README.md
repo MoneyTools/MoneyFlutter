@@ -32,6 +32,14 @@ This is the Flutter app, you will need to install the Flutter/Dart frameWork and
    - Web
    - Linux
 
+## Demo version
+
+<https://money.vteam.com>
+
+## Main UI
+
+![overview.svg](documentation%2Foverview.svg)
+
 ## Data
 
 ### SQLite Tables
@@ -320,10 +328,6 @@ Windows
 ./check.cmd
 ```
 
-## Main UI
-
-![overview.svg](documentation%2Foverview.svg)
-
 ## Layer Dependency Diagram
 
 ![layers.svg](layers.svg)
@@ -338,6 +342,8 @@ install
 
 run
 ```./graph.sh```
+
+![graph.svg](graph.svg)
 
 ## Deploy
 
