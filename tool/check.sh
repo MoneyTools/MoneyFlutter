@@ -1,7 +1,7 @@
 #!/bin/sh
 echo --- Analyze
 
-sh/style.sh
+tool/style.sh
 
 dart analyze 
 dart fix --apply
