@@ -47,13 +47,10 @@ class _PasteImageOcrState extends State<PasteImageOcr> {
     final Uint8List? bytes = await Pasteboard.image;
     if (bytes != null) {
       try {
-        final Textify textify = Textify();
-        await textify.init();
-
         final ui.Image inputImage = await fromBytesToImage(bytes);
 
         // extract text from the image
-        widget.textController.text = await textify.getTextFromImage(
+        widget.textController.text = await (await Textify().init()).getTextFromImage(
           image: inputImage,
           supportedCharacters: widget.allowedCharacters,
         );
