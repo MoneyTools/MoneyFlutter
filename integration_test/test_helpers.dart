@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/app/controller/theme_controller.dart';
-import 'package:money/app/core/widgets/info_panel/info_panel.dart';
-import 'package:money/app/core/widgets/snack_bar.dart';
-import 'package:money/app/modules/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
+import 'package:money/core/controller/theme_controller.dart';
+import 'package:money/core/widgets/info_panel/info_panel.dart';
+import 'package:money/core/widgets/snack_bar.dart';
+import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
 
 Future<void> tapOnText(final WidgetTester tester, final String textToFind) async {
   final firstMatchingElement = find.text(textToFind).first;

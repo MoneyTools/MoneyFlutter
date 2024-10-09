@@ -1,9 +1,9 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/app/core/widgets/info_panel/info_panel_header.dart';
-import 'package:money/app/core/widgets/widgets.dart';
-import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/core/widgets/info_panel/info_panel_header.dart';
+import 'package:money/core/widgets/widgets.dart';
+import 'package:money/data/storage/data/data.dart';
 import 'package:money/main.dart' as app;
 import 'package:shared_preferences/shared_preferences.dart';
 

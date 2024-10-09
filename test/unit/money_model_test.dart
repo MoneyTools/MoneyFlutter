@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/app/core/helpers/string_helper.dart';
-import 'package:money/app/data/storage/data/data.dart';
+import 'package:money/core/helpers/string_helper.dart';
+import 'package:money/data/storage/data/data.dart';
 
 void main() {
   test('test_should_round_positive_decimal_value', () {

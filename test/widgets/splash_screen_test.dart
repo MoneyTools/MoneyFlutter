@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/app/modules/splash_screen.dart';
+import 'package:money/views/splash_screen.dart';
 
 void main() {
   testWidgets('SplashScreen displays title and progress indicator', (WidgetTester tester) async {

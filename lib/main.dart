@@ -1,17 +1,17 @@
 import 'package:get/get.dart';
-import 'package:money/app/controller/data_controller.dart';
-import 'package:money/app/controller/keyboard_controller.dart';
-import 'package:money/app/controller/preferences_controller.dart';
-import 'package:money/app/controller/theme_controller.dart';
-import 'package:money/app/core/widgets/widgets.dart';
-import 'package:money/app/modules/home/home_routes.dart';
-import 'package:money/app/modules/policies/policy_routes.dart';
-import 'package:money/app/modules/settings/settings_routes.dart';
-import 'package:money/app/modules/splash_screen.dart';
-import 'package:money/app/modules/welcome/welcome_page.dart';
-import 'package:money/app/modules/welcome/welcome_routes.dart';
+import 'package:money/core/controller/data_controller.dart';
+import 'package:money/core/controller/keyboard_controller.dart';
+import 'package:money/core/controller/preferences_controller.dart';
+import 'package:money/core/controller/theme_controller.dart';
+import 'package:money/core/widgets/widgets.dart';
+import 'package:money/views/home/home_routes.dart';
+import 'package:money/views/policies/policy_routes.dart';
+import 'package:money/views/settings/settings_routes.dart';
+import 'package:money/views/splash_screen.dart';
+import 'package:money/views/welcome/welcome_page.dart';
+import 'package:money/views/welcome/welcome_routes.dart';
 
-import 'app/core/bindings/application_bindings.dart';
+import 'core/bindings/application_bindings.dart';
 
 /// The main entry point for the MoneyFlutter application.
 /// Sets up the app structure, theming, and initial routes.
