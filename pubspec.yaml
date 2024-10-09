@@ -74,8 +74,8 @@ dev_dependencies:
 
 # https://pub.dev/packages/flutter_launcher_icons
 # after updating the main icon run this command from the root of the project
-# flutter pub run flutter_launcher_icons:main
-flutter_icons:
+# dart run flutter_launcher_icons
+flutter_launcher_icons:
   image_path: ./assets/main_icon.png
   remove_alpha_ios: true
   android: true
