@@ -11,7 +11,7 @@
 <g id="clust1" class="cluster">
 <title>cluster~</title>
 <path fill="none" stroke="lightgray" stroke-width="2.6" d="M20,-8C20,-8 24338,-8 24338,-8 24344,-8 24350,-14 24350,-20 24350,-20 24350,-1436.4 24350,-1436.4 24350,-1442.4 24344,-1448.4 24338,-1448.4 24338,-1448.4 20,-1448.4 20,-1448.4 14,-1448.4 8,-1442.4 8,-1436.4 8,-1436.4 8,-20 8,-20 8,-14 14,-8 20,-8"/>
-<text text-anchor="middle" x="12179" y="-1432.05" font-family="Arial Black" font-size="13.00">MoneyFlutter</text>
+<text text-anchor="middle" x="12179" y="-1432.05" font-family="Arial Black" font-size="13.00">money_flutter</text>
 </g>
 <g id="clust2" class="cluster">
 <title>cluster~/test_driver</title>

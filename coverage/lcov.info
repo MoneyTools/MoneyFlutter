@@ -927,10 +927,10 @@ DA:125,1
 DA:128,1
 DA:129,1
 DA:132,1
-DA:133,1
-DA:136,0
-DA:137,0
-DA:140,0
+DA:133,0
+DA:136,1
+DA:137,1
+DA:140,1
 DA:141,0
 DA:146,1
 DA:147,2
@@ -958,7 +958,7 @@ DA:205,0
 DA:206,0
 DA:207,0
 LF:79
-LH:60
+LH:62
 end_of_record
 TN:
 SF:lib/core/helpers/ranges.dart
