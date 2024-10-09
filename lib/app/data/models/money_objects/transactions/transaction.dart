@@ -725,6 +725,7 @@ class Transaction extends MoneyObject {
           tmp.fieldNumber,
           tmp.fieldPayee,
           tmp.fieldCategoryId,
+          tmp.fieldMemo,
           tmp.fieldStatus,
           tmp.fieldCurrency,
           tmp.fieldAmount,

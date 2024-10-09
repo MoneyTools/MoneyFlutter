@@ -53,8 +53,7 @@ dependencies:
   shared_preferences: ^2.2.2
   sqlite3: ^2.4.5
   sqlite3_flutter_libs: ^0.5.24
-  textify:
-    ^0.0.9
+  textify: ^0.1.2
     # path: "../../textify"
   universal_io: ^2.2.2
   url_launcher: ^6.2.4
