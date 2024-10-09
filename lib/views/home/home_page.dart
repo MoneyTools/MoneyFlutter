@@ -2,9 +2,11 @@ import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
+import 'package:money/core/widgets/drop_zone.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/core/widgets/working.dart';
 import 'package:money/data/models/constants.dart';
+import 'package:money/data/storage/import/import_qfx.dart';
 import 'package:money/views/home/sub_views/app_bar.dart';
 import 'package:money/views/home/sub_views/app_scaffold.dart';
 import 'package:money/views/home/sub_views/my_nav_bar.dart';
@@ -35,9 +37,14 @@ class HomePage extends GetView<HomeController> {
       const MyAppBar(),
       dataController.isLoading.value
           ? const WorkingIndicator()
-          : Container(
-              color: getColorTheme(context).secondaryContainer,
-              child: _buildAdaptiveContent(context),
+          : DropZone(
+              onFilesDropped: (List<String> filePaths) {
+                filePaths.forEach((filePath) => importQFX(context, filePath));
+              },
+              child: Container(
+                color: getColorTheme(context).secondaryContainer,
+                child: _buildAdaptiveContent(context),
+              ),
             ),
     );
   }
