@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:money/core/widgets/gaps.dart';
 
 class NumberPicker extends StatelessWidget {
-  const NumberPicker({
+  NumberPicker({
     super.key,
     required this.title,
-    required this.selectedNumber,
+    required int selectedNumber,
     required this.onChanged,
-  });
+    this.minValue = 1,
+    this.maxValue = 10,
+  }) : selectedNumber = selectedNumber.clamp(minValue, maxValue);
 
+  final int maxValue;
+  final int minValue;
   final Function(int) onChanged;
   final int selectedNumber;
   final String title;
@@ -27,14 +31,16 @@ class NumberPicker extends StatelessWidget {
               child: DropdownButton<int>(
                 value: selectedNumber,
                 items: List.generate(
-                  12,
+                  maxValue - minValue + 1,
                   (index) => DropdownMenuItem(
-                    value: index + 1,
-                    child: Text('${index + 1}'),
+                    value: index + minValue,
+                    child: Text('${index + minValue}'),
                   ),
                 ),
                 onChanged: (int? value) {
-                  onChanged(value!);
+                  if (value != null) {
+                    onChanged(value);
+                  }
                 },
               ),
             ),
