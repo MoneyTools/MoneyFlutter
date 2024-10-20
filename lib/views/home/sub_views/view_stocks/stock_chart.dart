@@ -26,17 +26,24 @@ class ChartEvent {
     required this.quantity,
     required this.description,
     required this.colorBasedOnQuantity,
+    this.color,
   });
 
   final double amount;
+  final Color? color;
   final bool colorBasedOnQuantity;
   final DateTime date;
   final String description;
   final double quantity;
 
-  Color get color => colorBasedOnQuantity
-      ? (quantity == 0 ? Colors.grey : (isBuy ? Colors.orange : Colors.blue))
-      : (amount == 0 ? Colors.grey : (amount.isNegative ? Colors.orange : Colors.blue));
+  Color get colorToUse {
+    if (this.color == null) {
+      return colorBasedOnQuantity
+          ? (quantity == 0 ? Colors.grey : (isBuy ? Colors.orange : Colors.blue))
+          : (amount == 0 ? Colors.grey : (amount.isNegative ? Colors.orange : Colors.blue));
+    }
+    return this.color!;
+  }
 
   bool get isBuy => quantity > 0;
 
@@ -502,13 +509,18 @@ class PaintActivities extends CustomPainter {
       if (activity.date.millisecondsSinceEpoch > minX) {
         left = ((activity.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
-      _paintLine(canvas, lineColor?.withAlpha(150) ?? activity.color.withOpacity(0.8), left, 0, chartHeight);
+      _paintLine(canvas, lineColor?.withAlpha(150) ?? activity.colorToUse.withOpacity(0.8), left, 0, chartHeight);
 
       String text = '';
+      // show the quantity if not 1
       if (activity.quantity.toInt().abs() != 1) {
         text = '${getIntAsText(activity.quantity.toInt().abs())} ';
       }
-      text += doubleToCurrency(activity.amount, showPlusSign: true);
+      // show the value is not zero
+      if (activity.amount != 0) {
+        text += doubleToCurrency(activity.amount, showPlusSign: true);
+      }
+      // add description
       if (activity.description.isNotEmpty) {
         text += '\n${activity.description}';
       }
@@ -516,7 +528,7 @@ class PaintActivities extends CustomPainter {
       _paintLabel(
         canvas,
         text,
-        lineColor ?? activity.color,
+        lineColor ?? activity.colorToUse,
         left + 2,
         nextVerticalLabelPosition,
       );
