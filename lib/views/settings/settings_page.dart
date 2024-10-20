@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/box.dart';
-import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/my_text_input.dart';
 import 'package:money/core/widgets/text_title.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
@@ -23,41 +22,40 @@ class SettingsPage extends GetView<GetxController> {
         centerTitle: true,
       ),
       Center(
-        child: Box(
-          child: Column(
-            children: [
-              SwitchListTile(
-                title: const Text('Rental'),
-                subtitle: const Text(
-                  'Manage the expenses and rental income of properties.',
+        child: SingleChildScrollView(
+          child: Box(
+            child: Column(
+              children: [
+                SwitchListTile(
+                  title: const Text('Rental'),
+                  subtitle: const Text(
+                    'Manage the expenses and rental income of properties.',
+                  ),
+                  value: PreferenceController.to.includeRentalManagement,
+                  onChanged: (bool value) {
+                    PreferenceController.to.includeRentalManagement = !PreferenceController.to.includeRentalManagement;
+                  },
                 ),
-                value: PreferenceController.to.includeRentalManagement,
-                onChanged: (bool value) {
-                  PreferenceController.to.includeRentalManagement = !PreferenceController.to.includeRentalManagement;
-                  // setState(() {
-                  //   _isRentalEnabled = value;
-                  // });
-                },
-              ),
-              gapLarge(),
-              MyTextInput(
-                hintText: 'Stock service API key',
-                controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks,
-              ),
-              gapLarge(),
-              MyTextInput(
-                hintText: 'Currencies',
-              ),
-              gapMedium(),
-              buildCurrenciesPanel(context),
-            ],
+                Divider(height: 50),
+                MyTextInput(
+                  hintText: 'Stock service API key',
+                  controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks,
+                ),
+                Divider(height: 50),
+                MyTextInput(
+                  hintText: 'Currencies',
+                ),
+                Divider(height: 50),
+                _buildCurrenciesPanel(context),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget buildCurrenciesPanel(final BuildContext context) {
+  Widget _buildCurrenciesPanel(final BuildContext context) {
     final List<Widget> widgets = <Widget>[];
 
     for (final Currency currency in Data().currencies.iterableList()) {
