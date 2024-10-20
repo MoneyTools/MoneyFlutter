@@ -117,12 +117,14 @@ class PreferenceController extends GetxController {
 
   set includeClosedAccounts(bool value) {
     _includeClosedAccounts.value = value;
-    setBool(settingKeyRentalsSupport, value);
+    setBool(settingKeyIncludeClosedAccounts, value);
   }
 
+  ///--------------------------------
+  /// Rental
   bool get includeRentalManagement => _includeRentalManagement.value;
 
-  set includeRentalManagement(bool value) {
+  set includeRentalManagement(final bool value) {
     _includeRentalManagement.value = value;
     setBool(settingKeyRentalsSupport, value);
   }
