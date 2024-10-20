@@ -7,6 +7,7 @@ import 'package:money/core/helpers/accumulator.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/charts/my_line_chart.dart';
+import 'package:money/data/models/chart_event.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/events/event.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';

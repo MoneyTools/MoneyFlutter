@@ -12,43 +12,13 @@ import 'package:money/core/widgets/dialog/dialog_single_text_input.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/core/widgets/working.dart';
+import 'package:money/data/models/chart_event.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/get_stock_from_cache_or_backend.dart';
-
-class ChartEvent {
-  ChartEvent({
-    required this.date,
-    required this.amount,
-    required this.quantity,
-    required this.description,
-    required this.colorBasedOnQuantity,
-    this.color,
-  });
-
-  final double amount;
-  final Color? color;
-  final bool colorBasedOnQuantity;
-  final DateTime date;
-  final String description;
-  final double quantity;
-
-  Color get colorToUse {
-    if (this.color == null) {
-      return colorBasedOnQuantity
-          ? (quantity == 0 ? Colors.grey : (isBuy ? Colors.orange : Colors.blue))
-          : (amount == 0 ? Colors.grey : (amount.isNegative ? Colors.orange : Colors.blue));
-    }
-    return this.color!;
-  }
-
-  bool get isBuy => quantity > 0;
-
-  bool get isSell => quantity < 0;
-}
 
 class StockChartWidget extends StatefulWidget {
   const StockChartWidget({

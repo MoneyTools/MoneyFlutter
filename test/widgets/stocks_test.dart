@@ -6,6 +6,7 @@ import 'package:mockito/mockito.dart';
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/center_message.dart';
+import 'package:money/data/models/chart_event.dart';
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/data/storage/data/data.dart';

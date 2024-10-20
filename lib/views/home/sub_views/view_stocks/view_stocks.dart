@@ -1,6 +1,7 @@
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/data/models/chart_event.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
 import 'package:money/data/models/money_objects/investments/stock_cumulative.dart';
@@ -11,6 +12,8 @@ import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/money_object_card.dart';
 import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
+
+export 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
 class ViewStocks extends ViewForMoneyObjects {
   const ViewStocks({
