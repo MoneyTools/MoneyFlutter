@@ -76,12 +76,48 @@ class DataSimulator {
     _generateTransactionsSalary();
     _generateLoans();
     _generateTransfersToRentAndHomeLoan();
+    _generateEvents();
 
     _generateSubscriptionsOnCheckingAccount();
     _generateSubscriptionsOnCreditCard();
 
     generateTransactionsForCreditCard();
     _generateTransfersToCreditCardPayment();
+  }
+
+  List<DateTime> generateListOfDates({
+    required int yearInThePast,
+    DateTime? stopDate,
+    required int howManyPerYear,
+    required int dayOfTheMonth,
+  }) {
+    List<DateTime> dates = [];
+
+    final whenToStop = stopDate ?? DateTime.now();
+    for (int i = yearInThePast * howManyPerYear; i >= 0; i--) {
+      // Subtract the current month index from today's date
+      DateTime date = DateTime(whenToStop.year, whenToStop.month - i, dayOfTheMonth);
+      dates.add(date);
+    }
+    return dates;
+  }
+
+  List<DateTime> generateListOfDatesRandom({required int year, required int howManyPerMonths}) {
+    List<DateTime> dates = [];
+
+    final today = DateTime.now();
+    for (int i = year * 12; i >= 0; i--) {
+      // Subtract the current month index from today's date
+      DateTime date = DateTime(today.year, today.month - i, 1);
+      // Now we have a Year and Month
+      // generate on random date of the month
+      for (int event = 0; event < howManyPerMonths; event++) {
+        int day = Random().nextInt(31);
+        date = date.add(Duration(days: day));
+        dates.add(date);
+      }
+    }
+    return dates;
   }
 
   // ignore: unused_element
@@ -180,11 +216,26 @@ class DataSimulator {
     return roundDouble(amount, 2);
   }
 
+  DateTime getDateShiftedByYears(int yearsToShift, int month, int day) {
+    int yearShifted = getShiftedYearFromNow(yearsToShift);
+    return DateTime(yearShifted, month, day);
+  }
+
   /// Returns the last day of the previous month for a given date.
   DateTime getLastDayOfPreviousMonth(DateTime date) {
     final previousMonth = DateTime(date.year, date.month - 1);
     final daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
     return DateTime(previousMonth.year, previousMonth.month, daysInPreviousMonth).endOfDay;
+  }
+
+  double getRandomAmount(final int maxValue) {
+    final double amount = Random().nextDouble() * maxValue;
+    return roundDouble(amount, 2);
+  }
+
+  int getShiftedYearFromNow(int numberOfYearFromToday) {
+    final today = DateTime.now();
+    return DateTime(today.year + numberOfYearFromToday, today.month, today.day).year;
   }
 
   /// Adds an investment transaction to the account.
@@ -247,6 +298,41 @@ class DataSimulator {
     return account;
   }
 
+  Transaction _addTransactionAccountDatePayeeCategory({
+    required Account account,
+    required DateTime date,
+    int payeeId = -1,
+    int categoryId = -1,
+    double amount = 0.00,
+    String memo = '',
+  }) {
+    // generate an amount
+    // Expenses should be a negative value and smaller range than Revenue;
+    int maxValue = 2500;
+    if (Data().categories.isCategoryAnExpense(categoryId)) {
+      maxValue = -500;
+    }
+
+    if (amount == 0) {
+      amount = getRandomAmount(maxValue);
+    }
+
+    final MyJson demoJson = <String, dynamic>{
+      'Id': -1,
+      'Account': account.fieldId.value,
+      'Date': date,
+      'Payee': payeeId,
+      'Category': categoryId,
+      'Amount': amount,
+      'Memo': memo,
+    };
+
+    final Transaction t = Transaction.fromJSon(demoJson, 0);
+
+    Data().transactions.appendNewMoneyObject(t, fireNotification: false);
+    return t;
+  }
+
   /// Buys a home and adds related transactions.
   void _buyHome(final Payee payeeForHomeLoan, final DateTime date) {
     final accountAssetHome = _addNewAccount(
@@ -274,6 +360,29 @@ class DataSimulator {
       amount: -30000,
       memo: 'Down payment',
     );
+  }
+
+  Transaction _createTransferTransaction({
+    required final Account accountSource,
+    required final Account accountDestination,
+    required final DateTime date,
+    required final double amount,
+    required final String memo,
+    int categoryId = -1,
+  }) {
+    final Transaction source = _addTransactionAccountDatePayeeCategory(
+      account: accountSource,
+      date: date,
+      categoryId: categoryId,
+      amount: amount,
+      memo: memo,
+    );
+
+    final relatedTransaction = Data().makeTransferLinkage(source, accountDestination);
+
+    linkTransfer(source, relatedTransaction);
+
+    return relatedTransaction;
   }
 
   /// Generates sample account aliases.
@@ -524,6 +633,13 @@ class DataSimulator {
       _categoryInvestmentTrades = Data().categories.addNewCategory(
             name: 'Investment:Trades',
           );
+
+      Data().categories.addNewCategory(
+            name: 'Properties',
+            description: '',
+            type: CategoryType.investment,
+            color: '#FF11FFDD',
+          );
     }
 
     Data().categories.addNewCategory(
@@ -564,6 +680,13 @@ class DataSimulator {
           description: '',
           type: CategoryType.income,
           color: '#FFBB2233',
+        );
+
+    Data().categories.addNewCategory(
+          name: 'Travel',
+          description: '',
+          type: CategoryType.expense,
+          color: '#FFBB22FF',
         );
 
     {
@@ -631,6 +754,65 @@ class DataSimulator {
     for (final MyJson demoCurrency in demoCurrencies) {
       Data().currencies.appendNewMoneyObject(Currency.fromJson(demoCurrency));
     }
+  }
+
+  void _generateEvents() {
+    final Category categoryIdForProperties = Data().categories.getByName('Properties')!;
+
+    final Category categoryIdForTravels = Data().categories.getByName('Travel')!;
+
+    Data().events.loadFromJson([
+      {
+        'Id': 0,
+        'Name': 'Condo in Chicago',
+        'Category': categoryIdForProperties.uniqueId,
+        'Begin': '1987-03-04',
+        'End': '1999-12-04',
+        'Memo': 'My first property',
+      },
+      {
+        'Id': 1,
+        'Name': 'Wedding and honeymoon',
+        'Category': categoryIdForTravels.uniqueId,
+        'Begin': '1995-06-20',
+        'End': '1995-06-30',
+        'People': 'Karen; Bob; Yoko',
+        'Memo': 'It was raining, see photos here http://example.com',
+      },
+      {
+        'Id': 2,
+        'Name': 'Home in Springfield',
+        'Category': categoryIdForProperties.uniqueId,
+        'Begin': '1997-01-04',
+        'End': '2016-01-04',
+        'Memo': 'Our first home',
+      },
+      {
+        'Id': 3,
+        'Name': 'Divorce',
+        'Begin': '2020-01-01',
+        'End': '2020-04-13',
+        'People': 'Karen; Bob',
+        'Memo': 'Our friendly divorce',
+      },
+      {
+        'Id': 4,
+        'Name': 'Sold house',
+        'Category': categoryIdForProperties.uniqueId,
+        'Begin': '2020-03-01',
+        'End': '2020-03-05',
+        'Memo': 'My trip to Vegas',
+      },
+      {
+        'Id': 5,
+        'Name': 'Vegas',
+        'Category': categoryIdForTravels.uniqueId,
+        'Begin': '2020-07-01',
+        'End': '2020-07-05',
+        'People': 'Bob, John, Paul, Ringo',
+        'Memo': 'My trip to Vegas with buddies',
+      }
+    ]);
   }
 
   /// Generates sample investments.
@@ -1049,112 +1231,4 @@ class DataSimulator {
       }
     }
   }
-}
-
-Transaction _addTransactionAccountDatePayeeCategory({
-  required Account account,
-  required DateTime date,
-  int payeeId = -1,
-  int categoryId = -1,
-  double amount = 0.00,
-  String memo = '',
-}) {
-  // generate an amount
-  // Expenses should be a negative value and smaller range than Revenue;
-  int maxValue = 2500;
-  if (Data().categories.isCategoryAnExpense(categoryId)) {
-    maxValue = -500;
-  }
-
-  if (amount == 0) {
-    amount = getRandomAmount(maxValue);
-  }
-
-  final MyJson demoJson = <String, dynamic>{
-    'Id': -1,
-    'Account': account.fieldId.value,
-    'Date': date,
-    'Payee': payeeId,
-    'Category': categoryId,
-    'Amount': amount,
-    'Memo': memo,
-  };
-
-  final Transaction t = Transaction.fromJSon(demoJson, 0);
-
-  Data().transactions.appendNewMoneyObject(t, fireNotification: false);
-  return t;
-}
-
-double getRandomAmount(final int maxValue) {
-  final double amount = Random().nextDouble() * maxValue;
-  return roundDouble(amount, 2);
-}
-
-List<DateTime> generateListOfDates({
-  required int yearInThePast,
-  DateTime? stopDate,
-  required int howManyPerYear,
-  required int dayOfTheMonth,
-}) {
-  List<DateTime> dates = [];
-
-  final whenToStop = stopDate ?? DateTime.now();
-  for (int i = yearInThePast * howManyPerYear; i >= 0; i--) {
-    // Subtract the current month index from today's date
-    DateTime date = DateTime(whenToStop.year, whenToStop.month - i, dayOfTheMonth);
-    dates.add(date);
-  }
-  return dates;
-}
-
-List<DateTime> generateListOfDatesRandom({required int year, required int howManyPerMonths}) {
-  List<DateTime> dates = [];
-
-  final today = DateTime.now();
-  for (int i = year * 12; i >= 0; i--) {
-    // Subtract the current month index from today's date
-    DateTime date = DateTime(today.year, today.month - i, 1);
-    // Now we have a Year and Month
-    // generate on random date of the month
-    for (int event = 0; event < howManyPerMonths; event++) {
-      int day = Random().nextInt(31);
-      date = date.add(Duration(days: day));
-      dates.add(date);
-    }
-  }
-  return dates;
-}
-
-int getShiftedYearFromNow(int numberOfYearFromToday) {
-  final today = DateTime.now();
-  return DateTime(today.year + numberOfYearFromToday, today.month, today.day).year;
-}
-
-DateTime getDateShiftedByYears(int yearsToShift, int month, int day) {
-  int yearShifted = getShiftedYearFromNow(yearsToShift);
-  return DateTime(yearShifted, month, day);
-}
-
-Transaction _createTransferTransaction({
-  required final Account accountSource,
-  required final Account accountDestination,
-  required final DateTime date,
-  required final double amount,
-  required final String memo,
-  int categoryId = -1,
-}) {
-  final Transaction source = _addTransactionAccountDatePayeeCategory(
-    account: accountSource,
-    date: date,
-    categoryId: categoryId,
-    amount: amount,
-    memo: memo,
-  );
-
-  final relatedTransaction = Data().makeTransferLinkage(source, accountDestination);
-
-  linkTransfer(source, relatedTransaction);
-
-  return relatedTransaction;
 }

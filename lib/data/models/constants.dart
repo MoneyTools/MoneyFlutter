@@ -156,6 +156,7 @@ class IntValues {
 
 enum ViewId {
   viewCashFlow,
+  viewEvents,
   viewAccounts,
   viewCategories,
   viewPayees,
@@ -196,6 +197,8 @@ extension ViewExtension on ViewId {
         return Icons.candlestick_chart_outlined;
       case ViewId.viewRentals:
         return Icons.location_city_outlined;
+      case ViewId.viewEvents:
+        return Icons.event_outlined;
       case ViewId.viewPolicy:
         return Icons.policy_outlined;
     }

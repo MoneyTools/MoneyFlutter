@@ -109,6 +109,11 @@ class MyNavigationBar extends StatelessWidget {
         icon: ViewId.viewCashFlow.getIcon(),
       ),
       MyNavigationItem(
+        label: 'Events',
+        tooltip: 'Your life events',
+        icon: ViewId.viewEvents.getIcon(),
+      ),
+      MyNavigationItem(
         label: 'Accounts',
         tooltip: 'Show Accounts',
         icon: ViewId.viewAccounts.getIcon(),
@@ -149,6 +154,7 @@ class MyNavigationBar extends StatelessWidget {
         icon: ViewId.viewStocks.getIcon(),
       ),
     ];
+
     if (PreferenceController.to.includeRentalManagement) {
       appBarDestinations.add(
         MyNavigationItem(

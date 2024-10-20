@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.9.00] 2024-10-20
+
+### Added
+
+- PREVIEW: Events, no data is persisted. Use in Demo Data.
+  
 ## [version 1.8.54] 2024-08-10
 
 ### Added

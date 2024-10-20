@@ -18,6 +18,7 @@ import 'package:money/data/models/money_objects/accounts/accounts.dart';
 import 'package:money/data/models/money_objects/aliases/aliases.dart';
 import 'package:money/data/models/money_objects/categories/categories.dart';
 import 'package:money/data/models/money_objects/currencies/currencies.dart';
+import 'package:money/data/models/money_objects/events/events.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
 import 'package:money/data/models/money_objects/loan_payments/loan_payments.dart';
 import 'package:money/data/models/money_objects/money_objects.dart';
@@ -94,6 +95,9 @@ class Data {
 
   /// 5 Currencies definitions used in the money files
   Currencies currencies = Currencies();
+
+  /// 16 Events
+  Events events = Events();
 
   /// 6 Investment transactions
   Investments investments = Investments();

@@ -14,6 +14,7 @@ import 'package:money/views/home/sub_views/view_accounts/view_accounts.dart';
 import 'package:money/views/home/sub_views/view_aliases/view_aliases.dart';
 import 'package:money/views/home/sub_views/view_cashflow/view_cashflow.dart';
 import 'package:money/views/home/sub_views/view_categories/view_categories.dart';
+import 'package:money/views/home/sub_views/view_events/view_events.dart';
 import 'package:money/views/home/sub_views/view_investments/view_investments.dart';
 import 'package:money/views/home/sub_views/view_payees/view_payees.dart';
 import 'package:money/views/home/sub_views/view_rentals/view_rentals.dart';
@@ -128,6 +129,9 @@ class HomePage extends GetView<HomeController> {
 
       case ViewId.viewStocks:
         return const ViewStocks();
+
+      case ViewId.viewEvents:
+        return const ViewEvents();
 
       case ViewId.viewRentals:
         return const ViewRentals();
