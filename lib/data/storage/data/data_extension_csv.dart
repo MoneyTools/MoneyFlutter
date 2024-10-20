@@ -89,6 +89,10 @@ extension DataFromCsv on Data {
             transactionExtras.loadFromJson(
               convertFromRawCsvTextToListOfJSonObject(fileContent),
             );
+          case 'events.csv':
+            events.loadFromJson(
+              convertFromRawCsvTextToListOfJSonObject(fileContent),
+            );
         }
       }
     }
@@ -151,6 +155,7 @@ extension DataFromCsv on Data {
     addCsvToArchive(archive, 'rent_units.csv', rentUnits.toCSV());
     addCsvToArchive(archive, 'rent_buildings.csv', rentBuildings.toCSV());
     addCsvToArchive(archive, 'rent_units.csv', rentUnits.toCSV());
+    addCsvToArchive(archive, 'events.csv', events.toCSV());
     addCsvToArchive(
       archive,
       'transaction_extras.csv',

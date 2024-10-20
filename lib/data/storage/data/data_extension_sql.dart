@@ -28,6 +28,11 @@ extension DataFromSql on Data {
       securities.loadFromJson(db.select('SELECT * FROM Securities'));
       stockSplits.loadFromJson(db.select('SELECT * FROM StockSplits'));
 
+      // Check if the Events table exists before loading it
+      if (db.tableExists('Events')) {
+        events.loadFromJson(db.select('SELECT * FROM Events'));
+      }
+
       transactions.loadFromJson(db.select('SELECT * FROM Transactions'));
       transactionExtras.loadFromJson(db.select('SELECT * FROM TransactionExtras'));
       // Must come after Transactions are loaded
@@ -62,6 +67,23 @@ extension DataFromSql on Data {
       rentUnits.saveSql(db, 'RentUnits');
       securities.saveSql(db, 'Securities');
       stockSplits.saveSql(db, 'StockSplits');
+
+      if (!db.tableExists('Events')) {
+        // Create the Events table if it doesn't exist
+        db.execute(
+          '''
+          CREATE TABLE [Events] (
+            [Id] int PRIMARY KEY,
+            [Name] nvarchar(255) NOT NULL,
+            [Category] int,
+            [Begin] datetime NOT NULL,
+            [End] datetime NOT NULL,
+            [People] nvarchar(255) NOT NULL,
+            [Memo] nvarchar(255) NOT NULL
+          );''',
+        );
+      }
+      events.saveSql(db, 'Events');
 
       transactions.saveSql(db, 'Transactions');
       transactionExtras.saveSql(db, 'TransactionExtras');

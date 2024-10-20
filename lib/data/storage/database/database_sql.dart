@@ -17,9 +17,13 @@ class MyDatabaseImplementation {
     _db.dispose();
   }
 
+  void execute(final String command) {
+    _db.execute(command);
+  }
+
   void initDatabase(Database database) {
     database.execute('''
-    CREATE TABLE [LoanPayments] (
+CREATE TABLE [LoanPayments] (
   [Id] int NOT NULL,
   [AccountId] int NOT NULL,
   [Date] datetime NOT NULL,
@@ -27,6 +31,7 @@ class MyDatabaseImplementation {
   [Interest] money,
   [Memo] nvarchar(255)
 );
+
 CREATE TABLE [Accounts] (
   [Id] int PRIMARY KEY,
   [AccountId] nchar(20),
@@ -46,6 +51,7 @@ CREATE TABLE [Accounts] (
   [CategoryIdForPrincipal] int,
   [CategoryIdForInterest] int
 );
+
 CREATE TABLE [OnlineAccounts] (
   [Id] int PRIMARY KEY,
   [Name] nvarchar(80) NOT NULL,
@@ -69,16 +75,19 @@ CREATE TABLE [OnlineAccounts] (
   [UserKey] nvarchar(64),
   [UserKeyExpireDate] datetime
 );
+
 CREATE TABLE [Payees] (
   [Id] int PRIMARY KEY,
   [Name] nvarchar(255) NOT NULL
 );
+
 CREATE TABLE [Aliases] (
   [Id] int PRIMARY KEY,
   [Pattern] nvarchar(255) NOT NULL,
   [Flags] int NOT NULL,
   [Payee] int NOT NULL
 );
+
 CREATE TABLE [RentBuildings] (
   [Id] int PRIMARY KEY,
   [Name] nvarchar(255) NOT NULL,
@@ -99,6 +108,7 @@ CREATE TABLE [RentBuildings] (
   [CategoryForMaintenance] int,
   [CategoryForManagement] int
 );
+
 CREATE TABLE [RentUnits] (
   [Id] int PRIMARY KEY,
   [Building] int NOT NULL,
@@ -106,6 +116,7 @@ CREATE TABLE [RentUnits] (
   [Renter] nvarchar(255),
   [Note] nvarchar(255)
 );
+
 CREATE TABLE [Categories] (
   [Id] int PRIMARY KEY,
   [ParentId] int,
@@ -118,6 +129,7 @@ CREATE TABLE [Categories] (
   [Frequency] int,
   [TaxRefNum] int
 );
+
 CREATE TABLE [Transactions] (
   [Id] bigint PRIMARY KEY,
   [Account] int NOT NULL,
@@ -138,6 +150,7 @@ CREATE TABLE [Transactions] (
   [TransferSplit] int,
   [MergeDate] datetime
 );
+
 CREATE TABLE [Splits] (
   [Transaction] bigint NOT NULL,
   [Id] int NOT NULL,
@@ -149,6 +162,7 @@ CREATE TABLE [Splits] (
   [Flags] int,
   [BudgetBalanceDate] datetime
 );
+
 CREATE TABLE [Investments] (
   [Id] bigint PRIMARY KEY,
   [Security] int NOT NULL,
@@ -164,6 +178,7 @@ CREATE TABLE [Investments] (
   [TaxExempt] bit,
   [Withholding] money
 );
+
 CREATE TABLE [StockSplits] (
   [Id] bigint PRIMARY KEY,
   [Date] datetime NOT NULL,
@@ -171,6 +186,7 @@ CREATE TABLE [StockSplits] (
   [Numerator] money NOT NULL,
   [Denominator] money NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS "Securities" (
   [Id] int PRIMARY KEY,
   [Name] nvarchar(80) NOT NULL,
@@ -179,27 +195,44 @@ CREATE TABLE IF NOT EXISTS "Securities" (
   [LastPrice] money,
   [CUSPID] nchar(20),
   [SECURITYTYPE] int,
-  [TAXABLE] tinyint
-, [PriceDate] datetime);
+  [TAXABLE] tinyint, 
+  [PriceDate] datetime
+);
+
 CREATE TABLE [AccountAliases] (
   [Id] int PRIMARY KEY,
   [Pattern] nvarchar(255) NOT NULL,
   [Flags] int NOT NULL,
   [AccountId] nchar(20) NOT NULL
 );
+
 CREATE TABLE IF NOT EXISTS "TransactionExtras" (
   [Id] int PRIMARY KEY,
   [Transaction] bigint NOT NULL,
-  [TaxYear] int NOT NULL
-, [TaxDate] datetime);
+  [TaxYear] int NOT NULL, 
+  [TaxDate] datetime
+);
+
+CREATE TABLE IF NOT EXISTS [Events] (
+  [Id] int PRIMARY KEY,
+  [Name] nvarchar(255) NOT NULL,
+  [Category] int,
+  [Begin] datetime NOT NULL,
+  [End] datetime NOT NULL,            
+  [People] nvarchar(255) NOT NULL,
+  [Memo] nvarchar(255) NOT NULL,
+);
+
 CREATE TABLE IF NOT EXISTS "Currencies" (
   [Id] int PRIMARY KEY,
   [Symbol] nchar(20) NOT NULL,
   [Name] nvarchar(80) NOT NULL,
   [Ratio] money,
-  [LastRatio] money
-, [CultureCode] nvarchar(80));
-  ''');
+  [LastRatio] money,
+  [CultureCode] nvarchar(80)
+);
+
+''');
     // Add more tables or alter the schema as needed
   }
 
@@ -226,6 +259,14 @@ CREATE TABLE IF NOT EXISTS "Currencies" (
 
   List<MyJson> select(final String query) {
     return _db.select(query);
+  }
+
+  bool tableExists(String tableName) {
+    final result = _db.select(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
+      [tableName],
+    );
+    return result.isNotEmpty;
   }
 
   /// SQL Update

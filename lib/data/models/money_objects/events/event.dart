@@ -105,16 +105,23 @@ class Event extends MoneyObject {
 
   /// Date Begin
   FieldDate fieldDateBegin = FieldDate(
-    serializeName: 'Begins',
+    name: 'Begins',
+    serializeName: 'Begin',
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Event).fieldDateBegin.value,
     getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      String initValue = '';
+      try {
+        initValue = (instance as Event).fieldDateBegin.value!.toIso8601String();
+      } catch (_) {
+        //
+      }
       return PickerEditBoxDate(
         key: Constants.keyDatePicker,
-        initialValue: (instance as Event).fieldDateBegin.value!.toIso8601String(),
+        initialValue: initValue,
         onChanged: (String? newDateSelected) {
           if (newDateSelected != null) {
-            instance.fieldDateBegin.value = attemptToGetDateFromText(newDateSelected);
+            (instance as Event).fieldDateBegin.value = attemptToGetDateFromText(newDateSelected);
             onEdited(true);
           }
         },
@@ -128,16 +135,17 @@ class Event extends MoneyObject {
 
   /// Date End
   FieldDate fieldDateEnd = FieldDate(
-    serializeName: 'Ends',
+    name: 'Ends',
+    serializeName: 'End',
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Event).fieldDateBegin.value,
     getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
       return PickerEditBoxDate(
         key: Constants.keyDatePicker,
-        initialValue: (instance as Event).fieldDateBegin.value!.toIso8601String(),
+        initialValue: (instance as Event).fieldDateEnd.value!.toIso8601String(),
         onChanged: (String? newDateSelected) {
           if (newDateSelected != null) {
-            instance.fieldDateBegin.value = attemptToGetDateFromText(newDateSelected);
+            instance.fieldDateEnd.value = attemptToGetDateFromText(newDateSelected);
             onEdited(true);
           }
         },

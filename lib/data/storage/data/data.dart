@@ -78,6 +78,7 @@ class Data {
       // Can be last
       rentBuildings, // 10
       rentUnits, // 11
+      events,
     ];
   }
 
