@@ -14,7 +14,7 @@ class Payees extends MoneyObjects<Payee> {
     /*
      */
     for (final MyJson row in rows) {
-      final int id = int.parse(row['Id'].toString());
+      final int id = row.getInt('Id', -1);
       final String name = row['Name'].toString();
       appendMoneyObject(
         Payee()

@@ -31,7 +31,7 @@ class Payee extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).fieldCount.value,
   );
 
-  // 0
+  // 0 - ID
   FieldId fieldId = FieldId(
     getValueForSerialization: (final MoneyObject instance) => (instance as Payee).uniqueId,
   );

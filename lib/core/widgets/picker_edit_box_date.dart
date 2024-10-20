@@ -50,7 +50,7 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
             final DateTime? pickedDate = await showDatePicker(
               context: context,
               initialDate: dateSelected,
-              firstDate: DateTime(2000),
+              firstDate: DateTime(1950),
               lastDate: DateTime.now(),
             );
             if (pickedDate != null) {

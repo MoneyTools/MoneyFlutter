@@ -104,57 +104,17 @@ class Event extends MoneyObject {
   );
 
   /// Date Begin
-  FieldDate fieldDateBegin = FieldDate(
-    name: 'Begins',
-    serializeName: 'Begin',
-    columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Event).fieldDateBegin.value,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
-      String initValue = '';
-      try {
-        initValue = (instance as Event).fieldDateBegin.value!.toIso8601String();
-      } catch (_) {
-        //
-      }
-      return PickerEditBoxDate(
-        key: Constants.keyDatePicker,
-        initialValue: initValue,
-        onChanged: (String? newDateSelected) {
-          if (newDateSelected != null) {
-            (instance as Event).fieldDateBegin.value = attemptToGetDateFromText(newDateSelected);
-            onEdited(true);
-          }
-        },
-      );
-    },
-    setValue: (MoneyObject instance, dynamic newValue) =>
-        (instance as Event).fieldDateBegin.value = attemptToGetDateFromText(newValue),
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Event).fieldDateBegin.value),
+  FieldDate fieldDateBegin = _createDateField(
+    'Begins',
+    'Begin',
+    (event) => event.fieldDateBegin,
   );
 
   /// Date End
-  FieldDate fieldDateEnd = FieldDate(
-    name: 'Ends',
-    serializeName: 'End',
-    columnWidth: ColumnWidth.small,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Event).fieldDateBegin.value,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
-      return PickerEditBoxDate(
-        key: Constants.keyDatePicker,
-        initialValue: (instance as Event).fieldDateEnd.value!.toIso8601String(),
-        onChanged: (String? newDateSelected) {
-          if (newDateSelected != null) {
-            instance.fieldDateEnd.value = attemptToGetDateFromText(newDateSelected);
-            onEdited(true);
-          }
-        },
-      );
-    },
-    setValue: (MoneyObject instance, dynamic newValue) =>
-        (instance as Event).fieldDateBegin.value = attemptToGetDateFromText(newValue),
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToIso8601OrDefaultString((instance as Event).fieldDateBegin.value),
+  FieldDate fieldDateEnd = _createDateField(
+    'Ends',
+    'End',
+    (event) => event.fieldDateEnd,
   );
 
   FieldInt fieldDuration = FieldInt(
@@ -232,7 +192,8 @@ class Event extends MoneyObject {
 
   String get categoryName => Data().categories.getNameFromId(this.fieldCategoryId.value);
 
-  String get durationAsString => DateRange(min: fieldDateBegin.value, max: fieldDateEnd.value).toStringDuration();
+  String get durationAsString =>
+      DateRange(min: fieldDateBegin.value, max: fieldDateEnd.value ?? DateTime.now()).toStringDuration();
 
   String get eventName => fieldName.value.isEmpty ? 'Event $uniqueId' : fieldName.value;
 
@@ -240,6 +201,7 @@ class Event extends MoneyObject {
     if (_fields.isEmpty) {
       final tmpInstance = Event.fromJson({});
       _fields.setDefinitions([
+        tmpInstance.fieldId,
         tmpInstance.fieldName,
         tmpInstance.fieldCategoryId,
         tmpInstance.fieldDateBegin,
@@ -266,5 +228,30 @@ class Event extends MoneyObject {
       ]);
     }
     return _fieldsColumView;
+  }
+
+  static FieldDate _createDateField(String name, String serializeName, FieldDate Function(Event) getField) {
+    return FieldDate(
+      name: name,
+      serializeName: serializeName,
+      columnWidth: ColumnWidth.small,
+      getValueForDisplay: (final MoneyObject instance) => getField(instance as Event).value,
+      getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+        return PickerEditBoxDate(
+          key: Constants.keyDatePicker,
+          initialValue: dateToDateTimeString(getField(instance as Event).value),
+          onChanged: (String? newDateSelected) {
+            if (newDateSelected != null) {
+              getField(instance).value = attemptToGetDateFromText(newDateSelected);
+              onEdited(true);
+            }
+          },
+        );
+      },
+      setValue: (MoneyObject instance, dynamic newValue) =>
+          getField(instance as Event).value = attemptToGetDateFromText(newValue),
+      getValueForSerialization: (final MoneyObject instance) =>
+          dateToIso8601OrDefaultString(getField(instance as Event).value),
+    );
   }
 }
