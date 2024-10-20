@@ -9,6 +9,7 @@ import 'package:money/core/widgets/pick_number.dart';
 import 'package:money/core/widgets/years_range_selector.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
+import 'package:money/data/models/money_objects/events/event.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view.dart';
 import 'package:money/views/home/sub_views/view_cashflow/net_worth_chart.dart';
@@ -66,6 +67,11 @@ class ViewCashFlowState extends ViewWidgetState {
       Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
       Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
     );
+
+    for (final Event event in Data().events.iterableList()) {
+      dateRangeTransactions.inflate(event.fieldDateBegin.value);
+      dateRangeTransactions.inflate(event.fieldDateEnd.value);
+    }
 
     this.selectedYearStart = dateRangeTransactions.min!.year;
     this.selectedYearEnd = dateRangeTransactions.max!.year;
@@ -126,6 +132,8 @@ class ViewCashFlowState extends ViewWidgetState {
                 .contains(PreferenceController.to.cashflowViewAs.value))
               NumberPicker(
                 title: 'Occurrence',
+                minValue: 2,
+                maxValue: 12,
                 selectedNumber: PreferenceController.to.cashflowRecurringOccurrences.value,
                 onChanged: (int value) {
                   PreferenceController.to.cashflowRecurringOccurrences.value = value;
@@ -138,6 +146,8 @@ class ViewCashFlowState extends ViewWidgetState {
             if (CashflowViewAs.netWorthOverTime == PreferenceController.to.cashflowViewAs.value)
               NumberPicker(
                 title: 'Event Tolerances',
+                minValue: 0,
+                maxValue: 12,
                 selectedNumber: PreferenceController.to.netWorthEventThreshold.value,
                 onChanged: (int value) {
                   PreferenceController.to.netWorthEventThreshold.value = value;

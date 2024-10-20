@@ -7,6 +7,8 @@ import 'package:money/core/helpers/accumulator.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/charts/my_line_chart.dart';
+import 'package:money/data/models/money_objects/categories/category.dart';
+import 'package:money/data/models/money_objects/events/event.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
@@ -35,10 +37,16 @@ class NetWorthChartState extends State<NetWorthChart> {
 
     _transactions = Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer == false).toList();
 
+    // Add transactions to the accumulator
     for (final t in _transactions) {
       String dateKey = dateToString(t.fieldDateTime.value);
-
       cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
+    }
+
+    // Add events to the accumulator with zero amount
+    for (final event in Data().events.iterableList()) {
+      String dateKey = dateToString(event.fieldDateBegin.value);
+      cumulateYearMonthBalance.cumulate(dateKey, 0.0);
     }
 
     List<FlSpot> tmpDataPoints = [];
@@ -109,6 +117,23 @@ class NetWorthChartState extends State<NetWorthChart> {
 
 List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
   List<ChartEvent> milestoneTransactions = [];
+
+  if (PreferenceController.to.netWorthEventThreshold.value == 0) {
+    for (final Event event in Data().events.iterableList()) {
+      final Category? category = Data().categories.get(event.fieldCategoryId.value);
+      milestoneTransactions.add(
+        ChartEvent(
+          date: event.fieldDateBegin.value!,
+          amount: 0,
+          quantity: 1,
+          colorBasedOnQuantity: false, // use Amount
+          description: event.fieldName.value,
+          color: category == null ? Colors.blue : category.getColorOrAncestorsColor(),
+        ),
+      );
+    }
+    return milestoneTransactions;
+  }
 
   // Calculate Z-scores for outlier detection based on amount
   List<double> amounts = transactions.map((t) => t.fieldAmount.value.toDouble()).toList();
