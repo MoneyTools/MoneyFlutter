@@ -12,6 +12,8 @@ class MyDatabaseImplementation {
 
   void dispose() {}
 
+  void execute(final String query) {}
+
   /// SQL Insert
   void insert(final String tableName, final MyJson data) {}
 
@@ -21,6 +23,11 @@ class MyDatabaseImplementation {
 
   List<MyJson> select(final String query) {
     return _db.select(query);
+  }
+
+  /// Check if a table exists in the database
+  bool tableExists(String tableName) {
+    return false;
   }
 
   /// SQL Update
