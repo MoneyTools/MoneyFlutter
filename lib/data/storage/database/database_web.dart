@@ -1,12 +1,11 @@
+// ignore_for_file: avoid_web_libraries_in_flutter, avoid_print
+import 'dart:async';
+import 'dart:js' as js;
 import 'dart:typed_data';
-
 import 'package:money/core/helpers/json_helper.dart';
-import 'package:sqlite3/wasm.dart';
 
 /// implement the Sqlite3 WASM Web Support see https://pub.dev/packages/sqlite3#wasm-web-support
 class MyDatabaseImplementation {
-  late final CommonDatabase _db;
-
   /// SQL Delete
   void delete(final String tableName, final int id) {}
 
@@ -18,11 +17,43 @@ class MyDatabaseImplementation {
   void insert(final String tableName, final MyJson data) {}
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
-    _db = await sqliteLoadFromMemory(fileBytes);
+    try {
+      final jsArray = js.JsObject.jsify(fileBytes);
+      // Pass the array to JavaScript function to load the database
+      await js.context.callMethod('loadDatabaseFromBinary', [jsArray]);
+    } catch (e) {
+      // Rollback the transaction if an error occurs
+      // _db.execute('ROLLBACK');
+      // print('Error loading database: $e');
+      rethrow;
+    } finally {
+      // Clean up the temporary table
+      // _db.execute('DROP TABLE IF EXISTS temp_table');
+    }
   }
 
-  List<MyJson> select(final String query) {
-    return _db.select(query);
+  Future<List<Map<String, dynamic>>> select(final String query) async {
+    try {
+      final jsObjectResult = await js.context.callMethod('executeSql', [query]);
+
+      if (jsObjectResult == null || jsObjectResult.length == 0) {
+        // no results found from the query
+        // print('No results found');
+        return [];
+      }
+
+      // Access the first result set, ensuring it's a JsObject
+      final dynamic firstResult = jsObjectResult[0];
+      if (firstResult == null || firstResult is! js.JsObject) {
+        print('Error: The result set structure is unexpected.');
+        return [];
+      }
+      // Convert the JsObject result to List<Map<String, dynamic>>
+      return _convertJsResultToList(firstResult);
+    } catch (e) {
+      print('Error executing query: $e');
+      return [];
+    }
   }
 
   /// Check if a table exists in the database
@@ -32,31 +63,18 @@ class MyDatabaseImplementation {
 
   /// SQL Update
   void update(final String tableName, final int id, final MyJson jsonMap) {}
-}
 
-Future<CommonDatabase> sqliteLoadFromMemory(Uint8List fileBytes) async {
-  // Load the WebAssembly module
-  final sqlite3 = await _loadSqlite3Wasm();
-
-  // Create an in-memory database
-  final db = sqlite3.openInMemory();
-
-  // Load the database file bytes into the in-memory database
-  db.execute('CREATE TABLE temp_table(data BLOB)');
-  db.execute('INSERT INTO temp_table (data) VALUES (?)', [fileBytes]);
-
-  return db;
-}
-
-Future<WasmSqlite3> _loadSqlite3Wasm() async {
-  return await WasmSqlite3.loadFromUrl(Uri(path: 'sqlite3.wasm'));
-
-  // final response = await http.get(Uri.parse('/sqlite3.wasm'));
-  // if (response.statusCode != 200) {
-  //   throw Exception('Failed to load sqlite3.wasm');
-  // }
-  // return await WasmSqlite3.load(
-  //   response.bodyBytes,
-  //   // environment: SqliteEnvironment.fromJsObject(),
-  // );
+  // Helper to convert JsObject to List<Map<String, dynamic>>
+  List<Map<String, dynamic>> _convertJsResultToList(js.JsObject jsResult) {
+    final List<String> columns = List<String>.from(jsResult['columns'] as List);
+    final List<dynamic> values = jsResult['values'] as List;
+    if (values.isEmpty) {
+      return [];
+    }
+    // Map each row's values to its column name
+    return values.map((row) {
+      final rowValues = row as List;
+      return Map<String, dynamic>.fromIterables(columns, rowValues);
+    }).toList();
+  }
 }

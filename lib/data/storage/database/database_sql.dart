@@ -257,7 +257,7 @@ CREATE TABLE IF NOT EXISTS "Currencies" (
     }
   }
 
-  List<MyJson> select(final String query) {
+  Future<List<MyJson>> select(final String query) async {
     return _db.select(query);
   }
 

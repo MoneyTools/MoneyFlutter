@@ -14,29 +14,29 @@ extension DataFromSql on Data {
 
       await db.load(filePath, fileBytes);
       // Load
-      accountAliases.loadFromJson(db.select('SELECT * FROM AccountAliases'));
-      accounts.loadFromJson(db.select('SELECT * FROM Accounts'));
-      aliases.loadFromJson(db.select('SELECT * FROM Aliases'));
-      categories.loadFromJson(db.select('SELECT * FROM Categories'));
-      currencies.loadFromJson(db.select('SELECT * FROM Currencies'));
-      investments.loadFromJson(db.select('SELECT * FROM Investments'));
-      loanPayments.loadFromJson(db.select('SELECT * FROM LoanPayments'));
-      onlineAccounts.loadFromJson(db.select('SELECT * FROM OnlineAccounts'));
-      payees.loadFromJson(db.select('SELECT * FROM Payees'));
-      rentBuildings.loadFromJson(db.select('SELECT * FROM RentBuildings'));
-      rentUnits.loadFromJson(db.select('SELECT * FROM RentUnits'));
-      securities.loadFromJson(db.select('SELECT * FROM Securities'));
-      stockSplits.loadFromJson(db.select('SELECT * FROM StockSplits'));
+      accountAliases.loadFromJson(await db.select('SELECT * FROM AccountAliases'));
+      accounts.loadFromJson(await db.select('SELECT * FROM Accounts'));
+      aliases.loadFromJson(await db.select('SELECT * FROM Aliases'));
+      categories.loadFromJson(await db.select('SELECT * FROM Categories'));
+      currencies.loadFromJson(await db.select('SELECT * FROM Currencies'));
+      investments.loadFromJson(await db.select('SELECT * FROM Investments'));
+      loanPayments.loadFromJson(await db.select('SELECT * FROM LoanPayments'));
+      onlineAccounts.loadFromJson(await db.select('SELECT * FROM OnlineAccounts'));
+      payees.loadFromJson(await db.select('SELECT * FROM Payees'));
+      rentBuildings.loadFromJson(await db.select('SELECT * FROM RentBuildings'));
+      rentUnits.loadFromJson(await db.select('SELECT * FROM RentUnits'));
+      securities.loadFromJson(await db.select('SELECT * FROM Securities'));
+      stockSplits.loadFromJson(await db.select('SELECT * FROM StockSplits'));
 
       // Check if the Events table exists before loading it
       if (db.tableExists('Events')) {
-        events.loadFromJson(db.select('SELECT * FROM Events'));
+        events.loadFromJson(await db.select('SELECT * FROM Events'));
       }
 
-      transactions.loadFromJson(db.select('SELECT * FROM Transactions'));
-      transactionExtras.loadFromJson(db.select('SELECT * FROM TransactionExtras'));
+      transactions.loadFromJson(await db.select('SELECT * FROM Transactions'));
+      transactionExtras.loadFromJson(await db.select('SELECT * FROM TransactionExtras'));
       // Must come after Transactions are loaded
-      splits.loadFromJson(db.select('SELECT * FROM Splits'));
+      splits.loadFromJson(await db.select('SELECT * FROM Splits'));
 
       // Close the database when done
       db.dispose();
