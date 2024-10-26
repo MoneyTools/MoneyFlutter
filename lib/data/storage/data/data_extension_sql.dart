@@ -29,7 +29,7 @@ extension DataFromSql on Data {
       stockSplits.loadFromJson(await db.select('SELECT * FROM StockSplits'));
 
       // Check if the Events table exists before loading it
-      if (db.tableExists('Events')) {
+      if (await db.tableExists('Events')) {
         events.loadFromJson(await db.select('SELECT * FROM Events'));
       }
 
@@ -68,7 +68,7 @@ extension DataFromSql on Data {
       securities.saveSql(db, 'Securities');
       stockSplits.saveSql(db, 'StockSplits');
 
-      if (!db.tableExists('Events')) {
+      if (!await db.tableExists('Events')) {
         // Create the Events table if it doesn't exist
         db.execute(
           '''

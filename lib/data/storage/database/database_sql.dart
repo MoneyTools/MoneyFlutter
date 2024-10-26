@@ -261,7 +261,7 @@ CREATE TABLE IF NOT EXISTS "Currencies" (
     return _db.select(query);
   }
 
-  bool tableExists(String tableName) {
+  Future<bool> tableExists(String tableName) async {
     final result = _db.select(
       "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
       [tableName],

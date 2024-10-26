@@ -57,8 +57,14 @@ class MyDatabaseImplementation {
   }
 
   /// Check if a table exists in the database
-  bool tableExists(String tableName) {
-    return false;
+  Future<bool> tableExists(final String tableName) async {
+    try {
+      final list = await select("SELECT name FROM sqlite_master WHERE type='table'");
+      return _listMapContains(list, 'name', tableName);
+    } catch (e) {
+      print('Error checking if table exists: $e');
+      return false;
+    }
   }
 
   /// SQL Update
@@ -76,5 +82,9 @@ class MyDatabaseImplementation {
       final rowValues = row as List;
       return Map<String, dynamic>.fromIterables(columns, rowValues);
     }).toList();
+  }
+
+  bool _listMapContains(List<Map<String, dynamic>> list, String field, String value) {
+    return list.any((map) => map[field] == value);
   }
 }
