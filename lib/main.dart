@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/keyboard_controller.dart';
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/widgets/widgets.dart';
@@ -25,6 +26,10 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final DataController dataController = Get.put(DataController());
+  final ListControllerInfoPanel listControllerInfoPanel = Get.put(ListControllerInfoPanel());
+
+  // Use in the two major list
+  final ListControllerMain listControllerMain = Get.put(ListControllerMain());
 
   // Leave these declared in this order
   final PreferenceController preferenceController = Get.put(PreferenceController());

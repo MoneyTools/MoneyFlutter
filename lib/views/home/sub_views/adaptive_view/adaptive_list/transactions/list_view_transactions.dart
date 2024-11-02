@@ -1,3 +1,4 @@
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/data/models/fields/field_filter.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
@@ -10,6 +11,7 @@ class ListViewTransactions extends StatefulWidget {
     super.key,
     required this.columnsToInclude,
     required this.getList,
+    required this.listController,
     required this.selectionController,
     this.sortFieldIndex = 0,
     this.sortAscending = true,
@@ -19,6 +21,7 @@ class ListViewTransactions extends StatefulWidget {
   final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
   final List<Field> columnsToInclude;
   final List<Transaction> Function() getList;
+  final ListController listController;
   final SelectionController selectionController;
   final bool sortAscending;
   final int sortFieldIndex;
@@ -53,6 +56,8 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
       sortByFieldIndex: _sortBy,
       sortAscending: _sortAscending,
       selectedId: widget.selectionController.firstSelectedId,
+      listController: widget.listController,
+
       // Field & Columns
       displayAsColumns: true,
       backgroundColorForHeaderFooter: Colors.transparent,

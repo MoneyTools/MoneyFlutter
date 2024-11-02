@@ -2,6 +2,10 @@
 
 ## [version 1.9.02] 2024-11-02
 
+### Added
+
+- New Navigation button to jump to Top and Bottom of list
+
 ### Fix
 
 - Repaint transaction list view on Data changes like inline Category Approval

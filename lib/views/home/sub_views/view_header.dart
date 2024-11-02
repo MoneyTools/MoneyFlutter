@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/filter_input.dart';
+import 'package:money/core/widgets/icon_button.dart';
 import 'package:money/core/widgets/three_part_label.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/multiple_selection_context.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/multiple_selection_toggle.dart';
@@ -28,6 +29,8 @@ class ViewHeader extends StatelessWidget {
     this.onMergeMoneyObject, // A callback for when the merge money object button is pressed.
     this.onEditMoneyObject, // A callback for when the edit money object button is pressed.
     this.onDeleteMoneyObject, // A callback for when the delete money object button is pressed.
+    this.onScrollToTop, // scroll action
+    this.onScrollToBottom, // scroll action
     this.child, // An optional child widget to display in the header.
   });
 
@@ -40,6 +43,8 @@ class ViewHeader extends StatelessWidget {
   final VoidCallback? onDeleteMoneyObject;
   final VoidCallback? onEditMoneyObject;
   final VoidCallback? onMergeMoneyObject;
+  final VoidCallback? onScrollToBottom;
+  final VoidCallback? onScrollToTop;
   final ValueNotifier<List<int>> selectedItems;
   final String textFilter;
   final String title;
@@ -93,6 +98,18 @@ class ViewHeader extends StatelessWidget {
                   text1: title,
                   text2: getIntAsText(itemCount.toInt()),
                 ),
+                if (onScrollToTop != null)
+                  MyIconButton(
+                    icon: Icons.first_page,
+                    tooltip: 'Scroll to the Top of the list',
+                    onPressed: onScrollToTop!,
+                  ),
+                if (onScrollToBottom != null)
+                  MyIconButton(
+                    icon: Icons.last_page,
+                    tooltip: 'Scroll to the Bottom of the list',
+                    onPressed: onScrollToBottom!,
+                  ),
               ],
             ),
           ),

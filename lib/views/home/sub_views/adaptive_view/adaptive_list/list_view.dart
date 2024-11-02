@@ -20,6 +20,7 @@ class MyListView<T> extends StatefulWidget {
     required this.fields,
     required this.list,
     required this.selectedItemIds,
+    required this.scrollController,
     super.key,
     this.onTap,
     this.onDoubleTap,
@@ -37,6 +38,7 @@ class MyListView<T> extends StatefulWidget {
   final FieldDefinitions fields;
   final bool isMultiSelectionOn;
   final List<T> list;
+  final ScrollController scrollController;
   final ValueNotifier<List<int>> selectedItemIds;
 
   @override
@@ -47,14 +49,6 @@ class MyListViewState<T> extends State<MyListView<T>> {
   double padding = 0;
 
   double _rowHeight = 30;
-  ScrollController _scrollController = ScrollController();
-
-  @override
-  void initState() {
-    super.initState();
-    // render the list with the first selected item in view
-    scrollFirstItemIntoView();
-  }
 
   @override
   Widget build(final BuildContext context) {
@@ -71,7 +65,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
     return ListView.builder(
       primary: false,
       scrollDirection: Axis.vertical,
-      controller: _scrollController,
+      controller: widget.scrollController,
       itemCount: widget.list.length,
       itemExtent: textScaler.scale(_rowHeight),
       itemBuilder: (final BuildContext context, final int index) {
@@ -156,9 +150,10 @@ class MyListViewState<T> extends State<MyListView<T>> {
 // use this if total item count is known
   NumRange indexOfItemsInView() {
     final int itemCount = widget.list.length;
-    final double scrollOffset = _scrollController.position.pixels;
-    final double viewportHeight = _scrollController.position.viewportDimension;
-    final double scrollRange = _scrollController.position.maxScrollExtent - _scrollController.position.minScrollExtent;
+    final double scrollOffset = widget.scrollController.position.pixels;
+    final double viewportHeight = widget.scrollController.position.viewportDimension;
+    final double scrollRange =
+        widget.scrollController.position.maxScrollExtent - widget.scrollController.position.minScrollExtent;
 
     final int firstVisibleItemIndex = (scrollOffset / (scrollRange + viewportHeight) * itemCount).ceil();
     final int lastVisibleItemIndex = firstVisibleItemIndex + numberOfItemOnViewPort() - 1;
@@ -194,7 +189,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
   int numberOfItemOnViewPort() {
-    final double viewportHeight = _scrollController.position.viewportDimension;
+    final double viewportHeight = widget.scrollController.position.viewportDimension;
     final int numberOfItemDisplayed = (viewportHeight / _rowHeight).floor();
     return numberOfItemDisplayed;
   }
@@ -226,13 +221,13 @@ class MyListViewState<T> extends State<MyListView<T>> {
         case LogicalKeyboardKey.home:
           final idToSelect = (widget.list.first as MoneyObject).uniqueId;
           selectedItem(idToSelect);
-          _scrollController.jumpTo(getListOffsetOfItemIndex(0));
+          widget.scrollController.jumpTo(getListOffsetOfItemIndex(0));
           return KeyEventResult.handled;
 
         case LogicalKeyboardKey.end:
           final idToSelect = (widget.list.last as MoneyObject).uniqueId;
           selectedItem(idToSelect);
-          _scrollController.jumpTo(getListOffsetOfItemIndex(widget.list.length - 1));
+          widget.scrollController.jumpTo(getListOffsetOfItemIndex(widget.list.length - 1));
           return KeyEventResult.handled;
 
         case LogicalKeyboardKey.pageUp:
@@ -246,15 +241,15 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
   void scrollFirstItemIntoView() {
-    double initialScrollOffset = 0;
+    // double initialScrollOffset = 0;
 
-    if (widget.selectedItemIds.value.isNotEmpty) {
-      final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
-      if (firstSelectedIndex != -1) {
-        initialScrollOffset = getListOffsetOfItemIndex(firstSelectedIndex);
-      }
-    }
-    _scrollController = ScrollController(initialScrollOffset: initialScrollOffset);
+    // if (widget.selectedItemIds.value.isNotEmpty) {
+    //   final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
+    //   if (firstSelectedIndex != -1) {
+    //     initialScrollOffset = getListOffsetOfItemIndex(firstSelectedIndex);
+    //   }
+    // }
+    // _scrollController = ScrollController(initialScrollOffset: initialScrollOffset);
   }
 
   /// if the uniqueID is valid,
@@ -269,6 +264,11 @@ class MyListViewState<T> extends State<MyListView<T>> {
   }
 
   void scrollToIndex(final int index) {
+    if (!widget.scrollController.hasClients) {
+      // not yet attached to a list
+      return;
+    }
+
     if (isIndexInRange(widget.list, index)) {
       final NumRange viewingIndexRange = indexOfItemsInView();
       if (isBetweenOrEqual(index, viewingIndexRange.min, viewingIndexRange.max)) {
@@ -283,10 +283,10 @@ class MyListViewState<T> extends State<MyListView<T>> {
         late double desiredNewPosition;
         if (index == viewingIndexRange.min - 1) {
           // scroll up by one
-          desiredNewPosition = (_scrollController.offset - _rowHeight);
+          desiredNewPosition = (widget.scrollController.offset - _rowHeight);
         } else {
           if (index == viewingIndexRange.max + 1) {
-            desiredNewPosition = (_scrollController.offset + (_rowHeight));
+            desiredNewPosition = (widget.scrollController.offset + (_rowHeight));
           } else {
             desiredNewPosition = _rowHeight * index;
           }
@@ -295,7 +295,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
         desiredNewPosition = numberOfItems * _rowHeight;
 
         //print('current offset ${_scrollController.offset}, requesting $desiredNewPosition for index $index');
-        _scrollController.jumpTo(desiredNewPosition);
+        widget.scrollController.jumpTo(desiredNewPosition);
       }
     }
   }

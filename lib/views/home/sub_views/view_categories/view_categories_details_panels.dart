@@ -44,6 +44,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
 
       return ListViewTransactions(
         key: Key(category.uniqueId.toString()),
+        listController: Get.find<ListControllerInfoPanel>(),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),

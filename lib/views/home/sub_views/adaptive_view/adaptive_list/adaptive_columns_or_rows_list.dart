@@ -1,3 +1,4 @@
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/fields/field_filter.dart';
@@ -14,6 +15,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     required this.filters,
     required this.selectedItemsByUniqueId,
     required this.displayAsColumns,
+    required this.listController,
     this.sortByFieldIndex = 0,
     this.sortAscending = true,
     this.isMultiSelectionOn = false,
@@ -38,6 +40,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   final FieldFilters filters;
   final bool isMultiSelectionOn;
   final List<MoneyObject> list;
+  final ListController listController;
   final Function? onContextMenu;
   final bool sortAscending;
   final int sortByFieldIndex;
@@ -88,6 +91,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
             displayAsColumn: displayAsColumns,
             onTap: onItemTap,
             onLongPress: onItemLongPress,
+            scrollController: listController.scrollController,
           ),
         ),
 

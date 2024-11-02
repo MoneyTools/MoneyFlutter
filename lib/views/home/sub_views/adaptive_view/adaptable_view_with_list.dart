@@ -1,3 +1,4 @@
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/fields/field_filter.dart';
 import 'package:money/data/models/money_objects/money_objects.dart';
@@ -13,6 +14,7 @@ class AdaptiveViewWithList extends StatelessWidget {
     required this.selectedItemsByUniqueId,
     required this.onSelectionChanged,
     required this.isMultiSelectionOn,
+    required this.listController,
     super.key,
     this.top,
     this.bottom,
@@ -37,6 +39,7 @@ class AdaptiveViewWithList extends StatelessWidget {
   final int flexBottom;
   final bool isMultiSelectionOn;
   final List<MoneyObject> list;
+  final ListController listController;
   final Function(int) onSelectionChanged;
   final bool sortAscending;
   final int sortByFieldIndex;
@@ -81,6 +84,7 @@ class AdaptiveViewWithList extends StatelessWidget {
                     filters: filters,
                     sortByFieldIndex: sortByFieldIndex,
                     sortAscending: sortAscending,
+                    listController: listController,
 
                     // Display as Cards or Columns
                     // On small device you can display rows a Cards instead of Columns

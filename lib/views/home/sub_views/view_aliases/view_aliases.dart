@@ -1,3 +1,4 @@
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/data/models/money_objects/aliases/alias.dart';
@@ -58,6 +59,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
     if (alias != null && alias.fieldId.value > -1) {
       return ListViewTransactions(
         key: Key(alias.uniqueId.toString()),
+        listController: Get.find<ListControllerInfoPanel>(),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),

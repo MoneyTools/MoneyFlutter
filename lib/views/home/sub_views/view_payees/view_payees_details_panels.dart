@@ -120,6 +120,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
       final SelectionController selectionController = Get.put(SelectionController());
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
+        listController: Get.find<ListControllerInfoPanel>(),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),

@@ -1,5 +1,6 @@
 import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
@@ -43,9 +44,9 @@ class ViewForMoneyObjects extends StatefulWidget {
 }
 
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
+  final DataController dataController = Get.find();
   late final ViewId viewId;
 
-  DataController dataController = Get.find();
   bool firstLoadCompleted = false;
   // list management
   List<MoneyObject> list = <MoneyObject>[];
@@ -104,6 +105,8 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           return _buildInformUserOfEmptyList(key);
         }
 
+        final lc = Get.find<ListControllerMain>();
+
         return AdaptiveViewWithList(
           key: key,
           top: buildHeader(),
@@ -113,6 +116,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           selectedItemsByUniqueId: _selectedItemsByUniqueId,
           sortByFieldIndex: _sortByFieldIndex,
           sortAscending: _sortAscending,
+          listController: lc,
           isMultiSelectionOn: _isMultiSelectionOn,
           onColumnHeaderTap: _changeListSortOrder,
           onColumnHeaderLongPress: onCustomizeColumn,
@@ -199,6 +203,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
               });
             }
           : null,
+      onScrollToTop: () {
+        Get.find<ListControllerMain>().scrollToTop();
+      },
+      onScrollToBottom: () {
+        Get.find<ListControllerMain>().scrollToBottom();
+      },
       child: child,
     );
   }

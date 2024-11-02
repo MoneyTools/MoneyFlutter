@@ -1,3 +1,4 @@
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
@@ -240,6 +241,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       filters: FieldFilters(),
       sortByFieldIndex: sortByFieldIndex,
       sortAscending: sortAscending,
+      listController: Get.find<ListControllerMain>(),
       selectedId: getInfoPanelLastSelectedItemId(),
       // Field & Columns related
       displayAsColumns: true,

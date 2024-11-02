@@ -60,6 +60,7 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
             list: rows,
             selectedItemIds: ValueNotifier<List<int>>([]),
             onSelectionChanged: (int _) {},
+            scrollController: ScrollController(),
           ),
         ),
       ],

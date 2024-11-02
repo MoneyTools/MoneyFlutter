@@ -72,6 +72,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     lastSelectedRental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
     final SelectionController selectionController = Get.put(SelectionController());
     return ListViewTransactions(
+      listController: Get.find<ListControllerInfoPanel>(),
       columnsToInclude: <Field>[
         Transaction.fields.getFieldByName(columnIdDate),
         Transaction.fields.getFieldByName(columnIdAccount),

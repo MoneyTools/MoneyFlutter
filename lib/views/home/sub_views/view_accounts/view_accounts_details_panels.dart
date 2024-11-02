@@ -264,6 +264,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           getList: () => getTransactionForLastSelectedAccount(account),
           sortFieldIndex: sortFieldIndex,
           sortAscending: sortAscending,
+          listController: Get.find<ListControllerInfoPanel>(),
           selectionController: selectionController,
           onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int selectedTransactionId) {
             // keep track of user choice
@@ -309,6 +310,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       filters: FieldFilters(),
       sortByFieldIndex: sortFieldIndex,
       sortAscending: sortAscending,
+      listController: Get.find<ListControllerInfoPanel>(),
 
       // Display as Cards or Columns
       // On small device you can display rows a Cards instead of Columns

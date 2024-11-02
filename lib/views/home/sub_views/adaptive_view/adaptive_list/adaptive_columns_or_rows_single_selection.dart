@@ -1,3 +1,4 @@
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/data/models/fields/field_filter.dart';
 import 'package:money/data/models/money_objects/money_object.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
@@ -13,6 +14,7 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
     required this.filters,
     required this.selectedId,
     required this.displayAsColumns,
+    required this.listController,
     this.sortByFieldIndex = 0,
     this.sortAscending = true,
     this.onSelectionChanged,
@@ -35,6 +37,7 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
   final FieldDefinitions fieldDefinitions;
   final FieldFilters filters;
   final List<MoneyObject> list;
+  final ListController listController;
   final Function? onContextMenu;
   final bool sortAscending;
   final int sortByFieldIndex;
@@ -64,6 +67,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       filters: widget.filters,
       sortByFieldIndex: widget.sortByFieldIndex,
       sortAscending: widget.sortAscending,
+      listController: widget.listController,
       isMultiSelectionOn: false,
       selectedItemsByUniqueId: selectionCollectionOfOnlyOneItem,
       onSelectionChanged: (final int selectedId) {

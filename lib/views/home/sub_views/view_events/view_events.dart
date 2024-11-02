@@ -1,3 +1,4 @@
+import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/data/models/money_objects/events/event.dart';
@@ -88,6 +89,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
         Get.put(SelectionController(getPreferenceKey('info_$settingKeySelectedListItemId')));
 
     return ListViewTransactions(
+      listController: Get.find<ListControllerInfoPanel>(),
       columnsToInclude: <Field>[
         Transaction.fields.getFieldByName(columnIdDate),
         Transaction.fields.getFieldByName(columnIdAccount),
