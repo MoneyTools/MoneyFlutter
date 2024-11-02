@@ -5,7 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_drop
   pasteboard
-  screen_retriever
+  screen_retriever_windows
   sqlite3_flutter_libs
   url_launcher_windows
   window_manager
