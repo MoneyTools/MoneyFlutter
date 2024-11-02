@@ -198,7 +198,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Category',
     defaultValue: -1,
     getValueForDisplay: (final MoneyObject instance) {
-      final t = (instance as Transaction);
+      final Transaction t = (instance as Transaction);
       if (t.fieldCategoryId.value == -1) {
         return SuggestionApproval(
           onApproved: t.possibleMatchingCategoryId == -1
@@ -215,16 +215,19 @@ class Transaction extends MoneyObject {
               items: Data().categories.getCategoriesAsStrings(),
               selectedItem: '',
               onSelected: (final String text) {
-                final selectedCategory = Data().categories.getByName(text);
+                final Category? selectedCategory = Data().categories.getByName(text);
                 if (selectedCategory != null) {
                   changeCategory(t, selectedCategory.uniqueId);
                 }
               },
             );
           },
-          child: Data().categories.getCategoryWidget(
-                t.possibleMatchingCategoryId,
-              ),
+          child: Tooltip(
+            message: 'Suggested category:\n${Data().categories.getNameFromId(t.possibleMatchingCategoryId)}',
+            child: Data().categories.getCategoryWidget(
+                  t.possibleMatchingCategoryId,
+                ),
+          ),
         );
       } else {
         return Data().categories.getCategoryWidget(t.fieldCategoryId.value);
@@ -598,7 +601,7 @@ class Transaction extends MoneyObject {
     Data().notifyMutationChanged(
       mutation: MutationType.changed,
       moneyObject: t,
-      recalculateBalances: false,
+      recalculateBalances: true,
     );
   }
 

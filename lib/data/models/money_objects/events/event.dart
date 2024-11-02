@@ -59,7 +59,7 @@ class Event extends MoneyObject {
               ? null
               : () {
                   // record the change
-                  // changeCategory(event, event.possibleMatchingCategoryId);
+                  changeCategory(event, event.possibleMatchingCategoryId);
                 },
           onChooseCategory: (final BuildContext context) {
             event.possibleMatchingCategoryId = -1;
@@ -71,7 +71,8 @@ class Event extends MoneyObject {
               onSelected: (final String text) {
                 final selectedCategory = Data().categories.getByName(text);
                 if (selectedCategory != null) {
-                  // changeCategory(event, selectedCategory.uniqueId);
+                  // record the change
+                  changeCategory(event, selectedCategory.uniqueId);
                 }
               },
             );
@@ -191,6 +192,22 @@ class Event extends MoneyObject {
   static final Fields<Event> _fieldsColumView = Fields<Event>();
 
   String get categoryName => Data().categories.getNameFromId(this.fieldCategoryId.value);
+
+  static void changeCategory(Event item, final int categoryId) {
+    // record the change
+    item.stashValueBeforeEditing();
+
+    // Make change
+    item.fieldCategoryId.value = categoryId;
+    item.possibleMatchingCategoryId = -1;
+
+    // inform of changes
+    Data().notifyMutationChanged(
+      mutation: MutationType.changed,
+      moneyObject: item,
+      recalculateBalances: true,
+    );
+  }
 
   String get durationAsString =>
       DateRange(min: fieldDateBegin.value, max: fieldDateEnd.value ?? DateTime.now()).toStringDuration();

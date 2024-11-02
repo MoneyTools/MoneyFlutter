@@ -1,6 +1,6 @@
 import 'package:money/core/widgets/icon_button.dart';
 import 'package:money/core/widgets/widgets.dart';
-import 'package:money/data/models/constants.dart';
+import 'package:money/core/widgets/working.dart';
 
 class SuggestionApproval extends StatefulWidget {
   const SuggestionApproval({
@@ -23,8 +23,10 @@ class SuggestionApproval extends StatefulWidget {
 }
 
 class SuggestionApprovalState extends State<SuggestionApproval> with SingleTickerProviderStateMixin {
+  bool approved = false;
+
   late AnimationController _animationController;
-  late Animation<double> _iconOpacityAnimation;
+  late Animation<double> _opacityAnimation;
 
   @override
   void dispose() {
@@ -37,39 +39,44 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 500),
+      duration: const Duration(milliseconds: 400),
     );
 
-    _iconOpacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
+    _opacityAnimation = Tween<double>(begin: 1.0, end: 0.0).animate(
       CurvedAnimation(
         parent: _animationController,
-        curve: const Interval(0.5, 1.0, curve: Curves.easeOut),
+        curve: const Interval(0.0, 1.0, curve: Curves.ease),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    if (approved) {
+      return WorkingIndicator(size: 10);
+    }
     return FadeTransition(
-      opacity: _iconOpacityAnimation,
-      child: buildDashboardWidget(
-        Row(
+      opacity: _opacityAnimation,
+      child: Opacity(
+        opacity: 0.6,
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              child: Opacity(opacity: 0.5, child: widget.child),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: IntrinsicWidth(child: widget.child),
+              ),
             ),
 
             /// Optional Accept Suggestion
             if (widget.onApproved != null)
-              Padding(
-                padding: const EdgeInsets.only(left: SizeForPadding.normal),
-                child: MyIconButton(
-                  icon: Icons.thumb_up,
-                  tooltip: 'Approve category',
-                  hoverColor: Colors.green,
-                  onPressed: _fadeOutAndApproved,
-                ),
+              MyIconButton(
+                icon: Icons.thumb_up,
+                tooltip: 'Approve category',
+                hoverColor: Colors.green,
+                onPressed: _fadeOutAndApproved,
               ),
 
             // Optional Dropdown button
@@ -93,8 +100,11 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
   void _fadeOutAndApproved() {
     _animationController.forward().then((_) {
       setState(() {
-        widget.onApproved?.call();
+        approved = true;
       });
+      if (widget.onApproved != null) {
+        Future.delayed(Duration(milliseconds: 10), () => widget.onApproved!());
+      }
     });
   }
 }

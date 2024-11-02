@@ -48,9 +48,9 @@ class DataController extends GetxController {
     return await getDocumentDirectory();
   }
 
-  String get getUniqueState => '${trackMutations.lastDateTimeChanged}';
-
   bool get isUntitled => currentLoadedFileName.value == Constants.untitledFileName;
+
+  String get lastUpdateAsString => '${trackMutations.lastDateTimeChanged}';
 
   Future<void> loadDemoData() async {
     isLoading.value = true;

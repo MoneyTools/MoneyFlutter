@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.9.02] 2024-11-02
+
+### Fix
+
+- Repaint transaction list view on Data changes like inline Category Approval
+
 ## [version 1.9.01] 2024-10-26
 
 ### Added

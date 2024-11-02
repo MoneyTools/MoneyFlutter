@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
@@ -44,6 +45,7 @@ class ViewForMoneyObjects extends StatefulWidget {
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   late final ViewId viewId;
 
+  DataController dataController = Get.find();
   bool firstLoadCompleted = false;
   // list management
   List<MoneyObject> list = <MoneyObject>[];
@@ -91,7 +93,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return buildViewContent(
       Obx(() {
         final key = Key(
-          '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}',
+          '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}|${dataController.lastUpdateAsString}}',
         );
 
         if (firstLoadCompleted == false) {

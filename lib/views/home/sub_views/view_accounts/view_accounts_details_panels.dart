@@ -254,13 +254,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       if (account.fieldType.value == AccountType.credit) Transaction.fields.getFieldByName(columnIdPaidOn),
     ];
 
-    DataController.to.trackMutations.lastDateTimeChanged;
-
     return Obx(
       () {
         return ListViewTransactions(
           key: Key(
-            'transaction_list_currency_${showAsNativeCurrency}_changedOn${DataController.to.trackMutations.lastDateTimeChanged}',
+            'transaction_list_currency_${showAsNativeCurrency}_changedOn${DataController.to.lastUpdateAsString}',
           ),
           columnsToInclude: columnsToDisplay,
           getList: () => getTransactionForLastSelectedAccount(account),
