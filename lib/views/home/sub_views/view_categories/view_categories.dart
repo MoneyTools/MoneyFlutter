@@ -4,7 +4,7 @@ import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
-import 'package:money/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';

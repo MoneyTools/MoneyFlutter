@@ -6,32 +6,40 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Map<String, num> map = <String, num>{};
+    if (selectedIds.isEmpty) {
+      final Map<String, num> map = <String, num>{};
 
-    for (final Category item in getList()) {
-      if (item.fieldName.value != 'Split' && item.fieldName.value != 'Xfer to Deleted Account') {
-        final Category topCategory = Data().categories.getTopAncestor(item);
-        if (map[topCategory.fieldName.value] == null) {
-          map[topCategory.fieldName.value] = 0;
+      for (final Category item in getList()) {
+        if (item.fieldName.value != 'Split' && item.fieldName.value != 'Xfer to Deleted Account') {
+          final Category topCategory = Data().categories.getTopAncestor(item);
+          if (map[topCategory.fieldName.value] == null) {
+            map[topCategory.fieldName.value] = 0;
+          }
+          map[topCategory.fieldName.value] = map[topCategory.fieldName.value]! + item.fieldSum.value.toDouble();
         }
-        map[topCategory.fieldName.value] = map[topCategory.fieldName.value]! + item.fieldSum.value.toDouble();
       }
+      final List<PairXY> list = <PairXY>[];
+      map.forEach((final String key, final num value) {
+        list.add(PairXY(key, value));
+      });
+
+      list.sort((final PairXY a, final PairXY b) {
+        return (b.yValue.abs() - a.yValue.abs()).toInt();
+      });
+
+      return Chart(
+        key: Key(selectedIds.toString()),
+        list: list.take(10).toList(),
+        variableNameHorizontal: 'Category',
+        variableNameVertical: 'Balance',
+      );
+    } else {
+      final List<Transaction> flatTransactions = Transactions.flatTransactions(Data().transactions.iterableList())
+          .where((t) => t.fieldCategoryId.value == selectedIds.first)
+          .toList();
+
+      return timeLineChartOfTransactionsWidget(context, flatTransactions);
     }
-    final List<PairXY> list = <PairXY>[];
-    map.forEach((final String key, final num value) {
-      list.add(PairXY(key, value));
-    });
-
-    list.sort((final PairXY a, final PairXY b) {
-      return (b.yValue.abs() - a.yValue.abs()).toInt();
-    });
-
-    return Chart(
-      key: Key(selectedIds.toString()),
-      list: list.take(10).toList(),
-      variableNameHorizontal: 'Category',
-      variableNameVertical: 'Balance',
-    );
   }
 
   // Details Panel for Transactions Categories
