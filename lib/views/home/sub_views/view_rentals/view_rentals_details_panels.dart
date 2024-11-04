@@ -18,6 +18,9 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
       );
     }
 
+    //
+    // Single Rental property selected
+    //
     RentBuilding? rental = getFirstSelectedItem() as RentBuilding?;
     if (rental != null) {
       // show PnL for the selected rental property, per year
@@ -25,7 +28,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
 
       if (!rental.dateRangeOfOperation.hasNullDates) {
         for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
-          var pnl = rental.pnlOverYears[year];
+          RentalPnL? pnl = rental.pnlOverYears[year];
           pnl ??= RentalPnL(date: DateTime(year, 1, 1));
           pnlCards.add(RentalPnLCard(pnl: pnl));
         }

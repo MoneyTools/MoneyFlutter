@@ -38,8 +38,17 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
     );
   }
 
+  /// Accumulates transaction data for a given rental building.
+  ///
+  /// Iterates through all transactions and uses the `cumulatePnL` method
+  /// of the provided `rental` object to aggregate profit and loss data.
   void cumulateTransactions(final RentBuilding rental) {
+    // Reset the accumulated P&L data for the rental.
+    rental.pnlOverYears = {};
+
+    // Iterate through all transactions in the data store.
     for (Transaction t in Data().transactions.iterableList()) {
+      // Accumulate P&L for the rental based on the current transaction.
       rental.cumulatePnL(t);
     }
   }
