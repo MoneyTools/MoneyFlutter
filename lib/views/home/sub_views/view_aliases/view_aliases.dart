@@ -68,6 +68,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
+          flattenSplits: true,
           filter: (final Transaction transaction) => transaction.fieldPayee.value == alias.fieldPayeeId.value,
         ),
         selectionController: selectionController,

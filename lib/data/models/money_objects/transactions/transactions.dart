@@ -201,8 +201,11 @@ class Transactions extends MoneyObjects<Transaction> {
     for (final t in transactions) {
       if (t.isSplit) {
         for (final s in t.splits) {
-          final fakeTransaction = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value);
+          final Transaction fakeTransaction = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value);
+          fakeTransaction.fieldAccountId.value = t.fieldAccountId.value;
+          fakeTransaction.fieldPayee.value = t.fieldPayee.value;
           fakeTransaction.fieldCategoryId.value = s.fieldCategoryId.value;
+          fakeTransaction.fieldMemo.value = s.fieldMemo.value;
           fakeTransaction.fieldAmount.value = s.fieldAmount.value;
           flatList.add(fakeTransaction);
         }

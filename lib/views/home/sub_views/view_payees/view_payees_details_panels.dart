@@ -129,6 +129,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
+          flattenSplits: true,
           filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
         ),
         selectionController: selectionController,

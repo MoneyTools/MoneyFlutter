@@ -1,7 +1,7 @@
 import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/data/models/fields/field_filter.dart';
-import 'package:money/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';
 import 'package:money/views/home/sub_views/view_transactions/dialog_mutate_transaction.dart';
@@ -90,11 +90,20 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
   }
 }
 
-List<Transaction> getTransactions({bool Function(Transaction)? filter}) {
+List<Transaction> getTransactions({bool Function(Transaction)? filter, bool flattenSplits = false}) {
   filter ??= (Transaction transaction) => true;
 
-  final List<Transaction> list =
-      Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
+  List<Transaction> list = [];
+
+  if (flattenSplits) {
+    // Flatten the splits
+    list = Transactions.flatTransactions(Data().transactions.iterableList())
+        .where((final Transaction transaction) => filter!(transaction))
+        .toList();
+  } else {
+    // No flattening of splits
+    list = Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
+  }
 
   list.sort((a, b) => Transaction.sortByDateTime(a, b, true));
 

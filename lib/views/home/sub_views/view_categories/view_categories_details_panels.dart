@@ -54,6 +54,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
           Transaction.fields.getFieldByName(columnIdAmount),
         ],
         getList: () => getTransactions(
+          flattenSplits: true,
           filter: (final Transaction transaction) =>
               listOfDescendentCategories.contains(transaction.fieldCategoryId.value),
         ),
