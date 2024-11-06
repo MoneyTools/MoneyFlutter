@@ -267,4 +267,72 @@ class Transactions extends MoneyObjects<Transaction> {
     timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
     return timeAndAmounts;
   }
+
+  static List<Pair<DateTime, double>> transactionSumByYearly(List<Transaction> transactions) {
+    Map<int, double> yearSums = {};
+    for (final t in transactions) {
+      final year = t.fieldDateTime.value!.year;
+      yearSums[year] = (yearSums[year] ?? 0) + t.fieldAmount.value.toDouble();
+    }
+
+    List<Pair<DateTime, double>> summedYears = [];
+    yearSums.forEach((year, sum) {
+      summedYears.add(Pair(DateTime(year), sum));
+    });
+
+    // Sort by year
+    summedYears.sort((a, b) => a.first.compareTo(b.first));
+    return summedYears;
+  }
+
+  static List<Pair<DateTime, double>> transactionSumDaily(List<Transaction> transactions) {
+    List<Pair<DateTime, double>> timeAndAmounts = [];
+    for (final t in transactions) {
+      DateTime date = DateTime(t.fieldDateTime.value!.year, t.fieldDateTime.value!.month, t.fieldDateTime.value!.day);
+      timeAndAmounts.add(Pair<DateTime, double>(date, t.fieldAmount.value.toDouble()));
+    }
+    // sort by date time
+    timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
+    return timeAndAmounts;
+  }
+
+  static List<Pair<DateTime, double>> transactionSumMonthly(List<Transaction> transactions) {
+    Map<DateTime, double> monthSums = {};
+
+    for (final t in transactions) {
+      final date = t.fieldDateTime.value!;
+      // Create a DateTime object representing the first day of the month.
+      final firstDayOfMonth = DateTime(date.year, date.month);
+      monthSums[firstDayOfMonth] = (monthSums[firstDayOfMonth] ?? 0) + t.fieldAmount.value.toDouble();
+    }
+
+    List<Pair<DateTime, double>> summedMonths = [];
+    monthSums.forEach((key, value) {
+      summedMonths.add(Pair(key, value));
+    });
+
+    // Sort by date
+    summedMonths.sort((a, b) => a.first.compareTo(b.first));
+    return summedMonths;
+  }
+
+  static List<Pair<DateTime, double>> transactionSumWeekly(List<Transaction> transactions) {
+    Map<DateTime, double> weekSums = {};
+
+    for (final t in transactions) {
+      final date = t.fieldDateTime.value!;
+      // Get the first day of the week (Sunday).
+      final firstDayOfWeek = date.subtract(Duration(days: date.weekday));
+      weekSums[firstDayOfWeek] = (weekSums[firstDayOfWeek] ?? 0) + t.fieldAmount.value.toDouble();
+    }
+
+    List<Pair<DateTime, double>> summedWeeks = [];
+    weekSums.forEach((key, value) {
+      summedWeeks.add(Pair(key, value));
+    });
+
+    // Sort by date
+    summedWeeks.sort((a, b) => a.first.compareTo(b.first));
+    return summedWeeks;
+  }
 }
