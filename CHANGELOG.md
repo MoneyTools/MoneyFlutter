@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.9.03] 2024-11-06
+
+### Added
+
+- SidePanel BarChart with scale [Daily, Weekly, Monthly, Yearly] used in Categories and Payees
+
 ## [version 1.9.02] 2024-11-02
 
 ### Added

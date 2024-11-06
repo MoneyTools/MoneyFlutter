@@ -18,3 +18,6 @@ git@github.com:jpdup/glad.git --view layers --lines curve --align left -o layers
 # call graph
 tool/graph.sh
 
+# layer diagram
+tool/layers.sh
+
