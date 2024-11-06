@@ -157,6 +157,15 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  List<MoneyObject> getSidePanelTransactions() {
+    final Category? category = getFirstSelectedItem() as Category?;
+    if (category != null) {
+      return _getTransactionsFromSelectedIds([category.uniqueId]);
+    }
+    return [];
+  }
+
+  @override
   Widget getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
@@ -304,5 +313,19 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       }
     });
     return total;
+  }
+
+  List<Transaction> _getTransactionsFromSelectedIds(final List<int> selectedIds) {
+    final Category? category = getMoneyObjectFromFirstSelectedId<Category>(selectedIds, list);
+    if (category != null) {
+      final List<int> listOfDescendentCategories = <int>[];
+      Data().categories.getTreeIdsRecursive(category.uniqueId, listOfDescendentCategories);
+      return getTransactions(
+        flattenSplits: true,
+        filter: (final Transaction transaction) =>
+            listOfDescendentCategories.contains(transaction.fieldCategoryId.value),
+      );
+    }
+    return [];
   }
 }

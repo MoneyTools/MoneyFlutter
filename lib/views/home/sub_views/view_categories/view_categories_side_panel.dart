@@ -34,41 +34,26 @@ extension ViewCategoriesSidePanel on ViewCategoriesState {
         variableNameVertical: 'Balance',
       );
     } else {
-      final List<Transaction> flatTransactions = Transactions.flatTransactions(Data().transactions.iterableList())
-          .where((t) => t.fieldCategoryId.value == selectedIds.first)
-          .toList();
-
-      return TransactionTimelineChart(transactions: flatTransactions);
+      return TransactionTimelineChart(transactions: _getTransactionsFromSelectedIds(selectedIds));
     }
   }
 
   // Details Panel for Transactions Categories
   Widget _getSubViewContentForTransactions(final List<int> selectedIds) {
-    final Category? category = getMoneyObjectFromFirstSelectedId<Category>(selectedIds, list);
-    if (category != null) {
-      final List<int> listOfDescendentCategories = <int>[];
-      Data().categories.getTreeIdsRecursive(category.uniqueId, listOfDescendentCategories);
-      final SelectionController selectionController = Get.put(SelectionController());
+    final SelectionController selectionController = Get.put(SelectionController());
 
-      return ListViewTransactions(
-        key: Key(category.uniqueId.toString()),
-        listController: Get.find<ListControllerSidePanel>(),
-        columnsToInclude: <Field>[
-          Transaction.fields.getFieldByName(columnIdDate),
-          Transaction.fields.getFieldByName(columnIdAccount),
-          Transaction.fields.getFieldByName(columnIdPayee),
-          Transaction.fields.getFieldByName(columnIdCategory),
-          Transaction.fields.getFieldByName(columnIdMemo),
-          Transaction.fields.getFieldByName(columnIdAmount),
-        ],
-        getList: () => getTransactions(
-          flattenSplits: true,
-          filter: (final Transaction transaction) =>
-              listOfDescendentCategories.contains(transaction.fieldCategoryId.value),
-        ),
-        selectionController: selectionController,
-      );
-    }
-    return CenterMessage.noTransaction();
+    return ListViewTransactions(
+      listController: Get.find<ListControllerSidePanel>(),
+      columnsToInclude: <Field>[
+        Transaction.fields.getFieldByName(columnIdDate),
+        Transaction.fields.getFieldByName(columnIdAccount),
+        Transaction.fields.getFieldByName(columnIdPayee),
+        Transaction.fields.getFieldByName(columnIdCategory),
+        Transaction.fields.getFieldByName(columnIdMemo),
+        Transaction.fields.getFieldByName(columnIdAmount),
+      ],
+      getList: () => _getTransactionsFromSelectedIds(selectedIds),
+      selectionController: selectionController,
+    );
   }
 }
