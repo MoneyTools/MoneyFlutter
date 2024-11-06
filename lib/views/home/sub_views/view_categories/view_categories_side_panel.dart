@@ -38,7 +38,7 @@ extension ViewCategoriesSidePanel on ViewCategoriesState {
           .where((t) => t.fieldCategoryId.value == selectedIds.first)
           .toList();
 
-      return timeLineChartOfTransactionsWidget(context, flatTransactions);
+      return TransactionTimelineChart(transactions: flatTransactions);
     }
   }
 

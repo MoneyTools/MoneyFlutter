@@ -30,7 +30,7 @@ extension ViewPayeesSidePanel on ViewPayeesState {
       Data().transactions.iterableList().where((t) => t.fieldPayee.value == selectedIds.first),
     );
 
-    return timeLineChartOfTransactionsWidget(context, flatTransactions);
+    return TransactionTimelineChart(transactions: flatTransactions);
   }
 
   // Details Panel for Transactions Payees

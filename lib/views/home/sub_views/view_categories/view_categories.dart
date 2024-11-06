@@ -7,6 +7,7 @@ import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
+import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/transaction_timeline_chart.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/view_categories/merge_categories.dart';
 
