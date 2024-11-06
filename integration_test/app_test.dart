@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:money/core/widgets/info_panel/info_panel_header.dart';
+import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/main.dart' as app;
@@ -107,13 +107,13 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   //------------------------------------------------------------------------
   // Transfers
   await tapOnText(tester, 'Transfers');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 
   //------------------------------------------------------------------------
   // Investments
   await tapOnText(tester, 'Investments');
   await tapOnTextFromParentType(tester, ListView, 'Fidelity');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 
   //------------------------------------------------------------------------
   // Stocks
@@ -123,10 +123,10 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   // Rentals
   await tapOnText(tester, 'Rentals');
   await tapOnTextFromParentType(tester, ListView, 'AirBnB');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
   // Go back to Chart where there's a PNL panel
   // we want to test the copy PnL data to clipboard
-  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
+  await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
   await tapOnKeyString(tester, 'key_card_copy_to_clipboard');
 
   //------------------------------------------------------------------------
@@ -256,7 +256,7 @@ Future<void> testAliases(WidgetTester tester) async {
   await inputTextToTextFieldWithThisLabel(tester, 'Pattern', 'ABC_XYZ');
   await tapOnText(tester, 'Apply');
 
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 }
 
 Future<void> testAccounts(WidgetTester tester) async {
@@ -271,24 +271,24 @@ Future<void> testAccounts(WidgetTester tester) async {
     'key_toggle_show_all',
   ]);
 
-  await tapOnKey(tester, Constants.keyInfoPanelExpando);
-  await infoTabs(tester);
+  await tapOnKey(tester, Constants.keySidePanelExpando);
+  await sidePanelTabs(tester);
 
   // Select one of the row
   await tapOnTextFromParentType(tester, ListView, 'Savings');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 
   // await tester.myPump();
   // toggle sorting
   await tapOnText(tester, 'Memo');
 
   await tapOnTextFromParentType(tester, ListView, 'Investment');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
   await tapOnTextFromParentType(tester, ListView, 'Loan');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 
-  // CopyToCLipboard from the Info Panel Header
-  await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderInfoPanel);
+  // CopyToCLipboard from the Side Panel Header
+  await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderSidePanel);
 
   // Accounts - Add new
   await tapOnKey(tester, Constants.keyAddNewItem);
@@ -302,11 +302,11 @@ Future<void> testAccounts(WidgetTester tester) async {
   // CopyToCLipboard from the Main Header
   await tapOnKey(tester, Constants.keyCopyListToClipboardHeaderMain);
 
-  // Select first element of the Info-Panel-Transaction-List
-  await selectFirstItemOfInfoPanelTransactionLIst(tester);
+  // Select first element of the Side-Panel-Transaction-List
+  await selectFirstItemOfSidePanelTransactionLIst(tester);
 
   // Bring upt the Mutate Transaction Dialog
-  await longPressFirstItemOfInfoPanelTransactionLIst(tester);
+  await longPressFirstItemOfSidePanelTransactionLIst(tester);
 
   // Delete
   {
@@ -371,7 +371,7 @@ Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Close');
 
   await tapOnText(tester, 'Cancel');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 
   // Add New Item
   {
@@ -391,7 +391,7 @@ Future<void> testPayees(WidgetTester tester) async {
   await tapOnKey(tester, Constants.keyMergeButton);
   await tapOnText(tester, 'Comcast');
   await tapOnText(tester, 'Cancel');
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 }
 
 Future<void> testStocks(WidgetTester tester) async {
@@ -412,9 +412,9 @@ Future<void> testStocks(WidgetTester tester) async {
     await tapOnText(tester, 'Apply');
   }
 
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 
-  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
+  await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
   await tapOnText(tester, 'Set API Key');
   await tapOnText(tester, 'Cancel');
 }
@@ -457,7 +457,7 @@ Future<void> testTransactions(WidgetTester tester) async {
 
     await tapOnText(tester, 'Apply');
   }
-  await infoTabs(tester);
+  await sidePanelTabs(tester);
 
   // Delete selected item
   await tapOnKey(tester, Constants.keyDeleteSelectedItems);
@@ -519,10 +519,10 @@ Future<void> testTransactions(WidgetTester tester) async {
   await tapOnFirstRowOfListView(tester);
 }
 
-Future<void> infoTabs(WidgetTester tester) async {
-  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Details');
-  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Chart');
-  await tapOnTextFromParentType(tester, InfoPanelHeader, 'Transactions');
+Future<void> sidePanelTabs(WidgetTester tester) async {
+  await tapOnTextFromParentType(tester, SidePanelHeader, 'Details');
+  await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
+  await tapOnTextFromParentType(tester, SidePanelHeader, 'Transactions');
 }
 
 Future<void> testPendingChanges(WidgetTester tester) async {

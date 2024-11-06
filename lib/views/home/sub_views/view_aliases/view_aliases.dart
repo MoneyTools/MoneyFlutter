@@ -40,7 +40,18 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
+  List<Alias> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    return Data()
+        .aliases
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (instance) => applyFilter == false || isMatchingFilters(instance),
+        )
+        .toList();
+  }
+
+  @override
+  Widget getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -48,7 +59,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewTransactions({
+  Widget getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -59,7 +70,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
     if (alias != null && alias.fieldId.value > -1) {
       return ListViewTransactions(
         key: Key(alias.uniqueId.toString()),
-        listController: Get.find<ListControllerInfoPanel>(),
+        listController: Get.find<ListControllerSidePanel>(),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),
@@ -75,16 +86,5 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
       );
     }
     return CenterMessage.noTransaction();
-  }
-
-  @override
-  List<Alias> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data()
-        .aliases
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (instance) => applyFilter == false || isMatchingFilters(instance),
-        )
-        .toList();
   }
 }

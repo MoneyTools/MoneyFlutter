@@ -8,7 +8,7 @@ import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transacti
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/view_payees/merge_payees.dart';
 
-part 'view_payees_details_panels.dart';
+part 'view_payees_side_panel.dart';
 
 class ViewPayees extends ViewForMoneyObjects {
   const ViewPayees({super.key});
@@ -24,9 +24,9 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   /// add more top level action buttons
   @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
-    if (!forInfoPanelTransactions) {
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
+    final list = super.getActionsButtons(forSidePanelTransactions);
+    if (!forSidePanelTransactions) {
       /// Merge
       final MoneyObject? moneyObject = getFirstSelectedItem();
       if (moneyObject != null) {
@@ -86,36 +86,6 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getInfoPanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
-  }
-
-  @override
-  List<MoneyObject> getInfoTransactions() {
-    final Payee? payee = getFirstSelectedItem() as Payee?;
-    if (payee != null && payee.fieldId.value > -1) {
-      return getTransactions(
-        filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
-      );
-    }
-    return [];
-  }
-
-  @override
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
     var list = Data()
         .payees
@@ -126,5 +96,35 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
         .toList();
 
     return list;
+  }
+
+  @override
+  List<MoneyObject> getSidePanelTransactions() {
+    final Payee? payee = getFirstSelectedItem() as Payee?;
+    if (payee != null && payee.fieldId.value > -1) {
+      return getTransactions(
+        filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
+      );
+    }
+    return [];
+  }
+
+  @override
+  Widget getSidePanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
+  }
+
+  @override
+  Widget getSidePanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(selectedIds);
   }
 }

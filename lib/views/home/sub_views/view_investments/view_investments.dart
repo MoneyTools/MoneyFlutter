@@ -10,7 +10,7 @@ import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 
-part 'view_investments_details_panels.dart';
+part 'view_investments_side_panel.dart';
 
 class ViewInvestments extends ViewForMoneyObjects {
   const ViewInvestments({super.key});
@@ -26,9 +26,9 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
 
   /// add more top level action buttons
   @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
-    if (!forInfoPanelTransactions) {
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
+    final list = super.getActionsButtons(forSidePanelTransactions);
+    if (!forSidePanelTransactions) {
       final Investment? selectedInvestment = getFirstSelectedItem() as Investment?;
 
       // this can go last
@@ -95,25 +95,6 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getInfoPanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
-  }
-
-  @override
   List<Investment> getList({
     bool includeDeleted = false,
     bool applyFilter = true,
@@ -128,5 +109,24 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     Investments.applyHoldingSharesAdjustedForSplits(list);
 
     return list;
+  }
+
+  @override
+  Widget getSidePanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
+  }
+
+  @override
+  Widget getSidePanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(selectedIds);
   }
 }

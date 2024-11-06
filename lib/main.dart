@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final DataController dataController = Get.put(DataController());
-  final ListControllerInfoPanel listControllerInfoPanel = Get.put(ListControllerInfoPanel());
+  final ListControllerSidePanel listControllerSidePanel = Get.put(ListControllerSidePanel());
 
   // Use in the two major list
   final ListControllerMain listControllerMain = Get.put(ListControllerMain());

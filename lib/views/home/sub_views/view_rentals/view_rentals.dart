@@ -14,7 +14,7 @@ import 'package:money/views/home/sub_views/money_object_card.dart';
 import 'package:money/views/home/sub_views/view_rentals/rental_pnl.dart';
 import 'package:money/views/home/sub_views/view_rentals/rental_pnl_card.dart';
 
-part 'view_rentals_details_panels.dart';
+part 'view_rentals_side_panel.dart';
 
 class ViewRentals extends ViewForMoneyObjects {
   const ViewRentals({super.key});
@@ -51,7 +51,22 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
+  List<RentBuilding> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
+
+    return list;
+  }
+
+  @override
+  List<MoneyObject> getSidePanelTransactions() {
+    return getTransactionLastSelectedItem();
+  }
+
+  @override
+  Widget getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -62,7 +77,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewDetails({
+  Widget getSidePanelViewDetails({
     required final List<int> selectedIds,
     required final bool isReadOnly,
   }) {
@@ -90,26 +105,11 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewTransactions({
+  Widget getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
     return _getSubViewContentForTransactions(selectedIds);
-  }
-
-  @override
-  List<MoneyObject> getInfoTransactions() {
-    return getTransactionLastSelectedItem();
-  }
-
-  @override
-  List<RentBuilding> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
-
-    return list;
   }
 
   String getUnitsAsString(final List<RentUnit> listOfUnits) {

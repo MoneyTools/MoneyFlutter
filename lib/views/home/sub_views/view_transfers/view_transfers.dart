@@ -41,21 +41,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewDetails({
-    required final List<int> selectedIds,
-    required final bool isReadOnly,
-  }) {
-    if (selectedIds.isNotEmpty) {
-      final int id = selectedIds.first;
-      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
-      if (transfer != null) {
-        return TransferSenderReceiver(transfer: transfer);
-      }
-    }
-    return const CenterMessage(message: 'No item selected.');
-  }
-
-  @override
   List<Transfer> getList({
     bool includeDeleted = false,
     bool applyFilter = true,
@@ -112,6 +97,21 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     }
 
     return listOfTransfers;
+  }
+
+  @override
+  Widget getSidePanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    if (selectedIds.isNotEmpty) {
+      final int id = selectedIds.first;
+      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
+      if (transfer != null) {
+        return TransferSenderReceiver(transfer: transfer);
+      }
+    }
+    return const CenterMessage(message: 'No item selected.');
   }
 
   void keepThisTransfer({

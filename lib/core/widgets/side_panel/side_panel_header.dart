@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/widgets/gaps.dart';
-import 'package:money/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/core/widgets/my_segment.dart';
+import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/data/models/constants.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 
-class InfoPanelHeader extends StatelessWidget {
+class SidePanelHeader extends StatelessWidget {
   /// Constructor
-  const InfoPanelHeader({
+  const SidePanelHeader({
     required this.isExpanded,
     required this.onExpanded, // SubView
     required this.subViewSelected,
@@ -24,7 +24,7 @@ class InfoPanelHeader extends StatelessWidget {
   final Function currentSelectionChanged;
   final bool isExpanded;
   final Function onExpanded;
-  final Function(InfoPanelSubViewEnum) subViewSelectionChanged;
+  final Function(SidePanelSubViewEnum) subViewSelectionChanged;
 
   // Actions
   final List<Widget> Function(bool) actionButtons;
@@ -33,7 +33,7 @@ class InfoPanelHeader extends StatelessWidget {
   final List<String> currencyChoices;
 
   // SubView
-  final InfoPanelSubViewEnum subViewSelected;
+  final SidePanelSubViewEnum subViewSelected;
 
   @override
   Widget build(final BuildContext context) {
@@ -97,7 +97,7 @@ class InfoPanelHeader extends StatelessWidget {
 
   Widget _buildExpando() {
     return IconButton(
-      key: Constants.keyInfoPanelExpando,
+      key: Constants.keySidePanelExpando,
       onPressed: () {
         onExpanded(!isExpanded);
       },
@@ -133,7 +133,7 @@ class InfoPanelHeader extends StatelessWidget {
           onExpanded(true);
         }
         subViewSelectionChanged(
-          InfoPanelSubViewEnum.values[newSelection],
+          SidePanelSubViewEnum.values[newSelection],
         );
       },
     );

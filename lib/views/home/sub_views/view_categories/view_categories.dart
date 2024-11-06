@@ -10,7 +10,7 @@ import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transacti
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/view_categories/merge_categories.dart';
 
-part 'view_categories_details_panels.dart';
+part 'view_categories_side_panel.dart';
 
 class ViewCategories extends ViewForMoneyObjects {
   const ViewCategories({super.key});
@@ -41,9 +41,9 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   /// add more top level action buttons
   @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
-    if (!forInfoPanelTransactions) {
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
+    final list = super.getActionsButtons(forSidePanelTransactions);
+    if (!forSidePanelTransactions) {
       // Add a new Category, place this at the top of the list
       list.insert(
         0,
@@ -138,25 +138,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getInfoPanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
-  }
-
-  @override
   List<Category> getList({
     bool includeDeleted = false,
     bool applyFilter = true,
@@ -172,6 +153,25 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
         )
         .toList();
     return list;
+  }
+
+  @override
+  Widget getSidePanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
+  }
+
+  @override
+  Widget getSidePanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForTransactions(selectedIds);
   }
 
   @override

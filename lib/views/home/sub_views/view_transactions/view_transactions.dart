@@ -51,10 +51,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   final List<bool> _selectedPivot = <bool>[false, false, true];
 
   @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
+    final list = super.getActionsButtons(forSidePanelTransactions);
 
-    if (!forInfoPanelTransactions && getFirstSelectedItem() != null) {
+    if (!forSidePanelTransactions && getFirstSelectedItem() != null) {
       final transaction = getFirstSelectedItem() as Transaction?;
 
       // this can go last
@@ -139,7 +139,38 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
+  List<Transaction> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    final List<Transaction> list = Data()
+        .transactions
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (final Transaction transaction) =>
+              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
+        )
+        .toList();
+
+    if (!balanceDone) {
+      list.sort(
+        (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
+      );
+
+      double runningNativeBalance = 0.0;
+
+      for (Transaction transaction in list) {
+        runningNativeBalance += transaction.fieldAmount.value.toDouble();
+        transaction.balance = runningNativeBalance;
+      }
+
+      balanceDone = true;
+    }
+    return list;
+  }
+
+  @override
+  Widget getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -184,7 +215,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewTransactions({
+  Widget getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -226,37 +257,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       }
     }
     return const CenterMessage(message: 'No related transactions');
-  }
-
-  @override
-  List<Transaction> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    final List<Transaction> list = Data()
-        .transactions
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (final Transaction transaction) =>
-              isMatchingIncomeExpense(transaction) && (applyFilter == false || isMatchingFilters(transaction)),
-        )
-        .toList();
-
-    if (!balanceDone) {
-      list.sort(
-        (final Transaction a, final Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value),
-      );
-
-      double runningNativeBalance = 0.0;
-
-      for (Transaction transaction in list) {
-        runningNativeBalance += transaction.fieldAmount.value.toDouble();
-        transaction.balance = runningNativeBalance;
-      }
-
-      balanceDone = true;
-    }
-    return list;
   }
 
   @override

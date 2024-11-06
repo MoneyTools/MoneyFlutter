@@ -1,7 +1,7 @@
 part of 'view_accounts.dart';
 
-extension ViewAccountsDetailsPanels on ViewAccountsState {
-  Widget _getInfoPanelViewDetails({
+extension ViewAccountsSidePanel on ViewAccountsState {
+  Widget _getSidePanelViewDetails({
     required final List<int> selectedIds,
     required final bool isReadOnly,
   }) {
@@ -230,11 +230,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
-    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
+    int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey('side_panel_$settingKeySortBy'), 0);
+    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('side_panel_$settingKeySortAscending'), true);
 
     final SelectionController selectionController =
-        Get.put(SelectionController(getPreferenceKey('info_$settingKeySelectedListItemId')));
+        Get.put(SelectionController(getPreferenceKey('side_panel_$settingKeySelectedListItemId')));
 
     selectionController.load();
 
@@ -264,7 +264,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
           getList: () => getTransactionForLastSelectedAccount(account),
           sortFieldIndex: sortFieldIndex,
           sortAscending: sortAscending,
-          listController: Get.find<ListControllerInfoPanel>(),
+          listController: Get.find<ListControllerSidePanel>(),
           selectionController: selectionController,
           onUserChoiceChanged: (int sortByFieldIndex, bool sortAscending, final int selectedTransactionId) {
             // keep track of user choice
@@ -273,11 +273,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
             // Save user choices
             PreferenceController.to.setInt(
-              getPreferenceKey('info_$settingKeySortBy'),
+              getPreferenceKey('side_panel_$settingKeySortBy'),
               sortByFieldIndex,
             );
             PreferenceController.to.setBool(
-              getPreferenceKey('info_$settingKeySortAscending'),
+              getPreferenceKey('side_panel_$settingKeySortAscending'),
               sortAscending,
             );
           },
@@ -291,9 +291,10 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
     required final Account account,
     required final bool showAsNativeCurrency,
   }) {
-    int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
-    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), true);
-    int selectedItemId = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
+    int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey('side_panel_$settingKeySortBy'), 0);
+    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('side_panel_$settingKeySortAscending'), true);
+    int selectedItemId =
+        PreferenceController.to.getInt(getPreferenceKey('side_panel_$settingKeySelectedListItemId'), -1);
 
     List<LoanPayment> aggregatedList = getAccountLoanPayments(account);
 
@@ -310,7 +311,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
       filters: FieldFilters(),
       sortByFieldIndex: sortFieldIndex,
       sortAscending: sortAscending,
-      listController: Get.find<ListControllerInfoPanel>(),
+      listController: Get.find<ListControllerSidePanel>(),
 
       // Display as Cards or Columns
       // On small device you can display rows a Cards instead of Columns
@@ -326,11 +327,11 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
             sortFieldIndex = columnHeaderIndex;
           }
           PreferenceController.to.setInt(
-            getPreferenceKey('info_$settingKeySortBy'),
+            getPreferenceKey('side_panel_$settingKeySortBy'),
             sortFieldIndex,
           );
           PreferenceController.to.setBool(
-            getPreferenceKey('info_$settingKeySortAscending'),
+            getPreferenceKey('side_panel_$settingKeySortAscending'),
             sortAscending,
           );
         });
@@ -342,7 +343,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
         setState(() {
           selectedItemId = uniqueId;
           PreferenceController.to.setInt(
-            getPreferenceKey('info_$settingKeySelectedListItemId'),
+            getPreferenceKey('side_panel_$settingKeySelectedListItemId'),
             selectedItemId,
           );
         });
@@ -357,7 +358,7 @@ extension ViewAccountsDetailsPanels on ViewAccountsState {
 
         selectedItemId = itemId;
         PreferenceController.to.setInt(
-          getPreferenceKey('info_$settingKeySelectedListItemId'),
+          getPreferenceKey('side_panel_$settingKeySelectedListItemId'),
           selectedItemId,
         );
       },

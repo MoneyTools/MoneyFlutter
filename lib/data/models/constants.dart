@@ -62,17 +62,17 @@ class Constants {
 
   static const Key keyCancelButton = Key('key_cancel_button');
   static const Key keyCheckboxToggleSelectAll = Key('key_checkbox_toggle_select_all');
-  static const Key keyCopyListToClipboardHeaderInfoPanel = Key('keyCopyListToClipboardHeaderInfoPanel');
   static const Key keyCopyListToClipboardHeaderMain = Key('keyCopyListToClipboardHeaderMain');
+  static const Key keyCopyListToClipboardHeaderSidePanel = Key('keyCopyListToClipboardHeaderSidePanel');
   static const Key keyDatePicker = Key('key_date_picker');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
   static const Key keyEditSelectedItems = Key('key_edit_item');
-  static const Key keyInfoPanelExpando = Key('key_info_panel_expando');
   static const Key keyMergeButton = Key('key_merge_button');
   static const Key keyMruButton = Key('key_mru_button');
   static const Key keyMultiSelectionToggle = Key('key_multi_selection_toggle');
   static const Key keyPendingChanges = Key('key_pending_changes');
   static const Key keySettingsButton = Key('key_settings_button');
+  static const Key keySidePanelExpando = Key('key_side_panel_expando');
   static const Key keyZoomDecrease = Key('keyZoomDecrease');
   static const Key keyZoomIncrease = Key('keyZoomIncrease');
   static const Key keyZoomNormal = Key('keyZoomNormal');

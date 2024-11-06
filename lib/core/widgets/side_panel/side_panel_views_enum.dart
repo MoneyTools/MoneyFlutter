@@ -1,4 +1,4 @@
-enum InfoPanelSubViewEnum {
+enum SidePanelSubViewEnum {
   details,
   chart,
   transactions,

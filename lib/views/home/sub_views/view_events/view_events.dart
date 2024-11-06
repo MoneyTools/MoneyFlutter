@@ -21,9 +21,9 @@ class ViewEventsState extends ViewForMoneyObjectsState {
 
   /// add more top level action buttons
   @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
-    if (!forInfoPanelTransactions) {
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
+    final list = super.getActionsButtons(forSidePanelTransactions);
+    if (!forSidePanelTransactions) {
       // Add a new Category, place this at the top of the list
       list.insert(
         0,
@@ -73,7 +73,18 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
+  List<Event> getList({bool includeDeleted = false, bool applyFilter = true}) {
+    return Data()
+        .events
+        .iterableList(includeDeleted: includeDeleted)
+        .where(
+          (instance) => applyFilter == false || isMatchingFilters(instance),
+        )
+        .toList();
+  }
+
+  @override
+  Widget getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -81,7 +92,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewTransactions({
+  Widget getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -89,7 +100,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
         Get.put(SelectionController(getPreferenceKey('info_$settingKeySelectedListItemId')));
 
     return ListViewTransactions(
-      listController: Get.find<ListControllerInfoPanel>(),
+      listController: Get.find<ListControllerSidePanel>(),
       columnsToInclude: <Field>[
         Transaction.fields.getFieldByName(columnIdDate),
         Transaction.fields.getFieldByName(columnIdAccount),
@@ -102,16 +113,5 @@ class ViewEventsState extends ViewForMoneyObjectsState {
           ),
       selectionController: selectionController,
     );
-  }
-
-  @override
-  List<Event> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    return Data()
-        .events
-        .iterableList(includeDeleted: includeDeleted)
-        .where(
-          (instance) => applyFilter == false || isMatchingFilters(instance),
-        )
-        .toList();
   }
 }

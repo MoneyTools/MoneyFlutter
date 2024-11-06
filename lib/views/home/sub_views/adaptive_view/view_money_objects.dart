@@ -10,9 +10,9 @@ import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/gaps.dart';
-import 'package:money/core/widgets/info_panel/info_panel.dart';
-import 'package:money/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/core/widgets/message_box.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
+import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/core/widgets/text_title.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/core/widgets/working.dart';
@@ -75,7 +75,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   bool _isMultiSelectionOn = false;
   int _lastSelectedItemId = -1;
-  InfoPanelSubViewEnum _selectedBottomTabId = InfoPanelSubViewEnum.details;
+  SidePanelSubViewEnum _selectedBottomTabId = SidePanelSubViewEnum.details;
   int _selectedCurrency = 0;
   bool _sortAscending = true;
   int _sortByFieldIndex = 0;
@@ -127,7 +127,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           },
           onItemTap: _onItemTap,
           flexBottom: preferenceController.isDetailsPanelExpanded.value ? 1 : 0,
-          bottom: InfoPanel(
+          bottom: SidePanel(
             isExpanded: preferenceController.isDetailsPanelExpanded.value,
             onExpanded: (final bool isExpanded) {
               setState(() {
@@ -139,7 +139,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             // SubView
             subPanelSelected: _selectedBottomTabId,
             subPanelSelectionChanged: _updateBottomContent,
-            subPanelContent: getInfoPanelContent,
+            subPanelContent: getSidePanelContent,
 
             // Currency
             getCurrencyChoices: getCurrencyChoices,
@@ -242,10 +242,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     final int subViewIndex = PreferenceController.to.getInt(
       getPreferenceKey(settingKeySelectedDetailsPanelTab),
-      InfoPanelSubViewEnum.details.index,
+      SidePanelSubViewEnum.details.index,
     );
 
-    _selectedBottomTabId = InfoPanelSubViewEnum.values[subViewIndex];
+    _selectedBottomTabId = SidePanelSubViewEnum.values[subViewIndex];
 
     // Filters
 
@@ -327,19 +327,19 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   /// Allowed to be override by derived classes
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
     List<Widget> widgets = [];
 
     /// Info panel header
-    if (forInfoPanelTransactions) {
-      if (_selectedBottomTabId == InfoPanelSubViewEnum.transactions) {
+    if (forSidePanelTransactions) {
+      if (_selectedBottomTabId == SidePanelSubViewEnum.transactions) {
         /// Add Transactions
         if (onAddTransaction != null) {
           widgets.add(buildAddTransactionsButton(onAddTransaction!));
         }
 
         /// Copy Info List
-        widgets.add(buildCopyButton(onCopyListFromInfoPanel, Constants.keyCopyListToClipboardHeaderInfoPanel));
+        widgets.add(buildCopyButton(onCopyListFromSidePanel, Constants.keyCopyListToClipboardHeaderSidePanel));
       }
     }
 
@@ -406,13 +406,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   /// Override in your view
   List<String> getCurrencyChoices(
-    final InfoPanelSubViewEnum subViewId,
+    final SidePanelSubViewEnum subViewId,
     final List<int> selectedItems,
   ) {
     switch (subViewId) {
-      case InfoPanelSubViewEnum.details:
-      case InfoPanelSubViewEnum.chart:
-      case InfoPanelSubViewEnum.transactions:
+      case SidePanelSubViewEnum.details:
+      case SidePanelSubViewEnum.chart:
+      case SidePanelSubViewEnum.transactions:
       default:
         return [];
     }
@@ -444,30 +444,52 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return getMoneyObjectFromFirstSelectedId<MoneyObject>(selectedList, list);
   }
 
-  Widget getInfoPanelContent(
-    final InfoPanelSubViewEnum subViewId,
+  List<MoneyObject> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    return <MoneyObject>[];
+  }
+
+  String getPreferenceKey(final String suffix) {
+    return viewId.getViewPreferenceId(suffix);
+  }
+
+  List<MoneyObject> getSelectedItemsFromSelectedList(
+    final List<int> selectedList,
+  ) {
+    if (selectedList.isEmpty) {
+      return [];
+    }
+
+    final Set<int> selectedIds = selectedList.toSet();
+    return list.where((moneyObject) => selectedIds.contains(moneyObject.uniqueId)).toList();
+  }
+
+  Widget getSidePanelContent(
+    final SidePanelSubViewEnum subViewId,
     final List<int> selectedIds,
   ) {
     switch (subViewId) {
       /// Details
-      case InfoPanelSubViewEnum.details:
-        return getInfoPanelViewDetails(
+      case SidePanelSubViewEnum.details:
+        return getSidePanelViewDetails(
           selectedIds: selectedIds,
           isReadOnly: false,
         );
 
       /// Chart
-      case InfoPanelSubViewEnum.chart:
-        return getInfoPanelViewChart(
+      case SidePanelSubViewEnum.chart:
+        return getSidePanelViewChart(
           selectedIds: selectedIds,
           showAsNativeCurrency: _selectedCurrency == 0,
         );
 
       /// Transactions
-      case InfoPanelSubViewEnum.transactions:
+      case SidePanelSubViewEnum.transactions:
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: getInfoPanelViewTransactions(
+          child: getSidePanelViewTransactions(
             selectedIds: selectedIds,
             showAsNativeCurrency: _selectedCurrency == 0,
           ),
@@ -477,7 +499,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     }
   }
 
-  Widget getInfoPanelHeader(
+  Widget getSidePanelHeader(
     final BuildContext context,
     final num index,
     final MoneyObject item,
@@ -485,34 +507,38 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return Center(child: Text('${getClassNameSingular()} #${index + 1}'));
   }
 
-  T? getInfoPanelLastSelectedItem<T>(final MoneyObjects<T> list) {
-    int selectedItemId = getInfoPanelLastSelectedItemId();
+  T? getSidePanelLastSelectedItem<T>(final MoneyObjects<T> list) {
+    int selectedItemId = getSidePanelLastSelectedItemId();
     if (selectedItemId == -1) {
       return null;
     }
     return list.get(selectedItemId);
   }
 
-  int getInfoPanelLastSelectedItemId() {
+  int getSidePanelLastSelectedItemId() {
     return PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
   }
 
-  Transaction? getInfoPanelLastSelectedTransaction() {
-    int selectedItemId = getInfoPanelLastSelectedItemId();
+  Transaction? getSidePanelLastSelectedTransaction() {
+    int selectedItemId = getSidePanelLastSelectedItemId();
     if (selectedItemId == -1) {
       return null;
     }
     return Data().transactions.get(selectedItemId);
   }
 
-  Widget getInfoPanelViewChart({
+  List<MoneyObject> getSidePanelTransactions() {
+    return [];
+  }
+
+  Widget getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
     return const Center(child: Text('No chart to display'));
   }
 
-  Widget getInfoPanelViewDetails({
+  Widget getSidePanelViewDetails({
     required final List<int> selectedIds,
     required final bool isReadOnly,
   }) {
@@ -539,37 +565,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
   }
 
-  Widget getInfoPanelViewTransactions({
+  Widget getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
     return const Center(child: Text('No transactions'));
-  }
-
-  List<MoneyObject> getInfoTransactions() {
-    return [];
-  }
-
-  List<MoneyObject> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    return <MoneyObject>[];
-  }
-
-  String getPreferenceKey(final String suffix) {
-    return viewId.getViewPreferenceId(suffix);
-  }
-
-  List<MoneyObject> getSelectedItemsFromSelectedList(
-    final List<int> selectedList,
-  ) {
-    if (selectedList.isEmpty) {
-      return [];
-    }
-
-    final Set<int> selectedIds = selectedList.toSet();
-    return list.where((moneyObject) => selectedIds.contains(moneyObject.uniqueId)).toList();
   }
 
   int? getUniqueIdOfFirstSelectedItem() {
@@ -650,18 +650,18 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return true;
   }
 
-  void onCopyListFromInfoPanel() {
-    final listToCopy = getInfoTransactions();
-    copyToClipboardAndInformUser(
-      context,
-      MoneyObjects.getCsvFromList(listToCopy, forSerialization: false),
-    );
-  }
-
   void onCopyListFromMainView() {
     copyToClipboardAndInformUser(
       context,
       MoneyObjects.getCsvFromList(list, forSerialization: false),
+    );
+  }
+
+  void onCopyListFromSidePanel() {
+    final listToCopy = getSidePanelTransactions();
+    copyToClipboardAndInformUser(
+      context,
+      MoneyObjects.getCsvFromList(listToCopy, forSerialization: false),
     );
   }
 
@@ -941,7 +941,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         context: context,
         title: '${getClassNameSingular()} #${uniqueId + 1}',
         actionButtons: [],
-        child: getInfoPanelViewDetails(
+        child: getSidePanelViewDetails(
           selectedIds: <int>[uniqueId],
           isReadOnly: true,
         ),
@@ -1018,7 +1018,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     list = getList();
   }
 
-  void _updateBottomContent(final InfoPanelSubViewEnum tab) {
+  void _updateBottomContent(final SidePanelSubViewEnum tab) {
     setState(() {
       _selectedBottomTabId = tab;
       saveLastUserChoicesOfView();

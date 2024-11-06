@@ -1,6 +1,6 @@
 part of 'view_payees.dart';
 
-extension ViewPayeesDetailsPanels on ViewPayeesState {
+extension ViewPayeesSidePanel on ViewPayeesState {
   /// Details panels Chart panel for Payees
   Widget _getSubViewContentForChart({
     required final List<int> selectedIds,
@@ -40,7 +40,7 @@ extension ViewPayeesDetailsPanels on ViewPayeesState {
       final SelectionController selectionController = Get.put(SelectionController());
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
-        listController: Get.find<ListControllerInfoPanel>(),
+        listController: Get.find<ListControllerSidePanel>(),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),

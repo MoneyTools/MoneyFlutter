@@ -41,4 +41,4 @@ class ListController extends GetxController {
 
 class ListControllerMain extends ListController {}
 
-class ListControllerInfoPanel extends ListController {}
+class ListControllerSidePanel extends ListController {}

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
-import 'package:money/core/widgets/info_panel/info_panel_header.dart';
-import 'package:money/core/widgets/info_panel/info_panel_views_enum.dart';
+import 'package:money/core/widgets/side_panel/side_panel_header.dart';
+import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/data/models/constants.dart';
 
-class InfoPanel extends StatelessWidget {
+class SidePanel extends StatelessWidget {
   /// Constructor
-  const InfoPanel({
+  const SidePanel({
     required this.isExpanded,
     required this.onExpanded,
     required this.selectedItems, // sub-views
@@ -21,12 +21,12 @@ class InfoPanel extends StatelessWidget {
   });
 
   final Function(int) currencySelectionChanged;
-  final List<String> Function(InfoPanelSubViewEnum, List<int>) getCurrencyChoices;
+  final List<String> Function(SidePanelSubViewEnum, List<int>) getCurrencyChoices;
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
-  final Widget Function(InfoPanelSubViewEnum, List<int>) subPanelContent;
-  final Function(InfoPanelSubViewEnum) subPanelSelectionChanged;
+  final Widget Function(SidePanelSubViewEnum, List<int>) subPanelContent;
+  final Function(SidePanelSubViewEnum) subPanelSelectionChanged;
 
   // Currency selection
   final int currencySelected;
@@ -35,7 +35,7 @@ class InfoPanel extends StatelessWidget {
   final List<Widget> Function(bool) getActionButtons;
 
   // SubViews [Details] [Chart] [Transactions]
-  final InfoPanelSubViewEnum subPanelSelected;
+  final SidePanelSubViewEnum subPanelSelected;
 
   @override
   Widget build(final BuildContext context) {
@@ -63,7 +63,7 @@ class InfoPanel extends StatelessWidget {
           return Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              InfoPanelHeader(
+              SidePanelHeader(
                 isExpanded: isExpanded,
                 onExpanded: onExpanded,
 

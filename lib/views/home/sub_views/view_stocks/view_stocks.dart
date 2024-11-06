@@ -89,12 +89,12 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return super.buildHeader(_renderToggles());
   }
 
-  /// add more top menu or info panel action buttons
+  /// add more top menu or Side panel action buttons
   @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final List<Widget> list = super.getActionsButtons(forInfoPanelTransactions);
-    if (forInfoPanelTransactions) {
-      final Investment? selectedInvestment = getInfoPanelLastSelectedItem<Investment>(Data().investments);
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
+    final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
+    if (forSidePanelTransactions) {
+      final Investment? selectedInvestment = getSidePanelLastSelectedItem<Investment>(Data().investments);
       if (selectedInvestment != null) {
         list.add(
           buildJumpToButton(
@@ -143,7 +143,26 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
+  List<Security> getList({
+    bool includeDeleted = false,
+    bool applyFilter = true,
+  }) {
+    List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
+
+    if (applyFilter) {
+      list = list.where((final instance) => isMatchingFilters(instance) && isMatchingPivot(instance)).toList();
+    }
+
+    return list;
+  }
+
+  @override
+  List<MoneyObject> getSidePanelTransactions() {
+    return getListOfInvestment(_lastSecuritySelected!);
+  }
+
+  @override
+  Widget getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -181,7 +200,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewDetails({
+  Widget getSidePanelViewDetails({
     required final List<int> selectedIds,
     required final bool isReadOnly,
   }) {
@@ -210,7 +229,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewTransactions({
+  Widget getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
@@ -225,7 +244,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
     bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), false);
 
-    final fields = _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
+    final fields = _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
 
     MoneyObjects.sortList(
       listOfInvestmentsForThisStock,
@@ -237,12 +256,12 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     return AdaptiveListColumnsOrRowsSingleSelection(
       // list related
       list: listOfInvestmentsForThisStock,
-      fieldDefinitions: _getFieldsToDisplayForInfoPanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
+      fieldDefinitions: _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
       filters: FieldFilters(),
       sortByFieldIndex: sortByFieldIndex,
       sortAscending: sortAscending,
       listController: Get.find<ListControllerMain>(),
-      selectedId: getInfoPanelLastSelectedItemId(),
+      selectedId: getSidePanelLastSelectedItemId(),
       // Field & Columns related
       displayAsColumns: true,
       backgroundColorForHeaderFooter: Colors.transparent,
@@ -274,25 +293,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         }
       },
     );
-  }
-
-  @override
-  List<MoneyObject> getInfoTransactions() {
-    return getListOfInvestment(_lastSecuritySelected!);
-  }
-
-  @override
-  List<Security> getList({
-    bool includeDeleted = false,
-    bool applyFilter = true,
-  }) {
-    List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
-
-    if (applyFilter) {
-      list = list.where((final instance) => isMatchingFilters(instance) && isMatchingPivot(instance)).toList();
-    }
-
-    return list;
   }
 
   List<Investment> getListOfInvestment(Security security) {
@@ -371,7 +371,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     );
   }
 
-  List<Field<dynamic>> _getFieldsToDisplayForInfoPanelTransactions(bool includeSplitColumns) {
+  List<Field<dynamic>> _getFieldsToDisplayForSidePanelTransactions(bool includeSplitColumns) {
     final included = [
       'Date',
       'Account',

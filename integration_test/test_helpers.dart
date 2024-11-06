@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/core/controller/theme_controller.dart';
-import 'package:money/core/widgets/info_panel/info_panel.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
 
@@ -114,24 +114,24 @@ Future<void> showInstruction(tester, text) async {
   await tapOnKeyString(tester, 'key_snackbar_close_button');
 }
 
-// Select first element of the Info-Panel-Transaction-List
-Future<void> selectFirstItemOfInfoPanelTransactionLIst(WidgetTester tester) async {
-  final element = await getFirstRowOfInfoPanelTransactionList(tester);
+// Select first element of the Side-Panel-Transaction-List
+Future<void> selectFirstItemOfSidePanelTransactionLIst(WidgetTester tester) async {
+  final element = await getFirstRowOfSidePanelTransactionList(tester);
   await tester.tap(element, warnIfMissed: false);
   await tester.myPump();
 }
 
-// Long Press first element of the Info-Panel-Transaction-List
-Future<void> longPressFirstItemOfInfoPanelTransactionLIst(WidgetTester tester) async {
-  final element = await getFirstRowOfInfoPanelTransactionList(tester);
+// Long Press first element of the Side-Panel-Transaction-List
+Future<void> longPressFirstItemOfSidePanelTransactionLIst(WidgetTester tester) async {
+  final element = await getFirstRowOfSidePanelTransactionList(tester);
   await tester.longPress(element, warnIfMissed: false);
   await tester.myPump();
 }
 
-Future<Finder> getFirstRowOfInfoPanelTransactionList(WidgetTester tester) async {
-  // Select first element of the Info-Panel-Transaction-List
+Future<Finder> getFirstRowOfSidePanelTransactionList(WidgetTester tester) async {
+  // Select first element of the Side-Panel-Transaction-List
   Finder firstMatchingElement = find.descendant(
-    of: find.byType(InfoPanel),
+    of: find.byType(SidePanel),
     matching: find.byType(MyListItem),
   );
   expect(

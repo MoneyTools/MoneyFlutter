@@ -1,6 +1,6 @@
 part of 'view_categories.dart';
 
-extension ViewCategoriesDetailsPanels on ViewCategoriesState {
+extension ViewCategoriesSidePanel on ViewCategoriesState {
   /// Details panels Chart panel for Categories
   Widget _getSubViewContentForChart({
     required final List<int> selectedIds,
@@ -52,7 +52,7 @@ extension ViewCategoriesDetailsPanels on ViewCategoriesState {
 
       return ListViewTransactions(
         key: Key(category.uniqueId.toString()),
-        listController: Get.find<ListControllerInfoPanel>(),
+        listController: Get.find<ListControllerSidePanel>(),
         columnsToInclude: <Field>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),

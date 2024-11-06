@@ -7,9 +7,9 @@ import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/gaps.dart';
-import 'package:money/core/widgets/info_panel/info_panel_views_enum.dart';
 import 'package:money/core/widgets/label_and_amount.dart';
 import 'package:money/core/widgets/money_widget.dart';
+import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/core/widgets/text_title.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
@@ -27,7 +27,7 @@ import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transacti
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/money_object_card.dart';
 
-part 'view_accounts_details_panels.dart';
+part 'view_accounts_side_panel.dart';
 part 'view_accounts_helpers.dart';
 
 /// Main view for all Accounts
@@ -66,10 +66,10 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<Widget> getActionsButtons(final bool forInfoPanelTransactions) {
-    final list = super.getActionsButtons(forInfoPanelTransactions);
+  List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
+    final list = super.getActionsButtons(forSidePanelTransactions);
 
-    if (forInfoPanelTransactions) {
+    if (forSidePanelTransactions) {
       list.add(
         buildJumpToButton(
           [
@@ -77,7 +77,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
               icon: ViewId.viewTransactions.getIconData(),
               title: 'Matching Transaction',
               onPressed: () {
-                final selectedInfoTransaction = getInfoPanelLastSelectedTransaction();
+                final selectedInfoTransaction = getSidePanelLastSelectedTransaction();
 
                 if (selectedInfoTransaction != null) {
                   // Look for transaction matching -1 to +1 date from this transaction
@@ -163,12 +163,12 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   // default currency for this view
   @override
   List<String> getCurrencyChoices(
-    final InfoPanelSubViewEnum subViewId,
+    final SidePanelSubViewEnum subViewId,
     final List<int> selectedItems,
   ) {
     switch (subViewId) {
-      case InfoPanelSubViewEnum.chart: // Chart
-      case InfoPanelSubViewEnum.transactions: // Transactions
+      case SidePanelSubViewEnum.chart: // Chart
+      case SidePanelSubViewEnum.transactions: // Transactions
         final Account? account = getFirstSelectedItemFromSelectedList(selectedItems) as Account?;
         if (account != null) {
           if (account.fieldCurrency.value != Constants.defaultCurrency) {
@@ -194,57 +194,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getInfoPanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getInfoPanelViewDetails({
-    required final List<int> selectedIds,
-    required final bool isReadOnly,
-  }) {
-    return _getInfoPanelViewDetails(selectedIds: selectedIds, isReadOnly: isReadOnly);
-  }
-
-  @override
-  Widget getInfoPanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    final Account? account = getFirstSelectedItem() as Account?;
-    if (account == null) {
-      return const CenterMessage(message: 'No account selected.');
-    } else {
-      if (account.fieldType.value == AccountType.loan) {
-        return _getSubViewContentForTransactionsForLoans(
-          account: account,
-          showAsNativeCurrency: showAsNativeCurrency,
-        );
-      } else {
-        return _getSubViewContentForTransactions(
-          account: account,
-          showAsNativeCurrency: showAsNativeCurrency,
-        );
-      }
-    }
-  }
-
-  @override
-  List<MoneyObject> getInfoTransactions() {
-    final Account? account = getFirstSelectedItem() as Account?;
-    if (account != null) {
-      return getTransactionForLastSelectedAccount(account);
-    }
-    return [];
-  }
-
-  @override
   List<Account> getList({
     bool includeDeleted = false,
     bool applyFilter = true,
@@ -266,6 +215,57 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       _footerColumnDate.inflate(account.fieldUpdatedOn.value);
     }
     return list;
+  }
+
+  @override
+  List<MoneyObject> getSidePanelTransactions() {
+    final Account? account = getFirstSelectedItem() as Account?;
+    if (account != null) {
+      return getTransactionForLastSelectedAccount(account);
+    }
+    return [];
+  }
+
+  @override
+  Widget getSidePanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    return _getSubViewContentForChart(
+      selectedIds: selectedIds,
+      showAsNativeCurrency: showAsNativeCurrency,
+    );
+  }
+
+  @override
+  Widget getSidePanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    return _getSidePanelViewDetails(selectedIds: selectedIds, isReadOnly: isReadOnly);
+  }
+
+  @override
+  Widget getSidePanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Account? account = getFirstSelectedItem() as Account?;
+    if (account == null) {
+      return const CenterMessage(message: 'No account selected.');
+    } else {
+      if (account.fieldType.value == AccountType.loan) {
+        return _getSubViewContentForTransactionsForLoans(
+          account: account,
+          showAsNativeCurrency: showAsNativeCurrency,
+        );
+      } else {
+        return _getSubViewContentForTransactions(
+          account: account,
+          showAsNativeCurrency: showAsNativeCurrency,
+        );
+      }
+    }
   }
 
   @override

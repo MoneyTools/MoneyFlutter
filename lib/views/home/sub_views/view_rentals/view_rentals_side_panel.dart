@@ -1,6 +1,6 @@
 part of 'view_rentals.dart';
 
-extension ViewRentalsDetailsPanels on ViewRentalsState {
+extension ViewRentalsSidePanel on ViewRentalsState {
   /// Details panels Chart panel for Payees
   Widget _getSubViewContentForChart({
     required final List<int> selectedIds,
@@ -75,7 +75,7 @@ extension ViewRentalsDetailsPanels on ViewRentalsState {
     lastSelectedRental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
     final SelectionController selectionController = Get.put(SelectionController());
     return ListViewTransactions(
-      listController: Get.find<ListControllerInfoPanel>(),
+      listController: Get.find<ListControllerSidePanel>(),
       columnsToInclude: <Field>[
         Transaction.fields.getFieldByName(columnIdDate),
         Transaction.fields.getFieldByName(columnIdAccount),
