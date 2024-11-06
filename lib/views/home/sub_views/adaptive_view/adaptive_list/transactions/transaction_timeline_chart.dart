@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/helpers/string_helper.dart';
+import 'package:money/core/widgets/gaps.dart';
+import 'package:money/core/widgets/icon_button.dart';
 import 'package:money/core/widgets/timeline_chart.dart'; // Assuming this is your custom chart widget
+import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
 
 /// Widget to display a timeline chart of transactions.
@@ -36,19 +41,31 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
 
     return Column(
       children: [
-        DropdownButton<TimelineScale>(
-          value: _selectedScale,
-          onChanged: (TimelineScale? newValue) {
-            setState(() {
-              _selectedScale = newValue!;
-            });
-          },
-          items: TimelineScale.values.map<DropdownMenuItem<TimelineScale>>((TimelineScale value) {
-            return DropdownMenuItem<TimelineScale>(
-              value: value,
-              child: Text(value.name),
-            );
-          }).toList(),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            DropdownButton<TimelineScale>(
+              value: _selectedScale,
+              onChanged: (TimelineScale? newValue) {
+                setState(() {
+                  _selectedScale = newValue!;
+                });
+              },
+              items: TimelineScale.values.map<DropdownMenuItem<TimelineScale>>((TimelineScale value) {
+                return DropdownMenuItem<TimelineScale>(
+                  value: value,
+                  child: Text(value.name),
+                );
+              }).toList(),
+            ),
+            gapMedium(),
+            MyIconButton(
+              icon: Icons.copy_all_outlined,
+              onPressed: () {
+                _copyToClipboard(sumByPeriod);
+              },
+            ),
+          ],
         ),
         Expanded(
           child: Padding(
@@ -74,6 +91,16 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       case TimelineScale.yearly:
         return Transactions.transactionSumByYearly(widget.transactions);
     }
+  }
+
+  void _copyToClipboard(List<Pair<DateTime, double>> data) {
+    final DateFormat formatter = DateFormat(_getDateFormat(_selectedScale));
+    final String clipboardData = data
+        .map((pair) => '${formatter.format(pair.first)} : ${Currency.getAmountAsStringUsingCurrency(pair.second)}')
+        .join('\n');
+    Clipboard.setData(ClipboardData(text: clipboardData));
+    // Optional: Show a snackbar to confirm copy
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));
   }
 
   String _getDateFormat(TimelineScale scale) {

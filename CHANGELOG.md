@@ -4,6 +4,7 @@
 
 ### Added
 
+- Ability to Copy BarChart values to clipboard
 - SidePanel BarChart with scale [Daily, Weekly, Monthly, Yearly] used in Categories and Payees
 
 ## [version 1.9.02] 2024-11-02
