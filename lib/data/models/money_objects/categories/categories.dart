@@ -61,8 +61,6 @@ class Categories extends MoneyObjects<Category> {
     child: const Text('Split'),
   );
 
-  static int idOfSplitCategory = -1;
-
   /// Add a new Category ensure that the name is unique under the parent or root
   Category addNewCategory({
     final int parentId = -1,
@@ -238,12 +236,6 @@ class Categories extends MoneyObjects<Category> {
     return getTopAncestor(parent);
   }
 
-  List<Category> getTree(final Category rootCategoryToStartFrom) {
-    final List<Category> list = <Category>[];
-    getTreeRecursive(rootCategoryToStartFrom, list);
-    return list;
-  }
-
   List<int> getTreeIds(final int rootIdToStartFrom) {
     final List<int> list = <int>[];
     if (rootIdToStartFrom > 0) {
@@ -259,14 +251,6 @@ class Categories extends MoneyObjects<Category> {
       for (final Category c in descendants) {
         getTreeIdsRecursive(c.fieldId.value, list);
       }
-    }
-  }
-
-  void getTreeRecursive(final Category category, final List<Category> list) {
-    list.add(category);
-    final List<Category> descendants = getCategoriesWithThisParent(category.uniqueId);
-    for (final Category c in descendants) {
-      getTreeRecursive(c, list);
     }
   }
 
