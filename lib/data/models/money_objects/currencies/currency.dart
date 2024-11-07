@@ -50,7 +50,7 @@ class Currency extends MoneyObject {
   }
 
   /// 5
-  /// 5    CultureCode  nvarchar(80)  0                 0
+  /// 5    CultureCode  nvarchar(80)
   FieldString fieldCultureCode = FieldString(
     name: 'Culture Code',
     serializeName: 'CultureCode',
@@ -72,7 +72,7 @@ class Currency extends MoneyObject {
   );
 
   /// 2
-  /// 2    name       nchar(20)     1                 0
+  /// 2    name       nchar(20)
   FieldString fieldName = FieldString(
     name: 'Name',
     serializeName: 'Name',
@@ -80,8 +80,7 @@ class Currency extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldName.value,
   );
 
-  /// 3
-  /// 3    Ratio        money         0                 0
+  /// 3    Ratio        money
   FieldDouble fieldRatio = FieldDouble(
     name: 'Ratio',
     serializeName: 'Ratio',
@@ -89,14 +88,17 @@ class Currency extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldRatio.value,
   );
 
-  /// 1
-  /// 1    Symbol       nchar(20)     1                 0
+  /// 1    Symbol       nchar(20)
   FieldString fieldSymbol = FieldString(
     name: 'Symbol',
     serializeName: 'Symbol',
     getValueForDisplay: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Currency).fieldSymbol.value,
   );
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   @override
   String getRepresentation() {
@@ -109,6 +111,8 @@ class Currency extends MoneyObject {
   @override
   set uniqueId(value) => fieldId.value = value;
 
+  static final _fields = Fields<Currency>();
+
   static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
     String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
 
@@ -116,6 +120,21 @@ class Currency extends MoneyObject {
       threeLetterCurrencySymbol: getCurrencyAsString(threeLetterCurrencySymbol),
       flagId: getCountryFromLocale(locale).toLowerCase(),
     );
+  }
+
+  static Fields<Currency> get fields {
+    if (_fields.isEmpty) {
+      final tmp = Currency.fromJson({});
+      _fields.setDefinitions([
+        tmp.fieldId,
+        tmp.fieldSymbol,
+        tmp.fieldName,
+        tmp.fieldRatio,
+        tmp.fieldLastRatio,
+        tmp.fieldCultureCode,
+      ]);
+    }
+    return _fields;
   }
 
   /// Return a formatted string from the given amount using the supplied ISO4217 code

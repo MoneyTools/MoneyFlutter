@@ -24,7 +24,7 @@ class MyDatabaseImplementation {
   void initDatabase(Database database) {
     database.execute('''
 CREATE TABLE [LoanPayments] (
-  [Id] int NOT NULL,
+  [Id] int PRIMARY KEY,
   [AccountId] int NOT NULL,
   [Date] datetime NOT NULL,
   [Principal] money,
@@ -187,7 +187,7 @@ CREATE TABLE [StockSplits] (
   [Denominator] money NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "Securities" (
+CREATE TABLE IF NOT EXISTS [Securities] (
   [Id] int PRIMARY KEY,
   [Name] nvarchar(80) NOT NULL,
   [Symbol] nchar(20) NOT NULL,
@@ -206,7 +206,7 @@ CREATE TABLE [AccountAliases] (
   [AccountId] nchar(20) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "TransactionExtras" (
+CREATE TABLE IF NOT EXISTS [TransactionExtras] (
   [Id] int PRIMARY KEY,
   [Transaction] bigint NOT NULL,
   [TaxYear] int NOT NULL, 
@@ -220,10 +220,10 @@ CREATE TABLE IF NOT EXISTS [Events] (
   [Begin] datetime NOT NULL,
   [End] datetime NOT NULL,            
   [People] nvarchar(255) NOT NULL,
-  [Memo] nvarchar(255) NOT NULL,
+  [Memo] nvarchar(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS "Currencies" (
+CREATE TABLE IF NOT EXISTS [Currencies] (
   [Id] int PRIMARY KEY,
   [Symbol] nchar(20) NOT NULL,
   [Name] nvarchar(80) NOT NULL,

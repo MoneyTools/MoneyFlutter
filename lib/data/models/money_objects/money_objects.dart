@@ -198,7 +198,7 @@ class MoneyObjects<T> {
   }
 
   bool saveSql(final MyDatabase db, final String tableName) {
-    for (final item in _iterableListOfMoneyObject(true)) {
+    for (final MoneyObject item in _iterableListOfMoneyObject(true)) {
       switch (item.mutation) {
         case MutationType.none:
           break;
