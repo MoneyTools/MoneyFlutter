@@ -59,8 +59,8 @@ Future<void> stepWelcomeSettingAndTheme(WidgetTester tester) async {
 
 Future<void> stepDemoDataViewInSmallScreen(WidgetTester tester) async {
   await tapOnKeyString(tester, 'key_menu_cashflow');
+  await tapOnKeyString(tester, 'key_menu_events');
   await tapOnKeyString(tester, 'key_menu_accounts');
-  // await testAccountEdit(tester);
   await tapOnKeyString(tester, 'key_menu_categories');
   await tapOnKeyString(tester, 'key_menu_payees');
   await tapOnKeyString(tester, 'key_menu_aliases');
@@ -83,6 +83,10 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   //------------------------------------------------------------------------
   // Cash Flow
   await testCashFlow(tester);
+
+  //------------------------------------------------------------------------
+  // Events
+  await testEvents(tester);
 
   //------------------------------------------------------------------------
   // Accounts
@@ -381,6 +385,72 @@ Future<void> testCategories(WidgetTester tester) async {
   // trigger sort by Level
   await tester.longPress(find.text('Level').first);
   await tapOnText(tester, 'Close');
+}
+
+Future<void> testEvents(WidgetTester tester) async {
+  await tapOnText(tester, 'Events');
+
+  await tapOnFirstRowOfListView(tester);
+
+  // Edit
+  {
+    await tapOnKey(tester, Constants.keyAddNewItem);
+
+    // Edit the name
+    {
+      // Find the TextFormField by its labelText in the InputDecoration.
+      final textFieldFinder = find.widgetWithText(TextFormField, 'Name');
+
+      // Check if the TextFormField with the labelText was found.
+      expect(textFieldFinder, findsOneWidget);
+
+      // Enter text into the TextFormField
+      await tester.enterText(textFieldFinder, 'Wedding');
+
+      // Verify the entered text if needed
+      expect(find.text('Wedding'), findsOneWidget);
+    }
+
+    // Edit the date
+    {
+      // Find the TextFormField (or TextField) by its labelText.
+      final textFormFieldFinder = find.widgetWithText(InputDecorator, 'Begins');
+
+      // Check if the TextFormField with the labelText was found.
+      expect(textFormFieldFinder, findsOneWidget);
+
+      // Find the EditableText widget within the TextFormField, which is the actual input box.
+      final editableTextFinder = find.descendant(
+        of: textFormFieldFinder,
+        matching: find.byType(EditableText),
+      );
+
+      // Enter text into the TextFormField
+      await tester.enterText(editableTextFinder, '2025-01-01');
+    }
+
+    // Edit the Category
+    {
+      await tapOnKeyString(tester, 'key_dropdown');
+      await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
+
+      // Find the widget that displays the text 'Grocery'.
+      final groceryFinder = find.text('Grocery');
+
+      // Tap on the widget.
+      await tester.tap(groceryFinder);
+
+      // await tapOnText(tester, 'Close');
+    }
+
+    await tapOnText(tester, 'Apply');
+  }
+
+  // Add New Item
+  {
+    await tapOnKey(tester, Constants.keyAddNewItem);
+    await tapOnText(tester, 'Cancel');
+  }
 }
 
 Future<void> testPayees(WidgetTester tester) async {

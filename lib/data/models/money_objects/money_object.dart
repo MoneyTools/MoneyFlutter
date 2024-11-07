@@ -51,7 +51,7 @@ class MoneyObject {
     {
       final definitions = getFieldDefinitionsForPanel();
 
-      for (final fieldDefinition in definitions) {
+      for (final Field fieldDefinition in definitions) {
         final Widget widget = buildWidgetNameValueFromFieldDefinition(
           objectInstance: this,
           fieldDefinition: fieldDefinition,
