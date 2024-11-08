@@ -76,7 +76,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   bool _isMultiSelectionOn = false;
   int _lastSelectedItemId = -1;
   SidePanelSubViewEnum _selectedBottomTabId = SidePanelSubViewEnum.details;
-  int _selectedCurrency = 0;
   bool _sortAscending = true;
   int _sortByFieldIndex = 0;
 
@@ -91,10 +90,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   Widget build(final BuildContext context) {
     footerAccumulators();
 
+    final SidePanelSupport sidePanelOptions = getSidePanelSupport();
     return buildViewContent(
       Obx(() {
         final key = Key(
-          '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}|${dataController.lastUpdateAsString}}',
+          '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}|${dataController.lastUpdateAsString}|${sidePanelOptions.selectedCurrency}}',
         );
 
         if (firstLoadCompleted == false) {
@@ -128,6 +128,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           onItemTap: _onItemTap,
           flexBottom: preferenceController.isDetailsPanelExpanded.value ? 1 : 0,
           bottom: SidePanel(
+            key: Key('side_panel_${sidePanelOptions.selectedCurrency}'),
             isExpanded: preferenceController.isDetailsPanelExpanded.value,
             onExpanded: (final bool isExpanded) {
               setState(() {
@@ -137,16 +138,16 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             selectedItems: _selectedItemsByUniqueId,
 
             // SubView
+            sidePanelSupport: sidePanelOptions,
             subPanelSelected: _selectedBottomTabId,
             subPanelSelectionChanged: _updateBottomContent,
-            subPanelContent: getSidePanelContent,
 
             // Currency
             getCurrencyChoices: getCurrencyChoices,
-            currencySelected: _selectedCurrency,
+            currencySelected: sidePanelOptions.selectedCurrency,
             currencySelectionChanged: (final int selected) {
               setState(() {
-                _selectedCurrency = selected;
+                sidePanelOptions.selectedCurrency = selected;
               });
             },
 
@@ -466,39 +467,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return list.where((moneyObject) => selectedIds.contains(moneyObject.uniqueId)).toList();
   }
 
-  Widget getSidePanelContent(
-    final SidePanelSubViewEnum subViewId,
-    final List<int> selectedIds,
-  ) {
-    switch (subViewId) {
-      /// Details
-      case SidePanelSubViewEnum.details:
-        return getSidePanelViewDetails(
-          selectedIds: selectedIds,
-          isReadOnly: false,
-        );
-
-      /// Chart
-      case SidePanelSubViewEnum.chart:
-        return getSidePanelViewChart(
-          selectedIds: selectedIds,
-          showAsNativeCurrency: _selectedCurrency == 0,
-        );
-
-      /// Transactions
-      case SidePanelSubViewEnum.transactions:
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          child: getSidePanelViewTransactions(
-            selectedIds: selectedIds,
-            showAsNativeCurrency: _selectedCurrency == 0,
-          ),
-        );
-      default:
-        return const Text('- empty -');
-    }
-  }
-
   Widget getSidePanelHeader(
     final BuildContext context,
     final num index,
@@ -527,15 +495,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     return Data().transactions.get(selectedItemId);
   }
 
-  List<MoneyObject> getSidePanelTransactions() {
-    return [];
+  SidePanelSupport getSidePanelSupport() {
+    return SidePanelSupport(); // by default the base class does not show any content in the side panel
   }
 
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return const Center(child: Text('No chart to display'));
+  List<MoneyObject> getSidePanelTransactions() {
+    return [];
   }
 
   Widget getSidePanelViewDetails({
@@ -563,13 +528,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         onDelete: _onUserRequestedToDelete,
       ),
     );
-  }
-
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return const Center(child: Text('No transactions'));
   }
 
   int? getUniqueIdOfFirstSelectedItem() {

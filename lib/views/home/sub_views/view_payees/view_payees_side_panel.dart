@@ -32,8 +32,8 @@ extension ViewPayeesSidePanel on ViewPayeesState {
   }
 
   // Details Panel for Transactions Payees
-  Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final Payee? payee = getMoneyObjectFromFirstSelectedId<Payee>(indices, list);
+  Widget _getSubViewContentForTransactions({required final List<int> selectedIds, required bool showAsNativeCurrency}) {
+    final Payee? payee = getMoneyObjectFromFirstSelectedId<Payee>(selectedIds, list);
     if (payee != null && payee.fieldId.value > -1) {
       final SelectionController selectionController = Get.put(SelectionController());
       return ListViewTransactions(

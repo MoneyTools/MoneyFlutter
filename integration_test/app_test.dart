@@ -111,7 +111,11 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   //------------------------------------------------------------------------
   // Transfers
   await tapOnText(tester, 'Transfers');
-  await sidePanelTabs(tester);
+  await sidePanelTabs(
+    tester,
+    expectChart: false,
+    expectTransactions: false,
+  );
 
   //------------------------------------------------------------------------
   // Investments
@@ -127,10 +131,10 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   // Rentals
   await tapOnText(tester, 'Rentals');
   await tapOnTextFromParentType(tester, ListView, 'AirBnB');
-  await sidePanelTabs(tester);
+  await sidePanelTabs(tester, expectPnl: true);
   // Go back to Chart where there's a PNL panel
   // we want to test the copy PnL data to clipboard
-  await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
+  await tapOnTextFromParentType(tester, SidePanelHeader, 'PnL');
   await tapOnKeyString(tester, 'key_card_copy_to_clipboard');
 
   //------------------------------------------------------------------------
@@ -260,7 +264,7 @@ Future<void> testAliases(WidgetTester tester) async {
   await inputTextToTextFieldWithThisLabel(tester, 'Pattern', 'ABC_XYZ');
   await tapOnText(tester, 'Apply');
 
-  await sidePanelTabs(tester);
+  await sidePanelTabs(tester, expectChart: false);
 }
 
 Future<void> testAccounts(WidgetTester tester) async {
@@ -589,10 +593,28 @@ Future<void> testTransactions(WidgetTester tester) async {
   await tapOnFirstRowOfListView(tester);
 }
 
-Future<void> sidePanelTabs(WidgetTester tester) async {
-  await tapOnTextFromParentType(tester, SidePanelHeader, 'Details');
-  await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
-  await tapOnTextFromParentType(tester, SidePanelHeader, 'Transactions');
+Future<void> sidePanelTabs(
+  WidgetTester tester, {
+  bool expectDetails = true,
+  bool expectChart = true,
+  bool expectTransactions = true,
+  bool expectPnl = false,
+}) async {
+  if (expectDetails) {
+    await tapOnTextFromParentType(tester, SidePanelHeader, 'Details');
+  }
+
+  if (expectChart) {
+    await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
+  }
+  if (expectTransactions) {
+    {
+      await tapOnTextFromParentType(tester, SidePanelHeader, 'Transactions');
+    }
+  }
+  if (expectPnl) {
+    await tapOnTextFromParentType(tester, SidePanelHeader, 'PnL');
+  }
 }
 
 Future<void> testPendingChanges(WidgetTester tester) async {

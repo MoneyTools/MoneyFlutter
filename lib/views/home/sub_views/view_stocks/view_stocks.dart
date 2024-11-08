@@ -2,6 +2,7 @@ import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/chart_event.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
@@ -31,6 +32,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   final List<Widget> _pivots = <Widget>[];
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onChart: _getSidePanelViewChart,
+    onTransactions: _getSidePanelViewTransactions,
+  );
 
   // Filter related
   final List<bool> _selectedPivot = <bool>[false, false, true];
@@ -157,46 +163,13 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<MoneyObject> getSidePanelTransactions() {
-    return getListOfInvestment(_lastSecuritySelected!);
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 
   @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    final Security? security = getFirstSelectedItem() as Security?;
-    if (security != null) {
-      final String symbol = security.fieldSymbol.value;
-      List<Investment> list = getListOfInvestment(security);
-
-      final List<ChartEvent> events = [];
-      for (final Investment activity in list) {
-        if (activity.effectiveUnits != 0) {
-          events.add(
-            ChartEvent(
-              date: activity.transactionInstance!.fieldDateTime.value!,
-              amount: activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
-              quantity: activity.effectiveUnitsAdjusted,
-              colorBasedOnQuantity: true,
-              description: activity.fieldInvestmentType.getValueForDisplay(activity),
-            ),
-          );
-        }
-      }
-
-      if (symbol.isNotEmpty) {
-        return StockChartWidget(
-          key: Key('stock_symbol_$symbol'),
-          symbol: symbol,
-          splits: Data().stockSplits.getStockSplitsForSecurity(security),
-          dividends: security.dividends,
-          holdingsActivities: events,
-        );
-      }
-    }
-    return const Center(child: Text('No stock selected'));
+  List<MoneyObject> getSidePanelTransactions() {
+    return getListOfInvestment(_lastSecuritySelected!);
   }
 
   @override
@@ -225,73 +198,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           ],
         ),
       ),
-    );
-  }
-
-  @override
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    _lastSecuritySelected = getFirstSelectedItem() as Security?;
-
-    if (_lastSecuritySelected == null) {
-      return const CenterMessage(message: 'No security selected.');
-    }
-
-    final listOfInvestmentsForThisStock = getListOfInvestment(_lastSecuritySelected!);
-
-    int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
-    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), false);
-
-    final fields = _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
-
-    MoneyObjects.sortList(
-      listOfInvestmentsForThisStock,
-      fields,
-      sortByFieldIndex,
-      sortAscending,
-    );
-
-    return AdaptiveListColumnsOrRowsSingleSelection(
-      // list related
-      list: listOfInvestmentsForThisStock,
-      fieldDefinitions: _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
-      filters: FieldFilters(),
-      sortByFieldIndex: sortByFieldIndex,
-      sortAscending: sortAscending,
-      listController: Get.find<ListControllerMain>(),
-      selectedId: getSidePanelLastSelectedItemId(),
-      // Field & Columns related
-      displayAsColumns: true,
-      backgroundColorForHeaderFooter: Colors.transparent,
-      onColumnHeaderTap: (int columnHeaderIndex) {
-        setState(() {
-          if (columnHeaderIndex == sortByFieldIndex) {
-            // toggle order
-            sortAscending = !sortAscending;
-            PreferenceController.to.setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
-          } else {
-            sortByFieldIndex = columnHeaderIndex;
-            PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
-          }
-        });
-      },
-      onSelectionChanged: (int uniqueId) {
-        setState(() {
-          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
-        });
-      },
-      onItemLongPress: (BuildContext context2, int itemId) {
-        final instance = Data().investments.get(itemId);
-        if (instance != null) {
-          myShowDialogAndActionsForMoneyObject(
-            title: 'Investment',
-            context: context2,
-            moneyObject: instance,
-          );
-        }
-      },
     );
   }
 
@@ -392,6 +298,109 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         )
         .toList();
     return fieldsToDisplay;
+  }
+
+  Widget _getSidePanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Security? security = getFirstSelectedItem() as Security?;
+    if (security != null) {
+      final String symbol = security.fieldSymbol.value;
+      List<Investment> list = getListOfInvestment(security);
+
+      final List<ChartEvent> events = [];
+      for (final Investment activity in list) {
+        if (activity.effectiveUnits != 0) {
+          events.add(
+            ChartEvent(
+              date: activity.transactionInstance!.fieldDateTime.value!,
+              amount: activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
+              quantity: activity.effectiveUnitsAdjusted,
+              colorBasedOnQuantity: true,
+              description: activity.fieldInvestmentType.getValueForDisplay(activity),
+            ),
+          );
+        }
+      }
+
+      if (symbol.isNotEmpty) {
+        return StockChartWidget(
+          key: Key('stock_symbol_$symbol'),
+          symbol: symbol,
+          splits: Data().stockSplits.getStockSplitsForSecurity(security),
+          dividends: security.dividends,
+          holdingsActivities: events,
+        );
+      }
+    }
+    return const Center(child: Text('No stock selected'));
+  }
+
+  Widget _getSidePanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    _lastSecuritySelected = getFirstSelectedItem() as Security?;
+
+    if (_lastSecuritySelected == null) {
+      return const CenterMessage(message: 'No security selected.');
+    }
+
+    final listOfInvestmentsForThisStock = getListOfInvestment(_lastSecuritySelected!);
+
+    int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
+    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), false);
+
+    final fields = _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
+
+    MoneyObjects.sortList(
+      listOfInvestmentsForThisStock,
+      fields,
+      sortByFieldIndex,
+      sortAscending,
+    );
+
+    return AdaptiveListColumnsOrRowsSingleSelection(
+      // list related
+      list: listOfInvestmentsForThisStock,
+      fieldDefinitions: _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty),
+      filters: FieldFilters(),
+      sortByFieldIndex: sortByFieldIndex,
+      sortAscending: sortAscending,
+      listController: Get.find<ListControllerMain>(),
+      selectedId: getSidePanelLastSelectedItemId(),
+      // Field & Columns related
+      displayAsColumns: true,
+      backgroundColorForHeaderFooter: Colors.transparent,
+      onColumnHeaderTap: (int columnHeaderIndex) {
+        setState(() {
+          if (columnHeaderIndex == sortByFieldIndex) {
+            // toggle order
+            sortAscending = !sortAscending;
+            PreferenceController.to.setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+          } else {
+            sortByFieldIndex = columnHeaderIndex;
+            PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
+          }
+        });
+      },
+      onSelectionChanged: (int uniqueId) {
+        setState(() {
+          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
+        });
+      },
+      onItemLongPress: (BuildContext context2, int itemId) {
+        final instance = Data().investments.get(itemId);
+        if (instance != null) {
+          myShowDialogAndActionsForMoneyObject(
+            title: 'Investment',
+            context: context2,
+            moneyObject: instance,
+          );
+        }
+      },
+    );
   }
 
   Widget _renderToggles() {

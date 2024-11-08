@@ -51,8 +51,8 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
   }
 
   // Details Panel for Transactions Payees
-  Widget _getSubViewContentForTransactions(final List<int> indices) {
-    final Investment? instance = getMoneyObjectFromFirstSelectedId<Investment>(indices, list);
+  Widget _getSubViewContentForTransactions({required final List<int> selectedIds, required bool showAsNativeCurrency}) {
+    final Investment? instance = getMoneyObjectFromFirstSelectedId<Investment>(selectedIds, list);
 
     if (instance == null) {
       return CenterMessage.noTransaction();

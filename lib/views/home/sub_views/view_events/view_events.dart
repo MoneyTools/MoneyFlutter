@@ -1,6 +1,7 @@
 import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/events/event.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -18,6 +19,11 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   ViewEventsState() {
     viewId = ViewId.viewAliases;
   }
+
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onTransactions: _getSidePanelViewTransactions,
+  );
 
   /// add more top level action buttons
   @override
@@ -84,15 +90,11 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return const Text('No chart for events');
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 
-  @override
-  Widget getSidePanelViewTransactions({
+  Widget _getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {

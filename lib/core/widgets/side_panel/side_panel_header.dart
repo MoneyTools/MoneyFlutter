@@ -15,7 +15,8 @@ class SidePanelHeader extends StatelessWidget {
     required this.subViewSelectionChanged, // Currency
     required this.currencyChoices,
     required this.currencySelected,
-    required this.currentSelectionChanged, // Actions
+    required this.currentSelectionChanged,
+    required this.supportedSubViews,
     required this.actionButtons,
     super.key,
   });
@@ -25,6 +26,7 @@ class SidePanelHeader extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
   final Function(SidePanelSubViewEnum) subViewSelectionChanged;
+  final List<SidePanelSubViewEnum> supportedSubViews;
 
   // Actions
   final List<Widget> Function(bool) actionButtons;
@@ -107,25 +109,38 @@ class SidePanelHeader extends StatelessWidget {
   }
 
   Widget _buildViewSelections(final BoxConstraints constraints) {
+    if (supportedSubViews.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     final bool smallDevice = ThemeController.to.isDeviceWidthSmall.value;
 
     return mySegmentSelector(
       segments: [
-        ButtonSegment<int>(
-          value: 0,
-          label: smallDevice ? null : const Text('Details'),
-          icon: const Icon(Icons.info_outline),
-        ),
-        ButtonSegment<int>(
-          value: 1,
-          label: smallDevice ? null : const Text('Chart'),
-          icon: const Icon(Icons.bar_chart),
-        ),
-        ButtonSegment<int>(
-          value: 2,
-          label: smallDevice ? null : const Text('Transactions'),
-          icon: const Icon(Icons.calendar_view_day),
-        ),
+        if (supportedSubViews.contains(SidePanelSubViewEnum.details))
+          ButtonSegment<int>(
+            value: 0,
+            label: smallDevice ? null : const Text('Details'),
+            icon: const Icon(Icons.info_outline),
+          ),
+        if (supportedSubViews.contains(SidePanelSubViewEnum.chart))
+          ButtonSegment<int>(
+            value: 1,
+            label: smallDevice ? null : const Text('Chart'),
+            icon: const Icon(Icons.bar_chart),
+          ),
+        if (supportedSubViews.contains(SidePanelSubViewEnum.transactions))
+          ButtonSegment<int>(
+            value: 2,
+            label: smallDevice ? null : const Text('Transactions'),
+            icon: const Icon(Icons.calendar_view_day),
+          ),
+        if (supportedSubViews.contains(SidePanelSubViewEnum.pnl))
+          ButtonSegment<int>(
+            value: 3,
+            label: smallDevice ? null : const Text('PnL'),
+            icon: const Icon(Icons.calendar_view_day),
+          ),
       ],
       selectedId: subViewSelected.index,
       onSelectionChanged: (final int newSelection) {

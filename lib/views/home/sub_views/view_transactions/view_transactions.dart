@@ -2,6 +2,7 @@ import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/helpers/string_helper.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
@@ -49,6 +50,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   bool balanceDone = false;
 
   final List<bool> _selectedPivot = <bool>[false, false, true];
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onChart: _getSidePanelViewChart,
+    onTransactions: _getSidePanelViewTransactions,
+  );
 
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
@@ -170,91 +176,8 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    final Map<String, num> tallyPerMonths = <String, num>{};
-
-    final DateRange timePeriod = DateRange(
-      min: DateTime.now().subtract(const Duration(days: 356)).startOfDay,
-      max: DateTime.now().endOfDay,
-    );
-
-    getList().forEach((final Transaction transaction) {
-      transaction;
-
-      if (timePeriod.isBetweenEqual(transaction.fieldDateTime.value)) {
-        final num value = transaction.fieldAmount.value.toDouble();
-
-        final DateTime date = transaction.fieldDateTime.value!;
-        // Format the date as year-month string (e.g., '2023-11')
-        final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
-
-        // Update the map or add a new entry
-        tallyPerMonths.update(
-          yearMonth,
-          (final num total) => total + value,
-          ifAbsent: () => value,
-        );
-      }
-    });
-
-    final List<PairXY> list = <PairXY>[];
-    tallyPerMonths.forEach((final String key, final num value) {
-      list.add(PairXY(key, value));
-    });
-
-    list.sort((final PairXY a, final PairXY b) => a.xText.compareTo(b.xText));
-
-    return Chart(
-      list: list,
-    );
-  }
-
-  @override
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    final Transaction? transaction = getFirstSelectedItem() as Transaction?;
-
-    //
-    // If the category of this transaction is a Split then list the details of the Split
-    //
-    if (transaction != null) {
-      if (transaction.isSplit) {
-        // this is Split get the split transactions
-        return ListViewTransactionSplits(
-          key: Key('split_transactions ${transaction.uniqueId}'),
-          getList: () {
-            return Data()
-                .splits
-                .iterableList()
-                .where(
-                  (final MoneySplit s) => s.fieldTransactionId.value == transaction.fieldId.value,
-                )
-                .toList();
-          },
-        );
-      }
-
-      if (transaction.isTransfer) {
-        return TransferSenderReceiver(transfer: transaction.instanceOfTransfer!);
-      } else {
-        final investment = Data().investments.get(transaction.uniqueId);
-        if (investment != null) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            child: MoneyObjectCard(
-              title: 'Investment',
-              moneyObject: investment,
-            ),
-          );
-        }
-      }
-    }
-    return const CenterMessage(message: 'No related transactions');
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 
   @override
@@ -343,5 +266,91 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         children: pivots,
       ),
     );
+  }
+
+  Widget _getSidePanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Map<String, num> tallyPerMonths = <String, num>{};
+
+    final DateRange timePeriod = DateRange(
+      min: DateTime.now().subtract(const Duration(days: 356)).startOfDay,
+      max: DateTime.now().endOfDay,
+    );
+
+    getList().forEach((final Transaction transaction) {
+      transaction;
+
+      if (timePeriod.isBetweenEqual(transaction.fieldDateTime.value)) {
+        final num value = transaction.fieldAmount.value.toDouble();
+
+        final DateTime date = transaction.fieldDateTime.value!;
+        // Format the date as year-month string (e.g., '2023-11')
+        final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
+
+        // Update the map or add a new entry
+        tallyPerMonths.update(
+          yearMonth,
+          (final num total) => total + value,
+          ifAbsent: () => value,
+        );
+      }
+    });
+
+    final List<PairXY> list = <PairXY>[];
+    tallyPerMonths.forEach((final String key, final num value) {
+      list.add(PairXY(key, value));
+    });
+
+    list.sort((final PairXY a, final PairXY b) => a.xText.compareTo(b.xText));
+
+    return Chart(
+      list: list,
+    );
+  }
+
+  Widget _getSidePanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Transaction? transaction = getFirstSelectedItem() as Transaction?;
+
+    //
+    // If the category of this transaction is a Split then list the details of the Split
+    //
+    if (transaction != null) {
+      if (transaction.isSplit) {
+        // this is Split get the split transactions
+        return ListViewTransactionSplits(
+          key: Key('split_transactions ${transaction.uniqueId}'),
+          getList: () {
+            return Data()
+                .splits
+                .iterableList()
+                .where(
+                  (final MoneySplit s) => s.fieldTransactionId.value == transaction.fieldId.value,
+                )
+                .toList();
+          },
+        );
+      }
+
+      if (transaction.isTransfer) {
+        return TransferSenderReceiver(transfer: transaction.instanceOfTransfer!);
+      } else {
+        final investment = Data().investments.get(transaction.uniqueId);
+        if (investment != null) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: MoneyObjectCard(
+              title: 'Investment',
+              moneyObject: investment,
+            ),
+          );
+        }
+      }
+    }
+    return const CenterMessage(message: 'No related transactions');
   }
 }

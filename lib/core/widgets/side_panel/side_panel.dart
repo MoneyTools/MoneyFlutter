@@ -4,15 +4,87 @@ import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/data/models/constants.dart';
 
+class SidePanelSupport {
+  SidePanelSupport({
+    this.onDetails,
+    this.onChart,
+    this.onTransactions,
+    this.onPnL,
+  });
+
+  int selectedCurrency = 0;
+
+  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onTransactions;
+  Function? onChart;
+  Function? onDetails;
+  Function? onPnL;
+
+  Widget getSidePanelContent(
+    final SidePanelSubViewEnum subViewId,
+    final List<int> selectedIds,
+  ) {
+    switch (subViewId) {
+      /// Details
+      case SidePanelSubViewEnum.details:
+        return onDetails!(
+          selectedIds: selectedIds,
+          isReadOnly: false,
+        );
+
+      /// Chart
+      case SidePanelSubViewEnum.chart:
+        if (onChart == null) {
+          return const Text('- empty -');
+        }
+        return onChart!(
+          selectedIds: selectedIds,
+          showAsNativeCurrency: selectedCurrency == 0,
+        );
+
+      /// PnL
+      case SidePanelSubViewEnum.pnl:
+        if (onPnL == null) {
+          return const Text('- empty -');
+        }
+        return onPnL!(
+          selectedIds: selectedIds,
+          showAsNativeCurrency: selectedCurrency == 0,
+        );
+
+      /// Transactions
+      case SidePanelSubViewEnum.transactions:
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: onTransactions!(
+            selectedIds: selectedIds,
+            showAsNativeCurrency: selectedCurrency == 0,
+          ),
+        );
+      default:
+        return const Text('- empty -');
+    }
+  }
+
+  List<SidePanelSubViewEnum> get getSubViewEnumSupported {
+    return [
+      if (onDetails != null) SidePanelSubViewEnum.details,
+      if (onChart != null) SidePanelSubViewEnum.chart,
+      if (onTransactions != null) SidePanelSubViewEnum.transactions,
+      if (onPnL != null) SidePanelSubViewEnum.pnl,
+    ];
+  }
+}
+
 class SidePanel extends StatelessWidget {
   /// Constructor
   const SidePanel({
     required this.isExpanded,
     required this.onExpanded,
-    required this.selectedItems, // sub-views
+    required this.selectedItems,
+    // sub-views
+    required this.sidePanelSupport,
     required this.subPanelSelected,
     required this.subPanelSelectionChanged,
-    required this.subPanelContent, // Currency
     required this.getCurrencyChoices,
     required this.currencySelected,
     required this.currencySelectionChanged, // Actions
@@ -25,7 +97,7 @@ class SidePanel extends StatelessWidget {
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
-  final Widget Function(SidePanelSubViewEnum, List<int>) subPanelContent;
+  final SidePanelSupport sidePanelSupport;
   final Function(SidePanelSubViewEnum) subPanelSelectionChanged;
 
   // Currency selection
@@ -68,6 +140,7 @@ class SidePanel extends StatelessWidget {
                 onExpanded: onExpanded,
 
                 // SubPanel
+                supportedSubViews: sidePanelSupport.getSubViewEnumSupported,
                 subViewSelected: subPanelSelected,
                 subViewSelectionChanged: subPanelSelectionChanged,
 
@@ -84,7 +157,7 @@ class SidePanel extends StatelessWidget {
               ),
               if (isExpanded)
                 Expanded(
-                  child: subPanelContent(
+                  child: sidePanelSupport.getSidePanelContent(
                     subPanelSelected,
                     listOfSelectedItemIndex,
                   ),

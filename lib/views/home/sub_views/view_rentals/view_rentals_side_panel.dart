@@ -6,48 +6,53 @@ extension ViewRentalsSidePanel on ViewRentalsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
+    final List<PairXY> list = <PairXY>[];
+    for (final RentBuilding entry in getList()) {
+      list.add(PairXY(entry.fieldName.value, entry.lifeTimePnL.profit));
+    }
+    return Chart(
+      list: list,
+    );
+  }
+
+  Widget _getSubViewContentForPnL({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
     if (selectedIds.isEmpty) {
-      final List<PairXY> list = <PairXY>[];
-      for (final RentBuilding entry in getList()) {
-        list.add(PairXY(entry.fieldName.value, entry.lifeTimePnL.profit));
-      }
-      return Chart(
-        list: list,
-      );
+      return Text('Select a Rental property to see its P&L');
     }
 
     //
     // Single Rental property selected
     //
-    RentBuilding? rental = getFirstSelectedItem() as RentBuilding?;
-    if (rental != null) {
-      // show PnL for the selected rental property, per year
-      List<Widget> pnlCards = [];
+    RentBuilding rental = getFirstSelectedItem() as RentBuilding;
 
-      if (!rental.dateRangeOfOperation.hasNullDates) {
-        for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
-          RentalPnL? pnl = rental.pnlOverYears[year];
-          pnl ??= RentalPnL(date: DateTime(year, 1, 1));
-          pnlCards.add(RentalPnLCard(pnl: pnl));
-        }
+    // show PnL for the selected rental property, per year
+    List<Widget> pnlCards = [];
+
+    if (!rental.dateRangeOfOperation.hasNullDates) {
+      for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
+        RentalPnL? pnl = rental.pnlOverYears[year];
+        pnl ??= RentalPnL(date: DateTime(year, 1, 1));
+        pnlCards.add(RentalPnLCard(pnl: pnl));
       }
-
-      pnlCards.add(
-        RentalPnLCard(
-          pnl: rental.lifeTimePnL,
-          customTitle: 'Life Time P&L',
-        ),
-      );
-
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        reverse: true,
-        child: Row(
-          children: pnlCards,
-        ),
-      );
     }
-    return const Text('No Rental property selected');
+
+    pnlCards.add(
+      RentalPnLCard(
+        pnl: rental.lifeTimePnL,
+        customTitle: 'Life Time P&L',
+      ),
+    );
+
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      reverse: true,
+      child: Row(
+        children: pnlCards,
+      ),
+    );
   }
 
   void getPnLOverYears(RentBuilding rental) {
@@ -69,8 +74,8 @@ extension ViewRentalsSidePanel on ViewRentalsState {
   }
 
   // Details Panel for Transactions Payees
-  Widget _getSubViewContentForTransactions(final List<int> indices) {
-    lastSelectedRental = getMoneyObjectFromFirstSelectedId<RentBuilding>(indices, list);
+  Widget _getSubViewContentForTransactions({required final List<int> selectedIds, required bool showAsNativeCurrency}) {
+    lastSelectedRental = getMoneyObjectFromFirstSelectedId<RentBuilding>(selectedIds, list);
     final SelectionController selectionController = Get.put(SelectionController());
     return ListViewTransactions(
       listController: Get.find<ListControllerSidePanel>(),

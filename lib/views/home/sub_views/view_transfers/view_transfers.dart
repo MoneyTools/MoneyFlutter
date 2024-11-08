@@ -1,3 +1,4 @@
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
@@ -19,6 +20,10 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   ViewTransfersState() {
     viewId = ViewId.viewTransfers;
   }
+
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: _getSidePanelViewDetails,
+  );
 
   @override
   String getClassNamePlural() {
@@ -100,18 +105,8 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getSidePanelViewDetails({
-    required final List<int> selectedIds,
-    required final bool isReadOnly,
-  }) {
-    if (selectedIds.isNotEmpty) {
-      final int id = selectedIds.first;
-      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
-      if (transfer != null) {
-        return TransferSenderReceiver(transfer: transfer);
-      }
-    }
-    return const CenterMessage(message: 'No item selected.');
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 
   void keepThisTransfer({
@@ -142,5 +137,19 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
       // transfer.transactionAmount.value = t.amount.value;
       list.add(transfer);
     }
+  }
+
+  Widget _getSidePanelViewDetails({
+    required final List<int> selectedIds,
+    required final bool isReadOnly,
+  }) {
+    if (selectedIds.isNotEmpty) {
+      final int id = selectedIds.first;
+      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
+      if (transfer != null) {
+        return TransferSenderReceiver(transfer: transfer);
+      }
+    }
+    return const CenterMessage(message: 'No item selected.');
   }
 }

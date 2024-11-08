@@ -2,6 +2,7 @@ import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
@@ -34,6 +35,12 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     false,
     true,
   ];
+
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onChart: _getSubViewContentForChart,
+    onTransactions: _getSubViewContentForTransactions,
+  );
 
   @override
   Widget buildHeader([final Widget? child]) {
@@ -157,31 +164,8 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<MoneyObject> getSidePanelTransactions() {
-    final Category? category = getFirstSelectedItem() as Category?;
-    if (category != null) {
-      return _getTransactionsFromSelectedIds([category.uniqueId]);
-    }
-    return [];
-  }
-
-  @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 
   @override

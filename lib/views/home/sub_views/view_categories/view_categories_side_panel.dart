@@ -37,7 +37,7 @@ extension ViewCategoriesSidePanel on ViewCategoriesState {
   }
 
   // Details Panel for Transactions Categories
-  Widget _getSubViewContentForTransactions(final List<int> selectedIds) {
+  Widget _getSubViewContentForTransactions({required final List<int> selectedIds, required bool showAsNativeCurrency}) {
     final SelectionController selectionController = Get.put(SelectionController());
 
     return ListViewTransactions(

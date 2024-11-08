@@ -3,6 +3,7 @@ import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/gaps.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/data/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/data/models/money_objects/splits/money_split.dart';
@@ -29,6 +30,13 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   RentBuilding? lastSelectedRental;
+
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onChart: _getSubViewContentForChart,
+    onPnL: _getSubViewContentForPnL,
+    onTransactions: _getSubViewContentForTransactions,
+  );
 
   @override
   String getClassNamePlural() {
@@ -61,19 +69,13 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  List<MoneyObject> getSidePanelTransactions() {
-    return getTransactionLastSelectedItem();
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 
   @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
+  List<MoneyObject> getSidePanelTransactions() {
+    return getTransactionLastSelectedItem();
   }
 
   @override
@@ -102,14 +104,6 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
         ),
       ),
     );
-  }
-
-  @override
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
   }
 
   String getUnitsAsString(final List<RentUnit> listOfUnits) {

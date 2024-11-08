@@ -1,6 +1,7 @@
 import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/payees/payee.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -22,6 +23,12 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   ViewPayeesState() {
     viewId = ViewId.viewPayees;
   }
+
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onChart: _getSubViewContentForChart,
+    onTransactions: _getSubViewContentForTransactions,
+  );
 
   /// add more top level action buttons
   @override
@@ -100,6 +107,11 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   }
 
   @override
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
+  }
+
+  @override
   List<MoneyObject> getSidePanelTransactions() {
     final Payee? payee = getFirstSelectedItem() as Payee?;
     if (payee != null && payee.fieldId.value > -1) {
@@ -108,24 +120,5 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
       );
     }
     return [];
-  }
-
-  @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
   }
 }

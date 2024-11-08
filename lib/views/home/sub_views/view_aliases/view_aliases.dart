@@ -1,6 +1,7 @@
 import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/aliases/alias.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -18,6 +19,11 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
   ViewAliasesState() {
     viewId = ViewId.viewAliases;
   }
+
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onTransactions: getSidePanelViewTransactions,
+  );
 
   @override
   String getClassNamePlural() {
@@ -51,14 +57,10 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return const Text('No chart for Aliases');
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 
-  @override
   Widget getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,

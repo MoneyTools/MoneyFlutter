@@ -3,6 +3,7 @@ import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/charts/my_line_chart.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
@@ -23,6 +24,12 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   ViewInvestmentsState() {
     viewId = ViewId.viewInvestments;
   }
+
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: getSidePanelViewDetails,
+    onChart: _getSubViewContentForChart,
+    onTransactions: _getSubViewContentForTransactions,
+  );
 
   /// add more top level action buttons
   @override
@@ -112,21 +119,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   }
 
   @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForTransactions(selectedIds);
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
   }
 }

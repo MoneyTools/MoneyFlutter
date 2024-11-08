@@ -9,6 +9,7 @@ import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/label_and_amount.dart';
 import 'package:money/core/widgets/money_widget.dart';
+import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/core/widgets/text_title.dart';
@@ -44,6 +45,11 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   final List<Widget> _pivots = <Widget>[];
+  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
+    onDetails: _getSidePanelViewDetails,
+    onChart: _getSubViewContentForChart,
+    onTransactions: _getSidePanelViewTransactions,
+  );
 
   // Footer related
   final DateRange _footerColumnDate = DateRange();
@@ -218,54 +224,17 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   @override
+  SidePanelSupport getSidePanelSupport() {
+    return _sidePanelSupport;
+  }
+
+  @override
   List<MoneyObject> getSidePanelTransactions() {
     final Account? account = getFirstSelectedItem() as Account?;
     if (account != null) {
       return getTransactionForLastSelectedAccount(account);
     }
     return [];
-  }
-
-  @override
-  Widget getSidePanelViewChart({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    return _getSubViewContentForChart(
-      selectedIds: selectedIds,
-      showAsNativeCurrency: showAsNativeCurrency,
-    );
-  }
-
-  @override
-  Widget getSidePanelViewDetails({
-    required final List<int> selectedIds,
-    required final bool isReadOnly,
-  }) {
-    return _getSidePanelViewDetails(selectedIds: selectedIds, isReadOnly: isReadOnly);
-  }
-
-  @override
-  Widget getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    final Account? account = getFirstSelectedItem() as Account?;
-    if (account == null) {
-      return const CenterMessage(message: 'No account selected.');
-    } else {
-      if (account.fieldType.value == AccountType.loan) {
-        return _getSubViewContentForTransactionsForLoans(
-          account: account,
-          showAsNativeCurrency: showAsNativeCurrency,
-        );
-      } else {
-        return _getSubViewContentForTransactions(
-          account: account,
-          showAsNativeCurrency: showAsNativeCurrency,
-        );
-      }
-    }
   }
 
   @override
@@ -331,5 +300,27 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         ),
       ),
     );
+  }
+
+  Widget _getSidePanelViewTransactions({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    final Account? account = getFirstSelectedItem() as Account?;
+    if (account == null) {
+      return const CenterMessage(message: 'No account selected.');
+    } else {
+      if (account.fieldType.value == AccountType.loan) {
+        return _getSubViewContentForTransactionsForLoans(
+          account: account,
+          showAsNativeCurrency: showAsNativeCurrency,
+        );
+      } else {
+        return _getSubViewContentForTransactions(
+          account: account,
+          showAsNativeCurrency: showAsNativeCurrency,
+        );
+      }
+    }
   }
 }
