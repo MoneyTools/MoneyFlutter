@@ -1,8 +1,10 @@
 // ignore_for_file: prefer_conditional_assignment
 
 import 'package:money/core/helpers/accumulator.dart';
+import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
+import 'package:money/core/widgets/chart.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/models/money_objects/transfers/transfer.dart';
@@ -268,71 +270,72 @@ class Transactions extends MoneyObjects<Transaction> {
     return timeAndAmounts;
   }
 
-  static List<Pair<DateTime, double>> transactionSumByYearly(List<Transaction> transactions) {
-    Map<int, double> yearSums = {};
+  static List<PairXY> transactionSumByYearly(List<Transaction> transactions) {
+    Map<String, double> yearSums = {};
     for (final t in transactions) {
-      final year = t.fieldDateTime.value!.year;
-      yearSums[year] = (yearSums[year] ?? 0) + t.fieldAmount.value.toDouble();
+      final String yearDateTimeAsString = t.fieldDateTime.value!.year.toString();
+      yearSums[yearDateTimeAsString] = (yearSums[yearDateTimeAsString] ?? 0) + t.fieldAmount.value.toDouble();
     }
 
-    List<Pair<DateTime, double>> summedYears = [];
+    List<PairXY> summedYears = [];
     yearSums.forEach((year, sum) {
-      summedYears.add(Pair(DateTime(year), sum));
+      summedYears.add(PairXY(year, sum));
     });
 
     // Sort by year
-    summedYears.sort((a, b) => a.first.compareTo(b.first));
+    summedYears.sort((a, b) => a.xText.compareTo(b.xText));
     return summedYears;
   }
 
-  static List<Pair<DateTime, double>> transactionSumDaily(List<Transaction> transactions) {
-    List<Pair<DateTime, double>> timeAndAmounts = [];
+  static List<PairXY> transactionSumDaily(List<Transaction> transactions) {
+    List<PairXY> timeAndAmounts = [];
     for (final t in transactions) {
-      DateTime date = DateTime(t.fieldDateTime.value!.year, t.fieldDateTime.value!.month, t.fieldDateTime.value!.day);
-      timeAndAmounts.add(Pair<DateTime, double>(date, t.fieldAmount.value.toDouble()));
+      final String dateAsString =
+          dateToString(DateTime(t.fieldDateTime.value!.year, t.fieldDateTime.value!.month, t.fieldDateTime.value!.day));
+      timeAndAmounts.add(PairXY(dateAsString, t.fieldAmount.value.toDouble()));
     }
     // sort by date time
-    timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
+    timeAndAmounts.sort((a, b) => a.xText.compareTo(b.xText));
     return timeAndAmounts;
   }
 
-  static List<Pair<DateTime, double>> transactionSumMonthly(List<Transaction> transactions) {
-    Map<DateTime, double> monthSums = {};
+  static List<PairXY> transactionSumMonthly(List<Transaction> transactions) {
+    Map<String, double> monthSums = {};
 
     for (final t in transactions) {
       final date = t.fieldDateTime.value!;
       // Create a DateTime object representing the first day of the month.
-      final firstDayOfMonth = DateTime(date.year, date.month);
+      final String firstDayOfMonth = '${date.year}\n${date.month}';
       monthSums[firstDayOfMonth] = (monthSums[firstDayOfMonth] ?? 0) + t.fieldAmount.value.toDouble();
     }
 
-    List<Pair<DateTime, double>> summedMonths = [];
+    List<PairXY> summedMonths = [];
     monthSums.forEach((key, value) {
-      summedMonths.add(Pair(key, value));
+      summedMonths.add(PairXY(key, value));
     });
 
     // Sort by date
-    summedMonths.sort((a, b) => a.first.compareTo(b.first));
+    summedMonths.sort((a, b) => a.xText.compareTo(b.xText));
     return summedMonths;
   }
 
-  static List<Pair<DateTime, double>> transactionSumWeekly(List<Transaction> transactions) {
-    Map<DateTime, double> weekSums = {};
+  static List<PairXY> transactionSumWeekly(List<Transaction> transactions) {
+    Map<String, double> weekSums = {};
 
     for (final t in transactions) {
       final date = t.fieldDateTime.value!;
       // Get the first day of the week (Sunday).
-      final firstDayOfWeek = date.subtract(Duration(days: date.weekday));
+      final String firstDayOfWeek = dateToString(date.subtract(Duration(days: date.weekday)));
       weekSums[firstDayOfWeek] = (weekSums[firstDayOfWeek] ?? 0) + t.fieldAmount.value.toDouble();
     }
 
-    List<Pair<DateTime, double>> summedWeeks = [];
+    List<PairXY> summedWeeks = [];
     weekSums.forEach((key, value) {
-      summedWeeks.add(Pair(key, value));
+      summedWeeks.add(PairXY(key, value));
     });
 
     // Sort by date
-    summedWeeks.sort((a, b) => a.first.compareTo(b.first));
+    summedWeeks.sort((a, b) => a.xText.compareTo(b.xText));
     return summedWeeks;
   }
 }

@@ -209,8 +209,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
     return Chart(
       list: list,
-      variableNameHorizontal: 'Month',
-      variableNameVertical: 'Transactions',
     );
   }
 

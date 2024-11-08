@@ -195,8 +195,6 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       return Chart(
         key: Key('$selectedIds $showAsNativeCurrency'),
         list: listOfPairXY.take(100).toList(),
-        variableNameHorizontal: 'Year',
-        variableNameVertical: 'FBar',
         currency: showAsNativeCurrency ? account.fieldCurrency.value : Constants.defaultCurrency,
       );
     } else {
@@ -219,8 +217,6 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       return Chart(
         key: Key(selectedIds.toString()),
         list: listOfPairXY.take(10).toList(),
-        variableNameHorizontal: 'Account',
-        variableNameVertical: 'Balance',
       );
     }
   }

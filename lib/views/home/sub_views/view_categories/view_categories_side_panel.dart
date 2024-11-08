@@ -30,8 +30,6 @@ extension ViewCategoriesSidePanel on ViewCategoriesState {
       return Chart(
         key: Key(selectedIds.toString()),
         list: list.take(10).toList(),
-        variableNameHorizontal: 'Category',
-        variableNameVertical: 'Balance',
       );
     } else {
       return TransactionTimelineChart(transactions: _getTransactionsFromSelectedIds(selectedIds));

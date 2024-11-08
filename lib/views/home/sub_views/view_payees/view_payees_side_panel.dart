@@ -21,8 +21,6 @@ extension ViewPayeesSidePanel on ViewPayeesState {
       return Chart(
         key: Key(selectedIds.toString()),
         list: list.take(10).toList(),
-        variableNameHorizontal: 'Payee',
-        variableNameVertical: 'Transactions',
       );
     }
 

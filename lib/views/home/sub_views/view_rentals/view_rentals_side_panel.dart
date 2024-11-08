@@ -9,12 +9,10 @@ extension ViewRentalsSidePanel on ViewRentalsState {
     if (selectedIds.isEmpty) {
       final List<PairXY> list = <PairXY>[];
       for (final RentBuilding entry in getList()) {
-        list.add(PairXY(entry.fieldName.value, entry.fieldProfit.value.toDouble()));
+        list.add(PairXY(entry.fieldName.value, entry.lifeTimePnL.profit));
       }
       return Chart(
         list: list,
-        variableNameHorizontal: 'Rental',
-        variableNameVertical: 'Profit',
       );
     }
 
