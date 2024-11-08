@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:money/core/helpers/ranges.dart';
+import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/widgets/chart.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/icon_button.dart';
@@ -31,12 +31,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       return const Center(child: Text('No transactions'));
     }
 
-    final dateRange = DateRange();
-    for (final t in widget.transactions) {
-      dateRange.inflate(t.fieldDateTime.value);
-    }
-
-    List<PairXY> sumByPeriod = _calculateSumByPeriod(dateRange);
+    List<PairXY> sumByPeriod = _calculateSumByPeriod();
 
     return Column(
       children: [
@@ -78,16 +73,39 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
     );
   }
 
-  List<PairXY> _calculateSumByPeriod(DateRange dateRange) {
+  List<PairXY> _calculateSumByPeriod() {
     switch (_selectedScale) {
+      // DAILY
       case TimelineScale.daily:
-        return Transactions.transactionSumDaily(widget.transactions);
+        return Transactions.transactionSumBy(
+          widget.transactions,
+          (date) => dateToString(
+            DateTime(date.year, date.month, date.day),
+          ),
+        );
+
+      // WEEKLY
       case TimelineScale.weekly:
-        return Transactions.transactionSumWeekly(widget.transactions);
+        return Transactions.transactionSumBy(
+          widget.transactions,
+          (date) => dateToString(
+            date.subtract(Duration(days: date.weekday)),
+          ),
+        );
+
+      // MONTHLY
       case TimelineScale.monthly:
-        return Transactions.transactionSumMonthly(widget.transactions);
+        return Transactions.transactionSumBy(
+          widget.transactions,
+          (date) => '${date.year}\n${date.month}',
+        );
+
+      // YEARLY
       case TimelineScale.yearly:
-        return Transactions.transactionSumByYearly(widget.transactions);
+        return Transactions.transactionSumBy(
+          widget.transactions,
+          (date) => date.year.toString(),
+        );
     }
   }
 

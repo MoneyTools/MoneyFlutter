@@ -1,7 +1,6 @@
 // ignore_for_file: prefer_conditional_assignment
 
 import 'package:money/core/helpers/accumulator.dart';
-import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/chart.dart';
@@ -257,6 +256,55 @@ class Transactions extends MoneyObjects<Transaction> {
     );
   }
 
+  /// Aggregates transactions by a custom key generated from their date and sums their amounts.
+  ///
+  /// This method takes a list of [transactions] and a [keyGenerator] function.
+  /// The [keyGenerator] function takes a [DateTime] object (the transaction date) and
+  /// returns a [String] that will be used as the key to group transactions.
+  ///
+  /// The function returns a list of [PairXY] objects. Each [PairXY] represents a group
+  /// of transactions with the same key. The `x` value of the [PairXY] is the generated
+  /// key (a string), and the `y` value is the sum of the amounts of all transactions
+  /// in that group.
+  ///
+  /// The returned list is sorted alphabetically by the `x` value (the generated key).
+  ///
+  /// Example:
+  /// ```dart
+  /// // Group transactions by month and year (e.g., "2024-01", "2024-02")
+  /// List<PairXY> monthlySums = Transactions.transactionSumBy(
+  ///   transactions,
+  ///   (dateTime) => "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}",
+  /// );
+  /// ```
+  static List<PairXY> transactionSumBy(
+    final List<Transaction> transactions,
+    final String Function(DateTime) keyGenerator,
+  ) {
+    final Map<String, double> sums = <String, double>{};
+
+    for (final Transaction t in transactions) {
+      final String key = keyGenerator(t.fieldDateTime.value!);
+      sums[key] = (sums[key] ?? 0) + t.fieldAmount.value.toDouble();
+    }
+
+    final List<PairXY> result = sums.entries.map((e) => PairXY(e.key, e.value)).toList();
+    result.sort((a, b) => a.xText.compareTo(b.xText));
+    return result;
+  }
+
+  /// Aggregates transactions by day and sums their amounts.
+  ///
+  /// This method takes a list of [transactions] and returns a list of
+  /// [Pair<int, double>] objects. Each [Pair] represents a day's worth of
+  /// transactions.
+  ///
+  /// The `first` value of the [Pair] is the number of days since the epoch
+  /// (millisecondsSinceEpoch ~/ Duration.millisecondsPerDay), representing the day.
+  /// The `second` value of the [Pair] is the sum of the amounts of all transactions
+  /// on that day.
+  ///
+  /// The returned list is sorted chronologically by the `first` value (the day).
   static List<Pair<int, double>> transactionSumByTime(
     List<Transaction> transactions,
   ) {
@@ -268,74 +316,5 @@ class Transactions extends MoneyObjects<Transaction> {
     // sort by date time
     timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
     return timeAndAmounts;
-  }
-
-  static List<PairXY> transactionSumByYearly(List<Transaction> transactions) {
-    Map<String, double> yearSums = {};
-    for (final t in transactions) {
-      final String yearDateTimeAsString = t.fieldDateTime.value!.year.toString();
-      yearSums[yearDateTimeAsString] = (yearSums[yearDateTimeAsString] ?? 0) + t.fieldAmount.value.toDouble();
-    }
-
-    List<PairXY> summedYears = [];
-    yearSums.forEach((year, sum) {
-      summedYears.add(PairXY(year, sum));
-    });
-
-    // Sort by year
-    summedYears.sort((a, b) => a.xText.compareTo(b.xText));
-    return summedYears;
-  }
-
-  static List<PairXY> transactionSumDaily(List<Transaction> transactions) {
-    List<PairXY> timeAndAmounts = [];
-    for (final t in transactions) {
-      final String dateAsString =
-          dateToString(DateTime(t.fieldDateTime.value!.year, t.fieldDateTime.value!.month, t.fieldDateTime.value!.day));
-      timeAndAmounts.add(PairXY(dateAsString, t.fieldAmount.value.toDouble()));
-    }
-    // sort by date time
-    timeAndAmounts.sort((a, b) => a.xText.compareTo(b.xText));
-    return timeAndAmounts;
-  }
-
-  static List<PairXY> transactionSumMonthly(List<Transaction> transactions) {
-    Map<String, double> monthSums = {};
-
-    for (final t in transactions) {
-      final date = t.fieldDateTime.value!;
-      // Create a DateTime object representing the first day of the month.
-      final String firstDayOfMonth = '${date.year}\n${date.month}';
-      monthSums[firstDayOfMonth] = (monthSums[firstDayOfMonth] ?? 0) + t.fieldAmount.value.toDouble();
-    }
-
-    List<PairXY> summedMonths = [];
-    monthSums.forEach((key, value) {
-      summedMonths.add(PairXY(key, value));
-    });
-
-    // Sort by date
-    summedMonths.sort((a, b) => a.xText.compareTo(b.xText));
-    return summedMonths;
-  }
-
-  static List<PairXY> transactionSumWeekly(List<Transaction> transactions) {
-    Map<String, double> weekSums = {};
-
-    for (final t in transactions) {
-      final date = t.fieldDateTime.value!;
-      // Get the first day of the week (Sunday).
-      final String firstDayOfWeek = dateToString(date.subtract(Duration(days: date.weekday)));
-      weekSums[firstDayOfWeek] = (weekSums[firstDayOfWeek] ?? 0) + t.fieldAmount.value.toDouble();
-    }
-
-    List<PairXY> summedWeeks = [];
-    weekSums.forEach((key, value) {
-      summedWeeks.add(PairXY(key, value));
-    });
-
-    // Sort by date
-    summedWeeks.sort((a, b) => a.xText.compareTo(b.xText));
-    return summedWeeks;
   }
 }
