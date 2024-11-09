@@ -10,12 +10,21 @@ class SidePanelSupport {
     this.onChart,
     this.onTransactions,
     this.onPnL,
+    this.onCopyToClipboard,
   });
+
+  late final List<SidePanelSubViewEnum> supportedSubViews = [
+    if (onDetails != null) SidePanelSubViewEnum.details,
+    if (onChart != null) SidePanelSubViewEnum.chart,
+    if (onTransactions != null) SidePanelSubViewEnum.transactions,
+    if (onPnL != null) SidePanelSubViewEnum.pnl,
+  ];
 
   int selectedCurrency = 0;
 
   Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onTransactions;
   Function? onChart;
+  Function? onCopyToClipboard;
   Function? onDetails;
   Function? onPnL;
 
@@ -63,15 +72,6 @@ class SidePanelSupport {
       default:
         return const Text('- empty -');
     }
-  }
-
-  List<SidePanelSubViewEnum> get getSubViewEnumSupported {
-    return [
-      if (onDetails != null) SidePanelSubViewEnum.details,
-      if (onChart != null) SidePanelSubViewEnum.chart,
-      if (onTransactions != null) SidePanelSubViewEnum.transactions,
-      if (onPnL != null) SidePanelSubViewEnum.pnl,
-    ];
   }
 }
 
@@ -140,7 +140,7 @@ class SidePanel extends StatelessWidget {
                 onExpanded: onExpanded,
 
                 // SubPanel
-                supportedSubViews: sidePanelSupport.getSubViewEnumSupported,
+                sidePanelSupport: sidePanelSupport,
                 subViewSelected: subPanelSelected,
                 subViewSelectionChanged: subPanelSelectionChanged,
 

@@ -1,21 +1,12 @@
-import 'package:money/core/controller/list_controller.dart';
-import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
-import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/rent_buildings/rent_building.dart';
 import 'package:money/data/models/money_objects/rental_unit/rental_unit.dart';
-import 'package:money/data/models/money_objects/splits/money_split.dart';
-import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
-import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/money_object_card.dart';
-import 'package:money/views/home/sub_views/view_rentals/rental_pnl.dart';
-import 'package:money/views/home/sub_views/view_rentals/rental_pnl_card.dart';
-
-part 'view_rentals_side_panel.dart';
+import 'package:money/views/home/sub_views/view_rentals/view_rentals_side_panel.dart';
 
 class ViewRentals extends ViewForMoneyObjects {
   const ViewRentals({super.key});
@@ -33,9 +24,9 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
     onDetails: getSidePanelViewDetails,
-    onChart: _getSubViewContentForChart,
-    onPnL: _getSubViewContentForPnL,
-    onTransactions: _getSubViewContentForTransactions,
+    onChart: ViewRentalsSidePanel.getSubViewContentForChart,
+    onPnL: ViewRentalsSidePanel.getSubViewContentForPnL,
+    onTransactions: ViewRentalsSidePanel.getSubViewContentForTransactions,
   );
 
   @override
@@ -75,7 +66,11 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   @override
   List<MoneyObject> getSidePanelTransactions() {
-    return getTransactionLastSelectedItem();
+    final RentBuilding? item = getFirstSelectedItem() as RentBuilding?;
+    if (item == null) {
+      return [];
+    }
+    return ViewRentalsSidePanel.getTransactionLastSelectedItem(item);
   }
 
   @override
@@ -99,23 +94,14 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
               title: getClassNameSingular(),
               moneyObject: selectedItem,
             ),
-            _buildRenters(context, selectedItem),
+            buildRenters(context, selectedItem),
           ],
         ),
       ),
     );
   }
 
-  String getUnitsAsString(final List<RentUnit> listOfUnits) {
-    final List<String> listAsText = <String>[];
-    for (RentUnit unit in listOfUnits) {
-      listAsText.add('${unit.fieldName}:${unit.fieldRenter}');
-    }
-
-    return listAsText.join('\n');
-  }
-
-  Widget _buildRenters(final BuildContext context, final RentBuilding building) {
+  Widget buildRenters(final BuildContext context, final RentBuilding building) {
     final rentersInThisBuilding = Data()
         .rentUnits
         .iterableList()
@@ -150,5 +136,14 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
       ),
       count: rentersInThisBuilding.length,
     );
+  }
+
+  String getUnitsAsString(final List<RentUnit> listOfUnits) {
+    final List<String> listAsText = <String>[];
+    for (RentUnit unit in listOfUnits) {
+      listAsText.add('${unit.fieldName}:${unit.fieldRenter}');
+    }
+
+    return listAsText.join('\n');
   }
 }
