@@ -23,12 +23,16 @@ class Currencies extends MoneyObjects<Currency> {
     );
   }
 
+  /// Converts a currency symbol to the corresponding country's alpha-2 code.
+  ///
+  /// If no matching currency is found, returns 'US' as the default value.
   String fromSymbolToCountryAlpha2(final String symbol) {
-    Currency? currency = getCurrencyFromSymbol(symbol);
+    final Currency? currency = getCurrencyFromSymbol(symbol);
     if (currency == null) {
       return 'US';
     }
-    return currency.fieldCultureCode.value;
+    final String local = currency.fieldCultureCode.getValueForSerialization(currency);
+    return local;
   }
 
   Currency? getCurrencyFromSymbol(final String symbolToMatch) {

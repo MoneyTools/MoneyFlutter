@@ -26,7 +26,7 @@ class CurrencyLabel extends StatelessWidget {
           children: [
             Text(threeLetterCurrencySymbol),
             gapSmall(),
-            Image.asset('assets/flags/$flagId.png', height: 10),
+            if (flagId.isNotEmpty) Image.asset('assets/flags/$flagId.png', height: 10),
           ],
         ),
       ),
