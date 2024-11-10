@@ -9,7 +9,11 @@ import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transacti
 import 'package:money/views/home/sub_views/view_rentals/rental_pnl.dart';
 import 'package:money/views/home/sub_views/view_rentals/rental_pnl_card.dart';
 
+/// Contains the logic for the side panel in the View Rentals screen.
 class ViewRentalsSidePanel {
+  /// Filters transactions based on whether their categories match the rental property's categories for income, management, repairs, maintenance, taxes or interest.
+  ///
+  /// Considers split transactions by checking each split individually.
   static bool filterByRentalCategories(
     final Transaction t,
     final RentBuilding rental,
@@ -28,45 +32,74 @@ class ViewRentalsSidePanel {
     return isMatchingCategories(categoryIdToMatch, rental);
   }
 
+  /// Retrieves a list of all rent buildings, including deleted ones.
   static List<RentBuilding> getList() {
     return Data().rentBuildings.iterableList(includeDeleted: true).toList();
   }
 
+  /// Calculates the Profit & Loss (P&L) over the years for a given rental property.
+  /// Currently unused and incomplete. Needs further implementation to calculate and store P&L values.
   void getPnLOverYears(RentBuilding rental) {
     for (final transaction in Data().transactions.iterableList()) {
-      if (rental.categoryForIncomeTreeIds.contains(transaction.fieldCategoryId.value)) {}
+      if (rental.categoryForIncomeTreeIds.contains(transaction.fieldCategoryId.value)) {
+        // TODO: Implement P&L calculation logic here
+      }
     }
   }
 
-  /// Details panels Chart panel for Payees
+  /// Returns the content for the chart sub-view in the details panel.
+  /// Displays either a chart of lifetime P&L for all rentals (if no rental is selected)
+  /// or a chart of cumulative profit over time for the selected rental.
   static Widget getSubViewContentForChart({
     required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
+    required final bool showAsNativeCurrency, // Currently unused
   }) {
-    final List<PairXY> list = <PairXY>[];
-    for (final RentBuilding entry in getList()) {
-      list.add(PairXY(entry.fieldName.value, entry.lifeTimePnL.profit));
+    if (selectedIds.isEmpty) {
+      /// UNSELECTED: Chart for all rentals' lifetime P&L
+      final List<PairXY> list = <PairXY>[];
+      for (final RentBuilding entry in getList()) {
+        list.add(PairXY(entry.fieldName.value, entry.lifeTimePnL.profit));
+      }
+      return Chart(
+        list: list,
+      );
+    } else {
+      // SELECTED: Show cumulated profit over time for the selected rental(s)
+      RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+
+      List<PairXY> dataPoints = [];
+      double cumulativeProfit = 0;
+
+      if (!rental.dateRangeOfOperation.hasNullDates) {
+        for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
+          RentalPnL? pnl = rental.pnlOverYears[year];
+          pnl ??= RentalPnL(date: DateTime(year, 1, 1));
+          cumulativeProfit += pnl.profit;
+          dataPoints.add(PairXY(year.toString(), cumulativeProfit));
+        }
+      }
+
+      return Chart(
+        list: dataPoints,
+      );
     }
-    return Chart(
-      list: list,
-    );
   }
 
+  /// Returns the content for the P&L sub-view in the details panel.
+  /// Displays a message to select a rental if none is selected, otherwise displays
+  /// a horizontal scrollable list of yearly and lifetime P&L cards for the selected rental.
   static Widget getSubViewContentForPnL({
     required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
+    required final bool showAsNativeCurrency, // Currently unused
   }) {
     if (selectedIds.isEmpty) {
       return Text('Select a Rental property to see its P&L');
     }
 
-    //
     // Single Rental property selected
-    //
-
     RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
-    // show PnL for the selected rental property, per year
+    // Show PnL for the selected rental property, per year
     List<Widget> pnlCards = [];
 
     if (!rental.dateRangeOfOperation.hasNullDates) {
@@ -93,10 +126,11 @@ class ViewRentalsSidePanel {
     );
   }
 
-  // Details Panel for Transactions Payees
+  /// Returns the content for the transactions sub-view in the details panel.
+  /// Displays a list of transactions associated with the selected rental property.
   static Widget getSubViewContentForTransactions({
     required final List<int> selectedIds,
-    required bool showAsNativeCurrency,
+    required bool showAsNativeCurrency, // Currently unused
   }) {
     RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
     final SelectionController selectionController = Get.put(SelectionController());
@@ -115,6 +149,7 @@ class ViewRentalsSidePanel {
     );
   }
 
+  /// Retrieves transactions filtered by the provided rental property's categories.
   static List<Transaction> getTransactionLastSelectedItem(RentBuilding rentBuildings) {
     return getTransactions(
       filter: (final Transaction transaction) => filterByRentalCategories(
@@ -124,6 +159,7 @@ class ViewRentalsSidePanel {
     );
   }
 
+  /// Checks if a given category ID is part of the rental's relevant category trees (income, management, repairs, etc.).
   static bool isMatchingCategories(
     final num categoryIdToMatch,
     final RentBuilding rental,
