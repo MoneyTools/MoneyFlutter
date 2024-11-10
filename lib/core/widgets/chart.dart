@@ -201,6 +201,7 @@ class PairXYY {
 
   String xText = '';
   num yValue1 = 0.0;
+
   num? yValue2;
 }
 

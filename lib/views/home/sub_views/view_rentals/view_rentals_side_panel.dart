@@ -72,13 +72,11 @@ class ViewRentalsSidePanel {
       RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
       List<PairXYY> dataPoints = [];
-      double cumulativeProfit = 0;
 
       if (!rental.dateRangeOfOperation.hasNullDates) {
         for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
           RentalPnL? pnl = rental.pnlOverYears[year];
           pnl ??= RentalPnL(date: DateTime(year, 1, 1));
-          cumulativeProfit += pnl.profit;
           dataPoints.add(PairXYY(year.toString(), pnl.profit, pnl.income));
         }
       }
