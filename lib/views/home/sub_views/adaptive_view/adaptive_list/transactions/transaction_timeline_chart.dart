@@ -31,7 +31,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       return const Center(child: Text('No transactions'));
     }
 
-    List<PairXY> sumByPeriod = _calculateSumByPeriod();
+    List<PairXYY> sumByPeriod = _calculateSumByPeriod();
 
     return Column(
       children: [
@@ -73,7 +73,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
     );
   }
 
-  List<PairXY> _calculateSumByPeriod() {
+  List<PairXYY> _calculateSumByPeriod() {
     switch (_selectedScale) {
       // DAILY
       case TimelineScale.daily:
@@ -109,9 +109,9 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
     }
   }
 
-  void _copyToClipboard(List<PairXY> data) {
+  void _copyToClipboard(List<PairXYY> data) {
     final String clipboardData =
-        data.map((pair) => '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue)}').join('\n');
+        data.map((pair) => '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue1)}').join('\n');
     Clipboard.setData(ClipboardData(text: clipboardData));
     // Optional: Show a snackbar to confirm copy
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));

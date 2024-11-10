@@ -298,12 +298,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       }
     });
 
-    final List<PairXY> list = <PairXY>[];
+    final List<PairXYY> list = <PairXYY>[];
     tallyPerMonths.forEach((final String key, final num value) {
-      list.add(PairXY(key, value));
+      list.add(PairXYY(key, value));
     });
 
-    list.sort((final PairXY a, final PairXY b) => a.xText.compareTo(b.xText));
+    list.sort((final PairXYY a, final PairXYY b) => a.xText.compareTo(b.xText));
 
     return Chart(
       list: list,

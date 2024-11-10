@@ -262,8 +262,8 @@ class Transactions extends MoneyObjects<Transaction> {
   /// The [keyGenerator] function takes a [DateTime] object (the transaction date) and
   /// returns a [String] that will be used as the key to group transactions.
   ///
-  /// The function returns a list of [PairXY] objects. Each [PairXY] represents a group
-  /// of transactions with the same key. The `x` value of the [PairXY] is the generated
+  /// The function returns a list of [PairXYY] objects. Each [PairXYY] represents a group
+  /// of transactions with the same key. The `x` value of the [PairXYY] is the generated
   /// key (a string), and the `y` value is the sum of the amounts of all transactions
   /// in that group.
   ///
@@ -277,7 +277,7 @@ class Transactions extends MoneyObjects<Transaction> {
   ///   (dateTime) => "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}",
   /// );
   /// ```
-  static List<PairXY> transactionSumBy(
+  static List<PairXYY> transactionSumBy(
     final List<Transaction> transactions,
     final String Function(DateTime) keyGenerator,
   ) {
@@ -288,7 +288,7 @@ class Transactions extends MoneyObjects<Transaction> {
       sums[key] = (sums[key] ?? 0) + t.fieldAmount.value.toDouble();
     }
 
-    final List<PairXY> result = sums.entries.map((e) => PairXY(e.key, e.value)).toList();
+    final List<PairXYY> result = sums.entries.map((e) => PairXYY(e.key, e.value)).toList();
     result.sort((a, b) => a.xText.compareTo(b.xText));
     return result;
   }

@@ -18,13 +18,13 @@ extension ViewCategoriesSidePanel on ViewCategoriesState {
           map[topCategory.fieldName.value] = map[topCategory.fieldName.value]! + item.fieldSum.value.toDouble();
         }
       }
-      final List<PairXY> list = <PairXY>[];
+      final List<PairXYY> list = <PairXYY>[];
       map.forEach((final String key, final num value) {
-        list.add(PairXY(key, value));
+        list.add(PairXYY(key, value));
       });
 
-      list.sort((final PairXY a, final PairXY b) {
-        return (b.yValue.abs() - a.yValue.abs()).toInt();
+      list.sort((final PairXYY a, final PairXYY b) {
+        return (b.yValue1.abs() - a.yValue1.abs()).toInt();
       });
 
       return Chart(

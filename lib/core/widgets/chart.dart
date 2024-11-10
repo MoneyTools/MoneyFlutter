@@ -17,7 +17,7 @@ class Chart extends StatelessWidget {
   });
 
   final String currency;
-  final List<PairXY> list;
+  final List<PairXYY> list;
 
   @override
   Widget build(final BuildContext context) {
@@ -33,20 +33,32 @@ class Chart extends StatelessWidget {
 
         // 1. Calculate available width:
         double barWidth = getBarWidth(constraints, list.length);
+        barWidth /= 2;
 
         for (int index = 0; index < list.length; index++) {
-          final PairXY entry = list[index];
-          maxY = max(maxY, entry.yValue.toDouble());
-          minY = min(minY, entry.yValue.toDouble());
+          final PairXYY entry = list[index];
+          maxY = max(maxY, entry.yValue1.toDouble());
+          minY = min(minY, entry.yValue1.toDouble());
+          if (entry.yValue2 != null) {
+            maxY = max(maxY, entry.yValue2!.toDouble());
+            minY = min(minY, entry.yValue2!.toDouble());
+          }
           final BarChartGroupData bar = BarChartGroupData(
             x: index,
             barRods: <BarChartRodData>[
               BarChartRodData(
-                toY: entry.yValue.toDouble(),
+                toY: entry.yValue1.toDouble(),
                 borderRadius: BorderRadius.circular(2),
-                color: entry.yValue < 0 ? Colors.red : Colors.green,
+                color: entry.yValue1 < 0 ? Colors.red : Colors.green,
                 width: barWidth, // Dynamically set the bar width
               ),
+              if (entry.yValue2 != null)
+                BarChartRodData(
+                  toY: entry.yValue2!.toDouble(),
+                  borderRadius: BorderRadius.circular(2),
+                  color: Colors.blue,
+                  width: barWidth, // Dynamically set the bar width
+                ),
             ],
           );
 
@@ -184,11 +196,12 @@ class Chart extends StatelessWidget {
   }
 }
 
-class PairXY {
-  PairXY(this.xText, this.yValue);
+class PairXYY {
+  PairXYY(this.xText, this.yValue1, [this.yValue2]);
 
   String xText = '';
-  num yValue = 0.0;
+  num yValue1 = 0.0;
+  num? yValue2;
 }
 
 FlBorderData getBorders(final double min, final double max) {

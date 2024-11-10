@@ -7,15 +7,15 @@ extension ViewPayeesSidePanel on ViewPayeesState {
     required final bool showAsNativeCurrency,
   }) {
     if (selectedIds.isEmpty) {
-      final List<PairXY> list = <PairXY>[];
+      final List<PairXYY> list = <PairXYY>[];
       for (final Payee item in getList()) {
         if (item.fieldName.value != 'Transfer') {
-          list.add(PairXY(item.fieldName.value, item.fieldCount.value));
+          list.add(PairXYY(item.fieldName.value, item.fieldCount.value));
         }
       }
 
-      list.sort((final PairXY a, final PairXY b) {
-        return (b.yValue.abs() - a.yValue.abs()).toInt();
+      list.sort((final PairXYY a, final PairXYY b) {
+        return (b.yValue1.abs() - a.yValue1.abs()).toInt();
       });
 
       return Chart(

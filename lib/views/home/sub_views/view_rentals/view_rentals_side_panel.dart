@@ -55,19 +55,23 @@ class ViewRentalsSidePanel {
     required final bool showAsNativeCurrency, // Currently unused
   }) {
     if (selectedIds.isEmpty) {
-      /// UNSELECTED: Chart for all rentals' lifetime P&L
-      final List<PairXY> list = <PairXY>[];
+      //
+      // UNSELECTED: Chart for all rentals' lifetime P&L
+      //
+      final List<PairXYY> list = <PairXYY>[];
       for (final RentBuilding entry in getList()) {
-        list.add(PairXY(entry.fieldName.value, entry.lifeTimePnL.profit));
+        list.add(PairXYY(entry.fieldName.value, entry.lifeTimePnL.profit));
       }
       return Chart(
         list: list,
       );
     } else {
+      //
       // SELECTED: Show cumulated profit over time for the selected rental(s)
+      //
       RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
-      List<PairXY> dataPoints = [];
+      List<PairXYY> dataPoints = [];
       double cumulativeProfit = 0;
 
       if (!rental.dateRangeOfOperation.hasNullDates) {
@@ -75,7 +79,7 @@ class ViewRentalsSidePanel {
           RentalPnL? pnl = rental.pnlOverYears[year];
           pnl ??= RentalPnL(date: DateTime(year, 1, 1));
           cumulativeProfit += pnl.profit;
-          dataPoints.add(PairXY(year.toString(), cumulativeProfit));
+          dataPoints.add(PairXYY(year.toString(), pnl.profit, pnl.income));
         }
       }
 

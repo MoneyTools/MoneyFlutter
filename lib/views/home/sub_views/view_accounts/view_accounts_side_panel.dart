@@ -176,7 +176,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final List<PairXY> listOfPairXY = <PairXY>[];
+    final List<PairXYY> listOfPairXY = <PairXYY>[];
 
     if (selectedIds.length == 1) {
       final Account? account = getFirstSelectedItemFromSelectedList(selectedIds) as Account?;
@@ -188,7 +188,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       account.maxBalancePerYears.forEach((key, value) {
         double valueCurrencyChoice = showAsNativeCurrency ? value : value * account.getCurrencyRatio();
 
-        listOfPairXY.add(PairXY(key.toString(), valueCurrencyChoice));
+        listOfPairXY.add(PairXYY(key.toString(), valueCurrencyChoice));
       });
       listOfPairXY.sort((a, b) => compareAsciiLowerCase(a.xText, b.xText));
 
@@ -202,7 +202,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         final Account account = item as Account;
         if (account.isOpen) {
           listOfPairXY.add(
-            PairXY(
+            PairXYY(
               account.fieldName.value,
               showAsNativeCurrency ? account.balance : account.fieldBalanceNormalized.getValueForDisplay(account),
             ),
@@ -211,7 +211,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       }
 
       listOfPairXY.sort(
-        (final PairXY a, final PairXY b) => (b.yValue.abs() - a.yValue.abs()).toInt(),
+        (final PairXYY a, final PairXYY b) => (b.yValue1.abs() - a.yValue1.abs()).toInt(),
       );
 
       return Chart(
