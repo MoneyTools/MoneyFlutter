@@ -47,7 +47,7 @@ extension DataFromSql on Data {
 
   Future<bool> saveToSql({
     required final String filePath,
-    required final Function(bool, String) onSaveCompleted,
+    required final Function(bool success, String errorMessage) onSaveCompleted,
   }) async {
     try {
       final MyDatabase db = MyDatabase();

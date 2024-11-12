@@ -238,7 +238,7 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
 
   /// SQL Insert
   void insert(final String tableName, final MyJson data) {
-    final columnNames = data.keys.join(', ');
+    final columnNames = data.keys.map((key) => '"$key"').join(', ');
     final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
     _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
   }
@@ -272,7 +272,7 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
   /// SQL Update
   void update(final String tableName, final int id, final MyJson jsonMap) {
     final List<String> setStatements =
-        jsonMap.keys.map((key) => '$key = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
+        jsonMap.keys.map((key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
 
     String fieldNamesAndValues = setStatements.join(', ');
     _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE Id=$id;');

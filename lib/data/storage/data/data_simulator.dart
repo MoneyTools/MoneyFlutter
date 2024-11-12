@@ -928,11 +928,11 @@ class DataSimulator {
         'Id': 0,
         'Name': 'AirBnB',
         'Address': 'One Washington DC',
-        'CategoryForIncome': Data().categories.getOrCreate('RentalIncome', CategoryType.income),
-        'CategoryForInterest': Data().categories.getOrCreate('RentalInterest', CategoryType.expense),
-        'CategoryForTaxes': Data().categories.getOrCreate('RentalTaxes', CategoryType.expense),
-        'CategoryForMaintenance': Data().categories.getOrCreate('RentalMaintenance', CategoryType.expense),
-        'CategoryForManagement': Data().categories.getOrCreate('RentalManagement', CategoryType.expense),
+        'CategoryForIncome': Data().categories.getOrCreate('RentalIncome', CategoryType.income).uniqueId,
+        'CategoryForInterest': Data().categories.getOrCreate('RentalInterest', CategoryType.expense).uniqueId,
+        'CategoryForTaxes': Data().categories.getOrCreate('RentalTaxes', CategoryType.expense).uniqueId,
+        'CategoryForMaintenance': Data().categories.getOrCreate('RentalMaintenance', CategoryType.expense).uniqueId,
+        'CategoryForManagement': Data().categories.getOrCreate('RentalManagement', CategoryType.expense).uniqueId,
       }
     ]);
 

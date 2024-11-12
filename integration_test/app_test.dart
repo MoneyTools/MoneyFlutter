@@ -638,16 +638,25 @@ Future<void> testPendingChanges(WidgetTester tester) async {
   // close the panel
   await tapOnText(tester, 'Save to CSV');
 
-  // Save and Load to SQL
+  // Clean/Save/Load to SQL
+  String testFilename = './test_output_sqlite.MyMoney.mmdb';
+  if (await File(testFilename).exists()) {
+    await File(testFilename).delete();
+  }
+
+  // Save SQL
   await Data().saveToSql(
-    filePath: './test_output_sqlite.db',
-    onSaveCompleted: (_, __) {
+    filePath: testFilename,
+    onSaveCompleted: (bool success, String errorMessage) {
       // save completed
+      expect(success, true, reason: errorMessage);
     },
   );
 
-  await Data().loadFromSql(
-    filePath: './test_output_sqlite.db',
+  // Load fromm SQL
+  bool successLoading = await Data().loadFromSql(
+    filePath: testFilename,
     fileBytes: Uint8List(0),
   );
+  expect(successLoading, true);
 }
