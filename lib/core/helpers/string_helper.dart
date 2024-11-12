@@ -6,6 +6,11 @@ import 'package:intl/intl.dart';
 import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:path_provider/path_provider.dart';
 
+/// Returns the count of occurrences of a single character in a given string.
+///
+/// @param input The input string to search for the character.
+/// @param char The single character to count occurrences of.
+/// @returns The number of times the character appears in the input string.
 int countOccurrences(String input, String char) {
   if (char.length != 1) {
     throw ArgumentError('The character to count must be a single character.');

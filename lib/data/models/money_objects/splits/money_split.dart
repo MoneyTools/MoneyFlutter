@@ -2,6 +2,7 @@
 
 import 'dart:ui';
 
+import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 
@@ -78,27 +79,35 @@ class MoneySplit extends MoneyObject {
   // 4
   FieldMoney fieldAmount = FieldMoney(
     name: 'Amount',
+    serializeName: 'Amount',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value.toDouble(),
   );
 
   // 8
   FieldDate fieldBudgetBalanceDate = FieldDate(
     name: 'Budgeted Date',
+    serializeName: 'BudgetBalanceDate',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldBudgetBalanceDate.value,
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToIso8601OrDefaultString((instance as MoneySplit).fieldBudgetBalanceDate.value),
   );
 
   // 2
   FieldInt fieldCategoryId = FieldInt(
     name: 'Category',
+    serializeName: 'Category',
     type: FieldType.text,
     align: TextAlign.left,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().categories.getNameFromId((instance as MoneySplit).fieldCategoryId.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldCategoryId.value,
   );
 
   // 7
   FieldInt fieldFlags = FieldInt(
     name: 'Flags',
+    serializeName: 'Flags',
     columnWidth: ColumnWidth.nano,
     align: TextAlign.center,
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldFlags.value,
@@ -112,27 +121,36 @@ class MoneySplit extends MoneyObject {
   // 6
   FieldString fieldMemo = FieldString(
     name: 'Memo',
+    serializeName: 'Memo',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
   );
 
   // 3
   FieldInt fieldPayeeId = FieldInt(
     name: 'Payee',
+    serializeName: 'Payee',
     type: FieldType.text,
     align: TextAlign.left,
     getValueForDisplay: (final MoneyObject instance) =>
         Data().payees.getNameFromId((instance as MoneySplit).fieldPayeeId.value),
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldPayeeId.value,
   );
 
   // 0
   FieldInt fieldTransactionId = FieldInt(
     name: 'Transaction',
+    serializeName: 'Transaction',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldTransactionId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldTransactionId.value,
   );
 
   // 5
   FieldInt fieldTransferId = FieldInt(
     name: 'Transfer',
+    serializeName: 'Transfer',
+    getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldTransferId.value,
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldTransferId.value,
   );
 
   // Fields for this instance
@@ -151,10 +169,15 @@ class MoneySplit extends MoneyObject {
     if (_fields.isEmpty) {
       final tmp = MoneySplit.fromJson({});
       _fields.setDefinitions([
+        tmp.fieldId,
+        tmp.fieldTransactionId,
         tmp.fieldPayeeId,
         tmp.fieldCategoryId,
         tmp.fieldMemo,
         tmp.fieldAmount,
+        tmp.fieldTransferId,
+        tmp.fieldFlags,
+        tmp.fieldBudgetBalanceDate,
       ]);
     }
     return _fields;

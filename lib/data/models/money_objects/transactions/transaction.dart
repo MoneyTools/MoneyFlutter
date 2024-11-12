@@ -16,6 +16,7 @@ import 'package:money/data/models/money_objects/investments/investment.dart';
 import 'package:money/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
 import 'package:money/data/models/money_objects/payees/payee.dart';
+import 'package:money/data/models/money_objects/splits/popup_transaction_splits.dart';
 import 'package:money/data/models/money_objects/splits/splits.dart';
 import 'package:money/data/models/money_objects/transactions/transaction_types.dart';
 import 'package:money/data/models/money_objects/transfers/transfer.dart';
@@ -199,45 +200,55 @@ class Transaction extends MoneyObject {
     defaultValue: -1,
     getValueForDisplay: (final MoneyObject instance) {
       final Transaction t = (instance as Transaction);
-      if (t.fieldCategoryId.value == -1) {
-        return SuggestionApproval(
-          onApproved: t.possibleMatchingCategoryId == -1
-              ? null
-              : () {
-                  // record the change
-                  changeCategory(t, t.possibleMatchingCategoryId);
-                },
-          onChooseCategory: (final BuildContext context) {
-            t.possibleMatchingCategoryId = -1;
-            showPopupSelection(
-              title: 'Category',
-              context: context,
-              items: Data().categories.getCategoriesAsStrings(),
-              selectedItem: '',
-              onSelected: (final String text) {
-                final Category? selectedCategory = Data().categories.getByName(text);
-                if (selectedCategory != null) {
-                  changeCategory(t, selectedCategory.uniqueId);
-                }
+
+      final int effectiveCategoryId =
+          t.possibleMatchingCategoryId == -1 ? t.fieldCategoryId.value : t.possibleMatchingCategoryId;
+      final String categoryName = Data().categories.getNameFromId(effectiveCategoryId);
+      final Widget categoryWidget = Data().categories.getCategoryWidget(
+            effectiveCategoryId,
+          );
+
+      return SuggestionApproval(
+        onApproved: t.possibleMatchingCategoryId == -1
+            ? null
+            : () {
+                // record the change
+                changeCategory(t, t.possibleMatchingCategoryId);
               },
-            );
-          },
-          child: Tooltip(
-            message: 'Suggested category:\n${Data().categories.getNameFromId(t.possibleMatchingCategoryId)}',
-            child: Data().categories.getCategoryWidget(
-                  t.possibleMatchingCategoryId,
-                ),
-          ),
-        );
-      } else {
-        return Data().categories.getCategoryWidget(t.fieldCategoryId.value);
-      }
+        onChooseCategory: t.fieldCategoryId.value == -1
+            ? (final BuildContext context) {
+                t.possibleMatchingCategoryId = -1;
+                showPopupSelection(
+                  title: 'Category',
+                  context: context,
+                  items: Data().categories.getCategoriesAsStrings(),
+                  selectedItem: '',
+                  onSelected: (final String text) {
+                    final Category? selectedCategory = Data().categories.getByName(text);
+                    if (selectedCategory != null) {
+                      changeCategory(t, selectedCategory.uniqueId);
+                    }
+                  },
+                );
+              }
+            : null,
+        onShowSplit: t.isSplit ? (context) => showTransactionSplits(context, t) : null,
+        child: Tooltip(
+          message: categoryName,
+          child: categoryWidget,
+        ),
+      );
     },
     getValueForReading: (final MoneyObject instance) => (instance as Transaction).categoryName,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldCategoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).fieldCategoryId.value = newValue as int,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (
+      final MoneyObject instance,
+      Function(
+        bool wasModified,
+      ) onEdited,
+    ) {
       return pickerCategory(
         key: const Key('key_pick_category'),
         itemSelected: Data().categories.get((instance as Transaction).fieldCategoryId.value),
@@ -573,6 +584,11 @@ class Transaction extends MoneyObject {
       commonJson = compareAndGenerateCommonJson(commonJson, t.getPersistableJSon());
     }
     return Transaction.fromJSon(commonJson, 0);
+  }
+
+  @override
+  String toString() {
+    return '$dateTimeAsString | $accountName | $oneLinePayeeAndDescription | $amountAsString';
   }
 
   @override

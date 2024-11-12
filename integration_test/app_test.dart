@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -589,8 +590,18 @@ Future<void> testTransactions(WidgetTester tester) async {
     await tapOnKeyString(tester, 'key_select_unselect_all');
     await tapOnText(tester, 'Apply');
   }
+
   // By selecting the first Transaction in the list that is a s 'split' we end up showing on the info-panel the sub-transactions of that Split
-  await tapOnFirstRowOfListView(tester);
+  final firstRow = await tapOnFirstRowOfListView(tester);
+
+  // The row is now selected
+  final categorySplitButton = find.descendant(of: firstRow, matching: find.text('Split'));
+  await tester.tap(categorySplitButton, warnIfMissed: false);
+  // wait for the dialog
+  await tester.myPump();
+
+  // dismiss the dialog box for "Splits"
+  await tapOnText(tester, 'Close');
 }
 
 Future<void> sidePanelTabs(

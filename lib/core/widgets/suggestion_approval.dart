@@ -7,10 +7,14 @@ class SuggestionApproval extends StatefulWidget {
     super.key,
     required this.onApproved,
     required this.onChooseCategory,
+    this.onShowSplit,
     required this.child,
   });
 
   final Widget child;
+
+  // Optional - for Split Transaction
+  final void Function(BuildContext)? onShowSplit;
 
   /// Optional - Approval button will show if there's a callback function
   final Function? onApproved;
@@ -52,13 +56,22 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
 
   @override
   Widget build(BuildContext context) {
+    if (widget.onShowSplit != null) {
+      return InkWell(
+        onTap: () => widget.onShowSplit?.call(context),
+        child: widget.child,
+      );
+    }
+
+    final double opacity = widget.onApproved == null ? 1 : 0.6;
+
     if (approved) {
       return WorkingIndicator(size: 10);
     }
     return FadeTransition(
       opacity: _opacityAnimation,
       child: Opacity(
-        opacity: 0.6,
+        opacity: opacity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

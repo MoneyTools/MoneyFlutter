@@ -94,7 +94,7 @@ class ThemeController extends GetxController {
       (value) {
         WindowOptions windowOptions = const WindowOptions(
           size: Size(Constants.screenWithSmall, 900),
-          maximumSize: Size(Constants.screenWithSmall, 800),
+          maximumSize: Size(Constants.screenWithSmall, 900),
           center: true,
           backgroundColor: Colors.transparent,
           skipTaskbar: false,

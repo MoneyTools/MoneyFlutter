@@ -52,11 +52,12 @@ Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type,
   firstMatchingElement = firstMatchingElement.first;
 
   expect(firstMatchingElement, findsOneWidget);
-  await tester.tap(firstMatchingElement, warnIfMissed: false);
+  // await tester.tap(firstMatchingElement, warnIfMissed: false);
+  await tester.tapAt(tester.getTopLeft(firstMatchingElement, warnIfMissed: false));
   await tester.myPump();
 }
 
-Future<void> tapOnFirstRowOfListView(final WidgetTester tester) async {
+Future<Finder> tapOnFirstRowOfListView(final WidgetTester tester) async {
   Finder firstMatchingElement = find.descendant(
     of: find.byType(ListView),
     matching: find.byType(Row),
@@ -69,8 +70,10 @@ Future<void> tapOnFirstRowOfListView(final WidgetTester tester) async {
   firstMatchingElement = firstMatchingElement.first;
 
   expect(firstMatchingElement, findsOneWidget);
-  await tester.tap(firstMatchingElement, warnIfMissed: false);
+  // for row we tap on the top left side to avoid any active widget in the row like "Split", "Accept suggestion"
+  await tester.tapAt(tester.getTopLeft(firstMatchingElement, warnIfMissed: false));
   await tester.myPump();
+  return firstMatchingElement;
 }
 
 Future<void> tapBackButton(WidgetTester tester) async {
