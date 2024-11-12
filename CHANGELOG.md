@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.9.04] 2024-11-12
+
+### Fix
+
+- Improve Test for saving and loading from Sqlite
+
 ## [version 1.9.03] 2024-11-06
 
 ### Added
