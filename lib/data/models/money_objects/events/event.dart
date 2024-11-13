@@ -173,10 +173,6 @@ class Event extends MoneyObject {
     );
   }
 
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
-
   @override
   String getRepresentation() {
     return eventName;
@@ -187,9 +183,6 @@ class Event extends MoneyObject {
 
   @override
   set uniqueId(value) => fieldId.value = value;
-
-  static final Fields<Event> _fields = Fields<Event>();
-  static final Fields<Event> _fieldsColumView = Fields<Event>();
 
   String get categoryName => Data().categories.getNameFromId(this.fieldCategoryId.value);
 
@@ -213,6 +206,13 @@ class Event extends MoneyObject {
       DateRange(min: fieldDateBegin.value, max: fieldDateEnd.value ?? DateTime.now()).toStringDuration();
 
   String get eventName => fieldName.value.isEmpty ? 'Event $uniqueId' : fieldName.value;
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  static final Fields<Event> _fields = Fields<Event>();
+  static final Fields<Event> _fieldsColumView = Fields<Event>();
 
   static Fields<Event> get fields {
     if (_fields.isEmpty) {

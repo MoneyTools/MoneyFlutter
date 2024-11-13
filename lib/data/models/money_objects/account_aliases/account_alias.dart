@@ -44,16 +44,19 @@ class AccountAlias extends MoneyObject {
 
   // Fields for this instance
   @override
-  FieldDefinitions get fieldDefinitions {
-    final tmp = AccountAlias.fromJson({});
-    final f = Fields<AccountAlias>()
-      ..setDefinitions([
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+  static final Fields<AccountAlias> _fields = Fields<AccountAlias>();
+  static Fields<AccountAlias> get fields {
+    if (_fields.isEmpty) {
+      final tmp = AccountAlias.fromJson({});
+      _fields.setDefinitions([
         tmp.fieldId,
         tmp.fieldPattern,
         tmp.fieldFlags,
         tmp.fieldAccountId,
       ]);
-    return f.definitions;
+    }
+    return _fields;
   }
 
   @override
@@ -66,20 +69,4 @@ class AccountAlias extends MoneyObject {
 
   @override
   set uniqueId(value) => fieldId.value = value;
-
-  static final _fields = Fields<AccountAlias>();
-
-  static Fields<AccountAlias> get fieldsForColumnView {
-    if (_fields.isEmpty) {
-      final tmp = AccountAlias.fromJson({});
-      _fields.setDefinitions(
-        [
-          tmp.fieldPattern,
-          tmp.fieldFlags,
-          tmp.fieldAccountId,
-        ],
-      );
-    }
-    return _fields;
-  }
 }
