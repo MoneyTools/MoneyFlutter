@@ -324,7 +324,10 @@ class MoneyObject {
   /// All object must have a unique identified
   int get uniqueId => -1;
 
-  set uniqueId(int value) {}
+  // must be implemented by derived classes
+  set uniqueId(int value) {
+    assert(false, 'derived class must implement uniqueId');
+  }
 
   Widget _buildNameValuePair(
     Field<dynamic> fieldDefinition,

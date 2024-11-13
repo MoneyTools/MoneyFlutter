@@ -132,3 +132,4 @@ graph.dot
 /.firebase
 !**/converage/cc.txt
 test_output_sqlite.db
+test_output_sqlite.MyMoney.mmdb
