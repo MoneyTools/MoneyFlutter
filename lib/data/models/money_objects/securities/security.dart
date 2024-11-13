@@ -103,7 +103,6 @@ class Security extends MoneyObject {
 
   // 0
   FieldId fieldId = FieldId(
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).uniqueId,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).uniqueId,
   );
 

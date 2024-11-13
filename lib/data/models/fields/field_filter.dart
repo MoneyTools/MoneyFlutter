@@ -10,13 +10,6 @@ class FieldFilter {
     this.strings = strings;
   }
 
-  factory FieldFilter.fromJson(Map<String, dynamic> json) {
-    return FieldFilter(
-      fieldName: json['fieldName'] as String,
-      strings: json['filterTextInLowerCase'].split('|'),
-    );
-  }
-
   final String fieldName;
 
   List<String> strings = [];
@@ -31,13 +24,6 @@ class FieldFilter {
       return stringCompareIgnoreCasing2(text, textToMatch) == 0;
     });
     return found != null;
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'fieldName': fieldName,
-      'filterTextInLowerCase': strings,
-    };
   }
 }
 
@@ -81,12 +67,6 @@ class FieldFilters {
   bool get isNotEmpty => !isEmpty;
 
   int get length => list.length;
-
-  Map<String, dynamic> toJson() {
-    return {
-      'list': list.map((filter) => filter.toJson()).toList(),
-    };
-  }
 
   List<String> toStringList() {
     return list.map((filter) => filter.toString()).toList();

@@ -59,20 +59,8 @@ class Fields<T> {
         isMatchingColumnFiltering(objectInstance, filterByFieldsValue);
   }
 
-  String getCsvRowValues(final MoneyObject item) {
-    final List<dynamic> listOfValues = <dynamic>[];
-    for (final Field<dynamic> field in definitions) {
-      listOfValues.add('"${field.getValueForSerialization(item)}"');
-    }
-    return listOfValues.join(',');
-  }
-
   Field getFieldByName(final String name) {
     return definitions.firstWhere((field) => field.name == name);
-  }
-
-  FieldDefinitions getFieldsForClass<C>() {
-    return definitions;
   }
 
   /// Used in table view
@@ -100,18 +88,6 @@ class Fields<T> {
     return Row(children: cells);
   }
 
-  /// Used in table view
-  static String getRowOfColumnsForCSV(final FieldDefinitions definitions, final MoneyObject objectInstance) {
-    final List<String> strings = <String>[];
-
-    for (final Field fieldDefinition in definitions) {
-      final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
-      strings.add(value.toString());
-    }
-
-    return strings.join();
-  }
-
   String getStringValueUsingFieldName(final MoneyObject objectInstance, final String fieldName) {
     final fieldFound = definitions.firstWhereOrNull((f) => f.name == fieldName);
     if (fieldFound != null) {
@@ -121,33 +97,6 @@ class Fields<T> {
   }
 
   bool get isEmpty => definitions.isEmpty;
-
-  /// Checks if a given field definition matches the provided filterByFieldsValue.
-  /// to match we need both the name and value of a instance to match all of the "name, values[], of each filters in filterByFieldsValue"
-  /// This function is used to determine whether a field definition matches the
-  /// specified filters in the filtering process.
-  ///
-  /// @param fieldDefinition The [Field] definition to be checked.
-  /// @param fieldValueAsStringInLowerCase The field value as a lowercase string.
-  /// @param filterByFieldsValue The list of [FieldFilter] objects containing the
-  ///        field name and the filter text.
-  /// @return `true` if the field definition matches the filters, `false` otherwise.
-  bool isFieldMatching(
-    Field<dynamic> fieldDefinition,
-    String fieldValueAsStringInLowerCase,
-    FieldFilters filterByFieldsValue,
-  ) {
-    int numberOfMatch = 0;
-
-    // for (final FieldFilter filter in filterByFieldsValue.listOfFilters) {
-    //   if (fieldDefinition.name == filter.fieldName) {
-    //     if (fieldValueAsStringInLowerCase == filter.filterTextInLowerCase) {
-    //       numberOfMatch++;
-    //     }
-    //   }
-    // }
-    return numberOfMatch == filterByFieldsValue.list.length;
-  }
 
   bool isMatchingColumnFiltering(
     final MoneyObject objectInstance,

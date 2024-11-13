@@ -157,11 +157,6 @@ class MoneyObjects<T> {
     return nextId + 1;
   }
 
-  String getTypeName() {
-    Type t = T;
-    return t.toString().split('.').last;
-  }
-
   bool get isEmpty {
     return _list.isEmpty;
   }
