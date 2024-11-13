@@ -514,6 +514,30 @@ class DataSimulator {
 
   /// Generates sample categories.
   void _generateCategories() {
+    // add the standard categories
+    Data().categories.interestEarned;
+    Data().categories.salesTax;
+    Data().categories.savings;
+    Data().categories.transferFromDeletedAccount;
+    Data().categories.transferToDeletedAccount;
+    Data().categories.unassignedSplit;
+    Data().categories.unknown;
+
+    // standard categories for investments
+    Data().categories.investmentBonds;
+    Data().categories.investmentCredit;
+    Data().categories.investmentDebit;
+    Data().categories.investmentDividends;
+    Data().categories.investmentFees;
+    Data().categories.investmentInterest;
+    Data().categories.investmentLongTermCapitalGainsDistribution;
+    Data().categories.investmentMiscellaneous;
+    Data().categories.investmentOptions;
+    Data().categories.investmentOther;
+    Data().categories.investmentReinvest;
+    Data().categories.investmentStocks;
+    Data().categories.investmentTransfer;
+
     // Bills
     {
       _categoryBills = Data().categories.addNewCategory(
