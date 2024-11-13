@@ -13,12 +13,4 @@ class RentUnits extends MoneyObjects<RentUnit> {
       appendMoneyObject(RentUnit.fromJson(row));
     }
   }
-
-  String getNameFromId(final int id) {
-    final RentUnit? found = get(id);
-    if (found == null) {
-      return '';
-    }
-    return found.fieldName.value;
-  }
 }

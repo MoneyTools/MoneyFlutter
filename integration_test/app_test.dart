@@ -462,6 +462,10 @@ Future<void> testPayees(WidgetTester tester) async {
   Data().payees.getPayeeIdFromName('NASA');
 
   await tapOnText(tester, 'Payees');
+  // Test Side Panel with not row selected
+  await sidePanelTabs(tester);
+
+  // Test with one row selected
   await tapOnFirstRowOfListView(tester);
   await tapOnKey(tester, Constants.keyMergeButton);
   await tapOnText(tester, 'Comcast');
