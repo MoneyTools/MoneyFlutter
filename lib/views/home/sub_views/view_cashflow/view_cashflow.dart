@@ -155,7 +155,7 @@ class ViewCashFlowState extends ViewWidgetState {
               ),
           ],
         ),
-        if (!Data().transactions.isEmpty)
+        if (Data().transactions.isNotEmpty)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: YearRangeSlider(

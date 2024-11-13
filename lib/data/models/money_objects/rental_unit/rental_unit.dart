@@ -69,4 +69,24 @@ class RentUnit extends MoneyObject {
 
   @override
   set uniqueId(value) => fieldId.value = value;
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  static final _fields = Fields<RentUnit>();
+
+  static Fields<RentUnit> get fields {
+    if (_fields.isEmpty) {
+      final tmp = RentUnit.fromJson({});
+      _fields.setDefinitions([
+        tmp.fieldId,
+        tmp.fieldBuilding,
+        tmp.fieldName,
+        tmp.fieldRenter,
+        tmp.fieldNote,
+      ]);
+    }
+    return _fields;
+  }
 }

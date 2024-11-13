@@ -13,8 +13,8 @@ class Categories extends MoneyObjects<Category> {
   Category? _split;
 
   @override
-  Category instanceFromSqlite(final MyJson row) {
-    return Category.fromJson(row);
+  Category instanceFromJson(final MyJson json) {
+    return Category.fromJson(json);
   }
 
   @override

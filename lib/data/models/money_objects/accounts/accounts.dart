@@ -21,8 +21,8 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   @override
-  Account instanceFromSqlite(final MyJson row) {
-    return Account.fromJson(row);
+  Account instanceFromJson(final MyJson json) {
+    return Account.fromJson(json);
   }
 
   @override
@@ -254,7 +254,7 @@ class Accounts extends MoneyObjects<Account> {
     return firstItem()!;
   }
 
-  String getNameFromId(final num id) {
+  String getNameFromId(final int id) {
     final Account? account = get(id);
     if (account == null) {
       return id.toString();

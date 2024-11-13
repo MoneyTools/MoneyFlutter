@@ -33,6 +33,9 @@ class ValueQuality {
   }
 
   DateTime? asDate() {
+    if (valueAsString.isEmpty) {
+      return null;
+    }
     return DateFormat(dateFormat).tryParse(valueAsString);
   }
 

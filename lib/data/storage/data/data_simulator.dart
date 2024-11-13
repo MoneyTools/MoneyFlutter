@@ -81,8 +81,9 @@ class DataSimulator {
     _generateSubscriptionsOnCheckingAccount();
     _generateSubscriptionsOnCreditCard();
 
-    generateTransactionsForCreditCard();
+    _generateTransactionsForCreditCard();
     _generateTransfersToCreditCardPayment();
+    _generateTransactionExtra();
   }
 
   List<DateTime> generateListOfDates({
@@ -135,7 +136,7 @@ class DataSimulator {
   }
 
   /// Generates credit card transactions for the past 20 years.
-  void generateTransactionsForCreditCard() {
+  void _generateTransactionsForCreditCard() {
     final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
 
     for (final date in dates) {
@@ -1164,6 +1165,24 @@ class DataSimulator {
       }
       rollingBalance += t.fieldAmount.value.toDouble();
     }
+  }
+
+  // Create 2 random TransactionsExtra entries, mainly for code coverage.
+  void _generateTransactionExtra() {
+    Data().transactionExtras.loadFromJson([
+      {
+        'Id': '0',
+        'TaxDate': DateTime(2010, 1, 1),
+        'TaxYear': 2010,
+        'Transaction': 0,
+      },
+      {
+        'Id': '1',
+        'TaxDate': DateTime(2020, 1, 1),
+        'TaxYear': 2020,
+        'Transaction': 1,
+      }
+    ]);
   }
 
   /// The demo data tries to demonstrate a person that had a rent for the first part of their journey and a house on the second half

@@ -1,3 +1,4 @@
+import 'package:money/core/helpers/json_helper.dart';
 import 'package:money/data/models/money_objects/money_object.dart';
 
 /*
@@ -24,6 +25,21 @@ class TransactionExtra extends MoneyObject {
     this.fieldTransaction.value = transaction;
     this.fieldTaxYear.value = taxYear;
     this.fieldTaxDate.value = taxDate;
+  }
+
+  factory TransactionExtra.fromJson(final MyJson row) {
+    final TransactionExtra t = TransactionExtra(
+      // id
+      id: row.getInt('Id', -1),
+      // Transaction Id
+      transaction: row.getInt('Transaction', -1),
+      // Tax Year
+      taxYear: row.getInt('TaxYear'),
+      // Tax Date
+      taxDate: row.getDate('TaxDate'),
+    );
+
+    return t;
   }
 
   /// ID
@@ -55,4 +71,23 @@ class TransactionExtra extends MoneyObject {
 
   @override
   set uniqueId(value) => fieldId.value = value;
+
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  static final _fields = Fields<TransactionExtra>();
+
+  static Fields<TransactionExtra> get fields {
+    if (_fields.isEmpty) {
+      final tmp = TransactionExtra.fromJson({});
+      _fields.setDefinitions([
+        tmp.fieldId,
+        tmp.fieldTaxDate,
+        tmp.fieldTaxYear,
+        tmp.fieldTransaction,
+      ]);
+    }
+    return _fields;
+  }
 }

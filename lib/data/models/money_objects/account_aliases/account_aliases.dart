@@ -8,7 +8,7 @@ class AccountAliases extends MoneyObjects<AccountAlias> {
   }
 
   @override
-  AccountAlias instanceFromSqlite(final MyJson row) {
-    return AccountAlias.fromJson(row);
+  AccountAlias instanceFromJson(final MyJson json) {
+    return AccountAlias.fromJson(json);
   }
 }

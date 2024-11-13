@@ -4,13 +4,11 @@ import 'package:money/data/models/money_objects/rental_unit/rental_unit.dart';
 
 class RentUnits extends MoneyObjects<RentUnit> {
   RentUnits() {
-    collectionName = 'Rental Units';
+    collectionName = 'RentalUnits';
   }
 
   @override
-  void loadFromJson(final List<MyJson> rows) {
-    for (final MyJson row in rows) {
-      appendMoneyObject(RentUnit.fromJson(row));
-    }
+  RentUnit instanceFromJson(final MyJson json) {
+    return RentUnit.fromJson(json);
   }
 }

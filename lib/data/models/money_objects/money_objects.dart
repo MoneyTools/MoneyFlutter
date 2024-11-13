@@ -23,6 +23,12 @@ class MoneyObjects<T> {
   final List<MoneyObject> _list = <MoneyObject>[];
   final Map<num, MoneyObject> _map = <num, MoneyObject>{};
 
+  /// Must be override by derived class
+  MoneyObject instanceFromJson(final MyJson json) {
+    assert(false, 'You must implement this in your derived class');
+    return MoneyObject();
+  }
+
   void appendMoneyObject(final MoneyObject moneyObject) {
     // assert(moneyObject.uniqueId != -1);
 
@@ -74,8 +80,11 @@ class MoneyObjects<T> {
     return iterableList(includeDeleted: includeDeleted).toList().first;
   }
 
-  T? get(final num id) {
-    return _map[id] as T?;
+  T? get(final int id) {
+    if (_map.containsKey(id)) {
+      return _map[id] as T;
+    }
+    return null;
   }
 
   static String getCsvFromList(
@@ -153,14 +162,11 @@ class MoneyObjects<T> {
     return t.toString().split('.').last;
   }
 
-  /// Must be override by derived class
-  MoneyObject? instanceFromSqlite(final MyJson row) {
-    return null;
-  }
-
   bool get isEmpty {
     return _list.isEmpty;
   }
+
+  bool get isNotEmpty => !isEmpty;
 
   static bool isFieldMatchingCondition(final field, bool forSerialization) {
     return ((forSerialization == true && field.serializeName.isNotEmpty) || (forSerialization == false));
@@ -178,10 +184,8 @@ class MoneyObjects<T> {
   void loadFromJson(final List<MyJson> rows) {
     clear();
     for (final MyJson row in rows) {
-      final MoneyObject? newInstance = instanceFromSqlite(row);
-      if (newInstance != null) {
-        appendMoneyObject(newInstance);
-      }
+      final MoneyObject moneyObject = instanceFromJson(row);
+      appendMoneyObject(moneyObject);
     }
   }
 

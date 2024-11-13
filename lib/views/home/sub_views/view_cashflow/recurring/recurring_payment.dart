@@ -124,7 +124,7 @@ class RecurringPayment {
     // keep at most [n] number of items
     final int topCategoryToShow = min(topN, list.length);
 
-    for (final categoryIdAndSum in list.take(topCategoryToShow)) {
+    for (final Pair<int, double> categoryIdAndSum in list.take(topCategoryToShow)) {
       final Category? category = Data().categories.get(categoryIdAndSum.first);
       if (category == null) {
         listForDistributionBar.add(

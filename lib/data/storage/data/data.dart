@@ -56,7 +56,7 @@ class Data {
 
   /// private constructor
   Data._internal() {
-    _listOfTables = <MoneyObjects<dynamic>>[
+    tables = <MoneyObjects<dynamic>>[
       accountAliases, // 1
       aliases, // 3
       categories, // 4
@@ -133,7 +133,7 @@ class Data {
   /// 16 All Transactions in the Money file
   Transactions transactions = Transactions();
 
-  late final List<MoneyObjects<dynamic>> _listOfTables;
+  late final List<MoneyObjects<dynamic>> tables;
 
   /// singleton
   static final Data _instance = Data._internal();
@@ -152,13 +152,13 @@ class Data {
   void clear() {
     DataController.to.trackMutations.reset();
 
-    for (final element in _listOfTables) {
+    for (final element in tables) {
       element.clear();
     }
   }
 
   void clearExistingData() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+    for (final MoneyObjects<dynamic> moneyObjects in tables) {
       moneyObjects.clear();
     }
   }
@@ -230,7 +230,7 @@ class Data {
 
   List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {
     List<MoneyObject> mutated = [];
-    for (final MoneyObjects listOfInstance in _listOfTables) {
+    for (final MoneyObjects listOfInstance in tables) {
       mutated.addAll(listOfInstance.getMutatedObjects(typeOfMutation));
     }
     return mutated;
@@ -239,7 +239,7 @@ class Data {
   List<MutationGroup> getMutationGroups(MutationType typeOfMutation) {
     List<MutationGroup> allMutationGroups = [];
 
-    for (final MoneyObjects moneyObjects in _listOfTables) {
+    for (final MoneyObjects moneyObjects in tables) {
       final mutatedInstances = moneyObjects.getMutatedObjects(typeOfMutation);
       if (mutatedInstances.isNotEmpty) {
         MutationGroup mutationGroup = MutationGroup();
@@ -442,7 +442,7 @@ class Data {
 
   /// When Changes are done we can force a reevaluation of the balances
   void recalculateBalances() {
-    for (final MoneyObjects<dynamic> moneyObjects in _listOfTables) {
+    for (final MoneyObjects<dynamic> moneyObjects in tables) {
       moneyObjects.onAllDataLoaded();
     }
 
