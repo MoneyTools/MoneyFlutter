@@ -76,6 +76,34 @@ Future<Finder> tapOnFirstRowOfListView(final WidgetTester tester) async {
   return firstMatchingElement;
 }
 
+Future<Finder> selectListViewItemByText(final WidgetTester tester, final String text) async {
+  final listFinder = find.byType(ListView);
+  final itemFinder = find.text(text);
+
+  await tester.dragUntilVisible(
+    itemFinder, // What you're looking for
+    listFinder, // ListView finder
+    const Offset(0, -100), // Scroll down by 100 pixels
+  );
+
+  Finder firstMatchingElement = find.descendant(
+    of: find.byType(ListView),
+    matching: find.text(text),
+  );
+  expect(
+    firstMatchingElement,
+    findsAny,
+  );
+
+  firstMatchingElement = firstMatchingElement.first;
+
+  expect(firstMatchingElement, findsOneWidget);
+  // for row we tap on the top left side to avoid any active widget in the row like "Split", "Accept suggestion"
+  await tester.tapAt(tester.getTopLeft(firstMatchingElement, warnIfMissed: false));
+  await tester.myPump();
+  return firstMatchingElement;
+}
+
 Future<void> tapBackButton(WidgetTester tester) async {
   final firstMatchingElement = find.byTooltip('Back');
   expect(firstMatchingElement, findsOneWidget, reason: 'No Back button found');

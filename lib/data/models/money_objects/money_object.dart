@@ -23,6 +23,16 @@ class MoneyObject {
 
   MyJson? valueBeforeEdit;
 
+  @override
+  String toString() {
+    final List<String> fieldsAsText = fieldDefinitions
+        .where((field) => field.serializeName.isNotEmpty)
+        .map((field) => '${field.serializeName}:${field.getValueForSerialization(this)}')
+        .toList();
+
+    return fieldsAsText.join('|');
+  }
+
   ///
   /// Column 1 | Column 2 | Column 3
   ///
@@ -302,6 +312,10 @@ class MoneyObject {
     }
   }
 
+  String toJsonString() {
+    return getPersistableJSon().toString();
+  }
+
   /// attempt to get text that a human could read
   String toReadableString(Field field) {
     switch (field.type) {
@@ -357,20 +371,6 @@ class MoneyObject {
         ],
       ),
     );
-  }
-
-  String toJsonString() {
-    return getPersistableJSon().toString();
-  }
-
-  @override
-  String toString() {
-    final List<String> fieldsAsText = fieldDefinitions
-        .where((field) => field.serializeName.isNotEmpty)
-        .map((field) => '${field.serializeName}:${field.getValueForSerialization(this)}')
-        .toList();
-
-    return fieldsAsText.join('|');
   }
 }
 

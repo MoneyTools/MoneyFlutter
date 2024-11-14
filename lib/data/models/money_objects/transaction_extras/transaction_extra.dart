@@ -66,15 +66,15 @@ class TransactionExtra extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as TransactionExtra).fieldTransaction.value,
   );
 
+  // Fields for this instance
+  @override
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
   @override
   int get uniqueId => fieldId.value;
 
   @override
   set uniqueId(value) => fieldId.value = value;
-
-  // Fields for this instance
-  @override
-  FieldDefinitions get fieldDefinitions => fields.definitions;
 
   static final _fields = Fields<TransactionExtra>();
 

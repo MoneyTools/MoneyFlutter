@@ -135,57 +135,6 @@ class DataSimulator {
     return dates;
   }
 
-  /// Generates credit card transactions for the past 20 years.
-  void _generateTransactionsForCreditCard() {
-    final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
-
-    for (final date in dates) {
-      final selectedCategory = [
-        [
-          _categorySubscriptionTransport,
-          [
-            ['City Bus', 3],
-            ['Taxi', 20],
-            ['Uber', 30],
-          ],
-        ],
-        [
-          _categoryFoodGrocery,
-          [
-            ['TheFoodStore', 50],
-            ['SafeWay', 80],
-            ['WholeFood', 200],
-          ],
-        ],
-        [
-          _categoryFoodRestaurant,
-          [
-            ['Starbucks', 10],
-            ['AppleBees', 100],
-            ['PizzaHut', 20],
-          ],
-        ],
-      ].getRandomItem();
-
-      Category category = selectedCategory[0] as Category;
-
-      final payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
-      double maxSpendingOnCreditCard = payeeAndMaxAmount[1].toDouble();
-
-      final Transaction source = _addTransactionAccountDatePayeeCategory(
-        account: _accountCreditCardUSD,
-        date: date,
-        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0]).uniqueId,
-        categoryId: category.uniqueId,
-      );
-      if (date.isAfter(_dateOfFirstBigJob)) {
-        // big job and spends more
-        maxSpendingOnCreditCard = maxSpendingOnCreditCard * 3;
-      }
-      source.fieldAmount.setAmount(-getRandomAmount(maxSpendingOnCreditCard.toInt()));
-    }
-  }
-
   /// Generates monthly expenses for a given account, payee, category, and amount.
   void generateTransactionsMonthlyExpenses({
     required Account account,
@@ -1094,6 +1043,75 @@ class DataSimulator {
     );
   }
 
+  // Create 2 random TransactionsExtra entries, mainly for code coverage.
+  void _generateTransactionExtra() {
+    Data().transactionExtras.loadFromJson([
+      {
+        'Id': '0',
+        'TaxDate': DateTime(2010, 1, 1),
+        'TaxYear': 2010,
+        'Transaction': 0,
+      },
+      {
+        'Id': '1',
+        'TaxDate': DateTime(2020, 1, 1),
+        'TaxYear': 2020,
+        'Transaction': 1,
+      }
+    ]);
+  }
+
+  /// Generates credit card transactions for the past 20 years.
+  void _generateTransactionsForCreditCard() {
+    final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
+
+    for (final date in dates) {
+      final selectedCategory = [
+        [
+          _categorySubscriptionTransport,
+          [
+            ['City Bus', 3],
+            ['Taxi', 20],
+            ['Uber', 30],
+          ],
+        ],
+        [
+          _categoryFoodGrocery,
+          [
+            ['TheFoodStore', 50],
+            ['SafeWay', 80],
+            ['WholeFood', 200],
+          ],
+        ],
+        [
+          _categoryFoodRestaurant,
+          [
+            ['Starbucks', 10],
+            ['AppleBees', 100],
+            ['PizzaHut', 20],
+          ],
+        ],
+      ].getRandomItem();
+
+      Category category = selectedCategory[0] as Category;
+
+      final payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
+      double maxSpendingOnCreditCard = payeeAndMaxAmount[1].toDouble();
+
+      final Transaction source = _addTransactionAccountDatePayeeCategory(
+        account: _accountCreditCardUSD,
+        date: date,
+        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0]).uniqueId,
+        categoryId: category.uniqueId,
+      );
+      if (date.isAfter(_dateOfFirstBigJob)) {
+        // big job and spends more
+        maxSpendingOnCreditCard = maxSpendingOnCreditCard * 3;
+      }
+      source.fieldAmount.setAmount(-getRandomAmount(maxSpendingOnCreditCard.toInt()));
+    }
+  }
+
   void _generateTransactionsSalary() {
     final dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 5);
     _dateOfFirstBigJob = dates[dates.length ~/ 2];
@@ -1189,24 +1207,6 @@ class DataSimulator {
       }
       rollingBalance += t.fieldAmount.value.toDouble();
     }
-  }
-
-  // Create 2 random TransactionsExtra entries, mainly for code coverage.
-  void _generateTransactionExtra() {
-    Data().transactionExtras.loadFromJson([
-      {
-        'Id': '0',
-        'TaxDate': DateTime(2010, 1, 1),
-        'TaxYear': 2010,
-        'Transaction': 0,
-      },
-      {
-        'Id': '1',
-        'TaxDate': DateTime(2020, 1, 1),
-        'TaxYear': 2020,
-        'Transaction': 1,
-      }
-    ]);
   }
 
   /// The demo data tries to demonstrate a person that had a rent for the first part of their journey and a house on the second half

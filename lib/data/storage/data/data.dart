@@ -82,6 +82,8 @@ class Data {
     ];
   }
 
+  late final List<MoneyObjects<dynamic>> tables;
+
   /// 1 Account Aliases
   AccountAliases accountAliases = AccountAliases();
 
@@ -132,8 +134,6 @@ class Data {
 
   /// 16 All Transactions in the Money file
   Transactions transactions = Transactions();
-
-  late final List<MoneyObjects<dynamic>> tables;
 
   /// singleton
   static final Data _instance = Data._internal();

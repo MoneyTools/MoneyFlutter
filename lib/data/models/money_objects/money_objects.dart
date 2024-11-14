@@ -23,12 +23,6 @@ class MoneyObjects<T> {
   final List<MoneyObject> _list = <MoneyObject>[];
   final Map<num, MoneyObject> _map = <num, MoneyObject>{};
 
-  /// Must be override by derived class
-  MoneyObject instanceFromJson(final MyJson json) {
-    assert(false, 'You must implement this in your derived class');
-    return MoneyObject();
-  }
-
   void appendMoneyObject(final MoneyObject moneyObject) {
     // assert(moneyObject.uniqueId != -1);
 
@@ -157,15 +151,21 @@ class MoneyObjects<T> {
     return nextId + 1;
   }
 
+  /// Must be override by derived class
+  MoneyObject instanceFromJson(final MyJson json) {
+    assert(false, 'You must implement this in your derived class');
+    return MoneyObject();
+  }
+
   bool get isEmpty {
     return _list.isEmpty;
   }
 
-  bool get isNotEmpty => !isEmpty;
-
   static bool isFieldMatchingCondition(final field, bool forSerialization) {
     return ((forSerialization == true && field.serializeName.isNotEmpty) || (forSerialization == false));
   }
+
+  bool get isNotEmpty => !isEmpty;
 
   /// Recast list as type <T>
   Iterable<T> iterableList({bool includeDeleted = false}) {

@@ -24,18 +24,30 @@ void main() {
           await tester.pumpAndSettle();
 
           //*************************************************************************
+          //
+          // Small screen
+          //
           await switchToSmall(tester);
           await stepWelcomeSettingAndTheme(tester);
 
-          //*************************************************************************
+          // //*************************************************************************
+          // //
+          // // Medium screen - import
+          // //
           await switchToMedium(tester);
           await stepImport(tester);
 
           //*************************************************************************
+          //
+          // Large screen - Demo data
+          //
           await switchToLarge(tester);
           await stepDemoDataViews(tester);
 
           //*************************************************************************
+          //
+          // Back to small screen using Demo data
+          //
           await switchToSmall(tester);
           await stepDemoDataViewInSmallScreen(tester);
         },
@@ -366,7 +378,10 @@ Future<void> testCategories(WidgetTester tester) async {
     'key_toggle_show_investments',
     'key_toggle_show_all',
   ]);
+  // test side panel with no list item selected
+  await sidePanelTabs(tester);
 
+  // Select an item
   await tapOnFirstRowOfListView(tester);
 
   // Edit
@@ -380,14 +395,20 @@ Future<void> testCategories(WidgetTester tester) async {
     await tapOnText(tester, 'Cancel');
   }
 
-  // Merge
+  // Merge - Investments:Debit into Investments:Bond
+  await selectListViewItemByText(tester, 'Debit');
   await tapOnKey(tester, Constants.keyMergeButton);
 
   // Drop down pretend to pick a category
   await tapOnKeyString(tester, 'key_dropdown');
-  await tapOnText(tester, 'Close');
 
-  await tapOnText(tester, 'Cancel');
+  await inputTextToElementByKey(tester, MyKeys.keyHeaderFilterTextInput, 'bon');
+  await selectListViewItemByText(tester, 'Bonds');
+
+  // Merge and close the dialog
+  await tapOnText(tester, 'Merge');
+
+  // continue
   await sidePanelTabs(tester);
 
   // Add New Item
@@ -671,7 +692,7 @@ Future<void> testPendingChanges(WidgetTester tester) async {
 
   await tapOnText(tester, '1 modified');
 
-  await tapOnText(tester, '2 deleted');
+  await tapOnText(tester, '3 deleted');
 
   // close the panel
   await tapOnText(tester, 'Save to CSV');

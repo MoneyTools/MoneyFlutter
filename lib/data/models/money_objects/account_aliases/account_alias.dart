@@ -45,7 +45,20 @@ class AccountAlias extends MoneyObject {
   // Fields for this instance
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
+
+  @override
+  String getRepresentation() {
+    return '${fieldPattern.value} ${fieldAccountId.value}';
+  }
+
+  @override
+  int get uniqueId => fieldId.value;
+
+  @override
+  set uniqueId(value) => fieldId.value = value;
+
   static final Fields<AccountAlias> _fields = Fields<AccountAlias>();
+
   static Fields<AccountAlias> get fields {
     if (_fields.isEmpty) {
       final tmp = AccountAlias.fromJson({});
@@ -58,15 +71,4 @@ class AccountAlias extends MoneyObject {
     }
     return _fields;
   }
-
-  @override
-  String getRepresentation() {
-    return '${fieldPattern.value} ${fieldAccountId.value}';
-  }
-
-  @override
-  int get uniqueId => fieldId.value;
-
-  @override
-  set uniqueId(value) => fieldId.value = value;
 }
