@@ -92,6 +92,7 @@ class Constants {
   static String viewTransactionFieldNameAccount = 'Account';
   static String viewTransactionFieldNameCategory = 'Category';
   static String viewTransactionFieldNamePayee = 'Payee/Transfer';
+  static String fakeStockApiKey = 'fakeStockApiKey';
 }
 
 class SizeForDoubles {

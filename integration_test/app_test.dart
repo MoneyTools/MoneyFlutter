@@ -539,7 +539,10 @@ Future<void> testStocks(WidgetTester tester) async {
 
   await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
   await tapOnText(tester, 'Set API Key');
-  await tapOnText(tester, 'Cancel');
+
+  await inputTextToElementByKey(tester, Key('key_single_input_dialog'), Constants.fakeStockApiKey);
+
+  await tapOnText(tester, 'Continue');
 }
 
 Future<void> testTransactions(WidgetTester tester) async {

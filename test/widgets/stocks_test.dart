@@ -35,7 +35,7 @@ class MockPreferenceController extends GetxController with Mock implements Prefe
   }
 
   @override
-  String get apiKeyForStocks => 'fake_api_key';
+  String get apiKeyForStocks => Constants.fakeStockApiKey;
 }
 
 // Generate a MockClient class

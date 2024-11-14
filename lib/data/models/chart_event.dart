@@ -10,6 +10,23 @@ class ChartEvent {
     this.color,
   });
 
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) {
+      return true;
+    }
+    if (other is! ChartEvent) {
+      return false;
+    }
+
+    return date == other.date &&
+        amount == other.amount &&
+        quantity == other.quantity &&
+        description == other.description;
+  }
+
+  @override
+  int get hashCode => Object.hash(date, amount, quantity, description);
   final double amount;
   final Color? color;
   final bool colorBasedOnQuantity;

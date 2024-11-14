@@ -37,6 +37,7 @@ Future<void> showTextInputDialog({
               gapLarge(),
               Expanded(
                 child: MyTextInput(
+                  key: Key('key_single_input_dialog'),
                   controller: textEditingController,
                   hintText: 'Enter $title',
                 ),
