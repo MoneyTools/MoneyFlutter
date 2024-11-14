@@ -479,6 +479,21 @@ Future<void> testPayees(WidgetTester tester) async {
   await tapOnText(tester, 'Comcast');
   await tapOnText(tester, 'Cancel');
   await sidePanelTabs(tester);
+
+  // Perform a Payee merge
+  await tapOnKey(
+    tester,
+    Constants.keyMergeButton,
+  );
+
+  await tapOnKeyString(tester, 'key_dropdown');
+
+  await inputTextToElementByKey(tester, MyKeys.keyHeaderFilterTextInput, 'mobile');
+
+  await tapOnText(tester, 'TMobile');
+
+  // Merge and close the dialog
+  await tapOnText(tester, 'Merge');
 }
 
 Future<void> testStocks(WidgetTester tester) async {
@@ -656,7 +671,7 @@ Future<void> testPendingChanges(WidgetTester tester) async {
 
   await tapOnText(tester, '1 modified');
 
-  await tapOnText(tester, '1 deleted');
+  await tapOnText(tester, '2 deleted');
 
   // close the panel
   await tapOnText(tester, 'Save to CSV');

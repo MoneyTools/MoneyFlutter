@@ -159,6 +159,13 @@ Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String 
   await tester.myPump();
 }
 
+Future<void> inputTextToElementByKey(WidgetTester tester, Key keyToElement, String textToEnter) async {
+  final firstMatchingElement = find.byKey(keyToElement).first;
+  await tester.enterText(firstMatchingElement, textToEnter);
+  await tester.testTextInput.receiveAction(TextInputAction.done);
+  await tester.myPump();
+}
+
 Future<void> tapAllToggleButtons(final WidgetTester tester, final List<String> keys) async {
   for (final key in keys) {
     await tapOnKeyString(tester, key);
