@@ -952,7 +952,7 @@ DA:133,1
 DA:136,1
 DA:137,0
 DA:140,1
-DA:141,1
+DA:141,0
 DA:146,1
 DA:147,2
 DA:148,1
@@ -979,7 +979,7 @@ DA:205,0
 DA:206,0
 DA:207,0
 LF:79
-LH:63
+LH:62
 end_of_record
 TN:
 SF:lib/core/helpers/ranges.dart
@@ -2569,7 +2569,7 @@ DA:111,3
 DA:112,6
 DA:113,4
 DA:114,1
-DA:115,0
+DA:115,3
 DA:117,1
 DA:120,1
 DA:122,3
@@ -2592,7 +2592,7 @@ DA:155,3
 DA:157,1
 DA:158,1
 DA:159,2
-DA:161,0
+DA:161,1
 DA:170,1
 DA:171,3
 DA:172,3
@@ -2613,7 +2613,7 @@ DA:195,0
 DA:197,0
 DA:199,0
 LF:87
-LH:75
+LH:77
 end_of_record
 TN:
 SF:lib/core/widgets/info_banner.dart
@@ -2814,11 +2814,11 @@ DA:17,1
 DA:19,1
 DA:20,3
 DA:21,1
-DA:22,0
-DA:23,0
-DA:24,0
+DA:22,1
+DA:23,3
+DA:24,1
 LF:9
-LH:6
+LH:9
 end_of_record
 TN:
 SF:lib/core/widgets/my_segment.dart
@@ -7536,7 +7536,7 @@ DA:155,1
 DA:160,3
 DA:161,5
 DA:162,4
-DA:163,0
+DA:163,3
 DA:171,0
 DA:172,0
 DA:173,0
@@ -7597,7 +7597,7 @@ DA:313,4
 DA:314,5
 DA:317,5
 LF:113
-LH:94
+LH:95
 end_of_record
 TN:
 SF:lib/data/models/money_objects/transfers/transfer.dart
