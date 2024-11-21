@@ -37,7 +37,7 @@ const String settingKeySortAscending = 'sortAscending';
 const String settingKeySortBy = 'sortBy';
 const String settingKeyStockApiKey = 'stockServiceApiKey';
 const String settingKeyTextScale = 'textScale';
-
+const String settingKeySidePanel = 'side_panel_';
 const String settingKeyDomainAccounts = 'accounts';
 const String settingKeyDomainCategories = 'categories';
 const String settingKeyDomainPayees = 'payees';

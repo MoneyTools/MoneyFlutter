@@ -128,7 +128,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           onItemTap: _onItemTap,
           flexBottom: preferenceController.isDetailsPanelExpanded.value ? 1 : 0,
           bottom: SidePanel(
-            key: Key('side_panel_${sidePanelOptions.selectedCurrency}'),
+            key: Key(settingKeySidePanel + sidePanelOptions.selectedCurrency.toString()),
             isExpanded: preferenceController.isDetailsPanelExpanded.value,
             onExpanded: (final bool isExpanded) {
               setState(() {
@@ -484,7 +484,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   int getSidePanelLastSelectedItemId() {
-    return PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySelectedListItemId'), -1);
+    return PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId), -1);
   }
 
   Transaction? getSidePanelLastSelectedTransaction() {

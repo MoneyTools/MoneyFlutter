@@ -83,7 +83,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
               icon: ViewId.viewTransactions.getIconData(),
               title: 'Matching Transaction',
               onPressed: () {
-                final selectedInfoTransaction = getSidePanelLastSelectedTransaction();
+                final Transaction? selectedInfoTransaction = getSidePanelLastSelectedTransaction();
 
                 if (selectedInfoTransaction != null) {
                   // Look for transaction matching -1 to +1 date from this transaction
@@ -94,7 +94,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                   // we are looking for the reverse transaction
                   final double amountToFind = selectedInfoTransaction.fieldAmount.value.toDouble() * -1;
 
-                  final matchingTransaction = Data().transactions.findExistingTransaction(
+                  final Transaction? matchingTransaction = Data().transactions.findExistingTransaction(
                         accountId: -1,
                         dateRange: approximationDates,
                         amount: amountToFind,
@@ -300,27 +300,5 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         ),
       ),
     );
-  }
-
-  Widget _getSidePanelViewTransactions({
-    required final List<int> selectedIds,
-    required final bool showAsNativeCurrency,
-  }) {
-    final Account? account = getFirstSelectedItem() as Account?;
-    if (account == null) {
-      return const CenterMessage(message: 'No account selected.');
-    } else {
-      if (account.fieldType.value == AccountType.loan) {
-        return _getSubViewContentForTransactionsForLoans(
-          account: account,
-          showAsNativeCurrency: showAsNativeCurrency,
-        );
-      } else {
-        return _getSubViewContentForTransactions(
-          account: account,
-          showAsNativeCurrency: showAsNativeCurrency,
-        );
-      }
-    }
   }
 }

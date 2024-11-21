@@ -349,8 +349,9 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
     final listOfInvestmentsForThisStock = getListOfInvestment(_lastSecuritySelected!);
 
-    int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey('info_$settingKeySortBy'), 0);
-    bool sortAscending = PreferenceController.to.getBool(getPreferenceKey('info_$settingKeySortAscending'), false);
+    int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), 0);
+    bool sortAscending =
+        PreferenceController.to.getBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), false);
 
     final fields = _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
 
@@ -378,16 +379,18 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           if (columnHeaderIndex == sortByFieldIndex) {
             // toggle order
             sortAscending = !sortAscending;
-            PreferenceController.to.setBool(getPreferenceKey('info_$settingKeySortAscending'), sortAscending);
+            PreferenceController.to
+                .setBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), sortAscending);
           } else {
             sortByFieldIndex = columnHeaderIndex;
-            PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySortBy'), sortByFieldIndex);
+            PreferenceController.to.setInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), sortByFieldIndex);
           }
         });
       },
       onSelectionChanged: (int uniqueId) {
         setState(() {
-          PreferenceController.to.setInt(getPreferenceKey('info_$settingKeySelectedListItemId'), uniqueId);
+          PreferenceController.to
+              .setInt(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId), uniqueId);
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {

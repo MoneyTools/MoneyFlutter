@@ -99,7 +99,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     required final bool showAsNativeCurrency,
   }) {
     final SelectionController selectionController =
-        Get.put(SelectionController(getPreferenceKey('info_$settingKeySelectedListItemId')));
+        Get.put(SelectionController(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId)));
 
     return ListViewTransactions(
       listController: Get.find<ListControllerSidePanel>(),

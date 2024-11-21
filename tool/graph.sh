@@ -7,7 +7,7 @@ rm graph.dot
 rm graph.svg
 
 ## with folders
-lakos -o graph.dot --metrics --ignore=test/** .
+lakos -o graph.dot --metrics .
 
 # remove the folders
 #lakos -o graph.dot --no-tree --metrics --ignore=test/** .
