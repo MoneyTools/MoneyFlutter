@@ -71,6 +71,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       isMultiSelectionOn: false,
       selectedItemsByUniqueId: selectionCollectionOfOnlyOneItem,
       onSelectionChanged: (final int selectedId) {
+        widget.listController.bookmark = widget.listController.scrollController.offset;
         setState(() {
           selectionCollectionOfOnlyOneItem.value = [selectedId];
           widget.onSelectionChanged?.call(selectedId);

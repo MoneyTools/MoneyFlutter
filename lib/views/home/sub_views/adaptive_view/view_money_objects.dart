@@ -122,6 +122,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           onColumnHeaderLongPress: onCustomizeColumn,
           getColumnFooterWidget: getColumnFooterWidget,
           onSelectionChanged: (int _) {
+            lc.bookmark = lc.scrollController.offset;
             _selectedItemsByUniqueId.value = _selectedItemsByUniqueId.value.toList();
             saveLastUserChoicesOfView();
           },
@@ -206,6 +207,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           : null,
       onScrollToTop: () {
         Get.find<ListControllerMain>().scrollToTop();
+      },
+      onScrollToSelection: () {
+        Get.find<ListControllerMain>().scrollToBookmark();
       },
       onScrollToBottom: () {
         Get.find<ListControllerMain>().scrollToBottom();

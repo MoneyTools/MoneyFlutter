@@ -5,6 +5,8 @@ class ListController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxDouble scrollPosition = 0.0.obs;
 
+  double bookmark = -1;
+
   @override
   void onClose() {
     scrollController.removeListener(_scrollListener);
@@ -24,6 +26,16 @@ class ListController extends GetxController {
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );
+  }
+
+  void scrollToBookmark() {
+    if (bookmark != -1) {
+      scrollController.animateTo(
+        bookmark,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   void scrollToTop() {

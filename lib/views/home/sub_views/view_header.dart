@@ -29,8 +29,9 @@ class ViewHeader extends StatelessWidget {
     this.onMergeMoneyObject, // A callback for when the merge money object button is pressed.
     this.onEditMoneyObject, // A callback for when the edit money object button is pressed.
     this.onDeleteMoneyObject, // A callback for when the delete money object button is pressed.
-    this.onScrollToTop, // scroll action
-    this.onScrollToBottom, // scroll action
+    this.onScrollToTop, // scroll action - top
+    this.onScrollToSelection, // scroll action - selection
+    this.onScrollToBottom, // scroll action - bottom
     this.child, // An optional child widget to display in the header.
   });
 
@@ -44,6 +45,7 @@ class ViewHeader extends StatelessWidget {
   final VoidCallback? onEditMoneyObject;
   final VoidCallback? onMergeMoneyObject;
   final VoidCallback? onScrollToBottom;
+  final VoidCallback? onScrollToSelection;
   final VoidCallback? onScrollToTop;
   final ValueNotifier<List<int>> selectedItems;
   final String textFilter;
@@ -103,6 +105,12 @@ class ViewHeader extends StatelessWidget {
                     icon: Icons.first_page,
                     tooltip: 'Scroll to the Top of the list',
                     onPressed: onScrollToTop!,
+                  ),
+                if (onScrollToSelection != null)
+                  MyIconButton(
+                    icon: Icons.center_focus_strong,
+                    tooltip: 'Scroll to last selection',
+                    onPressed: onScrollToSelection!,
                   ),
                 if (onScrollToBottom != null)
                   MyIconButton(
