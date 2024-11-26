@@ -7,14 +7,14 @@ class SuggestionApproval extends StatefulWidget {
     super.key,
     required this.onApproved,
     required this.onChooseCategory,
-    this.onShowSplit,
+    required this.onShowSplit,
     required this.child,
   });
 
   final Widget child;
 
   // Optional - for Split Transaction
-  final void Function(BuildContext)? onShowSplit;
+  final Function? onShowSplit;
 
   /// Optional - Approval button will show if there's a callback function
   final Function? onApproved;
@@ -58,7 +58,7 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
   Widget build(BuildContext context) {
     if (widget.onShowSplit != null) {
       return InkWell(
-        onTap: () => widget.onShowSplit?.call(context),
+        onTap: () => widget.onShowSplit?.call(),
         child: widget.child,
       );
     }

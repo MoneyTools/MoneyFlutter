@@ -77,6 +77,7 @@ class Event extends MoneyObject {
               },
             );
           },
+          onShowSplit: null, // N/A for events
           child: Data().categories.getCategoryWidget(
                 event.possibleMatchingCategoryId,
               ),

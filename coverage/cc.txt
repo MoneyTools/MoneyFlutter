@@ -1,6 +1,6 @@
 Overall coverage rate:
   source files: 225
-  lines.......: 83.5% (10008 of 11982 lines)
+  lines.......: 83.5% (10012 of 11990 lines)
   functions...: no data found
 Message summary:
   no messages were reported

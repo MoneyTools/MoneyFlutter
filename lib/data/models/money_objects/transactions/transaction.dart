@@ -5,6 +5,7 @@ import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
+import 'package:money/core/widgets/icon_button.dart';
 import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/core/widgets/picker_edit_box_date.dart';
 import 'package:money/core/widgets/picker_panel.dart';
@@ -232,7 +233,7 @@ class Transaction extends MoneyObject {
                 );
               }
             : null,
-        onShowSplit: t.isSplit ? (context) => showTransactionSplits(context, t) : null,
+        onShowSplit: t.isSplit ? () => showTransactionSplits(t) : null,
         child: Tooltip(
           message: categoryName,
           child: categoryWidget,
@@ -249,16 +250,30 @@ class Transaction extends MoneyObject {
         bool wasModified,
       ) onEdited,
     ) {
-      return pickerCategory(
-        key: const Key('key_pick_category'),
-        itemSelected: Data().categories.get((instance as Transaction).fieldCategoryId.value),
-        onSelected: (Category? newCategory) {
-          if (newCategory != null) {
-            instance.fieldCategoryId.value = newCategory.uniqueId;
-            // notify container
-            onEdited(true);
-          }
-        },
+      (instance as Transaction);
+      return Row(
+        children: [
+          Expanded(
+            child: pickerCategory(
+              key: const Key('key_pick_category'),
+              itemSelected: Data().categories.get(instance.fieldCategoryId.value),
+              onSelected: (Category? newCategory) {
+                if (newCategory != null) {
+                  instance.fieldCategoryId.value = newCategory.uniqueId;
+                  // notify container
+                  onEdited(true);
+                }
+              },
+            ),
+          ),
+          if (instance.fieldCategoryId.value == Data().categories.splitCategoryId())
+            MyIconButton(
+              icon: Icons.arrow_forward_ios,
+              onPressed: () {
+                showTransactionSplits(instance);
+              },
+            ),
+        ],
       );
     },
   );

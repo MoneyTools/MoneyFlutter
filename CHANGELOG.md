@@ -4,6 +4,7 @@
 
 ### Update
 
+- You can now see the Splits from the Transaction Dialog
 - Dialog fields are cleaner
 
 ## [version 1.9.05] 2024-11-20
