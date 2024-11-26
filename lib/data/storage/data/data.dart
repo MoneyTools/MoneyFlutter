@@ -1,5 +1,6 @@
 // Imports
 // The following lines import necessary libraries and packages for the file.
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -141,10 +142,13 @@ class Data {
   void checkTransfers() {
     Set<Transaction> dangling = getDanglingTransfers();
     if (dangling.isNotEmpty) {
-      SnackBarService.displayWarning(
-        message: '$dangling Dangling transfers have been found',
-        title: 'Dangling Transfers',
-        autoDismiss: false,
+      Timer(
+        Duration(milliseconds: 100),
+        () => SnackBarService.displayWarning(
+          message: '$dangling Dangling transfers have been found',
+          title: 'Dangling Transfers',
+          autoDismiss: false,
+        ),
       );
     }
   }

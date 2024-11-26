@@ -796,7 +796,7 @@ class Transaction extends MoneyObject {
       }
 
       return getTransferCaption(
-        instanceOfTransfer!.receiverAccount,
+        instanceOfTransfer?.receiverAccount,
         isFrom,
         showAccount: showAccount,
       );
@@ -826,8 +826,10 @@ class Transaction extends MoneyObject {
 
   Transfer? get instanceOfTransfer {
     if (_instanceOfTransfer == null && isTransfer) {
-      final relatedTransaction = Data().transactions.get(this.fieldTransfer.value);
-      linkTransfer(this, relatedTransaction!);
+      final Transaction? relatedTransaction = Data().transactions.get(this.fieldTransfer.value);
+      if (relatedTransaction != null) {
+        linkTransfer(this, relatedTransaction);
+      }
     }
     return _instanceOfTransfer;
   }

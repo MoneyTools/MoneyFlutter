@@ -43,7 +43,7 @@ class Transactions extends MoneyObjects<Transaction> {
     MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
 
     final transactionsWithCategories = getListFlattenSplits();
-    for (var t in transactionsWithCategories) {
+    for (final Transaction t in transactionsWithCategories) {
       if (t.fieldCategoryId.value != -1) {
         accountsToPayeeNameToCategories.cumulate(
           t.fieldAccountId.value,
