@@ -120,6 +120,7 @@ class MoneyObject {
       isReadOnly: isReadOnly,
     );
 
+    // Editing Field
     if (!isReadOnly && fieldDefinition.getEditWidget != null) {
       // Editing mode and the MoneyObject has a custom edit widget
       return InputDecorator(
@@ -131,6 +132,7 @@ class MoneyObject {
       );
     }
 
+    // Read only
     switch (fieldDefinition.type) {
       case FieldType.toggle:
         if (isReadOnly) {
@@ -163,27 +165,30 @@ class MoneyObject {
 
       case FieldType.widget:
         final String valueAsString = fieldDefinition.getValueForSerialization(objectInstance).toString();
-        return MyFormFieldForWidget(
-          title: fieldDefinition.name,
-          valueAsText: valueAsString,
-          isReadOnly: isReadOnly,
-          onChanged: (final String value) {
-            fieldDefinition.setValue?.call(objectInstance, value);
-            onEdited?.call(false);
-          },
+        return Opacity(
+          opacity: isReadOnly ? 0.5 : 1.0,
+          child: MyFormFieldForWidget(
+            title: fieldDefinition.name,
+            valueAsText: valueAsString,
+            isReadOnly: isReadOnly,
+            onChanged: (final String value) {
+              fieldDefinition.setValue?.call(objectInstance, value);
+              onEdited?.call(false);
+            },
+          ),
         );
 
       // all others will be a normal text input
       default:
         String value = fieldDefinition.getString(fieldValue);
         if (value.isEmpty && isReadOnly) {
-          value = '. . . ';
+          value = '';
         }
         return Row(
           children: <Widget>[
             Expanded(
               child: Opacity(
-                opacity: isReadOnly ? 0.6 : 1.0,
+                opacity: isReadOnly ? 0.5 : 1.0,
                 child: TextFormField(
                   initialValue: value,
                   decoration: decoration,

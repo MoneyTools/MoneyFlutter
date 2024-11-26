@@ -188,7 +188,7 @@ class Categories extends MoneyObjects<Category> {
       return categoryWidgetForSplit;
     }
 
-    return get(id)!.getColorAndNameWidget();
+    return get(id)?.getColorAndNameWidget() ?? Text('Unknown');
   }
 
   List<Category> getListSorted() {

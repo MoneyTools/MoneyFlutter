@@ -1,5 +1,17 @@
 # Change Log
 
+## [version 1.9.06] 2024-11-26
+
+### Update
+
+- Dialog fields are cleaner
+
+## [version 1.9.05] 2024-11-20
+
+### Added
+
+- Scroll jump to top or bottom
+
 ## [version 1.9.04] 2024-11-12
 
 ### Fix

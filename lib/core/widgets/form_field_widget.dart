@@ -32,33 +32,20 @@ class MyFormFieldForWidgetState extends State<MyFormFieldForWidget> {
 
   @override
   Widget build(final BuildContext context) {
-    if (widget.isReadOnly) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(widget.title, style: Theme.of(context).textTheme.bodySmall),
-          Text(widget.valueAsText),
-        ],
-      );
-    }
-    return Row(
-      children: <Widget>[
-        Expanded(
-          child: TextFormField(
-            controller: controller,
-            decoration: getFormFieldDecoration(
-              fieldName: widget.title,
-              isReadOnly: widget.isReadOnly,
-            ),
-            onChanged: (final String value) {
-              setState(() {
-                widget.onChanged(value);
-              });
-            },
-          ),
+    return Opacity(
+      opacity: widget.isReadOnly ? 0.5 : 1.0,
+      child: TextFormField(
+        controller: controller,
+        decoration: getFormFieldDecoration(
+          fieldName: widget.title,
+          isReadOnly: widget.isReadOnly,
         ),
-      ],
+        onChanged: (final String value) {
+          setState(() {
+            widget.onChanged(value);
+          });
+        },
+      ),
     );
   }
 }

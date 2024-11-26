@@ -5,13 +5,14 @@ class MyTextInput extends StatelessWidget {
     super.key,
     this.initialValue,
     this.isDense = false,
+    this.border = true,
     IconData? icon,
     this.controller,
     this.hintText = '',
     this.onChanged,
     this.onFieldSubmitted,
   }) : decoration = InputDecoration(
-          border: const OutlineInputBorder(),
+          border: border ? const OutlineInputBorder() : null,
           prefixIcon: icon == null ? null : Icon(icon),
           isDense: isDense,
           // isCollapsed: isDense,
@@ -25,6 +26,7 @@ class MyTextInput extends StatelessWidget {
   final String hintText;
   final String? initialValue;
   final bool isDense;
+  final bool border;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onFieldSubmitted;
 

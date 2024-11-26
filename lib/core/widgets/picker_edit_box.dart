@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/widgets/my_text_input.dart';
 import 'package:money/core/widgets/picker_panel.dart';
 
@@ -36,15 +35,16 @@ class PickerEditBoxState extends State<PickerEditBox> {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: getColorTheme(context).tertiaryContainer.withOpacity(0.3),
-        border: Border(bottom: BorderSide(color: getColorTheme(context).outline)),
-        // borderRadius: const BorderRadius.all(Radius.circular(8)),
-      ),
+          // color: getColorTheme(context).tertiaryContainer.withOpacity(0.3),
+          // border: Border(bottom: BorderSide(color: getColorTheme(context).outline)),
+          // borderRadius: const BorderRadius.all(Radius.circular(8)),
+          ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: MyTextInput(
+              border: false,
               controller: _textController,
               onChanged: (final String value) {
                 setState(() {

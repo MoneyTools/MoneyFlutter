@@ -869,7 +869,7 @@ window_manager</title>
   </g>
   <g id='Labels_flutter_markdown'>
     <text class="nodeName" x="2850" y="225" font-size="120%">flutter_markdown</text>
-    <text class="nodeName" x="2850" y="245" font-size="80%">0.7.4+1</text>
+    <text class="nodeName" x="2850" y="245" font-size="80%">0.7.4+2</text>
   </g>
   <g id='Labels_intl'>
     <text class="nodeName" x="3150" y="225" font-size="120%">intl</text>
@@ -877,7 +877,7 @@ window_manager</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.9.05</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.9.06</text>
   </g>
   <g id='Labels_clipboard'>
     <text class="nodeName" x="1050" y="375" font-size="120%">clipboard</text>
@@ -901,7 +901,7 @@ window_manager</title>
   </g>
   <g id='Labels_fl_chart'>
     <text class="nodeName" x="4650" y="225" font-size="120%">fl_chart</text>
-    <text class="nodeName" x="4650" y="245" font-size="80%">0.69.0</text>
+    <text class="nodeName" x="4650" y="245" font-size="80%">0.69.2</text>
   </g>
   <g id='Labels_get'>
     <text class="nodeName" x="1350" y="375" font-size="120%">get</text>
@@ -937,7 +937,7 @@ window_manager</title>
   </g>
   <g id='Labels_sqlite3'>
     <text class="nodeName" x="1050" y="225" font-size="120%">sqlite3</text>
-    <text class="nodeName" x="1050" y="245" font-size="80%">2.4.7</text>
+    <text class="nodeName" x="1050" y="245" font-size="80%">2.5.0</text>
   </g>
   <g id='Labels_sqlite3_flutter_libs'>
     <text class="nodeName" x="1950" y="375" font-size="120%">sqlite3_flutter_libs</text>
