@@ -49,6 +49,12 @@ double? attemptToGetDoubleFromText(String text) {
   return amount;
 }
 
+/// Copies the provided text to the system clipboard and displays a snackbar to inform the user.
+///
+/// This function is a utility for quickly copying text to the clipboard and providing feedback to the user.
+///
+/// @param context The [BuildContext] used to display the snackbar.
+/// @param textToCopy The text to be copied to the clipboard.
 void copyToClipboardAndInformUser(
   final BuildContext context,
   final String textToCopy,

@@ -69,7 +69,6 @@ class Chart extends StatelessWidget {
         minY = minY == 0 ? 0 : -roundToTheNextNaturalFit(minY.toInt().abs()).toDouble();
 
         return BarChart(
-          swapAnimationDuration: Duration.zero,
           BarChartData(
             barGroups: barChartData,
             maxY: maxY,

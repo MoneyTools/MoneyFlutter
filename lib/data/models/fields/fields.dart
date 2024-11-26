@@ -68,21 +68,23 @@ class Fields<T> {
     final List<Widget> cells = <Widget>[];
 
     for (final Field fieldDefinition in definitions) {
-      final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
-      cells.add(
-        Expanded(
-          flex: fieldDefinition.columnWidth.index,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
-            child: buildWidgetFromTypeAndValue(
-              value: value,
-              type: fieldDefinition.type,
-              align: fieldDefinition.align,
-              fixedFont: fieldDefinition.fixedFont,
+      if (fieldDefinition.columnWidth != ColumnWidth.hidden) {
+        final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
+        cells.add(
+          Expanded(
+            flex: fieldDefinition.columnWidth.index,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(2, 0, 2, 0),
+              child: buildWidgetFromTypeAndValue(
+                value: value,
+                type: fieldDefinition.type,
+                align: fieldDefinition.align,
+                fixedFont: fieldDefinition.fixedFont,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
 
     return Row(children: cells);

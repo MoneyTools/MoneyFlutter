@@ -38,22 +38,24 @@ class MyListItemFooter<T> extends StatelessWidget {
     }
     for (int i = 0; i < columns.length; i++) {
       final Field<dynamic> columnDefinition = columns[i];
-      footerWidgets.add(
-        buildColumnFooterButton(
-          context: context,
-          textAlign: columnDefinition.align,
-          flex: columnDefinition.columnWidth.index,
-          // Press
-          onPressed: () {
-            onTap(i);
-          },
-          // Long Press
-          onLongPress: () {
-            onLongPress?.call(columnDefinition);
-          },
-          child: getColumnFooterWidget(columnDefinition),
-        ),
-      );
+      if (columnDefinition.columnWidth != ColumnWidth.hidden) {
+        footerWidgets.add(
+          buildColumnFooterButton(
+            context: context,
+            textAlign: columnDefinition.align,
+            flex: columnDefinition.columnWidth.index,
+            // Press
+            onPressed: () {
+              onTap(i);
+            },
+            // Long Press
+            onLongPress: () {
+              onLongPress?.call(columnDefinition);
+            },
+            child: getColumnFooterWidget(columnDefinition),
+          ),
+        );
+      }
     }
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),

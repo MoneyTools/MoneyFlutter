@@ -48,7 +48,7 @@ typedef FieldDefinitions = List<Field<dynamic>>;
 
 /// This enum defines the different column widths that can be used for displaying fields in a table or grid layout.
 enum ColumnWidth {
-  hide, // 0
+  hidden, // 0
   nano, // 1
   tiny, // 1
   small, // 2
@@ -372,6 +372,7 @@ class FieldId extends Field<int> {
           serializeName: 'Id',
           useAsDetailPanels: defaultCallbackValueFalse,
           defaultValue: -1,
+          columnWidth: ColumnWidth.hidden,
         );
 }
 

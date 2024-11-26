@@ -141,6 +141,7 @@ class MoneySplit extends MoneyObject {
   FieldInt fieldTransactionId = FieldInt(
     name: 'Transaction',
     serializeName: 'Transaction',
+    columnWidth: ColumnWidth.hidden,
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldTransactionId.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldTransactionId.value,
   );
@@ -149,6 +150,7 @@ class MoneySplit extends MoneyObject {
   FieldInt fieldTransferId = FieldInt(
     name: 'Transfer',
     serializeName: 'Transfer',
+    columnWidth: ColumnWidth.hidden,
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldTransferId.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldTransferId.value,
   );

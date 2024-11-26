@@ -620,7 +620,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void onCopyListFromSidePanel() {
-    final listToCopy = getSidePanelTransactions();
+    final List<MoneyObject> listToCopy = getSidePanelTransactions();
     copyToClipboardAndInformUser(
       context,
       MoneyObjects.getCsvFromList(listToCopy, forSerialization: false),

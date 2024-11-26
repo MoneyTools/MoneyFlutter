@@ -262,9 +262,10 @@ class MoneyObjects<T> {
   ]) {
     final List<String> listValues = <String>[];
     for (final Field field in fieldDefinitions) {
-      final dynamic value = field.getValueForSerialization == defaultCallbackValue
+      final dynamic value = field.getValueForSerialization == defaultCallbackValue || forSerialization == false
           ? item.toReadableString(field)
           : field.getValueForSerialization(item);
+
       final String valueAsString = '"$value"';
       listValues.add(valueAsString);
     }
