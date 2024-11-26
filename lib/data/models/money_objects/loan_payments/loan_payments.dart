@@ -61,12 +61,12 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   // Rollup into a single Payment based on Date to match Principal and Interest payment
   Map<String, PaymentRollup> payments = {};
 
-  for (final t in listOfTransactions) {
-    // Key is based on date
-    String key = '${t.dateTimeAsString} ${t.uniqueId}';
-    PaymentRollup? pr = payments[key];
+  for (final Transaction t in listOfTransactions) {
+    // Key is based on date + transaction ID
+    String key = t.dateTimeAsString;
 
     bool isFromSplit = false;
+    PaymentRollup? pr = payments[key];
     if (pr == null) {
       pr = PaymentRollup();
       pr.accountId = t.fieldAccountId.value;
@@ -87,18 +87,18 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
 
     // Principal
     if (t.fieldCategoryId.value == account.fieldCategoryIdForPrincipal.value) {
-      pr.principal = t.fieldAmount.value.toDouble();
+      pr.principal += t.fieldAmount.value.toDouble();
     }
 
     // Interest
     if (t.fieldCategoryId.value == account.fieldCategoryIdForInterest.value) {
-      pr.interest = t.fieldAmount.value.toDouble();
+      pr.interest += t.fieldAmount.value.toDouble();
     }
   }
 
   int fakeId = 10000000;
 
-  for (final pr in payments.values) {
+  for (final PaymentRollup pr in payments.values) {
     aggregatedList.add(
       LoanPayment(
         id: fakeId++,
@@ -116,7 +116,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
 
   double runningBalance = 0.00;
 
-  for (final p in aggregatedList) {
+  for (final LoanPayment p in aggregatedList) {
     runningBalance += p.fieldPrincipal.value.toDouble();
     p.fieldBalance.value.setAmount(runningBalance);
 

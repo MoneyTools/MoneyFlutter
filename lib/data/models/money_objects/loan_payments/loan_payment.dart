@@ -176,9 +176,10 @@ class LoanPayment extends MoneyObject {
         tmpInstance.fieldAccountId,
         tmpInstance.fieldMemo,
         tmpInstance.fieldReference,
+        tmpInstance.payment,
         tmpInstance.fieldRate,
-        tmpInstance.fieldInterest,
         tmpInstance.fieldPrincipal,
+        tmpInstance.fieldInterest,
         tmpInstance.fieldBalance,
       ]);
     }
