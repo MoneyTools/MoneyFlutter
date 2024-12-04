@@ -159,6 +159,12 @@ class MoneySplit extends MoneyObject {
   @override
   FieldDefinitions get fieldDefinitions => fields.definitions;
 
+  /// Splits are different from the other tables, the primary keys is Transaction+Id
+  @override
+  String getWhereClause() {
+    return 'Transaction=${fieldTransactionId.value} AND Id=$uniqueId';
+  }
+
   @override
   int get uniqueId => fieldId.value;
 

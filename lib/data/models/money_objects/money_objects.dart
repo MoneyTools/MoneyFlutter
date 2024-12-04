@@ -202,13 +202,23 @@ class MoneyObjects<T> {
         case MutationType.none:
           break;
         case MutationType.inserted:
-          db.itemInsert(tableName, item.getPersistableJSon());
+          db.itemInsert(
+            tableName,
+            item.getPersistableJSon(),
+          );
 
         case MutationType.changed:
-          db.itemUpdate(tableName, item.uniqueId, item.getPersistableJSon());
+          db.itemUpdate(
+            tableName,
+            item.getPersistableJSon(),
+            item.getWhereClause(),
+          );
 
         case MutationType.deleted:
-          db.itemDelete(tableName, item.uniqueId);
+          db.itemDelete(
+            tableName,
+            item.getWhereClause(),
+          );
 
         default:
           debugPrint('Unhandled change ${item.mutation}');

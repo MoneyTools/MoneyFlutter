@@ -257,6 +257,12 @@ class MoneyObject {
     return 'Id: $uniqueId'; // By default the ID is the best unique way
   }
 
+  /// Return the where clause use to identify the unique storage identification of a row in the database
+  /// for most table it will be " where Id='1' "
+  String getWhereClause() {
+    return 'Id=$uniqueId'; // By default the ID is the best unique way
+  }
+
   bool get isChanged => mutation == MutationType.changed;
 
   static bool isDataModified(MoneyObject moneyObject) {

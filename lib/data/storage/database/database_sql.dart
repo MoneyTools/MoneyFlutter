@@ -232,8 +232,8 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
   }
 
   /// SQL Delete
-  void itemDelete(final String tableName, final int id) {
-    _db.execute('DELETE FROM $tableName WHERE Id=$id;');
+  void itemDelete(final String tableName, final String whereClause) {
+    _db.execute('DELETE FROM $tableName WHERE $whereClause;');
   }
 
   /// SQL Insert
@@ -244,12 +244,12 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
   }
 
   /// SQL Update
-  void itemUpdate(final String tableName, final int id, final MyJson jsonMap) {
+  void itemUpdate(final String tableName, final MyJson jsonMap, final String whereClause) {
     final List<String> setStatements =
         jsonMap.keys.map((key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
 
     String fieldNamesAndValues = setStatements.join(', ');
-    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE Id=$id;');
+    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE $whereClause;');
   }
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
