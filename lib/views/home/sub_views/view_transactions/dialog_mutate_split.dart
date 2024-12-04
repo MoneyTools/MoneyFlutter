@@ -86,6 +86,7 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
     if (editMode) {
       return [
         DialogActionButton(
+          key: Constants.keyButtonApplyOrDone,
           text: dataWasModified ? 'Apply' : 'Done',
           onPressed: () {
             // Changes were made
@@ -132,6 +133,7 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
       ),
       // Edit
       DialogActionButton(
+        key: Constants.keyButtonEdit,
         icon: Icons.edit_outlined,
         text: 'Edit',
         onPressed: () {

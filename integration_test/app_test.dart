@@ -1,11 +1,10 @@
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/core/widgets/side_panel/side_panel_header.dart';
-import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/main.dart' as app;
+import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'test_helpers.dart';
@@ -30,10 +29,10 @@ void main() {
           await switchToSmall(tester);
           await stepWelcomeSettingAndTheme(tester);
 
-          // //*************************************************************************
-          // //
-          // // Medium screen - import
-          // //
+          //*************************************************************************
+          //
+          // Medium screen - import
+          //
           await switchToMedium(tester);
           await stepImport(tester);
 
@@ -648,8 +647,27 @@ Future<void> testTransactions(WidgetTester tester) async {
   // The row is now selected
   final categorySplitButton = find.descendant(of: firstRow, matching: find.text('Split'));
   await tester.tap(categorySplitButton, warnIfMissed: false);
+
   // wait for the dialog
   await tester.myPump();
+
+  // // long press on the first list item to bring up the Split Editing dialog
+  // await longPressFirstItemOfListView(tester, MyListView<MoneySplit>);
+
+  // // wait for the dialog
+  // await tester.myPump();
+
+  // // Go in Edit mode by tapping button "Edit"
+  // await tapOnKey(tester, Constants.keyButtonEdit);
+
+  // // wait for the dialog
+  // await tester.myPump();
+
+  // // Tape button "Done"
+  // await tapOnKey(tester, Constants.keyButtonApplyOrDone);
+
+  // wait for the dialog
+  // await tester.myPump();
 
   // dismiss the dialog box for "Splits"
   await tapOnText(tester, 'Close');

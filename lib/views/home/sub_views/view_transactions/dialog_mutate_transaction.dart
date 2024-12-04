@@ -86,6 +86,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
     if (editMode) {
       return [
         DialogActionButton(
+          key: Constants.keyButtonApplyOrDone,
           text: dataWasModified ? 'Apply' : 'Done',
           onPressed: () {
             // Changes were made
@@ -153,6 +154,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       ),
       // Edit
       DialogActionButton(
+        key: Constants.keyButtonEdit,
         icon: Icons.edit_outlined,
         text: 'Edit',
         onPressed: () {

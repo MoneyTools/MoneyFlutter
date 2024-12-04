@@ -62,7 +62,7 @@ void adaptiveScreenSizeDialog({
     actionButtons.insert(
       0,
       DialogActionButton(
-        key: Constants.keyCancelButton,
+        key: Constants.keyButtonCancel,
         text: captionForClose,
         onPressed: () {
           Navigator.of(context).pop(false);

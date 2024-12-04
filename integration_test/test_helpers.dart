@@ -147,22 +147,33 @@ Future<void> showInstruction(tester, text) async {
 
 // Select first element of the Side-Panel-Transaction-List
 Future<void> selectFirstItemOfSidePanelTransactionLIst(WidgetTester tester) async {
-  final element = await getFirstRowOfSidePanelTransactionList(tester);
+  final element = await getFirstItemOfList(tester, SidePanel);
   await tester.tap(element, warnIfMissed: false);
   await tester.myPump();
 }
 
 // Long Press first element of the Side-Panel-Transaction-List
 Future<void> longPressFirstItemOfSidePanelTransactionLIst(WidgetTester tester) async {
-  final element = await getFirstRowOfSidePanelTransactionList(tester);
-  await tester.longPress(element, warnIfMissed: false);
-  await tester.myPump();
+  await longPressFirstItemOfListView(tester, SidePanel);
 }
 
-Future<Finder> getFirstRowOfSidePanelTransactionList(WidgetTester tester) async {
+// Long Press first element of the Side-Panel-Transaction-List
+Future<void> longPressFirstItemOfListView(WidgetTester tester, Type typeParentListContainer) async {
+  final Finder firstMatchingElement = await getFirstItemOfList(tester, typeParentListContainer);
+  expect(
+    firstMatchingElement,
+    findsAny,
+  );
+  await tester.longPress(firstMatchingElement, warnIfMissed: false);
+}
+
+Future<Finder> getFirstItemOfList(
+  WidgetTester tester,
+  Type typeParentListContainer,
+) async {
   // Select first element of the Side-Panel-Transaction-List
   Finder firstMatchingElement = find.descendant(
-    of: find.byType(SidePanel),
+    of: find.byType(typeParentListContainer),
     matching: find.byType(MyListItem),
   );
   expect(
