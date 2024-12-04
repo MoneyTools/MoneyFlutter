@@ -8,11 +8,6 @@ import 'package:sqlite3/sqlite3.dart';
 class MyDatabaseImplementation {
   late final Database _db;
 
-  /// SQL Delete
-  void delete(final String tableName, final int id) {
-    _db.execute('DELETE FROM $tableName WHERE Id=$id;');
-  }
-
   void dispose() {
     _db.dispose();
   }
@@ -236,13 +231,6 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
     // Add more tables or alter the schema as needed
   }
 
-  /// SQL Insert
-  void insert(final String tableName, final MyJson data) {
-    final columnNames = data.keys.map((key) => '"$key"').join(', ');
-    final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
-    _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
-  }
-
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     if (File(fileToOpen).existsSync()) {
       _db = sqlite3.open(fileToOpen);
@@ -269,8 +257,20 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
     return result.isNotEmpty;
   }
 
+  /// SQL Delete
+  void itemDelete(final String tableName, final int id) {
+    _db.execute('DELETE FROM $tableName WHERE Id=$id;');
+  }
+
+  /// SQL Insert
+  void itemInsert(final String tableName, final MyJson data) {
+    final columnNames = data.keys.map((key) => '"$key"').join(', ');
+    final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
+    _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
+  }
+
   /// SQL Update
-  void update(final String tableName, final int id, final MyJson jsonMap) {
+  void itemUpdate(final String tableName, final int id, final MyJson jsonMap) {
     final List<String> setStatements =
         jsonMap.keys.map((key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
 
