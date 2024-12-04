@@ -6,6 +6,13 @@ import 'package:money/data/models/money_objects/currencies/currency.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
 class MoneyWidget extends StatelessWidget {
+  /// Constructor
+  const MoneyWidget({
+    super.key,
+    required this.amountModel,
+    this.asTile = false,
+  });
+
   factory MoneyWidget.fromDouble(double amount, {bool asTitle = false}) {
     return MoneyWidget(
       amountModel: MoneyModel(
@@ -15,17 +22,11 @@ class MoneyWidget extends StatelessWidget {
     );
   }
 
-  /// Constructor
-  const MoneyWidget({
-    super.key,
-    required this.amountModel,
-    this.asTile = false,
-  });
-
   final bool asTile;
 
   /// Amount to display
   final MoneyModel amountModel;
+
   @override
   Widget build(final BuildContext context) {
     if (amountModel.showCurrency) {

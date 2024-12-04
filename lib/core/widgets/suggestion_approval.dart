@@ -13,14 +13,14 @@ class SuggestionApproval extends StatefulWidget {
 
   final Widget child;
 
-  // Optional - for Split Transaction
-  final Function? onShowSplit;
-
   /// Optional - Approval button will show if there's a callback function
   final Function? onApproved;
 
   // Optional - Dropdown button
   final Function? onChooseCategory;
+
+  // Optional - for Split Transaction
+  final Function? onShowSplit;
 
   @override
   SuggestionApprovalState createState() => SuggestionApprovalState();

@@ -20,14 +20,6 @@ class ListController extends GetxController {
     super.onInit();
   }
 
-  void scrollToBottom() {
-    scrollController.animateTo(
-      scrollController.position.maxScrollExtent,
-      duration: const Duration(milliseconds: 300),
-      curve: Curves.easeOut,
-    );
-  }
-
   void scrollToBookmark() {
     if (bookmark != -1) {
       scrollController.animateTo(
@@ -36,6 +28,14 @@ class ListController extends GetxController {
         curve: Curves.easeOut,
       );
     }
+  }
+
+  void scrollToBottom() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
   }
 
   void scrollToTop() {

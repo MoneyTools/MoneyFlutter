@@ -21,12 +21,12 @@ class MyTextInput extends StatelessWidget {
           hintText: hintText,
         );
 
+  final bool border;
   final TextEditingController? controller;
   final InputDecoration decoration;
   final String hintText;
   final String? initialValue;
   final bool isDense;
-  final bool border;
   final ValueChanged<String>? onChanged;
   final ValueChanged<String>? onFieldSubmitted;
 

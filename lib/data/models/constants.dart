@@ -55,6 +55,7 @@ class Constants {
   static const int commandSettings = 1100;
   static const int commandTextZoom = 1000;
   static const String defaultCurrency = 'USD';
+  static String fakeStockApiKey = 'fakeStockApiKey';
   static const double gapBetweenChannels = 14.0;
   static const Key keyAccountPicker = Key('key_account_picker');
   // Keys
@@ -92,7 +93,6 @@ class Constants {
   static String viewTransactionFieldNameAccount = 'Account';
   static String viewTransactionFieldNameCategory = 'Category';
   static String viewTransactionFieldNamePayee = 'Payee/Transfer';
-  static String fakeStockApiKey = 'fakeStockApiKey';
 }
 
 class SizeForDoubles {

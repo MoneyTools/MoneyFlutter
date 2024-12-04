@@ -231,6 +231,27 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
     // Add more tables or alter the schema as needed
   }
 
+  /// SQL Delete
+  void itemDelete(final String tableName, final int id) {
+    _db.execute('DELETE FROM $tableName WHERE Id=$id;');
+  }
+
+  /// SQL Insert
+  void itemInsert(final String tableName, final MyJson data) {
+    final columnNames = data.keys.map((key) => '"$key"').join(', ');
+    final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
+    _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
+  }
+
+  /// SQL Update
+  void itemUpdate(final String tableName, final int id, final MyJson jsonMap) {
+    final List<String> setStatements =
+        jsonMap.keys.map((key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
+
+    String fieldNamesAndValues = setStatements.join(', ');
+    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE Id=$id;');
+  }
+
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     if (File(fileToOpen).existsSync()) {
       _db = sqlite3.open(fileToOpen);
@@ -255,26 +276,5 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
       [tableName],
     );
     return result.isNotEmpty;
-  }
-
-  /// SQL Delete
-  void itemDelete(final String tableName, final int id) {
-    _db.execute('DELETE FROM $tableName WHERE Id=$id;');
-  }
-
-  /// SQL Insert
-  void itemInsert(final String tableName, final MyJson data) {
-    final columnNames = data.keys.map((key) => '"$key"').join(', ');
-    final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
-    _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
-  }
-
-  /// SQL Update
-  void itemUpdate(final String tableName, final int id, final MyJson jsonMap) {
-    final List<String> setStatements =
-        jsonMap.keys.map((key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
-
-    String fieldNamesAndValues = setStatements.join(', ');
-    _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE Id=$id;');
   }
 }
