@@ -324,15 +324,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         // this is Split get the split transactions
         return ListViewTransactionSplits(
           key: Key('split_transactions ${transaction.uniqueId}'),
-          getList: () {
-            return Data()
-                .splits
-                .iterableList()
-                .where(
-                  (final MoneySplit s) => s.fieldTransactionId.value == transaction.fieldId.value,
-                )
-                .toList();
-          },
+          transaction: transaction,
         );
       }
 

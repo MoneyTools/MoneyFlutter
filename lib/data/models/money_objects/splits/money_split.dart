@@ -1,10 +1,11 @@
 // ignore_for_file: unrelated_type_equality_checks, unnecessary_this
-
-import 'dart:ui';
-
 import 'package:money/core/helpers/date_helper.dart';
+import 'package:money/core/widgets/picker_panel.dart';
+import 'package:money/core/widgets/suggestion_approval.dart';
+import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
+import 'package:money/views/home/sub_views/view_categories/picker_category.dart';
 
 /*
   SQLite table definition
@@ -82,6 +83,8 @@ class MoneySplit extends MoneyObject {
     serializeName: 'Amount',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value.toDouble(),
+    setValue: (MoneyObject instance, dynamic newValue) =>
+        (instance as MoneySplit).fieldAmount.value.setAmount(newValue),
   );
 
   // 8
@@ -97,11 +100,68 @@ class MoneySplit extends MoneyObject {
   FieldInt fieldCategoryId = FieldInt(
     name: 'Category',
     serializeName: 'Category',
-    type: FieldType.text,
+    type: FieldType.widget,
     align: TextAlign.left,
-    getValueForDisplay: (final MoneyObject instance) =>
-        Data().categories.getNameFromId((instance as MoneySplit).fieldCategoryId.value),
+    getValueForDisplay: (final MoneyObject instance) {
+      (instance as MoneySplit);
+      final Widget categoryWidget = Data().categories.getCategoryWidget(
+            instance.fieldCategoryId.value,
+          );
+
+      return SuggestionApproval(
+        onApproved: null,
+        onChooseCategory: instance.fieldCategoryId.value == -1
+            ? (final BuildContext context) {
+                showPopupSelection(
+                  title: 'Category',
+                  context: context,
+                  items: Data().categories.getCategoriesAsStrings(),
+                  selectedItem: '',
+                  onSelected: (final String text) {
+                    final Category? selectedCategory = Data().categories.getByName(text);
+                    if (selectedCategory != null) {
+                      instance.fieldCategoryId.value = selectedCategory.uniqueId;
+                    }
+                  },
+                );
+              }
+            : null,
+        onShowSplit: null,
+        child: Tooltip(
+          message: instance.categoryName,
+          child: categoryWidget,
+        ),
+      );
+    },
+    getValueForReading: (final MoneyObject instance) => (instance as MoneySplit).categoryName,
     getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldCategoryId.value,
+    setValue: (final MoneyObject instance, dynamic newValue) =>
+        (instance as MoneySplit).fieldCategoryId.value = newValue as int,
+    getEditWidget: (
+      final MoneyObject instance,
+      Function(
+        bool wasModified,
+      ) onEdited,
+    ) {
+      (instance as MoneySplit);
+      return Row(
+        children: [
+          Expanded(
+            child: pickerCategory(
+              key: const Key('key_pick_category'),
+              itemSelected: Data().categories.get(instance.fieldCategoryId.value),
+              onSelected: (Category? newCategory) {
+                if (newCategory != null) {
+                  instance.fieldCategoryId.value = newCategory.uniqueId;
+                  // notify container
+                  onEdited(true);
+                }
+              },
+            ),
+          ),
+        ],
+      );
+    },
   );
 
   // 7
@@ -124,6 +184,7 @@ class MoneySplit extends MoneyObject {
     serializeName: 'Memo',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as MoneySplit).fieldMemo.value = newValue,
   );
 
   // 3
@@ -162,7 +223,7 @@ class MoneySplit extends MoneyObject {
   /// Splits are different from the other tables, the primary keys is Transaction+Id
   @override
   String getWhereClause() {
-    return 'Transaction=${fieldTransactionId.value} AND Id=$uniqueId';
+    return '"Transaction"=${fieldTransactionId.value} AND "Id"=$uniqueId';
   }
 
   @override
@@ -172,6 +233,8 @@ class MoneySplit extends MoneyObject {
   set uniqueId(value) => fieldId.value = value;
 
   static final _fields = Fields<MoneySplit>();
+
+  String get categoryName => Data().categories.getNameFromId(fieldCategoryId.value);
 
   static Fields<MoneySplit> get fields {
     if (_fields.isEmpty) {
