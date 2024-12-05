@@ -91,6 +91,7 @@ class MoneySplit extends MoneyObject {
   FieldDate fieldBudgetBalanceDate = FieldDate(
     name: 'Budgeted Date',
     serializeName: 'BudgetBalanceDate',
+    columnWidth: ColumnWidth.hidden,
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldBudgetBalanceDate.value,
     getValueForSerialization: (final MoneyObject instance) =>
         dateToIso8601OrDefaultString((instance as MoneySplit).fieldBudgetBalanceDate.value),
@@ -168,7 +169,7 @@ class MoneySplit extends MoneyObject {
   FieldInt fieldFlags = FieldInt(
     name: 'Flags',
     serializeName: 'Flags',
-    columnWidth: ColumnWidth.nano,
+    columnWidth: ColumnWidth.hidden,
     align: TextAlign.center,
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldFlags.value,
   );

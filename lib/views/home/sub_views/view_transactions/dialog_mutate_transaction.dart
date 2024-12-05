@@ -102,7 +102,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
       ];
     }
 
-    // Read only more
+    // Read only mode
     return [
       // Close
       DialogActionButton(

@@ -58,6 +58,10 @@ Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type,
 }
 
 Future<Finder> tapOnFirstRowOfListView(final WidgetTester tester) async {
+  return await tapOnFirstRowOfListViewFirstOrLast(tester, true);
+}
+
+Future<Finder> tapOnFirstRowOfListViewFirstOrLast(final WidgetTester tester, bool first) async {
   Finder firstMatchingElement = find.descendant(
     of: find.byType(ListView),
     matching: find.byType(Row),
@@ -67,7 +71,7 @@ Future<Finder> tapOnFirstRowOfListView(final WidgetTester tester) async {
     findsAny,
   );
 
-  firstMatchingElement = firstMatchingElement.first;
+  firstMatchingElement = first ? firstMatchingElement.first : firstMatchingElement.last;
 
   expect(firstMatchingElement, findsOneWidget);
   // for row we tap on the top left side to avoid any active widget in the row like "Split", "Accept suggestion"
@@ -162,9 +166,9 @@ Future<void> longPressFirstItemOfListView(WidgetTester tester, Type typeParentLi
   final Finder firstMatchingElement = await getFirstItemOfList(tester, typeParentListContainer);
   expect(
     firstMatchingElement,
-    findsAny,
+    findsAtLeast(1),
   );
-  await tester.longPress(firstMatchingElement, warnIfMissed: false);
+  await tester.longPress(firstMatchingElement, warnIfMissed: true);
 }
 
 Future<Finder> getFirstItemOfList(
@@ -178,7 +182,7 @@ Future<Finder> getFirstItemOfList(
   );
   expect(
     firstMatchingElement,
-    findsAny,
+    findsAtLeast(1),
   );
 
   firstMatchingElement = firstMatchingElement.first;

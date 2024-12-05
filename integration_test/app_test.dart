@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
+import 'dart:ui';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -644,33 +645,43 @@ Future<void> testTransactions(WidgetTester tester) async {
   // By selecting the first Transaction in the list that is a s 'split' we end up showing on the info-panel the sub-transactions of that Split
   final firstRow = await tapOnFirstRowOfListView(tester);
 
-  // The row is now selected
-  final categorySplitButton = find.descendant(of: firstRow, matching: find.text('Split'));
-  await tester.tap(categorySplitButton, warnIfMissed: false);
+  // Do some CRUD with Splits
+  {
+    final Finder categorySplitButton = find.descendant(of: firstRow, matching: find.text('Split'));
+    await tester.tap(categorySplitButton, warnIfMissed: false);
+    await tester.myPump();
 
-  // wait for the dialog
-  await tester.myPump();
+    await tapOnText(tester, 'Add');
+    await tester.myPump();
 
-  // // long press on the first list item to bring up the Split Editing dialog
-  // await longPressFirstItemOfListView(tester, MyListView<MoneySplit>);
+    await tapOnText(tester, 'Refresh list');
+    await tester.myPump();
 
-  // // wait for the dialog
-  // await tester.myPump();
+    await tester.longPress(find.text('Principal').last, warnIfMissed: true, kind: PointerDeviceKind.mouse);
+    await tester.myPump();
 
-  // // Go in Edit mode by tapping button "Edit"
-  // await tapOnKey(tester, Constants.keyButtonEdit);
+    // Go in Edit mode by tapping button "Edit"
+    await tapOnKey(tester, Constants.keyButtonEdit);
+    await tester.myPump();
 
-  // // wait for the dialog
-  // await tester.myPump();
+    // Edit the Category
+    {
+      await tapOnKeyString(tester, 'key_dropdown');
+      await tester.myPump();
+      await tapOnText(tester, 'Investment');
+      await tester.myPump();
+    }
 
-  // // Tape button "Done"
-  // await tapOnKey(tester, Constants.keyButtonApplyOrDone);
+    // make a change to the Amount
+    await inputTextToTextFieldWithThisLabel(tester, 'Amount', '333');
 
-  // wait for the dialog
-  // await tester.myPump();
+    // Tape button "Done"
+    await tapOnKey(tester, Constants.keyButtonApplyOrDone);
+    await tester.myPump();
 
-  // dismiss the dialog box for "Splits"
-  await tapOnText(tester, 'Close');
+    // dismiss the dialog box for "Splits"
+    await tapOnText(tester, 'Close');
+  }
 }
 
 Future<void> sidePanelTabs(

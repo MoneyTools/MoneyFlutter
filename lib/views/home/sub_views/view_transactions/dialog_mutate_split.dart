@@ -102,7 +102,7 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
       ];
     }
 
-    // Read only more
+    // Read only mode
     return [
       // Close
       DialogActionButton(

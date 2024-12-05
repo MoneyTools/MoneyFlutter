@@ -70,6 +70,7 @@ class Constants {
   static const Key keyDatePicker = Key('key_date_picker');
   static const Key keyDeleteSelectedItems = Key('key_delete_button');
   static const Key keyEditSelectedItems = Key('key_edit_item');
+  static const Key keyItemEdit = Key('key_item_edit');
   static const Key keyMergeButton = Key('key_merge_button');
   static const Key keyMruButton = Key('key_mru_button');
   static const Key keyMultiSelectionToggle = Key('key_multi_selection_toggle');
