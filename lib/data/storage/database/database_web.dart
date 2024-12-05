@@ -6,15 +6,18 @@ import 'package:money/core/helpers/json_helper.dart';
 
 /// implement the Sqlite3 WASM Web Support see https://pub.dev/packages/sqlite3#wasm-web-support
 class MyDatabaseImplementation {
-  /// SQL Delete
-  void delete(final String tableName, final int id) {}
-
   void dispose() {}
 
   void execute(final String query) {}
 
+  /// SQL Delete
+  void itemDelete(final String tableName, final String whereClause) {}
+
   /// SQL Insert
-  void insert(final String tableName, final MyJson data) {}
+  void itemInsert(final String tableName, final MyJson data) {}
+
+  /// SQL Update
+  void itemUpdate(final String tableName, final MyJson jsonMap, final String whereClause) {}
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     try {
@@ -66,9 +69,6 @@ class MyDatabaseImplementation {
       return false;
     }
   }
-
-  /// SQL Update
-  void update(final String tableName, final int id, final MyJson jsonMap) {}
 
   // Helper to convert JsObject to List<Map<String, dynamic>>
   List<Map<String, dynamic>> _convertJsResultToList(js.JsObject jsResult) {
