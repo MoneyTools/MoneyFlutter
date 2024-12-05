@@ -38,7 +38,7 @@ class SettingsPage extends GetView<GetxController> {
                 ),
                 Divider(height: 50),
                 MyTextInput(
-                  hintText: 'Stock service API key',
+                  hintText: 'Stock service API key from https://twelvedata.com',
                   controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks,
                 ),
                 Divider(height: 50),
