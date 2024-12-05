@@ -6,14 +6,14 @@ void main() {
   group('ChartEvent', () {
     test('creates ChartEvent with valid data', () {
       final chartEvent = ChartEvent(
-        date: DateTime(2023, 1, 1),
+        dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 100.0,
         quantity: 1,
         description: 'Test Event',
         colorBasedOnQuantity: true,
       );
 
-      expect(chartEvent.date, DateTime(2023, 1, 1));
+      expect(chartEvent.dates.min, DateTime(2023, 1, 1));
       expect(chartEvent.amount, 100.0);
       expect(chartEvent.isBuy, true);
       expect(chartEvent.colorToUse, Colors.orange);
@@ -21,7 +21,7 @@ void main() {
 
     test('creates ChartEvent with zero value', () {
       final chartEvent = ChartEvent(
-        date: DateTime(2023, 1, 1),
+        dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 0.0,
         quantity: 0,
         description: 'Zero Event',
@@ -33,7 +33,7 @@ void main() {
 
     test('creates ChartEvent with negative value', () {
       final chartEvent = ChartEvent(
-        date: DateTime(2023, 1, 1),
+        dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: -100.0,
         quantity: -1,
         description: 'Negative Event',
@@ -47,7 +47,7 @@ void main() {
 
     test('compares ChartEvents correctly', () {
       final event1 = ChartEvent(
-        date: DateTime(2023, 1, 1),
+        dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 100.0,
         quantity: 1,
         description: 'Event 1',
@@ -55,7 +55,7 @@ void main() {
       );
 
       final event2 = ChartEvent(
-        date: DateTime(2023, 1, 1),
+        dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 100.0,
         quantity: 1,
         description: 'Event 1',
@@ -63,7 +63,7 @@ void main() {
       );
 
       final event3 = ChartEvent(
-        date: DateTime(2023, 1, 2),
+        dates: DateRange(min: DateTime(2023, 1, 2)),
         amount: 200.0,
         quantity: 2,
         description: 'Event 2',

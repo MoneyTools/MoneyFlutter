@@ -15,6 +15,46 @@ class DateRange {
   DateTime? min;
 
   @override
+  bool operator ==(Object other) {
+    if (other is! DateRange) {
+      return false;
+    }
+
+    if (this.max == null && other.max != null) {
+      return false;
+    }
+
+    if (this.max != null && other.max == null) {
+      return false;
+    }
+
+    final DateTime otherMin = other.min!;
+
+    if (this.max == null && other.max == null) {
+      // Just Min
+      return min!.year <= otherMin.year && min!.month <= otherMin.month && min!.day <= otherMin.day;
+    }
+
+    // Min and Max
+    final DateTime otherMax = other.max!;
+    return min!.year <= otherMin.year &&
+        max!.year >= otherMax.year &&
+        min!.month <= otherMin.month &&
+        max!.month >= otherMax.month &&
+        min!.day <= otherMin.day &&
+        max!.day >= otherMax.day;
+  }
+
+  @override
+  int get hashCode {
+    if (max == null) {
+      return min!.hashCode;
+    } else {
+      return min!.hashCode ^ max!.hashCode;
+    }
+  }
+
+  @override
   String toString() {
     return '${dateToString(min)} : ${dateToString(max)}';
   }

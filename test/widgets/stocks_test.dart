@@ -119,14 +119,14 @@ void main() {
 
       final holdingsActivities = [
         ChartEvent(
-          date: DateTime(2022, 1, 1),
+          dates: DateRange(min: DateTime(2022, 1, 1)),
           amount: 100.0,
           quantity: 10,
           description: 'Buy',
           colorBasedOnQuantity: true,
         ),
         ChartEvent(
-          date: DateTime(2022, 2, 1),
+          dates: DateRange(min: DateTime(2022, 2, 1)),
           amount: -50.0,
           quantity: -5,
           description: 'Sell',

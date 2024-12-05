@@ -149,7 +149,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
       final Category? category = Data().categories.get(event.fieldCategoryId.value);
       milestoneTransactions.add(
         ChartEvent(
-          date: event.fieldDateBegin.value!,
+          dates: DateRange(min: event.fieldDateBegin.value!, max: event.fieldDateEnd.value ?? DateTime.now()),
           amount: 0,
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
@@ -160,7 +160,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     }
 
     // sort by ascending date
-    milestoneTransactions.sort((a, b) => a.date.compareTo(b.date));
+    milestoneTransactions.sort((a, b) => a.dates.min!.compareTo(b.dates.min!));
 
     return Stack(
       alignment: Alignment.topCenter,

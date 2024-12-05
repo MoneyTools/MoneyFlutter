@@ -1,8 +1,11 @@
+import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/widgets.dart';
+
+export 'package:money/core/helpers/ranges.dart';
 
 class ChartEvent {
   ChartEvent({
-    required this.date,
+    required this.dates,
     required this.amount,
     required this.quantity,
     required this.description,
@@ -13,7 +16,7 @@ class ChartEvent {
   final double amount;
   final Color? color;
   final bool colorBasedOnQuantity;
-  final DateTime date;
+  final DateRange dates;
   final String description;
   final double quantity;
 
@@ -26,14 +29,14 @@ class ChartEvent {
       return false;
     }
 
-    return date == other.date &&
+    return dates == other.dates &&
         amount == other.amount &&
         quantity == other.quantity &&
         description == other.description;
   }
 
   @override
-  int get hashCode => Object.hash(date, amount, quantity, description);
+  int get hashCode => Object.hash(dates, amount, quantity, description);
 
   Color get colorToUse {
     if (this.color == null) {

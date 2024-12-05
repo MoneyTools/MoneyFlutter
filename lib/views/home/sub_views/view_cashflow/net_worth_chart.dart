@@ -92,7 +92,7 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
       final Category? category = Data().categories.get(event.fieldCategoryId.value);
       milestoneTransactions.add(
         ChartEvent(
-          date: event.fieldDateBegin.value!,
+          dates: DateRange(min: event.fieldDateBegin.value!),
           amount: 0,
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
@@ -124,7 +124,7 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
       final t = transactions[i];
       milestoneTransactions.add(
         ChartEvent(
-          date: t.fieldDateTime.value!,
+          dates: DateRange(min: t.fieldDateTime.value!),
           amount: t.fieldAmount.value.toDouble(),
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
@@ -133,6 +133,6 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
       );
     }
   }
-  milestoneTransactions.sort((a, b) => sortByDate(a.date, b.date, true));
+  milestoneTransactions.sort((a, b) => sortByDate(a.dates.min, b.dates.min, true));
   return milestoneTransactions;
 }

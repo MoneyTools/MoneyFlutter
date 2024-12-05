@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
+import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/charts/my_line_chart.dart';
@@ -112,11 +113,11 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   void _adjustMissingDataPointInThePast() {
     for (final activity in widget.holdingsActivities.reversed) {
-      if (dataPoints.isEmpty || activity.date.millisecondsSinceEpoch < dataPoints.first.x) {
+      if (dataPoints.isEmpty || activity.dates.min!.millisecondsSinceEpoch < dataPoints.first.x) {
         dataPoints.insert(
           0,
           FlSpot(
-            activity.date.millisecondsSinceEpoch.toDouble(),
+            activity.dates.min!.millisecondsSinceEpoch.toDouble(),
             activity.amount,
           ),
         );
@@ -395,9 +396,9 @@ void _paintLabel(
       text: text,
       style: TextStyle(
         color: color,
-        fontSize: 9,
-        height: 0.9, // Tight lines spacing
-        fontWeight: FontWeight.w900,
+        fontSize: 10,
+        height: 0.7, // Tight lines spacing
+        fontWeight: FontWeight.bold,
       ),
     ),
     textDirection: ui.TextDirection.ltr,
@@ -475,9 +476,12 @@ class PaintActivities extends CustomPainter {
 
     for (final ChartEvent activity in activities) {
       double left = 0;
-
-      if (activity.date.millisecondsSinceEpoch > minX) {
-        left = ((activity.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+      double right = 0;
+      if (activity.dates.min!.millisecondsSinceEpoch > minX) {
+        left = ((activity.dates.min!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
+      }
+      if (activity.dates.max != null) {
+        right = ((activity.dates.max!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
       _paintLine(canvas, lineColor?.withAlpha(150) ?? activity.colorToUse.withOpacity(0.8), left, 0, chartHeight);
 
@@ -494,11 +498,23 @@ class PaintActivities extends CustomPainter {
       if (activity.description.isNotEmpty) {
         text += '\n${activity.description}';
       }
-
+      Color boxColor = (lineColor ?? activity.colorToUse).withAlpha(100);
+      Color textColor = boxColor;
+      if (activity.dates.max != null) {
+        _paintBox(
+          canvas,
+          left,
+          nextVerticalLabelPosition,
+          right - left,
+          20,
+          boxColor,
+        );
+        textColor = contrastColor(boxColor);
+      }
       _paintLabel(
         canvas,
         text,
-        lineColor ?? activity.colorToUse,
+        textColor,
         left + 2,
         nextVerticalLabelPosition,
       );
@@ -516,7 +532,7 @@ class PaintActivities extends CustomPainter {
   /// [left], [top], [width], and [height].
   ///
   /// This function reuses a single [Paint] object for better performance.
-  void paintBox(
+  void _paintBox(
     ui.Canvas canvas,
     double left,
     double top,

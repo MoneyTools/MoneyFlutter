@@ -313,7 +313,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         if (activity.effectiveUnits != 0) {
           events.add(
             ChartEvent(
-              date: activity.transactionInstance!.fieldDateTime.value!,
+              dates: DateRange(min: activity.transactionInstance!.fieldDateTime.value!),
               amount: activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
               quantity: activity.effectiveUnitsAdjusted,
               colorBasedOnQuantity: true,
