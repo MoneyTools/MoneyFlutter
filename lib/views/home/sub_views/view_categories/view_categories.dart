@@ -36,12 +36,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     true,
   ];
 
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: getSidePanelViewDetails,
-    onChart: _getSubViewContentForChart,
-    onTransactions: _getSubViewContentForTransactions,
-  );
-
   @override
   Widget buildHeader([final Widget? child]) {
     return super.buildHeader(_buildToggles());
@@ -165,7 +159,11 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: getSidePanelViewDetails,
+      onChart: _getSubViewContentForChart,
+      onTransactions: _getSubViewContentForTransactions,
+    );
   }
 
   @override

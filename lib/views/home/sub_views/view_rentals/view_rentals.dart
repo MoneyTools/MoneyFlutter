@@ -22,13 +22,6 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   RentBuilding? lastSelectedRental;
 
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: getSidePanelViewDetails,
-    onChart: ViewRentalsSidePanel.getSubViewContentForChart,
-    onPnL: ViewRentalsSidePanel.getSubViewContentForPnL,
-    onTransactions: ViewRentalsSidePanel.getSubViewContentForTransactions,
-  );
-
   @override
   String getClassNamePlural() {
     return 'Rentals';
@@ -61,7 +54,12 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: getSidePanelViewDetails,
+      onChart: ViewRentalsSidePanel.getSubViewContentForChart,
+      onPnL: ViewRentalsSidePanel.getSubViewContentForPnL,
+      onTransactions: ViewRentalsSidePanel.getSubViewContentForTransactions,
+    );
   }
 
   @override

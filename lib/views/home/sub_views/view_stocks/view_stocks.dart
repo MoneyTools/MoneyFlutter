@@ -32,11 +32,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   final List<Widget> _pivots = <Widget>[];
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: getSidePanelViewDetails,
-    onChart: _getSidePanelViewChart,
-    onTransactions: _getSidePanelViewTransactions,
-  );
 
   // Filter related
   final List<bool> _selectedPivot = <bool>[false, false, true];
@@ -164,7 +159,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: getSidePanelViewDetails,
+      onChart: _getSidePanelViewChart,
+      onTransactions: _getSidePanelViewTransactions,
+    );
   }
 
   @override

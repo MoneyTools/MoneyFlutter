@@ -45,11 +45,6 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
   }
 
   final List<Widget> _pivots = <Widget>[];
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: _getSidePanelViewDetails,
-    onChart: _getSubViewContentForChart,
-    onTransactions: _getSidePanelViewTransactions,
-  );
 
   // Footer related
   final DateRange _footerColumnDate = DateRange();
@@ -225,7 +220,11 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: _getSidePanelViewDetails,
+      onChart: _getSubViewContentForChart,
+      onTransactions: _getSidePanelViewTransactions,
+    );
   }
 
   @override

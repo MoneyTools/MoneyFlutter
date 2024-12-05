@@ -21,10 +21,6 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewTransfers;
   }
 
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: _getSidePanelViewDetails,
-  );
-
   @override
   String getClassNamePlural() {
     return 'Transfers';
@@ -106,7 +102,9 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: _getSidePanelViewDetails,
+    );
   }
 
   void keepThisTransfer({

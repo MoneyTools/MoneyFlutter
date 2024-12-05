@@ -13,10 +13,18 @@ import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transacti
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
+/// ViewForMoneyObjects class with ViewEvents as a subclass.
 class ViewEvents extends ViewForMoneyObjects {
+  /// Constructor for the ViewEvents class.
+  ///
+  /// @param {super.key} - Initializes the key of the superclass.
   const ViewEvents({super.key});
 
   @override
+
+  /// Creates and returns a new instance of the State class associated with this view.
+  ///
+  /// @return A new instance of the State class.
   State<ViewForMoneyObjects> createState() => ViewEventsState();
 }
 
@@ -24,12 +32,6 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   ViewEventsState() {
     viewId = ViewId.viewAliases;
   }
-
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: getSidePanelViewDetails,
-    onChart: _getSidePanelViewChart,
-    onTransactions: _getSidePanelViewTransactions,
-  );
 
   /// add more top level action buttons
   @override
@@ -74,16 +76,27 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     return 'Event';
   }
 
+  /// Returns a human-readable description of the view.
+  ///
+  /// @return A string describing the purpose of the view.
   @override
   String getDescription() {
     return 'All your major life events';
   }
 
+  /// Defines the fields for the table that displays the data in this view.
+  ///
+  /// @return A list of Fields representing the columns to display.
   @override
   Fields<Event> getFieldsForTable() {
     return Event.fieldsForColumnView;
   }
 
+  /// Returns a list of Events that match the current filters and includeDeleted flags.
+  ///
+  /// @param {bool} includeDeleted - Whether to include deleted Events in the list.
+  /// @param {bool} applyFilter - Whether to apply any filters before returning the list.
+  /// @return A list of Events matching the specified conditions.
   @override
   List<Event> getList({bool includeDeleted = false, bool applyFilter = true}) {
     return Data()
@@ -95,11 +108,27 @@ class ViewEventsState extends ViewForMoneyObjectsState {
         .toList();
   }
 
+  /// Returns the SidePanelSupport instance associated with this view.
+  ///
+  /// @return The SidePanelSupport instance.
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: getSidePanelViewDetails,
+      onChart: _getSidePanelViewChart,
+      onTransactions: _getSidePanelViewTransactions,
+    );
   }
 
+  /// Returns a chart for displaying the data in this view.
+  ///
+  /// The chart shows net worth over time. It includes milestone transactions,
+  /// which are Events that have a significant impact on the net worth (i.e., amount).
+  ///
+  /// @param {List<int>} selectedIds - A list of IDs of items currently selected.
+  /// @param {bool} showAsNativeCurrency - Whether to display the values in native currency format.
+  ///
+  /// @return The chart widget for this view.
   Widget _getSidePanelViewChart({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
@@ -155,6 +184,15 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     );
   }
 
+  /// Returns a view for displaying the transactions in this view.
+  ///
+  /// The view is a ListView that displays the transaction fields, including date,
+  /// account, category, memo, and amount.
+  ///
+  /// @param {List<int>} selectedIds - A list of IDs of items currently selected.
+  /// @param {bool} showAsNativeCurrency - Whether to display the values in native currency format.
+  ///
+  /// @return The view widget for this view.
   Widget _getSidePanelViewTransactions({
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,

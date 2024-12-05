@@ -50,11 +50,6 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
   bool balanceDone = false;
 
   final List<bool> _selectedPivot = <bool>[false, false, true];
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: getSidePanelViewDetails,
-    onChart: _getSidePanelViewChart,
-    onTransactions: _getSidePanelViewTransactions,
-  );
 
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
@@ -177,7 +172,11 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: getSidePanelViewDetails,
+      onChart: _getSidePanelViewChart,
+      onTransactions: _getSidePanelViewTransactions,
+    );
   }
 
   @override

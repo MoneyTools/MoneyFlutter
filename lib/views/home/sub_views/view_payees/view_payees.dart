@@ -24,12 +24,6 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewPayees;
   }
 
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: getSidePanelViewDetails,
-    onChart: _getSubViewContentForChart,
-    onTransactions: _getSubViewContentForTransactions,
-  );
-
   /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
@@ -108,7 +102,11 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: getSidePanelViewDetails,
+      onChart: _getSubViewContentForChart,
+      onTransactions: _getSubViewContentForTransactions,
+    );
   }
 
   @override

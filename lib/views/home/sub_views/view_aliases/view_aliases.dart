@@ -20,11 +20,6 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
     viewId = ViewId.viewAliases;
   }
 
-  late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
-    onDetails: getSidePanelViewDetails,
-    onTransactions: getSidePanelViewTransactions,
-  );
-
   @override
   String getClassNamePlural() {
     return 'Aliases';
@@ -58,7 +53,10 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
 
   @override
   SidePanelSupport getSidePanelSupport() {
-    return _sidePanelSupport;
+    return SidePanelSupport(
+      onDetails: getSidePanelViewDetails,
+      onTransactions: getSidePanelViewTransactions,
+    );
   }
 
   Widget getSidePanelViewTransactions({
