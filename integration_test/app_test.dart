@@ -423,7 +423,7 @@ Future<void> testCategories(WidgetTester tester) async {
 
 Future<void> testEvents(WidgetTester tester) async {
   await tapOnText(tester, 'Events');
-
+  await sidePanelTabs(tester);
   await tapOnFirstRowOfListView(tester);
 
   // Edit
