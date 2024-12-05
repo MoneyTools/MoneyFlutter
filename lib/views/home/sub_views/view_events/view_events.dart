@@ -1,12 +1,17 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
+import 'package:money/core/widgets/charts/my_line_chart.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
+import 'package:money/data/models/chart_event.dart';
+import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/events/event.dart';
-import 'package:money/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
+import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
 class ViewEvents extends ViewForMoneyObjects {
   const ViewEvents({super.key});
@@ -22,6 +27,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
 
   late final SidePanelSupport _sidePanelSupport = SidePanelSupport(
     onDetails: getSidePanelViewDetails,
+    onChart: _getSidePanelViewChart,
     onTransactions: _getSidePanelViewTransactions,
   );
 
@@ -92,6 +98,61 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   @override
   SidePanelSupport getSidePanelSupport() {
     return _sidePanelSupport;
+  }
+
+  Widget _getSidePanelViewChart({
+    required final List<int> selectedIds,
+    required final bool showAsNativeCurrency,
+  }) {
+    // get net worth over time
+    final transactionsWithoutTransfers =
+        Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer == false).toList();
+
+    List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(transactionsWithoutTransfers);
+
+    const marginLeft = 80.0;
+    const marginBottom = 50.0;
+
+    // get the events
+    final List<ChartEvent> milestoneTransactions = [];
+
+    for (final Event event in getList()) {
+      final Category? category = Data().categories.get(event.fieldCategoryId.value);
+      milestoneTransactions.add(
+        ChartEvent(
+          date: event.fieldDateBegin.value!,
+          amount: 0,
+          quantity: 1,
+          colorBasedOnQuantity: false, // use Amount
+          description: event.fieldName.value,
+          color: category == null ? Colors.blue : category.getColorOrAncestorsColor(),
+        ),
+      );
+    }
+
+    // sort by ascending date
+    milestoneTransactions.sort((a, b) => a.date.compareTo(b.date));
+
+    return Stack(
+      alignment: Alignment.topCenter,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
+          child: CustomPaint(
+            size: const Size(double.infinity, double.infinity),
+            painter: PaintActivities(
+              activities: milestoneTransactions,
+              minX: tmpDataPointsWithNetWorth.first.x,
+              maxX: tmpDataPointsWithNetWorth.last.x,
+            ),
+          ),
+        ),
+        MyLineChart(
+          dataPoints: tmpDataPointsWithNetWorth,
+          showDots: false,
+        ),
+      ],
+    );
   }
 
   Widget _getSidePanelViewTransactions({

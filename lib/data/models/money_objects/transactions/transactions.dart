@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_conditional_assignment
 
+import 'package:fl_chart/fl_chart.dart';
 import 'package:money/core/helpers/accumulator.dart';
+import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/chart.dart';
@@ -149,6 +151,42 @@ class Transactions extends MoneyObjects<Transaction> {
     for (Transaction t in iterableList()) {
       t.checkTransfers(dangling, deletedAccounts);
     }
+  }
+
+  static List<FlSpot> cumulateTransactionPerYearMonth(final List<Transaction> transactions) {
+    final AccumulatorSum<String, double> cumulateYearMonthBalance = AccumulatorSum<String, double>();
+
+    // Add transactions to the accumulator
+    for (final t in transactions) {
+      String dateKey = dateToString(t.fieldDateTime.value);
+      cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
+    }
+
+    // Add events to the accumulator with zero amount
+    for (final event in Data().events.iterableList()) {
+      String dateKey = dateToString(event.fieldDateBegin.value);
+      cumulateYearMonthBalance.cumulate(dateKey, 0.0);
+    }
+
+    List<FlSpot> tmpDataPoints = [];
+    cumulateYearMonthBalance.getEntries().forEach(
+      (entry) {
+        final tokens = entry.key.split('-');
+        DateTime dateForYearMonth = DateTime(int.parse(tokens[0]), int.parse(tokens[1]), int.parse(tokens[2]));
+        tmpDataPoints.add(FlSpot(dateForYearMonth.millisecondsSinceEpoch.toDouble(), entry.value));
+      },
+    );
+
+    tmpDataPoints.sort((a, b) => a.x.compareTo(b.x));
+
+    double netWorth = 0;
+    List<FlSpot> tmpDataPointsWithNetWorth = [];
+    for (final dp in tmpDataPoints) {
+      netWorth += dp.y;
+      tmpDataPointsWithNetWorth.add(FlSpot(dp.x, netWorth));
+    }
+
+    return tmpDataPointsWithNetWorth;
   }
 
   /// match amount and date YYYY,MM,DD, optionally restrict to a specific account by passing -1

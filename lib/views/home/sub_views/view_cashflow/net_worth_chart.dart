@@ -3,14 +3,12 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
-import 'package:money/core/helpers/accumulator.dart';
-import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/charts/my_line_chart.dart';
 import 'package:money/data/models/chart_event.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/events/event.dart';
-import 'package:money/data/models/money_objects/transactions/transaction.dart';
+import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_stocks/stock_chart.dart';
 
@@ -34,39 +32,9 @@ class NetWorthChartState extends State<NetWorthChart> {
   void initState() {
     super.initState();
 
-    final AccumulatorSum<String, double> cumulateYearMonthBalance = AccumulatorSum<String, double>();
-
     _transactions = Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer == false).toList();
 
-    // Add transactions to the accumulator
-    for (final t in _transactions) {
-      String dateKey = dateToString(t.fieldDateTime.value);
-      cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
-    }
-
-    // Add events to the accumulator with zero amount
-    for (final event in Data().events.iterableList()) {
-      String dateKey = dateToString(event.fieldDateBegin.value);
-      cumulateYearMonthBalance.cumulate(dateKey, 0.0);
-    }
-
-    List<FlSpot> tmpDataPoints = [];
-    cumulateYearMonthBalance.getEntries().forEach(
-      (entry) {
-        final tokens = entry.key.split('-');
-        DateTime dateForYearMonth = DateTime(int.parse(tokens[0]), int.parse(tokens[1]), int.parse(tokens[2]));
-        tmpDataPoints.add(FlSpot(dateForYearMonth.millisecondsSinceEpoch.toDouble(), entry.value));
-      },
-    );
-
-    tmpDataPoints.sort((a, b) => a.x.compareTo(b.x));
-
-    double netWorth = 0;
-    List<FlSpot> tmpDataPointsWithNetWorth = [];
-    for (final dp in tmpDataPoints) {
-      netWorth += dp.y;
-      tmpDataPointsWithNetWorth.add(FlSpot(dp.x, netWorth));
-    }
+    List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(_transactions);
 
     _yearMonthDataPoints.addAll(
       tmpDataPointsWithNetWorth.where(

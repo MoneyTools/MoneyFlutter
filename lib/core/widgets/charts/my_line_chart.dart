@@ -22,6 +22,9 @@ class MyLineChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (dataPoints.isEmpty) {
+      return Center(child: Text('No data to display'));
+    }
     return LineChart(
       LineChartData(
         lineBarsData: [
