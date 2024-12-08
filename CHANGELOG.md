@@ -1,5 +1,17 @@
 # Change Log
 
+## [version 1.10.01] 2024-12-08
+
+### Fix
+
+- Editing of Category Type "Recurring Expense"
+
+## [version 1.10.00] 2024-12-01
+
+### Add
+
+- Chart to Events
+
 ## [version 1.9.06] 2024-11-26
 
 ### Update
@@ -9,7 +21,7 @@
 
 ## [version 1.9.05] 2024-11-20
 
-### Added
+### Add
 
 - Scroll jump to top or bottom
 

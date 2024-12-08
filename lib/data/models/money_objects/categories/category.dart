@@ -324,10 +324,24 @@ class Category extends MoneyObject {
   }
 
   static CategoryType getCategoryTypeFromName(final String categoryTypeName) {
-    try {
-      return CategoryType.values.byName(categoryTypeName.toLowerCase());
-    } catch (_) {
-      return CategoryType.none;
+    switch (categoryTypeName.toLowerCase()) {
+      case 'income':
+        return CategoryType.income;
+      case 'expense':
+        return CategoryType.expense;
+      case 'recurringexpense':
+      case 'expenserecurring':
+        return CategoryType.recurringExpense;
+      case 'saving':
+        return CategoryType.saving;
+      case 'reserved':
+        return CategoryType.reserved;
+      case 'transfer':
+        return CategoryType.transfer;
+      case 'investment':
+        return CategoryType.investment;
+      default:
+        return CategoryType.none;
     }
   }
 
