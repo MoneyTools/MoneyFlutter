@@ -126,22 +126,12 @@ class RecurringPayment {
 
     for (final Pair<int, double> categoryIdAndSum in list.take(topCategoryToShow)) {
       final Category? category = Data().categories.get(categoryIdAndSum.first);
-      if (category == null) {
-        listForDistributionBar.add(
-          Distribution(
-            title: '< no category >',
-            amount: categoryIdAndSum.second,
-          ),
-        );
-      } else {
-        listForDistributionBar.add(
-          Distribution(
-            title: category.fieldName.value,
-            color: category.getColorOrAncestorsColor(),
-            amount: categoryIdAndSum.second,
-          ),
-        );
-      }
+      listForDistributionBar.add(
+        Distribution(
+          category: category ?? Data().categories.unknown,
+          amount: categoryIdAndSum.second,
+        ),
+      );
     }
     return listForDistributionBar;
   }

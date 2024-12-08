@@ -172,7 +172,7 @@ class _PanelBudgetState extends State<PanelBudget> {
     for (final category in recurringCategories) {
       // get all transactions meeting the request of date and type
       bool whereClause(Transaction t) {
-        return t.category == category && isBetween(t.fieldDateTime.value!.year, widget.minYear, widget.maxYear);
+        return t.category == category && isBetweenOrEqual(t.fieldDateTime.value!.year, widget.minYear, widget.maxYear);
       }
 
       final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);

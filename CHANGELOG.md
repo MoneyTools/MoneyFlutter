@@ -4,6 +4,7 @@
 
 ### Add
 
+- Toggle Category RecurringExpense from the Cashflow views
 - A basic budget view of Recurring Expenses
   
 ### Fix

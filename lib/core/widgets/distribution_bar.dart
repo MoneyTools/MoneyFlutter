@@ -1,46 +1,53 @@
 import 'package:flutter/material.dart';
 import 'package:money/core/helpers/color_helper.dart';
-import 'package:money/core/widgets/circle.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/data/models/money_model.dart';
+import 'package:money/data/models/money_objects/categories/category.dart';
 
 class Distribution {
   Distribution({
-    required this.title,
+    required this.category,
     required this.amount,
-    this.color = Colors.transparent,
   });
 
   final double amount;
-  final Color color;
-  final String title;
+  final Category category;
 
   double percentage = 0;
 }
 
-class DistributionBar extends StatelessWidget {
-  DistributionBar({required this.segments, super.key});
+class DistributionBar extends StatefulWidget {
+  const DistributionBar({required this.segments, super.key});
 
-  final List<Widget> detailRowWidgets = [];
-  final List<Widget> segmentWidgets = [];
   final List<Distribution> segments;
 
   @override
+  State<DistributionBar> createState() => _DistributionBarState();
+}
+
+class _DistributionBarState extends State<DistributionBar> {
+  final List<Widget> detailRowWidgets = [];
+  final List<Widget> segmentWidgets = [];
+
+  @override
   Widget build(BuildContext context) {
-    double sum = segments.fold(
+    detailRowWidgets.clear();
+    segmentWidgets.clear();
+
+    double sum = widget.segments.fold(
       0,
       (previousValue, element) => previousValue + element.amount.abs(),
     );
     if (sum > 0) {
-      for (final segment in segments) {
+      for (final segment in widget.segments) {
         segment.percentage = segment.amount.abs() / sum;
       }
     }
     // Sort descending by percentage
-    segments.sort((a, b) => b.percentage.compareTo(a.percentage));
+    widget.segments.sort((a, b) => b.percentage.compareTo(a.percentage));
 
-    initWidgets(context);
+    _buildWidgets(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -52,67 +59,19 @@ class DistributionBar extends StatelessWidget {
     );
   }
 
-  void initWidgets(final BuildContext context) {
-    for (final segment in segments) {
-      Color backgroundColorOfSegment = segment.color;
-      Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
-
-      if (backgroundColorOfSegment.opacity == 0) {
-        backgroundColorOfSegment = Colors.grey;
-        foregroundColorOfSegment = Colors.white;
-      }
-
-      segmentWidgets.add(
-        Expanded(
-          // use the percentage to determine the relative width
-          flex: (segment.percentage * 100).toInt().abs(),
-          child: Tooltip(
-            message: segment.title,
-            child: Container(
-              alignment: Alignment.center,
-              color: backgroundColorOfSegment,
-              margin: EdgeInsets.only(right: segment == segments.last ? 0.0 : 1.0),
-              child: _builtSegmentOverlayText(
-                segment.percentage,
-                foregroundColorOfSegment,
-              ),
-            ),
-          ),
-        ),
-      );
-
-      detailRowWidgets.add(
-        _buildDetailRow(
-          context,
-          segment.title,
-          MyCircle(colorFill: segment.color, size: 16),
-          segment.amount,
-        ),
-      );
-    }
-  }
-
   Widget _buildDetailRow(
     final BuildContext context,
-    final String label,
-    final Widget colorWidget,
+    final Category category,
     final double value,
   ) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        colorWidget,
         gapSmall(),
         Expanded(
           flex: 2,
-          child: Text(
-            label,
-            style: getTextTheme(context).labelMedium,
-            textAlign: TextAlign.justify,
-            textWidthBasis: TextWidthBasis.longestLine,
-            softWrap: false,
-          ),
+          child: category.getColorAndNameWidget(),
         ),
         Expanded(
           child: MoneyWidget(
@@ -120,6 +79,23 @@ class DistributionBar extends StatelessWidget {
               amount: value,
             ),
             asTile: false,
+          ),
+        ),
+        Opacity(
+          opacity: category.isExpense ? 1 : 0,
+          child: Checkbox(
+            value: category.isRecurring,
+            onChanged: (bool? value) {
+              if (category.isExpense) {
+                setState(() {
+                  category.mutateField(
+                    'Type',
+                    value == true ? CategoryType.recurringExpense.index : CategoryType.expense.index,
+                    true,
+                  );
+                });
+              }
+            },
           ),
         ),
       ],
@@ -143,6 +119,45 @@ class DistributionBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: detailRowWidgets,
     );
+  }
+
+  void _buildWidgets(final BuildContext context) {
+    for (final Distribution segment in widget.segments) {
+      Color backgroundColorOfSegment = segment.category.getColorOrAncestorsColor();
+      Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
+
+      if (backgroundColorOfSegment.opacity == 0) {
+        backgroundColorOfSegment = Colors.grey;
+        foregroundColorOfSegment = Colors.white;
+      }
+
+      segmentWidgets.add(
+        Expanded(
+          // use the percentage to determine the relative width
+          flex: (segment.percentage * 100).toInt().abs(),
+          child: Tooltip(
+            message: segment.category.fieldName.value,
+            child: Container(
+              alignment: Alignment.center,
+              color: backgroundColorOfSegment,
+              margin: EdgeInsets.only(right: segment == widget.segments.last ? 0.0 : 1.0),
+              child: _builtSegmentOverlayText(
+                segment.percentage,
+                foregroundColorOfSegment,
+              ),
+            ),
+          ),
+        ),
+      );
+
+      detailRowWidgets.add(
+        _buildDetailRow(
+          context,
+          segment.category,
+          segment.amount,
+        ),
+      );
+    }
   }
 
   Widget _builtSegmentOverlayText(final double percentage, final Color color) {
