@@ -2,6 +2,10 @@
 
 ## [version 1.10.01] 2024-12-08
 
+### Add
+
+- A basic budget view of Recurring Expenses
+  
 ### Fix
 
 - Editing of Category Type "Recurring Expense"

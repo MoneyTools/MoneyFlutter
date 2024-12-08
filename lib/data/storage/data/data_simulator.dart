@@ -420,7 +420,7 @@ class DataSimulator {
             id: -1,
             name: 'Loans',
             description: '',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
             color: '#FFAAFFAA',
           ),
         );
@@ -551,7 +551,7 @@ class DataSimulator {
     {
       _categorySubscriptions = Data().categories.addNewCategory(
             name: 'Subscriptions',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
             color: '#FFFFaaaa',
           );
 

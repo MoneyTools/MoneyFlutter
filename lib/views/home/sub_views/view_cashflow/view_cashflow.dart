@@ -13,6 +13,7 @@ import 'package:money/data/models/money_objects/events/event.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view.dart';
 import 'package:money/views/home/sub_views/view_cashflow/net_worth_chart.dart';
+import 'package:money/views/home/sub_views/view_cashflow/recurring/panel_budget.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/views/home/sub_views/view_cashflow/sankey_panel.dart';
 import 'package:money/views/home/sub_views/view_header.dart';
@@ -196,6 +197,10 @@ class ViewCashFlowState extends ViewWidgetState {
           value: CashflowViewAs.recurringExpenses.index,
           label: const Text('Expenses'),
         ),
+        ButtonSegment<int>(
+          value: CashflowViewAs.budget.index,
+          label: const Text('Budget'),
+        ),
       ],
       selectedId: PreferenceController.to.cashflowViewAs.value.index,
       onSelectionChanged: (final int newSelection) {
@@ -232,6 +237,13 @@ class ViewCashFlowState extends ViewWidgetState {
 
       case CashflowViewAs.recurringExpenses:
         return PanelRecurring(
+          dateRangeSearch: dateRangeTransactions,
+          minYear: this.selectedYearStart,
+          maxYear: this.selectedYearEnd,
+          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
+        );
+      case CashflowViewAs.budget:
+        return PanelBudget(
           dateRangeSearch: dateRangeTransactions,
           minYear: this.selectedYearStart,
           maxYear: this.selectedYearEnd,

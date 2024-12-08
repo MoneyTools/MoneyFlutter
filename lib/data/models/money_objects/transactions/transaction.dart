@@ -618,6 +618,8 @@ class Transaction extends MoneyObject {
 
   String get amountAsString => fieldAmount.value.toString();
 
+  Category? get category => Data().categories.get(this.fieldCategoryId.value);
+
   String get categoryName => Data().categories.getNameFromId(this.fieldCategoryId.value);
 
   static void changeCategory(Transaction t, final int categoryId) {

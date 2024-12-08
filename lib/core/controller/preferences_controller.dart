@@ -268,4 +268,5 @@ enum CashflowViewAs {
   netWorthOverTime,
   recurringIncomes,
   recurringExpenses,
+  budget,
 }

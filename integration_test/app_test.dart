@@ -274,6 +274,8 @@ Future<void> testCashFlow(WidgetTester tester) async {
   await tapOnText(tester, 'Incomes');
 
   await tapOnText(tester, 'Expenses');
+
+  await tapOnText(tester, 'Budget');
 }
 
 Future<void> testAliases(WidgetTester tester) async {
