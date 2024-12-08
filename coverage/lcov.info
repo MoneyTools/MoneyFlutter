@@ -11354,9 +11354,9 @@ DA:168,1
 DA:170,8
 DA:172,2
 DA:174,1
-DA:175,2
+DA:175,10
 DA:178,3
-DA:180,1
+DA:180,6
 DA:181,1
 DA:182,2
 DA:183,2
@@ -11606,7 +11606,7 @@ DA:70,3
 DA:71,2
 DA:73,6
 DA:75,1
-DA:76,0
+DA:76,1
 DA:77,5
 DA:78,3
 DA:79,2
@@ -11638,7 +11638,7 @@ DA:135,2
 DA:136,2
 DA:137,2
 LF:67
-LH:65
+LH:66
 end_of_record
 TN:
 SF:lib/views/home/sub_views/view_cashflow/view_cashflow.dart

@@ -418,16 +418,16 @@ class DataSimulator {
     Data().categories.appendNewMoneyObject(
           Category(
             id: -1,
-            name: 'Loans',
+            name: 'Lend',
             description: '',
-            type: CategoryType.recurringExpense,
+            type: CategoryType.investment,
             color: '#FFAAFFAA',
           ),
         );
     _accountStartupLoan.fieldCategoryIdForInterest.value =
-        Data().categories.getOrCreate('Loans:Interest:Startup', CategoryType.investment).uniqueId;
+        Data().categories.getOrCreate('Lend:Interest:Startup', CategoryType.investment).uniqueId;
     _accountStartupLoan.fieldCategoryIdForPrincipal.value =
-        Data().categories.getOrCreate('Loans:Principal:Startup', CategoryType.investment).uniqueId;
+        Data().categories.getOrCreate('Lend:Principal:Startup', CategoryType.investment).uniqueId;
   }
 
   /// Generates sample aliases.
@@ -497,7 +497,7 @@ class DataSimulator {
       _categoryBillsElectricity = Data().categories.addNewCategory(
             parentId: _categoryBills.uniqueId,
             name: 'Electricity',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
 
       Data().categories.addNewCategory(
@@ -510,19 +510,19 @@ class DataSimulator {
       _categoryBillsPhone = Data().categories.addNewCategory(
             parentId: _categoryBills.uniqueId,
             name: 'Phone',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
 
       _categoryBillsTV = Data().categories.addNewCategory(
             parentId: _categoryBills.uniqueId,
             name: 'TV',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
 
       _categoryBillsInternet = Data().categories.addNewCategory(
             parentId: _categoryBills.uniqueId,
             name: 'Internet',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
     }
 
@@ -537,13 +537,13 @@ class DataSimulator {
       _categoryFoodGrocery = Data().categories.addNewCategory(
             parentId: _categoryFood.uniqueId,
             name: 'Grocery',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
 
       _categoryFoodRestaurant = Data().categories.addNewCategory(
             parentId: _categoryFood.uniqueId,
             name: 'Restaurant',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
     }
 
@@ -551,26 +551,26 @@ class DataSimulator {
     {
       _categorySubscriptions = Data().categories.addNewCategory(
             name: 'Subscriptions',
-            type: CategoryType.recurringExpense,
+            type: CategoryType.expense,
             color: '#FFFFaaaa',
           );
 
       _categorySubscriptionsGym = Data().categories.addNewCategory(
             parentId: _categorySubscriptions.uniqueId,
             name: 'Gym',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
 
       _categorySubscriptionsStreaming = Data().categories.addNewCategory(
             parentId: _categorySubscriptions.uniqueId,
             name: 'Streaming',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
 
       _categorySubscriptionTransport = Data().categories.addNewCategory(
             parentId: _categorySubscriptions.uniqueId,
             name: 'Transportation',
-            type: CategoryType.expense,
+            type: CategoryType.recurringExpense,
           );
     }
 
