@@ -63,7 +63,7 @@ class Box extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0), // Bor
             border: Border.all(
               width: 1,
-              color: Colors.grey.withOpacity(0.5),
+              color: Colors.grey.withValues(alpha: 0.5),
             ),
           ),
           child: child,

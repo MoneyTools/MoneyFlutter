@@ -187,7 +187,7 @@ class PickerPanelState extends State<PickerPanel> {
               ? null
               : Border(
                   bottom: BorderSide(
-                    color: getColorTheme(context).onSurfaceVariant.withOpacity(0.2),
+                    color: getColorTheme(context).onSurfaceVariant.withValues(alpha: 0.2),
                     width: 1,
                   ),
                 ),

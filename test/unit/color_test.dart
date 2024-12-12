@@ -56,10 +56,10 @@ void main() {
       test('converts Color to hexadecimal string correctly', () {
         // Arrange
         const Color colorSource = Colors.purple;
-        const expectedHexString = '#9c27b0ff';
+        const String expectedHexString = '#9c27b0ff';
 
         // Act
-        final result = colorToHexString(colorSource);
+        final String result = colorToHexString(colorSource);
 
         // Assert
         expect(result, expectedHexString);
@@ -132,16 +132,16 @@ void main() {
 
     test('alter colors', () {
       {
-        final result = addTintOfRed(Colors.grey, 200);
+        final Color result = addTintOfRed(Colors.grey, 200);
         expect(colorToHexString(result), '#ff9e9eff');
       }
 
       {
-        final result = addTintOfGreen(Colors.grey, 200);
+        final Color result = addTintOfGreen(Colors.grey, 200);
         expect(colorToHexString(result), '#9eff9eff');
       }
       {
-        final result = addTintOfBlue(Colors.grey, 200);
+        final Color result = addTintOfBlue(Colors.grey, 200);
         expect(colorToHexString(result), '#9e9effff');
       }
     });

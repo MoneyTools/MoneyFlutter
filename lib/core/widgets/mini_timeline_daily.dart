@@ -58,7 +58,7 @@ class MiniTimelineDaily extends StatelessWidget {
               child: VerticalLineWithTooltip(
                 height: value.second.abs() * yRatio,
                 width: lineWidth,
-                color: colorBasedOnValue(value.second).withOpacity(0.5),
+                color: colorBasedOnValue(value.second).withValues(alpha: 0.5),
                 tooltip:
                     '${dateToString(DateTime.fromMillisecondsSinceEpoch(oneDaySlot))}\n${doubleToCurrency(value.second)}',
               ),

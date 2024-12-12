@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.10.02] 2024-12-12
+
+### Update
+
+- Update to Flutter 3.27.0 and Dart 3.6.0
+
 ## [version 1.10.01] 2024-12-08
 
 ### Add

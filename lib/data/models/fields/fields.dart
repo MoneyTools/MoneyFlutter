@@ -26,7 +26,7 @@ export 'package:money/data/models/fields/field.dart';
 /// `MoneyTools/MoneyFlutter` project, where it plays a crucial role in
 /// managing the fields and filtering functionality for the application.
 ///
-/// @param <T> The data type associated with the field definitions.
+/// @param ```<T>``` The data type associated with the field definitions.
 class Fields<T> {
   /// Constructor
   Fields() {

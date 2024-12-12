@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 Widget diffTextOldValue(final String text) {
   return diffText(
     text,
-    Colors.red.withOpacity(0.3), // Transparent red background color
+    Colors.red.withValues(alpha: 0.3), // Transparent red background color
     Colors.red, // Color for old value
     true,
   );
@@ -12,7 +12,7 @@ Widget diffTextOldValue(final String text) {
 Widget diffTextNewValue(final String text) {
   return diffText(
     text,
-    Colors.green.withOpacity(0.3), // Transparent red background color
+    Colors.green.withValues(alpha: 0.3), // Transparent red background color
     Colors.green, // Color for old value
     false,
   );

@@ -125,7 +125,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   /// The chart shows net worth over time. It includes milestone transactions,
   /// which are Events that have a significant impact on the net worth (i.e., amount).
   ///
-  /// @param {List<int>} selectedIds - A list of IDs of items currently selected.
+  /// @param {```List<int>```} selectedIds - A list of IDs of items currently selected.
   /// @param {bool} showAsNativeCurrency - Whether to display the values in native currency format.
   ///
   /// @return The chart widget for this view.
@@ -189,7 +189,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   /// The view is a ListView that displays the transaction fields, including date,
   /// account, category, memo, and amount.
   ///
-  /// @param {List<int>} selectedIds - A list of IDs of items currently selected.
+  /// @param {```List<int>```} selectedIds - A list of IDs of items currently selected.
   /// @param {bool} showAsNativeCurrency - Whether to display the values in native currency format.
   ///
   /// @return The view widget for this view.

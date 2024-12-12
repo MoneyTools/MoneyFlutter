@@ -886,9 +886,8 @@ class Transaction extends MoneyObject {
 
   String get payeeName => Data().payees.getNameFromId(fieldPayee.value);
 
-  /// <summary>
   /// Find all the objects referenced by this Transaction and wire them back up
-  /// </summary>
+
   /// <param name="money">The owner</param>
   /// <param name="parent">The container</param>
   /// <param name="from">The account this transaction belongs to</param>

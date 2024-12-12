@@ -126,7 +126,7 @@ class _DistributionBarState extends State<DistributionBar> {
       Color backgroundColorOfSegment = segment.category.getColorOrAncestorsColor();
       Color foregroundColorOfSegment = contrastColor(backgroundColorOfSegment);
 
-      if (backgroundColorOfSegment.opacity == 0) {
+      if (backgroundColorOfSegment.a == 0) {
         backgroundColorOfSegment = Colors.grey;
         foregroundColorOfSegment = Colors.white;
       }

@@ -67,7 +67,7 @@ List<double> calculateSpread(double start, double end, int numEntries) {
 /// ```
 ///
 /// Parameters:
-///   map (Map<dynamic, dynamic>): The input Map to be converted.
+///   map (```Map<dynamic, dynamic>```): The input Map to be converted.
 ///
 /// Type Parameters:
 ///   T: The type of the keys in the input Map.
@@ -114,7 +114,7 @@ List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
 /// ```
 ///
 /// Parameters:
-///   keyValuePairs (List<KeyValue>): The input list of `KeyValue` objects.
+///   keyValuePairs (```List<KeyValue>```): The input list of `KeyValue` objects.
 ///
 /// Returns:
 ///   A list of `KeyValue` objects, where each object contains a key from the

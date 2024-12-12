@@ -42,7 +42,7 @@ class DropZoneState extends State<DropZone> {
           widget.child,
           if (_dragging)
             Container(
-              color: Colors.blue.withOpacity(0.2),
+              color: Colors.blue.withValues(alpha: 0.2),
               child: const Center(
                 child: Text(
                   'Drop files here',

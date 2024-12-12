@@ -483,7 +483,7 @@ class PaintActivities extends CustomPainter {
       if (activity.dates.max != null) {
         right = ((activity.dates.max!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
       }
-      _paintLine(canvas, lineColor?.withAlpha(150) ?? activity.colorToUse.withOpacity(0.8), left, 0, chartHeight);
+      _paintLine(canvas, lineColor?.withAlpha(150) ?? activity.colorToUse.withValues(alpha: 0.8), left, 0, chartHeight);
 
       String text = '';
       // show the quantity if not 1

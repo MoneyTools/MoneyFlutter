@@ -167,7 +167,7 @@ class MoneyObjects<T> {
 
   bool get isNotEmpty => !isEmpty;
 
-  /// Recast list as type <T>
+  /// Recast list as type ```<T>```
   Iterable<T> iterableList({bool includeDeleted = false}) {
     return _iterableListOfMoneyObject(includeDeleted).whereType<T>();
   }

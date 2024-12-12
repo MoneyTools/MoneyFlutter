@@ -50,7 +50,7 @@ class MyListItemState extends State<MyListItem> {
     final Color backgroundColor = isSelected
         ? getColorTheme(context).primaryContainer
         : _hovering
-            ? getColorTheme(context).inversePrimary.withOpacity(0.3)
+            ? getColorTheme(context).inversePrimary.withValues(alpha: 0.3)
             : Colors.transparent;
 
     return Focus(
@@ -78,12 +78,12 @@ class MyListItemState extends State<MyListItem> {
               border: Border(
                 top: BorderSide(
                   width: 0.5,
-                  color: getColorTheme(context).outline.withOpacity(0.3),
+                  color: getColorTheme(context).outline.withValues(alpha: 0.3),
                 ),
                 left: BorderSide(width: 2, color: widget.adornmentColor),
                 bottom: BorderSide(
                   width: 0.5,
-                  color: getColorTheme(context).outline.withOpacity(0.3),
+                  color: getColorTheme(context).outline.withValues(alpha: 0.3),
                 ),
               ),
             ),

@@ -219,7 +219,7 @@ FlBorderData getBorders(final double min, final double max) {
 }
 
 Color getHorizontalLineColorBasedOnValue(final double value) {
-  return colorBasedOnValue(value).withOpacity(0.3);
+  return colorBasedOnValue(value).withValues(alpha: 0.3);
 }
 
 Widget getWidgetChartAmount(final double value, final TitleMeta meta) {

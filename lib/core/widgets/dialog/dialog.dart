@@ -28,7 +28,7 @@ class MyAlertDialog extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: const BorderRadius.all(Radius.circular(8)),
         side: BorderSide(
-          color: getColorTheme(context).primary.withOpacity(0.3),
+          color: getColorTheme(context).primary.withValues(alpha: 0.3),
           width: 1,
         ),
       ),

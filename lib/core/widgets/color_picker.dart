@@ -46,7 +46,7 @@ class _ColorPickerState extends State<ColorPicker> {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: getColorTheme(context).onSurface.withOpacity(0.5),
+          color: getColorTheme(context).onSurface.withValues(alpha: 0.5),
           width: 1,
         ),
       ),

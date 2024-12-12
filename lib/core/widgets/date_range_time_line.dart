@@ -54,7 +54,7 @@ List<Widget> ticks(final int numberOfTicks) {
         height: 5,
         decoration: BoxDecoration(
           // shape: BoxShape.circle,
-          color: Colors.grey.withOpacity(0.5),
+          color: Colors.grey.withValues(alpha: 0.5),
         ),
       ),
     );

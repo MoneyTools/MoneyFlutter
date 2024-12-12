@@ -193,13 +193,8 @@ class MapAccumulatorSet<K, I, V> {
     map[k]!.cumulate(i, v);
   }
 
-  /// for example
-  /// cumulating 'species', 'number of Legs', 'name'
-  /// MapAccumulatorSet<String, int, String>
-  /// find ('bird', 2) returns ['duck', 'owl'])
-  ///
-  /// cumulating 'Account ID', 'PayeeNames', 'Categories'
-  /// find (42, 'Starbucks') returns [12,33,207])
+  /// Retrieves the set of values [V] associated with the given keys [K] and [I].
+  /// If no values are found for the given keys, an empty set is returned.
   Set<V> find(K key1, I key2) {
     final foundInLevel1 = map[key1];
     return foundInLevel1?.getValue(key2) ?? <V>{};

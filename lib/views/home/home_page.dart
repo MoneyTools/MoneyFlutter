@@ -140,7 +140,6 @@ class HomePage extends GetView<HomeController> {
         return const PolicyScreen();
 
       case ViewId.viewCashFlow:
-      default:
         return const ViewCashFlow();
     }
   }

@@ -32,17 +32,17 @@ import 'package:money/core/helpers/misc_helpers.dart';
 ///   A new `Color` object with the red component adjusted by the specified tint strength.
 Color addTintOfRed(Color originalColor, int tintStrength) {
   // Add the tint strength to the red component
-  int red = originalColor.red + tintStrength;
+  int red = (originalColor.r * 255).toInt() + tintStrength;
 
   // Keep the green and blue components unchanged
-  int green = originalColor.green;
-  int blue = originalColor.blue;
+  int green = (originalColor.g * 255).toInt();
+  int blue = (originalColor.b * 255).toInt();
 
   // Ensure red value stays within the valid range (0 to 255)
   red = red.clamp(0, 255);
 
   // Create a new Color object with the adjusted red component
-  return Color.fromARGB(originalColor.alpha, red, green, blue);
+  return Color.fromARGB((originalColor.a * 255).toInt(), red, green, blue);
 }
 
 /// Adds a tint of blue to the original color.
@@ -54,14 +54,14 @@ Color addTintOfRed(Color originalColor, int tintStrength) {
 /// If the resulting blue value exceeds 255, it will be clamped to 255 to ensure it stays within the valid range (0 to 255).
 ///
 Color addTintOfBlue(Color originalColor, int tintStrength) {
-  int red = originalColor.red;
-  int green = originalColor.green;
-  int blue = originalColor.blue + tintStrength;
+  int red = (originalColor.r * 255).toInt();
+  int green = (originalColor.g * 255).toInt();
+  int blue = (originalColor.b * 255).toInt() + tintStrength;
 
   // Ensure blue value stays within the valid range (0 to 255)
   blue = blue.clamp(0, 255);
 
-  return Color.fromARGB(originalColor.alpha, red, green, blue);
+  return Color.fromARGB((originalColor.a * 255).toInt(), red, green, blue);
 }
 
 /// Adds a tint of green to the original color.
@@ -73,14 +73,14 @@ Color addTintOfBlue(Color originalColor, int tintStrength) {
 /// If the resulting green value exceeds 255, it will be clamped to 255 to ensure it stays within the valid range (0 to 255).
 ///
 Color addTintOfGreen(Color originalColor, int tintStrength) {
-  int red = originalColor.red;
-  int green = originalColor.green + tintStrength;
-  int blue = originalColor.blue;
+  int red = (originalColor.r * 255).toInt();
+  int green = (originalColor.g * 255).toInt() + tintStrength;
+  int blue = (originalColor.b * 255).toInt();
 
   // Ensure green value stays within the valid range (0 to 255)
   green = green.clamp(0, 255);
 
-  return Color.fromARGB(originalColor.alpha, red, green, blue);
+  return Color.fromARGB((originalColor.a * 255).toInt(), red, green, blue);
 }
 
 /// Adjusts the brightness of the input color to the specified value within the valid range (0.0 - 1.0).
@@ -113,7 +113,7 @@ TextStyle adjustOpacityOfTextStyle(
   final double opacity = 0.7,
 ]) {
   return textStyle.copyWith(
-    color: textStyle.color!.withOpacity(opacity),
+    color: textStyle.color!.withValues(alpha: opacity),
   );
 }
 
@@ -185,10 +185,10 @@ String colorToHexString(
   bool alphaFirst = false,
   bool includeAlpha = true,
 }) {
-  final String red = color.red.toRadixString(16).padLeft(2, '0');
-  final String green = color.green.toRadixString(16).padLeft(2, '0');
-  final String blue = color.blue.toRadixString(16).padLeft(2, '0');
-  final String alpha = color.alpha.toRadixString(16).padLeft(2, '0');
+  final String red = (color.r * 255).toInt().toRadixString(16).padLeft(2, '0');
+  final String green = (color.g * 255).toInt().toRadixString(16).padLeft(2, '0');
+  final String blue = (color.b * 255).toInt().toRadixString(16).padLeft(2, '0');
+  final String alpha = (color.a * 255).toInt().toRadixString(16).padLeft(2, '0');
   if (includeAlpha == false) {
     return '#$red$green$blue';
   }
@@ -208,7 +208,7 @@ String colorToHexString(
 ///
 Color contrastColor(Color color) {
   // Calculate the luminance of the color
-  final luminance = (0.299 * color.red + 0.587 * color.green + 0.114 * color.blue) / 255;
+  final luminance = (0.299 * (color.r * 255) + 0.587 * (color.g * 255) + 0.114 * (color.b * 255)) / 255;
 
   // Determine whether to make the contrast color black or white based on the luminance
   final contrastColor = luminance > 0.5 ? Colors.black : Colors.white;
@@ -248,7 +248,7 @@ ColorScheme getColorTheme(final BuildContext context) {
 /// The brightness value is calculated by subtracting the lightness value from 1.
 ///
 /// @param color The color to extract the hue and brightness values from.
-/// @return A Pair<double, double> object containing the hue and brightness values.
+/// @return A ```Pair<double, double>``` object containing the hue and brightness values.
 ///
 Pair<double, double> getHueAndBrightness(Color color) {
   HSLColor hslColor = HSLColor.fromColor(color);
@@ -304,12 +304,12 @@ Color hsvToColor(double hue, double brightness) {
 ///
 Color invertColor(final Color color) {
   // Calculate inverted color by subtracting each color channel from 255
-  int invertedRed = 255 - color.red;
-  int invertedGreen = 255 - color.green;
-  int invertedBlue = 255 - color.blue;
+  double invertedRed = 1.0 - color.r;
+  double invertedGreen = 1.0 - color.g;
+  double invertedBlue = 1.0 - color.b;
 
   // Return the inverted color
-  return Color.fromRGBO(invertedRed, invertedGreen, invertedBlue, 1.0);
+  return Color.fromRGBO((invertedRed * 255).toInt(), (invertedGreen * 255).toInt(), (invertedBlue * 255).toInt(), 1.0);
 }
 
 Color? getTextColorToUse(

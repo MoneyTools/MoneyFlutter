@@ -390,7 +390,7 @@ class Category extends MoneyObject {
 
   Widget getColorWidget() {
     final Color fillColor = getColorOrAncestorsColor();
-    final Color textColor = fillColor.opacity == 0 ? Colors.grey : contrastColor(fillColor);
+    final Color textColor = fillColor.a == 0 ? Colors.grey : contrastColor(fillColor);
 
     return Stack(
       alignment: Alignment.center,
@@ -435,8 +435,6 @@ class Category extends MoneyObject {
         return 'Investment';
       case CategoryType.none:
         return 'None';
-      default:
-        return '<unknown>';
     }
   }
 

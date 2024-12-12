@@ -69,8 +69,6 @@ class SidePanelSupport {
             showAsNativeCurrency: selectedCurrency == 0,
           ),
         );
-      default:
-        return const Text('- empty -');
     }
   }
 }

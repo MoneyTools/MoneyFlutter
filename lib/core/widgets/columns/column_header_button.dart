@@ -119,7 +119,6 @@ Widget buildSortIconNameWidget(final SortIndicator sortIndicator) {
     case SortIndicator.sortDescending:
       return const Icon(Icons.sort, size: 20.0);
     case SortIndicator.none:
-    default:
       return const SizedBox();
   }
 }
@@ -140,7 +139,6 @@ String _getTooltipText(final SortIndicator sortIndicator, final bool filterOn) {
     case SortIndicator.sortDescending:
       tooltip += 'Sorting Descending';
     case SortIndicator.none:
-    default:
       break;
   }
   return tooltip;
