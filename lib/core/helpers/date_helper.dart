@@ -217,9 +217,20 @@ DateTime? oldestDate(final DateTime? a, final DateTime? b) {
   return a.isBefore(b) ? a : b;
 }
 
-/// Input will look like this "20240103120000.000[-5:EST]"
-///                            01234567890123456789012345
-///                            0........10--------20_____
+/// Parses a QFX date string and returns a [DateTime] object.
+///
+/// The QFX date string is expected to be in the format "20240103120000.000[-5:EST]",
+/// where the first 14 characters represent the date and time, and the remaining
+/// characters represent the time zone offset and abbreviation.
+///
+/// This function will attempt to parse the date and time components and create a
+/// [DateTime] object. If the parsing fails for any reason, it will return `null`.
+///
+/// @param qfxDate The QFX date string to parse.
+/// @return The parsed [DateTime] object, or `null` if the parsing fails.
+/// Input will look like this ```20240103120000.000[-5:EST]```
+///                           ```01234567890123456789012345```
+///                           ```0........10--------20_____```
 DateTime? parseQfxDataFormat(final String qfxDate) {
   // Extract date components
   try {
