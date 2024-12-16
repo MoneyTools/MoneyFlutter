@@ -53,9 +53,9 @@ class _PanelTrendState extends State<PanelTrend> {
     return BarChart(
       BarChartData(
         barGroups: _buildBarGroups(),
-        // alignment: BarChartAlignment.spaceBetween,
-        maxY: maxY * 1.1,
-        minY: minY * 1.1,
+        alignment: BarChartAlignment.spaceEvenly,
+        maxY: maxY * 1.1, // add 10%
+        minY: minY * 1.1, // add 10%
         backgroundColor: Colors.transparent,
         borderData: getBorders(minY, maxY),
         titlesData: _buildTitlesData(),
@@ -89,30 +89,32 @@ class _PanelTrendState extends State<PanelTrend> {
     return List.generate(years.length, (index) {
       final int year = years[index];
       final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;
-
+      final double profit = (yearData.sumIncome + yearData.sumExpense);
       return BarChartGroupData(
         x: index,
         barRods: [
+          BarChartRodData(
+            fromY: 0,
+            toY: profit,
+            color: getTextColorToUse(profit),
+            width: 10,
+            borderRadius: const BorderRadius.all(Radius.circular(4)),
+          ),
+
           // Negative Bar
           BarChartRodData(
             fromY: 0,
             toY: yearData.sumExpense,
-            color: getTextColorToUse(-1),
-            width: 20,
+
+            color: Colors.orange.withAlpha(120),
+            width: 10,
             borderRadius: const BorderRadius.all(Radius.circular(4)),
             // Positive Bar
             backDrawRodData: BackgroundBarChartRodData(
               show: true,
               toY: yearData.sumIncome,
-              color: getTextColorToUse(1),
+              color: Colors.blue.withAlpha(120),
             ),
-          ),
-          BarChartRodData(
-            fromY: 0,
-            toY: (yearData.sumIncome + yearData.sumExpense), // +100 + -25 = +75
-            color: Colors.blue,
-            width: 5,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
           ),
         ],
         barsSpace: 0,
