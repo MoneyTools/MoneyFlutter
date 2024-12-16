@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.10.03] 2024-12-16
+
+### Add
+
+- Trend chart
+  
 ## [version 1.10.02] 2024-12-12
 
 ### Update
