@@ -135,7 +135,7 @@ extension DataFromCsv on Data {
     // Add files to the archive
     writeEachFiles(archive);
     // Encode the archive to a byte array
-    List<int> zipBytes = ZipEncoder().encode(archive)!;
+    List<int> zipBytes = ZipEncoder().encode(archive);
     return zipBytes;
   }
 
