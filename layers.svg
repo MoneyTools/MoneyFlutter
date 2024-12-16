@@ -90,7 +90,7 @@
   <rect width="100%" height="100%" fill="white"/>
   <rect width="100%" height="100%" fill="white"/>
   <g id='Node_archive'>
-    <rect x="2104" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="1804" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_path'>
     <rect x="4" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -138,7 +138,7 @@
     <rect x="1804" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_pasteboard'>
-    <rect x="1804" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="2104" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_path_provider'>
     <rect x="1504" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -171,7 +171,7 @@
     <rect x="3604" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Edges'>
-    <path class="line" d="M2380 245 C 2390 300,10 300, 20 355" fill="none" stroke="#377E22">
+    <path class="line" d="M2080 245 C 2090 300,10 300, 20 355" fill="none" stroke="#377E22">
       <title>archive
 ⬇
 path</title>
@@ -196,7 +196,7 @@ http</title>
 ⬇
 path</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,2110 150, 2120 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,1810 150, 1820 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 archive</title>
@@ -266,7 +266,7 @@ js</title>
 ⬇
 logger</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,1810 150, 1820 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,2110 150, 2120 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 pasteboard</title>
@@ -326,12 +326,12 @@ uuid</title>
 ⬇
 window_manager</title>
     </path>
-    <path class="line" d="M2080 245 C 2090 300,10 300, 20 355" fill="none" stroke="#377E22">
+    <path class="line" d="M2380 245 C 2390 300,10 300, 20 355" fill="none" stroke="#377E22">
       <title>pasteboard
 ⬇
 path</title>
     </path>
-    <path class="line" d="M2080 245 C 2090 300,910 300, 920 355" fill="none" stroke="#377E22">
+    <path class="line" d="M2380 245 C 2390 300,910 300, 920 355" fill="none" stroke="#377E22">
       <title>pasteboard
 ⬇
 uuid</title>
@@ -364,16 +364,17 @@ path</title>
   </g>
   <g id='Counters_archive'>
     <g>
-      <circle cx="2380" cy="245" r="10" fill="green"/>
-      <text x="2380" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+      <circle cx="2080" cy="245" r="10" fill="green"/>
+      <text x="2080" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">3</text>
       <title>archive
 ⬇
 1 /direct/path
-2 /transitive/crypto</title>
+2 /transitive/crypto
+3 /transitive/posix</title>
     </g>
     <g>
-      <circle cx="2120" cy="205" r="10" fill="blue"/>
-      <text x="2120" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+      <circle cx="1820" cy="205" r="10" fill="blue"/>
+      <text x="1820" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
       <title>1 /root/money
 2 /transitive/image
 ⬇
@@ -383,7 +384,7 @@ archive</title>
   <g id='Counters_path'>
     <g>
       <circle cx="20" cy="355" r="10" fill="blue"/>
-      <text x="20" y="355" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">33</text>
+      <text x="20" y="355" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">34</text>
       <title>1 /dev/flutter_launcher_icons
 2 /dev/flutter_test
 3 /dev/integration_test
@@ -408,15 +409,16 @@ archive</title>
 22 /transitive/package_config
 23 /transitive/path_provider_linux
 24 /transitive/path_provider_windows
-25 /transitive/process
-26 /transitive/shared_preferences_linux
-27 /transitive/shared_preferences_windows
-28 /transitive/source_gen
-29 /transitive/source_span
-30 /transitive/stack_trace
-31 /transitive/watcher
-32 /transitive/webdriver
-33 /transitive/xdg_directories
+25 /transitive/posix
+26 /transitive/process
+27 /transitive/shared_preferences_linux
+28 /transitive/shared_preferences_windows
+29 /transitive/source_gen
+30 /transitive/source_span
+31 /transitive/stack_trace
+32 /transitive/watcher
+33 /transitive/webdriver
+34 /transitive/xdg_directories
 ⬇
 path</title>
     </g>
@@ -672,8 +674,8 @@ logger</title>
   </g>
   <g id='Counters_pasteboard'>
     <g>
-      <circle cx="2080" cy="245" r="10" fill="green"/>
-      <text x="2080" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">4</text>
+      <circle cx="2380" cy="245" r="10" fill="green"/>
+      <text x="2380" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">4</text>
       <title>pasteboard
 ⬇
 1 /direct/path
@@ -682,8 +684,8 @@ logger</title>
 4 /transitive/web</title>
     </g>
     <g>
-      <circle cx="1820" cy="205" r="10" fill="blue"/>
-      <text x="1820" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="2120" cy="205" r="10" fill="blue"/>
+      <text x="2120" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 pasteboard</title>
@@ -864,8 +866,8 @@ window_manager</title>
     </g>
   </g>
   <g id='Labels_archive'>
-    <text class="nodeName" x="2250" y="225" font-size="120%">archive</text>
-    <text class="nodeName" x="2250" y="245" font-size="80%">3.6.1</text>
+    <text class="nodeName" x="1950" y="225" font-size="120%">archive</text>
+    <text class="nodeName" x="1950" y="245" font-size="80%">4.0.1</text>
   </g>
   <g id='Labels_path'>
     <text class="nodeName" x="150" y="375" font-size="120%">path</text>
@@ -928,8 +930,8 @@ window_manager</title>
     <text class="nodeName" x="1950" y="395" font-size="80%">2.5.0</text>
   </g>
   <g id='Labels_pasteboard'>
-    <text class="nodeName" x="1950" y="225" font-size="120%">pasteboard</text>
-    <text class="nodeName" x="1950" y="245" font-size="80%">0.3.0</text>
+    <text class="nodeName" x="2250" y="225" font-size="120%">pasteboard</text>
+    <text class="nodeName" x="2250" y="245" font-size="80%">0.3.0</text>
   </g>
   <g id='Labels_path_provider'>
     <text class="nodeName" x="1650" y="225" font-size="120%">path_provider</text>

@@ -451,6 +451,8 @@ class Category extends MoneyObject {
 
   bool get isExpense => fieldType.value == CategoryType.expense || fieldType.value == CategoryType.recurringExpense;
 
+  bool get isIncome => fieldType.value == CategoryType.income || fieldType.value == CategoryType.investment;
+
   bool get isRecurring => fieldType.value == CategoryType.recurringExpense;
 
   ///

@@ -269,4 +269,5 @@ enum CashflowViewAs {
   recurringIncomes,
   recurringExpenses,
   budget,
+  trend,
 }

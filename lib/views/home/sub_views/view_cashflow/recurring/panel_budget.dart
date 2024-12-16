@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/money_widget.dart';
-import 'package:money/data/models/money_objects/categories/category.dart';
-import 'package:money/data/models/money_objects/transactions/transactions.dart';
-import 'package:money/data/storage/data/data.dart';
+import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
 
 class PanelBudget extends StatefulWidget {
   const PanelBudget({
@@ -26,13 +24,6 @@ class PanelBudget extends StatefulWidget {
   State<PanelBudget> createState() => _PanelBudgetState();
 
   int get numberOfYears => max(1, maxYear - minYear);
-}
-
-class RecurringExpenses {
-  RecurringExpenses(this.category, this.sum);
-
-  final Category category;
-  final double sum;
 }
 
 class _PanelBudgetState extends State<PanelBudget> {
@@ -165,25 +156,8 @@ class _PanelBudgetState extends State<PanelBudget> {
   }
 
   void initializeItems() {
+    items = RecurringExpenses.getRecurringItems(widget.minYear, widget.maxYear);
     sumForAllCategories = 0.00;
-    final recurringCategories =
-        Data().categories.iterableList().where((c) => c.fieldType.value == CategoryType.recurringExpense);
-
-    for (final category in recurringCategories) {
-      // get all transactions meeting the request of date and type
-      bool whereClause(Transaction t) {
-        return t.category == category && isBetweenOrEqual(t.fieldDateTime.value!.year, widget.minYear, widget.maxYear);
-      }
-
-      final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
-      final sumOfTransactionsForCategory =
-          flatTransactions.fold<double>(0, (p, e) => p + e.fieldAmount.value.toDouble());
-      final item = RecurringExpenses(category, sumOfTransactionsForCategory);
-      items.add(item);
-      sumForAllCategories += sumOfTransactionsForCategory;
-    }
-    items.sort(
-      (a, b) => a.sum.compareTo(b.sum),
-    );
+    items.forEach((item) => sumForAllCategories += item.sum);
   }
 }
