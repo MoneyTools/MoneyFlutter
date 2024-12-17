@@ -7,6 +7,7 @@ import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/chart.dart';
 import 'package:money/core/widgets/money_widget.dart';
+import 'package:money/data/models/money_model.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
 
 class PanelTrend extends StatefulWidget {
@@ -33,11 +34,13 @@ class _PanelTrendState extends State<PanelTrend> {
   double maxY = 0;
   double minY = 0;
   Map<int, RecurringExpenses> yearCategoryIncomeExpenseSums = {};
+  List<int> years = [];
 
   @override
   void initState() {
     super.initState();
     yearCategoryIncomeExpenseSums = RecurringExpenses.getSumByIncomeExpenseByYears(widget.minYear, widget.maxYear);
+    years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
 
     maxY = 0;
     minY = 0;
@@ -52,6 +55,61 @@ class _PanelTrendState extends State<PanelTrend> {
   Widget build(BuildContext context) {
     return BarChart(
       BarChartData(
+        barTouchData: BarTouchData(
+          touchTooltipData: BarTouchTooltipData(
+            tooltipRoundedRadius: 8,
+            tooltipPadding: const EdgeInsets.all(8),
+            tooltipMargin: 8,
+            getTooltipColor: (group) => Colors.black,
+            fitInsideVertically: true,
+            fitInsideHorizontally: true,
+            maxContentWidth: 300,
+            getTooltipItem: (BarChartGroupData group, int groupIndex, BarChartRodData rod, int rodIndex) {
+              final int year = years[groupIndex];
+              final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;
+              final double profit = yearData.sumIncome + yearData.sumExpense;
+              return BarTooltipItem(
+                year.toString(),
+                textAlign: TextAlign.end,
+                const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                ),
+                children: [
+                  TextSpan(
+                    text: '\nRevenue\t${MoneyModel(amount: yearData.sumIncome).toShortHand()}',
+                    style: TextStyle(
+                      color: Colors.green,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '\nExpense\t${MoneyModel(amount: yearData.sumExpense).toShortHand()}',
+                    style: TextStyle(
+                      color: Colors.red.shade100,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '\n${profit > 0 ? 'Profit' : 'Loss'}\t${MoneyModel(amount: profit).toShortHand()}',
+                    style: TextStyle(
+                      color: profit > 0 ? Colors.blue : Colors.orange,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
+          touchCallback: (event, response) {
+            // Optional: Add custom touch handling here
+          },
+          handleBuiltInTouches: true,
+        ),
         barGroups: _buildBarGroups(),
         alignment: BarChartAlignment.spaceEvenly,
         maxY: maxY * 1.1, // add 10%
@@ -84,7 +142,7 @@ class _PanelTrendState extends State<PanelTrend> {
 
   // Data for the chart
   List<BarChartGroupData> _buildBarGroups() {
-    final years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
+    final List<int> years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
 
     return List.generate(years.length, (index) {
       final int year = years[index];
@@ -138,7 +196,7 @@ class _PanelTrendState extends State<PanelTrend> {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 30,
-          getTitlesWidget: (value, meta) {
+          getTitlesWidget: (final double value, final TitleMeta meta) {
             final years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
             if (value.toInt() >= years.length) {
               return const Text('');

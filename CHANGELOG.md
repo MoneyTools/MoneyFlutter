@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.10.04] 2024-12-17
+
+### Add
+
+- Trend chart tooltips
+  
 ## [version 1.10.03] 2024-12-16
 
 ### Add
