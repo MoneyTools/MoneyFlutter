@@ -161,6 +161,14 @@ class Categories extends MoneyObjects<Category> {
     return getByName(name)!;
   }
 
+  List<Category> getAllExpenseCategories() {
+    return iterableList().where((category) => category.isExpense).toList();
+  }
+
+  List<Category> getAllIncomeCategories() {
+    return iterableList().where((category) => category.isIncome).toList();
+  }
+
   Category? getByName(final String name) {
     return iterableList().firstWhereOrNull((final Category category) => category.fieldName.value == name);
   }
@@ -318,14 +326,9 @@ class Categories extends MoneyObjects<Category> {
     return getOrCreate('Investments:Transfer', CategoryType.none);
   }
 
-  bool isCategoryAnExpense(final int categoryId) {
-    final Category? category = get(categoryId);
-    if (category == null) {
-      return false;
-    }
-    return category.fieldType.value == CategoryType.expense ||
-        category.fieldType.value == CategoryType.recurringExpense;
-  }
+  bool isCategoryAnExpense(final int categoryId) => get(categoryId)?.isExpense ?? false;
+
+  bool isCategoryAnIncome(final int categoryId) => get(categoryId)?.isIncome ?? false;
 
   void reparentCategory(final Category categoryToReparent, final Category newParentCategory) {
     categoryToReparent.stashValueBeforeEditing();

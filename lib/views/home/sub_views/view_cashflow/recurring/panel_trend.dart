@@ -4,10 +4,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
+import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/chart.dart';
 import 'package:money/core/widgets/money_widget.dart';
-import 'package:money/data/models/money_model.dart';
+import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/money_objects/categories/category.dart';
+import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
 
 class PanelTrend extends StatefulWidget {
@@ -26,8 +29,6 @@ class PanelTrend extends StatefulWidget {
 
   @override
   State<PanelTrend> createState() => _PanelTrendState();
-
-  int get numberOfYears => max(1, maxYear - minYear);
 }
 
 class _PanelTrendState extends State<PanelTrend> {
@@ -105,8 +106,41 @@ class _PanelTrendState extends State<PanelTrend> {
               );
             },
           ),
-          touchCallback: (event, response) {
-            // Optional: Add custom touch handling here
+          touchCallback: (FlTouchEvent event, BarTouchResponse? response) {
+            if (event is FlTapUpEvent && response != null && response.spot != null) {
+              final int year = years[response.spot!.touchedBarGroupIndex];
+
+              final FieldFilter fieldFilterToUseForYear = FieldFilter(
+                fieldName: Constants.viewTransactionFieldNameDate,
+                strings:
+                    Data().transactions.getAllTransactionDatesForYear(year).map((date) => dateToString(date)).toList(),
+              );
+
+              // Filter by Category Expense and Income
+              Set<String> categoryNames = {};
+              {
+                for (final Category category in Data().categories.getAllExpenseCategories()) {
+                  categoryNames.add(category.name);
+                }
+                for (final Category category in Data().categories.getAllIncomeCategories()) {
+                  categoryNames.add(category.name);
+                }
+              }
+              final List<String> sortedCategoryList = categoryNames.toList();
+              sortedCategoryList.sort();
+
+              final FieldFilter fieldFilterToUseForCategories = FieldFilter(
+                fieldName: Constants.viewTransactionFieldNameCategory,
+                strings: sortedCategoryList,
+              );
+
+              PreferenceController.to.jumpToView(
+                viewId: ViewId.viewTransactions,
+                selectedId: -1,
+                columnFilter: FieldFilters([fieldFilterToUseForYear, fieldFilterToUseForCategories]).toStringList(),
+                textFilter: '',
+              );
+            }
           },
           handleBuiltInTouches: true,
         ),

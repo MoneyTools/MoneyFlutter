@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/main.dart' as app;
@@ -278,6 +280,61 @@ Future<void> testCashFlow(WidgetTester tester) async {
   await tapOnText(tester, 'Budget');
 
   await tapOnText(tester, 'Trend');
+
+  final barChartFinder = find.byType(BarChart);
+  expect(barChartFinder, findsOneWidget);
+
+  // Define scan parameters
+  final int attemptsY = 10; // Number of attempts (scan points)
+  final int attemptsX = 40; // Number of attempts (scan points)
+  // ignore: deprecated_member_use
+  final Size appSize = tester.binding.window.physicalSize;
+  final double scanSpacingWidth = appSize.width / attemptsX; // Horizontal scan step
+  final double scanSpacingHeight = appSize.height / attemptsY; // Horizontal scan step
+
+  // print(
+  //   '******************** Screen size $appSize scanSpacingWidth $scanSpacingWidth   scanSpacingHeight $scanSpacingHeight',
+  // );
+
+  // Attempt to tap across the chart diagonal top left to bottom right
+  bool tooltipFound = false;
+  final double startingHeight = appSize.height / 3; // 1/3 from he top
+  for (int y = 0; y < (attemptsY / 3); y++) {
+    for (int x = 0; x < attemptsX; x++) {
+      // Calculate the tap position
+      final Offset tapPosition = Offset(
+        400 + (x * scanSpacingWidth),
+        startingHeight + (y * scanSpacingHeight),
+      );
+
+      // Perform the tap
+      await tester.tapAt(tapPosition, kind: PointerDeviceKind.mouse);
+      await tester.pumpAndSettle();
+
+      final Finder barChartFinder = find.byType(BarChart);
+      if (barChartFinder.evaluate().isEmpty) {
+        tooltipFound = true;
+        break;
+      }
+
+      if (tooltipFound) {
+        break;
+      }
+    }
+    if (tooltipFound) {
+      break;
+    }
+  }
+  expect(tooltipFound, isTrue, reason: 'No tooltip was found after ${attemptsY * attemptsX} attempts.');
+
+  // At this point we are displaying the Transaction view with some filters for the BarChart that was tapped
+
+  // remove all filters on the Transaction view
+  PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterText));
+  PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText));
+
+  // back to Cashflow
+  await tapOnText(tester, 'Cashflow');
 }
 
 Future<void> testAliases(WidgetTester tester) async {

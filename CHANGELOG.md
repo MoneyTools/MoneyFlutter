@@ -4,6 +4,7 @@
 
 ### Add
 
+- Trend chart jump tp Transaction view for the year tapped on the BarChart
 - Trend chart tooltips
   
 ## [version 1.10.03] 2024-12-16

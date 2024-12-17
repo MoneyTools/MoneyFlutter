@@ -456,10 +456,17 @@ class Category extends MoneyObject {
   bool get isRecurring => fieldType.value == CategoryType.recurringExpense;
 
   ///
-  /// The name of the Category without the ancestor names
+  /// The last part of the full name of the Category without the ancestor names
   ///
   String get leafName {
-    return fieldName.value.split(':').last;
+    return name.split(':').last;
+  }
+
+  ///
+  /// The full name of the Category
+  ///
+  String get name {
+    return fieldName.value;
   }
 
   Category? get parentCategory {

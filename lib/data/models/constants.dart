@@ -95,6 +95,7 @@ class Constants {
   static String viewStockFieldNameSymbol = 'Symbol';
   static String viewTransactionFieldNameAccount = 'Account';
   static String viewTransactionFieldNameCategory = 'Category';
+  static String viewTransactionFieldNameDate = 'Date';
   static String viewTransactionFieldNamePayee = 'Payee/Transfer';
 }
 

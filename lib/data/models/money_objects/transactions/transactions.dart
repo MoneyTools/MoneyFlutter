@@ -255,6 +255,17 @@ class Transactions extends MoneyObjects<Transaction> {
     return flatList;
   }
 
+  List<DateTime> getAllTransactionDatesForYear(final int year) {
+    final transactions = transactionInYearRange(minYear: year, maxYear: year, incomesOrExpenses: null);
+    List<DateTime> dates = [];
+    for (final t in transactions) {
+      if (t.fieldDateTime.value?.year == year && !dates.contains(t.fieldDateTime.value)) {
+        dates.add(t.fieldDateTime.value!);
+      }
+    }
+    return dates;
+  }
+
   List<Transaction> getListFlattenSplits({
     final bool Function(Transaction)? whereClause,
   }) {
