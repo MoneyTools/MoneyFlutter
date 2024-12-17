@@ -91,30 +91,30 @@ class _PanelTrendState extends State<PanelTrend> {
       final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;
       final double profit = (yearData.sumIncome + yearData.sumExpense);
       return BarChartGroupData(
+        groupVertically: true,
         x: index,
         barRods: [
-          BarChartRodData(
-            fromY: 0,
-            toY: profit,
-            color: getTextColorToUse(profit),
-            width: 10,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-          ),
-
           // Negative Bar
           BarChartRodData(
             fromY: 0,
+            toY: yearData.sumIncome,
+            color: getTextColorToUse(yearData.sumIncome)!.withAlpha(120),
+            width: 20,
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(8), topRight: Radius.circular(8)),
+          ),
+          BarChartRodData(
+            fromY: 0,
             toY: yearData.sumExpense,
-
-            color: Colors.orange.withAlpha(120),
+            color: getTextColorToUse(yearData.sumExpense)!.withAlpha(120),
+            width: 20,
+            borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
+          ),
+          BarChartRodData(
+            fromY: 0,
+            toY: profit,
+            color: profit > 0 ? Colors.blue : Colors.orange,
             width: 10,
-            borderRadius: const BorderRadius.all(Radius.circular(4)),
-            // Positive Bar
-            backDrawRodData: BackgroundBarChartRodData(
-              show: true,
-              toY: yearData.sumIncome,
-              color: Colors.blue.withAlpha(120),
-            ),
+            borderRadius: const BorderRadius.only(topLeft: Radius.circular(0)),
           ),
         ],
         barsSpace: 0,
