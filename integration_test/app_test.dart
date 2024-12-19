@@ -137,9 +137,7 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
 
   //------------------------------------------------------------------------
   // Investments
-  await tapOnText(tester, 'Investments');
-  await tapOnTextFromParentType(tester, ListView, 'Fidelity');
-  await sidePanelTabs(tester);
+  await testInvestments(tester);
 
   //------------------------------------------------------------------------
   // Stocks
@@ -147,13 +145,7 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
 
   //------------------------------------------------------------------------
   // Rentals
-  await tapOnText(tester, 'Rentals');
-  await tapOnTextFromParentType(tester, ListView, 'AirBnB');
-  await sidePanelTabs(tester, expectPnl: true);
-  // Go back to Chart where there's a PNL panel
-  // we want to test the copy PnL data to clipboard
-  await tapOnTextFromParentType(tester, SidePanelHeader, 'PnL');
-  await tapOnKeyString(tester, 'key_card_copy_to_clipboard');
+  await testRentals(tester);
 
   //------------------------------------------------------------------------
   // Pending Changes
@@ -748,6 +740,22 @@ Future<void> testTransfers(WidgetTester tester) async {
     expectChart: false,
     expectTransactions: false,
   );
+}
+
+Future<void> testRentals(WidgetTester tester) async {
+  await tapOnText(tester, 'Rentals');
+  await tapOnTextFromParentType(tester, ListView, 'AirBnB');
+  await sidePanelTabs(tester, expectPnl: true);
+  // Go back to Chart where there's a PNL panel
+  // we want to test the copy PnL data to clipboard
+  await tapOnTextFromParentType(tester, SidePanelHeader, 'PnL');
+  await tapOnKeyString(tester, 'key_card_copy_to_clipboard');
+}
+
+Future<void> testInvestments(WidgetTester tester) async {
+  await tapOnText(tester, 'Investments');
+  await tapOnTextFromParentType(tester, ListView, 'Fidelity');
+  await sidePanelTabs(tester);
 }
 
 Future<void> sidePanelTabs(
