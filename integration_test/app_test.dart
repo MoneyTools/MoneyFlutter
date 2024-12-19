@@ -133,12 +133,7 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
 
   //------------------------------------------------------------------------
   // Transfers
-  await tapOnText(tester, 'Transfers');
-  await sidePanelTabs(
-    tester,
-    expectChart: false,
-    expectTransactions: false,
-  );
+  await testTransfers(tester);
 
   //------------------------------------------------------------------------
   // Investments
@@ -743,6 +738,16 @@ Future<void> testTransactions(WidgetTester tester) async {
     // dismiss the dialog box for "Splits"
     await tapOnText(tester, 'Close');
   }
+}
+
+Future<void> testTransfers(WidgetTester tester) async {
+  await tapOnText(tester, 'Transfers');
+  await tapOnFirstRowOfListView(tester);
+  await sidePanelTabs(
+    tester,
+    expectChart: false,
+    expectTransactions: false,
+  );
 }
 
 Future<void> sidePanelTabs(
