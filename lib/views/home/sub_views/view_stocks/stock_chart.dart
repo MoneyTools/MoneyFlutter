@@ -59,24 +59,28 @@ class StockChartWidgetState extends State<StockChartWidget> {
       return CenterMessage(message: 'Security "${widget.symbol}" is not valid');
     }
 
-    if (PreferenceController.to.apiKeyForStocks.isEmpty ||
-        latestPriceHistoryData.status == StockLookupStatus.invalidApiKey) {
-      return Center(
-        child: ElevatedButton(
-          onPressed: () {
-            showTextInputDialog(
-              context: context,
-              title: 'API Key',
-              subTitle: 'for accessing https://twelvedata.com',
-              initialValue: PreferenceController.to.apiKeyForStocks,
-              onContinue: (final String text) {
-                PreferenceController.to.apiKeyForStocks = text;
-              },
-            );
-          },
-          child: const Text('Set API Key'),
-        ),
-      );
+    if (PreferenceController.to.apiKeyForStocks == Constants.fakeStockApiKey) {
+      latestPriceHistoryData.status = StockLookupStatus.foundInCache;
+    } else {
+      if (PreferenceController.to.apiKeyForStocks.isEmpty ||
+          latestPriceHistoryData.status == StockLookupStatus.invalidApiKey) {
+        return Center(
+          child: ElevatedButton(
+            onPressed: () {
+              showTextInputDialog(
+                context: context,
+                title: 'API Key',
+                subTitle: 'for accessing https://twelvedata.com',
+                initialValue: PreferenceController.to.apiKeyForStocks,
+                onContinue: (final String text) {
+                  PreferenceController.to.apiKeyForStocks = text;
+                },
+              );
+            },
+            child: const Text('Set API Key'),
+          ),
+        );
+      }
     }
 
     switch (latestPriceHistoryData.status) {

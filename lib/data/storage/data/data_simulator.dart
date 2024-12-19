@@ -793,14 +793,27 @@ class DataSimulator {
   void _generateInvestments() {
     _generateStocks();
 
-    // Buy Apple
-    _addInvestment(_accountForInvestments, '2015-06-20', idStockApple, InvestmentType.buy, 100, 199.99);
+    // Trade Apple 'AAPL'
+    {
+      // Buy
+      _addInvestment(_accountForInvestments, '2010-06-20', idStockApple, InvestmentType.buy, 100, 199.99);
+      // Sell
+      _addInvestment(_accountForInvestments, '2000-07-21', idStockApple, InvestmentType.sell, 100, 300.00);
 
-    // Buy Ford
-    _addInvestment(_accountForInvestments, '2012-07-26', idStockFord, InvestmentType.buy, 1000, 8.86);
+      // add Dividends
+      _addInvestment(_accountForInvestments, '2012-01-01', idStockApple, InvestmentType.dividend, 1, 5000.00);
 
-    // Sell Ford
-    _addInvestment(_accountForInvestments, '2013-01-15', idStockFord, InvestmentType.sell, 1000, 14.14);
+      // Buy
+      _addInvestment(_accountForInvestments, '2020-08-22', idStockApple, InvestmentType.buy, 100, 400.00);
+    }
+    // Trade Ford 'F'
+    {
+      // Buy
+      _addInvestment(_accountForInvestments, '2012-07-26', idStockFord, InvestmentType.buy, 1000, 8.86);
+
+      // Sell
+      _addInvestment(_accountForInvestments, '2013-01-15', idStockFord, InvestmentType.sell, 1000, 14.14);
+    }
   }
 
   /// Generates sample loan payments.
@@ -961,7 +974,7 @@ class DataSimulator {
     Data().stockSplits.appendNewMoneyObject(
           StockSplit.fromJson({
             'Date': '2005-05-05',
-            'Security': 0,
+            'Security': idStockApple, // AAPL
             'Numerator': 2,
             'Denominator': 1,
           }),

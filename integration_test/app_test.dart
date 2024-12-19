@@ -591,6 +591,9 @@ Future<void> testStocks(WidgetTester tester) async {
   await inputTextToElementByKey(tester, Key('key_single_input_dialog'), Constants.fakeStockApiKey);
 
   await tapOnText(tester, 'Continue');
+
+  await tapOnTextFromParentType(tester, ListView, 'Ford');
+  await tapOnTextFromParentType(tester, ListView, 'AAPL');
 }
 
 Future<void> testTransactions(WidgetTester tester) async {
