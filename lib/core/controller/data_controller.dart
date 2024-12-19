@@ -65,23 +65,24 @@ class DataController extends GetxController {
     isLoading.value = false;
   }
 
-  Future<void> loadFile(final DataSource dataSource) async {
+  Future<bool> loadFile(final DataSource dataSource) async {
     this.closeFile(false); // ensure that we closed current file and state
 
-    await Data().loadFromPath(dataSource).then((final bool success) async {
-      if (success) {
-        setCurrentFileName(dataSource.filePath);
-        currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(dataSource.filePath);
-        Future.delayed(Duration.zero, () {
-          Get.offNamed(Constants.routeHomePage);
-        });
-      }
-      isLoading.value = false;
-    });
+    bool success = await Data().loadFromPath(dataSource);
+
+    if (success) {
+      setCurrentFileName(dataSource.filePath);
+      currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(dataSource.filePath);
+      Future.delayed(Duration.zero, () {
+        Get.offNamed(Constants.routeHomePage);
+      });
+    }
+    isLoading.value = false;
+    return success;
   }
 
-  Future<void> loadFileFromPath(final DataSource dataSource) async {
-    loadFile(dataSource);
+  Future<bool> loadFileFromPath(final DataSource dataSource) async {
+    return await loadFile(dataSource);
   }
 
   // Async method to fetch data
@@ -172,7 +173,7 @@ class DataController extends GetxController {
             dataSource = DataSource(filePath: pickerResult.files.single.path ?? '');
           }
 
-          loadFile(dataSource);
+          await loadFile(dataSource);
           return true;
         }
       } catch (e) {
@@ -191,7 +192,7 @@ class DataController extends GetxController {
     trackMutations.reset();
   }
 
-  void onSaveToSql() async {
+  Future<bool> onSaveToSql() async {
     String fileNameAndPath = currentLoadedFileName.value;
 
     if (fileNameAndPath.isEmpty) {
@@ -199,7 +200,7 @@ class DataController extends GetxController {
       fileNameAndPath = await defaultFolderToSaveTo('mymoney.mmdb');
     }
 
-    Data().saveToSql(
+    bool result = await Data().saveToSql(
       filePath: fileNameAndPath,
       onSaveCompleted: (final bool success, final String message) {
         if (success) {
@@ -211,6 +212,7 @@ class DataController extends GetxController {
     );
 
     PreferenceController.to.addToMRU(fileNameAndPath);
+    return result;
   }
 
   void onShowFileLocation() async {
@@ -243,8 +245,4 @@ class DataSource {
   final Uint8List _fileBytes;
 
   Uint8List get fileBytes => _fileBytes;
-
-  bool get isByteFile => _fileBytes.isNotEmpty && filePath.isNotEmpty;
-
-  bool get isLocalFile => _fileBytes.isEmpty && filePath.isNotEmpty && filePath.contains(MyFileSystems.pathSeparator);
 }

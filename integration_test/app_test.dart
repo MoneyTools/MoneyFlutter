@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -853,10 +853,15 @@ Future<void> testPendingChanges(WidgetTester tester) async {
     },
   );
 
-  // Load fromm SQL
-  bool successLoading = await Data().loadFromSql(
-    filePath: testFilename,
-    fileBytes: Uint8List(0),
-  );
-  expect(successLoading, true);
+  // Load from SQL
+  {
+    DataSource dataSource = DataSource(filePath: testFilename);
+    bool successLoading = await DataController.to.loadFileFromPath(dataSource);
+    expect(successLoading, true);
+  }
+  // Save to SQL
+  {
+    bool result = await DataController.to.onSaveToSql();
+    expect(result, true);
+  }
 }
