@@ -3,12 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
-import 'package:money/core/widgets/dialog/dialog.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/import/import_data.dart';
-import 'package:money/views/home/sub_views/view_accounts/picker_account.dart';
 
 Future<bool> importQFX(
   final BuildContext context,
@@ -184,24 +182,4 @@ String getValuePortion(final String line) {
     lineContent = lineContent.substring(0, end);
   }
   return getNormalizedValue(lineContent);
-}
-
-void showPickAccount(
-  final BuildContext context,
-) {
-  adaptiveScreenSizeDialog(
-    context: context,
-    title: 'Pick Account to import to',
-    captionForClose: null, // this will hide the close button
-    child: Column(
-      children: [
-        pickerAccount(
-          selected: null,
-          onSelected: (Account? account) {
-            // widget.onSelected(_choice, widget.payee, account);
-          },
-        ),
-      ],
-    ),
-  );
 }

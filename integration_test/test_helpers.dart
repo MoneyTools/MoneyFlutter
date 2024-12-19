@@ -5,8 +5,14 @@ import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_item.dart';
 
-Future<void> tapOnText(final WidgetTester tester, final String textToFind) async {
-  final firstMatchingElement = find.text(textToFind).first;
+Future<void> tapOnText(final WidgetTester tester, final String textToFind, {final bool lastOneFound = false}) async {
+  var firstMatchingElement = find.text(textToFind);
+  if (lastOneFound) {
+    firstMatchingElement = firstMatchingElement.last;
+  } else {
+    firstMatchingElement = firstMatchingElement.first;
+  }
+
   expect(firstMatchingElement, findsOneWidget);
   await tester.tap(firstMatchingElement, warnIfMissed: false);
   await tester.myPump();

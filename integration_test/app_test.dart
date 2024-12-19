@@ -1,11 +1,12 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/side_panel/side_panel_header.dart';
 import 'package:money/data/storage/data/data.dart';
+import 'package:money/data/storage/import/import_qfx.dart';
 import 'package:money/main.dart' as app;
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -158,6 +159,37 @@ Future<void> stepImport(WidgetTester tester) async {
   await tapOnText(tester, 'Add transactions...');
   await tester.myPump();
 
+  // Also test the Import from file
+  {
+    const String fileContent = '''<OFX><BANKACCTFROM>
+    <BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS</BANKACCTFROM>
+    <BANKTRANLIST><STMTTRN><TRNTYPE>DEBIT<DTPOSTED>20230810
+    <TRNAMT>-50.00<NAME>Sample Transaction</STMTTRN></BANKTRANLIST></OFX>''';
+
+    // Should not throw error when context is null
+    final BuildContext context = tester.element(find.byType(Navigator));
+    expect(() => importQfxFromString(context, fileContent), returnsNormally);
+
+    // Verify import success
+    await tester.pumpAndSettle();
+    // Wait for the dialog box to appear
+    expect(find.text('Pick account to import to'), findsOneWidget);
+    await tapOnText(
+      tester,
+      'New Bank Account',
+      lastOneFound: true,
+    );
+    await tester.pumpAndSettle();
+    await tapOnText(tester, 'Import');
+    // expect(find.text('Imported'), findsOneWidget);
+    await tester.pumpAndSettle(Durations.extralong4);
+  }
+
+  // Import from manual text input in bulk
+  await testImportBulkManualTextInput(tester);
+}
+
+Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
   await tapOnText(tester, 'Manual bulk text input');
   await tester.myPump();
 
