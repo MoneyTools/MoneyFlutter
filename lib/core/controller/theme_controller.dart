@@ -6,6 +6,13 @@ import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:money/data/models/constants.dart';
 import 'package:window_manager/window_manager.dart';
 
+/// Controller for managing app theme settings including:
+/// - Light/dark mode switching
+/// - Primary color scheme selection
+/// - Device width responsive breakpoints
+/// - Font scaling
+/// - Window size management
+/// - Theme persistence
 class ThemeController extends GetxController {
   RxInt colorSelected = 0.obs;
   RxBool isDarkTheme = false.obs;

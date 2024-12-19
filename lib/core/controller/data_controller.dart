@@ -12,6 +12,13 @@ import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/data/data_mutations.dart';
 import 'package:path/path.dart' as p;
 
+/// Controller for managing data file operations.
+/// Features:
+/// - Load/save files in multiple formats
+/// - Track file state and modifications
+/// - Manage MRU list
+/// - File format conversions
+/// - File location management
 class DataController extends GetxController {
   Rxn<DateTime> currentLoadedFileDateTime = Rxn<DateTime>();
   RxString currentLoadedFileName = Constants.untitledFileName.obs;
@@ -220,6 +227,11 @@ class DataController extends GetxController {
   static DataController get to => Get.find();
 }
 
+/// Data source configuration for file loading operations.
+/// Supports:
+/// - Local file paths
+/// - In-memory byte data
+/// - File format validation
 class DataSource {
   DataSource({
     this.filePath = '',

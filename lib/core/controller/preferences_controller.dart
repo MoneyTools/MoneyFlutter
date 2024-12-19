@@ -5,6 +5,16 @@ import 'package:money/data/models/constants.dart';
 import 'package:money/data/models/fields/field_filter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+/// Controller for managing application preferences and settings.
+/// Handles:
+/// - MRU (Most Recently Used) files
+/// - View settings and filters
+/// - Display options
+/// - Feature flags
+/// - Theme preferences
+/// - Window state
+/// - Font scaling
+/// Uses SharedPreferences for persistence.
 class PreferenceController extends GetxController {
   final RxBool isReady = false.obs;
   final RxBool useYahooStock = true.obs;

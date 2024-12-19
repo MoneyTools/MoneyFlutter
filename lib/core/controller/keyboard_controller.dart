@@ -5,6 +5,12 @@ import 'package:get/get.dart';
 import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/data/storage/data/data.dart';
 
+/// Controller for handling keyboard shortcuts and hotkeys.
+/// Features:
+/// - Zoom in/out shortcuts
+/// - Font scaling shortcuts
+/// - Data refresh shortcuts
+/// - Custom shortcut registration
 class ShortcutController extends GetxController {
   @override
   void onClose() {

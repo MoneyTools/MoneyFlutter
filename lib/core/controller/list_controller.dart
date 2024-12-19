@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+/// Base controller for managing scrollable list state.
+/// Features:
+/// - Track scroll position
+/// - Bookmark positions
+/// - Scroll to top/bottom
+/// - Animated scrolling
 class ListController extends GetxController {
   final ScrollController scrollController = ScrollController();
   final RxDouble scrollPosition = 0.0.obs;
@@ -51,6 +57,8 @@ class ListController extends GetxController {
   }
 }
 
+/// List controller specialized for main content area
 class ListControllerMain extends ListController {}
 
+/// List controller specialized for side panel content
 class ListControllerSidePanel extends ListController {}

@@ -1,7 +1,19 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-/// dataPoints will be sorted by date ascending
+/// Helper functions for creating line charts.
+/// Features:
+/// - Data point sorting
+/// - Color selection based on trends
+/// - Gradient area fills
+/// - Configurable dot display
+/// Creates and returns a LineChartBarData object for displaying a line chart.
+/// The data points are sorted by x value (date) in ascending order.
+/// The line color is determined by the trend of the data:
+/// - Orange for negative final value
+/// - Green if trending upward
+/// - Red if trending downward
+/// - Grey otherwise
 LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints, {bool showDots = false}) {
   dataPoints.sort((a, b) => a.x.compareTo(b.x));
 

@@ -1,8 +1,11 @@
 import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:money/core/helpers/ranges.dart';
 
-/// A generic class that accumulates values of type `V` associated with keys of type `T`.
-/// It uses a `Map<K, Set<V>>` to store the accumulated values.
+/// Generic accumulator for collecting values by key.
+/// Features:
+/// - Type-safe value accumulation
+/// - Set-based storage
+/// - Key-value lookups
 class AccumulatorList<K, V> {
   final Map<K, Set<V>> values = {};
 
@@ -57,7 +60,11 @@ class AccumulatorList<K, V> {
   }
 }
 
-/// Tally values
+/// Accumulator for numeric sums mapped to keys.
+/// Features:
+/// - Generic numeric value support
+/// - Running sum calculation
+/// - Max value tracking
 class AccumulatorSum<K, V> {
   final Map<K, V> values = {};
 
@@ -113,7 +120,11 @@ class AccumulatorSum<K, V> {
   }
 }
 
-/// Keep track of oldest and newest date range
+/// Tracks date ranges for values by key.
+/// Features:
+/// - Min/max date tracking
+/// - Date range expansion
+/// - Range retrieval
 class AccumulatorDateRange<K> {
   final Map<K, DateRange> values = {};
 
@@ -142,7 +153,11 @@ class AccumulatorDateRange<K> {
   }
 }
 
-/// Keep track of oldest and newest date range
+/// Calculates running averages for values by key.
+/// Features:
+/// - Running average calculation
+/// - Count tracking
+/// - Zero value handling
 class AccumulatorAverage<K> {
   final Map<K, RunningAverage> values = {};
 
@@ -164,8 +179,11 @@ class AccumulatorAverage<K> {
   }
 }
 
-/// Ensure unique Key [K] instances, that cumulate unique instance of [I] another accumulator
-/// for Sum of [V]
+/// Two-level accumulator mapping keys to sums.
+/// Features:
+/// - Nested key structure
+/// - Sum accumulation
+/// - Level-based access
 class MapAccumulatorSum<K, I, V> {
   Map<K, AccumulatorSum<I, V>> map = {};
 
@@ -181,8 +199,11 @@ class MapAccumulatorSum<K, I, V> {
   }
 }
 
-/// Ensure unique Key [K] instances, that cumulate unique instance of [I] another accumulator
-/// for Set of [V]
+/// Two-level accumulator mapping keys to sets.
+/// Features:
+/// - Nested key structure
+/// - Set-based storage
+/// - Level-based access
 class MapAccumulatorSet<K, I, V> {
   Map<K, AccumulatorList<I, V>> map = {};
 
@@ -205,6 +226,12 @@ class MapAccumulatorSet<K, I, V> {
   }
 }
 
+/// Tracks running statistics for numeric values.
+/// Features:
+/// - Count tracking
+/// - Sum calculation
+/// - Zero handling
+/// - Min/max range
 class RunningAverage {
   NumRange range = NumRange(
     min: double.infinity,

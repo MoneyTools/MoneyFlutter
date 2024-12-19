@@ -13,6 +13,8 @@ import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
 
+/// Widget that displays recurring cashflow trends over time as a bar chart.
+/// Shows income, expenses and profit/loss for each time period.
 class PanelTrend extends StatefulWidget {
   const PanelTrend({
     super.key,
@@ -31,6 +33,8 @@ class PanelTrend extends StatefulWidget {
   State<PanelTrend> createState() => _PanelTrendState();
 }
 
+/// State management for the PanelTrend widget.
+/// Handles data preparation and chart rendering.
 class _PanelTrendState extends State<PanelTrend> {
   double maxY = 0;
   double minY = 0;

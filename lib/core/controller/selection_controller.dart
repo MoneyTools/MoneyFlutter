@@ -3,6 +3,12 @@ import 'package:money/core/controller/preferences_controller.dart';
 export 'package:get/get.dart';
 
 // List the selected item IDs, optionally can be persisted and loaded in Preferences
+/// Controller for managing selected item IDs in lists.
+/// Features:
+/// - Track multiple selected items using a RxSet
+/// - Persist selections to preferences using a key
+/// - Toggle individual item selection
+/// - Support for first selected ID retrieval
 class SelectionController extends GetxController {
   SelectionController([this.preferenceKeyForPersistingSelections = '']) {
     if (preferenceKeyForPersistingSelections.isNotEmpty) {

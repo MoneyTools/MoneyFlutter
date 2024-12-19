@@ -3,6 +3,13 @@ import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/misc_helpers.dart';
 
+/// Collection of color utility functions for:
+/// - Color manipulation (tinting, brightness, opacity)
+/// - Format conversion (hex, HSL, RGB)
+/// - Contrast calculation
+/// - Theme-aware color selection
+/// - Color state management
+
 /// Adds a tint of red to a given color.
 ///
 /// This function takes a `Color` object and an integer value representing the
