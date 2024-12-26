@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.11.00] 2024-12-26
+
+### Add
+
+- Display Category distribution graph on Transaction view Side panel
+
 ## [version 1.10.04] 2024-12-17
 
 ### Add

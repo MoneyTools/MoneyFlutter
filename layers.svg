@@ -123,10 +123,10 @@
     <rect x="2404" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_dotted_border'>
-    <rect x="3904" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="4204" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_fl_chart'>
-    <rect x="4204" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="3304" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_get'>
     <rect x="1504" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -144,7 +144,7 @@
     <rect x="1504" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_provider'>
-    <rect x="3304" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="3604" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_shared_preferences'>
     <rect x="604" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
@@ -168,7 +168,7 @@
     <rect x="904" y="339" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Node_window_manager'>
-    <rect x="3604" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
+    <rect x="3904" y="189" width="292" height="72" rx="8" ry="8" class="nodeFile"/>
   </g>
   <g id='Edges'>
     <path class="line" d="M2080 245 C 2090 300,10 300, 20 355" fill="none" stroke="#377E22">
@@ -221,7 +221,7 @@ csv</title>
 ⬇
 desktop_drop</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,3910 150, 3920 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,4210 150, 4220 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 dotted_border</title>
@@ -231,7 +231,7 @@ dotted_border</title>
 ⬇
 file_picker</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,4210 150, 4220 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,3310 150, 3320 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 fl_chart</title>
@@ -281,7 +281,7 @@ path</title>
 ⬇
 path_provider</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,3310 150, 3320 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,3610 150, 3620 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 provider</title>
@@ -321,7 +321,7 @@ url_launcher</title>
 ⬇
 uuid</title>
     </path>
-    <path class="line" d="M280 95 C 290 150,3610 150, 3620 205" fill="none" stroke="#377E22">
+    <path class="line" d="M280 95 C 290 150,3910 150, 3920 205" fill="none" stroke="#377E22">
       <title>money
 ⬇
 window_manager</title>
@@ -336,7 +336,7 @@ path</title>
 ⬇
 uuid</title>
     </path>
-    <path class="line" d="M3580 245 C 3590 300,310 300, 320 355" fill="none" stroke="#377E22">
+    <path class="line" d="M3880 245 C 3890 300,310 300, 320 355" fill="none" stroke="#377E22">
       <title>provider
 ⬇
 collection</title>
@@ -356,7 +356,7 @@ path</title>
 ⬇
 collection</title>
     </path>
-    <path class="line" d="M3880 245 C 3890 300,10 300, 20 355" fill="none" stroke="#377E22">
+    <path class="line" d="M4180 245 C 4190 300,10 300, 20 355" fill="none" stroke="#377E22">
       <title>window_manager
 ⬇
 path</title>
@@ -615,15 +615,15 @@ desktop_drop</title>
   </g>
   <g id='Counters_dotted_border'>
     <g>
-      <circle cx="4180" cy="245" r="10" fill="green"/>
-      <text x="4180" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="4480" cy="245" r="10" fill="green"/>
+      <text x="4480" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>dotted_border
 ⬇
 1 /transitive/path_drawing</title>
     </g>
     <g>
-      <circle cx="3920" cy="205" r="10" fill="blue"/>
-      <text x="3920" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="4220" cy="205" r="10" fill="blue"/>
+      <text x="4220" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 dotted_border</title>
@@ -631,15 +631,16 @@ dotted_border</title>
   </g>
   <g id='Counters_fl_chart'>
     <g>
-      <circle cx="4480" cy="245" r="10" fill="green"/>
-      <text x="4480" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="3580" cy="245" r="10" fill="green"/>
+      <text x="3580" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
       <title>fl_chart
 ⬇
-1 /transitive/equatable</title>
+1 /transitive/equatable
+2 /transitive/vector_math</title>
     </g>
     <g>
-      <circle cx="4220" cy="205" r="10" fill="blue"/>
-      <text x="4220" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="3320" cy="205" r="10" fill="blue"/>
+      <text x="3320" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 fl_chart</title>
@@ -713,16 +714,16 @@ path_provider</title>
   </g>
   <g id='Counters_provider'>
     <g>
-      <circle cx="3580" cy="245" r="10" fill="green"/>
-      <text x="3580" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+      <circle cx="3880" cy="245" r="10" fill="green"/>
+      <text x="3880" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
       <title>provider
 ⬇
 1 /direct/collection
 2 /transitive/nested</title>
     </g>
     <g>
-      <circle cx="3320" cy="205" r="10" fill="blue"/>
-      <text x="3320" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="3620" cy="205" r="10" fill="blue"/>
+      <text x="3620" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 provider</title>
@@ -850,16 +851,16 @@ uuid</title>
   </g>
   <g id='Counters_window_manager'>
     <g>
-      <circle cx="3880" cy="245" r="10" fill="green"/>
-      <text x="3880" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
+      <circle cx="4180" cy="245" r="10" fill="green"/>
+      <text x="4180" y="245" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">2</text>
       <title>window_manager
 ⬇
 1 /direct/path
 2 /transitive/screen_retriever</title>
     </g>
     <g>
-      <circle cx="3620" cy="205" r="10" fill="blue"/>
-      <text x="3620" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
+      <circle cx="3920" cy="205" r="10" fill="blue"/>
+      <text x="3920" y="205" fill="white" font-size="10" text-anchor="middle" dominant-baseline="central">1</text>
       <title>1 /root/money
 ⬇
 window_manager</title>
@@ -867,7 +868,7 @@ window_manager</title>
   </g>
   <g id='Labels_archive'>
     <text class="nodeName" x="1950" y="225" font-size="120%">archive</text>
-    <text class="nodeName" x="1950" y="245" font-size="80%">4.0.1</text>
+    <text class="nodeName" x="1950" y="245" font-size="80%">4.0.2</text>
   </g>
   <g id='Labels_path'>
     <text class="nodeName" x="150" y="375" font-size="120%">path</text>
@@ -875,7 +876,7 @@ window_manager</title>
   </g>
   <g id='Labels_file_picker'>
     <text class="nodeName" x="150" y="225" font-size="120%">file_picker</text>
-    <text class="nodeName" x="150" y="245" font-size="80%">8.1.5</text>
+    <text class="nodeName" x="150" y="245" font-size="80%">8.1.6</text>
   </g>
   <g id='Labels_flutter_markdown'>
     <text class="nodeName" x="2850" y="225" font-size="120%">flutter_markdown</text>
@@ -891,7 +892,7 @@ window_manager</title>
   </g>
   <g id='Labels_money'>
     <text class="nodeName" x="150" y="75" font-size="120%">money</text>
-    <text class="nodeName" x="150" y="95" font-size="80%">1.10.04</text>
+    <text class="nodeName" x="150" y="95" font-size="80%">1.11.00</text>
   </g>
   <g id='Labels_clipboard'>
     <text class="nodeName" x="1350" y="375" font-size="120%">clipboard</text>
@@ -910,12 +911,12 @@ window_manager</title>
     <text class="nodeName" x="2550" y="245" font-size="80%">0.5.0</text>
   </g>
   <g id='Labels_dotted_border'>
-    <text class="nodeName" x="4050" y="225" font-size="120%">dotted_border</text>
-    <text class="nodeName" x="4050" y="245" font-size="80%">2.1.0</text>
+    <text class="nodeName" x="4350" y="225" font-size="120%">dotted_border</text>
+    <text class="nodeName" x="4350" y="245" font-size="80%">2.1.0</text>
   </g>
   <g id='Labels_fl_chart'>
-    <text class="nodeName" x="4350" y="225" font-size="120%">fl_chart</text>
-    <text class="nodeName" x="4350" y="245" font-size="80%">0.69.2</text>
+    <text class="nodeName" x="3450" y="225" font-size="120%">fl_chart</text>
+    <text class="nodeName" x="3450" y="245" font-size="80%">0.70.0</text>
   </g>
   <g id='Labels_get'>
     <text class="nodeName" x="1650" y="375" font-size="120%">get</text>
@@ -938,12 +939,12 @@ window_manager</title>
     <text class="nodeName" x="1650" y="245" font-size="80%">2.1.5</text>
   </g>
   <g id='Labels_provider'>
-    <text class="nodeName" x="3450" y="225" font-size="120%">provider</text>
-    <text class="nodeName" x="3450" y="245" font-size="80%">6.1.2</text>
+    <text class="nodeName" x="3750" y="225" font-size="120%">provider</text>
+    <text class="nodeName" x="3750" y="245" font-size="80%">6.1.2</text>
   </g>
   <g id='Labels_shared_preferences'>
     <text class="nodeName" x="750" y="225" font-size="120%">shared_preferences</text>
-    <text class="nodeName" x="750" y="245" font-size="80%">2.3.3</text>
+    <text class="nodeName" x="750" y="245" font-size="80%">2.3.4</text>
   </g>
   <g id='Labels_sqlite3'>
     <text class="nodeName" x="1050" y="225" font-size="120%">sqlite3</text>
@@ -951,11 +952,11 @@ window_manager</title>
   </g>
   <g id='Labels_sqlite3_flutter_libs'>
     <text class="nodeName" x="2250" y="375" font-size="120%">sqlite3_flutter_libs</text>
-    <text class="nodeName" x="2250" y="395" font-size="80%">0.5.27</text>
+    <text class="nodeName" x="2250" y="395" font-size="80%">0.5.28</text>
   </g>
   <g id='Labels_textify'>
     <text class="nodeName" x="5250" y="225" font-size="120%">textify</text>
-    <text class="nodeName" x="5250" y="245" font-size="80%">0.1.6</text>
+    <text class="nodeName" x="5250" y="245" font-size="80%">0.2.1</text>
   </g>
   <g id='Labels_universal_io'>
     <text class="nodeName" x="3150" y="225" font-size="120%">universal_io</text>
@@ -970,7 +971,7 @@ window_manager</title>
     <text class="nodeName" x="1050" y="395" font-size="80%">4.5.1</text>
   </g>
   <g id='Labels_window_manager'>
-    <text class="nodeName" x="3750" y="225" font-size="120%">window_manager</text>
-    <text class="nodeName" x="3750" y="245" font-size="80%">0.4.3</text>
+    <text class="nodeName" x="4050" y="225" font-size="120%">window_manager</text>
+    <text class="nodeName" x="4050" y="245" font-size="80%">0.4.3</text>
   </g>
 </svg>

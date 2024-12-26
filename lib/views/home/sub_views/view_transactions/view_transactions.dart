@@ -1,6 +1,4 @@
-import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
-import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
@@ -271,38 +269,29 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool showAsNativeCurrency,
   }) {
-    final Map<String, num> tallyPerMonths = <String, num>{};
-
-    final DateRange timePeriod = DateRange(
-      min: DateTime.now().subtract(const Duration(days: 356)).startOfDay,
-      max: DateTime.now().endOfDay,
-    );
+    final Map<String, num> tallyPerCategory = <String, num>{};
 
     getList().forEach((final Transaction transaction) {
-      transaction;
+      final num value = transaction.fieldAmount.value.toDouble();
+      final int categoryId = transaction.fieldCategoryId.value;
+      dynamic category = Data().categories.get(categoryId);
+      category ??= Data().categories.unknown;
+      final parentCategory = Data().categories.getTopAncestor(category!);
 
-      if (timePeriod.isBetweenEqual(transaction.fieldDateTime.value)) {
-        final num value = transaction.fieldAmount.value.toDouble();
-
-        final DateTime date = transaction.fieldDateTime.value!;
-        // Format the date as year-month string (e.g., '2023-11')
-        final String yearMonth = '${date.year}-${date.month.toString().padLeft(2, '0')}';
-
-        // Update the map or add a new entry
-        tallyPerMonths.update(
-          yearMonth,
-          (final num total) => total + value,
-          ifAbsent: () => value,
-        );
-      }
+      // Update the map or add a new entry
+      tallyPerCategory.update(
+        parentCategory.name,
+        (final num total) => total + value,
+        ifAbsent: () => value,
+      );
     });
 
     final List<PairXYY> list = <PairXYY>[];
-    tallyPerMonths.forEach((final String key, final num value) {
+    tallyPerCategory.forEach((final String key, final num value) {
       list.add(PairXYY(key, value));
     });
 
-    list.sort((final PairXYY a, final PairXYY b) => a.xText.compareTo(b.xText));
+    list.sort((final PairXYY a, final PairXYY b) => a.yValue1.compareTo(b.yValue1));
 
     return Chart(
       list: list,
