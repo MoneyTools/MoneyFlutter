@@ -22,12 +22,14 @@ class PanelTrend extends StatefulWidget {
     required this.minYear,
     required this.maxYear,
     required this.viewRecurringAs,
+    required this.includeAssetAccounts,
   });
 
   final DateRange dateRangeSearch;
   final int maxYear;
   final int minYear;
   final CashflowViewAs viewRecurringAs;
+  final bool includeAssetAccounts;
 
   @override
   State<PanelTrend> createState() => _PanelTrendState();
@@ -44,7 +46,24 @@ class _PanelTrendState extends State<PanelTrend> {
   @override
   void initState() {
     super.initState();
-    yearCategoryIncomeExpenseSums = RecurringExpenses.getSumByIncomeExpenseByYears(widget.minYear, widget.maxYear);
+    _generateList();
+  }
+
+  @override
+  void didUpdateWidget(covariant PanelTrend oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.minYear != oldWidget.minYear ||
+        widget.maxYear != oldWidget.maxYear ||
+        widget.includeAssetAccounts != oldWidget.includeAssetAccounts) {
+      setState(() {
+        _generateList();
+      });
+    }
+  }
+
+  void _generateList() {
+    yearCategoryIncomeExpenseSums =
+        RecurringExpenses.getSumByIncomeExpenseByYears(widget.minYear, widget.maxYear, widget.includeAssetAccounts);
     years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
 
     maxY = 0;
@@ -180,8 +199,6 @@ class _PanelTrendState extends State<PanelTrend> {
 
   // Data for the chart
   List<BarChartGroupData> _buildBarGroups() {
-    final List<int> years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
-
     return List.generate(years.length, (index) {
       final int year = years[index];
       final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;

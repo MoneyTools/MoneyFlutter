@@ -843,6 +843,8 @@ class Transaction extends MoneyObject {
     _instanceOfAccount = value;
   }
 
+  bool get isAssetAccount => instanceOfAccount?.isAssetAccount ?? false;
+
   Transfer? get instanceOfTransfer {
     if (_instanceOfTransfer == null && isTransfer) {
       final Transaction? relatedTransaction = Data().transactions.get(this.fieldTransfer.value);

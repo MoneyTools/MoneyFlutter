@@ -34,11 +34,18 @@ class RecurringExpenses {
     return items;
   }
 
-  static Map<int, RecurringExpenses> getSumByIncomeExpenseByYears(int minYear, int maxYear) {
+  static Map<int, RecurringExpenses> getSumByIncomeExpenseByYears(
+    int minYear,
+    int maxYear,
+    bool includeAssetAccounts,
+  ) {
     Map<int, RecurringExpenses> yearMap = {};
 
     final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(
-          whereClause: (t) => t.category != null && isBetweenOrEqual(t.fieldDateTime.value!.year, minYear, maxYear),
+          whereClause: (t) =>
+              t.category != null &&
+              isBetweenOrEqual(t.fieldDateTime.value!.year, minYear, maxYear) &&
+              (includeAssetAccounts || !t.isAssetAccount),
         );
 
     for (final Transaction t in flatTransactions) {

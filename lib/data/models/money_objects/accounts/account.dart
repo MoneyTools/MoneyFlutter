@@ -486,6 +486,10 @@ class Account extends MoneyObject {
     }
   }
 
+  bool get isAssetAccount {
+    return fieldType.value == AccountType.asset;
+  }
+
   bool matchType(final List<AccountType> types) {
     if (types.isEmpty) {
       // All accounts except the fake ones

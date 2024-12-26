@@ -155,6 +155,24 @@ class ViewCashFlowState extends ViewWidgetState {
                   PreferenceController.to.netWorthEventThreshold.value = value;
                 },
               ),
+            if (CashflowViewAs.trend == PreferenceController.to.cashflowViewAs.value)
+              IntrinsicWidth(
+                child: Row(
+                  children: [
+                    Obx(
+                      () => Checkbox.adaptive(
+                        value: PreferenceController.to.trendIncludeAssetAccounts.value,
+                        onChanged: (bool? newValue) {
+                          if (newValue != null) {
+                            PreferenceController.to.trendIncludeAssetAccounts.value = newValue;
+                          }
+                        },
+                      ),
+                    ),
+                    const Text('Include Asset Accounts'),
+                  ],
+                ),
+              ),
           ],
         ),
         if (Data().transactions.isNotEmpty)
@@ -255,12 +273,15 @@ class ViewCashFlowState extends ViewWidgetState {
           viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
         );
       case CashflowViewAs.trend:
-        return PanelTrend(
-          dateRangeSearch: dateRangeTransactions,
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
-        );
+        return Obx(() {
+          return PanelTrend(
+            dateRangeSearch: dateRangeTransactions,
+            minYear: this.selectedYearStart,
+            maxYear: this.selectedYearEnd,
+            viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
+            includeAssetAccounts: PreferenceController.to.trendIncludeAssetAccounts.value,
+          );
+        });
     }
   }
 }
