@@ -63,8 +63,12 @@ class Category extends MoneyObject {
   /// 6|Budget|money|0||0
   FieldMoney fieldBudget = FieldMoney(
     name: 'Budget',
+    serializeName: 'Budget',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldBudget.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldBudget.value.toDouble(),
+    setValue: (final MoneyObject instance, final dynamic value) {
+      (instance as Category).fieldBudget.value.setAmount(value);
+    },
   );
 
   /// Budget Balance
@@ -308,6 +312,7 @@ class Category extends MoneyObject {
         tmp.fieldName,
         tmp.fieldDescription,
         tmp.fieldType,
+        tmp.fieldBudget,
         tmp.fieldBudgetBalance,
         tmp.fieldTransactionCount,
         tmp.fieldSum,
