@@ -6,43 +6,54 @@ import 'package:money/core/helpers/value_parser.dart';
 import 'package:money/core/widgets/columns/input_values.dart';
 import 'package:money/data/models/constants.dart';
 
-class InputByColumns extends StatefulWidget {
-  const InputByColumns({
+/// A widget that provides input functionality for financial data in either
+/// three-column format (date, description, amount) or single-column freestyle format.
+class InputByColumnsOrFreeStyle extends StatefulWidget {
+  const InputByColumnsOrFreeStyle({
     super.key,
     required this.inputText,
     required this.dateFormat,
     required this.currency,
-    required this.onChange,
+    required this.onChanged,
     required this.reverseAmountValue,
   });
 
+  /// The currency symbol or code to use for amounts
   final String currency;
+
+  /// The date format to use for parsing dates (e.g., 'dd/MM/yyyy')
   final String dateFormat;
+
+  /// The initial input text to populate the fields
   final String inputText;
-  final Function(String) onChange;
+
+  /// Callback function triggered when input changes
+  final Function(String) onChanged;
+
+  /// Whether to reverse the sign of amount values
   final bool reverseAmountValue;
 
   @override
-  State<InputByColumns> createState() => _InputByColumnsState();
+  State<InputByColumnsOrFreeStyle> createState() => _InputByColumnsOrFreeStyleState();
 }
 
-class _InputByColumnsState extends State<InputByColumns> {
-  final Debouncer _debouncer = Debouncer();
+class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
+  final _controllerColumn2 = TextEditingController(); // Description column
+  final _controllerColumn3 = TextEditingController(); // Amount column
 
-  // Date
-  final _controllerColumn1 = TextEditingController();
+  // Controllers for the three-column format
+  final _controllerColumn1 = TextEditingController(); // Date column
 
-  // Description
-  final _controllerColumn2 = TextEditingController();
-
-  // Amount
-  final _controllerColumn3 = TextEditingController();
-
-  // Freestyle
+  // Controller for the single-column freestyle format
   final _controllerSingleColumn = TextEditingController();
 
-  bool _freeStyleInput = false; // use 3 columns by default
-  bool _pauseTextSync = false;
+  // Debouncer to prevent rapid successive updates
+  final Debouncer _debouncer = Debouncer();
+
+  // Input mode flags
+  bool _freeStyleInput = false; // false = three columns, true = single column
+
+  bool _pauseTextSync = false; // prevents recursive updates during sync
 
   @override
   void dispose() {
@@ -109,7 +120,7 @@ class _InputByColumnsState extends State<InputByColumns> {
     );
   }
 
-  // 1 column
+  /// Builds the single-column freestyle input view
   Widget _buildInputFor1Column() {
     return Center(
       child: InputValues(
@@ -121,7 +132,7 @@ class _InputByColumnsState extends State<InputByColumns> {
     );
   }
 
-  // 3 columns
+  /// Builds the three-column input view with date, description, and amount
   Widget _buildInputFor3Columns() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -156,12 +167,16 @@ class _InputByColumnsState extends State<InputByColumns> {
     );
   }
 
+  /// Converts single-column text into three columns
   void _fromOneToThreeColumn() {
+    // Create parser with user preferences
     ValuesParser parser = ValuesParser(
       dateFormat: widget.dateFormat,
       currency: widget.currency,
       reverseAmountValue: widget.reverseAmountValue,
     );
+
+    // Parse the single column text and update individual columns
     parser.convertInputTextToTransactionList(
       context,
       _controllerSingleColumn.text,
@@ -174,11 +189,13 @@ class _InputByColumnsState extends State<InputByColumns> {
     _pauseTextSync = false;
   }
 
+  /// Combines three columns into a single text buffer
   String _fromThreeToOneColumn() {
     _controllerSingleColumn.text = _getSingleBufferWithLatest3ColumnsText();
     return _controllerSingleColumn.text;
   }
 
+  /// Combines the content of all three columns into a single text string
   String _getSingleBufferWithLatest3ColumnsText() {
     return ValuesParser.assembleIntoSingleTextBuffer(
       _controllerColumn1.text,
@@ -187,36 +204,49 @@ class _InputByColumnsState extends State<InputByColumns> {
     );
   }
 
+  /// Notifies parent widget of changes through callback
   void _notifyChanged() {
-    widget.onChange(_controllerSingleColumn.text);
+    widget.onChanged(_controllerSingleColumn.text);
   }
 
+  /// Sets up listeners for text changes in all three columns
   void _startListening() {
     _controllerColumn1.addListener(_syncText);
     _controllerColumn2.addListener(_syncText);
     _controllerColumn3.addListener(_syncText);
+    _controllerSingleColumn.addListener(_syncText);
   }
 
+  /// Removes text change listeners to prevent memory leaks
   void _stopListening() {
     _controllerColumn1.removeListener(_syncText);
     _controllerColumn2.removeListener(_syncText);
     _controllerColumn3.removeListener(_syncText);
+    _controllerSingleColumn.removeListener(_syncText);
   }
 
+  /// Synchronizes text between three-column and single-column views
   void _syncText() {
     _debouncer.run(() {
       if (_pauseTextSync) {
         return;
       }
-      // suspend sync in to avoid re-entrance
+
+      // Prevent recursive updates
       _pauseTextSync = true;
 
-      _fromThreeToOneColumn();
+      // Update single column with combined content from three columns
+      if (_freeStyleInput) {
+        _updateAllTextControllerContentFromRawText(_controllerSingleColumn.text);
+      } else {
+        _fromThreeToOneColumn();
+      }
       _pauseTextSync = false;
       _notifyChanged();
     });
   }
 
+  /// Updates all text controllers with initial or new input text
   void _updateAllTextControllerContentFromRawText(final String inputText) {
     _controllerSingleColumn.text = inputText;
 
@@ -236,6 +266,8 @@ class _InputByColumnsState extends State<InputByColumns> {
   }
 }
 
+/// Text formatter that removes empty lines from input while preserving
+/// trailing newlines if present in the original input
 class TextInputFormatterRemoveEmptyLines extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(

@@ -104,13 +104,13 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
               Expanded(
                 flex: 1,
-                child: InputByColumns(
+                child: InputByColumnsOrFreeStyle(
                   inputText: _textToParse,
                   dateFormat: userChoiceOfDateFormat,
                   currency:
                       _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
                   reverseAmountValue: _userChoiceDebitVsCredit == 1,
-                  onChange: (String newTextInput) {
+                  onChanged: (String newTextInput) {
                     setState(() {
                       convertAndNotify(context, newTextInput);
                       _textToParse = newTextInput;
