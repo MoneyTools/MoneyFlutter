@@ -443,6 +443,10 @@ class Account extends MoneyObject {
     return isBankAccount() && isOpen;
   }
 
+  bool get isAssetAccount {
+    return fieldType.value == AccountType.asset;
+  }
+
   bool isBankAccount() {
     return fieldType.value == AccountType.savings ||
         fieldType.value == AccountType.checking ||
@@ -484,10 +488,6 @@ class Account extends MoneyObject {
     } else {
       fieldFlags.value |= AccountFlags.closed.index; // Set the bit at the specified position
     }
-  }
-
-  bool get isAssetAccount {
-    return fieldType.value == AccountType.asset;
   }
 
   bool matchType(final List<AccountType> types) {

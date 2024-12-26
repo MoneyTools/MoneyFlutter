@@ -26,10 +26,10 @@ class PanelTrend extends StatefulWidget {
   });
 
   final DateRange dateRangeSearch;
+  final bool includeAssetAccounts;
   final int maxYear;
   final int minYear;
   final CashflowViewAs viewRecurringAs;
-  final bool includeAssetAccounts;
 
   @override
   State<PanelTrend> createState() => _PanelTrendState();
@@ -44,12 +44,6 @@ class _PanelTrendState extends State<PanelTrend> {
   List<int> years = [];
 
   @override
-  void initState() {
-    super.initState();
-    _generateList();
-  }
-
-  @override
   void didUpdateWidget(covariant PanelTrend oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.minYear != oldWidget.minYear ||
@@ -61,18 +55,10 @@ class _PanelTrendState extends State<PanelTrend> {
     }
   }
 
-  void _generateList() {
-    yearCategoryIncomeExpenseSums =
-        RecurringExpenses.getSumByIncomeExpenseByYears(widget.minYear, widget.maxYear, widget.includeAssetAccounts);
-    years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
-
-    maxY = 0;
-    minY = 0;
-
-    for (final yearData in yearCategoryIncomeExpenseSums.values) {
-      maxY = max(max(maxY, yearData.sumExpense), yearData.sumIncome);
-      minY = min(min(minY, yearData.sumExpense), yearData.sumIncome);
-    }
+  @override
+  void initState() {
+    super.initState();
+    _generateList();
   }
 
   @override
@@ -267,5 +253,19 @@ class _PanelTrendState extends State<PanelTrend> {
       topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
       rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
     );
+  }
+
+  void _generateList() {
+    yearCategoryIncomeExpenseSums =
+        RecurringExpenses.getSumByIncomeExpenseByYears(widget.minYear, widget.maxYear, widget.includeAssetAccounts);
+    years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
+
+    maxY = 0;
+    minY = 0;
+
+    for (final yearData in yearCategoryIncomeExpenseSums.values) {
+      maxY = max(max(maxY, yearData.sumExpense), yearData.sumIncome);
+      minY = min(min(minY, yearData.sumExpense), yearData.sumIncome);
+    }
   }
 }
