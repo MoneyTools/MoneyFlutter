@@ -24,12 +24,14 @@ class QuantityWidget extends StatelessWidget {
       fontWeight: FontWeight.w900,
     );
 
-    final originalString = formatDoubleUpToFiveZero(quantity, showPlusSign: true);
+    final String originalString = formatDoubleUpToFiveZero(quantity, showPlusSign: true);
 
-    final leftSideOfDecimalPoint = quantity.truncate();
-    final leftSideOfDecimalPointAsString =
-        formatDoubleUpToFiveZero(leftSideOfDecimalPoint.toDouble(), showPlusSign: true);
-    final rightOfDecimalPoint = originalString.substring(leftSideOfDecimalPointAsString.length);
+    final int leftSideOfDecimalPoint = quantity.truncate();
+    String leftSideOfDecimalPointAsString = '';
+    if (leftSideOfDecimalPoint != 0) {
+      leftSideOfDecimalPointAsString = formatDoubleUpToFiveZero(leftSideOfDecimalPoint.toDouble(), showPlusSign: true);
+    }
+    final String rightOfDecimalPoint = originalString.substring(leftSideOfDecimalPointAsString.length);
 
     return SelectableText.rich(
       maxLines: 1,
