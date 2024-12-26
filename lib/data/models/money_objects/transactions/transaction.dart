@@ -242,6 +242,8 @@ class Transaction extends MoneyObject {
     },
     getValueForReading: (final MoneyObject instance) => (instance as Transaction).categoryName,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldCategoryId.value,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByString((a as Transaction).categoryName, (b as Transaction).categoryName, ascending),
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).fieldCategoryId.value = newValue as int,
     getEditWidget: (

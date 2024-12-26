@@ -2,6 +2,10 @@
 
 ## [version 1.11.00] 2024-12-26
 
+### Update
+
+- Fix sorting Category in Transaction View
+
 ### Add
 
 - Display Category distribution graph on Transaction view Side panel
