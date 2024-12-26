@@ -157,6 +157,12 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   }
 
   void convertAndNotify(BuildContext context, String inputText) {
+    // Detect currency format from input text if any amounts exist
+    int detectedFormat = detectCurrencyFormat(inputText);
+    if (detectedFormat != -1) {
+      _userChoiceNativeVsUSD = detectedFormat;
+    }
+
     ValuesParser parser = ValuesParser(
       dateFormat: userChoiceOfDateFormat,
       currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
@@ -168,6 +174,40 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
     _values = parser.lines;
     widget.onTransactionsFound(parser);
+  }
+
+  /// Detects the currency format from input text
+  /// Returns: 0 for native currency format, 1 for USD format, -1 if no amounts found
+  int detectCurrencyFormat(String input) {
+    if (input.isEmpty) {
+      return -1;
+    }
+
+    // Split input into lines
+    final lines = input.split('\n');
+    for (var line in lines) {
+      // Look for number patterns with currency symbols
+      if (line.contains(RegExp(r'[€£¥]'))) {
+        return 0; // Native currency detected
+      }
+      if (line.contains('\$')) {
+        return 1; // USD detected
+      }
+    }
+
+    // If no explicit currency symbols, try to detect format based on number patterns
+    for (final String line in lines) {
+      // US format (1,234.56)
+      if (line.contains(RegExp(r'\d{1,3}(?:,\d{3})*\.\d{2}'))) {
+        return 1;
+      }
+      // European format (1.234,56 or 1,234.56)
+      if (line.contains(RegExp(r'\d{1,3}(?:\.\d{3})*,\d{2}'))) {
+        return 0;
+      }
+    }
+
+    return -1; // No clear format detected
   }
 
   void removeFocus() {

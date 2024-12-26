@@ -8,6 +8,7 @@
 
 ### Add
 
+- Automatically detect input currency in Bulk-Import
 - Display Category distribution graph on Transaction view Side panel
 
 ## [version 1.10.04] 2024-12-17
