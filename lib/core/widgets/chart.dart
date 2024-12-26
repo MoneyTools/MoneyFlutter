@@ -109,6 +109,8 @@ class Chart extends StatelessWidget {
     return BarTouchData(
       enabled: true,
       touchTooltipData: BarTouchTooltipData(
+        fitInsideHorizontally: true,
+        fitInsideVertically: true,
         getTooltipColor: (BarChartGroupData group) => getColorTheme(context).secondaryContainer,
         tooltipRoundedRadius: 8,
         getTooltipItem: (

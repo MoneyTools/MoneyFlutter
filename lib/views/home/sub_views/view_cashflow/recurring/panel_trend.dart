@@ -83,11 +83,11 @@ class _PanelTrendState extends State<PanelTrend> {
           touchTooltipData: BarTouchTooltipData(
             tooltipRoundedRadius: 8,
             tooltipPadding: const EdgeInsets.all(8),
-            tooltipMargin: 8,
-            getTooltipColor: (group) => Colors.black,
-            fitInsideVertically: true,
+            tooltipMargin: 16, // Increased margin to prevent clipping
             fitInsideHorizontally: true,
+            fitInsideVertically: true,
             maxContentWidth: 300,
+            getTooltipColor: (group) => Colors.black,
             getTooltipItem: (BarChartGroupData group, int groupIndex, BarChartRodData rod, int rodIndex) {
               final int year = years[groupIndex];
               final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;
