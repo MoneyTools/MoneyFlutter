@@ -114,3 +114,28 @@ class ShortcutController extends GetxController {
   }
 
 */
+
+class SafeKeyboardHandler {
+  final Set<PhysicalKeyboardKey> _pressedKeys = {};
+
+  void clearKeys() {
+    _pressedKeys.clear();
+  }
+
+  void dispose() {
+    clearKeys();
+  }
+
+  bool onKeyEvent(KeyEvent event) {
+    if (event is KeyDownEvent) {
+      if (_pressedKeys.contains(event.physicalKey)) {
+        // Key is already marked as pressed, clear and re-add
+        _pressedKeys.remove(event.physicalKey);
+      }
+      _pressedKeys.add(event.physicalKey);
+    } else if (event is KeyUpEvent) {
+      _pressedKeys.remove(event.physicalKey);
+    }
+    return false; // Allow event to continue propagating
+  }
+}

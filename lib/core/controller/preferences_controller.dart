@@ -21,7 +21,6 @@ class PreferenceController extends GetxController {
 
   RxInt cashflowRecurringOccurrences = 12.obs;
   Rx<CashflowViewAs> cashflowViewAs = CashflowViewAs.sankey.obs;
-  Rx<bool> trendIncludeAssetAccounts = false.obs;
 
   ///---------------------------------
   /// Observable enum
@@ -29,6 +28,7 @@ class PreferenceController extends GetxController {
 
   RxList<String> mru = <String>[].obs;
   RxInt netWorthEventThreshold = 5.obs;
+  Rx<bool> trendIncludeAssetAccounts = false.obs;
 
   final RxString _apiKeyForStocks = ''.obs;
   final RxBool _includeClosedAccounts = false.obs;

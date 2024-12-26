@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:money/core/controller/keyboard_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/value_parser.dart';
@@ -34,6 +35,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late String userChoiceOfDateFormat = _possibleDateFormats.first;
 
   final _focusNode = FocusNode();
+  final _keyboardHandler = SafeKeyboardHandler();
   final List<String> _possibleDateFormats = [
     // Dash
     'yyyy-MM-dd',
@@ -62,6 +64,12 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   List<ValuesQuality> _values = [];
 
   @override
+  void dispose() {
+    _keyboardHandler.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _account = widget.account;
@@ -76,62 +84,74 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       values: _values,
     );
 
-    return SizedBox(
-      width: 800,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          _buildHeaderAndAccountPicker(),
+    return Focus(
+      onFocusChange: (hasFocus) {
+        if (!hasFocus) {
+          _keyboardHandler.clearKeys();
+        }
+      },
+      child: KeyboardListener(
+        onKeyEvent: _keyboardHandler.onKeyEvent,
+        focusNode: _focusNode,
+        child: SizedBox(
+          width: 800,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _buildHeaderAndAccountPicker(),
 
-          gapMedium(),
+              gapMedium(),
 
-          Expanded(
-            flex: 1,
-            child: InputByColumns(
-              inputText: _textToParse,
-              dateFormat: userChoiceOfDateFormat,
-              currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
-              reverseAmountValue: _userChoiceDebitVsCredit == 1,
-              onChange: (String newTextInput) {
-                setState(() {
-                  convertAndNotify(context, newTextInput);
-                  _textToParse = newTextInput;
-                });
-              },
-            ),
-          ),
-
-          ///
-          /// Date Format | Credit/Debit | Currency
-          ///
-          if (_values.isNotEmpty)
-            Padding(
-              padding: const EdgeInsets.only(top: SizeForPadding.large),
-              child: Row(
-                children: [
-                  _buildChoiceOfDateFormat(),
-                  const Spacer(),
-                  _buildChoiceOfDebitVsCredit(),
-                  gapLarge(),
-                  _buildChoiceOfAmountFormat(),
-                ],
+              Expanded(
+                flex: 1,
+                child: InputByColumns(
+                  inputText: _textToParse,
+                  dateFormat: userChoiceOfDateFormat,
+                  currency:
+                      _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
+                  reverseAmountValue: _userChoiceDebitVsCredit == 1,
+                  onChange: (String newTextInput) {
+                    setState(() {
+                      convertAndNotify(context, newTextInput);
+                      _textToParse = newTextInput;
+                    });
+                  },
+                ),
               ),
-            ),
 
-          const Divider(),
-          gapMedium(),
+              ///
+              /// Date Format | Credit/Debit | Currency
+              ///
+              if (_values.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: SizeForPadding.large),
+                  child: Row(
+                    children: [
+                      _buildChoiceOfDateFormat(),
+                      const Spacer(),
+                      _buildChoiceOfDebitVsCredit(),
+                      gapLarge(),
+                      _buildChoiceOfAmountFormat(),
+                    ],
+                  ),
+                ),
 
-          // Results
-          Expanded(
-            flex: 2,
-            child: Center(
-              child: ImportTransactionsListPreview(
-                accountId: _account.uniqueId,
-                values: _values,
+              const Divider(),
+              gapMedium(),
+
+              // Results
+              Expanded(
+                flex: 2,
+                child: Center(
+                  child: ImportTransactionsListPreview(
+                    accountId: _account.uniqueId,
+                    values: _values,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
