@@ -57,12 +57,14 @@ class MoneyWidget extends StatelessWidget {
       iso4217code: amountModel.iso4217,
     );
 
-    final leftSideOfDecimalPoint = value.truncate();
-    final leftSideOfDecimalPointAsString = Currency.getAmountAsStringUsingCurrency(
-      leftSideOfDecimalPoint,
-      iso4217code: amountModel.iso4217,
-      decimalDigits: 0,
-    );
+    final leftSideOfDecimalPoint = value.truncate().abs();
+    final leftSideOfDecimalPointAsString = leftSideOfDecimalPoint == 0
+        ? '' // No need to show leading zero
+        : Currency.getAmountAsStringUsingCurrency(
+            leftSideOfDecimalPoint,
+            iso4217code: amountModel.iso4217,
+            decimalDigits: 0,
+          );
 
     final rightOfDecimalPoint = valueAsString.substring(leftSideOfDecimalPointAsString.length);
 
