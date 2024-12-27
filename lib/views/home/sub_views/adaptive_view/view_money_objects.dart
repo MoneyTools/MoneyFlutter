@@ -45,6 +45,7 @@ class ViewForMoneyObjects extends StatefulWidget {
 
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   final DataController dataController = Get.find();
+  final ListControllerMain lc = ListControllerMain();
   late final ViewId viewId;
 
   bool firstLoadCompleted = false;
@@ -82,7 +83,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   @override
   void initState() {
     super.initState();
-
     firstLoad();
   }
 
@@ -104,8 +104,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         if (list.isEmpty) {
           return _buildInformUserOfEmptyList(key);
         }
-
-        final lc = Get.find<ListControllerMain>();
 
         return AdaptiveViewWithList(
           key: key,
