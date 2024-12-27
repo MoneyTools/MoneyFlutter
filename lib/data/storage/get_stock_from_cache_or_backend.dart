@@ -3,10 +3,9 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/date_helper.dart';
-import 'package:money/core/helpers/json_helper.dart';
-import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:money/core/widgets/snack_bar.dart';
-import 'package:money/data/models/constants.dart';
+import 'package:money/data/models/money_objects/securities/security.dart';
+import 'package:money/data/storage/data/data.dart';
 
 class StockDatePrice {
   /// Constructor
@@ -199,6 +198,24 @@ void _saveToCache(final String symbol, List<StockDatePrice> prices) async {
 
   await PreferenceController.to.setString('stock-$symbol', csvContent);
   await PreferenceController.to.setString('stock-date-$symbol', DateTime.now().toIso8601String());
+
+  // Also save to the last price to the Security table
+  final Security? security = Data().securities.getBySymbol(symbol);
+  if (security != null) {
+    if (security.fieldPriceDate.value == null || prices.first.date.isAfter(security.fieldPriceDate.value!)) {
+      // update to the last known stock price
+
+      security.stashValueBeforeEditing();
+      security.fieldPrice.setValue!(security, prices.first.price);
+      security.fieldLastPrice.setValue!(security, prices.first.price);
+      security.fieldPriceDate.setValue!(security, prices.first.date);
+      Data().notifyMutationChanged(
+        mutation: MutationType.changed,
+        moneyObject: security,
+        recalculateBalances: true,
+      );
+    }
+  }
 }
 
 void _saveToCacheInvalidSymbol(final String symbol) async {

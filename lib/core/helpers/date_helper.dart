@@ -58,6 +58,15 @@ bool doesDateFormatWorkOnThisString(String format, String dateString) {
   return false;
 }
 
+DateTime? attemptToGetDateFromDynamic(final dynamic value) {
+  if (value is DateTime) {
+    return value;
+  } else if (value is String) {
+    return attemptToGetDateFromText(value);
+  }
+  return null;
+}
+
 /// Attempts to parse a date string using a list of common date formats.
 ///
 /// This function tries to parse the provided [text] string using a list of

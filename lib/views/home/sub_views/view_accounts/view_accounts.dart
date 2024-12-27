@@ -22,6 +22,7 @@ import 'package:money/data/models/money_objects/loan_payments/loan_payments.dart
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
+import 'package:money/data/storage/get_stock_from_cache_or_backend.dart';
 import 'package:money/data/storage/import/import_wizard.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transactions.dart';

@@ -44,7 +44,7 @@ class Security extends MoneyObject {
     this.fieldCuspid.value = cuspid;
     this.fieldSecurityType.value = securityType;
     this.taxable.value = taxable;
-    this.priceDate.value = priceDate;
+    this.fieldPriceDate.value = priceDate;
   }
 
   /// Constructor from a SQLite row
@@ -113,6 +113,9 @@ class Security extends MoneyObject {
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldLastPrice.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldLastPrice.value.toDouble(),
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Security).fieldLastPrice.value.setAmount(value);
+    },
   );
 
   // 1
@@ -216,12 +219,15 @@ class Security extends MoneyObject {
   );
 
   // 8
-  FieldDate priceDate = FieldDate(
+  FieldDate fieldPriceDate = FieldDate(
     name: 'LatestPrice',
     serializeName: 'PriceDate',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).priceDate.value,
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldPriceDate.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        dateToSqliteFormat((instance as Security).priceDate.value),
+        dateToSqliteFormat((instance as Security).fieldPriceDate.value),
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Security).fieldPriceDate.value = attemptToGetDateFromDynamic(value);
+    },
   );
 
   List<StockSplit> splitsHistory = [];
