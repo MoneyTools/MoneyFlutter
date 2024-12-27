@@ -131,6 +131,18 @@ class InternalViewSwitching {
     );
   }
 
+  factory InternalViewSwitching.customAction({
+    required final IconData icon,
+    required final String text,
+    required final Function onPressed,
+  }) {
+    return InternalViewSwitching(
+      icon: icon,
+      title: text,
+      onPressed: onPressed,
+    );
+  }
+
   final IconData? icon;
   final Function onPressed;
   final String title;

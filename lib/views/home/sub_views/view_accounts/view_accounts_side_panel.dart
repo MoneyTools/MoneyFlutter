@@ -93,6 +93,13 @@ extension ViewAccountsSidePanel on ViewAccountsState {
                     InternalViewSwitching.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
                     InternalViewSwitching.toStocks(symbol: summary.symbol),
                     InternalViewSwitching.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
+                    InternalViewSwitching.customAction(
+                      icon: Icons.refresh,
+                      text: 'Get latest price',
+                      onPressed: () async {
+                        await loadFomBackendAndSaveToCache(summary.symbol);
+                      },
+                    ),
                   ]),
                 ],
               ),
