@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.11.01] 2024-12-27
+
+### Update
+
+- Editing of Stock Units
+
 ## [version 1.11.00] 2024-12-26
 
 ### Update

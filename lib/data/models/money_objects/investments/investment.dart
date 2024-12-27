@@ -275,6 +275,10 @@ class Investment extends MoneyObject {
     serializeName: 'Units',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).effectiveUnits,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldUnits.value,
+    setValue: (final MoneyObject instance, dynamic value) {
+      // (instance as Investment).stashValueBeforeEditing();
+      (instance as Investment).fieldUnits.value = getDoubleFromDynamic(value);
+    },
   );
 
   FieldQuantity fieldUnitsAdjusted = FieldQuantity(

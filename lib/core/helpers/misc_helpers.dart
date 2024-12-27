@@ -13,6 +13,19 @@ final Logger logger = Logger(
   output: null, // Use the default LogOutput (-> send everything to console)
 );
 
+double getDoubleFromDynamic(final dynamic value) {
+  if (value is double) {
+    return value;
+  }
+  if (value is int) {
+    return value.toDouble();
+  }
+  if (value is String) {
+    return attemptToGetDoubleFromText(value) ?? 0.00;
+  }
+  return 0.00;
+}
+
 /// Remove non-numeric characters from the currency text
 double? attemptToGetDoubleFromText(String text) {
   text = text.trim();
