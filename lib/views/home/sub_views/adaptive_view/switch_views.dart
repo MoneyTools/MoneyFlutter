@@ -68,6 +68,32 @@ class InternalViewSwitching {
     );
   }
 
+  factory InternalViewSwitching.toStocks({
+    final String symbol = '',
+  }) {
+    late FieldFilter fieldFilterToUse;
+    if (symbol.isNotEmpty) {
+      fieldFilterToUse = FieldFilter(
+        fieldName: Constants.viewStockFieldNameSymbol,
+        strings: [symbol],
+      );
+    }
+
+    // Jump to Stock view
+    return InternalViewSwitching(
+      icon: ViewId.viewStocks.getIconData(),
+      title: 'Switch to Stocks',
+      onPressed: () {
+        PreferenceController.to.jumpToView(
+          viewId: ViewId.viewStocks,
+          selectedId: -1,
+          columnFilter: FieldFilters([fieldFilterToUse]).toStringList(),
+          textFilter: '',
+        );
+      },
+    );
+  }
+
   factory InternalViewSwitching.toTransactions({
     required final int transactionId,
     final FieldFilters? filters,

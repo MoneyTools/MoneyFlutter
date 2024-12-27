@@ -91,6 +91,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
                   ),
                   buildJumpToButton([
                     InternalViewSwitching.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
+                    InternalViewSwitching.toStocks(symbol: summary.symbol),
                     InternalViewSwitching.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
                   ]),
                 ],

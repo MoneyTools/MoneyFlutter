@@ -4,6 +4,7 @@
 
 ### Update
 
+- Jump from Investment-SidePanel transactions to StockView
 - Editing of Stock Units
 
 ## [version 1.11.00] 2024-12-26
