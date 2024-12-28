@@ -72,6 +72,7 @@ Widget buildAddItemButton(
 
 Widget buildAddTransactionsButton(final Function callback) {
   return IconButton(
+    key: Constants.keyButtonAddTransactions,
     onPressed: () {
       callback();
     },

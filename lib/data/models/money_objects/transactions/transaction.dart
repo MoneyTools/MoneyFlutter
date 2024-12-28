@@ -45,6 +45,23 @@ class Transaction extends MoneyObject {
     this.fieldFlags.value = TransactionFlags.none.index;
   }
 
+  factory Transaction.fromDateDescriptionAmount(
+    final Account account,
+    final DateTime date,
+    final String description,
+    final double amount,
+  ) {
+    Payee? payee = Data().aliases.findOrCreateNewPayee(description, fireNotification: false);
+
+    final Transaction t = Transaction(date: date);
+    t.fieldId.value = -1;
+    t.fieldAccountId.value = account.fieldId.value;
+    t.fieldPayee.value = payee == null ? -1 : payee.fieldId.value;
+    t.fieldMemo.value = description;
+    t.fieldAmount.value.setAmount(amount);
+    return t;
+  }
+
   factory Transaction.fromJSon(final MyJson json, final double runningBalance) {
     final Transaction t = Transaction(date: json.getDate('Date'));
 // 0 ID

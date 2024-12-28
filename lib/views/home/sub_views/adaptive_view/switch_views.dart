@@ -8,6 +8,18 @@ import 'package:url_launcher/url_launcher.dart';
 class InternalViewSwitching {
   InternalViewSwitching({required this.icon, required this.title, required this.onPressed});
 
+  factory InternalViewSwitching.customAction({
+    required final IconData icon,
+    required final String text,
+    required final Function onPressed,
+  }) {
+    return InternalViewSwitching(
+      icon: icon,
+      title: text,
+      onPressed: onPressed,
+    );
+  }
+
   factory InternalViewSwitching.toAccounts({required final int accountId}) {
     return InternalViewSwitching(
       icon: ViewId.viewAccounts.getIconData(),
@@ -128,18 +140,6 @@ class InternalViewSwitching {
           SnackBarService.displayError(message: 'Could not launch $urlWebSite');
         }
       },
-    );
-  }
-
-  factory InternalViewSwitching.customAction({
-    required final IconData icon,
-    required final String text,
-    required final Function onPressed,
-  }) {
-    return InternalViewSwitching(
-      icon: icon,
-      title: text,
-      onPressed: onPressed,
     );
   }
 

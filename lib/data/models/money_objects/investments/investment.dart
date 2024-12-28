@@ -16,13 +16,13 @@ class Investment extends MoneyObject {
     required final int security, // 1
     required final double unitPrice, // 2
     required final double units, // 3
+    required final int investmentType, // 9
+    required final int tradeType, // 10
     final double commission = 0, // 4
     final double markUpDown = 0, // 5
     final double taxes = 0, // 6
     final double fees = 0, // 7
     final double load = 0, // 8
-    required final int investmentType, // 9
-    required final int tradeType, // 10
     final int taxExempt = 0, // 11
     final double withholding = 0, // 12
   }) {

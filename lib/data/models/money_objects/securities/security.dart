@@ -148,6 +148,18 @@ class Security extends MoneyObject {
     setValue: (final MoneyObject instance, dynamic value) => (instance as Security).fieldPrice.value.setAmount(value),
   );
 
+  // 8
+  FieldDate fieldPriceDate = FieldDate(
+    name: 'LatestPrice',
+    serializeName: 'PriceDate',
+    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldPriceDate.value,
+    getValueForSerialization: (final MoneyObject instance) =>
+        dateToSqliteFormat((instance as Security).fieldPriceDate.value),
+    setValue: (final MoneyObject instance, dynamic value) {
+      (instance as Security).fieldPriceDate.value = attemptToGetDateFromDynamic(value);
+    },
+  );
+
   FieldMoney fieldProfit = FieldMoney(
     name: 'Profit',
     getValueForDisplay: (final MoneyObject instance) =>
@@ -216,18 +228,6 @@ class Security extends MoneyObject {
     getValue: (final MoneyObject instance) => (instance as Security).fieldTransactionDateRange.value,
     getValueForDisplay: (final MoneyObject instance) =>
         (instance as Security).fieldTransactionDateRange.value.toStringYears(),
-  );
-
-  // 8
-  FieldDate fieldPriceDate = FieldDate(
-    name: 'LatestPrice',
-    serializeName: 'PriceDate',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldPriceDate.value,
-    getValueForSerialization: (final MoneyObject instance) =>
-        dateToSqliteFormat((instance as Security).fieldPriceDate.value),
-    setValue: (final MoneyObject instance, dynamic value) {
-      (instance as Security).fieldPriceDate.value = attemptToGetDateFromDynamic(value);
-    },
   );
 
   List<StockSplit> splitsHistory = [];

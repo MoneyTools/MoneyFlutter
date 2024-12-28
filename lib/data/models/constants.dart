@@ -61,6 +61,7 @@ class Constants {
   // Keys
   static const Key keyAddNewItem = Key('key_add_new_item');
 
+  static const Key keyButtonAddTransactions = Key('key_button_add_transactions');
   static const Key keyButtonApplyOrDone = Key('key_button_apply_done');
   static const Key keyButtonCancel = Key('key_button_cancel');
   static const Key keyButtonEdit = Key('key_button_edit');

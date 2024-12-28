@@ -391,8 +391,12 @@ Future<void> testAccounts(WidgetTester tester) async {
   // toggle sorting
   await tapOnText(tester, 'Memo');
 
+  // Investment - Add new
   await tapOnTextFromParentType(tester, ListView, 'Investment');
   await sidePanelTabs(tester);
+  await testImportInInvestmentAccount(tester);
+
+  // Loan Account
   await tapOnTextFromParentType(tester, ListView, 'Loan');
   await sidePanelTabs(tester);
 
@@ -430,6 +434,19 @@ Future<void> testAccounts(WidgetTester tester) async {
     // pressing Done also will close the dialog
     await tapOnText(tester, 'Done');
   }
+}
+
+Future<void> testImportInInvestmentAccount(WidgetTester tester) async {
+  // Import Wizard
+  await tapOnKey(tester, Constants.keyButtonAddTransactions);
+  await tapOnText(tester, 'Investment Transaction');
+
+  // Wait for dialog to appear
+  // await tester.myPump();
+
+  // Close ImportDialog
+  await tapOnText(tester, 'Add Investment');
+  await tester.myPump();
 }
 
 Future<void> testAccountEdit(WidgetTester tester) async {

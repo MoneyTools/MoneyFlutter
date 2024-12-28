@@ -6,7 +6,6 @@ import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/message_box.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
-import 'package:money/data/models/money_objects/payees/payee.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/import/import_transactions_panel.dart';
@@ -34,7 +33,7 @@ void showImportTransactionsFromTextInput(
 
           for (final ValuesQuality singleTransactionInput in parser.lines) {
             if (!singleTransactionInput.exist) {
-              final t = createNewTransactionFromDateDescriptionAmount(
+              final t = Transaction.fromDateDescriptionAmount(
                 account,
                 singleTransactionInput.date.asDate() ?? DateTime.now(),
                 singleTransactionInput.description.asString(),
@@ -78,23 +77,6 @@ void showImportTransactionsFromTextInput(
       ],
     ),
   );
-}
-
-Transaction createNewTransactionFromDateDescriptionAmount(
-  final Account account,
-  final DateTime date,
-  final String description,
-  final double amount,
-) {
-  Payee? payee = Data().aliases.findOrCreateNewPayee(description, fireNotification: false);
-
-  final Transaction t = Transaction(date: date);
-  t.fieldId.value = -1;
-  t.fieldAccountId.value = account.fieldId.value;
-  t.fieldPayee.value = payee == null ? -1 : payee.fieldId.value;
-  t.fieldMemo.value = description;
-  t.fieldAmount.value.setAmount(amount);
-  return t;
 }
 
 /// Add the list of transactions "as is", then notify the user when completed

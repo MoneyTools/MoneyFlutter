@@ -147,7 +147,7 @@ void _showAndConfirmTransactionToImport(
       final List<Transaction> transactionsToAdd = [];
       for (final ValuesQuality singleTransactionInput in valuesQuality) {
         if (!singleTransactionInput.exist) {
-          final t = createNewTransactionFromDateDescriptionAmount(
+          final t = Transaction.fromDateDescriptionAmount(
             account,
             singleTransactionInput.date.asDate() ?? DateTime.now(),
             singleTransactionInput.description.asString(),

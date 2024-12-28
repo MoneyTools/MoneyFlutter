@@ -1,17 +1,5 @@
 import 'package:flutter/material.dart';
 
-InputDecoration getFormFieldDecoration({
-  required final fieldName,
-  required final bool isReadOnly,
-}) {
-  return InputDecoration(
-    labelText: fieldName,
-    contentPadding: isReadOnly ? const EdgeInsets.symmetric(horizontal: 12) : null,
-    // some padding to match the Editable fields that have a border and padding
-    border: const OutlineInputBorder(),
-  );
-}
-
 class SwitchFormField extends FormField<bool> {
   SwitchFormField({
     required String title,

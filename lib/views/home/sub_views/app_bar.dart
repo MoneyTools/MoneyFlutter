@@ -213,7 +213,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         DataController.to.onShowFileLocation();
         break;
       case Constants.commandAddTransactions:
-        showImportTransactionsWizard(Get.context!);
+        showImportTransactionsWizard();
         break;
       case Constants.commandRebalance:
         Data().recalculateBalances();

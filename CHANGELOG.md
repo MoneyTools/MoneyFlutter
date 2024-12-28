@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.11.02] 2024-12-28
+
+### Add
+
+- Manual Import Investment Transaction
+
 ## [version 1.11.01] 2024-12-27
 
 ### Update

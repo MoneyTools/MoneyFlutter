@@ -115,7 +115,7 @@ class MoneyObject {
     }
     final isReadOnly = onEdited == null || fieldDefinition.setValue == null;
 
-    final InputDecoration decoration = getFormFieldDecoration(
+    final InputDecoration decoration = myFormFieldDecoration(
       fieldName: fieldDefinition.name,
       isReadOnly: isReadOnly,
     );
