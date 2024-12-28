@@ -56,13 +56,12 @@ class InternalViewSwitching {
         fieldName: Constants.viewStockFieldNameSymbol,
         strings: [symbol],
       );
-    } else {
-      if (accountName.isNotEmpty) {
-        fieldFilterToUse = FieldFilter(
-          fieldName: Constants.viewStockFieldNameAccount,
-          strings: [accountName],
-        );
-      }
+    }
+    if (accountName.isNotEmpty) {
+      fieldFilterToUse = FieldFilter(
+        fieldName: Constants.viewStockFieldNameAccount,
+        strings: [accountName],
+      );
     }
 
     // Jump to Stock view
