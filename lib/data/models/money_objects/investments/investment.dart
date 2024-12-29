@@ -261,6 +261,10 @@ class Investment extends MoneyObject {
     footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldUnitPrice.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldUnitPrice.value.toDouble(),
+    setValue: (final MoneyObject instance, dynamic value) {
+      // (instance as Investment).stashValueBeforeEditing();
+      (instance as Investment).fieldUnitPrice.value.setAmount(value);
+    },
   );
 
   FieldMoney fieldUnitPriceAdjusted = FieldMoney(

@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.11.03] 2024-12-29
+
+### Add
+
+- Enable editing of Investment-UnitPrice
+
 ## [version 1.11.02] 2024-12-28
 
 ### Add
