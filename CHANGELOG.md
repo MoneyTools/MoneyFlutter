@@ -4,6 +4,7 @@
 
 ### Add
 
+- Add Manual Investment transaction can now pick a Category
 - Enable editing of Investment-UnitPrice
 
 ## [version 1.11.02] 2024-12-28

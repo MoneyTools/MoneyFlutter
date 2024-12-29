@@ -9,12 +9,14 @@ import 'package:money/core/widgets/picker_edit_box_date.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/data/models/money_objects/investments/picker_investment_type.dart';
+import 'package:money/views/home/sub_views/view_categories/picker_category.dart';
 
 class InvestmentImportFields {
   InvestmentImportFields({
     required this.account,
     required this.date,
     required this.investmentType,
+    required this.category,
     required this.symbol,
     required this.units,
     required this.amountPerUnit,
@@ -24,6 +26,7 @@ class InvestmentImportFields {
 
   Account account;
   double amountPerUnit;
+  Category category;
   DateTime date;
   String description;
   InvestmentType investmentType;
@@ -120,6 +123,7 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
                     },
                   ),
                 ),
+
                 // Investment Type
                 myFormField(
                   title: 'Investment Type',
@@ -127,6 +131,19 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
                     itemSelected: widget.inputFields.investmentType,
                     onSelected: (final InvestmentType newSelection) {
                       widget.inputFields.investmentType = newSelection;
+                    },
+                  ),
+                ),
+
+                // Investment Category
+                myFormField(
+                  title: 'Category',
+                  child: pickerCategory(
+                    itemSelected: widget.inputFields.category,
+                    onSelected: (final Category? newSelection) {
+                      if (newSelection != null) {
+                        widget.inputFields.category = newSelection;
+                      }
                     },
                   ),
                 ),

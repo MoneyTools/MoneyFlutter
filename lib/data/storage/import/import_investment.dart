@@ -4,6 +4,7 @@ import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
+import 'package:money/data/models/money_objects/payees/payee.dart';
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -16,6 +17,7 @@ void showImportInvestment(
     account: Data().accounts.getMostRecentlySelectedAccount(),
     date: DateTime.now(),
     investmentType: InvestmentType.buy,
+    category: Data().categories.investmentOther,
     symbol: '',
     units: 1,
     amountPerUnit: 0,
@@ -50,26 +52,33 @@ List<Widget> getActionButtons(
       onPressed: () {
         // Import
 
+        final Security security = Data().securities.getOrCreate(inputData.symbol);
+
         // add the Transaction to the Transaction list
-        final newTransaction = Transaction.fromDateDescriptionAmount(
-          inputData.account,
-          inputData.date,
-          inputData.description,
-          inputData.transactionAmount.toDouble(),
-        );
+        Payee? payee = Data().aliases.findOrCreateNewPayee(security.fieldSymbol.value, fireNotification: false)!;
+
+        final Transaction newTransaction = Transaction(date: inputData.date);
+        newTransaction.fieldAccountId.value = inputData.account.uniqueId;
+        newTransaction.fieldPayee.value = payee.uniqueId;
+        newTransaction.fieldMemo.value = inputData.description;
+        newTransaction.fieldCategoryId.value = inputData.category.uniqueId;
+        newTransaction.fieldAmount.value.setAmount(inputData.transactionAmount.toDouble());
+
         Data().transactions.appendNewMoneyObject(newTransaction, fireNotification: false);
 
         // add the Investment transaction to the Investment list
-        final Security security = Data().securities.getOrCreate(inputData.symbol);
-        final newInvestment = Investment(
-          id: newTransaction.uniqueId,
+        final Investment investmentToBeAdded = Investment(
+          id: -1,
           security: security.fieldId.value,
           units: inputData.units,
           unitPrice: inputData.amountPerUnit,
           investmentType: inputData.investmentType.index,
           tradeType: InvestmentTradeType.none.index,
         );
-        Data().investments.appendMoneyObject(newInvestment);
+
+        Data().investments.appendNewMoneyObject(investmentToBeAdded, fireNotification: false);
+        // Investment are linked to transactions by the uniqueId
+        investmentToBeAdded.fieldId.value = newTransaction.uniqueId;
 
         // update the app
         Data().updateAll();

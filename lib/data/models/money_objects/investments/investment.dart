@@ -250,10 +250,6 @@ class Investment extends MoneyObject {
     ),
   );
 
-  /// --------------------------------------------
-  /// Not Persisted
-  ///
-
   /// 2    UnitPrice       money   1
   FieldMoney fieldUnitPrice = FieldMoney(
     name: 'Price',
