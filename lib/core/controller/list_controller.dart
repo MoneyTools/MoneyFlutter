@@ -26,6 +26,11 @@ class ListController extends GetxController {
     super.onInit();
   }
 
+  double getOffsetOfIndex(final int index, final int numberOfItems) {
+    final double itemHeight = scrollController.position.maxScrollExtent / numberOfItems;
+    return itemHeight * index;
+  }
+
   void scrollToBookmark() {
     if (bookmark != -1) {
       scrollController.animateTo(
@@ -39,6 +44,18 @@ class ListController extends GetxController {
   void scrollToBottom() {
     scrollController.animateTo(
       scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void scrollToIndex(final int index, final int numberOfItems) {
+    scrollToOffSet(getOffsetOfIndex(index, numberOfItems));
+  }
+
+  void scrollToOffSet(final double offset) {
+    scrollController.animateTo(
+      offset,
       duration: const Duration(milliseconds: 300),
       curve: Curves.easeOut,
     );

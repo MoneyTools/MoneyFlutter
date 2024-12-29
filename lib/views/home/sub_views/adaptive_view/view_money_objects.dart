@@ -204,13 +204,19 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             }
           : null,
       onScrollToTop: () {
-        Get.find<ListControllerMain>().scrollToTop();
+        lc.scrollToTop();
       },
       onScrollToSelection: () {
-        Get.find<ListControllerMain>().scrollToBookmark();
+        if (_selectedItemsByUniqueId.value.isNotEmpty) {
+          final int firstSelectedId = _selectedItemsByUniqueId.value.first;
+          final int index = list.indexWhere((item) => item.uniqueId == firstSelectedId);
+          if (index != -1) {
+            lc.scrollToIndex(index, list.length);
+          }
+        }
       },
       onScrollToBottom: () {
-        Get.find<ListControllerMain>().scrollToBottom();
+        lc.scrollToBottom();
       },
       child: child,
     );
@@ -272,7 +278,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   void footerAccumulators() {
     _footerAccumulators.clear();
 
-    for (final item in list) {
+    for (final MoneyObject item in list) {
       for (final field in _fieldToDisplay.definitions) {
         switch (field.type) {
           case FieldType.text:
