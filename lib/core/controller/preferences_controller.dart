@@ -156,8 +156,8 @@ class PreferenceController extends GetxController {
   void jumpToView({
     required final ViewId viewId,
     required final int selectedId,
-    required final List<String> columnFilter,
-    required final String textFilter,
+    final List<String> columnFilter = const [],
+    final String textFilter = '',
   }) async {
     // First set all filters on the destination view
     await setString(viewId.getViewPreferenceId(settingKeyFilterText), textFilter);

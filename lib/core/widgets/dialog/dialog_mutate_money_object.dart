@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/dialog/dialog.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';
@@ -6,13 +7,11 @@ import 'package:money/core/widgets/message_box.dart';
 import 'package:money/data/storage/data/data.dart';
 
 void myShowDialogAndActionsForMoneyObject({
-  required final BuildContext context,
   required final String title,
   required final MoneyObject moneyObject,
   Function? onApplyChange,
 }) {
   myShowDialogAndActionsForMoneyObjects(
-    context: context,
     title: title,
     moneyObjects: [moneyObject],
     onApplyChange: onApplyChange,
@@ -20,11 +19,12 @@ void myShowDialogAndActionsForMoneyObject({
 }
 
 void myShowDialogAndActionsForMoneyObjects({
-  required final BuildContext context,
   required final String title,
   required final List<MoneyObject> moneyObjects,
   Function? onApplyChange,
 }) {
+  final context = Get.context!;
+
   if (moneyObjects.isEmpty) {
     messageBox(context, 'No items to edit');
     return;

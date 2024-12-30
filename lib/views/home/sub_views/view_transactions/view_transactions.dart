@@ -61,10 +61,10 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
         buildJumpToButton(
           [
             // Account
-            InternalViewSwitching.toAccounts(accountId: transaction?.fieldAccountId.value ?? -1),
+            MenuEntry.toAccounts(accountId: transaction?.fieldAccountId.value ?? -1),
 
             // Category
-            InternalViewSwitching(
+            MenuEntry(
               icon: ViewId.viewCategories.getIconData(),
               title: 'Switch to Categories',
               onPressed: () {
@@ -82,7 +82,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
             ),
 
             // Payee
-            InternalViewSwitching(
+            MenuEntry(
               icon: ViewId.viewPayees.getIconData(),
               title: 'Switch to Payees',
               onPressed: () {
@@ -99,7 +99,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               },
             ),
             // Search Payee
-            InternalViewSwitching(
+            MenuEntry(
               icon: Icons.person_search_outlined,
               title: 'Search for Payee',
               onPressed: () {

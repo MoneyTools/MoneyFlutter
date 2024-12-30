@@ -78,7 +78,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       list.add(
         buildJumpToButton(
           [
-            InternalViewSwitching(
+            MenuEntry(
               icon: ViewId.viewTransactions.getIconData(),
               title: 'Matching Transaction',
               onPressed: () {
@@ -135,7 +135,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching.toTransactions(
+              MenuEntry.toTransactions(
                 transactionId: -1,
                 // Prepare the Transaction view Filter to show only the selected account
                 filters: FieldFilters([
@@ -145,7 +145,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                   ),
                 ]),
               ),
-              InternalViewSwitching.toInvestments(accountName: account.fieldName.value),
+              MenuEntry.toInvestments(accountName: account.fieldName.value),
             ],
           ),
         );

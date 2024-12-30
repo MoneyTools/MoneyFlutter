@@ -7,11 +7,13 @@ class MyIconButton extends StatefulWidget {
     required this.onPressed,
     this.hoverColor,
     this.tooltip = '',
+    this.size = 18,
   });
 
   final Color? hoverColor;
   final IconData icon;
   final VoidCallback onPressed;
+  final double size;
   final String tooltip;
 
   @override
@@ -29,7 +31,7 @@ class MyIconButtonState extends State<MyIconButton> {
       child: IconButton(
         padding: EdgeInsets.zero,
         icon: Icon(
-          size: 18,
+          size: widget.size,
           widget.icon,
           color: _isHovered ? widget.hoverColor : null,
         ),

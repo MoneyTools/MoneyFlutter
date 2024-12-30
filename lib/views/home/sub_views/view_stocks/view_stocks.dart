@@ -100,8 +100,8 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching.toAccounts(accountId: selectedInvestment.transactionInstance!.fieldAccountId.value),
-              InternalViewSwitching.toTransactions(transactionId: selectedInvestment.uniqueId),
+              MenuEntry.toAccounts(accountId: selectedInvestment.transactionInstance!.fieldAccountId.value),
+              MenuEntry.toTransactions(transactionId: selectedInvestment.uniqueId),
             ],
           ),
         );
@@ -114,7 +114,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               // Jump to Investment view
-              InternalViewSwitching.toInvestments(symbol: selectedSecurity.fieldSymbol.value),
+              MenuEntry.toInvestments(symbol: selectedSecurity.fieldSymbol.value),
             ],
           ),
         );
@@ -397,7 +397,6 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         if (instance != null) {
           myShowDialogAndActionsForMoneyObject(
             title: 'Investment',
-            context: context2,
             moneyObject: instance,
           );
         }

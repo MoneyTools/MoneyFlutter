@@ -48,7 +48,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching(
+              MenuEntry(
                 icon: ViewId.viewTransactions.getIconData(),
                 title: 'Switch to Transactions',
                 onPressed: () {

@@ -60,7 +60,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
             // Queue up the edit dialog
             myShowDialogAndActionsForMoneyObject(
-              context: context,
               title: 'New ${getClassNameSingular()}',
               moneyObject: newItem,
               onApplyChange: () {
@@ -100,7 +99,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
         list.add(
           buildJumpToButton(
             [
-              InternalViewSwitching.toTransactions(
+              MenuEntry.toTransactions(
                 transactionId: -1,
                 filters: FieldFilters(
                   [

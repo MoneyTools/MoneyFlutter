@@ -4,6 +4,7 @@
 
 ### Add
 
+- Budget View editing Category & jump to category view
 - Editing of InvestmentTradeType
 - Average Cost of Shares
 

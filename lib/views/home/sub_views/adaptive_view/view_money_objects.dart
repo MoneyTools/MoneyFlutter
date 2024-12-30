@@ -360,7 +360,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         widgets.add(
           buildEditButton(() {
             myShowDialogAndActionsForMoneyObjects(
-              context: context,
               title: _selectedItemsByUniqueId.value.length == 1 ? getClassNameSingular() : getClassNamePlural(),
               moneyObjects: getSelectedItemsFromSelectedList(
                 _selectedItemsByUniqueId.value,
@@ -920,7 +919,6 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final List<MoneyObject> moneyObjects,
   ) {
     myShowDialogAndActionsForMoneyObjects(
-      context: context,
       title: getSingularPluralText(
         'Edit',
         moneyObjects.length,

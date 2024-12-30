@@ -39,16 +39,16 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
           buildJumpToButton(
             [
               // Jump to Account view
-              InternalViewSwitching.toAccounts(accountId: relatedTransaction!.fieldAccountId.value),
+              MenuEntry.toAccounts(accountId: relatedTransaction!.fieldAccountId.value),
 
               // Jump to Transaction view
-              InternalViewSwitching.toTransactions(
+              MenuEntry.toTransactions(
                 transactionId: relatedTransaction.uniqueId,
                 filters: null,
               ),
 
               // Jump to Stock view
-              InternalViewSwitching(
+              MenuEntry(
                 icon: ViewId.viewStocks.getIconData(),
                 title: 'Switch to Stocks',
                 onPressed: () {

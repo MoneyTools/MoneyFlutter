@@ -102,17 +102,17 @@ extension ViewAccountsSidePanel on ViewAccountsState {
                     child: TextTitle(summary.symbol),
                   ),
                   buildMenuButton([
-                    InternalViewSwitching.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
-                    InternalViewSwitching.toStocks(symbol: summary.symbol),
-                    InternalViewSwitching.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
-                    InternalViewSwitching.customAction(
+                    MenuEntry.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
+                    MenuEntry.toStocks(symbol: summary.symbol),
+                    MenuEntry.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
+                    MenuEntry.customAction(
                       icon: Icons.refresh,
                       text: 'Get latest price',
                       onPressed: () async {
                         await loadFomBackendAndSaveToCache(summary.symbol);
                       },
                     ),
-                    InternalViewSwitching.customAction(
+                    MenuEntry.customAction(
                       icon: Icons.add,
                       text: 'Add investment',
                       onPressed: () async {
@@ -430,7 +430,6 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         final LoanPayment instance = findObjectById(itemId, aggregatedList) as LoanPayment;
         myShowDialogAndActionsForMoneyObject(
           title: 'Loan Payment',
-          context: context2,
           moneyObject: instance,
         );
 

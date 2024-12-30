@@ -2,8 +2,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
+import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
+import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/money_widget.dart';
+import 'package:money/views/home/sub_views/adaptive_view/switch_views.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
 
 class PanelBudget extends StatefulWidget {
@@ -29,6 +32,7 @@ class PanelBudget extends StatefulWidget {
 class _PanelBudgetState extends State<PanelBudget> {
   List<RecurringExpenses> items = [];
   double sumForAllCategories = 0.00;
+  double sumForAllCategoriesBudget = 0.00;
 
   @override
   void initState() {
@@ -42,67 +46,83 @@ class _PanelBudgetState extends State<PanelBudget> {
     return Center(
       child: Column(
         children: [
-          // Column explanation
-          Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          Container(
+            color: getColorTheme(context).surfaceContainer,
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
               children: [
-                Expanded(
-                  flex: 2,
-                  child: Text('Category'),
+                //
+                // Column title
+                //
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text('Category'),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Total',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Yearly',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Monthly',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Budgeted',
+                        textAlign: TextAlign.end,
+                      ),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: Text(
-                    'Total',
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'Yearly',
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-                Expanded(
-                  child: Text(
-                    'Monthly',
-                    textAlign: TextAlign.end,
-                  ),
-                ),
-              ],
-            ),
-          ),
 
-          //
-          // Column values
-          //
-          Padding(
-            padding: const EdgeInsets.all(13.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Text(''),
-                ),
-                Expanded(
-                  child: MoneyWidget.fromDouble(
-                    sumForAllCategories,
-                    asTitle: true,
-                  ),
-                ),
-                Expanded(
-                  child: MoneyWidget.fromDouble(
-                    sumForAllCategories / widget.numberOfYears,
-                    asTitle: true,
-                  ),
-                ),
-                Expanded(
-                  child: MoneyWidget.fromDouble(
-                    (sumForAllCategories / widget.numberOfYears) / 12,
-                    asTitle: true,
-                  ),
+                //
+                // Column values
+                //
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: Text(''),
+                    ),
+                    Expanded(
+                      child: MoneyWidget.fromDouble(
+                        sumForAllCategories,
+                        asTitle: true,
+                      ),
+                    ),
+                    Expanded(
+                      child: MoneyWidget.fromDouble(
+                        sumForAllCategories / widget.numberOfYears,
+                        asTitle: true,
+                      ),
+                    ),
+                    Expanded(
+                      child: MoneyWidget.fromDouble(
+                        (sumForAllCategories / widget.numberOfYears) / 12,
+                        asTitle: true,
+                      ),
+                    ),
+                    Expanded(
+                      child: MoneyWidget.fromDouble(
+                        sumForAllCategoriesBudget,
+                        asTitle: true,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -110,44 +130,79 @@ class _PanelBudgetState extends State<PanelBudget> {
 
           // Column details
           Expanded(
-            child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (context, index) {
-                // build the Card UI
-                final RecurringExpenses item = items[index];
-                return Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Expanded(
-                          flex: 2,
-                          child: item.category.getNameAsWidget(),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: ListView.separated(
+                separatorBuilder: (context, index) => const Divider(height: 0),
+                padding: EdgeInsets.all(0),
+                itemCount: items.length,
+                itemBuilder: (context, index) {
+                  // build the Card UI
+                  final RecurringExpenses item = items[index];
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Category Long Name
+                      Expanded(
+                        flex: 2,
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: item.category.getNameAsWidget(),
+                            ),
+                            buildMenuButton(
+                              [
+                                MenuEntry.toCategory(category: item.category),
+                                MenuEntry.editCategory(
+                                  category: item.category,
+                                  onApplyChange: () {
+                                    setState(() {
+                                      // refresh the screen
+                                    });
+                                  },
+                                ),
+                              ],
+                              icon: Icons.more_vert,
+                            ),
+                          ],
                         ),
-                        Expanded(
-                          child: MoneyWidget.fromDouble(
-                            item.sum,
-                            asTitle: true,
-                          ),
+                      ),
+
+                      // Sum for all date
+                      Expanded(
+                        child: MoneyWidget.fromDouble(
+                          item.sum,
+                          asTitle: true,
                         ),
-                        Expanded(
-                          child: MoneyWidget.fromDouble(
-                            item.sum / widget.numberOfYears,
-                            asTitle: true,
-                          ),
+                      ),
+
+                      // Sum per year
+                      Expanded(
+                        child: MoneyWidget.fromDouble(
+                          item.sum / widget.numberOfYears,
+                          asTitle: true,
                         ),
-                        Expanded(
-                          child: MoneyWidget.fromDouble(
-                            (item.sum / widget.numberOfYears) / 12,
-                            asTitle: true,
-                          ),
+                      ),
+
+                      // Sum per month
+                      Expanded(
+                        child: MoneyWidget.fromDouble(
+                          (item.sum / widget.numberOfYears) / 12,
+                          asTitle: true,
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+                      ),
+
+                      // Budgeted per month
+                      Expanded(
+                        child: MoneyWidget.fromDouble(
+                          item.category.fieldBudget.value.toDouble(),
+                          asTitle: true,
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
         ],
@@ -158,6 +213,10 @@ class _PanelBudgetState extends State<PanelBudget> {
   void initializeItems() {
     items = RecurringExpenses.getRecurringItems(widget.minYear, widget.maxYear);
     sumForAllCategories = 0.00;
-    items.forEach((item) => sumForAllCategories += item.sum);
+    sumForAllCategoriesBudget = 0.00;
+    items.forEach((item) {
+      sumForAllCategories += item.sum;
+      sumForAllCategoriesBudget += item.category.fieldBudget.value.toDouble();
+    });
   }
 }

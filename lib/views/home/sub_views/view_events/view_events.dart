@@ -49,7 +49,6 @@ class ViewEventsState extends ViewForMoneyObjectsState {
 
             // Queue up the edit dialog
             myShowDialogAndActionsForMoneyObject(
-              context: context,
               title: 'New ${getClassNameSingular()}',
               moneyObject: newItem,
               onApplyChange: () {

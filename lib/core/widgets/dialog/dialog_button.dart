@@ -115,21 +115,21 @@ Widget buildCopyButton(final Function callback, [final key = Constants.keyCopyLi
 }
 
 Widget buildMenuButton(
-  final List<InternalViewSwitching> listOfViewToJumpTo, {
+  final List<MenuEntry> menuItems, {
   IconData icon = Icons.more_horiz,
   String tooltip = 'Switch view',
 }) {
   final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
-  for (var i = 0; i < listOfViewToJumpTo.length; i++) {
+  for (var i = 0; i < menuItems.length; i++) {
     list.add(
       PopupMenuItem<int>(
         value: i,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Icon(listOfViewToJumpTo[i].icon),
+            Icon(menuItems[i].icon),
             gapLarge(),
-            Expanded(child: Text(listOfViewToJumpTo[i].title)),
+            Expanded(child: Text(menuItems[i].title)),
           ],
         ),
       ),
@@ -140,13 +140,13 @@ Widget buildMenuButton(
     tooltip: tooltip,
     list: list,
     onSelected: (final index) {
-      listOfViewToJumpTo[index].onPressed();
+      menuItems[index].onPressed();
     },
   );
 }
 
 Widget buildJumpToButton(
-  final List<InternalViewSwitching> listOfViewToJumpTo,
+  final List<MenuEntry> listOfViewToJumpTo,
 ) {
   return buildMenuButton(listOfViewToJumpTo, icon: Icons.open_in_new_outlined, tooltip: 'Switch view');
 }
