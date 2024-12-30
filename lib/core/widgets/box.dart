@@ -161,7 +161,11 @@ Widget getBadgeText(final String text) {
 }
 
 class BoxWithScrollingContent extends StatelessWidget {
-  const BoxWithScrollingContent({super.key, required this.children, this.height});
+  const BoxWithScrollingContent({
+    super.key,
+    required this.children,
+    this.height,
+  });
 
   final List<Widget> children;
   final double? height;

@@ -55,13 +55,19 @@ extension ViewAccountsSidePanel on ViewAccountsState {
 
     List<StockSummary> stockSummaries = [];
 
-    groupBySymbol.values.forEach((String key, dynamic listOfInvestmentsForAccount) {
+    groupBySymbol.values.forEach((String key, Set<Investment> listOfInvestmentsForAccount) {
       final double sharesForThisStock = Investments.applyHoldingSharesAdjustedForSplits(
         listOfInvestmentsForAccount.toList(),
       );
 
       if (isConsideredZero(sharesForThisStock) == false) {
         //  "123|MSFT" >> "MSFT"
+        // tally the cost of the stock
+        double totalCost = 0.0;
+        for (final Investment investment in listOfInvestmentsForAccount.toList()) {
+          totalCost += investment.costForShares;
+        }
+
         final symbol = key.split('|')[1];
 
         final Security? stock = Data().securities.getBySymbol(symbol);
@@ -71,18 +77,24 @@ extension ViewAccountsSidePanel on ViewAccountsState {
           stockPrice = stock.fieldPrice.value.toDouble();
         }
 
-        stockSummaries.add(StockSummary(symbol: symbol, shares: sharesForThisStock, sharePrice: stockPrice));
+        stockSummaries.add(
+          StockSummary(
+            symbol: symbol,
+            shares: sharesForThisStock,
+            sharePrice: stockPrice,
+            averageCost: totalCost / sharesForThisStock,
+          ),
+        );
       }
     });
 
     // sort by descending holding-value
     stockSummaries.sort((a, b) => b.holdingValue.compareTo(a.holdingValue));
 
-    const cardHeight = 150.0;
     final List<Widget> stockPanels = stockSummaries
         .map(
           (summary) => BoxWithScrollingContent(
-            height: cardHeight,
+            height: 180,
             children: [
               Row(
                 children: [
@@ -111,13 +123,21 @@ extension ViewAccountsSidePanel on ViewAccountsState {
                 quantity: summary.shares,
               ),
 
+              // Average cost price
+              LabelAndAmount(
+                caption: 'Average cost',
+                amount: summary.averageCost,
+              ),
+
               // Price per share
               LabelAndAmount(
-                caption: 'Share price',
+                caption: 'Market price',
                 amount: summary.sharePrice,
               ),
-              const Divider(),
+
               // Hold value
+              gapMedium(),
+              const Divider(),
               LabelAndAmount(
                 caption: 'Value',
                 amount: summary.holdingValue,
@@ -136,7 +156,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     stockPanels.insert(
       0,
       BoxWithScrollingContent(
-        height: cardHeight,
+        height: 150,
         children: [
           gapMedium(),
           // Cash
@@ -167,6 +187,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
               ),
             ],
           ),
+          gapMedium(),
           const Divider(),
           LabelAndAmount(
             caption: 'Value',
@@ -414,8 +435,14 @@ extension ViewAccountsSidePanel on ViewAccountsState {
 }
 
 class StockSummary {
-  StockSummary({required this.symbol, required this.shares, required this.sharePrice});
+  StockSummary({
+    required this.symbol,
+    required this.shares,
+    required this.sharePrice,
+    required this.averageCost,
+  });
 
+  final double averageCost;
   final double sharePrice;
   final double shares;
   final String symbol;

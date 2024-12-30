@@ -350,6 +350,8 @@ class Investment extends MoneyObject {
     }
   }
 
+  double get costForShares => this.effectiveUnitsAdjusted * this._unitPriceAdjusted;
+
   DateTime get date => this.transactionInstance?.fieldDateTime.value ?? DateTime.now();
 
   double get effectiveUnits {
