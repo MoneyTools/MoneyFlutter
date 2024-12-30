@@ -10,9 +10,7 @@ import 'package:money/data/storage/import/import_qfx.dart';
 import 'package:money/data/storage/import/import_qif.dart';
 import 'package:money/data/storage/import/import_transactions_from_text.dart';
 
-void showImportTransactionsWizard({
-  bool includeInvestment = false,
-}) {
+void showImportTransactionsWizard() {
   final BuildContext context = Get.context!;
 
   adaptiveScreenSizeDialog(
@@ -42,15 +40,14 @@ void showImportTransactionsWizard({
               showImportTransactionsFromTextInput(context);
             },
           ),
-          if (includeInvestment)
-            WizardChoice(
-              title: 'Investment Transaction',
-              description: 'Buy/Sell/Dividend.',
-              onPressed: () {
-                Navigator.of(context).pop(true);
-                showImportInvestment(context);
-              },
-            ),
+          WizardChoice(
+            title: 'Investment Transaction',
+            description: 'Buy/Sell/Dividend.',
+            onPressed: () {
+              Navigator.of(context).pop(true);
+              showImportInvestment(context);
+            },
+          ),
         ],
       ),
     ),

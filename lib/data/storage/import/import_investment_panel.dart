@@ -3,12 +3,12 @@ import 'package:money/core/controller/keyboard_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/widgets/form_field_widget.dart';
-import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/my_text_input.dart';
 import 'package:money/core/widgets/picker_edit_box_date.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/investments/investment_types.dart';
 import 'package:money/data/models/money_objects/investments/picker_investment_type.dart';
+import 'package:money/views/home/sub_views/view_accounts/picker_account.dart';
 import 'package:money/views/home/sub_views/view_categories/picker_category.dart';
 
 class InvestmentImportFields {
@@ -98,16 +98,22 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
               children: [
                 // Title
                 Text(
-                  'Add investment to account',
-                  style: getTextTheme(context).bodyLarge,
+                  'Add Investment Transaction',
+                  style: getTextTheme(context).titleLarge,
                 ),
 
                 // Account
-                Text(
-                  widget.inputFields.account.fieldName.value,
-                  style: getTextTheme(context).titleLarge,
+                myFormField(
+                  title: 'To Account',
+                  child: pickerAccount(
+                    selected: widget.inputFields.account,
+                    onSelected: (Account? selectedAccount) {
+                      if (selectedAccount != null) {
+                        widget.inputFields.account = selectedAccount;
+                      }
+                    },
+                  ),
                 ),
-                gapMedium(),
 
                 // Date
                 myFormField(

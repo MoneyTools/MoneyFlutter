@@ -242,9 +242,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     super.initState();
 
     onAddTransaction = () {
-      showImportTransactionsWizard(
-        includeInvestment: (getFirstSelectedItem() as Account?)?.fieldType.value == AccountType.investment,
-      );
+      showImportTransactionsWizard();
     };
 
     _pivots.add(
