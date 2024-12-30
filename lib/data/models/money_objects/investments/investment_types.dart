@@ -10,16 +10,6 @@ enum SecurityType {
   private, // Investment in a private company.
 }
 
-enum InvestmentTradeType {
-  none, // 0
-  buy, // 1
-  buyToOpen, // 2
-  buyToCover, // 3,
-  buyToClose, // 4,
-  sell, // 5
-  sellShort, // 6
-}
-
 enum InvestmentType {
   // kep this order to avoid changing the index value of each enum
   add, // 0

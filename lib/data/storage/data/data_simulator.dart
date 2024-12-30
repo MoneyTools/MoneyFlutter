@@ -10,6 +10,7 @@ import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/investments/investment.dart';
 import 'package:money/data/models/money_objects/investments/investment_types.dart';
+import 'package:money/data/models/money_objects/investments/picker_investment_trade_type.dart';
 import 'package:money/data/models/money_objects/loan_payments/loan_payment.dart';
 import 'package:money/data/models/money_objects/online_accounts/online_account.dart';
 import 'package:money/data/models/money_objects/payees/payee.dart';

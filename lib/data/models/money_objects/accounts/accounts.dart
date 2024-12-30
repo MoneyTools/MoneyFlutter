@@ -300,7 +300,7 @@ class Accounts extends MoneyObjects<Account> {
     for (final Investment investment in investments) {
       final Security? security = Data().securities.get(investment.fieldSecurity.value);
       if (security != null) {
-        final stockSymbol = security.fieldSymbol.value;
+        final String stockSymbol = security.fieldSymbol.value;
         groupBySymbol.cumulate('${account.uniqueId}|$stockSymbol', investment);
       }
     }

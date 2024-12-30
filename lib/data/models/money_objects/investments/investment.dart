@@ -3,6 +3,7 @@
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/data/models/money_objects/investments/investment_types.dart';
+import 'package:money/data/models/money_objects/investments/picker_investment_trade_type.dart';
 import 'package:money/data/models/money_objects/investments/picker_investment_type.dart';
 import 'package:money/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/data/models/money_objects/stock_splits/stock_split.dart';
@@ -228,6 +229,19 @@ class Investment extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) =>
         InvestmentTradeType.values[(instance as Investment).fieldTradeType.value].name.toUpperCase(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldTradeType.value,
+    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      return pickerInvestmentTradeType(
+        itemSelected: getInvestmentTradeTypeFromValue((instance as Investment).fieldTradeType.value),
+        onSelected: (final InvestmentTradeType newSelection) {
+          instance.fieldTradeType.value = newSelection.index;
+          onEdited(true); // notify container
+        },
+      );
+    },
+    setValue: (final MoneyObject instance, dynamic value) {
+      // (instance as Investment).stashValueBeforeEditing();
+      (instance as Investment).fieldTradeType.value = value;
+    },
   );
 
   FieldString fieldTransactionAccountName = FieldString(
@@ -382,6 +396,7 @@ class Investment extends MoneyObject {
         tmp.fieldSecurity,
         tmp.fieldSecuritySymbol,
         tmp.fieldInvestmentType,
+        tmp.fieldTradeType,
         tmp.fieldUnits,
         tmp.fieldSplitRatioAsText,
         tmp.fieldUnitsAdjusted,
@@ -393,7 +408,6 @@ class Investment extends MoneyObject {
         tmp.fieldTaxes,
         tmp.fieldFees,
         tmp.fieldLoad,
-        tmp.fieldTradeType,
         tmp.fieldTaxExempt,
         tmp.fieldWithholding,
         tmp.fieldActivityAmount,

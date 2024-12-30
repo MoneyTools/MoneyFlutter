@@ -59,8 +59,6 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
   final _focusNode = FocusNode();
   final _keyboardHandler = SafeKeyboardHandler();
 
-  late DateTime _date = widget.inputFields.date;
-
   @override
   void dispose() {
     _controllerSymbol.dispose();
@@ -115,10 +113,10 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
                 myFormField(
                   title: 'Date',
                   child: PickerEditBoxDate(
-                    initialValue: dateToString(_date),
+                    initialValue: dateToString(widget.inputFields.date),
                     onChanged: (String? newDateSelected) {
                       if (newDateSelected != null) {
-                        _date = attemptToGetDateFromText(newDateSelected) ?? DateTime.now();
+                        widget.inputFields.date = attemptToGetDateFromText(newDateSelected) ?? DateTime.now();
                       }
                     },
                   ),
@@ -194,7 +192,6 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
   }
 
   void _updateInputFields() {
-    widget.inputFields.date = _date;
     widget.inputFields.symbol = _controllerSymbol.text;
     widget.inputFields.units = double.tryParse(_controllerUnites.text) ?? 0.0;
     widget.inputFields.amountPerUnit = double.tryParse(_controllerAmount.text) ?? 0.0;

@@ -1,5 +1,12 @@
 # Change Log
 
+## [version 1.11.04] 2024-12-30
+
+### Add
+
+- Editing of InvestmentTradeType
+- Average Cost of Shares
+
 ## [version 1.11.03] 2024-12-29
 
 ### Add

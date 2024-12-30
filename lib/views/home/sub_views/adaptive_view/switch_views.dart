@@ -50,17 +50,22 @@ class InternalViewSwitching {
     final String symbol = '',
     final String accountName = '',
   }) {
-    late FieldFilter fieldFilterToUse;
+    List<FieldFilter> filters = [];
+
     if (symbol.isNotEmpty) {
-      fieldFilterToUse = FieldFilter(
-        fieldName: Constants.viewStockFieldNameSymbol,
-        strings: [symbol],
+      filters.add(
+        FieldFilter(
+          fieldName: Constants.viewStockFieldNameSymbol,
+          strings: [symbol],
+        ),
       );
     }
     if (accountName.isNotEmpty) {
-      fieldFilterToUse = FieldFilter(
-        fieldName: Constants.viewStockFieldNameAccount,
-        strings: [accountName],
+      filters.add(
+        FieldFilter(
+          fieldName: Constants.viewStockFieldNameAccount,
+          strings: [accountName],
+        ),
       );
     }
 
@@ -72,7 +77,7 @@ class InternalViewSwitching {
         PreferenceController.to.jumpToView(
           viewId: ViewId.viewInvestments,
           selectedId: -1,
-          columnFilter: FieldFilters([fieldFilterToUse]).toStringList(),
+          columnFilter: FieldFilters(filters).toStringList(),
           textFilter: '',
         );
       },
