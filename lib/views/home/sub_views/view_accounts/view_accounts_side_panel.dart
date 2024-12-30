@@ -101,7 +101,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
                   Expanded(
                     child: TextTitle(summary.symbol),
                   ),
-                  buildJumpToButton([
+                  buildMenuButton([
                     InternalViewSwitching.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
                     InternalViewSwitching.toStocks(symbol: summary.symbol),
                     InternalViewSwitching.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
@@ -110,6 +110,26 @@ extension ViewAccountsSidePanel on ViewAccountsState {
                       text: 'Get latest price',
                       onPressed: () async {
                         await loadFomBackendAndSaveToCache(summary.symbol);
+                      },
+                    ),
+                    InternalViewSwitching.customAction(
+                      icon: Icons.add,
+                      text: 'Add investment',
+                      onPressed: () async {
+                        showImportInvestment(
+                          inputData: InvestmentImportFields(
+                            account: Data().accounts.getMostRecentlySelectedAccount(),
+                            date: DateTime.now(),
+                            // inverse the position
+                            investmentType: summary.shares > 0 ? InvestmentType.sell : InvestmentType.buy,
+                            category: Data().categories.investmentOther,
+                            symbol: summary.symbol,
+                            units: summary.shares,
+                            amountPerUnit: summary.sharePrice,
+                            transactionAmount: summary.shares * summary.sharePrice,
+                            description: 'Close Position',
+                          ),
+                        );
                       },
                     ),
                   ]),

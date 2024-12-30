@@ -45,7 +45,7 @@ void showImportTransactionsWizard() {
             description: 'Buy/Sell/Dividend.',
             onPressed: () {
               Navigator.of(context).pop(true);
-              showImportInvestment(context);
+              showImportInvestment();
             },
           ),
         ],

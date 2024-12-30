@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:money/core/widgets/dialog/dialog.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/gaps.dart';
@@ -11,10 +12,8 @@ import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/import/import_investment_panel.dart';
 
-void showImportInvestment(
-  final BuildContext context,
-) {
-  final inputData = InvestmentImportFields(
+void showImportInvestment({InvestmentImportFields? inputData}) {
+  inputData ??= InvestmentImportFields(
     account: Data().accounts.getMostRecentlySelectedAccount(),
     date: DateTime.now(),
     investmentType: InvestmentType.buy,
@@ -26,6 +25,7 @@ void showImportInvestment(
     description: '',
   );
 
+  final BuildContext context = Get.context!;
   adaptiveScreenSizeDialog(
     context: context,
     captionForClose: 'Cancel',

@@ -114,7 +114,11 @@ Widget buildCopyButton(final Function callback, [final key = Constants.keyCopyLi
   );
 }
 
-Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
+Widget buildMenuButton(
+  final List<InternalViewSwitching> listOfViewToJumpTo, {
+  IconData icon = Icons.more_horiz,
+  String tooltip = 'Switch view',
+}) {
   final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
   for (var i = 0; i < listOfViewToJumpTo.length; i++) {
     list.add(
@@ -132,13 +136,19 @@ Widget buildJumpToButton(final List<InternalViewSwitching> listOfViewToJumpTo) {
     );
   }
   return myPopupMenuIconButton(
-    icon: Icons.open_in_new_outlined,
-    tooltip: 'Switch view',
+    icon: icon,
+    tooltip: tooltip,
     list: list,
     onSelected: (final index) {
       listOfViewToJumpTo[index].onPressed();
     },
   );
+}
+
+Widget buildJumpToButton(
+  final List<InternalViewSwitching> listOfViewToJumpTo,
+) {
+  return buildMenuButton(listOfViewToJumpTo, icon: Icons.open_in_new_outlined, tooltip: 'Switch view');
 }
 
 PopupMenuButton<int> myPopupMenuIconButton({
