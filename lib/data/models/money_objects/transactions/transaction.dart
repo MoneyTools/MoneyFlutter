@@ -876,13 +876,19 @@ class Transaction extends MoneyObject {
 
   bool get isAssetAccount => instanceOfAccount?.isAssetAccount ?? false;
 
+  bool get isCandidateForBudget => this.fieldCategoryId.value != -1 && (this.isExpense || this.isIncome);
+
+  bool get isExpense => category?.isExpense == true;
+
+  bool get isIncome => category?.isIncome == true;
+
   bool isMatchingAnyOfTheseCategories(List<int> categoriesToMatch) {
     if (categoriesToMatch.contains(fieldCategoryId.value)) {
       return true;
     }
 
     if (this.isSplit) {
-      for (var s in this.splits) {
+      for (final MoneySplit s in this.splits) {
         if (categoriesToMatch.contains(s.fieldCategoryId.value)) {
           return true;
         }
