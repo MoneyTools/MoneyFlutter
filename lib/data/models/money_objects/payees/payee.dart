@@ -90,6 +90,12 @@ class Payee extends MoneyObject {
     return _fields;
   }
 
+  /// Returns a [Fields] instance that defines the fields to be displayed in a column view for a [Payee] object.
+  /// The fields included are:
+  /// - [Payee.fieldName]: The name of the payee.
+  /// - [Payee.fieldCategoriesAsText]: The categories associated with the payee, as a string.
+  /// - [Payee.fieldCount]: The count or number of occurrences for the payee.
+  /// - [Payee.fieldSum]: The total sum or amount associated with the payee.
   static Fields<Payee> get fieldsForColumnView {
     final tmp = Payee.fromJson({});
     return Fields<Payee>()
@@ -101,6 +107,11 @@ class Payee extends MoneyObject {
       ]);
   }
 
+  /// Returns a string representation of the categories associated with the payee.
+  /// If there are no categories, an empty string is returned.
+  /// If there is one category, that category is returned.
+  /// If there are two categories, they are joined with a semicolon and space.
+  /// If there are more than two categories, the number of categories is returned as a string.
   String getCategoriesAsString() {
     if (categories.isEmpty) {
       return '';
@@ -115,6 +126,7 @@ class Payee extends MoneyObject {
     return '${getIntAsText(categories.length)} categories';
   }
 
+  /// Returns the name of the [Payee] object, or an empty string if the [Payee] is null.
   static String getName(final Payee? payee) {
     return payee == null ? '' : payee.fieldName.value;
   }

@@ -16,6 +16,16 @@ analyzer:
 
 linter:
   rules:
+    # Error prevention
+    avoid_print: true
+    avoid_type_to_string: true
+    cancel_subscriptions: true
+    close_sinks: true
+
+    # Documentation
+    package_api_docs: true
+    # public_member_api_docs: true
+
     prefer_single_quotes: true
     require_trailing_commas: true
     always_declare_return_types: true
@@ -29,10 +39,5 @@ linter:
     always_put_control_body_on_new_line: true
     use_key_in_widget_constructors: true
     directives_ordering: true
-    # sort_constructors_order:
-    #   - super
-    #   - required
-    #   - positional
-    # always_put_required_named_parameters_first: false
-    # sort_unnamed_constructors_first: true
-    # no_leading_underscores_for_local_identifiers: false
+    sort_pub_dependencies: true
+    always_put_required_named_parameters_first: false

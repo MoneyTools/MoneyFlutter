@@ -7,16 +7,18 @@ import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 import 'package:money/views/home/sub_views/view_transfers/transfer_sender_receiver.dart';
 
+/// Widget for displaying transfers between accounts.
 class ViewTransfers extends ViewForMoneyObjects {
-  const ViewTransfers({
-    super.key,
-  });
+  /// Creates a new instance of [ViewTransfers].
+  const ViewTransfers({super.key});
 
   @override
   State<ViewForMoneyObjects> createState() => ViewTransfersState();
 }
 
+/// State class for [ViewTransfers].
 class ViewTransfersState extends ViewForMoneyObjectsState {
+  /// Creates a new instance of [ViewTransfersState].
   ViewTransfersState() {
     viewId = ViewId.viewTransfers;
   }
@@ -48,7 +50,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }) {
     List<Transfer> listOfTransfers = [];
 
-    // get all transaction of type transfer where the money was sent from (debited)
+    // Retrieve all transactions related to transfers.
     final List<Transaction> listOfTransactionsUseForTransfer = Data()
         .transactions
         .getListFlattenSplits()
@@ -57,12 +59,12 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         )
         .toList();
 
-    // Add the Senders
+    // Process sender transactions.
     for (final transactionOfSender in listOfTransactionsUseForTransfer) {
-      // Display only the Sender/From Transaction you know that its the sender because the amount id negative (deducted)
+      // Identify sender transactions by negative amount.
       if (transactionOfSender.fieldAmount.value.toDouble() <= 0) {
         final Transaction? transactionOfReceiver = Data().transactions.get(transactionOfSender.fieldTransfer.value);
-        keepThisTransfer(
+        _addTransferToList(
           list: listOfTransfers,
           transactionSender: transactionOfSender,
           transactionReceiver: transactionOfReceiver,
@@ -71,21 +73,22 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
       }
     }
 
-    // Add the Receivers only it they are not already part of the Senders
+    // Process receiver transactions not already included.
     for (final transactionOfReceiver in listOfTransactionsUseForTransfer) {
-      // the amount is positive, so this is the receiver transaction
+      // Identify receiver transactions by positive amount.
       if (transactionOfReceiver.fieldAmount.value.toDouble() > 0) {
         final Transaction? transactionOfSender = Data().transactions.get(transactionOfReceiver.fieldTransfer.value);
         if (transactionOfSender == null) {
+          // Handle orphaned receiver transactions (sender not found).
           if (transactionOfReceiver.fieldTransferSplit.value != -1) {
-            logger.i('This is a split');
+            logger.i('This is a split'); // Log split transactions.
           }
           logger.e(
             'related account not found ${transactionOfReceiver.uniqueId} ${transactionOfReceiver.fieldAmount.value}',
-          );
-          keepThisTransfer(
+          ); // Log missing sender.
+          _addTransferToList(
             list: listOfTransfers,
-            transactionSender: transactionOfSender!,
+            transactionSender: transactionOfSender!, // Non-nullable, but logged as error above.
             transactionReceiver: transactionOfReceiver,
             isOrphan: true,
           );
@@ -93,6 +96,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
       }
     }
 
+    // Apply filters if enabled.
     if (applyFilter) {
       listOfTransfers = listOfTransfers.where((final instance) => isMatchingFilters(instance)).toList();
     }
@@ -107,7 +111,8 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     );
   }
 
-  void keepThisTransfer({
+  /// Adds a transfer to the list if the accounts are available and not excluded by filters.
+  void _addTransferToList({
     required final List<Transfer> list,
     required Transaction transactionSender,
     required Transaction? transactionReceiver,
@@ -115,15 +120,11 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }) {
     final Account? accountSender = transactionSender.instanceOfAccount;
     final Account? accountReceiver = transactionReceiver?.instanceOfAccount;
-    if (accountSender != null && accountReceiver != null) {
-      // Are the accounts available?
 
-      // if both accounts are closed skip them if the user does not care
-      if (accountSender.isClosed() && accountReceiver.isClosed()) {
-        if (!PreferenceController.to.includeClosedAccounts) {
-          // exclude closed account
-          return;
-        }
+    if (accountSender != null && accountReceiver != null) {
+      // Exclude closed accounts if the preference is set.
+      if (accountSender.isClosed() && accountReceiver.isClosed() && !PreferenceController.to.includeClosedAccounts) {
+        return;
       }
 
       final Transfer transfer = Transfer(
@@ -132,11 +133,11 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         relatedTransaction: transactionReceiver,
         isOrphan: isOrphan,
       );
-      // transfer.transactionAmount.value = t.amount.value;
       list.add(transfer);
     }
   }
 
+  /// Returns the side panel view details for a selected transfer.
   Widget _getSidePanelViewDetails({
     required final List<int> selectedIds,
     required final bool isReadOnly,

@@ -10,7 +10,10 @@ import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/app_scaffold.dart';
 
+/// The `SettingsPage` class is a `GetView` that extends `GetxController`. It represents the settings page of the application.
+/// This page allows the user to manage various settings, such as rental management, stock service API key, and currencies.
 class SettingsPage extends GetView<GetxController> {
+  /// Constructs a `SettingsPage` widget with the provided [key].
   const SettingsPage({super.key});
 
   @override

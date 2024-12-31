@@ -4,6 +4,15 @@ import 'package:money/core/helpers/misc_helpers.dart';
 import 'package:money/core/helpers/string_helper.dart';
 export 'dart:convert';
 
+/// Compares two JSON objects and generates a new JSON object containing only the common key-value pairs.
+///
+/// This function iterates over the keys in the first JSON object (`json1`) and checks if the key exists in the second JSON object (`json2`) with the same value. If so, the key-value pair is added to the `commonJson` object, which is then returned.
+///
+/// This function can be useful for finding the common data between two JSON objects, which can be helpful in scenarios like data synchronization or merging.
+///
+/// @param json1 The first JSON object to compare.
+/// @param json2 The second JSON object to compare.
+/// @return A new JSON object containing only the common key-value pairs between `json1` and `json2`.
 MyJson compareAndGenerateCommonJson(MyJson json1, MyJson json2) {
   MyJson commonJson = {};
 
@@ -20,6 +29,14 @@ MyJson compareAndGenerateCommonJson(MyJson json1, MyJson json2) {
   return commonJson;
 }
 
+/// Encodes a dynamic value by wrapping string types in single quotes and escaping the string content.
+///
+/// If the input `value` is a [String], this function will return the value wrapped in single quotes with the string content escaped using [escapeString]. Otherwise, it will return the string representation of the value using [toString()].
+///
+/// This function is useful for safely encoding dynamic values as part of a larger string, such as when building SQL queries or other text-based formats.
+///
+/// @param value The dynamic value to encode.
+/// @return The encoded value as a [String].
 String encodeValueWrapStringTypes(dynamic value) {
   if (value is String) {
     return "'${escapeString(value)}'";
@@ -29,6 +46,15 @@ String encodeValueWrapStringTypes(dynamic value) {
 }
 
 /// Diff between to JSon object
+/// Generates a new JSON object that represents the differences between two JSON objects.
+///
+/// This function takes two JSON objects, `before` and `after`, and compares their key-value pairs. It creates a new JSON object `diff` that contains only the keys where the values differ between the two input objects. For each differing key, the `diff` object contains a map with the `'before'` and `'after'` values.
+///
+/// This function can be useful for tracking changes between two versions of a JSON data structure, such as when synchronizing data or generating update diffs.
+///
+/// @param before The JSON object representing the original or previous state.
+/// @param after The JSON object representing the updated or current state.
+/// @return A new JSON object containing the differences between `before` and `after`.
 MyJson myJsonDiff({required MyJson before, required MyJson after}) {
   MyJson diff = MyJson();
 
@@ -44,6 +70,13 @@ MyJson myJsonDiff({required MyJson before, required MyJson after}) {
   return diff;
 }
 
+/// Creates a new [MyJson] object from parallel lists of keys and values.
+///
+/// This function takes two lists, one containing keys and one containing values, and constructs a new [MyJson] object where each key is associated with the corresponding value.
+///
+/// @param keys The list of keys to use for the new [MyJson] object.
+/// @param values The list of values to associate with the keys.
+/// @return A new [MyJson] object constructed from the provided keys and values.
 MyJson myJsonFromKeyValuePairs(List<String> keys, List<String> values) {
   MyJson object = {};
   for (int i = 0; i < keys.length; i++) {
@@ -52,10 +85,18 @@ MyJson myJsonFromKeyValuePairs(List<String> keys, List<String> values) {
   return object;
 }
 
+/// A type alias for a Map with String keys and dynamic values, representing a JSON-like object.
 typedef MyJson = Map<String, dynamic>;
 
 /// helpers for retrieving value as types
 extension MyJsonExtensions on MyJson {
+  /// Retrieves a boolean value from the JSON object for the given key.
+  ///
+  /// If the value for the specified key is `null` or cannot be parsed as a boolean, the provided [defaultIfNotFound] value is returned.
+  ///
+  /// @param key The key to retrieve the boolean value for.
+  /// @param defaultIfNotFound The default value to return if the key is not found or the value cannot be parsed as a boolean. Defaults to `false`.
+  /// @return The boolean value associated with the key, or the default value if the key is not found or the value is not a boolean.
   bool getBool(
     final String key, [
     final bool defaultIfNotFound = false,
@@ -96,6 +137,16 @@ extension MyJsonExtensions on MyJson {
     }
   }
 
+  /// Retrieves a double value from the JSON object for the given key.
+  ///
+  /// If the value for the specified key is `null`, the provided [defaultIfNotFound] value is returned.
+  /// If the value is an `int`, it is converted to a `double`.
+  /// If the value is a `String`, an attempt is made to parse it as a `double` using the [attemptToGetDoubleFromText] function, and the result is returned or the default value is returned if the parsing fails.
+  /// If the value is a `double`, it is returned as is.
+  ///
+  /// @param key The key to retrieve the double value for.
+  /// @param defaultIfNotFound The default value to return if the key is not found or the value cannot be parsed as a double. Defaults to `0.0`.
+  /// @return The double value associated with the key, or the default value if the key is not found or the value cannot be parsed as a double.
   double getDouble(
     final String key, [
     final double defaultIfNotFound = 0.0,
@@ -117,6 +168,15 @@ extension MyJsonExtensions on MyJson {
     }
   }
 
+  /// Retrieves an integer value from the JSON object for the given key.
+  ///
+  /// If the value for the specified key is `null`, the provided [defaultIfNotFound] value is returned.
+  /// If the value is an `int`, it is returned as is.
+  /// If the value is a `String`, an attempt is made to parse it as an `int` using [int.parse], and the result is returned or the default value is returned if the parsing fails.
+  ///
+  /// @param key The key to retrieve the integer value for.
+  /// @param defaultIfNotFound The default value to return if the key is not found or the value cannot be parsed as an integer. Defaults to `0`.
+  /// @return The integer value associated with the key, or the default value if the key is not found or the value cannot be parsed as an integer.
   int getInt(final String key, [final int defaultIfNotFound = 0]) {
     final dynamic value = this[key];
     if (value == null) {
@@ -132,6 +192,14 @@ extension MyJsonExtensions on MyJson {
     }
   }
 
+  /// Retrieves a string value from the JSON object for the given key.
+  ///
+  /// If the value for the specified key is `null`, the provided [defaultIfNotFound] value is returned.
+  /// If the value is a `String`, it is returned as is.
+  ///
+  /// @param key The key to retrieve the string value for.
+  /// @param defaultIfNotFound The default value to return if the key is not found or the value cannot be parsed as a string. Defaults to an empty string.
+  /// @return The string value associated with the key, or the default value if the key is not found or the value cannot be parsed as a string.
   String getString(
     final String key, [
     final String defaultIfNotFound = '',
@@ -156,6 +224,16 @@ extension MyJsonExtensions on MyJson {
     return defaultValue;
   }
 
+  /// Decodes the provided JSON string and returns the result as an instance of type [T].
+  ///
+  /// This method uses [jsonDecode] to parse the JSON string and then casts the result to the
+  /// specified generic type [T]. It is the caller's responsibility to ensure that the JSON
+  /// string can be successfully deserialized into the target type.
+  ///
+  /// Example usage:
+  ///
+  /// ```final myObject = JsonHelper.fromJson<MyClass>('{"key":"value"}');```
+  ///
   static T fromJson<T>(final String jsonString) {
     return jsonDecode(jsonString) as T;
   }
@@ -165,6 +243,20 @@ extension MyJsonExtensions on MyJson {
   }
 }
 
+/// Converts raw CSV text content into a list of [MyJson] objects.
+///
+/// The function takes a [fileContent] string, which is expected to be in CSV format.
+/// It parses the CSV content, extracts the header columns, and then creates a list
+/// of [MyJson] objects, where each object represents a row in the CSV data.
+///
+/// The function assumes that the CSV file has at least one row of data (excluding the header).
+/// If the CSV file is empty or has only the header row, an empty list will be returned.
+///
+/// Example usage:
+///
+/// final csvContent = await readFile('data.csv');
+/// final jsonObjects = convertFromRawCsvTextToListOfJSonObject(csvContent);
+///
 List<MyJson> convertFromRawCsvTextToListOfJSonObject(String fileContent) {
   List<MyJson> rows = [];
   List<List<String>> lines = getLinesFromRawTextWithSeparator(fileContent);

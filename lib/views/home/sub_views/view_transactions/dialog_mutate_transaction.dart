@@ -5,6 +5,16 @@ import 'package:money/core/widgets/dialog/dialog_full_screen.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 
+/// Shows a dialog that allows the user to mutate a transaction.
+///
+/// The dialog displays the transaction details and provides options to edit or confirm the transaction.
+///
+/// Parameters:
+/// - `context`: The build context used to display the dialog.
+/// - `transaction`: The transaction to be displayed and mutated in the dialog.
+///
+/// Returns:
+/// A `Future` that completes when the dialog is closed, with the result of the user's actions.
 Future<dynamic> showTransactionAndActions({
   required final BuildContext context,
   required final Transaction transaction,
@@ -18,6 +28,11 @@ Future<dynamic> showTransactionAndActions({
 }
 
 /// Dialog content
+/// A stateful widget that represents a dialog for mutating a transaction.
+///
+/// This widget is responsible for displaying the transaction details and providing options to edit or confirm the transaction.
+///
+/// The [transaction] parameter is required and represents the transaction to be displayed and mutated in the dialog.
 class DialogMutateTransaction extends StatefulWidget {
   const DialogMutateTransaction({
     required this.transaction,

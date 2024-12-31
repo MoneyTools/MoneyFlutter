@@ -97,6 +97,7 @@ class BadgePendingChanges extends StatelessWidget {
     );
   }
 
+  /// Returns a tooltip text string that summarizes the pending changes, including the number of added, modified, and deleted items, as well as the last time the changes were edited.
   String getTooltipText() {
     final String lastChangedOn = getElapsedTime(DataController.to.trackMutations.lastDateTimeChanged.value);
     return 'Added: ${DataController.to.trackMutations.added}\nModified: ${DataController.to.trackMutations.changed}\nDeleted: ${DataController.to.trackMutations.deleted}\n\nEdited $lastChangedOn';
