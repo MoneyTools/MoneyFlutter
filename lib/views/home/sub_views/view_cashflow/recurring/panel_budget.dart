@@ -3,10 +3,12 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
+import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
+import 'package:money/core/widgets/columns/column_header_button.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/money_widget.dart';
-import 'package:money/views/home/sub_views/adaptive_view/switch_views.dart';
+import 'package:money/views/home/sub_views/adaptive_view/menu_entry.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
 
 class PanelBudget extends StatefulWidget {
@@ -34,6 +36,9 @@ class _PanelBudgetState extends State<PanelBudget> {
   double sumForAllCategories = 0.00;
   double sumForAllCategoriesBudget = 0.00;
 
+  bool _sortAscending = false;
+  int _sortColumnIndex = 1;
+
   @override
   void initState() {
     super.initState();
@@ -52,75 +57,46 @@ class _PanelBudgetState extends State<PanelBudget> {
             child: Column(
               children: [
                 //
-                // Column title
+                // Column Header
                 //
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Expanded(
+                    buildColumnHeaderButton(
+                      context: context,
+                      text: 'Category',
+                      textAlign: TextAlign.start,
                       flex: 2,
-                      child: Text('Category'),
+                      sortIndicator: getSortIndicator(_sortColumnIndex, 0, _sortAscending),
+                      onPressed: () => _onColumnSort(0),
                     ),
-                    Expanded(
-                      child: Text(
-                        'Total',
-                        textAlign: TextAlign.end,
-                      ),
+                    buildColumnHeaderButton(
+                      context: context,
+                      text: 'Total',
+                      textAlign: TextAlign.end,
+                      sortIndicator: getSortIndicator(_sortColumnIndex, 1, _sortAscending),
+                      onPressed: () => _onColumnSort(1),
                     ),
-                    Expanded(
-                      child: Text(
-                        'Yearly',
-                        textAlign: TextAlign.end,
-                      ),
+                    buildColumnHeaderButton(
+                      context: context,
+                      text: 'Yearly',
+                      textAlign: TextAlign.end,
+                      sortIndicator: getSortIndicator(_sortColumnIndex, 2, _sortAscending),
+                      onPressed: () => _onColumnSort(2),
                     ),
-                    Expanded(
-                      child: Text(
-                        'Monthly',
-                        textAlign: TextAlign.end,
-                      ),
+                    buildColumnHeaderButton(
+                      context: context,
+                      text: 'Monthly',
+                      textAlign: TextAlign.end,
+                      sortIndicator: getSortIndicator(_sortColumnIndex, 3, _sortAscending),
+                      onPressed: () => _onColumnSort(3),
                     ),
-                    Expanded(
-                      child: Text(
-                        'Budgeted',
-                        textAlign: TextAlign.end,
-                      ),
-                    ),
-                  ],
-                ),
-
-                //
-                // Column values
-                //
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Expanded(
-                      flex: 2,
-                      child: Text(''),
-                    ),
-                    Expanded(
-                      child: MoneyWidget.fromDouble(
-                        sumForAllCategories,
-                        asTitle: true,
-                      ),
-                    ),
-                    Expanded(
-                      child: MoneyWidget.fromDouble(
-                        sumForAllCategories / widget.numberOfYears,
-                        asTitle: true,
-                      ),
-                    ),
-                    Expanded(
-                      child: MoneyWidget.fromDouble(
-                        (sumForAllCategories / widget.numberOfYears) / 12,
-                        asTitle: true,
-                      ),
-                    ),
-                    Expanded(
-                      child: MoneyWidget.fromDouble(
-                        sumForAllCategoriesBudget,
-                        asTitle: true,
-                      ),
+                    buildColumnHeaderButton(
+                      context: context,
+                      text: 'Budgeted',
+                      textAlign: TextAlign.end,
+                      sortIndicator: getSortIndicator(_sortColumnIndex, 4, _sortAscending),
+                      onPressed: () => _onColumnSort(4),
                     ),
                   ],
                 ),
@@ -205,6 +181,41 @@ class _PanelBudgetState extends State<PanelBudget> {
               ),
             ),
           ),
+
+          // Footer
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Expanded(
+                flex: 2,
+                child: Text(''),
+              ),
+              Expanded(
+                child: MoneyWidget.fromDouble(
+                  sumForAllCategories,
+                  asTitle: true,
+                ),
+              ),
+              Expanded(
+                child: MoneyWidget.fromDouble(
+                  sumForAllCategories / widget.numberOfYears,
+                  asTitle: true,
+                ),
+              ),
+              Expanded(
+                child: MoneyWidget.fromDouble(
+                  (sumForAllCategories / widget.numberOfYears) / 12,
+                  asTitle: true,
+                ),
+              ),
+              Expanded(
+                child: MoneyWidget.fromDouble(
+                  sumForAllCategoriesBudget,
+                  asTitle: true,
+                ),
+              ),
+            ],
+          ),
         ],
       ),
     );
@@ -217,6 +228,42 @@ class _PanelBudgetState extends State<PanelBudget> {
     items.forEach((item) {
       sumForAllCategories += item.sum;
       sumForAllCategoriesBudget += item.category.fieldBudget.value.toDouble();
+    });
+
+    _sort();
+  }
+
+  void _onColumnSort(int columnIndex) {
+    setState(() {
+      if (columnIndex == _sortColumnIndex) {
+        _sortAscending = !_sortAscending;
+      } else {
+        _sortColumnIndex = columnIndex;
+      }
+      _sort();
+    });
+  }
+
+  void _sort() {
+    items.sort((RecurringExpenses a, RecurringExpenses b) {
+      switch (_sortColumnIndex) {
+        case 0:
+          return sortByString(a.category.name, b.category.name, _sortAscending);
+        case 1:
+          return sortByValue(a.sum, b.sum, _sortAscending);
+        case 2:
+          return sortByValue(a.sum, b.sum, _sortAscending);
+        case 3:
+          return sortByValue(a.sum, b.sum, _sortAscending);
+        case 4:
+          return sortByValue(
+            a.category.fieldBudget.value.toDouble(),
+            b.category.fieldBudget.value.toDouble(),
+            _sortAscending,
+          );
+        default:
+          return sortByValue(a.sum, b.sum, _sortAscending);
+      }
     });
   }
 }

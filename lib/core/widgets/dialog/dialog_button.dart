@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/data/models/constants.dart';
-import 'package:money/views/home/sub_views/adaptive_view/switch_views.dart';
+import 'package:money/views/home/sub_views/adaptive_view/menu_entry.dart';
 
 class DialogActionButton extends StatelessWidget {
   const DialogActionButton({

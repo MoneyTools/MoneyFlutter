@@ -5,12 +5,12 @@ import 'package:money/core/widgets/columns/column_content_center.dart';
 Widget buildColumnHeaderButton({
   required BuildContext context,
   required String text,
-  required TextAlign textAlign,
-  required int flex,
-  required SortIndicator sortIndicator,
-  required bool hasFilters,
-  required VoidCallback? onPressed,
-  required VoidCallback? onLongPress,
+  TextAlign textAlign = TextAlign.left,
+  SortIndicator sortIndicator = SortIndicator.none,
+  int flex = 1,
+  bool hasFilters = false,
+  VoidCallback? onPressed,
+  VoidCallback? onLongPress,
 }) {
   return Expanded(
     flex: flex,
