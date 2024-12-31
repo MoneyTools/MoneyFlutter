@@ -43,7 +43,10 @@ class MoneyWidget extends StatelessWidget {
   }
 
   Widget _amountAsText(final BuildContext context) {
-    final double value = amountModel.toDouble();
+    double value = amountModel.toDouble();
+    if (value == double.infinity) {
+      value = 0.00;
+    }
 
     final style = TextStyle(
       fontFamily: 'RobotoMono',
@@ -52,7 +55,7 @@ class MoneyWidget extends StatelessWidget {
       fontWeight: FontWeight.w900,
     );
 
-    final valueAsString = Currency.getAmountAsStringUsingCurrency(
+    final String valueAsString = Currency.getAmountAsStringUsingCurrency(
       isConsideredZero((value)) ? 0.00 : value,
       iso4217code: amountModel.iso4217,
     );
