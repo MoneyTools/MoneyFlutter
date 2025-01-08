@@ -233,7 +233,7 @@ Widget getWidgetChartAmount(final double value, final TitleMeta meta) {
   );
 
   return SideTitleWidget(
-    axisSide: meta.axisSide,
+    meta: meta,
     child: widget,
   );
 }
