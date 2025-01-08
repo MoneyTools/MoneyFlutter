@@ -236,20 +236,21 @@ class StockChartWidgetState extends State<StockChartWidget> {
               } else {
                 splits = await _fetchSplitsFromTwelveData(widget.symbol);
               }
+              if (mounted) {
+                setState(() {
+                  _refreshing = false;
 
-              setState(() {
-                _refreshing = false;
+                  fromPriceHistoryToChartDataPoints(result);
 
-                fromPriceHistoryToChartDataPoints(result);
+                  // update the data model
+                  Data().stockSplits.setStockSplits(security!.uniqueId, splits);
 
-                // update the data model
-                Data().stockSplits.setStockSplits(security!.uniqueId, splits);
-
-                // refresh all of the UI part since if needed
-                if (DataController.to.trackMutations.isMutated()) {
-                  Data().updateAll();
-                }
-              });
+                  // refresh all of the UI part since if needed
+                  if (DataController.to.trackMutations.isMutated()) {
+                    Data().updateAll();
+                  }
+                });
+              }
             });
           },
         ),
