@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.11.05] 2025-01-09
+
+### Update
+
+- Improve the Budget list display
+
 ## [version 1.11.04] 2024-12-30
 
 ### Add

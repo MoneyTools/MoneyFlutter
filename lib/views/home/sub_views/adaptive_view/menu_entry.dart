@@ -44,7 +44,7 @@ class MenuEntry {
   factory MenuEntry.toAccounts({required final int accountId}) {
     return MenuEntry(
       icon: ViewId.viewAccounts.getIconData(),
-      title: 'Switch to Account',
+      title: 'Go to Account',
       onPressed: () {
         // Prepare the Account view to show only the selected account
         final accountInstance = Data().accounts.get(accountId);
@@ -72,7 +72,7 @@ class MenuEntry {
   }) {
     return MenuEntry(
       icon: ViewId.viewCategories.getIconData(),
-      title: 'Switch to Category',
+      title: 'Go to Category',
       onPressed: () {
         // Prepare the Transaction view Filter to show only the selected account
         PreferenceController.to.jumpToView(
@@ -109,7 +109,7 @@ class MenuEntry {
     // Jump to Stock view
     return MenuEntry(
       icon: ViewId.viewInvestments.getIconData(),
-      title: 'Switch to Investments',
+      title: 'Go to Investments',
       onPressed: () {
         PreferenceController.to.jumpToView(
           viewId: ViewId.viewInvestments,
@@ -135,7 +135,7 @@ class MenuEntry {
     // Jump to Stock view
     return MenuEntry(
       icon: ViewId.viewStocks.getIconData(),
-      title: 'Switch to Stocks',
+      title: 'Go to Stocks',
       onPressed: () {
         PreferenceController.to.jumpToView(
           viewId: ViewId.viewStocks,
@@ -154,7 +154,7 @@ class MenuEntry {
   }) {
     return MenuEntry(
       icon: ViewId.viewTransactions.getIconData(),
-      title: 'Switch to Transactions',
+      title: 'Go to Transactions',
       onPressed: () {
         // Prepare the Transaction view Filter to show only the selected account
         PreferenceController.to.jumpToView(

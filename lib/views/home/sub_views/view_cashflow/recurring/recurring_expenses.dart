@@ -1,3 +1,4 @@
+import 'package:money/core/helpers/ranges.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -9,6 +10,7 @@ class RecurringExpenses {
     this.sumIncome = 0,
     this.sumExpense = 0,
     this.sumBudget = 0,
+    this.dates,
   });
 
   final Category category;
@@ -17,6 +19,8 @@ class RecurringExpenses {
   double sumBudget = 0;
   double sumExpense = 0;
   double sumIncome = 0;
+
+  DateRange? dates = DateRange();
 
   static List<RecurringExpenses> getRecurringItems(int minYear, int maxYear) {
     List<RecurringExpenses> items = [];
@@ -30,10 +34,18 @@ class RecurringExpenses {
       }
 
       final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
-      final double sumOfTransactionsForCategory =
-          flatTransactions.fold<double>(0, (p, e) => p + e.fieldAmount.value.toDouble());
+
+      double sumOfTransactionsForCategory = 0;
+      DateRange dateRangeOfTransactions = DateRange();
+
+      for (final Transaction transaction in flatTransactions) {
+        sumOfTransactionsForCategory += transaction.fieldAmount.value.toDouble();
+        dateRangeOfTransactions.inflate(transaction.fieldDateTime.value);
+      }
 
       final RecurringExpenses item = RecurringExpenses(category, sumOfTransactionsForCategory, sumBudget: 1.12);
+      item.dates = dateRangeOfTransactions;
+
       items.add(item);
     }
     items.sort(
