@@ -566,7 +566,7 @@ Future<void> testEvents(WidgetTester tester) async {
       await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
 
       // Find the widget that displays the text 'Grocery'.
-      final groceryFinder = find.text('Grocery');
+      final groceryFinder = find.text('Grocery').first;
 
       // Tap on the widget.
       await tester.tap(groceryFinder);

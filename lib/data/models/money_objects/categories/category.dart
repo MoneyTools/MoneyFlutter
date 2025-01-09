@@ -407,6 +407,16 @@ class Category extends MoneyObject {
     );
   }
 
+  void getDescendants(List<Category> list) {
+    final Iterable<Category> allCategories = Data().categories.iterableList(includeDeleted: true);
+    for (final Category category in allCategories) {
+      if (category.fieldParentId.value == this.uniqueId) {
+        list.add(category);
+        category.getDescendants(list);
+      }
+    }
+  }
+
   static String getName(final Category? instance) {
     return instance == null ? '' : (instance).fieldName.value;
   }
