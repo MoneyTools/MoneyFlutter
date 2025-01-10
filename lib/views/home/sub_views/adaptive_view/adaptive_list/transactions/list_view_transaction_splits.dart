@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/money_widget.dart';
 import 'package:money/data/models/fields/field_filter.dart';
@@ -60,12 +61,14 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
             list: widget.transaction.splits,
             selectedItemIds: ValueNotifier<List<int>>([]),
             onSelectionChanged: (int _) {},
-            onLongPress: (context2, index) {
-              final MoneySplit instance = widget.transaction.splits[index];
-              showSplitAndActions(
-                context: context2,
-                split: instance,
-              );
+            onLongPress: (final BuildContext context2, final int uniqueId) {
+              final MoneySplit? instance = widget.transaction.splits.firstWhereOrNull((t) => t.uniqueId == uniqueId);
+              if (instance != null) {
+                showSplitAndActions(
+                  context: context2,
+                  split: instance,
+                );
+              }
             },
             scrollController: ScrollController(),
           ),

@@ -96,7 +96,7 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
     expect(table.isNotEmpty, true, reason: table.collectionName);
     final String text = table.firstItem(false).toString();
     // ignore: avoid_print
-    print('${table.collectionName}>$text');
+    // print('${table.collectionName}>$text');
     expect(text.isNotEmpty, true, reason: '${table.collectionName}=[$text]');
   }
 
