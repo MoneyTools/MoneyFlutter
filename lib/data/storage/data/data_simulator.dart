@@ -495,6 +495,7 @@ class DataSimulator {
             type: CategoryType.expense,
             color: '#FFFF0000',
           );
+      _categoryBills.fieldBudget.value.setAmount(100.00);
       _categoryBillsElectricity = Data().categories.addNewCategory(
             parentId: _categoryBills.uniqueId,
             name: 'Electricity',
@@ -589,6 +590,7 @@ class DataSimulator {
             parentId: _categorySalary.uniqueId,
             name: 'Paycheck',
           );
+      _categorySalaryPaycheck.fieldBudget.value.setAmount(900);
 
       _categorySalaryBonus = Data().categories.addNewCategory(
             parentId: _categorySalary.uniqueId,

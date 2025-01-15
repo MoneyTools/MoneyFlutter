@@ -163,9 +163,7 @@ class _PanelBudgetState extends State<PanelBudget> {
   Widget _buildContent() {
     switch (panelType) {
       case BudgetViewAs.list:
-        return Expanded(
-          child: isListEmpty ? CenterMessage(message: 'No budget income category found') : _buildList(),
-        );
+        return isListEmpty ? CenterMessage(message: 'No budget income category found') : _buildList();
 
       case BudgetViewAs.chart:
         return CenterMessage(message: 'CHART ');

@@ -200,7 +200,7 @@ Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
 
   await tapOnKeyString(tester, 'key_import_tab_free_style');
 
-  final textFieldInput = find.byKey(const Key('key_input_text_field_value')).first;
+  final textFieldInput = find.byKey(const Key('key_input_text_field_value')).at(0); // top most element found
   await inputTextToElement(
     tester,
     textFieldInput,
@@ -292,12 +292,6 @@ Future<void> testCashFlow(WidgetTester tester) async {
 
   await tapOnText(tester, 'NetWorth');
 
-  await tapOnText(tester, 'Incomes');
-
-  await tapOnText(tester, 'Expenses');
-
-  await tapOnText(tester, 'Budget');
-
   await tapOnText(tester, 'Trend');
 
   final barChartFinder = find.byType(BarChart);
@@ -352,7 +346,19 @@ Future<void> testCashFlow(WidgetTester tester) async {
   PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterText));
   PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText));
 
-  // back to Cashflow
+  await tapOnText(tester, 'Cashflow');
+
+  {
+    await tapOnText(tester, 'Budget');
+
+    await tapOnText(tester, 'List');
+
+    await tapOnText(tester, 'Chart');
+
+    await tapOnText(tester, 'Recurring');
+
+    await tapOnText(tester, 'Suggestion');
+  } // back to Cashflow
   await tapOnText(tester, 'Cashflow');
 }
 
@@ -566,7 +572,7 @@ Future<void> testEvents(WidgetTester tester) async {
       await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
 
       // Find the widget that displays the text 'Grocery'.
-      final groceryFinder = find.text('Grocery').first;
+      final Finder groceryFinder = find.text('Grocery').at(0); // top most element found
 
       // Tap on the widget.
       await tester.tap(groceryFinder);

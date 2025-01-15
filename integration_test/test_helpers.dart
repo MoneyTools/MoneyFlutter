@@ -10,7 +10,7 @@ Future<void> tapOnText(final WidgetTester tester, final String textToFind, {fina
   if (lastOneFound) {
     firstMatchingElement = firstMatchingElement.last;
   } else {
-    firstMatchingElement = firstMatchingElement.first;
+    firstMatchingElement = firstMatchingElement.at(0); // top most element
   }
 
   expect(firstMatchingElement, findsOneWidget);
@@ -19,7 +19,7 @@ Future<void> tapOnText(final WidgetTester tester, final String textToFind, {fina
 }
 
 Finder findByKeyString(final String keyString) {
-  final Finder firstMatchingElement = find.byKey(Key(keyString)).first;
+  final Finder firstMatchingElement = find.byKey(Key(keyString)).at(0); // top most element
   expect(firstMatchingElement, findsOneWidget);
   return firstMatchingElement;
 }
@@ -31,14 +31,14 @@ Future<void> tapOnKeyString(final WidgetTester tester, final String keyString) a
 }
 
 Future<void> tapOnKey(final WidgetTester tester, final Key key) async {
-  final firstMatchingElement = find.byKey(key).first;
+  final firstMatchingElement = find.byKey(key).at(0); // top most element
   expect(firstMatchingElement, findsOneWidget, reason: key.toString());
   await tester.tap(firstMatchingElement, warnIfMissed: false);
   await tester.myPump();
 }
 
 Future<void> tapOnWidgetType(final WidgetTester tester, final Type type) async {
-  final firstMatchingElement = find.byElementType(type).first;
+  final firstMatchingElement = find.byElementType(type).at(0); // top most element
   expect(firstMatchingElement, findsOneWidget);
   await tester.tap(firstMatchingElement, warnIfMissed: false);
   await tester.myPump();
@@ -55,7 +55,7 @@ Future<void> tapOnTextFromParentType(final WidgetTester tester, final Type type,
     reason: 'tapOnTextFromParentType "$textToFind"',
   );
 
-  firstMatchingElement = firstMatchingElement.first;
+  firstMatchingElement = firstMatchingElement.at(0); // top most element
 
   expect(firstMatchingElement, findsOneWidget);
   // await tester.tap(firstMatchingElement, warnIfMissed: false);
@@ -105,7 +105,7 @@ Future<Finder> selectListViewItemByText(final WidgetTester tester, final String 
     findsAny,
   );
 
-  firstMatchingElement = firstMatchingElement.first;
+  firstMatchingElement = firstMatchingElement.at(0); // top most element
 
   expect(firstMatchingElement, findsOneWidget);
   // for row we tap on the top left side to avoid any active widget in the row like "Split", "Accept suggestion"
@@ -191,14 +191,14 @@ Future<Finder> getFirstItemOfList(
     findsAtLeast(1),
   );
 
-  firstMatchingElement = firstMatchingElement.first;
+  firstMatchingElement = firstMatchingElement.at(0); // top most element
 
   expect(firstMatchingElement, findsOneWidget);
   return firstMatchingElement;
 }
 
 Future<void> inputText(WidgetTester tester, final String textToEnter) async {
-  final Finder filterInput = find.byType(TextField).first;
+  final Finder filterInput = find.byType(TextField).at(0); // top most element
   await inputTextToElement(tester, filterInput, textToEnter);
 }
 
@@ -209,7 +209,7 @@ Future<void> inputTextToElement(WidgetTester tester, Finder filterInput, String 
 }
 
 Future<void> inputTextToElementByKey(WidgetTester tester, Key keyToElement, String textToEnter) async {
-  final firstMatchingElement = find.byKey(keyToElement).first;
+  final firstMatchingElement = find.byKey(keyToElement).at(0); // top most element
   await tester.enterText(firstMatchingElement, textToEnter);
   await tester.testTextInput.receiveAction(TextInputAction.done);
   await tester.myPump();
@@ -226,7 +226,7 @@ Future<void> inputTextToTextFieldWithThisLabel(
   final String labelToFind,
   final String textToInput,
 ) async {
-  Finder textFieldFinder = findTextFieldByLabel(labelToFind).first;
+  Finder textFieldFinder = findTextFieldByLabel(labelToFind).at(0); // top most element
   expect(textFieldFinder, findsOneWidget, reason: 'searching for label $labelToFind');
   await inputTextToElement(tester, textFieldFinder, textToInput);
 }
