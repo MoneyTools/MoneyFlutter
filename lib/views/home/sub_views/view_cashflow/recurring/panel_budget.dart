@@ -16,6 +16,7 @@ import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/menu_entry.dart';
+import 'package:money/views/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
 
 class PanelBudget extends StatefulWidget {
@@ -26,7 +27,6 @@ class PanelBudget extends StatefulWidget {
     required this.dateRangeSearch,
     required this.minYear,
     required this.maxYear,
-    required this.viewRecurringAs,
   });
 
   final List<CategoryType> categoryTypes;
@@ -34,7 +34,6 @@ class PanelBudget extends StatefulWidget {
   final int maxYear;
   final int minYear;
   final String title;
-  final CashflowViewAs viewRecurringAs;
 
   @override
   State<PanelBudget> createState() => _PanelBudgetState();
@@ -44,7 +43,10 @@ class PanelBudget extends StatefulWidget {
 
 class _PanelBudgetState extends State<PanelBudget> {
   List<RecurringExpenses> items = [];
-  int panelType = 0;
+  late BudgetViewAs panelType = isForIncome
+      ? PreferenceController.to.budgetViewAsForIncomes.value
+      : PreferenceController.to.budgetViewAsForExpenses.value;
+
   double sumForAllCategories = 0.00;
   double sumForAllCategoriesBudget = 0.00;
 
@@ -66,18 +68,9 @@ class _PanelBudgetState extends State<PanelBudget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           sectionHeader(context),
-          switch (panelType) {
-            0 => Expanded(
-                child: isListEmpty ? CenterMessage(message: 'No budget income category found') : _buildList(),
-              ),
-            1 => CenterMessage(message: 'CHART '),
-            2 => _buildSuggestion(
-                isForIncome
-                    ? _budget.categoryBudgetsIncomes.entries.toList()
-                    : _budget.categoryBudgetsExpenses.entries.toList(),
-              ),
-            _ => const SizedBox(), // Default case
-          },
+          Expanded(
+            child: _buildContent(),
+          ),
         ],
       ),
     );
@@ -126,22 +119,31 @@ class _PanelBudgetState extends State<PanelBudget> {
         mySegmentSelector(
           segments: [
             ButtonSegment<int>(
-              value: 0,
+              value: BudgetViewAs.list.index,
               label: Text('List'),
             ),
             ButtonSegment<int>(
-              value: 1,
+              value: BudgetViewAs.chart.index,
               label: Text('Chart'),
             ),
             ButtonSegment<int>(
-              value: 2,
+              value: BudgetViewAs.recurrences.index,
+              label: Text('Recurring'),
+            ),
+            ButtonSegment<int>(
+              value: 3,
               label: Text('Suggestion'),
             ),
           ],
-          selectedId: panelType,
+          selectedId: panelType.index,
           onSelectionChanged: (final int newSelection) {
             setState(() {
-              panelType = newSelection;
+              panelType = BudgetViewAs.values[newSelection];
+              if (isForIncome) {
+                PreferenceController.to.budgetViewAsForIncomes.value = BudgetViewAs.values[newSelection];
+              } else {
+                PreferenceController.to.budgetViewAsForExpenses.value = BudgetViewAs.values[newSelection];
+              }
             });
           },
         ),
@@ -156,6 +158,38 @@ class _PanelBudgetState extends State<PanelBudget> {
         color: color,
       ),
     );
+  }
+
+  Widget _buildContent() {
+    switch (panelType) {
+      case BudgetViewAs.list:
+        return Expanded(
+          child: isListEmpty ? CenterMessage(message: 'No budget income category found') : _buildList(),
+        );
+
+      case BudgetViewAs.chart:
+        return CenterMessage(message: 'CHART ');
+
+      case BudgetViewAs.recurrences:
+        final dateRangeTransactions = DateRange.fromStarEndYears(
+          Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
+          Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
+        );
+
+        return PanelRecurring(
+          dateRangeSearch: dateRangeTransactions,
+          minYear: widget.minYear,
+          maxYear: widget.maxYear,
+          forIncome: isForIncome,
+        );
+
+      case BudgetViewAs.suggestions:
+        return _buildSuggestion(
+          isForIncome
+              ? _budget.categoryBudgetsIncomes.entries.toList()
+              : _budget.categoryBudgetsExpenses.entries.toList(),
+        );
+    }
   }
 
   Widget _buildList() {

@@ -16,27 +16,25 @@ class PanelRecurring extends StatefulWidget {
     required this.dateRangeSearch,
     required this.minYear,
     required this.maxYear,
-    required this.viewRecurringAs,
+    required this.forIncome,
   });
 
   final DateRange dateRangeSearch;
+  final bool forIncome;
   final int maxYear;
   final int minYear;
-  final CashflowViewAs viewRecurringAs;
 
   @override
   State<PanelRecurring> createState() => _PanelRecurringState();
 }
 
 class _PanelRecurringState extends State<PanelRecurring> {
-  late bool forIncomeTransaction;
   List<RecurringPayment> recurringPayments = [];
 
   @override
   void initState() {
     super.initState();
-    forIncomeTransaction = widget.viewRecurringAs == CashflowViewAs.recurringIncomes;
-    initRecurringTransactions(forIncome: forIncomeTransaction);
+    initRecurringTransactions(forIncome: widget.forIncome);
   }
 
   @override
@@ -54,7 +52,7 @@ class _PanelRecurringState extends State<PanelRecurring> {
             dateRangeSearch: widget.dateRangeSearch,
             dateRangeSelected: DateRange.fromStarEndYears(widget.minYear, widget.maxYear),
             payment: payment,
-            forIncomeTransaction: forIncomeTransaction,
+            forIncomeTransaction: widget.forIncome,
           );
         },
       ),
@@ -116,14 +114,6 @@ class _PanelRecurringState extends State<PanelRecurring> {
 
     // get all transaction Income | Expenses
     findMonthlyRecurringPayments(flatTransactions, forIncome);
-
-    // Sort descending - biggest amount first
-    if (widget.viewRecurringAs == CashflowViewAs.recurringIncomes) {
-      recurringPayments.sort((a, b) => b.total.compareTo(a.total));
-    }
-    if (widget.viewRecurringAs == CashflowViewAs.recurringExpenses) {
-      recurringPayments.sort((a, b) => a.total.compareTo(b.total));
-    }
   }
 
   bool isMonthlyRecurrence(List<int> months) {

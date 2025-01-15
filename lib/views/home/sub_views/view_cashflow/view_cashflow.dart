@@ -14,7 +14,6 @@ import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view.dart';
 import 'package:money/views/home/sub_views/view_cashflow/net_worth_chart.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/panel_budget.dart';
-import 'package:money/views/home/sub_views/view_cashflow/recurring/panel_recurring.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/panel_trend.dart';
 import 'package:money/views/home/sub_views/view_cashflow/sankey_panel.dart';
 import 'package:money/views/home/sub_views/view_header.dart';
@@ -128,21 +127,6 @@ class ViewCashFlowState extends ViewWidgetState {
             _buildSelectView(),
 
             //
-            // Optional settings for Recurrence
-            //
-            if ([CashflowViewAs.recurringExpenses, CashflowViewAs.recurringIncomes]
-                .contains(PreferenceController.to.cashflowViewAs.value))
-              NumberPicker(
-                title: 'Occurrence',
-                minValue: 2,
-                maxValue: 12,
-                selectedNumber: PreferenceController.to.cashflowRecurringOccurrences.value,
-                onChanged: (int value) {
-                  PreferenceController.to.cashflowRecurringOccurrences.value = value;
-                },
-              ),
-
-            //
             // Optional settings for NetWorth
             //
             if (CashflowViewAs.netWorthOverTime == PreferenceController.to.cashflowViewAs.value)
@@ -209,20 +193,12 @@ class ViewCashFlowState extends ViewWidgetState {
           label: const Text('NetWorth'),
         ),
         ButtonSegment<int>(
-          value: CashflowViewAs.recurringIncomes.index,
-          label: const Text('Incomes'),
-        ),
-        ButtonSegment<int>(
-          value: CashflowViewAs.recurringExpenses.index,
-          label: const Text('Expenses'),
+          value: CashflowViewAs.trend.index,
+          label: const Text('Trend'),
         ),
         ButtonSegment<int>(
           value: CashflowViewAs.budget.index,
           label: const Text('Budget'),
-        ),
-        ButtonSegment<int>(
-          value: CashflowViewAs.trend.index,
-          label: const Text('Trend'),
         ),
       ],
       selectedId: PreferenceController.to.cashflowViewAs.value.index,
@@ -250,21 +226,6 @@ class ViewCashFlowState extends ViewWidgetState {
           maxYear: this.selectedYearEnd,
         );
 
-      case CashflowViewAs.recurringIncomes:
-        return PanelRecurring(
-          dateRangeSearch: dateRangeTransactions,
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
-        );
-
-      case CashflowViewAs.recurringExpenses:
-        return PanelRecurring(
-          dateRangeSearch: dateRangeTransactions,
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
-        );
       case CashflowViewAs.budget:
         return Column(
           children: [
@@ -275,7 +236,6 @@ class ViewCashFlowState extends ViewWidgetState {
                 dateRangeSearch: dateRangeTransactions,
                 minYear: this.selectedYearStart,
                 maxYear: this.selectedYearEnd,
-                viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
               ),
             ),
             Expanded(
@@ -285,7 +245,6 @@ class ViewCashFlowState extends ViewWidgetState {
                 dateRangeSearch: dateRangeTransactions,
                 minYear: this.selectedYearStart,
                 maxYear: this.selectedYearEnd,
-                viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
               ),
             ),
           ],

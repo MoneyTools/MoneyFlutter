@@ -22,6 +22,8 @@ const List<String> themeColorNames = <String>[
 
 const String settingKeyCashflowRecurringOccurrences = 'keyCashflowOccurrences';
 const String settingKeyCashflowView = 'keyCashflowView';
+const String settingKeyBudgetViewAsIncomes = 'keyBudgetViewAsIncomes';
+const String settingKeyBudgetViewAsExpenses = 'keyBudgetViewAsExpenses';
 const String settingKeyDarkMode = 'themeDarkMode';
 const String settingKeyTheme = 'themeColor';
 const String settingKeyDetailsPanelExpanded = 'isDetailsPanelExpanded';

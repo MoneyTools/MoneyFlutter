@@ -19,6 +19,8 @@ class PreferenceController extends GetxController {
   final RxBool isReady = false.obs;
   final RxBool useYahooStock = true.obs;
 
+  Rx<BudgetViewAs> budgetViewAsForExpenses = BudgetViewAs.list.obs;
+  Rx<BudgetViewAs> budgetViewAsForIncomes = BudgetViewAs.list.obs;
   RxInt cashflowRecurringOccurrences = 12.obs;
   Rx<CashflowViewAs> cashflowViewAs = CashflowViewAs.sankey.obs;
 
@@ -180,6 +182,9 @@ class PreferenceController extends GetxController {
     _apiKeyForStocks.value = getString(settingKeyStockApiKey, '');
 
     cashflowViewAs.value = CashflowViewAs.values[getInt(settingKeyCashflowView, CashflowViewAs.sankey.index)];
+    budgetViewAsForIncomes.value = BudgetViewAs.values[getInt(settingKeyBudgetViewAsIncomes, BudgetViewAs.list.index)];
+    budgetViewAsForExpenses.value =
+        BudgetViewAs.values[getInt(settingKeyBudgetViewAsExpenses, BudgetViewAs.list.index)];
     cashflowRecurringOccurrences.value = getInt(settingKeyCashflowRecurringOccurrences, 12);
   }
 
@@ -277,8 +282,13 @@ void switchViewTransactionForPayee(final String payeeName) {
 enum CashflowViewAs {
   sankey,
   netWorthOverTime,
-  recurringIncomes,
-  recurringExpenses,
   budget,
   trend,
+}
+
+enum BudgetViewAs {
+  list,
+  chart,
+  recurrences,
+  suggestions,
 }
