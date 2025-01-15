@@ -8,11 +8,13 @@ class BudgetRecommendation {
     required this.minimumExpense,
     required this.maximumExpense,
     required this.projectedIncome,
-    required this.categoryBudgets,
+    required this.categoryBudgetsIncomes,
+    required this.categoryBudgetsExpenses,
     required this.savingsRate,
   });
 
-  final Map<String, ExpenseBudget> categoryBudgets;
+  final Map<String, BudgetCumulator> categoryBudgetsExpenses;
+  final Map<String, BudgetCumulator> categoryBudgetsIncomes;
   final double maximumExpense;
   final double minimumExpense;
   final double projectedIncome;
@@ -20,8 +22,8 @@ class BudgetRecommendation {
   final double savingsRate;
 }
 
-class ExpenseBudget {
-  ExpenseBudget({
+class BudgetCumulator {
+  BudgetCumulator({
     required this.monthlyAmount,
     required this.frequency,
     required this.originalAmount,
@@ -86,7 +88,8 @@ class BudgetAnalyzer {
     final incomeStats = _calculateStatistics(monthlyIncome.values.toList());
     final expenseStats = _calculateStatistics(monthlyExpenses.values.toList());
 
-    final categoryBudgets = _calculateCategoryBudgets(expenseTransactions);
+    final Map<String, BudgetCumulator> categoryBudgetsIncomes = _calculateCategoryBudgets(incomeTransactions);
+    final Map<String, BudgetCumulator> categoryBudgetsExpenses = _calculateCategoryBudgets(expenseTransactions);
     final savingsRate = _calculateSavingsRate(monthlyIncome, monthlyExpenses);
 
     return BudgetRecommendation(
@@ -94,7 +97,8 @@ class BudgetAnalyzer {
       minimumExpense: expenseStats.average * 0.9,
       maximumExpense: expenseStats.average * 1.2,
       projectedIncome: incomeStats.average * (1 + incomeStats.trend),
-      categoryBudgets: categoryBudgets,
+      categoryBudgetsIncomes: categoryBudgetsIncomes,
+      categoryBudgetsExpenses: categoryBudgetsExpenses,
       savingsRate: savingsRate,
     );
   }
@@ -107,7 +111,7 @@ class BudgetAnalyzer {
     return totalAmount / transactions.length;
   }
 
-  Map<String, ExpenseBudget> _calculateCategoryBudgets(List<Transaction> expenses) {
+  Map<String, BudgetCumulator> _calculateCategoryBudgets(List<Transaction> expenses) {
     // Group transactions by category
     final categoryTransactions = <String, List<Transaction>>{};
     for (final transaction in expenses) {
@@ -127,7 +131,7 @@ class BudgetAnalyzer {
 
       return MapEntry(
         category,
-        ExpenseBudget(
+        BudgetCumulator(
           monthlyAmount: monthlyAmount,
           frequency: frequency,
           originalAmount: originalAmount,

@@ -24,11 +24,23 @@ class RecurringExpenses {
 
   DateRange? dates = DateRange();
 
-  static List<RecurringExpenses> getRecurringItems(final int minYear, final int maxYear) {
+  static List<RecurringExpenses> getBudgetedTransactions(
+    final int minYear,
+    final int maxYear,
+    final bool onlyNonZeroBudget,
+    final List<CategoryType> categoryTypes,
+  ) {
     List<RecurringExpenses> items = [];
 
-    final recurringCategories =
-        Data().categories.iterableList().where((c) => c.fieldType.value == CategoryType.recurringExpense);
+    final Iterable<Category> recurringCategories = Data().categories.iterableList().where((c) {
+      if (!categoryTypes.contains(c.fieldType.value)) {
+        return false;
+      }
+      if (onlyNonZeroBudget && c.fieldBudget.value.toDouble() == 0) {
+        return false;
+      }
+      return true;
+    });
 
     for (final Category category in recurringCategories) {
       List<Category> listOfDescendants = [category]; // include this Category

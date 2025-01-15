@@ -111,13 +111,7 @@ class Box extends StatelessWidget {
             padding: const EdgeInsets.symmetric(
               horizontal: SizeForPadding.medium,
             ),
-            child: title.isEmpty
-                ? header
-                : SelectableText(
-                    title,
-                    style: getTextTheme(context).titleSmall,
-                    textAlign: TextAlign.center,
-                  ),
+            child: title.isEmpty ? header : headerText(context, title),
           ),
         ),
       ),
@@ -186,4 +180,12 @@ class BoxWithScrollingContent extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget headerText(final BuildContext context, final String title, {final large = false}) {
+  return SelectableText(
+    title,
+    style: large ? getTextTheme(context).titleLarge : getTextTheme(context).titleSmall,
+    textAlign: TextAlign.center,
+  );
 }

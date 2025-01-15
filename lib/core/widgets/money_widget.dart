@@ -44,7 +44,7 @@ class MoneyWidget extends StatelessWidget {
 
   Widget _amountAsText(final BuildContext context) {
     double value = amountModel.toDouble();
-    if (value == double.infinity) {
+    if (!value.isFinite) {
       value = 0.00;
     }
 

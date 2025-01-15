@@ -1,14 +1,16 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
+import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/columns/column_header_button.dart';
 import 'package:money/core/widgets/dialog/dialog_button.dart';
 import 'package:money/core/widgets/money_widget.dart';
+import 'package:money/core/widgets/my_segment.dart';
 import 'package:money/core/widgets/token_text.dart';
+import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/budget.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
@@ -19,15 +21,19 @@ import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_exp
 class PanelBudget extends StatefulWidget {
   const PanelBudget({
     super.key,
+    required this.title,
+    required this.categoryTypes,
     required this.dateRangeSearch,
     required this.minYear,
     required this.maxYear,
     required this.viewRecurringAs,
   });
 
+  final List<CategoryType> categoryTypes;
   final DateRange dateRangeSearch;
   final int maxYear;
   final int minYear;
+  final String title;
   final CashflowViewAs viewRecurringAs;
 
   @override
@@ -38,6 +44,7 @@ class PanelBudget extends StatefulWidget {
 
 class _PanelBudgetState extends State<PanelBudget> {
   List<RecurringExpenses> items = [];
+  int panelType = 0;
   double sumForAllCategories = 0.00;
   double sumForAllCategoriesBudget = 0.00;
 
@@ -58,10 +65,19 @@ class _PanelBudgetState extends State<PanelBudget> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: _buildListOfExpenses(),
-          ),
-          _buildSuggestion(),
+          sectionHeader(context),
+          switch (panelType) {
+            0 => Expanded(
+                child: isListEmpty ? CenterMessage(message: 'No budget income category found') : _buildList(),
+              ),
+            1 => CenterMessage(message: 'CHART '),
+            2 => _buildSuggestion(
+                isForIncome
+                    ? _budget.categoryBudgetsIncomes.entries.toList()
+                    : _budget.categoryBudgetsExpenses.entries.toList(),
+              ),
+            _ => const SizedBox(), // Default case
+          },
         ],
       ),
     );
@@ -82,7 +98,8 @@ class _PanelBudgetState extends State<PanelBudget> {
     final BudgetAnalyzer analyzer = BudgetAnalyzer(transactions);
     _budget = analyzer.calculateMonthlyBudget();
 
-    items = RecurringExpenses.getRecurringItems(widget.minYear, widget.maxYear);
+    items = RecurringExpenses.getBudgetedTransactions(widget.minYear, widget.maxYear, true, widget.categoryTypes);
+
     sumForAllCategories = 0.00;
     sumForAllCategoriesBudget = 0.00;
     items.forEach((item) {
@@ -91,6 +108,45 @@ class _PanelBudgetState extends State<PanelBudget> {
     });
 
     _sort();
+  }
+
+  bool get isForIncome => widget.categoryTypes.contains(CategoryType.income);
+
+  bool get isListEmpty {
+    return items.isEmpty;
+  }
+
+  Widget sectionHeader(final BuildContext context) {
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: headerText(context, widget.title, large: true),
+        ),
+        mySegmentSelector(
+          segments: [
+            ButtonSegment<int>(
+              value: 0,
+              label: Text('List'),
+            ),
+            ButtonSegment<int>(
+              value: 1,
+              label: Text('Chart'),
+            ),
+            ButtonSegment<int>(
+              value: 2,
+              label: Text('Suggestion'),
+            ),
+          ],
+          selectedId: panelType,
+          onSelectionChanged: (final int newSelection) {
+            setState(() {
+              panelType = newSelection;
+            });
+          },
+        ),
+      ],
+    );
   }
 
   Widget verticalLine(Color color) {
@@ -102,7 +158,7 @@ class _PanelBudgetState extends State<PanelBudget> {
     );
   }
 
-  Widget _buildListOfExpenses() {
+  Widget _buildList() {
     final Color dividersColor = Theme.of(context).dividerColor.withAlpha(100);
 
     return Column(
@@ -342,20 +398,20 @@ class _PanelBudgetState extends State<PanelBudget> {
     );
   }
 
-  Widget _buildSuggestion() {
+  Widget _buildSuggestion(List<MapEntry<String, BudgetCumulator>> list) {
     List<Widget> widgets = [];
 
-    final List<MapEntry<String, ExpenseBudget>> list = _budget.categoryBudgets.entries.toList();
     list.sort(
       (a, b) => a.value.monthlyAmount.compareTo(b.value.monthlyAmount),
     );
 
-    for (final MapEntry<String, ExpenseBudget> categoryBudget in list) {
+    for (final MapEntry<String, BudgetCumulator> categoryBudget in list) {
       widgets.add(
         Row(
           children: [
             _categoryContextMenu(Data().categories.getByName(categoryBudget.key)!),
             Expanded(
+              flex: 2,
               child: TokenText(categoryBudget.key),
             ),
             Expanded(
@@ -368,19 +424,17 @@ class _PanelBudgetState extends State<PanelBudget> {
         ),
       );
     }
-    return ExpansionTile(
-      title: const Text('Budget Suggestions'),
-      children: [
-        SizedBox(
-          height: 400,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: widgets,
-            ),
+    return Center(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 800),
+        height: 400,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widgets,
           ),
         ),
-      ],
+      ),
     );
   }
 

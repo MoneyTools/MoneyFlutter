@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.11.06] 2025-01-15
+
+### Add
+
+- Include Incomes categories in Budget View
+  
 ## [version 1.11.05] 2025-01-09
 
 ### Update

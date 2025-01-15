@@ -266,11 +266,29 @@ class ViewCashFlowState extends ViewWidgetState {
           viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
         );
       case CashflowViewAs.budget:
-        return PanelBudget(
-          dateRangeSearch: dateRangeTransactions,
-          minYear: this.selectedYearStart,
-          maxYear: this.selectedYearEnd,
-          viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
+        return Column(
+          children: [
+            Expanded(
+              child: PanelBudget(
+                title: 'Incomes',
+                categoryTypes: [CategoryType.income, CategoryType.investment, CategoryType.saving],
+                dateRangeSearch: dateRangeTransactions,
+                minYear: this.selectedYearStart,
+                maxYear: this.selectedYearEnd,
+                viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
+              ),
+            ),
+            Expanded(
+              child: PanelBudget(
+                title: 'Expenses',
+                categoryTypes: [CategoryType.expense, CategoryType.recurringExpense],
+                dateRangeSearch: dateRangeTransactions,
+                minYear: this.selectedYearStart,
+                maxYear: this.selectedYearEnd,
+                viewRecurringAs: PreferenceController.to.cashflowViewAs.value,
+              ),
+            ),
+          ],
         );
       case CashflowViewAs.trend:
         return Obx(() {
