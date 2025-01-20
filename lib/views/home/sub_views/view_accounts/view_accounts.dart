@@ -13,6 +13,7 @@ import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/core/widgets/text_title.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/accounts/account_types_enum.dart';
 import 'package:money/data/models/money_objects/accounts/accounts.dart';
@@ -103,8 +104,8 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                     PreferenceController.to.jumpToView(
                       viewId: ViewId.viewTransactions,
                       selectedId: matchingTransaction.uniqueId,
-                      columnFilter: [],
                       textFilter: '',
+                      columnFilters: null,
                     );
                     return;
                   }

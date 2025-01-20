@@ -12,6 +12,7 @@ import 'package:money/core/widgets/my_segment.dart';
 import 'package:money/core/widgets/token_text.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/data/models/budget.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -473,7 +474,30 @@ class _PanelBudgetState extends State<PanelBudget> {
   Widget _categoryContextMenu(final Category category) {
     return buildMenuButton(
       [
+        // View - Transactions
+        MenuEntry.toTransactions(
+          transactionId: -1,
+          filters: FieldFilters(
+            [
+              FieldFilter(
+                fieldName: Constants.viewTransactionFieldNameCategory,
+                strings: [category.name],
+              ),
+              FieldFilter(
+                fieldName: Constants.viewTransactionFieldNameDate,
+                byDateRange: true,
+                strings: [
+                  '${widget.minYear}-01-01',
+                  '${widget.maxYear}-12-31',
+                ],
+              ),
+            ],
+          ),
+        ),
+
+        // View - Category
         MenuEntry.toCategory(category: category),
+        // Edit Category
         MenuEntry.editCategory(
           category: category,
           onApplyChange: () {

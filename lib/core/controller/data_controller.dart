@@ -118,8 +118,8 @@ class DataController extends GetxController {
     PreferenceController.to.jumpToView(
       viewId: ViewId.viewAccounts,
       selectedId: newAccount.uniqueId,
-      columnFilter: [],
       textFilter: '',
+      columnFilters: null,
     );
   }
 

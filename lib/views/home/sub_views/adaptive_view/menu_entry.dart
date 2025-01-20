@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/snack_bar.dart';
-import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -52,8 +52,8 @@ class MenuEntry {
           PreferenceController.to.jumpToView(
             viewId: ViewId.viewAccounts,
             selectedId: accountId,
-            columnFilter: [],
             textFilter: '',
+            columnFilters: null,
           );
 
           if (accountInstance.isClosed()) {
@@ -114,8 +114,8 @@ class MenuEntry {
         PreferenceController.to.jumpToView(
           viewId: ViewId.viewInvestments,
           selectedId: -1,
-          columnFilter: FieldFilters(filters).toStringList(),
           textFilter: '',
+          columnFilters: FieldFilters(filters),
         );
       },
     );
@@ -140,7 +140,7 @@ class MenuEntry {
         PreferenceController.to.jumpToView(
           viewId: ViewId.viewStocks,
           selectedId: -1,
-          columnFilter: FieldFilters([fieldFilterToUse]).toStringList(),
+          columnFilters: FieldFilters([fieldFilterToUse]),
           textFilter: '',
         );
       },
@@ -160,7 +160,7 @@ class MenuEntry {
         PreferenceController.to.jumpToView(
           viewId: ViewId.viewTransactions,
           selectedId: transactionId,
-          columnFilter: filters?.toStringList() ?? [],
+          columnFilters: filters,
           textFilter: filterText,
         );
       },

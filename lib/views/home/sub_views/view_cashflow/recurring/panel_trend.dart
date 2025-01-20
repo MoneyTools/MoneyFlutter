@@ -8,7 +8,7 @@ import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/chart.dart';
 import 'package:money/core/widgets/money_widget.dart';
-import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_cashflow/recurring/recurring_expenses.dart';
@@ -146,7 +146,7 @@ class _PanelTrendState extends State<PanelTrend> {
               PreferenceController.to.jumpToView(
                 viewId: ViewId.viewTransactions,
                 selectedId: -1,
-                columnFilter: FieldFilters([fieldFilterToUseForYear, fieldFilterToUseForCategories]).toStringList(),
+                columnFilters: FieldFilters([fieldFilterToUseForYear, fieldFilterToUseForCategories]),
                 textFilter: '',
               );
             }

@@ -2,7 +2,7 @@
 import 'package:money/core/helpers/date_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/widgets.dart';
-import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/money_objects.dart';
 
 // Exports
@@ -106,12 +106,25 @@ class Fields<T> {
   ) {
     for (final FieldFilter filter in filterByFieldsValue.list) {
       final Field fieldDefinition = getFieldByName(filter.fieldName);
-      final String fieldValueAsString = _getFieldValueAsStringForFiltering(
-        objectInstance,
-        fieldDefinition,
-      );
-      if (!filter.contains(fieldValueAsString)) {
-        return false;
+      if (filter.byDateRange) {
+        // caller supplied a date range
+        final DateTime date = _getFieldValueAsDate(
+          objectInstance,
+          fieldDefinition,
+        );
+
+        if (!filter.asDateRange.isBetweenEqual(date)) {
+          return false;
+        }
+      } else {
+        // using a list of strings to match
+        final String fieldValueAsString = _getFieldValueAsStringForFiltering(
+          objectInstance,
+          fieldDefinition,
+        );
+        if (!filter.contains(fieldValueAsString)) {
+          return false;
+        }
       }
     }
     return true;
@@ -142,6 +155,14 @@ class Fields<T> {
     }
   }
 
+  DateTime _getFieldValueAsDate(
+    final MoneyObject objectInstance,
+    final Field<dynamic> fieldDefinition,
+  ) {
+    final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+    return fieldValue as DateTime;
+  }
+
   /// Converts the given field value to a string representation suitable for filtering.
   ///
   /// For date fields, the value is converted to a string in the format "YYYY-MM-DD" without the time component.
@@ -154,7 +175,7 @@ class Fields<T> {
   /// @return The string representation of the field value, suitable for filtering.
   String _getFieldValueAsStringForFiltering(
     final MoneyObject objectInstance,
-    Field<dynamic> fieldDefinition,
+    final Field<dynamic> fieldDefinition,
   ) {
     switch (fieldDefinition.type) {
       case FieldType.widget:
@@ -165,7 +186,7 @@ class Fields<T> {
         }
 
       case FieldType.date:
-        final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+        final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
         return dateToString(fieldValue);
 
       case FieldType.quantity:

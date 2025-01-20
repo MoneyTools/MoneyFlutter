@@ -1,6 +1,6 @@
 import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/selection_controller.dart';
-import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_single_selection.dart';

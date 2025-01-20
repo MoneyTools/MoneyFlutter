@@ -3,6 +3,7 @@ import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/transactions/transactions.dart';

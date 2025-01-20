@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/helpers/json_helper.dart';
 import 'package:money/data/models/constants.dart';
-import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Controller for managing application preferences and settings.
@@ -158,12 +158,14 @@ class PreferenceController extends GetxController {
   void jumpToView({
     required final ViewId viewId,
     required final int selectedId,
-    final List<String> columnFilter = const [],
     final String textFilter = '',
+    final FieldFilters? columnFilters,
   }) async {
     // First set all filters on the destination view
     await setString(viewId.getViewPreferenceId(settingKeyFilterText), textFilter);
-    await setStringList(viewId.getViewPreferenceId(settingKeyFilterColumnsText), columnFilter);
+    if (columnFilters != null) {
+      await setString(viewId.getViewPreferenceId(settingKeyFiltersColumns), columnFilters.toJsonString());
+    }
 
     // Set the last selected item, in order to have it selected when the view changes
     if (selectedId != -1) {
@@ -271,7 +273,7 @@ void switchViewTransactionForPayee(final String payeeName) {
   );
 
   PreferenceController.to.setStringList(
-    ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText),
+    ViewId.viewTransactions.getViewPreferenceId(settingKeyFiltersColumns),
     fieldFilters.toStringList(),
   );
 

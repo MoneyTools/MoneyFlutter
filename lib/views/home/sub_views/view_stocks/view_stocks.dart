@@ -4,6 +4,7 @@ import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/chart_event.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/investments/investments.dart';
 import 'package:money/data/models/money_objects/investments/stock_cumulative.dart';

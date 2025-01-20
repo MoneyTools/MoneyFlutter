@@ -4,10 +4,17 @@ import 'package:money/core/helpers/string_helper.dart';
 class DateRange {
   DateRange({this.min, this.max});
 
-  factory DateRange.fromStarEndYears(int yearStart, int yearEnd) {
+  factory DateRange.fromStarEndYears(final int yearStart, final int yearEnd) {
     return DateRange(
       min: DateTime(yearStart, 1, 1),
       max: DateTime(yearEnd + 1).subtract(const Duration(microseconds: 1)),
+    );
+  }
+
+  factory DateRange.fromText(final String minDateAsText, final String maxDateAsText) {
+    return DateRange(
+      min: DateTime.parse(minDateAsText),
+      max: DateTime.parse(maxDateAsText),
     );
   }
 

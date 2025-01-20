@@ -74,8 +74,8 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                   PreferenceController.to.jumpToView(
                     viewId: ViewId.viewCategories,
                     selectedId: transaction.fieldCategoryId.value,
-                    columnFilter: [],
                     textFilter: '',
+                    columnFilters: null,
                   );
                 }
               },
@@ -92,8 +92,8 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
                   PreferenceController.to.jumpToView(
                     viewId: ViewId.viewPayees,
                     selectedId: transaction.fieldPayee.value,
-                    columnFilter: [],
                     textFilter: '',
+                    columnFilters: null,
                   );
                 }
               },

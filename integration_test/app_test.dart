@@ -344,7 +344,7 @@ Future<void> testCashFlow(WidgetTester tester) async {
 
   // remove all filters on the Transaction view
   PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterText));
-  PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFilterColumnsText));
+  PreferenceController.to.remove(ViewId.viewTransactions.getViewPreferenceId(settingKeyFiltersColumns));
 
   await tapOnText(tester, 'Cashflow');
 

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/list_controller.dart';
@@ -16,7 +17,7 @@ import 'package:money/core/widgets/side_panel/side_panel_views_enum.dart';
 import 'package:money/core/widgets/text_title.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/core/widgets/working.dart';
-import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptable_view_with_list.dart';
@@ -265,8 +266,16 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     );
 
     // load the column filters
-    var tmpList = await preferenceController.getStringList(getPreferenceKey(settingKeyFilterColumnsText));
-    _filterByFieldsValue = FieldFilters.fromList(tmpList);
+    try {
+      final String filtersAsJSonString = preferenceController.getString(getPreferenceKey(settingKeyFiltersColumns));
+      if (filtersAsJSonString.isEmpty) {
+        _filterByFieldsValue = FieldFilters.fromJsonString(filtersAsJSonString);
+      }
+    } catch (_e) {
+      if (kDebugMode) {
+        print(_e.toString());
+      }
+    }
 
     list = getList();
 
@@ -763,7 +772,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       _filterByText,
     );
     PreferenceController.to.setStringList(
-      getPreferenceKey(settingKeyFilterColumnsText),
+      getPreferenceKey(settingKeyFiltersColumns),
       _filterByFieldsValue.toStringList(),
     );
   }

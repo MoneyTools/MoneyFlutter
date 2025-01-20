@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:money/core/widgets/gaps.dart';
 import 'package:money/core/widgets/money_widget.dart';
-import 'package:money/data/models/fields/field_filter.dart';
+import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/splits/money_split.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_view.dart';

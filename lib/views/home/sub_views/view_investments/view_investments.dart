@@ -61,8 +61,8 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
                     PreferenceController.to.jumpToView(
                       viewId: ViewId.viewStocks,
                       selectedId: securityFound.uniqueId,
-                      columnFilter: [],
                       textFilter: '',
+                      columnFilters: null,
                     );
                   }
                 },
