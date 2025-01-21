@@ -11,17 +11,20 @@ class MoneyWidget extends StatelessWidget {
     super.key,
     required this.amountModel,
     this.asTile = false,
+    this.asHeader = false,
   });
 
-  factory MoneyWidget.fromDouble(double amount, {bool asTitle = false}) {
+  factory MoneyWidget.fromDouble(double amount, {bool asTitle = false, bool asHeader = false}) {
     return MoneyWidget(
       amountModel: MoneyModel(
         amount: amount,
       ),
       asTile: asTitle,
+      asHeader: asHeader,
     );
   }
 
+  final bool asHeader;
   final bool asTile;
 
   /// Amount to display
@@ -48,10 +51,18 @@ class MoneyWidget extends StatelessWidget {
       value = 0.00;
     }
 
-    final style = TextStyle(
+    double? fontSize;
+    if (asTile) {
+      fontSize = getTextTheme(context).titleMedium!.fontSize!;
+    }
+    if (asHeader) {
+      fontSize = getTextTheme(context).headlineLarge!.fontSize!;
+    }
+
+    final TextStyle style = TextStyle(
       fontFamily: 'RobotoMono',
       color: getTextColorToUse(value, amountModel.autoColor),
-      fontSize: asTile ? getTextTheme(context).titleMedium!.fontSize : null,
+      fontSize: fontSize,
       fontWeight: FontWeight.w900,
     );
 
@@ -60,8 +71,8 @@ class MoneyWidget extends StatelessWidget {
       iso4217code: amountModel.iso4217,
     );
 
-    final leftSideOfDecimalPoint = value.truncate();
-    final leftSideOfDecimalPointAsString = leftSideOfDecimalPoint.abs() == 0
+    final int leftSideOfDecimalPoint = value.truncate();
+    final String leftSideOfDecimalPointAsString = leftSideOfDecimalPoint.abs() == 0
         ? '' // No need to show leading zero
         : Currency.getAmountAsStringUsingCurrency(
             leftSideOfDecimalPoint,
@@ -69,7 +80,7 @@ class MoneyWidget extends StatelessWidget {
             decimalDigits: 0,
           );
 
-    final rightOfDecimalPoint = valueAsString.substring(leftSideOfDecimalPointAsString.length);
+    final String rightOfDecimalPoint = valueAsString.substring(leftSideOfDecimalPointAsString.length);
 
     return SelectableText.rich(
       maxLines: 1,
@@ -82,8 +93,8 @@ class MoneyWidget extends StatelessWidget {
           ),
           TextSpan(
             text: rightOfDecimalPoint,
-            style: const TextStyle(
-              fontSize: 11,
+            style: TextStyle(
+              fontSize: fontSize != null ? fontSize * 0.8 : getTextTheme(context).bodySmall!.fontSize!,
             ),
           ),
         ],

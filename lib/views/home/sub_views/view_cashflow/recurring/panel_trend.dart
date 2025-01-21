@@ -257,7 +257,7 @@ class _PanelTrendState extends State<PanelTrend> {
 
   void _generateList() {
     yearCategoryIncomeExpenseSums =
-        RecurringExpenses.getSumByIncomeExpenseByYears(widget.minYear, widget.maxYear, widget.includeAssetAccounts);
+        RecurringExpenses.getSumByIncomeExpenseByYears(widget.minYear, widget.maxYear, widget.includeAssetAccounts, 1);
     years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
 
     maxY = 0;

@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:money/core/controller/preferences_controller.dart';
+import 'package:money/core/controller/selection_controller.dart';
+import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
@@ -63,18 +65,39 @@ class _PanelBudgetState extends State<PanelBudget> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          sectionHeader(context),
-          Expanded(
-            child: _buildContent(),
-          ),
-        ],
+  Widget build(final BuildContext context) {
+    return Box(
+      margin: 8,
+      width: double.infinity,
+      height: double.infinity,
+      child: Center(
+        child: ThemeController.to.isDeviceWidthSmall.value ? _buildContentForSmallScreen() : _buildContentAsList(),
       ),
     );
+  }
+
+  String calculateBudgetAccuracy(double budgeted, double actual) {
+    if (budgeted == 0 && actual == 0) {
+      return 'Both budgeted and actual amounts are zero. Accuracy is undefined.';
+    }
+
+    if (actual == 0) {
+      return 'Actual amount is zero. Cannot calculate percentages.';
+    }
+
+    double accuracyPercentage = (budgeted / actual) * 100;
+    double variancePercentage = ((actual - budgeted) / budgeted) * 100;
+
+    String result = 'Accuracy:    ${accuracyPercentage.toStringAsFixed(2)}%\n';
+
+    // Check for cases where variance calculation is invalid
+    if (budgeted == 0) {
+      result += 'Budgeted amount is zero. Variance is undefined.';
+    } else {
+      result += 'Variance:    ${variancePercentage.toStringAsFixed(2)}%';
+    }
+
+    return result;
   }
 
   void initializeItems() {
@@ -92,13 +115,22 @@ class _PanelBudgetState extends State<PanelBudget> {
     final BudgetAnalyzer analyzer = BudgetAnalyzer(transactions);
     _budget = analyzer.calculateMonthlyBudget();
 
-    items = RecurringExpenses.getBudgetedTransactions(widget.minYear, widget.maxYear, true, widget.categoryTypes);
+    items = RecurringExpenses.getBudgetedTransactions(
+      widget.minYear,
+      widget.maxYear,
+      true,
+      widget.categoryTypes,
+      isForIncome ? 1 : -1,
+    );
 
     sumForAllCategories = 0.00;
     sumForAllCategoriesBudget = 0.00;
+
+    int adjustValue = isForIncome ? 1 : -1;
+
     items.forEach((item) {
       sumForAllCategories += item.sumOfAllTransactions;
-      sumForAllCategoriesBudget += item.category.fieldBudget.value.toDouble();
+      sumForAllCategoriesBudget += item.category.fieldBudget.value.toDouble() * adjustValue;
     });
 
     _sort();
@@ -152,6 +184,8 @@ class _PanelBudgetState extends State<PanelBudget> {
     );
   }
 
+  double get sumForAllCategoriesActual => (sumForAllCategories / widget.numberOfYears) / 12;
+
   Widget verticalLine(Color color) {
     return SizedBox(
       height: 38,
@@ -191,8 +225,54 @@ class _PanelBudgetState extends State<PanelBudget> {
     }
   }
 
+  Widget _buildContentAsList() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        sectionHeader(context),
+        Expanded(
+          child: _buildContent(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildContentForSmallScreen() {
+    return ConstrainedBox(
+      constraints: BoxConstraints(
+        maxWidth: 400,
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(widget.title, style: context.textTheme.headlineLarge),
+          SizedBox(height: 20),
+          Text(
+            'Monthly Budgeted',
+            style: context.textTheme.bodyLarge,
+          ),
+          MoneyWidget.fromDouble(sumForAllCategoriesBudget, asHeader: true),
+          SizedBox(height: 10),
+          Text(
+            'Monthly Actual',
+            style: context.textTheme.bodyLarge,
+          ),
+          MoneyWidget.fromDouble(sumForAllCategoriesActual, asHeader: true),
+          SizedBox(height: 20),
+          Text(
+            calculateBudgetAccuracy(sumForAllCategoriesBudget, sumForAllCategoriesActual),
+            textAlign: TextAlign.end,
+            style: context.textTheme.headlineSmall,
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildList() {
     final Color dividersColor = Theme.of(context).dividerColor.withAlpha(100);
+    int adjustValue = isForIncome ? 1 : -1;
 
     return Column(
       children: [
@@ -306,7 +386,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budgeted per month
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.toDouble(),
+                              item.category.fieldBudget.value.toDouble() * adjustValue,
                               asTitle: true,
                             ),
                           ),
@@ -331,7 +411,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budget per year
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.toDouble() * 12,
+                              item.category.fieldBudget.value.toDouble() * 12 * adjustValue,
                               asTitle: true,
                             ),
                           ),
@@ -398,7 +478,7 @@ class _PanelBudgetState extends State<PanelBudget> {
             ),
             Expanded(
               child: MoneyWidget.fromDouble(
-                (sumForAllCategories / widget.numberOfYears) / 12,
+                sumForAllCategoriesActual,
                 asTitle: true,
               ),
             ),

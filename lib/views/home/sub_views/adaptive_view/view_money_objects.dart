@@ -271,9 +271,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       if (filtersAsJSonString.isEmpty) {
         _filterByFieldsValue = FieldFilters.fromJsonString(filtersAsJSonString);
       }
-    } catch (_e) {
+    } catch (error) {
       if (kDebugMode) {
-        print(_e.toString());
+        print(error.toString());
       }
     }
 

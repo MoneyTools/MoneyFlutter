@@ -1,5 +1,11 @@
 # Change Log
 
+## [version 1.11.07] 2025-01-21
+
+### Update
+
+- Budget feature support small devices
+
 ## [version 1.11.06] 2025-01-15
 
 ### Add

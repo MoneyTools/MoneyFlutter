@@ -29,6 +29,7 @@ class RecurringExpenses {
     final int maxYear,
     final bool onlyNonZeroBudget,
     final List<CategoryType> categoryTypes,
+    final double multiplier,
   ) {
     List<RecurringExpenses> items = [];
 
@@ -86,6 +87,7 @@ class RecurringExpenses {
     int minYear,
     int maxYear,
     bool includeAssetAccounts,
+    double multiplier,
   ) {
     Map<int, RecurringExpenses> yearMap = {};
 
@@ -102,7 +104,7 @@ class RecurringExpenses {
         if (!yearMap.containsKey(year)) {
           yearMap[year] = RecurringExpenses(category: t.category!, sumOfAllTransactions: 0);
         }
-        yearMap[year]!.sumBudget += t.category!.fieldBudget.value.toDouble();
+        yearMap[year]!.sumBudget += t.category!.fieldBudget.value.toDouble() * multiplier;
 
         final double amount = t.fieldAmount.value.toDouble();
         if (t.category!.isExpense) {
