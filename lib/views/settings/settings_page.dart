@@ -45,10 +45,6 @@ class SettingsPage extends GetView<GetxController> {
                   controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks,
                 ),
                 Divider(height: 50),
-                MyTextInput(
-                  hintText: 'Currencies',
-                ),
-                Divider(height: 50),
                 _buildCurrenciesPanel(context),
               ],
             ),
