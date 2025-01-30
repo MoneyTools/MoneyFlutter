@@ -23,10 +23,11 @@ class ImportFieldsForTransfer {
 
   Account accountFrom;
   Account accountTo;
-  DateTime date;
-  Category? category;
-  String memo;
   double amount;
+  DateTime date;
+  String memo;
+
+  Category? category;
 
   bool get validAccounts => accountFrom != accountTo;
 }

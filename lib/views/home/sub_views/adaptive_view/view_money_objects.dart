@@ -47,6 +47,7 @@ class ViewForMoneyObjects extends StatefulWidget {
 class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   final DataController dataController = Get.find();
   final ListControllerMain lc = ListControllerMain();
+  late final SidePanelSupport sidePanelOptions;
   late final ViewId viewId;
 
   bool firstLoadCompleted = false;
@@ -85,13 +86,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   void initState() {
     super.initState();
     firstLoad();
+    this.sidePanelOptions = getSidePanelSupport();
   }
 
   @override
   Widget build(final BuildContext context) {
     footerAccumulators();
 
-    final SidePanelSupport sidePanelOptions = getSidePanelSupport();
     return buildViewContent(
       Obx(() {
         final key = Key(

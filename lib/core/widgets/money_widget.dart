@@ -28,6 +28,7 @@ class MoneyWidget extends StatelessWidget {
       size: size,
     );
   }
+
   final MoneyWidgetSize size;
 
   /// Amount to display
