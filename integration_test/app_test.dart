@@ -38,7 +38,14 @@ void main() {
           // Medium screen - import
           //
           await switchToMedium(tester);
-          await stepImport(tester);
+          await stepImportWizardOptions(tester);
+
+          //------------------------------------------------------------------------
+          // Close the current file
+          await tapOnKeyString(tester, 'key_menu_button');
+          await tester.pumpAndSettle();
+          await tapOnText(tester, 'Close file');
+          await tester.pumpAndSettle();
 
           //*************************************************************************
           //
@@ -153,11 +160,26 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   await testPendingChanges(tester);
 }
 
-Future<void> stepImport(WidgetTester tester) async {
+Future<void> stepImportWizardOptions(WidgetTester tester) async {
+  // Import QFX
+  await testImportQfx(tester);
+
+  // Import from manual text input in bulk
+  await testImportBulkManualTextInput(tester);
+
+  // Record a Transfer
+  await testImportWizadRecordTransfer(tester);
+}
+
+Future<void> bringUpImportWizard(final WidgetTester tester) async {
   // Import Wizard
   await tapOnKeyString(tester, 'key_menu_button');
   await tapOnText(tester, 'Add transactions...');
-  await tester.myPump();
+}
+
+Future<void> testImportQfx(WidgetTester tester) async {
+  // Import Wizard
+  await bringUpImportWizard(tester);
 
   // Also test the Import from file
   {
@@ -182,14 +204,17 @@ Future<void> stepImport(WidgetTester tester) async {
     await tester.pumpAndSettle();
     await tapOnText(tester, 'Import');
     // expect(find.text('Imported'), findsOneWidget);
-    await tester.pumpAndSettle(Durations.extralong4);
-  }
+    await tester.pumpAndSettle();
 
-  // Import from manual text input in bulk
-  await testImportBulkManualTextInput(tester);
+    // Close the dialog
+    await tapOnText(tester, 'Cancel');
+  }
 }
 
 Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
+  // Import Wizard
+  await bringUpImportWizard(tester);
+
   await tapOnText(tester, 'Manual bulk text input');
   await tester.myPump();
 
@@ -199,24 +224,22 @@ Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
   await tapOnText(tester, 'Close');
 
   await tapOnKeyString(tester, 'key_import_tab_free_style');
-
+  await tester.pumpAndSettle();
   final textFieldInput = find.byKey(const Key('key_input_text_field_value')).at(0); // top most element found
+  await tester.pumpAndSettle(Durations.extralong4);
   await inputTextToElement(
     tester,
     textFieldInput,
     '2001-12-25;Hawaii;123.45\n2002-12-25;ABC;-123.45\n2003-01-01;Ibiza;(77.99)\nabc;+123.45\nHawaii;99.99',
   );
-
+  await tester.pumpAndSettle(Durations.extralong4);
   await tapOnKeyString(tester, 'key_import_tab_three_columns');
+  await tester.pumpAndSettle(Durations.extralong4);
   await tapOnKeyString(tester, 'key_import_tab_free_style');
+  await tester.pumpAndSettle(Durations.extralong4);
 
   // Close ImportDialog
   await tapOnText(tester, 'Import');
-
-  //------------------------------------------------------------------------
-  // Close the file
-  await tapOnKeyString(tester, 'key_menu_button');
-  await tapOnText(tester, 'Close file');
 }
 
 Future<void> testThemeColors(WidgetTester tester) async {
@@ -440,6 +463,21 @@ Future<void> testAccounts(WidgetTester tester) async {
     // pressing Done also will close the dialog
     await tapOnText(tester, 'Done');
   }
+}
+
+Future<void> testImportWizadRecordTransfer(WidgetTester tester) async {
+  // Import Wizard
+  await bringUpImportWizard(tester);
+  await tapOnText(tester, 'Record a transfer');
+
+  // Close ImportDialog
+  await tapOnText(tester, 'Record Transfer');
+
+  // Dismiss the warning message
+  await tapOnKeyString(tester, 'key_snackbar_close_button');
+  await tester.pumpAndSettle();
+  await tapOnText(tester, 'Cancel');
+  await tester.myPump();
 }
 
 Future<void> testImportInInvestmentAccount(WidgetTester tester) async {

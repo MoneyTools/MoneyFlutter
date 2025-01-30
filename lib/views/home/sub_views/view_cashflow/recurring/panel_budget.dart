@@ -252,13 +252,13 @@ class _PanelBudgetState extends State<PanelBudget> {
             'Monthly Budgeted',
             style: context.textTheme.bodyLarge,
           ),
-          MoneyWidget.fromDouble(sumForAllCategoriesBudget, asHeader: true),
+          MoneyWidget.fromDouble(sumForAllCategoriesBudget, MoneyWidgetSize.header),
           SizedBox(height: 10),
           Text(
             'Monthly Actual',
             style: context.textTheme.bodyLarge,
           ),
-          MoneyWidget.fromDouble(sumForAllCategoriesActual, asHeader: true),
+          MoneyWidget.fromDouble(sumForAllCategoriesActual, MoneyWidgetSize.header),
           SizedBox(height: 20),
           Text(
             calculateBudgetAccuracy(sumForAllCategoriesBudget, sumForAllCategoriesActual),
@@ -387,13 +387,13 @@ class _PanelBudgetState extends State<PanelBudget> {
                           Expanded(
                             child: MoneyWidget.fromDouble(
                               item.category.fieldBudget.value.toDouble() * adjustValue,
-                              asTitle: true,
+                              MoneyWidgetSize.title,
                             ),
                           ),
                           Expanded(
                             child: MoneyWidget.fromDouble(
                               item.sumPerMonth,
-                              asTitle: true,
+                              MoneyWidgetSize.title,
                             ),
                           ),
                         ],
@@ -412,7 +412,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           Expanded(
                             child: MoneyWidget.fromDouble(
                               item.category.fieldBudget.value.toDouble() * 12 * adjustValue,
-                              asTitle: true,
+                              MoneyWidgetSize.title,
                             ),
                           ),
 
@@ -420,7 +420,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           Expanded(
                             child: MoneyWidget.fromDouble(
                               item.sumPerMonth * 12,
-                              asTitle: true,
+                              MoneyWidgetSize.title,
                             ),
                           ),
                         ],
@@ -448,7 +448,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           Expanded(
                             child: MoneyWidget.fromDouble(
                               item.sumOfAllTransactions,
-                              asTitle: true,
+                              MoneyWidgetSize.title,
                             ),
                           ),
                         ],
@@ -473,26 +473,26 @@ class _PanelBudgetState extends State<PanelBudget> {
             Expanded(
               child: MoneyWidget.fromDouble(
                 sumForAllCategoriesBudget,
-                asTitle: true,
+                MoneyWidgetSize.title,
               ),
             ),
             Expanded(
               child: MoneyWidget.fromDouble(
                 sumForAllCategoriesActual,
-                asTitle: true,
+                MoneyWidgetSize.title,
               ),
             ),
             verticalLine(dividersColor),
             Expanded(
               child: MoneyWidget.fromDouble(
                 sumForAllCategoriesBudget * 12,
-                asTitle: true,
+                MoneyWidgetSize.title,
               ),
             ),
             Expanded(
               child: MoneyWidget.fromDouble(
                 sumForAllCategories / widget.numberOfYears,
-                asTitle: true,
+                MoneyWidgetSize.title,
               ),
             ),
             verticalLine(dividersColor),
@@ -502,7 +502,7 @@ class _PanelBudgetState extends State<PanelBudget> {
             Expanded(
               child: MoneyWidget.fromDouble(
                 sumForAllCategories,
-                asTitle: true,
+                MoneyWidgetSize.title,
               ),
             ),
           ],

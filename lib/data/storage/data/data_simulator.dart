@@ -329,7 +329,10 @@ class DataSimulator {
       memo: memo,
     );
 
-    final relatedTransaction = Data().makeTransferLinkage(source, accountDestination);
+    final relatedTransaction = Data().makeTransferLinkage(
+      transactionSource: source,
+      destinationAccount: accountDestination,
+    );
 
     linkTransfer(source, relatedTransaction);
 

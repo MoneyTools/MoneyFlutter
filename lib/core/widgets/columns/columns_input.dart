@@ -255,14 +255,17 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
       currency: widget.currency,
       reverseAmountValue: widget.reverseAmountValue,
     );
-    parser.convertInputTextToTransactionList(
-      context,
-      widget.inputText,
-    );
 
-    _controllerColumn1.text = parser.getListOfDatesString().join('\n');
-    _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
-    _controllerColumn3.text = parser.getListOfAmountString().join('\n');
+    if (context.mounted) {
+      parser.convertInputTextToTransactionList(
+        context,
+        widget.inputText,
+      );
+
+      _controllerColumn1.text = parser.getListOfDatesString().join('\n');
+      _controllerColumn2.text = parser.getListOfDescriptionString().join('\n');
+      _controllerColumn3.text = parser.getListOfAmountString().join('\n');
+    }
   }
 }
 

@@ -9,6 +9,7 @@ import 'package:money/data/storage/import/import_investment.dart';
 import 'package:money/data/storage/import/import_qfx.dart';
 import 'package:money/data/storage/import/import_qif.dart';
 import 'package:money/data/storage/import/import_transactions_from_text.dart';
+import 'package:money/data/storage/import/import_trasnsfer.dart';
 
 void showImportTransactionsWizard() {
   final BuildContext context = Get.context!;
@@ -38,6 +39,14 @@ void showImportTransactionsWizard() {
             onPressed: () {
               Navigator.of(context).pop(true);
               showImportTransactionsFromTextInput(context);
+            },
+          ),
+          WizardChoice(
+            title: 'Record a transfer',
+            description: 'add a transaction Between two accounts.',
+            onPressed: () {
+              Navigator.of(context).pop(true);
+              showImportTransfer();
             },
           ),
           WizardChoice(

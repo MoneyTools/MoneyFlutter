@@ -80,10 +80,7 @@ class BarChartWidget extends StatelessWidget {
         ),
         colorWidget,
         Expanded(
-          child: MoneyWidget(
-            amountModel: MoneyModel(amount: value * (asIncome ? 1 : -1)),
-            asTile: false,
-          ),
+          child: MoneyWidget(amountModel: MoneyModel(amount: value * (asIncome ? 1 : -1))),
         ),
       ],
     );

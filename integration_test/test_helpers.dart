@@ -15,7 +15,7 @@ Future<void> tapOnText(final WidgetTester tester, final String textToFind, {fina
 
   expect(firstMatchingElement, findsOneWidget);
   await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.myPump();
+  await tester.pumpAndSettle(const Duration(milliseconds: 500));
 }
 
 Finder findByKeyString(final String keyString) {
@@ -27,14 +27,14 @@ Finder findByKeyString(final String keyString) {
 Future<void> tapOnKeyString(final WidgetTester tester, final String keyString) async {
   final firstMatchingElement = findByKeyString(keyString);
   await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.myPump();
+  await tester.pumpAndSettle(const Duration(milliseconds: 500));
 }
 
 Future<void> tapOnKey(final WidgetTester tester, final Key key) async {
   final firstMatchingElement = find.byKey(key).at(0); // top most element
   expect(firstMatchingElement, findsOneWidget, reason: key.toString());
   await tester.tap(firstMatchingElement, warnIfMissed: false);
-  await tester.myPump();
+  await tester.pumpAndSettle();
 }
 
 Future<void> tapOnWidgetType(final WidgetTester tester, final Type type) async {
@@ -216,7 +216,7 @@ Future<void> inputTextToElementByKey(WidgetTester tester, Key keyToElement, Stri
 }
 
 Future<void> tapAllToggleButtons(final WidgetTester tester, final List<String> keys) async {
-  for (final key in keys) {
+  for (final String key in keys) {
     await tapOnKeyString(tester, key);
   }
 }

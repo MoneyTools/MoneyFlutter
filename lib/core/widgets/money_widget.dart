@@ -5,27 +5,30 @@ import 'package:money/data/models/money_model.dart';
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 
 /// Formatted text using the supplied currency code and optional the currency/country flag
+
+enum MoneyWidgetSize {
+  body,
+  title,
+  header,
+}
+
 class MoneyWidget extends StatelessWidget {
   /// Constructor
   const MoneyWidget({
     super.key,
     required this.amountModel,
-    this.asTile = false,
-    this.asHeader = false,
+    this.size = MoneyWidgetSize.body,
   });
 
-  factory MoneyWidget.fromDouble(double amount, {bool asTitle = false, bool asHeader = false}) {
+  factory MoneyWidget.fromDouble(final double amount, [final MoneyWidgetSize size = MoneyWidgetSize.body]) {
     return MoneyWidget(
       amountModel: MoneyModel(
         amount: amount,
       ),
-      asTile: asTitle,
-      asHeader: asHeader,
+      size: size,
     );
   }
-
-  final bool asHeader;
-  final bool asTile;
+  final MoneyWidgetSize size;
 
   /// Amount to display
   final MoneyModel amountModel;
@@ -52,11 +55,14 @@ class MoneyWidget extends StatelessWidget {
     }
 
     double? fontSize;
-    if (asTile) {
-      fontSize = getTextTheme(context).titleMedium!.fontSize!;
-    }
-    if (asHeader) {
-      fontSize = getTextTheme(context).headlineLarge!.fontSize!;
+
+    switch (size) {
+      case MoneyWidgetSize.body:
+        fontSize = getTextTheme(context).bodyMedium!.fontSize!;
+      case MoneyWidgetSize.title:
+        fontSize = getTextTheme(context).titleMedium!.fontSize!;
+      case MoneyWidgetSize.header:
+        fontSize = getTextTheme(context).headlineLarge!.fontSize!;
     }
 
     final TextStyle style = TextStyle(
@@ -94,7 +100,7 @@ class MoneyWidget extends StatelessWidget {
           TextSpan(
             text: rightOfDecimalPoint,
             style: TextStyle(
-              fontSize: fontSize != null ? fontSize * 0.8 : getTextTheme(context).bodySmall!.fontSize!,
+              fontSize: fontSize * 0.8,
             ),
           ),
         ],

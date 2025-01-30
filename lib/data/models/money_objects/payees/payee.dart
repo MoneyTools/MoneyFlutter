@@ -54,7 +54,7 @@ class Payee extends MoneyObject {
   Widget buildFieldsAsWidgetForSmallScreen() {
     return MyListItemAsCard(
       leftTopAsString: fieldName.value,
-      rightTopAsWidget: MoneyWidget(amountModel: fieldSum.value, asTile: true),
+      rightTopAsWidget: MoneyWidget(amountModel: fieldSum.value, size: MoneyWidgetSize.title),
       rightBottomAsString: getAmountAsShorthandText(fieldCount.value),
     );
   }

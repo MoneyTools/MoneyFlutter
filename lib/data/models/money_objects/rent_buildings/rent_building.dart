@@ -370,7 +370,7 @@ class RentBuilding extends MoneyObject {
       leftBottomAsString: fieldAddress.value,
       rightTopAsWidget: MoneyWidget(
         amountModel: MoneyModel(amount: lifeTimePnL.profit),
-        asTile: true,
+        size: MoneyWidgetSize.title,
       ),
     );
   }

@@ -251,7 +251,7 @@ class Category extends MoneyObject {
     return MyListItemAsCard(
       leftTopAsString: top,
       leftBottomAsString: bottom,
-      rightTopAsWidget: MoneyWidget(amountModel: fieldSum.value, asTile: true),
+      rightTopAsWidget: MoneyWidget(amountModel: fieldSum.value, size: MoneyWidgetSize.title),
       rightBottomAsWidget: Row(
         children: <Widget>[
           Text(getTypeAsText()),

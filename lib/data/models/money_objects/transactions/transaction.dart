@@ -493,7 +493,10 @@ class Transaction extends MoneyObject {
                     }
                   } else {
                     instance.fieldPayee.value = Data().categories.transfer.uniqueId;
-                    Data().makeTransferLinkage(instance, account);
+                    Data().makeTransferLinkage(
+                      transactionSource: instance,
+                      destinationAccount: account,
+                    );
                   }
                 }
             }
@@ -589,7 +592,7 @@ class Transaction extends MoneyObject {
     return MyListItemAsCard(
       leftTopAsString: payeeName,
       leftBottomAsString: '${Data().categories.getNameFromId(fieldCategoryId.value)}\n${fieldMemo.value}',
-      rightTopAsWidget: MoneyWidget(amountModel: fieldAmount.value, asTile: true),
+      rightTopAsWidget: MoneyWidget(amountModel: fieldAmount.value, size: MoneyWidgetSize.title),
       rightBottomAsString: '$dateTimeAsString\n${Account.getName(instanceOfAccount)}',
     );
   }

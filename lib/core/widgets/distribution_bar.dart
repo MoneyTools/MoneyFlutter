@@ -78,7 +78,6 @@ class _DistributionBarState extends State<DistributionBar> {
             amountModel: MoneyModel(
               amount: value,
             ),
-            asTile: false,
           ),
         ),
         Opacity(

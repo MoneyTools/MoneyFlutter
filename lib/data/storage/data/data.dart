@@ -260,14 +260,16 @@ class Data {
     return MoneyModel(amount: sum);
   }
 
-  Transaction? getOrCreateRelatedTransaction(
-    Transaction transactionSource,
-    Account destinationAccount,
-  ) {
+  Transaction? getOrCreateRelatedTransaction({
+    required Transaction transactionSource,
+    required Account destinationAccount,
+  }) {
     if (transactionSource.fieldAccountId.value == destinationAccount.uniqueId) {
       logger.e('Cannot transfer to same account');
       return null;
     }
+
+    final double destinationAmount = transactionSource.fieldAmount.value.toDouble() * -1;
 
     Transaction? relatedTransaction = Data().transactions.findExistingTransaction(
           accountId: destinationAccount.uniqueId,
@@ -275,7 +277,7 @@ class Data {
             min: transactionSource.fieldDateTime.value!.startOfDay,
             max: transactionSource.fieldDateTime.value!.endOfDay,
           ),
-          amount: -transactionSource.fieldAmount.value.toDouble(),
+          amount: destinationAmount,
         );
 
     if (relatedTransaction == null) {
@@ -285,7 +287,7 @@ class Data {
       );
 
       // flip the sign on the amount
-      relatedTransaction.fieldAmount.value.setAmount(transactionSource.fieldAmount.value.toDouble() * -1);
+      relatedTransaction.fieldAmount.value.setAmount(destinationAmount);
       relatedTransaction.fieldCategoryId.value = transactionSource.fieldCategoryId.value;
       relatedTransaction.fieldFitid.value = transactionSource.fieldFitid.value;
       relatedTransaction.fieldNumber.value = transactionSource.fieldNumber.value;
@@ -356,11 +358,14 @@ class Data {
     return true;
   }
 
-  Transaction makeTransferLinkage(
-    Transaction transactionSource,
-    Account destinationAccount,
-  ) {
-    Transaction? relatedTransaction = getOrCreateRelatedTransaction(transactionSource, destinationAccount);
+  Transaction makeTransferLinkage({
+    required Transaction transactionSource,
+    required Account destinationAccount,
+  }) {
+    Transaction? relatedTransaction = getOrCreateRelatedTransaction(
+      transactionSource: transactionSource,
+      destinationAccount: destinationAccount,
+    );
 
     if (relatedTransaction != null) {
       final Transfer transfer;
