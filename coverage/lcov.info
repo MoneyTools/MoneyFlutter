@@ -4464,7 +4464,7 @@ SF:lib/data/models/money_objects/account_aliases/account_alias.dart
 FNF:0
 FNH:0
 DA:14,1
-DA:20,1
+DA:19,1
 DA:21,1
 DA:22,4
 DA:23,3
@@ -11615,7 +11615,7 @@ TN:
 SF:lib/views/home/sub_views/view_accounts/view_accounts_side_panel.dart
 FNF:0
 FNH:0
-DA:4,2
+DA:4,3
 DA:8,1
 DA:13,1
 DA:14,1
@@ -11707,7 +11707,7 @@ DA:204,1
 DA:210,1
 DA:212,1
 DA:214,1
-DA:224,2
+DA:224,3
 DA:228,1
 DA:230,2
 DA:231,1
@@ -11730,7 +11730,7 @@ DA:263,7
 DA:266,1
 DA:267,2
 DA:268,2
-DA:273,2
+DA:273,3
 DA:277,1
 DA:281,3
 DA:282,1
@@ -12985,7 +12985,7 @@ TN:
 SF:lib/views/home/sub_views/view_categories/view_categories_side_panel.dart
 FNF:0
 FNH:0
-DA:5,2
+DA:5,3
 DA:9,1
 DA:10,1
 DA:12,2
@@ -13003,7 +13003,7 @@ DA:30,1
 DA:31,2
 DA:32,2
 DA:35,2
-DA:40,2
+DA:40,3
 DA:41,3
 DA:43,1
 DA:44,2
@@ -13210,7 +13210,7 @@ TN:
 SF:lib/views/home/sub_views/view_investments/view_investments_side_panel.dart
 FNF:0
 FNH:0
-DA:5,2
+DA:5,3
 DA:11,1
 DA:12,5
 DA:14,1
@@ -13228,7 +13228,7 @@ DA:40,0
 DA:43,1
 DA:44,3
 DA:47,3
-DA:54,2
+DA:54,3
 DA:55,2
 DA:58,1
 DA:62,1
@@ -13498,7 +13498,7 @@ TN:
 SF:lib/views/home/sub_views/view_payees/view_payees_side_panel.dart
 FNF:0
 FNH:0
-DA:5,2
+DA:5,3
 DA:9,1
 DA:10,1
 DA:11,2
@@ -13512,7 +13512,7 @@ DA:23,2
 DA:27,1
 DA:28,9
 DA:31,1
-DA:35,2
+DA:35,3
 DA:36,2
 DA:37,4
 DA:38,3
@@ -14437,10 +14437,10 @@ DA:314,3
 DA:319,1
 DA:320,0
 DA:322,4
-DA:324,1
-DA:326,1
+DA:324,0
+DA:326,0
 LF:121
-LH:95
+LH:93
 end_of_record
 TN:
 SF:lib/views/home/sub_views/view_transfers/transfer_sender_receiver.dart
