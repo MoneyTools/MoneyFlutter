@@ -200,7 +200,7 @@ class Field<T> {
   }
 
   /// Customize/override the edit widget
-  Widget Function(MoneyObject, Function(bool wasModified) onEdited)? getEditWidget;
+  Widget Function(MoneyObject, void Function(bool wasModified) onEdited)? getEditWidget;
 
   /// override the value edited
   dynamic Function(MoneyObject, dynamic)? setValue;

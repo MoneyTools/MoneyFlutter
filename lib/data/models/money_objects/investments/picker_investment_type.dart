@@ -3,7 +3,7 @@ import 'package:money/views/home/sub_views/view_stocks/picker_security_type.dart
 
 Widget pickerInvestmentType({
   required final InvestmentType itemSelected,
-  required final Function(InvestmentType) onSelected,
+  required final void Function(InvestmentType) onSelected,
 }) {
   String selectedName = getInvestmentTypeText(itemSelected);
 

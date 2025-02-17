@@ -73,7 +73,7 @@ void adaptiveScreenSizeDialog({
 
   if (context.isWidthSmall) {
     // Full screen also comes with a Close (X) button
-    showDialog(
+    showDialog<dynamic>(
       context: context,
       builder: (BuildContext context) {
         return FullScreenDialog(
@@ -90,7 +90,7 @@ void adaptiveScreenSizeDialog({
   }
 
   // Large screen
-  showDialog(
+  showDialog<dynamic>(
     context: context,
     barrierDismissible: false,
     builder: (final BuildContext context) {

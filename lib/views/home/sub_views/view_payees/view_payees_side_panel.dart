@@ -39,7 +39,7 @@ extension ViewPayeesSidePanel on ViewPayeesState {
       return ListViewTransactions(
         key: Key(payee.uniqueId.toString()),
         listController: Get.find<ListControllerSidePanel>(),
-        columnsToInclude: <Field>[
+        columnsToInclude: <Field<dynamic>>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdCategory),

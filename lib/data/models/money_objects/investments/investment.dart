@@ -132,7 +132,7 @@ class Investment extends MoneyObject {
     footer: FooterType.count,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._investmentTypeAsString,
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldInvestmentType.value,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
       return pickerInvestmentType(
         itemSelected: getInvestmentTypeFromValue((instance as Investment).fieldInvestmentType.value),
         onSelected: (final InvestmentType newSelection) {
@@ -229,7 +229,7 @@ class Investment extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) =>
         InvestmentTradeType.values[(instance as Investment).fieldTradeType.value].name.toUpperCase(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldTradeType.value,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
       return pickerInvestmentTradeType(
         itemSelected: getInvestmentTradeTypeFromValue((instance as Investment).fieldTradeType.value),
         onSelected: (final InvestmentTradeType newSelection) {
@@ -342,7 +342,7 @@ class Investment extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final Fields<Investment> _fields = Fields<Investment>();
 

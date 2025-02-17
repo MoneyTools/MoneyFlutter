@@ -47,7 +47,7 @@ class MyFileSystems {
     return await Directory(fullPath).create(recursive: true);
   }
 
-  static String getFileExtension(final filePath) {
+  static String getFileExtension(final String filePath) {
     return p.extension(filePath);
   }
 
@@ -64,11 +64,11 @@ class MyFileSystems {
     }
   }
 
-  static String getFileName(final filePath) {
+  static String getFileName(final String filePath) {
     return p.basename(filePath);
   }
 
-  static String getFolderFromFilePath(final filePath) {
+  static String getFolderFromFilePath(final String filePath) {
     return p.dirname(filePath);
   }
 

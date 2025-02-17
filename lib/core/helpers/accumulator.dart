@@ -263,7 +263,7 @@ class RunningAverage {
     return '$_count of ${_count + _countZeros} non zero entries.';
   }
 
-  double getAverage({includingZeros = false}) {
+  double getAverage({final bool includingZeros = false}) {
     if (_count == 0) {
       return 0.0; // Handle case where no values have been added yet
     }

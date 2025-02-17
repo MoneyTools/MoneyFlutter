@@ -280,7 +280,7 @@ class Account extends MoneyObject {
     defaultValue: AccountType.checking,
     getValueForDisplay: (final MoneyObject instance) => getTypeAsText((instance as Account).fieldType.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).fieldType.value.index,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
       return pickerAccountType(
         itemSelected: (instance as Account).fieldType.value,
         onSelected: (AccountType newSelection) {
@@ -365,7 +365,7 @@ class Account extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final Fields<Account> _fields = Fields<Account>();
   static final Fields<Account> _fieldsForColumns = Fields<Account>();

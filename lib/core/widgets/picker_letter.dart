@@ -10,7 +10,7 @@ class PickerLetters extends StatefulWidget {
     this.vertical = true,
   });
 
-  final Function(String selectedValue) onSelected;
+  final void Function(String selectedValue) onSelected;
   final List<String> options;
   final String? selected;
   final bool vertical;

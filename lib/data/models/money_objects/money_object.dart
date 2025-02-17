@@ -50,7 +50,7 @@ class MoneyObject {
   /// Name: Bob
   /// Date: 2020-12-31
   List<Widget> buildListOfNamesValuesWidgets({
-    Function(bool wasModified)? onEdit,
+    void Function(bool wasModified)? onEdit,
     bool compact = false,
   }) {
     if (fieldDefinitions.isEmpty) {
@@ -61,7 +61,7 @@ class MoneyObject {
     {
       final definitions = getFieldDefinitionsForPanel();
 
-      for (final Field fieldDefinition in definitions) {
+      for (final Field<dynamic> fieldDefinition in definitions) {
         final Widget widget = buildWidgetNameValueFromFieldDefinition(
           objectInstance: this,
           fieldDefinition: fieldDefinition,
@@ -103,7 +103,7 @@ class MoneyObject {
     required final MoneyObject objectInstance,
     required final Field<dynamic> fieldDefinition,
     required final bool singleLineNameValue,
-    required final Function(bool)? onEdited,
+    required final void Function(bool)? onEdited,
     final bool isFirstItem = false,
     final bool isLastItem = false,
   }) {
@@ -288,7 +288,7 @@ class MoneyObject {
     final bool rebalance,
   ) {
     stashValueBeforeEditing();
-    final Field? field = getFieldDefinitionByName(fieldDefinitions, fieldName);
+    final Field<dynamic>? field = getFieldDefinitionByName(fieldDefinitions, fieldName);
     if (field != null && field.setValue != null) {
       field.setValue!(this, newValue);
       Data().notifyMutationChanged(
@@ -328,7 +328,7 @@ class MoneyObject {
   }
 
   /// attempt to get text that a human could read
-  String toReadableString(Field field) {
+  String toReadableString(Field<dynamic> field) {
     switch (field.type) {
       case FieldType.widget:
         if (field.getValueForReading == null) {

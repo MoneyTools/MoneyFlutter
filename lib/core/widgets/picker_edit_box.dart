@@ -12,10 +12,10 @@ class PickerEditBox extends StatefulWidget {
     this.initialValue,
   });
 
-  final Function(String)? onAddNew;
+  final void Function(String)? onAddNew;
   final String? initialValue;
   final List<String> items;
-  final Function(String) onChanged;
+  final void Function(String) onChanged;
   final String title;
 
   @override

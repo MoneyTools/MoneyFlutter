@@ -74,7 +74,7 @@ class DataController extends GetxController {
       setCurrentFileName(dataSource.filePath);
       currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(dataSource.filePath);
       Future.delayed(Duration.zero, () {
-        Get.offNamed(Constants.routeHomePage);
+        Get.offNamed<dynamic>(Constants.routeHomePage);
       });
     }
     isLoading.value = false;
@@ -102,7 +102,7 @@ class DataController extends GetxController {
         isLoading.value = false;
 
         Future.delayed(Duration.zero, () {
-          Get.offNamed(Constants.routeWelcomePage);
+          Get.offNamed<dynamic>(Constants.routeWelcomePage);
         });
       }
     } catch (e) {

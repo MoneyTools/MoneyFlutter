@@ -6,7 +6,7 @@ import 'package:money/data/storage/data/data.dart';
 
 Widget pickerPayee({
   required final Payee? itemSelected,
-  required final Function(Payee?) onSelected,
+  required final void Function(Payee?) onSelected,
 }) {
   final List<String> options = Data().payees.getListSorted().map((element) => element.fieldName.value).toList();
   options.sort((a, b) => sortByString(a, b, true));

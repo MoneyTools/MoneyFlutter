@@ -90,7 +90,7 @@ class Event extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Event).fieldCategoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Event).fieldCategoryId.value = newValue as int,
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
       return pickerCategory(
         key: const Key('key_pick_category'),
         itemSelected: Data().categories.get((instance as Event).fieldCategoryId.value),
@@ -187,7 +187,7 @@ class Event extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final Fields<Event> _fields = Fields<Event>();
   static final Fields<Event> _fieldsColumView = Fields<Event>();
@@ -254,7 +254,7 @@ class Event extends MoneyObject {
       serializeName: serializeName,
       columnWidth: ColumnWidth.small,
       getValueForDisplay: (final MoneyObject instance) => getField(instance as Event).value,
-      getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+      getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
         return PickerEditBoxDate(
           key: Constants.keyDatePicker,
           initialValue: dateToDateTimeString(getField(instance as Event).value),

@@ -28,10 +28,10 @@ class AdaptiveViewWithList extends StatelessWidget {
     this.getColumnFooterWidget,
   });
 
-  final Function(BuildContext, int)? onItemTap;
-  final Function(int columnHeaderIndex)? onColumnHeaderTap;
-  final Function(Field<dynamic> field)? onColumnHeaderLongPress;
-  final Widget? Function(Field field)? getColumnFooterWidget;
+  final void Function(BuildContext, int)? onItemTap;
+  final void Function(int columnHeaderIndex)? onColumnHeaderTap;
+  final void Function(Field<dynamic> field)? onColumnHeaderLongPress;
+  final Widget? Function(Field<dynamic> field)? getColumnFooterWidget;
   final bool applySorting;
   final Widget? bottom;
   final FieldDefinitions fieldDefinitions;
@@ -40,7 +40,7 @@ class AdaptiveViewWithList extends StatelessWidget {
   final bool isMultiSelectionOn;
   final List<MoneyObject> list;
   final ListController listController;
-  final Function(int) onSelectionChanged;
+  final void Function(int) onSelectionChanged;
   final bool sortAscending;
   final int sortByFieldIndex;
   final Widget? top;

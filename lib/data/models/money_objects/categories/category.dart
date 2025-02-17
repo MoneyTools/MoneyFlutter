@@ -93,7 +93,7 @@ class Category extends MoneyObject {
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).fieldColor.value = value as String;
     },
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
       return MutateFieldColor(
         colorAsHex: (instance as Category).fieldColor.value,
         onEdited: (String newValue) {
@@ -223,7 +223,7 @@ class Category extends MoneyObject {
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).fieldType.value = CategoryType.values[value as int];
     },
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (final MoneyObject instance,void  Function(bool wasModified) onEdited) {
       final i = instance as Category;
       return pickerCategoryType(
         itemSelected: i.fieldType.value,
@@ -275,7 +275,7 @@ class Category extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final _fields = Fields<Category>();
 
@@ -515,7 +515,7 @@ class MutateFieldColor extends StatefulWidget {
   });
 
   final String colorAsHex;
-  final Function(String) onEdited;
+  final void Function(String) onEdited;
 
   @override
   State<MutateFieldColor> createState() => _MutateFieldColorState();

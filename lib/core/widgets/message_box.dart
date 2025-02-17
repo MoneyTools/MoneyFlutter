@@ -6,7 +6,7 @@ void messageBox(
   final BuildContext context,
   final String message,
 ) {
-  showDialog(
+  showDialog<dynamic>(
     context: context,
     builder: (BuildContext context) {
       return SimpleDialog(
@@ -34,7 +34,7 @@ class DialogService {
   static final DialogService _instance = DialogService._internal();
 
   Future<void> showMessageBox(String title, String message) async {
-    await showDialog(
+    await showDialog<dynamic>(
       context: navigatorKey.currentContext!,
       builder: (BuildContext context) {
         return AlertDialog(

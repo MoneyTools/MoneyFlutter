@@ -28,7 +28,7 @@ class SnackBarService {
         onPressed: () {
           // Dismiss the Snackbar when the close button is pressed
           if (Get.isSnackbarOpen) {
-            Get.back();
+            Get.back<dynamic>();
           }
         },
         child: Icon(Icons.close, color: textColor),

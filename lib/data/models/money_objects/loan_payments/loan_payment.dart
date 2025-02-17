@@ -146,7 +146,7 @@ class LoanPayment extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final Fields<LoanPayment> _fields = Fields<LoanPayment>();
 

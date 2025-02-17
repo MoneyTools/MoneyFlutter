@@ -30,10 +30,10 @@ class MyListView<T> extends StatefulWidget {
     this.isMultiSelectionOn = false,
   });
 
-  final Function(BuildContext, int uniqueId)? onTap;
-  final Function(BuildContext, int uniqueId)? onDoubleTap;
-  final Function(BuildContext, int uniqueId)? onLongPress;
-  final Function(int /* uniqueId */)? onSelectionChanged;
+  final void Function(BuildContext, int uniqueId)? onTap;
+  final void Function(BuildContext, int uniqueId)? onDoubleTap;
+  final void Function(BuildContext, int uniqueId)? onLongPress;
+  final void Function(int /* uniqueId */)? onSelectionChanged;
   final bool displayAsColumn;
   final FieldDefinitions fields;
   final bool isMultiSelectionOn;

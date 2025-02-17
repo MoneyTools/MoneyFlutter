@@ -71,7 +71,7 @@ class ViewAliasesState extends ViewForMoneyObjectsState {
       return ListViewTransactions(
         key: Key(alias.uniqueId.toString()),
         listController: Get.find<ListControllerSidePanel>(),
-        columnsToInclude: <Field>[
+        columnsToInclude: <Field<dynamic>>[
           Transaction.fields.getFieldByName(columnIdDate),
           Transaction.fields.getFieldByName(columnIdAccount),
           Transaction.fields.getFieldByName(columnIdCategory),

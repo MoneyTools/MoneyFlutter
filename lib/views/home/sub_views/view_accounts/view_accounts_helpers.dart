@@ -57,7 +57,7 @@ extension ViewAccountsHelpers on ViewAccountsState {
   ///
   /// @param index The index of the selected pivot. Valid values are 0, 1, 2, 3, and -1 (for "all" account types).
   /// @return A list of [AccountType] corresponding to the provided [index].
-  List<AccountType> getSelectedAccountTypesByIndex(final index) {
+  List<AccountType> getSelectedAccountTypesByIndex(final int index) {
     switch (index) {
       case 0:
         return <AccountType>[AccountType.checking, AccountType.savings];

@@ -9,7 +9,7 @@ class DropZone extends StatefulWidget {
   });
 
   final Widget child;
-  final Function(List<String> filePaths) onFilesDropped;
+  final void Function(List<String> filePaths) onFilesDropped;
 
   @override
   DropZoneState createState() => DropZoneState();

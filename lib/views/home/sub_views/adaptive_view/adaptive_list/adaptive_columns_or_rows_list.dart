@@ -29,12 +29,12 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
     this.backgroundColorForHeaderFooter,
   });
 
-  final Widget? Function(Field field)? getColumnFooterWidget;
-  final Function(int uniqueId)? onSelectionChanged;
-  final Function(int columnHeaderIndex)? onColumnHeaderTap;
-  final Function(Field field)? onColumnHeaderLongPress;
-  final Function(BuildContext context, int itemId)? onItemTap;
-  final Function(BuildContext context, int itemId)? onItemLongPress;
+  final Widget? Function(Field<dynamic> field)? getColumnFooterWidget;
+  final void Function(int uniqueId)? onSelectionChanged;
+  final void Function(int columnHeaderIndex)? onColumnHeaderTap;
+  final void Function(Field<dynamic> field)? onColumnHeaderLongPress;
+  final void Function(BuildContext context, int itemId)? onItemTap;
+  final void Function(BuildContext context, int itemId)? onItemLongPress;
   final Color? backgroundColorForHeaderFooter;
   final FieldDefinitions fieldDefinitions;
   final FieldFilters filters;

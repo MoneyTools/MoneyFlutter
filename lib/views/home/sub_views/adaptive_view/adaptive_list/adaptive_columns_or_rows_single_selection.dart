@@ -27,12 +27,12 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
     this.backgroundColorForHeaderFooter,
   });
 
-  final Widget? Function(Field field)? getColumnFooterWidget;
-  final Function(int uniqueId)? onSelectionChanged;
-  final Function(int columnHeaderIndex)? onColumnHeaderTap;
-  final Function(Field field)? onColumnHeaderLongPress;
-  final Function(BuildContext context, int itemId)? onItemTap;
-  final Function(BuildContext context, int itemId)? onItemLongPress;
+  final Widget? Function(Field<dynamic> field)? getColumnFooterWidget;
+  final void Function(int uniqueId)? onSelectionChanged;
+  final void Function(int columnHeaderIndex)? onColumnHeaderTap;
+  final void Function(Field<dynamic> field)? onColumnHeaderLongPress;
+  final void Function(BuildContext context, int itemId)? onItemTap;
+  final void Function(BuildContext context, int itemId)? onItemLongPress;
   final Color? backgroundColorForHeaderFooter;
   final FieldDefinitions fieldDefinitions;
   final FieldFilters filters;
@@ -139,7 +139,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
   }
 
   /// Use the field FooterType to decide how to render the bottom button of each columns
-  Widget getColumnFooterWidget(final Field field) {
+  Widget getColumnFooterWidget(final Field<dynamic> field) {
     return _footerAccumulators.buildWidget(field);
   }
 }

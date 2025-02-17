@@ -173,7 +173,7 @@ T? getMoneyObjectFromFirstSelectedId<T>(
   return null;
 }
 
-bool isIndexInRange(List array, int index) {
+bool isIndexInRange(List<dynamic> array, int index) {
   return index >= 0 && index < array.length;
 }
 

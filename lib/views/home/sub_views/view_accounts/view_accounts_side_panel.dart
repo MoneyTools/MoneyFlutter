@@ -306,7 +306,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
 
     selectionController.load();
 
-    final FieldDefinitions columnsToDisplay = <Field>[
+    final FieldDefinitions columnsToDisplay = <Field<dynamic>>[
       Transaction.fields.getFieldByName(columnIdDate),
       Transaction.fields.getFieldByName(columnIdPayee),
       Transaction.fields.getFieldByName(columnIdCategory),

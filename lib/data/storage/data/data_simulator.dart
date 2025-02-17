@@ -192,7 +192,7 @@ class DataSimulator {
   /// Adds an investment transaction to the account.
   void _addInvestment(
     final Account account,
-    final dateAsString,
+    final String dateAsString,
     final int stockId,
     final InvestmentType activity,
     final double quantity,
@@ -232,7 +232,7 @@ class DataSimulator {
   }
 
   /// Adds a new account to the data.
-  Account _addNewAccount(int id, name, accountId, type, currency) {
+  Account _addNewAccount(final int id, final String name, final String accountId, final int type, final String currency,) {
     final account = Account.fromJson({
       'Id': id,
       'Name': name,

@@ -5,7 +5,7 @@ import 'package:money/data/storage/data/data.dart';
 
 Widget pickerAccount({
   required final Account? selected,
-  required final Function(Account?) onSelected,
+  required final void Function(Account?) onSelected,
 }) {
   final List<String> options = Data().accounts.getListSorted().map((element) => element.fieldName.value).toList();
 

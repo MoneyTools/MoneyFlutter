@@ -14,7 +14,7 @@ void showPopupSelection({
   required String title,
   required List<String> items,
   required String selectedItem,
-  required Function(String text) onSelected,
+  required void Function(String text) onSelected,
   bool showLetterPicker = true,
   TokenTextStyle tokenTextStyle = const TokenTextStyle(
     separatorPaddingLeft: SizeForPadding.nano,
@@ -53,7 +53,7 @@ class PickerPanel extends StatefulWidget {
   });
 
   final double itemHeight;
-  final Function(String selectedValue) onSelected;
+  final void Function(String selectedValue) onSelected;
   final List<String> options;
   final bool rightAligned;
   final String selectedItem;

@@ -161,7 +161,7 @@ class MoneyObjects<T> {
     return _list.isEmpty;
   }
 
-  static bool isFieldMatchingCondition(final field, bool forSerialization) {
+  static bool isFieldMatchingCondition(final Field<dynamic> field, bool forSerialization) {
     return ((forSerialization == true && field.serializeName.isNotEmpty) || (forSerialization == false));
   }
 
@@ -271,7 +271,7 @@ class MoneyObjects<T> {
     bool forSerialization = true,
   ]) {
     final List<String> listValues = <String>[];
-    for (final Field field in fieldDefinitions) {
+    for (final Field<dynamic> field in fieldDefinitions) {
       final dynamic value = field.getValueForSerialization == defaultCallbackValue || forSerialization == false
           ? item.toReadableString(field)
           : field.getValueForSerialization(item);

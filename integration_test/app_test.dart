@@ -99,7 +99,7 @@ Future<void> stepDemoDataViews(WidgetTester tester) async {
   // Open a Demo Data
   await tapOnText(tester, 'Use Demo Data');
 
-  for (final MoneyObjects table in Data().tables) {
+  for (final MoneyObjects<dynamic> table in Data().tables) {
     expect(table.isNotEmpty, true, reason: table.collectionName);
     final String text = table.firstItem(false).toString();
     // ignore: avoid_print
@@ -278,7 +278,7 @@ Future<void> testSettingsFontsAndRental(WidgetTester tester) async {
     // Toggle the switch to "On"
     await tester.tap(switchTileFinder);
     await tester.myPump(); // Wait for the state to update
-    await Future.delayed(const Duration(seconds: 1));
+    await Future<dynamic>.delayed(const Duration(seconds: 1));
   }
   await tapBackButton(tester);
 }

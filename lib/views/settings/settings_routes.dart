@@ -9,7 +9,7 @@ class SettingsRoutes {
   /// Defines the routes for the settings page in the application.
   /// This includes a single route for the SettingsPage.
   static final routes = [
-    GetPage(
+    GetPage<dynamic>(
       name: Constants.routeSettingsPage,
       page: () => const SettingsPage(),
     ),

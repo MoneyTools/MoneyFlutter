@@ -25,7 +25,7 @@ class MyNavigationBar extends StatelessWidget {
     required this.onSelected,
   });
 
-  final Function(int) onSelected;
+  final void Function(int) onSelected;
   final Axis orientation;
   final int selectedIndex;
 

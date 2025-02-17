@@ -47,7 +47,7 @@ InvestmentTradeType fromInvestmentType(final InvestmentType type) {
 
 Widget pickerInvestmentTradeType({
   required final InvestmentTradeType itemSelected,
-  required final Function(InvestmentTradeType) onSelected,
+  required final void Function(InvestmentTradeType) onSelected,
 }) {
   String selectedName = getInvestmentTradeTypeText(itemSelected);
 

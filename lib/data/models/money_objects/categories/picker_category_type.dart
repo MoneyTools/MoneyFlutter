@@ -4,7 +4,7 @@ import 'package:money/data/models/money_objects/categories/category.dart';
 
 Widget pickerCategoryType({
   required final CategoryType itemSelected,
-  required final Function(CategoryType) onSelected,
+  required final void Function(CategoryType) onSelected,
 }) {
   return PickerEditBox(
     title: 'Category',

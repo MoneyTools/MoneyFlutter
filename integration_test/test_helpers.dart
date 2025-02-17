@@ -131,25 +131,25 @@ extension WidgetTesterExtension on WidgetTester {
   }
 }
 
-Future<void> switchToSmall(tester) async {
+Future<void> switchToSmall(final WidgetTester tester) async {
   ThemeController.to.setAppSizeToSmall();
   await tester.pumpAndSettle();
   await showInstruction(tester, 'Small Screen - Phone');
 }
 
-Future<void> switchToMedium(tester) async {
+Future<void> switchToMedium(final WidgetTester tester) async {
   ThemeController.to.setAppSizeToMedium();
   await tester.pumpAndSettle();
   await showInstruction(tester, 'Medium Screen - iPad');
 }
 
-Future<void> switchToLarge(tester) async {
+Future<void> switchToLarge(final WidgetTester tester) async {
   ThemeController.to.setAppSizeToLarge();
   await tester.pumpAndSettle();
   await showInstruction(tester, 'Medium Screen - Desktop');
 }
 
-Future<void> showInstruction(tester, text) async {
+Future<void> showInstruction(final WidgetTester tester, final String text) async {
   SnackBarService.display(message: text, autoDismiss: true, title: 'MyMoney flutter integration test', duration: 5);
   await tester.pumpAndSettle();
   await tapOnKeyString(tester, 'key_snackbar_close_button');

@@ -26,7 +26,7 @@ class SidePanelHeader extends StatelessWidget {
   final Function currentSelectionChanged;
   final bool isExpanded;
   final Function onExpanded;
-  final Function(SidePanelSubViewEnum) subViewSelectionChanged;
+  final void Function(SidePanelSubViewEnum) subViewSelectionChanged;
 
   // Actions
   final List<Widget> Function(bool) actionButtons;

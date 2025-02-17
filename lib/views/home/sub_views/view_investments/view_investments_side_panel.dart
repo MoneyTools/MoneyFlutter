@@ -80,7 +80,7 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
     return ListViewTransactions(
       key: Key(instance.uniqueId.toString()),
       listController: Get.find<ListControllerSidePanel>(),
-      columnsToInclude: <Field>[
+      columnsToInclude: <Field<dynamic>>[
         Transaction.fields.getFieldByName(columnIdDate),
         Transaction.fields.getFieldByName(columnIdAccount),
         Transaction.fields.getFieldByName(columnIdPayee),

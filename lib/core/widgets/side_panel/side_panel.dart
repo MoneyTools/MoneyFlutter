@@ -90,13 +90,13 @@ class SidePanel extends StatelessWidget {
     super.key,
   });
 
-  final Function(int) currencySelectionChanged;
+  final void Function(int) currencySelectionChanged;
   final List<String> Function(SidePanelSubViewEnum, List<int>) getCurrencyChoices;
   final bool isExpanded;
   final Function onExpanded;
   final ValueNotifier<List<int>> selectedItems;
   final SidePanelSupport sidePanelSupport;
-  final Function(SidePanelSubViewEnum) subPanelSelectionChanged;
+  final void Function(SidePanelSubViewEnum) subPanelSelectionChanged;
 
   // Currency selection
   final int currencySelected;

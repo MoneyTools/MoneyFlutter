@@ -12,7 +12,7 @@ Widget myFormField({
 }
 
 InputDecoration myFormFieldDecoration({
-  required final fieldName,
+  required final String fieldName,
   required final bool isReadOnly,
 }) {
   return InputDecoration(
@@ -34,7 +34,7 @@ class MyFormFieldForWidget extends StatefulWidget {
   });
 
   final bool isReadOnly;
-  final Function(String) onChanged;
+  final void Function(String) onChanged;
   final String title;
   final String valueAsText;
 

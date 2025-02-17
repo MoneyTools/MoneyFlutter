@@ -196,7 +196,7 @@ class Accounts extends MoneyObjects<Account> {
   /// Find a transaction that has a date in the future but not more than 2 months and has inverse amount
   Transaction? findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
     final List<Transaction> transactionForAccountSortedByDateAscending,
-    final indexStartingFrom,
+    final int indexStartingFrom,
     final DateTime validDateInThePast,
     final double amountToMatch,
   ) {

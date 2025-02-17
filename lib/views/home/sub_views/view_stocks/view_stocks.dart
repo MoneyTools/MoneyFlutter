@@ -292,7 +292,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       'Commission',
       'ActivityAmount',
     ];
-    final List<Field> fieldsToDisplay = Investment.fields.definitions
+    final List<Field<dynamic>> fieldsToDisplay = Investment.fields.definitions
         .where(
           (element) => included.contains(element.name),
         )

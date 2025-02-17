@@ -5,7 +5,7 @@ import 'package:money/views/policies/policy_page.dart';
 class PolicyRoutes {
   PolicyRoutes._();
 
-  static final routes = [
+  static final List<GetPage<dynamic>> routes = [
     GetPage(
       name: Constants.routePolicyPage,
       page: () => const PolicyPage(),

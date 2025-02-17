@@ -59,7 +59,7 @@ class Fields<T> {
         isMatchingColumnFiltering(objectInstance, filterByFieldsValue);
   }
 
-  Field getFieldByName(final String name) {
+  Field<dynamic> getFieldByName(final String name) {
     return definitions.firstWhere((field) => field.name == name);
   }
 
@@ -67,7 +67,7 @@ class Fields<T> {
   static Widget getRowOfColumns(final FieldDefinitions definitions, final MoneyObject objectInstance) {
     final List<Widget> cells = <Widget>[];
 
-    for (final Field fieldDefinition in definitions) {
+    for (final Field<dynamic> fieldDefinition in definitions) {
       if (fieldDefinition.columnWidth != ColumnWidth.hidden) {
         final dynamic value = fieldDefinition.getValueForDisplay(objectInstance);
         cells.add(
@@ -105,7 +105,7 @@ class Fields<T> {
     final FieldFilters filterByFieldsValue,
   ) {
     for (final FieldFilter filter in filterByFieldsValue.list) {
-      final Field fieldDefinition = getFieldByName(filter.fieldName);
+      final Field<dynamic> fieldDefinition = getFieldByName(filter.fieldName);
       if (filter.byDateRange) {
         // caller supplied a date range
         final DateTime date = _getFieldValueAsDate(

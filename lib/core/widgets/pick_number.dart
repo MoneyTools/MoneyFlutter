@@ -13,7 +13,7 @@ class NumberPicker extends StatelessWidget {
 
   final int maxValue;
   final int minValue;
-  final Function(int) onChanged;
+  final void Function(int) onChanged;
   final int selectedNumber;
   final String title;
 

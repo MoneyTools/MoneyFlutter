@@ -6,7 +6,7 @@ SegmentedButton<int> mySegmentSelector({
   required final int selectedId,
 
   /// returns the new selected segment ID
-  required Function(int) onSelectionChanged,
+  required void Function(int) onSelectionChanged,
 }) {
   return SegmentedButton<int>(
     style: const ButtonStyle(

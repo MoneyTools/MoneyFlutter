@@ -10,7 +10,7 @@ class ColorPicker extends StatefulWidget {
   });
 
   final Color color;
-  final Function(Color) onColorChanged;
+  final void Function(Color) onColorChanged;
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();

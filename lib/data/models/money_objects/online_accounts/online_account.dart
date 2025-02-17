@@ -119,19 +119,24 @@ class OnlineAccount extends MoneyObject {
 
   // Fields for this instance
   @override
-  FieldDefinitions get fieldDefinitions {
-    final tmp = OnlineAccount.fromJson({});
-    final f = Fields<Fields>()
-      ..setDefinitions([
+  FieldDefinitions get fieldDefinitions => fields.definitions;
+
+    static final Fields<OnlineAccount> _fields = Fields<OnlineAccount>();
+  static Fields<OnlineAccount> get fields {
+    if (_fields.isEmpty) {
+      final tmp = OnlineAccount.fromJson({});
+      _fields.setDefinitions([
         tmp.fieldId,
         tmp.fieldName,
       ]);
-    return f.definitions;
+    }
+
+    return _fields;
   }
 
   @override
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 }

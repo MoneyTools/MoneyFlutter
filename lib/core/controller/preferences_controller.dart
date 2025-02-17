@@ -62,7 +62,7 @@ class PreferenceController extends GetxController {
     } else {
       // queue changing screen after app loaded
       Future.delayed(const Duration(milliseconds: 100), () {
-        Get.offNamed(Constants.routeWelcomePage);
+        Get.offNamed<dynamic>(Constants.routeWelcomePage);
       });
     }
   }
@@ -148,10 +148,12 @@ class PreferenceController extends GetxController {
     isReady.value = true;
   }
 
-  RxBool get isDetailsPanelExpanded => _isDetailsPanelExpanded;
+  bool get isDetailsPanelExpanded => _isDetailsPanelExpanded.value;
 
-  set isDetailsPanelExpanded(value) {
+  set isDetailsPanelExpanded(final bool value) {
     _isDetailsPanelExpanded.value = value;
+    
+    // persist
     setBool(settingKeyDetailsPanelExpanded, value);
   }
 

@@ -103,7 +103,7 @@ Widget buildDeleteButton(final Function callback) {
   );
 }
 
-Widget buildCopyButton(final Function callback, [final key = Constants.keyCopyListToClipboardHeaderMain]) {
+Widget buildCopyButton(final Function callback, [final Key key = Constants.keyCopyListToClipboardHeaderMain]) {
   return IconButton(
     key: key,
     onPressed: () {
@@ -156,7 +156,7 @@ PopupMenuButton<int> myPopupMenuIconButton({
   required final IconData icon,
   required final String tooltip,
   required final List<PopupMenuItem<int>> list,
-  required final Function(int) onSelected,
+  required final void Function(int) onSelected,
 }) {
   return PopupMenuButton<int>(
     key: key,

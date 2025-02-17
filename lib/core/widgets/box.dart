@@ -182,7 +182,7 @@ class BoxWithScrollingContent extends StatelessWidget {
   }
 }
 
-Widget headerText(final BuildContext context, final String title, {final large = false}) {
+Widget headerText(final BuildContext context, final String title, {final bool large = false}) {
   return SelectableText(
     title,
     style: large ? getTextTheme(context).titleLarge : getTextTheme(context).titleSmall,

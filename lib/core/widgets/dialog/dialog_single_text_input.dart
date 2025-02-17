@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 Future<void> showTextInputDialog({
   required BuildContext context,
-  required Function(String) onContinue,
+  required void Function(String) onContinue,
   final String title = 'Input',
   final String subTitle = '',
   final String initialValue = '',

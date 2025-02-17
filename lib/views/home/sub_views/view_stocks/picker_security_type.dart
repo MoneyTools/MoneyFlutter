@@ -8,7 +8,7 @@ export 'package:money/data/models/money_objects/investments/investment_types.dar
 
 Widget pickerSecurityType({
   required final SecurityType itemSelected,
-  required final Function(SecurityType?) onSelected,
+  required final void Function(SecurityType?) onSelected,
 }) {
   List<String> options = enumToStringList(SecurityType.values);
 

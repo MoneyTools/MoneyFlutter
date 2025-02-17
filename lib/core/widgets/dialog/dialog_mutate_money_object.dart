@@ -71,7 +71,7 @@ class DialogMutateMoneyObject extends StatefulWidget {
   });
 
   final MoneyObject moneyObject;
-  final Function(MoneyObject) onApplyChange;
+  final void Function(MoneyObject) onApplyChange;
 
   @override
   State<DialogMutateMoneyObject> createState() => _DialogMutateMoneyObjectState();

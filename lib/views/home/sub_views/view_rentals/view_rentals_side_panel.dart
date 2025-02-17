@@ -138,7 +138,7 @@ class ViewRentalsSidePanel {
     final SelectionController selectionController = Get.put(SelectionController());
     return ListViewTransactions(
       listController: Get.find<ListControllerSidePanel>(),
-      columnsToInclude: <Field>[
+      columnsToInclude: <Field<dynamic>>[
         Transaction.fields.getFieldByName(columnIdDate),
         Transaction.fields.getFieldByName(columnIdAccount),
         Transaction.fields.getFieldByName(columnIdPayee),

@@ -91,11 +91,11 @@ String getInitials(String fullName) {
   return fullName.split(' ').map((word) => word[0].toUpperCase()).join('');
 }
 
-String getIntAsText(final int value, {showPlusSign = false}) {
+String getIntAsText(final int value, {final bool showPlusSign = false}) {
   return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + NumberFormat.decimalPattern().format(value);
 }
 
-String getPrefixPlusSignIfNeeded(final num value, {showPlusSign = false}) {
+String getPrefixPlusSignIfNeeded(final num value, {final bool showPlusSign = false}) {
   return (showPlusSign ? getPlusSignIfPositive(value) : '');
 }
 

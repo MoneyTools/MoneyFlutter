@@ -28,7 +28,7 @@ class InputByColumnsOrFreeStyle extends StatefulWidget {
   final String inputText;
 
   /// Callback function triggered when input changes
-  final Function(String) onChanged;
+  final void Function(String) onChanged;
 
   /// Whether to reverse the sign of amount values
   final bool reverseAmountValue;

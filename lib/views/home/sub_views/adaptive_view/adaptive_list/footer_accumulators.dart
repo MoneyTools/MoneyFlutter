@@ -5,16 +5,16 @@ import 'package:money/data/models/fields/field.dart';
 import 'package:money/views/home/sub_views/adaptive_view/view_money_objects.dart';
 
 class FooterAccumulators {
-  final AccumulatorDateRange<Field> accumulatorDateRange = AccumulatorDateRange<Field>();
-  final AccumulatorAverage<Field> accumulatorForAverage = AccumulatorAverage<Field>();
-  final AccumulatorList<Field, String> accumulatorListOfText = AccumulatorList<Field, String>();
-  final AccumulatorSum<Field, double> accumulatorSumAmount = AccumulatorSum<Field, double>();
-  final AccumulatorSum<Field, double> accumulatorSumNumber = AccumulatorSum<Field, double>();
+  final AccumulatorDateRange<Field<dynamic>> accumulatorDateRange = AccumulatorDateRange<Field<dynamic>>();
+  final AccumulatorAverage<Field<dynamic>> accumulatorForAverage = AccumulatorAverage<Field<dynamic>>();
+  final AccumulatorList<Field<dynamic>, String> accumulatorListOfText = AccumulatorList<Field<dynamic>, String>();
+  final AccumulatorSum<Field<dynamic>, double> accumulatorSumAmount = AccumulatorSum<Field<dynamic>, double>();
+  final AccumulatorSum<Field<dynamic>, double> accumulatorSumNumber = AccumulatorSum<Field<dynamic>, double>();
 
   /// Allowed to be override by derived classes
   /// to be overridden by derived class
   /// Use the field FooterType to decide how to render the bottom button of each columns
-  Widget buildWidget(final Field field) {
+  Widget buildWidget(final Field<dynamic> field) {
     switch (field.footer) {
       case FooterType.range:
         if (accumulatorDateRange.containsKey(field)) {

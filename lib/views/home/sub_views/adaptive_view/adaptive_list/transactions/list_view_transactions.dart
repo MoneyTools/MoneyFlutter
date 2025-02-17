@@ -18,8 +18,8 @@ class ListViewTransactions extends StatefulWidget {
     this.onUserChoiceChanged,
   });
 
-  final Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
-  final List<Field> columnsToInclude;
+  final void Function(int sortingField, bool sortAscending, int selectedItemIndex)? onUserChoiceChanged;
+  final List<Field<dynamic>> columnsToInclude;
   final List<Transaction> Function() getList;
   final ListController listController;
   final SelectionController selectionController;

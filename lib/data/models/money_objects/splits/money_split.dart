@@ -140,9 +140,7 @@ class MoneySplit extends MoneyObject {
         (instance as MoneySplit).fieldCategoryId.value = newValue as int,
     getEditWidget: (
       final MoneyObject instance,
-      Function(
-        bool wasModified,
-      ) onEdited,
+      void Function(bool wasModified) onEdited,
     ) {
       (instance as MoneySplit);
       return Row(
@@ -231,7 +229,7 @@ class MoneySplit extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final _fields = Fields<MoneySplit>();
 

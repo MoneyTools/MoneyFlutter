@@ -12,7 +12,7 @@ class PickerEditBoxDate extends StatefulWidget {
   });
 
   final String? initialValue;
-  final Function(String) onChanged;
+  final void Function(String) onChanged;
 
   @override
   PickerEditBoxDateState createState() => PickerEditBoxDateState();

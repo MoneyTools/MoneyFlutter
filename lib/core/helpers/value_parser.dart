@@ -251,7 +251,7 @@ class ValuesParser {
     );
   }
 
-  Widget buildPresentation(context) {
+  Widget buildPresentation(final BuildContext context) {
     List<Widget> rows = [];
 
     if (lines.isNotEmpty) {

@@ -24,8 +24,8 @@ class ImportTransactionsPanel extends StatefulWidget {
 
   final Account account;
   final String inputText;
-  final Function(Account accountSelected) onAccountChanged;
-  final Function(ValuesParser parser) onTransactionsFound;
+  final void Function(Account accountSelected) onAccountChanged;
+  final void Function(ValuesParser parser) onTransactionsFound;
 
   @override
   ImportTransactionsPanelState createState() => ImportTransactionsPanelState();

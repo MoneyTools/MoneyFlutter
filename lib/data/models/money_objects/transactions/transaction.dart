@@ -265,9 +265,7 @@ class Transaction extends MoneyObject {
         (instance as Transaction).fieldCategoryId.value = newValue as int,
     getEditWidget: (
       final MoneyObject instance,
-      Function(
-        bool wasModified,
-      ) onEdited,
+      void Function(bool wasModified) onEdited,
     ) {
       (instance as Transaction);
       return Row(
@@ -320,7 +318,7 @@ class Transaction extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => dateToSqliteFormat(
       (instance as Transaction).fieldDateTime.value,
     ),
-    getEditWidget: (final MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (final MoneyObject instance, void Function(bool wasModified) onEdited) {
       return PickerEditBoxDate(
         key: Constants.keyDatePicker,
         initialValue: (instance as Transaction).dateTimeAsString,
@@ -446,7 +444,7 @@ class Transaction extends MoneyObject {
         instance.instanceOfTransfer = null;
       }
     },
-    getEditWidget: (MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (MoneyObject instance, void Function(bool wasModified) onEdited) {
       return SizedBox(
         width: 300,
         height: 80,
@@ -632,7 +630,7 @@ class Transaction extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final Fields<Transaction> _fields = Fields<Transaction>();
 

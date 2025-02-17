@@ -8,7 +8,7 @@ export 'package:money/data/models/money_objects/categories/category.dart';
 Widget pickerCategory({
   Key? key,
   required final Category? itemSelected,
-  required final Function(Category?) onSelected,
+  required final void Function(Category?) onSelected,
 }) {
   String selectedName = itemSelected == null ? '' : itemSelected.fieldName.value;
 

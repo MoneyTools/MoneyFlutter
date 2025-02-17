@@ -28,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
             children: <Widget>[
               OutlinedButton(
                 onPressed: () {
-                  Get.offAllNamed(Constants.routeHomePage);
+                  Get.offAllNamed<dynamic>(Constants.routeHomePage);
                   DataController.to.onFileNew();
                 },
                 child: const Text('New File ...'),
@@ -37,7 +37,7 @@ class WelcomeScreen extends StatelessWidget {
                 onPressed: () {
                   DataController.to.onFileOpen().then((final bool succeeded) {
                     if (succeeded) {
-                      Get.offAllNamed(Constants.routeHomePage);
+                      Get.offAllNamed<dynamic>(Constants.routeHomePage);
                     }
                   });
                 },
@@ -48,7 +48,7 @@ class WelcomeScreen extends StatelessWidget {
                   DataController.to.closeFile();
                   final DataController dataController = Get.find();
                   dataController.loadDemoData().then((final _) {
-                    Get.offAllNamed(Constants.routeHomePage);
+                    Get.offAllNamed<dynamic>(Constants.routeHomePage);
                   });
                 },
                 child: const Text('Use Demo Data'),
@@ -65,7 +65,7 @@ class WelcomeScreen extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {
-                      Get.toNamed(Constants.routePolicyPage);
+                      Get.toNamed<dynamic>(Constants.routePolicyPage);
                     },
                     child: const Text('Privacy Policy'),
                   ),

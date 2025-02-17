@@ -42,7 +42,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         showImportTransactionsFromTextInput(Get.context!);
         break;
       case Constants.commandSettings:
-        Get.toNamed(Constants.routeSettingsPage);
+        Get.toNamed<dynamic>(Constants.routeSettingsPage);
         break;
       case Constants.commandIncludeClosedAccount:
         PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
@@ -201,12 +201,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   void _handleMenuSelection(int index) {
     switch (index) {
       case Constants.commandFileNew:
-        Get.offAllNamed(Constants.routeHomePage);
+        Get.offAllNamed<dynamic>(Constants.routeHomePage);
         DataController.to.onFileNew();
         break;
       case Constants.commandFileOpen:
         DataController.to.onFileOpen().then((_) {
-          Get.offAllNamed(Constants.routeHomePage);
+          Get.offAllNamed<dynamic>(Constants.routeHomePage);
         });
         break;
       case Constants.commandFileLocation:
@@ -226,7 +226,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         break;
       case Constants.commandFileClose:
         DataController.to.closeFile();
-        Get.offAllNamed(Constants.routeWelcomePage);
+        Get.offAllNamed<dynamic>(Constants.routeWelcomePage);
         break;
       default:
         debugPrint('Unhandled menu item: $index');

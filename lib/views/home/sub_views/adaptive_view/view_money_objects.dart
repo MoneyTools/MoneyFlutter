@@ -127,10 +127,10 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             saveLastUserChoicesOfView();
           },
           onItemTap: _onItemTap,
-          flexBottom: preferenceController.isDetailsPanelExpanded.value ? 1 : 0,
+          flexBottom: preferenceController.isDetailsPanelExpanded ? 1 : 0,
           bottom: SidePanel(
             key: Key(settingKeySidePanel + sidePanelOptions.selectedCurrency.toString()),
-            isExpanded: preferenceController.isDetailsPanelExpanded.value,
+            isExpanded: preferenceController.isDetailsPanelExpanded,
             onExpanded: (final bool isExpanded) {
               setState(() {
                 preferenceController.isDetailsPanelExpanded = isExpanded;
@@ -413,7 +413,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   /// Allowed to be override by derived classes
   /// to be overridden by derived class
   /// Use the field FooterType to decide how to render the bottom button of each columns
-  Widget getColumnFooterWidget(final Field field) {
+  Widget getColumnFooterWidget(final Field<dynamic> field) {
     return _footerAccumulators.buildWidget(field);
   }
 
@@ -809,14 +809,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     });
   }
 
-  Widget _buildCenterMessageForEmptyList(final key) {
+  Widget _buildCenterMessageForEmptyList(final Key key) {
     return CenterMessage(
       key: key,
       message: 'No ${getClassNamePlural()}',
     );
   }
 
-  Widget _buildCenterMessageForEmptyListDueToFilters(final key) {
+  Widget _buildCenterMessageForEmptyListDueToFilters(final Key key) {
     List<String> activeFilterValues = [];
     if (_filterByText.isNotEmpty) {
       activeFilterValues.add('"$_filterByText"');

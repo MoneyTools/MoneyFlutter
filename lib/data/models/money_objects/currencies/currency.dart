@@ -109,7 +109,7 @@ class Currency extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final _fields = Fields<Currency>();
 

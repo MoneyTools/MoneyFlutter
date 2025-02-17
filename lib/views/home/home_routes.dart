@@ -7,7 +7,7 @@ class HomeRoutes {
   HomeRoutes._();
 
   static final routes = [
-    GetPage(
+    GetPage<dynamic>(
       name: Constants.routeHomePage,
       page: () => const HomePage(),
       binding: HomeBinding(),

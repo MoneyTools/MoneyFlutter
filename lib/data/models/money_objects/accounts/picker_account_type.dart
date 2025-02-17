@@ -5,7 +5,7 @@ import 'package:money/data/models/money_objects/accounts/account_types_enum.dart
 
 Widget pickerAccountType({
   required final AccountType itemSelected,
-  required final Function(AccountType) onSelected,
+  required final void Function(AccountType) onSelected,
 }) {
   String selectedName = getTypeAsText(itemSelected);
 

@@ -191,7 +191,7 @@ class Security extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) =>
         getSecurityTypeFromInt((instance as Security).fieldSecurityType.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Security).fieldSecurityType.value,
-    getEditWidget: (MoneyObject instance, Function(bool wasModified) onEdited) {
+    getEditWidget: (MoneyObject instance, void Function(bool wasModified) onEdited) {
       instance = (instance as Security);
       return pickerSecurityType(
         itemSelected: SecurityType.values[instance.fieldSecurityType.value],
@@ -260,7 +260,7 @@ class Security extends MoneyObject {
   int get uniqueId => fieldId.value;
 
   @override
-  set uniqueId(value) => fieldId.value = value;
+  set uniqueId(final int value) => fieldId.value = value;
 
   static final _fields = Fields<Security>();
 

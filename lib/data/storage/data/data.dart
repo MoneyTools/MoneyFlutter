@@ -234,7 +234,7 @@ class Data {
 
   List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {
     List<MoneyObject> mutated = [];
-    for (final MoneyObjects listOfInstance in tables) {
+    for (final MoneyObjects<dynamic> listOfInstance in tables) {
       mutated.addAll(listOfInstance.getMutatedObjects(typeOfMutation));
     }
     return mutated;
@@ -243,7 +243,7 @@ class Data {
   List<MutationGroup> getMutationGroups(MutationType typeOfMutation) {
     List<MutationGroup> allMutationGroups = [];
 
-    for (final MoneyObjects moneyObjects in tables) {
+    for (final MoneyObjects<dynamic> moneyObjects in tables) {
       final mutatedInstances = moneyObjects.getMutatedObjects(typeOfMutation);
       if (mutatedInstances.isNotEmpty) {
         MutationGroup mutationGroup = MutationGroup();

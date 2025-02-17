@@ -96,7 +96,7 @@ void showAndConfirmTransactionToImport(
             message:
                 'Import - No matching "${importData.fileType}" accounts with ID "${importData.account?.uniqueId.toString() ?? '-1'}"',
           );
-          return false;
+          return;
         }
       },
     );

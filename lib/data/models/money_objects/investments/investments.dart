@@ -45,7 +45,7 @@ class Investments extends MoneyObjects<Investment> {
 
   static double applyHoldingSharesAdjustedForSplits(List<Investment> investments) {
     // first sort by date, TradeType, Amount
-    final Field fieldToSortBy = Investment.fields.getFieldByName('Date');
+    final Field<dynamic> fieldToSortBy = Investment.fields.getFieldByName('Date');
     MoneyObjects.sortListFallbackOnIdForTieBreaker(investments, fieldToSortBy.sort!, true);
     double runningShares = 0;
 

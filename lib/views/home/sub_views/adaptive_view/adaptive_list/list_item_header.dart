@@ -18,13 +18,13 @@ class MyListItemHeader<T> extends StatelessWidget {
     this.onLongPress,
   });
 
-  final Function(bool)? onSelectAll;
-  final Function(Field<dynamic>)? onLongPress;
+  final void Function(bool)? onSelectAll;
+  final void Function(Field<dynamic>)? onLongPress;
   final Color backgroundColor;
   final FieldDefinitions columns;
   final FieldFilters filterOn;
   final bool itemsAreAllSelected;
-  final Function(int columnIndex) onTap;
+  final void Function(int columnIndex) onTap;
   final bool sortAscending;
   final int sortByColumn;
 

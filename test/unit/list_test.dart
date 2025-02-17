@@ -39,14 +39,14 @@ void main() {
     });
 
     test('returns empty list for numEntries <= 1', () {
-      expect(calculateSpread(1.0, 5.0, 1), []);
-      expect(calculateSpread(1.0, 5.0, 0), []);
+      expect(calculateSpread(1.0, 5.0, 1), <double>[]);
+      expect(calculateSpread(1.0, 5.0, 0), <double>[]);
     });
   });
 
   group('convertMapToListOfPair', () {
     test('returns empty list for empty map', () {
-      expect(convertMapToListOfPair({}), []);
+      expect(convertMapToListOfPair<String, int>({}).isEmpty, true);
     });
 
     test('converts map to list of pairs correctly', () {
