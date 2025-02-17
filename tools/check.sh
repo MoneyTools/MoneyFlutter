@@ -6,15 +6,14 @@ dart fix --apply
 dart analyze 
 flutter analyze
 
-
 flutter test
 
 # layers dependencies
 git@github.com:jpdup/glad.git --view layers --lines curve --align left -o layers.svg
 
 # call graph
-tool/graph.sh
+tools/graph.sh
 
 # layer diagram
-tool/layers.sh
+tools/layers.sh
 
