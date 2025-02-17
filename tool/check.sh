@@ -1,14 +1,11 @@
 #!/bin/sh
 echo --- Analyze
-
-tool/style.sh
-
-dart analyze 
+# dart format .
 dart fix --apply
 
+dart analyze 
 flutter analyze
 
-dart format . -l 120
 
 flutter test
 
