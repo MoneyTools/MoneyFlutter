@@ -168,8 +168,8 @@ class Field<T> {
             final bool ascending,
           ) =>
               sortByValue(
-                getValueForDisplay(a).toDouble(),
-                getValueForDisplay(b).toDouble(),
+                getValueForDisplay(a) as num,
+                getValueForDisplay(b) as num,
                 ascending,
               );
         case FieldType.date:
@@ -198,7 +198,7 @@ class Field<T> {
       }
     }
   }
-
+  
   /// Customize/override the edit widget
   Widget Function(MoneyObject, void Function(bool wasModified) onEdited)? getEditWidget;
 

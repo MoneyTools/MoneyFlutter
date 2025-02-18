@@ -1,3 +1,5 @@
+import 'package:money/data/models/money_model.dart';
+
 /// Returns the provided [value] if it's not null, otherwise returns the [defaultValueIfNull].
 ///
 /// This function is useful when dealing with nullable boolean values and ensuring a non-null value
@@ -81,4 +83,22 @@ num numValueOrDefault(final num? value, {final num defaultValueIfNull = 0}) {
 /// ```
 String valueOrDefaultString(final String? value, {final String defaultValueIfNull = ''}) {
   return value ?? defaultValueIfNull;
+}
+
+
+double smartToDouble(final dynamic value){
+
+  if(value is double){
+    return value;
+  }
+
+  if(value is int){
+    return value.toDouble();
+  }
+
+  if(value is MoneyModel){
+    return  value.asDouble();
+  }
+  
+  return value as double;
 }

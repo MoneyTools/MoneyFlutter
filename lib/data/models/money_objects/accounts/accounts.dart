@@ -30,7 +30,7 @@ class Accounts extends MoneyObjects<Account> {
     // reset balances
     for (final Account account in iterableList()) {
       account.fieldCount.value = 0;
-      account.balance = account.fieldOpeningBalance.value.toDouble();
+      account.balance = account.fieldOpeningBalance.value.asDouble();
       account.minBalancePerYears.clear();
       account.maxBalancePerYears.clear();
 
@@ -62,7 +62,7 @@ class Accounts extends MoneyObjects<Account> {
         }
 
         account.fieldCount.value++;
-        account.balance += t.fieldAmount.value.toDouble();
+        account.balance += t.fieldAmount.value.asDouble();
 
         final int yearOfTheTransaction = t.fieldDateTime.value!.year;
 
@@ -116,9 +116,9 @@ class Accounts extends MoneyObjects<Account> {
         final security = Data().securities.getBySymbol(symbol);
         if (security != null) {
           account.fieldStockHoldingEstimation.value
-              .setAmount(totalAdjustedShareForThisStockInThisAccount * security.fieldLastPrice.value.toDouble());
-          if (account.fieldStockHoldingEstimation.value.toDouble() != 0) {
-            account.balance += account.fieldStockHoldingEstimation.value.toDouble();
+              .setAmount(totalAdjustedShareForThisStockInThisAccount * security.fieldLastPrice.value.asDouble());
+          if (account.fieldStockHoldingEstimation.value.asDouble() != 0) {
+            account.balance += account.fieldStockHoldingEstimation.value.asDouble();
           }
         }
       }
@@ -131,7 +131,7 @@ class Accounts extends MoneyObjects<Account> {
       final LoanPayment? latestPayment = getAccountLoanPayments(account).lastOrNull;
       if (latestPayment != null) {
         account.fieldUpdatedOn.value = latestPayment.fieldDate.value;
-        account.balance = latestPayment.fieldBalance.value.toDouble() * -1;
+        account.balance = latestPayment.fieldBalance.value.asDouble() * -1;
       }
     }
 
@@ -277,9 +277,9 @@ class Accounts extends MoneyObjects<Account> {
   double getSumOfAccountBalances() {
     double sum = 0.00;
 
-    for (final account in iterableList()) {
+    for (final Account account in iterableList()) {
       if (account.isMatchingUserChoiceIncludingClosedAccount) {
-        sum += account.fieldBalanceNormalized.getValueForDisplay(account).toDouble();
+        sum += (account.fieldBalanceNormalized.getValueForDisplay(account) as MoneyModel).asDouble();
       }
     }
     return sum;
@@ -342,7 +342,7 @@ class Accounts extends MoneyObjects<Account> {
     double runningBalanceForThisAccount = 0;
 
     for (final t in transactionForAccountSortedByDateAscending) {
-      runningBalanceForThisAccount += t.fieldAmount.value.toDouble();
+      runningBalanceForThisAccount += t.fieldAmount.value.asDouble();
       t.balance = runningBalanceForThisAccount;
       t.fieldPaidOn.value = '';
     }
@@ -351,7 +351,7 @@ class Accounts extends MoneyObjects<Account> {
 
     for (int i = length; i >= 0; i--) {
       final Transaction t = transactionForAccountSortedByDateAscending[i];
-      if (t.fieldAmount.value.toDouble() > 0) {
+      if (t.fieldAmount.value.asDouble() > 0) {
         // a payment or reimbursement was made
 
         final DateTime maxDateToLookAt = t.fieldDateTime.value!.subtract(const Duration(days: 60));
@@ -359,7 +359,7 @@ class Accounts extends MoneyObjects<Account> {
           transactionForAccountSortedByDateAscending,
           i - 1,
           maxDateToLookAt,
-          -t.fieldAmount.value.toDouble(),
+          -t.fieldAmount.value.asDouble(),
         );
 
         if (transactionWithMatchingBalance == null) {

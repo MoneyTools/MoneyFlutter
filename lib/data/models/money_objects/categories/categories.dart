@@ -33,9 +33,9 @@ class Categories extends MoneyObjects<Category> {
       final Category? item = get(t.fieldCategoryId.value);
       if (item != null) {
         item.fieldTransactionCount.value++;
-        item.fieldSum.value += t.fieldAmount.value.toDouble();
+        item.fieldSum.value += t.fieldAmount.value.asDouble();
         item.fieldTransactionCountRollup.value++;
-        item.fieldSumRollup.value += t.fieldAmount.value.toDouble();
+        item.fieldSumRollup.value += t.fieldAmount.value.asDouble();
 
         List<Category> ancestors = [];
         item.getAncestors(ancestors);

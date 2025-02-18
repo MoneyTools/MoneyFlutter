@@ -74,7 +74,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         double stockPrice = 1.00;
 
         if (stock != null) {
-          stockPrice = stock.fieldPrice.value.toDouble();
+          stockPrice = stock.fieldPrice.value.asDouble();
         }
 
         stockSummaries.add(
@@ -253,7 +253,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
           listOfPairXY.add(
             PairXYY(
               account.fieldName.value,
-              showAsNativeCurrency ? account.balance : account.fieldBalanceNormalized.getValueForDisplay(account),
+              showAsNativeCurrency ? account.balance : account.fieldBalanceNormalized.getValueForDisplay(account) as num,
             ),
           );
         }

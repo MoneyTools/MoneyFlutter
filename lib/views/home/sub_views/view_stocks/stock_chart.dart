@@ -341,7 +341,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
                 if (events != null) {
                   final splits = events['splits'];
                   if (splits != null) {
-                    for (var splitJson in splits.values) {
+                    for (final splitJson in splits.values as List) {
                       int dateInMilliseconds = splitJson['date'] as int;
                       final DateTime dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
                       StockSplit sp = StockSplit(

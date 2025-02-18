@@ -99,13 +99,13 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   }
 
   double get amountDelta {
-    return sumOfSplits - widget.transaction.fieldAmount.value.toDouble();
+    return sumOfSplits - widget.transaction.fieldAmount.value.asDouble();
   }
 
   bool get isTotalMatching => amountDelta == 0;
 
   double get sumOfSplits {
-    return widget.transaction.splits.fold(0.0, (sum, split) => sum + split.fieldAmount.value.toDouble());
+    return widget.transaction.splits.fold(0.0, (sum, split) => sum + split.fieldAmount.value.asDouble());
   }
 
   Widget _buildTally() {

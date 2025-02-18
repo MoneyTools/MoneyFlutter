@@ -65,7 +65,7 @@ class Category extends MoneyObject {
     name: 'Budget',
     serializeName: 'Budget',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldBudget.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldBudget.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldBudget.value.asDouble(),
     setValue: (final MoneyObject instance, final dynamic value) {
       (instance as Category).fieldBudget.value.setAmount(value);
     },
@@ -77,7 +77,7 @@ class Category extends MoneyObject {
     name: 'BudgetBalance',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldBudgetBalance.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        (instance as Category).fieldBudgetBalance.value.toDouble(),
+        (instance as Category).fieldBudgetBalance.value.asDouble(),
   );
 
   /// Color

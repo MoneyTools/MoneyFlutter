@@ -59,8 +59,8 @@ class LoanPayment extends MoneyObject {
 
   FieldMoney fieldBalance = FieldMoney(
     name: 'Balance',
-    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.toDouble(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.toDouble(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.asDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldBalance.value.asDouble(),
   );
 
   /// Date
@@ -84,7 +84,7 @@ class LoanPayment extends MoneyObject {
     name: 'Interest',
     serializeName: 'Interest',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldInterest.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldInterest.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldInterest.value.asDouble(),
   );
 
   // 5
@@ -104,7 +104,7 @@ class LoanPayment extends MoneyObject {
     name: 'Principal',
     serializeName: 'Principal',
     getValueForDisplay: (final MoneyObject instance) => (instance as LoanPayment).fieldPrincipal.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldPrincipal.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as LoanPayment).fieldPrincipal.value.asDouble(),
   );
 
   FieldPercentage fieldRate = FieldPercentage(
@@ -187,18 +187,18 @@ class LoanPayment extends MoneyObject {
   }
 
   double getRate() {
-    double previousBalance = this.fieldBalance.value.toDouble() - this.fieldPrincipal.value.toDouble();
+    double previousBalance = this.fieldBalance.value.asDouble() - this.fieldPrincipal.value.asDouble();
     if (previousBalance == 0) {
       return 0.00;
     }
 
     // Calculate the monthly interest rate
-    double annualInterestRate = (this.fieldInterest.value.toDouble() * 12) // Convert to annual interest rate
+    double annualInterestRate = (this.fieldInterest.value.asDouble() * 12) // Convert to annual interest rate
         /
         previousBalance;
 
     return annualInterestRate.abs();
   }
 
-  double get _totalPrincipalAndInterest => this.fieldPrincipal.value.toDouble() + this.fieldInterest.value.toDouble();
+  double get _totalPrincipalAndInterest => this.fieldPrincipal.value.asDouble() + this.fieldInterest.value.asDouble();
 }

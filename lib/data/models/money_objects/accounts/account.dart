@@ -243,7 +243,7 @@ class Account extends MoneyObject {
     serializeName: 'OpeningBalance',
     getValueForDisplay: (final MoneyObject instance) => (instance as Account).fieldOpeningBalance.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        (instance as Account).fieldOpeningBalance.value.toDouble(),
+        (instance as Account).fieldOpeningBalance.value.asDouble(),
   );
 
   /// ReconcileWarning

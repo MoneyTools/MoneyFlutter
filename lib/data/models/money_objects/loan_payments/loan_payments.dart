@@ -87,12 +87,12 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
 
     // Principal
     if (t.fieldCategoryId.value == account.fieldCategoryIdForPrincipal.value) {
-      pr.principal += t.fieldAmount.value.toDouble();
+      pr.principal += t.fieldAmount.value.asDouble();
     }
 
     // Interest
     if (t.fieldCategoryId.value == account.fieldCategoryIdForInterest.value) {
-      pr.interest += t.fieldAmount.value.toDouble();
+      pr.interest += t.fieldAmount.value.asDouble();
     }
   }
 
@@ -117,7 +117,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   double runningBalance = 0.00;
 
   for (final LoanPayment p in aggregatedList) {
-    runningBalance += p.fieldPrincipal.value.toDouble();
+    runningBalance += p.fieldPrincipal.value.asDouble();
     p.fieldBalance.value.setAmount(runningBalance);
 
     // Special hack to include the Manual LoanPayment memo into th reference text

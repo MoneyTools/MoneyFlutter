@@ -82,7 +82,7 @@ class MoneySplit extends MoneyObject {
     name: 'Amount',
     serializeName: 'Amount',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldAmount.value.asDouble(),
     setValue: (MoneyObject instance, dynamic newValue) =>
         (instance as MoneySplit).fieldAmount.value.setAmount(newValue),
   );

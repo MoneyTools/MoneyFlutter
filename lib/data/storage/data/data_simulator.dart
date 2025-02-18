@@ -1224,7 +1224,7 @@ class DataSimulator {
         rollingBalance = 0;
         lastMonth = t.fieldDateTime.value!.month;
       }
-      rollingBalance += t.fieldAmount.value.toDouble();
+      rollingBalance += t.fieldAmount.value.asDouble();
     }
   }
 

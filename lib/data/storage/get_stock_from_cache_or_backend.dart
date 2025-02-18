@@ -139,7 +139,7 @@ Future<StockPriceHistoryCache> _loadFromBackend(
 
   if (response.statusCode == 200) {
     try {
-      final MyJson data = json.decode(response.body);
+      final MyJson data = json.decode(response.body) as MyJson;
       if (data['code'] == 401) {
         //data['message'];
         result.status = StockLookupStatus.invalidApiKey;
@@ -158,18 +158,18 @@ Future<StockPriceHistoryCache> _loadFromBackend(
         result.status = StockLookupStatus.invalidApiKey;
         return result;
       }
-      final List<dynamic> values = data['values'];
+      final List<dynamic> values = data['values'] as List;
 
       // Unfortunately for now (sometimes) the API may returns two entries with the same date
       // for this ensure that we only have one date and price, last one wins
       Map<String, StockDatePrice> mapByUniqueDate = {};
 
-      for (final value in values) {
-        final String dateAsText = value['datetime'];
+      for (final dynamic value in values) {
+        final String dateAsText = value['datetime'] as String;
 
         StockDatePrice sp = StockDatePrice(
           date: DateTime.parse(dateAsText),
-          price: double.parse(value['close']),
+          price: double.parse(value['close'] as String),
         );
         mapByUniqueDate[dateAsText] = sp;
       }

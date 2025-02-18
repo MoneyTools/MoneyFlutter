@@ -89,7 +89,7 @@ class Investment extends MoneyObject {
     name: 'Commission',
     serializeName: 'Commission',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldCommission.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldCommission.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldCommission.value.asDouble(),
   );
 
   /// 7    Fees            money   0                    0
@@ -97,7 +97,7 @@ class Investment extends MoneyObject {
     name: 'Fees',
     serializeName: 'Fees',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldFees.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldFees.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldFees.value.asDouble(),
   );
 
   FieldQuantity fieldHoldingShares = FieldQuantity(
@@ -152,15 +152,15 @@ class Investment extends MoneyObject {
     name: 'Load',
     serializeName: 'Load',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldLoad.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldLoad.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldLoad.value.asDouble(),
   );
 
   /// 5    MarkUpDown      money   0                    0
   FieldMoney fieldMarkUpDown = FieldMoney(
     name: 'MarkUpDown',
     serializeName: 'MarkUpDown',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldMarkUpDown.value.toDouble(),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldMarkUpDown.value.toDouble(),
+    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldMarkUpDown.value.asDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldMarkUpDown.value.asDouble(),
   );
 
   FieldMoney fieldNetValueOfEvent = FieldMoney(
@@ -218,7 +218,7 @@ class Investment extends MoneyObject {
     name: 'Taxes',
     serializeName: 'Taxes',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldTaxes.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldTaxes.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldTaxes.value.asDouble(),
   );
 
   /// 10   TradeType       INT     0                    0
@@ -270,7 +270,7 @@ class Investment extends MoneyObject {
     serializeName: 'UnitPrice',
     footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldUnitPrice.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldUnitPrice.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Investment).fieldUnitPrice.value.asDouble(),
     setValue: (final MoneyObject instance, dynamic value) {
       // (instance as Investment).stashValueBeforeEditing();
       (instance as Investment).fieldUnitPrice.value.setAmount(value);
@@ -306,7 +306,7 @@ class Investment extends MoneyObject {
     serializeName: 'Withholding',
     getValueForDisplay: (final MoneyObject instance) => (instance as Investment).fieldWithholding.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        (instance as Investment).fieldWithholding.value.toDouble(),
+        (instance as Investment).fieldWithholding.value.asDouble(),
   );
 
   double _splitRatio = 1;
@@ -352,7 +352,7 @@ class Investment extends MoneyObject {
     // if (investmentType.value != InvestmentType.dividend.index &&
     //     investmentType.value != InvestmentType.add.index &&
     //     investmentType.value != InvestmentType.remove.index) {
-    return transactionInstance?.fieldAmount.value.toDouble() ?? 0.00;
+    return transactionInstance?.fieldAmount.value.asDouble() ?? 0.00;
     // }
     // return 0.00;
   }
@@ -444,21 +444,21 @@ class Investment extends MoneyObject {
 
   StockCumulative get finalAmount {
     StockCumulative cumulative = StockCumulative();
-    cumulative.quantity = -1 * effectiveUnits * this.fieldUnitPrice.value.toDouble();
-    cumulative.amount += this.fieldCommission.value.toDouble();
+    cumulative.quantity = -1 * effectiveUnits * this.fieldUnitPrice.value.asDouble();
+    cumulative.amount += this.fieldCommission.value.asDouble();
     return cumulative;
   }
 
   double get originalCostBasis {
     // looking for the original un-split cost basis at the date of this transaction.
-    double proceeds = this.fieldUnitPrice.value.toDouble() * this.fieldUnits.value;
+    double proceeds = this.fieldUnitPrice.value.asDouble() * this.fieldUnits.value;
 
-    if (this.transactionInstance!.fieldAmount.value.toDouble() != 0) {
+    if (this.transactionInstance!.fieldAmount.value.asDouble() != 0) {
       // We may have paid more for the stock than "price" in a buy transaction because of brokerage fees and
       // this can be included in the cost basis.  We may have also received less than "price" in a sale
       // transaction, and that can also reduce our capital gain, so we use the transaction amount if we
       // have one.
-      return this.transactionInstance!.fieldAmount.value.toDouble().abs();
+      return this.transactionInstance!.fieldAmount.value.asDouble().abs();
     }
 
     // But if the sale proceeds were not recorded for some reason, then we fall back on the proceeds.
@@ -512,7 +512,7 @@ class Investment extends MoneyObject {
 
   double get _activityDividend {
     if (fieldInvestmentType.value == InvestmentType.dividend.index) {
-      return transactionInstance?.fieldAmount.value.toDouble() ?? 0.00;
+      return transactionInstance?.fieldAmount.value.asDouble() ?? 0.00;
     }
     return 0.00;
   }
@@ -530,5 +530,5 @@ class Investment extends MoneyObject {
           ? 1
           : -1;
 
-  double get _unitPriceAdjusted => this.fieldUnitPrice.value.toDouble() / this._splitRatio;
+  double get _unitPriceAdjusted => this.fieldUnitPrice.value.asDouble() / this._splitRatio;
 }

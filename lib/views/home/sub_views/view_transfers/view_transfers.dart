@@ -62,7 +62,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     // Process sender transactions.
     for (final transactionOfSender in listOfTransactionsUseForTransfer) {
       // Identify sender transactions by negative amount.
-      if (transactionOfSender.fieldAmount.value.toDouble() <= 0) {
+      if (transactionOfSender.fieldAmount.value.asDouble() <= 0) {
         final Transaction? transactionOfReceiver = Data().transactions.get(transactionOfSender.fieldTransfer.value);
         _addTransferToList(
           list: listOfTransfers,
@@ -76,7 +76,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     // Process receiver transactions not already included.
     for (final transactionOfReceiver in listOfTransactionsUseForTransfer) {
       // Identify receiver transactions by positive amount.
-      if (transactionOfReceiver.fieldAmount.value.toDouble() > 0) {
+      if (transactionOfReceiver.fieldAmount.value.asDouble() > 0) {
         final Transaction? transactionOfSender = Data().transactions.get(transactionOfReceiver.fieldTransfer.value);
         if (transactionOfSender == null) {
           // Handle orphaned receiver transactions (sender not found).

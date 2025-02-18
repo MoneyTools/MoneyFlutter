@@ -28,7 +28,7 @@ class FooterAccumulators {
           list = accumulatorListOfText.getList(field);
         } else {
           if (accumulatorSumNumber.containsKey(field)) {
-            list = accumulatorSumNumber.getValue(field);
+            list = accumulatorSumNumber.getValue(field) as List<String>;
           }
         }
 
@@ -49,10 +49,10 @@ class FooterAccumulators {
       case FooterType.sum:
         Widget? widget;
         if (accumulatorSumAmount.containsKey(field)) {
-          widget = getFooterForAmount(accumulatorSumAmount.getValue(field));
+          widget = getFooterForAmount(accumulatorSumAmount.getValue(field) as double);
         } else {
           if (accumulatorSumNumber.containsKey(field)) {
-            widget = getFooterForInt(accumulatorSumNumber.getValue(field));
+            widget = getFooterForInt(accumulatorSumNumber.getValue(field) as num);
           }
         }
         return Tooltip(

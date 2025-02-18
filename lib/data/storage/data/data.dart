@@ -269,7 +269,7 @@ class Data {
       return null;
     }
 
-    final double destinationAmount = transactionSource.fieldAmount.value.toDouble() * -1;
+    final double destinationAmount = transactionSource.fieldAmount.value.asDouble() * -1;
 
     Transaction? relatedTransaction = Data().transactions.findExistingTransaction(
           accountId: destinationAccount.uniqueId,
@@ -370,7 +370,7 @@ class Data {
     if (relatedTransaction != null) {
       final Transfer transfer;
 
-      if (transactionSource.fieldAmount.value.toDouble() < 0) {
+      if (transactionSource.fieldAmount.value.asDouble() < 0) {
         // transfer TO
         transfer = Transfer(
           id: 0,
@@ -460,7 +460,7 @@ class Data {
   }
 
   bool removeTransaction(Transaction t) {
-    if (t.fieldStatus.value == TransactionStatus.reconciled && t.fieldAmount.value.toDouble() != 0) {
+    if (t.fieldStatus.value == TransactionStatus.reconciled && t.fieldAmount.value.asDouble() != 0) {
       throw Exception('Cannot removed reconciled transaction');
     }
     // TODO

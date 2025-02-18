@@ -18,7 +18,7 @@ analyzer:
     avoid_function_literals_in_foreach_calls: ignore
 
   language:
-      # strict-casts: true
+      strict-casts: true
       strict-inference: true
       strict-raw-types: true
 

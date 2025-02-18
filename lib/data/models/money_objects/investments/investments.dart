@@ -72,10 +72,10 @@ class Investments extends MoneyObjects<Investment> {
     for (final investment in investments) {
       cumulative.dateRange.inflate(investment.date);
       cumulative.quantity += investment.effectiveUnitsAdjusted;
-      cumulative.amount += investment.fieldActivityAmount.getValueForDisplay(investment);
+      cumulative.amount += investment.fieldActivityAmount.getValueForDisplay(investment) as double;
 
       if (investment.actionType == InvestmentType.dividend) {
-        final double amount = investment.activityDividend.getValueForDisplay(investment);
+        final double amount = investment.activityDividend.getValueForDisplay(investment) as double;
         cumulative.dividends.add(Dividend(investment.date, amount));
         cumulative.dividendsSum += amount;
       }

@@ -1,4 +1,5 @@
 import 'package:money/core/controller/list_controller.dart';
+import 'package:money/core/helpers/default_values.dart';
 import 'package:money/data/models/fields/field_filters.dart';
 import 'package:money/data/models/money_objects/money_object.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/adaptive_columns_or_rows_list.dart';
@@ -109,8 +110,8 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
             }
 
           case FieldType.amount:
-            final value = field.getValueForDisplay(item).toDouble();
-            _footerAccumulators.accumulatorSumAmount.cumulate(field, value as double);
+            final double value = smartToDouble(field.getValueForDisplay(item));
+            _footerAccumulators.accumulatorSumAmount.cumulate(field, value);
             if (field.footer == FooterType.average) {
               _footerAccumulators.accumulatorForAverage.cumulate(field, value as num);
             }

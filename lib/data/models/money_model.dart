@@ -36,7 +36,7 @@ class MoneyModel {
   /// Add operator
   MoneyModel operator +(final dynamic value) {
     if (value is MoneyModel) {
-      _amount += value.toDouble();
+      _amount += value.asDouble();
     } else {
       _amount += value as double;
     }
@@ -46,7 +46,7 @@ class MoneyModel {
   /// Subtracting operator
   MoneyModel operator -(final dynamic value) {
     if (value is MoneyModel) {
-      _amount -= value.toDouble();
+      _amount -= value.asDouble();
     } else {
       _amount -= value as double;
     }
@@ -63,7 +63,7 @@ class MoneyModel {
   }
 
   /// the raw value as double
-  double toDouble() => _amount;
+  double asDouble() => _amount;
 
   String toShortHand() {
     return Currency.getAmountAsShortHandStringUsingCurrency(

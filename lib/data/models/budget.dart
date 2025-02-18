@@ -107,7 +107,7 @@ class BudgetAnalyzer {
     if (transactions.isEmpty) {
       return 0.0;
     }
-    final totalAmount = transactions.fold(0.0, (sum, t) => sum + t.fieldAmount.value.toDouble());
+    final totalAmount = transactions.fold(0.0, (sum, t) => sum + t.fieldAmount.value.asDouble());
     return totalAmount / transactions.length;
   }
 
@@ -146,7 +146,7 @@ class BudgetAnalyzer {
     }
 
     // Calculate total amount over the period
-    final totalAmount = transactions.fold(0.0, (sum, t) => sum + t.fieldAmount.value.toDouble());
+    final totalAmount = transactions.fold(0.0, (sum, t) => sum + t.fieldAmount.value.asDouble());
 
     // Calculate the time span in months
     final dateRange = _calculateDateRange(transactions);
@@ -186,7 +186,7 @@ class BudgetAnalyzer {
         1,
       );
 
-      monthlyTotals[monthStart] = (monthlyTotals[monthStart] ?? 0.0) + transaction.fieldAmount.value.toDouble();
+      monthlyTotals[monthStart] = (monthlyTotals[monthStart] ?? 0.0) + transaction.fieldAmount.value.asDouble();
     }
 
     return monthlyTotals;

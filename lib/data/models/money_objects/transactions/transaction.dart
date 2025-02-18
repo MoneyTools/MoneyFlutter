@@ -131,15 +131,15 @@ class Transaction extends MoneyObject {
     name: columnIdAmount,
     serializeName: 'Amount',
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-      amount: (instance as Transaction).fieldAmount.value.toDouble(),
+      amount: (instance as Transaction).fieldAmount.value.asDouble(),
       iso4217: instance.currency,
     ),
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAmount.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldAmount.value.asDouble(),
     setValue: (final MoneyObject instance, dynamic newValue) =>
         (instance as Transaction).fieldAmount.value.setAmount(newValue),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).fieldAmount.value.toDouble(),
-      (b as Transaction).fieldAmount.value.toDouble(),
+      (a as Transaction).fieldAmount.value.asDouble(),
+      (b as Transaction).fieldAmount.value.asDouble(),
       ascending,
     ),
   );
@@ -154,12 +154,12 @@ class Transaction extends MoneyObject {
     columnWidth: ColumnWidth.small,
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) => MoneyModel(
-      amount: (instance as Transaction).getNormalizedAmount(instance.fieldAmount.value.toDouble()),
+      amount: (instance as Transaction).getNormalizedAmount(instance.fieldAmount.value.asDouble()),
       iso4217: Constants.defaultCurrency,
     ),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).fieldAmount.value.toDouble(),
-      (b as Transaction).fieldAmount.value.toDouble(),
+      (a as Transaction).fieldAmount.value.asDouble(),
+      (b as Transaction).fieldAmount.value.asDouble(),
       ascending,
     ),
   );
@@ -368,7 +368,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Memo',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldMemo.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldMemo.value,
-    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldMemo.value = newValue,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldMemo.value = newValue as String,
   );
 
   /// MergeDate
@@ -454,7 +454,7 @@ class Transaction extends MoneyObject {
               : TransactionFlavor.transfer,
           payee: Data().payees.get(instance.fieldPayee.value),
           account: instance.instanceOfTransfer?.receiverAccount,
-          amount: instance.fieldAmount.value.toDouble(),
+          amount: instance.fieldAmount.value.asDouble(),
           onSelected: (
             TransactionFlavor choice,
             Payee? selectedPayee,
@@ -524,10 +524,10 @@ class Transaction extends MoneyObject {
     name: 'Sales Tax',
     serializeName: 'SalesTax',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction).fieldSalesTax.value,
-    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldSalesTax.value.toDouble(),
+    getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldSalesTax.value.asDouble(),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
-      (a as Transaction).fieldSalesTax.value.toDouble(),
-      (b as Transaction).fieldSalesTax.value.toDouble(),
+      (a as Transaction).fieldSalesTax.value.asDouble(),
+      (b as Transaction).fieldSalesTax.value.asDouble(),
       ascending,
     ),
   );
@@ -544,7 +544,7 @@ class Transaction extends MoneyObject {
     serializeName: 'Status',
     getValueForDisplay: (final MoneyObject instance) => (instance as Transaction)._buildStatusButtonToggle(),
     getValueForSerialization: (final MoneyObject instance) => (instance as Transaction).fieldStatus.value.index,
-    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldStatus.value = newValue,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as Transaction).fieldStatus.value = newValue as TransactionStatus,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
       transactionStatusToLetter((a as Transaction).fieldStatus.value),
       transactionStatusToLetter((b as Transaction).fieldStatus.value),
@@ -819,7 +819,7 @@ class Transaction extends MoneyObject {
 
   String getPayeeOrTransferCaption({final bool showAccount = false}) {
     Investment? investment = instanceOfInvestment;
-    double amount = this.fieldAmount.value.toDouble();
+    double amount = this.fieldAmount.value.asDouble();
 
     bool isFrom = false;
     String displayName = '';

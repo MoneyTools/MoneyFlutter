@@ -159,7 +159,7 @@ class Transactions extends MoneyObjects<Transaction> {
     // Add transactions to the accumulator
     for (final t in transactions) {
       String dateKey = dateToString(t.fieldDateTime.value);
-      cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.toDouble());
+      cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.asDouble());
     }
 
     // Add events to the accumulator with zero amount
@@ -197,7 +197,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }) {
     return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
       if ((accountId == -1 || transaction.fieldAccountId.value == accountId) &&
-          transaction.fieldAmount.value.toDouble() == amount &&
+          transaction.fieldAmount.value.asDouble() == amount &&
           dateRange.isBetweenEqual(transaction.fieldDateTime.value)) {
         return true;
       }
@@ -300,8 +300,8 @@ class Transactions extends MoneyObjects<Transaction> {
       (element) =>
           isBetweenOrEqual(element.fieldDateTime.value!.year, minYear, maxYear) &&
           ((incomesOrExpenses == null ||
-              (incomesOrExpenses == true && element.fieldAmount.value.toDouble() > 0) ||
-              (incomesOrExpenses == false && element.fieldAmount.value.toDouble() < 0))),
+              (incomesOrExpenses == true && element.fieldAmount.value.asDouble() > 0) ||
+              (incomesOrExpenses == false && element.fieldAmount.value.asDouble() < 0))),
     );
   }
 
@@ -334,7 +334,7 @@ class Transactions extends MoneyObjects<Transaction> {
 
     for (final Transaction t in transactions) {
       final String key = keyGenerator(t.fieldDateTime.value!);
-      sums[key] = (sums[key] ?? 0) + t.fieldAmount.value.toDouble();
+      sums[key] = (sums[key] ?? 0) + t.fieldAmount.value.asDouble();
     }
 
     final List<PairXYY> result = sums.entries.map((e) => PairXYY(e.key, e.value)).toList();
@@ -360,7 +360,7 @@ class Transactions extends MoneyObjects<Transaction> {
     List<Pair<int, double>> timeAndAmounts = [];
     for (final t in transactions) {
       int oneDaySlot = t.fieldDateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
-      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.fieldAmount.value.toDouble()));
+      timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.fieldAmount.value.asDouble()));
     }
     // sort by date time
     timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));

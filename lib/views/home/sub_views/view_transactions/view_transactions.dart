@@ -160,7 +160,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       double runningNativeBalance = 0.0;
 
       for (Transaction transaction in list) {
-        runningNativeBalance += transaction.fieldAmount.value.toDouble();
+        runningNativeBalance += transaction.fieldAmount.value.asDouble();
         transaction.balance = runningNativeBalance;
       }
 
@@ -192,7 +192,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               .transactions
               .iterableList()
               .where(
-                (final Transaction element) => element.fieldAmount.value.toDouble() > 0,
+                (final Transaction element) => element.fieldAmount.value.asDouble() > 0,
               )
               .length,
         ),
@@ -208,7 +208,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               .transactions
               .iterableList()
               .where(
-                (final Transaction element) => element.fieldAmount.value.toDouble() < 0,
+                (final Transaction element) => element.fieldAmount.value.asDouble() < 0,
               )
               .length,
         ),
@@ -231,12 +231,12 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
     // Expenses
     if (_selectedPivot[1]) {
-      return transaction.fieldAmount.value.toDouble() < 0;
+      return transaction.fieldAmount.value.asDouble() < 0;
     }
 
     // Incomes
     if (_selectedPivot[0]) {
-      return transaction.fieldAmount.value.toDouble() > 0;
+      return transaction.fieldAmount.value.asDouble() > 0;
     }
     return false;
   }
@@ -273,7 +273,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     final Map<String, num> tallyPerCategory = <String, num>{};
 
     getList().forEach((final Transaction transaction) {
-      final num value = transaction.fieldAmount.value.toDouble();
+      final num value = transaction.fieldAmount.value.asDouble();
       final int categoryId = transaction.fieldCategoryId.value;
       Category? category = Data().categories.get(categoryId);
       category ??= Data().categories.unknown;

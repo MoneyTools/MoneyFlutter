@@ -110,7 +110,7 @@ class AccumulatorSum<K, V> {
     return keyFound;
   }
 
-  dynamic getValue(K key) {
+  dynamic getValue(final K key) {
     return values[key] ?? 0;
   }
 

@@ -130,7 +130,7 @@ class _PanelBudgetState extends State<PanelBudget> {
 
     items.forEach((item) {
       sumForAllCategories += item.sumOfAllTransactions;
-      sumForAllCategoriesBudget += item.category.fieldBudget.value.toDouble() * adjustValue;
+      sumForAllCategoriesBudget += item.category.fieldBudget.value.asDouble() * adjustValue;
     });
 
     _sort();
@@ -386,7 +386,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budgeted per month
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.toDouble() * adjustValue,
+                              item.category.fieldBudget.value.asDouble() * adjustValue,
                               MoneyWidgetSize.title,
                             ),
                           ),
@@ -411,7 +411,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                           // Budget per year
                           Expanded(
                             child: MoneyWidget.fromDouble(
-                              item.category.fieldBudget.value.toDouble() * 12 * adjustValue,
+                              item.category.fieldBudget.value.asDouble() * 12 * adjustValue,
                               MoneyWidgetSize.title,
                             ),
                           ),
@@ -615,8 +615,8 @@ class _PanelBudgetState extends State<PanelBudget> {
           return sortByValue(a.sumOfAllTransactions, b.sumOfAllTransactions, _sortAscending);
         case 4:
           return sortByValue(
-            a.category.fieldBudget.value.toDouble(),
-            b.category.fieldBudget.value.toDouble(),
+            a.category.fieldBudget.value.asDouble(),
+            b.category.fieldBudget.value.asDouble(),
             _sortAscending,
           );
         default:

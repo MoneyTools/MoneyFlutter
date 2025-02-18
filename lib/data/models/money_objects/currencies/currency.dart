@@ -179,7 +179,7 @@ class Currency extends MoneyObject {
       customPattern: '¤#,##0.00', // Pattern to place the symbol on the left
     );
 
-    return currencyFormat.format(isConsideredZero(amount) ? 0.00 : amount);
+    return currencyFormat.format(isConsideredZero(amount as num) ? 0.00 : amount);
   }
 
   static String getCurrencyAsString(final String threeLetterCurrencySymbol) {

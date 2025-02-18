@@ -37,7 +37,7 @@ class RecurringExpenses {
       if (!categoryTypes.contains(c.fieldType.value)) {
         return false;
       }
-      if (onlyNonZeroBudget && c.fieldBudget.value.toDouble() == 0) {
+      if (onlyNonZeroBudget && c.fieldBudget.value.asDouble() == 0) {
         return false;
       }
       return true;
@@ -60,7 +60,7 @@ class RecurringExpenses {
       DateRange dateRangeOfTransactions = DateRange();
 
       for (final Transaction transaction in flatTransactions) {
-        totalForAllTimeForThisCategory += transaction.fieldAmount.value.toDouble();
+        totalForAllTimeForThisCategory += transaction.fieldAmount.value.asDouble();
         dateRangeOfTransactions.inflate(transaction.fieldDateTime.value);
       }
 
@@ -104,9 +104,9 @@ class RecurringExpenses {
         if (!yearMap.containsKey(year)) {
           yearMap[year] = RecurringExpenses(category: t.category!, sumOfAllTransactions: 0);
         }
-        yearMap[year]!.sumBudget += t.category!.fieldBudget.value.toDouble() * multiplier;
+        yearMap[year]!.sumBudget += t.category!.fieldBudget.value.asDouble() * multiplier;
 
-        final double amount = t.fieldAmount.value.toDouble();
+        final double amount = t.fieldAmount.value.asDouble();
         if (t.category!.isExpense) {
           yearMap[year]!.sumExpense += amount;
         }

@@ -5,6 +5,7 @@ import 'package:money/core/controller/list_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/color_helper.dart';
 import 'package:money/core/helpers/date_helper.dart';
+import 'package:money/core/helpers/default_values.dart';
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/box.dart';
@@ -309,7 +310,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
             }
 
           case FieldType.amount:
-            final double value = field.getValueForDisplay(item).toDouble();
+            final double value = smartToDouble(field.getValueForDisplay(item));
             if (isNumber(value)) {
               _footerAccumulators.accumulatorSumAmount.cumulate(field, value);
               if (field.footer == FooterType.average) {

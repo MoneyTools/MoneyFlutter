@@ -38,7 +38,7 @@ class SecurityPurchase {
   /// Get market value of remaining units.
 
   double? get latestMarketValue {
-    return this.futuresFactor * this.unitsRemaining * this.security!.fieldPrice.value.toDouble();
+    return this.futuresFactor * this.unitsRemaining * this.security!.fieldPrice.value.asDouble();
   }
 
   /// Perform a sale of the given number of units.  If we don't have enough return all that we have.

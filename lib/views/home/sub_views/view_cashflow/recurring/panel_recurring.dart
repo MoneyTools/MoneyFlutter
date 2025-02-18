@@ -72,8 +72,8 @@ class _PanelRecurringState extends State<PanelRecurring> {
     // Step 1: Group transactions by payeeId and record transaction months
     for (final transaction in transactions.where(
       (final t) =>
-          (isIncomeTransaction && t.fieldAmount.value.toDouble() > 0) ||
-          (isIncomeTransaction == false && t.fieldAmount.value.toDouble() <= 0),
+          (isIncomeTransaction && t.fieldAmount.value.asDouble() > 0) ||
+          (isIncomeTransaction == false && t.fieldAmount.value.asDouble() <= 0),
     )) {
       int payeeId = transaction.fieldPayee.value;
 
@@ -106,8 +106,8 @@ class _PanelRecurringState extends State<PanelRecurring> {
     // get all transactions meeting the request of date and type
     bool whereClause(Transaction t) {
       return isBetweenOrEqual(t.fieldDateTime.value!.year, widget.minYear, widget.maxYear) &&
-          (((forIncome == true && t.fieldAmount.value.toDouble() > 0) ||
-              (forIncome == false && t.fieldAmount.value.toDouble() < 0)));
+          (((forIncome == true && t.fieldAmount.value.asDouble() > 0) ||
+              (forIncome == false && t.fieldAmount.value.asDouble() < 0)));
     }
 
     final flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);

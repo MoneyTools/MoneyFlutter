@@ -92,7 +92,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
                     max: selectedInfoTransaction.fieldDateTime.value!.add(const Duration(days: 1)).endOfDay,
                   );
                   // we are looking for the reverse transaction
-                  final double amountToFind = selectedInfoTransaction.fieldAmount.value.toDouble() * -1;
+                  final double amountToFind = selectedInfoTransaction.fieldAmount.value.asDouble() * -1;
 
                   final Transaction? matchingTransaction = Data().transactions.findExistingTransaction(
                         accountId: -1,

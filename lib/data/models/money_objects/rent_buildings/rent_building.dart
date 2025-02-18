@@ -183,7 +183,7 @@ class RentBuilding extends MoneyObject {
     serializeName: 'EstimatedValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).fieldEstimatedValue.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        (instance as RentBuilding).fieldEstimatedValue.value.toDouble(),
+        (instance as RentBuilding).fieldEstimatedValue.value.asDouble(),
     setValue: (final MoneyObject instance, final dynamic value) =>
         (instance as RentBuilding).fieldEstimatedValue.setAmount(value),
   );
@@ -208,7 +208,7 @@ class RentBuilding extends MoneyObject {
     serializeName: 'LandValue',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).fieldLandValue.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        (instance as RentBuilding).fieldLandValue.value.toDouble(),
+        (instance as RentBuilding).fieldLandValue.value.asDouble(),
     setValue: (final MoneyObject instance, final dynamic value) =>
         (instance as RentBuilding).fieldLandValue.setAmount(value),
   );
@@ -326,7 +326,7 @@ class RentBuilding extends MoneyObject {
     serializeName: 'PurchasedPrice',
     getValueForDisplay: (final MoneyObject instance) => (instance as RentBuilding).fieldPurchasedPrice.value,
     getValueForSerialization: (final MoneyObject instance) =>
-        (instance as RentBuilding).fieldPurchasedPrice.value.toDouble(),
+        (instance as RentBuilding).fieldPurchasedPrice.value.asDouble(),
   );
 
   /// Revenue
@@ -428,14 +428,14 @@ class RentBuilding extends MoneyObject {
           cumulatePnLValues(
             pnl,
             split.fieldCategoryId.value,
-            split.fieldAmount.value.toDouble(),
+            split.fieldAmount.value.asDouble(),
           );
         }
       } else {
         cumulatePnLValues(
           pnl,
           transactionCategoryId,
-          t.fieldAmount.value.toDouble(),
+          t.fieldAmount.value.asDouble(),
         );
       }
     }

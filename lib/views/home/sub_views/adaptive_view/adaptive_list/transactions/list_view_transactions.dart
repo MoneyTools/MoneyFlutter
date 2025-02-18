@@ -109,7 +109,7 @@ List<Transaction> getTransactions({bool Function(Transaction)? filter, bool flat
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {
-    runningBalance += transaction.fieldAmount.value.toDouble();
+    runningBalance += transaction.fieldAmount.value.asDouble();
     transaction.balance = runningBalance;
   }
   return list;

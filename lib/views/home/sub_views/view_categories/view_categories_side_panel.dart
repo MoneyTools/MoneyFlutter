@@ -15,7 +15,7 @@ extension ViewCategoriesSidePanel on ViewCategoriesState {
           if (map[topCategory.fieldName.value] == null) {
             map[topCategory.fieldName.value] = 0;
           }
-          map[topCategory.fieldName.value] = map[topCategory.fieldName.value]! + item.fieldSum.value.toDouble();
+          map[topCategory.fieldName.value] = map[topCategory.fieldName.value]! + item.fieldSum.value.asDouble();
         }
       }
       final List<PairXYY> list = <PairXYY>[];

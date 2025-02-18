@@ -105,7 +105,7 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
   }
 
   // Calculate Z-scores for outlier detection based on amount
-  List<double> amounts = transactions.map((t) => t.fieldAmount.value.toDouble()).toList();
+  List<double> amounts = transactions.map((t) => t.fieldAmount.value.asDouble()).toList();
   if (amounts.isEmpty) {
     // nothing to work on;
     return [];
@@ -125,7 +125,7 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
       milestoneTransactions.add(
         ChartEvent(
           dates: DateRange(min: t.fieldDateTime.value!),
-          amount: t.fieldAmount.value.toDouble(),
+          amount: t.fieldAmount.value.asDouble(),
           quantity: 1,
           colorBasedOnQuantity: false, // use Amount
           description: t.oneLinePayeeAndDescription,
