@@ -53,11 +53,11 @@ class SecurityPurchase {
       return null;
     }
 
-    double canSell = min(units, this.unitsRemaining);
+    final double canSell = min(units, this.unitsRemaining);
 
     unitsRemaining -= canSell;
 
-    var s = SecuritySale()
+    final s = SecuritySale()
       ..dateSold = date
       ..security = security
       ..costBasisPerUnit = costBasisPerUnit

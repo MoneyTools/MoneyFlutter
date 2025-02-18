@@ -35,7 +35,7 @@ class _DistributionBarState extends State<DistributionBar> {
     detailRowWidgets.clear();
     segmentWidgets.clear();
 
-    double sum = widget.segments.fold(
+    final double sum = widget.segments.fold(
       0,
       (previousValue, element) => previousValue + element.amount.abs(),
     );
@@ -160,7 +160,7 @@ class _DistributionBarState extends State<DistributionBar> {
   }
 
   Widget _builtSegmentOverlayText(final double percentage, final Color color) {
-    int value = (percentage * 100).toInt();
+    final int value = (percentage * 100).toInt();
     if (value <= 0) {
       return const SizedBox();
     }

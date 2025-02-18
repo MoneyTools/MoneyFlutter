@@ -398,10 +398,10 @@ class RentBuilding extends MoneyObject {
   }
 
   void cumulatePnL(Transaction t) {
-    int transactionCategoryId = t.fieldCategoryId.value;
+    final int transactionCategoryId = t.fieldCategoryId.value;
 
     if (this.isTransactionOrSplitAssociatedWithThisRental(t)) {
-      int year = t.fieldDateTime.value!.year;
+      final int year = t.fieldDateTime.value!.year;
 
       RentalPnL? pnl = pnlOverYears[year];
       if (pnl == null) {
@@ -411,12 +411,12 @@ class RentBuilding extends MoneyObject {
         );
 
         if (this.fieldOwnershipName1.value.isNotEmpty) {
-          String name = '${this.fieldOwnershipName1.value} (${fieldOwnershipPercentage1.value}%)';
+          final String name = '${this.fieldOwnershipName1.value} (${fieldOwnershipPercentage1.value}%)';
           pnl.distributions[name] = this.fieldOwnershipPercentage1.value;
         }
 
         if (this.fieldOwnershipName2.value.isNotEmpty) {
-          String name = '${this.fieldOwnershipName2.value} (${fieldOwnershipPercentage2.value}%)';
+          final String name = '${this.fieldOwnershipName2.value} (${fieldOwnershipPercentage2.value}%)';
           pnl.distributions[name] = this.fieldOwnershipPercentage2.value;
         }
 
@@ -543,7 +543,7 @@ class RentBuilding extends MoneyObject {
   }
 
   RentalPnL getLifeTimePnL() {
-    RentalPnL lifeTimePnL = RentalPnL(date: DateTime.now());
+    final RentalPnL lifeTimePnL = RentalPnL(date: DateTime.now());
     pnlOverYears.forEach((year, pnl) {
       dateRangeOfOperation.inflate(pnl.date);
       lifeTimePnL.income += pnl.income;

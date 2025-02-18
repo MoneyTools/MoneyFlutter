@@ -114,7 +114,7 @@ class Currency extends MoneyObject {
   static final _fields = Fields<Currency>();
 
   static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
-    String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
+    final String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
 
     return CurrencyLabel(
       threeLetterCurrencySymbol: getCurrencyAsString(threeLetterCurrencySymbol),
@@ -163,16 +163,16 @@ class Currency extends MoneyObject {
     }
 
     // determining the locale to be used when formatting the currency amount
-    String localeToUse = iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
+    final String localeToUse = iso4217code == Constants.defaultCurrency || iso4217code.isEmpty
         ? 'en_US'
         : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
 
     // Use NumberFormat.simpleCurrency to get the symbol for the locale
-    var tempFormat = NumberFormat.simpleCurrency(locale: localeToUse);
-    String currencySymbol = tempFormat.currencySymbol;
+    final tempFormat = NumberFormat.simpleCurrency(locale: localeToUse);
+    final String currencySymbol = tempFormat.currencySymbol;
 
     // Create a NumberFormat instance with a custom pattern using the currency constructor
-    var currencyFormat = NumberFormat.currency(
+    final currencyFormat = NumberFormat.currency(
       locale: localeToUse,
       symbol: currencySymbol, // Euro symbol
       decimalDigits: decimalDigits, // Number of decimal places
@@ -192,7 +192,7 @@ class Currency extends MoneyObject {
   // Define a function to get the currency symbol from ISO 4217 code
   static String getCurrencySymbol(String isoCode) {
     // Create a NumberFormat instance with the currency name and locale
-    var format = NumberFormat.simpleCurrency(name: isoCode);
+    final format = NumberFormat.simpleCurrency(name: isoCode);
     // Return the currency symbol
     return format.currencySymbol;
   }

@@ -13,8 +13,8 @@ extension DataFromCsv on Data {
     if (fileBytes.isNotEmpty) {
       archive = ZipDecoder().decodeBytes(fileBytes);
     } else {
-      File file = File(filePathToLoad);
-      List<int> bytes = await file.readAsBytes();
+      final File file = File(filePathToLoad);
+      final List<int> bytes = await file.readAsBytes();
       archive = ZipDecoder().decodeBytes(bytes);
     }
     loadFromArchive(archive);
@@ -24,7 +24,7 @@ extension DataFromCsv on Data {
     // Extract the files and read the content
     for (ArchiveFile file in archive) {
       if (file.isFile) {
-        String fileContent = getZipSingleFileContent(file);
+        final String fileContent = getZipSingleFileContent(file);
 
         final String fileNameInLowercase = MyFileSystems.getFileName(file.name).toLowerCase();
 
@@ -100,7 +100,7 @@ extension DataFromCsv on Data {
 
   String getZipSingleFileContent(ArchiveFile file) {
     try {
-      List<int> fileBytes = file.content as List<int>;
+      final List<int> fileBytes = file.content as List<int>;
       String fileContent = utf8.decode(fileBytes, allowMalformed: true);
       // Remove UTF-8 BOM if present
       fileContent = removeUtf8Bom(fileContent);
@@ -112,17 +112,17 @@ extension DataFromCsv on Data {
   }
 
   Future<String> saveToCsv() async {
-    String destinationFolder = await DataController.to.generateNextFolderToSaveTo();
+    final String destinationFolder = await DataController.to.generateNextFolderToSaveTo();
     if (destinationFolder.isEmpty) {
       throw Exception('No container folder give for saving');
     }
 
     // Define the path to the ZIP file
     final String zipFileName = MyFileSystems.append(destinationFolder, mainFileName);
-    File zipFile = File(zipFileName);
+    final File zipFile = File(zipFileName);
 
     // Create the ZIP archive
-    List<int> zipBytes = getCsvZipAchieveListOfInt();
+    final List<int> zipBytes = getCsvZipAchieveListOfInt();
     // Write the ZIP file
     await zipFile.writeAsBytes(zipBytes);
     return zipFileName;
@@ -130,12 +130,12 @@ extension DataFromCsv on Data {
 
   List<int> getCsvZipAchieveListOfInt() {
     // Create the ZIP archive
-    Archive archive = Archive();
+    final Archive archive = Archive();
 
     // Add files to the archive
     writeEachFiles(archive);
     // Encode the archive to a byte array
-    List<int> zipBytes = ZipEncoder().encode(archive);
+    final List<int> zipBytes = ZipEncoder().encode(archive);
     return zipBytes;
   }
 
@@ -169,7 +169,7 @@ extension DataFromCsv on Data {
     final String filename,
     final String textContent,
   ) {
-    List<int> bytes = utf8.encode(textContent);
+    final List<int> bytes = utf8.encode(textContent);
     archive.addFile(ArchiveFile(filename, bytes.length, bytes));
   }
 }

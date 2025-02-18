@@ -115,7 +115,7 @@ class RecurringCard extends StatelessWidget {
   }
 
   Widget _buildBoxTimelinePerDayOverYears(final BuildContext context) {
-    List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(payment.transactions);
+    final List<Pair<int, double>> sumByDays = Transactions.transactionSumByTime(payment.transactions);
 
     return Box(
       title: 'Timeline',
@@ -166,7 +166,7 @@ class RecurringCard extends StatelessWidget {
   }
 
   Widget _buildHeader(final BuildContext context) {
-    TextTheme textTheme = getTextTheme(context);
+    final TextTheme textTheme = getTextTheme(context);
     final String payeeName = Data().payees.getNameFromId(payment.payeeId);
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,

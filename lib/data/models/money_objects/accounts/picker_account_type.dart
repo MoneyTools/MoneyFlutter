@@ -7,7 +7,7 @@ Widget pickerAccountType({
   required final AccountType itemSelected,
   required final void Function(AccountType) onSelected,
 }) {
-  String selectedName = getTypeAsText(itemSelected);
+  final String selectedName = getTypeAsText(itemSelected);
 
   return PickerEditBox(
     title: 'Accounts',

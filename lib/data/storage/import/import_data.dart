@@ -124,10 +124,10 @@ void _showAndConfirmTransactionToImport(
     );
   }
 
-  String messageToUser =
+  final String messageToUser =
       '${list.length} transactions found in $fileType file, to be imported into "${account.fieldName.value}"';
 
-  Widget questionContent = SizedBox(
+  final Widget questionContent = SizedBox(
     height: 400,
     child: Center(
       child: ImportTransactionsListPreview(

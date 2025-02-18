@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
             GetPage(
               name: '/',
               page: () {
-                PreferenceController preferenceController = Get.find();
+                final PreferenceController preferenceController = Get.find();
                 if (preferenceController.isReady.value) {
                   return const WelcomePage();
                 }

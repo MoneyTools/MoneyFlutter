@@ -248,7 +248,7 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
     final List<String> setStatements =
         jsonMap.keys.map((key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
 
-    String fieldNamesAndValues = setStatements.join(', ');
+    final String fieldNamesAndValues = setStatements.join(', ');
     _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE $whereClause;');
   }
 

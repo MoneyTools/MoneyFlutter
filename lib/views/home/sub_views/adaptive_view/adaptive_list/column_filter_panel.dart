@@ -58,7 +58,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
           key: const Key('key_select_unselect_all'),
           onPressed: () {
             setState(() {
-              bool setAs = !areAllItemSelected();
+              final bool setAs = !areAllItemSelected();
               for (final item in list) {
                 item.isSelected = setAs;
               }

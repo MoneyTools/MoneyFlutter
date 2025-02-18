@@ -87,7 +87,7 @@ class MenuEntry {
     final String symbol = '',
     final String accountName = '',
   }) {
-    List<FieldFilter> filters = [];
+    final List<FieldFilter> filters = [];
 
     if (symbol.isNotEmpty) {
       filters.add(

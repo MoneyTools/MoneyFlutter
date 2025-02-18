@@ -26,7 +26,7 @@ int countOccurrences(String input, String char) {
 }
 
 String doubleToCurrency(final double value, {final String symbol = '\$', final bool showPlusSign = false}) {
-  NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: symbol);
+  final NumberFormat currencyFormatter = NumberFormat.currency(locale: 'en_US', symbol: symbol);
   // Format the double value as currency text
   return (showPlusSign ? getPlusSignIfPositive(value) : '') + currencyFormatter.format(value);
 }
@@ -109,13 +109,13 @@ String getPrefixPlusSignIfNeeded(final num value, {final bool showPlusSign = fal
 ///
 /// Returns a `List<List<String>>` representing the parsed rows and fields.
 List<List<String>> getLinesFromRawTextWithSeparator(final String content, [final String separator = ',']) {
-  List<List<String>> rows = [];
+  final List<List<String>> rows = [];
   List<String> currentRow = [];
   StringBuffer currentField = StringBuffer();
   bool inQuotes = false;
 
   for (int i = 0; i < content.length; i++) {
-    String char = content[i];
+    final String char = content[i];
 
     if (char == '"' && (i + 1 < content.length && content[i + 1] == '"')) {
       // Handle escaped quotes
@@ -205,7 +205,7 @@ int getLineCount(final String text) {
 
 /// Split the text into lines
 List<String> getLinesOfText(final String inputText, {bool includeEmptyLines = true}) {
-  List<String> lines = inputText.split('\n');
+  final List<String> lines = inputText.split('\n');
   if (includeEmptyLines == false) {
     // Filter out the empty lines
     return lines.where((line) => line.trim().isNotEmpty).toList();
@@ -215,10 +215,10 @@ List<String> getLinesOfText(final String inputText, {bool includeEmptyLines = tr
 
 String removeEmptyLines(String text) {
   // Filter out the empty lines
-  List<String> nonEmptyLines = getLinesOfText(text, includeEmptyLines: false);
+  final List<String> nonEmptyLines = getLinesOfText(text, includeEmptyLines: false);
 
   // Join the non-empty lines back together
-  String result = nonEmptyLines.join('\n');
+  final String result = nonEmptyLines.join('\n');
 
   return result;
 }

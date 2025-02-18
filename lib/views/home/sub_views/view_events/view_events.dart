@@ -136,7 +136,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     final transactionsWithoutTransfers =
         Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer == false).toList();
 
-    List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(transactionsWithoutTransfers);
+    final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(transactionsWithoutTransfers);
 
     const marginLeft = 80.0;
     const marginBottom = 50.0;

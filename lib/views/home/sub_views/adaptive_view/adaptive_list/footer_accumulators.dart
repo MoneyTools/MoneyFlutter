@@ -64,7 +64,7 @@ class FooterAccumulators {
         if (accumulatorForAverage.containsKey(field)) {
           final RunningAverage range = accumulatorForAverage.getValue(field)!;
           final double value = range.getAverage();
-          Widget widget = field.type == FieldType.amount
+          final Widget widget = field.type == FieldType.amount
               ? getFooterForAmount(value, prefix: 'Av ')
               : getFooterForInt(value, prefix: 'Av ');
           return Tooltip(

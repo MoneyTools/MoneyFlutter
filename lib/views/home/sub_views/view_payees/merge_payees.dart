@@ -131,7 +131,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
       return const SizedBox();
     }
 
-    List<Widget> radioButtonChoices = [];
+    final List<Widget> radioButtonChoices = [];
     final sortedDescendingListOfCategories = categoryIdsFound.getEntries();
     sortedDescendingListOfCategories.sort((a, b) => sortByValue(a.value, b.value, false));
 
@@ -219,7 +219,7 @@ void mutateTransactionsToPayee(
   final int toPayeeId,
   final int? categoryId,
 ) {
-  Set<int> fromPayeeIds = {};
+  final Set<int> fromPayeeIds = {};
 
   for (final t in transactions) {
     // keep track of the payeeIds that we remove transactions from

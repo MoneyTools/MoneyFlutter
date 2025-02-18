@@ -10,7 +10,7 @@ Widget pickerSecurityType({
   required final SecurityType itemSelected,
   required final void Function(SecurityType?) onSelected,
 }) {
-  List<String> options = enumToStringList(SecurityType.values);
+  final List<String> options = enumToStringList(SecurityType.values);
 
   return PickerEditBox(
     title: 'Type',

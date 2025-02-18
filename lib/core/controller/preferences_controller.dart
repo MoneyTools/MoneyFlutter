@@ -57,7 +57,7 @@ class PreferenceController extends GetxController {
     super.onInit();
     await init();
     if (mru.isNotEmpty) {
-      DataController dataController = Get.find();
+      final DataController dataController = Get.find();
       dataController.loadLastFileSaved();
     } else {
       // queue changing screen after app loaded
@@ -266,7 +266,7 @@ class PreferenceController extends GetxController {
 /// Navigation helpers
 
 void switchViewTransactionForPayee(final String payeeName) {
-  FieldFilters fieldFilters = FieldFilters();
+  final FieldFilters fieldFilters = FieldFilters();
   fieldFilters.add(
     FieldFilter(
       fieldName: Constants.viewTransactionFieldNamePayee,

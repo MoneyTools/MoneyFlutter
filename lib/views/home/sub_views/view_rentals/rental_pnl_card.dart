@@ -96,7 +96,7 @@ class RentalPnLCard extends StatelessWidget {
   Widget distribution({
     required final BuildContext context,
   }) {
-    List<Widget> widgets = [];
+    final List<Widget> widgets = [];
 
     pnl.distributions.forEach((name, percentage) {
       if (name.isNotEmpty) {

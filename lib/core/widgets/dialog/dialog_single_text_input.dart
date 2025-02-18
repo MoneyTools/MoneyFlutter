@@ -15,7 +15,7 @@ Future<void> showTextInputDialog({
   return showDialog(
     context: context,
     builder: (BuildContext context) {
-      TextEditingController textEditingController = TextEditingController();
+      final TextEditingController textEditingController = TextEditingController();
       textEditingController.text = initialValue;
       return AlertDialog(
         title: Text(title),
@@ -55,7 +55,7 @@ Future<void> showTextInputDialog({
           ),
           ElevatedButton(
             onPressed: () {
-              String text = textEditingController.text;
+              final String text = textEditingController.text;
               Navigator.pop(context);
               onContinue(text);
             },

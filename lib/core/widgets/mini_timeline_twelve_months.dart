@@ -19,7 +19,7 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        List<Widget> bars = [];
+        final List<Widget> bars = [];
 
         if (values.isNotEmpty) {
           num maxValue = 0;
@@ -27,7 +27,7 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
             maxValue = max(maxValue, p.second.abs());
           }
 
-          double ratio = constraints.maxHeight / maxValue;
+          final double ratio = constraints.maxHeight / maxValue;
           for (final value in values) {
             final double height = value.second.abs() * ratio;
             bars.add(

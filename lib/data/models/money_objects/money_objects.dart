@@ -283,15 +283,15 @@ class MoneyObjects<T> {
   }
 
   List<Widget> whatWasMutated(List<MoneyObject> objects) {
-    List<Widget> widgets = [];
+    final List<Widget> widgets = [];
     for (final moneyObject in objects) {
       final MyJson jsonDelta = moneyObject.getMutatedDiff<T>();
 
-      List<Widget> diffWidgets = [];
+      final List<Widget> diffWidgets = [];
 
       jsonDelta.forEach((key, value) {
         // Field Name
-        Widget instanceName = Text(key, style: const TextStyle(fontSize: 10));
+        final Widget instanceName = Text(key, style: const TextStyle(fontSize: 10));
 
         switch (moneyObject.mutation) {
           case MutationType.inserted:

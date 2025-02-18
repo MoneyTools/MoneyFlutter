@@ -125,7 +125,7 @@ class HueGradientPainter extends CustomPainter {
       Color.fromRGBO(255, 0, 0, 1), // 7 Red
     ];
 
-    Gradient gradient = LinearGradient(
+    final Gradient gradient = LinearGradient(
       colors: colors,
       stops: calculateSpread(0, 1, colors.length),
     );

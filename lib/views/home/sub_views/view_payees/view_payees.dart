@@ -89,7 +89,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   @override
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    var list = Data()
+    final list = Data()
         .payees
         .iterableList(includeDeleted: includeDeleted)
         .where(

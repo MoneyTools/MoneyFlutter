@@ -140,7 +140,7 @@ class Data {
   static final Data _instance = Data._internal();
 
   void checkTransfers() {
-    Set<Transaction> dangling = getDanglingTransfers();
+    final Set<Transaction> dangling = getDanglingTransfers();
     if (dangling.isNotEmpty) {
       Timer(
         Duration(milliseconds: 100),
@@ -217,8 +217,8 @@ class Data {
   }
 
   Set<Transaction> getDanglingTransfers() {
-    Set<Transaction> dangling = {};
-    List<Account> deletedAccounts = [];
+    final Set<Transaction> dangling = {};
+    final List<Account> deletedAccounts = [];
     transactions.checkTransfers(dangling, deletedAccounts);
     for (Account a in deletedAccounts) {
       accounts.removeAccount(a);
@@ -227,13 +227,13 @@ class Data {
   }
 
   DateTime? getLastDateTimeModified(final String fullPathToFile) {
-    File file = File(fullPathToFile);
+    final File file = File(fullPathToFile);
     // Get the last modified date and time of the file
     return file.lastModifiedSync();
   }
 
   List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {
-    List<MoneyObject> mutated = [];
+    final List<MoneyObject> mutated = [];
     for (final MoneyObjects<dynamic> listOfInstance in tables) {
       mutated.addAll(listOfInstance.getMutatedObjects(typeOfMutation));
     }
@@ -241,12 +241,12 @@ class Data {
   }
 
   List<MutationGroup> getMutationGroups(MutationType typeOfMutation) {
-    List<MutationGroup> allMutationGroups = [];
+    final List<MutationGroup> allMutationGroups = [];
 
     for (final MoneyObjects<dynamic> moneyObjects in tables) {
       final mutatedInstances = moneyObjects.getMutatedObjects(typeOfMutation);
       if (mutatedInstances.isNotEmpty) {
-        MutationGroup mutationGroup = MutationGroup();
+        final MutationGroup mutationGroup = MutationGroup();
         mutationGroup.title = moneyObjects.collectionName;
         mutationGroup.whatWasMutated = moneyObjects.whatWasMutated(mutatedInstances);
         allMutationGroups.add(mutationGroup);
@@ -362,7 +362,7 @@ class Data {
     required Transaction transactionSource,
     required Account destinationAccount,
   }) {
-    Transaction? relatedTransaction = getOrCreateRelatedTransaction(
+    final Transaction? relatedTransaction = getOrCreateRelatedTransaction(
       transactionSource: transactionSource,
       destinationAccount: destinationAccount,
     );

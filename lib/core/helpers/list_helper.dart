@@ -40,10 +40,10 @@ List<double> calculateSpread(double start, double end, int numEntries) {
   }
 
   // Calculate the step size between each value
-  double step = (end - start) / (numEntries - 1);
+  final double step = (end - start) / (numEntries - 1);
 
   // Initialize an empty list to store the spread values
-  List<double> spread = [];
+  final List<double> spread = [];
 
   // Generate the spread values and add them to the list
   for (int i = 0; i < numEntries; i++) {
@@ -82,7 +82,7 @@ List<double> calculateSpread(double start, double end, int numEntries) {
 ///   from the input Map.
 List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
   // Initialize an empty list to store the Pair objects
-  List<Pair<T, U>> list = [];
+  final List<Pair<T, U>> list = [];
 
   // Iterate over the entries in the input Map
   map.forEach((dynamic key, dynamic value) {
@@ -114,11 +114,11 @@ List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
 ///   percentages of the total.
 List<PairStringDouble> convertToPercentages(List<PairStringDouble> pairStringDouble) {
   // Calculate total amount
-  double totalAmount = pairStringDouble.fold(0, (prev, entry) => prev + (entry.value as num));
+  final double totalAmount = pairStringDouble.fold(0, (prev, entry) => prev + (entry.value as num));
 
   // Convert each amount to a percentage and retain key association
-  List<PairStringDouble> percentages = pairStringDouble.map((PairStringDouble entry) {
-    double percentage = ((entry.value as num) / (totalAmount)) * 100;
+  final List<PairStringDouble> percentages = pairStringDouble.map((PairStringDouble entry) {
+    final double percentage = ((entry.value as num) / (totalAmount)) * 100;
     return PairStringDouble(
       key: entry.key,
       value: percentage.isNaN ? 0.0 : percentage,
@@ -173,7 +173,7 @@ List<String> padList(List<String> list, int length, String padding) {
   if (list.length >= length) {
     return list;
   }
-  List<String> paddedList = List<String>.from(list);
+  final List<String> paddedList = List<String>.from(list);
   for (int i = list.length; i < length; i++) {
     paddedList.add(padding);
   }

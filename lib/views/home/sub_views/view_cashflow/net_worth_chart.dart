@@ -34,7 +34,7 @@ class NetWorthChartState extends State<NetWorthChart> {
 
     _transactions = Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer == false).toList();
 
-    List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(_transactions);
+    final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(_transactions);
 
     _yearMonthDataPoints.addAll(
       tmpDataPointsWithNetWorth.where(
@@ -85,7 +85,7 @@ class NetWorthChartState extends State<NetWorthChart> {
 }
 
 List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
-  List<ChartEvent> milestoneTransactions = [];
+  final List<ChartEvent> milestoneTransactions = [];
 
   if (PreferenceController.to.netWorthEventThreshold.value == 0) {
     for (final Event event in Data().events.iterableList()) {
@@ -105,21 +105,21 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
   }
 
   // Calculate Z-scores for outlier detection based on amount
-  List<double> amounts = transactions.map((t) => t.fieldAmount.value.asDouble()).toList();
+  final List<double> amounts = transactions.map((t) => t.fieldAmount.value.asDouble()).toList();
   if (amounts.isEmpty) {
     // nothing to work on;
     return [];
   }
 
   // Find outlier events
-  double mean = amounts.reduce((a, b) => a + b) / amounts.length;
-  double variance = amounts.map((amount) => (amount - mean) * (amount - mean)).reduce((a, b) => a + b) / amounts.length;
-  double stdDev = sqrt(variance);
+  final double mean = amounts.reduce((a, b) => a + b) / amounts.length;
+  final double variance = amounts.map((amount) => (amount - mean) * (amount - mean)).reduce((a, b) => a + b) / amounts.length;
+  final double stdDev = sqrt(variance);
 
-  List<double> zScores = amounts.map((amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
+  final List<double> zScores = amounts.map((amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
 
   for (int i = 0; i < transactions.length; i++) {
-    double zScore = zScores[i];
+    final double zScore = zScores[i];
     if (zScore.abs() >= PreferenceController.to.netWorthEventThreshold.value) {
       final t = transactions[i];
       milestoneTransactions.add(

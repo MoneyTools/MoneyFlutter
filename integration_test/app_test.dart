@@ -272,7 +272,7 @@ Future<void> testSettingsFontsAndRental(WidgetTester tester) async {
     );
 
     // Verify initial state is OFF (false)
-    SwitchListTile switchTile = tester.widget(switchTileFinder);
+    final SwitchListTile switchTile = tester.widget(switchTileFinder);
     expect(switchTile.value, isFalse);
 
     // Toggle the switch to "On"
@@ -901,7 +901,7 @@ Future<void> testPendingChanges(WidgetTester tester) async {
   await tapOnText(tester, 'Save to CSV');
 
   // Clean/Save/Load to SQL
-  String testFilename = './test_output_sqlite.MyMoney.mmdb';
+  final String testFilename = './test_output_sqlite.MyMoney.mmdb';
   if (await File(testFilename).exists()) {
     await File(testFilename).delete();
   }
@@ -917,13 +917,13 @@ Future<void> testPendingChanges(WidgetTester tester) async {
 
   // Load from SQL
   {
-    DataSource dataSource = DataSource(filePath: testFilename);
-    bool successLoading = await DataController.to.loadFileFromPath(dataSource);
+    final DataSource dataSource = DataSource(filePath: testFilename);
+    final bool successLoading = await DataController.to.loadFileFromPath(dataSource);
     expect(successLoading, true);
   }
   // Save to SQL
   {
-    bool result = await DataController.to.onSaveToSql();
+    final bool result = await DataController.to.onSaveToSql();
     expect(result, true);
   }
 }

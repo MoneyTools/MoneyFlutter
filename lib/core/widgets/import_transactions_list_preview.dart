@@ -108,8 +108,8 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
   }
 
   String buildTallyOfItemsToImportOrSkip() {
-    int totalItems = widget.values.length;
-    int itemsToImport = widget.values.where((item) => !item.exist).length;
+    final int totalItems = widget.values.length;
+    final int itemsToImport = widget.values.where((item) => !item.exist).length;
     String text = getIntAsText(widget.values.length);
     if (totalItems != itemsToImport) {
       text = '${getIntAsText(itemsToImport)}/${getIntAsText(totalItems)}';

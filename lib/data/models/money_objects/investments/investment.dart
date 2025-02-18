@@ -443,7 +443,7 @@ class Investment extends MoneyObject {
   }
 
   StockCumulative get finalAmount {
-    StockCumulative cumulative = StockCumulative();
+    final StockCumulative cumulative = StockCumulative();
     cumulative.quantity = -1 * effectiveUnits * this.fieldUnitPrice.value.asDouble();
     cumulative.amount += this.fieldCommission.value.asDouble();
     return cumulative;
@@ -451,7 +451,7 @@ class Investment extends MoneyObject {
 
   double get originalCostBasis {
     // looking for the original un-split cost basis at the date of this transaction.
-    double proceeds = this.fieldUnitPrice.value.asDouble() * this.fieldUnits.value;
+    final double proceeds = this.fieldUnitPrice.value.asDouble() * this.fieldUnits.value;
 
     if (this.transactionInstance!.fieldAmount.value.asDouble() != 0) {
       // We may have paid more for the stock than "price" in a buy transaction because of brokerage fees and

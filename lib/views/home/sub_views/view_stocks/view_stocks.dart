@@ -41,7 +41,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
 
   @override
   Widget buildHeader([final Widget? child]) {
-    List<Security> list = getList(
+    final List<Security> list = getList(
       includeDeleted: false,
       applyFilter: false,
     );
@@ -307,7 +307,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     final Security? security = getFirstSelectedItem() as Security?;
     if (security != null) {
       final String symbol = security.fieldSymbol.value;
-      List<Investment> list = getListOfInvestment(security);
+      final List<Investment> list = getListOfInvestment(security);
 
       final List<ChartEvent> events = [];
       for (final Investment activity in list) {

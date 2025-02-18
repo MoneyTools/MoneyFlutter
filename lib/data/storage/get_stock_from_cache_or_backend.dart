@@ -44,7 +44,7 @@ Future<StockPriceHistoryCache> getFromCacheOrBackend(
 }
 
 Future<StockPriceHistoryCache> loadFomBackendAndSaveToCache(String symbol) async {
-  StockPriceHistoryCache result = await _loadFromBackend(symbol);
+  final StockPriceHistoryCache result = await _loadFromBackend(symbol);
   if (result.errorMessage.isNotEmpty) {
     SnackBarService.displayError(message: result.errorMessage, autoDismiss: false);
   }
@@ -82,7 +82,7 @@ Future<StockPriceHistoryCache> _loadFromCache(
       // give up now
       stockPriceHistoryCache.status = StockLookupStatus.notFoundInCache;
     } else {
-      String dateTimeAsString = PreferenceController.to.getString('stock-date-$symbol');
+      final String dateTimeAsString = PreferenceController.to.getString('stock-date-$symbol');
       if (dateTimeAsString.isNotEmpty) {
         stockPriceHistoryCache.lastDateTime = DateTime.parse(dateTimeAsString);
       }
@@ -123,7 +123,7 @@ Future<StockPriceHistoryCache> _loadFromBackend(
     return StockPriceHistoryCache(symbol, StockLookupStatus.invalidApiKey);
   }
 
-  DateTime numberOfDaysInThePast = DateTime.now().subtract(const Duration(days: 365 * 40));
+  final DateTime numberOfDaysInThePast = DateTime.now().subtract(const Duration(days: 365 * 40));
 
   final String url =
       'https://api.twelvedata.com/time_series?symbol=$symbol&interval=1day&start_date=${numberOfDaysInThePast.toIso8601String()}&apikey=${PreferenceController.to.apiKeyForStocks}';
@@ -135,7 +135,7 @@ Future<StockPriceHistoryCache> _loadFromBackend(
     return result;
   }
 
-  http.Response response = await http.get(uri);
+  final http.Response response = await http.get(uri);
 
   if (response.statusCode == 200) {
     try {
@@ -162,12 +162,12 @@ Future<StockPriceHistoryCache> _loadFromBackend(
 
       // Unfortunately for now (sometimes) the API may returns two entries with the same date
       // for this ensure that we only have one date and price, last one wins
-      Map<String, StockDatePrice> mapByUniqueDate = {};
+      final Map<String, StockDatePrice> mapByUniqueDate = {};
 
       for (final dynamic value in values) {
         final String dateAsText = value['datetime'] as String;
 
-        StockDatePrice sp = StockDatePrice(
+        final StockDatePrice sp = StockDatePrice(
           date: DateTime.parse(dateAsText),
           price: double.parse(value['close'] as String),
         );

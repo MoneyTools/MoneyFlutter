@@ -66,8 +66,8 @@ class _PanelRecurringState extends State<PanelRecurring> {
     // reset the content
     recurringPayments.clear();
 
-    AccumulatorList<int, Transaction> groupTransactionsByPayeeId = AccumulatorList<int, Transaction>();
-    AccumulatorList<int, int> groupMonthsListByPayeeId = AccumulatorList<int, int>();
+    final AccumulatorList<int, Transaction> groupTransactionsByPayeeId = AccumulatorList<int, Transaction>();
+    final AccumulatorList<int, int> groupMonthsListByPayeeId = AccumulatorList<int, int>();
 
     // Step 1: Group transactions by payeeId and record transaction months
     for (final transaction in transactions.where(
@@ -75,7 +75,7 @@ class _PanelRecurringState extends State<PanelRecurring> {
           (isIncomeTransaction && t.fieldAmount.value.asDouble() > 0) ||
           (isIncomeTransaction == false && t.fieldAmount.value.asDouble() <= 0),
     )) {
-      int payeeId = transaction.fieldPayee.value;
+      final int payeeId = transaction.fieldPayee.value;
 
       groupTransactionsByPayeeId.cumulate(payeeId, transaction);
       groupMonthsListByPayeeId.cumulate(
@@ -86,7 +86,7 @@ class _PanelRecurringState extends State<PanelRecurring> {
 
     // Step 2: Calculate average amount and frequency for each payeeId
     for (final payeeId in groupMonthsListByPayeeId.getKeys()) {
-      List<int> months = groupMonthsListByPayeeId.getList(payeeId);
+      final List<int> months = groupMonthsListByPayeeId.getList(payeeId);
 
       // Check if the frequency indicates monthly recurrence
       if (isMonthlyRecurrence(months)) {

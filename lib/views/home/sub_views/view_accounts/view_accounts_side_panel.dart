@@ -46,14 +46,14 @@ extension ViewAccountsSidePanel on ViewAccountsState {
   }
 
   List<Widget> _buildStockHoldingCards(final Account account) {
-    AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
+    final AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
     Accounts.groupAccountStockSymbols(account, groupBySymbol);
 
     if (groupBySymbol.getKeys().isEmpty) {
       return [];
     }
 
-    List<StockSummary> stockSummaries = [];
+    final List<StockSummary> stockSummaries = [];
 
     groupBySymbol.values.forEach((String key, Set<Investment> listOfInvestmentsForAccount) {
       final double sharesForThisStock = Investments.applyHoldingSharesAdjustedForSplits(
@@ -171,7 +171,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     double totalInvestment = 0.0;
     stockSummaries.forEach((element) => totalInvestment += element.holdingValue);
 
-    double totalCash = account.balance - totalInvestment;
+    final double totalCash = account.balance - totalInvestment;
 
     stockPanels.insert(
       0,
@@ -235,7 +235,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       }
 
       account.maxBalancePerYears.forEach((key, value) {
-        double valueCurrencyChoice = showAsNativeCurrency ? value : value * account.getCurrencyRatio();
+        final double valueCurrencyChoice = showAsNativeCurrency ? value : value * account.getCurrencyRatio();
 
         listOfPairXY.add(PairXYY(key.toString(), valueCurrencyChoice));
       });
@@ -298,7 +298,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     required final bool showAsNativeCurrency,
   }) {
     int sortFieldIndex = PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), 0);
-    bool sortAscending =
+    final bool sortAscending =
         PreferenceController.to.getBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), true);
 
     final SelectionController selectionController =
@@ -374,7 +374,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     int selectedItemId =
         PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySelectedListItemId), -1);
 
-    List<LoanPayment> aggregatedList = getAccountLoanPayments(account);
+    final List<LoanPayment> aggregatedList = getAccountLoanPayments(account);
 
     MoneyObjects.sortList(
       aggregatedList,

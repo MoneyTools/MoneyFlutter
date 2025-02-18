@@ -46,7 +46,7 @@ List<Widget> getActionButtons(
   InvestmentImportFields inputData,
   BuildContext context,
 ) {
-  List<Widget> actionButtons = [
+  final List<Widget> actionButtons = [
     // Button - Import
     DialogActionButton(
       text: 'Add Investment',
@@ -56,7 +56,7 @@ List<Widget> getActionButtons(
         final Security security = Data().securities.getOrCreate(inputData.symbol);
 
         // add the Transaction to the Transaction list
-        Payee? payee = Data().aliases.findOrCreateNewPayee(security.fieldSymbol.value, fireNotification: false)!;
+        final Payee payee = Data().aliases.findOrCreateNewPayee(security.fieldSymbol.value, fireNotification: false)!;
 
         final Transaction newTransaction = Transaction(date: inputData.date);
         newTransaction.fieldAccountId.value = inputData.account.uniqueId;

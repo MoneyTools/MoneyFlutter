@@ -39,7 +39,7 @@ class Currencies extends MoneyObjects<Currency> {
   }
 
   double getRatioFromSymbol(final String symbol) {
-    Currency? currency = getCurrencyFromSymbol(symbol);
+    final Currency? currency = getCurrencyFromSymbol(symbol);
     if (currency == null) {
       return 1;
     }

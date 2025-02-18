@@ -175,7 +175,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
     int itemIdToSelect = -1;
     final int firstSelectedIndex = getListIndexFromUniqueId(widget.selectedItemIds.value.first);
     if (firstSelectedIndex != -1) {
-      int newIndexToSelect = firstSelectedIndex + incrementBy; // go up
+      final int newIndexToSelect = firstSelectedIndex + incrementBy; // go up
       if (isIndexInRange(widget.list, newIndexToSelect)) {
         final itemFoundAtNewIndexPosition = widget.list[newIndexToSelect];
         itemIdToSelect = (itemFoundAtNewIndexPosition as MoneyObject).uniqueId;
@@ -202,7 +202,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
       switch (event.logicalKey) {
         case LogicalKeyboardKey.arrowUp:
           if (widget.selectedItemIds.value.isNotEmpty) {
-            int itemIdToSelect = moveCurrentSelection(-1);
+            final int itemIdToSelect = moveCurrentSelection(-1);
             if (itemIdToSelect != -1) {
               selectedItem(itemIdToSelect);
             }
@@ -211,7 +211,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
 
         case LogicalKeyboardKey.arrowDown:
           if (widget.selectedItemIds.value.isNotEmpty) {
-            int itemIdToSelect = moveCurrentSelection(1);
+            final int itemIdToSelect = moveCurrentSelection(1);
             if (itemIdToSelect != -1) {
               selectedItem(itemIdToSelect);
             }
@@ -285,7 +285,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
             desiredNewPosition = _rowHeight * index;
           }
         }
-        int numberOfItems = (desiredNewPosition / _rowHeight).floor();
+        final int numberOfItems = (desiredNewPosition / _rowHeight).floor();
         desiredNewPosition = numberOfItems * _rowHeight;
 
         //print('current offset ${_scrollController.offset}, requesting $desiredNewPosition for index $index');

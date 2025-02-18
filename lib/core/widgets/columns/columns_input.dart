@@ -170,7 +170,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
   /// Converts single-column text into three columns
   void _fromOneToThreeColumn() {
     // Create parser with user preferences
-    ValuesParser parser = ValuesParser(
+    final ValuesParser parser = ValuesParser(
       dateFormat: widget.dateFormat,
       currency: widget.currency,
       reverseAmountValue: widget.reverseAmountValue,
@@ -250,7 +250,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
   void _updateAllTextControllerContentFromRawText(final String inputText) {
     _controllerSingleColumn.text = inputText;
 
-    ValuesParser parser = ValuesParser(
+    final ValuesParser parser = ValuesParser(
       dateFormat: widget.dateFormat,
       currency: widget.currency,
       reverseAmountValue: widget.reverseAmountValue,

@@ -326,7 +326,7 @@ class Account extends MoneyObject {
     if (fieldCurrency.value == Constants.defaultCurrency) {
       originalCurrencyAndValue = Currency.buildCurrencyWidget(fieldCurrency.value);
     } else {
-      double ratioCurrency = getCurrencyRatio();
+      final double ratioCurrency = getCurrencyRatio();
       originalCurrencyAndValue = Tooltip(
         message: ratioCurrency.toString(),
         child: Row(

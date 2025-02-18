@@ -51,7 +51,7 @@ class Transaction extends MoneyObject {
     final String description,
     final double amount,
   ) {
-    Payee? payee = Data().aliases.findOrCreateNewPayee(description, fireNotification: false);
+    final Payee? payee = Data().aliases.findOrCreateNewPayee(description, fireNotification: false);
 
     final Transaction t = Transaction(date: date);
     t.fieldId.value = -1;
@@ -478,7 +478,7 @@ class Transaction extends MoneyObject {
                       // same account do noting
                     } else {
                       // use the new account destination
-                      Transaction relatedTransaction = instance.instanceOfTransfer!.relatedTransaction!;
+                      final Transaction relatedTransaction = instance.instanceOfTransfer!.relatedTransaction!;
                       instance.instanceOfTransfer!.relatedTransaction!.instanceOfAccount = Data().accounts.get(
                             account.uniqueId,
                           );
@@ -672,7 +672,7 @@ class Transaction extends MoneyObject {
     }
 
     if (this.instanceOfTransfer != null) {
-      Transaction other = this.instanceOfTransfer!.relatedTransaction!;
+      final Transaction other = this.instanceOfTransfer!.relatedTransaction!;
       if (other.isSplit) {
         //       int count = 0;
         //       Split splitXfer = null;
@@ -818,8 +818,8 @@ class Transaction extends MoneyObject {
   }
 
   String getPayeeOrTransferCaption({final bool showAccount = false}) {
-    Investment? investment = instanceOfInvestment;
-    double amount = this.fieldAmount.value.asDouble();
+    final Investment? investment = instanceOfInvestment;
+    final double amount = this.fieldAmount.value.asDouble();
 
     bool isFrom = false;
     String displayName = '';
@@ -845,7 +845,7 @@ class Transaction extends MoneyObject {
 
   String getTransferCaption(final Account? relatedAccount, final bool isFrom, {final bool showAccount = false}) {
     String caption = showAccount ? accountName : 'Transfer';
-    String arrowDirection = isFrom ? ' ← ' : ' → ';
+    final String arrowDirection = isFrom ? ' ← ' : ' → ';
     caption += arrowDirection;
     caption += relatedAccountName(relatedAccount);
     return caption;
@@ -1052,7 +1052,7 @@ class Transaction extends MoneyObject {
           // Attempt to restore/undo
           if (valueBeforeEdit != null) {
             // bring back the previous value
-            int oldValue = (valueBeforeEdit![this.fieldStatus.name] ?? 0) as int;
+            final int oldValue = (valueBeforeEdit![this.fieldStatus.name] ?? 0) as int;
             this.fieldStatus.value = TransactionStatus.values[oldValue];
 
             // if this was the only change to this instance we can undo the mutation state

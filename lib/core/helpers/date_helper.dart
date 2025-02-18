@@ -6,7 +6,7 @@ List<String> generateAllDateFormats() {
   final List<String> monthFormats = ['MM', 'M'];
   final List<String> dayFormats = ['dd', 'd'];
 
-  List<String> allFormats = [];
+  final List<String> allFormats = [];
 
   for (String yearFormat in yearFormats) {
     for (String monthFormat in monthFormats) {
@@ -95,7 +95,7 @@ DateTime? attemptToGetDateFromDynamic(final dynamic value) {
 /// @return The parsed [DateTime] object, or `null` if no valid date is found.
 DateTime? attemptToGetDateFromText(final String text) {
   // Define a list of date formats to try
-  List<String> dateFormats = [
+  final List<String> dateFormats = [
     'yyyy-MM-dd HH:mm:ss', // ISO8601
     'yyyy-MM-dd', // ISO8601
     'MM/dd/yyyy', // USA format 4 digit year
@@ -252,7 +252,7 @@ DateTime? parseQfxDataFormat(final String qfxDate) {
     final int second = int.parse(qfxDate.substring(12, 14));
 
     // Create DateTime object
-    DateTime dateTime = DateTime(year, month, day, hour, minute, second);
+    final DateTime dateTime = DateTime(year, month, day, hour, minute, second);
 
     // Import UTC based
     // dateTime = dateTime.toUtc();

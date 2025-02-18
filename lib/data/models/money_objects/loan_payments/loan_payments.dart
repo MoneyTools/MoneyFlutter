@@ -47,7 +47,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   ];
 
   // include the manual entries done in the LoanPayments table
-  List<LoanPayment> aggregatedList = Data()
+  final List<LoanPayment> aggregatedList = Data()
       .loanPayments
       .iterableList(includeDeleted: false)
       .where((a) => a.fieldAccountId.value == account.uniqueId)
@@ -59,11 +59,11 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
       );
 
   // Rollup into a single Payment based on Date to match Principal and Interest payment
-  Map<String, PaymentRollup> payments = {};
+  final Map<String, PaymentRollup> payments = {};
 
   for (final Transaction t in listOfTransactions) {
     // Key is based on date + transaction ID
-    String key = t.dateTimeAsString;
+    final String key = t.dateTimeAsString;
 
     bool isFromSplit = false;
     PaymentRollup? pr = payments[key];

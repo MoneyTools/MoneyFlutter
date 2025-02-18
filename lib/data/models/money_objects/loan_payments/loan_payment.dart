@@ -187,13 +187,13 @@ class LoanPayment extends MoneyObject {
   }
 
   double getRate() {
-    double previousBalance = this.fieldBalance.value.asDouble() - this.fieldPrincipal.value.asDouble();
+    final double previousBalance = this.fieldBalance.value.asDouble() - this.fieldPrincipal.value.asDouble();
     if (previousBalance == 0) {
       return 0.00;
     }
 
     // Calculate the monthly interest rate
-    double annualInterestRate = (this.fieldInterest.value.asDouble() * 12) // Convert to annual interest rate
+    final double annualInterestRate = (this.fieldInterest.value.asDouble() * 12) // Convert to annual interest rate
         /
         previousBalance;
 

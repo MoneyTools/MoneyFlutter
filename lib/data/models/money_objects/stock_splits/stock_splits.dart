@@ -35,7 +35,7 @@ class StockSplits extends MoneyObjects<StockSplit> {
   }
 
   List<StockSplit> getStockSplitsForSecurity(final Security s) {
-    List<StockSplit> list = [];
+    final List<StockSplit> list = [];
     for (StockSplit split in iterableList()) {
       if (!s.isDeleted && split.fieldSecurity.value == s.uniqueId) {
         list.add(split);

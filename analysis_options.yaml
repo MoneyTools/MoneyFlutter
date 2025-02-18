@@ -44,6 +44,7 @@ linter:
     use_decorated_box: true
     use_super_parameters: true
     prefer_final_fields: true
+    prefer_final_locals: true
     matching_super_parameters: true
     sort_constructors_first: true
     always_put_control_body_on_new_line: true

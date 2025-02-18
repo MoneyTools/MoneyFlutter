@@ -21,8 +21,8 @@ class RecurringPayment {
     categoryIdsAndSums = [];
     frequency = transactions.length;
 
-    MapAccumulatorSum<int, int, double> payeeIdMonthAndSums = MapAccumulatorSum<int, int, double>();
-    Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
+    final MapAccumulatorSum<int, int, double> payeeIdMonthAndSums = MapAccumulatorSum<int, int, double>();
+    final Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
 
     averagePerMonths = List.generate(12, (index) => Pair<int, double>(0, 0));
 
@@ -38,7 +38,7 @@ class RecurringPayment {
       );
 
       /// Rolling average per Month
-      int transactionMonth = transaction.fieldDateTime.value!.month - 1;
+      final int transactionMonth = transaction.fieldDateTime.value!.month - 1;
       final Pair<int, double> pair = averagePerMonths[transactionMonth];
       if (pair.first == 0) {
         // first time
@@ -119,7 +119,7 @@ class RecurringPayment {
       list.sort((a, b) => a.second.compareTo(b.second));
     }
 
-    List<Distribution> listForDistributionBar = [];
+    final List<Distribution> listForDistributionBar = [];
 
     // keep at most [n] number of items
     final int topCategoryToShow = min(topN, list.length);

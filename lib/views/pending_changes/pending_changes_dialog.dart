@@ -157,7 +157,7 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
 
   /// Builds the sub-segment buttons for selecting specific data groups within a mutation type.
   Widget _buildSubSegmentsButtons(Mutations mutations) {
-    List<Widget> groupSelectors = [];
+    final List<Widget> groupSelectors = [];
 
     for (int i = 0; i < mutations.mutationGroups.length; i++) {
       final group = mutations.mutationGroups[i];

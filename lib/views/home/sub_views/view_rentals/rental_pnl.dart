@@ -58,8 +58,8 @@ class RentalPnL {
   double get profit => income + expenses; // since Expense is stored as a negative value we use a [+]
 
   String textAmount(final String text, final double amount) {
-    String textPadded = '$text:'.padRight(15);
-    String amountPadded = Currency.getAmountAsStringUsingCurrency(amount, iso4217code: currency).padLeft(15);
+    final String textPadded = '$text:'.padRight(15);
+    final String amountPadded = Currency.getAmountAsStringUsingCurrency(amount, iso4217code: currency).padLeft(15);
     return '$textPadded\t$amountPadded\n';
   }
 }

@@ -21,12 +21,12 @@ class AdaptiveColumns extends StatelessWidget {
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
         // how many columnsWidth  can fit in the give container
-        int quantity = (constraints.maxWidth / columnWidth).floor();
+        final int quantity = (constraints.maxWidth / columnWidth).floor();
 
         // if theres only 1 column then just use the entire width
-        double? optimalColumnWidth = quantity <= 1 ? null : constraints.maxWidth / quantity;
+        final double? optimalColumnWidth = quantity <= 1 ? null : constraints.maxWidth / quantity;
 
-        List<Widget> sizedWidgets = children
+        final List<Widget> sizedWidgets = children
             .map(
               (widget) => Container(
                 padding: const EdgeInsets.all(4),

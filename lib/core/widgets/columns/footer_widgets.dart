@@ -9,7 +9,7 @@ import 'package:money/data/models/money_objects/currencies/currency.dart';
 Widget getFooterForDateRange(final DateRange dateRange) {
   return LayoutBuilder(
     builder: (context, constraints) {
-      bool showDates = constraints.maxWidth > 80;
+      final bool showDates = constraints.maxWidth > 80;
       return DefaultTextStyle(
         style: const TextStyle(
           fontSize: 10,
@@ -35,7 +35,7 @@ Widget getFooterForDateRange(final DateRange dateRange) {
 }
 
 Widget getFooterForAmount(final double amount, {final String prefix = ''}) {
-  TextStyle style = TextStyle(
+  final TextStyle style = TextStyle(
     color: colorBasedOnValue(amount),
     fontFamily: 'RobotoMono',
   );
@@ -47,7 +47,7 @@ Widget getFooterForAmount(final double amount, {final String prefix = ''}) {
 }
 
 Widget getFooterForInt(final num value, {final bool applyColorBasedOnValue = true, final String prefix = ''}) {
-  TextStyle style = TextStyle(
+  final TextStyle style = TextStyle(
     color: applyColorBasedOnValue ? colorBasedOnValue(value) : null,
     fontFamily: 'RobotoMono',
   );

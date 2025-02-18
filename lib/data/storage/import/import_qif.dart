@@ -30,7 +30,7 @@ void importQIF(
 }
 
 ImportData loadQIF(final List<String> lines) {
-  ImportData importData = ImportData();
+  final ImportData importData = ImportData();
 
   ImportEntry currentEntry = ImportEntry.blank();
 
@@ -44,8 +44,8 @@ ImportData loadQIF(final List<String> lines) {
       continue;
     }
     if (line.length >= 2) {
-      String fieldLetter = line[0];
-      String fieldData = line.substring(1);
+      final String fieldLetter = line[0];
+      final String fieldData = line.substring(1);
       switch (fieldLetter) {
         case '!':
           switch (fieldData) {

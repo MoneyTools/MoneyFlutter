@@ -348,7 +348,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   /// Allowed to be override by derived classes
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    List<Widget> widgets = [];
+    final List<Widget> widgets = [];
 
     /// Info panel header
     if (forSidePanelTransactions) {
@@ -494,7 +494,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   T? getSidePanelLastSelectedItem<T>(final MoneyObjects<T> list) {
-    int selectedItemId = getSidePanelLastSelectedItemId();
+    final int selectedItemId = getSidePanelLastSelectedItemId();
     if (selectedItemId == -1) {
       return null;
     }
@@ -506,7 +506,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   Transaction? getSidePanelLastSelectedTransaction() {
-    int selectedItemId = getSidePanelLastSelectedItemId();
+    final int selectedItemId = getSidePanelLastSelectedItemId();
     if (selectedItemId == -1) {
       return null;
     }
@@ -559,7 +559,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
-      String fieldValue = columnToCustomerFilterOn.getValueForDisplay(moneyObject).toString();
+      final String fieldValue = columnToCustomerFilterOn.getValueForDisplay(moneyObject).toString();
       set.add(fieldValue);
     }
     return set.toList();
@@ -720,7 +720,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           onPressed: () {
             Navigator.of(context).pop(false);
             setState(() {
-              List<String> selectedValues = [];
+              final List<String> selectedValues = [];
 
               for (final ValueSelection checkbox in listOfValueSelected) {
                 if (checkbox.isSelected) {
@@ -818,7 +818,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   Widget _buildCenterMessageForEmptyListDueToFilters(final Key key) {
-    List<String> activeFilterValues = [];
+    final List<String> activeFilterValues = [];
     if (_filterByText.isNotEmpty) {
       activeFilterValues.add('"$_filterByText"');
     }

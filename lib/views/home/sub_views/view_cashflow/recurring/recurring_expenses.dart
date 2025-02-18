@@ -31,7 +31,7 @@ class RecurringExpenses {
     final List<CategoryType> categoryTypes,
     final double multiplier,
   ) {
-    List<RecurringExpenses> items = [];
+    final List<RecurringExpenses> items = [];
 
     final Iterable<Category> recurringCategories = Data().categories.iterableList().where((c) {
       if (!categoryTypes.contains(c.fieldType.value)) {
@@ -44,7 +44,7 @@ class RecurringExpenses {
     });
 
     for (final Category category in recurringCategories) {
-      List<Category> listOfDescendants = [category]; // include this Category
+      final List<Category> listOfDescendants = [category]; // include this Category
 
       category.getDescendants(listOfDescendants);
 
@@ -57,7 +57,7 @@ class RecurringExpenses {
       final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
 
       double totalForAllTimeForThisCategory = 0;
-      DateRange dateRangeOfTransactions = DateRange();
+      final DateRange dateRangeOfTransactions = DateRange();
 
       for (final Transaction transaction in flatTransactions) {
         totalForAllTimeForThisCategory += transaction.fieldAmount.value.asDouble();
@@ -89,7 +89,7 @@ class RecurringExpenses {
     bool includeAssetAccounts,
     double multiplier,
   ) {
-    Map<int, RecurringExpenses> yearMap = {};
+    final Map<int, RecurringExpenses> yearMap = {};
 
     final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(
           whereClause: (t) =>

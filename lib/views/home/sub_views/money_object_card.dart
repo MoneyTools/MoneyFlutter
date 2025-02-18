@@ -25,7 +25,7 @@ class MoneyObjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Widget> widgets = [];
+    final List<Widget> widgets = [];
 
     // Header
     if (title.isNotEmpty) {

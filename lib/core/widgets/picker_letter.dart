@@ -22,7 +22,7 @@ class PickerLetters extends StatefulWidget {
 class _PickerLettersState extends State<PickerLetters> {
   @override
   Widget build(BuildContext context) {
-    List<Widget> buttons = [];
+    final List<Widget> buttons = [];
 
     for (final String option in widget.options) {
       final letter = option.isEmpty ? ' ' : option[0];

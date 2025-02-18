@@ -12,7 +12,7 @@ class SnackBarService {
     Color backgroundColor = Colors.black,
     int duration = 5,
   }) {
-    Color textColor = contrastColor(backgroundColor);
+    final Color textColor = contrastColor(backgroundColor);
     Get.snackbar(
       title, message,
       margin: const EdgeInsets.all(10),

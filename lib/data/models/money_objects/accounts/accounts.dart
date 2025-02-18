@@ -98,7 +98,7 @@ class Accounts extends MoneyObjects<Account> {
         )
         .toList();
 
-    AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
+    final AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
 
     for (final account in investmentAccounts) {
       groupAccountStockSymbols(account, groupBySymbol);
@@ -106,7 +106,7 @@ class Accounts extends MoneyObjects<Account> {
 
     // apply the investment running balance amount
     groupBySymbol.values.forEach((keyAccountAndSymbol, valuesInvestments) {
-      double totalAdjustedShareForThisStockInThisAccount =
+      final double totalAdjustedShareForThisStockInThisAccount =
           Investments.applyHoldingSharesAdjustedForSplits(valuesInvestments.toList());
       final tokens = keyAccountAndSymbol.split('|');
       final accountId = tokens[0];

@@ -115,8 +115,8 @@ class Transfer extends MoneyObject {
   int get uniqueId => source!.uniqueId;
 
   int dateSpreadBetweenSendingAndReceiving() {
-    DateTime dateSent = geSenderTransactionDate() ?? DateTime.now();
-    DateTime dateReceived = getReceivedDateOrToday();
+    final DateTime dateSent = geSenderTransactionDate() ?? DateTime.now();
+    final DateTime dateReceived = getReceivedDateOrToday();
     return dateReceived.difference(dateSent).inDays;
   }
 
@@ -165,7 +165,7 @@ class Transfer extends MoneyObject {
     if (isOrphan) {
       status += 'Orphan';
     }
-    int dateSpread = dateSpreadBetweenSendingAndReceiving().abs();
+    final int dateSpread = dateSpreadBetweenSendingAndReceiving().abs();
 
     if (dateSpread > 2) {
       if (status.isNotEmpty) {

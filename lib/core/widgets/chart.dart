@@ -150,8 +150,8 @@ class Chart extends StatelessWidget {
 
   static double getBarWidth(BoxConstraints constraints, final int numberOfBars) {
     // 1. Calculate available width:
-    double margins = 80 * 2;
-    double availableWidth = constraints.maxWidth - margins;
+    final double margins = 80 * 2;
+    final double availableWidth = constraints.maxWidth - margins;
 
     // 2. Calculate bar width (adjust as needed):
     double barWidth = availableWidth / numberOfBars;

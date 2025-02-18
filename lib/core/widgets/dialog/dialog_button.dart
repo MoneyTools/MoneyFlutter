@@ -18,7 +18,7 @@ class DialogActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget child = icon == null
+    final Widget child = icon == null
         ? Text(text)
         : IntrinsicWidth(
             child: Row(

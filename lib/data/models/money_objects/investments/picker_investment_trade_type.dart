@@ -49,7 +49,7 @@ Widget pickerInvestmentTradeType({
   required final InvestmentTradeType itemSelected,
   required final void Function(InvestmentTradeType) onSelected,
 }) {
-  String selectedName = getInvestmentTradeTypeText(itemSelected);
+  final String selectedName = getInvestmentTradeTypeText(itemSelected);
 
   return PickerEditBox(
     title: 'Investment Trade Type',

@@ -69,9 +69,9 @@ class ViewRentalsSidePanel {
       //
       // SELECTED: Show cumulated profit over time for the selected rental(s)
       //
-      RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+      final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
-      List<PairXYY> dataPoints = [];
+      final List<PairXYY> dataPoints = [];
 
       if (!rental.dateRangeOfOperation.hasNullDates) {
         for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
@@ -99,10 +99,10 @@ class ViewRentalsSidePanel {
     }
 
     // Single Rental property selected
-    RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+    final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
     // Show PnL for the selected rental property, per year
-    List<Widget> pnlCards = [];
+    final List<Widget> pnlCards = [];
 
     if (!rental.dateRangeOfOperation.hasNullDates) {
       for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
@@ -134,7 +134,7 @@ class ViewRentalsSidePanel {
     required final List<int> selectedIds,
     required bool showAsNativeCurrency, // Currently unused
   }) {
-    RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
+    final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
     final SelectionController selectionController = Get.put(SelectionController());
     return ListViewTransactions(
       listController: Get.find<ListControllerSidePanel>(),

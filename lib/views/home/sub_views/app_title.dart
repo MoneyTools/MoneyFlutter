@@ -66,8 +66,8 @@ Widget _buildRevealContentOption(
   String text,
   final bool hidden,
 ) {
-  Color color = getColorTheme(context).onSurface;
-  TextStyle textStyle = TextStyle(fontSize: SizeForText.normal, color: color);
+  final Color color = getColorTheme(context).onSurface;
+  final TextStyle textStyle = TextStyle(fontSize: SizeForText.normal, color: color);
 
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,

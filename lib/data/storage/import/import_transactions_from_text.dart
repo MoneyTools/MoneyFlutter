@@ -18,9 +18,9 @@ void showImportTransactionsFromTextInput(
 
   Account account = Data().accounts.getMostRecentlySelectedAccount();
 
-  ValuesParser parser = ValuesParser(dateFormat: 'MM/dd/yyyy', currency: 'USD');
+  final ValuesParser parser = ValuesParser(dateFormat: 'MM/dd/yyyy', currency: 'USD');
 
-  List<Widget> actionButtons = [
+  final List<Widget> actionButtons = [
     // Button - Import
     DialogActionButton(
       text: 'Import',

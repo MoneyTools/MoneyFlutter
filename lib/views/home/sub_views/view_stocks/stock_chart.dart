@@ -95,7 +95,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   void fromPriceHistoryToChartDataPoints(StockPriceHistoryCache priceCache) {
     if (priceCache.status == StockLookupStatus.validSymbol || priceCache.status == StockLookupStatus.foundInCache) {
-      List<FlSpot> tmpDataPoints = [];
+      final List<FlSpot> tmpDataPoints = [];
       for (final sp in priceCache.prices) {
         tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
       }
@@ -261,7 +261,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
   Future<List<StockSplit>> _fetchSplitsFromTwelveData(
     String symbol,
   ) async {
-    List<StockSplit> splitsFound = [];
+    final List<StockSplit> splitsFound = [];
 
     if (PreferenceController.to.apiKeyForStocks.isNotEmpty) {
       final Uri uri = Uri.parse(
@@ -274,7 +274,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
         try {
           final MyJson data = json.decode(response.body) as MyJson;
 
-          int? subStatusCode = data['code'] as int?;
+          final int? subStatusCode = data['code'] as int?;
           if ([401, 403, 404, 409].contains(subStatusCode)) {
             logger.e(data.toString());
             SnackBarService.displayError(message: data['message'] as String);
@@ -284,7 +284,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
             final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
             for (final dataSplit in dataSplits) {
               final DateTime dateOfSplit = DateTime.parse(dataSplit['date'] as String);
-              StockSplit sp = StockSplit(
+              final StockSplit sp = StockSplit(
                 security: securityId,
                 date: dateOfSplit,
                 numerator: dataSplit['from_factor'] as int,
@@ -305,7 +305,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
   }
 
   Future<List<StockSplit>> _fetchStockSplitsFromYahoo(String symbol) async {
-    List<StockSplit> splitsFound = [];
+    final List<StockSplit> splitsFound = [];
 
     // Base URL for Yahoo Finance API v8
     final String baseUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/$symbol';
@@ -327,7 +327,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
     if (response.statusCode == 200) {
       // Parse the response body as JSON
       final Map<String, dynamic> jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
-      Security? security = Data().securities.getBySymbol(symbol);
+      final Security? security = Data().securities.getBySymbol(symbol);
       if (security != null) {
         // Extract the stock splits data
         final responseChart = jsonResponse['chart'];
@@ -342,9 +342,9 @@ class StockChartWidgetState extends State<StockChartWidget> {
                   final splits = events['splits'];
                   if (splits != null) {
                     for (final splitJson in splits.values as List) {
-                      int dateInMilliseconds = splitJson['date'] as int;
+                      final int dateInMilliseconds = splitJson['date'] as int;
                       final DateTime dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
-                      StockSplit sp = StockSplit(
+                      final StockSplit sp = StockSplit(
                         security: security.uniqueId,
                         date: dateOSplit,
                         numerator: splitJson['numerator'] as int,
@@ -367,7 +367,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
   }
 
   void _getStockHistoricalData() async {
-    StockPriceHistoryCache priceCache = await getFromCacheOrBackend(widget.symbol);
+    final StockPriceHistoryCache priceCache = await getFromCacheOrBackend(widget.symbol);
     fromPriceHistoryToChartDataPoints(priceCache);
   }
 }
@@ -476,7 +476,7 @@ class PaintActivities extends CustomPainter {
     final chartWidth = size.width;
     final chartHeight = size.height;
 
-    double labelVerticalDistribution = chartHeight / activities.length;
+    final double labelVerticalDistribution = chartHeight / activities.length;
     double nextVerticalLabelPosition = chartHeight - labelVerticalDistribution;
 
     for (final ChartEvent activity in activities) {
@@ -503,7 +503,7 @@ class PaintActivities extends CustomPainter {
       if (activity.description.isNotEmpty) {
         text += '\n${activity.description}';
       }
-      Color boxColor = (lineColor ?? activity.colorToUse).withAlpha(100);
+      final Color boxColor = (lineColor ?? activity.colorToUse).withAlpha(100);
       Color textColor = boxColor;
       if (activity.dates.max != null) {
         _paintBox(

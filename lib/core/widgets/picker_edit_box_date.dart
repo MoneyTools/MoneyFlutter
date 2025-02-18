@@ -45,7 +45,7 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
         ),
         MyIconButton(
           onPressed: () async {
-            DateTime dateSelected = valueOrDefaultDate(
+            final DateTime dateSelected = valueOrDefaultDate(
               attemptToGetDateFromText(widget.initialValue ?? ''),
               defaultValueIfNull: DateTime.now(),
             );

@@ -40,10 +40,10 @@ void main() {
   group('getHueAndBrightnessFromColor Function Tests', () {
     test('test_getHueAndBrightnessFromColor', () {
       // Arrange
-      Color color = Colors.blue;
+      final Color color = Colors.blue;
 
       // Act
-      Pair<double, double> result = getHueAndBrightnessFromColor(color);
+      final Pair<double, double> result = getHueAndBrightnessFromColor(color);
 
       // Assert
       expect(roundToDecimalPlaces(result.first, 1), equals(206.6));

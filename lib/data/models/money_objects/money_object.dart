@@ -220,7 +220,7 @@ class MoneyObject {
   }
 
   MyJson getMutatedDiff<T>() {
-    MyJson afterEditing = getPersistableJSon();
+    final MyJson afterEditing = getPersistableJSon();
     return myJsonDiff(
       before: valueBeforeEdit ?? {},
       after: afterEditing,
@@ -266,8 +266,8 @@ class MoneyObject {
   bool get isChanged => mutation == MutationType.changed;
 
   static bool isDataModified(MoneyObject moneyObject) {
-    MyJson afterEditing = moneyObject.getPersistableJSon();
-    MyJson diff = myJsonDiff(
+    final MyJson afterEditing = moneyObject.getPersistableJSon();
+    final MyJson diff = myJsonDiff(
       before: moneyObject.valueBeforeEdit ?? {},
       after: afterEditing,
     );

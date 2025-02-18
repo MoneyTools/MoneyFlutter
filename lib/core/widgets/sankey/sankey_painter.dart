@@ -256,7 +256,7 @@ class SankeyPainter extends CustomPainter {
     ui.Canvas canvas,
     double heightProfitFromIncomeSection,
   ) {
-    Block targetNet = buildSegmentForNetProfitLost(
+    final Block targetNet = buildSegmentForNetProfitLost(
       netAmount,
       lastHeight,
       ratioIncomeToExpense,
@@ -326,7 +326,7 @@ class SankeyPainter extends CustomPainter {
       );
       final double boxTop = top + verticalPosition;
       final ui.Rect rect = Rect.fromLTWH(left, boxTop, columnWidth, height);
-      String text = compactView ? shortenLongText(element.name) : element.name;
+      final String text = compactView ? shortenLongText(element.name) : element.name;
       final Block source = Block(
         '$text: ${getAmountAsShorthandText(element.value)}',
         rect,

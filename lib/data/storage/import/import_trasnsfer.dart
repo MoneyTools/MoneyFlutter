@@ -39,7 +39,7 @@ List<Widget> getActionButtons(
   ImportFieldsForTransfer inputData,
   BuildContext context,
 ) {
-  List<Widget> actionButtons = [
+  final List<Widget> actionButtons = [
     // Button - Import
     DialogActionButton(
       text: 'Record Transfer',

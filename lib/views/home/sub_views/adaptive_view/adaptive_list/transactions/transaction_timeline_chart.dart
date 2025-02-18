@@ -31,7 +31,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       return const Center(child: Text('No transactions'));
     }
 
-    List<PairXYY> sumByPeriod = _calculateSumByPeriod();
+    final List<PairXYY> sumByPeriod = _calculateSumByPeriod();
 
     return Column(
       children: [

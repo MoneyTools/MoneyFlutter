@@ -137,7 +137,7 @@ Widget buildHeaderTitleAndCounter(
   final String title,
   final String badgeText,
 ) {
-  Widget boxHeader = Badge(
+  final Widget boxHeader = Badge(
     isLabelVisible: badgeText.isNotEmpty,
     backgroundColor: ThemeController.to.primaryColor,
     offset: const Offset(20.0, 0),

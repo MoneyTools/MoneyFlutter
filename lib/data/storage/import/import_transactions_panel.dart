@@ -158,12 +158,12 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   void convertAndNotify(BuildContext context, String inputText) {
     // Detect currency format from input text if any amounts exist
-    int detectedFormat = detectCurrencyFormat(inputText);
+    final int detectedFormat = detectCurrencyFormat(inputText);
     if (detectedFormat != -1) {
       _userChoiceNativeVsUSD = detectedFormat;
     }
 
-    ValuesParser parser = ValuesParser(
+    final ValuesParser parser = ValuesParser(
       dateFormat: userChoiceOfDateFormat,
       currency: _userChoiceNativeVsUSD == 0 ? _account.getAccountCurrencyAsText() : Constants.defaultCurrency,
       reverseAmountValue: _userChoiceDebitVsCredit == 1,
@@ -253,7 +253,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
     final List<String> listOfDateAsStrings = _values.map((entry) => entry.date.asString()).toList();
 
-    List<String> choiceOfDateFormat = getPossibleDateFormatsForAllValues(listOfDateAsStrings);
+    final List<String> choiceOfDateFormat = getPossibleDateFormatsForAllValues(listOfDateAsStrings);
 
     if (choiceOfDateFormat.isEmpty) {
       return Text('Bad Date Format', style: TextStyle(color: getColorFromState(ColorState.error)));

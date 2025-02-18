@@ -68,7 +68,7 @@ class DataController extends GetxController {
   Future<bool> loadFile(final DataSource dataSource) async {
     this.closeFile(false); // ensure that we closed current file and state
 
-    bool success = await Data().loadFromPath(dataSource);
+    final bool success = await Data().loadFromPath(dataSource);
 
     if (success) {
       setCurrentFileName(dataSource.filePath);
@@ -167,7 +167,7 @@ class DataController extends GetxController {
         if (fileExtension == 'mmdb' || fileExtension == 'mmcsv') {
           late DataSource dataSource;
           if (kIsWeb) {
-            PlatformFile file = pickerResult.files.first;
+            final PlatformFile file = pickerResult.files.first;
             dataSource = DataSource(filePath: file.name, fileBytes: file.bytes!);
           } else {
             dataSource = DataSource(filePath: pickerResult.files.single.path ?? '');
@@ -200,7 +200,7 @@ class DataController extends GetxController {
       fileNameAndPath = await defaultFolderToSaveTo('mymoney.mmdb');
     }
 
-    bool result = await Data().saveToSql(
+    final bool result = await Data().saveToSql(
       filePath: fileNameAndPath,
       onSaveCompleted: (final bool success, final String message) {
         if (success) {
@@ -216,7 +216,7 @@ class DataController extends GetxController {
   }
 
   void onShowFileLocation() async {
-    String path = await generateNextFolderToSaveTo();
+    final String path = await generateNextFolderToSaveTo();
     showLocalFolder(path);
   }
 

@@ -18,7 +18,7 @@ class AccumulatorList<K, V> {
   }
 
   bool containsKeyValue(K key, V value) {
-    var setFound = values[key];
+    final setFound = values[key];
     if (setFound == null) {
       // the key is not a match
       return false;
@@ -170,7 +170,7 @@ class AccumulatorAverage<K> {
   }
 
   void cumulate(final K key, final num value) {
-    RunningAverage average = values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
+    final RunningAverage average = values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
     average.addValue(value);
   }
 

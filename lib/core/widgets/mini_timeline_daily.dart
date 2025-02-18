@@ -35,22 +35,22 @@ class MiniTimelineDaily extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        int numberOfYears = yearEnd - yearStart + 1;
+        final int numberOfYears = yearEnd - yearStart + 1;
 
         // X Ratio
-        double numberOfDays = numberOfYears * 365.25;
-        double xRatio = constraints.maxWidth / numberOfDays;
+        final double numberOfDays = numberOfYears * 365.25;
+        final double xRatio = constraints.maxWidth / numberOfDays;
 
         // Y Ratio
         double maxValueFound = 0;
         for (final value in values) {
           maxValueFound = max(maxValueFound, value.second.abs());
         }
-        double yRatio = constraints.maxHeight / maxValueFound;
+        final double yRatio = constraints.maxHeight / maxValueFound;
 
-        List<Widget> bars = [];
+        final List<Widget> bars = [];
         for (final value in values) {
-          int oneDaySlot = value.first * Duration.millisecondsPerDay;
+          final int oneDaySlot = value.first * Duration.millisecondsPerDay;
 
           bars.add(
             Positioned(

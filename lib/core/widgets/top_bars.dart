@@ -23,13 +23,13 @@ class BarChartWidget extends StatelessWidget {
     listCategoryNameToAmount.sort((PairIntDouble a, PairIntDouble b) => b.value.compareTo(a.value));
 
     // Extract top 3 values and calculate total value of others
-    int topCategoryToShow = min(3, listCategoryNameToAmount.length);
+    final int topCategoryToShow = min(3, listCategoryNameToAmount.length);
 
     final double otherSumValues = listCategoryNameToAmount
         .skip(topCategoryToShow)
         .fold(0.0, (double prev, PairIntDouble current) => prev + current.value);
 
-    List<Widget> bars = [];
+    final List<Widget> bars = [];
 
     for (int top = 0; top < topCategoryToShow; top++) {
       final Category? category = Data().categories.get(listCategoryNameToAmount[top].key);

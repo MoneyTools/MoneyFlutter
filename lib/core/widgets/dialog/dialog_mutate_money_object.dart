@@ -36,7 +36,7 @@ void myShowDialogAndActionsForMoneyObjects({
   }
 
   final rollup = moneyObjects[0].rollup(moneyObjects);
-  MyJson beforeEditing = rollup.getPersistableJSon();
+  final MyJson beforeEditing = rollup.getPersistableJSon();
 
   return adaptiveScreenSizeDialog(
     context: context,
@@ -45,8 +45,8 @@ void myShowDialogAndActionsForMoneyObjects({
     child: DialogMutateMoneyObject(
       moneyObject: rollup,
       onApplyChange: (MoneyObject objectChanged) {
-        MyJson afterEditing = rollup.getPersistableJSon();
-        MyJson diff = myJsonDiff(before: beforeEditing, after: afterEditing);
+        final MyJson afterEditing = rollup.getPersistableJSon();
+        final MyJson diff = myJsonDiff(before: beforeEditing, after: afterEditing);
 
         if (diff.keys.isNotEmpty) {
           for (final m in moneyObjects) {

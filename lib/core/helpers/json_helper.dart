@@ -14,7 +14,7 @@ export 'dart:convert';
 /// @param json2 The second JSON object to compare.
 /// @return A new JSON object containing only the common key-value pairs between `json1` and `json2`.
 MyJson compareAndGenerateCommonJson(MyJson json1, MyJson json2) {
-  MyJson commonJson = {};
+  final MyJson commonJson = {};
 
   // Iterate over keys in json1
   json1.forEach((key, value) {
@@ -56,10 +56,10 @@ String encodeValueWrapStringTypes(dynamic value) {
 /// @param after The JSON object representing the updated or current state.
 /// @return A new JSON object containing the differences between `before` and `after`.
 MyJson myJsonDiff({required MyJson before, required MyJson after}) {
-  MyJson diff = MyJson();
+  final MyJson diff = MyJson();
 
   after.forEach((key, valueAfter) {
-    dynamic valueBefore = before[key];
+    final dynamic valueBefore = before[key];
     if (valueBefore != valueAfter) {
       diff[key] = {
         'before': valueBefore,
@@ -78,7 +78,7 @@ MyJson myJsonDiff({required MyJson before, required MyJson after}) {
 /// @param values The list of values to associate with the keys.
 /// @return A new [MyJson] object constructed from the provided keys and values.
 MyJson myJsonFromKeyValuePairs(List<String> keys, List<String> values) {
-  MyJson object = {};
+  final MyJson object = {};
   for (int i = 0; i < keys.length; i++) {
     object[keys[i]] = values[i];
   }
@@ -258,8 +258,8 @@ extension MyJsonExtensions on MyJson {
 /// final jsonObjects = convertFromRawCsvTextToListOfJSonObject(csvContent);
 ///
 List<MyJson> convertFromRawCsvTextToListOfJSonObject(String fileContent) {
-  List<MyJson> rows = [];
-  List<List<String>> lines = getLinesFromRawTextWithSeparator(fileContent);
+  final List<MyJson> rows = [];
+  final List<List<String>> lines = getLinesFromRawTextWithSeparator(fileContent);
   if (lines.length > 1) {
     final List<String> csvHeaderColumns = lines.first;
     for (final List<String> csvRowValues in lines.skip(1)) {

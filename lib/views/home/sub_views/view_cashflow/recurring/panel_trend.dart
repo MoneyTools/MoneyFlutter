@@ -126,7 +126,7 @@ class _PanelTrendState extends State<PanelTrend> {
               );
 
               // Filter by Category Expense and Income
-              Set<String> categoryNames = {};
+              final Set<String> categoryNames = {};
               {
                 for (final Category category in Data().categories.getAllExpenseCategories()) {
                   categoryNames.add(category.name);

@@ -39,7 +39,7 @@ class InfoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color color = getColorFromState(type);
+    final Color color = getColorFromState(type);
 
     return Container(
       decoration: BoxDecoration(

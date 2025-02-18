@@ -37,7 +37,7 @@ class AccountHoldings {
   /// Get current holdings to date.
 
   List<SecurityPurchase> getHoldings() {
-    List<SecurityPurchase> result = [];
+    final List<SecurityPurchase> result = [];
     for (final SecurityFifoQueue queue in this.queues.values) {
       for (SecurityPurchase p in queue.getHoldings()) {
         result.add(p);
@@ -47,7 +47,7 @@ class AccountHoldings {
   }
 
   List<SecuritySale> getPendingSales() {
-    List<SecuritySale> result = [];
+    final List<SecuritySale> result = [];
     for (var queue in this.queues.values) {
       for (SecuritySale sale in queue.getPendingSales()) {
         result.add(sale);
@@ -57,8 +57,8 @@ class AccountHoldings {
   }
 
   List<SecuritySale> getPendingSalesForSecurity(Security s) {
-    List<SecuritySale> result = [];
-    SecurityFifoQueue? queue = queues[s];
+    final List<SecuritySale> result = [];
+    final SecurityFifoQueue? queue = queues[s];
     if (queue != null) {
       for (final SecuritySale sale in queue.getPendingSales()) {
         result.add(sale);
@@ -70,9 +70,9 @@ class AccountHoldings {
   /// Get current purchases for the given security
 
   List<SecurityPurchase> getPurchases(Security security) {
-    List<SecurityPurchase> result = [];
+    final List<SecurityPurchase> result = [];
 
-    SecurityFifoQueue? queue = queues[security];
+    final SecurityFifoQueue? queue = queues[security];
 
     if (queue != null) {
       for (final SecurityPurchase p in queue.getHoldings()) {
@@ -83,7 +83,7 @@ class AccountHoldings {
   }
 
   List<SecuritySale> processPendingSales(Security s) {
-    SecurityFifoQueue? queue = queues[s];
+    final SecurityFifoQueue? queue = queues[s];
     if (queue != null) {
       return queue.processPendingSales();
     } else {}

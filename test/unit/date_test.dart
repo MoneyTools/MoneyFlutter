@@ -118,7 +118,7 @@ void main() {
         expect(result, 'Just now');
       }
 
-      DateTime now = DateTime(2000, 1, 1);
+      final DateTime now = DateTime(2000, 1, 1);
       {
         final String result = getElapsedTime(relativeTo: now, now.subtract(const Duration(seconds: 61)));
         expect(result, '1 minute ago');

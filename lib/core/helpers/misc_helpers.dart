@@ -29,7 +29,7 @@ double getDoubleFromDynamic(final dynamic value) {
 /// Remove non-numeric characters from the currency text
 double? attemptToGetDoubleFromText(String text) {
   text = text.trim();
-  double? firstSimpleCase = double.tryParse(text);
+  final double? firstSimpleCase = double.tryParse(text);
   if (firstSimpleCase != null) {
     return firstSimpleCase;
   }
@@ -44,7 +44,7 @@ double? attemptToGetDoubleFromText(String text) {
   cleanedText = cleanedText.replaceAll(RegExp(r'^\.+|\.+$'), '');
 
   // If there are multiple periods, keep only the last one
-  int lastIndex = cleanedText.lastIndexOf('.');
+  final int lastIndex = cleanedText.lastIndexOf('.');
   if (lastIndex != -1) {
     String beforeDecimal = cleanedText.substring(0, lastIndex);
     beforeDecimal = beforeDecimal.replaceAll('.', '');
@@ -52,7 +52,7 @@ double? attemptToGetDoubleFromText(String text) {
   }
 
   // Parse the cleaned text into a double
-  double? amount = double.tryParse(cleanedText);
+  final double? amount = double.tryParse(cleanedText);
   if (amount == null) {
     return null;
   }
@@ -110,7 +110,7 @@ double roundToDecimalPlaces(double value, int places) {
   if (places < 0) {
     throw ArgumentError('Decimal places must be non-negative');
   }
-  int factor = pow(10, places).toInt();
+  final int factor = pow(10, places).toInt();
   return (value * factor).round() / factor;
 }
 
@@ -173,9 +173,9 @@ void showSnackBar(final BuildContext context, final String message) {
 
 double trimToFiveDecimalPlaces(double value) {
   // Multiply the value by 100,000 to move the decimal point 5 places to the right
-  double multipliedValue = value * 100000;
+  final double multipliedValue = value * 100000;
   // Round the result to the nearest integer
-  double roundedValue = multipliedValue.roundToDouble();
+  final double roundedValue = multipliedValue.roundToDouble();
   // Divide the rounded value by 100,000 to move the decimal point back to its original position
   return roundedValue / 100000;
 }

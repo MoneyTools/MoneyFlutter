@@ -5,7 +5,7 @@ Widget pickerInvestmentType({
   required final InvestmentType itemSelected,
   required final void Function(InvestmentType) onSelected,
 }) {
-  String selectedName = getInvestmentTypeText(itemSelected);
+  final String selectedName = getInvestmentTypeText(itemSelected);
 
   return PickerEditBox(
     title: 'Investment type',

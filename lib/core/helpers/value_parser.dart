@@ -48,12 +48,12 @@ class ValueQuality {
       return buildWarning(context, '< no amount >');
     }
 
-    double? amount = parseAmount(valueAsString, currency);
+    final double? amount = parseAmount(valueAsString, currency);
     if (amount == null) {
       return buildWarning(context, valueAsString);
     }
 
-    MoneyModel mm = MoneyModel(amount: asAmount(), iso4217: currency);
+    final MoneyModel mm = MoneyModel(amount: asAmount(), iso4217: currency);
     return MoneyWidget(amountModel: mm);
   }
 
@@ -67,7 +67,7 @@ class ValueQuality {
       return buildWarning(context, valueAsString);
     }
 
-    String dateText = DateFormat('yyyy-MM-dd').format(parsedDate);
+    final String dateText = DateFormat('yyyy-MM-dd').format(parsedDate);
     return SelectableText(dateText);
   }
 
@@ -117,7 +117,7 @@ class ValuesQuality {
   }
 
   static DateRange getDateRange(final List<ValuesQuality> list) {
-    DateRange range = DateRange();
+    final DateRange range = DateRange();
     for (final v in list) {
       range.inflate(v.date.asDate());
     }
@@ -203,7 +203,7 @@ class ValuesParser {
     String amountAsText = '';
 
     line.trim();
-    List<String> threeValues = line.split(RegExp(r'\t|;|\|')).where((token) => token.trim().isNotEmpty).toList();
+    final List<String> threeValues = line.split(RegExp(r'\t|;|\|')).where((token) => token.trim().isNotEmpty).toList();
 
     // We are looking for these 3 values
     // Date | Description | Amount
@@ -252,7 +252,7 @@ class ValuesParser {
   }
 
   Widget buildPresentation(final BuildContext context) {
-    List<Widget> rows = [];
+    final List<Widget> rows = [];
 
     if (lines.isNotEmpty) {
       for (var line in lines) {
@@ -302,7 +302,7 @@ class ValuesParser {
       //
       // Date ; Description ; Amount
       //
-      List<String> lines = getLinesOfText(inputString, includeEmptyLines: false);
+      final List<String> lines = getLinesOfText(inputString, includeEmptyLines: false);
       if (lines.isNotEmpty) {
         for (final String line in lines) {
           add(attemptToExtractTriples(line));
@@ -312,7 +312,7 @@ class ValuesParser {
       //
       // CSV like text but use space as separator ' ', instead of ',' this is necessary because some currency use comma in the Amount value
       //
-      List<List<String>> lines = getLinesFromRawTextWithSeparator(inputString, ' ');
+      final List<List<String>> lines = getLinesFromRawTextWithSeparator(inputString, ' ');
       if (lines.isNotEmpty) {
         for (final List<String> line in lines) {
           if (line.isNotEmpty) {

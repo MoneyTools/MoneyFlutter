@@ -67,7 +67,7 @@ class Investments extends MoneyObjects<Investment> {
       (a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
     );
 
-    StockCumulative cumulative = StockCumulative();
+    final StockCumulative cumulative = StockCumulative();
 
     for (final investment in investments) {
       cumulative.dateRange.inflate(investment.date);

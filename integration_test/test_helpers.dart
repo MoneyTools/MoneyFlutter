@@ -226,7 +226,7 @@ Future<void> inputTextToTextFieldWithThisLabel(
   final String labelToFind,
   final String textToInput,
 ) async {
-  Finder textFieldFinder = findTextFieldByLabel(labelToFind).at(0); // top most element
+  final Finder textFieldFinder = findTextFieldByLabel(labelToFind).at(0); // top most element
   expect(textFieldFinder, findsOneWidget, reason: 'searching for label $labelToFind');
   await inputTextToElement(tester, textFieldFinder, textToInput);
 }

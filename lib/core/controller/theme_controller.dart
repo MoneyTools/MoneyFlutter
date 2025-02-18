@@ -59,7 +59,7 @@ class ThemeController extends GetxController {
   void setAppSizeToLarge() {
     windowManager.ensureInitialized().then(
       (value) {
-        WindowOptions windowOptions = const WindowOptions(
+        final WindowOptions windowOptions = const WindowOptions(
           size: Size(1800, 900),
           minimumSize: Size(Constants.screenWithSmall, 800),
           center: true,
@@ -79,7 +79,7 @@ class ThemeController extends GetxController {
   void setAppSizeToMedium() {
     windowManager.ensureInitialized().then(
       (value) {
-        WindowOptions windowOptions = const WindowOptions(
+        final WindowOptions windowOptions = const WindowOptions(
           size: Size(Constants.screenWidthMedium, 900),
           minimumSize: Size(Constants.screenWidthMedium, 800),
           center: true,
@@ -99,7 +99,7 @@ class ThemeController extends GetxController {
   void setAppSizeToSmall() {
     windowManager.ensureInitialized().then(
       (value) {
-        WindowOptions windowOptions = const WindowOptions(
+        final WindowOptions windowOptions = const WindowOptions(
           size: Size(Constants.screenWithSmall, 900),
           maximumSize: Size(Constants.screenWithSmall, 900),
           center: true,

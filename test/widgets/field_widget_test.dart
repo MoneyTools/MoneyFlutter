@@ -37,8 +37,8 @@ void main() {
     // Enable test mode
     Get.testMode = true;
 
-    MockPreferenceController mockPreferenceController = MockPreferenceController();
-    MockThemeController mockThemeController = MockThemeController();
+    final MockPreferenceController mockPreferenceController = MockPreferenceController();
+    final MockThemeController mockThemeController = MockThemeController();
 
     Get.put<ThemeController>(mockThemeController);
     Get.put<PreferenceController>(mockPreferenceController);

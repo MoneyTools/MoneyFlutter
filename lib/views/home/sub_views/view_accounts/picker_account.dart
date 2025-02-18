@@ -9,7 +9,7 @@ Widget pickerAccount({
 }) {
   final List<String> options = Data().accounts.getListSorted().map((element) => element.fieldName.value).toList();
 
-  String selectedName = selected == null ? '' : selected.fieldName.value;
+  final String selectedName = selected == null ? '' : selected.fieldName.value;
 
   return PickerEditBox(
     key: Constants.keyAccountPicker,

@@ -37,7 +37,7 @@ class Categories extends MoneyObjects<Category> {
         item.fieldTransactionCountRollup.value++;
         item.fieldSumRollup.value += t.fieldAmount.value.asDouble();
 
-        List<Category> ancestors = [];
+        final List<Category> ancestors = [];
         item.getAncestors(ancestors);
         for (final ancestorCategory in ancestors) {
           ancestorCategory.fieldTransactionCountRollup.value++;
@@ -74,14 +74,14 @@ class Categories extends MoneyObjects<Category> {
       'Supply a parent ID or hierarchy names but not both',
     );
 
-    Category? parent = Data().categories.get(parentId);
+    final Category? parent = Data().categories.get(parentId);
 
     if (parent == null && name.contains(':')) {
       return ensureAncestorExist(name: name, overrideTypeOfParent: type);
     }
 
     // find next available name
-    String prefixName = parent == null ? name : '${parent.fieldName.value}:$name';
+    final String prefixName = parent == null ? name : '${parent.fieldName.value}:$name';
     String nextAvailableName = prefixName;
     int next = 1;
     while ((getByName(nextAvailableName) != null)) {

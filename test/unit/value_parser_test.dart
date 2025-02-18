@@ -24,7 +24,7 @@ void main() {
       expect(valueQuality.asDate(), null);
     });
     test('attemptToExtractTriples using ;', () {
-      ValuesParser parser = ValuesParser(
+      final ValuesParser parser = ValuesParser(
         dateFormat: 'yyyy-MM-dd',
         currency: 'USD',
         reverseAmountValue: false,
@@ -41,7 +41,7 @@ void main() {
     });
 
     test('attemptToExtractTriples using ,', () {
-      ValuesParser parser = ValuesParser(
+      final ValuesParser parser = ValuesParser(
         dateFormat: 'yyyy-MM-dd',
         currency: 'USD',
         reverseAmountValue: false,

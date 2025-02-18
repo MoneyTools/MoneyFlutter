@@ -8,10 +8,10 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
   }) {
     double balance = 0.00;
 
-    var investments = getList();
+    final investments = getList();
     investments.sort((a, b) => sortByDate(a.date, b.date, true));
 
-    List<FlSpot> dataPoints = [];
+    final List<FlSpot> dataPoints = [];
     if (investments.isEmpty) {
       return const CenterMessage(message: 'No data');
     }

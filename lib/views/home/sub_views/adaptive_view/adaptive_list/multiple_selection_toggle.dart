@@ -14,7 +14,7 @@ class MultipleSelectionToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isSelected = multipleSelection!.isMultiSelectionOn;
+    final bool isSelected = multipleSelection!.isMultiSelectionOn;
     return ValueListenableBuilder<List<int>>(
       valueListenable: multipleSelection!.selectedItems,
       builder: (

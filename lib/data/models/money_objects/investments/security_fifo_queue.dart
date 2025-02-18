@@ -26,7 +26,7 @@ class SecurityFifoQueue {
   /// <param name="units">The number of units purchased</param>
   /// <param name="amount">The total cost basis for this purchase</param>
   void buy(DateTime datePurchased, double units, double costBasis) {
-    SecurityPurchase sp = SecurityPurchase();
+    final SecurityPurchase sp = SecurityPurchase();
     sp.security = security;
     sp.datePurchased = datePurchased;
     sp.costBasisPerUnit = costBasis / units;
@@ -34,7 +34,7 @@ class SecurityFifoQueue {
 
     // insert the purchase in date order
     for (int i = 0, n = this.list.length; i < n; i++) {
-      SecurityPurchase e = this.list[i];
+      final SecurityPurchase e = this.list[i];
       if (e.datePurchased.millisecond > datePurchased.millisecond) {
         this.list.insert(i, sp);
         return;
@@ -45,7 +45,7 @@ class SecurityFifoQueue {
   }
 
   List<SecurityPurchase> getHoldings() {
-    List<SecurityPurchase> result = [];
+    final List<SecurityPurchase> result = [];
     for (SecurityPurchase sp in this.list) {
       if (sp.unitsRemaining > 0) {
         result.add(sp);
@@ -60,9 +60,9 @@ class SecurityFifoQueue {
 
   List<SecuritySale> processPendingSales() {
 // now that more has arrived, time to see if we can process those pending sales.
-    List<SecuritySale> copy = List.from(this.pending);
+    final List<SecuritySale> copy = List.from(this.pending);
     this.pending.clear();
-    List<SecuritySale> result = [];
+    final List<SecuritySale> result = [];
     for (final SecuritySale s in copy) {
       // this will put any remainder back in the pending list if it still can't be covered.
       for (SecuritySale real in this.sell(s.dateSold!, s.unitsSold, s.unitsSold * s.salePricePerUnit)) {
@@ -81,10 +81,10 @@ class SecurityFifoQueue {
   /// <param name="units">The number of units sold</param>
   /// <param name="amount">The total amount we received from the sale</param>
   List<SecuritySale> sell(DateTime dateSold, double units, double amount) {
-    double salePricePerUnit = amount / units;
-    List<SecuritySale> result = [];
+    final double salePricePerUnit = amount / units;
+    final List<SecuritySale> result = [];
     for (var purchase in this.list) {
-      SecuritySale? sale = purchase.sell(dateSold, units, salePricePerUnit);
+      final SecuritySale? sale = purchase.sell(dateSold, units, salePricePerUnit);
       if (sale != null) {
         sale.account = account;
         units -= sale.unitsSold;

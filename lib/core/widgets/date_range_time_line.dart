@@ -16,8 +16,8 @@ class DateRangeTimeline extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Calculate the number of years between the start and end dates
-    int numYears = (endDate.year - startDate.year) + 1;
-    TextStyle style = getTextTheme(context).labelSmall!;
+    final int numYears = (endDate.year - startDate.year) + 1;
+    final TextStyle style = getTextTheme(context).labelSmall!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -45,7 +45,7 @@ class DateRangeTimeline extends StatelessWidget {
 }
 
 List<Widget> ticks(final int numberOfTicks) {
-  List<Widget> widgets = [];
+  final List<Widget> widgets = [];
 
   for (int tick = 0; tick < numberOfTicks; tick++) {
     widgets.add(

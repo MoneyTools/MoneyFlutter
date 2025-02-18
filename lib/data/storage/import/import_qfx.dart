@@ -26,7 +26,7 @@ void importQfxFromString(final BuildContext? context, final String text) {
 
   final AccountType? accountType = getAccountTypeFromText(bankInfo.accountType);
 
-  ImportData importData = ImportData();
+  final ImportData importData = ImportData();
   importData.account = Data().accounts.findByIdAndType(bankInfo.accountId, accountType);
   importData.entries = getTransactionFromOFX(ofx);
   importData.fileType = 'QFX';
@@ -104,7 +104,7 @@ int getInvestmentCategoryFromOfxType(final ImportEntry ofxTransaction) {
 List<ImportEntry> getTransactionFromOFX(final String rawOfx) {
   if (rawOfx.isNotEmpty) {
     // Remove all LN/CR
-    String ofx = getNormalizedValue(rawOfx);
+    final String ofx = getNormalizedValue(rawOfx);
 
     String bankTransactionLit = getStringContentBetweenTwoTokens(
       ofx,
@@ -161,16 +161,16 @@ String findAndGetValueOf(
   final String tokenTextToFind,
   final String valueIfNotFound,
 ) {
-  int position = line.indexOf(tokenTextToFind);
+  final int position = line.indexOf(tokenTextToFind);
   if (position != -1) {
-    String tokenStartingLine = line.substring(position);
+    final String tokenStartingLine = line.substring(position);
     return getValuePortion(tokenStartingLine);
   }
   return valueIfNotFound;
 }
 
 String getValuePortion(final String line) {
-  int startIndexOfValue = line.indexOf('>') + 1;
+  final int startIndexOfValue = line.indexOf('>') + 1;
   String lineContent = line.substring(startIndexOfValue);
 
 // Find the end of the value

@@ -85,8 +85,8 @@ class _PanelBudgetState extends State<PanelBudget> {
       return 'Actual amount is zero. Cannot calculate percentages.';
     }
 
-    double accuracyPercentage = (budgeted / actual) * 100;
-    double variancePercentage = ((actual - budgeted) / budgeted) * 100;
+    final double accuracyPercentage = (budgeted / actual) * 100;
+    final double variancePercentage = ((actual - budgeted) / budgeted) * 100;
 
     String result = 'Accuracy:    ${accuracyPercentage.toStringAsFixed(2)}%\n';
 
@@ -126,7 +126,7 @@ class _PanelBudgetState extends State<PanelBudget> {
     sumForAllCategories = 0.00;
     sumForAllCategoriesBudget = 0.00;
 
-    int adjustValue = isForIncome ? 1 : -1;
+    final int adjustValue = isForIncome ? 1 : -1;
 
     items.forEach((item) {
       sumForAllCategories += item.sumOfAllTransactions;
@@ -272,7 +272,7 @@ class _PanelBudgetState extends State<PanelBudget> {
 
   Widget _buildList() {
     final Color dividersColor = Theme.of(context).dividerColor.withAlpha(100);
-    int adjustValue = isForIncome ? 1 : -1;
+    final int adjustValue = isForIncome ? 1 : -1;
 
     return Column(
       children: [
@@ -512,7 +512,7 @@ class _PanelBudgetState extends State<PanelBudget> {
   }
 
   Widget _buildSuggestion(List<MapEntry<String, BudgetCumulator>> list) {
-    List<Widget> widgets = [];
+    final List<Widget> widgets = [];
 
     list.sort(
       (a, b) => a.value.monthlyAmount.compareTo(b.value.monthlyAmount),

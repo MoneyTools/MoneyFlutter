@@ -42,8 +42,8 @@ Color addTintOfRed(Color originalColor, int tintStrength) {
   int red = (originalColor.r * 255).toInt() + tintStrength;
 
   // Keep the green and blue components unchanged
-  int green = (originalColor.g * 255).toInt();
-  int blue = (originalColor.b * 255).toInt();
+  final int green = (originalColor.g * 255).toInt();
+  final int blue = (originalColor.b * 255).toInt();
 
   // Ensure red value stays within the valid range (0 to 255)
   red = red.clamp(0, 255);
@@ -61,8 +61,8 @@ Color addTintOfRed(Color originalColor, int tintStrength) {
 /// If the resulting blue value exceeds 255, it will be clamped to 255 to ensure it stays within the valid range (0 to 255).
 ///
 Color addTintOfBlue(Color originalColor, int tintStrength) {
-  int red = (originalColor.r * 255).toInt();
-  int green = (originalColor.g * 255).toInt();
+  final int red = (originalColor.r * 255).toInt();
+  final int green = (originalColor.g * 255).toInt();
   int blue = (originalColor.b * 255).toInt() + tintStrength;
 
   // Ensure blue value stays within the valid range (0 to 255)
@@ -80,9 +80,9 @@ Color addTintOfBlue(Color originalColor, int tintStrength) {
 /// If the resulting green value exceeds 255, it will be clamped to 255 to ensure it stays within the valid range (0 to 255).
 ///
 Color addTintOfGreen(Color originalColor, int tintStrength) {
-  int red = (originalColor.r * 255).toInt();
+  final int red = (originalColor.r * 255).toInt();
   int green = (originalColor.g * 255).toInt() + tintStrength;
-  int blue = (originalColor.b * 255).toInt();
+  final int blue = (originalColor.b * 255).toInt();
 
   // Ensure green value stays within the valid range (0 to 255)
   green = green.clamp(0, 255);
@@ -258,18 +258,18 @@ ColorScheme getColorTheme(final BuildContext context) {
 /// @return A ```Pair<double, double>``` object containing the hue and brightness values.
 ///
 Pair<double, double> getHueAndBrightness(Color color) {
-  HSLColor hslColor = HSLColor.fromColor(color);
+  final HSLColor hslColor = HSLColor.fromColor(color);
   return Pair(hslColor.hue, 1 - hslColor.lightness);
 }
 
 /// Retrieves the hue and brightness values from the given Color object in the HSL color space.
 Pair<double, double> getHueAndBrightnessFromColor(Color color) {
   // Convert color to HSL
-  HSLColor hslColor = HSLColor.fromColor(color);
+  final HSLColor hslColor = HSLColor.fromColor(color);
 
   // Extract hue and lightness values
-  double hue = hslColor.hue;
-  double brightness = hslColor.lightness;
+  final double hue = hslColor.hue;
+  final double brightness = hslColor.lightness;
 
   return Pair<double, double>(hue, brightness);
 }
@@ -277,10 +277,10 @@ Pair<double, double> getHueAndBrightnessFromColor(Color color) {
 /// Retrieves the hue value from the given Color object in the HSL color space.
 double getHueFromColor(Color color) {
   // Convert color to HSL
-  HSLColor hslColor = HSLColor.fromColor(color);
+  final HSLColor hslColor = HSLColor.fromColor(color);
 
   // Extract hue value
-  double hue = hslColor.hue;
+  final double hue = hslColor.hue;
 
   return hue;
 }
@@ -311,9 +311,9 @@ Color hsvToColor(double hue, double brightness) {
 ///
 Color invertColor(final Color color) {
   // Calculate inverted color by subtracting each color channel from 255
-  double invertedRed = 1.0 - color.r;
-  double invertedGreen = 1.0 - color.g;
-  double invertedBlue = 1.0 - color.b;
+  final double invertedRed = 1.0 - color.r;
+  final double invertedGreen = 1.0 - color.g;
+  final double invertedBlue = 1.0 - color.b;
 
   // Return the inverted color
   return Color.fromRGBO((invertedRed * 255).toInt(), (invertedGreen * 255).toInt(), (invertedBlue * 255).toInt(), 1.0);

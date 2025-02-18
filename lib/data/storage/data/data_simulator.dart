@@ -93,19 +93,19 @@ class DataSimulator {
     required int howManyPerYear,
     required int dayOfTheMonth,
   }) {
-    List<DateTime> dates = [];
+    final List<DateTime> dates = [];
 
     final whenToStop = stopDate ?? DateTime.now();
     for (int i = yearInThePast * howManyPerYear; i >= 0; i--) {
       // Subtract the current month index from today's date
-      DateTime date = DateTime(whenToStop.year, whenToStop.month - i, dayOfTheMonth);
+      final DateTime date = DateTime(whenToStop.year, whenToStop.month - i, dayOfTheMonth);
       dates.add(date);
     }
     return dates;
   }
 
   List<DateTime> generateListOfDatesRandom({required int year, required int howManyPerMonths}) {
-    List<DateTime> dates = [];
+    final List<DateTime> dates = [];
 
     final today = DateTime.now();
     for (int i = year * 12; i >= 0; i--) {
@@ -114,7 +114,7 @@ class DataSimulator {
       // Now we have a Year and Month
       // generate on random date of the month
       for (int event = 0; event < howManyPerMonths; event++) {
-        int day = Random().nextInt(31);
+        final int day = Random().nextInt(31);
         date = date.add(Duration(days: day));
         dates.add(date);
       }
@@ -168,7 +168,7 @@ class DataSimulator {
   }
 
   DateTime getDateShiftedByYears(int yearsToShift, int month, int day) {
-    int yearShifted = getShiftedYearFromNow(yearsToShift);
+    final int yearShifted = getShiftedYearFromNow(yearsToShift);
     return DateTime(yearShifted, month, day);
   }
 
@@ -198,7 +198,7 @@ class DataSimulator {
     final double quantity,
     final double tradePrice,
   ) {
-    DateTime date = DateTime.parse(dateAsString);
+    final DateTime date = DateTime.parse(dateAsString);
     double transactionAmount = tradePrice * quantity;
     String action = 'sold';
     final stock = Data().securities.get(stockId);
@@ -209,7 +209,7 @@ class DataSimulator {
     }
     final payee = Data().payees.getOrCreate('Broker');
 
-    var t = _addTransactionAccountDatePayeeCategory(
+    final t = _addTransactionAccountDatePayeeCategory(
       account: account,
       date: date,
       amount: transactionAmount,
@@ -825,7 +825,7 @@ class DataSimulator {
   /// Generates sample loan payments.
   void _generateLoans() {
     double loanAmount = 20000; // 20K
-    double loanRate = 4 / 100; // 4%
+    final double loanRate = 4 / 100; // 4%
     double monthlyPayment = 500;
 
     //
@@ -1112,7 +1112,7 @@ class DataSimulator {
         ],
       ].getRandomItem();
 
-      Category category = selectedCategory[0] as Category;
+      final Category category = selectedCategory[0] as Category;
 
       final dynamic payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
       double maxSpendingOnCreditCard = (payeeAndMaxAmount[1] as num).toDouble();
@@ -1136,12 +1136,12 @@ class DataSimulator {
     _dateOfFirstBigJob = dates[dates.length ~/ 2];
 
     double yearlySalary = _startingYearlySalaryFirstJob;
-    double increaseRatePerYear = _yearlyInflation / 100;
+    final double increaseRatePerYear = _yearlyInflation / 100;
 
     int iterationYear = -1;
 
-    Payee employer1 = Data().payees.get(0)!;
-    Payee employer2 = Data().payees.get(1)!;
+    final Payee employer1 = Data().payees.get(0)!;
+    final Payee employer2 = Data().payees.get(1)!;
 
     bool switchedJob = false;
 

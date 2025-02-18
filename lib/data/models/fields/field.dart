@@ -273,7 +273,7 @@ class Field<T> {
   }
 
   Widget getValueAsWidget(MoneyObject instance) {
-    dynamic value = this.getValueForDisplay(instance);
+    final dynamic value = this.getValueForDisplay(instance);
     if (value is Widget) {
       return value;
     }
