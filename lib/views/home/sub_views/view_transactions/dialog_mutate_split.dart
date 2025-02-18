@@ -47,7 +47,7 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
     return AutoSizeDialog(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -84,7 +84,7 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
     required final bool dataWasModified,
   }) {
     if (editMode) {
-      return [
+      return <Widget>[
         DialogActionButton(
           key: Constants.keyButtonApplyOrDone,
           text: dataWasModified ? 'Apply' : 'Done',
@@ -103,7 +103,7 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
     }
 
     // Read only mode
-    return [
+    return <Widget>[
       // Close
       DialogActionButton(
         text: 'Close',
@@ -149,7 +149,7 @@ class _DialogMutateSplitState extends State<DialogMutateSplit> {
   bool isDataModified() {
     final MyJson afterEditing = _split.getPersistableJSon();
     final MyJson diff = myJsonDiff(
-      before: _split.valueBeforeEdit ?? {},
+      before: _split.valueBeforeEdit ?? <String, dynamic>{},
       after: afterEditing,
     );
     return diff.keys.isNotEmpty;

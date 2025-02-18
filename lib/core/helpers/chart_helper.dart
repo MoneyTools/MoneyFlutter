@@ -15,7 +15,7 @@ import 'package:flutter/material.dart';
 /// - Red if trending downward
 /// - Grey otherwise
 LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints, {bool showDots = false}) {
-  dataPoints.sort((a, b) => a.x.compareTo(b.x));
+  dataPoints.sort((FlSpot a, FlSpot b) => a.x.compareTo(b.x));
 
   Color color = Colors.grey;
   if (dataPoints.last.y.isNegative) {
@@ -32,7 +32,7 @@ LineChartBarData getLineChartBarData(final List<FlSpot> dataPoints, {bool showDo
     belowBarData: BarAreaData(
       show: true,
       gradient: LinearGradient(
-        colors: [
+        colors: <Color>[
           color.withAlpha(100), // top
           color.withAlpha(10), // bottom
         ],

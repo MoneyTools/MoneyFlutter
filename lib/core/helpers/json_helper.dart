@@ -14,10 +14,10 @@ export 'dart:convert';
 /// @param json2 The second JSON object to compare.
 /// @return A new JSON object containing only the common key-value pairs between `json1` and `json2`.
 MyJson compareAndGenerateCommonJson(MyJson json1, MyJson json2) {
-  final MyJson commonJson = {};
+  final MyJson commonJson = <String, dynamic>{};
 
   // Iterate over keys in json1
-  json1.forEach((key, value) {
+  json1.forEach((String key, dynamic value) {
     // Check if the key exists in json2 and has the same value
     if (json2.containsKey(key) && json2[key] == value) {
       // Add the key-value pair to the commonJson
@@ -58,10 +58,10 @@ String encodeValueWrapStringTypes(dynamic value) {
 MyJson myJsonDiff({required MyJson before, required MyJson after}) {
   final MyJson diff = MyJson();
 
-  after.forEach((key, valueAfter) {
+  after.forEach((String key, dynamic valueAfter) {
     final dynamic valueBefore = before[key];
     if (valueBefore != valueAfter) {
-      diff[key] = {
+      diff[key] = <String, dynamic>{
         'before': valueBefore,
         'after': valueAfter,
       };
@@ -78,7 +78,7 @@ MyJson myJsonDiff({required MyJson before, required MyJson after}) {
 /// @param values The list of values to associate with the keys.
 /// @return A new [MyJson] object constructed from the provided keys and values.
 MyJson myJsonFromKeyValuePairs(List<String> keys, List<String> values) {
-  final MyJson object = {};
+  final MyJson object = <String, dynamic>{};
   for (int i = 0; i < keys.length; i++) {
     object[keys[i]] = values[i];
   }
@@ -258,12 +258,12 @@ extension MyJsonExtensions on MyJson {
 /// final jsonObjects = convertFromRawCsvTextToListOfJSonObject(csvContent);
 ///
 List<MyJson> convertFromRawCsvTextToListOfJSonObject(String fileContent) {
-  final List<MyJson> rows = [];
+  final List<MyJson> rows = <MyJson>[];
   final List<List<String>> lines = getLinesFromRawTextWithSeparator(fileContent);
   if (lines.length > 1) {
     final List<String> csvHeaderColumns = lines.first;
     for (final List<String> csvRowValues in lines.skip(1)) {
-      final rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
+      final MyJson rowValues = myJsonFromKeyValuePairs(csvHeaderColumns, csvRowValues);
       rows.add(rowValues);
     }
   }

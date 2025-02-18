@@ -22,7 +22,7 @@ class LabelAndAmount extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(
           child: Text(
             caption,
@@ -57,7 +57,7 @@ class LabelAndQuantity extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(
           child: Text(
             caption,

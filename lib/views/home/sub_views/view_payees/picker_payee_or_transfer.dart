@@ -46,7 +46,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         gapMedium(),
         SizedBox(width: 250, child: buildChoice()),
         gapSmall(),
@@ -59,7 +59,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
 
   Widget buildChoice() {
     return mySegmentSelector(
-      segments: [
+      segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: TransactionFlavor.payee.index,
           label: const Text('Payee'),
@@ -81,7 +81,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
   Widget buildIInput() {
     if (_choice == TransactionFlavor.payee) {
       return Row(
-        children: [
+        children: <Widget>[
           Expanded(
             child: pickerPayee(
               itemSelected: widget.payee,
@@ -119,7 +119,7 @@ class _PickPayeeOrTransferState extends State<PickPayeeOrTransfer> {
   Widget presentInput(final String caption, final Widget widget) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         if (caption.isNotEmpty) SizedBox(width: 100, child: Text(caption)),
         gapMedium(),
         Expanded(

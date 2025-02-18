@@ -71,7 +71,7 @@ class AdaptiveViewWithList extends StatelessWidget {
             final _,
           ) {
             return Column(
-              children: [
+              children: <Widget>[
                 // Top - Title area
                 if (top != null) top!,
 

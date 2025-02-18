@@ -17,8 +17,8 @@ void showMergePayee(
   final BuildContext context,
   Payee payee,
 ) {
-  final transactions =
-      Data().transactions.iterableList(includeDeleted: true).where((t) => t.fieldPayee.value == payee.uniqueId);
+  final Iterable<Transaction> transactions =
+      Data().transactions.iterableList(includeDeleted: true).where((Transaction t) => t.fieldPayee.value == payee.uniqueId);
 
   adaptiveScreenSizeDialog(
     context: context,
@@ -57,10 +57,10 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           const Spacer(),
           Row(
-            children: [
+            children: <Widget>[
               const SizedBox(width: 100, child: Text('From payee')),
               Expanded(
                 child: Box(child: Text(widget.currentPayee.fieldName.value)),
@@ -70,7 +70,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
           gapLarge(),
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               const SizedBox(width: 100, child: Text('To payee')),
               Expanded(
                 child: Box(
@@ -91,7 +91,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
           _buildCategoryChoices(),
           const Spacer(),
           dialogActionButtons(
-            [
+            <Widget>[
               DialogActionButton(
                 text: 'Cancel',
                 onPressed: () => Navigator.pop(context),
@@ -118,7 +118,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
   void getAssociatedCategories() {
     if (_selectedPayee != null) {
       categoryIdsFound.clear();
-      for (final t in Data().transactions.iterableList(includeDeleted: true)) {
+      for (final Transaction t in Data().transactions.iterableList(includeDeleted: true)) {
         if (t.fieldPayee.value == _selectedPayee!.uniqueId) {
           categoryIdsFound.cumulate(t.fieldCategoryId.value, 1);
         }
@@ -131,15 +131,15 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
       return const SizedBox();
     }
 
-    final List<Widget> radioButtonChoices = [];
-    final sortedDescendingListOfCategories = categoryIdsFound.getEntries();
-    sortedDescendingListOfCategories.sort((a, b) => sortByValue(a.value, b.value, false));
+    final List<Widget> radioButtonChoices = <Widget>[];
+    final List<MapEntry<int, int>> sortedDescendingListOfCategories = categoryIdsFound.getEntries();
+    sortedDescendingListOfCategories.sort((MapEntry<int, int> a, MapEntry<int, int> b) => sortByValue(a.value, b.value, false));
 
-    for (final entry in sortedDescendingListOfCategories) {
-      final categoryId = entry.key;
-      final categoryCounts = entry.value;
+    for (final MapEntry<int, int> entry in sortedDescendingListOfCategories) {
+      final int categoryId = entry.key;
+      final int categoryCounts = entry.value;
 
-      final categoryName = Data().categories.getNameFromId(categoryId).trim();
+      final String categoryName = Data().categories.getNameFromId(categoryId).trim();
       if (categoryName.isNotEmpty) {
         radioButtonChoices.add(
           ListTile(
@@ -154,7 +154,7 @@ class _MergeTransactionsDialogState extends State<MergeTransactionsDialog> {
             ),
             title: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Text(
                   'or change to category',
                   style: getTextTheme(context).bodySmall,
@@ -219,9 +219,9 @@ void mutateTransactionsToPayee(
   final int toPayeeId,
   final int? categoryId,
 ) {
-  final Set<int> fromPayeeIds = {};
+  final Set<int> fromPayeeIds = <int>{};
 
-  for (final t in transactions) {
+  for (final Transaction t in transactions) {
     // keep track of the payeeIds that we remove transactions from
     fromPayeeIds.add(t.fieldPayee.value);
 

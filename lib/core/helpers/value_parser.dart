@@ -62,7 +62,7 @@ class ValueQuality {
       return buildWarning(context, '< no date >');
     }
 
-    final parsedDate = asDate();
+    final DateTime? parsedDate = asDate();
     if (parsedDate == null) {
       return buildWarning(context, valueAsString);
     }
@@ -118,7 +118,7 @@ class ValuesQuality {
 
   static DateRange getDateRange(final List<ValuesQuality> list) {
     final DateRange range = DateRange();
-    for (final v in list) {
+    for (final ValuesQuality v in list) {
       range.inflate(v.date.asDate());
     }
     return range;
@@ -129,7 +129,7 @@ class ValuesQuality {
     final int sortBy,
     final bool ascending,
   ) {
-    list.sort((a, b) {
+    list.sort((ValuesQuality a, ValuesQuality b) {
       switch (sortBy) {
         case 0:
           return sortByDate(a.date.asDate(), b.date.asDate(), ascending);
@@ -162,9 +162,9 @@ class ValuesParser {
   final bool reverseAmountValue;
 
   String errorMessage = '';
-  List<Widget> rows = [];
+  List<Widget> rows = <Widget>[];
 
-  List<ValuesQuality> _values = [];
+  List<ValuesQuality> _values = <ValuesQuality>[];
 
   void add(final ValuesQuality item) {
     _values.add(item);
@@ -203,7 +203,7 @@ class ValuesParser {
     String amountAsText = '';
 
     line.trim();
-    final List<String> threeValues = line.split(RegExp(r'\t|;|\|')).where((token) => token.trim().isNotEmpty).toList();
+    final List<String> threeValues = line.split(RegExp(r'\t|;|\|')).where((String token) => token.trim().isNotEmpty).toList();
 
     // We are looking for these 3 values
     // Date | Description | Amount
@@ -252,13 +252,13 @@ class ValuesParser {
   }
 
   Widget buildPresentation(final BuildContext context) {
-    final List<Widget> rows = [];
+    final List<Widget> rows = <Widget>[];
 
     if (lines.isNotEmpty) {
-      for (var line in lines) {
+      for (ValuesQuality line in lines) {
         rows.add(
           Row(
-            children: [
+            children: <Widget>[
               SizedBox(width: 100, child: line.date.valueAsDateWidget(context)),
               // Date
               SizedBox(
@@ -327,30 +327,30 @@ class ValuesParser {
     required final int accountId,
     required final List<ValuesQuality> values,
   }) {
-    for (final vq in values) {
+    for (final ValuesQuality vq in values) {
       vq.checkIfExistAlready(accountId: accountId);
     }
   }
 
   List<String> getListOfAmountString() {
-    final List<String> list = [];
-    for (final value in _values) {
+    final List<String> list = <String>[];
+    for (final ValuesQuality value in _values) {
       list.add(value.amount.valueAsString);
     }
     return list;
   }
 
   List<String> getListOfDatesString() {
-    final List<String> list = [];
-    for (final value in _values) {
+    final List<String> list = <String>[];
+    for (final ValuesQuality value in _values) {
       list.add(value.date.valueAsString);
     }
     return list;
   }
 
   List<String> getListOfDescriptionString() {
-    final List<String> list = [];
-    for (final value in _values) {
+    final List<String> list = <String>[];
+    for (final ValuesQuality value in _values) {
       list.add(value.description.valueAsString);
     }
     return list;
@@ -376,7 +376,7 @@ class ValuesParser {
   }
 
   List<ValuesQuality> get onlyNewTransactions {
-    return _values.where((item) => !item.exist).toList();
+    return _values.where((ValuesQuality item) => !item.exist).toList();
   }
 }
 

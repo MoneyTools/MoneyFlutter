@@ -28,7 +28,7 @@ class SettingsPage extends GetView<GetxController> {
         child: SingleChildScrollView(
           child: Box(
             child: Column(
-              children: [
+              children: <Widget>[
                 SwitchListTile(
                   title: const Text('Rental'),
                   subtitle: const Text(
@@ -39,12 +39,12 @@ class SettingsPage extends GetView<GetxController> {
                     PreferenceController.to.includeRentalManagement = !PreferenceController.to.includeRentalManagement;
                   },
                 ),
-                Divider(height: 50),
+                const Divider(height: 50),
                 MyTextInput(
                   hintText: 'Stock service API key from https://twelvedata.com',
                   controller: TextEditingController()..text = PreferenceController.to.apiKeyForStocks,
                 ),
-                Divider(height: 50),
+                const Divider(height: 50),
                 _buildCurrenciesPanel(context),
               ],
             ),

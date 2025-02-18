@@ -55,14 +55,14 @@ class Securities extends MoneyObjects<Security> {
   // Retrieves a Security object by its symbol, ignoring case.
   Security? getBySymbol(final String symbolToFind) {
     return iterableList()
-        .firstWhereOrNull((item) => stringCompareIgnoreCasing2(item.fieldSymbol.value, symbolToFind) == 0);
+        .firstWhereOrNull((Security item) => stringCompareIgnoreCasing2(item.fieldSymbol.value, symbolToFind) == 0);
   }
 
   // Retrieves a Security object by its symbol or creates a new one if it doesn't exist.
   Security getOrCreate(final String symbolToFind) {
     Security? security = getBySymbol(symbolToFind);
     if (security == null) {
-      security = Security.fromJson({'Symbol': symbolToFind}); // Creates a new Security if not found.
+      security = Security.fromJson(<String, dynamic>{'Symbol': symbolToFind}); // Creates a new Security if not found.
       appendNewMoneyObject(security, fireNotification: false); // Appends the new Security to the collection.
     }
     return security;

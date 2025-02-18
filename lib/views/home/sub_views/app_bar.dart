@@ -21,8 +21,8 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeController = Get.find<ThemeController>();
-    final preferencesController = Get.find<PreferenceController>();
+    final ThemeController themeController = Get.find<ThemeController>();
+    final PreferenceController preferencesController = Get.find<PreferenceController>();
 
     return AppBar(
       backgroundColor: getColorTheme(context).secondaryContainer,
@@ -65,12 +65,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildPopupMenu() {
-    final List<PopupMenuItem<int>> menuItems = [
+    final List<PopupMenuItem<int>> menuItems = <PopupMenuItem<int>>[
       _buildMenuItem(Constants.commandFileNew, 'New', Icons.note_add_outlined),
       _buildMenuItem(Constants.commandFileOpen, 'Open...', Icons.file_open_outlined),
       _buildMenuItem(Constants.commandAddTransactions, 'Add transactions...', Icons.post_add_outlined),
       _buildMenuItem(Constants.commandRebalance, 'Rebalance...', Icons.refresh_outlined),
-      if (!kIsWeb) ...[
+      if (!kIsWeb) ...<PopupMenuItem<int>>[
         _buildMenuItem(Constants.commandFileLocation, 'File location...', Icons.folder_open_outlined),
         _buildMenuItem(Constants.commandFileSaveCsv, 'Save to CSV', Icons.save),
         _buildMenuItem(Constants.commandFileSaveSql, 'Save to SQL', Icons.save),
@@ -88,7 +88,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   Widget _buildSettingsMenu(ThemeController themeController, PreferenceController preferencesController) {
-    final List<PopupMenuItem<int>> actionList = [
+    final List<PopupMenuItem<int>> actionList = <PopupMenuItem<int>>[
       _buildSettingsMenuItem(
         Constants.commandIncludeClosedAccount,
         preferencesController.includeClosedAccounts ? 'Hide "Closed Accounts"' : 'Show "Closed Account"',
@@ -153,7 +153,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       themeAsColors.length,
       (int index) {
         final bool isSelected = index == themeController.colorSelected.value;
-        final themeColorName = themeColorNames[index];
+        final String themeColorName = themeColorNames[index];
 
         return PopupMenuItem<int>(
           value: index,

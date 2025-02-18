@@ -28,7 +28,7 @@ class CenterMessage extends StatelessWidget {
           child: IntrinsicWidth(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: <Widget>[
                 Expanded(
                   child: Text(message),
                 ),

@@ -18,7 +18,7 @@ class QuantityWidget extends StatelessWidget {
 
   @override
   Widget build(final BuildContext context) {
-    final style = TextStyle(
+    final TextStyle style = TextStyle(
       fontFamily: 'RobotoMono',
       color: getTextColorToUseQuantity(quantity),
       fontWeight: FontWeight.w900,
@@ -38,7 +38,7 @@ class QuantityWidget extends StatelessWidget {
       textAlign: align,
       TextSpan(
         style: style,
-        children: [
+        children: <InlineSpan>[
           TextSpan(
             text: leftSideOfDecimalPointAsString,
           ),

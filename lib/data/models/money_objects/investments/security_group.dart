@@ -4,7 +4,7 @@ import 'package:money/data/models/money_objects/investments/security_purchase.da
 import 'package:money/data/models/money_objects/securities/security.dart';
 
 class SecurityGroup {
-  List<SecurityPurchase> purchases = [];
+  List<SecurityPurchase> purchases = <SecurityPurchase>[];
   TaxStatus taxStatus = TaxStatus.any;
 
   DateTime? date;

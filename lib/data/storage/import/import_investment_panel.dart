@@ -49,15 +49,15 @@ class ImportInvestmentPanel extends StatefulWidget {
 }
 
 class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
-  late final _controllerAmount = TextEditingController(text: widget.inputFields.amountPerUnit.toString());
-  late final _controllerDescription = TextEditingController(text: widget.inputFields.description.toString());
-  late final _controllerSymbol = TextEditingController(text: widget.inputFields.symbol.toString());
-  late final _controllerTransactionAmount =
+  late final TextEditingController _controllerAmount = TextEditingController(text: widget.inputFields.amountPerUnit.toString());
+  late final TextEditingController _controllerDescription = TextEditingController(text: widget.inputFields.description.toString());
+  late final TextEditingController _controllerSymbol = TextEditingController(text: widget.inputFields.symbol.toString());
+  late final TextEditingController _controllerTransactionAmount =
       TextEditingController(text: widget.inputFields.transactionAmount.toString());
 
-  late final _controllerUnites = TextEditingController(text: widget.inputFields.units.toString());
-  final _focusNode = FocusNode();
-  final _keyboardHandler = SafeKeyboardHandler();
+  late final TextEditingController _controllerUnites = TextEditingController(text: widget.inputFields.units.toString());
+  final FocusNode _focusNode = FocusNode();
+  final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
 
   @override
   void dispose() {
@@ -95,7 +95,7 @@ class ImportInvestmentPanelState extends State<ImportInvestmentPanel> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 24,
-              children: [
+              children: <Widget>[
                 // Title
                 Text(
                   'Add Investment Transaction',

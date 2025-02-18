@@ -12,7 +12,7 @@ class RentalPnL {
     this.currency = 'USD',
     Map<String, double>? distributions,
   }) {
-    this.distributions = distributions ?? {};
+    this.distributions = distributions ?? <String, double>{};
   }
 
   final DateTime date;
@@ -45,7 +45,7 @@ class RentalPnL {
   String appendDistribution() {
     String text = '';
 
-    distributions.forEach((name, percentage) {
+    distributions.forEach((String name, double percentage) {
       if (name.isNotEmpty) {
         text += textAmount(name, profit * (percentage / 100));
       }

@@ -37,9 +37,9 @@ class Categories extends MoneyObjects<Category> {
         item.fieldTransactionCountRollup.value++;
         item.fieldSumRollup.value += t.fieldAmount.value.asDouble();
 
-        final List<Category> ancestors = [];
+        final List<Category> ancestors = <Category>[];
         item.getAncestors(ancestors);
-        for (final ancestorCategory in ancestors) {
+        for (final Category ancestorCategory in ancestors) {
           ancestorCategory.fieldTransactionCountRollup.value++;
           ancestorCategory.fieldSumRollup.value += t.fieldAmount.value;
         }
@@ -118,7 +118,7 @@ class Categories extends MoneyObjects<Category> {
     required final CategoryType type,
     bool fireNotification = false,
   }) {
-    final category = Category(
+    final Category category = Category(
       id: -1,
       parentId: parentId,
       name: name,
@@ -162,11 +162,11 @@ class Categories extends MoneyObjects<Category> {
   }
 
   List<Category> getAllExpenseCategories() {
-    return iterableList().where((category) => category.isExpense).toList();
+    return iterableList().where((Category category) => category.isExpense).toList();
   }
 
   List<Category> getAllIncomeCategories() {
-    return iterableList().where((category) => category.isIncome).toList();
+    return iterableList().where((Category category) => category.isIncome).toList();
   }
 
   Category? getByName(final String name) {
@@ -174,7 +174,7 @@ class Categories extends MoneyObjects<Category> {
   }
 
   List<String> getCategoriesAsStrings() {
-    return this.getListSorted().map((element) => element.fieldName.value).toList();
+    return this.getListSorted().map((Category element) => element.fieldName.value).toList();
   }
 
   List<Category> getCategoriesWithThisParent(final int parentId) {
@@ -196,12 +196,12 @@ class Categories extends MoneyObjects<Category> {
       return categoryWidgetForSplit;
     }
 
-    return get(id)?.getColorAndNameWidget() ?? Text('Unknown');
+    return get(id)?.getColorAndNameWidget() ?? const Text('Unknown');
   }
 
   List<Category> getListSorted() {
-    final list = iterableList().toList();
-    list.sort((a, b) => sortByString(a.fieldName.value, b.fieldName.value, true));
+    final List<Category> list = iterableList().toList();
+    list.sort((Category a, Category b) => sortByString(a.fieldName.value, b.fieldName.value, true));
     return list;
   }
 
@@ -334,9 +334,9 @@ class Categories extends MoneyObjects<Category> {
     categoryToReparent.stashValueBeforeEditing();
     categoryToReparent.fieldParentId.value = newParentCategory.uniqueId;
 
-    final descendants = getTreeIds(categoryToReparent.uniqueId);
-    for (final id in descendants) {
-      final category = get(id);
+    final List<int> descendants = getTreeIds(categoryToReparent.uniqueId);
+    for (final int id in descendants) {
+      final Category? category = get(id);
       if (category != null) {
         category.updateNameBaseOnParent();
       }

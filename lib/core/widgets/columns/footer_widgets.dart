@@ -8,7 +8,7 @@ import 'package:money/data/models/money_objects/currencies/currency.dart';
 
 Widget getFooterForDateRange(final DateRange dateRange) {
   return LayoutBuilder(
-    builder: (context, constraints) {
+    builder: (BuildContext context, BoxConstraints constraints) {
       final bool showDates = constraints.maxWidth > 80;
       return DefaultTextStyle(
         style: const TextStyle(
@@ -19,7 +19,7 @@ Widget getFooterForDateRange(final DateRange dateRange) {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             if (showDates) Text(dateToString(dateRange.min)),
             if (showDates) Text(dateToString(dateRange.max)),
             Text(

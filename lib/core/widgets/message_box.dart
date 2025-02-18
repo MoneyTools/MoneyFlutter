@@ -10,7 +10,7 @@ void messageBox(
     context: context,
     builder: (BuildContext context) {
       return SimpleDialog(
-        children: [
+        children: <Widget>[
           gapLarge(),
           Padding(
             padding: const EdgeInsets.all(16.0),

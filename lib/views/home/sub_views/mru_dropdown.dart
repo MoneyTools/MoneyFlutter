@@ -27,7 +27,7 @@ class MruDropdown extends StatelessWidget {
       child: Obx(() {
         return Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             InkWell(
               key: Constants.keyMruButton,
               onTap: () {
@@ -48,7 +48,7 @@ class MruDropdown extends StatelessWidget {
                 );
               },
               child: Row(
-                children: [
+                children: <Widget>[
                   TokenText(
                     dataController.currentLoadedFileName.value,
                     style: tokenStyle,

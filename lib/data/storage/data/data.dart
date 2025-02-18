@@ -143,7 +143,7 @@ class Data {
     final Set<Transaction> dangling = getDanglingTransfers();
     if (dangling.isNotEmpty) {
       Timer(
-        Duration(milliseconds: 100),
+        const Duration(milliseconds: 100),
         () => SnackBarService.displayWarning(
           message: '$dangling Dangling transfers have been found',
           title: 'Dangling Transfers',
@@ -156,7 +156,7 @@ class Data {
   void clear() {
     DataController.to.trackMutations.reset();
 
-    for (final element in tables) {
+    for (final MoneyObjects<dynamic> element in tables) {
       element.clear();
     }
   }
@@ -206,7 +206,7 @@ class Data {
 
   /// Bulk Delete
   void deleteItems(final List<MoneyObject> itemsToDelete) {
-    for (final item in itemsToDelete) {
+    for (final MoneyObject item in itemsToDelete) {
       Data().notifyMutationChanged(
         mutation: MutationType.deleted,
         moneyObject: item,
@@ -217,8 +217,8 @@ class Data {
   }
 
   Set<Transaction> getDanglingTransfers() {
-    final Set<Transaction> dangling = {};
-    final List<Account> deletedAccounts = [];
+    final Set<Transaction> dangling = <Transaction>{};
+    final List<Account> deletedAccounts = <Account>[];
     transactions.checkTransfers(dangling, deletedAccounts);
     for (Account a in deletedAccounts) {
       accounts.removeAccount(a);
@@ -233,7 +233,7 @@ class Data {
   }
 
   List<MoneyObject> getMutatedInstances(MutationType typeOfMutation) {
-    final List<MoneyObject> mutated = [];
+    final List<MoneyObject> mutated = <MoneyObject>[];
     for (final MoneyObjects<dynamic> listOfInstance in tables) {
       mutated.addAll(listOfInstance.getMutatedObjects(typeOfMutation));
     }
@@ -241,10 +241,10 @@ class Data {
   }
 
   List<MutationGroup> getMutationGroups(MutationType typeOfMutation) {
-    final List<MutationGroup> allMutationGroups = [];
+    final List<MutationGroup> allMutationGroups = <MutationGroup>[];
 
     for (final MoneyObjects<dynamic> moneyObjects in tables) {
-      final mutatedInstances = moneyObjects.getMutatedObjects(typeOfMutation);
+      final List<MoneyObject> mutatedInstances = moneyObjects.getMutatedObjects(typeOfMutation);
       if (mutatedInstances.isNotEmpty) {
         final MutationGroup mutationGroup = MutationGroup();
         mutationGroup.title = moneyObjects.collectionName;

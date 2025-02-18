@@ -29,7 +29,7 @@ class PanelRecurring extends StatefulWidget {
 }
 
 class _PanelRecurringState extends State<PanelRecurring> {
-  List<RecurringPayment> recurringPayments = [];
+  List<RecurringPayment> recurringPayments = <RecurringPayment>[];
 
   @override
   void initState() {
@@ -44,9 +44,9 @@ class _PanelRecurringState extends State<PanelRecurring> {
       child: ListView.builder(
         padding: const EdgeInsets.all(21),
         itemCount: recurringPayments.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           // build the Card UI
-          final payment = recurringPayments[index];
+          final RecurringPayment payment = recurringPayments[index];
           return RecurringCard(
             index: index + 1,
             dateRangeSearch: widget.dateRangeSearch,
@@ -70,8 +70,8 @@ class _PanelRecurringState extends State<PanelRecurring> {
     final AccumulatorList<int, int> groupMonthsListByPayeeId = AccumulatorList<int, int>();
 
     // Step 1: Group transactions by payeeId and record transaction months
-    for (final transaction in transactions.where(
-      (final t) =>
+    for (final Transaction transaction in transactions.where(
+      (final Transaction t) =>
           (isIncomeTransaction && t.fieldAmount.value.asDouble() > 0) ||
           (isIncomeTransaction == false && t.fieldAmount.value.asDouble() <= 0),
     )) {
@@ -85,7 +85,7 @@ class _PanelRecurringState extends State<PanelRecurring> {
     }
 
     // Step 2: Calculate average amount and frequency for each payeeId
-    for (final payeeId in groupMonthsListByPayeeId.getKeys()) {
+    for (final int payeeId in groupMonthsListByPayeeId.getKeys()) {
       final List<int> months = groupMonthsListByPayeeId.getList(payeeId);
 
       // Check if the frequency indicates monthly recurrence
@@ -110,7 +110,7 @@ class _PanelRecurringState extends State<PanelRecurring> {
               (forIncome == false && t.fieldAmount.value.asDouble() < 0)));
     }
 
-    final flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
+    final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(whereClause: whereClause);
 
     // get all transaction Income | Expenses
     findMonthlyRecurringPayments(flatTransactions, forIncome);

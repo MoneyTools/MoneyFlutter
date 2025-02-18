@@ -116,7 +116,7 @@ class ShortcutController extends GetxController {
 */
 
 class SafeKeyboardHandler {
-  final Set<PhysicalKeyboardKey> _pressedKeys = {};
+  final Set<PhysicalKeyboardKey> _pressedKeys = <PhysicalKeyboardKey>{};
 
   void clearKeys() {
     _pressedKeys.clear();

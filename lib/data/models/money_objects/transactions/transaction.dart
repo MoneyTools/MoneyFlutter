@@ -269,7 +269,7 @@ class Transaction extends MoneyObject {
     ) {
       (instance as Transaction);
       return Row(
-        children: [
+        children: <Widget>[
           Expanded(
             child: pickerCategory(
               key: const Key('key_pick_category'),
@@ -577,7 +577,7 @@ class Transaction extends MoneyObject {
   Investment? instanceOfInvestment;
 
   int possibleMatchingCategoryId = -1;
-  List<MoneySplit> splits = [];
+  List<MoneySplit> splits = <MoneySplit>[];
 
   /// Instances of related MoneyObjects
   Account? _instanceOfAccount;
@@ -615,7 +615,7 @@ class Transaction extends MoneyObject {
 
     MyJson commonJson = moneyObjectInstances.first.getPersistableJSon();
 
-    for (var t in moneyObjectInstances.skip(1)) {
+    for (MoneyObject t in moneyObjectInstances.skip(1)) {
       commonJson = compareAndGenerateCommonJson(commonJson, t.getPersistableJSon());
     }
     return Transaction.fromJSon(commonJson, 0);
@@ -739,9 +739,9 @@ class Transaction extends MoneyObject {
 
   static Fields<Transaction> get fields {
     if (_fields.isEmpty) {
-      final tmp = Transaction(date: DateTime.now());
+      final Transaction tmp = Transaction(date: DateTime.now());
       _fields.setDefinitions(
-        [
+        <Field<dynamic>>[
           tmp.fieldId,
           tmp.fieldDateTime,
           tmp.fieldAccountId,
@@ -772,10 +772,10 @@ class Transaction extends MoneyObject {
   }
 
   static Fields<Transaction> get fieldsForColumnView {
-    final tmp = Transaction(date: DateTime.now());
+    final Transaction tmp = Transaction(date: DateTime.now());
     return Fields<Transaction>()
       ..setDefinitions(
-        [
+        <Field<dynamic>>[
           tmp.fieldDateTime,
           tmp.fieldAccountId,
           tmp.fieldNumber,

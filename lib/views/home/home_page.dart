@@ -40,7 +40,7 @@ class HomePage extends GetView<HomeController> {
           ? const WorkingIndicator()
           : DropZone(
               onFilesDropped: (List<String> filePaths) {
-                filePaths.forEach((filePath) => importQFX(context, filePath));
+                filePaths.forEach((String filePath) => importQFX(context, filePath));
               },
               child: Container(
                 color: getColorTheme(context).secondaryContainer,

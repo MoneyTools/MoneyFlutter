@@ -1,4 +1,5 @@
 import 'package:money/data/models/money_objects/splits/money_split.dart';
+import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 
 // Exports
@@ -14,8 +15,8 @@ class Splits extends MoneyObjects<MoneySplit> {
     super.appendMoneyObject(moneyObject);
 
     // Attach the split back to the their  container Transaction
-    final splitAdded = (moneyObject as MoneySplit);
-    final containerTransaction = Data().transactions.get(splitAdded.fieldTransactionId.value);
+    final MoneySplit splitAdded = (moneyObject as MoneySplit);
+    final Transaction? containerTransaction = Data().transactions.get(splitAdded.fieldTransactionId.value);
     if (containerTransaction != null) {
       containerTransaction.splits.add(moneyObject);
     }

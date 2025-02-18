@@ -2,6 +2,7 @@ import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
+import 'package:money/data/models/money_objects/investments/investment.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
@@ -52,15 +53,15 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
 
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    final list = super.getActionsButtons(forSidePanelTransactions);
+    final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
 
     if (!forSidePanelTransactions && getFirstSelectedItem() != null) {
-      final transaction = getFirstSelectedItem() as Transaction?;
+      final Transaction? transaction = getFirstSelectedItem() as Transaction?;
 
       // this can go last
       list.add(
         buildJumpToButton(
-          [
+          <MenuEntry>[
             // Account
             MenuEntry.toAccounts(accountId: transaction?.fieldAccountId.value ?? -1),
 
@@ -69,7 +70,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               icon: ViewId.viewCategories.getIconData(),
               title: 'Switch to Categories',
               onPressed: () {
-                final transaction = getFirstSelectedItem() as Transaction?;
+                final Transaction? transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Category of this Transaction
                   PreferenceController.to.jumpToView(
@@ -87,7 +88,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               icon: ViewId.viewPayees.getIconData(),
               title: 'Switch to Payees',
               onPressed: () {
-                final transaction = getFirstSelectedItem() as Transaction?;
+                final Transaction? transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   // Preselect the Payee of this Transaction
                   PreferenceController.to.jumpToView(
@@ -104,7 +105,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
               icon: Icons.person_search_outlined,
               title: 'Search for Payee',
               onPressed: () {
-                final transaction = getFirstSelectedItem() as Transaction?;
+                final Transaction? transaction = getFirstSelectedItem() as Transaction?;
                 if (transaction != null) {
                   launchGoogleSearch(transaction.getPayeeOrTransferCaption());
                 }
@@ -277,7 +278,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       final int categoryId = transaction.fieldCategoryId.value;
       Category? category = Data().categories.get(categoryId);
       category ??= Data().categories.unknown;
-      final parentCategory = Data().categories.getTopAncestor(category);
+      final Category parentCategory = Data().categories.getTopAncestor(category);
 
       // Update the map or add a new entry
       tallyPerCategory.update(
@@ -320,7 +321,7 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
       if (transaction.isTransfer) {
         return TransferSenderReceiver(transfer: transaction.instanceOfTransfer!);
       } else {
-        final investment = Data().investments.get(transaction.uniqueId);
+        final Investment? investment = Data().investments.get(transaction.uniqueId);
         if (investment != null) {
           return SingleChildScrollView(
             scrollDirection: Axis.vertical,

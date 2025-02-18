@@ -35,15 +35,20 @@ linter:
     always_declare_return_types: true
     always_put_control_body_on_new_line: true
     always_put_required_named_parameters_first: false
+    always_specify_types: true
+    annotate_overrides: true
+    # avoid_dynamic_calls: true
     avoid_print: true
     avoid_type_to_string: true
     cancel_subscriptions: true
     close_sinks: true
     directives_ordering: true
     matching_super_parameters: true
+    prefer_const_constructors: true
     prefer_final_fields: true
     prefer_final_locals: true
     prefer_single_quotes: true
+    # public_member_api_docs: true
     require_trailing_commas: true
     sort_child_properties_last: true
     sort_constructors_first: true

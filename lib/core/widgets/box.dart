@@ -23,7 +23,7 @@ class Box extends StatelessWidget {
 
   final Widget child;
   final Color? color;
-  final Function? copyToClipboard;
+  final void Function()? copyToClipboard;
   final Widget? footer;
   final Widget? header;
   final double? height;
@@ -37,7 +37,7 @@ class Box extends StatelessWidget {
     EdgeInsetsGeometry? adjustedMargin = margin == null ? null : EdgeInsets.all(margin!);
     // adjust the margin to account for the title bleeding out of the box
     if (title.isNotEmpty || header != null) {
-      const increaseTopMarginBy = EdgeInsets.only(top: SizeForPadding.large);
+      const EdgeInsets increaseTopMarginBy = EdgeInsets.only(top: SizeForPadding.large);
       if (adjustedMargin == null) {
         adjustedMargin = increaseTopMarginBy;
       } else {
@@ -47,7 +47,7 @@ class Box extends StatelessWidget {
 
     return Stack(
       alignment: AlignmentDirectional.topStart,
-      children: [
+      children: <Widget>[
         Container(
           width: width,
           height: height,

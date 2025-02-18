@@ -71,7 +71,7 @@ String getTypeAsText(final AccountType type) {
 }
 
 List<String> getAccountTypeAsText() {
-  return [
+  return <String>[
     getTypeAsText(AccountType.checking),
     getTypeAsText(AccountType.savings),
     getTypeAsText(AccountType.retirement),

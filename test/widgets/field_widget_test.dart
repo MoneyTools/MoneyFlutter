@@ -257,7 +257,7 @@ void main() {
         ),
       );
 
-      final result = getAmountAsShorthandText(1234567);
+      final String result = getAmountAsShorthandText(1234567);
       expect(result, '1.23M');
 
       expect(find.byType(FittedBox), findsOneWidget);
@@ -265,7 +265,7 @@ void main() {
     });
 
     testWidgets('renders the provided widget for widget field', (WidgetTester tester) async {
-      const testWidget = Text('Test Widget');
+      const Text testWidget = Text('Test Widget');
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(
@@ -302,7 +302,7 @@ void main() {
     });
 
     testWidgets('renders date widget for date field with DateTime value', (WidgetTester tester) async {
-      final inputDate = DateTime(2023, 5, 15);
+      final DateTime inputDate = DateTime(2023, 5, 15);
       await tester.pumpWidget(
         MaterialApp(
           home: Scaffold(

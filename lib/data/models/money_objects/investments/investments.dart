@@ -2,6 +2,7 @@ import 'package:money/data/models/money_objects/investments/investment.dart';
 import 'package:money/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/stock_splits/stock_split.dart';
+import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/view_stocks/picker_security_type.dart';
 
@@ -25,7 +26,7 @@ class Investments extends MoneyObjects<Investment> {
   void onAllDataLoaded() {
     for (final Investment investment in iterableList()) {
       // hydrate the transaction instance associated to the investments
-      final transactionFound = Data().transactions.get(investment.uniqueId);
+      final Transaction? transactionFound = Data().transactions.get(investment.uniqueId);
       investment.transactionInstance = transactionFound;
 
       final Security? security = Data().securities.get(investment.fieldSecurity.value);
@@ -58,18 +59,18 @@ class Investments extends MoneyObjects<Investment> {
   }
 
   static List<Investment> getInvestmentsForThisSecurity(final int securityId) {
-    return Data().investments.iterableList().where((item) => item.fieldSecurity.value == securityId).toList();
+    return Data().investments.iterableList().where((Investment item) => item.fieldSecurity.value == securityId).toList();
   }
 
   static StockCumulative getSharesAndProfit(List<Investment> investments) {
     // StockCumulative sort by date, TradeType, Amount
     investments.sort(
-      (a, b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
+      (Investment a, Investment b) => Investment.sortByDateAndInvestmentType(a, b, true, true),
     );
 
     final StockCumulative cumulative = StockCumulative();
 
-    for (final investment in investments) {
+    for (final Investment investment in investments) {
       cumulative.dateRange.inflate(investment.date);
       cumulative.quantity += investment.effectiveUnitsAdjusted;
       cumulative.amount += investment.fieldActivityAmount.getValueForDisplay(investment) as double;

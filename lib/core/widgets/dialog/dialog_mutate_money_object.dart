@@ -9,11 +9,11 @@ import 'package:money/data/storage/data/data.dart';
 void myShowDialogAndActionsForMoneyObject({
   required final String title,
   required final MoneyObject moneyObject,
-  Function? onApplyChange,
+  void Function()? onApplyChange,
 }) {
   myShowDialogAndActionsForMoneyObjects(
     title: title,
-    moneyObjects: [moneyObject],
+    moneyObjects: <MoneyObject>[moneyObject],
     onApplyChange: onApplyChange,
   );
 }
@@ -21,9 +21,9 @@ void myShowDialogAndActionsForMoneyObject({
 void myShowDialogAndActionsForMoneyObjects({
   required final String title,
   required final List<MoneyObject> moneyObjects,
-  Function? onApplyChange,
+  void Function()? onApplyChange,
 }) {
-  final context = Get.context!;
+  final BuildContext context = Get.context!;
 
   if (moneyObjects.isEmpty) {
     messageBox(context, 'No items to edit');
@@ -31,11 +31,11 @@ void myShowDialogAndActionsForMoneyObjects({
   }
 
   // Before we edit lets stash the current values of each objects
-  for (final m in moneyObjects) {
+  for (final MoneyObject m in moneyObjects) {
     m.stashValueBeforeEditing();
   }
 
-  final rollup = moneyObjects[0].rollup(moneyObjects);
+  final MoneyObject rollup = moneyObjects[0].rollup(moneyObjects);
   final MyJson beforeEditing = rollup.getPersistableJSon();
 
   return adaptiveScreenSizeDialog(
@@ -49,8 +49,8 @@ void myShowDialogAndActionsForMoneyObjects({
         final MyJson diff = myJsonDiff(before: beforeEditing, after: afterEditing);
 
         if (diff.keys.isNotEmpty) {
-          for (final m in moneyObjects) {
-            diff.forEach((key, value) {
+          for (final MoneyObject m in moneyObjects) {
+            diff.forEach((String key, dynamic value) {
               m.mutateField(key, value['after'], false);
             });
           }
@@ -92,7 +92,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
   Widget build(final BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         Expanded(
           child: SingleChildScrollView(
             child: Column(
@@ -125,7 +125,7 @@ class _DialogMutateMoneyObjectState extends State<DialogMutateMoneyObject> {
     required bool editMode,
     required bool dataWasModified,
   }) {
-    return [
+    return <Widget>[
       // Cancel
       DialogActionButton(
         text: 'Cancel',

@@ -52,7 +52,7 @@ class SankeyPanel extends StatelessWidget {
   }
 
   void transformData() {
-    final transactions = Data().transactions.transactionInYearRange(
+    final Iterable<Transaction> transactions = Data().transactions.transactionInYearRange(
           minYear: minYear,
           maxYear: maxYear,
           incomesOrExpenses: null,

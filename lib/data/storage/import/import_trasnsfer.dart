@@ -25,7 +25,7 @@ void showImportTransfer({ImportFieldsForTransfer? inputData}) {
     actionButtons: getActionButtons(inputData, context),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         gapLarge(),
         Expanded(
           child: ImportFieldsForTransferPanel(inputFields: inputData),
@@ -39,7 +39,7 @@ List<Widget> getActionButtons(
   ImportFieldsForTransfer inputData,
   BuildContext context,
 ) {
-  final List<Widget> actionButtons = [
+  final List<Widget> actionButtons = <Widget>[
     // Button - Import
     DialogActionButton(
       text: 'Record Transfer',

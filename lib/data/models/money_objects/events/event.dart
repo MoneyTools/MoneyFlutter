@@ -69,7 +69,7 @@ class Event extends MoneyObject {
               items: Data().categories.getCategoriesAsStrings(),
               selectedItem: '',
               onSelected: (final String text) {
-                final selectedCategory = Data().categories.getByName(text);
+                final Category? selectedCategory = Data().categories.getByName(text);
                 if (selectedCategory != null) {
                   // record the change
                   changeCategory(event, selectedCategory.uniqueId);
@@ -109,14 +109,14 @@ class Event extends MoneyObject {
   FieldDate fieldDateBegin = _createDateField(
     'Begins',
     'Begin',
-    (event) => event.fieldDateBegin,
+    (Event event) => event.fieldDateBegin,
   );
 
   /// Date End
   FieldDate fieldDateEnd = _createDateField(
     'Ends',
     'End',
-    (event) => event.fieldDateEnd,
+    (Event event) => event.fieldDateEnd,
   );
 
   FieldInt fieldDuration = FieldInt(
@@ -167,7 +167,7 @@ class Event extends MoneyObject {
 
   @override
   Widget buildFieldsAsWidgetForSmallScreen() {
-    return MyListItemAsCard(
+    return const MyListItemAsCard(
       leftTopAsString: 'Begin',
       rightTopAsString: 'End',
       rightBottomAsString: 'Memo',
@@ -217,8 +217,8 @@ class Event extends MoneyObject {
 
   static Fields<Event> get fields {
     if (_fields.isEmpty) {
-      final tmpInstance = Event.fromJson({});
-      _fields.setDefinitions([
+      final Event tmpInstance = Event.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmpInstance.fieldId,
         tmpInstance.fieldName,
         tmpInstance.fieldCategoryId,
@@ -234,8 +234,8 @@ class Event extends MoneyObject {
 
   static Fields<Event> get fieldsForColumnView {
     if (_fieldsColumView.isEmpty) {
-      final tmpInstance = Event.fromJson({});
-      _fieldsColumView.setDefinitions([
+      final Event tmpInstance = Event.fromJson(<String, dynamic>{});
+      _fieldsColumView.setDefinitions(<Field<dynamic>>[
         tmpInstance.fieldName,
         tmpInstance.fieldCategoryId,
         tmpInstance.fieldDateBegin,

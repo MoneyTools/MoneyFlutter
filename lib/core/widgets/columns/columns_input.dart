@@ -38,14 +38,14 @@ class InputByColumnsOrFreeStyle extends StatefulWidget {
 }
 
 class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
-  final _controllerColumn2 = TextEditingController(); // Description column
-  final _controllerColumn3 = TextEditingController(); // Amount column
+  final TextEditingController _controllerColumn2 = TextEditingController(); // Description column
+  final TextEditingController _controllerColumn3 = TextEditingController(); // Amount column
 
   // Controllers for the three-column format
-  final _controllerColumn1 = TextEditingController(); // Date column
+  final TextEditingController _controllerColumn1 = TextEditingController(); // Date column
 
   // Controller for the single-column freestyle format
-  final _controllerSingleColumn = TextEditingController();
+  final TextEditingController _controllerSingleColumn = TextEditingController();
 
   // Debouncer to prevent rapid successive updates
   final Debouncer _debouncer = Debouncer();
@@ -80,9 +80,9 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
       length: 2,
       initialIndex: _freeStyleInput ? 1 : 0,
       child: Column(
-        children: [
+        children: <Widget>[
           TabBar(
-            tabs: const [
+            tabs: const <Widget>[
               Tab(
                 key: Key('key_import_tab_three_columns'),
                 child: Text('3 columns'),
@@ -92,7 +92,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
                 child: Text('Free style'),
               ),
             ],
-            onTap: (index) {
+            onTap: (int index) {
               _freeStyleInput = index == 1;
               if (_freeStyleInput) {
                 _fromThreeToOneColumn();
@@ -106,7 +106,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: SizeForPadding.normal),
               child: TabBarView(
-                children: [
+                children: <Widget>[
                   // Content for 3 columns
                   _buildInputFor3Columns(),
                   // Content for 1 column
@@ -137,7 +137,7 @@ class _InputByColumnsOrFreeStyleState extends State<InputByColumnsOrFreeStyle> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         Expanded(
           flex: 1,
           child: InputValues(

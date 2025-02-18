@@ -224,7 +224,7 @@ class Category extends MoneyObject {
       (instance as Category).fieldType.value = CategoryType.values[value as int];
     },
     getEditWidget: (final MoneyObject instance,void  Function(bool wasModified) onEdited) {
-      final i = instance as Category;
+      final Category i = instance as Category;
       return pickerCategoryType(
         itemSelected: i.fieldType.value,
         onSelected: (CategoryType selectedType) {
@@ -277,12 +277,12 @@ class Category extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<Category>();
+  static final Fields<Category> _fields = Fields<Category>();
 
   static Fields<Category> get fields {
     if (_fields.isEmpty) {
-      final tmp = Category.fromJson({});
-      _fields.setDefinitions([
+      final Category tmp = Category.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldParentId,
         tmp.fieldLevel,
@@ -304,9 +304,9 @@ class Category extends MoneyObject {
   }
 
   static Fields<Category> get fieldsForColumnView {
-    final tmp = Category.fromJson({});
+    final Category tmp = Category.fromJson(<String, dynamic>{});
     return Fields<Category>()
-      ..setDefinitions([
+      ..setDefinitions(<Field<dynamic>>[
         tmp.fieldLevel,
         tmp.fieldColor,
         tmp.fieldName,
@@ -351,7 +351,7 @@ class Category extends MoneyObject {
   }
 
   static List<String> getCategoryTypes() {
-    return [
+    return <String>[
       getTextFromType(CategoryType.income),
       getTextFromType(CategoryType.expense),
       getTextFromType(CategoryType.recurringExpense),
@@ -378,7 +378,7 @@ class Category extends MoneyObject {
 
   Widget getColorAndNameWidget() {
     return Row(
-      children: [
+      children: <Widget>[
         getColorWidget(),
         gapMedium(),
         Expanded(
@@ -389,7 +389,7 @@ class Category extends MoneyObject {
   }
 
   Color getColorOrAncestorsColor() {
-    final pair = getColorAndLevel(0);
+    final Pair<Color, int> pair = getColorAndLevel(0);
     return pair.first;
   }
 
@@ -399,7 +399,7 @@ class Category extends MoneyObject {
 
     return Stack(
       alignment: Alignment.center,
-      children: [
+      children: <Widget>[
         MyCircle(colorFill: fillColor, size: 12),
         if (this.fieldColor.value.isNotEmpty && this.fieldLevel.getValueForDisplay(this) != '1')
           Text('#', style: TextStyle(fontSize: 10, color: textColor)),
@@ -529,7 +529,7 @@ class _MutateFieldColorState extends State<MutateFieldColor> {
     late Color color = getColorFromString(controllerForText.text);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Expanded(
           child: MyTextInput(
             controller: controllerForText,

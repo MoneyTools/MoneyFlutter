@@ -3,6 +3,7 @@ import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/dialog/dialog_mutate_money_object.dart';
 import 'package:money/core/widgets/snack_bar.dart';
 import 'package:money/data/models/fields/field_filters.dart';
+import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,7 +14,7 @@ class MenuEntry {
   factory MenuEntry.customAction({
     required final IconData icon,
     required final String text,
-    required final Function onPressed,
+    required final void Function() onPressed,
   }) {
     return MenuEntry(
       icon: icon,
@@ -47,7 +48,7 @@ class MenuEntry {
       title: 'Go to Account',
       onPressed: () {
         // Prepare the Account view to show only the selected account
-        final accountInstance = Data().accounts.get(accountId);
+        final Account? accountInstance = Data().accounts.get(accountId);
         if (accountInstance != null) {
           PreferenceController.to.jumpToView(
             viewId: ViewId.viewAccounts,
@@ -87,13 +88,13 @@ class MenuEntry {
     final String symbol = '',
     final String accountName = '',
   }) {
-    final List<FieldFilter> filters = [];
+    final List<FieldFilter> filters = <FieldFilter>[];
 
     if (symbol.isNotEmpty) {
       filters.add(
         FieldFilter(
           fieldName: Constants.viewStockFieldNameSymbol,
-          strings: [symbol],
+          strings: <String>[symbol],
         ),
       );
     }
@@ -101,7 +102,7 @@ class MenuEntry {
       filters.add(
         FieldFilter(
           fieldName: Constants.viewStockFieldNameAccount,
-          strings: [accountName],
+          strings: <String>[accountName],
         ),
       );
     }
@@ -128,7 +129,7 @@ class MenuEntry {
     if (symbol.isNotEmpty) {
       fieldFilterToUse = FieldFilter(
         fieldName: Constants.viewStockFieldNameSymbol,
-        strings: [symbol],
+        strings: <String>[symbol],
       );
     }
 
@@ -140,7 +141,7 @@ class MenuEntry {
         PreferenceController.to.jumpToView(
           viewId: ViewId.viewStocks,
           selectedId: -1,
-          columnFilters: FieldFilters([fieldFilterToUse]),
+          columnFilters: FieldFilters(<FieldFilter>[fieldFilterToUse]),
           textFilter: '',
         );
       },
@@ -174,7 +175,7 @@ class MenuEntry {
       icon: Icons.web_asset_outlined,
       title: 'Yahoo finance',
       onPressed: () async {
-        final urlWebSite = Uri.parse(url);
+        final Uri urlWebSite = Uri.parse(url);
         if (await canLaunchUrl(urlWebSite)) {
           await launchUrl(urlWebSite);
         } else {
@@ -185,6 +186,6 @@ class MenuEntry {
   }
 
   final IconData? icon;
-  final Function onPressed;
+  final void Function() onPressed;
   final String title;
 }

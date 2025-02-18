@@ -40,7 +40,7 @@ class StockChartWidget extends StatefulWidget {
 }
 
 class StockChartWidgetState extends State<StockChartWidget> {
-  List<FlSpot> dataPoints = [];
+  List<FlSpot> dataPoints = <FlSpot>[];
   StockPriceHistoryCache latestPriceHistoryData = StockPriceHistoryCache('', StockLookupStatus.notFoundInCache, null);
 
   late Security? security = Data().securities.getBySymbol(widget.symbol);
@@ -95,8 +95,8 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
   void fromPriceHistoryToChartDataPoints(StockPriceHistoryCache priceCache) {
     if (priceCache.status == StockLookupStatus.validSymbol || priceCache.status == StockLookupStatus.foundInCache) {
-      final List<FlSpot> tmpDataPoints = [];
-      for (final sp in priceCache.prices) {
+      final List<FlSpot> tmpDataPoints = <FlSpot>[];
+      for (final StockDatePrice sp in priceCache.prices) {
         tmpDataPoints.add(FlSpot(sp.date.millisecondsSinceEpoch.toDouble(), sp.price));
       }
       if (mounted) {
@@ -109,14 +109,14 @@ class StockChartWidgetState extends State<StockChartWidget> {
       if (mounted) {
         setState(() {
           this.latestPriceHistoryData = priceCache;
-          this.dataPoints = [];
+          this.dataPoints = <FlSpot>[];
         });
       }
     }
   }
 
   void _adjustMissingDataPointInThePast() {
-    for (final activity in widget.holdingsActivities.reversed) {
+    for (final ChartEvent activity in widget.holdingsActivities.reversed) {
       if (dataPoints.isEmpty || activity.dates.min!.millisecondsSinceEpoch < dataPoints.first.x) {
         dataPoints.insert(
           0,
@@ -134,7 +134,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
     const double marginBottom = 50;
 
     // Date ascending
-    dataPoints.sort((a, b) => a.x.compareTo(b.x));
+    dataPoints.sort((FlSpot a, FlSpot b) => a.x.compareTo(b.x));
 
     _adjustMissingDataPointInThePast();
 
@@ -144,11 +144,11 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
     // lines are drawn let to right sorted by time
     // the labels are drawn bottom to top sorted by ascending currentUnitPrice
-    widget.holdingsActivities.sort((a, b) => a.amount.compareTo(b.amount));
+    widget.holdingsActivities.sort((ChartEvent a, ChartEvent b) => a.amount.compareTo(b.amount));
 
     return Stack(
       alignment: Alignment.topCenter,
-      children: [
+      children: <Widget>[
         // Splits
         Padding(
           padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
@@ -207,7 +207,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
         child: TextButton(
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: SizeForPadding.medium),
                 child: Text(
@@ -226,11 +226,11 @@ class StockChartWidgetState extends State<StockChartWidget> {
             setState(() {
               _refreshing = true;
             });
-            loadFomBackendAndSaveToCache(widget.symbol).then((result) async {
+            loadFomBackendAndSaveToCache(widget.symbol).then((StockPriceHistoryCache result) async {
               fromPriceHistoryToChartDataPoints(await loadFomBackendAndSaveToCache(widget.symbol));
 
               // Fetch Historical Stock Splits
-              List<StockSplit> splits = [];
+              List<StockSplit> splits = <StockSplit>[];
               if (PreferenceController.to.useYahooStock.value) {
                 splits = await _fetchStockSplitsFromYahoo(widget.symbol);
               } else {
@@ -261,7 +261,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
   Future<List<StockSplit>> _fetchSplitsFromTwelveData(
     String symbol,
   ) async {
-    final List<StockSplit> splitsFound = [];
+    final List<StockSplit> splitsFound = <StockSplit>[];
 
     if (PreferenceController.to.apiKeyForStocks.isNotEmpty) {
       final Uri uri = Uri.parse(
@@ -275,14 +275,14 @@ class StockChartWidgetState extends State<StockChartWidget> {
           final MyJson data = json.decode(response.body) as MyJson;
 
           final int? subStatusCode = data['code'] as int?;
-          if ([401, 403, 404, 409].contains(subStatusCode)) {
+          if (<int>[401, 403, 404, 409].contains(subStatusCode)) {
             logger.e(data.toString());
             SnackBarService.displayError(message: data['message'] as String);
           } else {
             final List<dynamic> dataSplits = data['splits'] as List<dynamic>;
 
-            final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
-            for (final dataSplit in dataSplits) {
+            final int securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
+            for (final dynamic dataSplit in dataSplits) {
               final DateTime dateOfSplit = DateTime.parse(dataSplit['date'] as String);
               final StockSplit sp = StockSplit(
                 security: securityId,
@@ -305,13 +305,13 @@ class StockChartWidgetState extends State<StockChartWidget> {
   }
 
   Future<List<StockSplit>> _fetchStockSplitsFromYahoo(String symbol) async {
-    final List<StockSplit> splitsFound = [];
+    final List<StockSplit> splitsFound = <StockSplit>[];
 
     // Base URL for Yahoo Finance API v8
     final String baseUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/$symbol';
 
     // Define the query parameters
-    final Map<String, String> queryParams = {
+    final Map<String, String> queryParams = <String, String>{
       'interval': '1d', // Daily interval
       'range': '5y', // Last 5 years range
       'events': 'splits', // Fetch stock splits
@@ -330,25 +330,31 @@ class StockChartWidgetState extends State<StockChartWidget> {
       final Security? security = Data().securities.getBySymbol(symbol);
       if (security != null) {
         // Extract the stock splits data
+        // ignore: always_specify_types
         final responseChart = jsonResponse['chart'];
         if (responseChart != null) {
+          // ignore: always_specify_types
           final responseChartResult = responseChart['result'];
           if (responseChartResult != null) {
             if ((responseChartResult is List) && responseChartResult.isNotEmpty) {
+              // ignore: always_specify_types
               final firstEntry = responseChartResult.firstOrNull;
               if (firstEntry != null) {
+                // ignore: always_specify_types
                 final events = firstEntry['events'];
                 if (events != null) {
-                  final splits = events['splits'];
+                  // ignore: always_specify_types
+                  final MyJson? splits = events['splits'] as MyJson?;
                   if (splits != null) {
-                    for (final splitJson in splits.values as List) {
+                    // ignore: always_specify_types
+                    for (var splitJson in splits.values) {
                       final int dateInMilliseconds = splitJson['date'] as int;
                       final DateTime dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
                       final StockSplit sp = StockSplit(
                         security: security.uniqueId,
                         date: dateOSplit,
-                        numerator: splitJson['numerator'] as int,
-                        denominator: splitJson['denominator'] as int,
+                        numerator: (splitJson['numerator'] as num).toInt(),
+                        denominator: (splitJson['denominator'] as num).toInt(),
                       );
                       splitsFound.add(sp);
                     }
@@ -382,7 +388,7 @@ void _paintLine(
   double top,
   double chartHeight,
 ) {
-  final rect = Rect.fromLTWH(left, top, 0.5, chartHeight);
+  final ui.Rect rect = Rect.fromLTWH(left, top, 0.5, chartHeight);
   _paint.color = color;
 
   canvas.drawRect(rect, _paint);
@@ -396,7 +402,7 @@ void _paintLabel(
   double y,
 ) {
   // Draw the text
-  final textPainter = TextPainter(
+  final TextPainter textPainter = TextPainter(
     text: TextSpan(
       text: text,
       style: TextStyle(
@@ -430,12 +436,12 @@ class PaintSplits extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final chartWidth = size.width;
-    final chartHeight = size.height;
+    final double chartWidth = size.width;
+    final double chartHeight = size.height;
 
     // lines are drawn lef to right sorted by time
     // the label are drawn bottom to top sorted by ascending amount
-    for (final split in splits) {
+    for (final StockSplit split in splits) {
       double left = 0;
       if (split.fieldDate.value!.millisecondsSinceEpoch > minX) {
         left = ((split.fieldDate.value!.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;
@@ -473,8 +479,8 @@ class PaintActivities extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final chartWidth = size.width;
-    final chartHeight = size.height;
+    final double chartWidth = size.width;
+    final double chartHeight = size.height;
 
     final double labelVerticalDistribution = chartHeight / activities.length;
     double nextVerticalLabelPosition = chartHeight - labelVerticalDistribution;
@@ -545,8 +551,8 @@ class PaintActivities extends CustomPainter {
     double height,
     Color color,
   ) {
-    final rect = Rect.fromLTWH(left, top, width, height);
-    final paint = Paint()
+    final ui.Rect rect = Rect.fromLTWH(left, top, width, height);
+    final ui.Paint paint = Paint()
       ..color = color
       ..style = PaintingStyle.fill;
 
@@ -567,12 +573,12 @@ class PaintDividends extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final chartWidth = size.width;
-    final chartHeight = size.height;
+    final double chartWidth = size.width;
+    final double chartHeight = size.height;
 
     // lines are drawn lef to right sorted by time
     // the label are drawn at bottom
-    for (final item in list) {
+    for (final Dividend item in list) {
       double left = 0;
       if (item.date.millisecondsSinceEpoch > minX) {
         left = ((item.date.millisecondsSinceEpoch - minX) / (maxX - minX)) * chartWidth;

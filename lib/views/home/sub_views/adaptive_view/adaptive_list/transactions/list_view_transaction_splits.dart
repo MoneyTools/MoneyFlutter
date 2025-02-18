@@ -59,10 +59,10 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
           child: MyListView<MoneySplit>(
             fields: MoneySplit.fields.definitions,
             list: widget.transaction.splits,
-            selectedItemIds: ValueNotifier<List<int>>([]),
+            selectedItemIds: ValueNotifier<List<int>>(<int>[]),
             onSelectionChanged: (int _) {},
             onLongPress: (final BuildContext context2, final int uniqueId) {
-              final MoneySplit? instance = widget.transaction.splits.firstWhereOrNull((t) => t.uniqueId == uniqueId);
+              final MoneySplit? instance = widget.transaction.splits.firstWhereOrNull((MoneySplit t) => t.uniqueId == uniqueId);
               if (instance != null) {
                 showSplitAndActions(
                   context: context2,
@@ -75,16 +75,16 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: <Widget>[
             ElevatedButton(
               onPressed: () {
                 setState(() {
                   // update
                 });
               },
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
-                children: [
+                children: <Widget>[
                   Icon(Icons.refresh),
                   SizedBox(width: 8),
                   Text('Refresh list'),
@@ -105,22 +105,22 @@ class _ListViewTransactionSplitsState extends State<ListViewTransactionSplits> {
   bool get isTotalMatching => amountDelta == 0;
 
   double get sumOfSplits {
-    return widget.transaction.splits.fold(0.0, (sum, split) => sum + split.fieldAmount.value.asDouble());
+    return widget.transaction.splits.fold(0.0, (double sum, MoneySplit split) => sum + split.fieldAmount.value.asDouble());
   }
 
   Widget _buildTally() {
     if (isTotalMatching) {
       return Row(
-        children: [
-          Text('Amount is matching'),
+        children: <Widget>[
+          const Text('Amount is matching'),
           gapSmall(),
           MoneyWidget.fromDouble(sumOfSplits),
         ],
       );
     } else {
       return Row(
-        children: [
-          Text('Amount is off by'),
+        children: <Widget>[
+          const Text('Amount is off by'),
           gapSmall(),
           MoneyWidget.fromDouble(amountDelta),
         ],

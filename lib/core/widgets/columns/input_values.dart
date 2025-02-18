@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/box.dart';
 import 'package:money/core/widgets/columns/columns_input.dart';
@@ -23,7 +24,7 @@ class InputValues extends StatelessWidget {
 
     return Stack(
       fit: StackFit.expand,
-      children: [
+      children: <Widget>[
         Box(
           height: 200,
           width: 800,
@@ -40,7 +41,7 @@ class InputValues extends StatelessWidget {
               fontSize: SizeForText.medium,
               overflow: TextOverflow.fade,
             ),
-            inputFormatters: [
+            inputFormatters: <TextInputFormatter>[
               TextInputFormatterRemoveEmptyLines(), // remove empty line
             ],
           ),

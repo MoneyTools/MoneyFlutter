@@ -41,7 +41,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
   final bool isMultiSelectionOn;
   final List<MoneyObject> list;
   final ListController listController;
-  final Function? onContextMenu;
+  final void Function()? onContextMenu;
   final bool sortAscending;
   final int sortByFieldIndex;
 
@@ -53,7 +53,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theContent = Column(
+    final Column theContent = Column(
       children: <Widget>[
         // Header
         if (displayAsColumns)
@@ -68,7 +68,7 @@ class AdaptiveListColumnsOrRows extends StatelessWidget {
                 ? (bool selectAllRequested) {
                     selectedItemsByUniqueId.value.clear();
                     if (selectAllRequested) {
-                      for (final item in list) {
+                      for (final MoneyObject item in list) {
                         selectedItemsByUniqueId.value.add(item.uniqueId);
                       }
                     }

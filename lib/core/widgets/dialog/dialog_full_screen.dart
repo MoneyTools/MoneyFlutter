@@ -7,7 +7,7 @@ class FullScreenDialog extends StatefulWidget {
     required this.title,
     required this.content,
     super.key,
-    this.actionButtons = const [],
+    this.actionButtons = const <Widget>[],
   });
 
   final List<Widget> actionButtons;
@@ -27,7 +27,7 @@ class FullScreenDialogState extends State<FullScreenDialog> {
         title: Text(widget.title),
       ),
       Column(
-        children: [
+        children: <Widget>[
           Expanded(
             child: widget.content,
           ),

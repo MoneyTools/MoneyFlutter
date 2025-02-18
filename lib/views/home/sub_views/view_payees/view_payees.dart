@@ -27,7 +27,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
   /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    final list = super.getActionsButtons(forSidePanelTransactions);
+    final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
     if (!forSidePanelTransactions) {
       /// Merge
       final MoneyObject? moneyObject = getFirstSelectedItem();
@@ -36,7 +36,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
           buildMergeButton(
             () {
               // let the user pick another Payee and merge change the transaction of the current selected payee to the destination
-              final payee = (moneyObject as Payee);
+              final Payee payee = (moneyObject as Payee);
               showMergePayee(context, payee);
             },
           ),
@@ -47,7 +47,7 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
       if (getFirstSelectedItem() != null) {
         list.add(
           buildJumpToButton(
-            [
+            <MenuEntry>[
               MenuEntry(
                 icon: ViewId.viewTransactions.getIconData(),
                 title: 'Switch to Transactions',
@@ -89,11 +89,11 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
 
   @override
   List<Payee> getList({bool includeDeleted = false, bool applyFilter = true}) {
-    final list = Data()
+    final List<Payee> list = Data()
         .payees
         .iterableList(includeDeleted: includeDeleted)
         .where(
-          (instance) => (applyFilter == false || isMatchingFilters(instance)),
+          (Payee instance) => (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
 
@@ -117,6 +117,6 @@ class ViewPayeesState extends ViewForMoneyObjectsState {
         filter: (final Transaction transaction) => transaction.fieldPayee.value == payee.fieldId.value,
       );
     }
-    return [];
+    return <MoneyObject>[];
   }
 }

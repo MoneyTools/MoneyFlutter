@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:money/core/helpers/color_helper.dart';
 
 class SnackBarService {
-  static final scaffoldKey = GlobalKey<ScaffoldMessengerState>();
+  static final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey<ScaffoldMessengerState>();
 
   static void display({
     required String title,

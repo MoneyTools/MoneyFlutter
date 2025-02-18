@@ -29,7 +29,7 @@ class BarChartWidget extends StatelessWidget {
         .skip(topCategoryToShow)
         .fold(0.0, (double prev, PairIntDouble current) => prev + current.value);
 
-    final List<Widget> bars = [];
+    final List<Widget> bars = <Widget>[];
 
     for (int top = 0; top < topCategoryToShow; top++) {
       final Category? category = Data().categories.get(listCategoryNameToAmount[top].key);
@@ -67,7 +67,7 @@ class BarChartWidget extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Expanded(
           flex: 2,
           child: Text(

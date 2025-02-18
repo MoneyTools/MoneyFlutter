@@ -107,7 +107,7 @@ Widget buildFieldWidgetForPercentage({
   // 0.000 to 100.000%
   return Row(
     mainAxisAlignment: MainAxisAlignment.end,
-    children: [
+    children: <Widget>[
       Opacity(
         opacity: value == 0 ? 0.4 : 1,
         child: Text(
@@ -177,7 +177,7 @@ Widget buildWidgetFromTypeAndValue({
     // Quantity
     case FieldType.quantity:
       return Row(
-        children: [
+        children: <Widget>[
           Expanded(
             child: (value is num)
                 ? QuantityWidget(

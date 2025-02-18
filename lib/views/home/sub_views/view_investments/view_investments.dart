@@ -28,7 +28,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
   /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    final list = super.getActionsButtons(forSidePanelTransactions);
+    final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
     if (!forSidePanelTransactions) {
       final Investment? selectedInvestment = getFirstSelectedItem() as Investment?;
 
@@ -37,7 +37,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
         final Transaction? relatedTransaction = Data().transactions.get(selectedInvestment.uniqueId);
         list.add(
           buildJumpToButton(
-            [
+            <MenuEntry>[
               // Jump to Account view
               MenuEntry.toAccounts(accountId: relatedTransaction!.fieldAccountId.value),
 
@@ -100,11 +100,11 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final list = Data()
+    final List<Investment> list = Data()
         .investments
         .iterableList(includeDeleted: includeDeleted)
         .where(
-          (instance) => (applyFilter == false || isMatchingFilters(instance)),
+          (Investment instance) => (applyFilter == false || isMatchingFilters(instance)),
         )
         .toList();
     Investments.applyHoldingSharesAdjustedForSplits(list);

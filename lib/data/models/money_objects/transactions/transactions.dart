@@ -7,6 +7,8 @@ import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/widgets/chart.dart';
 import 'package:money/data/models/money_objects/accounts/account.dart';
+import 'package:money/data/models/money_objects/events/event.dart';
+import 'package:money/data/models/money_objects/splits/money_split.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/models/money_objects/transfers/transfer.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -44,7 +46,7 @@ class Transactions extends MoneyObjects<Transaction> {
     // We use this to give a Hint to the user about the best category to pick for a transaction
     final MapAccumulatorSet<int, String, int> accountsToPayeeNameToCategories = MapAccumulatorSet<int, String, int>();
 
-    final transactionsWithCategories = getListFlattenSplits();
+    final List<Transaction> transactionsWithCategories = getListFlattenSplits();
     for (final Transaction t in transactionsWithCategories) {
       if (t.fieldCategoryId.value != -1) {
         accountsToPayeeNameToCategories.cumulate(
@@ -157,31 +159,31 @@ class Transactions extends MoneyObjects<Transaction> {
     final AccumulatorSum<String, double> cumulateYearMonthBalance = AccumulatorSum<String, double>();
 
     // Add transactions to the accumulator
-    for (final t in transactions) {
+    for (final Transaction t in transactions) {
       final String dateKey = dateToString(t.fieldDateTime.value);
       cumulateYearMonthBalance.cumulate(dateKey, t.fieldAmount.value.asDouble());
     }
 
     // Add events to the accumulator with zero amount
-    for (final event in Data().events.iterableList()) {
+    for (final Event event in Data().events.iterableList()) {
       final String dateKey = dateToString(event.fieldDateBegin.value);
       cumulateYearMonthBalance.cumulate(dateKey, 0.0);
     }
 
-    final List<FlSpot> tmpDataPoints = [];
+    final List<FlSpot> tmpDataPoints = <FlSpot>[];
     cumulateYearMonthBalance.getEntries().forEach(
-      (entry) {
-        final tokens = entry.key.split('-');
+      (MapEntry<String, double> entry) {
+        final List<String> tokens = entry.key.split('-');
         final DateTime dateForYearMonth = DateTime(int.parse(tokens[0]), int.parse(tokens[1]), int.parse(tokens[2]));
         tmpDataPoints.add(FlSpot(dateForYearMonth.millisecondsSinceEpoch.toDouble(), entry.value));
       },
     );
 
-    tmpDataPoints.sort((a, b) => a.x.compareTo(b.x));
+    tmpDataPoints.sort((FlSpot a, FlSpot b) => a.x.compareTo(b.x));
 
     double netWorth = 0;
-    final List<FlSpot> tmpDataPointsWithNetWorth = [];
-    for (final dp in tmpDataPoints) {
+    final List<FlSpot> tmpDataPointsWithNetWorth = <FlSpot>[];
+    for (final FlSpot dp in tmpDataPoints) {
       netWorth += dp.y;
       tmpDataPointsWithNetWorth.add(FlSpot(dp.x, netWorth));
     }
@@ -195,7 +197,7 @@ class Transactions extends MoneyObjects<Transaction> {
     required final DateRange dateRange,
     required final double amount,
   }) {
-    return iterableList(includeDeleted: true).firstWhereOrNull((transaction) {
+    return iterableList(includeDeleted: true).firstWhereOrNull((Transaction transaction) {
       if ((accountId == -1 || transaction.fieldAccountId.value == accountId) &&
           transaction.fieldAmount.value.asDouble() == amount &&
           dateRange.isBetweenEqual(transaction.fieldDateTime.value)) {
@@ -207,8 +209,8 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   int findPossibleMatchingCategoryId(final Transaction t, List<Transaction> transactionWithCategories) {
-    final transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
-      (item) =>
+    final Transaction? transactionMatchingAccountPayeeAndHasCategory = transactionWithCategories.firstWhereOrNull(
+      (Transaction item) =>
           item.fieldAccountId.value == t.fieldAccountId.value &&
           item.getPayeeOrTransferCaption() == t.getPayeeOrTransferCaption(),
     );
@@ -219,7 +221,7 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   Iterable<Transaction> findTransfersToAccount(final Account a) {
-    final List<Transaction> view = [];
+    final List<Transaction> view = <Transaction>[];
     for (Transaction t in iterableList()) {
       if (t.isDeleted) {
         continue;
@@ -236,10 +238,10 @@ class Transactions extends MoneyObjects<Transaction> {
   static List<Transaction> flatTransactions(
     final Iterable<Transaction> transactions,
   ) {
-    final List<Transaction> flatList = [];
-    for (final t in transactions) {
+    final List<Transaction> flatList = <Transaction>[];
+    for (final Transaction t in transactions) {
       if (t.isSplit) {
-        for (final s in t.splits) {
+        for (final MoneySplit s in t.splits) {
           final Transaction fakeTransaction = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value);
           fakeTransaction.fieldAccountId.value = t.fieldAccountId.value;
           fakeTransaction.fieldPayee.value = t.fieldPayee.value;
@@ -256,9 +258,9 @@ class Transactions extends MoneyObjects<Transaction> {
   }
 
   List<DateTime> getAllTransactionDatesForYear(final int year) {
-    final transactions = transactionInYearRange(minYear: year, maxYear: year, incomesOrExpenses: null);
-    final List<DateTime> dates = [];
-    for (final t in transactions) {
+    final Iterable<Transaction> transactions = transactionInYearRange(minYear: year, maxYear: year, incomesOrExpenses: null);
+    final List<DateTime> dates = <DateTime>[];
+    for (final Transaction t in transactions) {
       if (t.fieldDateTime.value?.year == year && !dates.contains(t.fieldDateTime.value)) {
         dates.add(t.fieldDateTime.value!);
       }
@@ -269,12 +271,12 @@ class Transactions extends MoneyObjects<Transaction> {
   List<Transaction> getListFlattenSplits({
     final bool Function(Transaction)? whereClause,
   }) {
-    final List<Transaction> flattenList = [];
-    for (final t in iterableList()) {
+    final List<Transaction> flattenList = <Transaction>[];
+    for (final Transaction t in iterableList()) {
       if (whereClause == null || whereClause(t)) {
         if (t.fieldCategoryId.value == Data().categories.splitCategoryId()) {
-          for (final s in t.splits) {
-            final fakeT = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value)
+          for (final MoneySplit s in t.splits) {
+            final Transaction fakeT = Transaction(date: t.fieldDateTime.value, status: t.fieldStatus.value)
               ..fieldAccountId.value = t.fieldAccountId.value
               ..fieldPayee.value = s.fieldPayeeId.value == -1 ? t.fieldPayee.value : s.fieldPayeeId.value
               ..fieldCategoryId.value = s.fieldCategoryId.value
@@ -297,7 +299,7 @@ class Transactions extends MoneyObjects<Transaction> {
     required final bool? incomesOrExpenses,
   }) {
     return iterableList(includeDeleted: true).where(
-      (element) =>
+      (Transaction element) =>
           isBetweenOrEqual(element.fieldDateTime.value!.year, minYear, maxYear) &&
           ((incomesOrExpenses == null ||
               (incomesOrExpenses == true && element.fieldAmount.value.asDouble() > 0) ||
@@ -337,8 +339,8 @@ class Transactions extends MoneyObjects<Transaction> {
       sums[key] = (sums[key] ?? 0) + t.fieldAmount.value.asDouble();
     }
 
-    final List<PairXYY> result = sums.entries.map((e) => PairXYY(e.key, e.value)).toList();
-    result.sort((a, b) => a.xText.compareTo(b.xText));
+    final List<PairXYY> result = sums.entries.map((MapEntry<String, double> e) => PairXYY(e.key, e.value)).toList();
+    result.sort((PairXYY a, PairXYY b) => a.xText.compareTo(b.xText));
     return result;
   }
 
@@ -357,13 +359,13 @@ class Transactions extends MoneyObjects<Transaction> {
   static List<Pair<int, double>> transactionSumByTime(
     List<Transaction> transactions,
   ) {
-    final List<Pair<int, double>> timeAndAmounts = [];
-    for (final t in transactions) {
+    final List<Pair<int, double>> timeAndAmounts = <Pair<int, double>>[];
+    for (final Transaction t in transactions) {
       final int oneDaySlot = t.fieldDateTime.value!.millisecondsSinceEpoch ~/ Duration.millisecondsPerDay;
       timeAndAmounts.add(Pair<int, double>(oneDaySlot, t.fieldAmount.value.asDouble()));
     }
     // sort by date time
-    timeAndAmounts.sort((a, b) => a.first.compareTo(b.first));
+    timeAndAmounts.sort((Pair<int, double> a, Pair<int, double> b) => a.first.compareTo(b.first));
     return timeAndAmounts;
   }
 }

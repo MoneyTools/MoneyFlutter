@@ -39,7 +39,7 @@ class ColorPalette extends StatelessWidget {
   @override
   Widget build(final BuildContext context) {
     return Column(
-      children: [
+      children: <Widget>[
         const Divider(),
         const Text('Helper for debugging'),
         _buildColorBar(
@@ -146,10 +146,10 @@ class ColorPalette extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
+                children: <Widget>[
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
+                    children: <Widget>[
                       Expanded(
                         child: Container(
                           height: 10,

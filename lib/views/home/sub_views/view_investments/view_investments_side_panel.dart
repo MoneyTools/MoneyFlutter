@@ -8,10 +8,10 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
   }) {
     double balance = 0.00;
 
-    final investments = getList();
-    investments.sort((a, b) => sortByDate(a.date, b.date, true));
+    final List<Investment> investments = getList();
+    investments.sort((Investment a, Investment b) => sortByDate(a.date, b.date, true));
 
-    final List<FlSpot> dataPoints = [];
+    final List<FlSpot> dataPoints = <FlSpot>[];
     if (investments.isEmpty) {
       return const CenterMessage(message: 'No data');
     }
@@ -59,17 +59,17 @@ extension ViewInvestmentsSidePanel on ViewInvestmentsState {
     }
 
     // get the related Transaction in order to get the associated Account
-    final listOfInvestmentIdForThisSecurityAndAccount = Data()
+    final List<int> listOfInvestmentIdForThisSecurityAndAccount = Data()
         .investments
         .iterableList()
         .where(
-          (i) => _isSameSecurityFromTheSameAccount(
+          (Investment i) => _isSameSecurityFromTheSameAccount(
             i,
             instance.fieldSecurity.value,
             _getAccountIdForInvestment(instance.uniqueId),
           ),
         )
-        .map((i) => i.uniqueId)
+        .map((Investment i) => i.uniqueId)
         .toList();
 
     final List<Transaction> listOfTransactions = getTransactions(

@@ -13,7 +13,7 @@ void showTransactionSplits(final Transaction transaction) {
     child: IntrinsicHeight(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Text(transaction.toString()),
           gapLarge(),
           SizedBox(
@@ -24,7 +24,7 @@ void showTransactionSplits(final Transaction transaction) {
         ],
       ),
     ),
-    actionButtons: [
+    actionButtons: <Widget>[
       DialogActionButton(
         text: 'Add',
         onPressed: () {

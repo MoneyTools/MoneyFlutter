@@ -40,7 +40,7 @@ class ViewRentalsSidePanel {
   /// Calculates the Profit & Loss (P&L) over the years for a given rental property.
   /// Currently unused and incomplete. Needs further implementation to calculate and store P&L values.
   void getPnLOverYears(RentBuilding rental) {
-    for (final transaction in Data().transactions.iterableList()) {
+    for (final Transaction transaction in Data().transactions.iterableList()) {
       if (rental.categoryForIncomeTreeIds.contains(transaction.fieldCategoryId.value)) {
         // TODO: Implement P&L calculation logic here
       }
@@ -71,7 +71,7 @@ class ViewRentalsSidePanel {
       //
       final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
-      final List<PairXYY> dataPoints = [];
+      final List<PairXYY> dataPoints = <PairXYY>[];
 
       if (!rental.dateRangeOfOperation.hasNullDates) {
         for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {
@@ -95,14 +95,14 @@ class ViewRentalsSidePanel {
     required final bool showAsNativeCurrency, // Currently unused
   }) {
     if (selectedIds.isEmpty) {
-      return Text('Select a Rental property to see its P&L');
+      return const Text('Select a Rental property to see its P&L');
     }
 
     // Single Rental property selected
     final RentBuilding rental = Data().rentBuildings.get(selectedIds.first) as RentBuilding;
 
     // Show PnL for the selected rental property, per year
-    final List<Widget> pnlCards = [];
+    final List<Widget> pnlCards = <Widget>[];
 
     if (!rental.dateRangeOfOperation.hasNullDates) {
       for (int year = rental.dateRangeOfOperation.min!.year; year <= rental.dateRangeOfOperation.max!.year; year++) {

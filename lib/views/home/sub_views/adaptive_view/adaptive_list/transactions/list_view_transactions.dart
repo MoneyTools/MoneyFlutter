@@ -81,7 +81,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
         showTransactionAndActions(
           context: context2,
           transaction: instance,
-        ).then((value) {
+        ).then((final dynamic _) {
           widget.selectionController.select(uniqueId);
           widget.onUserChoiceChanged?.call(_sortBy, _sortAscending, widget.selectionController.firstSelectedId);
         });
@@ -93,7 +93,7 @@ class _ListViewTransactionsState extends State<ListViewTransactions> {
 List<Transaction> getTransactions({bool Function(Transaction)? filter, bool flattenSplits = false}) {
   filter ??= (Transaction transaction) => true;
 
-  List<Transaction> list = [];
+  List<Transaction> list = <Transaction>[];
 
   if (flattenSplits) {
     // Flatten the splits
@@ -105,7 +105,7 @@ List<Transaction> getTransactions({bool Function(Transaction)? filter, bool flat
     list = Data().transactions.iterableList().where((final Transaction transaction) => filter!(transaction)).toList();
   }
 
-  list.sort((a, b) => Transaction.sortByDateTime(a, b, true));
+  list.sort((Transaction a, Transaction b) => Transaction.sortByDateTime(a, b, true));
 
   double runningBalance = 0.0;
   for (Transaction transaction in list) {

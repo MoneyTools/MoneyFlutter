@@ -121,10 +121,10 @@ class Transfer extends MoneyObject {
   }
 
   static Fields<Transfer> get fieldsForColumnView {
-    final tmp = Transfer.fromJson({});
+    final Transfer tmp = Transfer.fromJson(<String, dynamic>{});
 
     return Fields<Transfer>()
-      ..setDefinitions([
+      ..setDefinitions(<Field<dynamic>>[
         tmp.fieldSenderTransactionDate,
         tmp.fieldSenderAccountId,
         tmp.fieldSenderTransactionStatus,

@@ -19,7 +19,7 @@ class Payee extends MoneyObject {
     return Payee();
   }
 
-  Set<String> categories = {};
+  Set<String> categories = <String>{};
   FieldString fieldCategoriesAsText = FieldString(
     name: 'Categories',
     getValueForDisplay: (final MoneyObject instance) => (instance as Payee).getCategoriesAsString(),
@@ -74,12 +74,12 @@ class Payee extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<Payee>();
+  static final Fields<Payee> _fields = Fields<Payee>();
 
   static Fields<Payee> get fields {
     if (_fields.isEmpty) {
-      final tmp = Payee.fromJson({});
-      _fields.setDefinitions([
+      final Payee tmp = Payee.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldName,
         tmp.fieldCategoriesAsText,
@@ -97,9 +97,9 @@ class Payee extends MoneyObject {
   /// - [Payee.fieldCount]: The count or number of occurrences for the payee.
   /// - [Payee.fieldSum]: The total sum or amount associated with the payee.
   static Fields<Payee> get fieldsForColumnView {
-    final tmp = Payee.fromJson({});
+    final Payee tmp = Payee.fromJson(<String, dynamic>{});
     return Fields<Payee>()
-      ..setDefinitions([
+      ..setDefinitions(<Field<dynamic>>[
         tmp.fieldName,
         tmp.fieldCategoriesAsText,
         tmp.fieldCount,

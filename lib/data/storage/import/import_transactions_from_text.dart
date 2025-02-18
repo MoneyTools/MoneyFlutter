@@ -20,7 +20,7 @@ void showImportTransactionsFromTextInput(
 
   final ValuesParser parser = ValuesParser(dateFormat: 'MM/dd/yyyy', currency: 'USD');
 
-  final List<Widget> actionButtons = [
+  final List<Widget> actionButtons = <Widget>[
     // Button - Import
     DialogActionButton(
       text: 'Import',
@@ -29,11 +29,11 @@ void showImportTransactionsFromTextInput(
           messageBox(context, 'Nothing to import');
         } else {
           // Import
-          final List<Transaction> transactionsToAdd = [];
+          final List<Transaction> transactionsToAdd = <Transaction>[];
 
           for (final ValuesQuality singleTransactionInput in parser.lines) {
             if (!singleTransactionInput.exist) {
-              final t = Transaction.fromDateDescriptionAmount(
+              final Transaction t = Transaction.fromDateDescriptionAmount(
                 account,
                 singleTransactionInput.date.asDate() ?? DateTime.now(),
                 singleTransactionInput.description.asString(),
@@ -59,7 +59,7 @@ void showImportTransactionsFromTextInput(
     actionButtons: actionButtons,
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         gapLarge(),
         Expanded(
           child: ImportTransactionsPanel(
@@ -93,7 +93,7 @@ void addNewTransactions(
     return;
   }
 
-  for (final transactionToAdd in transactionsNew) {
+  for (final Transaction transactionToAdd in transactionsNew) {
     Data().transactions.appendNewMoneyObject(transactionToAdd, fireNotification: false);
   }
   Data().updateAll();

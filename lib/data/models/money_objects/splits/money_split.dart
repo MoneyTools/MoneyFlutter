@@ -144,7 +144,7 @@ class MoneySplit extends MoneyObject {
     ) {
       (instance as MoneySplit);
       return Row(
-        children: [
+        children: <Widget>[
           Expanded(
             child: pickerCategory(
               key: const Key('key_pick_category'),
@@ -231,14 +231,14 @@ class MoneySplit extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<MoneySplit>();
+  static final Fields<MoneySplit> _fields = Fields<MoneySplit>();
 
   String get categoryName => Data().categories.getNameFromId(fieldCategoryId.value);
 
   static Fields<MoneySplit> get fields {
     if (_fields.isEmpty) {
-      final tmp = MoneySplit.fromJson({});
-      _fields.setDefinitions([
+      final MoneySplit tmp = MoneySplit.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldTransactionId,
         tmp.fieldPayeeId,

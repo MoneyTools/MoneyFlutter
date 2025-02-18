@@ -24,15 +24,15 @@ class NumberPicker extends StatelessWidget {
       child: IntrinsicWidth(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text('$title:'),
             gapSmall(),
             Expanded(
               child: DropdownButton<int>(
                 value: selectedNumber,
-                items: List.generate(
+                items: List<DropdownMenuItem<int>>.generate(
                   maxValue - minValue + 1,
-                  (index) => DropdownMenuItem(
+                  (int index) => DropdownMenuItem<int>(
                     value: index + minValue,
                     child: Text('${index + minValue}'),
                   ),

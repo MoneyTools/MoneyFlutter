@@ -215,10 +215,10 @@ String colorToHexString(
 ///
 Color contrastColor(Color color) {
   // Calculate the luminance of the color
-  final luminance = (0.299 * (color.r * 255) + 0.587 * (color.g * 255) + 0.114 * (color.b * 255)) / 255;
+  final double luminance = (0.299 * (color.r * 255) + 0.587 * (color.g * 255) + 0.114 * (color.b * 255)) / 255;
 
   // Determine whether to make the contrast color black or white based on the luminance
-  final contrastColor = luminance > 0.5 ? Colors.black : Colors.white;
+  final Color contrastColor = luminance > 0.5 ? Colors.black : Colors.white;
 
   return contrastColor;
 }
@@ -259,7 +259,7 @@ ColorScheme getColorTheme(final BuildContext context) {
 ///
 Pair<double, double> getHueAndBrightness(Color color) {
   final HSLColor hslColor = HSLColor.fromColor(color);
-  return Pair(hslColor.hue, 1 - hslColor.lightness);
+  return Pair<double, double>(hslColor.hue, 1 - hslColor.lightness);
 }
 
 /// Retrieves the hue and brightness values from the given Color object in the HSL color space.

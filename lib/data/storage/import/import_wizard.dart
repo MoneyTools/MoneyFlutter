@@ -22,7 +22,7 @@ void showImportTransactionsWizard() {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 40,
-        children: [
+        children: <Widget>[
           gapMedium(),
           WizardChoice(
             title: 'From QFX/QIF file',

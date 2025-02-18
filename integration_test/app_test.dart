@@ -225,7 +225,7 @@ Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
 
   await tapOnKeyString(tester, 'key_import_tab_free_style');
   await tester.pumpAndSettle();
-  final textFieldInput = find.byKey(const Key('key_input_text_field_value')).at(0); // top most element found
+  final Finder textFieldInput = find.byKey(const Key('key_input_text_field_value')).at(0); // top most element found
   await tester.pumpAndSettle(Durations.extralong4);
   await inputTextToElement(
     tester,
@@ -245,7 +245,7 @@ Future<void> testImportBulkManualTextInput(WidgetTester tester) async {
 Future<void> testThemeColors(WidgetTester tester) async {
   // Change Colors, Purple is the default, and we use "Teal" as the last color.
   {
-    for (final String themeColorName in ['Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Teal']) {
+    for (final String themeColorName in <String>['Blue', 'Green', 'Yellow', 'Orange', 'Pink', 'Teal']) {
       await tapOnKey(tester, Constants.keySettingsButton);
       await tapOnKeyString(tester, 'key_theme_$themeColorName');
     }
@@ -317,7 +317,7 @@ Future<void> testCashFlow(WidgetTester tester) async {
 
   await tapOnText(tester, 'Trend');
 
-  final barChartFinder = find.byType(BarChart);
+  final Finder barChartFinder = find.byType(BarChart);
   expect(barChartFinder, findsOneWidget);
 
   // Define scan parameters
@@ -401,7 +401,7 @@ Future<void> testAccounts(WidgetTester tester) async {
   await tapOnKeyString(tester, 'key_menu_accounts');
 
   // Iterate over all found ToggleButtons and click on each child button
-  await tapAllToggleButtons(tester, [
+  await tapAllToggleButtons(tester, <String>[
     'key_toggle_show_bank',
     'key_toggle_show_investment',
     'key_toggle_show_credit',
@@ -512,7 +512,7 @@ Future<void> testCategories(WidgetTester tester) async {
   await tapOnText(tester, 'Categories');
 
 // Iterate over all found ToggleButtons and click on each child button
-  await tapAllToggleButtons(tester, [
+  await tapAllToggleButtons(tester, <String>[
     'key_toggle_show_none',
     'key_toggle_show_expenses',
     'key_toggle_show_saving',
@@ -574,7 +574,7 @@ Future<void> testEvents(WidgetTester tester) async {
     // Edit the name
     {
       // Find the TextFormField by its labelText in the InputDecoration.
-      final textFieldFinder = find.widgetWithText(TextFormField, 'Name');
+      final Finder textFieldFinder = find.widgetWithText(TextFormField, 'Name');
 
       // Check if the TextFormField with the labelText was found.
       expect(textFieldFinder, findsOneWidget);
@@ -589,13 +589,13 @@ Future<void> testEvents(WidgetTester tester) async {
     // Edit the date
     {
       // Find the TextFormField (or TextField) by its labelText.
-      final textFormFieldFinder = find.widgetWithText(InputDecorator, 'Begins');
+      final Finder textFormFieldFinder = find.widgetWithText(InputDecorator, 'Begins');
 
       // Check if the TextFormField with the labelText was found.
       expect(textFormFieldFinder, findsOneWidget);
 
       // Find the EditableText widget within the TextFormField, which is the actual input box.
-      final editableTextFinder = find.descendant(
+      final Finder editableTextFinder = find.descendant(
         of: textFormFieldFinder,
         matching: find.byType(EditableText),
       );
@@ -682,7 +682,7 @@ Future<void> testStocks(WidgetTester tester) async {
   await tapOnTextFromParentType(tester, SidePanelHeader, 'Chart');
   await tapOnText(tester, 'Set API Key');
 
-  await inputTextToElementByKey(tester, Key('key_single_input_dialog'), Constants.fakeStockApiKey);
+  await inputTextToElementByKey(tester, const Key('key_single_input_dialog'), Constants.fakeStockApiKey);
 
   await tapOnText(tester, 'Continue');
 
@@ -788,7 +788,7 @@ Future<void> testTransactions(WidgetTester tester) async {
   }
 
   // By selecting the first Transaction in the list that is a s 'split' we end up showing on the info-panel the sub-transactions of that Split
-  final firstRow = await tapOnFirstRowOfListView(tester);
+  final Finder firstRow = await tapOnFirstRowOfListView(tester);
 
   // Do some CRUD with Splits
   {

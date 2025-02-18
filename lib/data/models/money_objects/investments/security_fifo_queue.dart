@@ -13,10 +13,10 @@ class SecurityFifoQueue {
   /// The account the security is held in.
   Account? account;
 
-  List<SecurityPurchase> list = [];
+  List<SecurityPurchase> list = <SecurityPurchase>[];
 
   /// list of pending sales that we couldn't cover before, we keep these until the matching Buy arrives.
-  List<SecuritySale> pending = [];
+  List<SecuritySale> pending = <SecuritySale>[];
 
   /// The security that we are tracking with this queue.
   Security? security;
@@ -45,7 +45,7 @@ class SecurityFifoQueue {
   }
 
   List<SecurityPurchase> getHoldings() {
-    final List<SecurityPurchase> result = [];
+    final List<SecurityPurchase> result = <SecurityPurchase>[];
     for (SecurityPurchase sp in this.list) {
       if (sp.unitsRemaining > 0) {
         result.add(sp);
@@ -60,9 +60,9 @@ class SecurityFifoQueue {
 
   List<SecuritySale> processPendingSales() {
 // now that more has arrived, time to see if we can process those pending sales.
-    final List<SecuritySale> copy = List.from(this.pending);
+    final List<SecuritySale> copy = List<SecuritySale>.from(this.pending);
     this.pending.clear();
-    final List<SecuritySale> result = [];
+    final List<SecuritySale> result = <SecuritySale>[];
     for (final SecuritySale s in copy) {
       // this will put any remainder back in the pending list if it still can't be covered.
       for (SecuritySale real in this.sell(s.dateSold!, s.unitsSold, s.unitsSold * s.salePricePerUnit)) {
@@ -82,8 +82,8 @@ class SecurityFifoQueue {
   /// <param name="amount">The total amount we received from the sale</param>
   List<SecuritySale> sell(DateTime dateSold, double units, double amount) {
     final double salePricePerUnit = amount / units;
-    final List<SecuritySale> result = [];
-    for (var purchase in this.list) {
+    final List<SecuritySale> result = <SecuritySale>[];
+    for (SecurityPurchase purchase in this.list) {
       final SecuritySale? sale = purchase.sell(dateSold, units, salePricePerUnit);
       if (sale != null) {
         sale.account = account;
@@ -98,7 +98,7 @@ class SecurityFifoQueue {
 
     if (units.floor() > 0) {
       // Generate an error item so we can report this problem later.
-      final ss = SecuritySale();
+      final SecuritySale ss = SecuritySale();
       ss.security = security;
       ss.account = account;
       ss.dateSold = dateSold;

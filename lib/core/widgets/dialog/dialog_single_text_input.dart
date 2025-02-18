@@ -10,7 +10,7 @@ Future<void> showTextInputDialog({
   final String title = 'Input',
   final String subTitle = '',
   final String initialValue = '',
-  Function? onCancel,
+  void Function()? onCancel,
 }) async {
   return showDialog(
     context: context,
@@ -24,7 +24,7 @@ Future<void> showTextInputDialog({
           height: 200,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+            children: <Widget>[
               Expanded(
                 child: Markdown(
                   data: subTitle,
@@ -37,7 +37,7 @@ Future<void> showTextInputDialog({
               gapLarge(),
               Expanded(
                 child: MyTextInput(
-                  key: Key('key_single_input_dialog'),
+                  key: const Key('key_single_input_dialog'),
                   controller: textEditingController,
                   hintText: 'Enter $title',
                 ),

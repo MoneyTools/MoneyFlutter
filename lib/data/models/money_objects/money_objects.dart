@@ -67,7 +67,7 @@ class MoneyObjects<T> {
   }
 
   T? firstItem([bool includeDeleted = false]) {
-    final list = iterableList(includeDeleted: includeDeleted).toList();
+    final List<T> list = iterableList(includeDeleted: includeDeleted).toList();
     if (list.isEmpty) {
       return null;
     }
@@ -140,12 +140,12 @@ class MoneyObjects<T> {
   }
 
   List<MoneyObject> getMutatedObjects(MutationType typeOfMutation) {
-    return _list.where((element) => element.mutation == typeOfMutation).toList();
+    return _list.where((MoneyObject element) => element.mutation == typeOfMutation).toList();
   }
 
   int getNextId() {
     int nextId = -1;
-    for (var moneyObject in _list) {
+    for (MoneyObject moneyObject in _list) {
       nextId = max(nextId, moneyObject.uniqueId);
     }
     return nextId + 1;
@@ -283,24 +283,24 @@ class MoneyObjects<T> {
   }
 
   List<Widget> whatWasMutated(List<MoneyObject> objects) {
-    final List<Widget> widgets = [];
-    for (final moneyObject in objects) {
+    final List<Widget> widgets = <Widget>[];
+    for (final MoneyObject moneyObject in objects) {
       final MyJson jsonDelta = moneyObject.getMutatedDiff<T>();
 
-      final List<Widget> diffWidgets = [];
+      final List<Widget> diffWidgets = <Widget>[];
 
-      jsonDelta.forEach((key, value) {
+      jsonDelta.forEach((String key, dynamic value) {
         // Field Name
         final Widget instanceName = Text(key, style: const TextStyle(fontSize: 10));
 
         switch (moneyObject.mutation) {
           case MutationType.inserted:
-            final valueToAddAsString = value['after'].toString();
+            final String valueToAddAsString = value['after'].toString();
             if (valueToAddAsString.isNotEmpty) {
               diffWidgets.add(
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     instanceName,
                     diffTextNewValue(valueToAddAsString),
                   ],
@@ -312,7 +312,7 @@ class MoneyObjects<T> {
             diffWidgets.add(
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   instanceName,
                   diffTextOldValue(value['after'].toString()),
                 ],
@@ -323,7 +323,7 @@ class MoneyObjects<T> {
             diffWidgets.add(
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   instanceName,
                   diffTextOldValue(value['before'].toString()),
                   diffTextNewValue(value['after'].toString()),
@@ -336,10 +336,10 @@ class MoneyObjects<T> {
       widgets.add(
         Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Text(
                   moneyObject.getRepresentation(),
                   style: const TextStyle(fontWeight: FontWeight.w700),
@@ -376,7 +376,7 @@ class MoneyObjects<T> {
       // No filtering needed
       return _list;
     }
-    return _list.where((final item) => item.mutation != MutationType.deleted);
+    return _list.where((final MoneyObject item) => item.mutation != MutationType.deleted);
   }
 }
 
@@ -387,5 +387,5 @@ MoneyObject? findObjectById(
   if (uniqueId == null) {
     return null;
   }
-  return listToSearch.firstWhereOrNull((element) => (element).uniqueId == uniqueId);
+  return listToSearch.firstWhereOrNull((MoneyObject element) => (element).uniqueId == uniqueId);
 }

@@ -57,7 +57,7 @@ class SecurityPurchase {
 
     unitsRemaining -= canSell;
 
-    final s = SecuritySale()
+    final SecuritySale s = SecuritySale()
       ..dateSold = date
       ..security = security
       ..costBasisPerUnit = costBasisPerUnit

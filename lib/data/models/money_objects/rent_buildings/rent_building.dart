@@ -6,6 +6,7 @@ import 'package:money/core/widgets/money_widget.dart';
 
 import 'package:money/data/models/money_objects/currencies/currency.dart';
 import 'package:money/data/models/money_objects/rental_unit/rental_unit.dart';
+import 'package:money/data/models/money_objects/splits/money_split.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/list_item_card.dart';
@@ -358,7 +359,7 @@ class RentBuilding extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as RentBuilding).note.value,
   );
 
-  Map<int, RentalPnL> pnlOverYears = {};
+  Map<int, RentalPnL> pnlOverYears = <int, RentalPnL>{};
   List<RentUnit> units = <RentUnit>[];
 
   Account? account;
@@ -385,12 +386,12 @@ class RentBuilding extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<RentBuilding>();
+  static final Fields<RentBuilding> _fields = Fields<RentBuilding>();
 
   void associateAccountToBuilding() {
     final Transaction? firstTransactionForThisBuilding =
         Data().transactions.iterableList(includeDeleted: true).firstWhereOrNull(
-              (t) => this.categoryForIncomeTreeIds.contains(t.fieldCategoryId.value),
+              (Transaction t) => this.categoryForIncomeTreeIds.contains(t.fieldCategoryId.value),
             );
     if (firstTransactionForThisBuilding != null) {
       this.account = firstTransactionForThisBuilding.instanceOfAccount;
@@ -424,7 +425,7 @@ class RentBuilding extends MoneyObject {
       }
 
       if (t.isSplit) {
-        for (final split in t.splits) {
+        for (final MoneySplit split in t.splits) {
           cumulatePnLValues(
             pnl,
             split.fieldCategoryId.value,
@@ -473,8 +474,8 @@ class RentBuilding extends MoneyObject {
 
   static Fields<RentBuilding> get fields {
     if (_fields.isEmpty) {
-      final tmp = RentBuilding.fromJson({});
-      _fields.setDefinitions([
+      final RentBuilding tmp = RentBuilding.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldName,
         tmp.fieldAddress,
@@ -509,9 +510,9 @@ class RentBuilding extends MoneyObject {
   }
 
   static Fields<RentBuilding> get fieldsForColumnView {
-    final tmp = RentBuilding.fromJson({});
+    final RentBuilding tmp = RentBuilding.fromJson(<String, dynamic>{});
     return Fields<RentBuilding>()
-      ..setDefinitions([
+      ..setDefinitions(<Field<dynamic>>[
         tmp.fieldName,
         tmp.fieldAddress,
         tmp.fieldCurrency,
@@ -544,7 +545,7 @@ class RentBuilding extends MoneyObject {
 
   RentalPnL getLifeTimePnL() {
     final RentalPnL lifeTimePnL = RentalPnL(date: DateTime.now());
-    pnlOverYears.forEach((year, pnl) {
+    pnlOverYears.forEach((int year, RentalPnL pnl) {
       dateRangeOfOperation.inflate(pnl.date);
       lifeTimePnL.income += pnl.income;
       lifeTimePnL.expenseInterest += pnl.expenseInterest;
@@ -570,7 +571,7 @@ class RentBuilding extends MoneyObject {
   bool isTransactionOrSplitAssociatedWithThisRental(Transaction t) {
     final int transactionCategoryId = t.fieldCategoryId.value;
     if (t.isSplit) {
-      for (final split in t.splits) {
+      for (final MoneySplit split in t.splits) {
         if (isTransactionAssociatedWithThisRental(split.fieldCategoryId.value)) {
           return true;
         }

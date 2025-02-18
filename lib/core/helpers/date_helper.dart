@@ -1,18 +1,18 @@
 import 'package:intl/intl.dart';
 
 List<String> generateAllDateFormats() {
-  final List<String> separators = ['-', '/'];
-  final List<String> yearFormats = ['yyyy', 'yy'];
-  final List<String> monthFormats = ['MM', 'M'];
-  final List<String> dayFormats = ['dd', 'd'];
+  final List<String> separators = <String>['-', '/'];
+  final List<String> yearFormats = <String>['yyyy', 'yy'];
+  final List<String> monthFormats = <String>['MM', 'M'];
+  final List<String> dayFormats = <String>['dd', 'd'];
 
-  final List<String> allFormats = [];
+  final List<String> allFormats = <String>[];
 
   for (String yearFormat in yearFormats) {
     for (String monthFormat in monthFormats) {
       for (String dayFormat in dayFormats) {
         for (String separator in separators) {
-          allFormats.addAll([
+          allFormats.addAll(<String>[
             '$yearFormat$separator$monthFormat$separator$dayFormat',
             '$monthFormat$separator$dayFormat$separator$yearFormat',
             '$dayFormat$separator$monthFormat$separator$yearFormat',
@@ -26,16 +26,16 @@ List<String> generateAllDateFormats() {
 }
 
 List<String> getPossibleDateFormats(String dateString) {
-  return getPossibleDateFormatsForAllValues([dateString]);
+  return getPossibleDateFormatsForAllValues(<String>[dateString]);
 }
 
 List<String> getPossibleDateFormatsForAllValues(List<String> dateStrings) {
-  final List<String> validFormats = [];
+  final List<String> validFormats = <String>[];
 
   final List<String> possibleFormats = generateAllDateFormats();
   for (final String format in possibleFormats) {
     bool supportedByAll = true;
-    for (final dateString in dateStrings) {
+    for (final String dateString in dateStrings) {
       if (!doesDateFormatWorkOnThisString(format, dateString)) {
         supportedByAll = false;
         break;
@@ -95,7 +95,7 @@ DateTime? attemptToGetDateFromDynamic(final dynamic value) {
 /// @return The parsed [DateTime] object, or `null` if no valid date is found.
 DateTime? attemptToGetDateFromText(final String text) {
   // Define a list of date formats to try
-  final List<String> dateFormats = [
+  final List<String> dateFormats = <String>[
     'yyyy-MM-dd HH:mm:ss', // ISO8601
     'yyyy-MM-dd', // ISO8601
     'MM/dd/yyyy', // USA format 4 digit year
@@ -274,14 +274,14 @@ String getElapsedTime(DateTime? dateTime, {DateTime? relativeTo}) {
     return '';
   }
 
-  final now = relativeTo ?? DateTime.now();
-  final difference = now.difference(dateTime);
+  final DateTime now = relativeTo ?? DateTime.now();
+  final Duration difference = now.difference(dateTime);
 
   if (difference.inDays >= 365) {
-    final years = difference.inDays ~/ 365;
-    final remainingDays = difference.inDays % 365;
-    final months = remainingDays ~/ 30;
-    final days = remainingDays % 30;
+    final int years = difference.inDays ~/ 365;
+    final int remainingDays = difference.inDays % 365;
+    final int months = remainingDays ~/ 30;
+    final int days = remainingDays % 30;
 
     if (months == 0 && days == 0) {
       return '$years year${years > 1 ? 's' : ''} ago';
@@ -291,8 +291,8 @@ String getElapsedTime(DateTime? dateTime, {DateTime? relativeTo}) {
       return '$years year${years > 1 ? 's' : ''}, $months month${months > 1 ? 's' : ''}, $days day${days > 1 ? 's' : ''} ago';
     }
   } else if (difference.inDays >= 30) {
-    final months = difference.inDays ~/ 30;
-    final remainingDays = difference.inDays % 30;
+    final int months = difference.inDays ~/ 30;
+    final int remainingDays = difference.inDays % 30;
     if (remainingDays == 0) {
       return '$months month${months > 1 ? 's' : ''} ago';
     } else {

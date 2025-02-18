@@ -53,7 +53,7 @@ class MyListItemHeader<T> extends StatelessWidget {
             flex: columnDefinition.columnWidth.index,
             sortIndicator: getSortIndicator(sortByColumn, i, sortAscending),
             hasFilters: filterOn.list.firstWhereOrNull(
-                  (item) => item.fieldName == columnDefinition.name,
+                  (FieldFilter item) => item.fieldName == columnDefinition.name,
                 ) !=
                 null,
             onPressed: () {

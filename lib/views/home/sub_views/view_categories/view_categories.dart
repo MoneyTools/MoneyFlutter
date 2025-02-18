@@ -45,7 +45,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
   /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    final list = super.getActionsButtons(forSidePanelTransactions);
+    final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
     if (!forSidePanelTransactions) {
       // Add a new Category, place this at the top of the list
       list.insert(
@@ -54,7 +54,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
           () {
             // add a new Category
             final Category? currentSelectedCategory = getFirstSelectedItem() as Category?;
-            final newItem = Data().categories.addNewCategory(
+            final Category newItem = Data().categories.addNewCategory(
                   parentId: currentSelectedCategory?.uniqueId ?? -1,
                 );
             updateListAndSelect(newItem.uniqueId);
@@ -99,14 +99,14 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
       if (category != null) {
         list.add(
           buildJumpToButton(
-            [
+            <MenuEntry>[
               MenuEntry.toTransactions(
                 transactionId: -1,
                 filters: FieldFilters(
-                  [
+                  <FieldFilter>[
                     FieldFilter(
                       fieldName: Constants.viewTransactionFieldNameCategory,
-                      strings: [category.uniqueId.toString()],
+                      strings: <String>[category.uniqueId.toString()],
                     ),
                   ],
                 ),
@@ -145,7 +145,7 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
     bool applyFilter = true,
   }) {
     final List<CategoryType> filterType = _getSelectedCategoryType();
-    final list = Data()
+    final List<Category> list = Data()
         .categories
         .iterableList(includeDeleted: includeDeleted)
         .where(
@@ -269,22 +269,22 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
 
   List<CategoryType> _getSelectedCategoryType() {
     if (_selectedPivot[0]) {
-      return [CategoryType.none];
+      return <CategoryType>[CategoryType.none];
     }
     if (_selectedPivot[1]) {
-      return [CategoryType.expense, CategoryType.recurringExpense];
+      return <CategoryType>[CategoryType.expense, CategoryType.recurringExpense];
     }
     if (_selectedPivot[2]) {
-      return [CategoryType.income];
+      return <CategoryType>[CategoryType.income];
     }
     if (_selectedPivot[3]) {
-      return [CategoryType.saving];
+      return <CategoryType>[CategoryType.saving];
     }
     if (_selectedPivot[4]) {
-      return [CategoryType.investment];
+      return <CategoryType>[CategoryType.investment];
     }
 
-    return []; // all
+    return <CategoryType>[]; // all
   }
 
   double _getTotalBalanceOfAccounts(final List<CategoryType> types) {
@@ -308,6 +308,6 @@ class ViewCategoriesState extends ViewForMoneyObjectsState {
             listOfDescendentCategories.contains(transaction.fieldCategoryId.value),
       );
     }
-    return [];
+    return <Transaction>[];
   }
 }

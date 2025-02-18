@@ -11,7 +11,7 @@ class WizardChoice extends StatelessWidget {
   });
 
   final String description;
-  final Function onPressed;
+  final void Function() onPressed;
   final String title;
 
   @override

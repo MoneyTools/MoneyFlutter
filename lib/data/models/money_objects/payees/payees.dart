@@ -36,7 +36,7 @@ class Payees extends MoneyObjects<Payee> {
       if (item != null) {
         item.fieldCount.value++;
         item.fieldSum.value += t.fieldAmount.value;
-        final categoryName = Data().categories.getNameFromId(t.fieldCategoryId.value).trim();
+        final String categoryName = Data().categories.getNameFromId(t.fieldCategoryId.value).trim();
         if (categoryName.isNotEmpty) {
           item.categories.add(Data().categories.getNameFromId(t.fieldCategoryId.value));
         }
@@ -59,8 +59,8 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   List<Payee> getListSorted() {
-    final list = iterableList().toList();
-    list.sort((a, b) => sortByString(a.fieldName.value, b.fieldName.value, true));
+    final List<Payee> list = iterableList().toList();
+    list.sort((Payee a, Payee b) => sortByString(a.fieldName.value, b.fieldName.value, true));
     return list;
   }
 
@@ -103,11 +103,11 @@ class Payees extends MoneyObjects<Payee> {
   }
 
   static void removePayeesThatHaveNoTransactions(List<int> payeeIds) {
-    for (final payeeId in payeeIds) {
+    for (final int payeeId in payeeIds) {
       final Payee? payeeToCheck = Data().payees.get(payeeId);
       if (payeeToCheck != null) {
         if (Data().transactions.iterableList().firstWhereOrNull(
-                  (element) => element.fieldPayee.value == payeeToCheck.uniqueId,
+                  (Transaction element) => element.fieldPayee.value == payeeToCheck.uniqueId,
                 ) ==
             null) {
           // No transactions for this payee, we can delete it

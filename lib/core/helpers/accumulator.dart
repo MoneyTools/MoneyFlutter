@@ -7,7 +7,7 @@ import 'package:money/core/helpers/ranges.dart';
 /// - Set-based storage
 /// - Key-value lookups
 class AccumulatorList<K, V> {
-  final Map<K, Set<V>> values = {};
+  final Map<K, Set<V>> values = <K, Set<V>>{};
 
   void clear() {
     values.clear();
@@ -18,7 +18,7 @@ class AccumulatorList<K, V> {
   }
 
   bool containsKeyValue(K key, V value) {
-    final setFound = values[key];
+    final Set<V>? setFound = values[key];
     if (setFound == null) {
       // the key is not a match
       return false;
@@ -34,7 +34,7 @@ class AccumulatorList<K, V> {
   /// set containing the `value` and associates it with the `key` in the `values` map.
   void cumulate(K key, V value) {
     if (values.containsKey(key)) {
-      final existingSet = values[key] as Set<V>;
+      final Set<V> existingSet = values[key] as Set<V>;
       existingSet.add(value);
     } else {
       // first time setting the set
@@ -52,7 +52,7 @@ class AccumulatorList<K, V> {
   /// If the `key` exists in the `values` map, it converts the set to a list and returns it.
   /// If the `key` doesn't exist, it returns an empty list.
   List<V> getList(K key) {
-    return values[key]?.toList() ?? [];
+    return values[key]?.toList() ?? <V>[];
   }
 
   Set<V>? getValue(K key) {
@@ -66,7 +66,7 @@ class AccumulatorList<K, V> {
 /// - Running sum calculation
 /// - Max value tracking
 class AccumulatorSum<K, V> {
-  final Map<K, V> values = {};
+  final Map<K, V> values = <K, V>{};
 
   void clear() {
     values.clear();
@@ -95,7 +95,7 @@ class AccumulatorSum<K, V> {
     V? maxFound;
 
     values.forEach(
-      (key, value) {
+      (K key, V value) {
         if (keyFound == null) {
           keyFound = key;
           maxFound = value;
@@ -126,7 +126,7 @@ class AccumulatorSum<K, V> {
 /// - Date range expansion
 /// - Range retrieval
 class AccumulatorDateRange<K> {
-  final Map<K, DateRange> values = {};
+  final Map<K, DateRange> values = <K, DateRange>{};
 
   void clear() {
     values.clear();
@@ -159,7 +159,7 @@ class AccumulatorDateRange<K> {
 /// - Count tracking
 /// - Zero value handling
 class AccumulatorAverage<K> {
-  final Map<K, RunningAverage> values = {};
+  final Map<K, RunningAverage> values = <K, RunningAverage>{};
 
   void clear() {
     values.clear();
@@ -185,7 +185,7 @@ class AccumulatorAverage<K> {
 /// - Sum accumulation
 /// - Level-based access
 class MapAccumulatorSum<K, I, V> {
-  Map<K, AccumulatorSum<I, V>> map = {};
+  Map<K, AccumulatorSum<I, V>> map = <K, AccumulatorSum<I, V>>{};
 
   void cumulate(K k, I i, V v) {
     if (!map.containsKey(k)) {
@@ -205,7 +205,7 @@ class MapAccumulatorSum<K, I, V> {
 /// - Set-based storage
 /// - Level-based access
 class MapAccumulatorSet<K, I, V> {
-  Map<K, AccumulatorList<I, V>> map = {};
+  Map<K, AccumulatorList<I, V>> map = <K, AccumulatorList<I, V>>{};
 
   void cumulate(K k, I i, V v) {
     if (!map.containsKey(k)) {
@@ -217,7 +217,7 @@ class MapAccumulatorSet<K, I, V> {
   /// Retrieves the set of values [V] associated with the given keys [K] and [I].
   /// If no values are found for the given keys, an empty set is returned.
   Set<V> find(final K key1,final I key2) {
-    final foundInLevel1 = map[key1];
+    final AccumulatorList<I, V>? foundInLevel1 = map[key1];
     return foundInLevel1?.getValue(key2) ?? <V>{};
   }
 

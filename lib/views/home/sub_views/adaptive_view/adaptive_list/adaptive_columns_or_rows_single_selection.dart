@@ -39,7 +39,7 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
   final FieldFilters filters;
   final List<MoneyObject> list;
   final ListController listController;
-  final Function? onContextMenu;
+  final void Function()? onContextMenu;
   final bool sortAscending;
   final int sortByFieldIndex;
 
@@ -54,7 +54,7 @@ class AdaptiveListColumnsOrRowsSingleSelection extends StatefulWidget {
 }
 
 class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListColumnsOrRowsSingleSelection> {
-  late final selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>([widget.selectedId]);
+  late final ValueNotifier<List<int>> selectionCollectionOfOnlyOneItem = ValueNotifier<List<int>>(<int>[widget.selectedId]);
 
   final FooterAccumulators _footerAccumulators = FooterAccumulators();
 
@@ -74,7 +74,7 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       onSelectionChanged: (final int selectedId) {
         widget.listController.bookmark = widget.listController.scrollController.offset;
         setState(() {
-          selectionCollectionOfOnlyOneItem.value = [selectedId];
+          selectionCollectionOfOnlyOneItem.value = <int>[selectedId];
           widget.onSelectionChanged?.call(selectedId);
         });
       },
@@ -92,8 +92,8 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
   void footerAccumulators() {
     _footerAccumulators.clear();
 
-    for (final item in widget.list) {
-      for (final field in widget.fieldDefinitions) {
+    for (final MoneyObject item in widget.list) {
+      for (final Field<dynamic> field in widget.fieldDefinitions) {
         switch (field.type) {
           case FieldType.text:
             _footerAccumulators.accumulatorListOfText.cumulate(field, field.getValueForDisplay(item) as String);

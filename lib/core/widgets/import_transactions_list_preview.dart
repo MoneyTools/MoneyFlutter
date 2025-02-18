@@ -26,7 +26,7 @@ class ImportTransactionsListPreview extends StatefulWidget {
 }
 
 class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPreview> {
-  late final List<Triple<String, TextAlign, int>> _columnNames = [
+  late final List<Triple<String, TextAlign, int>> _columnNames = <Triple<String, TextAlign, int>>[
     Triple<String, TextAlign, int>('Date', TextAlign.left, 1),
     Triple<String, TextAlign, int>('Description/Payee', TextAlign.left, 2),
     Triple<String, TextAlign, int>('Amount', TextAlign.right, 1),
@@ -63,7 +63,7 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
         copyToClipboardAndInformUser(context, text);
       },
       child: Column(
-        children: [
+        children: <Widget>[
           //
           // header
           //
@@ -74,9 +74,9 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
           //
           Expanded(
             child: ListView.separated(
-              separatorBuilder: (context, index) => const Divider(),
+              separatorBuilder: (BuildContext context, int index) => const Divider(),
               itemCount: widget.values.length,
-              itemBuilder: (context, index) => _buildTransactionRow(widget.values[index]),
+              itemBuilder: (BuildContext context, int index) => _buildTransactionRow(widget.values[index]),
             ),
           ),
 
@@ -88,7 +88,7 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
             padding: const EdgeInsets.all(SizeForPadding.small),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Text(
                   ValuesQuality.getDateRange(widget.values).toStringDays(),
                   style: const TextStyle(fontSize: SizeForText.small),
@@ -109,7 +109,7 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
 
   String buildTallyOfItemsToImportOrSkip() {
     final int totalItems = widget.values.length;
-    final int itemsToImport = widget.values.where((item) => !item.exist).length;
+    final int itemsToImport = widget.values.where((ValuesQuality item) => !item.exist).length;
     String text = getIntAsText(widget.values.length);
     if (totalItems != itemsToImport) {
       text = '${getIntAsText(itemsToImport)}/${getIntAsText(totalItems)}';
@@ -130,9 +130,9 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
       color: getColorTheme(context).surfaceContainerLow,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(
+        children: List<Widget>.generate(
           _columnNames.length,
-          (index) => buildColumnHeaderButton(
+          (int index) => buildColumnHeaderButton(
             context: context,
             text: _columnNames[index].first,
             textAlign: _columnNames[index].second,
@@ -151,11 +151,11 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
     BuildContext context,
     ValueQuality valueQuality,
   ) {
-    final payeeName = valueQuality.valueAsString;
-    final payeeMatch = Data().payees.getByName(payeeName) != null;
+    final String payeeName = valueQuality.valueAsString;
+    final bool payeeMatch = Data().payees.getByName(payeeName) != null;
 
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(child: valueQuality.valueAsTextWidget(context)),
         if (payeeMatch)
           const Badge(
@@ -168,15 +168,15 @@ class _ImportTransactionsListPreviewState extends State<ImportTransactionsListPr
   }
 
   Widget _buildTransactionRow(ValuesQuality value) {
-    final dateAsWidget = value.date.valueAsDateWidget(context);
-    final payeeAsWidget = _buildDescriptionOrPayee(context, value.description);
-    final amountAsWidget = value.amount.valueAsAmountWidget(context);
+    final Widget dateAsWidget = value.date.valueAsDateWidget(context);
+    final Widget payeeAsWidget = _buildDescriptionOrPayee(context, value.description);
+    final Widget amountAsWidget = value.amount.valueAsAmountWidget(context);
 
     return MyBanner(
       on: value.exist,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Expanded(flex: 1, child: dateAsWidget),
           Expanded(flex: 2, child: payeeAsWidget),
           Expanded(flex: 1, child: amountAsWidget),

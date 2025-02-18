@@ -61,7 +61,7 @@ class PreferenceController extends GetxController {
       dataController.loadLastFileSaved();
     } else {
       // queue changing screen after app loaded
-      Future.delayed(const Duration(milliseconds: 100), () {
+      Future<Null>.delayed(const Duration(milliseconds: 100), () {
         Get.offNamed<dynamic>(Constants.routeWelcomePage);
       });
     }
@@ -117,7 +117,7 @@ class PreferenceController extends GetxController {
 
   // Retrieve a list of strings from preferences
   Future<List<String>> getStringList(String key) async {
-    return _preferences?.getStringList(key) ?? [];
+    return _preferences?.getStringList(key) ?? <String>[];
   }
 
   String get getUniqueState =>
@@ -179,7 +179,7 @@ class PreferenceController extends GetxController {
   }
 
   Future<void> loadDefaults() async {
-    mru.value = _preferences!.getStringList(settingKeyMRU) ?? [];
+    mru.value = _preferences!.getStringList(settingKeyMRU) ?? <String>[];
     _isDetailsPanelExpanded.value = getBool(settingKeyDetailsPanelExpanded, false);
     _includeClosedAccounts.value = getBool(settingKeyIncludeClosedAccounts, false);
     _includeRentalManagement.value = getBool(settingKeyRentalsSupport, false);
@@ -270,7 +270,7 @@ void switchViewTransactionForPayee(final String payeeName) {
   fieldFilters.add(
     FieldFilter(
       fieldName: Constants.viewTransactionFieldNamePayee,
-      strings: [payeeName],
+      strings: <String>[payeeName],
     ),
   );
 

@@ -18,7 +18,7 @@ Field<dynamic>? getFieldDefinitionByName(
   final FieldDefinitions fields,
   final String nameToFind,
 ) {
-  for (final f in fields) {
+  for (final Field<dynamic> f in fields) {
     if (f.name == nameToFind) {
       return f;
     }

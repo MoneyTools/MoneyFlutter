@@ -7,6 +7,7 @@ import 'package:money/core/controller/data_controller.dart';
 import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/widgets/center_message.dart';
 import 'package:money/data/models/chart_event.dart';
+import 'package:money/data/models/money_objects/investments/stock_cumulative.dart';
 import 'package:money/data/models/money_objects/securities/security.dart';
 import 'package:money/data/models/money_objects/stock_splits/stock_split.dart';
 import 'package:money/data/storage/data/data.dart';
@@ -43,7 +44,7 @@ class MockPreferenceController extends GetxController with Mock implements Prefe
 class MockHttpClient extends Mock implements http.Client {
   @override
   Future<http.Response> get(Uri url, {Map<String, String>? headers}) {
-    return Future.value(http.Response(jsonEncode({'key': 'value'}), 200));
+    return Future<http.Response>.value(http.Response(jsonEncode(<String, String>{'key': 'value'}), 200));
   }
 }
 
@@ -81,9 +82,9 @@ void main() {
         const MaterialApp(
           home: StockChartWidget(
             symbol: 'INVALID',
-            splits: [],
-            dividends: [],
-            holdingsActivities: [],
+            splits: <StockSplit>[],
+            dividends: <Dividend>[],
+            holdingsActivities: <ChartEvent>[],
           ),
         ),
       );
@@ -94,7 +95,7 @@ void main() {
 
     testWidgets('renders chart when data is available', (WidgetTester tester) async {
       final MoneyObject newFakeSecurity = Data().securities.appendNewMoneyObject(
-            Security.fromJson({
+            Security.fromJson(<String, dynamic>{
               'Id': -1,
               'name': 'Fake Company',
               'symbol': Constants.mockStockSymbol,
@@ -106,7 +107,7 @@ void main() {
             }),
           );
 
-      final List<StockSplit> stockSplits = [
+      final List<StockSplit> stockSplits = <StockSplit>[
         StockSplit(
           date: DateTime(2021, 1, 1),
           security: newFakeSecurity.uniqueId,
@@ -117,7 +118,7 @@ void main() {
 
       Data().stockSplits.setStockSplits(0, stockSplits);
 
-      final holdingsActivities = [
+      final List<ChartEvent> holdingsActivities = <ChartEvent>[
         ChartEvent(
           dates: DateRange(min: DateTime(2022, 1, 1)),
           amount: 100.0,
@@ -139,7 +140,7 @@ void main() {
           home: StockChartWidget(
             symbol: Constants.mockStockSymbol,
             splits: stockSplits,
-            dividends: const [],
+            dividends: const <Dividend>[],
             holdingsActivities: holdingsActivities,
           ),
         ),

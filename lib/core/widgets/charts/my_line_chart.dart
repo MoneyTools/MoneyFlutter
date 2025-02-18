@@ -23,11 +23,11 @@ class MyLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (dataPoints.isEmpty) {
-      return Center(child: Text('No data to display'));
+      return const Center(child: Text('No data to display'));
     }
     return LineChart(
       LineChartData(
-        lineBarsData: [
+        lineBarsData: <LineChartBarData>[
           getLineChartBarData(dataPoints, showDots: showDots),
         ],
         gridData: const FlGridData(show: false),
@@ -49,7 +49,7 @@ class MyLineChart extends StatelessWidget {
                 if (value == meta.min || value == meta.max) {
                   return const SizedBox();
                 }
-                final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+                final DateTime date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
                 return Text(
                   formatDate(date),
                   textAlign: TextAlign.center,
@@ -65,8 +65,8 @@ class MyLineChart extends StatelessWidget {
             fitInsideVertically: true,
             fitInsideHorizontally: true,
             getTooltipItems: (List<LineBarSpot> touchedSpots) {
-              return touchedSpots.map((touchedSpot) {
-                final date = DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt());
+              return touchedSpots.map((LineBarSpot touchedSpot) {
+                final DateTime date = DateTime.fromMillisecondsSinceEpoch(touchedSpot.x.toInt());
                 return LineTooltipItem(
                   '${dateToString(date)}\n${doubleToCurrency(touchedSpot.y)}',
                   const TextStyle(color: Colors.white),

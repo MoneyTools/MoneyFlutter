@@ -19,16 +19,16 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (final BuildContext context, final BoxConstraints constraints) {
-        final List<Widget> bars = [];
+        final List<Widget> bars = <Widget>[];
 
         if (values.isNotEmpty) {
           num maxValue = 0;
-          for (final p in values) {
+          for (final Pair<int, double> p in values) {
             maxValue = max(maxValue, p.second.abs());
           }
 
           final double ratio = constraints.maxHeight / maxValue;
-          for (final value in values) {
+          for (final Pair<int, double> value in values) {
             final double height = value.second.abs() * ratio;
             bars.add(
               VerticalLineWithTooltip(
@@ -41,7 +41,7 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
         }
 
         return Column(
-          children: [
+          children: <Widget>[
             Expanded(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -55,7 +55,7 @@ class MiniTimelineTwelveMonths extends StatelessWidget {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
+              children: <Widget>[
                 _buildMontLabel('J'),
                 _buildMontLabel('F'),
                 _buildMontLabel('M'),

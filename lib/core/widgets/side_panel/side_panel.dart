@@ -13,7 +13,7 @@ class SidePanelSupport {
     this.onCopyToClipboard,
   });
 
-  late final List<SidePanelSubViewEnum> supportedSubViews = [
+  late final List<SidePanelSubViewEnum> supportedSubViews = <SidePanelSubViewEnum>[
     if (onDetails != null) SidePanelSubViewEnum.details,
     if (onChart != null) SidePanelSubViewEnum.chart,
     if (onTransactions != null) SidePanelSubViewEnum.transactions,
@@ -93,7 +93,7 @@ class SidePanel extends StatelessWidget {
   final void Function(int) currencySelectionChanged;
   final List<String> Function(SidePanelSubViewEnum, List<int>) getCurrencyChoices;
   final bool isExpanded;
-  final Function onExpanded;
+  final void Function(bool) onExpanded;
   final ValueNotifier<List<int>> selectedItems;
   final SidePanelSupport sidePanelSupport;
   final void Function(SidePanelSubViewEnum) subPanelSelectionChanged;

@@ -61,8 +61,8 @@ class AccountAlias extends MoneyObject {
 
   static Fields<AccountAlias> get fields {
     if (_fields.isEmpty) {
-      final tmp = AccountAlias.fromJson({});
-      _fields.setDefinitions([
+      final AccountAlias tmp = AccountAlias.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldPattern,
         tmp.fieldFlags,

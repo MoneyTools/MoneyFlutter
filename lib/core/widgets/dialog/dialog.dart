@@ -53,7 +53,7 @@ void adaptiveScreenSizeDialog({
   List<Widget>? actionButtons,
   final String? captionForClose = 'Close',
 }) {
-  actionButtons ??= [];
+  actionButtons ??= <Widget>[];
 
   // in modal always offer a close button
   if (captionForClose != null) {
@@ -82,7 +82,7 @@ void adaptiveScreenSizeDialog({
             padding: const EdgeInsets.all(8.0),
             child: child,
           ),
-          actionButtons: actionButtons ?? [],
+          actionButtons: actionButtons ?? <Widget>[],
         );
       },
     );

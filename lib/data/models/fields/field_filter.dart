@@ -74,7 +74,7 @@ class FieldFilter {
   /// - `strings`: a list of `dynamic` values representing the string values associated with the field.
   /// - `byDateRange`: a `bool` indicating whether the filter is based on a date range.
   Map<String, dynamic> toJson() {
-    return {
+    return <String, dynamic>{
       'fieldName': fieldName,
       'strings': strings,
       'byDateRange': byDateRange,

@@ -22,7 +22,7 @@ void main() {
   test('OfxBankInfo.fromOfx parses account information correctly', () {
     const String ofxContent = '''<BANKACCTFROM><BANKID>123456<ACCTID>00001 99-55555<ACCTTYPE>SAVINGS</BANKACCTFROM>''';
 
-    final bankInfo = OfxBankInfo.fromOfx(ofxContent);
+    final OfxBankInfo bankInfo = OfxBankInfo.fromOfx(ofxContent);
 
     expect(bankInfo.id, '123456');
     expect(bankInfo.accountId, '00001 99-55555');
@@ -40,7 +40,7 @@ void main() {
       number: '123',
     );
 
-    final categoryId = getInvestmentCategoryFromOfxType(mockEntry);
+    final int categoryId = getInvestmentCategoryFromOfxType(mockEntry);
     expect(categoryId, Data().categories.investmentCredit.fieldId.value);
   });
 
@@ -48,7 +48,7 @@ void main() {
     const String ofxContent =
         '''<OFX><BANKTRANLIST><STMTTRN><TRNTYPE>CREDIT<DTPOSTED>20230810<TRNAMT>50.00<NAME>Sample Transaction</STMTTRN></BANKTRANLIST></OFX>''';
 
-    final transactions = getTransactionFromOFX(ofxContent);
+    final List<ImportEntry> transactions = getTransactionFromOFX(ofxContent);
 
     expect(transactions.length, 1);
     expect(transactions.first.type, 'CREDIT');

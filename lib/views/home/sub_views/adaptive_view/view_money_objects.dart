@@ -56,7 +56,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   List<MoneyObject> list = <MoneyObject>[];
 
   List<String> listOfUniqueString = <String>[];
-  List<ValueSelection> listOfValueSelected = [];
+  List<ValueSelection> listOfValueSelected = <ValueSelection>[];
   PreferenceController preferenceController = Get.find();
   // detail panel
   Object? subViewSelectedItem;
@@ -64,13 +64,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   // Multi selection support
   bool supportsMultiSelection = false;
 
-  Function? onAddTransaction;
+  void Function()? onAddTransaction;
   VoidCallback? onDeleteItems;
   VoidCallback? onEditItems;
   VoidCallback? onMultiSelect;
 
   final FooterAccumulators _footerAccumulators = FooterAccumulators();
-  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>([]);
+  final ValueNotifier<List<int>> _selectedItemsByUniqueId = ValueNotifier<List<int>>(<int>[]);
 
   Fields<MoneyObject> _fieldToDisplay = Fields<MoneyObject>();
   FieldFilters _filterByFieldsValue = FieldFilters();
@@ -96,7 +96,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
     return buildViewContent(
       Obx(() {
-        final key = Key(
+        final Key key = Key(
           '${preferenceController.includeClosedAccounts}|${list.length}|${areFiltersOn()}|${dataController.lastUpdateAsString}|${sidePanelOptions.selectedCurrency}}',
         );
 
@@ -212,7 +212,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       onScrollToSelection: () {
         if (_selectedItemsByUniqueId.value.isNotEmpty) {
           final int firstSelectedId = _selectedItemsByUniqueId.value.first;
-          final int index = list.indexWhere((item) => item.uniqueId == firstSelectedId);
+          final int index = list.indexWhere((MoneyObject item) => item.uniqueId == firstSelectedId);
           if (index != -1) {
             lc.scrollToIndex(index, list.length);
           }
@@ -234,7 +234,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   void clearSelection() {
-    _selectedItemsByUniqueId.value = [];
+    _selectedItemsByUniqueId.value = <int>[];
     saveLastUserChoicesOfView();
   }
 
@@ -290,18 +290,18 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     _footerAccumulators.clear();
 
     for (final MoneyObject item in list) {
-      for (final field in _fieldToDisplay.definitions) {
+      for (final Field<dynamic> field in _fieldToDisplay.definitions) {
         switch (field.type) {
           case FieldType.text:
             _footerAccumulators.accumulatorListOfText.cumulate(field, field.getValueForDisplay(item).toString());
 
           case FieldType.date:
-            final dateTime = field.getValueForDisplay(item);
+            final dynamic dateTime = field.getValueForDisplay(item);
             if (dateTime != null) {
               _footerAccumulators.accumulatorDateRange.cumulate(field, dateTime as DateTime);
             }
           case FieldType.dateRange:
-            final dateRangeValue = field.getValue(item);
+            final dynamic dateRangeValue = field.getValue(item);
             if (dateRangeValue.min != null) {
               _footerAccumulators.accumulatorDateRange.cumulate(field, dateRangeValue.min as DateTime);
             }
@@ -348,7 +348,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   /// Allowed to be override by derived classes
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    final List<Widget> widgets = [];
+    final List<Widget> widgets = <Widget>[];
 
     /// Info panel header
     if (forSidePanelTransactions) {
@@ -433,7 +433,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       case SidePanelSubViewEnum.chart:
       case SidePanelSubViewEnum.transactions:
       default:
-        return [];
+        return <String>[];
     }
   }
 
@@ -449,9 +449,9 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   MoneyObject? getFirstSelectedItem() {
     if (_selectedItemsByUniqueId.value.isNotEmpty) {
-      final firstId = _selectedItemsByUniqueId.value.firstOrNull;
+      final int? firstId = _selectedItemsByUniqueId.value.firstOrNull;
       if (firstId != null) {
-        return list.firstWhereOrNull((moneyObject) => moneyObject.uniqueId == firstId);
+        return list.firstWhereOrNull((MoneyObject moneyObject) => moneyObject.uniqueId == firstId);
       }
     }
     return null;
@@ -478,11 +478,11 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final List<int> selectedList,
   ) {
     if (selectedList.isEmpty) {
-      return [];
+      return <MoneyObject>[];
     }
 
     final Set<int> selectedIds = selectedList.toSet();
-    return list.where((moneyObject) => selectedIds.contains(moneyObject.uniqueId)).toList();
+    return list.where((MoneyObject moneyObject) => selectedIds.contains(moneyObject.uniqueId)).toList();
   }
 
   Widget getSidePanelHeader(
@@ -518,7 +518,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   List<MoneyObject> getSidePanelTransactions() {
-    return [];
+    return <MoneyObject>[];
   }
 
   Widget getSidePanelViewDetails({
@@ -558,7 +558,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   ) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
-    for (final moneyObject in list) {
+    for (final MoneyObject moneyObject in list) {
       final String fieldValue = columnToCustomerFilterOn.getValueForDisplay(moneyObject).toString();
       set.add(fieldValue);
     }
@@ -571,7 +571,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   ) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
-    for (final moneyObject in list) {
+    for (final MoneyObject moneyObject in list) {
       final String fieldValue = dateToString(
         columnToCustomerFilterOn.getValueForDisplay(moneyObject) as DateTime?,
       );
@@ -588,14 +588,14 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   ) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
-    for (final moneyObject in list) {
+    for (final MoneyObject moneyObject in list) {
       final String fieldValue = formatDoubleTrimZeros(
         columnToCustomerFilterOn.getValueForDisplay(moneyObject) as double,
       );
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();
-    uniqueValues.sort((a, b) => compareStringsAsNumbers(a, b));
+    uniqueValues.sort((String a, String b) => compareStringsAsNumbers(a, b));
     return uniqueValues;
   }
 
@@ -605,7 +605,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   ) {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
-    for (final moneyObject in list) {
+    for (final MoneyObject moneyObject in list) {
       final String fieldValue = columnToCustomerFilterOn.getValueForReading?.call(moneyObject) as String? ?? '';
       set.add(fieldValue);
     }
@@ -650,7 +650,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         {
           listOfUniqueString = getUniqueInstancesOfNumbers(fieldDefinition);
 
-          for (final item in listOfUniqueString) {
+          for (final String item in listOfUniqueString) {
             listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
           }
 
@@ -664,7 +664,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         {
           listOfUniqueString = getUniqueInstancesOfDates(fieldDefinition);
 
-          for (final item in listOfUniqueString) {
+          for (final String item in listOfUniqueString) {
             listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
           }
 
@@ -678,7 +678,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         {
           listOfUniqueString = getUniqueInstancesOfWidgets(fieldDefinition);
 
-          for (final item in listOfUniqueString) {
+          for (final String item in listOfUniqueString) {
             listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
           }
 
@@ -694,12 +694,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           listOfUniqueString = getUniqueInstances(fieldDefinition);
 
           if (fieldDefinition.type == FieldType.amount) {
-            listOfUniqueString.sort((a, b) => compareStringsAsAmount(a, b));
+            listOfUniqueString.sort((String a, String b) => compareStringsAsAmount(a, b));
           } else {
             listOfUniqueString.sort();
           }
 
-          for (final item in listOfUniqueString) {
+          for (final String item in listOfUniqueString) {
             listOfValueSelected.add(ValueSelection(name: item, isSelected: true));
           }
 
@@ -714,13 +714,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       context: context,
       title: 'Column Filter (${fieldDefinition.name})',
       child: content,
-      actionButtons: [
+      actionButtons: <Widget>[
         DialogActionButton(
           text: 'Apply',
           onPressed: () {
             Navigator.of(context).pop(false);
             setState(() {
-              final List<String> selectedValues = [];
+              final List<String> selectedValues = <String>[];
 
               for (final ValueSelection checkbox in listOfValueSelected) {
                 if (checkbox.isSelected) {
@@ -818,12 +818,12 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
   }
 
   Widget _buildCenterMessageForEmptyListDueToFilters(final Key key) {
-    final List<String> activeFilterValues = [];
+    final List<String> activeFilterValues = <String>[];
     if (_filterByText.isNotEmpty) {
       activeFilterValues.add('"$_filterByText"');
     }
     if (_filterByFieldsValue.isNotEmpty) {
-      activeFilterValues.addAll(_filterByFieldsValue.list.map((filter) => filter.toString()));
+      activeFilterValues.addAll(_filterByFieldsValue.list.map((FieldFilter filter) => filter.toString()));
     }
 
     return Center(
@@ -833,13 +833,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
         child: IntrinsicHeight(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               TextTitle('No ${getClassNamePlural()} found with the filters:'),
               gapLarge(),
               SelectableText(activeFilterValues.join('\n')),
               gapHuge(),
               Row(
-                children: [
+                children: <Widget>[
                   const Spacer(),
                   IntrinsicWidth(
                     child: OutlinedButton(
@@ -849,7 +849,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
                         });
                       },
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           const Text('Clear Filters'),
                           gapSmall(),
                           const Icon(Icons.filter_alt_off_outlined),
@@ -868,7 +868,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   Widget _buildInformUserOfEmptyList(Key key) {
     return Column(
-      children: [
+      children: <Widget>[
         buildHeader(),
         Expanded(
           child:
@@ -880,7 +880,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
 
   Widget _buildLoadingScreen() {
     return Column(
-      children: [
+      children: <Widget>[
         buildHeader(),
         const Expanded(
           child: WorkingIndicator(),
@@ -916,7 +916,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
       adaptiveScreenSizeDialog(
         context: context,
         title: '${getClassNameSingular()} #${uniqueId + 1}',
-        actionButtons: [],
+        actionButtons: <Widget>[],
         child: getSidePanelViewDetails(
           selectedIds: <int>[uniqueId],
           isReadOnly: true,
@@ -962,7 +962,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final String question = moneyObjects.length == 1
         ? 'Are you sure you want to delete this $nameSingular?'
         : 'Are you sure you want to delete the ${moneyObjects.length} selected $namePlural?';
-    final content = moneyObjects.length == 1
+    final RenderObjectWidget content = moneyObjects.length == 1
         ? Column(
             children: moneyObjects.first.buildListOfNamesValuesWidgets(onEdit: null, compact: true),
           )

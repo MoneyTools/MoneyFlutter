@@ -36,7 +36,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
   /// add more top level action buttons
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    final list = super.getActionsButtons(forSidePanelTransactions);
+    final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
     if (!forSidePanelTransactions) {
       // Add a new Category, place this at the top of the list
       list.insert(
@@ -102,7 +102,7 @@ class ViewEventsState extends ViewForMoneyObjectsState {
         .events
         .iterableList(includeDeleted: includeDeleted)
         .where(
-          (instance) => applyFilter == false || isMatchingFilters(instance),
+          (Event instance) => applyFilter == false || isMatchingFilters(instance),
         )
         .toList();
   }
@@ -133,16 +133,16 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     required final bool showAsNativeCurrency,
   }) {
     // get net worth over time
-    final transactionsWithoutTransfers =
-        Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer == false).toList();
+    final List<Transaction> transactionsWithoutTransfers =
+        Data().transactions.iterableList(includeDeleted: true).where((Transaction t) => t.isTransfer == false).toList();
 
     final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(transactionsWithoutTransfers);
 
-    const marginLeft = 80.0;
-    const marginBottom = 50.0;
+    const double marginLeft = 80.0;
+    const double marginBottom = 50.0;
 
     // get the events
-    final List<ChartEvent> milestoneTransactions = [];
+    final List<ChartEvent> milestoneTransactions = <ChartEvent>[];
 
     for (final Event event in getList()) {
       final Category? category = Data().categories.get(event.fieldCategoryId.value);
@@ -159,11 +159,11 @@ class ViewEventsState extends ViewForMoneyObjectsState {
     }
 
     // sort by ascending date
-    milestoneTransactions.sort((a, b) => a.dates.min!.compareTo(b.dates.min!));
+    milestoneTransactions.sort((ChartEvent a, ChartEvent b) => a.dates.min!.compareTo(b.dates.min!));
 
     return Stack(
       alignment: Alignment.topCenter,
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
           child: CustomPaint(

@@ -238,15 +238,15 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
 
   /// SQL Insert
   void itemInsert(final String tableName, final MyJson data) {
-    final columnNames = data.keys.map((key) => '"$key"').join(', ');
-    final columnValues = data.values.map((value) => encodeValueWrapStringTypes(value)).join(', ');
+    final String columnNames = data.keys.map((final String key) => '"$key"').join(', ');
+    final String columnValues = data.values.map((final dynamic value) => encodeValueWrapStringTypes(value)).join(', ');
     _db.execute('INSERT INTO $tableName ($columnNames) VALUES ($columnValues)');
   }
 
   /// SQL Update
   void itemUpdate(final String tableName, final MyJson jsonMap, final String whereClause) {
     final List<String> setStatements =
-        jsonMap.keys.map((key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
+        jsonMap.keys.map((String key) => '"$key" = ${encodeValueWrapStringTypes(jsonMap[key])}').toList();
 
     final String fieldNamesAndValues = setStatements.join(', ');
     _db.execute('UPDATE $tableName SET $fieldNamesAndValues WHERE $whereClause;');
@@ -271,9 +271,9 @@ CREATE TABLE IF NOT EXISTS [Currencies] (
   }
 
   Future<bool> tableExists(String tableName) async {
-    final result = _db.select(
+    final ResultSet result = _db.select(
       "SELECT name FROM sqlite_master WHERE type='table' AND name=?",
-      [tableName],
+      <Object?>[tableName],
     );
     return result.isNotEmpty;
   }

@@ -6,7 +6,7 @@ import 'home_page.dart';
 class HomeRoutes {
   HomeRoutes._();
 
-  static final routes = [
+  static final List<GetPage<dynamic>> routes = <GetPage<dynamic>>[
     GetPage<dynamic>(
       name: Constants.routeHomePage,
       page: () => const HomePage(),

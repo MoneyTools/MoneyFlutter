@@ -70,13 +70,13 @@ class MyListViewState<T> extends State<MyListView<T>> {
       itemExtent: textScaler.scale(_rowHeight),
       itemBuilder: (final BuildContext context, final int index) {
         final MoneyObject itemInstance = getMoneyObjectFromIndex(index);
-        final isLastItemOfTheList = (index == widget.list.length - 1);
-        final isSelected = widget.selectedItemIds.value.contains(itemInstance.uniqueId);
+        final bool isLastItemOfTheList = (index == widget.list.length - 1);
+        final bool isSelected = widget.selectedItemIds.value.contains(itemInstance.uniqueId);
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: padding),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+            children: <Widget>[
               if (widget.isMultiSelectionOn)
                 Checkbox(
                   value: isSelected,
@@ -133,7 +133,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
 
   /// return -1 if not found
   int getListIndexFromUniqueId(final int uniqueId) {
-    return widget.list.indexWhere((element) => (element as MoneyObject).uniqueId == uniqueId);
+    return widget.list.indexWhere((final T element) => (element as MoneyObject).uniqueId == uniqueId);
   }
 
   /// don't make it flush to the top, we do this in order to give some clue that there's other item above,
@@ -177,7 +177,7 @@ class MyListViewState<T> extends State<MyListView<T>> {
     if (firstSelectedIndex != -1) {
       final int newIndexToSelect = firstSelectedIndex + incrementBy; // go up
       if (isIndexInRange(widget.list, newIndexToSelect)) {
-        final itemFoundAtNewIndexPosition = widget.list[newIndexToSelect];
+        final T itemFoundAtNewIndexPosition = widget.list[newIndexToSelect];
         itemIdToSelect = (itemFoundAtNewIndexPosition as MoneyObject).uniqueId;
       }
     } else {
@@ -219,13 +219,13 @@ class MyListViewState<T> extends State<MyListView<T>> {
           return KeyEventResult.handled;
 
         case LogicalKeyboardKey.home:
-          final idToSelect = (widget.list.first as MoneyObject).uniqueId;
+          final int idToSelect = (widget.list.first as MoneyObject).uniqueId;
           selectedItem(idToSelect);
           widget.scrollController.jumpTo(getListOffsetOfItemIndex(0));
           return KeyEventResult.handled;
 
         case LogicalKeyboardKey.end:
-          final idToSelect = (widget.list.last as MoneyObject).uniqueId;
+          final int idToSelect = (widget.list.last as MoneyObject).uniqueId;
           selectedItem(idToSelect);
           widget.scrollController.jumpTo(getListOffsetOfItemIndex(widget.list.length - 1));
           return KeyEventResult.handled;

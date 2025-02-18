@@ -25,12 +25,12 @@ void main() {
 
   group('valueOrDefaultDate', () {
     test('returns the provided value if it is not null', () {
-      final now = DateTime.now();
+      final DateTime now = DateTime.now();
       expect(valueOrDefaultDate(now), now);
     });
 
     test('returns the default value if the provided value is null', () {
-      final defaultDate = DateTime(2023, 6, 1);
+      final DateTime defaultDate = DateTime(2023, 6, 1);
       expect(valueOrDefaultDate(null, defaultValueIfNull: defaultDate), defaultDate);
     });
   });

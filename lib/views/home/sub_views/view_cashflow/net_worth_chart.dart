@@ -23,22 +23,22 @@ class NetWorthChart extends StatefulWidget {
 }
 
 class NetWorthChartState extends State<NetWorthChart> {
-  final List<FlSpot> _yearMonthDataPoints = [];
+  final List<FlSpot> _yearMonthDataPoints = <FlSpot>[];
 
-  List<ChartEvent> _milestoneTransactions = [];
-  List<Transaction> _transactions = [];
+  List<ChartEvent> _milestoneTransactions = <ChartEvent>[];
+  List<Transaction> _transactions = <Transaction>[];
 
   @override
   void initState() {
     super.initState();
 
-    _transactions = Data().transactions.iterableList(includeDeleted: true).where((t) => t.isTransfer == false).toList();
+    _transactions = Data().transactions.iterableList(includeDeleted: true).where((Transaction t) => t.isTransfer == false).toList();
 
     final List<FlSpot> tmpDataPointsWithNetWorth = Transactions.cumulateTransactionPerYearMonth(_transactions);
 
     _yearMonthDataPoints.addAll(
       tmpDataPointsWithNetWorth.where(
-        (entry) =>
+        (FlSpot entry) =>
             isBetweenOrEqual(DateTime.fromMillisecondsSinceEpoch(entry.x.toInt()).year, widget.minYear, widget.maxYear),
       ),
     );
@@ -46,10 +46,10 @@ class NetWorthChartState extends State<NetWorthChart> {
 
   @override
   Widget build(BuildContext context) {
-    const marginLeft = 80.0;
-    const marginBottom = 50.0;
+    const double marginLeft = 80.0;
+    const double marginBottom = 50.0;
 
-    final transactionSubSet = _transactions
+    final List<Transaction> transactionSubSet = _transactions
         .where(
           (Transaction t) => isBetweenOrEqual(
             t.fieldDateTime.value!.year,
@@ -63,7 +63,7 @@ class NetWorthChartState extends State<NetWorthChart> {
 
     return Stack(
       alignment: Alignment.topCenter,
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.only(left: marginLeft, bottom: marginBottom),
           child: CustomPaint(
@@ -85,7 +85,7 @@ class NetWorthChartState extends State<NetWorthChart> {
 }
 
 List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
-  final List<ChartEvent> milestoneTransactions = [];
+  final List<ChartEvent> milestoneTransactions = <ChartEvent>[];
 
   if (PreferenceController.to.netWorthEventThreshold.value == 0) {
     for (final Event event in Data().events.iterableList()) {
@@ -105,23 +105,23 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
   }
 
   // Calculate Z-scores for outlier detection based on amount
-  final List<double> amounts = transactions.map((t) => t.fieldAmount.value.asDouble()).toList();
+  final List<double> amounts = transactions.map((Transaction t) => t.fieldAmount.value.asDouble()).toList();
   if (amounts.isEmpty) {
     // nothing to work on;
-    return [];
+    return <ChartEvent>[];
   }
 
   // Find outlier events
-  final double mean = amounts.reduce((a, b) => a + b) / amounts.length;
-  final double variance = amounts.map((amount) => (amount - mean) * (amount - mean)).reduce((a, b) => a + b) / amounts.length;
+  final double mean = amounts.reduce((double a, double b) => a + b) / amounts.length;
+  final double variance = amounts.map((double amount) => (amount - mean) * (amount - mean)).reduce((double a, double b) => a + b) / amounts.length;
   final double stdDev = sqrt(variance);
 
-  final List<double> zScores = amounts.map((amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
+  final List<double> zScores = amounts.map((double amount) => stdDev == 0 ? 0.0 : (amount - mean) / stdDev).toList();
 
   for (int i = 0; i < transactions.length; i++) {
     final double zScore = zScores[i];
     if (zScore.abs() >= PreferenceController.to.netWorthEventThreshold.value) {
-      final t = transactions[i];
+      final Transaction t = transactions[i];
       milestoneTransactions.add(
         ChartEvent(
           dates: DateRange(min: t.fieldDateTime.value!),
@@ -133,6 +133,6 @@ List<ChartEvent> getMilestonesEvents(final List<Transaction> transactions) {
       );
     }
   }
-  milestoneTransactions.sort((a, b) => sortByDate(a.dates.min, b.dates.min, true));
+  milestoneTransactions.sort((ChartEvent a, ChartEvent b) => sortByDate(a.dates.min, b.dates.min, true));
   return milestoneTransactions;
 }

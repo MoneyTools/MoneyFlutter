@@ -35,7 +35,7 @@ void showPopupSelection({
       selectedItem: selectedItem,
       onSelected: onSelected,
     ),
-    actionButtons: [],
+    actionButtons: <Widget>[],
   );
 }
 
@@ -66,9 +66,9 @@ class PickerPanel extends StatefulWidget {
 }
 
 class PickerPanelState extends State<PickerPanel> {
-  List<String> filteredList = [];
+  List<String> filteredList = <String>[];
   int indexToScrollTo = -1;
-  List<String> uniqueLetters = [];
+  List<String> uniqueLetters = <String>[];
 
   final ScrollController _scrollController = ScrollController();
 
@@ -90,7 +90,7 @@ class PickerPanelState extends State<PickerPanel> {
       height: 500,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           _buildFilterTextField(),
           gapLarge(),
           Expanded(child: _buildPickerContent(context)),
@@ -101,9 +101,9 @@ class PickerPanelState extends State<PickerPanel> {
 
   void _applyFilters() {
     setState(() {
-      filteredList = widget.options.where((option) {
-        final matchesStart = _filterStartWith.isEmpty || option.toUpperCase().startsWith(_filterStartWith);
-        final matchesAnywhere =
+      filteredList = widget.options.where((String option) {
+        final bool matchesStart = _filterStartWith.isEmpty || option.toUpperCase().startsWith(_filterStartWith);
+        final bool matchesAnywhere =
             _filterByTextAnywhere.isEmpty || option.toLowerCase().contains(_filterByTextAnywhere.toLowerCase());
         return matchesStart && matchesAnywhere;
       }).toList();
@@ -114,7 +114,7 @@ class PickerPanelState extends State<PickerPanel> {
     return MyTextInput(
       key: MyKeys.keyHeaderFilterTextInput,
       hintText: 'Filter',
-      onChanged: (value) {
+      onChanged: (String value) {
         setState(() {
           _filterByTextAnywhere = value;
           _applyFilters();
@@ -128,9 +128,9 @@ class PickerPanelState extends State<PickerPanel> {
       itemCount: filteredList.length,
       controller: _scrollController,
       itemExtent: widget.itemHeight,
-      itemBuilder: (context, index) {
-        final label = filteredList[index];
-        final isSelected = label == widget.selectedItem;
+      itemBuilder: (BuildContext context, int index) {
+        final String label = filteredList[index];
+        final bool isSelected = label == widget.selectedItem;
         return _buildPickerItem(context, label, isSelected, index);
       },
     );
@@ -145,7 +145,7 @@ class PickerPanelState extends State<PickerPanel> {
           child: PickerLetters(
             options: uniqueLetters,
             selected: _filterStartWith,
-            onSelected: (selected) {
+            onSelected: (String selected) {
               setState(() {
                 _filterStartWith = selected;
                 _applyFilters();
@@ -160,7 +160,7 @@ class PickerPanelState extends State<PickerPanel> {
 
   Widget _buildPickerContent(BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(child: _buildFilteredList(context)),
         if (widget.showLetterPicker) _buildLetterPicker(),
       ],
@@ -211,9 +211,9 @@ class PickerPanelState extends State<PickerPanel> {
   }
 
   void _populateUniqueLetters() {
-    for (final option in widget.options) {
+    for (final String option in widget.options) {
       if (option.isNotEmpty) {
-        final singleLetter = option[0].toUpperCase();
+        final String singleLetter = option[0].toUpperCase();
         if (!uniqueLetters.contains(singleLetter)) {
           uniqueLetters.add(singleLetter);
         }

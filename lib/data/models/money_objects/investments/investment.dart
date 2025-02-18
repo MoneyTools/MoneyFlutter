@@ -388,8 +388,8 @@ class Investment extends MoneyObject {
 
   static Fields<Investment> get fields {
     if (_fields.isEmpty) {
-      final tmp = Investment.fromJson({});
-      _fields.setDefinitions([
+      final Investment tmp = Investment.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldTransactionDate,
         tmp.fieldTransactionAccountName,
@@ -419,9 +419,9 @@ class Investment extends MoneyObject {
   }
 
   static Fields<Investment> get fieldsForColumnView {
-    final tmp = Investment.fromJson({});
+    final Investment tmp = Investment.fromJson(<String, dynamic>{});
     return Fields<Investment>()
-      ..setDefinitions([
+      ..setDefinitions(<Field<dynamic>>[
         tmp.fieldTransactionDate,
         tmp.fieldTransactionAccountName,
         tmp.fieldSecuritySymbol,
@@ -526,7 +526,7 @@ class Investment extends MoneyObject {
   String get _investmentTypeAsString => getInvestmentTypeTextFromValue(this.fieldInvestmentType.value);
 
   int get _signBasedOnActivity =>
-      [InvestmentType.buy, InvestmentType.add].contains(getInvestmentTypeFromValue(this.fieldInvestmentType.value))
+      <InvestmentType>[InvestmentType.buy, InvestmentType.add].contains(getInvestmentTypeFromValue(this.fieldInvestmentType.value))
           ? 1
           : -1;
 

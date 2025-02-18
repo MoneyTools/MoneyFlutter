@@ -92,8 +92,8 @@ class StockSplit extends MoneyObject {
 
   static Fields<StockSplit> get fields {
     if (_fields.isEmpty) {
-      final tmp = StockSplit.fromJson({});
-      _fields.setDefinitions([
+      final StockSplit tmp = StockSplit.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldDate,
         tmp.fieldSecurity,

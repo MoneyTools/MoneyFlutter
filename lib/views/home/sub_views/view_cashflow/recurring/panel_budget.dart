@@ -45,7 +45,7 @@ class PanelBudget extends StatefulWidget {
 }
 
 class _PanelBudgetState extends State<PanelBudget> {
-  List<RecurringExpenses> items = [];
+  List<RecurringExpenses> items = <RecurringExpenses>[];
   late BudgetViewAs panelType = isForIncome
       ? PreferenceController.to.budgetViewAsForIncomes.value
       : PreferenceController.to.budgetViewAsForExpenses.value;
@@ -128,7 +128,7 @@ class _PanelBudgetState extends State<PanelBudget> {
 
     final int adjustValue = isForIncome ? 1 : -1;
 
-    items.forEach((item) {
+    items.forEach((RecurringExpenses item) {
       sumForAllCategories += item.sumOfAllTransactions;
       sumForAllCategoriesBudget += item.category.fieldBudget.value.asDouble() * adjustValue;
     });
@@ -144,26 +144,26 @@ class _PanelBudgetState extends State<PanelBudget> {
 
   Widget sectionHeader(final BuildContext context) {
     return Row(
-      children: [
+      children: <Widget>[
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: headerText(context, widget.title, large: true),
         ),
         mySegmentSelector(
-          segments: [
+          segments: <ButtonSegment<int>>[
             ButtonSegment<int>(
               value: BudgetViewAs.list.index,
-              label: Text('List'),
+              label: const Text('List'),
             ),
             ButtonSegment<int>(
               value: BudgetViewAs.chart.index,
-              label: Text('Chart'),
+              label: const Text('Chart'),
             ),
             ButtonSegment<int>(
               value: BudgetViewAs.recurrences.index,
-              label: Text('Recurring'),
+              label: const Text('Recurring'),
             ),
-            ButtonSegment<int>(
+            const ButtonSegment<int>(
               value: 3,
               label: Text('Suggestion'),
             ),
@@ -198,13 +198,13 @@ class _PanelBudgetState extends State<PanelBudget> {
   Widget _buildContent() {
     switch (panelType) {
       case BudgetViewAs.list:
-        return isListEmpty ? CenterMessage(message: 'No budget income category found') : _buildList();
+        return isListEmpty ? const CenterMessage(message: 'No budget income category found') : _buildList();
 
       case BudgetViewAs.chart:
-        return CenterMessage(message: 'CHART ');
+        return const CenterMessage(message: 'CHART ');
 
       case BudgetViewAs.recurrences:
-        final dateRangeTransactions = DateRange.fromStarEndYears(
+        final DateRange dateRangeTransactions = DateRange.fromStarEndYears(
           Data().transactions.dateRangeActiveAccount.min?.year ?? DateTime.now().year,
           Data().transactions.dateRangeActiveAccount.max?.year ?? DateTime.now().year,
         );
@@ -228,7 +228,7 @@ class _PanelBudgetState extends State<PanelBudget> {
   Widget _buildContentAsList() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: <Widget>[
         sectionHeader(context),
         Expanded(
           child: _buildContent(),
@@ -239,27 +239,27 @@ class _PanelBudgetState extends State<PanelBudget> {
 
   Widget _buildContentForSmallScreen() {
     return ConstrainedBox(
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         maxWidth: 400,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           Text(widget.title, style: context.textTheme.headlineLarge),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             'Monthly Budgeted',
             style: context.textTheme.bodyLarge,
           ),
           MoneyWidget.fromDouble(sumForAllCategoriesBudget, MoneyWidgetSize.header),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             'Monthly Actual',
             style: context.textTheme.bodyLarge,
           ),
           MoneyWidget.fromDouble(sumForAllCategoriesActual, MoneyWidgetSize.header),
-          SizedBox(height: 20),
+          const SizedBox(height: 20),
           Text(
             calculateBudgetAccuracy(sumForAllCategoriesBudget, sumForAllCategoriesActual),
             textAlign: TextAlign.end,
@@ -275,17 +275,17 @@ class _PanelBudgetState extends State<PanelBudget> {
     final int adjustValue = isForIncome ? 1 : -1;
 
     return Column(
-      children: [
+      children: <Widget>[
         Container(
           color: getColorTheme(context).surfaceContainer,
           padding: const EdgeInsets.all(8.0),
           child: Column(
-            children: [
+            children: <Widget>[
               //
               // Column Header
               //
               Row(
-                children: [
+                children: <Widget>[
                   buildColumnHeaderButton(
                     context: context,
                     text: 'Category',
@@ -354,22 +354,22 @@ class _PanelBudgetState extends State<PanelBudget> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: ListView.separated(
-              separatorBuilder: (context, index) => Divider(
+              separatorBuilder: (BuildContext context, int index) => Divider(
                 height: 0,
                 color: dividersColor,
               ),
-              padding: EdgeInsets.all(0),
+              padding: const EdgeInsets.all(0),
               itemCount: items.length,
               itemBuilder: (final BuildContext context, final int index) {
                 // build the Card UI
                 final RecurringExpenses item = items[index];
                 return Row(
-                  children: [
+                  children: <Widget>[
                     // Category Long Name
                     Expanded(
                       flex: 3,
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           _categoryContextMenu(item.category),
                           Expanded(
                             child: item.category.getNameAsWidget(),
@@ -382,7 +382,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                     Expanded(
                       flex: 2,
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           // Budgeted per month
                           Expanded(
                             child: MoneyWidget.fromDouble(
@@ -407,7 +407,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                     Expanded(
                       flex: 2,
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           // Budget per year
                           Expanded(
                             child: MoneyWidget.fromDouble(
@@ -434,7 +434,7 @@ class _PanelBudgetState extends State<PanelBudget> {
                     Expanded(
                       flex: 2,
                       child: Row(
-                        children: [
+                        children: <Widget>[
                           Expanded(
                             child: Tooltip(
                               message: item.dates!.toStringDays(),
@@ -464,8 +464,8 @@ class _PanelBudgetState extends State<PanelBudget> {
         // Footer
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Expanded(
+          children: <Widget>[
+            const Expanded(
               flex: 3,
               child: Text(''),
             ),
@@ -496,7 +496,7 @@ class _PanelBudgetState extends State<PanelBudget> {
               ),
             ),
             verticalLine(dividersColor),
-            Expanded(
+            const Expanded(
               child: Text(''),
             ),
             Expanded(
@@ -512,16 +512,16 @@ class _PanelBudgetState extends State<PanelBudget> {
   }
 
   Widget _buildSuggestion(List<MapEntry<String, BudgetCumulator>> list) {
-    final List<Widget> widgets = [];
+    final List<Widget> widgets = <Widget>[];
 
     list.sort(
-      (a, b) => a.value.monthlyAmount.compareTo(b.value.monthlyAmount),
+      (MapEntry<String, BudgetCumulator> a, MapEntry<String, BudgetCumulator> b) => a.value.monthlyAmount.compareTo(b.value.monthlyAmount),
     );
 
     for (final MapEntry<String, BudgetCumulator> categoryBudget in list) {
       widgets.add(
         Row(
-          children: [
+          children: <Widget>[
             _categoryContextMenu(Data().categories.getByName(categoryBudget.key)!),
             Expanded(
               flex: 2,
@@ -539,7 +539,7 @@ class _PanelBudgetState extends State<PanelBudget> {
     }
     return Center(
       child: Container(
-        constraints: BoxConstraints(maxWidth: 800),
+        constraints: const BoxConstraints(maxWidth: 800),
         height: 400,
         child: SingleChildScrollView(
           child: Column(
@@ -553,20 +553,20 @@ class _PanelBudgetState extends State<PanelBudget> {
 
   Widget _categoryContextMenu(final Category category) {
     return buildMenuButton(
-      [
+      <MenuEntry>[
         // View - Transactions
         MenuEntry.toTransactions(
           transactionId: -1,
           filters: FieldFilters(
-            [
+            <FieldFilter>[
               FieldFilter(
                 fieldName: Constants.viewTransactionFieldNameCategory,
-                strings: [category.name],
+                strings: <String>[category.name],
               ),
               FieldFilter(
                 fieldName: Constants.viewTransactionFieldNameDate,
                 byDateRange: true,
-                strings: [
+                strings: <String>[
                   '${widget.minYear}-01-01',
                   '${widget.maxYear}-12-31',
                 ],

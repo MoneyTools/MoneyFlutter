@@ -42,7 +42,7 @@ class RecurringCard extends StatelessWidget {
         padding: const EdgeInsets.all(13.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             // Header
             _buildHeader(context),
 
@@ -50,7 +50,7 @@ class RecurringCard extends StatelessWidget {
               alignment: WrapAlignment.center,
               spacing: 21,
               runSpacing: 21,
-              children: [
+              children: <Widget>[
                 // Time line
                 _buildBoxTimelinePerDayOverYears(context),
 
@@ -73,7 +73,7 @@ class RecurringCard extends StatelessWidget {
       padding: 21,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           Container(
             height: 55,
             margin: const EdgeInsets.symmetric(vertical: SizeForPadding.medium),
@@ -122,7 +122,7 @@ class RecurringCard extends StatelessWidget {
       padding: 21,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           SizedBox(
             height: 50,
             child: MiniTimelineDaily(
@@ -171,11 +171,11 @@ class RecurringCard extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Opacity(opacity: 0.5, child: Text('#$index ')),
         Expanded(
           child: Row(
-            children: [
+            children: <Widget>[
               SelectableText(
                 payeeName,
                 maxLines: 1,
@@ -204,7 +204,7 @@ Widget _buildTextAmountRow(
 ) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
+    children: <Widget>[
       Text(title, style: getTextTheme(context).labelMedium),
       MoneyWidget(amountModel: MoneyModel(amount: amount)),
     ],

@@ -62,7 +62,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
           height: 58,
           child: Stack(
             alignment: AlignmentDirectional.bottomStart,
-            children: [
+            children: <Widget>[
               RangeSlider(
                 min: widget.yearRange.min.toDouble(),
                 max: widget.yearRange.max.toDouble(),
@@ -111,7 +111,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
+        children: <Widget>[
           Text(
             _selectedYearRange.min.toString(),
             style: TextStyle(fontSize: 12, color: textColor),
@@ -151,7 +151,7 @@ class YearRangeSliderState extends State<YearRangeSlider> {
   }
 
   void _updateDragBottomWidth(double eachYearInPixel) {
-    const minimumWidthToFitAllElements = 162.0;
+    const double minimumWidthToFitAllElements = 162.0;
     _dragBottomWidth = max(_selectedYearRange.span * eachYearInPixel, minimumWidthToFitAllElements);
   }
 

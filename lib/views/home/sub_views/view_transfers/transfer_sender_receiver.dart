@@ -28,7 +28,7 @@ class TransferSenderReceiver extends StatelessWidget {
           alignment: WrapAlignment.center,
           runSpacing: 30,
           spacing: 30,
-          children: [
+          children: <Widget>[
             IntrinsicWidth(
               child: TransactionCard(
                 title: 'Sender',

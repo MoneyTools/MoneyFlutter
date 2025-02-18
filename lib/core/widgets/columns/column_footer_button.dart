@@ -53,7 +53,7 @@ Widget _alignChild(
   }
 
   return Stack(
-    children: [
+    children: <Widget>[
       Align(
         alignment: alignment,
         child: content,

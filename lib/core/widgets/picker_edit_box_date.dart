@@ -31,7 +31,7 @@ class PickerEditBoxDateState extends State<PickerEditBoxDate> {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Expanded(
           child: MyTextInput(
             controller: _textController,

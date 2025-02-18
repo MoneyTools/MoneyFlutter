@@ -32,7 +32,7 @@ void showImportInvestment({InvestmentImportFields? inputData}) {
     actionButtons: getActionButtons(inputData, context),
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         gapLarge(),
         Expanded(
           child: ImportInvestmentPanel(inputFields: inputData),
@@ -46,7 +46,7 @@ List<Widget> getActionButtons(
   InvestmentImportFields inputData,
   BuildContext context,
 ) {
-  final List<Widget> actionButtons = [
+  final List<Widget> actionButtons = <Widget>[
     // Button - Import
     DialogActionButton(
       text: 'Add Investment',

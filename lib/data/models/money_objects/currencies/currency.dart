@@ -111,7 +111,7 @@ class Currency extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<Currency>();
+  static final Fields<Currency> _fields = Fields<Currency>();
 
   static Widget buildCurrencyWidget(String threeLetterCurrencySymbol) {
     final String locale = Data().currencies.fromSymbolToCountryAlpha2(threeLetterCurrencySymbol);
@@ -124,8 +124,8 @@ class Currency extends MoneyObject {
 
   static Fields<Currency> get fields {
     if (_fields.isEmpty) {
-      final tmp = Currency.fromJson({});
-      _fields.setDefinitions([
+      final Currency tmp = Currency.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldSymbol,
         tmp.fieldName,
@@ -168,11 +168,11 @@ class Currency extends MoneyObject {
         : Currency.getLocaleFromCurrencyIso4217(iso4217code) ?? 'en_US';
 
     // Use NumberFormat.simpleCurrency to get the symbol for the locale
-    final tempFormat = NumberFormat.simpleCurrency(locale: localeToUse);
+    final NumberFormat tempFormat = NumberFormat.simpleCurrency(locale: localeToUse);
     final String currencySymbol = tempFormat.currencySymbol;
 
     // Create a NumberFormat instance with a custom pattern using the currency constructor
-    final currencyFormat = NumberFormat.currency(
+    final NumberFormat currencyFormat = NumberFormat.currency(
       locale: localeToUse,
       symbol: currencySymbol, // Euro symbol
       decimalDigits: decimalDigits, // Number of decimal places
@@ -192,7 +192,7 @@ class Currency extends MoneyObject {
   // Define a function to get the currency symbol from ISO 4217 code
   static String getCurrencySymbol(String isoCode) {
     // Create a NumberFormat instance with the currency name and locale
-    final format = NumberFormat.simpleCurrency(name: isoCode);
+    final NumberFormat format = NumberFormat.simpleCurrency(name: isoCode);
     // Return the currency symbol
     return format.currencySymbol;
   }
@@ -200,7 +200,7 @@ class Currency extends MoneyObject {
   /// Convert from ISO 4217 to a locale
   static String? getLocaleFromCurrencyIso4217(String iso4217code) {
     // Map currency codes to their respective locales
-    const currencyLocales = {
+    const Map<String, String> currencyLocales = <String, String>{
       'AED': 'ar_AE',
       'AFN': 'ps_AF',
       'ALL': 'sq_AL',

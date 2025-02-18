@@ -27,7 +27,7 @@ class AppTitle extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Row(
-              children: [
+              children: <Widget>[
                 IntrinsicWidth(child: _buildNetWorthToggle(context)),
                 gapSmall(),
                 Obx(() {
@@ -52,7 +52,7 @@ class AppTitle extends StatelessWidget {
   ) {
     return RevealContent(
       textForClipboard: netWorth.toString(),
-      widgets: [
+      widgets: <Widget>[
         _buildRevealContentOption(context, 'MyMoney', true),
         _buildRevealContentOption(context, netWorth.toShortHand(), false),
         _buildRevealContentOption(context, netWorth.toString(), false),
@@ -71,7 +71,7 @@ Widget _buildRevealContentOption(
 
   return Row(
     crossAxisAlignment: CrossAxisAlignment.center,
-    children: [
+    children: <Widget>[
       Text(text, style: textStyle),
       gapSmall(),
       Opacity(

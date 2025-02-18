@@ -46,9 +46,9 @@ void main() {
   });
 
   test('TransactionExtra', () {
-    Data().transactionExtras.loadFromJson([
-      {'Id': 0, 'Transaction': 0},
-      {'Id': 1, 'Transaction': 1},
+    Data().transactionExtras.loadFromJson(<MyJson>[
+      <String, dynamic>{'Id': 0, 'Transaction': 0},
+      <String, dynamic>{'Id': 1, 'Transaction': 1},
     ]);
     expect(Data().transactionExtras.isEmpty, false);
   });

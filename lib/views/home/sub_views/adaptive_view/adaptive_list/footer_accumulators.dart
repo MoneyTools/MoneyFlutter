@@ -22,7 +22,7 @@ class FooterAccumulators {
           return getFooterForDateRange(value);
         }
       case FooterType.count:
-        List<String> list = [];
+        List<String> list = <String>[];
 
         if (accumulatorListOfText.containsKey(field)) {
           list = accumulatorListOfText.getList(field);

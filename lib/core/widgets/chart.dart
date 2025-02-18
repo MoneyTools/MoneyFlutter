@@ -25,7 +25,7 @@ class Chart extends StatelessWidget {
       return const CenterMessage(message: 'No chart to display');
     }
     return LayoutBuilder(
-      builder: (context, constraints) {
+      builder: (BuildContext context, BoxConstraints constraints) {
         final List<BarChartGroupData> barChartData = <BarChartGroupData>[];
 
         double maxY = 0.0;

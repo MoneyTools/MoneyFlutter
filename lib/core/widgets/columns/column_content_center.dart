@@ -24,7 +24,7 @@ class HeaderContentCenter extends StatelessWidget {
     }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Flexible(child: textWidget),
         trailingWidget!,
       ],

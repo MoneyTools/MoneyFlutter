@@ -22,23 +22,23 @@ class DropZoneState extends State<DropZone> {
   Widget build(BuildContext context) {
     return DropTarget(
       onDragDone: (final DropDoneDetails detail) {
-        widget.onFilesDropped(detail.files.map((x) => x.path).toList());
+        widget.onFilesDropped(detail.files.map((DropItem x) => x.path).toList());
         setState(() {
           _dragging = false;
         });
       },
-      onDragEntered: (detail) {
+      onDragEntered: (DropEventDetails detail) {
         setState(() {
           _dragging = true;
         });
       },
-      onDragExited: (detail) {
+      onDragExited: (DropEventDetails detail) {
         setState(() {
           _dragging = false;
         });
       },
       child: Stack(
-        children: [
+        children: <Widget>[
           widget.child,
           if (_dragging)
             Container(

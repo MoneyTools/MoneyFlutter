@@ -7,7 +7,7 @@ void main() {
   group('loadQIF', () {
     test('should parse QIF data correctly', () {
       // Arrange
-      final List<String> qifLines = [
+      final List<String> qifLines = <String>[
         '!Type:Invst',
         'D01/30/2023',
         'T-100.00',
@@ -45,7 +45,7 @@ void main() {
 
     test('should handle invalid QIF data', () {
       // Arrange
-      final List<String> qifLines = [
+      final List<String> qifLines = <String>[
         'Invalid line',
         '^',
       ];

@@ -8,8 +8,8 @@ Widget pickerPayee({
   required final Payee? itemSelected,
   required final void Function(Payee?) onSelected,
 }) {
-  final List<String> options = Data().payees.getListSorted().map((element) => element.fieldName.value).toList();
-  options.sort((a, b) => sortByString(a, b, true));
+  final List<String> options = Data().payees.getListSorted().map((Payee element) => element.fieldName.value).toList();
+  options.sort((String a, String b) => sortByString(a, b, true));
 
   final String selectedName = itemSelected == null ? '' : itemSelected.fieldName.value;
 

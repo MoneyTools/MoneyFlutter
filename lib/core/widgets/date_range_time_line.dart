@@ -20,7 +20,7 @@ class DateRangeTimeline extends StatelessWidget {
     final TextStyle style = getTextTheme(context).labelSmall!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         if (showTicks)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -28,7 +28,7 @@ class DateRangeTimeline extends StatelessWidget {
           ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+          children: <Widget>[
             // Start year
             Text('${startDate.year}', style: style),
 
@@ -45,7 +45,7 @@ class DateRangeTimeline extends StatelessWidget {
 }
 
 List<Widget> ticks(final int numberOfTicks) {
-  final List<Widget> widgets = [];
+  final List<Widget> widgets = <Widget>[];
 
   for (int tick = 0; tick < numberOfTicks; tick++) {
     widgets.add(

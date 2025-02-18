@@ -102,13 +102,13 @@ class Alias extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<Alias>();
-  static final _fieldsForColumns = Fields<Alias>();
+  static final Fields<Alias> _fields = Fields<Alias>();
+  static final Fields<Alias> _fieldsForColumns = Fields<Alias>();
 
   static Fields<Alias> get fields {
     if (_fields.isEmpty) {
-      final tmp = Alias.fromJson({});
-      _fields.setDefinitions([
+      final Alias tmp = Alias.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldPattern,
         tmp.fieldFlags,
@@ -121,8 +121,8 @@ class Alias extends MoneyObject {
   static Fields<Alias> get fieldsForColumnView {
     if (_fieldsForColumns.isEmpty) {
       // used for the first time
-      final tmp = Alias.fromJson({});
-      _fieldsForColumns.setDefinitions([
+      final Alias tmp = Alias.fromJson(<String, dynamic>{});
+      _fieldsForColumns.setDefinitions(<Field<dynamic>>[
         tmp.fieldPattern,
         tmp.fieldFlags,
         tmp.fieldPayeeId,

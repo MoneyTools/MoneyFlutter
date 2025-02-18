@@ -33,7 +33,7 @@ class Fields<T> {
     assert(T != dynamic, 'Type T cannot be dynamic');
   }
 
-  final FieldDefinitions definitions = [];
+  final FieldDefinitions definitions = <Field<dynamic>>[];
 
   bool applyFilters(
     final MoneyObject objectInstance,
@@ -60,7 +60,7 @@ class Fields<T> {
   }
 
   Field<dynamic> getFieldByName(final String name) {
-    return definitions.firstWhere((field) => field.name == name);
+    return definitions.firstWhere((Field<dynamic> field) => field.name == name);
   }
 
   /// Used in table view
@@ -91,7 +91,7 @@ class Fields<T> {
   }
 
   String getStringValueUsingFieldName(final MoneyObject objectInstance, final String fieldName) {
-    final fieldFound = definitions.firstWhereOrNull((f) => f.name == fieldName);
+    final Field<dynamic>? fieldFound = definitions.firstWhereOrNull((Field<dynamic> f) => f.name == fieldName);
     if (fieldFound != null) {
       return _getFieldValueAsStringForFiltering(objectInstance, fieldFound);
     }
@@ -135,8 +135,8 @@ class Fields<T> {
     MoneyObject objectInstance,
     String filterBytFreeStyleLowerCaseText,
   ) {
-    for (final fieldDefinition in definitions) {
-      final fieldValueAsString = _getFieldValueAsStringForFiltering(
+    for (final Field<dynamic> fieldDefinition in definitions) {
+      final String fieldValueAsString = _getFieldValueAsStringForFiltering(
         objectInstance,
         fieldDefinition,
       );
@@ -150,7 +150,7 @@ class Fields<T> {
 
   void setDefinitions(List<Field<dynamic>> list) {
     definitions.clear();
-    for (var object in list) {
+    for (Field<dynamic> object in list) {
       definitions.add(object);
     }
   }
@@ -198,7 +198,7 @@ class Fields<T> {
         }
 
       default:
-        final fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
+        final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
         return fieldValue.toString().toLowerCase();
     }
   }

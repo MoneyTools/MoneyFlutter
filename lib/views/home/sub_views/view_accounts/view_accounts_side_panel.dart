@@ -14,7 +14,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       return SingleChildScrollView(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(SizeForPadding.large),
               child: MoneyObjectCard(
@@ -50,10 +50,10 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     Accounts.groupAccountStockSymbols(account, groupBySymbol);
 
     if (groupBySymbol.getKeys().isEmpty) {
-      return [];
+      return <Widget>[];
     }
 
-    final List<StockSummary> stockSummaries = [];
+    final List<StockSummary> stockSummaries = <StockSummary>[];
 
     groupBySymbol.values.forEach((String key, Set<Investment> listOfInvestmentsForAccount) {
       final double sharesForThisStock = Investments.applyHoldingSharesAdjustedForSplits(
@@ -68,7 +68,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
           totalCost += investment.costForShares;
         }
 
-        final symbol = key.split('|')[1];
+        final String symbol = key.split('|')[1];
 
         final Security? stock = Data().securities.getBySymbol(symbol);
         double stockPrice = 1.00;
@@ -89,19 +89,19 @@ extension ViewAccountsSidePanel on ViewAccountsState {
     });
 
     // sort by descending holding-value
-    stockSummaries.sort((a, b) => b.holdingValue.compareTo(a.holdingValue));
+    stockSummaries.sort((StockSummary a, StockSummary b) => b.holdingValue.compareTo(a.holdingValue));
 
     final List<Widget> stockPanels = stockSummaries
         .map(
-          (summary) => BoxWithScrollingContent(
+          (StockSummary summary) => BoxWithScrollingContent(
             height: 180,
-            children: [
+            children: <Widget>[
               Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: TextTitle(summary.symbol),
                   ),
-                  buildMenuButton([
+                  buildMenuButton(<MenuEntry>[
                     MenuEntry.toInvestments(symbol: summary.symbol, accountName: account.fieldName.value),
                     MenuEntry.toStocks(symbol: summary.symbol),
                     MenuEntry.toWeb(url: 'https://finance.yahoo.com/quote/${summary.symbol}/'),
@@ -169,7 +169,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
 
     // also add Summary Cash and Stock
     double totalInvestment = 0.0;
-    stockSummaries.forEach((element) => totalInvestment += element.holdingValue);
+    stockSummaries.forEach((StockSummary element) => totalInvestment += element.holdingValue);
 
     final double totalCash = account.balance - totalInvestment;
 
@@ -177,12 +177,12 @@ extension ViewAccountsSidePanel on ViewAccountsState {
       0,
       BoxWithScrollingContent(
         height: 150,
-        children: [
+        children: <Widget>[
           gapMedium(),
           // Cash
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               const TextTitle('Cash'),
               MoneyWidget(
                 amountModel: MoneyModel(
@@ -196,7 +196,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
           gapMedium(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               const TextTitle('Investments'),
               MoneyWidget(
                 amountModel: MoneyModel(
@@ -234,12 +234,12 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         return const Text('No account selected');
       }
 
-      account.maxBalancePerYears.forEach((key, value) {
+      account.maxBalancePerYears.forEach((int key, double value) {
         final double valueCurrencyChoice = showAsNativeCurrency ? value : value * account.getCurrencyRatio();
 
         listOfPairXY.add(PairXYY(key.toString(), valueCurrencyChoice));
       });
-      listOfPairXY.sort((a, b) => compareAsciiLowerCase(a.xText, b.xText));
+      listOfPairXY.sort((PairXYY a, PairXYY b) => compareAsciiLowerCase(a.xText, b.xText));
 
       return Chart(
         key: Key('$selectedIds $showAsNativeCurrency'),
@@ -415,7 +415,7 @@ extension ViewAccountsSidePanel on ViewAccountsState {
         });
       },
       isMultiSelectionOn: false,
-      selectedItemsByUniqueId: ValueNotifier<List<int>>([selectedItemId]),
+      selectedItemsByUniqueId: ValueNotifier<List<int>>(<int>[selectedItemId]),
       onSelectionChanged: (int uniqueId) {
         // ignore: invalid_use_of_protected_member
         setState(() {

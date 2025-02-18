@@ -40,8 +40,8 @@ class PanelTrend extends StatefulWidget {
 class _PanelTrendState extends State<PanelTrend> {
   double maxY = 0;
   double minY = 0;
-  Map<int, RecurringExpenses> yearCategoryIncomeExpenseSums = {};
-  List<int> years = [];
+  Map<int, RecurringExpenses> yearCategoryIncomeExpenseSums = <int, RecurringExpenses>{};
+  List<int> years = <int>[];
 
   @override
   void didUpdateWidget(covariant PanelTrend oldWidget) {
@@ -73,7 +73,7 @@ class _PanelTrendState extends State<PanelTrend> {
             fitInsideHorizontally: true,
             fitInsideVertically: true,
             maxContentWidth: 300,
-            getTooltipColor: (group) => Colors.black,
+            getTooltipColor: (BarChartGroupData group) => Colors.black,
             getTooltipItem: (BarChartGroupData group, int groupIndex, BarChartRodData rod, int rodIndex) {
               final int year = years[groupIndex];
               final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;
@@ -86,10 +86,10 @@ class _PanelTrendState extends State<PanelTrend> {
                   fontWeight: FontWeight.bold,
                   fontSize: 20,
                 ),
-                children: [
+                children: <TextSpan>[
                   TextSpan(
                     text: '\nRevenue\t${MoneyModel(amount: yearData.sumIncome).toShortHand()}',
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.green,
                       fontWeight: FontWeight.normal,
                       fontSize: 16,
@@ -122,11 +122,11 @@ class _PanelTrendState extends State<PanelTrend> {
               final FieldFilter fieldFilterToUseForYear = FieldFilter(
                 fieldName: Constants.viewTransactionFieldNameDate,
                 strings:
-                    Data().transactions.getAllTransactionDatesForYear(year).map((date) => dateToString(date)).toList(),
+                    Data().transactions.getAllTransactionDatesForYear(year).map((DateTime date) => dateToString(date)).toList(),
               );
 
               // Filter by Category Expense and Income
-              final Set<String> categoryNames = {};
+              final Set<String> categoryNames = <String>{};
               {
                 for (final Category category in Data().categories.getAllExpenseCategories()) {
                   categoryNames.add(category.name);
@@ -146,7 +146,7 @@ class _PanelTrendState extends State<PanelTrend> {
               PreferenceController.to.jumpToView(
                 viewId: ViewId.viewTransactions,
                 selectedId: -1,
-                columnFilters: FieldFilters([fieldFilterToUseForYear, fieldFilterToUseForCategories]),
+                columnFilters: FieldFilters(<FieldFilter>[fieldFilterToUseForYear, fieldFilterToUseForCategories]),
                 textFilter: '',
               );
             }
@@ -185,14 +185,14 @@ class _PanelTrendState extends State<PanelTrend> {
 
   // Data for the chart
   List<BarChartGroupData> _buildBarGroups() {
-    return List.generate(years.length, (index) {
+    return List<BarChartGroupData>.generate(years.length, (int index) {
       final int year = years[index];
       final RecurringExpenses yearData = yearCategoryIncomeExpenseSums[year]!;
       final double profit = (yearData.sumIncome + yearData.sumExpense);
       return BarChartGroupData(
         groupVertically: true,
         x: index,
-        barRods: [
+        barRods: <BarChartRodData>[
           // Negative Bar
           BarChartRodData(
             fromY: 0,
@@ -228,7 +228,7 @@ class _PanelTrendState extends State<PanelTrend> {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 120,
-          getTitlesWidget: (value, meta) {
+          getTitlesWidget: (double value, TitleMeta meta) {
             return MoneyWidget.fromDouble(value);
           },
         ),
@@ -238,7 +238,7 @@ class _PanelTrendState extends State<PanelTrend> {
           showTitles: true,
           reservedSize: 30,
           getTitlesWidget: (final double value, final TitleMeta meta) {
-            final years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
+            final List<int> years = yearCategoryIncomeExpenseSums.keys.toList()..sort();
             if (value.toInt() >= years.length) {
               return const Text('');
             }
@@ -263,7 +263,7 @@ class _PanelTrendState extends State<PanelTrend> {
     maxY = 0;
     minY = 0;
 
-    for (final yearData in yearCategoryIncomeExpenseSums.values) {
+    for (final RecurringExpenses yearData in yearCategoryIncomeExpenseSums.values) {
       maxY = max(max(maxY, yearData.sumExpense), yearData.sumIncome);
       minY = min(min(minY, yearData.sumExpense), yearData.sumIncome);
     }

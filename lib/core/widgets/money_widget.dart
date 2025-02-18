@@ -38,7 +38,7 @@ class MoneyWidget extends StatelessWidget {
   Widget build(final BuildContext context) {
     if (amountModel.showCurrency) {
       return Row(
-        children: [
+        children: <Widget>[
           _amountAsText(context),
           const SizedBox(width: 10),
           Currency.buildCurrencyWidget(amountModel.iso4217),
@@ -94,7 +94,7 @@ class MoneyWidget extends StatelessWidget {
       textAlign: TextAlign.right,
       TextSpan(
         style: style,
-        children: [
+        children: <InlineSpan>[
           TextSpan(
             text: leftSideOfDecimalPointAsString,
           ),

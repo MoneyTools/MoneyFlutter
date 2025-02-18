@@ -15,13 +15,13 @@ class StockDatePrice {
   final double price;
 }
 
-const flagAsInvalidSymbol = 'invalid-symbol';
+const String flagAsInvalidSymbol = 'invalid-symbol';
 
 class StockPriceHistoryCache {
   StockPriceHistoryCache(this.symbol, this.status, [this.lastDateTime]);
 
   String errorMessage = '';
-  List<StockDatePrice> prices = [];
+  List<StockDatePrice> prices = <StockDatePrice>[];
   StockLookupStatus status = StockLookupStatus.notFoundInCache;
   String symbol = '';
 
@@ -94,7 +94,7 @@ Future<StockPriceHistoryCache> _loadFromCache(
   if (csvContent != null) {
     final List<String> csvLines = csvContent.split('\n');
 
-    for (var row = 0; row < csvLines.length; row++) {
+    for (int row = 0; row < csvLines.length; row++) {
       if (row == 0) {
         // skip header
       } else {
@@ -131,7 +131,7 @@ Future<StockPriceHistoryCache> _loadFromBackend(
   final Uri uri = Uri.parse(url);
 
   if (symbol == Constants.mockStockSymbol) {
-    result.prices = [];
+    result.prices = <StockDatePrice>[];
     return result;
   }
 
@@ -158,11 +158,11 @@ Future<StockPriceHistoryCache> _loadFromBackend(
         result.status = StockLookupStatus.invalidApiKey;
         return result;
       }
-      final List<dynamic> values = data['values'] as List;
+      final List<dynamic> values = data['values'] as List<dynamic>;
 
       // Unfortunately for now (sometimes) the API may returns two entries with the same date
       // for this ensure that we only have one date and price, last one wins
-      final Map<String, StockDatePrice> mapByUniqueDate = {};
+      final Map<String, StockDatePrice> mapByUniqueDate = <String, StockDatePrice>{};
 
       for (final dynamic value in values) {
         final String dateAsText = value['datetime'] as String;
@@ -192,7 +192,7 @@ void _saveToCache(final String symbol, List<StockDatePrice> prices) async {
   String csvContent = '"date","price"\n';
 
   // CSV Content
-  for (final item in prices) {
+  for (final StockDatePrice item in prices) {
     csvContent += '${dateToString(item.date)},${item.price.toString()}\n';
   }
 

@@ -23,9 +23,9 @@ class SidePanelHeader extends StatelessWidget {
   });
 
   final int currencySelected;
-  final Function currentSelectionChanged;
+  final void Function(int) currentSelectionChanged;
   final bool isExpanded;
-  final Function onExpanded;
+  final void Function(bool) onExpanded;
   final void Function(SidePanelSubViewEnum) subViewSelectionChanged;
 
   // Actions
@@ -83,7 +83,7 @@ class SidePanelHeader extends StatelessWidget {
     }
 
     return mySegmentSelector(
-      segments: [
+      segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
           label: smallDevice ? Text(currencyChoices[0]) : Currency.buildCurrencyWidget(currencyChoices[0]),
@@ -119,7 +119,7 @@ class SidePanelHeader extends StatelessWidget {
     final bool smallDevice = ThemeController.to.isDeviceWidthSmall.value;
 
     return mySegmentSelector(
-      segments: [
+      segments: <ButtonSegment<int>>[
         if (sidePanelSupport.supportedSubViews.contains(SidePanelSubViewEnum.details))
           ButtonSegment<int>(
             value: 0,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:money/core/helpers/color_helper.dart';
 
 /// A Row for a Table view
@@ -60,8 +61,8 @@ class MyListItemState extends State<MyListItem> {
       },
       onKeyEvent: widget.onListViewKeyEvent,
       child: MouseRegion(
-        onHover: (event) => setState(() => _hovering = true),
-        onExit: (event) => setState(() => _hovering = false),
+        onHover: (PointerHoverEvent event) => setState(() => _hovering = true),
+        onExit: (PointerExitEvent event) => setState(() => _hovering = false),
         child: GestureDetector(
           onTap: () {
             setState(() {

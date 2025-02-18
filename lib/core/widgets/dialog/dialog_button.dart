@@ -22,7 +22,7 @@ class DialogActionButton extends StatelessWidget {
         ? Text(text)
         : IntrinsicWidth(
             child: Row(
-              children: [
+              children: <Widget>[
                 Opacity(opacity: 0.5, child: Icon(icon)),
                 gapSmall(),
                 Text(text),
@@ -45,7 +45,7 @@ Widget dialogActionButtons(final List<Widget> actionsButtons) {
   );
 }
 
-Widget buildMergeButton(final Function callback) {
+Widget buildMergeButton(final void Function() callback) {
   return IconButton(
     key: Constants.keyMergeButton,
     onPressed: () {
@@ -57,7 +57,7 @@ Widget buildMergeButton(final Function callback) {
 }
 
 Widget buildAddItemButton(
-  final Function callback,
+  final void Function() callback,
   final String tooltip,
 ) {
   return IconButton(
@@ -70,7 +70,7 @@ Widget buildAddItemButton(
   );
 }
 
-Widget buildAddTransactionsButton(final Function callback) {
+Widget buildAddTransactionsButton(final void Function() callback) {
   return IconButton(
     key: Constants.keyButtonAddTransactions,
     onPressed: () {
@@ -81,7 +81,7 @@ Widget buildAddTransactionsButton(final Function callback) {
   );
 }
 
-Widget buildEditButton(final Function callback) {
+Widget buildEditButton(final void Function() callback) {
   return IconButton(
     key: Constants.keyEditSelectedItems,
     onPressed: () {
@@ -92,7 +92,7 @@ Widget buildEditButton(final Function callback) {
   );
 }
 
-Widget buildDeleteButton(final Function callback) {
+Widget buildDeleteButton(final void Function() callback) {
   return IconButton(
     key: Constants.keyDeleteSelectedItems,
     onPressed: () {
@@ -103,7 +103,7 @@ Widget buildDeleteButton(final Function callback) {
   );
 }
 
-Widget buildCopyButton(final Function callback, [final Key key = Constants.keyCopyListToClipboardHeaderMain]) {
+Widget buildCopyButton(final void Function() callback, [final Key key = Constants.keyCopyListToClipboardHeaderMain]) {
   return IconButton(
     key: key,
     onPressed: () {
@@ -120,13 +120,13 @@ Widget buildMenuButton(
   String tooltip = 'Switch view',
 }) {
   final List<PopupMenuItem<int>> list = <PopupMenuItem<int>>[];
-  for (var i = 0; i < menuItems.length; i++) {
+  for (int i = 0; i < menuItems.length; i++) {
     list.add(
       PopupMenuItem<int>(
         value: i,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Icon(menuItems[i].icon),
             gapLarge(),
             Expanded(child: Text(menuItems[i].title)),
@@ -139,7 +139,7 @@ Widget buildMenuButton(
     icon: icon,
     tooltip: tooltip,
     list: list,
-    onSelected: (final index) {
+    onSelected: (final int index) {
       menuItems[index].onPressed();
     },
   );

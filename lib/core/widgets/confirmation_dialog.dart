@@ -7,7 +7,7 @@ void showConfirmationDialog({
   required final BuildContext context,
   required final String title,
   required final String buttonText,
-  required final Function onConfirmation,
+  required final void Function() onConfirmation,
   String question = '',
   Widget? content,
 }) {
@@ -15,7 +15,7 @@ void showConfirmationDialog({
     context: context,
     title: title,
     captionForClose: 'Cancel',
-    actionButtons: [
+    actionButtons: <Widget>[
       DialogActionButton(
         text: buttonText,
         onPressed: () {
@@ -52,7 +52,7 @@ class ConfirmationDialog extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             Text(question, style: Theme.of(context).textTheme.titleMedium),
             gapLarge(),
             // optional Content

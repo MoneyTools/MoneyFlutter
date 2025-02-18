@@ -76,7 +76,7 @@ class Security extends MoneyObject {
     getValueForDisplay: (final MoneyObject instance) => (instance as Security)._holdingValue,
   );
 
-  List<Dividend> dividends = [];
+  List<Dividend> dividends = <Dividend>[];
   FieldMoney fieldActivityDividend = FieldMoney(
     name: 'Dividend',
     getValueForDisplay: (final MoneyObject instance) => (instance as Security).fieldActivityDividend.value,
@@ -230,7 +230,7 @@ class Security extends MoneyObject {
         (instance as Security).fieldTransactionDateRange.value.toStringYears(),
   );
 
-  List<StockSplit> splitsHistory = [];
+  List<StockSplit> splitsHistory = <StockSplit>[];
   // 7
   FieldInt taxable = FieldInt(
     name: 'Taxable',
@@ -262,12 +262,12 @@ class Security extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<Security>();
+  static final Fields<Security> _fields = Fields<Security>();
 
   static Fields<Security> get fields {
     if (_fields.isEmpty) {
-      final tmp = Security.fromJson({});
-      _fields.setDefinitions([
+      final Security tmp = Security.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldName,
         tmp.fieldSymbol,
@@ -288,9 +288,9 @@ class Security extends MoneyObject {
   }
 
   static Fields<Security> get fieldsForColumnView {
-    final tmp = Security.fromJson({});
+    final Security tmp = Security.fromJson(<String, dynamic>{});
     return Fields<Security>()
-      ..setDefinitions([
+      ..setDefinitions(<Field<dynamic>>[
         tmp.fieldName,
         tmp.fieldSymbol,
         tmp.fieldTransactionDateRange,
@@ -307,7 +307,7 @@ class Security extends MoneyObject {
   }
 
   List<Investment> getAssociatedInvestments() =>
-      Data().investments.iterableList().where((item) => item.fieldSecurity.value == this.uniqueId).toList();
+      Data().investments.iterableList().where((Investment item) => item.fieldSecurity.value == this.uniqueId).toList();
 
   static String getSecurityTypeFromInt(final int index) {
     if (isIndexInRange(SecurityType.values, index)) {

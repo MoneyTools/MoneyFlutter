@@ -47,7 +47,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    final list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
+    final List<RentBuilding> list = Data().rentBuildings.iterableList(includeDeleted: includeDeleted).toList();
 
     return list;
   }
@@ -66,7 +66,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   List<MoneyObject> getSidePanelTransactions() {
     final RentBuilding? item = getFirstSelectedItem() as RentBuilding?;
     if (item == null) {
-      return [];
+      return <MoneyObject>[];
     }
     return ViewRentalsSidePanel.getTransactionLastSelectedItem(item);
   }
@@ -76,7 +76,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool isReadOnly,
   }) {
-    final selectedItem = getFirstSelectedItem() as RentBuilding?;
+    final RentBuilding? selectedItem = getFirstSelectedItem() as RentBuilding?;
     if (selectedItem == null) {
       return const CenterMessage(message: 'No item selected.');
     }
@@ -87,7 +87,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
           alignment: WrapAlignment.center,
           runSpacing: 30,
           spacing: 30,
-          children: [
+          children: <Widget>[
             MoneyObjectCard(
               title: getClassNameSingular(),
               moneyObject: selectedItem,
@@ -100,11 +100,11 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
   }
 
   Widget buildRenters(final BuildContext context, final RentBuilding building) {
-    final rentersInThisBuilding = Data()
+    final List<RentUnit> rentersInThisBuilding = Data()
         .rentUnits
         .iterableList()
         .where(
-          (item) => item.fieldBuilding.value == building.uniqueId,
+          (RentUnit item) => item.fieldBuilding.value == building.uniqueId,
         )
         .toList();
 
@@ -113,11 +113,11 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
       title: 'Renters',
       content: ListView.separated(
         itemCount: rentersInThisBuilding.length,
-        itemBuilder: (context, index) {
-          final renter = rentersInThisBuilding[index];
+        itemBuilder: (BuildContext context, int index) {
+          final RentUnit renter = rentersInThisBuilding[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(renter.fieldName.value),
               gapLarge(),
               Expanded(
@@ -128,7 +128,7 @@ class ViewRentalsState extends ViewForMoneyObjectsState {
             ],
           );
         },
-        separatorBuilder: (context, index) => Divider(
+        separatorBuilder: (BuildContext context, int index) => Divider(
           color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
         ),
       ),

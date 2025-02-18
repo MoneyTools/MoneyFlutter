@@ -2,6 +2,7 @@ import 'package:money/data/models/money_objects/rent_buildings/rent_building.dar
 import 'package:money/data/models/money_objects/rental_unit/rental_unit.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
+import 'package:money/views/home/sub_views/view_rentals/rental_pnl.dart';
 
 class RentBuildings extends MoneyObjects<RentBuilding> {
   RentBuildings() {
@@ -44,7 +45,7 @@ class RentBuildings extends MoneyObjects<RentBuilding> {
   /// of the provided `rental` object to aggregate profit and loss data.
   void cumulateTransactions(final RentBuilding rental) {
     // Reset the accumulated P&L data for the rental.
-    rental.pnlOverYears = {};
+    rental.pnlOverYears = <int, RentalPnL>{};
 
     // Iterate through all transactions in the data store.
     for (Transaction t in Data().transactions.iterableList()) {

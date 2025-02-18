@@ -37,7 +37,7 @@ class AccountHoldings {
   /// Get current holdings to date.
 
   List<SecurityPurchase> getHoldings() {
-    final List<SecurityPurchase> result = [];
+    final List<SecurityPurchase> result = <SecurityPurchase>[];
     for (final SecurityFifoQueue queue in this.queues.values) {
       for (SecurityPurchase p in queue.getHoldings()) {
         result.add(p);
@@ -47,8 +47,8 @@ class AccountHoldings {
   }
 
   List<SecuritySale> getPendingSales() {
-    final List<SecuritySale> result = [];
-    for (var queue in this.queues.values) {
+    final List<SecuritySale> result = <SecuritySale>[];
+    for (SecurityFifoQueue queue in this.queues.values) {
       for (SecuritySale sale in queue.getPendingSales()) {
         result.add(sale);
       }
@@ -57,7 +57,7 @@ class AccountHoldings {
   }
 
   List<SecuritySale> getPendingSalesForSecurity(Security s) {
-    final List<SecuritySale> result = [];
+    final List<SecuritySale> result = <SecuritySale>[];
     final SecurityFifoQueue? queue = queues[s];
     if (queue != null) {
       for (final SecuritySale sale in queue.getPendingSales()) {
@@ -70,7 +70,7 @@ class AccountHoldings {
   /// Get current purchases for the given security
 
   List<SecurityPurchase> getPurchases(Security security) {
-    final List<SecurityPurchase> result = [];
+    final List<SecurityPurchase> result = <SecurityPurchase>[];
 
     final SecurityFifoQueue? queue = queues[security];
 
@@ -87,7 +87,7 @@ class AccountHoldings {
     if (queue != null) {
       return queue.processPendingSales();
     } else {}
-    return [];
+    return <SecuritySale>[];
   }
 
   /// Find the oldest holdings that still have UnitsRemaining, and decrement them by the

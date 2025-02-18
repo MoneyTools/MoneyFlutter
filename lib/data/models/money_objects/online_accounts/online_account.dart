@@ -124,8 +124,8 @@ class OnlineAccount extends MoneyObject {
     static final Fields<OnlineAccount> _fields = Fields<OnlineAccount>();
   static Fields<OnlineAccount> get fields {
     if (_fields.isEmpty) {
-      final tmp = OnlineAccount.fromJson({});
-      _fields.setDefinitions([
+      final OnlineAccount tmp = OnlineAccount.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldName,
       ]);

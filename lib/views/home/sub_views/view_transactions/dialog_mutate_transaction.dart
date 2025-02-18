@@ -62,7 +62,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
     return AutoSizeDialog(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -99,7 +99,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
     required final bool dataWasModified,
   }) {
     if (editMode) {
-      return [
+      return <Widget>[
         DialogActionButton(
           key: Constants.keyButtonApplyOrDone,
           text: dataWasModified ? 'Apply' : 'Done',
@@ -118,7 +118,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
     }
 
     // Read only mode
-    return [
+    return <Widget>[
       // Close
       DialogActionButton(
         text: 'Close',
@@ -185,7 +185,7 @@ class _DialogMutateTransactionState extends State<DialogMutateTransaction> {
   bool isDataModified() {
     final MyJson afterEditing = _transaction.getPersistableJSon();
     final MyJson diff = myJsonDiff(
-      before: _transaction.valueBeforeEdit ?? {},
+      before: _transaction.valueBeforeEdit ?? <String, dynamic>{},
       after: afterEditing,
     );
     return diff.keys.isNotEmpty;

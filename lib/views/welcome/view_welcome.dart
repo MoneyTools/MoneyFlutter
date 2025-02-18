@@ -62,7 +62,7 @@ class WelcomeScreen extends StatelessWidget {
             child: Opacity(
               opacity: 0.5,
               child: Row(
-                children: [
+                children: <Widget>[
                   TextButton(
                     onPressed: () {
                       Get.toNamed<dynamic>(Constants.routePolicyPage);

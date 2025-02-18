@@ -34,9 +34,9 @@ class ImportTransactionsPanel extends StatefulWidget {
 class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late String userChoiceOfDateFormat = _possibleDateFormats.first;
 
-  final _focusNode = FocusNode();
-  final _keyboardHandler = SafeKeyboardHandler();
-  final List<String> _possibleDateFormats = [
+  final FocusNode _focusNode = FocusNode();
+  final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
+  final List<String> _possibleDateFormats = <String>[
     // Dash
     'yyyy-MM-dd',
     'yy-MM-dd',
@@ -61,7 +61,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
   late String _textToParse;
   int _userChoiceDebitVsCredit = 0;
   int _userChoiceNativeVsUSD = 0;
-  List<ValuesQuality> _values = [];
+  List<ValuesQuality> _values = <ValuesQuality>[];
 
   @override
   void dispose() {
@@ -85,7 +85,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     );
 
     return Focus(
-      onFocusChange: (hasFocus) {
+      onFocusChange: (bool hasFocus) {
         if (!hasFocus) {
           _keyboardHandler.clearKeys();
         }
@@ -97,7 +97,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
           width: 800,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+            children: <Widget>[
               _buildHeaderAndAccountPicker(),
 
               gapMedium(),
@@ -126,7 +126,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
                 Padding(
                   padding: const EdgeInsets.only(top: SizeForPadding.large),
                   child: Row(
-                    children: [
+                    children: <Widget>[
                       _buildChoiceOfDateFormat(),
                       const Spacer(),
                       _buildChoiceOfDebitVsCredit(),
@@ -184,8 +184,8 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     }
 
     // Split input into lines
-    final lines = input.split('\n');
-    for (var line in lines) {
+    final List<String> lines = input.split('\n');
+    for (String line in lines) {
       // Look for number patterns with currency symbols
       if (line.contains(RegExp(r'[€£¥]'))) {
         return 0; // Native currency detected
@@ -226,7 +226,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     }
 
     return mySegmentSelector(
-      segments: [
+      segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
           label: _account.getAccountCurrencyAsWidget(),
@@ -251,7 +251,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       return const SizedBox();
     }
 
-    final List<String> listOfDateAsStrings = _values.map((entry) => entry.date.asString()).toList();
+    final List<String> listOfDateAsStrings = _values.map((ValuesQuality entry) => entry.date.asString()).toList();
 
     final List<String> choiceOfDateFormat = getPossibleDateFormatsForAllValues(listOfDateAsStrings);
 
@@ -269,7 +269,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
       value: userChoiceOfDateFormat,
       items: choiceOfDateFormat
           .map(
-            (item) => DropdownMenuItem(
+            (String item) => DropdownMenuItem<String>(
               value: item,
               child: Text(item, style: TextStyle(color: getColorTheme(context).onSecondaryContainer)),
             ),
@@ -286,7 +286,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
 
   Widget _buildChoiceOfDebitVsCredit() {
     return mySegmentSelector(
-      segments: const [
+      segments: const <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: 0,
           label: Text('Credit'),
@@ -310,7 +310,7 @@ class ImportTransactionsPanelState extends State<ImportTransactionsPanel> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Text(
           'Import transaction to account',
           style: getTextTheme(context).bodyLarge,

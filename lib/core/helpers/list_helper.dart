@@ -36,14 +36,14 @@ export  'package:money/core/helpers/pairs.dart';
 List<double> calculateSpread(double start, double end, int numEntries) {
   // Check if numEntries is valid
   if (numEntries <= 1) {
-    return [];
+    return <double>[];
   }
 
   // Calculate the step size between each value
   final double step = (end - start) / (numEntries - 1);
 
   // Initialize an empty list to store the spread values
-  final List<double> spread = [];
+  final List<double> spread = <double>[];
 
   // Generate the spread values and add them to the list
   for (int i = 0; i < numEntries; i++) {
@@ -82,12 +82,12 @@ List<double> calculateSpread(double start, double end, int numEntries) {
 ///   from the input Map.
 List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
   // Initialize an empty list to store the Pair objects
-  final List<Pair<T, U>> list = [];
+  final List<Pair<T, U>> list = <Pair<T, U>>[];
 
   // Iterate over the entries in the input Map
   map.forEach((dynamic key, dynamic value) {
     // Create a Pair object with the current key and value
-    list.add(Pair(key as T, value as U));
+    list.add(Pair<T, U>(key as T, value as U));
   });
 
   // Return the list of Pair objects
@@ -114,7 +114,7 @@ List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
 ///   percentages of the total.
 List<PairStringDouble> convertToPercentages(List<PairStringDouble> pairStringDouble) {
   // Calculate total amount
-  final double totalAmount = pairStringDouble.fold(0, (prev, entry) => prev + (entry.value as num));
+  final double totalAmount = pairStringDouble.fold(0, (double prev, PairStringDouble entry) => prev + (entry.value as num));
 
   // Convert each amount to a percentage and retain key association
   final List<PairStringDouble> percentages = pairStringDouble.map((PairStringDouble entry) {
@@ -160,7 +160,7 @@ T? getMoneyObjectFromFirstSelectedId<T>(
 ) {
   if (selectedIds.isNotEmpty) {
     final int id = selectedIds.first;
-    return listOfItems.firstWhereOrNull((element) => (element as MoneyObject).uniqueId == id) as T?;
+    return listOfItems.firstWhereOrNull((final dynamic element) => (element as MoneyObject).uniqueId == id) as T?;
   }
   return null;
 }
@@ -226,7 +226,7 @@ int sortByValue(final num a, final num b, final bool ascending) {
 
 
 List<String> enumToStringList<T>(List<T> enumValues) {
-  return enumValues.map((e) => e.toString().split('.').last).toList();
+  return enumValues.map((final T e) => e.toString().split('.').last).toList();
 }
 
 extension RandomItemExtension<T> on List<T> {

@@ -43,12 +43,12 @@ String escapeString(String input) {
 }
 
 String formatDoubleUpToFiveZero(double value, {bool showPlusSign = false}) {
-  final formatter = NumberFormat('#,##0.#####', 'en_US');
+  final NumberFormat formatter = NumberFormat('#,##0.#####', 'en_US');
   return getPrefixPlusSignIfNeeded(value, showPlusSign: showPlusSign) + formatter.format(value);
 }
 
 String formatDoubleTrimZeros(double value) {
-  final formatter = NumberFormat('#,##0.##', 'en_US');
+  final NumberFormat formatter = NumberFormat('#,##0.##', 'en_US');
   return formatter.format(value);
 }
 
@@ -66,7 +66,7 @@ String getAmountAsShorthandText(
 List<String> getColumnInCsvLine(final String csvLine) {
   List<String> items = csvLine.split(RegExp(r',|;(?=(?:[^"]*"[^"]*")*[^"]*$)'));
   // remove quotes around elements
-  items = items.map((item) => item.replaceAll('"', '')).toList();
+  items = items.map((String item) => item.replaceAll('"', '')).toList();
   return items;
 }
 
@@ -75,7 +75,7 @@ String getCountryFromLocale(final String locale) {
   if (locale.isEmpty) {
     return 'US'; // default to US
   }
-  final tokens = locale.replaceAll('-', '_').split('_');
+  final List<String> tokens = locale.replaceAll('-', '_').split('_');
   return tokens.last;
 }
 
@@ -88,7 +88,7 @@ Future<String> getDocumentDirectory() async {
 }
 
 String getInitials(String fullName) {
-  return fullName.split(' ').map((word) => word[0].toUpperCase()).join('');
+  return fullName.split(' ').map((String word) => word[0].toUpperCase()).join('');
 }
 
 String getIntAsText(final int value, {final bool showPlusSign = false}) {
@@ -109,8 +109,8 @@ String getPrefixPlusSignIfNeeded(final num value, {final bool showPlusSign = fal
 ///
 /// Returns a `List<List<String>>` representing the parsed rows and fields.
 List<List<String>> getLinesFromRawTextWithSeparator(final String content, [final String separator = ',']) {
-  final List<List<String>> rows = [];
-  List<String> currentRow = [];
+  final List<List<String>> rows = <List<String>>[];
+  List<String> currentRow = <String>[];
   StringBuffer currentField = StringBuffer();
   bool inQuotes = false;
 
@@ -132,7 +132,7 @@ List<List<String>> getLinesFromRawTextWithSeparator(final String content, [final
       if (currentField.isNotEmpty || currentRow.isNotEmpty) {
         currentRow.add(currentField.toString());
         rows.add(currentRow);
-        currentRow = [];
+        currentRow = <String>[];
         currentField = StringBuffer();
       }
     } else {
@@ -208,7 +208,7 @@ List<String> getLinesOfText(final String inputText, {bool includeEmptyLines = tr
   final List<String> lines = inputText.split('\n');
   if (includeEmptyLines == false) {
     // Filter out the empty lines
-    return lines.where((line) => line.trim().isNotEmpty).toList();
+    return lines.where((String line) => line.trim().isNotEmpty).toList();
   }
   return lines;
 }
@@ -230,9 +230,9 @@ String shortenLongText(String fullName, [int maxLength = 5]) {
     return fullName;
   }
 
-  final words = fullName.split(' ');
+  final List<String> words = fullName.split(' ');
   if (words.length >= 2) {
-    return words.map((word) => word[0].toUpperCase()).join('.');
+    return words.map((String word) => word[0].toUpperCase()).join('.');
   }
   return fullName.substring(0, maxLength);
 }
@@ -269,8 +269,8 @@ int compareStringsAsNumbers(final String a, final String b) {
 }
 
 int compareStringsAsAmount(final String a, final String b) {
-  final valueA = attemptToGetDoubleFromText(a) ?? 0.00;
-  final valueB = attemptToGetDoubleFromText(b) ?? 0.00;
+  final double valueA = attemptToGetDoubleFromText(a) ?? 0.00;
+  final double valueB = attemptToGetDoubleFromText(b) ?? 0.00;
 
   return valueA.compareTo(valueB);
 }
@@ -297,7 +297,7 @@ String concat(
 }
 
 String removeUtf8Bom(String text) {
-  const bom = '\u{FEFF}';
+  const String bom = '\u{FEFF}';
   if (text.startsWith(bom)) {
     return text.substring(1);
   }
@@ -307,13 +307,13 @@ String removeUtf8Bom(String text) {
 double? parseUSDAmount(String input) {
   input = input.replaceAll('\$', '');
   input = input.replaceAll('USD', '');
-  final usdPattern = RegExp(r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\.\d+)(\s*USD)?$');
-  final match = usdPattern.firstMatch(input);
+  final RegExp usdPattern = RegExp(r'^[+-]?(\d+(\,\d{3})*(\.\d+)?|\.\d+)(\s*USD)?$');
+  final RegExpMatch? match = usdPattern.firstMatch(input);
 
   if (match != null) {
-    final numericPart = match.group(1)?.replaceAll(',', '');
+    final String? numericPart = match.group(1)?.replaceAll(',', '');
     if (numericPart != null) {
-      final sign = input.startsWith('-') ? -1.0 : 1.0;
+      final double sign = input.startsWith('-') ? -1.0 : 1.0;
       return double.parse(numericPart) * sign;
     }
   }
@@ -322,15 +322,15 @@ double? parseUSDAmount(String input) {
 }
 
 double? parseEuroAmount(String input) {
-  final euroPattern = RegExp(r'^([+-]?(?:\d+(?:\.\d{3})*|\d+))(,\d+)?\s*€?$');
-  final match = euroPattern.firstMatch(input);
+  final RegExp euroPattern = RegExp(r'^([+-]?(?:\d+(?:\.\d{3})*|\d+))(,\d+)?\s*€?$');
+  final RegExpMatch? match = euroPattern.firstMatch(input);
 
   if (match != null) {
-    final integerPart = match.group(1)?.replaceAll('.', '');
-    final decimalPart = match.group(2)?.replaceAll(',', '.');
+    final String? integerPart = match.group(1)?.replaceAll('.', '');
+    final String? decimalPart = match.group(2)?.replaceAll(',', '.');
 
     if (integerPart != null) {
-      final numericPart = integerPart + (decimalPart ?? '');
+      final String numericPart = integerPart + (decimalPart ?? '');
       return double.parse(numericPart);
     }
   }
@@ -362,7 +362,7 @@ double? parseAmount(String amountAsText, final String currency) {
 
 /// Remove any characters not in the allowedChars argument
 String cleanString(String inputStr, String allowedChars) {
-  return inputStr.split('').where((char) => allowedChars.contains(char)).join();
+  return inputStr.split('').where((String char) => allowedChars.contains(char)).join();
 }
 
 String validIntToCurrency(final num value) {

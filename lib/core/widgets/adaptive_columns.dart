@@ -28,7 +28,7 @@ class AdaptiveColumns extends StatelessWidget {
 
         final List<Widget> sizedWidgets = children
             .map(
-              (widget) => Container(
+              (Widget widget) => Container(
                 padding: const EdgeInsets.all(4),
                 width: optimalColumnWidth,
                 child: widget,

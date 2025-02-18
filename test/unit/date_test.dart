@@ -8,7 +8,7 @@ void main() {
     const DateTime? dateTime = null;
 
     // Act
-    final result = dateToDateTimeString(dateTime);
+    final String result = dateToDateTimeString(dateTime);
 
     // Assert
     expect(result, isEmpty);
@@ -16,10 +16,10 @@ void main() {
 
   test('getDateAndTimeAsText formats non-null DateTime correctly', () {
     // Arrange
-    final dateTime = DateTime(2023, 04, 15, 10, 30, 00);
+    final DateTime dateTime = DateTime(2023, 04, 15, 10, 30, 00);
 
     // Act
-    final result = dateToDateTimeString(dateTime);
+    final String result = dateToDateTimeString(dateTime);
 
     // Assert
     expect(result, '2023-04-15 10:30:00.000');
@@ -28,7 +28,7 @@ void main() {
   test('attempt to parse date formats', () {
     // ISO
 
-    var parsedDate = attemptToGetDateFromText('2019-12-31');
+    DateTime? parsedDate = attemptToGetDateFromText('2019-12-31');
     expect(parsedDate!.year, 2019);
     expect(parsedDate.month, 12);
     expect(parsedDate.day, 31);
@@ -65,32 +65,32 @@ void main() {
     });
 
     test('returns correct formats for 4-digit year dates with dashes', () {
-      expect(getPossibleDateFormats('2023-05-15'), ['yyyy-MM-dd', 'yyyy-MM-d']);
-      expect(getPossibleDateFormats('05-15-2023'), ['MM-dd-yyyy', 'MM-d-yyyy']);
-      expect(getPossibleDateFormats('15-05-2023'), ['dd-MM-yyyy', 'd-MM-yyyy']);
+      expect(getPossibleDateFormats('2023-05-15'), <String>['yyyy-MM-dd', 'yyyy-MM-d']);
+      expect(getPossibleDateFormats('05-15-2023'), <String>['MM-dd-yyyy', 'MM-d-yyyy']);
+      expect(getPossibleDateFormats('15-05-2023'), <String>['dd-MM-yyyy', 'd-MM-yyyy']);
     });
 
     test('returns correct formats for 4-digit year dates with slashes', () {
-      expect(getPossibleDateFormats('2023/05/15'), ['yyyy/MM/dd', 'yyyy/MM/d']);
-      expect(getPossibleDateFormats('05/15/2023'), ['MM/dd/yyyy', 'MM/d/yyyy']);
-      expect(getPossibleDateFormats('15/05/2023'), ['dd/MM/yyyy', 'd/MM/yyyy']);
+      expect(getPossibleDateFormats('2023/05/15'), <String>['yyyy/MM/dd', 'yyyy/MM/d']);
+      expect(getPossibleDateFormats('05/15/2023'), <String>['MM/dd/yyyy', 'MM/d/yyyy']);
+      expect(getPossibleDateFormats('15/05/2023'), <String>['dd/MM/yyyy', 'd/MM/yyyy']);
     });
 
     test('returns correct formats for 2-digit year dates with dashes', () {
-      expect(getPossibleDateFormats('23-05-15'), ['yy-MM-dd', 'dd-MM-yy', 'yy-MM-d', 'd-MM-yy']);
-      expect(getPossibleDateFormats('05-15-23'), ['MM-dd-yy', 'MM-d-yy']);
-      expect(getPossibleDateFormats('15-05-23'), ['yy-MM-dd', 'dd-MM-yy', 'yy-MM-d', 'd-MM-yy']);
+      expect(getPossibleDateFormats('23-05-15'), <String>['yy-MM-dd', 'dd-MM-yy', 'yy-MM-d', 'd-MM-yy']);
+      expect(getPossibleDateFormats('05-15-23'), <String>['MM-dd-yy', 'MM-d-yy']);
+      expect(getPossibleDateFormats('15-05-23'), <String>['yy-MM-dd', 'dd-MM-yy', 'yy-MM-d', 'd-MM-yy']);
     });
 
     test('returns correct formats for 2-digit year dates with slashes', () {
-      expect(getPossibleDateFormats('23/05/15'), ['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
-      expect(getPossibleDateFormats('05/15/23'), ['MM/dd/yy', 'MM/d/yy']);
-      expect(getPossibleDateFormats('15/05/23'), ['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
+      expect(getPossibleDateFormats('23/05/15'), <String>['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
+      expect(getPossibleDateFormats('05/15/23'), <String>['MM/dd/yy', 'MM/d/yy']);
+      expect(getPossibleDateFormats('15/05/23'), <String>['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
     });
 
     test('returns multiple formats if the date string matches multiple formats', () {
-      expect(getPossibleDateFormats('05/15/2023'), ['MM/dd/yyyy', 'MM/d/yyyy']);
-      expect(getPossibleDateFormats('15/05/23'), ['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
+      expect(getPossibleDateFormats('05/15/2023'), <String>['MM/dd/yyyy', 'MM/d/yyyy']);
+      expect(getPossibleDateFormats('15/05/23'), <String>['yy/MM/dd', 'dd/MM/yy', 'yy/MM/d', 'd/MM/yy']);
     });
 
     test('returns an empty list for invalid date strings', () {
@@ -100,8 +100,8 @@ void main() {
     });
 
     test('Relative dates', () {
-      final dateOld = DateTime(1999, 1, 1, 23, 59, 59);
-      final dateRecent = DateTime(2020, 1, 1);
+      final DateTime dateOld = DateTime(1999, 1, 1, 23, 59, 59);
+      final DateTime dateRecent = DateTime(2020, 1, 1);
 
       expect(oldestDate(dateOld, dateRecent), dateOld);
       expect(newestDate(dateOld, dateRecent), dateRecent);

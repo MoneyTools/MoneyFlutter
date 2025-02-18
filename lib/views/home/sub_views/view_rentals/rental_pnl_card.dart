@@ -19,9 +19,9 @@ class RentalPnLCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BoxWithScrollingContent(
-      children: [
+      children: <Widget>[
         Row(
-          children: [
+          children: <Widget>[
             gap(30),
             Expanded(
               child: Text(
@@ -96,9 +96,9 @@ class RentalPnLCard extends StatelessWidget {
   Widget distribution({
     required final BuildContext context,
   }) {
-    final List<Widget> widgets = [];
+    final List<Widget> widgets = <Widget>[];
 
-    pnl.distributions.forEach((name, percentage) {
+    pnl.distributions.forEach((String name, double percentage) {
       if (name.isNotEmpty) {
         widgets.add(
           LabelAndAmount(

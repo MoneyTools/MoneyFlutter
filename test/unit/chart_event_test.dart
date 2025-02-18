@@ -5,7 +5,7 @@ import 'package:money/data/models/chart_event.dart';
 void main() {
   group('ChartEvent', () {
     test('creates ChartEvent with valid data', () {
-      final chartEvent = ChartEvent(
+      final ChartEvent chartEvent = ChartEvent(
         dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 100.0,
         quantity: 1,
@@ -20,7 +20,7 @@ void main() {
     });
 
     test('creates ChartEvent with zero value', () {
-      final chartEvent = ChartEvent(
+      final ChartEvent chartEvent = ChartEvent(
         dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 0.0,
         quantity: 0,
@@ -32,7 +32,7 @@ void main() {
     });
 
     test('creates ChartEvent with negative value', () {
-      final chartEvent = ChartEvent(
+      final ChartEvent chartEvent = ChartEvent(
         dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: -100.0,
         quantity: -1,
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('compares ChartEvents correctly', () {
-      final event1 = ChartEvent(
+      final ChartEvent event1 = ChartEvent(
         dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 100.0,
         quantity: 1,
@@ -54,7 +54,7 @@ void main() {
         colorBasedOnQuantity: true,
       );
 
-      final event2 = ChartEvent(
+      final ChartEvent event2 = ChartEvent(
         dates: DateRange(min: DateTime(2023, 1, 1)),
         amount: 100.0,
         quantity: 1,
@@ -62,7 +62,7 @@ void main() {
         colorBasedOnQuantity: true,
       );
 
-      final event3 = ChartEvent(
+      final ChartEvent event3 = ChartEvent(
         dates: DateRange(min: DateTime(2023, 1, 2)),
         amount: 200.0,
         quantity: 2,

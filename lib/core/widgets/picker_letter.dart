@@ -22,12 +22,12 @@ class PickerLetters extends StatefulWidget {
 class _PickerLettersState extends State<PickerLetters> {
   @override
   Widget build(BuildContext context) {
-    final List<Widget> buttons = [];
+    final List<Widget> buttons = <Widget>[];
 
     for (final String option in widget.options) {
-      final letter = option.isEmpty ? ' ' : option[0];
+      final String letter = option.isEmpty ? ' ' : option[0];
       final bool isSelected = widget.selected == letter;
-      final theme = getColorTheme(context);
+      final ColorScheme theme = getColorTheme(context);
       buttons.add(
         TextButton(
           onPressed: () {

@@ -25,7 +25,7 @@ extension ViewPayeesSidePanel on ViewPayeesState {
     }
 
     final List<Transaction> flatTransactions = Transactions.flatTransactions(
-      Data().transactions.iterableList().where((t) => t.fieldPayee.value == selectedIds.first),
+      Data().transactions.iterableList().where((Transaction t) => t.fieldPayee.value == selectedIds.first),
     );
 
     return TransactionTimelineChart(transactions: flatTransactions);

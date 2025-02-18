@@ -19,7 +19,7 @@ class MergeCategoriesTransactionsDialog extends StatefulWidget {
 }
 
 class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTransactionsDialog> {
-  final List<Transaction> _transactions = [];
+  final List<Transaction> _transactions = <Transaction>[];
 
   late Category _categoryPicked = widget.categoryToMove;
 
@@ -27,7 +27,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
   void initState() {
     super.initState();
 
-    for (final t in Data().transactions.iterableList(includeDeleted: true)) {
+    for (final Transaction t in Data().transactions.iterableList(includeDeleted: true)) {
       if (t.fieldCategoryId.value == widget.categoryToMove.uniqueId) {
         _transactions.add(t);
       }
@@ -39,11 +39,11 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: [
+      children: <Widget>[
         const Spacer(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             const SizedBox(width: 100, child: Text('From category')),
             Expanded(
               child: Box(child: Text(widget.categoryToMove.fieldName.value)),
@@ -54,7 +54,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
         gapLarge(),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+          children: <Widget>[
             const SizedBox(width: 100, child: Text('To category')),
             Expanded(
               child: Box(
@@ -85,7 +85,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
       width: 250,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.all(8),
             child: action,
@@ -99,8 +99,8 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
   }
 
   Widget _buildActionPanel() {
-    final from = widget.categoryToMove.fieldName.value;
-    final to = _categoryPicked.fieldName.value;
+    final String from = widget.categoryToMove.fieldName.value;
+    final String to = _categoryPicked.fieldName.value;
 
     if (from == to) {
       return Center(
@@ -112,7 +112,7 @@ class _MergeCategoriesTransactionsDialogState extends State<MergeCategoriesTrans
       child: Wrap(
         spacing: SizeForPadding.large,
         runSpacing: SizeForPadding.large,
-        children: [
+        children: <Widget>[
           // Append
           _buildActionOffering(
             'Use this option to move "$from" as a child of category of "$to".',
@@ -176,7 +176,7 @@ void moveTransactionsToCategory(
   final List<Transaction> transactions,
   final Category moveToCategory,
 ) {
-  for (final t in transactions) {
+  for (final Transaction t in transactions) {
     t.stashValueBeforeEditing();
     t.fieldCategoryId.value = moveToCategory.uniqueId;
 

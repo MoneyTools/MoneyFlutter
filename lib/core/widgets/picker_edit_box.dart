@@ -34,14 +34,14 @@ class PickerEditBoxState extends State<PickerEditBox> {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
           // color: getColorTheme(context).tertiaryContainer.withValues(alpha:0.3),
           // border: Border(bottom: BorderSide(color: getColorTheme(context).outline)),
           // borderRadius: const BorderRadius.all(Radius.circular(8)),
           ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Expanded(
             child: MyTextInput(
               border: false,

@@ -57,7 +57,7 @@ Widget _buildTextAndSortAndFilter(
     case TextAlign.end:
       return Row(
         mainAxisAlignment: MainAxisAlignment.end,
-        children: [
+        children: <Widget>[
           Expanded(
             child: Text(
               text,
@@ -78,7 +78,7 @@ Widget _buildTextAndSortAndFilter(
         scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
               text,
               softWrap: false,
@@ -98,7 +98,7 @@ Widget _buildAdorners(
   final bool hasFilters,
 ) {
   return Row(
-    children: [
+    children: <Widget>[
       buildSortIconNameWidget(sortIndicator),
       _buildAdornerFoFilter(hasFilters),
     ],

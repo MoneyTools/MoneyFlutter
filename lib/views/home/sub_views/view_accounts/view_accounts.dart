@@ -73,12 +73,12 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
   @override
   List<Widget> getActionsButtons(final bool forSidePanelTransactions) {
-    final list = super.getActionsButtons(forSidePanelTransactions);
+    final List<Widget> list = super.getActionsButtons(forSidePanelTransactions);
 
     if (forSidePanelTransactions) {
       list.add(
         buildJumpToButton(
-          [
+          <MenuEntry>[
             MenuEntry(
               icon: ViewId.viewTransactions.getIconData(),
               title: 'Matching Transaction',
@@ -123,7 +123,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         buildAddItemButton(
           () {
             // add a new Account
-            final newItem = Data().accounts.addNewAccount('New Bank Account');
+            final Account newItem = Data().accounts.addNewAccount('New Bank Account');
             updateListAndSelect(newItem.uniqueId);
           },
           'Add new account',
@@ -135,14 +135,14 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
       if (account != null) {
         list.add(
           buildJumpToButton(
-            [
+            <MenuEntry>[
               MenuEntry.toTransactions(
                 transactionId: -1,
                 // Prepare the Transaction view Filter to show only the selected account
-                filters: FieldFilters([
+                filters: FieldFilters(<FieldFilter>[
                   FieldFilter(
                     fieldName: Constants.viewTransactionFieldNameAccount,
-                    strings: [account.fieldName.value],
+                    strings: <String>[account.fieldName.value],
                   ),
                 ]),
               ),
@@ -179,13 +179,13 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
         if (account != null) {
           if (account.fieldCurrency.value != Constants.defaultCurrency) {
             // only offer currency toggle if the account is not USD based
-            return [account.fieldCurrency.value, Constants.defaultCurrency];
+            return <String>[account.fieldCurrency.value, Constants.defaultCurrency];
           }
         }
 
-        return [Constants.defaultCurrency];
+        return <String>[Constants.defaultCurrency];
       default:
-        return [];
+        return <String>[];
     }
   }
 
@@ -217,7 +217,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
 
     _footerColumnDate.clear();
 
-    for (final account in list) {
+    for (final Account account in list) {
       _footerColumnDate.inflate(account.fieldUpdatedOn.value);
     }
     return list;
@@ -238,7 +238,7 @@ class ViewAccountsState extends ViewForMoneyObjectsState {
     if (account != null) {
       return getTransactionForLastSelectedAccount(account);
     }
-    return [];
+    return <MoneyObject>[];
   }
 
   @override

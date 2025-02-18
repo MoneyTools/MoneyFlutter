@@ -7,18 +7,18 @@ import 'package:money/core/helpers/misc_helpers.dart';
 void main() {
   group('invertColor Function Tests', () {
     test('test_invert_color_correct_inversion', () {
-      const color = Color.fromRGBO(100, 150, 200, 1.0);
-      const expectedInvertedColor = Color.fromRGBO(155, 105, 55, 1.0);
-      final invertedColor = invertColor(color);
+      const Color color = Color.fromRGBO(100, 150, 200, 1.0);
+      const Color expectedInvertedColor = Color.fromRGBO(155, 105, 55, 1.0);
+      final Color invertedColor = invertColor(color);
 
       expect(invertedColor, equals(expectedInvertedColor));
     });
 
     test('test_invert_color_edge_cases', () {
-      const black = Color.fromRGBO(0, 0, 0, 1.0);
-      const white = Color.fromRGBO(255, 255, 255, 1.0);
-      final invertedBlack = invertColor(black);
-      final invertedWhite = invertColor(white);
+      const Color black = Color.fromRGBO(0, 0, 0, 1.0);
+      const Color white = Color.fromRGBO(255, 255, 255, 1.0);
+      final Color invertedBlack = invertColor(black);
+      final Color invertedWhite = invertColor(white);
 
       expect(invertedBlack, equals(white));
       expect(invertedWhite, equals(black));
@@ -27,10 +27,10 @@ void main() {
 
   group('contrastColor Function Tests', () {
     test('test_contrast_color_luminance_threshold', () {
-      const lightColor = Color.fromRGBO(200, 200, 200, 1.0);
-      const darkColor = Color.fromRGBO(50, 50, 50, 1.0);
-      final contrastForLight = contrastColor(lightColor);
-      final contrastForDark = contrastColor(darkColor);
+      const Color lightColor = Color.fromRGBO(200, 200, 200, 1.0);
+      const Color darkColor = Color.fromRGBO(50, 50, 50, 1.0);
+      final Color contrastForLight = contrastColor(lightColor);
+      final Color contrastForDark = contrastColor(darkColor);
 
       expect(contrastForLight, equals(Colors.black));
       expect(contrastForDark, equals(Colors.white));
@@ -68,10 +68,10 @@ void main() {
       test('handles opaque colors correctly', () {
         // Arrange
         const Color colorSource = Color(0xFFFF0000);
-        const expectedHexString = '#ff0000ff';
+        const String expectedHexString = '#ff0000ff';
 
         // Act
-        final result = colorToHexString(colorSource);
+        final String result = colorToHexString(colorSource);
 
         // Assert
         expect(result, expectedHexString);
@@ -80,10 +80,10 @@ void main() {
       test('handles transparent colors correctly', () {
         // Arrange
         const Color colorSource = Color(0x80FF0000);
-        const expectedHexString = '#ff000080';
+        const String expectedHexString = '#ff000080';
 
         // Act
-        final result = colorToHexString(colorSource);
+        final String result = colorToHexString(colorSource);
 
         // Assert
         expect(result, expectedHexString);
@@ -97,7 +97,7 @@ void main() {
       const Color colorSource = Colors.purple;
 
       // Act
-      final result = getHueAndBrightness(colorSource);
+      final Pair<double, double> result = getHueAndBrightness(colorSource);
 
       // Assert
       expect(result.first.floor(), 291);
@@ -109,7 +109,7 @@ void main() {
       const Color colorSource = Color(0xFFFF0000);
 
       // Act
-      final result = getHueAndBrightness(colorSource);
+      final Pair<double, double> result = getHueAndBrightness(colorSource);
 
       // Assert
       expect(result.first, 0.0);
@@ -123,7 +123,7 @@ void main() {
       const double expectedBrightness = 0.5;
 
       // Act
-      final result = getHueAndBrightness(colorSource);
+      final Pair<double, double> result = getHueAndBrightness(colorSource);
 
       // Assert
       expect(result.first, expectedHue);

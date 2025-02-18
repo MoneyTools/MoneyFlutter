@@ -14,13 +14,13 @@ class SuggestionApproval extends StatefulWidget {
   final Widget child;
 
   /// Optional - Approval button will show if there's a callback function
-  final Function? onApproved;
+  final void Function()? onApproved;
 
   // Optional - Dropdown button
-  final Function? onChooseCategory;
+  final void Function(BuildContext)? onChooseCategory;
 
   // Optional - for Split Transaction
-  final Function? onShowSplit;
+  final void Function()? onShowSplit;
 
   @override
   SuggestionApprovalState createState() => SuggestionApprovalState();
@@ -66,7 +66,7 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
     final double opacity = widget.onApproved == null ? 1 : 0.6;
 
     if (approved) {
-      return WorkingIndicator(size: 10);
+      return const WorkingIndicator(size: 10);
     }
     return FadeTransition(
       opacity: _opacityAnimation,
@@ -74,7 +74,7 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
         opacity: opacity,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Expanded(
               child: FittedBox(
                 fit: BoxFit.scaleDown,
@@ -116,7 +116,7 @@ class SuggestionApprovalState extends State<SuggestionApproval> with SingleTicke
         approved = true;
       });
       if (widget.onApproved != null) {
-        Future.delayed(Duration(milliseconds: 10), () => widget.onApproved!());
+        Future<void>.delayed(const Duration(milliseconds: 10), () => widget.onApproved!());
       }
     });
   }

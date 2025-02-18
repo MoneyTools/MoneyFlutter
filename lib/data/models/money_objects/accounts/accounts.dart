@@ -51,8 +51,8 @@ class Accounts extends MoneyObjects<Account> {
     }
 
     // Cumulate
-    final transactionsSortedByDate =
-        Data().transactions.iterableList().sorted((a, b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value));
+    final List<Transaction> transactionsSortedByDate =
+        Data().transactions.iterableList().sorted((Transaction a, Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value));
 
     for (final Transaction t in transactionsSortedByDate) {
       final Account? account = get(t.fieldAccountId.value);
@@ -87,11 +87,11 @@ class Accounts extends MoneyObjects<Account> {
     }
 
     // Increase the balance of any investment account with the current Stock value
-    final investmentAccounts = Data()
+    final List<Account> investmentAccounts = Data()
         .accounts
         .iterableList()
         .where(
-          (account) =>
+          (Account account) =>
               account.fieldType.value == AccountType.moneyMarket ||
               account.fieldType.value == AccountType.investment ||
               account.fieldType.value == AccountType.retirement,
@@ -100,20 +100,20 @@ class Accounts extends MoneyObjects<Account> {
 
     final AccumulatorList<String, Investment> groupBySymbol = AccumulatorList<String, Investment>();
 
-    for (final account in investmentAccounts) {
+    for (final Account account in investmentAccounts) {
       groupAccountStockSymbols(account, groupBySymbol);
     }
 
     // apply the investment running balance amount
-    groupBySymbol.values.forEach((keyAccountAndSymbol, valuesInvestments) {
+    groupBySymbol.values.forEach((String keyAccountAndSymbol, Set<Investment> valuesInvestments) {
       final double totalAdjustedShareForThisStockInThisAccount =
           Investments.applyHoldingSharesAdjustedForSplits(valuesInvestments.toList());
-      final tokens = keyAccountAndSymbol.split('|');
-      final accountId = tokens[0];
-      final symbol = tokens[1];
-      final account = Data().accounts.get(int.parse(accountId));
+      final List<String> tokens = keyAccountAndSymbol.split('|');
+      final String accountId = tokens[0];
+      final String symbol = tokens[1];
+      final Account? account = Data().accounts.get(int.parse(accountId));
       if (account != null) {
-        final security = Data().securities.getBySymbol(symbol);
+        final Security? security = Data().securities.getBySymbol(symbol);
         if (security != null) {
           account.fieldStockHoldingEstimation.value
               .setAmount(totalAdjustedShareForThisStockInThisAccount * security.fieldLastPrice.value.asDouble());
@@ -125,9 +125,9 @@ class Accounts extends MoneyObjects<Account> {
     });
 
     // Loans
-    final accountLoans =
-        Data().accounts.iterableList().where((account) => account.fieldType.value == AccountType.loan).toList();
-    for (final account in accountLoans) {
+    final List<Account> accountLoans =
+        Data().accounts.iterableList().where((Account account) => account.fieldType.value == AccountType.loan).toList();
+    for (final Account account in accountLoans) {
       final LoanPayment? latestPayment = getAccountLoanPayments(account).lastOrNull;
       if (latestPayment != null) {
         account.fieldUpdatedOn.value = latestPayment.fieldDate.value;
@@ -137,7 +137,7 @@ class Accounts extends MoneyObjects<Account> {
 
     // Credit Card "Paid On" date
     // attempt to match Statement balance to a payment
-    for (final Account account in iterableList().where((a) => a.fieldType.value == AccountType.credit)) {
+    for (final Account account in iterableList().where((Account a) => a.fieldType.value == AccountType.credit)) {
       _updateCreditCardPaidOn(account);
     }
   }
@@ -180,7 +180,7 @@ class Accounts extends MoneyObjects<Account> {
     }
 
     // add a new Account
-    final account = Account();
+    final Account account = Account();
     account.fieldName.value = nextAvailableName;
     account.isOpen = true;
 
@@ -189,7 +189,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   bool compareDoubles(double a, double b, int precision) {
-    final threshold = pow(10, -precision);
+    final num threshold = pow(10, -precision);
     return (a - b).abs() < threshold;
   }
 
@@ -232,13 +232,13 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   List<Account> getListSorted() {
-    final list = iterableList()
+    final List<Account> list = iterableList()
         .where(
-          (account) =>
+          (Account account) =>
               account.isMatchingUserChoiceIncludingClosedAccount && account.fieldType.value != AccountType.categoryFund,
         )
         .toList();
-    list.sort((a, b) => sortByString(a.fieldName.value, b.fieldName.value, true));
+    list.sort((Account a, Account b) => sortByString(a.fieldName.value, b.fieldName.value, true));
     return list;
   }
 
@@ -286,7 +286,7 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   Iterable<Transaction> getTransactions(final Account account) {
-    return Data().transactions.iterableList().where((t) => t.fieldAccountId.value == account.uniqueId);
+    return Data().transactions.iterableList().where((Transaction t) => t.fieldAccountId.value == account.uniqueId);
   }
 
   String getViewPreferenceIdAccountLastSelected() {
@@ -294,8 +294,8 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   static void groupAccountStockSymbols(Account account, AccumulatorList<String, Investment> groupBySymbol) {
-    final investments =
-        Data().investments.iterableList().where((i) => i.transactionInstance!.fieldAccountId.value == account.uniqueId);
+    final Iterable<Investment> investments =
+        Data().investments.iterableList().where((Investment i) => i.transactionInstance!.fieldAccountId.value == account.uniqueId);
 
     for (final Investment investment in investments) {
       final Security? security = Data().securities.get(investment.fieldSecurity.value);
@@ -334,14 +334,14 @@ class Accounts extends MoneyObjects<Account> {
   }
 
   void _updateCreditCardPaidOn(final Account account) {
-    final transactionForAccountSortedByDateAscending =
-        Data().transactions.iterableList().where((t) => t.fieldAccountId.value == account.uniqueId).toList();
+    final List<Transaction> transactionForAccountSortedByDateAscending =
+        Data().transactions.iterableList().where((Transaction t) => t.fieldAccountId.value == account.uniqueId).toList();
     // sort date as string to match the ListView sorting logic
-    transactionForAccountSortedByDateAscending.sort((a, b) => Transaction.sortByDateTime(a, b, true));
+    transactionForAccountSortedByDateAscending.sort((Transaction a, Transaction b) => Transaction.sortByDateTime(a, b, true));
 
     double runningBalanceForThisAccount = 0;
 
-    for (final t in transactionForAccountSortedByDateAscending) {
+    for (final Transaction t in transactionForAccountSortedByDateAscending) {
       runningBalanceForThisAccount += t.fieldAmount.value.asDouble();
       t.balance = runningBalanceForThisAccount;
       t.fieldPaidOn.value = '';
@@ -355,7 +355,7 @@ class Accounts extends MoneyObjects<Account> {
         // a payment or reimbursement was made
 
         final DateTime maxDateToLookAt = t.fieldDateTime.value!.subtract(const Duration(days: 60));
-        final transactionWithMatchingBalance = findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
+        final Transaction? transactionWithMatchingBalance = findBackwardInTimeForTransactionBalanceThatMatchThisAmount(
           transactionForAccountSortedByDateAscending,
           i - 1,
           maxDateToLookAt,

@@ -18,15 +18,15 @@ class RecurringPayment {
   }) {
     total = 0.00;
     dateRangeFound = DateRange();
-    categoryIdsAndSums = [];
+    categoryIdsAndSums = <Pair<int, double>>[];
     frequency = transactions.length;
 
     final MapAccumulatorSum<int, int, double> payeeIdMonthAndSums = MapAccumulatorSum<int, int, double>();
-    final Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = {};
+    final Map<int, AccumulatorSum<int, double>> payeeIdCategoryIdsAndSums = <int, AccumulatorSum<int, double>>{};
 
-    averagePerMonths = List.generate(12, (index) => Pair<int, double>(0, 0));
+    averagePerMonths = List<Pair<int, double>>.generate(12, (int index) => Pair<int, double>(0, 0));
 
-    for (final transaction in transactions) {
+    for (final Transaction transaction in transactions) {
       total += transaction.fieldAmount.value.asDouble();
       dateRangeFound.inflate(transaction.fieldDateTime.value);
 
@@ -63,7 +63,7 @@ class RecurringPayment {
     }
 
     // sum per month
-    sumPerMonths = List.generate(12, (index) => 0);
+    sumPerMonths = List<double>.generate(12, (int index) => 0);
     final AccumulatorSum<int, double> monthSums2 = payeeIdMonthAndSums.getLevel1(payeeId)!;
     monthSums2.values.forEach((int month, double sum) {
       sumPerMonths[month - 1] = sum.abs();
@@ -114,12 +114,12 @@ class RecurringPayment {
     final List<Pair<int, double>> list = payment.getListOfCategoryIdAndSum();
     // Sort descending
     if (asIncome) {
-      list.sort((a, b) => b.second.compareTo(a.second));
+      list.sort((Pair<int, double> a, Pair<int, double> b) => b.second.compareTo(a.second));
     } else {
-      list.sort((a, b) => a.second.compareTo(b.second));
+      list.sort((Pair<int, double> a, Pair<int, double> b) => a.second.compareTo(b.second));
     }
 
-    final List<Distribution> listForDistributionBar = [];
+    final List<Distribution> listForDistributionBar = <Distribution>[];
 
     // keep at most [n] number of items
     final int topCategoryToShow = min(topN, list.length);

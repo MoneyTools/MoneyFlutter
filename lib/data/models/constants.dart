@@ -218,5 +218,5 @@ extension ViewExtension on ViewId {
 }
 
 class MyKeys {
-  static const keyHeaderFilterTextInput = Key('key_header_filter_input');
+  static const Key keyHeaderFilterTextInput = Key('key_header_filter_input');
 }

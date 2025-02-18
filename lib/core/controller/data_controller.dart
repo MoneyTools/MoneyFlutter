@@ -8,6 +8,7 @@ import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/helpers/file_systems.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/snack_bar.dart';
+import 'package:money/data/models/money_objects/accounts/account.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/data/storage/data/data_mutations.dart';
 import 'package:path/path.dart' as p;
@@ -73,7 +74,7 @@ class DataController extends GetxController {
     if (success) {
       setCurrentFileName(dataSource.filePath);
       currentLoadedFileDateTime.value = await MyFileSystems.getFileModifiedTime(dataSource.filePath);
-      Future.delayed(Duration.zero, () {
+      Future<Null>.delayed(Duration.zero, () {
         Get.offNamed<dynamic>(Constants.routeHomePage);
       });
     }
@@ -101,7 +102,7 @@ class DataController extends GetxController {
         // Once the file is loaded, navigate to the main screen
         isLoading.value = false;
 
-        Future.delayed(Duration.zero, () {
+        Future<Null>.delayed(Duration.zero, () {
           Get.offNamed<dynamic>(Constants.routeWelcomePage);
         });
       }
@@ -114,7 +115,7 @@ class DataController extends GetxController {
   void onFileNew() async {
     this.closeFile();
 
-    final newAccount = Data().accounts.addNewAccount('New Bank Account');
+    final Account newAccount = Data().accounts.addNewAccount('New Bank Account');
     PreferenceController.to.jumpToView(
       viewId: ViewId.viewAccounts,
       selectedId: newAccount.uniqueId,
@@ -126,7 +127,7 @@ class DataController extends GetxController {
   Future<bool> onFileOpen() async {
     FilePickerResult? pickerResult;
 
-    const supportedFileTypes = <String>[
+    const List<String> supportedFileTypes = <String>[
       'mmdb',
       'mmcsv',
       'sdf',

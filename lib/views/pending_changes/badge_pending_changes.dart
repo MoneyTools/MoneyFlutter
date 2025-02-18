@@ -59,7 +59,7 @@ class BadgePendingChanges extends StatelessWidget {
   }
 
   Widget getChangeLabel(final BuildContext context) {
-    final List<Widget> widgets = [];
+    final List<Widget> widgets = <Widget>[];
     final TextStyle textStyle = Theme.of(context).textTheme.labelSmall!.copyWith(fontSize: 9, fontWeight: FontWeight.w900);
     if (DataController.to.trackMutations.added.value > 0) {
       widgets.add(

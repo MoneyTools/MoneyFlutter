@@ -76,12 +76,12 @@ class TransactionExtra extends MoneyObject {
   @override
   set uniqueId(final int value) => fieldId.value = value;
 
-  static final _fields = Fields<TransactionExtra>();
+  static final Fields<TransactionExtra> _fields = Fields<TransactionExtra>();
 
   static Fields<TransactionExtra> get fields {
     if (_fields.isEmpty) {
-      final tmp = TransactionExtra.fromJson({});
-      _fields.setDefinitions([
+      final TransactionExtra tmp = TransactionExtra.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldTaxDate,
         tmp.fieldTaxYear,

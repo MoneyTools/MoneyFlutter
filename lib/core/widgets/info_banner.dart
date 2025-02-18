@@ -48,7 +48,7 @@ class InfoBanner extends StatelessWidget {
       ),
       padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       child: Row(
-        children: [
+        children: <Widget>[
           Icon(icon, color: color),
           const SizedBox(width: 8.0),
           Expanded(

@@ -41,7 +41,7 @@ class PaymentRollup {
 }
 
 List<LoanPayment> getAccountLoanPayments(Account account) {
-  final List<int> categoriesToMatch = [
+  final List<int> categoriesToMatch = <int>[
     account.fieldCategoryIdForInterest.value,
     account.fieldCategoryIdForPrincipal.value,
   ];
@@ -50,16 +50,16 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
   final List<LoanPayment> aggregatedList = Data()
       .loanPayments
       .iterableList(includeDeleted: false)
-      .where((a) => a.fieldAccountId.value == account.uniqueId)
+      .where((LoanPayment a) => a.fieldAccountId.value == account.uniqueId)
       .toList();
 
   // include the bank transactions matching the Account Categories for Principal and Interest
   final List<Transaction> listOfTransactions = Data().transactions.getListFlattenSplits(
-        whereClause: (t) => t.isMatchingAnyOfTheseCategories(categoriesToMatch),
+        whereClause: (Transaction t) => t.isMatchingAnyOfTheseCategories(categoriesToMatch),
       );
 
   // Rollup into a single Payment based on Date to match Principal and Interest payment
-  final Map<String, PaymentRollup> payments = {};
+  final Map<String, PaymentRollup> payments = <String, PaymentRollup>{};
 
   for (final Transaction t in listOfTransactions) {
     // Key is based on date + transaction ID
@@ -112,7 +112,7 @@ List<LoanPayment> getAccountLoanPayments(Account account) {
     );
   }
 
-  aggregatedList.sort((a, b) => sortByDate(a.fieldDate.value, b.fieldDate.value, true));
+  aggregatedList.sort((LoanPayment a, LoanPayment b) => sortByDate(a.fieldDate.value, b.fieldDate.value, true));
 
   double runningBalance = 0.00;
 

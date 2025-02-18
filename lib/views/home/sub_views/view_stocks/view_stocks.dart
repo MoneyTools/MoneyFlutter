@@ -100,7 +100,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       if (selectedInvestment != null) {
         list.add(
           buildJumpToButton(
-            [
+            <MenuEntry>[
               MenuEntry.toAccounts(accountId: selectedInvestment.transactionInstance!.fieldAccountId.value),
               MenuEntry.toTransactions(transactionId: selectedInvestment.uniqueId),
             ],
@@ -113,7 +113,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       if (selectedSecurity != null) {
         list.add(
           buildJumpToButton(
-            [
+            <MenuEntry>[
               // Jump to Investment view
               MenuEntry.toInvestments(symbol: selectedSecurity.fieldSymbol.value),
             ],
@@ -152,7 +152,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     List<Security> list = Data().securities.iterableList(includeDeleted: includeDeleted).toList();
 
     if (applyFilter) {
-      list = list.where((final instance) => isMatchingFilters(instance) && isMatchingPivot(instance)).toList();
+      list = list.where((final Security instance) => isMatchingFilters(instance) && isMatchingPivot(instance)).toList();
     }
 
     return list;
@@ -177,7 +177,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     required final List<int> selectedIds,
     required final bool isReadOnly,
   }) {
-    final selectedSecurity = getFirstSelectedItem() as Security?;
+    final Security? selectedSecurity = getFirstSelectedItem() as Security?;
     if (selectedSecurity == null) {
       return const CenterMessage(message: 'No item selected.');
     }
@@ -188,7 +188,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           alignment: WrapAlignment.center,
           runSpacing: 30,
           spacing: 30,
-          children: [
+          children: <Widget>[
             MoneyObjectCard(
               title: getClassNameSingular(),
               moneyObject: selectedSecurity,
@@ -223,7 +223,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   Widget _buildPanelForDividend(final BuildContext context, final Security security) {
-    final double totalDividend = security.dividends.fold(0.0, (sum, dividend) => sum + dividend.amount);
+    final double totalDividend = security.dividends.fold(0.0, (double sum, Dividend dividend) => sum + dividend.amount);
 
     return buildAdaptiveBox(
       context: context,
@@ -231,17 +231,17 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       count: security.dividends.length,
       content: ListView.separated(
         itemCount: security.dividends.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           final Dividend dividend = security.dividends[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Text(dividend.date.toString()),
               Text(Currency.getAmountAsStringUsingCurrency(dividend.amount)),
             ],
           );
         },
-        separatorBuilder: (context, index) => Divider(
+        separatorBuilder: (BuildContext context, int index) => Divider(
           color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
         ),
       ),
@@ -258,11 +258,11 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       count: splits.length,
       content: ListView.separated(
         itemCount: splits.length,
-        itemBuilder: (context, index) {
+        itemBuilder: (BuildContext context, int index) {
           final StockSplit split = splits[index];
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
+            children: <Widget>[
               Text(split.fieldDate.getValueForDisplay(split).toString()),
               Text(split.fieldNumerator.value.toString()),
               const Text(' for '),
@@ -270,7 +270,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
             ],
           );
         },
-        separatorBuilder: (context, index) => Divider(
+        separatorBuilder: (BuildContext context, int index) => Divider(
           color: getColorTheme(context).onPrimaryContainer.withAlpha(100),
         ),
       ),
@@ -278,7 +278,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
   }
 
   List<Field<dynamic>> _getFieldsToDisplayForSidePanelTransactions(bool includeSplitColumns) {
-    final included = [
+    final List<String> included = <String>[
       'Date',
       'Account',
       'Activity',
@@ -294,7 +294,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     ];
     final List<Field<dynamic>> fieldsToDisplay = Investment.fields.definitions
         .where(
-          (element) => included.contains(element.name),
+          (Field<dynamic> element) => included.contains(element.name),
         )
         .toList();
     return fieldsToDisplay;
@@ -309,7 +309,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       final String symbol = security.fieldSymbol.value;
       final List<Investment> list = getListOfInvestment(security);
 
-      final List<ChartEvent> events = [];
+      final List<ChartEvent> events = <ChartEvent>[];
       for (final Investment activity in list) {
         if (activity.effectiveUnits != 0) {
           events.add(
@@ -347,13 +347,13 @@ class ViewStocksState extends ViewForMoneyObjectsState {
       return const CenterMessage(message: 'No security selected.');
     }
 
-    final listOfInvestmentsForThisStock = getListOfInvestment(_lastSecuritySelected!);
+    final List<Investment> listOfInvestmentsForThisStock = getListOfInvestment(_lastSecuritySelected!);
 
     int sortByFieldIndex = PreferenceController.to.getInt(getPreferenceKey(settingKeySidePanel + settingKeySortBy), 0);
     bool sortAscending =
         PreferenceController.to.getBool(getPreferenceKey(settingKeySidePanel + settingKeySortAscending), false);
 
-    final fields = _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
+    final List<Field<dynamic>> fields = _getFieldsToDisplayForSidePanelTransactions(_lastSecuritySelected!.splitsHistory.isNotEmpty);
 
     MoneyObjects.sortList(
       listOfInvestmentsForThisStock,
@@ -394,7 +394,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
         });
       },
       onItemLongPress: (BuildContext context2, int itemId) {
-        final instance = Data().investments.get(itemId);
+        final Investment? instance = Data().investments.get(itemId);
         if (instance != null) {
           myShowDialogAndActionsForMoneyObject(
             title: 'Investment',

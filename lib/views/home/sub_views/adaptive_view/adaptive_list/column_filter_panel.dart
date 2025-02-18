@@ -30,17 +30,17 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
   Widget build(BuildContext context) {
     list = widget.listOfUniqueInstances
         .where(
-          (element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()),
+          (ValueSelection element) => filterText.isEmpty || element.name.toLowerCase().contains(filterText.toLowerCase()),
         )
         .toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         // Filter input box
         TextField(
           key: const Key('key_picker_input_filter'),
-          onChanged: (value) {
+          onChanged: (String value) {
             setState(() {
               filterText = value;
             });
@@ -59,7 +59,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
           onPressed: () {
             setState(() {
               final bool setAs = !areAllItemSelected();
-              for (final item in list) {
+              for (final ValueSelection item in list) {
                 item.isSelected = setAs;
               }
             });
@@ -98,7 +98,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
 
   /// true if all items are selected
   bool areAllItemSelected() {
-    return list.firstWhereOrNull((element) => element.isSelected == false) == null;
+    return list.firstWhereOrNull((ValueSelection element) => element.isSelected == false) == null;
   }
 
   String getItemCounts() {
@@ -110,7 +110,7 @@ class _ColumnFilterPanelState extends State<ColumnFilterPanel> {
   }
 
   int getSelectedCount() {
-    return widget.listOfUniqueInstances.where((item) => item.isSelected).length;
+    return widget.listOfUniqueInstances.where((ValueSelection item) => item.isSelected).length;
   }
 }
 

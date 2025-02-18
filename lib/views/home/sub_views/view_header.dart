@@ -87,7 +87,7 @@ class ViewHeader extends StatelessWidget {
   }
 
   Widget _buildContent(final BuildContext context) {
-    final List<Widget> widgets = [];
+    final List<Widget> widgets = <Widget>[];
 
     widgets.add(
       Column(
@@ -95,7 +95,7 @@ class ViewHeader extends StatelessWidget {
         children: <Widget>[
           IntrinsicWidth(
             child: Row(
-              children: [
+              children: <Widget>[
                 ThreePartLabel(
                   text1: title,
                   text2: getIntAsText(itemCount.toInt()),
@@ -132,7 +132,7 @@ class ViewHeader extends StatelessWidget {
     );
 
     if (multipleSelection != null || (getActionButtons != null)) {
-      final listOfActionButtons = getActionButtons!(false);
+      final List<Widget> listOfActionButtons = getActionButtons!(false);
 
       // Multiple-Selection
       if (multipleSelection != null) {
@@ -188,7 +188,7 @@ class ViewHeader extends StatelessWidget {
     }
 
     return Row(
-      children: [
+      children: <Widget>[
         Expanded(
           child: Wrap(
             spacing: 10.0, // Adjust spacing between child elements

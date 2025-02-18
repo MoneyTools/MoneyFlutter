@@ -18,14 +18,14 @@ class MoneyObjectCard extends StatelessWidget {
   });
 
   final MoneyObject? moneyObject;
-  final Function? onDelete;
-  final Function? onEdit;
-  final Function? onMergeWith;
+  final void Function(BuildContext, List<MoneyObject>)? onDelete;
+  final void Function(BuildContext, List<MoneyObject>)? onEdit;
+  final void Function(BuildContext, MoneyObject?)? onMergeWith;
   final String title;
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> widgets = [];
+    final List<Widget> widgets = <Widget>[];
 
     // Header
     if (title.isNotEmpty) {
@@ -37,17 +37,12 @@ class MoneyObjectCard extends StatelessWidget {
       widgets.add(const Text('- not found -'));
     } else {
       widgets.add(gapLarge());
-      widgets.addAll(
-        moneyObject!.buildListOfNamesValuesWidgets(onEdit: null, compact: true),
-      );
+      widgets.addAll(moneyObject!.buildListOfNamesValuesWidgets(onEdit: null, compact: true));
     }
 
     return Box(
       color: getColorTheme(context).primaryContainer,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: widgets,
-      ),
+      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: widgets),
     );
   }
 
@@ -55,53 +50,38 @@ class MoneyObjectCard extends StatelessWidget {
   Widget _buildCardHeader(final BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+      children: <Widget>[
         // Title
-        Text(
-          title,
-          style: getTextTheme(context).headlineSmall,
-        ),
+        Text(title, style: getTextTheme(context).headlineSmall),
 
         // Header Action buttons
         Row(
-          children: [
+          children: <Widget>[
             if (onMergeWith != null)
               IconButton(
                 icon: const Icon(Icons.merge),
                 onPressed: () {
-                  onMergeWith?.call(
-                    context,
-                    moneyObject,
-                  );
+                  onMergeWith?.call(context, moneyObject);
                 },
               ),
             if (onEdit != null)
               IconButton(
                 icon: const Icon(Icons.edit),
                 onPressed: () {
-                  onEdit?.call(
-                    context,
-                    [moneyObject!],
-                  );
+                  onEdit?.call(context, <MoneyObject>[moneyObject!]);
                 },
               ),
             if (onDelete != null)
               IconButton(
                 icon: const Icon(Icons.delete_outline),
                 onPressed: () {
-                  onDelete?.call(
-                    context,
-                    [moneyObject!],
-                  );
+                  onDelete?.call(context, <MoneyObject>[moneyObject!]);
                 },
               ),
             IconButton(
               icon: const Icon(Icons.copy_all),
               onPressed: () {
-                copyToClipboardAndInformUser(
-                  context,
-                  moneyObject!.getPersistableJSon().toString(),
-                );
+                copyToClipboardAndInformUser(context, moneyObject!.getPersistableJSon().toString());
               },
             ),
           ],
@@ -112,21 +92,14 @@ class MoneyObjectCard extends StatelessWidget {
 }
 
 class TransactionCard extends StatelessWidget {
-  const TransactionCard({
-    required this.title,
-    super.key,
-    this.transaction,
-  });
+  const TransactionCard({required this.title, super.key, this.transaction});
 
   final String title;
   final Transaction? transaction;
 
   @override
   Widget build(BuildContext context) {
-    return MoneyObjectCard(
-      title: title,
-      moneyObject: transaction,
-    );
+    return MoneyObjectCard(title: title, moneyObject: transaction);
   }
 }
 

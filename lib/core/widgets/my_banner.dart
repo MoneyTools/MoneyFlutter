@@ -16,7 +16,7 @@ class MyBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       alignment: Alignment.center,
-      children: [
+      children: <Widget>[
         Opacity(opacity: on ? 0.3 : 1, child: child),
         if (on)
           Transform.rotate(

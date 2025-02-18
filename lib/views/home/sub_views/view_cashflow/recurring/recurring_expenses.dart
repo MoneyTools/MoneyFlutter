@@ -31,9 +31,9 @@ class RecurringExpenses {
     final List<CategoryType> categoryTypes,
     final double multiplier,
   ) {
-    final List<RecurringExpenses> items = [];
+    final List<RecurringExpenses> items = <RecurringExpenses>[];
 
-    final Iterable<Category> recurringCategories = Data().categories.iterableList().where((c) {
+    final Iterable<Category> recurringCategories = Data().categories.iterableList().where((Category c) {
       if (!categoryTypes.contains(c.fieldType.value)) {
         return false;
       }
@@ -44,7 +44,7 @@ class RecurringExpenses {
     });
 
     for (final Category category in recurringCategories) {
-      final List<Category> listOfDescendants = [category]; // include this Category
+      final List<Category> listOfDescendants = <Category>[category]; // include this Category
 
       category.getDescendants(listOfDescendants);
 
@@ -78,7 +78,7 @@ class RecurringExpenses {
     }
 
     items.sort(
-      (a, b) => a.sumOfAllTransactions.compareTo(b.sumOfAllTransactions),
+      (RecurringExpenses a, RecurringExpenses b) => a.sumOfAllTransactions.compareTo(b.sumOfAllTransactions),
     );
     return items;
   }
@@ -89,10 +89,10 @@ class RecurringExpenses {
     bool includeAssetAccounts,
     double multiplier,
   ) {
-    final Map<int, RecurringExpenses> yearMap = {};
+    final Map<int, RecurringExpenses> yearMap = <int, RecurringExpenses>{};
 
     final List<Transaction> flatTransactions = Data().transactions.getListFlattenSplits(
-          whereClause: (t) =>
+          whereClause: (Transaction t) =>
               t.category != null &&
               isBetweenOrEqual(t.fieldDateTime.value!.year, minYear, maxYear) &&
               (includeAssetAccounts || !t.isAssetAccount),

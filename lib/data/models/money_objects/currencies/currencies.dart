@@ -35,7 +35,7 @@ class Currencies extends MoneyObjects<Currency> {
   }
 
   Currency? getCurrencyFromSymbol(final String symbolToMatch) {
-    return iterableList().firstWhereOrNull((currency) => currency.fieldSymbol.value == symbolToMatch);
+    return iterableList().firstWhereOrNull((Currency currency) => currency.fieldSymbol.value == symbolToMatch);
   }
 
   double getRatioFromSymbol(final String symbol) {

@@ -13,7 +13,7 @@ import 'package:money/data/storage/import/import_transactions_from_text.dart';
 import 'package:money/views/home/sub_views/view_stocks/picker_security_type.dart';
 
 class ImportData {
-  List<ImportEntry> entries = [];
+  List<ImportEntry> entries = <ImportEntry>[];
   String fileType = '';
 
   Account? account;
@@ -79,7 +79,7 @@ void showAndConfirmTransactionToImport(
 ) {
   if (importData.account == null) {
     final List<String> activeAccountNames =
-        Data().accounts.getListSorted().map((element) => element.fieldName.value).toList();
+        Data().accounts.getListSorted().map((Account element) => element.fieldName.value).toList();
 
     showPopupSelection(
       title: 'Pick account to import to',
@@ -111,7 +111,7 @@ void _showAndConfirmTransactionToImport(
   final List<ImportEntry> list,
   final Account account,
 ) {
-  final List<ValuesQuality> valuesQuality = [];
+  final List<ValuesQuality> valuesQuality = <ValuesQuality>[];
 
   // attempt to find or add new transactions
   for (final ImportEntry item in list) {
@@ -144,10 +144,10 @@ void _showAndConfirmTransactionToImport(
     content: questionContent,
     buttonText: 'Import',
     onConfirmation: () {
-      final List<Transaction> transactionsToAdd = [];
+      final List<Transaction> transactionsToAdd = <Transaction>[];
       for (final ValuesQuality singleTransactionInput in valuesQuality) {
         if (!singleTransactionInput.exist) {
-          final t = Transaction.fromDateDescriptionAmount(
+          final Transaction t = Transaction.fromDateDescriptionAmount(
             account,
             singleTransactionInput.date.asDate() ?? DateTime.now(),
             singleTransactionInput.description.asString(),

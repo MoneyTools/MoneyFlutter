@@ -12,7 +12,7 @@ class SwitchFormField extends FormField<bool> {
           builder: (FormFieldState<bool> state) {
             return Switch(
               value: state.value!,
-              onChanged: (value) {
+              onChanged: (bool value) {
                 state.didChange(value);
                 onSaved?.call(value);
               },

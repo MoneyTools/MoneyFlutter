@@ -61,7 +61,7 @@ class Account extends MoneyObject {
     name: 'BalanceN',
     footer: FooterType.none,
     getValueForDisplay: (final MoneyObject instance) {
-      final accountInstance = instance as Account;
+      final Account accountInstance = instance as Account;
       return MoneyModel(
         amount: accountInstance.balance,
         iso4217: accountInstance.getAccountCurrencyAsText(),
@@ -74,7 +74,7 @@ class Account extends MoneyObject {
     name: 'Balance(USD)',
     useAsDetailPanels: defaultCallbackValueFalse,
     getValueForDisplay: (final MoneyObject instance) {
-      final accountInstance = instance as Account;
+      final Account accountInstance = instance as Account;
       return MoneyModel(
         amount: accountInstance.getCurrencyRatio() * accountInstance.balance,
         iso4217: Constants.defaultCurrency,
@@ -314,8 +314,8 @@ class Account extends MoneyObject {
     getValueForSerialization: (final MoneyObject instance) => (instance as Account).fieldWebSite.value,
   );
 
-  Map< /*year */ int, /*balance*/ double> maxBalancePerYears = {};
-  Map< /*year */ int, /*balance*/ double> minBalancePerYears = {};
+  Map< /*year */ int, /*balance*/ double> maxBalancePerYears = <int, double>{};
+  Map< /*year */ int, /*balance*/ double> minBalancePerYears = <int, double>{};
 // cache the currency ratio
   double? ratio;
 
@@ -330,7 +330,7 @@ class Account extends MoneyObject {
       originalCurrencyAndValue = Tooltip(
         message: ratioCurrency.toString(),
         child: Row(
-          children: [
+          children: <Widget>[
             Text(
               Currency.getAmountAsStringUsingCurrency(
                 balance / ratioCurrency,
@@ -372,8 +372,8 @@ class Account extends MoneyObject {
 
   static Fields<Account> get fields {
     if (_fields.isEmpty) {
-      final tmp = Account.fromJson({});
-      _fields.setDefinitions([
+      final Account tmp = Account.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmp.fieldId,
         tmp.fieldName,
         tmp.fieldAccountId,
@@ -403,8 +403,8 @@ class Account extends MoneyObject {
 
   static Fields<Account> get fieldsForColumnView {
     if (_fieldsForColumns.isEmpty) {
-      final tmp = Account.fromJson({});
-      _fieldsForColumns.setDefinitions([
+      final Account tmp = Account.fromJson(<String, dynamic>{});
+      _fieldsForColumns.setDefinitions(<Field<dynamic>>[
         tmp.fieldName,
         tmp.fieldAccountId,
         tmp.fieldDescription,
@@ -436,7 +436,7 @@ class Account extends MoneyObject {
   }
 
   List<Transaction> getTransaction() {
-    return Data().transactions.iterableList().where((t) => t.fieldAccountId.value == this.uniqueId).toList();
+    return Data().transactions.iterableList().where((Transaction t) => t.fieldAccountId.value == this.uniqueId).toList();
   }
 
   bool isActiveBankAccount() {

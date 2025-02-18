@@ -46,10 +46,10 @@ class ImportFieldsForTransferPanel extends StatefulWidget {
 }
 
 class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPanel> {
-  late final _controllerAmount = TextEditingController(text: widget.inputFields.amount.toString());
-  late final _controllerDescription = TextEditingController(text: widget.inputFields.memo.toString());
-  final _focusNode = FocusNode();
-  final _keyboardHandler = SafeKeyboardHandler();
+  late final TextEditingController _controllerAmount = TextEditingController(text: widget.inputFields.amount.toString());
+  late final TextEditingController _controllerDescription = TextEditingController(text: widget.inputFields.memo.toString());
+  final FocusNode _focusNode = FocusNode();
+  final SafeKeyboardHandler _keyboardHandler = SafeKeyboardHandler();
 
   @override
   void dispose() {
@@ -83,7 +83,7 @@ class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPan
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               spacing: 24,
-              children: [
+              children: <Widget>[
                 // Title
                 Text(
                   'Record a Transfer between two accounts',
@@ -126,7 +126,7 @@ class ImportFieldsForTransferPanelState extends State<ImportFieldsForTransferPan
                 gapMedium(),
 
                 if (!validAccounts)
-                  Text(
+                  const Text(
                     'Please select different accounts',
                     style: TextStyle(color: Colors.red),
                   ),

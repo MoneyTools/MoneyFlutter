@@ -48,7 +48,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     bool includeDeleted = false,
     bool applyFilter = true,
   }) {
-    List<Transfer> listOfTransfers = [];
+    List<Transfer> listOfTransfers = <Transfer>[];
 
     // Retrieve all transactions related to transfers.
     final List<Transaction> listOfTransactionsUseForTransfer = Data()
@@ -60,7 +60,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
         .toList();
 
     // Process sender transactions.
-    for (final transactionOfSender in listOfTransactionsUseForTransfer) {
+    for (final Transaction transactionOfSender in listOfTransactionsUseForTransfer) {
       // Identify sender transactions by negative amount.
       if (transactionOfSender.fieldAmount.value.asDouble() <= 0) {
         final Transaction? transactionOfReceiver = Data().transactions.get(transactionOfSender.fieldTransfer.value);
@@ -74,7 +74,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
     }
 
     // Process receiver transactions not already included.
-    for (final transactionOfReceiver in listOfTransactionsUseForTransfer) {
+    for (final Transaction transactionOfReceiver in listOfTransactionsUseForTransfer) {
       // Identify receiver transactions by positive amount.
       if (transactionOfReceiver.fieldAmount.value.asDouble() > 0) {
         final Transaction? transactionOfSender = Data().transactions.get(transactionOfReceiver.fieldTransfer.value);
@@ -98,7 +98,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
 
     // Apply filters if enabled.
     if (applyFilter) {
-      listOfTransfers = listOfTransfers.where((final instance) => isMatchingFilters(instance)).toList();
+      listOfTransfers = listOfTransfers.where((final Transfer instance) => isMatchingFilters(instance)).toList();
     }
 
     return listOfTransfers;
@@ -144,7 +144,7 @@ class ViewTransfersState extends ViewForMoneyObjectsState {
   }) {
     if (selectedIds.isNotEmpty) {
       final int id = selectedIds.first;
-      final Transfer? transfer = list.firstWhereOrNull((element) => element.uniqueId == id) as Transfer?;
+      final Transfer? transfer = list.firstWhereOrNull((MoneyObject element) => element.uniqueId == id) as Transfer?;
       if (transfer != null) {
         return TransferSenderReceiver(transfer: transfer);
       }

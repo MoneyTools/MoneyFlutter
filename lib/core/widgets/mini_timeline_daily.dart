@@ -43,13 +43,13 @@ class MiniTimelineDaily extends StatelessWidget {
 
         // Y Ratio
         double maxValueFound = 0;
-        for (final value in values) {
+        for (final Pair<int, double> value in values) {
           maxValueFound = max(maxValueFound, value.second.abs());
         }
         final double yRatio = constraints.maxHeight / maxValueFound;
 
-        final List<Widget> bars = [];
-        for (final value in values) {
+        final List<Widget> bars = <Widget>[];
+        for (final Pair<int, double> value in values) {
           final int oneDaySlot = value.first * Duration.millisecondsPerDay;
 
           bars.add(

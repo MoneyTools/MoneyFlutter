@@ -34,6 +34,7 @@ class ViewCashFlow extends ViewWidget {
   String getDescription() => '';
 }
 
+// ignore: always_specify_types
 class ViewCashFlowState extends ViewWidgetState {
   ViewCashFlowState();
 
@@ -109,12 +110,12 @@ class ViewCashFlowState extends ViewWidgetState {
   Widget _buildHeaderContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           runSpacing: SizeForPadding.medium,
           spacing: SizeForPadding.large,
-          children: [
+          children: <Widget>[
             Text(
               'Cash Flow',
               style: getTextTheme(context).titleLarge,
@@ -142,7 +143,7 @@ class ViewCashFlowState extends ViewWidgetState {
             if (CashflowViewAs.trend == PreferenceController.to.cashflowViewAs.value)
               IntrinsicWidth(
                 child: Row(
-                  children: [
+                  children: <Widget>[
                     Obx(
                       () => Checkbox.adaptive(
                         value: PreferenceController.to.trendIncludeAssetAccounts.value,
@@ -183,7 +184,7 @@ class ViewCashFlowState extends ViewWidgetState {
 
   Widget _buildSelectView() {
     return mySegmentSelector(
-      segments: [
+      segments: <ButtonSegment<int>>[
         ButtonSegment<int>(
           value: CashflowViewAs.sankey.index,
           label: const Text('Sankey'),
@@ -228,11 +229,11 @@ class ViewCashFlowState extends ViewWidgetState {
 
       case CashflowViewAs.budget:
         return Column(
-          children: [
+          children: <Widget>[
             Expanded(
               child: PanelBudget(
                 title: 'Incomes',
-                categoryTypes: [CategoryType.income, CategoryType.investment, CategoryType.saving],
+                categoryTypes: <CategoryType>[CategoryType.income, CategoryType.investment, CategoryType.saving],
                 dateRangeSearch: dateRangeTransactions,
                 minYear: this.selectedYearStart,
                 maxYear: this.selectedYearEnd,
@@ -241,7 +242,7 @@ class ViewCashFlowState extends ViewWidgetState {
             Expanded(
               child: PanelBudget(
                 title: 'Expenses',
-                categoryTypes: [CategoryType.expense, CategoryType.recurringExpense],
+                categoryTypes: <CategoryType>[CategoryType.expense, CategoryType.recurringExpense],
                 dateRangeSearch: dateRangeTransactions,
                 minYear: this.selectedYearStart,
                 maxYear: this.selectedYearEnd,

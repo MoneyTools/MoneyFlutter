@@ -7,7 +7,7 @@ export 'package:money/data/models/fields/field_filter.dart';
 /// Group a lists of filters
 class FieldFilters {
   FieldFilters([List<FieldFilter>? inputList]) {
-    this.list = inputList ?? [];
+    this.list = inputList ?? <FieldFilter>[];
   }
 
   /// Constructs a `FieldFilters` instance from a JSON map.
@@ -17,7 +17,7 @@ class FieldFilters {
   /// instance and populates its `list` with `FieldFilter` instances constructed from the
   /// JSON objects.
   factory FieldFilters.fromJson(final Map<String, dynamic> json) {
-    final filters = (json['filters'] as List<MyJson>).map((filterJson) => FieldFilter.fromJson(filterJson)).toList();
+    final List<FieldFilter> filters = (json['filters'] as List<MyJson>).map((MyJson filterJson) => FieldFilter.fromJson(filterJson)).toList();
     return FieldFilters(filters);
   }
 
@@ -46,8 +46,8 @@ class FieldFilters {
   /// If a pair in the `inputList` does not have exactly two tokens (i.e., the `=` character),
   /// it is skipped and not added to the `list`.
   FieldFilters.fromList(final List<String> inputList) {
-    for (final pair in inputList) {
-      final tokens = pair.split('=');
+    for (final String pair in inputList) {
+      final List<String> tokens = pair.split('=');
       if (tokens.length == 2) {
         list.add(
           FieldFilter(
@@ -59,7 +59,7 @@ class FieldFilters {
     }
   }
 
-  List<FieldFilter> list = [];
+  List<FieldFilter> list = <FieldFilter>[];
 
   @override
   String toString() {
@@ -81,19 +81,19 @@ class FieldFilters {
   int get length => list.length;
 
   Map<String, dynamic> toJson() {
-    return {
-      'filters': list.map((filter) => filter.toJson()).toList(),
+    return <String, dynamic>{
+      'filters': list.map((FieldFilter filter) => filter.toJson()).toList(),
     };
   }
 
   String toJsonString() {
-    return jsonEncode({
-      'filters': list.map((filter) => filter.toJson()).toList(),
+    return jsonEncode(<String, List<Map<String, dynamic>>>{
+      'filters': list.map((FieldFilter filter) => filter.toJson()).toList(),
     });
   }
 
   /// Returns a list of string representations of the [FieldFilter] instances in the [list].
   List<String> toStringList() {
-    return list.map((filter) => filter.toString()).toList();
+    return list.map((FieldFilter filter) => filter.toString()).toList();
   }
 }

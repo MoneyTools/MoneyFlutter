@@ -34,10 +34,10 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
     final List<PairXYY> sumByPeriod = _calculateSumByPeriod();
 
     return Column(
-      children: [
+      children: <Widget>[
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             DropdownButton<TimelineScale>(
               value: _selectedScale,
               onChanged: (TimelineScale? newValue) {
@@ -79,7 +79,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       case TimelineScale.daily:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (date) => dateToString(
+          (DateTime date) => dateToString(
             DateTime(date.year, date.month, date.day),
           ),
         );
@@ -88,7 +88,7 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       case TimelineScale.weekly:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (date) => dateToString(
+          (DateTime date) => dateToString(
             date.subtract(Duration(days: date.weekday)),
           ),
         );
@@ -97,21 +97,21 @@ class _TransactionTimelineChartState extends State<TransactionTimelineChart> {
       case TimelineScale.monthly:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (date) => '${date.year}\n${date.month}',
+          (DateTime date) => '${date.year}\n${date.month}',
         );
 
       // YEARLY
       case TimelineScale.yearly:
         return Transactions.transactionSumBy(
           widget.transactions,
-          (date) => date.year.toString(),
+          (DateTime date) => date.year.toString(),
         );
     }
   }
 
   void _copyToClipboard(List<PairXYY> data) {
     final String clipboardData =
-        data.map((pair) => '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue1)}').join('\n');
+        data.map((PairXYY pair) => '${pair.xText} : ${Currency.getAmountAsStringUsingCurrency(pair.yValue1)}').join('\n');
     Clipboard.setData(ClipboardData(text: clipboardData));
     // Optional: Show a snackbar to confirm copy
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Copied to clipboard')));

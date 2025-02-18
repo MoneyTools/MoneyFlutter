@@ -14,7 +14,7 @@ class TokenText extends StatelessWidget {
   late final TokenTextStyle style;
   final String text;
 
-  List<String> tokens = [];
+  List<String> tokens = <String>[];
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
@@ -33,7 +33,7 @@ class TokenText extends StatelessWidget {
       child: Text(style.separator, style: ancestors),
     );
 
-    final List<Widget> widgets = [];
+    final List<Widget> widgets = <Widget>[];
 
     for (final String token in tokens) {
       if (token == tokens.last) {

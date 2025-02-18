@@ -5,58 +5,58 @@ import 'package:money/core/helpers/string_helper.dart';
 void main() {
   group('getLinesFromTextBlob', () {
     test('parses simple comma-separated values', () {
-      const input = 'field1,field2,field3';
-      final expected = [
-        ['field1', 'field2', 'field3'],
+      const String input = 'field1,field2,field3';
+      final List<List<String>> expected = <List<String>>[
+        <String>['field1', 'field2', 'field3'],
       ];
       expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('parses multiple lines', () {
-      const input = 'field1,field2,field3\nfield4,field5,field6';
-      final expected = [
-        ['field1', 'field2', 'field3'],
-        ['field4', 'field5', 'field6'],
+      const String input = 'field1,field2,field3\nfield4,field5,field6';
+      final List<List<String>> expected = <List<String>>[
+        <String>['field1', 'field2', 'field3'],
+        <String>['field4', 'field5', 'field6'],
       ];
       expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles quoted fields with commas', () {
-      const input = '"field1,with,commas",field2,field3';
-      final expected = [
-        ['field1,with,commas', 'field2', 'field3'],
+      const String input = '"field1,with,commas",field2,field3';
+      final List<List<String>> expected = <List<String>>[
+        <String>['field1,with,commas', 'field2', 'field3'],
       ];
       expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles quoted fields spanning multiple lines', () {
-      const input = '"field1\nspanning\nmultiple\nlines",field2,field3';
-      final expected = [
-        ['field1\nspanning\nmultiple\nlines', 'field2', 'field3'],
+      const String input = '"field1\nspanning\nmultiple\nlines",field2,field3';
+      final List<List<String>> expected = <List<String>>[
+        <String>['field1\nspanning\nmultiple\nlines', 'field2', 'field3'],
       ];
       expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles escaped double quotes', () {
-      const input = 'field1,"field2""with""escaped""quotes",field3';
-      final expected = [
-        ['field1', 'field2"with"escaped"quotes', 'field3'],
+      const String input = 'field1,"field2""with""escaped""quotes",field3';
+      final List<List<String>> expected = <List<String>>[
+        <String>['field1', 'field2"with"escaped"quotes', 'field3'],
       ];
       expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles empty fields', () {
-      const input = 'field1,,field3';
-      final expected = [
-        ['field1', '', 'field3'],
+      const String input = 'field1,,field3';
+      final List<List<String>> expected = <List<String>>[
+        <String>['field1', '', 'field3'],
       ];
       expect(getLinesFromRawTextWithSeparator(input), expected);
     });
 
     test('handles trailing commas', () {
-      const input = 'field1,field2,';
-      final expected = [
-        ['field1', 'field2', ''],
+      const String input = 'field1,field2,';
+      final List<List<String>> expected = <List<String>>[
+        <String>['field1', 'field2', ''],
       ];
       expect(getLinesFromRawTextWithSeparator(input), expected);
     });
@@ -64,56 +64,56 @@ void main() {
 
   group('rawCsvStringToListOfJsonObjects', () {
     test('parses empty CSV', () {
-      const input = 'header1,header2';
-      final expected = <Map<String, dynamic>>[];
+      const String input = 'header1,header2';
+      final List<Map<String, dynamic>> expected = <Map<String, dynamic>>[];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('parses CSV with one row', () {
-      const input = 'name,age\nJohn,30';
-      final expected = [
-        {'name': 'John', 'age': '30'},
+      const String input = 'name,age\nJohn,30';
+      final List<Map<String, String>> expected = <Map<String, String>>[
+        <String, String>{'name': 'John', 'age': '30'},
       ];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('parses CSV with multiple rows', () {
-      const input = 'name,age\nJohn,30\nJane,25\nBob,40';
-      final expected = [
-        {'name': 'John', 'age': '30'},
-        {'name': 'Jane', 'age': '25'},
-        {'name': 'Bob', 'age': '40'},
+      const String input = 'name,age\nJohn,30\nJane,25\nBob,40';
+      final List<Map<String, String>> expected = <Map<String, String>>[
+        <String, String>{'name': 'John', 'age': '30'},
+        <String, String>{'name': 'Jane', 'age': '25'},
+        <String, String>{'name': 'Bob', 'age': '40'},
       ];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles quoted fields with commas', () {
-      const input = 'name,address\nJohn,"123 Main St, AnyTown, USA"';
-      final expected = [
-        {'name': 'John', 'address': '123 Main St, AnyTown, USA'},
+      const String input = 'name,address\nJohn,"123 Main St, AnyTown, USA"';
+      final List<Map<String, String>> expected = <Map<String, String>>[
+        <String, String>{'name': 'John', 'address': '123 Main St, AnyTown, USA'},
       ];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles missing fields', () {
-      const input = 'name,age,email\nJohn,30,\nJane,25,jane@example.com';
-      final expected = [
-        {'name': 'John', 'age': '30', 'email': ''},
-        {'name': 'Jane', 'age': '25', 'email': 'jane@example.com'},
+      const String input = 'name,age,email\nJohn,30,\nJane,25,jane@example.com';
+      final List<Map<String, String>> expected = <Map<String, String>>[
+        <String, String>{'name': 'John', 'age': '30', 'email': ''},
+        <String, String>{'name': 'Jane', 'age': '25', 'email': 'jane@example.com'},
       ];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles extra fields', () {
-      const input = 'name,age\nJohn,30,extra';
-      final expected = [
-        {'name': 'John', 'age': '30'},
+      const String input = 'name,age\nJohn,30,extra';
+      final List<Map<String, String>> expected = <Map<String, String>>[
+        <String, String>{'name': 'John', 'age': '30'},
       ];
       expect(convertFromRawCsvTextToListOfJSonObject(input), expected);
     });
 
     test('handles exceptions during parsing', () {
-      const input = 'name,age\nJohn,30\nInvalid';
+      const String input = 'name,age\nJohn,30\nInvalid';
 
       // Call the function that throws an exception and catch the exception
       dynamic caughtException;

@@ -5,22 +5,22 @@ import 'package:money/core/helpers/value_parser.dart';
 void main() {
   group('ValueQuality', () {
     test('asAmount returns correct value', () {
-      const valueQuality = ValueQuality('100.50', currency: 'USD');
+      const ValueQuality valueQuality = ValueQuality('100.50', currency: 'USD');
       expect(valueQuality.asAmount(), 100.50);
     });
 
     test('asAmount handles empty string', () {
-      const valueQuality = ValueQuality('');
+      const ValueQuality valueQuality = ValueQuality('');
       expect(valueQuality.asAmount(), 0.00);
     });
 
     test('asDate returns correct date', () {
-      const valueQuality = ValueQuality('2023-05-01', dateFormat: 'yyyy-MM-dd');
+      const ValueQuality valueQuality = ValueQuality('2023-05-01', dateFormat: 'yyyy-MM-dd');
       expect(valueQuality.asDate(), DateTime(2023, 5, 1));
     });
 
     test('asDate returns null for invalid date', () {
-      const valueQuality = ValueQuality('invalid date');
+      const ValueQuality valueQuality = ValueQuality('invalid date');
       expect(valueQuality.asDate(), null);
     });
     test('attemptToExtractTriples using ;', () {
@@ -60,7 +60,7 @@ void main() {
 
   group('ValuesQuality', () {
     test('getDateRange returns correct range', () {
-      final list = [
+      final List<ValuesQuality> list = <ValuesQuality>[
         ValuesQuality(
           date: const ValueQuality('2023-05-01', dateFormat: 'yyyy-MM-dd'),
           description: const ValueQuality(''),
@@ -78,7 +78,7 @@ void main() {
     });
 
     test('sort sorts list correctly', () {
-      final list = [
+      final List<ValuesQuality> list = <ValuesQuality>[
         ValuesQuality(
           date: const ValueQuality('2023-05-15', dateFormat: 'yyyy-MM-dd'),
           description: const ValueQuality('C'),
@@ -98,20 +98,20 @@ void main() {
 
       ValuesQuality.sort(list, 0, true); // Sort by date ascending
       expect(
-        list.map((e) => e.date.asString()).toList(),
-        ['2023-05-01', '2023-05-10', '2023-05-15'],
+        list.map((ValuesQuality e) => e.date.asString()).toList(),
+        <String>['2023-05-01', '2023-05-10', '2023-05-15'],
       );
 
       ValuesQuality.sort(list, 1, false); // Sort by description descending
       expect(
-        list.map((e) => e.description.asString()).toList(),
-        ['C', 'B', 'A'],
+        list.map((ValuesQuality e) => e.description.asString()).toList(),
+        <String>['C', 'B', 'A'],
       );
 
       ValuesQuality.sort(list, 2, true); // Sort by amount ascending
       expect(
-        list.map((e) => e.amount.asString()).toList(),
-        ['50.25', '75.00', '100.50'],
+        list.map((ValuesQuality e) => e.amount.asString()).toList(),
+        <String>['50.25', '75.00', '100.50'],
       );
     });
   });

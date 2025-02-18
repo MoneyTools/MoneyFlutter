@@ -33,7 +33,7 @@ class PendingChangesDialog extends StatefulWidget {
         height: 900,
         child: PendingChangesDialog(),
       ),
-      actionButtons: [
+      actionButtons: <Widget>[
         DialogActionButton(
           text: 'Save to SQL',
           onPressed: () {
@@ -55,7 +55,7 @@ class PendingChangesDialog extends StatefulWidget {
 
 class _PendingChangesDialogState extends State<PendingChangesDialog> {
   /// List of mutation types to display.
-  final List<Mutations> _data = [
+  final List<Mutations> _data = <Mutations>[
     Mutations(
       typeOfMutation: MutationType.inserted,
       title: 'added',
@@ -90,11 +90,11 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
     if (_isLoading) {
       return const WorkingIndicator();
     }
-    final selectedMutationType = _data[_displayMutationType];
+    final Mutations selectedMutationType = _data[_displayMutationType];
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
+      children: <Widget>[
         _buildColumnSelection(),
         gapLarge(),
         _buildSubSegmentsButtons(selectedMutationType),
@@ -110,7 +110,7 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
   Widget _buildColumnSelection() {
     return Center(
       child: mySegmentSelector(
-        segments: [
+        segments: <ButtonSegment<int>>[
           _buildSegment(0, _data[0]),
           _buildSegment(1, _data[1]),
           _buildSegment(2, _data[2]),
@@ -135,7 +135,7 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
 
     return ListView.separated(
       itemCount: g.whatWasMutated.length,
-      itemBuilder: (context, index) {
+      itemBuilder: (BuildContext context, int index) {
         return g.whatWasMutated[index];
       },
       separatorBuilder: (BuildContext context, int index) {
@@ -157,11 +157,11 @@ class _PendingChangesDialogState extends State<PendingChangesDialog> {
 
   /// Builds the sub-segment buttons for selecting specific data groups within a mutation type.
   Widget _buildSubSegmentsButtons(Mutations mutations) {
-    final List<Widget> groupSelectors = [];
+    final List<Widget> groupSelectors = <Widget>[];
 
     for (int i = 0; i < mutations.mutationGroups.length; i++) {
-      final group = mutations.mutationGroups[i];
-      final w = Container(
+      final MutationGroup group = mutations.mutationGroups[i];
+      final Container w = Container(
         padding: const EdgeInsets.only(bottom: 4),
         child: Badge(
           backgroundColor: mutations.color,
@@ -222,7 +222,7 @@ class Mutations {
   int count = 0;
 
   /// The list of mutation groups within this type.
-  List<MutationGroup> mutationGroups = [];
+  List<MutationGroup> mutationGroups = <MutationGroup>[];
 
   /// The currently selected group within this type.
   int selectedGroup = 0;
@@ -246,7 +246,7 @@ class Mutations {
     count = 0;
     mutationGroups = Data().getMutationGroups(typeOfMutation);
 
-    for (final m in mutationGroups) {
+    for (final MutationGroup m in mutationGroups) {
       count += m.whatWasMutated.length;
     }
   }

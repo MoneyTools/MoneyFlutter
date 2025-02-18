@@ -26,8 +26,8 @@ class MoneyObject {
   @override
   String toString() {
     final List<String> fieldsAsText = fieldDefinitions
-        .where((field) => field.serializeName.isNotEmpty)
-        .map((field) => '${field.serializeName}:${field.getValueForSerialization(this)}')
+        .where((Field<dynamic> field) => field.serializeName.isNotEmpty)
+        .map((Field<dynamic> field) => '${field.serializeName}:${field.getValueForSerialization(this)}')
         .toList();
 
     return fieldsAsText.join('|');
@@ -54,12 +54,12 @@ class MoneyObject {
     bool compact = false,
   }) {
     if (fieldDefinitions.isEmpty) {
-      return [Center(child: Text('No fields found for $this'))];
+      return <Widget>[Center(child: Text('No fields found for $this'))];
     }
     final List<Widget> widgets = <Widget>[];
 
     {
-      final definitions = getFieldDefinitionsForPanel();
+      final FieldDefinitions definitions = getFieldDefinitionsForPanel();
 
       for (final Field<dynamic> fieldDefinition in definitions) {
         final Widget widget = buildWidgetNameValueFromFieldDefinition(
@@ -87,7 +87,7 @@ class MoneyObject {
           opacity: 0.5,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               const Text('ID: '),
               SelectableText(uniqueId.toString()),
             ],
@@ -113,7 +113,7 @@ class MoneyObject {
       // simple [Name  Value] pair
       return _buildNameValuePair(fieldDefinition, fieldValue);
     }
-    final isReadOnly = onEdited == null || fieldDefinition.setValue == null;
+    final bool isReadOnly = onEdited == null || fieldDefinition.setValue == null;
 
     final InputDecoration decoration = myFormFieldDecoration(
       fieldName: fieldDefinition.name,
@@ -156,7 +156,7 @@ class MoneyObject {
               /// Todo
               return null;
             },
-            onSaved: (value) {
+            onSaved: (bool? value) {
               fieldDefinition.setValue?.call(objectInstance, value);
               onEdited(true);
             },
@@ -213,16 +213,16 @@ class MoneyObject {
     }
   }
 
-  FieldDefinitions get fieldDefinitions => [];
+  FieldDefinitions get fieldDefinitions => <Field<dynamic>>[];
 
   FieldDefinitions getFieldDefinitionsForPanel() {
-    return fieldDefinitions.where((element) => element.useAsDetailPanels(this)).toList();
+    return fieldDefinitions.where((Field<dynamic> element) => element.useAsDetailPanels(this)).toList();
   }
 
   MyJson getMutatedDiff<T>() {
     final MyJson afterEditing = getPersistableJSon();
     return myJsonDiff(
-      before: valueBeforeEdit ?? {},
+      before: valueBeforeEdit ?? <String, dynamic>{},
       after: afterEditing,
     );
   }
@@ -242,7 +242,7 @@ class MoneyObject {
 
   /// Serialize object instance to a JSon format
   MyJson getPersistableJSon() {
-    final MyJson json = {};
+    final MyJson json = <String, dynamic>{};
 
     for (final Field<dynamic> field in fieldDefinitions) {
       if (field.serializeName != '') {
@@ -268,7 +268,7 @@ class MoneyObject {
   static bool isDataModified(MoneyObject moneyObject) {
     final MyJson afterEditing = moneyObject.getPersistableJSon();
     final MyJson diff = myJsonDiff(
-      before: moneyObject.valueBeforeEdit ?? {},
+      before: moneyObject.valueBeforeEdit ?? <String, dynamic>{},
       after: afterEditing,
     );
     return diff.keys.isNotEmpty;
@@ -309,7 +309,7 @@ class MoneyObject {
 
     MyJson commonJson = moneyObjectInstances.first.getPersistableJSon();
 
-    for (var t in moneyObjectInstances.skip(1)) {
+    for (MoneyObject t in moneyObjectInstances.skip(1)) {
       commonJson = compareAndGenerateCommonJson(commonJson, t.getPersistableJSon());
     }
     return MoneyObject.fromJSon(commonJson, 0);
@@ -364,7 +364,7 @@ class MoneyObject {
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Expanded(
             flex: 1,
             child: Padding(
@@ -412,5 +412,5 @@ enum MutationType {
 /// visually represent the specific mutations that occurred.
 class MutationGroup {
   String title = '';
-  List<Widget> whatWasMutated = [];
+  List<Widget> whatWasMutated = <Widget>[];
 }

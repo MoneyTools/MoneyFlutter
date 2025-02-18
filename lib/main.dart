@@ -62,8 +62,8 @@ class MyApp extends StatelessWidget {
           title: 'MyMoney by VTeam',
           initialBinding: ApplicationBindings(),
           initialRoute: '/',
-          getPages: [
-            GetPage(
+          getPages: <GetPage<dynamic>>[
+            GetPage<dynamic>(
               name: '/',
               page: () {
                 final PreferenceController preferenceController = Get.find();

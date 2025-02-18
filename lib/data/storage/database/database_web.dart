@@ -22,9 +22,9 @@ class MyDatabaseImplementation {
 
   Future<void> load(final String fileToOpen, final Uint8List fileBytes) async {
     try {
-      final jsArray = js.JsObject.jsify(fileBytes);
+      final js.JsObject jsArray = js.JsObject.jsify(fileBytes);
       // Pass the array to JavaScript function to load the database
-      await js.context.callMethod('loadDatabaseFromBinary', [jsArray]);
+      await js.context.callMethod('loadDatabaseFromBinary', <dynamic>[jsArray]);
     } catch (e) {
       // Rollback the transaction if an error occurs
       // _db.execute('ROLLBACK');
@@ -38,32 +38,32 @@ class MyDatabaseImplementation {
 
   Future<List<Map<String, dynamic>>> select(final String query) async {
     try {
-      final jsObjectResult = await js.context.callMethod('executeSql', [query]);
+      final dynamic jsObjectResult = await js.context.callMethod('executeSql', <dynamic>[query]);
 
       if (jsObjectResult == null || jsObjectResult.length == 0) {
         // no results found from the query
         // print('No results found');
-        return [];
+        return <Map<String, dynamic>>[];
       }
 
       // Access the first result set, ensuring it's a JsObject
       final dynamic firstResult = jsObjectResult[0];
       if (firstResult == null || firstResult is! js.JsObject) {
         print('Error: The result set structure is unexpected.');
-        return [];
+        return <Map<String, dynamic>>[];
       }
       // Convert the JsObject result to List<Map<String, dynamic>>
       return _convertJsResultToList(firstResult);
     } catch (e) {
       print('Error executing query: $e');
-      return [];
+      return <Map<String, dynamic>>[];
     }
   }
 
   /// Check if a table exists in the database
   Future<bool> tableExists(final String tableName) async {
     try {
-      final list = await select("SELECT name FROM sqlite_master WHERE type='table'");
+      final List<Map<String, dynamic>> list = await select("SELECT name FROM sqlite_master WHERE type='table'");
       return _listMapContains(list, 'name', tableName);
     } catch (e) {
       print('Error checking if table exists: $e');
@@ -73,19 +73,19 @@ class MyDatabaseImplementation {
 
   // Helper to convert JsObject to List<Map<String, dynamic>>
   List<Map<String, dynamic>> _convertJsResultToList(js.JsObject jsResult) {
-    final List<String> columns = List<String>.from(jsResult['columns'] as List);
-    final List<dynamic> values = jsResult['values'] as List;
+    final List<String> columns = List<String>.from(jsResult['columns'] as List<String>);
+    final List<dynamic> values = jsResult['values'] as List<dynamic>;
     if (values.isEmpty) {
-      return [];
+      return <Map<String, dynamic>>[];
     }
     // Map each row's values to its column name
-    return values.map((row) {
-      final rowValues = row as List;
+    return values.map((dynamic row) {
+      final List<dynamic> rowValues = row as List<dynamic>;
       return Map<String, dynamic>.fromIterables(columns, rowValues);
     }).toList();
   }
 
   bool _listMapContains(List<Map<String, dynamic>> list, String field, String value) {
-    return list.any((map) => map[field] == value);
+    return list.any((Map<String, dynamic> map) => map[field] == value);
   }
 }

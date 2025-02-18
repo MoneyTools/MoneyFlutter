@@ -152,8 +152,8 @@ class LoanPayment extends MoneyObject {
 
   static Fields<LoanPayment> get fields {
     if (_fields.isEmpty) {
-      final tmpInstance = LoanPayment.fromJson({});
-      _fields.setDefinitions([
+      final LoanPayment tmpInstance = LoanPayment.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmpInstance.fieldId,
         tmpInstance.fieldDate,
         tmpInstance.fieldAccountId,
@@ -170,8 +170,8 @@ class LoanPayment extends MoneyObject {
 
   static Fields<LoanPayment> get fieldsForColumnView {
     if (_fields.isEmpty) {
-      final tmpInstance = LoanPayment.fromJson({});
-      _fields.setDefinitions([
+      final LoanPayment tmpInstance = LoanPayment.fromJson(<String, dynamic>{});
+      _fields.setDefinitions(<Field<dynamic>>[
         tmpInstance.fieldDate,
         tmpInstance.fieldAccountId,
         tmpInstance.fieldMemo,

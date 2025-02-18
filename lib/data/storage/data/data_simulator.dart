@@ -55,7 +55,7 @@ class DataSimulator {
   final int _numberOFYearInThePast = 20;
   final double _startingYearlySalaryFirstJob = 15000.00;
   final double _startingYearlySalarySecondJob = 50000.00;
-  final _today = DateTime.now();
+  final DateTime _today = DateTime.now();
   final double _yearlyInflation = 3.00;
 
   late DateTime _dateOfFirstBigJob;
@@ -93,9 +93,9 @@ class DataSimulator {
     required int howManyPerYear,
     required int dayOfTheMonth,
   }) {
-    final List<DateTime> dates = [];
+    final List<DateTime> dates = <DateTime>[];
 
-    final whenToStop = stopDate ?? DateTime.now();
+    final DateTime whenToStop = stopDate ?? DateTime.now();
     for (int i = yearInThePast * howManyPerYear; i >= 0; i--) {
       // Subtract the current month index from today's date
       final DateTime date = DateTime(whenToStop.year, whenToStop.month - i, dayOfTheMonth);
@@ -105,9 +105,9 @@ class DataSimulator {
   }
 
   List<DateTime> generateListOfDatesRandom({required int year, required int howManyPerMonths}) {
-    final List<DateTime> dates = [];
+    final List<DateTime> dates = <DateTime>[];
 
-    final today = DateTime.now();
+    final DateTime today = DateTime.now();
     for (int i = year * 12; i >= 0; i--) {
       // Subtract the current month index from today's date
       DateTime date = DateTime(today.year, today.month - i, 1);
@@ -124,13 +124,13 @@ class DataSimulator {
 
   // ignore: unused_element
   List<DateTime> generateRandomDates(int count) {
-    final tenYearsAgo = _today.subtract(
+    final DateTime tenYearsAgo = _today.subtract(
       Duration(days: 365 * _numberOFYearInThePast),
     ); // Adjust for leap years if needed
 
-    final random = Random();
-    final dates = List<DateTime>.generate(count, (index) {
-      final randomDaysSinceTenYearsAgo = random.nextInt(365 * _numberOFYearInThePast);
+    final Random random = Random();
+    final List<DateTime> dates = List<DateTime>.generate(count, (int index) {
+      final int randomDaysSinceTenYearsAgo = random.nextInt(365 * _numberOFYearInThePast);
       return tenYearsAgo.add(Duration(days: randomDaysSinceTenYearsAgo));
     });
     return dates;
@@ -146,7 +146,7 @@ class DataSimulator {
     required int yearMax,
     required int dayOfTheMonth,
   }) {
-    final payee = Data().payees.getOrCreate(payeeName);
+    final Payee payee = Data().payees.getOrCreate(payeeName);
 
     for (int year = yearMin; year <= yearMax; year++) {
       for (int month = 1; month <= 12; month++) {
@@ -174,8 +174,8 @@ class DataSimulator {
 
   /// Returns the last day of the previous month for a given date.
   DateTime getLastDayOfPreviousMonth(DateTime date) {
-    final previousMonth = DateTime(date.year, date.month - 1);
-    final daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
+    final DateTime previousMonth = DateTime(date.year, date.month - 1);
+    final int daysInPreviousMonth = DateTime(previousMonth.year, previousMonth.month + 1, 0).day;
     return DateTime(previousMonth.year, previousMonth.month, daysInPreviousMonth).endOfDay;
   }
 
@@ -185,7 +185,7 @@ class DataSimulator {
   }
 
   int getShiftedYearFromNow(int numberOfYearFromToday) {
-    final today = DateTime.now();
+    final DateTime today = DateTime.now();
     return DateTime(today.year + numberOfYearFromToday, today.month, today.day).year;
   }
 
@@ -201,15 +201,15 @@ class DataSimulator {
     final DateTime date = DateTime.parse(dateAsString);
     double transactionAmount = tradePrice * quantity;
     String action = 'sold';
-    final stock = Data().securities.get(stockId);
+    final Security? stock = Data().securities.get(stockId);
 
     if (activity == InvestmentType.buy) {
       action = 'bought';
       transactionAmount *= -1;
     }
-    final payee = Data().payees.getOrCreate('Broker');
+    final Payee payee = Data().payees.getOrCreate('Broker');
 
-    final t = _addTransactionAccountDatePayeeCategory(
+    final Transaction t = _addTransactionAccountDatePayeeCategory(
       account: account,
       date: date,
       amount: transactionAmount,
@@ -233,7 +233,7 @@ class DataSimulator {
 
   /// Adds a new account to the data.
   Account _addNewAccount(final int id, final String name, final String accountId, final int type, final String currency,) {
-    final account = Account.fromJson({
+    final Account account = Account.fromJson(<String, dynamic>{
       'Id': id,
       'Name': name,
       'AccountId': accountId,
@@ -286,7 +286,7 @@ class DataSimulator {
 
   /// Buys a home and adds related transactions.
   void _buyHome(final Payee payeeForHomeLoan, final DateTime date) {
-    final accountAssetHome = _addNewAccount(
+    final Account accountAssetHome = _addNewAccount(
       -1,
       'Main Home',
       'A0001',
@@ -329,7 +329,7 @@ class DataSimulator {
       memo: memo,
     );
 
-    final relatedTransaction = Data().makeTransferLinkage(
+    final Transaction relatedTransaction = Data().makeTransferLinkage(
       transactionSource: source,
       destinationAccount: accountDestination,
     );
@@ -342,7 +342,7 @@ class DataSimulator {
   /// Generates sample account aliases.
   void _generateAccountAliases() {
     Data().accountAliases.appendNewMoneyObject(
-          AccountAlias.fromJson({
+          AccountAlias.fromJson(<String, dynamic>{
             'Pattern': '*foo*',
             'Flag': 0,
             'AccountId': 'A12345',
@@ -350,7 +350,7 @@ class DataSimulator {
           fireNotification: false,
         );
     Data().accountAliases.appendNewMoneyObject(
-          AccountAlias.fromJson({
+          AccountAlias.fromJson(<String, dynamic>{
             'Pattern': '*bar*',
             'Flag': 0,
             'AccountId': 'B987654',
@@ -631,7 +631,7 @@ class DataSimulator {
 
     // Loans
     {
-      final homeLoan = Data().categories.addNewCategory(
+      final Category homeLoan = Data().categories.addNewCategory(
             name: 'HomeLoans',
             description: '',
             type: CategoryType.expense,
@@ -690,7 +690,7 @@ class DataSimulator {
   /// Generates sample currencies.
   void _generateCurrencies() {
     final List<MyJson> demoCurrencies = <MyJson>[
-      {
+      <String, dynamic>{
         'Id': -1,
         'Name': 'USA',
         'Symbol': 'USD',
@@ -698,7 +698,7 @@ class DataSimulator {
         'Ratio': 1.09,
         'LastRatio': 1.12,
       },
-      {
+      <String, dynamic>{
         'Id': -1,
         'Name': 'Canada',
         'Symbol': 'CAD',
@@ -706,7 +706,7 @@ class DataSimulator {
         'Ratio': 0.75,
         'LastRatio': 0.85,
       },
-      {
+      <String, dynamic>{
         'Id': -1,
         'Name': 'Euro',
         'Symbol': 'EUR',
@@ -714,7 +714,7 @@ class DataSimulator {
         'Ratio': 1.15,
         'LastRatio': 1.11,
       },
-      {
+      <String, dynamic>{
         'Id': -1,
         'Name': 'UK',
         'Symbol': 'GBP',
@@ -722,7 +722,7 @@ class DataSimulator {
         'Ratio': 1.25,
         'LastRatio': 1.21,
       },
-      {
+      <String, dynamic>{
         'Id': -1,
         'Name': 'Japan',
         'Symbol': 'JPY',
@@ -741,8 +741,8 @@ class DataSimulator {
 
     final Category categoryIdForTravels = Data().categories.getByName('Travel')!;
 
-    Data().events.loadFromJson([
-      {
+    Data().events.loadFromJson(<MyJson>[
+      <String, dynamic>{
         'Id': 0,
         'Name': 'Condo in Chicago',
         'Category': categoryIdForProperties.uniqueId,
@@ -750,7 +750,7 @@ class DataSimulator {
         'End': '1999-12-04',
         'Memo': 'My first property',
       },
-      {
+      <String, dynamic>{
         'Id': 1,
         'Name': 'Wedding and honeymoon',
         'Category': categoryIdForTravels.uniqueId,
@@ -759,7 +759,7 @@ class DataSimulator {
         'People': 'Karen; Bob; Yoko',
         'Memo': 'It was raining, see photos here http://example.com',
       },
-      {
+      <String, dynamic>{
         'Id': 2,
         'Name': 'Home in Springfield',
         'Category': categoryIdForProperties.uniqueId,
@@ -767,7 +767,7 @@ class DataSimulator {
         'End': '2016-01-04',
         'Memo': 'Our first home',
       },
-      {
+      <String, dynamic>{
         'Id': 3,
         'Name': 'Divorce',
         'Begin': '2020-01-01',
@@ -775,7 +775,7 @@ class DataSimulator {
         'People': 'Karen; Bob',
         'Memo': 'Our friendly divorce',
       },
-      {
+      <String, dynamic>{
         'Id': 4,
         'Name': 'Sold house',
         'Category': categoryIdForProperties.uniqueId,
@@ -783,7 +783,7 @@ class DataSimulator {
         'End': '2020-03-05',
         'Memo': 'My trip to Vegas',
       },
-      {
+      <String, dynamic>{
         'Id': 5,
         'Name': 'Vegas',
         'Category': categoryIdForTravels.uniqueId,
@@ -840,16 +840,16 @@ class DataSimulator {
       memo: 'Invest in project goto Mars',
     );
 
-    final dates = generateListOfDates(yearInThePast: 5, howManyPerYear: 12, dayOfTheMonth: 9);
+    final List<DateTime> dates = generateListOfDates(yearInThePast: 5, howManyPerYear: 12, dayOfTheMonth: 9);
 
-    for (final date in dates) {
+    for (final DateTime date in dates) {
       if (loanAmount < 0) {
         break; // done paying back the loan
       }
 
-      final annuallyInterest = loanAmount * loanRate;
-      var monthlyInterest = annuallyInterest / 12;
-      var principalForThisMonday = (monthlyPayment - monthlyInterest);
+      final double annuallyInterest = loanAmount * loanRate;
+      double monthlyInterest = annuallyInterest / 12;
+      double principalForThisMonday = (monthlyPayment - monthlyInterest);
       if (isConsideredZero(monthlyInterest)) {
         monthlyInterest = 0;
         principalForThisMonday = loanAmount;
@@ -885,12 +885,12 @@ class DataSimulator {
   /// Generates sample online accounts.
   void _generateOnlineAccounts() {
     // Pretend to load
-    Data().onlineAccounts.loadFromJson([
-      {
+    Data().onlineAccounts.loadFromJson(<MyJson>[
+      <String, dynamic>{
         'Id': 0,
         'Name': 'test1',
       },
-      {
+      <String, dynamic>{
         'Id': 1,
         'Name': 'test2',
       },
@@ -898,7 +898,7 @@ class DataSimulator {
 
     // Also add a new one
     Data().onlineAccounts.appendNewMoneyObject(
-          OnlineAccount.fromJson({
+          OnlineAccount.fromJson(<String, dynamic>{
             'Name': 'test3',
           }),
           fireNotification: false,
@@ -906,18 +906,18 @@ class DataSimulator {
   }
 
   void _generatePayees() {
-    Data().payees.loadFromJson([
-      {'Id': 0, 'Name': 'Job At BurgerKing'},
-      {'Id': 1, 'Name': 'NASA'},
-      {'Id': 2, 'Name': 'Lottery Win'},
-      {'Id': 3, 'Name': 'Broker'},
+    Data().payees.loadFromJson(<MyJson>[
+      <String, dynamic>{'Id': 0, 'Name': 'Job At BurgerKing'},
+      <String, dynamic>{'Id': 1, 'Name': 'NASA'},
+      <String, dynamic>{'Id': 2, 'Name': 'Lottery Win'},
+      <String, dynamic>{'Id': 3, 'Name': 'Broker'},
     ]);
   }
 
   /// Generates sample rental data.
   void _generateRentals() {
-    Data().rentBuildings.loadFromJson([
-      {
+    Data().rentBuildings.loadFromJson(<MyJson>[
+      <String, dynamic>{
         'Id': 0,
         'Name': 'AirBnB',
         'Address': 'One Washington DC',
@@ -930,15 +930,15 @@ class DataSimulator {
     ]);
 
     // Rent Units
-    Data().rentUnits.loadFromJson([
-      {
+    Data().rentUnits.loadFromJson(<MyJson>[
+      <String, dynamic>{
         'Id': 0,
         'Name': 'roomA',
         'Building': 0,
         'Renter': 'Bob Smith',
         'Note': 'Renting for 1 year',
       },
-      {
+      <String, dynamic>{
         'Id': 0,
         'Name': 'roomB',
         'Building': 0,
@@ -978,7 +978,7 @@ class DataSimulator {
         );
 
     Data().stockSplits.appendNewMoneyObject(
-          StockSplit.fromJson({
+          StockSplit.fromJson(<String, dynamic>{
             'Date': '2005-05-05',
             'Security': idStockApple, // AAPL
             'Numerator': 2,
@@ -989,7 +989,7 @@ class DataSimulator {
 
   /// 4 years of GYM and Netflix
   void _generateSubscriptionsOnCheckingAccount() {
-    final startDate = _today.subtract(Duration(days: (365.25 * _numberOFYearInThePast).toInt()));
+    final DateTime startDate = _today.subtract(Duration(days: (365.25 * _numberOFYearInThePast).toInt()));
 
     // Electricity
     generateTransactionsMonthlyExpenses(
@@ -1038,7 +1038,7 @@ class DataSimulator {
 
   /// 4 years of GYM and Netflix
   void _generateSubscriptionsOnCreditCard() {
-    final dateForGym = _today.subtract(const Duration(days: 365 * 8));
+    final DateTime dateForGym = _today.subtract(const Duration(days: 365 * 8));
     generateTransactionsMonthlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Gold Gym',
@@ -1050,7 +1050,7 @@ class DataSimulator {
     );
 
     // 5 years of netflix
-    final dateForNetflix = _today.subtract(const Duration(days: 365 * 5));
+    final DateTime dateForNetflix = _today.subtract(const Duration(days: 365 * 5));
     generateTransactionsMonthlyExpenses(
       account: _accountCreditCardUSD,
       payeeName: 'Netflix',
@@ -1064,14 +1064,14 @@ class DataSimulator {
 
   // Create 2 random TransactionsExtra entries, mainly for code coverage.
   void _generateTransactionExtra() {
-    Data().transactionExtras.loadFromJson([
-      {
+    Data().transactionExtras.loadFromJson(<MyJson>[
+      <String, dynamic>{
         'Id': '0',
         'TaxDate': DateTime(2010, 1, 1),
         'TaxYear': 2010,
         'Transaction': 0,
       },
-      {
+      <String, dynamic>{
         'Id': '1',
         'TaxDate': DateTime(2020, 1, 1),
         'TaxYear': 2020,
@@ -1082,39 +1082,39 @@ class DataSimulator {
 
   /// Generates credit card transactions for the past 20 years.
   void _generateTransactionsForCreditCard() {
-    final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
+    final List<DateTime> dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
 
     for (final DateTime date in dates) {
-      final List<Object> selectedCategory = [
-        [
+      final List<Object> selectedCategory = <List<Object>>[
+        <Object>[
           _categorySubscriptionTransport,
-          [
-            ['City Bus', 3],
-            ['Taxi', 20],
-            ['Uber', 30],
+          <List<Object>>[
+            <Object>['City Bus', 3],
+            <Object>['Taxi', 20],
+            <Object>['Uber', 30],
           ],
         ],
-        [
+        <Object>[
           _categoryFoodGrocery,
-          [
-            ['TheFoodStore', 50],
-            ['SafeWay', 80],
-            ['WholeFood', 200],
+          <List<Object>>[
+            <Object>['TheFoodStore', 50],
+            <Object>['SafeWay', 80],
+            <Object>['WholeFood', 200],
           ],
         ],
-        [
+        <Object>[
           _categoryFoodRestaurant,
-          [
-            ['Starbucks', 10],
-            ['AppleBees', 100],
-            ['PizzaHut', 20],
+          <List<Object>>[
+            <Object>['Starbucks', 10],
+            <Object>['AppleBees', 100],
+            <Object>['PizzaHut', 20],
           ],
         ],
       ].getRandomItem();
 
       final Category category = selectedCategory[0] as Category;
 
-      final dynamic payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
+      final dynamic payeeAndMaxAmount = (selectedCategory[1] as List<Object>).getRandomItem();
       double maxSpendingOnCreditCard = (payeeAndMaxAmount[1] as num).toDouble();
 
       final Transaction source = _addTransactionAccountDatePayeeCategory(
@@ -1132,7 +1132,7 @@ class DataSimulator {
   }
 
   void _generateTransactionsSalary() {
-    final dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 5);
+    final List<DateTime> dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 5);
     _dateOfFirstBigJob = dates[dates.length ~/ 2];
 
     double yearlySalary = _startingYearlySalaryFirstJob;
@@ -1145,7 +1145,7 @@ class DataSimulator {
 
     bool switchedJob = false;
 
-    for (final date in dates) {
+    for (final DateTime date in dates) {
       if (iterationYear == -1) {
         iterationYear = date.year;
       } else {
@@ -1207,12 +1207,12 @@ class DataSimulator {
   void _generateTransfersToCreditCardPayment() {
     double rollingBalance = 0.00;
 
-    final list = _accountCreditCardUSD.getTransaction();
+    final List<Transaction> list = _accountCreditCardUSD.getTransaction();
 
-    list.sort((Transaction a, b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true));
+    list.sort((Transaction a, Transaction b) => sortByDate(a.fieldDateTime.value, b.fieldDateTime.value, true));
     int lastMonth = list.first.fieldDateTime.value!.month;
 
-    for (final t in list) {
+    for (final Transaction t in list) {
       if (t.fieldDateTime.value!.month != lastMonth && rollingBalance != 0) {
         _createTransferTransaction(
           accountSource: _accountBankUSA,
@@ -1230,17 +1230,17 @@ class DataSimulator {
 
   /// The demo data tries to demonstrate a person that had a rent for the first part of their journey and a house on the second half
   void _generateTransfersToRentAndHomeLoan() {
-    final payeeLandLord = Data().payees.getOrCreate('TheLandlord');
-    final payeeForHomeLoan = Data().payees.getOrCreate('HomeLoanBank');
+    final Payee payeeLandLord = Data().payees.getOrCreate('TheLandlord');
+    final Payee payeeForHomeLoan = Data().payees.getOrCreate('HomeLoanBank');
     // Iterate over the last 'n' years of loan paid each month
-    final dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 10);
-    final midPointInTime = dates[dates.length ~/ 2];
+    final List<DateTime> dates = generateListOfDates(yearInThePast: _numberOFYearInThePast, howManyPerYear: 12, dayOfTheMonth: 10);
+    final DateTime midPointInTime = dates[dates.length ~/ 2];
 
     bool boughtHome = false;
     int numberOfRentPayment = 0;
     int numberOfMortgagePayment = 0;
 
-    for (final date in dates) {
+    for (final DateTime date in dates) {
       if (date.isBefore(midPointInTime)) {
         _addTransactionAccountDatePayeeCategory(
           account: _accountBankUSA,
@@ -1256,7 +1256,7 @@ class DataSimulator {
           _buyHome(payeeForHomeLoan, date.add(const Duration(days: 180)));
         }
 
-        final transaction = _addTransactionAccountDatePayeeCategory(
+        final Transaction transaction = _addTransactionAccountDatePayeeCategory(
           account: _accountBankUSA,
           date: date,
           payeeId: payeeForHomeLoan.uniqueId,
@@ -1265,7 +1265,7 @@ class DataSimulator {
           memo: 'Mortgage Payment #${++numberOfMortgagePayment}',
         );
 
-        final splitMortgagePaymentPrincipal = MoneySplit(
+        final MoneySplit splitMortgagePaymentPrincipal = MoneySplit(
           id: -1,
           amount: _monthlyHomeLoan - 200,
           transactionId: transaction.uniqueId,
@@ -1278,7 +1278,7 @@ class DataSimulator {
         );
         Data().splits.appendNewMoneyObject(splitMortgagePaymentPrincipal);
 
-        final splitMortgagePaymentInterest = MoneySplit(
+        final MoneySplit splitMortgagePaymentInterest = MoneySplit(
           id: -1,
           amount: 200,
           transactionId: transaction.uniqueId,

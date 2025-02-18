@@ -27,8 +27,8 @@ class DistributionBar extends StatefulWidget {
 }
 
 class _DistributionBarState extends State<DistributionBar> {
-  final List<Widget> detailRowWidgets = [];
-  final List<Widget> segmentWidgets = [];
+  final List<Widget> detailRowWidgets = <Widget>[];
+  final List<Widget> segmentWidgets = <Widget>[];
 
   @override
   Widget build(BuildContext context) {
@@ -37,21 +37,21 @@ class _DistributionBarState extends State<DistributionBar> {
 
     final double sum = widget.segments.fold(
       0,
-      (previousValue, element) => previousValue + element.amount.abs(),
+      (double previousValue, Distribution element) => previousValue + element.amount.abs(),
     );
     if (sum > 0) {
-      for (final segment in widget.segments) {
+      for (final Distribution segment in widget.segments) {
         segment.percentage = segment.amount.abs() / sum;
       }
     }
     // Sort descending by percentage
-    widget.segments.sort((a, b) => b.percentage.compareTo(a.percentage));
+    widget.segments.sort((Distribution a, Distribution b) => b.percentage.compareTo(a.percentage));
 
     _buildWidgets(context);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
+      children: <Widget>[
         _buildHorizontalBar(),
         gapSmall(),
         _buildRowOfDetails(),
@@ -67,7 +67,7 @@ class _DistributionBarState extends State<DistributionBar> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
+      children: <Widget>[
         gapSmall(),
         Expanded(
           flex: 2,

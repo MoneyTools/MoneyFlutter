@@ -54,8 +54,8 @@ class MyFileSystems {
   static Future<DateTime?> getFileModifiedTime(String filePath) async {
     try {
       if (await MyFileSystems.doesFileExist(filePath)) {
-        final file = File(filePath);
-        final fileStat = await file.stat();
+        final File file = File(filePath);
+        final FileStat fileStat = await file.stat();
         return fileStat.modified;
       }
       return null;
