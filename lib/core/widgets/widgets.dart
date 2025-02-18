@@ -64,7 +64,7 @@ Widget buildFieldWidgetForAmount({
       textAlign: align,
       style: TextStyle(
         fontFamily: 'RobotoMono',
-        color: getTextColorToUse(value),
+        color: getTextColorToUse(value as num),
       ),
     ),
     textAlignToAlignment(align),
@@ -193,7 +193,7 @@ Widget buildWidgetFromTypeAndValue({
       );
 
     case FieldType.percentage:
-      return buildFieldWidgetForPercentage(value: value);
+      return buildFieldWidgetForPercentage(value: value as double);
 
     // Amount
     case FieldType.amount:
@@ -207,7 +207,7 @@ Widget buildWidgetFromTypeAndValue({
       if (value is MoneyModel) {
         return MoneyWidget(amountModel: value);
       }
-      return MoneyWidget(amountModel: MoneyModel(amount: value));
+      return MoneyWidget(amountModel: MoneyModel(amount: value as double));
 
     // Amount short hand
     case FieldType.amountShorthand:
@@ -231,7 +231,7 @@ Widget buildWidgetFromTypeAndValue({
         );
       }
       // Adapt to available space
-      return scaleDown(buildFieldWidgetForDate(date: value, align: align), Alignment.centerLeft);
+      return scaleDown(buildFieldWidgetForDate(date: value as DateTime?, align: align), Alignment.centerLeft);
 
     case FieldType.text:
     default:

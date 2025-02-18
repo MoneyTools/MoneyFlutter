@@ -1,8 +1,12 @@
 import 'dart:math';
 
 import 'package:collection/collection.dart';
+import 'package:money/core/helpers/pairs.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/data/models/money_objects/money_object.dart';
+
+// Exports
+export  'package:money/core/helpers/pairs.dart';
 
 /// Calculates a list of evenly spaced values between a start and end value.
 ///
@@ -81,53 +85,41 @@ List<Pair<T, U>> convertMapToListOfPair<T, U>(Map<dynamic, dynamic> map) {
   List<Pair<T, U>> list = [];
 
   // Iterate over the entries in the input Map
-  map.forEach((key, value) {
+  map.forEach((dynamic key, dynamic value) {
     // Create a Pair object with the current key and value
-    list.add(Pair(key, value));
+    list.add(Pair(key as T, value as U));
   });
 
   // Return the list of Pair objects
   return list;
 }
 
+
 /// Converts a list of key-value pairs to a list of percentages.
 ///
-/// This function takes a list of `KeyValue` objects, where each object
-/// represents a key-value pair. The function calculates the total sum of
-/// all values and then converts each value to a percentage of the total sum.
-/// The resulting list contains `KeyValue` objects with the same keys as the
-/// input list, but with the values representing the corresponding percentages.
+/// This function takes a list of [PairStringDouble] objects, which represent
+/// key-value pairs where the value is a number. It calculates the total
+/// amount of all the values, then converts each value to a percentage of
+/// the total and returns a new list of [PairStringDouble] objects with the
+/// updated percentage values.
 ///
-/// If the total sum of values is zero, all percentages are set to 0.0.
-///
-/// Example usage:
-///
-/// ```dart
-/// List<KeyValue> keyValuePairs = [
-///   KeyValue(key: 'A', value: 10.0),
-///   KeyValue(key: 'B', value: 20.0),
-///   KeyValue(key: 'C', value: 30.0),
-/// ];
-///
-/// List<KeyValue> percentages = convertToPercentages(keyValuePairs);
-/// print(percentages); // Output: [KeyValue(key: 'A', value: 16.67), KeyValue(key: 'B', value: 33.33), KeyValue(key: 'C', value: 50.0)]
-/// ```
+/// If any of the values are zero, the corresponding percentage is set to 0.0
+/// to handle division by zero.
 ///
 /// Parameters:
-///   keyValuePairs (```List<KeyValue>```): The input list of `KeyValue` objects.
+///   `PairStringDouble (List<PairStringDouble>)`: The input list of key-value pairs.
 ///
 /// Returns:
-///   A list of `KeyValue` objects, where each object contains a key from the
-///   input list and a value representing the corresponding percentage of the
-///   total sum of values.
-List<KeyValue> convertToPercentages(List<KeyValue> keyValuePairs) {
+///   A new list of [PairStringDouble] objects with the values converted to
+///   percentages of the total.
+List<PairStringDouble> convertToPercentages(List<PairStringDouble> pairStringDouble) {
   // Calculate total amount
-  double totalAmount = keyValuePairs.fold(0, (prev, entry) => prev + entry.value);
+  double totalAmount = pairStringDouble.fold(0, (prev, entry) => prev + (entry.value as num));
 
   // Convert each amount to a percentage and retain key association
-  List<KeyValue> percentages = keyValuePairs.map((entry) {
-    double percentage = (entry.value / totalAmount) * 100;
-    return KeyValue(
+  List<PairStringDouble> percentages = pairStringDouble.map((PairStringDouble entry) {
+    double percentage = ((entry.value as num) / (totalAmount)) * 100;
+    return PairStringDouble(
       key: entry.key,
       value: percentage.isNaN ? 0.0 : percentage,
     ); // Handle division by zero
@@ -168,7 +160,7 @@ T? getMoneyObjectFromFirstSelectedId<T>(
 ) {
   if (selectedIds.isNotEmpty) {
     final int id = selectedIds.first;
-    return listOfItems.firstWhereOrNull((element) => (element as MoneyObject).uniqueId == id);
+    return listOfItems.firstWhereOrNull((element) => (element as MoneyObject).uniqueId == id) as T?;
   }
   return null;
 }
@@ -232,77 +224,6 @@ int sortByValue(final num a, final num b, final bool ascending) {
   }
 }
 
-class KeyValue {
-  KeyValue({required this.key, required this.value});
-
-  dynamic key;
-  dynamic value;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-
-    if (other is! KeyValue) {
-      return false;
-    }
-
-    final otherKeyValue = other;
-    return key == otherKeyValue.key && value == otherKeyValue.value;
-  }
-
-  @override
-  int get hashCode => Object.hash(key, value);
-
-  @override
-  String toString() {
-    return '$key:$value';
-  }
-}
-
-class Pair<F, S> {
-  Pair(this.first, this.second);
-
-  F first;
-  S second;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    return other is Pair<F, S> && other.first == first && other.second == second;
-  }
-
-  @override
-  int get hashCode => first.hashCode ^ second.hashCode;
-
-  @override
-  String toString() => '($first, $second)';
-}
-
-class Triple<F, S, T> {
-  Triple(this.first, this.second, this.third);
-
-  F first;
-  S second;
-  T third;
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) {
-      return true;
-    }
-    return other is Triple<F, S, T> && other.first == first && other.second == second && other.third == third;
-  }
-
-  @override
-  int get hashCode => first.hashCode ^ second.hashCode ^ third.hashCode;
-
-  @override
-  String toString() => '($first, $second, $third)';
-}
 
 List<String> enumToStringList<T>(List<T> enumValues) {
   return enumValues.map((e) => e.toString().split('.').last).toList();
@@ -310,7 +231,7 @@ List<String> enumToStringList<T>(List<T> enumValues) {
 
 extension RandomItemExtension<T> on List<T> {
   T getRandomItem() {
-    final random = Random();
+    final Random random = Random();
     if (isEmpty) {
       throw Exception('Cannot get random item from an empty list');
     }

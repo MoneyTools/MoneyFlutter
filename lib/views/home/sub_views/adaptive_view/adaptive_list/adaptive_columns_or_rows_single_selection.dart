@@ -95,23 +95,24 @@ class _AdaptiveListColumnsOrRowsSingleSelectionState extends State<AdaptiveListC
       for (final field in widget.fieldDefinitions) {
         switch (field.type) {
           case FieldType.text:
-            _footerAccumulators.accumulatorListOfText.cumulate(field, field.getValueForDisplay(item));
+            _footerAccumulators.accumulatorListOfText.cumulate(field, field.getValueForDisplay(item) as String);
 
           case FieldType.date:
-            _footerAccumulators.accumulatorDateRange.cumulate(field, field.getValueForDisplay(item));
+            _footerAccumulators.accumulatorDateRange.cumulate(field, field.getValueForDisplay(item) as DateTime);
+            
           case FieldType.dateRange:
             if (field.value.min != null) {
-              _footerAccumulators.accumulatorDateRange.cumulate(field, field.value.min);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, field.value.min as DateTime);
             }
             if (field.value.max != null) {
-              _footerAccumulators.accumulatorDateRange.cumulate(field, field.value.max);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, field.value.max as DateTime);
             }
 
           case FieldType.amount:
             final value = field.getValueForDisplay(item).toDouble();
-            _footerAccumulators.accumulatorSumAmount.cumulate(field, value);
+            _footerAccumulators.accumulatorSumAmount.cumulate(field, value as double);
             if (field.footer == FooterType.average) {
-              _footerAccumulators.accumulatorForAverage.cumulate(field, value);
+              _footerAccumulators.accumulatorForAverage.cumulate(field, value as num);
             }
 
           case FieldType.widget:

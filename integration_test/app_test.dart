@@ -608,14 +608,15 @@ Future<void> testEvents(WidgetTester tester) async {
     {
       await tapOnKeyString(tester, 'key_dropdown');
       await inputTextToElement(tester, findByKeyString('key_pick_category'), 'Food');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500)); // fix soem odd timing issues
 
       // Find the widget that displays the text 'Grocery'.
       final Finder groceryFinder = find.text('Grocery').at(0); // top most element found
+      await tester.pumpAndSettle(const Duration(milliseconds: 500)); // fix soem odd timing issues
 
       // Tap on the widget.
       await tester.tap(groceryFinder);
-
-      // await tapOnText(tester, 'Close');
+      await tester.pumpAndSettle(const Duration(milliseconds: 500)); // fix soem odd timing issues     
     }
 
     await tapOnText(tester, 'Apply');

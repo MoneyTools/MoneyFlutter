@@ -1,6 +1,7 @@
 import 'package:money/core/helpers/list_helper.dart';
 import 'package:money/core/helpers/string_helper.dart';
 import 'package:money/core/widgets/side_panel/side_panel.dart';
+import 'package:money/data/models/money_objects/categories/category.dart';
 import 'package:money/data/models/money_objects/transactions/transaction.dart';
 import 'package:money/data/storage/data/data.dart';
 import 'package:money/views/home/sub_views/adaptive_view/adaptive_list/transactions/list_view_transaction_splits.dart';
@@ -274,9 +275,9 @@ class ViewTransactionsState extends ViewForMoneyObjectsState {
     getList().forEach((final Transaction transaction) {
       final num value = transaction.fieldAmount.value.toDouble();
       final int categoryId = transaction.fieldCategoryId.value;
-      dynamic category = Data().categories.get(categoryId);
+      Category? category = Data().categories.get(categoryId);
       category ??= Data().categories.unknown;
-      final parentCategory = Data().categories.getTopAncestor(category!);
+      final parentCategory = Data().categories.getTopAncestor(category);
 
       // Update the map or add a new entry
       tallyPerCategory.update(

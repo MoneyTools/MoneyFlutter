@@ -80,7 +80,7 @@ class AccumulatorSum<K, V> {
     if (values.containsKey(key)) {
       // Use dynamic type for accumulated value as specific behavior depends on T
       final V? existingValue = values[key];
-      values[key] = _accumulate(existingValue as V, value);
+      values[key] = _accumulate(existingValue as V, value) as V;
     } else {
       values[key] = value;
     }
@@ -132,11 +132,11 @@ class AccumulatorDateRange<K> {
     values.clear();
   }
 
-  bool containsKey(K key) {
+  bool containsKey(final K key) {
     return values.containsKey(key);
   }
 
-  void cumulate(K key, DateTime value) {
+  void cumulate(final K key, final DateTime value) {
     if (values.containsKey(key)) {
       values[key]!.inflate(value);
     } else {
@@ -148,7 +148,7 @@ class AccumulatorDateRange<K> {
     return values.entries.toList();
   }
 
-  DateRange? getValue(K key) {
+  DateRange? getValue(final K key) {
     return values[key];
   }
 }
@@ -165,16 +165,16 @@ class AccumulatorAverage<K> {
     values.clear();
   }
 
-  bool containsKey(K key) {
+  bool containsKey(final K key) {
     return values.containsKey(key);
   }
 
-  void cumulate(K key, num value) {
+  void cumulate(final K key, final num value) {
     RunningAverage average = values.containsKey(key) ? values[key]! : values[key] = RunningAverage();
     average.addValue(value);
   }
 
-  RunningAverage? getValue(K key) {
+  RunningAverage? getValue(final K key) {
     return values[key];
   }
 }
@@ -216,12 +216,12 @@ class MapAccumulatorSet<K, I, V> {
 
   /// Retrieves the set of values [V] associated with the given keys [K] and [I].
   /// If no values are found for the given keys, an empty set is returned.
-  Set<V> find(K key1, I key2) {
+  Set<V> find(final K key1,final I key2) {
     final foundInLevel1 = map[key1];
     return foundInLevel1?.getValue(key2) ?? <V>{};
   }
 
-  AccumulatorList<I, V>? getLevel1(K key1) {
+  AccumulatorList<I, V>? getLevel1(final K key1) {
     return map[key1];
   }
 }

@@ -22,11 +22,11 @@ class SidePanelSupport {
 
   int selectedCurrency = 0;
 
-  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onTransactions;
-  Function? onChart;
+  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onTransactions;  
+  Widget Function({required List<int> selectedIds, required bool isReadOnly})? onDetails;
+  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onChart;
+  Widget Function({required List<int> selectedIds, required bool showAsNativeCurrency})? onPnL;
   Function? onCopyToClipboard;
-  Function? onDetails;
-  Function? onPnL;
 
   Widget getSidePanelContent(
     final SidePanelSubViewEnum subViewId,

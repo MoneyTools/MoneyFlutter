@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'package:money/core/helpers/json_helper.dart';
 import 'package:money/data/models/fields/field_filters.dart';
 
 /// Exports
@@ -17,7 +17,7 @@ class FieldFilters {
   /// instance and populates its `list` with `FieldFilter` instances constructed from the
   /// JSON objects.
   factory FieldFilters.fromJson(final Map<String, dynamic> json) {
-    final filters = (json['filters'] as List).map((filterJson) => FieldFilter.fromJson(filterJson)).toList();
+    final filters = (json['filters'] as List<MyJson>).map((filterJson) => FieldFilter.fromJson(filterJson)).toList();
     return FieldFilters(filters);
   }
 
@@ -29,7 +29,7 @@ class FieldFilters {
     if (jsonString.isEmpty) {
       return FieldFilters();
     }
-    final Map<String, dynamic> json = jsonDecode(jsonString);
+    final Map<String, dynamic> json = jsonDecode(jsonString) as Map<String, dynamic>;
     return FieldFilters.fromJson(json);
   }
 

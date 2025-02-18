@@ -297,15 +297,15 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           case FieldType.date:
             final dateTime = field.getValueForDisplay(item);
             if (dateTime != null) {
-              _footerAccumulators.accumulatorDateRange.cumulate(field, dateTime);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, dateTime as DateTime);
             }
           case FieldType.dateRange:
             final dateRangeValue = field.getValue(item);
             if (dateRangeValue.min != null) {
-              _footerAccumulators.accumulatorDateRange.cumulate(field, dateRangeValue.min);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, dateRangeValue.min as DateTime);
             }
             if (dateRangeValue.max != null) {
-              _footerAccumulators.accumulatorDateRange.cumulate(field, dateRangeValue.max);
+              _footerAccumulators.accumulatorDateRange.cumulate(field, dateRangeValue.max as DateTime);
             }
 
           case FieldType.amount:
@@ -329,13 +329,13 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
           case FieldType.quantity:
             final dynamic value = field.getValueForDisplay(item);
             if (field.footer == FooterType.count) {
-              _footerAccumulators.accumulatorListOfText.cumulate(field, getIntAsText(value));
+              _footerAccumulators.accumulatorListOfText.cumulate(field, getIntAsText(value as int));
             } else {
               if (value is num) {
                 _footerAccumulators.accumulatorSumNumber.cumulate(field, value.toDouble());
               }
               if (field.footer == FooterType.average) {
-                _footerAccumulators.accumulatorForAverage.cumulate(field, value);
+                _footerAccumulators.accumulatorForAverage.cumulate(field, value as num);
               }
             }
           default:
@@ -572,7 +572,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
       final String fieldValue = dateToString(
-        columnToCustomerFilterOn.getValueForDisplay(moneyObject),
+        columnToCustomerFilterOn.getValueForDisplay(moneyObject) as DateTime?,
       );
       set.add(fieldValue);
     }
@@ -589,7 +589,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
       final String fieldValue = formatDoubleTrimZeros(
-        columnToCustomerFilterOn.getValueForDisplay(moneyObject),
+        columnToCustomerFilterOn.getValueForDisplay(moneyObject) as double,
       );
       set.add(fieldValue);
     }
@@ -605,7 +605,7 @@ class ViewForMoneyObjectsState extends State<ViewForMoneyObjects> {
     final Set<String> set = <String>{}; // This is a Set()
     final List<MoneyObject> list = getList(applyFilter: false);
     for (final moneyObject in list) {
-      final String fieldValue = columnToCustomerFilterOn.getValueForReading?.call(moneyObject) ?? ''.toString();
+      final String fieldValue = columnToCustomerFilterOn.getValueForReading?.call(moneyObject) as String? ?? '';
       set.add(fieldValue);
     }
     final List<String> uniqueValues = set.toList();

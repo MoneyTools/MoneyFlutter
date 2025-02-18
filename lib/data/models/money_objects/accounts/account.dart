@@ -290,7 +290,7 @@ class Account extends MoneyObject {
       );
     },
     setValue: (final MoneyObject instance, dynamic value) {
-      (instance as Account).fieldType.value = AccountType.values[value];
+      (instance as Account).fieldType.value = AccountType.values[value as int];
     },
   );
 

@@ -15,19 +15,19 @@ class BarChartWidget extends StatelessWidget {
   });
 
   final bool asIncome;
-  final List<KeyValue> listCategoryNameToAmount; // List of data with label and value
+  final List<PairIntDouble> listCategoryNameToAmount; // List of data with label and value
 
   @override
   Widget build(BuildContext context) {
     // Sort the data by value in descending order
-    listCategoryNameToAmount.sort((a, b) => b.value.compareTo(a.value));
+    listCategoryNameToAmount.sort((PairIntDouble a, PairIntDouble b) => b.value.compareTo(a.value));
 
     // Extract top 3 values and calculate total value of others
     int topCategoryToShow = min(3, listCategoryNameToAmount.length);
 
     final double otherSumValues = listCategoryNameToAmount
         .skip(topCategoryToShow)
-        .fold(0.0, (double prev, KeyValue current) => prev + current.value);
+        .fold(0.0, (double prev, PairIntDouble current) => prev + current.value);
 
     List<Widget> bars = [];
 

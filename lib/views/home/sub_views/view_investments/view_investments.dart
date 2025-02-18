@@ -55,7 +55,7 @@ class ViewInvestmentsState extends ViewForMoneyObjectsState {
                   // Prepare the Stocks view
                   // Filter by Stock Symbol
                   String symbol =
-                      selectedInvestment.fieldSecuritySymbol.getValueForDisplay(selectedInvestment).toLowerCase();
+                      (selectedInvestment.fieldSecuritySymbol.getValueForDisplay(selectedInvestment) as String).toLowerCase();
                   final Security? securityFound = Data().securities.getBySymbol(symbol);
                   if (securityFound != null) {
                     PreferenceController.to.jumpToView(

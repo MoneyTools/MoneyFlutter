@@ -183,7 +183,7 @@ class MoneySplit extends MoneyObject {
     serializeName: 'Memo',
     getValueForDisplay: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as MoneySplit).fieldMemo.value,
-    setValue: (MoneyObject instance, dynamic newValue) => (instance as MoneySplit).fieldMemo.value = newValue,
+    setValue: (MoneyObject instance, dynamic newValue) => (instance as MoneySplit).fieldMemo.value = newValue as String,
   );
 
   // 3

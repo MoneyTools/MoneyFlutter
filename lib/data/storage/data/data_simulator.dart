@@ -1084,8 +1084,8 @@ class DataSimulator {
   void _generateTransactionsForCreditCard() {
     final dates = generateListOfDatesRandom(year: _numberOFYearInThePast, howManyPerMonths: 4);
 
-    for (final date in dates) {
-      final selectedCategory = [
+    for (final DateTime date in dates) {
+      final List<Object> selectedCategory = [
         [
           _categorySubscriptionTransport,
           [
@@ -1114,13 +1114,13 @@ class DataSimulator {
 
       Category category = selectedCategory[0] as Category;
 
-      final payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
-      double maxSpendingOnCreditCard = payeeAndMaxAmount[1].toDouble();
+      final dynamic payeeAndMaxAmount = (selectedCategory[1] as List<dynamic>).getRandomItem();
+      double maxSpendingOnCreditCard = (payeeAndMaxAmount[1] as num).toDouble();
 
       final Transaction source = _addTransactionAccountDatePayeeCategory(
         account: _accountCreditCardUSD,
         date: date,
-        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0]).uniqueId,
+        payeeId: Data().payees.getOrCreate(payeeAndMaxAmount[0] as String).uniqueId,
         categoryId: category.uniqueId,
       );
       if (date.isAfter(_dateOfFirstBigJob)) {

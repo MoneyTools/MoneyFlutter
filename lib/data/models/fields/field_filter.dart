@@ -3,6 +3,7 @@
 import 'package:money/core/controller/selection_controller.dart';
 import 'package:money/core/helpers/ranges.dart';
 import 'package:money/core/helpers/string_helper.dart';
+import 'package:money/data/storage/data/data.dart';
 
 /// List of string values in lower case associated to a fieldName
 /// e.g.  'Color', ['blue', 'red']
@@ -26,10 +27,10 @@ class FieldFilter {
   /// - `byDateRange`: a `bool` indicating whether the filter is based on a date range.
   ///
   /// The `byDateRange` value is set to `false` if it is not present in the JSON map.
-  factory FieldFilter.fromJson(Map<String, dynamic> json) {
+  factory FieldFilter.fromJson(MyJson json) {
     return FieldFilter(
       fieldName: json['fieldName'] as String,
-      strings: List<dynamic>.from(json['strings']),
+      strings: List<String>.from(json['strings'] as List<String> ),
       byDateRange: json['byDateRange'] as bool? ?? false,
     );
   }
@@ -43,7 +44,7 @@ class FieldFilter {
   final String fieldName;
 
   /// the list of string that the field must match when filtering
-  final List<dynamic> strings;
+  final List<String> strings;
 
   /// Returns a string representation of the `FieldFilter` instance in the format:
   /// `'$fieldName=${strings.join("|")}byDateRange:$byDateRange'`.
@@ -60,7 +61,7 @@ class FieldFilter {
   ///
   /// Returns `true` if a string in the [strings] list matches the [value] ignoring case, `false` otherwise.
   bool contains(final dynamic value) {
-    final String? found = this.strings.firstWhereOrNull((text) {
+    final String? found = this.strings.firstWhereOrNull((final String text) {
       return stringCompareIgnoreCasing2(text, value as String) == 0;
     });
     return found != null;

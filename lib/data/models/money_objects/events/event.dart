@@ -147,7 +147,7 @@ class Event extends MoneyObject {
     type: FieldType.widget,
     getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Event).eventName),
     getValueForSerialization: (final MoneyObject instance) => (instance as Event).fieldName.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Event).fieldName.value = value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Event).fieldName.value = value as String,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
       (a as Event).fieldName.value,
       (b as Event).fieldName.value,
@@ -267,7 +267,7 @@ class Event extends MoneyObject {
         );
       },
       setValue: (MoneyObject instance, dynamic newValue) =>
-          getField(instance as Event).value = attemptToGetDateFromText(newValue),
+          getField(instance as Event).value = attemptToGetDateFromText(newValue as String),
       getValueForSerialization: (final MoneyObject instance) =>
           dateToIso8601OrDefaultString(getField(instance as Event).value),
     );

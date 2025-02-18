@@ -122,7 +122,7 @@ class Category extends MoneyObject {
     serializeName: 'Description',
     getValueForDisplay: (final MoneyObject instance) => (instance as Category).fieldDescription.value,
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldDescription.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).fieldDescription.value = value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).fieldDescription.value = value as String,
   );
 
   /// 8|Frequency|INT|0||0
@@ -161,7 +161,7 @@ class Category extends MoneyObject {
     type: FieldType.widget,
     getValueForDisplay: (final MoneyObject instance) => TokenText((instance as Category).fieldName.value),
     getValueForSerialization: (final MoneyObject instance) => (instance as Category).fieldName.value,
-    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).fieldName.value = value,
+    setValue: (final MoneyObject instance, dynamic value) => (instance as Category).fieldName.value = value as String,
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByString(
       (a as Category).fieldName.value,
       (b as Category).fieldName.value,

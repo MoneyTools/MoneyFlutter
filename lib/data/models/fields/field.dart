@@ -179,8 +179,8 @@ class Field<T> {
             final bool ascending,
           ) =>
               sortByDate(
-                getValueForDisplay(a),
-                getValueForDisplay(b),
+                getValueForDisplay(a) as DateTime?,
+                getValueForDisplay(b) as DateTime?,
                 ascending,
               );
         case FieldType.text:
@@ -253,7 +253,7 @@ class Field<T> {
         return getAmountAsShorthandText(value as num);
       case FieldType.quantity:
       case FieldType.percentage:
-        return formatDoubleUpToFiveZero(value);
+        return formatDoubleUpToFiveZero(value as double);
       case FieldType.amount:
         if (type is MoneyModel) {
           return (value as MoneyModel).toString();
@@ -265,14 +265,14 @@ class Field<T> {
       case FieldType.amountShorthand:
         return getAmountAsShorthandText(value as double);
       case FieldType.widget:
-        return value;
+        return value as String;
       case FieldType.text:
       default:
         return value.toString();
     }
   }
 
-  Widget getValueAsWidget(dynamic instance) {
+  Widget getValueAsWidget(MoneyObject instance) {
     dynamic value = this.getValueForDisplay(instance);
     if (value is Widget) {
       return value;

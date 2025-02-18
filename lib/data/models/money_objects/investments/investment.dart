@@ -143,7 +143,7 @@ class Investment extends MoneyObject {
     },
     setValue: (final MoneyObject instance, dynamic value) {
       (instance as Investment).stashValueBeforeEditing();
-      instance.fieldInvestmentType.value = getInvestmentTypeFromValue(value).index;
+      instance.fieldInvestmentType.value = getInvestmentTypeFromValue(value as int).index;
     },
   );
 
@@ -240,7 +240,7 @@ class Investment extends MoneyObject {
     },
     setValue: (final MoneyObject instance, dynamic value) {
       // (instance as Investment).stashValueBeforeEditing();
-      (instance as Investment).fieldTradeType.value = value;
+      (instance as Investment).fieldTradeType.value = value as int;
     },
   );
 

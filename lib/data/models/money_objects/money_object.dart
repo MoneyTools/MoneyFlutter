@@ -150,7 +150,7 @@ class MoneyObject {
           ),
           child: SwitchFormField(
             title: fieldDefinition.name,
-            initialValue: fieldDefinition.getValueForDisplay(objectInstance),
+            initialValue: fieldDefinition.getValueForDisplay(objectInstance) as bool,
             isReadOnly: isReadOnly,
             validator: (bool? value) {
               /// Todo

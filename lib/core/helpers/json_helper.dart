@@ -186,7 +186,7 @@ extension MyJsonExtensions on MyJson {
       if (value is int) {
         return value;
       }
-      return int.parse(value);
+      return int.parse(value as String);
     } catch (_) {
       return defaultIfNotFound;
     }

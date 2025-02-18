@@ -51,7 +51,7 @@ class ViewStocksState extends ViewForMoneyObjectsState {
     double sumAll = 0.00;
 
     for (final Security security in list) {
-      final profit = security.fieldProfit.getValueForDisplay(security).toDouble();
+      final double profit = security.fieldProfit.getValueForDisplay(security) as double;
       sumAll += profit;
 
       if (isConsideredZero(security.fieldHoldingShares.value)) {
@@ -315,10 +315,10 @@ class ViewStocksState extends ViewForMoneyObjectsState {
           events.add(
             ChartEvent(
               dates: DateRange(min: activity.transactionInstance!.fieldDateTime.value!),
-              amount: activity.fieldUnitPriceAdjusted.getValueForDisplay(activity),
+              amount: activity.fieldUnitPriceAdjusted.getValueForDisplay(activity) as double,
               quantity: activity.effectiveUnitsAdjusted,
               colorBasedOnQuantity: true,
-              description: activity.fieldInvestmentType.getValueForDisplay(activity),
+              description: activity.fieldInvestmentType.getValueForDisplay(activity) as String,
             ),
           );
         }

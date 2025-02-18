@@ -272,23 +272,23 @@ class StockChartWidgetState extends State<StockChartWidget> {
 
       if (response.statusCode == 200) {
         try {
-          final MyJson data = json.decode(response.body);
+          final MyJson data = json.decode(response.body) as MyJson;
 
-          int? subStatusCode = data['code'];
+          int? subStatusCode = data['code'] as int?;
           if ([401, 403, 404, 409].contains(subStatusCode)) {
             logger.e(data.toString());
-            SnackBarService.displayError(message: data['message']);
+            SnackBarService.displayError(message: data['message'] as String);
           } else {
-            final List<dynamic> dataSplits = data['splits'];
+            final List<dynamic> dataSplits = data['splits'] as List<dynamic>;
 
             final securityId = Data().securities.getBySymbol(symbol)!.uniqueId;
             for (final dataSplit in dataSplits) {
-              final DateTime dateOfSplit = DateTime.parse(dataSplit['date']);
+              final DateTime dateOfSplit = DateTime.parse(dataSplit['date'] as String);
               StockSplit sp = StockSplit(
                 security: securityId,
                 date: dateOfSplit,
-                numerator: dataSplit['from_factor'],
-                denominator: dataSplit['to_factor'],
+                numerator: dataSplit['from_factor'] as int,
+                denominator: dataSplit['to_factor'] as int,
               );
               splitsFound.add(sp);
             }
@@ -326,7 +326,7 @@ class StockChartWidgetState extends State<StockChartWidget> {
     // Check if the request was successful
     if (response.statusCode == 200) {
       // Parse the response body as JSON
-      final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      final Map<String, dynamic> jsonResponse = jsonDecode(response.body) as Map<String, dynamic>;
       Security? security = Data().securities.getBySymbol(symbol);
       if (security != null) {
         // Extract the stock splits data
@@ -342,13 +342,13 @@ class StockChartWidgetState extends State<StockChartWidget> {
                   final splits = events['splits'];
                   if (splits != null) {
                     for (var splitJson in splits.values) {
-                      int dateInMilliseconds = splitJson['date'];
+                      int dateInMilliseconds = splitJson['date'] as int;
                       final DateTime dateOSplit = DateTime.fromMillisecondsSinceEpoch(dateInMilliseconds * 1000);
                       StockSplit sp = StockSplit(
                         security: security.uniqueId,
                         date: dateOSplit,
-                        numerator: splitJson['numerator'].toInt(),
-                        denominator: splitJson['denominator'].toInt(),
+                        numerator: splitJson['numerator'] as int,
+                        denominator: splitJson['denominator'] as int,
                       );
                       splitsFound.add(sp);
                     }

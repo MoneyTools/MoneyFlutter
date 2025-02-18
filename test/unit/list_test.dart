@@ -58,26 +58,26 @@ void main() {
 
   group('convertToPercentages', () {
     test('handles division by zero correctly', () {
-      final keyValuePairs = [
-        KeyValue(key: 'a', value: 0.0),
-        KeyValue(key: 'b', value: 0.0),
-        KeyValue(key: 'c', value: 0.0),
+      final pairs = [
+        PairStringDouble(key: 'a', value: 0.0),
+        PairStringDouble(key: 'b', value: 0.0),
+        PairStringDouble(key: 'c', value: 0.0),
       ];
       final expected = [
-        KeyValue(key: 'a', value: 0.0),
-        KeyValue(key: 'b', value: 0.0),
-        KeyValue(key: 'c', value: 0.0),
+        PairStringDouble(key: 'a', value: 0.0),
+        PairStringDouble(key: 'b', value: 0.0),
+        PairStringDouble(key: 'c', value: 0.0),
       ];
-      expect(convertToPercentages(keyValuePairs), expected);
+      expect(convertToPercentages(pairs), expected);
     });
     test('converts key-value pairs to percentages correctly', () {
-      final List<KeyValue> keyValuePairs = [
-        KeyValue(key: 'a', value: 10.0),
-        KeyValue(key: 'b', value: 20.0),
-        KeyValue(key: 'c', value: 30.0),
+      final List<PairStringDouble> pairs = [
+        PairStringDouble(key: 'a', value: 10.0),
+        PairStringDouble(key: 'b', value: 20.0),
+        PairStringDouble(key: 'c', value: 30.0),
       ];
 
-      final List<KeyValue> result = convertToPercentages(keyValuePairs);
+      final List<PairStringDouble> result = convertToPercentages(pairs);
 
       expect(roundDouble(result[0].value, 3), 16.667);
       expect(roundDouble(result[1].value, 3), 33.333);

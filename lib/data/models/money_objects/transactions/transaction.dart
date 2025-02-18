@@ -331,7 +331,7 @@ class Transaction extends MoneyObject {
       );
     },
     setValue: (MoneyObject instance, dynamic newValue) =>
-        (instance as Transaction).fieldDateTime.value = attemptToGetDateFromText(newValue),
+        (instance as Transaction).fieldDateTime.value = attemptToGetDateFromText(newValue as String),
     sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
         sortByDateTime(a as Transaction, b as Transaction, ascending),
   );
@@ -1052,7 +1052,7 @@ class Transaction extends MoneyObject {
           // Attempt to restore/undo
           if (valueBeforeEdit != null) {
             // bring back the previous value
-            int oldValue = valueBeforeEdit![this.fieldStatus.name] ?? 0;
+            int oldValue = (valueBeforeEdit![this.fieldStatus.name] ?? 0) as int;
             this.fieldStatus.value = TransactionStatus.values[oldValue];
 
             // if this was the only change to this instance we can undo the mutation state

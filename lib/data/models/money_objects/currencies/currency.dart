@@ -147,7 +147,7 @@ class Currency extends MoneyObject {
     }
 
     return getAmountAsShorthandText(
-      amount,
+      amount as num,
       symbol: getCurrencySymbol(iso4217code),
     );
   }

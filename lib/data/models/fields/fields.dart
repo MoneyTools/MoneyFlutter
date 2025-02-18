@@ -182,12 +182,12 @@ class Fields<T> {
         if (fieldDefinition.getValueForReading == null) {
           return fieldDefinition.getValueForSerialization(objectInstance).toString().toLowerCase();
         } else {
-          return fieldDefinition.getValueForReading!(objectInstance);
+          return fieldDefinition.getValueForReading!(objectInstance) as String;
         }
 
       case FieldType.date:
         final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
-        return dateToString(fieldValue);
+        return dateToString(fieldValue as DateTime?);
 
       case FieldType.quantity:
         final dynamic fieldValue = fieldDefinition.getValueForDisplay(objectInstance);
