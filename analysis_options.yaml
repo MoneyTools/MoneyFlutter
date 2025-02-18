@@ -32,23 +32,23 @@ dart_code_metrics:
 
 linter:
   rules:    
+    always_declare_return_types: true
+    always_put_control_body_on_new_line: true
+    always_put_required_named_parameters_first: false
     avoid_print: true
     avoid_type_to_string: true
     cancel_subscriptions: true
     close_sinks: true
-    prefer_single_quotes: true
-    require_trailing_commas: true
-    always_declare_return_types: true
-    sort_child_properties_last: true
-    super_goes_last: false
-    use_decorated_box: true
-    use_super_parameters: true
+    directives_ordering: true
+    matching_super_parameters: true
     prefer_final_fields: true
     prefer_final_locals: true
-    matching_super_parameters: true
+    prefer_single_quotes: true
+    require_trailing_commas: true
+    sort_child_properties_last: true
     sort_constructors_first: true
-    always_put_control_body_on_new_line: true
-    use_key_in_widget_constructors: true
-    directives_ordering: true
     sort_pub_dependencies: true
-    always_put_required_named_parameters_first: false
+    super_goes_last: false
+    use_decorated_box: true
+    use_key_in_widget_constructors: true
+    use_super_parameters: true
