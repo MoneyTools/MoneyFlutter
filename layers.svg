@@ -868,7 +868,7 @@ window_manager</title>
   </g>
   <g id='Labels_archive'>
     <text class="nodeName" x="1650" y="225" font-size="120%">archive</text>
-    <text class="nodeName" x="1650" y="245" font-size="80%">4.0.2</text>
+    <text class="nodeName" x="1650" y="245" font-size="80%">4.0.4</text>
   </g>
   <g id='Labels_path'>
     <text class="nodeName" x="150" y="375" font-size="120%">path</text>
@@ -876,7 +876,7 @@ window_manager</title>
   </g>
   <g id='Labels_file_picker'>
     <text class="nodeName" x="150" y="225" font-size="120%">file_picker</text>
-    <text class="nodeName" x="150" y="245" font-size="80%">8.3.7</text>
+    <text class="nodeName" x="150" y="245" font-size="80%">9.0.2</text>
   </g>
   <g id='Labels_flutter_markdown'>
     <text class="nodeName" x="2850" y="225" font-size="120%">flutter_markdown</text>
@@ -948,11 +948,11 @@ window_manager</title>
   </g>
   <g id='Labels_sqlite3'>
     <text class="nodeName" x="1050" y="225" font-size="120%">sqlite3</text>
-    <text class="nodeName" x="1050" y="245" font-size="80%">2.7.4</text>
+    <text class="nodeName" x="1050" y="245" font-size="80%">2.7.5</text>
   </g>
   <g id='Labels_sqlite3_flutter_libs'>
     <text class="nodeName" x="1650" y="375" font-size="120%">sqlite3_flutter_libs</text>
-    <text class="nodeName" x="1650" y="395" font-size="80%">0.5.30</text>
+    <text class="nodeName" x="1650" y="395" font-size="80%">0.5.31</text>
   </g>
   <g id='Labels_textify'>
     <text class="nodeName" x="5850" y="225" font-size="120%">textify</text>
