@@ -73,22 +73,19 @@ Widget _buildTextAndSortAndFilter(
 
     case TextAlign.left:
     case TextAlign.start:
-    default:
-      return SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              text,
-              softWrap: false,
-              textAlign: TextAlign.left,
-              overflow: TextOverflow.clip,
-              style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
-            ),
-            adorner,
-          ],
-        ),
+    default:    
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            text,
+            softWrap: false,
+            textAlign: TextAlign.left,
+            overflow: TextOverflow.clip,
+            style: getTextTheme(context).labelSmall!.copyWith(color: getColorTheme(context).secondary),
+          ),
+          adorner,
+        ],
       );
   }
 }

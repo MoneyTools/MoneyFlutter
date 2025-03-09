@@ -74,14 +74,14 @@ class Investment extends MoneyObject {
     );
   }
 
-  FieldMoney activityDividend = FieldMoney(
+  FieldMoney fieldActivityDividend = FieldMoney(
     name: 'ActivityDividend',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._activityDividend,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(amount: (instance as Investment).activityDividend),
   );
 
   FieldMoney fieldActivityAmount = FieldMoney(
     name: 'ActivityAmount',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment).activityAmount,
+    getValueForDisplay: (final MoneyObject instance) =>MoneyModel(amount: (instance as Investment).activityAmount),
   );
 
   /// 4    Commission      money   0                    0
@@ -111,7 +111,7 @@ class Investment extends MoneyObject {
     footer: FooterType.average,
     getValueForDisplay: (final MoneyObject instance) {
       return MoneyModel(
-        amount: (instance as Investment).fieldHoldingShares.value * instance._unitPriceAdjusted,
+        amount: (instance as Investment).fieldHoldingShares.value * instance.unitPriceAdjusted,
       );
     },
   );
@@ -280,7 +280,7 @@ class Investment extends MoneyObject {
   FieldMoney fieldUnitPriceAdjusted = FieldMoney(
     name: 'Price A.S.',
     footer: FooterType.average,
-    getValueForDisplay: (final MoneyObject instance) => (instance as Investment)._unitPriceAdjusted,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(amount: (instance as Investment).unitPriceAdjusted,),
   );
 
   /// 3    Units           money   0                    0
@@ -364,7 +364,7 @@ class Investment extends MoneyObject {
     }
   }
 
-  double get costForShares => this.effectiveUnitsAdjusted * this._unitPriceAdjusted;
+  double get costForShares => this.effectiveUnitsAdjusted * this.unitPriceAdjusted;
 
   DateTime get date => this.transactionInstance?.fieldDateTime.value ?? DateTime.now();
 
@@ -495,7 +495,7 @@ class Investment extends MoneyObject {
 
   String get symbol => Data().securities.getSymbolFromId(fieldSecurity.value);
 
-  double get transactionHoldingValue => this.fieldHoldingShares.value * this._unitPriceAdjusted;
+  double get transactionHoldingValue => this.fieldHoldingShares.value * this.unitPriceAdjusted;
 
   /// The actual transaction date.
   Transaction? get transactionInstance {
@@ -510,7 +510,7 @@ class Investment extends MoneyObject {
 
   double get transactionNetValue => transactionHoldingValue + this.activityAmount;
 
-  double get _activityDividend {
+  double get activityDividend {
     if (fieldInvestmentType.value == InvestmentType.dividend.index) {
       return transactionInstance?.fieldAmount.value.asDouble() ?? 0.00;
     }
@@ -530,5 +530,5 @@ class Investment extends MoneyObject {
           ? 1
           : -1;
 
-  double get _unitPriceAdjusted => this.fieldUnitPrice.value.asDouble() / this._splitRatio;
+  double get unitPriceAdjusted => this.fieldUnitPrice.value.asDouble() / this._splitRatio;
 }

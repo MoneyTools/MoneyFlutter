@@ -224,6 +224,14 @@ int sortByValue(final num a, final num b, final bool ascending) {
   }
 }
 
+int sortByAmount(final MoneyModel a, final MoneyModel b, final bool ascending) {
+  if (ascending) {
+    return a.asDouble().compareTo(b.asDouble());
+  } else {
+    return b.asDouble().compareTo(a.asDouble());
+  }
+}
+
 
 List<String> enumToStringList<T>(List<T> enumValues) {
   return enumValues.map((final T e) => e.toString().split('.').last).toList();

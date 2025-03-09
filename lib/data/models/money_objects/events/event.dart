@@ -86,6 +86,10 @@ class Event extends MoneyObject {
         return Data().categories.getCategoryWidget(event.fieldCategoryId.value);
       }
     },
+
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) =>
+        sortByString((a as Event).categoryName, (b as Event).categoryName, ascending),
+
     getValueForReading: (final MoneyObject instance) => (instance as Event).categoryName,
     getValueForSerialization: (final MoneyObject instance) => (instance as Event).fieldCategoryId.value,
     setValue: (final MoneyObject instance, dynamic newValue) =>
@@ -119,11 +123,16 @@ class Event extends MoneyObject {
     (Event event) => event.fieldDateEnd,
   );
 
-  FieldInt fieldDuration = FieldInt(
+  FieldString fieldDuration = FieldString(
     name: 'Duration',
     align: TextAlign.center,
     columnWidth: ColumnWidth.small,
     getValueForDisplay: (final MoneyObject instance) => (instance as Event).durationAsString,
+    sort: (final MoneyObject a, final MoneyObject b, final bool ascending) => sortByValue(
+      (a as Event).durationInDays,
+      (b as Event).durationInDays,
+      ascending,
+    ),
   );
 
   /// ID
@@ -210,8 +219,11 @@ class Event extends MoneyObject {
     );
   }
 
-  String get durationAsString =>
-      DateRange(min: fieldDateBegin.value, max: fieldDateEnd.value ?? DateTime.now()).toStringDuration();
+  DateRange get durationInDateRange => DateRange(min: fieldDateBegin.value, max: fieldDateEnd.value ?? DateTime.now());
+
+  int get durationInDays => durationInDateRange.durationInDays;
+
+  String get durationAsString => durationInDateRange.toStringDuration();
 
   String get eventName => fieldName.value.isEmpty ? 'Event $uniqueId' : fieldName.value;
 

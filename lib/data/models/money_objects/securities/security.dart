@@ -73,7 +73,7 @@ class Security extends MoneyObject {
 
   final FieldMoney fieldHoldingValue = FieldMoney(
     name: 'HoldingsValue',
-    getValueForDisplay: (final MoneyObject instance) => (instance as Security)._holdingValue,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(amount: (instance as Security).holdingValue),
   );
 
   List<Dividend> dividends = <Dividend>[];
@@ -160,12 +160,12 @@ class Security extends MoneyObject {
     },
   );
 
+  double get profit => this.fieldActivityProfit.value.asDouble() +
+        this.fieldActivityDividend.value.asDouble() +
+        this.holdingValue;
   FieldMoney fieldProfit = FieldMoney(
     name: 'Profit',
-    getValueForDisplay: (final MoneyObject instance) =>
-        (instance as Security).fieldActivityProfit.value.asDouble() +
-        instance.fieldActivityDividend.value.asDouble() +
-        instance._holdingValue,
+    getValueForDisplay: (final MoneyObject instance) => MoneyModel(amount: (instance as Security).profit),
   );
 
   /* 
@@ -316,5 +316,5 @@ class Security extends MoneyObject {
     return '';
   }
 
-  double get _holdingValue => this.fieldHoldingShares.value * this.fieldPrice.value.asDouble();
+  double get holdingValue => this.fieldHoldingShares.value * this.fieldPrice.value.asDouble();
 }

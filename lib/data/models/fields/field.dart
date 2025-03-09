@@ -146,7 +146,7 @@ class Field<T> {
     /// How to Sort on this field
     if (sort == null) {
       // if no override on sorting fallback to type sorting
-      switch (type) {
+      switch (this.type) {
         case FieldType.numeric:
         case FieldType.numericShorthand:
         case FieldType.quantity:
@@ -157,19 +157,18 @@ class Field<T> {
             final bool ascending,
           ) =>
               sortByValue(
-                getValueForDisplay(a) as num,
-                getValueForDisplay(b) as num,
-                ascending,
-              );
+                (getValueForDisplay(a) ?? 0) as num,
+                (getValueForDisplay(b) ?? 0) as num,
+                ascending,              );
         case FieldType.amount:
           sort = (
             final MoneyObject a,
             final MoneyObject b,
             final bool ascending,
           ) =>
-              sortByValue(
-                getValueForDisplay(a) as num,
-                getValueForDisplay(b) as num,
+              sortByAmount(
+                getValueForDisplay(a) as MoneyModel,
+                getValueForDisplay(b) as MoneyModel,
                 ascending,
               );
         case FieldType.date:
