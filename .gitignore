@@ -133,3 +133,8 @@ graph.dot
 !**/converage/cc.txt
 test_output_sqlite.db
 test_output_sqlite.MyMoney.mmdb
+
+# Downloads
+web/downloads/flutter-linux-app.zip
+web/downloads/flutter-macos-app.zip
+web/downloads/flutter-windows-app.zip

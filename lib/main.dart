@@ -6,9 +6,10 @@ import 'package:money/core/controller/preferences_controller.dart';
 import 'package:money/core/controller/theme_controller.dart';
 import 'package:money/core/widgets/widgets.dart';
 import 'package:money/views/home/home_routes.dart';
+import 'package:money/views/platforms/platforms_routes.dart';
 import 'package:money/views/policies/policy_routes.dart';
 import 'package:money/views/settings/settings_routes.dart';
-import 'package:money/views/splash_screen.dart';
+import 'package:money/views/splash_page.dart';
 import 'package:money/views/welcome/welcome_page.dart';
 import 'package:money/views/welcome/welcome_routes.dart';
 
@@ -76,6 +77,7 @@ class MyApp extends StatelessWidget {
             ...HomeRoutes.routes,
             ...WelcomeRoutes.routes,
             ...SettingsRoutes.routes,
+            ...PlatformsRoutes.routes,
             ...PolicyRoutes.routes,
           ],
         );

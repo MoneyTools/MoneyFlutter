@@ -44,6 +44,9 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       case Constants.commandSettings:
         Get.toNamed<dynamic>(Constants.routeSettingsPage);
         break;
+      case Constants.commandInstallPlatforms:
+        Get.toNamed<dynamic>(Constants.routeInstallPlatformsPage);
+        break;
       case Constants.commandIncludeClosedAccount:
         PreferenceController.to.includeClosedAccounts = !PreferenceController.to.includeClosedAccounts;
         break;
@@ -96,6 +99,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         opacity: preferencesController.includeClosedAccounts ? 1.0 : 0.5,
       ),
       _buildSettingsMenuItem(Constants.commandSettings, 'Settings...', Icons.settings, key: const Key('key_settings')),
+      _buildSettingsMenuItem(Constants.commandInstallPlatforms, 'Install App...', Icons.install_desktop, key: const Key('key_platforms')),
       ..._buildThemeColorMenuItems(themeController),
       PopupMenuItem<int>(
         value: Constants.commandTextZoom,

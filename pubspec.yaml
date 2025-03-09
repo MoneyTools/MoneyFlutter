@@ -101,6 +101,7 @@ flutter:
   # assets section
   assets:
     - assets/flags/
+    - assets/images/platforms/
 
   fonts:
     - family: RobotoFlex

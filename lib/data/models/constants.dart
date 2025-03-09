@@ -52,9 +52,10 @@ class Constants {
   static const int commandFileOpen = 2001;
   static const int commandFileSaveCsv = 2004;
   static const int commandFileSaveSql = 2005;
-  static const int commandIncludeClosedAccount = 1200;
   static const int commandRebalance = 1500;
   static const int commandSettings = 1100;
+  static const int commandIncludeClosedAccount = 1200;
+  static const int commandInstallPlatforms = 1300;
   static const int commandTextZoom = 1000;
   static const String defaultCurrency = 'USD';
   static String fakeStockApiKey = 'fakeStockApiKey';
@@ -88,6 +89,7 @@ class Constants {
   static String routeHomePage = '/home';
   static String routePolicyPage = '/policy';
   static String routeSettingsPage = '/settings';
+  static String routeInstallPlatformsPage = '/platforms';
   static String routeWelcomePage = '/welcome';
   static const double sanKeyColumnWidth = 200.0;
   static const double screenWidthMedium = 1200;
