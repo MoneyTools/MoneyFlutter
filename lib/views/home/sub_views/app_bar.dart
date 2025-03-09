@@ -99,7 +99,7 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
         opacity: preferencesController.includeClosedAccounts ? 1.0 : 0.5,
       ),
       _buildSettingsMenuItem(Constants.commandSettings, 'Settings...', Icons.settings, key: const Key('key_settings')),
-      _buildSettingsMenuItem(Constants.commandInstallPlatforms, 'Install App...', Icons.install_desktop, key: const Key('key_platforms')),
+      _buildSettingsMenuItem(Constants.commandInstallPlatforms, 'Install App...', Icons.install_desktop, key: Constants.keyPlatformsButton),
       ..._buildThemeColorMenuItems(themeController),
       PopupMenuItem<int>(
         value: Constants.commandTextZoom,

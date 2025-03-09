@@ -80,6 +80,7 @@ class Constants {
   static const Key keyMultiSelectionToggle = Key('key_multi_selection_toggle');
   static const Key keyPendingChanges = Key('key_pending_changes');
   static const Key keySettingsButton = Key('key_settings_button');
+  static const Key keyPlatformsButton = Key('key_platforms_button');
   static const Key keySidePanelExpando = Key('key_side_panel_expando');
   static const Key keyZoomDecrease = Key('keyZoomDecrease');
   static const Key keyZoomIncrease = Key('keyZoomIncrease');

@@ -76,6 +76,12 @@ Future<void> stepWelcomeSettingAndTheme(WidgetTester tester) async {
   await testTheme(tester);
 
   //------------------------------------------------------------------------
+  // Platforms
+  await tapOnKey(tester, Constants.keySettingsButton);
+  await tapOnKey(tester, Constants.keyPlatformsButton);  
+  await tapBackButton(tester);
+
+  //------------------------------------------------------------------------
   // The Settings dialog
   await testThemeColors(tester);
 }
